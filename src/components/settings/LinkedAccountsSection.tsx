@@ -69,7 +69,7 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleLinkAccount = async (provider: 'google' | 'apple') => {
     setLinkingProvider(provider);
     try {
-      const { error } = await supabase.auth.linkIdentity({
+      const { data, error } = await supabase.auth.linkIdentity({
         provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
@@ -77,12 +77,17 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
       });
 
       if (error) {
+        console.error('Link identity error:', error);
         toast.error(error.message || t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
+        setLinkingProvider(null);
+        return;
       }
+
       // If successful, the browser will redirect to the OAuth provider
+      // Don't reset linkingProvider here as the page will navigate away
     } catch (error) {
+      console.error('Link identity exception:', error);
       toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
-    } finally {
       setLinkingProvider(null);
     }
   };
