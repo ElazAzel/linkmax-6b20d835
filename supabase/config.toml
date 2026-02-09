@@ -1,5 +1,8 @@
 project_id = "pphdcfxucfndmwulpfwv"
 
+[auth]
+enable_manual_linking = true
+
 [functions.ai-content-generator]
 verify_jwt = false
 
