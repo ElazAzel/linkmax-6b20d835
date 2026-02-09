@@ -9,15 +9,23 @@ import { Trash2 } from 'lucide-react';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
+import { CarouselBlock } from '@/types/page';
+
+interface CarouselImage {
+  url: string;
+  alt: any; // Using any for I18nText temporarily to avoid complexity, or better: migrateToMultilingual result type
+  link?: string;
+}
+
 function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
-  const data = formData as any;
+  const data = formData as Partial<CarouselBlock>;
   const images = data.images || [];
-  const handleChange = (updates: any) => onChange(updates);
+  const handleChange = (updates: Partial<CarouselBlock>) => onChange(updates);
 
   const addImage = () => handleChange({ ...data, images: [...images, { url: '', alt: { ru: '', en: '', kk: '' }, link: '' }] });
-  const removeImage = (index: number) => handleChange({ ...data, images: images.filter((_: any, i: number) => i !== index) });
-  const updateImage = (index: number, field: string, value: any) => {
+  const removeImage = (index: number) => handleChange({ ...data, images: images.filter((_, i) => i !== index) });
+  const updateImage = (index: number, field: keyof CarouselImage, value: any) => {
     const updated = [...images];
     updated[index] = { ...updated[index], [field]: value };
     handleChange({ ...data, images: updated });
@@ -38,7 +46,7 @@ function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
           <Button type="button" variant="outline" size="sm" onClick={addImage}>{t('actions.addImage', 'Add Image')}</Button>
         </div>
 
-        {images.map((image: any, index: number) => (
+        {images.map((image, index) => (
           <div key={index} className="border border-border rounded-lg p-3 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{t('fields.image', 'Image')} {index + 1}</span>

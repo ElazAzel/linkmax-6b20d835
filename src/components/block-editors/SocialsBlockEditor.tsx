@@ -35,15 +35,20 @@ const DragHandle = () => {
   );
 };
 
+import { SocialsBlock } from '@/types/page';
+
+type SocialPlatform = SocialsBlock['platforms'][0];
+
 function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
+  const data = formData as Partial<SocialsBlock>;
 
   // Default platforms if none exist
-  const platforms = formData.platforms || [];
+  const platforms = data.platforms || [];
 
   const handleAddPlatform = () => {
     onChange({
-      ...formData,
+      ...data,
       platforms: [
         ...platforms,
         { id: crypto.randomUUID(), platform: 'instagram', url: '' }
@@ -53,20 +58,20 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
   const handleRemovePlatform = (id: string) => {
     onChange({
-      ...formData,
-      platforms: platforms.filter((p: any) => p.id !== id)
+      ...data,
+      platforms: platforms.filter((p) => p.id !== id)
     });
   };
 
-  const handleUpdatePlatform = (id: string, updates: any) => {
+  const handleUpdatePlatform = (id: string, updates: Partial<SocialPlatform>) => {
     onChange({
-      ...formData,
-      platforms: platforms.map((p: any) => p.id === id ? { ...p, ...updates } : p)
+      ...data,
+      platforms: platforms.map((p) => p.id === id ? { ...p, ...updates } : p)
     });
   };
 
   // Content filled calculation
-  const contentFilled = platforms.filter((p: any) => p.url).length;
+  const contentFilled = platforms.filter((p) => p.url).length;
   const totalItems = Math.max(platforms.length, 1);
 
   return (
@@ -81,8 +86,8 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       >
         <MultilingualInput
           label={t('fields.title', 'Title')}
-          value={migrateToMultilingual(formData.title)}
-          onChange={(value) => onChange({ ...formData, title: value })}
+          value={migrateToMultilingual(data.title)}
+          onChange={(value) => onChange({ ...data, title: value })}
           placeholder={t('fields.socialsTitle', 'Social Media')}
         />
 
@@ -92,10 +97,10 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Reorder.Group
             axis="y"
             values={platforms}
-            onReorder={(newOrder) => onChange({ ...formData, platforms: newOrder })}
+            onReorder={(newOrder) => onChange({ ...data, platforms: newOrder })}
             className="space-y-2"
           >
-            {platforms.map((item: any) => (
+            {platforms.map((item) => (
               <Reorder.Item key={item.id} value={item}>
                 <div className="flex gap-2 items-start p-3 bg-muted/30 rounded-xl border border-border/10 group">
                   <DragHandle />
