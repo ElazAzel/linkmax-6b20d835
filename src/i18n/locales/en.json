@@ -112,6 +112,13 @@
     "pleaseWait": "Please wait...",
     "comingSoon": "Coming soon"
   },
+  "errors": {
+    "loadError": "Failed to load",
+    "tryAgain": "Try again",
+    "createYourPage": "Create your page",
+    "invalidEmail": "Invalid email",
+    "subscription": "Subscription"
+  },
   "fields": {
     "name": "Name",
     "bio": "Bio",
@@ -673,6 +680,9 @@
       "title": "Explore Community Pages",
       "subtitle": "Get inspired by amazing pages created by our community",
       "viewAll": "View all"
+    },
+    "partners": {
+      "title": "Trusted by"
     },
     "v4": {
       "hero": {
