@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Mail, Link2, Unlink, Loader2 } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
-import { lovable } from '@/integrations/lovable/index';
+
 import { cn } from '@/lib/utils';
 
 interface LinkedAccount {
@@ -69,13 +69,17 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleLinkAccount = async (provider: 'google' | 'apple') => {
     setLinkingProvider(provider);
     try {
-      const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: `${window.location.origin}/auth/callback`,
+      const { error } = await supabase.auth.linkIdentity({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
-      if (result.error) {
-        toast.error(result.error.message || t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
+      if (error) {
+        toast.error(error.message || t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
       }
+      // If successful, the browser will redirect to the OAuth provider
     } catch (error) {
       toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
     } finally {
