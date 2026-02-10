@@ -112,13 +112,6 @@
     "pleaseWait": "Please wait...",
     "comingSoon": "Coming soon"
   },
-  "errors": {
-    "loadError": "Failed to load",
-    "tryAgain": "Try again",
-    "createYourPage": "Create your page",
-    "invalidEmail": "Invalid email",
-    "subscription": "Subscription"
-  },
   "fields": {
     "name": "Name",
     "bio": "Bio",
@@ -1587,12 +1580,19 @@
     "latest": "Latest",
     "popular": "Popular",
     "viewPage": "View",
+    "openEditor": "Open",
+    "goToEditor": "Open editor to customize",
+    "templateCopied": "Template copied!",
     "like": "Like",
+    "unlike": "Unlike",
     "liked": "Page liked!",
     "alreadyLiked": "You already liked this page",
     "views": "views",
     "untitled": "Untitled",
-    "empty": "No pages found",
+    "createPage": "Create Page",
+    "empty": "Be the first here!",
+    "emptyDescription": "This niche is waiting for a star. Create your page and get featured.",
+    "noResults": "No pages found matching your search",
     "seo": {
       "title": "lnkmx Gallery - link in bio examples & templates",
       "description": "Real lnkmx pages from creators and businesses. Browse niches, templates, and inspiration.",
@@ -1618,7 +1618,12 @@
     "invalidLink": "Invalid or corrupted link",
     "unauthorized": "Authorization required",
     "forbidden": "Access denied",
-    "networkError": "Network error"
+    "networkError": "Network error",
+    "loadError": "Failed to load",
+    "tryAgain": "Try again",
+    "createYourPage": "Create your page",
+    "invalidEmail": "Invalid email",
+    "subscription": "Subscription"
   },
   "language": {
     "autoTranslate": "Auto-translate",
@@ -3337,30 +3342,5 @@
       "watermark": "LinkMAX watermark",
       "limitedBlocks": "10 blocks maximum"
     }
-  },
-  "gallery": {
-    "empty": "Be the first here!",
-    "emptyDescription": "This niche is waiting for a star. Create your page and get featured.",
-    "createPage": "Create Page",
-    "seo": {
-      "title": "lnkmx Gallery — Link in Bio Examples & Templates",
-      "nicheTitle": "lnkmx Gallery — {{niche}}",
-      "description": "Explore real lnkmx link in bio pages by creators and businesses. Find templates, niches, and inspiration for your mini-site.",
-      "nicheDescription": "Explore {{niche}} pages on lnkmx."
-    },
-    "seoIntro": {
-      "highlights": [
-        "Link in bio",
-        "Mini-site",
-        "Templates"
-      ]
-    },
-    "templateCopied": "Template copied!",
-    "goToEditor": "Open editor to customize",
-    "openEditor": "Open",
-    "like": "Like",
-    "unlike": "Unlike",
-    "untitled": "Untitled page",
-    "noResults": "No pages found matching your search"
   }
 }

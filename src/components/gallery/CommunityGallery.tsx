@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Users, Loader2, Trophy } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useGallery } from '@/hooks/useGallery';
 import { useGalleryFilters } from '@/hooks/useGalleryFilters';
 import { GalleryFilters } from './GalleryFilters';
