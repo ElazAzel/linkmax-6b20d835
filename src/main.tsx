@@ -68,7 +68,19 @@ const router = createBrowserRouter([
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug", element: <PublicPage /> },
-      { path: "*", element: <NotFound /> },
+      { 
+        path: "*", 
+        element: <NotFound />,
+        loader: ({ request }) => {
+          const url = new URL(request.url);
+          // Let platform handle OAuth routes via full page navigation
+          if (url.pathname.startsWith('/~oauth')) {
+            window.location.href = url.href;
+            return new Promise(() => {}); // Never resolves, page will navigate away
+          }
+          return null;
+        }
+      },
     ],
   },
 ]);
