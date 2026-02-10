@@ -29,7 +29,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { createRowKey } from '@/lib/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockSizePreset } from '@/types/page';
-import { BLOCK_SIZE_DIMENSIONS } from '@/types/page';
+import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import type { FreeTier } from '@/hooks/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
 
