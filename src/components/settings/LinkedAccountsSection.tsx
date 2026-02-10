@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Mail, Link2, Unlink, Loader2 } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 
 import { cn } from '@/lib/utils';
 
@@ -69,11 +70,8 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleLinkAccount = async (provider: 'google' | 'apple') => {
     setLinkingProvider(provider);
     try {
-      const { data, error } = await supabase.auth.linkIdentity({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
+      const { error } = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: `${window.location.origin}/auth/callback`,
       });
 
       if (error) {
@@ -84,7 +82,6 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
       }
 
       // If successful, the browser will redirect to the OAuth provider
-      // Don't reset linkingProvider here as the page will navigate away
     } catch (error) {
       console.error('Link identity exception:', error);
       toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
