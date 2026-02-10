@@ -546,13 +546,13 @@
     "v6": {
       "hero": {
         "badge": "V6.0 Live",
-        "titlePrefix": "The",
-        "titleHighlight": "OS",
-        "titleSuffix": "for your",
-        "titleBrand": "Micro-Brand.",
-        "description": "More than a link-in-bio. A complete operating system to build, sell, and grow entirely from your phone. No code, just flow.",
-        "ctaPrimary": "Start Building Free",
-        "ctaSecondary": "Explore Features",
+        "titlePrefix": "Everything you do —",
+        "titleHighlight": "in one link.",
+        "titleSuffix": "",
+        "titleBrand": "",
+        "description": "Combine content, products, and services into a beautiful page. No designers or coding required. Accept orders and grow.",
+        "ctaPrimary": "Create Page for Free",
+        "ctaSecondary": "View Examples",
         "noCard": "No credit card",
         "cancelAnytime": "Cancel anytime",
         "cardRevenue": {
@@ -560,14 +560,14 @@
           "value": "$12,450"
         },
         "cardLead": {
-          "title": "New Lead!",
+          "title": "New Client!",
           "subtitle": "Just now via LinkMAX"
         }
       },
       "features": {
-        "title": "Everything you need.",
-        "subtitle": "Nothing you don't.",
-        "description": "A complete toolkit for micro-businesses, packaged in a beautiful Swiss-style interface.",
+        "title": "More than just a link.",
+        "subtitle": "A complete business tool.",
+        "description": "Everything you need to sell and connect with customers in one place.",
         "mobileBuilder": {
           "title": "Mobile-First Builder",
           "desc": "Designed for the phone generation. Edit, preview, and publish directly from your mobile device."
@@ -624,15 +624,15 @@
         }
       },
       "steps": {
-        "title": "From Idea to Live in Minutes",
+        "title": "From Idea to Launch in 2 Minutes",
         "subtitle": "We removed all the complexity. You focus on your content, we handle the rest.",
         "step1": {
           "title": "1. Create Account",
-          "desc": "Sign up in seconds using your email or Google account. No credit card required."
+          "desc": "Sign up in seconds using your email or Google."
         },
         "step2": {
-          "title": "2. Customize",
-          "desc": "Choose a template, add your links, and style it to match your brand."
+          "title": "2. Choose Style",
+          "desc": "Ready-made templates for any niche. Just add your links."
         },
         "step3": {
           "title": "3. Launch",
@@ -676,10 +676,10 @@
       }
     },
     "gallery": {
-      "badge": "Community",
-      "title": "Explore Community Pages",
-      "subtitle": "Get inspired by amazing pages created by our community",
-      "viewAll": "View all"
+      "badge": "Examples",
+      "title": "Gallery of Best Pages",
+      "subtitle": "See how other experts and brands use LinkMAX",
+      "viewAll": "Open Gallery"
     },
     "partners": {
       "title": "Trusted by"
@@ -3337,5 +3337,30 @@
       "watermark": "LinkMAX watermark",
       "limitedBlocks": "10 blocks maximum"
     }
+  },
+  "gallery": {
+    "empty": "Be the first here!",
+    "emptyDescription": "This niche is waiting for a star. Create your page and get featured.",
+    "createPage": "Create Page",
+    "seo": {
+      "title": "lnkmx Gallery — Link in Bio Examples & Templates",
+      "nicheTitle": "lnkmx Gallery — {{niche}}",
+      "description": "Explore real lnkmx link in bio pages by creators and businesses. Find templates, niches, and inspiration for your mini-site.",
+      "nicheDescription": "Explore {{niche}} pages on lnkmx."
+    },
+    "seoIntro": {
+      "highlights": [
+        "Link in bio",
+        "Mini-site",
+        "Templates"
+      ]
+    },
+    "templateCopied": "Template copied!",
+    "goToEditor": "Open editor to customize",
+    "openEditor": "Open",
+    "like": "Like",
+    "unlike": "Unlike",
+    "untitled": "Untitled page",
+    "noResults": "No pages found matching your search"
   }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, Loader2 } from 'lucide-react';
+import { Users, Loader2, Trophy } from 'lucide-react';
 import { useGallery } from '@/hooks/useGallery';
 import { useGalleryFilters } from '@/hooks/useGalleryFilters';
 import { GalleryFilters } from './GalleryFilters';
@@ -15,8 +15,8 @@ interface CommunityGalleryProps {
   showFeatured?: boolean;
 }
 
-export function CommunityGallery({ 
-  compact = false, 
+export function CommunityGallery({
+  compact = false,
   maxItems,
   showFilters = true,
   showFeatured = true,
@@ -34,7 +34,7 @@ export function CommunityGallery({
     }
     return new Set();
   });
-  
+
   const {
     search,
     setSearch,
@@ -49,7 +49,7 @@ export function CommunityGallery({
 
   const handleToggleLike = useCallback(async (pageId: string) => {
     const isCurrentlyLiked = likedPages.has(pageId);
-    
+
     if (isCurrentlyLiked) {
       // Unlike
       const newLikedPages = new Set(likedPages);
@@ -119,16 +119,23 @@ export function CommunityGallery({
 
       {/* Grid */}
       {filteredPages.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            {t('gallery.noResults', 'No pages found matching your search')}
+        <div className="text-center py-20 px-4 border-2 border-dashed border-muted rounded-3xl bg-muted/30">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Trophy className="h-8 w-8 text-primary" />
+          </div>
+          <h3 className="text-xl font-bold mb-2">{t('gallery.empty', 'Be the first here!')}</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            {t('gallery.emptyDescription', 'This niche is waiting for a star. Create your page and get featured.')}
           </p>
+          <Button onClick={() => window.location.href = '/auth'} size="lg" className="rounded-full shadow-lg hover:shadow-primary/20">
+            {t('gallery.createPage', 'Create Page')}
+          </Button>
         </div>
       ) : (
         <div className={
-          compact 
-            ? 'space-y-3' 
-            : 'grid grid-cols-1 sm:grid-cols-2 gap-4'
+          compact
+            ? 'space-y-3'
+            : 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6'
         }>
           {displayPages.map((page) => (
             <GalleryPageCard

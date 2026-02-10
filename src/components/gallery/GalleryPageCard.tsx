@@ -92,13 +92,13 @@ export function GalleryPageCard({
       onClick={(e) => handleView()}
     >
       {/* Page Preview Screenshot */}
-      <div className="aspect-[4/3] w-full relative overflow-hidden bg-gradient-to-br from-primary/10 to-violet-500/10">
+      <div className="aspect-[9/16] w-full relative overflow-hidden bg-gradient-to-br from-primary/10 to-violet-500/10 transition-transform duration-500 group-hover:scale-[1.02]">
         <PagePreview
           slug={page.slug}
           title={page.title}
           avatarUrl={page.avatar_url}
           previewUrl={page.preview_url}
-          className="w-full h-full"
+          className="w-full h-full object-cover"
         />
 
         {page.is_premium && (
