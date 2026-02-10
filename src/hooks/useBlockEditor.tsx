@@ -8,7 +8,7 @@ import { PREMIUM_BLOCK_TYPES } from '@/lib/block-registry';
 import { APP_CONFIG } from '@/lib/constants';
 import { incrementChallengeProgress, recordActivity } from '@/services/social';
 import type { Block, BlockType } from '@/types/page';
-import type { DeletedBlockInfo, BlockInsertResult } from '@/types/blocks';
+import type { DeletedBlockInfo, BlockInsertResult } from '@/types/block-editor-types';
 
 interface UseBlockEditorOptions {
   isPremium: boolean;
