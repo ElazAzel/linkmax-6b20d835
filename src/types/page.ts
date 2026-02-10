@@ -1,9 +1,8 @@
-// Multilingual string support
-// import type { I18nText, MultilingualString } from '@/lib/i18n-helpers'; // Not needed if not used directly
-import * as Blocks from './blocks';
-
 // Re-export all block types
 export * from './blocks';
+
+// Import for local use in PageData
+import type { Block, EditorMode } from './blocks';
 
 // Page background configuration
 export interface PageBackground {
@@ -42,7 +41,7 @@ export interface PageData {
   id: string;
   userId?: string;
   slug?: string;
-  blocks: Blocks.Block[];
+  blocks: Block[];
   theme: PageTheme;
   seo: {
     title: string;
@@ -54,7 +53,7 @@ export interface PageData {
   isIndexable?: boolean;
   viewCount?: number;
   metrics?: PageMetrics;
-  editorMode?: Blocks.EditorMode;
+  editorMode?: EditorMode;
   gridConfig?: GridConfig;
   niche?: string;
   previewUrl?: string; // Custom preview image for gallery
