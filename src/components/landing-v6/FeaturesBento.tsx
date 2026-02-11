@@ -14,7 +14,7 @@ interface FeatureCardProps {
 function FeatureCard({ title, description, icon: Icon, className, delay = 0 }: FeatureCardProps) {
     return (
         <Reveal delay={delay} direction="up" className={cn(
-            "group relative flex flex-col justify-between p-6 md:p-8 bg-card border border-border/60 hover:border-foreground/20 transition-colors duration-300 overflow-hidden",
+            "group relative flex flex-col justify-between p-6 md:p-8 bg-card border border-border/60 rounded-2xl hover:border-foreground/20 transition-colors duration-300 overflow-hidden",
             className
         )}>
             <div className="space-y-4 z-10">

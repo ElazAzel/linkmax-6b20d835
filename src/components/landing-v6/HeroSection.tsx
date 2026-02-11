@@ -17,7 +17,7 @@ export default function HeroSection() {
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20 pb-12">
             {/* Ambient Auras */}
             <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] animate-float-slow pointer-events-none" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-[100px] animate-float pointer-events-none delay-1000" />
+            <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] animate-float pointer-events-none delay-1000" />
 
             <div className="container px-4 md:px-6 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -35,7 +35,7 @@ export default function HeroSection() {
 
                         <Reveal delay={200}>
                             <h1 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9]">
-                                {t('landing.v6.hero.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-violet-500 to-primary animate-gradient-flow bg-[length:200%_auto]">{t('landing.v6.hero.titleHighlight')}</span>
+                                {t('landing.v6.hero.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/60 to-primary animate-gradient-flow bg-[length:200%_auto]">{t('landing.v6.hero.titleHighlight')}</span>
                                 {t('landing.v6.hero.titleSuffix', { defaultValue: '' }) ? <><br />{t('landing.v6.hero.titleSuffix')}</> : null}
                                 {t('landing.v6.hero.titleBrand', { defaultValue: '' }) ? <><br /><span className="italic font-serif">{t('landing.v6.hero.titleBrand')}</span></> : null}
                             </h1>
@@ -77,33 +77,33 @@ export default function HeroSection() {
                     <div className="relative hidden lg:block h-[800px] w-full perspective-[2000px]">
                         <Reveal delay={600} className="w-full h-full relative">
                             {/* Card 1: Stats */}
-                            <div className="absolute top-[15%] right-[5%] w-[280px] bg-card/80 backdrop-blur-xl border border-white/20 p-6 rounded-3xl shadow-glass-lg rotate-[-6deg] animate-float z-20">
+                            <div className="absolute top-[15%] right-[5%] w-[280px] bg-card/80 backdrop-blur-xl border border-border/20 p-6 rounded-3xl shadow-lg rotate-[-6deg] animate-float z-20">
                                 <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold">
-                                        $
+                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                        ₸
                                     </div>
                                     <div>
                                         <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">{t('landing.v6.hero.cardRevenue.label')}</p>
                                         <p className="text-xl font-bold font-heading">{t('landing.v6.hero.cardRevenue.value')}</p>
                                     </div>
                                 </div>
-                                <div className="h-24 bg-gradient-to-t from-green-500/10 to-transparent rounded-xl border border-green-500/20 relative overflow-hidden">
-                                    <div className="absolute bottom-0 left-0 right-0 h-[60%] bg-green-500/20 skew-y-6 transform origin-bottom-left"></div>
+                                <div className="h-24 bg-gradient-to-t from-primary/10 to-transparent rounded-xl border border-primary/20 relative overflow-hidden">
+                                    <div className="absolute bottom-0 left-0 right-0 h-[60%] bg-primary/20 skew-y-6 transform origin-bottom-left"></div>
                                 </div>
                             </div>
 
                             {/* Card 2: Phone Mockup Main */}
-                            <div className="absolute top-[5%] left-[15%] w-[320px] aspect-[9/19] bg-background border-[8px] border-muted rounded-[3rem] shadow-2xl rotate-[3deg] z-10 overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-7 bg-black rounded-b-2xl z-20" />
-                                <div className="p-6 pt-12 space-y-4 h-full bg-neutral-50 dark:bg-neutral-900 pointer-events-none select-none">
-                                    <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-violet-500 mx-auto shadow-lg" />
+                            <div className="absolute top-[5%] left-[15%] w-[320px] aspect-[9/19] bg-background border-[8px] border-muted rounded-[3rem] shadow-2xl rotate-[3deg] z-10 overflow-hidden ring-1 ring-border/10">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-7 bg-foreground/90 rounded-b-2xl z-20" />
+                                <div className="p-6 pt-12 space-y-4 h-full bg-muted/30 pointer-events-none select-none">
+                                    <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-primary/60 mx-auto shadow-lg" />
                                     <div className="text-center space-y-2">
                                         <div className="h-4 w-32 bg-foreground/10 mx-auto rounded-full" />
                                         <div className="h-3 w-48 bg-foreground/5 mx-auto rounded-full" />
                                     </div>
                                     <div className="space-y-3 pt-4">
                                         {[1, 2, 3].map(i => (
-                                            <div key={i} className="h-14 w-full bg-white dark:bg-black/20 rounded-2xl border border-foreground/5 shadow-sm p-3 flex items-center gap-3">
+                                            <div key={i} className="h-14 w-full bg-card/80 rounded-2xl border border-border/30 shadow-sm p-3 flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-lg bg-foreground/5" />
                                                 <div className="h-3 w-24 bg-foreground/10 rounded-full" />
                                             </div>
@@ -113,7 +113,7 @@ export default function HeroSection() {
                             </div>
 
                             {/* Card 3: Floating UI Elements */}
-                            <div className="absolute bottom-[20%] left-[-5%] bg-white dark:bg-neutral-800 p-4 rounded-2xl shadow-xl flex items-center gap-3 rotate-[5deg] animate-float-slow z-30">
+                            <div className="absolute bottom-[20%] left-[-5%] bg-card border border-border/40 p-4 rounded-2xl shadow-xl flex items-center gap-3 rotate-[5deg] animate-float-slow z-30">
                                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                                     <Sparkles className="w-5 h-5" />
                                 </div>

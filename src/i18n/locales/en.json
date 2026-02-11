@@ -589,6 +589,7 @@
       "pricing": {
         "title": "Simple, Transparent Pricing.",
         "subtitle": "Start for free, upgrade when you grow. No hidden fees.",
+        "perMonth": "/month",
         "free": {
           "title": "Free",
           "desc": "Perfect for getting started",
