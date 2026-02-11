@@ -86,44 +86,44 @@ export interface BlockMetadata {
 
 export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   // Basic - Free
-  profile: { type: 'profile', category: 'basic', isPremium: false, icon: 'user', labelKey: 'blocks.profile' },
-  link: { type: 'link', category: 'basic', isPremium: false, icon: 'link', labelKey: 'blocks.link' },
-  button: { type: 'button', category: 'basic', isPremium: false, icon: 'mouse-pointer', labelKey: 'blocks.button' },
-  text: { type: 'text', category: 'basic', isPremium: false, icon: 'type', labelKey: 'blocks.text' },
-  separator: { type: 'separator', category: 'basic', isPremium: false, icon: 'minus', labelKey: 'blocks.separator' },
-  avatar: { type: 'avatar', category: 'basic', isPremium: false, icon: 'user-circle', labelKey: 'blocks.avatar' },
-  socials: { type: 'socials', category: 'basic', isPremium: false, icon: 'share-2', labelKey: 'blocks.socials' },
-  messenger: { type: 'messenger', category: 'basic', isPremium: false, icon: 'message-circle', labelKey: 'blocks.messenger' },
-  
+  profile: { type: 'profile', category: 'basic', isPremium: false, icon: 'user', labelKey: 'blockTypes.profile' },
+  link: { type: 'link', category: 'basic', isPremium: false, icon: 'link', labelKey: 'blockTypes.link' },
+  button: { type: 'button', category: 'basic', isPremium: false, icon: 'mouse-pointer', labelKey: 'blockTypes.button' },
+  text: { type: 'text', category: 'basic', isPremium: false, icon: 'type', labelKey: 'blockTypes.text' },
+  separator: { type: 'separator', category: 'basic', isPremium: false, icon: 'minus', labelKey: 'blockTypes.separator' },
+  avatar: { type: 'avatar', category: 'basic', isPremium: false, icon: 'user-circle', labelKey: 'blockTypes.avatar' },
+  socials: { type: 'socials', category: 'basic', isPremium: false, icon: 'share-2', labelKey: 'blockTypes.socials' },
+  messenger: { type: 'messenger', category: 'basic', isPremium: false, icon: 'message-circle', labelKey: 'blockTypes.messenger' },
+
   // Media
-  image: { type: 'image', category: 'media', isPremium: false, icon: 'image', labelKey: 'blocks.image' },
-  video: { type: 'video', category: 'media', isPremium: true, icon: 'video', labelKey: 'blocks.video' },
-  carousel: { type: 'carousel', category: 'media', isPremium: true, icon: 'images', labelKey: 'blocks.carousel' },
-  before_after: { type: 'before_after', category: 'media', isPremium: true, icon: 'columns', labelKey: 'blocks.before_after' },
-  
+  image: { type: 'image', category: 'media', isPremium: false, icon: 'image', labelKey: 'blockTypes.image' },
+  video: { type: 'video', category: 'media', isPremium: true, icon: 'video', labelKey: 'blockTypes.video' },
+  carousel: { type: 'carousel', category: 'media', isPremium: true, icon: 'images', labelKey: 'blockTypes.carousel' },
+  before_after: { type: 'before_after', category: 'media', isPremium: true, icon: 'columns', labelKey: 'blockTypes.beforeAfter' },
+
   // Interactive
-  map: { type: 'map', category: 'interactive', isPremium: false, icon: 'map-pin', labelKey: 'blocks.map' },
-  faq: { type: 'faq', category: 'interactive', isPremium: false, icon: 'help-circle', labelKey: 'blocks.faq' },
-  form: { type: 'form', category: 'interactive', isPremium: true, icon: 'clipboard', labelKey: 'blocks.form' },
-  scratch: { type: 'scratch', category: 'interactive', isPremium: true, icon: 'gift', labelKey: 'blocks.scratch' },
-  countdown: { type: 'countdown', category: 'interactive', isPremium: true, icon: 'clock', labelKey: 'blocks.countdown' },
-  custom_code: { type: 'custom_code', category: 'interactive', isPremium: true, icon: 'code', labelKey: 'blocks.custom_code' },
-  
+  map: { type: 'map', category: 'interactive', isPremium: false, icon: 'map-pin', labelKey: 'blockTypes.map' },
+  faq: { type: 'faq', category: 'interactive', isPremium: false, icon: 'help-circle', labelKey: 'blockTypes.faq' },
+  form: { type: 'form', category: 'interactive', isPremium: true, icon: 'clipboard', labelKey: 'blockTypes.form' },
+  scratch: { type: 'scratch', category: 'interactive', isPremium: true, icon: 'gift', labelKey: 'blockTypes.scratch' },
+  countdown: { type: 'countdown', category: 'interactive', isPremium: true, icon: 'clock', labelKey: 'blockTypes.countdown' },
+  custom_code: { type: 'custom_code', category: 'interactive', isPremium: true, icon: 'code', labelKey: 'blockTypes.customCode' },
+
   // Commerce
-  product: { type: 'product', category: 'commerce', isPremium: true, icon: 'shopping-bag', labelKey: 'blocks.product' },
-  catalog: { type: 'catalog', category: 'commerce', isPremium: true, icon: 'grid', labelKey: 'blocks.catalog' },
-  pricing: { type: 'pricing', category: 'commerce', isPremium: true, icon: 'tag', labelKey: 'blocks.pricing' },
-  download: { type: 'download', category: 'commerce', isPremium: true, icon: 'download', labelKey: 'blocks.download' },
-  booking: { type: 'booking', category: 'commerce', isPremium: true, icon: 'calendar', labelKey: 'blocks.booking' },
-  
+  product: { type: 'product', category: 'commerce', isPremium: true, icon: 'shopping-bag', labelKey: 'blockTypes.product' },
+  catalog: { type: 'catalog', category: 'commerce', isPremium: true, icon: 'grid', labelKey: 'blockTypes.catalog' },
+  pricing: { type: 'pricing', category: 'commerce', isPremium: true, icon: 'tag', labelKey: 'blockTypes.pricing' },
+  download: { type: 'download', category: 'commerce', isPremium: true, icon: 'download', labelKey: 'blockTypes.download' },
+  booking: { type: 'booking', category: 'commerce', isPremium: true, icon: 'calendar', labelKey: 'blockTypes.booking' },
+
   // Social
-  shoutout: { type: 'shoutout', category: 'social', isPremium: true, icon: 'megaphone', labelKey: 'blocks.shoutout' },
-  community: { type: 'community', category: 'social', isPremium: true, icon: 'users', labelKey: 'blocks.community' },
-  event: { type: 'event', category: 'social', isPremium: true, icon: 'calendar-days', labelKey: 'blocks.event' },
-  testimonial: { type: 'testimonial', category: 'social', isPremium: true, icon: 'quote', labelKey: 'blocks.testimonial' },
-  
+  shoutout: { type: 'shoutout', category: 'social', isPremium: true, icon: 'megaphone', labelKey: 'blockTypes.shoutout' },
+  community: { type: 'community', category: 'social', isPremium: true, icon: 'users', labelKey: 'blockTypes.community' },
+  event: { type: 'event', category: 'social', isPremium: true, icon: 'calendar-days', labelKey: 'blockTypes.event' },
+  testimonial: { type: 'testimonial', category: 'social', isPremium: true, icon: 'quote', labelKey: 'blockTypes.testimonial' },
+
   // Advanced
-  newsletter: { type: 'newsletter', category: 'advanced', isPremium: true, icon: 'mail', labelKey: 'blocks.newsletter' },
+  newsletter: { type: 'newsletter', category: 'advanced', isPremium: true, icon: 'mail', labelKey: 'blockTypes.newsletter' },
 };
 
 /**

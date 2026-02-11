@@ -539,6 +539,139 @@
       "subtitle": "Lassen Sie sich von großartigen Seiten inspirieren, die unsere Community erstellt hat",
       "viewAll": "Alle ansehen"
     },
+    "v6": {
+      "hero": {
+        "badge": "V6.0 Live",
+        "titlePrefix": "Everything you do —",
+        "titleHighlight": "in one link.",
+        "titleSuffix": "",
+        "titleBrand": "",
+        "description": "Combine content, products, and services into a beautiful page. No designers or coding required. Accept orders and grow.",
+        "ctaPrimary": "Create Page for Free",
+        "ctaSecondary": "View Examples",
+        "noCard": "No credit card",
+        "cancelAnytime": "Cancel anytime",
+        "cardRevenue": {
+          "label": "Revenue",
+          "value": "$12,450"
+        },
+        "cardLead": {
+          "title": "New Client!",
+          "subtitle": "Just now via LinkMAX"
+        }
+      },
+      "features": {
+        "title": "More than just a link.",
+        "subtitle": "A complete business tool.",
+        "description": "Everything you need to sell and connect with customers in one place.",
+        "mobileBuilder": {
+          "title": "Mobile-First Builder",
+          "desc": "Designed for the phone generation. Edit, preview, and publish directly from your mobile device."
+        },
+        "analytics": {
+          "title": "Real-time Analytics",
+          "desc": "Track clicks, views, and conversion events with privacy-focused built-in analytics."
+        },
+        "domain": {
+          "title": "Custom Domain",
+          "desc": "Connect your own .com or .kz domain for professional branding."
+        },
+        "seo": {
+          "title": "Instant SEO",
+          "desc": "AI-generated meta tags and schema markup ensuring perfect search indexing."
+        },
+        "blocks": {
+          "title": "28+ Smart Blocks",
+          "desc": "From simple links to complex forms and booking systems."
+        },
+        "payments": {
+          "title": "Global Payments",
+          "desc": "Accept payments from anywhere via Stripe, Kaspi, or Crypto."
+        }
+      },
+      "pricing": {
+        "title": "Simple, Transparent Pricing.",
+        "subtitle": "Start for free, upgrade when you grow. No hidden fees.",
+        "perMonth": "/month",
+        "free": {
+          "title": "Free",
+          "desc": "Perfect for getting started",
+          "cta": "Get Started",
+          "features": [
+            "Unlimited links",
+            "Basic analytics",
+            "Custom themes",
+            "QR code generator",
+            "Social icons"
+          ]
+        },
+        "pro": {
+          "title": "Pro",
+          "desc": "For serious creators",
+          "badge": "MOST POPULAR",
+          "cta": "Upgrade to Pro",
+          "features": [
+            "Everything in Free",
+            "Advanced analytics",
+            "Remove branding",
+            "Custom domain",
+            "Priority support",
+            "AI content generation"
+          ]
+        }
+      },
+      "steps": {
+        "title": "From Idea to Launch in 2 Minutes",
+        "subtitle": "We removed all the complexity. You focus on your content, we handle the rest.",
+        "step1": {
+          "title": "1. Create Account",
+          "desc": "Sign up in seconds using your email or Google."
+        },
+        "step2": {
+          "title": "2. Choose Style",
+          "desc": "Ready-made templates for any niche. Just add your links."
+        },
+        "step3": {
+          "title": "3. Launch",
+          "desc": "Publish your page and share the link in your bio. Start tracking visits immediately."
+        }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Everything you need to know about the platform",
+        "items": [
+          {
+            "question": "What is lnkmx and who is it for?",
+            "answer": "lnkmx is an operating system for micro-businesses. It is ideal for experts, freelancers, and small businesses who need a fast website, built-in CRM for requests, and simple analytics without complex settings."
+          },
+          {
+            "question": "Do I need to know programming?",
+            "answer": "No, lnkmx is a no-code platform. You build a site from ready-made blocks, like a Lego set. And the built-in AI assistant can write texts for you."
+          },
+          {
+            "question": "Can I accept payments in Tenge?",
+            "answer": "Yes, the platform is fully adapted for the Kazakhstan market. You can specify prices in KZT, and integrations with local payment systems are in active development."
+          },
+          {
+            "question": "Does a site on lnkmx help with Google promotion (SEO)?",
+            "answer": "Absolutely. All pages on lnkmx are automatically optimized for search engines: fast loading, adaptability for mobile devices, and correct semantic markup (Schema.org), which is critically important for SEO in 2025."
+          },
+          {
+            "question": "Is there a free plan?",
+            "answer": "Yes, we have a forever free plan with basic features. You can create a page and start accepting requests without investment."
+          }
+        ]
+      },
+      "cta": {
+        "badge": "Ready to launch?",
+        "titlePrefix": "Build your micro-site",
+        "titleSuffix": "for free today.",
+        "description": "Join thousands of creators, experts, and small businesses growing with lnkmx. No credit card required.",
+        "primary": "Get Started Free",
+        "secondary": "View Examples",
+        "note": "Free forever plan available • Cancel anytime • 24/7 Support"
+      }
+    },
     "v4": {
       "hero": {
         "badge": "Das Micro-Business-OS",
