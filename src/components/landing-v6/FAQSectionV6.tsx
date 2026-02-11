@@ -5,38 +5,40 @@ import {
 } from "@/components/ui/collapsible";
 import { useTranslation } from 'react-i18next';
 import { ChevronDown } from "lucide-react";
+import { useEffect } from 'react';
 
 export default function FAQSectionV6() {
     const { t } = useTranslation();
 
-    // Get FAQ data using t() calls
     const faqs = (t('landing.v6.faq.items', { returnObjects: true }) as { question: string, answer: string }[]);
 
-    // JSON-LD for FAQPage (Google optimal)
-    const faqSchema = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqs.map(faq => ({
-            "@type": "Question",
-            "name": faq.question,
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": faq.answer
-            }
-        }))
-    };
+    // Inject JSON-LD via useEffect to avoid React DOM conflicts
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(faq => ({
+                "@type": "Question",
+                "name": faq.question,
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": faq.answer
+                }
+            }))
+        });
+        document.head.appendChild(script);
+        return () => {
+            document.head.removeChild(script);
+        };
+    }, [faqs]);
 
     return (
         <section className="py-24 bg-background relative overflow-hidden" id="faq">
-            {/* SEO Schema Injection */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-            />
-
             <div className="container px-4 md:px-6 mx-auto max-w-4xl relative z-10">
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
                         {t('landing.v6.faq.title')}
                     </h2>
                     <p className="text-lg text-muted-foreground">
@@ -53,7 +55,7 @@ export default function FAQSectionV6() {
                             <Collapsible>
                                 <CollapsibleTrigger className="flex items-center justify-between w-full p-6 text-left font-medium text-lg hover:bg-muted/50 transition-colors [&[data-state=open]>svg]:rotate-180">
                                     {faq.question}
-                                    <ChevronDown className="w-5 h-5 text-muted-foreground transition-transform duration-200" />
+                                    <ChevronDown className="w-5 h-5 text-muted-foreground transition-transform duration-200 shrink-0 ml-4" />
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                     <div className="px-6 pb-6 text-muted-foreground leading-relaxed">

@@ -1,17 +1,15 @@
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { Reveal } from '@/components/motion';
+import { useNavigate } from 'react-router-dom';
 
 export default function PricingSectionV6() {
     const { t } = useTranslation();
-
-    // Features are now loaded via i18n
-
+    const navigate = useNavigate();
 
     return (
-        <section className="py-24 bg-background border-t border-border/40">
+        <section className="py-24 bg-background border-t border-border/40" id="pricing">
             <div className="container px-4 md:px-6 max-w-7xl mx-auto">
                 <div className="mb-16 md:mb-24 text-center max-w-3xl mx-auto">
                     <h2 className="font-heading text-3xl md:text-5xl font-bold tracking-tight mb-6">
@@ -31,19 +29,23 @@ export default function PricingSectionV6() {
                         </div>
                         <div className="mb-8 flex items-baseline">
                             <span className="text-4xl font-extrabold font-heading">0₸</span>
-                            <span className="text-muted-foreground ml-2">/month</span>
+                            <span className="text-muted-foreground ml-2">{t('landing.v6.pricing.perMonth')}</span>
                         </div>
 
                         <ul className="space-y-4 mb-8 flex-1">
                             {(t('landing.v6.pricing.free.features', { returnObjects: true }) as string[]).map((feature: string, i: number) => (
                                 <li key={i} className="flex items-center text-sm font-sans">
-                                    <Check className="w-4 h-4 mr-3 text-primary" />
+                                    <Check className="w-4 h-4 mr-3 text-primary shrink-0" />
                                     {feature}
                                 </li>
                             ))}
                         </ul>
 
-                        <Button variant="outline" className="w-full h-12 rounded-xl text-base font-medium border-primary/20 hover:bg-primary/5 hover:text-primary">
+                        <Button
+                            variant="outline"
+                            className="w-full h-12 rounded-xl text-base font-medium border-primary/20 hover:bg-primary/5 hover:text-primary"
+                            onClick={() => navigate('/auth')}
+                        >
                             {t('landing.v6.pricing.free.cta')}
                         </Button>
                     </Reveal>
@@ -59,19 +61,22 @@ export default function PricingSectionV6() {
                         </div>
                         <div className="mb-8 flex items-baseline">
                             <span className="text-4xl font-extrabold font-heading">3,045₸</span>
-                            <span className="text-muted-foreground ml-2">/month</span>
+                            <span className="text-muted-foreground ml-2">{t('landing.v6.pricing.perMonth')}</span>
                         </div>
 
                         <ul className="space-y-4 mb-8 flex-1">
                             {(t('landing.v6.pricing.pro.features', { returnObjects: true }) as string[]).map((feature: string, i: number) => (
                                 <li key={i} className="flex items-center text-sm font-sans font-medium">
-                                    <Check className="w-4 h-4 mr-3 text-primary" />
+                                    <Check className="w-4 h-4 mr-3 text-primary shrink-0" />
                                     {feature}
                                 </li>
                             ))}
                         </ul>
 
-                        <Button className="w-full h-12 rounded-xl text-base font-bold shadow-lg shadow-primary/20">
+                        <Button
+                            className="w-full h-12 rounded-xl text-base font-bold shadow-lg shadow-primary/20"
+                            onClick={() => navigate('/auth')}
+                        >
                             {t('landing.v6.pricing.pro.cta')}
                         </Button>
                     </Reveal>

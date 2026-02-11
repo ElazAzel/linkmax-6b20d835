@@ -58,7 +58,7 @@ export default function CTASection() {
 
                 <Reveal delay={400} direction="up" className="mt-12">
                     <p className="text-sm text-muted-foreground/60">
-                        Free forever plan available • Cancel anytime • 24/7 Support
+                        {t('landing.v6.cta.note')}
                     </p>
                 </Reveal>
             </div>
