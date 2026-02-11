@@ -34,10 +34,11 @@ export default function HeroSection() {
                         </Reveal>
 
                         <Reveal delay={200}>
-                            <h1 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9]">
-                                {t('landing.v6.hero.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/60 to-primary animate-gradient-flow bg-[length:200%_auto]">{t('landing.v6.hero.titleHighlight')}</span>
-                                {t('landing.v6.hero.titleSuffix', { defaultValue: '' }) ? <><br />{t('landing.v6.hero.titleSuffix')}</> : null}
-                                {t('landing.v6.hero.titleBrand', { defaultValue: '' }) ? <><br /><span className="italic font-serif">{t('landing.v6.hero.titleBrand')}</span></> : null}
+                            <h1 className="font-heading text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] sm:leading-[0.9]">
+                                {t('landing.v6.hero.titlePrefix')}{' '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/60 to-primary animate-gradient-flow bg-[length:200%_auto]">
+                                    {t('landing.v6.hero.titleHighlight')}
+                                </span>
                             </h1>
                         </Reveal>
 
