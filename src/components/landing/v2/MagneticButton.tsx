@@ -9,6 +9,7 @@ interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
     size?: 'default' | 'sm' | 'lg' | 'icon';
     strength?: number; // How strong the magnetic pull is (default: 30)
+    onClick?: () => void;
 }
 
 export const MagneticButton = ({

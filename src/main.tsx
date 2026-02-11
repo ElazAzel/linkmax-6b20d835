@@ -12,7 +12,7 @@ import App from "./App";
 checkCacheVersion();
 
 // Lazy load page components for route-based code splitting
-const Index = lazy(() => import("./pages/LandingV6"));
+const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
 const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const Dashboard = lazy(() => import("./pages/DashboardV2"));
@@ -68,15 +68,15 @@ const router = createBrowserRouter([
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug", element: <PublicPage /> },
-      { 
-        path: "*", 
+      {
+        path: "*",
         element: <NotFound />,
         loader: ({ request }) => {
           const url = new URL(request.url);
           // Let platform handle OAuth routes via full page navigation
           if (url.pathname.startsWith('/~oauth')) {
             window.location.href = url.href;
-            return new Promise(() => {}); // Never resolves, page will navigate away
+            return new Promise(() => { }); // Never resolves, page will navigate away
           }
           return null;
         }
