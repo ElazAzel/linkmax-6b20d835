@@ -682,6 +682,8 @@
       "hero": {
         "badge": "The Micro-Business OS",
         "title": "Site, CRM & Analytics - All in One",
+        "titleStart": "Build pages that",
+        "titleEnd": "actually convert",
         "subtitle": "Page builder, lead management, click analytics. Everything a small business needs - no code required.",
         "cta": "Create for Free",
         "secondary": "See examples",
