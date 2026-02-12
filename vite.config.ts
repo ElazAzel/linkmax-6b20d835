@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.jpg', 'robots.txt'],
+      includeAssets: ['favicon.png', 'robots.txt'],
       // Version bump to clear all user caches - 2026-02-08 v1.3.1 fix OAuth and SW errors
       manifest: {
         name: 'LinkMAX - AI-Powered Link-in-Bio',
@@ -29,27 +29,27 @@ export default defineConfig(({ mode }) => ({
         start_url: '/',
         icons: [
           {
-            src: '/favicon.jpg',
+            src: '/favicon.png',
             sizes: '192x192',
-            type: 'image/jpeg',
+            type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon.jpg',
+            src: '/favicon.png',
             sizes: '512x512',
-            type: 'image/jpeg',
+            type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon.jpg',
+            src: '/favicon.png',
             sizes: '192x192',
-            type: 'image/jpeg',
+            type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/favicon.jpg',
+            src: '/favicon.png',
             sizes: '512x512',
-            type: 'image/jpeg',
+            type: 'image/png',
             purpose: 'maskable'
           }
         ],
