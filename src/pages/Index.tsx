@@ -31,7 +31,7 @@ export default function Index() {
 
   // Method to handle navigation and tracking
   const handleNav = useCallback((path: string, section: string) => {
-    trackCtaClick(section, path);
+    trackCtaClick(section as 'create' | 'gallery' | 'pricing' | 'signup', path);
     navigate(path);
   }, [navigate, trackCtaClick]);
 

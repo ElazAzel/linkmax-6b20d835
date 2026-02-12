@@ -1,15 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
-import {
-    IconArrowWaveRightUp,
-    IconBoxAlignRightFilled,
-    IconBoxAlignTopLeft,
-    IconClipboardCopy,
-    IconFileBroken,
-    IconSignature,
-    IconTableColumn,
-} from "@tabler/icons-react";
+import { Copy, BarChart3, Smartphone, Users } from "lucide-react";
 import { motion } from "framer-motion";
 
 // Skeleton components for the graphics
@@ -54,21 +46,21 @@ const items = [
         title: "AI Page Builder",
         description: "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
         header: <AIBuilderVisual />,
-        icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+        icon: <Copy className="h-4 w-4 text-muted-foreground" />,
         className: "md:col-span-2",
     },
     {
         title: "Deep Analytics",
         description: "Track every click, view, and conversion with privacy-focused, real-time analytics.",
         header: <AnalyticsVisual />,
-        icon: <IconBoxAlignTopLeft className="h-4 w-4 text-neutral-500" />,
+        icon: <BarChart3 className="h-4 w-4 text-muted-foreground" />,
         className: "md:col-span-1",
     },
     {
         title: "Mobile First Editor",
         description: "Edit your page from your phone. Full power in your pocket.",
         header: <MobileVisual />,
-        icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+        icon: <Smartphone className="h-4 w-4 text-muted-foreground" />,
         className: "md:col-span-1",
     },
     {
@@ -76,7 +68,7 @@ const items = [
         description:
             "Get leads delivered straight to Telegram. No more missing customers.",
         header: <Skeleton />,
-        icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+        icon: <Users className="h-4 w-4 text-muted-foreground" />,
         className: "md:col-span-2",
     },
 ];
