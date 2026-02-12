@@ -10,11 +10,14 @@ const steps = [
         description: "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
         icon: <User className="w-5 h-5" />,
         mockContent: (
-            <div className="flex flex-col gap-2 p-4">
+            <div className="flex flex-col gap-2 p-4 max-h-[260px] overflow-y-auto scrollbar-hide">
                 <div className="text-sm font-bold opacity-50 mb-2">I am a...</div>
                 <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium">Digital Creator</div>
                 <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Fitness Coach</div>
                 <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Crypto Expert</div>
+                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Beauty Blogger</div>
+                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Music Producer</div>
+                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Online Tutor</div>
             </div>
         )
     },
@@ -118,7 +121,7 @@ function DesktopDemo() {
     const step3Opacity = useTransform(activeStep, [1.5, 2], [0, 1]);
 
     return (
-        <section ref={containerRef} className="relative h-[200vh] bg-background z-0">
+        <section ref={containerRef} className="relative h-[150vh] bg-background z-0">
             <div className="sticky top-0 h-screen flex flex-col items-center justify-center py-20 overflow-hidden">
                 <div className="container relative z-10 grid grid-cols-2 gap-12 items-center h-full px-4">
                     {/* Left: Phone mockup */}

@@ -1,12 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
-import { Copy, BarChart3, Smartphone, Users } from "lucide-react";
+import { Copy, BarChart3, Smartphone, Users, Send } from "lucide-react";
 import { motion } from "framer-motion";
-
-const Skeleton = () => (
-    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-muted to-muted/50 animate-pulse"></div>
-);
 
 const AIBuilderVisual = () => (
     <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
@@ -39,6 +35,46 @@ const MobileVisual = () => (
     </div>
 );
 
+const LeadsVisual = () => (
+    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-sky-500/15 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
+        {/* Telegram-style icon */}
+        <div className="absolute left-6 top-1/2 -translate-y-1/2">
+            <div className="w-14 h-14 rounded-2xl bg-sky-500/20 flex items-center justify-center shadow-lg">
+                <Send className="w-7 h-7 text-sky-500" />
+            </div>
+        </div>
+        {/* Notification bubbles */}
+        <div className="flex flex-col gap-2 ml-24">
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm border border-border/40"
+            >
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs font-medium">New lead: Sarah K.</span>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm border border-border/40"
+            >
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs font-medium">New lead: Alex M.</span>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                className="flex items-center gap-2 bg-primary/10 rounded-full px-3 py-1.5 border border-primary/20"
+            >
+                <span className="text-xs font-bold text-primary">+12 today</span>
+            </motion.div>
+        </div>
+    </div>
+);
+
 const items = [
     {
         title: "AI Page Builder",
@@ -64,7 +100,7 @@ const items = [
     {
         title: "Instant Leads",
         description: "Get leads delivered straight to Telegram. No more missing customers.",
-        header: <Skeleton />,
+        header: <LeadsVisual />,
         icon: <Users className="h-4 w-4 text-muted-foreground" />,
         className: "md:col-span-2",
     },

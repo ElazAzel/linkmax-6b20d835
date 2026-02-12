@@ -110,16 +110,16 @@ export default function Index() {
           <InteractiveDemo />
         </div>
 
-        <div className="relative z-10 bg-background">
+        <div className="relative z-20 bg-background">
           <Testimonials />
 
           <div id="pricing">
             <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
           </div>
-        </div>
 
-        {/* Footer */}
-        <PremiumFooter />
+          {/* Footer */}
+          <PremiumFooter />
+        </div>
 
       </div>
     </>

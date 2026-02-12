@@ -50,7 +50,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                     damping: 30
                 }}
                 className={cn(
-                    "relative bg-black/80 dark:bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto overflow-hidden",
+                    "relative bg-black/80 dark:bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto overflow-hidden max-w-[90vw]",
                     "flex flex-col items-center"
                 )}
             >
