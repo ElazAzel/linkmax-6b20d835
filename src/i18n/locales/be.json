@@ -187,8 +187,13 @@
     }
   },
   "errors": {
+    "general": "An error occurred",
+    "notFound": "Page not found",
     "pageNotFound": "Page not found",
     "invalidLink": "Check the link or the page may have been deleted",
+    "unauthorized": "Authorization required",
+    "forbidden": "Access denied",
+    "networkError": "Network error",
     "loadError": "Loading error",
     "tryAgain": "Try refreshing the page",
     "createYourPage": "Want to create your own page?",
@@ -746,67 +751,6 @@
       "benefit6": "Mobile editor",
       "keywords": "Keywords: link page, link in bio, multi-link, linktree alternative, taplink analog, mini-landing"
     },
-    "faq": {
-      "badge": "Questions and Answers",
-      "title": "Frequently Asked Questions.",
-      "subtitle": "Answers to popular questions about LinkMAX",
-      "q1": {
-        "question": "What is LinkMAX and what is it for?",
-        "answer": "lnkmx is an AI link in bio and mini-site builder that helps create one clear page for links, services, booking, and inquiries."
-      },
-      "q2": {
-        "question": "How much does LinkMAX cost?",
-        "answer": "Basic plan is free forever. Pro: 3 mo - 4,350 ₸/mo, 6 mo - 3,698 ₸/mo (-15%), 12 mo - 3,045 ₸/mo (-30%). Online payment, 14-day refund."
-      },
-      "q3": {
-        "question": "How does AI page generation work?",
-        "answer": "Pick a niche and write a few facts about yourself - AI builds structure, copy, and CTAs in minutes. Free plan has 1 generation/month, Pro has 5/month."
-      },
-      "q4": {
-        "question": "What blocks are available for pages?",
-        "answer": "20+ block types: profile, links, buttons, images, videos, carousels, products, pricing, forms, maps, messengers, testimonials, FAQ, timers, and more."
-      },
-      "q5": {
-        "question": "Is there CRM and analytics?",
-        "answer": "Yes. Pro includes CRM for leads and Telegram notifications. Analytics shows clicks, traffic sources, and visitor behavior."
-      },
-      "q6": {
-        "question": "Is mobile editor supported?",
-        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit pages from your smartphone."
-      },
-      "q7": {
-        "question": "What integrations does LinkMAX support?",
-        "answer": "Telegram for lead notifications and Google Calendar for scheduling. Social media and messengers are available as blocks."
-      },
-      "q8": {
-        "question": "Does LinkMAX take commission on sales?",
-        "answer": "No. 0% commission on your sales - you only pay for subscription."
-      },
-      "q9": {
-        "question": "How to pay for Premium subscription?",
-        "answer": "Payment by card and available payment methods. You can also use tokens (100 tokens = 1 day of Pro)."
-      },
-      "q10": {
-        "question": "What are the refund conditions?",
-        "answer": "Refund is possible within 14 days of payment according to Kazakhstan law. Details in user agreement."
-      },
-      "q11": {
-        "question": "Can I see page examples?",
-        "answer": "Yes. The gallery has real pages from different niches: specialists, shops, services, and creators."
-      },
-      "q12": {
-        "question": "Why is LinkMAX better than Linktree and Taplink?",
-        "answer": "lnkmx has AI page building, CRM, and notifications without extra cost. Plus flexible blocks, clear pricing, and local languages."
-      },
-      "q13": {
-        "question": "Is lnkmx suitable for a shop or service?",
-        "answer": "Yes. You can add catalog, pricing, inquiry forms, and contact buttons so clients can quickly order or book."
-      },
-      "q14": {
-        "question": "Can I connect my own domain?",
-        "answer": "Yes, Pro includes custom domains and page branding."
-      }
-    },
     "nav": {
       "signIn": "Sign In",
       "getStarted": "Create",
@@ -815,9 +759,6 @@
     },
     "floatingCta": {
       "create": "Create"
-    },
-    "footer": {
-      "alternatives": "Comparison"
     },
     "hero": {
       "badge": "AI Mini-Site Builder",
@@ -1566,15 +1507,6 @@
       "locationTitle": "Local relevance",
       "locationBody": "Find examples from your city or country and adapt them for your business."
     }
-  },
-  "errors": {
-    "general": "An error occurred",
-    "notFound": "Page not found",
-    "pageNotFound": "Page not found",
-    "invalidLink": "Invalid or corrupted link",
-    "unauthorized": "Authorization required",
-    "forbidden": "Access denied",
-    "networkError": "Network error"
   },
   "language": {
     "autoTranslate": "Auto-translate",
@@ -3210,73 +3142,5 @@
     "oceanDesc": "Calm sea tones",
     "forest": "Forest",
     "forestDesc": "Natural green shades"
-  },
-  "pricing": {
-    "seo": {
-      "title": "lnkmx Тарифы — Планы для Link in Bio и Мини-сайтов",
-      "description": "Сравните тарифы lnkmx: бесплатный конструктор, Pro с AI, CRM, аналитикой и своим доменом. Прозрачные цены.",
-      "imageAlt": "Тарифные планы lnkmx"
-    },
-    "title": "Тарифы",
-    "choosePlan": "Выберите подходящий тариф",
-    "description": "Разблокируйте все возможности LinkMAX для вашего бизнеса",
-    "months": "мес",
-    "savingsText": "Экономия",
-    "popular": "Популярный",
-    "basicDesc": "Начните бесплатно",
-    "proDesc": "Всё для профессионалов и бизнеса",
-    "free": {
-      "title": "Бесплатно"
-    },
-    "month": "мес",
-    "totalFor": "за",
-    "startFree": "Начать бесплатно",
-    "subscribe": "Подписаться",
-    "currentPlan": "Текущий",
-    "alreadyFree": "Бесплатный тариф уже активен",
-    "comingSoon": "Оплата скоро будет доступна! Следите за обновлениями.",
-    "tokens": {
-      "title": "Или платите Linkkon токенами",
-      "balanceDescription": "100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов",
-      "converting": "Конвертация...",
-      "buyDay": "Купить 1 день за {{cost}} Linkkon",
-      "buyTokens": "Купить токены"
-    },
-    "securePayments": "Безопасные платежи",
-    "cancelAnytime": "Отмена в любое время",
-    "moneyBack": "Гарантия возврата 14 дней",
-    "companyDetails": {
-      "nameLine": "ИП BEEGIN • БИН: 971207300019",
-      "addressLine": "г. Алматы, ул. Шолохова, д. 20/7"
-    },
-    "paymentNote": "Оплата через RoboKassa",
-    "features": {
-      "basicThemes": "Базовые темы оформления",
-      "basicCustomization": "Базовая настройка (цвета, шрифты)",
-      "unlimitedLinks": "Неограниченные ссылки",
-      "basicBlocks": "Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)",
-      "messengers": "Мессенджеры и соцсети",
-      "maps": "Карты (адрес + карта)",
-      "basicStats": "Базовая статистика просмотров",
-      "qrCode": "QR-код страницы",
-      "aiMonthly": "1 AI-генерация в месяц",
-      "allBasic": "Всё из BASIC, плюс:",
-      "allBlocks": "Все 25+ типов блоков без ограничений",
-      "proThemes": "Профессиональные темы и анимации",
-      "media": "Медиа: изображения, видео, карусели",
-      "priceLists": "Прайс-листы и каталоги товаров",
-      "scheduler": "Планировщик блоков",
-      "advancedAnalytics": "Расширенная аналитика кликов",
-      "fullCRM": "Полноценная CRM для лидов",
-      "telegramNotifications": "Telegram-уведомления о заявках",
-      "forms": "Формы сбора заявок",
-      "faq": "FAQ и отзывы блоки",
-      "timers": "Таймеры обратного отсчёта",
-      "aiMonthlyPro": "5 AI-генераций в месяц"
-    },
-    "limitations": {
-      "watermark": "Водяной знак LinkMAX",
-      "limitedBlocks": "10 блоков максимум"
-    }
   }
 }
