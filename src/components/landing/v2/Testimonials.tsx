@@ -1,18 +1,17 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { motion } from "framer-motion";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const testimonials = [
     {
-        name: "Alex Rivera",
+        name: "Alex R.",
         role: "Fitness Coach",
         content: "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it.",
         avatar: "AR"
     },
     {
-        name: "Sarah Chen",
+        name: "Sarah C.",
         role: "Digital Artist",
         content: "The aesthetics are on another level. It doesn't look like a generic link-in-bio. It looks like a custom website.",
         avatar: "SC"
@@ -32,41 +31,42 @@ const testimonials = [
 ];
 
 export const Testimonials = () => {
+    const { t } = useTranslation();
+
     return (
-        <section className="py-20 relative overflow-hidden">
+        <section className="py-20 relative overflow-hidden z-10 bg-background">
             <div className="container px-4 mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-12">
-                    Loved by <span className="text-spotlight">10,000+</span> Creators
+                    {t('landing.v2.testimonials.title', 'Loved by')}{' '}
+                    <span className="text-primary">{t('landing.v2.testimonials.count', '2,000+')}</span>{' '}
+                    {t('landing.v2.testimonials.suffix', 'Creators')}
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {testimonials.map((t, i) => (
+                    {testimonials.map((testimonial, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 1, y: 0 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: i * 0.1 }}
                             whileHover={{ y: -5 }}
-                            className="glass-card p-6 flex flex-col gap-4"
+                            className="bg-card border border-border/60 rounded-2xl p-6 flex flex-col gap-4"
                         >
-                            <div className="flex gap-1 text-yellow-500">
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
+                            <div className="flex gap-1 text-primary">
+                                {[...Array(5)].map((_, j) => (
+                                    <Star key={j} className="w-4 h-4 fill-current" />
+                                ))}
                             </div>
                             <p className="text-sm leading-relaxed text-muted-foreground flex-grow">
-                                "{t.content}"
+                                "{testimonial.content}"
                             </p>
                             <div className="flex items-center gap-3 mt-2">
                                 <Avatar className="h-8 w-8 border border-primary/20">
-                                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{t.avatar}</AvatarFallback>
+                                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{testimonial.avatar}</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <div className="text-sm font-bold">{t.name}</div>
-                                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                                    <div className="text-sm font-bold">{testimonial.name}</div>
+                                    <div className="text-xs text-muted-foreground">{testimonial.role}</div>
                                 </div>
                             </div>
                         </motion.div>

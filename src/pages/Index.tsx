@@ -31,7 +31,7 @@ export default function Index() {
 
   // Method to handle navigation and tracking
   const handleNav = useCallback((path: string, section: string) => {
-    trackCtaClick(section, path);
+    trackCtaClick(section as 'create' | 'gallery' | 'pricing' | 'signup', path);
     navigate(path);
   }, [navigate, trackCtaClick]);
 
@@ -106,14 +106,16 @@ export default function Index() {
           <BentoGridSection />
         </div>
 
-        <div id="demo">
+        <div id="demo" className="relative z-0">
           <InteractiveDemo />
         </div>
 
-        <Testimonials />
+        <div className="relative z-10 bg-background">
+          <Testimonials />
 
-        <div id="pricing">
-          <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
+          <div id="pricing">
+            <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
+          </div>
         </div>
 
         {/* Footer */}
