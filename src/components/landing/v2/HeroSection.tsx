@@ -66,7 +66,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                     className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-[1.1] md:leading-[1.1]"
                 >
                     <span className="block text-foreground">{t('landing.v4.hero.titleStart', 'Build pages that')}</span>
-                    <span className="text-spotlight block mt-2 pb-4">
+                    <span className="block mt-2 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
                         {t('landing.v4.hero.titleEnd', 'actually convert')}
                     </span>
                 </motion.h1>

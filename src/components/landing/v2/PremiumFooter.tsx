@@ -1,76 +1,84 @@
-import { motion } from 'framer-motion';
-import { ArrowUpRight, Github, Twitter, Linkedin, Instagram } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { Heart, Mail, MapPin } from 'lucide-react';
+import { TermsLink } from '@/components/legal/TermsOfServiceModal';
+import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export const PremiumFooter = () => {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative bg-black text-white pt-32 pb-12 overflow-hidden">
-            {/* Background Gradient */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-neutral-900 to-black pointer-events-none" />
-
-            <div className="container relative z-10 px-4 mx-auto flex flex-col items-center">
-
-                {/* Massive CTA */}
-                <div className="w-full text-center mb-32">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="text-[12vw] font-black leading-[0.8] tracking-tighter mb-8"
-                    >
-                        START NOW
-                    </motion.h2>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                    >
-                        <Button className="h-16 px-10 rounded-full text-xl font-bold bg-white text-black hover:bg-neutral-200 transition-transform hover:scale-105 active:scale-95">
-                            Get Your Page <ArrowUpRight className="ml-2 w-6 h-6" />
-                        </Button>
-                    </motion.div>
+        <footer className="border-t border-border/30 py-12 pb-20 px-5 bg-gradient-to-b from-background to-muted/20">
+            <div className="max-w-4xl mx-auto">
+                {/* Logo and description */}
+                <div className="text-center mb-8">
+                    <span className="text-2xl font-black">
+                        lnk<span className="text-primary">mx</span>
+                    </span>
+                    <p className="text-sm text-muted-foreground mt-3 max-w-sm mx-auto">
+                        {t('landingV5.footer.description', 'The all-in-one platform for creators and micro-businesses')}
+                    </p>
                 </div>
 
-                {/* Footer Links Grid */}
-                <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-12 mb-24 border-t border-white/10 pt-16">
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-bold text-lg mb-2">Product</h4>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Features</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Pricing</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Showcase</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Changelog</a>
+                {/* Links Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10 text-sm">
+                    {/* Product */}
+                    <div className="flex flex-col gap-3">
+                        <h4 className="font-bold text-foreground">{t('footer.product', 'Product')}</h4>
+                        <button onClick={() => navigate('/gallery')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                            {t('landingV5.footer.examples', 'Examples')}
+                        </button>
+                        <button onClick={() => navigate('/pricing')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                            {t('landingV5.footer.pricing', 'Pricing')}
+                        </button>
+                        <button onClick={() => navigate('/alternatives')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                            {t('footer.alternatives', 'Alternatives')}
+                        </button>
                     </div>
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-bold text-lg mb-2">Company</h4>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">About</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Careers</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Blog</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Contact</a>
+
+                    {/* Legal */}
+                    <div className="flex flex-col gap-3">
+                        <h4 className="font-bold text-foreground">{t('footer.legal', 'Legal')}</h4>
+                        <TermsLink className="text-muted-foreground hover:text-primary transition-colors text-left">
+                            {t('landingV5.footer.terms', 'Terms of Service')}
+                        </TermsLink>
+                        <PrivacyLink className="text-muted-foreground hover:text-primary transition-colors text-left">
+                            {t('landingV5.footer.privacy', 'Privacy Policy')}
+                        </PrivacyLink>
+                        <button onClick={() => navigate('/payment-terms')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                            {t('footer.paymentTerms', 'Payment Terms')}
+                        </button>
                     </div>
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-bold text-lg mb-2">Legal</h4>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Privacy Policy</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Terms of Service</a>
-                        <a href="#" className="text-neutral-400 hover:text-white transition-colors">Cookie Policy</a>
-                    </div>
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-bold text-lg mb-2">Socials</h4>
-                        <div className="flex gap-4">
-                            <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-white/20 transition-colors"><Twitter className="w-5 h-5" /></a>
-                            <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-white/20 transition-colors"><Github className="w-5 h-5" /></a>
-                            <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-white/20 transition-colors"><Linkedin className="w-5 h-5" /></a>
-                            <a href="#" className="p-2 bg-white/5 rounded-full hover:bg-white/20 transition-colors"><Instagram className="w-5 h-5" /></a>
+
+                    {/* Contacts */}
+                    <div className="flex flex-col gap-3 col-span-2 md:col-span-1">
+                        <h4 className="font-bold text-foreground">{t('footer.contacts', 'Contacts')}</h4>
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                            <Mail className="w-4 h-4 shrink-0" />
+                            <a href="mailto:support@lnkmx.my" className="hover:text-primary transition-colors">support@lnkmx.my</a>
+                        </div>
+                        <div className="flex items-start gap-2 text-muted-foreground">
+                            <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
+                            <span className="text-xs leading-relaxed">
+                                {t('footer.companyInfo', 'ИП «lnkmx» / БИН 123456789012 / Казахстан, г. Алматы')}
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="w-full flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10 text-neutral-500 text-sm">
-                    <p>&copy; {currentYear} lnkmx. All rights reserved.</p>
-                    <p className="mt-2 md:mt-0 font-mono text-xs uppercase tracking-widest">Designed for the future</p>
+                {/* Language switcher */}
+                <div className="flex justify-center mb-6">
+                    <LanguageSwitcher />
                 </div>
+
+                {/* Copyright */}
+                <p className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1">
+                    {t('landingV5.footer.copyright', { year: currentYear, defaultValue: `© ${currentYear} lnkmx. All rights reserved.` })}
+                    <Heart className="h-3 w-3 text-primary/50" />
+                </p>
             </div>
         </footer>
     );
