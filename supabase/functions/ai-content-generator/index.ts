@@ -11,13 +11,13 @@ const RATE_LIMIT_WINDOW = 60; // 60 seconds
 
 async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string): Promise<boolean> {
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW * 1000);
-  
+
   // Clean up old entries
   await supabase
     .from('rate_limits')
     .delete()
     .lt('window_start', windowStart.toISOString());
-  
+
   // Get current rate limit entry
   const { data: existing } = await supabase
     .from('rate_limits')
@@ -26,12 +26,12 @@ async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string
     .eq('endpoint', endpoint)
     .gte('window_start', windowStart.toISOString())
     .single();
-  
+
   if (existing) {
     if (existing.request_count >= RATE_LIMIT_REQUESTS) {
       return false; // Rate limit exceeded
     }
-    
+
     // Update count
     await supabase
       .from('rate_limits')
@@ -48,7 +48,7 @@ async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string
         window_start: new Date().toISOString()
       });
   }
-  
+
   return true;
 }
 
@@ -59,15 +59,15 @@ serve(async (req) => {
 
   try {
     // Extract IP address
-    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
-                      req.headers.get('x-real-ip') || 
-                      'unknown';
-    
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      req.headers.get('x-real-ip') ||
+      'unknown';
+
     // Initialize Supabase client for rate limiting
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
-    
+
     // Check rate limit
     const allowed = await checkRateLimit(supabase, ipAddress, 'ai-content-generator');
     if (!allowed) {
@@ -82,10 +82,10 @@ serve(async (req) => {
     if (!text) {
       throw new Error('Request body is empty');
     }
-    
+
     const { type, input, prompt } = JSON.parse(text);
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    
+
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
@@ -107,6 +107,28 @@ serve(async (req) => {
       case 'seo':
         systemPrompt = 'You are an SEO expert. Generate optimized meta tags for link-in-bio pages. Return a JSON object with: title (50-60 chars), description (150-160 chars), and keywords (array of 5-8 relevant keywords). Return ONLY valid JSON, no markdown.';
         userPrompt = `Generate SEO meta tags for a page with this content: Name: ${input.name}, Bio: ${input.bio}, Links: ${input.links?.join(', ') || 'none'}`;
+        break;
+
+      case 'template-filler':
+        systemPrompt = `You are a content filler for LinkMAX templates.
+Your task is to take a JSON structure of a website template and fill it with highly relevant, engaging content based on the user's description.
+
+CRITICAL RULES:
+1. DO NOT change the structure of the JSON. Return exactly the same block types in the same order.
+2. ONLY fill 'overrides' fields (name, bio, content, title, description, price, etc.)
+3. Use the User Description to generate specific, personalized content.
+4. If the user description is short, expand on it creatively to fill all blocks.
+5. Maintain the language of the user's description (Russian, English, or Kazakh).
+6. Return the FULL JSON object with filled content.
+
+TEMPLATE STRUCTURE TO FILL:
+${JSON.stringify(input.templateBlocks, null, 2)}
+`;
+        userPrompt = `User Description: ${input.prompt}
+
+Fill the template above with content based on this description.
+Return ONLY the items array with 'overrides' populated. Keep technical fields (id, type, style) as is.
+`;
         break;
 
       case 'ai-builder':
@@ -302,9 +324,9 @@ serve(async (req) => {
           beauty: 'мастера красоты (маникюр, макияж, брови) с услугами, портфолио и записью.',
           chef: 'повара/кондитера с меню, услугами кейтеринга, мастер-классами и заказом.',
         };
-        
+
         const nicheDescription = nichePrompts[input.niche] || 'специалиста с услугами и контактами';
-        
+
         systemPrompt = `Ты AI-конструктор профессиональных страниц LinkMAX. Создай полную страницу для ${nicheDescription}
 
 ИНФОРМАЦИЯ:
@@ -383,7 +405,7 @@ serve(async (req) => {
 7. НЕ меняй URL изображений
 
 Return ONLY valid JSON, no markdown.`;
-        
+
         userPrompt = `Бизнес: ${input.businessName}
 Описание: ${input.businessDescription || "Нет описания"}
 Шаблон: ${input.templateName}

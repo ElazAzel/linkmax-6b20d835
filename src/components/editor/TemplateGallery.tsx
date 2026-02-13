@@ -10,12 +10,16 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Check, Sparkles, Store, Wand2 } from 'lucide-react';
+import { Check, Sparkles, Store, Wand2, Loader2, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { createBlock as createBaseBlock } from '@/lib/block-factory';
 import type { Block } from '@/types/page';
 import { TemplatePersonalization } from './TemplatePersonalization';
 import { TemplateMarketplace } from './TemplateMarketplace';
+import { supabase } from '@/platform/supabase/client';
+import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   TEMPLATE_CATEGORY_KEYS,
   type TemplateCategoryKey,
@@ -71,6 +75,31 @@ const PLACEHOLDER_IMAGES = {
     'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop',
     'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop',
   ],
+};
+
+const MATCH_KEYWORDS: Record<string, string> = {
+  // Creators
+  influencer: 'influencer', blog: 'influencer', video: 'influencer', youtube: 'influencer', tiktok: 'influencer', instagram: 'influencer', vlogger: 'influencer',
+  streamer: 'influencer', content: 'influencer', creator: 'influencer',
+
+  // Business
+  chef: 'chef', food: 'chef', cake: 'chef', cook: 'chef', kitchen: 'chef', bakery: 'chef', restaurant: 'restaurant', cafe: 'restaurant', bar: 'restaurant',
+  shop: 'shop', store: 'shop', buy: 'shop', sell: 'shop', ecommerce: 'shop', fashion: 'shop', clothes: 'shop', sneakers: 'shop',
+  realestate: 'realestate', house: 'realestate', home: 'realestate', apartment: 'realestate', realtor: 'realestate', estate: 'realestate', rent: 'realestate',
+  wedding: 'wedding', marriage: 'wedding', invite: 'wedding', event: 'wedding', party: 'wedding', celebration: 'wedding',
+
+  // Experts
+  psychologist: 'psychologist', therapy: 'psychologist', mind: 'psychologist', psychology: 'psychologist', counseling: 'psychologist', coach: 'psychologist',
+  teacher: 'teacher', teach: 'teacher', learn: 'teacher', school: 'teacher', course: 'teacher', english: 'teacher', tutor: 'teacher', education: 'teacher',
+  marketer: 'marketer', marketing: 'marketer', smm: 'marketer', social: 'marketer', promote: 'marketer', ads: 'marketer', advertising: 'marketer',
+  lawyer: 'lawyer', law: 'lawyer', legal: 'lawyer', attorney: 'lawyer', consult: 'lawyer', advice: 'lawyer',
+
+  // Premium
+  agency: 'agency', web: 'agency', design: 'agency', studio: 'agency', digital: 'agency', dev: 'agency', software: 'agency',
+  portfolio: 'portfolio-pro', cv: 'portfolio-pro', resume: 'portfolio-pro', job: 'portfolio-pro', manager: 'portfolio-pro', work: 'portfolio-pro',
+
+  // Other
+  personal: 'personal', life: 'personal', me: 'personal', about: 'personal',
 };
 
 const TEMPLATES: Template[] = [
@@ -554,10 +583,64 @@ export const TemplateGallery = memo(function TemplateGallery({
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [marketplaceOpen, setMarketplaceOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [smartPrompt, setSmartPrompt] = useState('');
+
+  const handleSmartMatch = async () => {
+    if (!smartPrompt.trim()) return;
+
+    setIsGenerating(true);
+    try {
+      // 1. Find best template
+      const words = smartPrompt.toLowerCase().split(/\s+/);
+      let bestTemplateId = 'personal';
+
+      for (const word of words) {
+        if (MATCH_KEYWORDS[word]) {
+          bestTemplateId = MATCH_KEYWORDS[word];
+          break;
+        }
+      }
+
+      // Default to business/agency if description implies business but no specific keyword matches
+      if (bestTemplateId === 'personal' && (smartPrompt.toLowerCase().includes('business') || smartPrompt.toLowerCase().includes('company'))) {
+        bestTemplateId = 'agency';
+      }
+
+      const template = TEMPLATES.find(t => t.id === bestTemplateId) || TEMPLATES[0];
+
+      // 2. Call AI to fill content
+      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
+        body: {
+          type: 'template-filler',
+          input: {
+            prompt: smartPrompt,
+            templateBlocks: template.blocks
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      // 3. Apply overrides
+      const aiBlocks = data.result.blocks || data.result;
+      const finalBlocks = aiBlocks.map((b: any) => createTemplateBlock(b.type, b.overrides));
+
+      onSelect(finalBlocks);
+      onClose();
+      toast.success(t('templates.generated', 'Template generated successfully!'));
+
+    } catch (error) {
+      console.error(error);
+      toast.error(t('templates.error', 'Generation failed'));
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleSelect = (template: Template) => {
     // Generate blocks with full structure from block-factory + overrides
-    const fullBlocks = template.blocks.map((blockDef) => 
+    const fullBlocks = template.blocks.map((blockDef) =>
       createTemplateBlock(blockDef.type, blockDef.overrides || {})
     );
     onSelect(fullBlocks);
@@ -568,8 +651,8 @@ export const TemplateGallery = memo(function TemplateGallery({
     }, 500);
   };
 
-  const filteredTemplates = selectedCategory === 'all' 
-    ? TEMPLATES 
+  const filteredTemplates = selectedCategory === 'all'
+    ? TEMPLATES
     : TEMPLATES.filter(t => normalizeTemplateCategory(t.category) === selectedCategory);
 
   return (
@@ -581,8 +664,8 @@ export const TemplateGallery = memo(function TemplateGallery({
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
               <span className="truncate">{t('templates.title', 'Галерея шаблонов')}</span>
             </DialogTitle>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={() => setMarketplaceOpen(true)}
               className="gap-1 flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3"
@@ -595,6 +678,44 @@ export const TemplateGallery = memo(function TemplateGallery({
             {t('templates.description', 'Выберите готовый шаблон — AI персонализирует под ваш бизнес')}
           </DialogDescription>
         </DialogHeader>
+
+        {/* Smart Match Input */}
+        <div className="px-3 sm:px-6 py-4 bg-muted/20 border-b space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="smart-prompt" className="text-sm font-medium flex items-center gap-1.5">
+              <Wand2 className="h-3.5 w-3.5 text-primary" />
+              {t('templates.smartMatch.title', 'AI Smart Auto-Fill')}
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="smart-prompt"
+                placeholder={t('templates.smartMatch.placeholder', 'Example: I am a fitness coach in Almaty...')}
+                value={smartPrompt}
+                onChange={(e) => setSmartPrompt(e.target.value)}
+                className="flex-1 bg-background text-sm h-9"
+                onKeyDown={(e) => e.key === 'Enter' && handleSmartMatch()}
+              />
+              <Button
+                onClick={handleSmartMatch}
+                disabled={isGenerating || !smartPrompt.trim()}
+                size="sm"
+                className="h-9 px-4 shrink-0"
+              >
+                {isGenerating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4 mr-1.5" />
+                    {t('templates.smartMatch.button', 'Generate')}
+                  </>
+                )}
+              </Button>
+            </div>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              {t('templates.smartMatch.hint', 'Describe your business and we will select & fill the best template for you.')}
+            </p>
+          </div>
+        </div>
 
         {/* Category Filter - Horizontal scroll on mobile */}
         <div className="px-3 sm:px-6 py-2 sm:py-3 border-b overflow-hidden">
@@ -619,9 +740,8 @@ export const TemplateGallery = memo(function TemplateGallery({
               {filteredTemplates.map((template) => (
                 <Card
                   key={template.id}
-                  className={`relative p-2.5 sm:p-4 hover:border-primary cursor-pointer transition-all hover:shadow-lg group active:scale-[0.98] ${
-                    copiedId === template.id ? 'border-green-500 bg-green-500/10' : ''
-                  }`}
+                  className={`relative p-2.5 sm:p-4 hover:border-primary cursor-pointer transition-all hover:shadow-lg group active:scale-[0.98] ${copiedId === template.id ? 'border-green-500 bg-green-500/10' : ''
+                    }`}
                   onClick={() => handleSelect(template)}
                 >
                   {template.isPremium && (
@@ -629,7 +749,7 @@ export const TemplateGallery = memo(function TemplateGallery({
                       PRO
                     </Badge>
                   )}
-                  
+
                   <div className="text-2xl sm:text-4xl mb-1.5 sm:mb-2 text-center group-hover:scale-110 transition-transform">
                     {copiedId === template.id ? (
                       <Check className="h-6 w-6 sm:h-8 sm:w-8 mx-auto text-green-500" />
@@ -637,15 +757,15 @@ export const TemplateGallery = memo(function TemplateGallery({
                       template.preview
                     )}
                   </div>
-                  
+
                   <h4 className="font-semibold text-[11px] sm:text-sm text-center mb-0.5 sm:mb-1 truncate">
                     {template.name}
                   </h4>
-                  
+
                   <p className="text-[9px] sm:text-xs text-muted-foreground text-center line-clamp-2 min-h-[2em] sm:min-h-[2.5em]">
                     {template.description}
                   </p>
-                  
+
                   <div className="mt-1.5 sm:mt-3 text-center">
                     <Badge variant="secondary" className="text-[9px] sm:text-xs px-1.5 sm:px-2">
                       {template.blocks.length} {t('templates.blocks', 'блоков')}
