@@ -83,7 +83,7 @@ export default function Index() {
         entityCategory="SaaS"
       />
 
-      <div className="bg-background min-h-screen text-foreground overflow-x-hidden selection:bg-primary/30 relative">
+      <div className="bg-background min-h-screen text-foreground selection:bg-primary/30 relative" style={{ overflowX: 'clip' }}>
 
         {/* PREMIUM LAYERS */}
         <GrainOverlay />
