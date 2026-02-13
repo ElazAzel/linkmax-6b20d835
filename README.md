@@ -77,16 +77,16 @@ The project follows Clean Architecture principles with separation of concerns.
 
 ## Documentation
 
-📚 **Primary Documentation:**
-
+- [📚 **Documentation Index**](./docs/INDEX.md) - **Start Here** for all documentation.
 - [📖 PLATFORM_SNAPSHOT.md](./docs/PLATFORM_SNAPSHOT.md) - **Single Source of Truth** (Architecture, Status, Flows)
 - [📜 CHANGELOG.md](./docs/CHANGELOG.md) - Version history and changes
+- [🏃 RUNBOOKS](./docs/RUNBOOKS/) - Operational guides (Local Dev, Deployment)
 
 **Component & Feature Refs:**
 
-- [🧩 BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md) - Block library
-- [🏗️ Architecture](./docs/architecture.md) - Deep dive (complementary to Snapshot)
-- [🔒 Security](./docs/SECURITY.md) - Security protocols
+- [blocks-reference](./docs/BLOCKS-REFERENCE.md)
+- [architecture](./docs/architecture.md)
+- [security](./docs/SECURITY.md)
 
 ## Database & Infrastructure
 
