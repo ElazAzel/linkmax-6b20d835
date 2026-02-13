@@ -315,9 +315,12 @@ export function BlockEditorV2({
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
+            // Pass block update handler for size changes
+            onBlockUpdate={handleFormChange}
             enablePreview={block.type !== 'profile'} // Profile often has its own preview or is complex
             previewComponent={previewComponent}
         >
+
             {renderEditor()}
         </BlockEditorShell>
     );

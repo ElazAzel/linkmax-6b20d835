@@ -62,6 +62,8 @@ interface BlockEditorShellProps {
     /** Callbacks */
     onSave: () => void;
     onClose: () => void;
+    /** Update block metadata directly */
+    onBlockUpdate?: (updates: Partial<Block>) => void;
     /** Optional: custom footer actions */
     footerActions?: ReactNode;
 }
@@ -160,6 +162,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     hasUnsavedChanges,
     onSave,
     onClose,
+    onBlockUpdate,
     footerActions,
 }: BlockEditorShellProps) {
     const { t } = useTranslation();
@@ -254,7 +257,9 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                     )}
 
                     <div className="flex-1 min-w-0">
-                        <h2 className="text-lg font-bold truncate">{blockTypeName}</h2>
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-lg font-bold truncate">{blockTypeName}</h2>
+                        </div>
                         <div className="flex items-center gap-2 mt-0.5">
                             <AutosaveIndicator
                                 isSaving={isSaving}
@@ -263,6 +268,54 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                             />
                         </div>
                     </div>
+
+                    {/* Block Size Selector */}
+                    {onBlockUpdate && block && (
+                        <div className="hidden sm:flex items-center gap-1 bg-muted/40 p-1 rounded-lg">
+                            {/* 1x1 (Small) */}
+                            <Button
+                                variant={(!block.blockSize || block.blockSize === 'small' || block.blockSize === 'half') ? 'secondary' : 'ghost'}
+                                size="icon"
+                                className="h-7 w-7 rounded-md"
+                                title="1x1"
+                                onClick={() => onBlockUpdate({ blockSize: 'small' })}
+                            >
+                                <div className="w-2 h-2 border border-current" />
+                            </Button>
+                            {/* 2x1 (Wide) */}
+                            <Button
+                                variant={(block.blockSize === 'wide' || block.blockSize === 'full') ? 'secondary' : 'ghost'}
+                                size="icon"
+                                className="h-7 w-7 rounded-md"
+                                title="2x1"
+                                onClick={() => onBlockUpdate({ blockSize: 'wide' })}
+                            >
+                                <div className="w-4 h-2 border border-current" />
+                            </Button>
+                            {/* 1x2 (Tall) */}
+                            <Button
+                                variant={(block.blockSize === 'tall') ? 'secondary' : 'ghost'}
+                                size="icon"
+                                className="h-7 w-7 rounded-md"
+                                title="1x2"
+                                onClick={() => onBlockUpdate({ blockSize: 'tall' })}
+                            >
+                                <div className="h-4 w-2 border border-current" />
+                            </Button>
+                            {/* 2x2 (Large) */}
+                            <Button
+                                variant={(block.blockSize === 'large') ? 'secondary' : 'ghost'}
+                                size="icon"
+                                className="h-7 w-7 rounded-md"
+                                title="2x2"
+                                onClick={() => onBlockUpdate({ blockSize: 'large' })}
+                            >
+                                <div className="w-4 h-4 border border-current" />
+                            </Button>
+                        </div>
+                    )}
+
+
 
                     {/* Preview toggle (desktop only) */}
                     {enablePreview && !isMobile && previewComponent && (

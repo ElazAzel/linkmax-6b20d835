@@ -56,15 +56,26 @@ export interface BlockSchedule {
 }
 
 // Block size presets - optimized for mobile-first responsive grid
-// gridCols: 1 = full width, 2 = half width (2 per row max)
+// gridCols: 1 = 1 column (half width on mobile/desktop 2-col grid), 2 = 2 columns (full width)
+// gridRows: 1 = standard height, 2 = double height
 export type BlockSizePreset =
-    | 'full'        // Full width block
-    | 'half';       // Half width block (2 per row)
+    | 'small'       // 1x1 (was 'half' logic, but explicit 1x1)
+    | 'wide'        // 2x1 (was 'full' logic)
+    | 'tall'        // 1x2
+    | 'large'       // 2x2
+    | 'full'        // Legacy alias for 'wide'
+    | 'half';       // Legacy alias for 'small'
 
-export const BLOCK_SIZE_DIMENSIONS: Record<BlockSizePreset, { gridCols: 1 | 2 }> = {
-    'full': { gridCols: 1 },
-    'half': { gridCols: 2 },
+export const BLOCK_SIZE_DIMENSIONS: Record<BlockSizePreset, { gridCols: 1 | 2; gridRows: 1 | 2 }> = {
+    'small': { gridCols: 1, gridRows: 1 },
+    'wide': { gridCols: 2, gridRows: 1 },
+    'tall': { gridCols: 1, gridRows: 2 },
+    'large': { gridCols: 2, gridRows: 2 },
+    // Legacy mapping
+    'full': { gridCols: 2, gridRows: 1 },
+    'half': { gridCols: 1, gridRows: 1 },
 };
+
 
 // Grid layout data for blocks
 export interface GridLayoutData {
