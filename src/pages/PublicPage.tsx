@@ -15,6 +15,7 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
+import { TrackingScripts } from '@/components/analytics/TrackingScripts';
 import { decompressPageData } from '@/lib/compression';
 import { usePublicPage } from '@/hooks/usePageCache';
 import { AnalyticsProvider } from '@/hooks/useAnalyticsTracking';
@@ -283,6 +284,11 @@ export default function PublicPage() {
 
           {/* AI Chatbot Widget */}
           {slug && <ChatbotWidget pageSlug={slug} />}
+
+          {/* Analytics Tracking Scripts */}
+          {pageData.integrations && (
+            <TrackingScripts integrations={pageData.integrations} />
+          )}
         </div>
       </AnalyticsProvider>
     </>

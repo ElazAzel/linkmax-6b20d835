@@ -45,9 +45,11 @@ interface PageSettingsScreenProps {
   onUpdateSlug: (slug: string) => Promise<{ success: boolean; error?: string }>;
   onUpdateSeo: (seo: { title?: string; description?: string; keywords?: string[] }) => void;
   onUpdateNiche: (niche: Niche) => void;
+  onUpdateIntegrations: (integrations: any) => void;
   onToggleIndexable: (indexable: boolean) => void;
   onUpgradePage?: () => void;
   onOpenTheme?: () => void;
+  integrations?: any;
 }
 
 export const PageSettingsScreen = memo(function PageSettingsScreen({
@@ -70,6 +72,8 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   onToggleIndexable,
   onUpgradePage,
   onOpenTheme,
+  onUpdateIntegrations,
+  integrations,
 }: PageSettingsScreenProps) {
   const { t } = useTranslation();
 
@@ -94,7 +98,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
     setSlugError(null);
 
     const result = await onUpdateSlug(slugInput);
-    
+
     if (!result.success) {
       setSlugError(t(`dashboard.pageSettings.errors.${result.error}`, 'Failed to update slug'));
     }
@@ -277,6 +281,60 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
           </h3>
           <Card className="p-4">
             <NicheSelector value={niche} onChange={onUpdateNiche} />
+          </Card>
+        </div>
+
+        {/* Integrations (Facebook, TikTok, GA4, Webhooks) */}
+        <div className="space-y-2">
+          <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+            {t('settings.integrations.title', 'Integrations & Tracking')}
+          </h3>
+          <Card className="p-4 space-y-4">
+            <div className="space-y-2">
+              <Label>{t('settings.integrations.fbPixel', 'Facebook Pixel ID')}</Label>
+              <Input
+                value={integrations?.fb_pixel || ''}
+                onChange={(e) => onUpdateIntegrations({ ...integrations, fb_pixel: e.target.value })}
+                placeholder="e.g. 1234567890"
+                className="rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('settings.integrations.ttPixel', 'TikTok Pixel ID')}</Label>
+              <Input
+                value={integrations?.tt_pixel || ''}
+                onChange={(e) => onUpdateIntegrations({ ...integrations, tt_pixel: e.target.value })}
+                placeholder="e.g. C1234567890"
+                className="rounded-xl"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('settings.integrations.ga4Id', 'GA4 Measurement ID')}</Label>
+              <Input
+                value={integrations?.ga4_id || ''}
+                onChange={(e) => onUpdateIntegrations({ ...integrations, ga4_id: e.target.value })}
+                placeholder="e.g. G-XXXXXXXXXX"
+                className="rounded-xl"
+              />
+            </div>
+
+            {/* Webhook - Pro Only */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label>{t('settings.integrations.webhookUrl', 'Webhook URL')}</Label>
+                {!isPremium && <Badge variant="secondary" className="text-xs">PRO</Badge>}
+              </div>
+              <Input
+                value={integrations?.webhook_url || ''}
+                onChange={(e) => onUpdateIntegrations({ ...integrations, webhook_url: e.target.value })}
+                placeholder="https://your-webhook.com/..."
+                className="rounded-xl"
+                disabled={!isPremium}
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('settings.integrations.webhookHint', 'Recieve a POST request when a lead is created')}
+              </p>
+            </div>
           </Card>
         </div>
 

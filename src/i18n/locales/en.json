@@ -479,6 +479,15 @@
       "unlinkFailed": "Failed to unlink account",
       "unlinkSuccess": "Account unlinked",
       "cannotUnlinkLast": "You must have at least one login method"
+    },
+    "integrations": {
+      "title": "Integrations & Tracking",
+      "description": "Connect external analytics and automation tools",
+      "fbPixel": "Facebook Pixel ID",
+      "ttPixel": "TikTok Pixel ID",
+      "ga4Id": "GA4 Measurement ID",
+      "webhookUrl": "Webhook URL (Pro)",
+      "webhookHint": "We'll send a POST request with lead data"
     }
   },
   "niche": {

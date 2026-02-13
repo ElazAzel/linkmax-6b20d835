@@ -22,6 +22,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTokens } from '@/hooks/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
+import { trackPurchase } from '@/components/analytics/TrackingScripts';
 
 interface ProductBlockProps {
   block: ProductBlockType;
@@ -36,29 +37,32 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
   const [isPurchasing, setIsPurchasing] = useState(false);
   const { user } = useAuth();
   const tokens = useTokens();
-  
+
   const name = getI18nText(block.name, i18n.language as SupportedLanguage);
   const description = getI18nText(block.description, i18n.language as SupportedLanguage);
   const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage);
-  
+
   // Check if this product uses token payment (price in KZT = tokens)
   const tokenPrice = block.currency === 'KZT' ? block.price : null;
   const hasEnoughTokens = tokenPrice ? (tokens.balance?.balance || 0) >= tokenPrice : true;
-  
+
   const handleBuy = async () => {
     // If product has a direct buy link, use it
     if (block.buyLink) {
+      if (block.price) {
+        trackPurchase(block.price, block.currency);
+      }
       window.open(block.buyLink, '_blank', 'noopener,noreferrer');
       return;
     }
-    
+
     // Token-based purchase (KZT = Linkkon tokens)
     if (tokenPrice) {
       if (!user) {
         toast.error(t('product.authRequired', 'Необходима авторизация для покупки'));
         return;
       }
-      
+
       if (!hasEnoughTokens) {
         const deficit = tokenPrice - (tokens.balance?.balance || 0);
         toast.info(t('product.notEnoughTokens', { count: Math.ceil(deficit), defaultValue: `Недостаточно токенов. Нужно еще ${Math.ceil(deficit)} Linkkon.` }));
@@ -66,7 +70,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
         redirectToTokenPurchase(deficit, name);
         return;
       }
-      
+
       // Process token purchase
       setIsPurchasing(true);
       try {
@@ -77,9 +81,15 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
           tokenPrice,
           t('product.purchaseDescription', 'Покупка товара: {{name}}', { name })
         );
-        
+
         if (success) {
           toast.success(t('product.purchaseSuccess', '🎉 Вы успешно приобрели "{{name}}"!', { name }));
+
+          // Track purchase event
+          if (tokenPrice) {
+            trackPurchase(tokenPrice, 'KZT'); // Assuming 1 token = 1 KZT roughly for tracking, or just track tokens
+          }
+
           tokens.refresh();
           setIsDetailOpen(false);
         }
@@ -128,7 +138,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
           />
         </div>
       )}
-      
+
       {/* Product Info */}
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-3">
@@ -137,17 +147,17 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
             {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
           </span>
         </div>
-        
+
         {description && (
           <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
             {description}
           </p>
         )}
       </div>
-      
+
       {/* Buy Button */}
       {(block.buyLink || tokenPrice) && (
-        <Button 
+        <Button
           onClick={handleBuy}
           disabled={isPurchasing}
           className={cn(
@@ -184,7 +194,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
 
   // Compact mobile-optimized card layout
   const ProductCard = () => (
-    <div 
+    <div
       className={cn(
         "w-full rounded-xl overflow-hidden cursor-pointer",
         "bg-card border border-border",
@@ -212,7 +222,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
             />
           </div>
         )}
-        
+
         {/* Content */}
         <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
@@ -225,13 +235,13 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
               </p>
             )}
           </div>
-          
+
           {/* Price and action hint */}
           <div className="flex items-center justify-between gap-2 mt-2">
             <span className="text-primary font-bold text-base whitespace-nowrap">
               {formatPrice(block.price)} {getCurrencySymbol(block.currency)}
             </span>
-            
+
             <span className="text-xs text-muted-foreground">
               {t('actions.tapToView', 'Подробнее →')}
             </span>
@@ -244,7 +254,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
   return (
     <>
       <ProductCard />
-      
+
       {/* Product Detail Modal/Drawer */}
       {isMobile ? (
         <Drawer open={isDetailOpen} onOpenChange={setIsDetailOpen}>

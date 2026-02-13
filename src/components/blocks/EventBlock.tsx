@@ -21,6 +21,7 @@ import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { getEventRegistrationCount, isEmailRegistered } from '@/services/events';
 import { downloadICS, getGoogleCalendarUrl, type CalendarEvent } from '@/lib/calendar-utils';
 import { EventFormRenderer } from '@/components/event-forms/EventFormRenderer';
+import { trackLead, trackPurchase } from '@/components/analytics/TrackingScripts';
 import type { EventBlock as EventBlockType, EventFormField } from '@/types/page';
 
 interface EventBlockProps {
@@ -241,7 +242,7 @@ export const EventBlock = memo(function EventBlock({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setEventError(null);
-    
+
     if (registrationClosed) {
       toast.error(t('event.registrationClosed', 'Регистрация закрыта'));
       return;
@@ -339,6 +340,12 @@ export const EventBlock = memo(function EventBlock({
       );
       localStorage.removeItem(draftKey);
 
+      // Track events
+      trackLead();
+      if (block.isPaid && block.price) {
+        trackPurchase(block.price, block.currency);
+      }
+
       // Send notification to organizer (Pro feature, non-blocking)
       if (isOwnerPremium && registration?.id && block.eventId && pageOwnerId) {
         supabase.functions.invoke('send-event-confirmation', {
@@ -389,17 +396,17 @@ export const EventBlock = memo(function EventBlock({
     const requiredFields = eventFields.filter(f => f.required || f.type === 'email');
     const totalRequired = requiredFields.length + 1; // +1 for system email
     let filledCount = 0;
-    
+
     const emailVal = formValues[SYSTEM_EMAIL_FIELD_ID];
     if (emailVal && typeof emailVal === 'string' && emailVal.trim()) filledCount++;
-    
+
     for (const field of requiredFields) {
       const val = formValues[field.id];
       if (val !== undefined && val !== '' && val !== false && !(Array.isArray(val) && val.length === 0)) {
         filledCount++;
       }
     }
-    
+
     return Math.round((filledCount / totalRequired) * 100);
   }, [formValues, eventFields, block.settings?.showProgressBar]);
 
@@ -450,15 +457,15 @@ export const EventBlock = memo(function EventBlock({
             )}
           </div>
 
-          <Button 
-            className="w-full rounded-xl" 
+          <Button
+            className="w-full rounded-xl"
             onClick={handleOpen}
             disabled={registrationClosed}
             variant={registrationClosed ? 'secondary' : 'default'}
           >
-            {isFull 
+            {isFull
               ? t('event.noSpots', 'Мест нет')
-              : registrationClosed 
+              : registrationClosed
                 ? t('event.registrationClosed', 'Регистрация закрыта')
                 : (block.buttonText && getI18nText(block.buttonText, language)) || t('event.register', 'Зарегистрироваться')
             }
@@ -488,7 +495,7 @@ export const EventBlock = memo(function EventBlock({
                   </div>
                   <div className="text-xl font-semibold">{ticketCode}</div>
                 </div>
-                
+
                 {/* Add to Calendar */}
                 {block.startAt && (
                   <div className="rounded-xl border border-border/60 p-4 space-y-3">
@@ -505,7 +512,7 @@ export const EventBlock = memo(function EventBlock({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => {
                               const calendarEvent: CalendarEvent = {
                                 title,
@@ -520,7 +527,7 @@ export const EventBlock = memo(function EventBlock({
                           >
                             Google Calendar
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => {
                               const calendarEvent: CalendarEvent = {
                                 title,
@@ -637,7 +644,7 @@ export const EventBlock = memo(function EventBlock({
                   {registrationClosed && !eventError && (
                     <Alert>
                       <AlertDescription>
-                        {isFull 
+                        {isFull
                           ? t('event.noSpotsMessage', 'К сожалению, все места заняты.')
                           : t('event.registrationClosedMessage', 'Регистрация на это событие закрыта.')
                         }

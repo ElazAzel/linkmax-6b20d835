@@ -502,6 +502,10 @@ export default function DashboardV2() {
                     seo: { ...dashboard.pageData?.seo, ...seo },
                   });
                 }}
+                integrations={dashboard.pageData?.integrations}
+                onUpdateIntegrations={(integrations) => {
+                  dashboard.updatePageDataPartial({ integrations });
+                }}
                 onToggleIndexable={(indexable) => {
                   dashboard.updatePageDataPartial({ isIndexable: indexable });
                 }}

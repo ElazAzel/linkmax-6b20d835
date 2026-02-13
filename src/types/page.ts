@@ -37,6 +37,13 @@ export interface GridConfig {
   cellHeight: number;       // cell height in px
 }
 
+export interface PageIntegrations {
+  fb_pixel?: string;
+  tt_pixel?: string;
+  ga4_id?: string;
+  webhook_url?: string;
+}
+
 export interface PageData {
   id: string;
   userId?: string;
@@ -53,6 +60,7 @@ export interface PageData {
   isIndexable?: boolean;
   viewCount?: number;
   metrics?: PageMetrics;
+  integrations?: PageIntegrations;
   editorMode?: EditorMode;
   gridConfig?: GridConfig;
   niche?: string;

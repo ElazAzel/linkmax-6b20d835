@@ -18,11 +18,11 @@ interface GridBlocksRendererProps {
 // Check if block is full width (with fallback for legacy sizes)
 function isFullWidthBlock(blockSize?: BlockSizePreset): boolean {
   if (!blockSize) return true; // Default to full width
-  
+
   // Handle legacy sizes - convert to new format
   if (blockSize.startsWith('full')) return true;
   if (blockSize.startsWith('half')) return false;
-  
+
   return true; // Default fallback
 }
 
@@ -103,15 +103,15 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
       {rows.map((row) => {
         // Use stable key based on block IDs in row
         const rowKey = createRowKey(row.blocks);
-        
+
         // Check if this is a profile row (single profile block)
         const isProfileRow = row.blocks.length === 1 && row.blocks[0].type === 'profile';
-        
+
         if (isProfileRow) {
           return (
             <div key={rowKey} className="w-full">
-              <BlockRenderer 
-                block={row.blocks[0]} 
+              <BlockRenderer
+                block={row.blocks[0]}
                 isPreview={isPreview}
                 pageOwnerId={pageOwnerId}
                 pageId={pageId}
@@ -127,15 +127,15 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             {row.blocks.map((block) => {
               const isFullWidth = isFullWidthBlock(block.blockSize);
               const contentAlignment = block.blockStyle?.contentAlignment || 'center';
-              const alignmentClass = contentAlignment === 'top' 
-                ? 'items-start' 
-                : contentAlignment === 'bottom' 
-                ? 'items-end' 
-                : 'items-center';
-              
+              const alignmentClass = contentAlignment === 'top'
+                ? 'items-start'
+                : contentAlignment === 'bottom'
+                  ? 'items-end'
+                  : 'items-center';
+
               return (
-                <div 
-                  key={block.id} 
+                <div
+                  key={block.id}
                   className={cn(
                     'rounded-xl overflow-hidden flex',
                     alignmentClass,
@@ -143,8 +143,8 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                   )}
                 >
                   <div className="w-full">
-                    <BlockRenderer 
-                      block={block} 
+                    <BlockRenderer
+                      block={block}
                       isPreview={isPreview}
                       pageOwnerId={pageOwnerId}
                       pageId={pageId}

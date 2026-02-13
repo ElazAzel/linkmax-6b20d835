@@ -479,6 +479,15 @@
       "unlinkFailed": "Не удалось отключить аккаунт",
       "unlinkSuccess": "Аккаунт отключён",
       "cannotUnlinkLast": "Необходимо оставить хотя бы один способ входа"
+    },
+    "integrations": {
+      "title": "Интеграции и аналитика",
+      "description": "Подключите внешние сервисы аналитики и автоматизации",
+      "fbPixel": "ID пикселя Facebook",
+      "ttPixel": "ID пикселя TikTok",
+      "ga4Id": "ID потока GA4",
+      "webhookUrl": "Webhook URL (Pro)",
+      "webhookHint": "Мы отправим POST-запрос с данными заявки"
     }
   },
   "niche": {

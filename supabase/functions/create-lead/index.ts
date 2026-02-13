@@ -12,13 +12,13 @@ const RATE_LIMIT_WINDOW = 60; // 60 seconds
 
 async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string): Promise<boolean> {
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW * 1000);
-  
+
   // Clean up old entries
   await supabase
     .from('rate_limits')
     .delete()
     .lt('window_start', windowStart.toISOString());
-  
+
   // Get current rate limit entry
   const { data: existing } = await supabase
     .from('rate_limits')
@@ -27,12 +27,12 @@ async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string
     .eq('endpoint', endpoint)
     .gte('window_start', windowStart.toISOString())
     .single();
-  
+
   if (existing) {
     if (existing.request_count >= RATE_LIMIT_REQUESTS) {
       return false; // Rate limit exceeded
     }
-    
+
     // Update count
     await supabase
       .from('rate_limits')
@@ -49,7 +49,7 @@ async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string
         window_start: new Date().toISOString()
       });
   }
-  
+
   return true;
 }
 
@@ -60,9 +60,9 @@ serve(async (req) => {
 
   try {
     // Extract IP address
-    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
-                      req.headers.get('x-real-ip') || 
-                      'unknown';
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      req.headers.get('x-real-ip') ||
+      'unknown';
 
     // Initialize Supabase client with service role key to bypass RLS
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -79,7 +79,7 @@ serve(async (req) => {
       );
     }
 
-    const { pageOwnerId, name, email, phone, source, notes, metadata } = await req.json();
+    const { pageOwnerId, pageId, name, email, phone, source, notes, metadata } = await req.json();
 
     if (!pageOwnerId || !name) {
       return new Response(
@@ -159,6 +159,44 @@ serve(async (req) => {
     } catch (notifyError) {
       console.error('Error triggering notification:', notifyError);
       // Don't fail the lead creation if notification fails
+    }
+
+    // Handle webhook integrations
+    if (pageId) {
+      try {
+        const { data: page } = await supabase
+          .from('pages')
+          .select('integrations')
+          .eq('id', pageId)
+          .single();
+
+        const webhookUrl = page?.integrations?.webhook_url;
+
+        if (webhookUrl) {
+          console.log(`Sending webhook to ${webhookUrl}`);
+          fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event: 'lead_created',
+              lead: {
+                id: lead.id,
+                name: lead.name,
+                email: lead.email,
+                phone: lead.phone,
+                source: lead.source,
+                notes: lead.notes,
+                metadata: lead.metadata,
+                created_at: lead.created_at,
+              },
+              pageId,
+              pageOwnerId,
+            }),
+          }).catch(err => console.error('Error sending webhook:', err));
+        }
+      } catch (webhookError) {
+        console.error('Error handling webhook:', webhookError);
+      }
     }
 
     return new Response(

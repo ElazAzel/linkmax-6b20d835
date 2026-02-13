@@ -11,12 +11,15 @@ import { toast } from 'sonner';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
 
+import { trackLead } from '@/components/analytics/TrackingScripts';
+
 interface FormBlockProps {
   block: FormBlockType;
   pageOwnerId?: string;
+  pageId?: string;
 }
 
-export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlockProps) {
+export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }: FormBlockProps) {
   const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,28 +36,29 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const missingFields = block.fields
       ?.filter((field, index) => field.required && !formData[getFieldKey(field, index)])
       .map((field, index) => getFieldKey(field, index));
-    
+
     if (missingFields && missingFields.length > 0) {
       toast.error(t('form.fillRequired', 'Please fill required fields') + `: ${missingFields.join(', ')}`);
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Create lead via edge function (bypasses RLS for anonymous visitors)
       if (pageOwnerId) {
         const name = formData['name'] || formData['Name'] || formData['Имя'] || formData['имя'] || 'Unknown';
         const email = formData['email'] || formData['Email'] || formData['Почта'] || formData['почта'] || null;
         const phone = formData['phone'] || formData['Phone'] || formData['Телефон'] || formData['телефон'] || null;
-        
+
         const { error } = await supabase.functions.invoke('create-lead', {
           body: {
             pageOwnerId,
+            pageId, // Pass pageId for webhook lookup
             name,
             email,
             phone,
@@ -66,6 +70,9 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
 
         if (error) {
           console.error('Error creating lead:', error);
+        } else {
+          // Track lead event on success
+          trackLead();
         }
       }
 
@@ -80,10 +87,10 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
   };
 
   const renderField = (field: FormBlockType['fields'][0], index: number) => {
-    const fieldName = typeof field.name === 'object' && field.name 
+    const fieldName = typeof field.name === 'object' && field.name
       ? getI18nText(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`
       : (field.name as string) || `Field ${index + 1}`;
-    
+
     const fieldPlaceholder = typeof field.placeholder === 'object' && field.placeholder
       ? getI18nText(field.placeholder, i18n.language as SupportedLanguage)
       : (field.placeholder as string);
@@ -130,9 +137,9 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
             {renderField(field, index)}
           </div>
         ))}
-        <Button 
-          type="submit" 
-          className="w-full h-12 sm:h-10 rounded-xl text-base sm:text-sm font-semibold" 
+        <Button
+          type="submit"
+          className="w-full h-12 sm:h-10 rounded-xl text-base sm:text-sm font-semibold"
           disabled={isSubmitting}
         >
           <Send className="h-4 w-4 mr-2" />

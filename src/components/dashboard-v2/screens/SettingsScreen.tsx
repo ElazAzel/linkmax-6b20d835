@@ -49,7 +49,7 @@ import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';
 import { cn } from '@/lib/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
-import type { ProfileBlock } from '@/types/page';
+import type { ProfileBlock, PageIntegrations } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
 
@@ -59,26 +59,26 @@ interface SettingsScreenProps {
   onUsernameChange: (value: string) => void;
   onUpdateUsername: () => void;
   usernameSaving: boolean;
-  
+
   // Profile block (page-scoped display)
   profileBlock?: ProfileBlock;
   onUpdateProfile: (updates: Partial<ProfileBlock>) => void;
-  
+
   // Premium status
   isPremium: boolean;
   premiumTier?: PremiumTier;
-  
+
   // Notifications (user-scoped)
   emailNotificationsEnabled: boolean;
   onEmailNotificationsChange: (enabled: boolean) => void;
   telegramEnabled: boolean;
   telegramChatId: string;
   onTelegramChange: (enabled: boolean, chatId?: string) => void;
-  
+
   // Page settings (page-scoped)
   niche?: Niche;
   onNicheChange: (niche: Niche) => void;
-  
+
   // Page info (for page settings)
   pageTitle?: string;
   pageSlug?: string;
@@ -89,9 +89,11 @@ interface SettingsScreenProps {
   isIndexable?: boolean;
   onUpdateSlug?: (slug: string) => Promise<{ success: boolean; error?: string }>;
   onUpdateSeo?: (seo: { title?: string; description?: string }) => void;
+  onUpdateIntegrations?: (integrations: PageIntegrations) => void;
+  integrations?: PageIntegrations;
   onToggleIndexable?: (indexable: boolean) => void;
   onUpgradePage?: () => void;
-  
+
   // Actions
   onSignOut: () => void;
   onOpenFriends: () => void;
@@ -184,7 +186,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
     setSlugError(null);
 
     const result = await props.onUpdateSlug(slugInput);
-    
+
     if (!result.success) {
       setSlugError(t(`dashboard.pageSettings.errors.${result.error}`, 'Failed to update slug'));
     }
@@ -233,15 +235,15 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
         {/* Tab Switcher */}
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'page' | 'account')} className="w-full">
           <TabsList className="w-full h-12 p-1 bg-muted/50 rounded-2xl mb-6">
-            <TabsTrigger 
-              value="page" 
+            <TabsTrigger
+              value="page"
               className="flex-1 h-10 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm"
             >
               <FileText className="w-4 h-4 mr-2" />
               {t('dashboard.settingsTabs.page', 'Страница')}
             </TabsTrigger>
-            <TabsTrigger 
-              value="account" 
+            <TabsTrigger
+              value="account"
               className="flex-1 h-10 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm"
             >
               <User className="w-4 h-4 mr-2" />
@@ -652,10 +654,10 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
                     iconBg="bg-slate-500/15"
                     iconColor="text-slate-500"
                     label={t('dashboard.accountSettings.billingHistory', 'Billing History')}
-                    onClick={() => {/* TODO: Open billing history */}}
+                    onClick={() => {/* TODO: Open billing history */ }}
                   />
                 )}
-            </Card>
+              </Card>
             </div>
 
             {/* Linked Accounts (Google / Apple) */}
@@ -672,7 +674,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
                   iconBg="bg-red-500/15"
                   iconColor="text-red-500"
                   label={t('dashboard.accountSettings.changePassword', 'Change Password')}
-                  onClick={() => {/* TODO: Open password change */}}
+                  onClick={() => {/* TODO: Open password change */ }}
                 />
               </Card>
             </div>

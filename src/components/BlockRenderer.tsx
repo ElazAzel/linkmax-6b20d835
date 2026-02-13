@@ -273,7 +273,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       return (
         <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <FormBlock block={block} pageOwnerId={pageOwnerId} />
+            <FormBlock block={block} pageOwnerId={pageOwnerId} pageId={pageId} />
           </Suspense>
         </TrackableWrapper>
       );
