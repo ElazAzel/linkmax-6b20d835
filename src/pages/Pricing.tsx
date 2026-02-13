@@ -14,7 +14,9 @@ import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
+import { cn } from '@/lib/utils';
 type BillingPeriod = 3 | 6 | 12;
+
 export default function Pricing() {
   const navigate = useNavigate();
   const {
@@ -235,92 +237,114 @@ export default function Pricing() {
           </div>
         </div>}
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12">
-          {Object.entries(pricingPlans).map(([key, plan]) => {
+        {/* Pricing Card - Unified PRO Focus */}
+        <div className="max-w-md mx-auto mb-12">
+          {(() => {
+            const planKey = 'pro';
+            const plan = pricingPlans.pro;
             const Icon = plan.icon;
-            const isCurrentPlan = tier === key || tier === 'free' && key === 'basic';
+            const isCurrentPlan = tier === planKey;
             const monthlyKzt = plan.pricesKzt[billingPeriod];
             const monthlyUsd = plan.pricesUsd[billingPeriod];
             const totalKzt = plan.totalKzt[billingPeriod];
             const totalUsd = plan.totalUsd[billingPeriod];
-            return <Card key={key} className={`relative overflow-hidden transition-all duration-300 hover:scale-[1.02] ${'popular' in plan && plan.popular ? 'border-primary shadow-lg shadow-primary/20' : 'border-border/50'} ${isCurrentPlan ? 'ring-2 ring-primary' : ''}`}>
-              {'popular' in plan && plan.popular && <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-bl-xl">
-                {t('pricing.popular', 'Популярный')}
-              </div>}
 
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center`}>
-                    <Icon className="h-6 w-6 text-white" />
+            return (
+              <div className="space-y-6">
+                <Card className={cn(
+                  "relative overflow-hidden transition-all duration-300 hover:scale-[1.01] border-primary shadow-lg shadow-primary/20",
+                  isCurrentPlan && "ring-2 ring-primary"
+                )}>
+                  <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-bl-xl">
+                    {t('pricing.popular', 'Популярный')}
                   </div>
-                  <div>
-                    <CardTitle className="flex items-center">
-                      {plan.name}
-                      {getCurrentPlanBadge(key)}
-                    </CardTitle>
-                    <CardDescription>
-                      {key === 'basic' && t('pricing.basicDesc', 'Начните бесплатно')}
-                      {key === 'pro' && t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}
-                    </CardDescription>
-                  </div>
+
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center`}>
+                        <Icon className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="flex items-center">
+                          {plan.name}
+                          {getCurrentPlanBadge(planKey)}
+                        </CardTitle>
+                        <CardDescription>
+                          {t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}
+                        </CardDescription>
+                      </div>
+                    </div>
+
+                    {/* Price */}
+                    <div className="mt-4">
+                      {isKztPrimary ? (
+                        <>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-4xl font-bold">{monthlyKzt.toLocaleString()}₸</span>
+                            <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
+                          </div>
+                          <div className="text-sm text-muted-foreground mt-1">
+                            {totalKzt.toLocaleString()}₸ {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                          </div>
+                          <div className="text-xs text-muted-foreground/70 mt-0.5">
+                            ≈ ${monthlyUsd.toFixed(2)}/{t('pricing.month', 'мес')}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-4xl font-bold">${monthlyUsd.toFixed(2)}</span>
+                            <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
+                          </div>
+                          <div className="text-sm text-muted-foreground mt-1">
+                            ${totalUsd} {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                          </div>
+                          <div className="text-xs text-muted-foreground/70 mt-0.5">
+                            ≈ {monthlyKzt.toLocaleString()}₸/{t('pricing.month', 'мес')}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-6">
+                    {/* Features */}
+                    <ul className="grid grid-cols-1 gap-2">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-start gap-2 text-sm">
+                          <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA Button */}
+                    <Button
+                      data-testid={`pricing-plan-${planKey}-cta`}
+                      className="w-full h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600"
+                      disabled={isCurrentPlan || isLoading}
+                      onClick={() => handleSelectPlan(planKey)}
+                    >
+                      {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Try for free link */}
+                <div className="text-center">
+                  <Button
+                    variant="link"
+                    className="text-muted-foreground hover:text-primary transition-colors h-auto p-0"
+                    onClick={() => handleSelectPlan('basic')}
+                  >
+                    {t('pricing.startFree', 'Попробовать бесплатно')}
+                  </Button>
                 </div>
-
-                {/* Price */}
-                <div className="mt-4">
-                  {key === 'basic' ? <div className="text-3xl font-bold">
-                    {t('pricing.free.title', 'Бесплатно')}
-                  </div> : isKztPrimary ? <>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold">{monthlyKzt.toLocaleString()}₸</span>
-                      <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {totalKzt.toLocaleString()}₸ {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
-                    </div>
-                    <div className="text-xs text-muted-foreground/70 mt-0.5">
-                      ≈ ${monthlyUsd.toFixed(2)}/{t('pricing.month', 'мес')}
-                    </div>
-                  </> : <>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold">${monthlyUsd.toFixed(2)}</span>
-                      <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      ${totalUsd} {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
-                    </div>
-                    <div className="text-xs text-muted-foreground/70 mt-0.5">
-                      ≈ {monthlyKzt.toLocaleString()}₸/{t('pricing.month', 'мес')}
-                    </div>
-                  </>}
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                {/* Features */}
-                <ul className="space-y-2">
-                  {plan.features.map((feature, index) => <li key={index} className="flex items-start gap-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                    <span>{feature}</span>
-                  </li>)}
-                </ul>
-
-                {/* Limitations for Basic */}
-                {'limitations' in plan && plan.limitations && <ul className="space-y-2 pt-2 border-t border-border/50">
-                  {plan.limitations.map((limitation, index) => <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4 mt-0.5 shrink-0" />
-                    <span>{limitation}</span>
-                  </li>)}
-                </ul>}
-
-                {/* CTA Button */}
-                <Button data-testid={`pricing-plan-${key}-cta`} className="w-full mt-4" variant={isCurrentPlan ? 'outline' : 'popular' in plan && plan.popular ? 'default' : 'outline'} disabled={isCurrentPlan || isLoading} onClick={() => handleSelectPlan(key)}>
-                  {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : key === 'basic' ? t('pricing.startFree', 'Начать бесплатно') : t('pricing.subscribe', 'Подписаться')}
-                </Button>
-              </CardContent>
-            </Card>;
-          })}
+              </div>
+            );
+          })()}
         </div>
+
 
         {/* Token Purchase Section */}
         <Card className="max-w-lg mx-auto mb-12 p-6 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">

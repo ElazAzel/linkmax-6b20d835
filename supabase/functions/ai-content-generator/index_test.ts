@@ -1,4 +1,7 @@
+// @ts-nocheck
+/// <reference lib="deno.ns" />
 import { assertEquals } from "https://deno.land/std@0.168.0/testing/asserts.ts";
+
 
 // Note: In a real environment, we would mock the dependencies or use a test-specific Deno configuration.
 // Since we are running in an environment without Deno installed, these tests are for demonstration

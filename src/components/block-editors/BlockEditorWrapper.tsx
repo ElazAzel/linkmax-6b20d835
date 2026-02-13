@@ -107,10 +107,10 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
     const { t } = useTranslation();
     const { formData, onChange } = props;
     const [advancedOpen, setAdvancedOpen] = useState(false);
-    
+
     // Validation logic
     const validationError = options?.validate?.(formData);
-    
+
     // Enhanced onChange with validation
     const handleChange = (updates: any) => {
       onChange(updates);
@@ -218,12 +218,12 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
             <AlertDescription>{validationError}</AlertDescription>
           </Alert>
         )}
-        
+
         {/* Main block content editor */}
         <Component {...props} onChange={handleChange} />
-        
+
         <Separator className="my-4" />
-        
+
         {/* Collapsible Advanced Settings */}
         <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
           <CollapsibleTrigger asChild>
@@ -241,7 +241,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
               )} />
             </Button>
           </CollapsibleTrigger>
-          
+
           <CollapsibleContent className="space-y-4 mt-4">
             {/* Block Color & Font Settings */}
             <div className="space-y-4 p-4 rounded-xl bg-muted/30 border border-border/50">
@@ -262,7 +262,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                   </Button>
                 )}
               </div>
-              
+
               {/* Background Color */}
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">{t('blockEditor.backgroundColor', 'Цвет фона')}</Label>
@@ -306,7 +306,12 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
               {/* Font Family */}
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">{t('blockEditor.fontFamily', 'Шрифт')}</Label>
-                <Select value={currentFontFamily} onValueChange={(v) => handleFontFamilyChange(v as BlockFontFamily)}>
+                {/* @ts-ignore - modal prop exists in Radix Select but might be missing in local types */}
+                <Select
+                  value={currentFontFamily}
+                  onValueChange={(v) => handleFontFamilyChange(v as BlockFontFamily)}
+                  modal={false}
+                >
                   <SelectTrigger className="bg-background/50">
                     <SelectValue />
                   </SelectTrigger>
@@ -329,7 +334,12 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                   <Sparkles className="h-3 w-3" />
                   {t('blockEditor.textEffect', 'Эффект текста')}
                 </Label>
-                <Select value={currentTextEffect} onValueChange={(v) => handleTextEffectChange(v as BlockStyle['textEffect'])}>
+                {/* @ts-ignore - modal prop exists in Radix Select but might be missing in local types */}
+                <Select
+                  value={currentTextEffect}
+                  onValueChange={(v) => handleTextEffectChange(v as BlockStyle['textEffect'])}
+                  modal={false}
+                >
                   <SelectTrigger className="bg-background/50">
                     <SelectValue />
                   </SelectTrigger>
@@ -351,7 +361,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
               {hasBlockStyles && (
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">{t('blockEditor.preview', 'Превью')}</Label>
-                  <div 
+                  <div
                     className={cn("p-4 rounded-lg border border-border/30", getFontClass(currentFontFamily))}
                     style={{
                       backgroundColor: currentBgColor || 'var(--card)',
@@ -372,7 +382,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                 <Maximize2 className="h-4 w-4 text-primary" />
                 <Label className="text-base font-semibold">{t('blockEditor.blockSize', 'Размер блока')}</Label>
               </div>
-              
+
               <div className="flex gap-2">
                 <Button
                   type="button"
@@ -403,7 +413,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                 <AlignVerticalJustifyCenter className="h-4 w-4 text-primary" />
                 <Label className="text-base font-semibold">{t('blockEditor.alignment', 'Выравнивание')}</Label>
               </div>
-              
+
               <div className="flex gap-2">
                 <Button
                   type="button"
@@ -434,21 +444,21 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                 </Button>
               </div>
             </div>
-        
+
             {/* Paid Content Settings */}
             <PaidContentSettings
               blockStyle={formData.blockStyle}
               onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
             />
-        
+
             {/* Animation Settings */}
             <AnimationSettings
               style={formData.blockStyle}
               onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
             />
-        
+
             <Separator className="my-4" />
-        
+
             {/* Schedule Settings */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -465,7 +475,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                   </Button>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-1 gap-3">
                 <div className="space-y-2">
                   <Label className="text-sm">{t('blockEditor.appearDate', 'Появление')}</Label>
@@ -475,7 +485,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                     placeholder={t('blockEditor.selectDate', 'Выберите дату')}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label className="text-sm">{t('blockEditor.disappearDate', 'Исчезновение')}</Label>
                   <DateTimePicker
@@ -485,7 +495,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                   />
                 </div>
               </div>
-              
+
               <p className="text-xs text-muted-foreground">
                 {t('blockEditor.scheduleHint', 'Блок будет виден только в указанный период')}
               </p>

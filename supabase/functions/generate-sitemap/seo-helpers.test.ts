@@ -1,4 +1,7 @@
+// @ts-nocheck
+/// <reference lib="deno.ns" />
 import { assertEquals, assertStringIncludes } from 'https://deno.land/std@0.168.0/testing/asserts.ts';
+
 import { buildMetaDescription, escapeHtml, extractLocationFromBlocks } from './seo-helpers.ts';
 
 Deno.test('escapeHtml escapes reserved characters', () => {
