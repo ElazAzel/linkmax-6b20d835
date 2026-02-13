@@ -24,6 +24,7 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Alternatives = lazy(() => import("./pages/Alternatives"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminTranslations = lazy(() => import("./pages/AdminTranslations"));
+const AdminTemplateEditor = lazy(() => import("./pages/AdminTemplateEditor"));
 const TeamPage = lazy(() => import("./pages/TeamPage"));
 const CollabPage = lazy(() => import("./pages/CollabPage"));
 const JoinTeam = lazy(() => import("./pages/JoinTeam"));
@@ -58,6 +59,8 @@ const router = createBrowserRouter([
       { path: "alternatives", element: <Alternatives /> },
       { path: "admin", element: <Admin /> },
       { path: "admin/translations", element: <AdminTranslations /> },
+      { path: "admin/templates/new", element: <AdminTemplateEditor /> },
+      { path: "admin/templates/:id", element: <AdminTemplateEditor /> },
       { path: "team/:slug", element: <TeamPage /> },
       { path: "join/:inviteCode", element: <JoinTeam /> },
       { path: "terms", element: <Terms /> },

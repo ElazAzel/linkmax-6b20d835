@@ -26,6 +26,7 @@ import {
   getTemplateCategoryLabel,
   normalizeTemplateCategory,
 } from '@/lib/templateCategories';
+import { useTemplates } from '@/hooks/useTemplates';
 
 interface Template {
   id: string;
@@ -102,7 +103,7 @@ const MATCH_KEYWORDS: Record<string, string> = {
   personal: 'personal', life: 'personal', me: 'personal', about: 'personal',
 };
 
-const TEMPLATES: Template[] = [
+const HARDCODED_TEMPLATES: Template[] = [
   // ===== КРЕАТОРЫ =====
   {
     id: 'influencer',
@@ -651,9 +652,16 @@ export const TemplateGallery = memo(function TemplateGallery({
     }, 500);
   };
 
+  // Fetch templates from DB
+  const { data: dbTemplates, isLoading } = useTemplates();
+
+  // Use DB templates if available, otherwise fallback to hardcoded
+  // This ensures the gallery is never empty during migration
+  const templates = (dbTemplates && dbTemplates.length > 0) ? dbTemplates : HARDCODED_TEMPLATES;
+
   const filteredTemplates = selectedCategory === 'all'
-    ? TEMPLATES
-    : TEMPLATES.filter(t => normalizeTemplateCategory(t.category) === selectedCategory);
+    ? templates
+    : templates.filter(t => normalizeTemplateCategory(t.category) === selectedCategory);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

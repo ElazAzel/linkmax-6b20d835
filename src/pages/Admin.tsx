@@ -22,6 +22,7 @@ const UserTierManager = lazy(() => import('@/components/admin/UserTierManager').
 const AdminVerificationPanel = lazy(() => import('@/components/admin/AdminVerificationPanel').then(m => ({ default: m.AdminVerificationPanel })));
 const AdminTokensTab = lazy(() => import('@/components/admin/AdminTokensTab').then(m => ({ default: m.AdminTokensTab })));
 const AdminPartnersTab = lazy(() => import('@/components/admin/AdminPartnersTab').then(m => ({ default: m.AdminPartnersTab })));
+const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTab').then(m => ({ default: m.AdminTemplatesTab })));
 
 function TabLoader() {
   return (
@@ -80,6 +81,7 @@ export default function Admin() {
     { value: 'tiers', label: t('admin.tiers'), icon: Crown },
     { value: 'verification', label: t('admin.verification', 'Верификация'), icon: ShieldCheck },
     { value: 'partners', label: t('admin.partners', 'Партнёры'), icon: Handshake },
+    { value: 'templates', label: t('admin.templates', 'Templates'), icon: FileText },
   ];
 
   return (
@@ -184,6 +186,10 @@ export default function Admin() {
 
               <TabsContent value="partners">
                 <AdminPartnersTab />
+              </TabsContent>
+
+              <TabsContent value="templates">
+                <AdminTemplatesTab />
               </TabsContent>
             </Suspense>
           </Tabs>
