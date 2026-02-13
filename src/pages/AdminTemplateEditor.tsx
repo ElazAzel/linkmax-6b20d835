@@ -58,7 +58,7 @@ export default function AdminTemplateEditor() {
 
     async function fetchTemplate(templateId: string) {
         try {
-            const { data, error } = await supabase
+            const { data, error } = await (supabase as any)
                 .from('templates')
                 .select('*')
                 .eq('id', templateId)
@@ -66,16 +66,17 @@ export default function AdminTemplateEditor() {
 
             if (error) throw error;
             if (data) {
+                const d = data as any;
                 setData({
-                    id: data.id,
-                    name: data.name,
-                    description: data.description || '',
-                    category: data.category as TemplateCategoryKey,
-                    is_premium: data.is_premium,
-                    is_public: data.is_public,
-                    preview_image: data.preview_image || '',
-                    blocks: (data.blocks as unknown as Block[]) || [],
-                    sort_order: data.sort_order,
+                    id: d.id,
+                    name: d.name,
+                    description: d.description || '',
+                    category: d.category as TemplateCategoryKey,
+                    is_premium: d.is_premium,
+                    is_public: d.is_public,
+                    preview_image: d.preview_image || '',
+                    blocks: (d.blocks as Block[]) || [],
+                    sort_order: d.sort_order,
                 });
             }
         } catch (error) {
@@ -108,14 +109,14 @@ export default function AdminTemplateEditor() {
             };
 
             if (id && id !== 'new') {
-                const { error } = await supabase
+                const { error } = await (supabase as any)
                     .from('templates')
                     .update(payload)
                     .eq('id', id);
                 if (error) throw error;
                 toast.success(t('admin.templateUpdated', 'Template updated'));
             } else {
-                const { error } = await supabase
+                const { error } = await (supabase as any)
                     .from('templates')
                     .insert(payload);
                 if (error) throw error;
@@ -148,7 +149,7 @@ export default function AdminTemplateEditor() {
     const handleUpdateBlock = useCallback((blockId: string, updates: Partial<Block>) => {
         setData(prev => ({
             ...prev,
-            blocks: prev.blocks.map(b => b.id === blockId ? { ...b, ...updates } : b)
+            blocks: prev.blocks.map(b => b.id === blockId ? { ...b, ...updates } as Block : b)
         }));
     }, []);
 

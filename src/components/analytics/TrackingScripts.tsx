@@ -12,8 +12,10 @@ interface TrackingScriptsProps {
 declare global {
     interface Window {
         fbq: any;
+        _fbq: any;
         ttq: any;
         gtag: any;
+        dataLayer: any[];
     }
 }
 
@@ -23,67 +25,48 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
     useEffect(() => {
         // Facebook Pixel
         if (integrations.fb_pixel) {
-            !function (f, b, e, v, n, t, s) {
-                if (f.fbq) return; n = f.fbq = function () {
-                    n.callMethod ?
-                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            const f = window as any;
+            const b = document;
+            if (!f.fbq) {
+                const n: any = f.fbq = function () {
+                    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
                 };
-                if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-                n.queue = []; t = b.createElement(e); t.async = !0;
-                t.src = v; s = b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t, s)
-            }(window, document, 'script',
-                'https://connect.facebook.net/en_US/fbevents.js');
-
+                if (!f._fbq) f._fbq = n;
+                n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+                const t = b.createElement('script'); t.async = true;
+                t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+                const s = b.getElementsByTagName('script')[0];
+                s.parentNode?.insertBefore(t, s);
+            }
             window.fbq('init', integrations.fb_pixel);
             window.fbq('track', 'PageView');
         }
 
         // TikTok Pixel
         if (integrations.tt_pixel) {
-            !function (w, d, t) {
-                w.ttq = w.ttq || [];
-                w.ttq.methods = [
-                    "page",
-                    "track",
-                    "identify",
-                    "instances",
-                    "debug",
-                    "on",
-                    "off",
-                    "once",
-                    "ready",
-                    "alias",
-                    "group",
-                    "enableCookie",
-                    "disableCookie",
-                ];
-                w.ttq.setAndDefer = function (t, e) {
-                    t.split(".").forEach(function (e, n) {
-                        w.ttq == w.ttq[e] && (w.ttq[e] = w.ttq[e] || []);
-                        w.ttq = w.ttq[e];
-                    });
-                    w.ttq.push([e].concat(Array.prototype.slice.call(arguments, 2)));
+            const w = window as any;
+            w.ttq = w.ttq || [];
+            w.ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
+            w.ttq.setAndDefer = function (t: any, e: any) {
+                t[e] = function () {
+                    t._i[e] = t._i[e] || [];
+                    t._i[e].push(arguments);
                 };
-                w.ttq.load = function (e, n) {
-                    var i = "https://analytics.tiktok.com/i18n/pixel/events.js";
-                    w.ttq._i = w.ttq._i || {};
-                    w.ttq._i[e] = [];
-                    w.ttq._i[e]._u = i;
-                    w.ttq._t = w.ttq._t || {};
-                    w.ttq._t[e] = +new Date();
-                    w.ttq._o = w.ttq._o || {};
-                    w.ttq._o[e] = n || {};
-                    var o = document.createElement("script");
-                    o.type = "text/javascript";
-                    o.async = !0;
-                    o.src = i + "?sdkid=" + e + "&lib=" + t;
-                    var a = document.getElementsByTagName("script")[0];
-                    a.parentNode.insertBefore(o, a);
-                };
-                w.ttq.load(integrations.tt_pixel);
-                w.ttq.page();
-            }(window, document, 'ttq');
+            };
+            w.ttq.load = function (e: string) {
+                const i = "https://analytics.tiktok.com/i18n/pixel/events.js";
+                w.ttq._i = w.ttq._i || {};
+                w.ttq._i[e] = [];
+                w.ttq._t = w.ttq._t || {};
+                w.ttq._t[e] = +new Date();
+                const o = document.createElement("script");
+                o.type = "text/javascript"; o.async = true;
+                o.src = i + "?sdkid=" + e + "&lib=ttq";
+                const a = document.getElementsByTagName("script")[0];
+                a.parentNode?.insertBefore(o, a);
+            };
+            w.ttq.load(integrations.tt_pixel);
+            w.ttq.page();
         }
 
         // Google Analytics 4
@@ -94,7 +77,7 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
             document.head.appendChild(script);
 
             window.dataLayer = window.dataLayer || [];
-            function gtag() { window.dataLayer.push(arguments); }
+            function gtag(...args: any[]) { window.dataLayer.push(args); }
             window.gtag = gtag;
             gtag('js', new Date());
             gtag('config', integrations.ga4_id);
@@ -123,42 +106,20 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
 // Helper functions for tracking events
 export const trackLead = () => {
     if (typeof window === 'undefined') return;
-
-    // Facebook
     if (window.fbq) window.fbq('track', 'Lead');
-
-    // TikTok
     if (window.ttq) window.ttq.track('SubmitForm');
-
-    // GA4
     if (window.gtag) window.gtag('event', 'generate_lead');
 };
 
 export const trackPurchase = (value: number, currency: string = 'USD') => {
     if (typeof window === 'undefined') return;
-
-    // Facebook
-    if (window.fbq) {
-        window.fbq('track', 'Purchase', { value, currency });
-    }
-
-    // TikTok
-    if (window.ttq) {
-        window.ttq.track('CompletePayment', { value, currency });
-    }
-
-    // GA4
-    if (window.gtag) {
-        window.gtag('event', 'purchase', {
-            value,
-            currency,
-        });
-    }
+    if (window.fbq) window.fbq('track', 'Purchase', { value, currency });
+    if (window.ttq) window.ttq.track('CompletePayment', { value, currency });
+    if (window.gtag) window.gtag('event', 'purchase', { value, currency });
 };
 
 export const trackInitiateCheckout = () => {
     if (typeof window === 'undefined') return;
-
     if (window.fbq) window.fbq('track', 'InitiateCheckout');
     if (window.ttq) window.ttq.track('InitiateCheckout');
     if (window.gtag) window.gtag('event', 'begin_checkout');

@@ -17,7 +17,7 @@ export function useTemplates() {
     return useQuery({
         queryKey: ['templates', 'public'],
         queryFn: async () => {
-            const { data, error } = await supabase
+            const { data, error } = await (supabase as any)
                 .from('templates')
                 .select('*')
                 .eq('is_public', true)
