@@ -1,5 +1,6 @@
+/// <reference lib="deno.ns" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,7 +10,7 @@ const corsHeaders = {
 const RATE_LIMIT_REQUESTS = 20; // 20 requests per minute
 const RATE_LIMIT_WINDOW = 60; // 60 seconds
 
-async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string): Promise<boolean> {
+async function checkRateLimit(supabase: SupabaseClient, ipAddress: string, endpoint: string): Promise<boolean> {
   const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW * 1000);
 
   // Clean up old entries
@@ -52,7 +53,7 @@ async function checkRateLimit(supabase: any, ipAddress: string, endpoint: string
   return true;
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
