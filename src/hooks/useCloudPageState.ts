@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from './useAuth';
 import { logger } from '@/lib/logger';
@@ -377,7 +377,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     }
   }, [user?.id, queryClient, refetch]);
 
-  return {
+  return useMemo(() => ({
     pageData,
     chatbotContext,
     setChatbotContext,
@@ -396,5 +396,24 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     updatePageDataPartial,
     updateNiche,
     refresh,
-  };
+  }), [
+    pageData,
+    chatbotContext,
+    loading,
+    savePageMutation.isPending,
+    publishPageMutation.isPending,
+    saveStatus,
+    save,
+    publish,
+    addBlock,
+    updateBlock,
+    deleteBlock,
+    reorderBlocks,
+    replaceBlocks,
+    updateTheme,
+    updateEditorMode,
+    updatePageDataPartial,
+    updateNiche,
+    refresh
+  ]);
 }

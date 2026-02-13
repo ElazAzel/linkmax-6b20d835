@@ -1,0 +1,346 @@
+import { memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+    Link2,
+    Check,
+    AlertTriangle,
+    Search,
+    Eye,
+    Palette,
+    LayoutTemplate,
+    Store,
+    ChevronRight,
+    Crown,
+    Sparkles,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { NicheSelector } from '@/components/settings/NicheSelector';
+import type { ProfileBlock } from '@/types/page';
+import type { Niche } from '@/lib/niches';
+
+interface PageSettingsTabProps {
+    // Page info
+    pageTitle?: string;
+    pageSlug?: string;
+    isPaid?: boolean;
+    isPrimaryPaid?: boolean;
+    isPremium: boolean;
+    seoTitle?: string;
+    seoDescription?: string;
+    isIndexable?: boolean;
+    niche?: Niche;
+
+    // Profile info
+    avatarUrl?: string;
+    displayName: string;
+
+    // Actions
+    onUpdateSlug?: (slug: string) => Promise<{ success: boolean; error?: string }>;
+    onUpdateSeo?: (seo: { title?: string; description?: string }) => void;
+    onToggleIndexable?: (indexable: boolean) => void;
+    onNicheChange: (niche: Niche) => void;
+    onUpgradePage?: () => void;
+    onOpenTheme?: () => void;
+    onOpenTemplates?: () => void;
+    onOpenMarketplace?: () => void;
+}
+
+export const PageSettingsTab = memo(function PageSettingsTab({
+    pageTitle,
+    pageSlug,
+    isPaid,
+    isPrimaryPaid,
+    isPremium,
+    seoTitle,
+    seoDescription,
+    isIndexable,
+    niche,
+    avatarUrl,
+    displayName,
+    onUpdateSlug,
+    onUpdateSeo,
+    onToggleIndexable,
+    onNicheChange,
+    onUpgradePage,
+    onOpenTheme,
+    onOpenTemplates,
+    onOpenMarketplace,
+}: PageSettingsTabProps) {
+    const { t } = useTranslation();
+
+    const [slugInput, setSlugInput] = useState(pageSlug || '');
+    const [slugSaving, setSlugSaving] = useState(false);
+    const [slugError, setSlugError] = useState<string | null>(null);
+    const [seoTitleInput, setSeoTitleInput] = useState(seoTitle || '');
+    const [seoDescInput, setSeoDescInput] = useState(seoDescription || '');
+
+    const handleSaveSlug = async () => {
+        if (!onUpdateSlug || slugInput === pageSlug) return;
+
+        const slugRegex = /^[a-z0-9-]{3,30}$/;
+        if (!slugRegex.test(slugInput)) {
+            setSlugError(t('dashboard.pageSettings.slugInvalid', 'Only lowercase letters, numbers, and hyphens. 3-30 characters.'));
+            return;
+        }
+
+        setSlugSaving(true);
+        setSlugError(null);
+
+        const result = await onUpdateSlug(slugInput);
+
+        if (!result.success) {
+            setSlugError(t(`dashboard.pageSettings.errors.${result.error}`, 'Failed to update slug'));
+        }
+
+        setSlugSaving(false);
+    };
+
+    const handleSaveSeo = () => {
+        if (onUpdateSeo) {
+            onUpdateSeo({
+                title: seoTitleInput || undefined,
+                description: seoDescInput || undefined,
+            });
+        }
+    };
+
+    const getPageTypeBadge = () => {
+        if (isPrimaryPaid) {
+            return (
+                <Badge className="bg-primary/20 text-primary border-primary/30">
+                    <Crown className="w-3 h-3 mr-1" />
+                    {t('dashboard.pageSettings.primaryPaid', 'Primary Paid')}
+                </Badge>
+            );
+        }
+        if (isPaid) {
+            return (
+                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    {t('dashboard.pageSettings.paidAddon', 'Paid Add-on')}
+                </Badge>
+            );
+        }
+        return (
+            <Badge variant="secondary">
+                {t('dashboard.pageSettings.freePage', 'Free')}
+            </Badge>
+        );
+    };
+
+    return (
+        <div className="space-y-6">
+            {/* Current Page Info */}
+            <Card className="p-5">
+                <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                        <Avatar className="h-12 w-12 rounded-xl">
+                            <AvatarImage src={avatarUrl} alt={displayName} />
+                            <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-bold">
+                                {displayName.charAt(0)}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <h2 className="font-bold">{pageTitle || displayName}</h2>
+                            <p className="text-sm text-muted-foreground">lnkmx.my/{pageSlug}</p>
+                        </div>
+                    </div>
+                    {getPageTypeBadge()}
+                </div>
+
+                {/* Upgrade to Paid */}
+                {!isPaid && isPremium && onUpgradePage && (
+                    <Button
+                        variant="outline"
+                        className="w-full rounded-xl border-primary/30 text-primary hover:bg-primary/10"
+                        onClick={onUpgradePage}
+                    >
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        {t('dashboard.pageSettings.upgradeToPaid', 'Upgrade to Paid (70% off)')}
+                    </Button>
+                )}
+            </Card>
+
+            {/* Domain / Slug */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.pageSettings.domain', 'Domain')}
+                </h3>
+                <Card className="p-4 space-y-4">
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                            <Link2 className="w-4 h-4" />
+                            {t('dashboard.pageSettings.slug', 'Page URL')}
+                        </Label>
+                        <div className="flex gap-2">
+                            <div className="flex-1 relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                                    lnkmx.my/
+                                </span>
+                                <Input
+                                    value={slugInput}
+                                    onChange={(e) => {
+                                        setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
+                                        setSlugError(null);
+                                    }}
+                                    className="pl-[85px] h-12 rounded-xl"
+                                    placeholder="your-page"
+                                />
+                            </div>
+                            <Button
+                                onClick={handleSaveSlug}
+                                disabled={slugSaving || slugInput === pageSlug || !onUpdateSlug}
+                                className="h-12 px-5 rounded-xl"
+                            >
+                                {slugSaving ? '...' : <Check className="w-5 h-5" />}
+                            </Button>
+                        </div>
+                        {slugError && (
+                            <p className="text-sm text-destructive flex items-center gap-1">
+                                <AlertTriangle className="w-4 h-4" />
+                                {slugError}
+                            </p>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                            {t('dashboard.pageSettings.slugHint', 'Changing this will update your public URL')}
+                        </p>
+                    </div>
+                </Card>
+            </div>
+
+            {/* SEO */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.pageSettings.seo', 'SEO')}
+                </h3>
+                <Card className="p-4 space-y-4">
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                            <Search className="w-4 h-4" />
+                            {t('dashboard.pageSettings.seoTitle', 'Meta Title')}
+                        </Label>
+                        <Input
+                            value={seoTitleInput}
+                            onChange={(e) => setSeoTitleInput(e.target.value)}
+                            onBlur={handleSaveSeo}
+                            placeholder={t('dashboard.pageSettings.seoTitlePlaceholder', 'Page title for search engines')}
+                            className="h-12 rounded-xl"
+                            maxLength={60}
+                        />
+                        <p className="text-xs text-muted-foreground text-right">
+                            {seoTitleInput.length}/60
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>{t('dashboard.pageSettings.seoDescription', 'Meta Description')}</Label>
+                        <Textarea
+                            value={seoDescInput}
+                            onChange={(e) => setSeoDescInput(e.target.value)}
+                            onBlur={handleSaveSeo}
+                            placeholder={t('dashboard.pageSettings.seoDescPlaceholder', 'Brief description for search results')}
+                            className="rounded-xl resize-none"
+                            rows={3}
+                            maxLength={160}
+                        />
+                        <p className="text-xs text-muted-foreground text-right">
+                            {seoDescInput.length}/160
+                        </p>
+                    </div>
+
+                    <div className="flex items-center justify-between py-2">
+                        <div className="space-y-0.5">
+                            <Label className="flex items-center gap-2">
+                                <Eye className="w-4 h-4" />
+                                {t('dashboard.pageSettings.indexable', 'Allow Search Indexing')}
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                                {t('dashboard.pageSettings.indexableHint', 'Show page in Google and other search engines')}
+                            </p>
+                        </div>
+                        <Switch
+                            checked={isIndexable ?? true}
+                            onCheckedChange={(checked) => onToggleIndexable?.(checked)}
+                        />
+                    </div>
+                </Card>
+            </div>
+
+            {/* Category / Niche */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.pageSettings.category', 'Category')}
+                </h3>
+                <Card className="p-4">
+                    <NicheSelector value={niche} onChange={onNicheChange} />
+                </Card>
+            </div>
+
+            {/* Branding */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.pageSettings.branding', 'Branding')}
+                </h3>
+                <Card className="divide-y divide-border/50 overflow-hidden">
+                    <button
+                        className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors"
+                        onClick={onOpenTheme}
+                    >
+                        <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
+                            <Palette className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                                <span className="font-medium">{t('dashboard.pageSettings.theme', 'Theme & Colors')}</span>
+                                {!isPremium && (
+                                    <Badge variant="secondary" className="text-xs">PRO</Badge>
+                                )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                                {t('dashboard.pageSettings.themeDesc', 'Customize colors and fonts')}
+                            </p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                    <button
+                        className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors"
+                        onClick={onOpenTemplates}
+                    >
+                        <div className="h-11 w-11 rounded-2xl bg-emerald-500/15 flex items-center justify-center">
+                            <LayoutTemplate className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <div className="flex-1">
+                            <span className="font-medium">{t('dashboard.pageSettings.templates', 'Templates')}</span>
+                            <p className="text-sm text-muted-foreground">
+                                {t('dashboard.pageSettings.templatesDesc', 'Ready-made page designs')}
+                            </p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                    <button
+                        className="w-full flex items-center gap-4 text-left p-4 hover:bg-muted/50 transition-colors"
+                        onClick={onOpenMarketplace}
+                    >
+                        <div className="h-11 w-11 rounded-2xl bg-violet-500/15 flex items-center justify-center">
+                            <Store className="w-5 h-5 text-violet-600" />
+                        </div>
+                        <div className="flex-1">
+                            <span className="font-medium">{t('dashboard.pageSettings.marketplace', 'Marketplace')}</span>
+                            <p className="text-sm text-muted-foreground">
+                                {t('dashboard.pageSettings.marketplaceDesc', 'Community templates')}
+                            </p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                </Card>
+            </div>
+        </div>
+    );
+});
