@@ -183,9 +183,6 @@ export async function trackEvent({
     const referrer = getReferrerInfo();
     const utmParams = getUtmParams();
 
-    // Validate blockId is a proper UUID before using it as foreign key
-    const isValidUuid = blockId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(blockId);
-
     const enrichedMetadata = {
       ...metadata,
       ...utmParams,
@@ -199,13 +196,11 @@ export async function trackEvent({
       screenWidth: screen.width,
       screenHeight: screen.height,
       timestamp: new Date().toISOString(),
-      // Store non-UUID blockId in metadata if present
-      ...(blockId && !isValidUuid ? { blockIdRaw: blockId } : {}),
     };
 
     await supabase.from('analytics').insert({
       page_id: pageId,
-      block_id: isValidUuid ? blockId : null,
+      block_id: blockId || null,
       event_type: eventType,
       metadata: enrichedMetadata as Json,
     });
@@ -250,13 +245,10 @@ export async function trackBlockClick(
   blockType?: string,
   blockTitle?: string
 ): Promise<void> {
-  // Validate blockId is a proper UUID before calling RPC
-  const isValidUuid = blockId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(blockId);
-
-  // Increment click count in blocks table - only if valid UUID
-  if (isValidUuid) {
+  // Increment click count in blocks table
+  if (blockId) {
     try {
-      await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
+      await supabase.rpc('increment_block_clicks', { block_id: blockId });
     } catch {
       // Silent fail
     }
