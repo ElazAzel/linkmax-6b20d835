@@ -608,7 +608,7 @@ export const TemplateGallery = memo(function TemplateGallery({
         bestTemplateId = 'agency';
       }
 
-      const template = TEMPLATES.find(t => t.id === bestTemplateId) || TEMPLATES[0];
+      const template = templates.find(t => t.id === bestTemplateId) || templates[0];
 
       // 2. Call AI to fill content
       const { data, error } = await supabase.functions.invoke('ai-content-generator', {
