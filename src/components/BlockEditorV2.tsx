@@ -13,6 +13,8 @@ import {
     Drawer,
     DrawerContent,
 } from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getLucideIcon } from '@/lib/icon-utils';
@@ -182,14 +184,29 @@ export function BlockEditorV2({
         };
     }, []);
 
-    // Handle close with unsaved changes warning
-    const handleClose = useCallback(() => {
+    // Intercept close attempt
+    const [showUnsavedDialog, setShowUnsavedDialog] = useState(false);
+
+    const handleCloseAttempt = useCallback(() => {
+        if (hasUnsavedChanges) {
+            setShowUnsavedDialog(true);
+        } else {
+            onClose();
+        }
+    }, [hasUnsavedChanges, onClose]);
+
+    const handleDiscard = useCallback(() => {
+        setShowUnsavedDialog(false);
+        onClose();
+    }, [onClose]);
+
+    const handleSaveAndClose = useCallback(() => {
         if (autosaveTimerRef.current) {
             clearTimeout(autosaveTimerRef.current);
         }
-        // Could add confirmation dialog here for unsaved changes
-        onClose();
-    }, [onClose]);
+        performSave(formData, true);
+        setShowUnsavedDialog(false);
+    }, [performSave, formData]);
 
     if (!block) return null;
 
@@ -200,18 +217,6 @@ export function BlockEditorV2({
 
     const BlockIcon = getLucideIcon(BLOCK_ICONS[block.type] || 'Box');
     const blockTypeName = t(`blockEditor.${block.type}`, block.type);
-
-    // Use ProfileEditorWizard for profile block
-    if (block.type === 'profile') {
-        // If mobile, render inside drawer as before but use new shell if possible or keep Wizard raw?
-        // ProfileEditorWizard usually handles its own layout or needs a container.
-        // Let's use it as 'content' inside shell, but disable tabs.
-        // However, ProfileEditorWizard might be complex. Let's wrap it in Suspense.
-        // The wizard handles its own save usually? No, it takes onComplete.
-        // We should adapt it.
-
-        // For now, render it as content.
-    }
 
     const renderEditor = () => {
         switch (block.type) {
@@ -309,7 +314,7 @@ export function BlockEditorV2({
             lastSaved={lastSaved}
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
-            onClose={handleClose}
+            onClose={handleCloseAttempt}
             enablePreview={block.type !== 'profile'} // Profile often has its own preview or is complex
             previewComponent={previewComponent}
         >
@@ -317,24 +322,67 @@ export function BlockEditorV2({
         </BlockEditorShell>
     );
 
+    const unsavedDialog = (
+        <Dialog open={showUnsavedDialog} onOpenChange={setShowUnsavedDialog}>
+            <DialogContent className="sm:max-w-[425px] rounded-2xl">
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2 text-center sm:text-left">
+                        <h3 className="text-lg font-bold">{t('editor.unsavedChanges', 'Несохраненные изменения')}</h3>
+                        <p className="text-muted-foreground text-sm">
+                            {t('editor.unsavedDescription', 'У вас есть изменения, которые еще не были сохранены. Что вы хотите сделать?')}
+                        </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                        <Button
+                            variant="destructive"
+                            onClick={handleDiscard}
+                            className="flex-1 rounded-xl"
+                        >
+                            {t('editor.discard', 'Сбросить')}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowUnsavedDialog(false)}
+                            className="flex-1 rounded-xl"
+                        >
+                            {t('editor.cancel', 'Отмена')}
+                        </Button>
+                        <Button
+                            onClick={handleSaveAndClose}
+                            className="flex-1 rounded-xl shadow-lg shadow-primary/25"
+                        >
+                            {t('editor.saveAndClose', 'Сохранить')}
+                        </Button>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+
     // Mobile: Full-screen drawer
     if (isMobile) {
         return (
-            <Drawer open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-                <DrawerContent className="h-[96vh] max-h-[96vh] bg-background border-t-0 rounded-t-[32px]">
-                    {shellContent}
-                </DrawerContent>
-            </Drawer>
+            <>
+                <Drawer open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
+                    <DrawerContent className="h-[96vh] max-h-[96vh] bg-background border-t-0 rounded-t-[32px]">
+                        {shellContent}
+                    </DrawerContent>
+                </Drawer>
+                {unsavedDialog}
+            </>
         );
     }
 
     // Desktop: Dialog with larger width for preview
     return (
-        <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-            <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl">
-                {shellContent}
-            </DialogContent>
-        </Dialog>
+        <>
+            <Dialog open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
+                <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl">
+                    {shellContent}
+                </DialogContent>
+            </Dialog>
+            {unsavedDialog}
+        </>
     );
 }
 

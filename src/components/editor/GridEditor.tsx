@@ -49,11 +49,11 @@ interface GridEditorProps {
 // Check if block is full width (with fallback for legacy sizes)
 function isFullWidthBlock(blockSize?: BlockSizePreset): boolean {
   if (!blockSize) return true; // Default to full width
-  
+
   // Handle legacy sizes - convert to new format
   if (blockSize.startsWith('full')) return true;
   if (blockSize.startsWith('half')) return false;
-  
+
   const dims = BLOCK_SIZE_DIMENSIONS[blockSize];
   return dims?.gridCols === 1;
 }
@@ -106,7 +106,8 @@ function SortableGridBlockItem({
       style={style}
       className={cn(
         'relative group bg-card rounded-2xl border border-border shadow-sm overflow-hidden transition-all',
-        isFullWidth ? 'col-span-2' : 'col-span-1',
+        isFullWidth ? 'col-span-1 md:col-span-2' : 'col-span-1',
+
         isDragging && 'opacity-50 ring-2 ring-primary z-50'
       )}
     >
@@ -142,7 +143,7 @@ function SortableGridBlockItem({
             <ChevronDown className="h-4 w-4" />
           </Button>
         </div>
-        
+
         {/* Drag handle - hidden on mobile for cleaner UX, move arrows are primary */}
         {!isMobile && (
           <div
@@ -158,7 +159,7 @@ function SortableGridBlockItem({
       </div>
 
       {/* Block content */}
-      <div 
+      <div
         className="w-full h-full overflow-hidden cursor-pointer"
         onClick={() => onEdit(block)}
       >
@@ -200,12 +201,13 @@ function SortableGridBlockItem({
 // Drag overlay component (ghost element while dragging) - BOLD
 function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block; isPremium?: boolean; premiumTier?: PremiumTier }) {
   const isFullWidth = isFullWidthBlock(block.blockSize);
-  
+
   return (
     <div
       className={cn(
         'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-hidden',
-        isFullWidth ? 'w-full' : 'w-1/2'
+        isFullWidth ? 'w-full' : 'w-full md:w-1/2'
+
       )}
       style={{
         maxWidth: isFullWidth ? '640px' : '320px',
@@ -257,7 +259,7 @@ function InlineAddButton({
   position: number;
 }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  
+
   return (
     <div className="relative flex items-center justify-center py-2 group/insert">
       {/* Line with plus button */}
@@ -273,7 +275,7 @@ function InlineAddButton({
         </Button>
         <div className="flex-1 border-t border-dashed border-transparent group-hover/insert:border-border/40 transition-colors" />
       </div>
-      
+
       {/* Sheet for block selection */}
       <BlockInsertButton
         onInsert={(type) => {
@@ -358,13 +360,13 @@ export const GridEditor = memo(function GridEditor({
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<string | null>(null);
-  
+
   // Unique ID for DndContext to prevent stale DOM reference issues
   const dndContextId = useId();
 
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
-  
+
   // Create stable block IDs string to detect when we need to reset DnD
   const blockIdsKey = useMemo(() => contentBlocks.map(b => b.id).join(','), [contentBlocks]);
 
@@ -408,12 +410,12 @@ export const GridEditor = memo(function GridEditor({
 
       if (oldIndex !== -1 && newIndex !== -1) {
         const reorderedContent = arrayMove(contentBlocks, oldIndex, newIndex);
-        
+
         // Reconstruct full blocks array with profile first
-        const newBlocks = profileBlock 
+        const newBlocks = profileBlock
           ? [profileBlock, ...reorderedContent]
           : reorderedContent;
-        
+
         onReorderBlocks?.(newBlocks);
       }
     }
@@ -424,8 +426,8 @@ export const GridEditor = memo(function GridEditor({
     // insertPosition is already the correct position to insert at
     // Profile block is always at position 0, so content blocks start at position 1
     const profileOffset = profileBlock ? 1 : 0;
-    const position = insertPosition !== undefined 
-      ? insertPosition + profileOffset 
+    const position = insertPosition !== undefined
+      ? insertPosition + profileOffset
       : contentBlocks.length + profileOffset;
     onInsertBlock(blockType, position);
   }, [onInsertBlock, contentBlocks.length, profileBlock]);
@@ -434,15 +436,15 @@ export const GridEditor = memo(function GridEditor({
   const handleMoveBlock = useCallback((blockId: string, direction: 'up' | 'down') => {
     const currentIndex = contentBlocks.findIndex(b => b.id === blockId);
     if (currentIndex === -1) return;
-    
+
     const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     if (newIndex < 0 || newIndex >= contentBlocks.length) return;
-    
+
     const reorderedContent = arrayMove(contentBlocks, currentIndex, newIndex);
-    const newBlocks = profileBlock 
+    const newBlocks = profileBlock
       ? [profileBlock, ...reorderedContent]
       : reorderedContent;
-    
+
     onReorderBlocks?.(newBlocks);
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
@@ -474,17 +476,18 @@ export const GridEditor = memo(function GridEditor({
             {rows.map((row) => {
               // Calculate the position for inserting after this row
               const lastBlockInRow = row.blocks[row.blocks.length - 1];
-              const insertPosition = lastBlockInRow 
+              const insertPosition = lastBlockInRow
                 ? contentBlocks.findIndex(b => b.id === lastBlockInRow.id) + 1
                 : 0;
-              
+
               // Use stable key based on block IDs in row
               const rowKey = createRowKey(row.blocks);
-              
+
               return (
                 <div key={rowKey}>
                   {/* Row with blocks */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                     {row.blocks.map((block) => {
                       const blockIndex = contentBlocks.findIndex(b => b.id === block.id);
                       return (
@@ -504,7 +507,7 @@ export const GridEditor = memo(function GridEditor({
                         />
                       );
                     })}
-                    
+
                     {/* Show add button in empty slot */}
                     {row.hasEmptySlot && (
                       <AddBlockSlot
@@ -515,7 +518,7 @@ export const GridEditor = memo(function GridEditor({
                       />
                     )}
                   </div>
-                  
+
                   {/* Plus button between rows */}
                   <InlineAddButton
                     onInsert={(type, pos) => handleInsertBlock(type, pos)}
@@ -530,8 +533,9 @@ export const GridEditor = memo(function GridEditor({
 
             {/* Bottom add button if there are blocks but no inline add after last row */}
             {rows.length === 0 && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8">
+
                   <BlockInsertButton
                     onInsert={(type) => handleInsertBlock(type)}
                     isPremium={isPremium}
