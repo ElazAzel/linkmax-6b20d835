@@ -672,6 +672,9 @@ export const TemplateGallery = memo(function TemplateGallery({
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
               <span className="truncate">{t('templates.title', 'Галерея шаблонов')}</span>
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('templates.description', 'Выберите шаблон для вашей страницы')}
+            </DialogDescription>
             <Button
               variant="outline"
               size="sm"
