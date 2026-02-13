@@ -46,8 +46,17 @@ const ScreenLoader = () => (
   </div>
 );
 
-// Modals & Panels (reused from v1)
-import { LoadingState, BackgroundEffects } from '@/components/dashboard';
+// Inline fallback components (previously from deleted dashboard barrel)
+const LoadingState = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-pulse space-y-4 w-full max-w-md px-4">
+      <div className="h-8 bg-muted rounded-lg w-3/4" />
+      <div className="h-32 bg-muted rounded-xl" />
+      <div className="h-12 bg-muted rounded-lg" />
+    </div>
+  </div>
+);
+const BackgroundEffects = () => null;
 import { storage } from '@/lib/storage';
 
 // Lazy load heavy components for better bundle splitting
