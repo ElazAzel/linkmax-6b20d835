@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { Check, User, MessageSquare, Zap } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -59,7 +60,6 @@ const steps = [
     }
 ];
 
-/** Mobile: simple vertical layout. Desktop: sticky scroll with phone mockup. */
 export const InteractiveDemo = () => {
     const isMobile = useIsMobile();
 
@@ -85,7 +85,6 @@ function MobileDemo() {
                             transition={{ duration: 0.4, delay: i * 0.1 }}
                             className="flex flex-col gap-4"
                         >
-                            {/* Step number + header */}
                             <div className="flex items-start gap-4">
                                 <div className="relative">
                                     <div className="w-12 h-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 text-lg font-bold">
@@ -100,7 +99,6 @@ function MobileDemo() {
                                     <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{step.description}</p>
                                 </div>
                             </div>
-                            {/* Mockup preview */}
                             <div className="bg-card border border-border/60 rounded-2xl overflow-hidden ml-16 shadow-sm">
                                 {step.mockContent}
                             </div>
@@ -113,71 +111,92 @@ function MobileDemo() {
 }
 
 function DesktopDemo() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
+    const [activeStep, setActiveStep] = useState(0);
+    const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    // Map scroll to a 0-2 range for 3 steps (0, 1, 2)
-    const progress = useTransform(scrollYProgress, [0, 1], [0, 2]);
+    useEffect(() => {
+        const observers: IntersectionObserver[] = [];
 
-    // Each phone screen fades in and out based on active step
-    const step1Opacity = useTransform(progress, [0, 0.4, 0.8], [1, 1, 0]);
-    const step2Opacity = useTransform(progress, [0.6, 1.0, 1.4], [0, 1, 0]);
-    const step3Opacity = useTransform(progress, [1.2, 1.6, 2.0], [0, 1, 1]);
+        stepRefs.current.forEach((ref, index) => {
+            if (!ref) return;
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            setActiveStep(index);
+                        }
+                    });
+                },
+                { threshold: 0.3, rootMargin: "-30% 0px -30% 0px" }
+            );
+            observer.observe(ref);
+            observers.push(observer);
+        });
+
+        return () => observers.forEach((o) => o.disconnect());
+    }, []);
 
     return (
-        <section ref={containerRef} className="relative bg-background" style={{ height: '200vh' }}>
-            <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-                <div className="container relative grid grid-cols-2 gap-16 items-center px-8 max-w-6xl">
-                    {/* Left: Phone mockup */}
-                    <div className="flex items-center justify-end">
-                        <div className="relative w-[300px] h-[600px] bg-foreground/90 rounded-[3rem] border-8 border-muted shadow-2xl overflow-hidden">
-                            {/* Notch */}
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground/90 rounded-b-xl z-20" />
-                            {/* Step screens */}
-                            <motion.div style={{ opacity: step1Opacity }} className="absolute inset-0 pt-12 bg-background flex flex-col text-foreground">
-                                {steps[0].mockContent}
-                            </motion.div>
-                            <motion.div style={{ opacity: step2Opacity }} className="absolute inset-0 pt-12 bg-background flex flex-col text-foreground">
-                                {steps[1].mockContent}
-                            </motion.div>
-                            <motion.div style={{ opacity: step3Opacity }} className="absolute inset-0 pt-12 bg-background flex flex-col text-foreground">
-                                {steps[2].mockContent}
-                            </motion.div>
-                            {/* Home indicator */}
-                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-muted-foreground/30 rounded-full" />
+        <section className="py-24 bg-background">
+            <div className="container max-w-6xl px-8">
+                <div className="relative flex">
+                    {/* Left: Sticky phone mockup — uses flex basis to take space */}
+                    <div className="w-1/2 shrink-0">
+                        <div className="sticky top-24 flex items-center justify-center py-8">
+                            <div className="relative w-[300px] h-[580px] bg-foreground/90 rounded-[3rem] border-8 border-muted shadow-2xl overflow-hidden">
+                                {/* Notch */}
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground/90 rounded-b-xl z-20" />
+                                {/* Step screens */}
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={activeStep}
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 1.05 }}
+                                        transition={{ duration: 0.35, ease: "easeOut" }}
+                                        className="absolute inset-0 pt-12 bg-background flex flex-col text-foreground"
+                                    >
+                                        {steps[activeStep].mockContent}
+                                    </motion.div>
+                                </AnimatePresence>
+                                {/* Home indicator */}
+                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-muted-foreground/30 rounded-full" />
+                            </div>
                         </div>
                     </div>
 
-                    {/* Right: Steps list */}
-                    <div className="flex flex-col gap-12 pl-4">
+                    {/* Right: Steps that scroll — drives the height */}
+                    <div className="w-1/2 flex flex-col pl-10">
                         {steps.map((step, i) => (
-                            <StepCard key={i} step={step} index={i} progress={progress} />
+                            <div
+                                key={i}
+                                ref={(el) => { stepRefs.current[i] = el; }}
+                                className="min-h-[70vh] flex items-center"
+                            >
+                                <div
+                                    className={cn(
+                                        "flex gap-5 items-start transition-all duration-500",
+                                        activeStep === i ? "opacity-100 scale-100" : "opacity-25 scale-95"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg text-xl font-bold transition-colors duration-300",
+                                        activeStep === i
+                                            ? "bg-primary text-primary-foreground"
+                                            : "bg-muted text-muted-foreground"
+                                    )}>
+                                        {i + 1}
+                                    </div>
+                                    <div className="flex flex-col gap-2 pt-2">
+                                        <h3 className="text-2xl font-bold leading-tight">{step.title}</h3>
+                                        <p className="text-muted-foreground text-base leading-relaxed max-w-sm">{step.description}</p>
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>
             </div>
         </section>
-    );
-}
-
-function StepCard({ step, index, progress }: { step: typeof steps[0]; index: number; progress: any }) {
-    // Active when progress is near this step's index
-    const opacity = useTransform(progress, [index - 0.6, index - 0.1, index, index + 0.5, index + 1.0], [0.25, 0.6, 1, 0.6, 0.25]);
-    const scale = useTransform(progress, [index - 0.5, index, index + 0.5], [0.95, 1, 0.95]);
-    const y = useTransform(progress, [index - 0.5, index, index + 0.5], [8, 0, -8]);
-
-    return (
-        <motion.div style={{ opacity, scale, y }} className="flex gap-5 items-start">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg bg-primary text-primary-foreground text-xl font-bold">
-                {index + 1}
-            </div>
-            <div className="flex flex-col gap-2 pt-2">
-                <h3 className="text-2xl font-bold leading-tight">{step.title}</h3>
-                <p className="text-muted-foreground text-base leading-relaxed max-w-sm">{step.description}</p>
-            </div>
-        </motion.div>
     );
 }
