@@ -44,6 +44,7 @@
     "e2e",
     "scripts",
     "compare_locales.ts",
-    "src/main.vite.tsx"
+    "src/main.vite.tsx",
+    "src/app"
   ]
 }
