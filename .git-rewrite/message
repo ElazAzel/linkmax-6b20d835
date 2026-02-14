@@ -1,8 +1,1 @@
-Translate dashboard and blocks to en/kk
-
-- Add translations across blocks editors and settings
-- Refactor to use t() for hardcoded text
-- Update various editors (SeparatorBlockEditor, PricingBlockEditor, CustomCodeBlockEditor)
-- Align UI with multilingual strings and ensure consistency across dashboard components
-
-X-Lovable-Edit-ID: edt-fdd1df0c-5165-4950-926c-ac28fcfa2bf4
+Changes

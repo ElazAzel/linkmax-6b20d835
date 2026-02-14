@@ -1,6 +1,14 @@
-tree 781c380e11cfae85d5a6d62707e8d48f7cd9865f
-parent 0b0beca9ef867e18ea4b02e250065a13c5530a9b
-author ElazAzel <35068027+ElazAzel@users.noreply.github.com> 1768890972 +0500
-committer ElazAzel <35068027+ElazAzel@users.noreply.github.com> 1768890972 +0500
+tree 0d8f92e03dc3a0ac76b54863fb02c92192f5db01
+parent 4087a1573e8b65dccbe22df1e1d3907801e621e2
+parent b64bda8e43902bbec71060ddced4f45e92f11fd3
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
 
-Redact public repository content
+Enhance SEO with AEO/GEO
+
+Add advanced AEO/GEO utilities, auto FAQ, GEO schemas, enhanced
+CrawlerFriendlyContent, and Cloudflare Prerender worker integration.
+Includes new answer-block, auto-faq, geo-schemas, key-facts, entity linking,
+SEO index, tests, and extensive TS/JSX updates with multilingual support.
+
+X-Lovable-Edit-ID: edt-ebfab774-d60f-4088-9017-a88a2dfd2232
