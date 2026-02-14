@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { COMPANY_DETAILS } from './TermsOfServiceModal';
 
 interface PrivacyPolicyModalProps {
   open: boolean;
@@ -26,57 +27,59 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
           <h2 className="text-lg font-semibold mb-4">LinkMAX Platform Privacy Policy</h2>
           <p className="mb-4 text-sm text-muted-foreground">Version: 1.0</p>
           
-          <h3 className="font-semibold mt-6 mb-2">1. Terms</h3>
-          <p className="text-sm text-muted-foreground mb-2">LinkMAX Platform (hereinafter referred to as the "Platform", "LinkMAX") — an online information system for creating personal mini-sites (link-in-bio pages and micro-landings), content management, analytics, and lead management using artificial intelligence technologies. The Platform is hosted on cloud infrastructure and operates in accordance with the personal data legislation of the Republic of Kazakhstan.</p>
-          <p className="text-sm text-muted-foreground mb-2">Administration — a person (sole proprietor/LLP) owning the rights to the LinkMAX Platform, providing organizational and technical support, administration, and processing of personal data within the Platform's operation.</p>
-          <p className="text-sm text-muted-foreground mb-2">User — a legally capable individual who has registered a Profile on the Platform, passed authentication, and agreed to the User Agreement and this Policy.</p>
-          <p className="text-sm text-muted-foreground mb-2">Profile (Account) — the User's individual account created during registration, containing information about the User and providing authorized access to Platform functionality.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">2. Introduction</h3>
-          <p className="text-sm text-muted-foreground mb-2">Ensuring the necessary level of protection for personal data of LinkMAX Platform Users and their clients (leads) is one of the key tasks of the Administration.</p>
-          <p className="text-sm text-muted-foreground mb-2">Processing and protection of personal data is carried out in accordance with the requirements of the Republic of Kazakhstan legislation on personal data.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">3. Definition and Composition of Personal Data</h3>
-          <p className="text-sm text-muted-foreground mb-2">3.1. Personal data — any information about a personal data subject that allows identification of their identity directly or indirectly.</p>
-          <p className="text-sm text-muted-foreground mb-2">3.2. The LinkMAX Platform Administration processes personal data exclusively for the purposes of: providing access to Platform functionality; ensuring the operation of services (page editor, analytics, Mini-CRM, AI functions); fulfilling contracts (subscriptions, B2B agreements); complying with legal requirements.</p>
-          <p className="text-sm text-muted-foreground mb-2">3.3. Depending on the User category and functionality used, the following data may be processed:</p>
-          <p className="text-sm text-muted-foreground mb-2">• User Data: name, username, email, phone number, Telegram ID, country/region, preferred interface language, account data (tariff, subscription period, payment history), page settings, technical data (IP address, browser and device information, cookies, interface activity data).</p>
-          <p className="text-sm text-muted-foreground mb-2">• Lead/Client Data (through forms and Mini-CRM): name, contact details, application content, lead status, interaction history.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">4. Purposes of Data Collection and Processing</h3>
-          <p className="text-sm text-muted-foreground mb-2">4.1. The Administration collects, stores, and processes personal data for the following purposes:</p>
-          <p className="text-sm text-muted-foreground mb-2">• Registration, authentication, and Account support;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Providing access to Platform functionality;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Using AI functions (text generation, translation, recommendations);</p>
-          <p className="text-sm text-muted-foreground mb-2">• Sending technical notifications;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Ensuring Mini-CRM operation and lead notifications;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Providing analytics;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Improving service quality.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">5. Personal Data Processing Terms</h3>
-          <p className="text-sm text-muted-foreground mb-2">5.1. Personal data is processed and stored for the duration of: User Account validity; necessity for achieving processing purposes; periods established by law.</p>
-          <p className="text-sm text-muted-foreground mb-2">5.2. Upon achieving processing purposes or withdrawal of consent (where applicable), data is subject to deletion or anonymization.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">6. Rights and Obligations of the Parties</h3>
-          <p className="text-sm text-muted-foreground mb-2">6.1. The Administration has the right to: process personal data of Users and leads within stated purposes; anonymize data for statistics and analytics; transfer data to third parties in cases provided by law.</p>
-          <p className="text-sm text-muted-foreground mb-2">6.2. The User has the right to: receive information about the fact of processing their personal data; request clarification, updating, blocking, or destruction of their data; withdraw consent to processing; appeal the Administration's actions.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">7. Principles and Conditions for Personal Data Processing</h3>
-          <p className="text-sm text-muted-foreground mb-2">7.1. Data processing on the LinkMAX Platform is carried out based on: the User Agreement and this Policy; voluntary provision of data by the User; legal requirements.</p>
-          <p className="text-sm text-muted-foreground mb-2">7.2. When processing personal data, the Administration is guided by the principles of: legality and good faith; purpose limitation; data minimization; storage limitation; confidentiality and security.</p>
-          <p className="text-sm text-muted-foreground mb-2">7.3. The Administration does not sell Users' personal data to third parties.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">8. Ensuring Personal Data Security</h3>
-          <p className="text-sm text-muted-foreground mb-2">8.1. The Administration takes necessary organizational, legal, and technical measures to protect personal data from unauthorized access, destruction, alteration, blocking, copying, and unlawful distribution.</p>
-          <p className="text-sm text-muted-foreground mb-2">8.2. Protection measures include: password and sensitive data encryption; role-based access restrictions; HTTPS protocol and traffic encryption; regular software updates; backup systems.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">9. Cookies and Analytics</h3>
-          <p className="text-sm text-muted-foreground mb-2">9.1. The Platform uses cookies (small text files stored in the User's browser) to ensure proper operation, authentication, and analytics.</p>
-          <p className="text-sm text-muted-foreground mb-2">9.2. Cookie types used: strictly necessary (for operation and authorization); analytical (for usage statistics collection); functional (for remembering preferences).</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">10. Contact Information</h3>
-          <p className="text-sm text-muted-foreground mb-2">For questions, requests, or complaints regarding personal data processing, please contact: support@linkmax.app</p>
-          <p className="text-sm text-muted-foreground mb-2">The current version of this Policy is always available at: https://lnkmx.my/privacy</p>
+          <h3 className="font-semibold mt-6 mb-2">1. General Provisions</h3>
+          <p className="text-sm text-muted-foreground mb-2">1.1. This Privacy Policy (hereinafter - "Policy") defines the procedure for processing and protecting personal data when using the LinkMAX platform (hereinafter - "Platform", "LinkMAX").</p>
+          <p className="text-sm text-muted-foreground mb-2">1.2. The Policy applies to data of Platform Users, as well as data of third parties (leads/clients) that the User collects through pages, forms, and mini CRM (hereinafter - "Client Data/Leads").</p>
+          <p className="text-sm text-muted-foreground mb-2">1.3. By using the Platform, the User confirms familiarity and agreement with the Policy (to the extent required by law and product settings).</p>
+
+          <h3 className="font-semibold mt-6 mb-2">2. Operator and Contacts</h3>
+          <p className="text-sm text-muted-foreground mb-2">2.1. Personal data operator (Administration): {COMPANY_DETAILS.name}, BIN (IIN) {COMPANY_DETAILS.bin}, address: {COMPANY_DETAILS.address}.</p>
+          <p className="text-sm text-muted-foreground mb-2">2.2. Contact for personal data inquiries: {COMPANY_DETAILS.email}.</p>
+          <p className="text-sm text-muted-foreground mb-2">2.3. The current version of the Policy is available at: https://lnkmx.my/privacy.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">3. Terms</h3>
+          <p className="text-sm text-muted-foreground mb-2">3.1. User - a legally capable individual who has registered an account on the Platform.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.2. Account (Profile) - User's account on the Platform.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.3. Personal data - any information relating to a directly or indirectly identifiable individual.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.4. Client Data/Leads - data of visitors to User's pages submitted through forms/mini CRM and other collection mechanisms.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">4. Regulatory Framework</h3>
+          <p className="text-sm text-muted-foreground mb-2">4.1. Processing and protection of personal data is carried out in accordance with the legislation of the Republic of Kazakhstan on personal data, including Law No. 94-V dated May 21, 2013 "On Personal Data and Their Protection".</p>
+
+          <h3 className="font-semibold mt-6 mb-2">5. What Data is Processed</h3>
+          <p className="text-sm text-muted-foreground mb-2">5.1. User Data may include: name/username, email, phone (if provided), Telegram ID (if connected), country/region, interface language, account information (plan, subscription period, payment history), page settings, and technical data (IP address, browser/device data, cookies).</p>
+          <p className="text-sm text-muted-foreground mb-2">5.2. Client Data/Leads may include: name, contact details, application content, lead status, interaction history (within mini CRM).</p>
+          <p className="text-sm text-muted-foreground mb-2">5.3. The Platform does not aim to collect excessive data and strives for minimization.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">6. Purposes and Grounds for Processing</h3>
+          <p className="text-sm text-muted-foreground mb-2">6.1. Purposes of personal data processing include: Registration, authentication, and account support; Providing access to Platform functionality (page editor, publishing, analytics, mini CRM); Sending technical notifications and service messages; Improving service quality, error diagnostics, and security; Fulfilling contractual obligations (including subscriptions and B2B interactions if applicable).</p>
+          <p className="text-sm text-muted-foreground mb-2">6.2. Processing grounds: contract/user agreement execution, data subject consent (if required), and legal requirements.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">7. Cookies and Analytics</h3>
+          <p className="text-sm text-muted-foreground mb-2">7.1. The Platform may use cookies and similar technologies for proper operation, authentication, protection, and analytics.</p>
+          <p className="text-sm text-muted-foreground mb-2">7.2. Cookie types may include: strictly necessary, functional, and analytical.</p>
+          <p className="text-sm text-muted-foreground mb-2">7.3. The User may restrict cookies in browser settings; however, some Platform functions may not work correctly.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">8. Third-Party Services and Data Transfers</h3>
+          <p className="text-sm text-muted-foreground mb-2">8.1. For Platform operation, third-party infrastructure and analytics providers may be used (e.g., analytics/attribution services and cloud services), to which a limited set of technical data (IP, cookies, device identifiers) may be transferred to the extent necessary for providing functions.</p>
+          <p className="text-sm text-muted-foreground mb-2">8.2. When the User connects integrations (e.g., YouTube/Google API and other platform APIs), data processing may also be governed by the respective platform policies, and permission management may be done in the provider's account settings.</p>
+          <p className="text-sm text-muted-foreground mb-2">8.3. The Administration does not sell Users' personal data to third parties.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">9. Storage Terms and Deletion</h3>
+          <p className="text-sm text-muted-foreground mb-2">9.1. Data is stored for the duration of the account and/or the period necessary to achieve processing purposes, as well as periods established by law.</p>
+          <p className="text-sm text-muted-foreground mb-2">9.2. Upon achieving processing purposes or withdrawal of consent (when applicable), data is deleted or anonymized unless otherwise required by law.</p>
+          <p className="text-sm text-muted-foreground mb-2">9.3. The User may delete their account and content from the Platform interface (if available) or submit a support request.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">10. Data Security</h3>
+          <p className="text-sm text-muted-foreground mb-2">10.1. The Administration takes organizational and technical measures to protect data from unauthorized access, modification, disclosure, and destruction.</p>
+          <p className="text-sm text-muted-foreground mb-2">10.2. Measures may include: HTTPS, role-based access control, password encryption/hashing, software updates, backup.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">11. Personal Data Subject Rights</h3>
+          <p className="text-sm text-muted-foreground mb-2">11.1. The User has the right to request information about data processing, require clarification/update, blocking or deletion of data, and withdraw consent to processing (in cases provided by law).</p>
+          <p className="text-sm text-muted-foreground mb-2">11.2. To exercise rights, the User may send a request to {COMPANY_DETAILS.email}.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">12. Policy Changes</h3>
+          <p className="text-sm text-muted-foreground mb-2">12.1. The Administration may update the Policy; the new version takes effect upon publication at https://lnkmx.my/privacy unless otherwise specified.</p>
         </>
       );
     }
@@ -87,49 +90,59 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
           <h2 className="text-lg font-semibold mb-4">LinkMAX платформасының құпиялылық саясаты</h2>
           <p className="mb-4 text-sm text-muted-foreground">Нұсқа: 1.0</p>
           
-          <h3 className="font-semibold mt-6 mb-2">1. Терминдер</h3>
-          <p className="text-sm text-muted-foreground mb-2">LinkMAX платформасы (бұдан әрі — «Платформа», «LinkMAX») — жасанды интеллект технологияларын қолдана отырып, жеке мини-сайттар (link-in-bio беттері мен микролендингтер) жасау, мазмұнды басқару, аналитика және лидтермен жұмыс істеу үшін ақпараттық онлайн-жүйе.</p>
-          <p className="text-sm text-muted-foreground mb-2">Әкімшілік — LinkMAX Платформасына құқықтарға ие тұлға (ЖК/ЖШС), Платформаның жұмысы шеңберінде ұйымдастырушылық-техникалық қолдау, әкімшілік және дербес деректерді өңдеуді жүзеге асырады.</p>
-          <p className="text-sm text-muted-foreground mb-2">Пайдаланушы — Платформада Профильді тіркеген, аутентификациядан өткен және Пайдаланушы келісімі мен осы Саясатпен келіскен әрекетке қабілетті жеке тұлға.</p>
-          <p className="text-sm text-muted-foreground mb-2">Профиль (Аккаунт) — тіркелу кезінде жасалған Пайдаланушының жеке тіркелгісі.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">2. Кіріспе</h3>
-          <p className="text-sm text-muted-foreground mb-2">LinkMAX Платформасы Пайдаланушылары мен олардың клиенттерінің (лидтердің) дербес деректерін қорғаудың қажетті деңгейін қамтамасыз ету Әкімшіліктің негізгі міндеттерінің бірі болып табылады.</p>
-          <p className="text-sm text-muted-foreground mb-2">Дербес деректерді өңдеу және қорғау Қазақстан Республикасының дербес деректер туралы заңнамасының талаптарына сәйкес жүзеге асырылады.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">3. Дербес деректердің анықтамасы және құрамы</h3>
-          <p className="text-sm text-muted-foreground mb-2">3.1. Дербес деректер — дербес деректер субъектісі туралы тікелей немесе жанама түрде оның жеке басын анықтауға мүмкіндік беретін кез келген ақпарат.</p>
-          <p className="text-sm text-muted-foreground mb-2">3.2. LinkMAX Платформасының Әкімшілігі дербес деректерді тек мына мақсаттарда өңдейді: Платформа функционалына қол жеткізуді қамтамасыз ету; қызметтердің жұмысын қамтамасыз ету; шарттарды орындау; заңнама талаптарын сақтау.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">4. Деректерді жинау және өңдеу мақсаттары</h3>
-          <p className="text-sm text-muted-foreground mb-2">4.1. Әкімшілік дербес деректерді мына мақсаттарда жинайды, сақтайды және өңдейді:</p>
-          <p className="text-sm text-muted-foreground mb-2">• Тіркелу, аутентификация және Аккаунтты қолдау;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Платформа функционалына қол жеткізуді қамтамасыз ету;</p>
-          <p className="text-sm text-muted-foreground mb-2">• AI функцияларын пайдалану;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Техникалық хабарламалар жіберу;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Mini-CRM жұмысын қамтамасыз ету;</p>
-          <p className="text-sm text-muted-foreground mb-2">• Аналитиканы қамтамасыз ету.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">5. Дербес деректерді өңдеу мерзімдері</h3>
-          <p className="text-sm text-muted-foreground mb-2">5.1. Дербес деректер мына мерзімде өңделеді және сақталады: Пайдаланушы Аккаунтының қолданылу мерзімі; өңдеу мақсаттарына жету үшін қажетті мерзім; заңнамамен белгіленген мерзімдер.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">6. Тараптардың құқықтары мен міндеттері</h3>
-          <p className="text-sm text-muted-foreground mb-2">6.1. Әкімшілік құқылы: көрсетілген мақсаттар шеңберінде Пайдаланушылар мен лидтердің дербес деректерін өңдеуге; статистика және аналитика үшін деректерді иесіздендіруге.</p>
-          <p className="text-sm text-muted-foreground mb-2">6.2. Пайдаланушы құқылы: өзінің дербес деректерін өңдеу фактісі туралы ақпарат алуға; деректерін нақтылауды, жаңартуды, бұғаттауды немесе жоюды талап етуге.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">7. Дербес деректерді өңдеу принциптері мен шарттары</h3>
-          <p className="text-sm text-muted-foreground mb-2">7.1. LinkMAX Платформасында деректерді өңдеу мына негізде жүзеге асырылады: Пайдаланушы келісімі және осы Саясат; Пайдаланушының деректерді ерікті түрде беруі; заңнама талаптары.</p>
-          <p className="text-sm text-muted-foreground mb-2">7.3. Әкімшілік Пайдаланушылардың дербес деректерін үшінші тұлғаларға сатпайды.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">8. Дербес деректер қауіпсіздігін қамтамасыз ету</h3>
-          <p className="text-sm text-muted-foreground mb-2">8.1. Әкімшілік дербес деректерді рұқсатсыз қол жеткізуден, жоюдан, өзгертуден, бұғаттаудан, көшіруден және заңсыз таратудан қорғау үшін қажетті ұйымдастырушылық, құқықтық және техникалық шараларды қабылдайды.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">9. Cookie файлдары және аналитика</h3>
-          <p className="text-sm text-muted-foreground mb-2">9.1. Платформа дұрыс жұмыс істеуді, аутентификацияны және аналитиканы қамтамасыз ету үшін cookie файлдарын пайдаланады.</p>
-          
-          <h3 className="font-semibold mt-6 mb-2">10. Байланыс ақпараты</h3>
-          <p className="text-sm text-muted-foreground mb-2">Дербес деректерді өңдеуге қатысты сұрақтар, сұраныстар немесе шағымдар бойынша хабарласыңыз: support@linkmax.app</p>
-          <p className="text-sm text-muted-foreground mb-2">Осы Саясаттың ағымдағы нұсқасы әрқашан мына мекенжайда қол жетімді: https://lnkmx.my/privacy</p>
+          <h3 className="font-semibold mt-6 mb-2">1. Жалпы ережелер</h3>
+          <p className="text-sm text-muted-foreground mb-2">1.1. Осы Құпиялылық саясаты (бұдан әрі - «Саясат») LinkMAX платформасын (бұдан әрі - «Платформа», «LinkMAX») пайдалану кезінде дербес деректерді өңдеу және қорғау тәртібін анықтайды.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.2. Саясат Платформа Пайдаланушыларының деректеріне, сондай-ақ Пайдаланушы беттер, нысандар және mini CRM арқылы жинайтын үшінші тараптардың (лидтердің/клиенттердің) деректеріне (бұдан әрі - «Клиенттік деректер/Лидтер») қолданылады.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.3. Платформаны пайдалана отырып, Пайдаланушы Саясатпен танысқанын және келіскенін растайды (заң талап ететін және өнім параметрлері көлемінде).</p>
+
+          <h3 className="font-semibold mt-6 mb-2">2. Оператор және байланыстар</h3>
+          <p className="text-sm text-muted-foreground mb-2">2.1. Дербес деректер операторы (Әкімшілік): {COMPANY_DETAILS.name}, БСН (ЖСН) {COMPANY_DETAILS.bin}, мекенжай: {COMPANY_DETAILS.address}.</p>
+          <p className="text-sm text-muted-foreground mb-2">2.2. Дербес деректер бойынша сұрауларға байланыс: {COMPANY_DETAILS.email}.</p>
+          <p className="text-sm text-muted-foreground mb-2">2.3. Саясаттың ағымдағы нұсқасы мына мекенжайда қол жетімді: https://lnkmx.my/privacy.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">3. Терминдер</h3>
+          <p className="text-sm text-muted-foreground mb-2">3.1. Пайдаланушы - Платформада аккаунт тіркеген әрекетке қабілетті жеке тұлға.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.2. Аккаунт (Профиль) - Платформадағы Пайдаланушының тіркелгісі.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.3. Дербес деректер - тікелей немесе жанама түрде анықталатын жеке тұлғаға қатысты кез келген ақпарат.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.4. Клиенттік деректер/Лидтер - нысандар/mini CRM және басқа жинау механизмдері арқылы жіберілген Пайдаланушы беттерінің келушілерінің деректері.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">4. Нормативтік база</h3>
+          <p className="text-sm text-muted-foreground mb-2">4.1. Дербес деректерді өңдеу және қорғау Қазақстан Республикасының дербес деректер туралы заңнамасына сәйкес жүзеге асырылады, соның ішінде 2013 жылғы 21 мамырдағы № 94-V «Дербес деректер және оларды қорғау туралы» Заңы.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">5. Қандай деректер өңделеді</h3>
+          <p className="text-sm text-muted-foreground mb-2">5.1. Пайдаланушы деректері мыналарды қамтуы мүмкін: аты/пайдаланушы аты, email, телефон (берілген болса), Telegram ID (қосылған болса), ел/аймақ, интерфейс тілі, аккаунт туралы ақпарат (тариф, жазылым мерзімі, төлем тарихы), бет параметрлері және техникалық деректер (IP мекенжайы, браузер/құрылғы деректері, cookies).</p>
+          <p className="text-sm text-muted-foreground mb-2">5.2. Клиенттік деректер/Лидтер мыналарды қамтуы мүмкін: аты, байланыс деректері, өтініш мазмұны, лид мәртебесі, өзара әрекеттесу тарихы (mini CRM шеңберінде).</p>
+          <p className="text-sm text-muted-foreground mb-2">5.3. Платформа артық деректерді жинауды мақсат етпейді және минимизациялауға ұмтылады.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">6. Өңдеу мақсаттары мен негіздері</h3>
+          <p className="text-sm text-muted-foreground mb-2">6.1. Дербес деректерді өңдеу мақсаттары мыналарды қамтиды: Тіркелу, аутентификация және аккаунтты қолдау; Платформа функционалына қол жеткізуді қамтамасыз ету (бет редакторы, жариялау, аналитика, mini CRM); Техникалық хабарландырулар мен сервистік хабарламалар жіберу; Қызмет сапасын жақсарту, қателерді диагностикалау және қауіпсіздік; Шарттық міндеттемелерді орындау (жазылымдар мен B2B өзара әрекеттесулерді қоса алғанда, қолданылса).</p>
+          <p className="text-sm text-muted-foreground mb-2">6.2. Өңдеу негіздері: шартты/пайдаланушы келісімін орындау, деректер субъектісінің келісімі (қажет болса) және заң талаптары.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">7. Cookies және аналитика</h3>
+          <p className="text-sm text-muted-foreground mb-2">7.1. Платформа дұрыс жұмыс істеу, аутентификация, қорғау және аналитика үшін cookies және ұқсас технологияларды пайдалануы мүмкін.</p>
+          <p className="text-sm text-muted-foreground mb-2">7.2. Cookie түрлері мыналарды қамтуы мүмкін: қатаң қажетті, функционалдық және аналитикалық.</p>
+          <p className="text-sm text-muted-foreground mb-2">7.3. Пайдаланушы браузер параметрлерінде cookies-ті шектей алады; дегенмен, кейбір Платформа функциялары дұрыс жұмыс істемеуі мүмкін.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">8. Үшінші тарап қызметтері және деректерді беру</h3>
+          <p className="text-sm text-muted-foreground mb-2">8.1. Платформа жұмысы үшін үшінші тарап инфрақұрылымы мен аналитика провайдерлері пайдаланылуы мүмкін (мысалы, аналитика/атрибуция қызметтері және бұлттық қызметтер), оларға функцияларды ұсыну үшін қажетті көлемде техникалық деректердің шектеулі жиынтығы (IP, cookies, құрылғы идентификаторлары) берілуі мүмкін.</p>
+          <p className="text-sm text-muted-foreground mb-2">8.2. Пайдаланушы интеграцияларды қосқан кезде (мысалы, YouTube/Google API және басқа платформа API), деректерді өңдеу тиісті платформа саясаттарымен де реттелуі мүмкін, ал рұқсаттарды басқару провайдердің аккаунт параметрлерінде жүзеге асырылуы мүмкін.</p>
+          <p className="text-sm text-muted-foreground mb-2">8.3. Әкімшілік Пайдаланушылардың дербес деректерін үшінші тараптарға сатпайды.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">9. Сақтау мерзімдері және жою</h3>
+          <p className="text-sm text-muted-foreground mb-2">9.1. Деректер аккаунт мерзімі ішінде және/немесе өңдеу мақсаттарына жету үшін қажетті мерзім ішінде, сондай-ақ заңмен белгіленген мерзімдер ішінде сақталады.</p>
+          <p className="text-sm text-muted-foreground mb-2">9.2. Өңдеу мақсаттарына жеткенде немесе келісімді қайтарып алған кезде (қолданылатын болса), деректер жойылады немесе иесіздендіріледі, егер заңмен өзгеше талап етілмесе.</p>
+          <p className="text-sm text-muted-foreground mb-2">9.3. Пайдаланушы өз аккаунтын және контентін Платформа интерфейсінен жоя алады (қол жетімді болса) немесе қолдау қызметіне сұрау жібере алады.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">10. Деректер қауіпсіздігі</h3>
+          <p className="text-sm text-muted-foreground mb-2">10.1. Әкімшілік деректерді рұқсатсыз қол жеткізуден, өзгертуден, ашудан және жоюдан қорғау үшін ұйымдастырушылық және техникалық шараларды қабылдайды.</p>
+          <p className="text-sm text-muted-foreground mb-2">10.2. Шаралар мыналарды қамтуы мүмкін: HTTPS, рөлдерге негізделген қол жеткізуді басқару, құпия сөздерді шифрлау/хэштеу, бағдарламалық жасақтаманы жаңарту, сақтық көшірме жасау.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">11. Дербес деректер субъектісінің құқықтары</h3>
+          <p className="text-sm text-muted-foreground mb-2">11.1. Пайдаланушы деректерді өңдеу туралы ақпаратты сұрауға, нақтылауды/жаңартуды, бұғаттауды немесе жоюды талап етуге және өңдеуге келісімді қайтарып алуға құқылы (заңмен көзделген жағдайларда).</p>
+          <p className="text-sm text-muted-foreground mb-2">11.2. Құқықтарды іске асыру үшін Пайдаланушы {COMPANY_DETAILS.email} мекенжайына сұрау жібере алады.</p>
+
+          <h3 className="font-semibold mt-6 mb-2">12. Саясатты өзгерту</h3>
+          <p className="text-sm text-muted-foreground mb-2">12.1. Әкімшілік Саясатты жаңарта алады; жаңа нұсқа https://lnkmx.my/privacy мекенжайында жарияланған сәттен күшіне енеді, егер өзгеше көрсетілмесе.</p>
         </>
       );
     }
@@ -140,81 +153,80 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
         <h2 className="text-lg font-semibold mb-4">Политика конфиденциальности платформы LinkMAX</h2>
         <p className="mb-4 text-sm text-muted-foreground">Версия: 1.0</p>
         
-        <h3 className="font-semibold mt-6 mb-2">1. Термины</h3>
-        <p className="text-sm text-muted-foreground mb-2">Платформа LinkMAX (далее — «Платформа», «LinkMAX») — информационная онлайн‑система для создания персональных мини‑сайтов (link‑in‑bio страниц и микролендингов), управления контентом, аналитики и работы с лидами, с использованием технологий искусственного интеллекта. Платформа размещена на облачной инфраструктуре и работает в соответствии с требованиями законодательства Республики Казахстан о персональных данных.</p>
-        <p className="text-sm text-muted-foreground mb-2">Администрация — лицо (ИП/ТОО), владеющее правами на Платформу LinkMAX, осуществляющее организационно‑техническое сопровождение, администрирование и обработку персональных данных в рамках работы Платформы.</p>
-        <p className="text-sm text-muted-foreground mb-2">Пользователь — дееспособное физическое лицо, зарегистрировавшее Профиль на Платформе, прошедшее аутентификацию и согласившееся с Пользовательским соглашением и настоящей Политикой.</p>
-        <p className="text-sm text-muted-foreground mb-2">Профиль (Аккаунт) — индивидуальная учётная запись Пользователя, создаваемая при регистрации, содержащая сведения о Пользователе и обеспечивающая авторизованный доступ к функционалу Платформы.</p>
-        <p className="text-sm text-muted-foreground mb-2">Персональные данные — любая информация, относящаяся к прямо или косвенно определённому физическому лицу (субъекту персональных данных), позволяющая идентифицировать его личность.</p>
-        <p className="text-sm text-muted-foreground mb-2">Клиентские данные / Лиды — данные третьих лиц (посетителей страниц Пользователя), собираемые через формы, Mini‑CRM и иные механизмы.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">2. Введение</h3>
-        <p className="text-sm text-muted-foreground mb-2">Обеспечение необходимого уровня защиты персональных данных Пользователей Платформы LinkMAX и их клиентов (лидов) является одной из ключевых задач Администрации.</p>
-        <p className="text-sm text-muted-foreground mb-2">Обработка и защита персональных данных осуществляются в соответствии с требованиями законодательства Республики Казахстан о персональных данных (включая Закон Республики Казахстан от 21 мая 2013 года № 94‑V «О персональных данных и их защите»).</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">3. Понятие и состав персональных данных</h3>
-        <p className="text-sm text-muted-foreground mb-2">3.1. Персональные данные — любая информация о субъекте персональных данных, позволяющая идентифицировать его личность прямо или косвенно.</p>
-        <p className="text-sm text-muted-foreground mb-2">3.2. Администрация Платформы LinkMAX обрабатывает персональные данные исключительно в целях: предоставления доступа к функционалу Платформы; обеспечения работы сервисов (редактор страниц, аналитика, Mini‑CRM, AI‑функции); исполнения договоров (подписок, B2B‑соглашений); соблюдения требований законодательства.</p>
-        <p className="text-sm text-muted-foreground mb-2">3.3. В зависимости от категории Пользователя могут обрабатываться следующие данные:</p>
-        <p className="text-sm text-muted-foreground mb-2">• Данные Пользователей: имя, username, email, номер телефона, Telegram ID, страна/регион, предпочитаемый язык интерфейса, данные об аккаунте (тариф, срок действия подписки, история платежей), настройки страниц, технические данные (IP‑адрес, информация о браузере и устройстве, cookie).</p>
-        <p className="text-sm text-muted-foreground mb-2">• Данные лидов/клиентов Пользователя: имя, контактные данные, содержание заявок, статус лида, история взаимодействий.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">4. Цели сбора и обработки данных</h3>
-        <p className="text-sm text-muted-foreground mb-2">4.1. Администрация осуществляет сбор, хранение и обработку персональных данных в следующих целях:</p>
-        <p className="text-sm text-muted-foreground mb-2">• регистрация, аутентификация и поддержка работы Аккаунта;</p>
-        <p className="text-sm text-muted-foreground mb-2">• предоставление доступа к функционалу Платформы;</p>
-        <p className="text-sm text-muted-foreground mb-2">• использование AI‑функций (генерация текста, перевод, рекомендации);</p>
-        <p className="text-sm text-muted-foreground mb-2">• отправка технических уведомлений;</p>
-        <p className="text-sm text-muted-foreground mb-2">• обеспечение работы Mini‑CRM и уведомлений о лидах;</p>
-        <p className="text-sm text-muted-foreground mb-2">• предоставление аналитики;</p>
-        <p className="text-sm text-muted-foreground mb-2">• улучшение качества сервиса.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">5. Сроки обработки персональных данных</h3>
-        <p className="text-sm text-muted-foreground mb-2">5.1. Персональные данные обрабатываются и хранятся в течение срока: действия Аккаунта Пользователя; необходимого для достижения целей обработки; установленного законодательством.</p>
-        <p className="text-sm text-muted-foreground mb-2">5.2. По достижении целей обработки либо при отзыве согласия данные подлежат удалению или обезличиванию.</p>
-        <p className="text-sm text-muted-foreground mb-2">5.3. Пользователь вправе удалить свой Аккаунт и Контент из интерфейса Платформы.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">6. Права и обязанности сторон</h3>
-        <p className="text-sm text-muted-foreground mb-2">6.1. Администрация имеет право: обрабатывать персональные данные Пользователей и лидов в пределах заявленных целей; обезличивать данные для статистики и аналитики; передавать данные третьим лицам в случаях, предусмотренных законодательством.</p>
-        <p className="text-sm text-muted-foreground mb-2">6.2. Пользователь имеет право: получать информацию о факте обработки своих персональных данных; требовать уточнения, обновления, блокирования или уничтожения своих данных; отзывать согласие на обработку; обжаловать действия Администрации.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">7. Принципы и условия обработки персональных данных</h3>
-        <p className="text-sm text-muted-foreground mb-2">7.1. Обработка данных на Платформе LinkMAX осуществляется на основании: Пользовательского соглашения и настоящей Политики; добровольного предоставления данных Пользователем; требований закона.</p>
-        <p className="text-sm text-muted-foreground mb-2">7.2. При обработке персональных данных Администрация руководствуется следующими принципами: законность и добросовестность; целевое ограничение; минимизация данных; ограничение по срокам хранения; конфиденциальность и безопасность.</p>
-        <p className="text-sm text-muted-foreground mb-2">7.3. Администрация не осуществляет продажу персональных данных Пользователей третьим лицам.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">8. Обеспечение безопасности персональных данных</h3>
-        <p className="text-sm text-muted-foreground mb-2">8.1. Администрация принимает необходимые организационные, правовые и технические меры для защиты персональных данных от несанкционированного доступа, уничтожения, изменения, блокирования, копирования, неправомерного распространения.</p>
-        <p className="text-sm text-muted-foreground mb-2">8.2. Для защиты используются: шифрование паролей и чувствительных данных; ограничение доступа по ролям; протокол HTTPS и шифрование трафика; регулярные обновления ПО; резервное копирование.</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">9. Cookies и аналитика</h3>
-        <p className="text-sm text-muted-foreground mb-2">9.1. Платформа использует cookies (небольшие текстовые файлы, сохраняемые в браузере Пользователя) для обеспечения корректной работы, аутентификации и аналитики.</p>
-        <p className="text-sm text-muted-foreground mb-2">9.2. Типы используемых cookies: строго необходимые (для работы и авторизации); аналитические (для сбора статистики использования); функциональные (для запоминания предпочтений).</p>
-        
-        <h3 className="font-semibold mt-6 mb-2">10. Контактные данные</h3>
-        <p className="text-sm text-muted-foreground mb-2">По вопросам, запросам или жалобам относительно обработки персональных данных обращайтесь: support@linkmax.app</p>
-        <p className="text-sm text-muted-foreground mb-2">Актуальная версия настоящей Политики всегда доступна по адресу: https://lnkmx.my/privacy</p>
+        <h3 className="font-semibold mt-6 mb-2">1. Общие положения</h3>
+        <p className="text-sm text-muted-foreground mb-2">1.1. Настоящая Политика конфиденциальности (далее - «Политика») определяет порядок обработки и защиты персональных данных при использовании платформы LinkMAX (далее - «Платформа», «LinkMAX»).</p>
+        <p className="text-sm text-muted-foreground mb-2">1.2. Политика действует в отношении данных Пользователей Платформы, а также данных третьих лиц (лидов/клиентов), которые Пользователь собирает через страницы, формы и mini CRM (далее - «Клиентские данные/Лиды»).</p>
+        <p className="text-sm text-muted-foreground mb-2">1.3. Используя Платформу, Пользователь подтверждает ознакомление и согласие с Политикой (в части, требуемой законом и настройками продукта).</p>
+
+        <h3 className="font-semibold mt-6 mb-2">2. Оператор и контакты</h3>
+        <p className="text-sm text-muted-foreground mb-2">2.1. Оператор персональных данных (Администрация): {COMPANY_DETAILS.name}, БИН (ИИН) {COMPANY_DETAILS.bin}, адрес: {COMPANY_DETAILS.address}.</p>
+        <p className="text-sm text-muted-foreground mb-2">2.2. Контакты для обращений по персональным данным: {COMPANY_DETAILS.email}.</p>
+        <p className="text-sm text-muted-foreground mb-2">2.3. Актуальная версия Политики размещается по адресу: https://lnkmx.my/privacy.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">3. Термины</h3>
+        <p className="text-sm text-muted-foreground mb-2">3.1. Пользователь - дееспособное физическое лицо, зарегистрировавшее аккаунт на Платформе.</p>
+        <p className="text-sm text-muted-foreground mb-2">3.2. Аккаунт (Профиль) - учётная запись Пользователя на Платформе.</p>
+        <p className="text-sm text-muted-foreground mb-2">3.3. Персональные данные - любая информация, относящаяся к прямо или косвенно определяемому физическому лицу.</p>
+        <p className="text-sm text-muted-foreground mb-2">3.4. Клиентские данные/Лиды - данные посетителей страниц Пользователя, оставленные через формы/mini CRM и иные механизмы сбора.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">4. Нормативная база</h3>
+        <p className="text-sm text-muted-foreground mb-2">4.1. Обработка и защита персональных данных осуществляются в соответствии с законодательством Республики Казахстан о персональных данных, включая Закон РК от 21 мая 2013 года № 94-V «О персональных данных и их защите».</p>
+
+        <h3 className="font-semibold mt-6 mb-2">5. Какие данные обрабатываются</h3>
+        <p className="text-sm text-muted-foreground mb-2">5.1. Данные Пользователей могут включать: имя/username, email, телефон (если предоставлен), Telegram ID (если подключён), страна/регион, язык интерфейса, сведения об аккаунте (тариф, срок подписки, история платежей), настройки страниц, а также технические данные (IP-адрес, данные браузера/устройства, cookies).</p>
+        <p className="text-sm text-muted-foreground mb-2">5.2. Клиентские данные/Лиды могут включать: имя, контактные данные, содержание заявки/сообщения, статус лида, историю взаимодействий (в рамках mini CRM).</p>
+        <p className="text-sm text-muted-foreground mb-2">5.3. Платформа не преследует цель сбора избыточных данных и стремится к минимизации.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">6. Цели и основания обработки</h3>
+        <p className="text-sm text-muted-foreground mb-2">6.1. Цели обработки персональных данных включают: Регистрация, аутентификация и поддержка работы аккаунта; Предоставление доступа к функционалу Платформы (редактор страниц, публикация, аналитика, mini CRM); Отправка технических уведомлений и сервисных сообщений; Улучшение качества сервиса, диагностика ошибок и безопасность; Исполнение договорных обязательств (в т.ч. подписки и B2B-взаимодействие при наличии).</p>
+        <p className="text-sm text-muted-foreground mb-2">6.2. Основания обработки: исполнение договора/пользовательского соглашения, согласие субъекта данных (если требуется), а также требования закона.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">7. Cookies и аналитика</h3>
+        <p className="text-sm text-muted-foreground mb-2">7.1. Платформа может использовать cookies и аналогичные технологии для корректной работы, аутентификации, защиты и аналитики.</p>
+        <p className="text-sm text-muted-foreground mb-2">7.2. Типы cookies могут включать: строго необходимые, функциональные и аналитические.</p>
+        <p className="text-sm text-muted-foreground mb-2">7.3. Пользователь может ограничить cookies в настройках браузера; при этом часть функций Платформы может работать некорректно.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">8. Сторонние сервисы и передачи данных</h3>
+        <p className="text-sm text-muted-foreground mb-2">8.1. Для работы Платформы могут использоваться сторонние поставщики инфраструктуры и аналитики (например, сервисы аналитики/атрибуции и облачные сервисы), которым может передаваться ограниченный набор технических данных (IP, cookies, идентификаторы устройства) в объёме, необходимом для предоставления функций.</p>
+        <p className="text-sm text-muted-foreground mb-2">8.2. При подключении Пользователем интеграций (например, YouTube/Google API и другие платформенные API) обработка данных может также регулироваться политиками соответствующих платформ, а управление разрешениями может осуществляться в настройках аккаунта провайдера.</p>
+        <p className="text-sm text-muted-foreground mb-2">8.3. Администрация не продаёт персональные данные Пользователей третьим лицам.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">9. Сроки хранения и удаление</h3>
+        <p className="text-sm text-muted-foreground mb-2">9.1. Данные хранятся в течение срока действия аккаунта и/или периода, необходимого для достижения целей обработки, а также сроков, установленных законом.</p>
+        <p className="text-sm text-muted-foreground mb-2">9.2. По достижении целей обработки или при отзыве согласия (когда применимо) данные удаляются или обезличиваются, если иное не требуется законом.</p>
+        <p className="text-sm text-muted-foreground mb-2">9.3. Пользователь может удалить аккаунт и контент из интерфейса Платформы (если функция доступна) либо направить запрос в поддержку.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">10. Безопасность данных</h3>
+        <p className="text-sm text-muted-foreground mb-2">10.1. Администрация принимает организационные и технические меры для защиты данных от неправомерного доступа, изменения, раскрытия и уничтожения.</p>
+        <p className="text-sm text-muted-foreground mb-2">10.2. Меры могут включать: HTTPS, контроль доступа по ролям, шифрование/хэширование паролей, обновления ПО, резервное копирование.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">11. Права субъекта персональных данных</h3>
+        <p className="text-sm text-muted-foreground mb-2">11.1. Пользователь вправе запросить информацию об обработке данных, требовать уточнения/обновления, блокирования или удаления данных, а также отозвать согласие на обработку (в случаях, предусмотренных законом).</p>
+        <p className="text-sm text-muted-foreground mb-2">11.2. Для реализации прав Пользователь может направить запрос на {COMPANY_DETAILS.email}.</p>
+
+        <h3 className="font-semibold mt-6 mb-2">12. Изменение Политики</h3>
+        <p className="text-sm text-muted-foreground mb-2">12.1. Администрация вправе обновлять Политику; новая редакция вступает в силу с момента публикации на https://lnkmx.my/privacy, если не указано иное.</p>
       </>
     );
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle>{t('legal.privacyPolicy', 'Политика конфиденциальности')}</DialogTitle>
+      <DialogContent className="max-w-2xl max-h-[80vh]">
+        <DialogHeader>
+          <DialogTitle>{t('legal.privacyPolicy')}</DialogTitle>
           <DialogDescription>
-            {t('legal.privacyDescription', 'Ознакомьтесь с политикой обработки персональных данных')}
+            {t('legal.privacyDescription')}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-[60vh] px-6 pb-6">
-          <div className="pr-4">
+        <ScrollArea className="h-[60vh] pr-4">
+          <div className="space-y-4">
             {getPrivacyContent()}
           </div>
         </ScrollArea>
-        <div className="p-6 pt-0">
-          <Button onClick={() => onOpenChange(false)} className="w-full">
-            {t('common.close', 'Закрыть')}
+        <div className="flex justify-end pt-4">
+          <Button onClick={() => onOpenChange(false)}>
+            {t('common.close')}
           </Button>
         </div>
       </DialogContent>
@@ -222,7 +234,6 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
   );
 }
 
-// Simple link component that opens the modal
 interface PrivacyLinkProps {
   children: React.ReactNode;
   className?: string;
@@ -236,7 +247,7 @@ export function PrivacyLink({ children, className }: PrivacyLinkProps) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={className || "text-primary hover:underline cursor-pointer"}
+        className={className}
       >
         {children}
       </button>

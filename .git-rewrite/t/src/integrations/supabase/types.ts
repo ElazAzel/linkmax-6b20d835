@@ -1171,6 +1171,7 @@ export type Database = {
           friends_count: number | null
           id: string
           is_premium: boolean | null
+          is_verified: boolean | null
           last_active_date: string | null
           longest_streak: number | null
           premium_expires_at: string | null
@@ -1184,6 +1185,10 @@ export type Database = {
           trial_ends_at: string | null
           updated_at: string | null
           username: string | null
+          verification_reviewed_at: string | null
+          verification_status: string | null
+          verification_submitted_at: string | null
+          verification_type: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -1195,6 +1200,7 @@ export type Database = {
           friends_count?: number | null
           id: string
           is_premium?: boolean | null
+          is_verified?: boolean | null
           last_active_date?: string | null
           longest_streak?: number | null
           premium_expires_at?: string | null
@@ -1208,6 +1214,10 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           username?: string | null
+          verification_reviewed_at?: string | null
+          verification_status?: string | null
+          verification_submitted_at?: string | null
+          verification_type?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -1219,6 +1229,7 @@ export type Database = {
           friends_count?: number | null
           id?: string
           is_premium?: boolean | null
+          is_verified?: boolean | null
           last_active_date?: string | null
           longest_streak?: number | null
           premium_expires_at?: string | null
@@ -1232,6 +1243,10 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string | null
           username?: string | null
+          verification_reviewed_at?: string | null
+          verification_status?: string | null
+          verification_submitted_at?: string | null
+          verification_type?: string | null
         }
         Relationships: []
       }
@@ -1340,6 +1355,51 @@ export type Database = {
           total_spent?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      verification_requests: {
+        Row: {
+          admin_notes: string | null
+          business_registration_url: string | null
+          created_at: string
+          face_photo_url: string | null
+          id: string
+          id_document_url: string | null
+          notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          user_id: string
+          verification_type: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          business_registration_url?: string | null
+          created_at?: string
+          face_photo_url?: string | null
+          id?: string
+          id_document_url?: string | null
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          user_id: string
+          verification_type: string
+        }
+        Update: {
+          admin_notes?: string | null
+          business_registration_url?: string | null
+          created_at?: string
+          face_photo_url?: string | null
+          id?: string
+          id_document_url?: string | null
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          user_id?: string
+          verification_type?: string
         }
         Relationships: []
       }

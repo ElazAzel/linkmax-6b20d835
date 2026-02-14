@@ -17,7 +17,7 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         label={t('fields.title', 'Title')}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder="Button text"
+        placeholder={t('placeholders.buttonText', 'Button text')}
         required
       />
 

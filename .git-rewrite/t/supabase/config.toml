@@ -53,3 +53,6 @@ verify_jwt = false
 
 [functions.process-crm-automations]
 verify_jwt = false
+
+[functions.seed-demo-accounts]
+verify_jwt = false

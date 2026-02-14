@@ -2,18 +2,32 @@ import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import type { Block } from '@/types/page';
 import { createBlock } from '@/lib/block-factory';
+import logger from '@/lib/logger';
 
 export type AIGeneratorType = 'magic-title' | 'sales-copy' | 'seo' | 'ai-builder';
+
+/** AI-generated block structure before normalization */
+interface AIBlockData {
+  type: string;
+  platforms?: AIBlockPlatform[];
+  targetDate?: string;
+  endDate?: string;
+  [key: string]: unknown;
+}
+
+interface AIBlockPlatform {
+  name?: string;
+  url?: string;
+  icon?: string;
+  platform?: string;
+}
 
 interface AIBuilderResult {
   profile?: {
     name: string;
     bio: string;
   };
-  blocks: Array<{
-    type: string;
-    [key: string]: any;
-  }>;
+  blocks: AIBlockData[];
 }
 
 interface UseDashboardAIOptions {
@@ -26,15 +40,15 @@ interface UseDashboardAIOptions {
 /**
  * Normalizes socials block data from AI format to expected format
  */
-function normalizeSocialsBlock(blockData: Record<string, any>): Record<string, any> {
+function normalizeSocialsBlock(blockData: AIBlockData): AIBlockData {
   if (blockData.type !== 'socials' || !Array.isArray(blockData.platforms)) {
     return blockData;
   }
   
   // Normalize platforms array - AI may use 'platform' instead of 'icon'
   const normalizedPlatforms = blockData.platforms
-    .filter((p: any) => p && typeof p === 'object')
-    .map((p: any) => ({
+    .filter((p): p is AIBlockPlatform => p != null && typeof p === 'object')
+    .map((p) => ({
       name: p.name || p.platform || p.icon || 'Link',
       url: p.url || '',
       icon: p.icon || p.platform || 'globe',
@@ -47,9 +61,9 @@ function normalizeSocialsBlock(blockData: Record<string, any>): Record<string, a
 }
 
 /**
- * Normalizes any block data from AI to match expected structure
+ * Normalizes block data from AI to match expected structure
  */
-function normalizeBlockData(blockData: Record<string, any>): Record<string, any> {
+function normalizeBlockData(blockData: AIBlockData): AIBlockData {
   // Normalize socials blocks
   if (blockData.type === 'socials') {
     return normalizeSocialsBlock(blockData);
@@ -69,7 +83,7 @@ function normalizeBlockData(blockData: Record<string, any>): Record<string, any>
 /**
  * Creates a proper block from AI-generated data by merging with factory defaults
  */
-function createBlockFromAI(blockData: { type: string; [key: string]: any }, index: number): Block | null {
+function createBlockFromAI(blockData: AIBlockData, index: number): Block | null {
   try {
     // Normalize block data first
     const normalizedData = normalizeBlockData(blockData);
@@ -89,7 +103,7 @@ function createBlockFromAI(blockData: { type: string; [key: string]: any }, inde
     
     return mergedBlock as Block;
   } catch (error) {
-    console.warn(`Unknown block type from AI: ${blockData.type}`, error);
+    logger.warn(`Unknown block type from AI: ${blockData.type}`, { context: 'AI', data: error });
     return null;
   }
 }

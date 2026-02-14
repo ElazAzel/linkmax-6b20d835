@@ -14,12 +14,12 @@ export const BUSINESS_BLOCKS = [
   'download', 'form', 'countdown', 'booking'
 ] as const;
 
-export type FreeTier = 'free' | 'pro' | 'business';
+export type FreeTier = 'free' | 'pro';
 
 // Feature flags for each tier
 export interface TierFeatures {
   maxBlocks: number;
-  maxAIRequestsPerWeek: number;
+  maxAIPageGenerationsPerMonth: number; // AI page builder generations
   showWatermark: boolean;
   allowedBlocks: string[];
   premiumBlocks: string[];
@@ -41,8 +41,8 @@ export interface TierFeatures {
 }
 
 export const FREE_LIMITS: TierFeatures = {
-  maxBlocks: Infinity, // Unlimited links/blocks as per pricing
-  maxAIRequestsPerWeek: 3,
+  maxBlocks: Infinity,
+  maxAIPageGenerationsPerMonth: 1, // 1 generation per month for free
   showWatermark: true,
   allowedBlocks: [...FREE_BLOCKS] as string[],
   premiumBlocks: [...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
@@ -63,32 +63,34 @@ export const FREE_LIMITS: TierFeatures = {
   canUseCustomPageBackground: false,
 };
 
+// Premium gets ALL Business features except white label
 export const PRO_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
-  maxAIRequestsPerWeek: Infinity,
+  maxAIPageGenerationsPerMonth: 5, // 5 generations per month for premium
   showWatermark: false,
-  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS] as unknown as string[],
-  premiumBlocks: [...BUSINESS_BLOCKS] as unknown as string[],
-  maxLeadsPerMonth: 100,
+  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
+  premiumBlocks: [] as string[], // No premium-locked blocks for pro
+  maxLeadsPerMonth: Infinity, // Unlimited leads
   canUseAnalytics: true,
   canUseCRM: true,
   canUseScheduler: true,
   canUsePixels: true,
-  canUseCustomDomain: false,
-  canUseChatbot: false,
-  canUseAutoNotifications: false,
-  canUsePayments: false,
-  canUseWhiteLabel: false,
-  canUseMultiPage: false,
+  canUseCustomDomain: true,
+  canUseChatbot: true,
+  canUseAutoNotifications: true,
+  canUsePayments: true,
+  canUseWhiteLabel: false, // White label only for Business
+  canUseMultiPage: true,
   canUseVerificationBadge: true,
   canUsePremiumFrames: true,
   canUseAdvancedThemes: true,
-  canUseCustomPageBackground: false,
+  canUseCustomPageBackground: true,
 };
 
+// Business only adds white label
 export const BUSINESS_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
-  maxAIRequestsPerWeek: Infinity,
+  maxAIPageGenerationsPerMonth: Infinity, // Unlimited for business
   showWatermark: false,
   allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
   premiumBlocks: [] as string[],
@@ -101,7 +103,7 @@ export const BUSINESS_LIMITS: TierFeatures = {
   canUseChatbot: true,
   canUseAutoNotifications: true,
   canUsePayments: true,
-  canUseWhiteLabel: true,
+  canUseWhiteLabel: true, // Only Business gets white label
   canUseMultiPage: true,
   canUseVerificationBadge: true,
   canUsePremiumFrames: true,
@@ -109,26 +111,26 @@ export const BUSINESS_LIMITS: TierFeatures = {
   canUseCustomPageBackground: true,
 };
 
-// Helper to get block tier
+// Helper to get block tier (business merged into pro)
 export function getBlockTier(blockType: string): FreeTier {
   if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'free';
+  // Both pro and business blocks now require 'pro' tier
   if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
-  if ((BUSINESS_BLOCKS as readonly string[]).includes(blockType)) return 'business';
+  if ((BUSINESS_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
   return 'free'; // Default to free for unknown blocks
 }
 
 export function useFreemiumLimits() {
   const { isPremium, isLoading, tier = 'free' } = usePremiumStatus();
   
-  // Determine current tier limits
+  // Determine current tier limits (business is now pro)
   const getCurrentLimits = () => {
-    if (tier === 'business') return BUSINESS_LIMITS;
     if (tier === 'pro' || isPremium) return PRO_LIMITS;
     return FREE_LIMITS;
   };
   
   const limits = getCurrentLimits();
-  const currentTier: FreeTier = tier === 'business' ? 'business' : (tier === 'pro' || isPremium) ? 'pro' : 'free';
+  const currentTier: FreeTier = (tier === 'pro' || isPremium) ? 'pro' : 'free';
   
   const canAddBlock = (currentBlockCount: number) => {
     return currentBlockCount < limits.maxBlocks;
@@ -160,41 +162,46 @@ export function useFreemiumLimits() {
     return Math.max(0, limits.maxBlocks - currentBlockCount);
   };
   
-  // Get AI usage from localStorage (weekly tracking)
-  const getAIUsageThisWeek = (): number => {
+  // Get AI page generation usage from localStorage (monthly tracking)
+  const getAIPageGenerationsThisMonth = (): number => {
     const now = new Date();
-    const weekStart = getWeekStart(now);
-    const stored = localStorage.getItem('linkmax_ai_usage');
+    const monthKey = getMonthKey(now);
+    const stored = localStorage.getItem('linkmax_ai_page_generations');
     if (!stored) return 0;
     
     try {
-      const { weekStartDate, count } = JSON.parse(stored);
-      if (weekStartDate === weekStart) return count;
+      const { monthKeyDate, count } = JSON.parse(stored);
+      if (monthKeyDate === monthKey) return count;
       return 0;
     } catch {
       return 0;
     }
   };
   
-  const incrementAIUsage = () => {
+  const incrementAIPageGeneration = () => {
     const now = new Date();
-    const weekStart = getWeekStart(now);
-    const current = getAIUsageThisWeek();
-    localStorage.setItem('linkmax_ai_usage', JSON.stringify({
-      weekStartDate: weekStart,
+    const monthKey = getMonthKey(now);
+    const current = getAIPageGenerationsThisMonth();
+    localStorage.setItem('linkmax_ai_page_generations', JSON.stringify({
+      monthKeyDate: monthKey,
       count: current + 1,
     }));
   };
   
-  const canUseAI = () => {
-    if (currentTier !== 'free') return true;
-    return getAIUsageThisWeek() < FREE_LIMITS.maxAIRequestsPerWeek;
+  const canUseAIPageGeneration = () => {
+    return getAIPageGenerationsThisMonth() < limits.maxAIPageGenerationsPerMonth;
   };
   
-  const getRemainingAIRequests = () => {
-    if (currentTier !== 'free') return Infinity;
-    return Math.max(0, FREE_LIMITS.maxAIRequestsPerWeek - getAIUsageThisWeek());
+  const getRemainingAIPageGenerations = () => {
+    if (limits.maxAIPageGenerationsPerMonth === Infinity) return Infinity;
+    return Math.max(0, limits.maxAIPageGenerationsPerMonth - getAIPageGenerationsThisMonth());
   };
+  
+  // Legacy AI usage (for other AI features - unlimited for all)
+  const canUseAI = () => true;
+  const getRemainingAIRequests = () => Infinity;
+  const incrementAIUsage = () => {};
+  const getAIUsageThisWeek = () => 0;
   
   // Feature checks
   const canUseFeature = (feature: keyof TierFeatures): boolean => {
@@ -230,6 +237,12 @@ export function useFreemiumLimits() {
     isBlockViewOnly,
     getRequiredTier,
     getRemainingBlocks,
+    // AI page generation (monthly limit)
+    canUseAIPageGeneration,
+    getRemainingAIPageGenerations,
+    incrementAIPageGeneration,
+    getAIPageGenerationsThisMonth,
+    // Legacy AI (unlimited for all)
     canUseAI,
     getRemainingAIRequests,
     incrementAIUsage,
@@ -254,11 +267,7 @@ export function useFreemiumLimits() {
   };
 }
 
-// Helper to get week start date string (Monday)
-function getWeekStart(date: Date): string {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday
-  d.setDate(diff);
-  return d.toISOString().split('T')[0];
+// Helper to get month key (YYYY-MM format)
+function getMonthKey(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }

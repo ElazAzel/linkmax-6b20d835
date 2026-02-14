@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import * as LucideIcons from 'lucide-react';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
 import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS, getVerificationPositionClasses, getVerificationColor, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
+import { getLucideIcon, CheckCircle2 } from '@/lib/icon-utils';
 import { cn } from '@/lib/utils';
 import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle, VerificationIconType } from '@/types/page';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
@@ -52,7 +52,7 @@ const VerificationBadge = memo(function VerificationBadgeComponent({
 
   const iconOption = VERIFICATION_ICON_OPTIONS.find(opt => opt.value === (iconType || 'check-circle'));
   const iconName = iconOption?.icon || 'CheckCircle2';
-  const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.CheckCircle2;
+  const IconComponent = getLucideIcon(iconName, CheckCircle2);
   
   return (
     <div 
@@ -72,11 +72,11 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
   const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
   const bio = getTranslatedString(block.bio, i18n.language as SupportedLanguage);
   
-  // Business tier always gets verification badge
-  const isBusinessTier = ownerTier === 'business';
+  // Pro tier users can get verification badge (previously business-only)
+  const isProTier = ownerTier === 'pro';
   
-  // Determine if verified badge should show (manual or auto-premium or business tier)
-  const showVerified = block.verified || (block.autoVerifyPremium && isOwnerPremium) || isBusinessTier;
+  // Determine if verified badge should show (manual or auto-premium or pro tier)
+  const showVerified = block.verified || (block.autoVerifyPremium && isOwnerPremium) || isProTier;
   
   const initials = name
     .split(' ')
@@ -147,12 +147,8 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
   // Get icon component dynamically
   const getIconComponent = () => {
     if (!block.avatarIcon) return null;
-    const iconName = block.avatarIcon
-      .split('-')
-      .map((part, i) => i === 0 ? part.charAt(0).toUpperCase() + part.slice(1) : part.charAt(0).toUpperCase() + part.slice(1))
-      .join('');
-    const IconComponent = (LucideIcons as any)[iconName];
-    return IconComponent || null;
+    const IconComp = getLucideIcon(block.avatarIcon);
+    return IconComp !== CheckCircle2 ? IconComp : null;
   };
 
   const IconComponent = getIconComponent();
@@ -202,12 +198,12 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
             </div>
           )}
           
-          {/* Verification badge on frame - Business gets gold, others use settings */}
+          {/* Verification badge on frame - Pro users get gold badge option */}
           {showVerified && (
             <VerificationBadge 
-              iconType={isBusinessTier ? 'badge-check' : block.verifiedIcon}
-              customIcon={isBusinessTier ? undefined : block.verifiedCustomIcon}
-              color={isBusinessTier ? 'gold' : block.verifiedColor}
+              iconType={isProTier ? 'badge-check' : block.verifiedIcon}
+              customIcon={isProTier ? undefined : block.verifiedCustomIcon}
+              color={isProTier ? 'gold' : block.verifiedColor}
               position={block.verifiedPosition || 'top-right'}
             />
           )}

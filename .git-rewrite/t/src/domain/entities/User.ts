@@ -121,7 +121,7 @@ export type PremiumTier = 'free' | 'pro' | 'business';
 
 export interface FreemiumLimits {
   maxBlocks: number;
-  maxAiRequestsPerWeek: number;
+  maxAIPageGenerationsPerMonth: number;
   canUseAnalytics: boolean;
   canUseCRM: boolean;
   showWatermark: boolean;
@@ -141,7 +141,7 @@ export interface FreemiumLimits {
 
 export const FREE_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
-  maxAiRequestsPerWeek: 3,
+  maxAIPageGenerationsPerMonth: 1,
   canUseAnalytics: false,
   canUseCRM: false,
   showWatermark: true,
@@ -159,29 +159,10 @@ export const FREE_TIER_LIMITS: FreemiumLimits = {
   canUseAdvancedThemes: false,
 };
 
+// Premium gets ALL Business features except white label
 export const PRO_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
-  maxAiRequestsPerWeek: Infinity,
-  canUseAnalytics: true,
-  canUseCRM: true,
-  showWatermark: false,
-  maxLeadsPerMonth: 100,
-  canUseScheduler: true,
-  canUsePixels: true,
-  canUseCustomDomain: false,
-  canUseChatbot: false,
-  canUseAutoNotifications: false,
-  canUsePayments: false,
-  canUseWhiteLabel: false,
-  canUseMultiPage: false,
-  canUseVerificationBadge: true,
-  canUsePremiumFrames: true,
-  canUseAdvancedThemes: true,
-};
-
-export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: Infinity,
-  maxAiRequestsPerWeek: Infinity,
+  maxAIPageGenerationsPerMonth: 5,
   canUseAnalytics: true,
   canUseCRM: true,
   showWatermark: false,
@@ -192,7 +173,28 @@ export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
   canUseChatbot: true,
   canUseAutoNotifications: true,
   canUsePayments: true,
-  canUseWhiteLabel: true,
+  canUseWhiteLabel: false, // Only Business
+  canUseMultiPage: true,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
+};
+
+// Business only adds white label
+export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: Infinity,
+  maxAIPageGenerationsPerMonth: Infinity,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  showWatermark: false,
+  maxLeadsPerMonth: Infinity,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: true,
+  canUseChatbot: true,
+  canUseAutoNotifications: true,
+  canUsePayments: true,
+  canUseWhiteLabel: true, // Only Business gets white label
   canUseMultiPage: true,
   canUseVerificationBadge: true,
   canUsePremiumFrames: true,

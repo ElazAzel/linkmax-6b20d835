@@ -5,6 +5,7 @@ import { useDashboard } from '@/hooks/useDashboard';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { PreviewEditor } from '@/components/editor/PreviewEditor';
 import { TemplateGallery } from '@/components/editor/TemplateGallery';
+import { TemplateMarketplace } from '@/components/editor/TemplateMarketplace';
 import { SaveTemplateDialog } from '@/components/editor/SaveTemplateDialog';
 import { MobileToolbar } from '@/components/editor/MobileToolbar';
 import { MobileSettingsSheet } from '@/components/editor/MobileSettingsSheet';
@@ -49,6 +50,7 @@ export default function Dashboard() {
   const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [showMyTemplates, setShowMyTemplates] = useState(false);
   const [showTokens, setShowTokens] = useState(false);
+  const [showMarketplace, setShowMarketplace] = useState(false);
 
   const handleOpenGallery = () => navigate('/gallery');
 
@@ -216,6 +218,7 @@ export default function Dashboard() {
           onOpenSettings={() => setShowMobileSettings(true)}
           onOpenAIBuilder={dashboard.aiState.openAIBuilder}
           onOpenTemplates={() => setTemplateGalleryOpen(true)}
+          onOpenMarketplace={() => setShowMarketplace(true)}
           onOpenAchievements={() => setShowAchievements(true)}
           onOpenCRM={() => setShowLeads(true)}
           achievementCount={dashboard.achievements.getProgress().unlocked}
@@ -355,6 +358,16 @@ export default function Dashboard() {
         onOpenChange={dashboard.sharingState.closeShareDialog}
         userId={dashboard.user?.id}
         publishedUrl={dashboard.sharingState.publishedUrl}
+      />
+
+      {/* Template Marketplace - direct access from mobile toolbar */}
+      <TemplateMarketplace
+        open={showMarketplace}
+        onClose={() => setShowMarketplace(false)}
+        onApplyTemplate={(blocks) => {
+          dashboard.handleApplyTemplate(blocks);
+          setShowMarketplace(false);
+        }}
       />
     </div>
   );

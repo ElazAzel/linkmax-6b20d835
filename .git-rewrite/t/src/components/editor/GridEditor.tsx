@@ -1,6 +1,6 @@
 import { memo, useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Edit2, Trash2, GripVertical } from 'lucide-react';
+import { Edit2, Trash2, GripVertical, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import {
   DndContext,
   DragOverlay,
@@ -62,6 +62,10 @@ interface SortableGridBlockItemProps {
   isFullWidth: boolean;
   onEdit: (block: Block) => void;
   onDelete: (id: string) => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  canMoveUp?: boolean;
+  canMoveDown?: boolean;
   isPremium?: boolean;
   premiumTier?: PremiumTier;
   isDragging?: boolean;
@@ -72,6 +76,10 @@ function SortableGridBlockItem({
   isFullWidth,
   onEdit,
   onDelete,
+  onMoveUp,
+  onMoveDown,
+  canMoveUp = true,
+  canMoveDown = true,
   isPremium,
   premiumTier,
 }: SortableGridBlockItemProps) {
@@ -99,14 +107,45 @@ function SortableGridBlockItem({
         isDragging && 'opacity-50 ring-2 ring-primary z-50'
       )}
     >
-      {/* Drag handle - visible on hover, top-left */}
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity z-20 cursor-grab active:cursor-grabbing"
-      >
-        <div className="bg-background/95 rounded-lg p-1.5 shadow-sm border">
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
+      {/* Left controls: Drag handle + arrows */}
+      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex flex-col gap-1">
+        {/* Drag handle */}
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing"
+        >
+          <div className="bg-background/95 rounded-lg p-1.5 shadow-sm border">
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </div>
+        
+        {/* Move arrows */}
+        <div className="flex flex-col gap-0.5">
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-7 w-7 p-0 rounded-lg shadow-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMoveUp?.();
+            }}
+            disabled={!canMoveUp}
+          >
+            <ChevronUp className="h-4 w-4" />
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-7 w-7 p-0 rounded-lg shadow-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMoveDown?.();
+            }}
+            disabled={!canMoveDown}
+          >
+            <ChevronDown className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
@@ -187,6 +226,55 @@ function AddBlockSlot({
         isPremium={isPremium}
         currentTier={currentTier}
         currentBlockCount={blockCount}
+      />
+    </div>
+  );
+}
+
+// Inline add button between rows - opens sheet on click
+function InlineAddButton({
+  onInsert,
+  isPremium,
+  currentTier,
+  blockCount,
+  position,
+}: {
+  onInsert: (blockType: string, position: number) => void;
+  isPremium: boolean;
+  currentTier?: FreeTier;
+  blockCount: number;
+  position: number;
+}) {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  
+  return (
+    <div className="relative flex items-center justify-center py-2 group/insert">
+      {/* Line with plus button */}
+      <div className="absolute inset-x-0 flex items-center px-4">
+        <div className="flex-1 border-t border-dashed border-transparent group-hover/insert:border-border/40 transition-colors" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 w-7 p-0 rounded-full border-dashed opacity-0 group-hover/insert:opacity-100 transition-all hover:scale-110 hover:border-primary hover:bg-primary/10"
+          onClick={() => setIsSheetOpen(true)}
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+        <div className="flex-1 border-t border-dashed border-transparent group-hover/insert:border-border/40 transition-colors" />
+      </div>
+      
+      {/* Sheet for block selection */}
+      <BlockInsertButton
+        onInsert={(type) => {
+          onInsert(type, position);
+          setIsSheetOpen(false);
+        }}
+        isPremium={isPremium}
+        currentTier={currentTier}
+        currentBlockCount={blockCount}
+        isOpen={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+        hideTrigger
       />
     </div>
   );
@@ -314,11 +402,32 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
-  // Handle adding block
-  const handleInsertBlock = useCallback((blockType: string, afterIndex?: number) => {
-    const position = afterIndex !== undefined ? afterIndex + 1 : contentBlocks.length;
+  // Handle adding block at specific position
+  const handleInsertBlock = useCallback((blockType: string, insertPosition?: number) => {
+    // insertPosition is already the correct position to insert at
+    // Profile block is always at position 0, so content blocks start at position 1
+    const profileOffset = profileBlock ? 1 : 0;
+    const position = insertPosition !== undefined 
+      ? insertPosition + profileOffset 
+      : contentBlocks.length + profileOffset;
     onInsertBlock(blockType, position);
-  }, [onInsertBlock, contentBlocks.length]);
+  }, [onInsertBlock, contentBlocks.length, profileBlock]);
+
+  // Handle arrow move - moves block up or down in the list
+  const handleMoveBlock = useCallback((blockId: string, direction: 'up' | 'down') => {
+    const currentIndex = contentBlocks.findIndex(b => b.id === blockId);
+    if (currentIndex === -1) return;
+    
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= contentBlocks.length) return;
+    
+    const reorderedContent = arrayMove(contentBlocks, currentIndex, newIndex);
+    const newBlocks = profileBlock 
+      ? [profileBlock, ...reorderedContent]
+      : reorderedContent;
+    
+    onReorderBlocks?.(newBlocks);
+  }, [contentBlocks, profileBlock, onReorderBlocks]);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4 space-y-4 pb-32 md:pb-24">
@@ -343,38 +452,62 @@ export const GridEditor = memo(function GridEditor({
           items={contentBlocks.map(b => b.id)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="space-y-4">
-            {rows.map((row, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="grid grid-cols-2 gap-4"
-              >
-                {row.blocks.map((block) => (
-                  <SortableGridBlockItem
-                    key={block.id}
-                    block={block}
-                    isFullWidth={isFullWidthBlock(block.blockSize)}
-                    onEdit={onEditBlock}
-                    onDelete={onDeleteBlock}
-                    isPremium={isPremium}
-                    premiumTier={premiumTier}
-                  />
-                ))}
-                
-                {/* Show add button in empty slot */}
-                {row.hasEmptySlot && (
-                  <AddBlockSlot
-                    onInsert={(type) => handleInsertBlock(type, rowIndex)}
+          <div className="space-y-1">
+            {rows.map((row, rowIndex) => {
+              // Calculate the position for inserting after this row
+              const lastBlockInRow = row.blocks[row.blocks.length - 1];
+              const insertPosition = lastBlockInRow 
+                ? contentBlocks.findIndex(b => b.id === lastBlockInRow.id) + 1
+                : 0;
+              
+              return (
+                <div key={rowIndex}>
+                  {/* Row with blocks */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {row.blocks.map((block) => {
+                      const blockIndex = contentBlocks.findIndex(b => b.id === block.id);
+                      return (
+                        <SortableGridBlockItem
+                          key={block.id}
+                          block={block}
+                          isFullWidth={isFullWidthBlock(block.blockSize)}
+                          onEdit={onEditBlock}
+                          onDelete={onDeleteBlock}
+                          onMoveUp={() => handleMoveBlock(block.id, 'up')}
+                          onMoveDown={() => handleMoveBlock(block.id, 'down')}
+                          canMoveUp={blockIndex > 0}
+                          canMoveDown={blockIndex < contentBlocks.length - 1}
+                          isPremium={isPremium}
+                          premiumTier={premiumTier}
+                        />
+                      );
+                    })}
+                    
+                    {/* Show add button in empty slot */}
+                    {row.hasEmptySlot && (
+                      <AddBlockSlot
+                        onInsert={(type) => handleInsertBlock(type, insertPosition - 1)}
+                        isPremium={isPremium}
+                        currentTier={currentTier}
+                        blockCount={blocks.length}
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Plus button between rows */}
+                  <InlineAddButton
+                    onInsert={(type, pos) => handleInsertBlock(type, pos)}
                     isPremium={isPremium}
                     currentTier={currentTier}
                     blockCount={blocks.length}
+                    position={insertPosition}
                   />
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })}
 
-            {/* Add row for new blocks */}
-            {rows.length === 0 || !rows[rows.length - 1]?.hasEmptySlot ? (
+            {/* Bottom add button if there are blocks but no inline add after last row */}
+            {rows.length === 0 && (
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8">
                   <BlockInsertButton
@@ -385,7 +518,7 @@ export const GridEditor = memo(function GridEditor({
                   />
                 </div>
               </div>
-            ) : null}
+            )}
           </div>
         </SortableContext>
 

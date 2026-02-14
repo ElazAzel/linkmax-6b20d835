@@ -23,7 +23,8 @@ import { useToast } from '@/hooks/use-toast';
 import { AdminCharts } from '@/components/admin/AdminCharts';
 import { AdminAnalyticsDashboard } from '@/components/admin/AdminAnalyticsDashboard';
 import { UserTierManager } from '@/components/admin/UserTierManager';
-import { Crown } from 'lucide-react';
+import { AdminVerificationPanel } from '@/components/admin/AdminVerificationPanel';
+import { Crown, ShieldCheck } from 'lucide-react';
 
 interface PlatformStats {
   totalUsers: number;
@@ -424,6 +425,11 @@ export default function Admin() {
                 <Crown className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 md:mr-2" />
                 <span className="hidden sm:inline">{t('admin.tiers')}</span>
                 <span className="sm:hidden">{t('admin.tiers').slice(0, 4)}</span>
+              </TabsTrigger>
+              <TabsTrigger value="verification" className="text-xs md:text-sm px-2 md:px-3 py-1.5 md:py-2">
+                <ShieldCheck className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Верификация</span>
+                <span className="sm:hidden">Верф</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -1022,6 +1028,11 @@ export default function Admin() {
           {/* User Tiers Tab */}
           <TabsContent value="tiers">
             <UserTierManager />
+          </TabsContent>
+
+          {/* Verification Tab */}
+          <TabsContent value="verification">
+            <AdminVerificationPanel />
           </TabsContent>
         </Tabs>
       </main>

@@ -10,7 +10,8 @@
     "andThe": "and"
   },
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "language": "Language"
   },
   "settings": {
     "niche": "Category",
@@ -27,7 +28,36 @@
     "telegramConnected": "Telegram connected! Check your messages.",
     "telegramError": "Failed to connect Telegram",
     "telegramInvalidId": "Invalid Chat ID. Make sure you sent /start to @userinfobot",
-    "telegramCantSend": "Cannot send messages. Start the bot first"
+    "telegramCantSend": "Cannot send messages. Start the bot first",
+    "pageAndAccount": "Page and account settings",
+    "yourLink": "Your Link",
+    "username": "Username",
+    "gridSettings": "Grid Settings",
+    "desktopColumns": "Desktop Columns",
+    "mobileColumns": "Mobile Columns",
+    "columns": "columns",
+    "column": "column",
+    "profileInfo": "Profile Info",
+    "name": "Name",
+    "bio": "Bio",
+    "chatbotContext": "AI Chatbot Context",
+    "chatbotPlaceholder": "Add hidden context for the AI chatbot (pricing, services, availability...)",
+    "chatbotHelp": "This helps the AI answer visitor questions accurately",
+    "aiTools": "AI Tools",
+    "seoGenerator": "SEO Generator",
+    "friends": "Friends",
+    "friendsDesc": "Add friends and get bonuses",
+    "openFriendsPanel": "Open friends panel",
+    "premiumActive": "Premium Active",
+    "freePlan": "Free Plan",
+    "upgradeToUnlock": "Upgrade to unlock all features",
+    "crmLeads": "CRM & Leads",
+    "crmDesc": "Manage leads and requests",
+    "openCRM": "Open CRM",
+    "referralProgram": "Referral Program",
+    "emailNotifications": "Email Notifications",
+    "telegramNotifications": "Telegram Notifications",
+    "signOut": "Sign Out"
   },
   "common": {
     "save": "Save"
@@ -85,14 +115,18 @@
     },
     "hero": {
       "badge": "AI-powered link-in-bio",
-      "title": "A page that",
-      "titleHighlight": "sells for you",
-      "description": "Create a professional page in 2 minutes with AI. All links, services, and contacts — in one place.",
+      "title": "AI page in 2 minutes,",
+      "titleHighlight": "that collects leads",
+      "description": "For beauty masters, experts and small businesses. AI designer + AI copywriter + Mini-CRM + Telegram notifications about new clients.",
       "usernamePlaceholder": "yourname",
       "free": "Free",
       "noCode": "No code",
       "aiHelps": "AI helps",
       "create": "Create",
+      "benefit1": "AI creates everything",
+      "benefit2": "Mini-CRM inside",
+      "benefit3": "Telegram notifications",
+      "viewExamples": "View example pages",
       "badges": {
         "aiReady": "AI Ready",
         "autoGenerate": "Auto-generate",
@@ -275,19 +309,106 @@
       "title": "Create your page right now"
     },
     "howItWorks": {
+      "badge": "2 minutes to results",
       "title": "How It Works",
       "subtitle": "3 steps to a ready page",
+      "cta": "Try for free",
       "step1": {
         "title": "Choose your niche",
-        "desc": "Select profession — AI understands what you need"
+        "description": "Tell us who you are - beauty master, expert or business. AI will understand what you need."
       },
       "step2": {
         "title": "AI creates the page",
-        "desc": "Ready design, copy, and blocks in 30 seconds"
+        "description": "In 30 seconds AI generates design, texts, structure and all blocks. You just need to check."
       },
       "step3": {
-        "title": "Publish & Share",
-        "desc": "Get your unique link and share everywhere"
+        "title": "Get leads",
+        "description": "Clients fill out the form → lead in Mini-CRM → Telegram notification. No lead will be lost."
+      }
+    },
+    "targetAudience": {
+      "title": "Who is LinkMAX for",
+      "subtitle": "Specific results for your niche",
+      "cta": "Create Page",
+      "beauty": {
+        "title": "Beauty masters",
+        "subtitle": "Nails, brows, lashes, hair",
+        "result1": "All services and prices in one link",
+        "result2": "Clients book through the form",
+        "result3": "Telegram notification about booking"
+      },
+      "expert": {
+        "title": "Experts and coaches",
+        "subtitle": "Psychologists, tutors, consultants",
+        "result1": "Portfolio and reviews beautifully presented",
+        "result2": "Leads automatically in Mini-CRM",
+        "result3": "Client statuses: new → in progress → done"
+      },
+      "business": {
+        "title": "Small business",
+        "subtitle": "Barbers, photographers, cafes",
+        "result1": "Product and service catalog",
+        "result2": "Analytics: where clients come from",
+        "result3": "Lead management without Excel"
+      }
+    },
+    "premiumValue": {
+      "badge": "Premium - more money",
+      "title": "Why pay for Premium",
+      "subtitle": "Not visual decorations, but tools for earning",
+      "cta": "Get Premium",
+      "price": "From $5.10/month with annual billing (≈2,610₸)",
+      "bonusTitle": "Plus nice bonuses:",
+      "crm": {
+        "title": "Mini-CRM",
+        "description": "All form submissions automatically go to CRM. Statuses: new → in progress → done. No more Excel."
+      },
+      "telegram": {
+        "title": "Telegram notifications",
+        "description": "Instant message in Telegram when a client leaves a request. Never miss a lead."
+      },
+      "ai": {
+        "title": "Unlimited AI",
+        "description": "Generate texts, headlines, product descriptions - without limits. AI copywriter works for you."
+      },
+      "analytics": {
+        "title": "Extended analytics",
+        "description": "Which links get clicked more, where clients come from, when activity is higher."
+      },
+      "bonus": {
+        "themes": "Premium themes and animations",
+        "noWatermark": "No watermark",
+        "scheduler": "Block scheduler",
+        "video": "Video and media blocks"
+      }
+    },
+    "simplePricing": {
+      "badge": "Simple pricing",
+      "title": "Free or Premium",
+      "free": {
+        "title": "Free",
+        "subtitle": "Forever, no hidden fees",
+        "cta": "Start free",
+        "f1": "Basic blocks (links, text, photos)",
+        "f2": "AI generation (3 times per day)",
+        "f3": "Basic statistics",
+        "f4": "Page QR code",
+        "f5": "Mini-CRM and leads",
+        "f6": "Telegram notifications",
+        "f7": "Unlimited AI"
+      },
+      "premium": {
+        "badge": "Recommended",
+        "title": "Premium",
+        "subtitle": "Everything for business growth",
+        "cta": "Get Premium",
+        "f1": "All blocks without limits",
+        "f2": "Mini-CRM - all leads in one place",
+        "f3": "Telegram notifications about leads",
+        "f4": "Unlimited AI copywriter",
+        "f5": "Extended click analytics",
+        "f6": "Premium themes and animations",
+        "f7": "No watermark"
       }
     },
     "cta": {
@@ -297,7 +418,8 @@
       "button": "Start Creating Now"
     },
     "footer": {
-      "copyright": "© 2025 LinkMAX. All rights reserved."
+      "copyright": "© 2026 LinkMAX. All rights reserved.",
+      "alternatives": "Comparison"
     },
     "pricing": {
       "badge": "Simple Pricing",
@@ -386,7 +508,7 @@
       },
       "q2": {
         "question": "How much does LinkMAX cost?",
-        "answer": "The Basic plan is free forever and includes unlimited links, basic blocks, and 3 AI requests per day. Premium plans start at $3.15/month with annual billing."
+        "answer": "The Basic plan is free forever and includes unlimited links, basic blocks, and 3 AI requests per day. Premium plans start at $5.10/month with annual billing."
       },
       "q3": {
         "question": "How does AI page generation work?",
@@ -606,13 +728,7 @@
       },
       "demo": {
         "title": "Try It Now",
-        "desc": "Interactive demo right on the site — no registration needed"
-      }
-    },
-    "howItWorks": {
-      "step4": {
-        "title": "Share your link",
-        "desc": "In bio, socials, everywhere"
+        "desc": "Interactive demo right on the site - no registration needed"
       }
     }
   },
@@ -707,7 +823,62 @@
     "newsletter": "Newsletter",
     "testimonial": "Testimonial",
     "scratch": "Scratch Card",
-    "search": "Search"
+    "search": "Search",
+    "booking": "Booking",
+    "faq": "FAQ",
+    "pricing": "Pricing",
+    "catalog": "Catalog",
+    "countdown": "Timer",
+    "community": "Community",
+    "shoutout": "Shoutout",
+    "beforeAfter": "Before/After",
+    "faq": {
+      "title": "Title",
+      "titlePlaceholder": "Frequently Asked Questions",
+      "items": "Questions & Answers",
+      "addItem": "Add",
+      "question": "Question",
+      "questionPlaceholder": "Enter question",
+      "answer": "Answer",
+      "answerPlaceholder": "Enter answer",
+      "newQuestion": "New Question",
+      "emptyHint": "Add questions and answers"
+    },
+    "booking": {
+      "description": "Booking block with calendar and time slots",
+      "blockTitle": "Title",
+      "titlePlaceholder": "Book an Appointment",
+      "blockDescription": "Description",
+      "descriptionPlaceholder": "Select a convenient time to book",
+      "workingHours": "Working Hours",
+      "startHour": "Start",
+      "endHour": "End",
+      "slotDuration": "Slot Duration (minutes)",
+      "workingDays": "Working Days",
+      "clickToToggle": "Click a day to enable/disable",
+      "customSlots": "Custom Slots",
+      "addSlot": "Add",
+      "noCustomSlots": "Slots are generated automatically based on working hours",
+      "advanced": "Advanced",
+      "maxDays": "Max booking days",
+      "requirePhone": "Phone required",
+      "requirePhoneDesc": "Client must provide phone number",
+      "requireEmail": "Email required",
+      "requireEmailDesc": "Client must provide email",
+      "prepayment": "Prepayment",
+      "requirePrepayment": "Require prepayment",
+      "prepaymentDesc": "After booking, client will be redirected to WhatsApp for payment",
+      "prepaymentPhone": "WhatsApp for payment",
+      "phoneHint": "Phone number with WhatsApp for receiving payments",
+      "prepaymentAmount": "Prepayment amount",
+      "currency": "Currency",
+      "notifications": "Telegram Notifications",
+      "dailyReminder": "Morning reminder",
+      "dailyReminderDesc": "Get a list of today's appointments",
+      "reminderTime": "Reminder time",
+      "weeklyMotivation": "Weekly motivation",
+      "weeklyMotivationDesc": "Monday at 9:00 - personal inspiration"
+    }
   },
   "blockEditor": {
     "profile": "Edit Profile",
@@ -782,7 +953,30 @@
     "priceMax": "Max Price",
     "isBookable": "Bookable",
     "availableDays": "Available Days",
-    "verificationBadge": "Verification Badge"
+    "verificationBadge": "Verification Badge",
+    "images": "Images",
+    "image": "Image",
+    "altText": "Alt Text",
+    "imageDescription": "Image description",
+    "link": "Link",
+    "autoPlay": "Auto-play",
+    "interval": "Interval",
+    "placeholder": "Placeholder",
+    "required": "Required",
+    "label": "Label",
+    "icon": "Icon",
+    "color": "Color",
+    "backgroundColor": "Background Color",
+    "textColor": "Text Color",
+    "width": "Width",
+    "height": "Height",
+    "padding": "Padding",
+    "margin": "Margin",
+    "borderRadius": "Border Radius",
+    "shadow": "Shadow",
+    "opacity": "Opacity",
+    "fontSize": "Font Size",
+    "fontWeight": "Font Weight"
   },
   "settings": {
     "pageSettings": "Page Settings",
@@ -807,7 +1001,28 @@
   },
   "actions": {
     "download": "Download",
-    "send": "Send"
+    "send": "Send",
+    "addImage": "Add Image",
+    "addItem": "Add",
+    "remove": "Remove",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "apply": "Apply",
+    "close": "Close",
+    "copy": "Copy",
+    "share": "Share",
+    "preview": "Preview",
+    "publish": "Publish",
+    "buyNow": "Buy Now",
+    "bookNow": "Book Now",
+    "subscribe": "Subscribe",
+    "submit": "Submit",
+    "tryFree": "Try Free",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started"
   },
   "form": {
     "fillRequired": "Please fill required fields",
@@ -1226,6 +1441,15 @@
     "crm": "CRM",
     "crmDesc": "Manage leads"
   },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
   "tokens": {
     "title": "Tokens",
     "balance": "Balance",
@@ -1344,5 +1568,176 @@
       "completeSuccess": "Booking marked as completed",
       "noBookingsExport": "No bookings to export"
     }
+  },
+  "booking": {
+    "title": "Book Appointment",
+    "workingHours": "Hours",
+    "step1": "Select date",
+    "step2": "Time",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "free": "available",
+    "taken": "taken",
+    "loadingSlots": "Loading schedule...",
+    "noSlotsTitle": "No available slots",
+    "noSlotsHint": "Try selecting another date",
+    "availableSlots": "Available times",
+    "noSlots": "No slots available for this date",
+    "available": "Available",
+    "booked": "Booked",
+    "occupied": "booked",
+    "selectedTime": "Selected",
+    "continue": "Continue",
+    "confirmBooking": "Complete booking",
+    "name": "Your name",
+    "namePlaceholder": "Enter your name",
+    "phone": "Phone",
+    "email": "Email",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional information...",
+    "confirm": "Book",
+    "confirmAndPay": "Book & Pay",
+    "prepaymentNote": "After booking you will be redirected to WhatsApp for payment",
+    "success": "Successfully booked!",
+    "error": "Booking failed. Please try again."
+  },
+  "fields": {
+    "avatarUrl": "Avatar",
+    "name": "Name",
+    "bio": "Bio",
+    "coverImage": "Cover Image",
+    "coverGradient": "Cover Gradient Overlay",
+    "coverHeight": "Cover Height",
+    "avatarSize": "Avatar Size",
+    "avatarPosition": "Avatar Position",
+    "avatarFrame": "Avatar Frame Style",
+    "avatarIcon": "Avatar Icon",
+    "selectIcon": "Select icon",
+    "shadowStyle": "Shadow Style",
+    "verificationBadge": "Verification Badge",
+    "autoVerifyPremium": "Auto-verify for Premium users",
+    "verified": "Manual verified badge",
+    "verifiedCustomIcon": "Custom Icon (PNG/SVG/GIF)",
+    "verifiedIcon": "Preset Icon",
+    "verifiedColor": "Badge Background",
+    "verifiedPosition": "Badge Position",
+    "proofOfHuman": "Proof of Human",
+    "boostTrust": "📈 +Trust",
+    "proofOfHumanDescription": "Add a short video or voice greeting to show visitors you're a real person",
+    "introVideo": "Video Greeting (max 30s)",
+    "introAudio": "Voice Greeting",
+    "proofOfHumanActive": "Your profile now shows a verified human badge with media",
+    "left": "Left",
+    "center": "Center",
+    "right": "Right",
+    "iconMode": "Icon",
+    "iconAuto": "Auto (site favicon)",
+    "iconManual": "Manual",
+    "refreshIcon": "Refresh icon",
+    "customIcon": "Custom icon",
+    "fallbackIcon": "Default icon",
+    "title": "Title",
+    "content": "Content",
+    "style": "Style",
+    "heading": "Heading",
+    "paragraph": "Paragraph",
+    "quote": "Quote",
+    "alignment": "Alignment",
+    "hoverEffect": "Hover Effect",
+    "none": "None",
+    "glow": "Glow",
+    "scale": "Scale",
+    "shadow": "Shadow",
+    "backgroundType": "Background Type",
+    "solidColor": "Solid Color",
+    "gradient": "Gradient",
+    "image": "Image",
+    "backgroundColor": "Background Color",
+    "gradientColors": "Gradient Colors",
+    "enterCommaSeparatedColors": "Enter comma-separated colors",
+    "gradientAngle": "Gradient Angle (degrees)",
+    "backgroundImage": "Background Image",
+    "width": "Width",
+    "fullWidth": "Full Width",
+    "mediumWidth": "Medium",
+    "smallWidth": "Small",
+    "url": "URL",
+    "placeholder": "Placeholder",
+    "description": "Description",
+    "price": "Price",
+    "currency": "Currency",
+    "buttonText": "Button Text"
+  },
+  "gradients": {
+    "none": "No Gradient",
+    "dark": "Dark Overlay",
+    "light": "Light Overlay",
+    "primary": "Primary Color",
+    "sunset": "Sunset Gradient",
+    "ocean": "Ocean Gradient",
+    "purple": "Purple Dream"
+  },
+  "heights": {
+    "small": "Small - 120px",
+    "medium": "Medium - 200px",
+    "large": "Large - 320px"
+  },
+  "avatarSizes": {
+    "small": "Small - 64px",
+    "medium": "Medium - 96px",
+    "large": "Large - 128px",
+    "xlarge": "Extra Large - 160px"
+  },
+  "shadows": {
+    "none": "No Shadow",
+    "soft": "Soft Shadow",
+    "medium": "Medium Shadow",
+    "strong": "Strong Shadow",
+    "glow": "Colored Glow"
+  },
+  "premium": {
+    "premiumFramesLocked": "Premium frames require PRO subscription",
+    "verificationRequiresPro": "Verification badge is available for PRO users",
+    "upgradeToPro": "Upgrade to PRO →"
+  },
+  "actions": {
+    "removeCustomIcon": "Remove custom icon"
+  },
+  "themes": {
+    "classic": "Classic",
+    "classicDesc": "Clean and minimal",
+    "darkMode": "Dark Mode",
+    "darkModeDesc": "Sleek dark design",
+    "gradientTheme": "Gradient",
+    "gradientThemeDesc": "Colorful and vibrant",
+    "minimal": "Minimal",
+    "minimalDesc": "Ultra clean aesthetic",
+    "neon": "Neon",
+    "neonDesc": "Bold and electric",
+    "pageTheme": "Page Theme",
+    "chooseTheme": "Choose a pre-designed theme for your page"
+  },
+  "placeholders": {
+    "yourName": "Your Name",
+    "tellAboutYourself": "Tell people about yourself...",
+    "enterText": "Enter your text...",
+    "buttonText": "Button text",
+    "productName": "Product Name",
+    "productDescription": "Product description",
+    "subscribeNewsletter": "Subscribe to Newsletter",
+    "getUpdates": "Get the latest updates delivered to your inbox",
+    "subscribe": "Subscribe",
+    "askAnything": "Ask me anything",
+    "askQuestion": "Ask a question...",
+    "scratchToReveal": "Scratch to Reveal",
+    "gallery": "Gallery"
+  },
+  "styles": {
+    "default": "Default",
+    "rounded": "Rounded",
+    "pill": "Pill (Fully Rounded)"
+  },
+  "ai": {
+    "generateWithAI": "Generate with AI"
   }
 }

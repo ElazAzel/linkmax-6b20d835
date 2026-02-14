@@ -92,7 +92,7 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
   return (
     <div className="space-y-4">
       <div>
-        <Label>URL</Label>
+        <Label>{t('fields.url', 'URL')}</Label>
         <Input
           type="url"
           value={formData.url || ''}
@@ -102,12 +102,12 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
       
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label>Заголовок</Label>
+          <Label>{t('fields.title', 'Заголовок')}</Label>
           <AIButton
             onClick={handleGenerateTitle}
             loading={aiLoading}
             disabled={!formData.url}
-            title="Generate with AI"
+            title={t('ai.generateWithAI', 'Generate with AI')}
             variant="icon"
           />
         </div>
@@ -204,7 +204,7 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
       </div>
       
       <div>
-        <Label>Button Style</Label>
+        <Label>{t('fields.style', 'Button Style')}</Label>
         <Select
           value={formData.style || 'default'}
           onValueChange={(value) => onChange({ ...formData, style: value })}
@@ -213,9 +213,9 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="default">Default</SelectItem>
-            <SelectItem value="rounded">Rounded</SelectItem>
-            <SelectItem value="pill">Pill (Fully Rounded)</SelectItem>
+            <SelectItem value="default">{t('styles.default', 'Default')}</SelectItem>
+            <SelectItem value="rounded">{t('styles.rounded', 'Rounded')}</SelectItem>
+            <SelectItem value="pill">{t('styles.pill', 'Pill (Fully Rounded)')}</SelectItem>
           </SelectContent>
         </Select>
       </div>

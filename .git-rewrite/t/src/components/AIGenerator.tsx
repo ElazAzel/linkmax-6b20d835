@@ -4,10 +4,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Crown, Lock } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
+import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import type { Block } from '@/types/page';
 
 interface AIGeneratorProps {
@@ -20,6 +22,7 @@ interface AIGeneratorProps {
 
 export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AIGeneratorProps) {
   const { t } = useTranslation();
+  const { canUseAIPageGeneration, getRemainingAIPageGenerations, incrementAIPageGeneration, isPremium, limits } = useFreemiumLimits();
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     url: '',
@@ -32,7 +35,17 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
     description: '',
   });
 
+  const isPageGeneration = type === 'ai-builder';
+  const canGenerate = !isPageGeneration || canUseAIPageGeneration();
+  const remainingGenerations = getRemainingAIPageGenerations();
+
   const handleGenerate = async () => {
+    // Check AI page generation limit for ai-builder
+    if (isPageGeneration && !canGenerate) {
+      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
+      return;
+    }
+
     setLoading(true);
     try {
       let requestBody: any = { type };
@@ -86,6 +99,11 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
         console.error('AI generation error:', error);
         toast.error(t('toasts.ai.generationError'));
         return;
+      }
+
+      // Increment usage counter for page generation
+      if (isPageGeneration) {
+        incrementAIPageGeneration();
       }
 
       toast.success(t('toasts.ai.generated'));
@@ -192,18 +210,50 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
 
       case 'ai-builder':
         return (
-          <div className="space-y-2">
-            <Label htmlFor="description">Describe Your Page</Label>
-            <Textarea
-              id="description"
-              placeholder="I'm a fitness coach offering online training programs, workout plans, and nutrition guides. I want to showcase my services and link to my social media."
-              value={input.description}
-              rows={5}
-              onChange={(e) => setInput({ ...input, description: e.target.value })}
-            />
-            <p className="text-xs text-muted-foreground">
-              Describe your page and AI will create a complete layout with suggested blocks
-            </p>
+          <div className="space-y-3">
+            {!canGenerate && (
+              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-sm">
+                <div className="flex items-center gap-2 text-destructive font-medium mb-1">
+                  <Lock className="h-4 w-4" />
+                  {t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')}
+                </div>
+                <p className="text-muted-foreground text-xs mb-2">
+                  {isPremium 
+                    ? t('freemium.aiLimitResetMonthlyPro', 'Лимит обновится в следующем месяце')
+                    : t('freemium.upgradeForMoreGenerations', 'Обновите до Premium для 5 генераций в месяц')
+                  }
+                </p>
+                {!isPremium && (
+                  <Button size="sm" variant="outline" onClick={openPremiumPurchase} className="w-full">
+                    <Crown className="h-3 w-3 mr-1.5 text-amber-500" />
+                    {t('freemium.getPremium', 'Получить Premium')}
+                  </Button>
+                )}
+              </div>
+            )}
+            {canGenerate && !isPremium && (
+              <div className="p-2 rounded-lg bg-muted/50 text-xs text-muted-foreground flex items-center gap-2">
+                <Sparkles className="h-3 w-3" />
+                {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', { 
+                  count: remainingGenerations, 
+                  total: limits.maxAIPageGenerationsPerMonth 
+                })}
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="description">Describe Your Page</Label>
+              <Textarea
+                id="description"
+                placeholder="I'm a fitness coach offering online training programs, workout plans, and nutrition guides. I want to showcase my services and link to my social media."
+                value={input.description}
+                rows={5}
+                onChange={(e) => setInput({ ...input, description: e.target.value })}
+                disabled={!canGenerate}
+              />
+              <p className="text-xs text-muted-foreground">
+                Describe your page and AI will create a complete layout with suggested blocks
+              </p>
+            </div>
           </div>
         );
     }
@@ -253,7 +303,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
           </Button>
           <Button 
             onClick={handleGenerate} 
-            disabled={loading} 
+            disabled={loading || (isPageGeneration && !canGenerate)} 
             className="w-full sm:w-auto"
           >
             {loading ? (

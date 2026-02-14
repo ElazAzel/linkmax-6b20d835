@@ -56,7 +56,7 @@ export function useCloudPageState() {
         
         // Save first with retry logic
         let retries = 2;
-        let lastError: any = null;
+        let lastError: Error | null = null;
         
         while (retries > 0) {
           try {

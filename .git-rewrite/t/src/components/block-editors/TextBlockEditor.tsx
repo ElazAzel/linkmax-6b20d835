@@ -15,7 +15,7 @@ function TextBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         value={migrateToMultilingual(formData.content)}
         onChange={(value) => onChange({ ...formData, content: value })}
         type="textarea"
-        placeholder="Enter your text..."
+        placeholder={t('placeholders.enterText', 'Enter your text...')}
         required
         enableRichText={true}
       />

@@ -26,10 +26,14 @@ import {
   Loader2,
   ArrowRight,
   ArrowLeft,
-  Laptop
+  Laptop,
+  Crown,
+  Lock
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
+import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import type { Block } from '@/types/page';
 import { NICHES, type Niche } from '@/lib/niches';
 
@@ -79,11 +83,15 @@ const NICHE_COLORS: Record<Niche, string> = {
 
 export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboardingProps) {
   const { t } = useTranslation();
+  const { canUseAIPageGeneration, getRemainingAIPageGenerations, incrementAIPageGeneration, isPremium, limits } = useFreemiumLimits();
   const [step, setStep] = useState<'niche' | 'details' | 'generating'>('niche');
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
   const [generating, setGenerating] = useState(false);
+
+  const canGenerate = canUseAIPageGeneration();
+  const remainingGenerations = getRemainingAIPageGenerations();
 
   const handleSelectNiche = (niche: Niche) => {
     setSelectedNiche(niche);
@@ -98,6 +106,11 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
   const handleGenerate = async () => {
     if (!selectedNiche || !name.trim()) {
       toast.error(t('onboarding.enterName'));
+      return;
+    }
+
+    if (!canGenerate) {
+      toast.error(t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан'));
       return;
     }
 
@@ -125,6 +138,9 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
         id: `${block.type}-${Date.now()}-${index}`,
         ...block,
       }));
+
+      // Increment usage counter
+      incrementAIPageGeneration();
 
       toast.success(t('onboarding.pageGenerated'));
       onComplete(profile, formattedBlocks, selectedNiche);
@@ -203,6 +219,36 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
             </DialogHeader>
 
             <div className="space-y-4 py-4">
+              {!canGenerate && (
+                <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-sm">
+                  <div className="flex items-center gap-2 text-destructive font-medium mb-1">
+                    <Lock className="h-4 w-4" />
+                    {t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')}
+                  </div>
+                  <p className="text-muted-foreground text-xs mb-2">
+                    {isPremium 
+                      ? t('freemium.aiLimitResetMonthlyPro', 'Лимит обновится в следующем месяце')
+                      : t('freemium.upgradeForMoreGenerations', 'Обновите до Premium для 5 генераций в месяц')
+                    }
+                  </p>
+                  {!isPremium && (
+                    <Button size="sm" variant="outline" onClick={openPremiumPurchase} className="w-full">
+                      <Crown className="h-3 w-3 mr-1.5 text-amber-500" />
+                      {t('freemium.getPremium', 'Получить Premium')}
+                    </Button>
+                  )}
+                </div>
+              )}
+              {canGenerate && !isPremium && (
+                <div className="p-2 rounded-lg bg-muted/50 text-xs text-muted-foreground flex items-center gap-2">
+                  <Sparkles className="h-3 w-3" />
+                  {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', { 
+                    count: remainingGenerations, 
+                    total: limits.maxAIPageGenerationsPerMonth 
+                  })}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="name">{t('onboarding.yourName')} *</Label>
                 <Input
@@ -211,6 +257,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t('onboarding.namePlaceholder')}
                   autoFocus
+                  disabled={!canGenerate}
                 />
               </div>
 
@@ -221,6 +268,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder={t('onboarding.detailsPlaceholder')}
+                  disabled={!canGenerate}
                 />
                 <p className="text-xs text-muted-foreground">
                   {t('onboarding.detailsHint')}
@@ -232,7 +280,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
               <Button variant="outline" onClick={handleSkip}>
                 {t('onboarding.skip')}
               </Button>
-              <Button onClick={handleGenerate} disabled={!name.trim()}>
+              <Button onClick={handleGenerate} disabled={!name.trim() || !canGenerate}>
                 {t('onboarding.generatePage')}
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>

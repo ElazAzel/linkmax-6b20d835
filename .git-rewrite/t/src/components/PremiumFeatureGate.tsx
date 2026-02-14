@@ -25,10 +25,9 @@ export function PremiumFeatureGate({
   const navigate = useNavigate();
   const { currentTier } = useFreemiumLimits();
 
-  // Tier hierarchy: free < pro < business
+  // Tier hierarchy: free < pro
   const tierLevel = (tier: FreeTier): number => {
     switch (tier) {
-      case 'business': return 3;
       case 'pro': return 2;
       default: return 1;
     }
@@ -43,10 +42,9 @@ export function PremiumFeatureGate({
   const tierNames = {
     free: 'BASIC',
     pro: 'PRO',
-    business: 'BUSINESS',
   };
 
-  const TierIcon = requiredTier === 'business' ? Sparkles : Crown;
+  const TierIcon = Crown;
 
   if (compact) {
     return (
@@ -76,11 +74,7 @@ export function PremiumFeatureGate({
         {children}
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/90 backdrop-blur-sm rounded-lg p-4">
-        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-          requiredTier === 'business' 
-            ? 'bg-gradient-to-br from-amber-500 to-orange-600' 
-            : 'bg-gradient-to-br from-violet-500 to-purple-600'
-        }`}>
+        <div className="h-10 w-10 rounded-full flex items-center justify-center bg-gradient-to-br from-violet-500 to-purple-600">
           <TierIcon className="h-5 w-5 text-white" />
         </div>
         <p className="text-sm font-medium text-center">
@@ -93,10 +87,7 @@ export function PremiumFeatureGate({
           <Button 
             size="sm" 
             variant="default"
-            className={requiredTier === 'business' 
-              ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700' 
-              : 'bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700'
-            }
+            className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700"
             onClick={() => navigate('/pricing')}
           >
             {t('premium.upgrade', 'Улучшить до {{tier}}', { tier: tierNames[requiredTier] })}
@@ -113,7 +104,6 @@ export function useFeatureAccess(requiredTier: FreeTier): boolean {
   
   const tierLevel = (tier: FreeTier): number => {
     switch (tier) {
-      case 'business': return 3;
       case 'pro': return 2;
       default: return 1;
     }

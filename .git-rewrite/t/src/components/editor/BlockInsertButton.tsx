@@ -23,9 +23,14 @@ interface BlockInsertButtonProps {
   currentBlockCount?: number;
   className?: string;
   currentTier?: FreeTier;
+  /** Control sheet externally (for inline mode) */
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Hide FAB button (for inline mode) */
+  hideTrigger?: boolean;
 }
 
-type BlockTier = 'free' | 'pro' | 'business';
+type BlockTier = 'free' | 'pro';
 
 interface BlockConfig {
   type: string;
@@ -54,28 +59,31 @@ const ALL_BLOCKS: BlockConfig[] = [
   { type: 'messenger', label: 'Мессенджеры', Icon: MessageCircle, color: 'bg-green-500', tier: 'free' },
   { type: 'shoutout', label: 'Упоминание', Icon: Megaphone, color: 'bg-orange-500', tier: 'pro' },
   
-  // Business
+  // Business (now pro tier)
   { type: 'product', label: 'Товар', Icon: ShoppingBag, color: 'bg-amber-500', tier: 'pro' },
   { type: 'catalog', label: 'Каталог', Icon: ListOrdered, color: 'bg-teal-500', tier: 'pro' },
   { type: 'pricing', label: 'Цены', Icon: DollarSign, color: 'bg-lime-500', tier: 'pro' },
-  { type: 'download', label: 'Файл', Icon: File, color: 'bg-indigo-500', tier: 'business' },
+  { type: 'download', label: 'Файл', Icon: File, color: 'bg-indigo-500', tier: 'pro' },
   
-  // Forms
-  { type: 'form', label: 'Форма', Icon: FormInput, color: 'bg-purple-500', tier: 'business' },
+  // Forms (now pro tier)
+  { type: 'form', label: 'Форма', Icon: FormInput, color: 'bg-purple-500', tier: 'pro' },
   { type: 'newsletter', label: 'Рассылка', Icon: Mail, color: 'bg-sky-500', tier: 'pro' },
-  { type: 'booking', label: 'Запись', Icon: Calendar, color: 'bg-fuchsia-500', tier: 'business' },
+  { type: 'booking', label: 'Запись', Icon: Calendar, color: 'bg-fuchsia-500', tier: 'pro' },
   
-  // Interactive
+  // Interactive (now pro tier)
   { type: 'testimonial', label: 'Отзывы', Icon: Star, color: 'bg-yellow-500', tier: 'pro' },
   { type: 'scratch', label: 'Скретч', Icon: Gift, color: 'bg-red-400', tier: 'pro' },
   { type: 'faq', label: 'FAQ', Icon: HelpCircle, color: 'bg-blue-400', tier: 'pro' },
-  { type: 'countdown', label: 'Таймер', Icon: Clock, color: 'bg-orange-400', tier: 'business' },
+  { type: 'countdown', label: 'Таймер', Icon: Clock, color: 'bg-orange-400', tier: 'pro' },
   
   // Other
   { type: 'map', label: 'Карта', Icon: MapPin, color: 'bg-green-600', tier: 'free' },
   { type: 'before_after', label: 'До/После', Icon: Compass, color: 'bg-cyan-600', tier: 'pro' },
   { type: 'search', label: 'AI Поиск', Icon: Search, color: 'bg-violet-600', tier: 'pro' },
   { type: 'custom_code', label: 'Код', Icon: Code, color: 'bg-slate-600', tier: 'pro' },
+  
+  // Social - Community
+  { type: 'community', label: 'Сообщество', Icon: () => <span className="text-lg">👥</span>, color: 'bg-indigo-400', tier: 'pro' },
 ];
 
 export const BlockInsertButton = memo(function BlockInsertButton({ 
@@ -83,20 +91,26 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   isPremium = false,
   currentBlockCount = 0,
   className,
-  currentTier = 'free'
+  currentTier = 'free',
+  isOpen: externalIsOpen,
+  onOpenChange,
+  hideTrigger = false
 }: BlockInsertButtonProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Support both controlled and uncontrolled modes
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = onOpenChange || setInternalIsOpen;
 
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
   const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
 
-  const tierLevel = (tier: FreeTier): number => {
+  const tierLevel = (tier: FreeTier | BlockTier): number => {
     switch (tier) {
-      case 'business': return 3;
       case 'pro': return 2;
       default: return 1;
     }
@@ -112,8 +126,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const handleInsert = (blockType: string, blockTier: BlockTier) => {
     if (!canUseBlock(blockTier)) {
-      const tierName = blockTier === 'business' ? 'BUSINESS' : 'PRO';
-      toast.error(`Этот блок доступен только в ${tierName}`, {
+      toast.error('Этот блок доступен только в PRO', {
         action: {
           label: 'Upgrade',
           onClick: () => navigate('/pricing'),
@@ -135,21 +148,23 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   // Mobile & Desktop - Clean full-screen sheet like competitors
   return (
     <div className={cn("flex items-center justify-center", className)}>
-      {/* FAB Button */}
-      <Button
-        variant="default"
-        size="lg"
-        onClick={() => setIsOpen(true)}
-        className={cn(
-          "shadow-lg transition-all active:scale-95",
-          isMobile 
-            ? "h-16 w-16 rounded-full" 
-            : "h-12 w-12 rounded-2xl"
-        )}
-        data-onboarding="add-block"
-      >
-        <Plus className={isMobile ? "h-8 w-8" : "h-6 w-6"} />
-      </Button>
+      {/* FAB Button - hidden when using external control */}
+      {!hideTrigger && (
+        <Button
+          variant="default"
+          size="lg"
+          onClick={() => setIsOpen(true)}
+          className={cn(
+            "shadow-lg transition-all active:scale-95",
+            isMobile 
+              ? "h-16 w-16 rounded-full" 
+              : "h-12 w-12 rounded-2xl"
+          )}
+          data-onboarding="add-block"
+        >
+          <Plus className={isMobile ? "h-8 w-8" : "h-6 w-6"} />
+        </Button>
+      )}
 
       {/* Clean Sheet with Grid */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -227,13 +242,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {block.tier === 'pro' && !isLocked && (
                       <div className="absolute top-1 right-1">
                         <Crown className="h-3.5 w-3.5 text-amber-500" />
-                      </div>
-                    )}
-                    {block.tier === 'business' && !isLocked && (
-                      <div className="absolute top-1 right-1">
-                        <Badge variant="secondary" className="text-[8px] px-1 py-0 bg-amber-500/20 text-amber-600">
-                          BIZ
-                        </Badge>
                       </div>
                     )}
                   </button>

@@ -26,13 +26,19 @@ export default function Pricing() {
   const { isPremium, tier, isLoading } = usePremiumStatus();
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(12);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  
+  const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
 
+  // Pricing in KZT: 3mo = 4350₸/mo, 6mo = 3500₸/mo, 12mo = 2610₸/mo
   const pricingPlans = {
     basic: {
       name: 'BASIC',
       icon: Zap,
       color: 'from-slate-500 to-slate-600',
-      prices: { 3: 0, 6: 0, 12: 0 },
+      pricesKzt: { 3: 0, 6: 0, 12: 0 },
+      pricesUsd: { 3: 0, 6: 0, 12: 0 },
+      totalKzt: { 3: 0, 6: 0, 12: 0 },
+      totalUsd: { 3: 0, 6: 0, 12: 0 },
       features: [
         t('pricing.features.basicThemes', 'Базовые темы оформления'),
         t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'),
@@ -43,7 +49,7 @@ export default function Pricing() {
         t('pricing.features.maps', 'Карты (адрес + карта)'),
         t('pricing.features.basicStats', 'Базовая статистика просмотров'),
         t('pricing.features.qrCode', 'QR-код страницы'),
-        t('pricing.features.aiRequestsWeek', '3 AI-запроса в неделю'),
+        t('pricing.features.aiMonthly', '1 AI-генерация в месяц'),
       ],
       limitations: [
         t('pricing.limitations.watermark', 'Водяной знак LinkMAX'),
@@ -55,8 +61,10 @@ export default function Pricing() {
       icon: Crown,
       color: 'from-violet-500 to-purple-600',
       popular: true,
-      prices: { 3: 6.25, 6: 4.40, 12: 3.15 },
-      totalPrices: { 3: 18.75, 6: 26.40, 12: 37.80 },
+      pricesKzt: { 3: 4350, 6: 3500, 12: 2610 },
+      pricesUsd: { 3: 8.50, 6: 6.80, 12: 5.10 },
+      totalKzt: { 3: 13050, 6: 21000, 12: 31320 },
+      totalUsd: { 3: 25.50, 6: 40.80, 12: 61.20 },
       features: [
         t('pricing.features.allBasic', 'Всё из BASIC'),
         t('pricing.features.proThemes', 'Профессиональные темы и анимации'),
@@ -66,38 +74,25 @@ export default function Pricing() {
         t('pricing.features.socialPixel', 'Social Media pixel (Meta, TikTok, Google)'),
         t('pricing.features.scheduler', 'Планировщик блоков'),
         t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'),
-        t('pricing.features.noWatermark', 'Без водяного знака'),
-        t('pricing.features.miniCRM', 'Mini-CRM до 100 лидов/мес'),
+        t('pricing.features.fullCRM', 'Полноценная CRM (без лимита лидов)'),
         t('pricing.features.telegramNotifications', 'Telegram-уведомления о лидах'),
-        t('pricing.features.unlimitedAI', 'Безлимитный AI'),
-      ],
-    },
-    business: {
-      name: 'BUSINESS',
-      icon: Sparkles,
-      color: 'from-amber-500 to-orange-600',
-      prices: { 3: 14.25, 6: 10.50, 12: 7.50 },
-      totalPrices: { 3: 42.75, 6: 63, 12: 90 },
-      features: [
-        t('pricing.features.allPro', 'Всё из PRO'),
+        t('pricing.features.autoNotifications', 'Автоматические email/Telegram-уведомления'),
         t('pricing.features.multiPage', 'Внутренние страницы (мульти-страничный сайт)'),
         t('pricing.features.digitalProducts', 'Цифровые продукты (лендинги под курсы)'),
         t('pricing.features.applicationForms', 'Заявки через расширенные формы'),
-        t('pricing.features.payments', 'Приём оплат (Stripe/Kaspi)'),
-        t('pricing.features.whiteLabel', 'Полное удаление брендинга (white-label)'),
-        t('pricing.features.fullCRM', 'Полноценная CRM (без лимита лидов)'),
-        t('pricing.features.autoNotifications', 'Автоматические email/Telegram-уведомления'),
+        t('pricing.features.payments', 'Приём оплат (RoboKassa)'),
         t('pricing.features.timers', 'Таймеры (запуски, акции)'),
         t('pricing.features.customDomain', 'Подключение кастомного домена'),
         t('pricing.features.sslCertificate', 'SSL-сертификат'),
         t('pricing.features.marketing', 'Маркетинговые аддоны (рефералы, промокоды)'),
+        t('pricing.features.aiMonthlyPro', '5 AI-генераций в месяц'),
       ],
     },
   };
 
   const getSavingsPercent = (period: BillingPeriod): number => {
-    if (period === 12) return 50;
-    if (period === 6) return 30;
+    if (period === 12) return 40;
+    if (period === 6) return 20;
     return 0;
   };
 
@@ -184,12 +179,12 @@ export default function Pricing() {
                 {period} {t('pricing.months', 'мес')}
                 {period === 12 && (
                   <span className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                    -50%
+                    -40%
                   </span>
                 )}
                 {period === 6 && (
                   <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                    -30%
+                    -20%
                   </span>
                 )}
               </button>
@@ -208,12 +203,14 @@ export default function Pricing() {
         )}
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12">
           {Object.entries(pricingPlans).map(([key, plan]) => {
             const Icon = plan.icon;
             const isCurrentPlan = tier === key || (tier === 'free' && key === 'basic');
-            const monthlyPrice = plan.prices[billingPeriod];
-            const totalPrice = 'totalPrices' in plan ? plan.totalPrices[billingPeriod] : 0;
+            const monthlyKzt = plan.pricesKzt[billingPeriod];
+            const monthlyUsd = plan.pricesUsd[billingPeriod];
+            const totalKzt = plan.totalKzt[billingPeriod];
+            const totalUsd = plan.totalUsd[billingPeriod];
 
             return (
               <Card
@@ -242,8 +239,7 @@ export default function Pricing() {
                       </CardTitle>
                       <CardDescription>
                         {key === 'basic' && t('pricing.basicDesc', 'Начните бесплатно')}
-                        {key === 'pro' && t('pricing.proDesc', 'Для профессионалов')}
-                        {key === 'business' && t('pricing.businessDesc', 'Для бизнеса')}
+                        {key === 'pro' && t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}
                       </CardDescription>
                     </div>
                   </div>
@@ -254,14 +250,30 @@ export default function Pricing() {
                       <div className="text-3xl font-bold">
                         {t('pricing.free', 'Бесплатно')}
                       </div>
-                    ) : (
+                    ) : isKztPrimary ? (
                       <>
                         <div className="flex items-baseline gap-1">
-                          <span className="text-3xl font-bold">${monthlyPrice.toFixed(2)}</span>
+                          <span className="text-3xl font-bold">{monthlyKzt.toLocaleString()}₸</span>
                           <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
                         </div>
                         <div className="text-sm text-muted-foreground mt-1">
-                          ${totalPrice} {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                          {totalKzt.toLocaleString()}₸ {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                        </div>
+                        <div className="text-xs text-muted-foreground/70 mt-0.5">
+                          ≈ ${monthlyUsd.toFixed(2)}/{t('pricing.month', 'мес')}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-3xl font-bold">${monthlyUsd.toFixed(2)}</span>
+                          <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
+                        </div>
+                        <div className="text-sm text-muted-foreground mt-1">
+                          ${totalUsd} {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                        </div>
+                        <div className="text-xs text-muted-foreground/70 mt-0.5">
+                          ≈ {monthlyKzt.toLocaleString()}₸/{t('pricing.month', 'мес')}
                         </div>
                       </>
                     )}
@@ -312,7 +324,7 @@ export default function Pricing() {
 
         {/* Trust Section */}
         <div className="text-center py-8 border-t border-border/50">
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground mb-6">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
               <span>{t('pricing.securePayments', 'Безопасные платежи')}</span>
@@ -323,8 +335,26 @@ export default function Pricing() {
             </div>
             <div className="flex items-center gap-2">
               <Star className="h-4 w-4" />
-              <span>{t('pricing.moneyBack', 'Гарантия возврата 7 дней')}</span>
+              <span>{t('pricing.moneyBack', 'Гарантия возврата 14 дней')}</span>
             </div>
+          </div>
+          
+          {/* Company Details for RoboKassa compliance */}
+          <div className="text-xs text-muted-foreground pt-4 border-t border-border/30">
+            <p className="mb-1">ИП BEEGIN • БИН: 971207300019</p>
+            <p className="mb-2">г. Алматы, ул. Шолохова, д. 20/7</p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a href="mailto:admin@lnkmx.my" className="hover:text-foreground transition-colors">
+                admin@lnkmx.my
+              </a>
+              <span>•</span>
+              <a href="tel:+77051097664" className="hover:text-foreground transition-colors">
+                +7 705 109 7664
+              </a>
+            </div>
+            <p className="mt-3 text-muted-foreground/70">
+              {t('pricing.paymentNote', 'Оплата через RoboKassa')}
+            </p>
           </div>
         </div>
       </main>

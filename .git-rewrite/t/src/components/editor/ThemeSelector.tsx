@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Check } from 'lucide-react';
@@ -13,8 +14,8 @@ interface ThemeSelectorProps {
 const THEMES = [
   {
     id: 'classic',
-    name: 'Classic',
-    description: 'Clean and minimal',
+    nameKey: 'themes.classic',
+    descKey: 'themes.classicDesc',
     theme: {
       backgroundColor: 'hsl(var(--background))',
       textColor: 'hsl(var(--foreground))',
@@ -29,8 +30,8 @@ const THEMES = [
   },
   {
     id: 'dark',
-    name: 'Dark Mode',
-    description: 'Sleek dark design',
+    nameKey: 'themes.darkMode',
+    descKey: 'themes.darkModeDesc',
     theme: {
       backgroundColor: 'hsl(220 13% 9%)',
       textColor: 'hsl(210 40% 98%)',
@@ -45,8 +46,8 @@ const THEMES = [
   },
   {
     id: 'gradient',
-    name: 'Gradient',
-    description: 'Colorful and vibrant',
+    nameKey: 'themes.gradientTheme',
+    descKey: 'themes.gradientThemeDesc',
     theme: {
       backgroundColor: 'linear-gradient(135deg, hsl(280 100% 70%) 0%, hsl(220 100% 75%) 100%)',
       textColor: 'hsl(0 0% 100%)',
@@ -61,8 +62,8 @@ const THEMES = [
   },
   {
     id: 'minimal',
-    name: 'Minimal',
-    description: 'Ultra clean aesthetic',
+    nameKey: 'themes.minimal',
+    descKey: 'themes.minimalDesc',
     theme: {
       backgroundColor: 'hsl(0 0% 98%)',
       textColor: 'hsl(0 0% 13%)',
@@ -77,8 +78,8 @@ const THEMES = [
   },
   {
     id: 'neon',
-    name: 'Neon',
-    description: 'Bold and electric',
+    nameKey: 'themes.neon',
+    descKey: 'themes.neonDesc',
     theme: {
       backgroundColor: 'hsl(270 100% 5%)',
       textColor: 'hsl(180 100% 70%)',
@@ -97,17 +98,19 @@ export const ThemeSelector = memo(function ThemeSelector({
   currentTheme, 
   onThemeChange 
 }: ThemeSelectorProps) {
+  const { t } = useTranslation();
+  
   // Simple theme matching based on backgroundColor
   const activeThemeId = THEMES.find(
-    t => t.theme.backgroundColor === currentTheme.backgroundColor
+    thm => thm.theme.backgroundColor === currentTheme.backgroundColor
   )?.id || 'classic';
 
   return (
     <div className="space-y-4">
       <div>
-        <Label className="text-base font-semibold">Page Theme</Label>
+        <Label className="text-base font-semibold">{t('themes.pageTheme', 'Page Theme')}</Label>
         <p className="text-sm text-muted-foreground mt-1">
-          Choose a pre-designed theme for your page
+          {t('themes.chooseTheme', 'Choose a pre-designed theme for your page')}
         </p>
       </div>
 
@@ -132,19 +135,19 @@ export const ThemeSelector = memo(function ThemeSelector({
                 "h-4 rounded-full w-full text-[8px] flex items-center justify-center font-medium",
                 theme.preview.button
               )}>
-                Button
+                {t('fields.buttonText', 'Button')}
               </div>
             </div>
 
             {/* Theme Info */}
             <div className="p-2 bg-card">
               <div className="flex items-center justify-between mb-0.5">
-                <h4 className="text-sm font-semibold">{theme.name}</h4>
+                <h4 className="text-sm font-semibold">{t(theme.nameKey)}</h4>
                 {activeThemeId === theme.id && (
                   <Check className="h-4 w-4 text-primary" />
                 )}
               </div>
-              <p className="text-xs text-muted-foreground">{theme.description}</p>
+              <p className="text-xs text-muted-foreground">{t(theme.descKey)}</p>
             </div>
           </Card>
         ))}

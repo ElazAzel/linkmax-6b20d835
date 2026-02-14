@@ -10,7 +10,8 @@
     "andThe": "және"
   },
   "common": {
-    "close": "Жабу"
+    "close": "Жабу",
+    "language": "Тіл"
   },
   "settings": {
     "niche": "Санат",
@@ -27,7 +28,36 @@
     "telegramConnected": "Telegram қосылды! Хабарламаларыңызды тексеріңіз.",
     "telegramError": "Telegram қосу сәтсіз аяқталды",
     "telegramInvalidId": "Қате Chat ID. @userinfobot ботына /start жібергеніңізге көз жеткізіңіз",
-    "telegramCantSend": "Хабарлама жіберу мүмкін емес. Алдымен ботты іске қосыңыз"
+    "telegramCantSend": "Хабарлама жіберу мүмкін емес. Алдымен ботты іске қосыңыз",
+    "pageAndAccount": "Бет және аккаунт баптаулары",
+    "yourLink": "Сіздің сілтеме",
+    "username": "Пайдаланушы аты",
+    "gridSettings": "Тор баптаулары",
+    "desktopColumns": "ПК бағандары",
+    "mobileColumns": "Мобильді бағандар",
+    "columns": "бағандар",
+    "column": "баған",
+    "profileInfo": "Профиль ақпараты",
+    "name": "Аты",
+    "bio": "Сипаттама",
+    "chatbotContext": "AI чатбот контексті",
+    "chatbotPlaceholder": "AI чатботқа жасырын контекст қосыңыз (бағалар, қызметтер, қолжетімділік...)",
+    "chatbotHelp": "AI-ға келушілер сұрақтарына дәл жауап беруге көмектеседі",
+    "aiTools": "AI құралдары",
+    "seoGenerator": "SEO генераторы",
+    "friends": "Достар",
+    "friendsDesc": "Достар қосып, бонустар алыңыз",
+    "openFriendsPanel": "Достар панелін ашу",
+    "premiumActive": "Премиум белсенді",
+    "freePlan": "Тегін жоспар",
+    "upgradeToUnlock": "Барлық мүмкіндіктерді ашу үшін жаңартыңыз",
+    "crmLeads": "CRM және лидтер",
+    "crmDesc": "Лидтер мен өтініштерді басқарыңыз",
+    "openCRM": "CRM ашу",
+    "referralProgram": "Реферал бағдарламасы",
+    "emailNotifications": "Email хабарламалары",
+    "telegramNotifications": "Telegram хабарламалары",
+    "signOut": "Шығу"
   },
   "common": {
     "save": "Сақтау"
@@ -77,16 +107,26 @@
       "subtitle": "LinkMAX арқылы жасалған ең танымал беттерді ашыңыз",
       "viewAll": "Барлық беттер"
     },
+    "gallery": {
+      "badge": "Қоғамдастық",
+      "title": "Беттер галереясы",
+      "subtitle": "Қоғамдастық жасаған беттерден шабыт алыңыз",
+      "viewAll": "Барлығын көру"
+    },
     "hero": {
-      "badge": "AI-powered link-in-bio",
-      "title": "Сіз үшін",
-      "titleHighlight": "сататын бет",
-      "description": "AI көмегімен 2 минутта кәсіби бет жасаңыз. Барлық сілтемелер, қызметтер мен байланыстар — бір жерде.",
+      "badge": "Бизнеске арналған AI-бет",
+      "title": "2 минутта AI-бет,",
+      "titleHighlight": "өтініштер жинайды",
+      "description": "Сұлулық шеберлеріне, мамандар мен шағын бизнеске арналған. AI-дизайнер + AI-копирайтер + Mini-CRM + Жаңа клиенттер туралы Telegram хабарламалары.",
       "usernamePlaceholder": "yourname",
       "free": "Тегін",
       "noCode": "Кодсыз",
       "aiHelps": "AI көмектеседі",
       "create": "Жасау",
+      "benefit1": "AI бәрін өзі жасайды",
+      "benefit2": "Mini-CRM ішінде",
+      "benefit3": "Telegram хабарламалары",
+      "viewExamples": "Бет мысалдарын көру",
       "badges": {
         "aiReady": "AI дайын",
         "autoGenerate": "Авто-генерация",
@@ -269,19 +309,106 @@
       "title": "Дәл қазір бетіңізді жасаңыз"
     },
     "howItWorks": {
+      "badge": "Нәтижеге 2 минут",
       "title": "Бұл қалай жұмыс істейді",
       "subtitle": "Дайын бетке дейін 3 қадам",
+      "cta": "Тегін бастау",
       "step1": {
         "title": "Саланы таңдаңыз",
-        "desc": "Мамандықты таңдаңыз — AI сізге не керектігін түсінеді"
+        "description": "Кім екеніңізді айтыңыз - сұлулық шебері, маман немесе бизнес. AI сізге не қажет екенін түсінеді."
       },
       "step2": {
         "title": "AI бет жасайды",
-        "desc": "Дайын дизайн, мәтіндер мен блоктар 30 секундта"
+        "description": "30 секундта AI дизайн, мәтіндер, құрылым мен барлық блоктарды жасайды. Сіз тек тексересіз."
       },
       "step3": {
-        "title": "Жариялаңыз",
-        "desc": "Бірегей сілтемеңізді алып, барлық жерде бөлісіңіз"
+        "title": "Өтініштер алыңыз",
+        "description": "Клиенттер форманы толтырады → Mini-CRM-де өтініш → Telegram хабарламасы. Бірде-бір лид жоғалмайды."
+      }
+    },
+    "targetAudience": {
+      "title": "LinkMAX кімге арналған",
+      "subtitle": "Сіздің салаңызға арналған нақты нәтижелер",
+      "cta": "Бет жасау",
+      "beauty": {
+        "title": "Сұлулық шеберлері",
+        "subtitle": "Маникюр, қастар, кірпіктер, шаш",
+        "result1": "Барлық қызметтер мен бағалар - бір сілтемеде",
+        "result2": "Клиенттер форма арқылы жазылады",
+        "result3": "Жазылу туралы Telegram хабарламасы"
+      },
+      "expert": {
+        "title": "Мамандар мен коучтар",
+        "subtitle": "Психологтар, репетиторлар, кеңесшілер",
+        "result1": "Портфолио мен пікірлер әдемі түрде",
+        "result2": "Лидтер автоматты түрде Mini-CRM-де",
+        "result3": "Клиент мәртебелері: жаңа → жұмыста → дайын"
+      },
+      "business": {
+        "title": "Шағын бизнес",
+        "subtitle": "Шаштараздар, фотографтар, кофеханалар",
+        "result1": "Тауарлар мен қызметтер каталогы",
+        "result2": "Аналитика: клиенттер қайдан келеді",
+        "result3": "Excel-сіз өтініштерді басқару"
+      }
+    },
+    "premiumValue": {
+      "badge": "Premium - көбірек ақша",
+      "title": "Неге Premium үшін төлейсіз",
+      "subtitle": "Визуалды безендіру емес, табыс құралдары",
+      "cta": "Premium алу",
+      "price": "Жылдық төлемде 2 610₸/айдан (≈$5.10)",
+      "bonusTitle": "Жағымды бонустар:",
+      "crm": {
+        "title": "Mini-CRM",
+        "description": "Формадағы барлық өтініштер автоматты түрде CRM-ге түседі. Мәртебелер: жаңа → жұмыста → аяқталды. Excel жоқ."
+      },
+      "telegram": {
+        "title": "Telegram хабарламалары",
+        "description": "Клиент өтініш қалдырғанда Telegram-ға лезде хабарлама. Бірде-бір лидті жіберіп алмаңыз."
+      },
+      "ai": {
+        "title": "Шексіз AI",
+        "description": "Мәтіндер, тақырыптар, тауар сипаттамалары - шексіз. AI копирайтер сіз үшін жұмыс істейді."
+      },
+      "analytics": {
+        "title": "Кеңейтілген аналитика",
+        "description": "Қандай сілтемелер көбірек басылады, клиенттер қайдан келеді, белсенділік қашан жоғары."
+      },
+      "bonus": {
+        "themes": "Премиум тақырыптар мен анимациялар",
+        "noWatermark": "Су белгісі жоқ",
+        "scheduler": "Блок жоспарлаушы",
+        "video": "Бейне және медиа блоктар"
+      }
+    },
+    "simplePricing": {
+      "badge": "Қарапайым тарифтер",
+      "title": "Тегін немесе Premium",
+      "free": {
+        "title": "Тегін",
+        "subtitle": "Мәңгіге, жасырын төлемсіз",
+        "cta": "Тегін бастау",
+        "f1": "Негізгі блоктар (сілтемелер, мәтін, фото)",
+        "f2": "AI генерация (күніне 3 рет)",
+        "f3": "Негізгі статистика",
+        "f4": "Бет QR-коды",
+        "f5": "Mini-CRM және лидтер",
+        "f6": "Telegram хабарламалары",
+        "f7": "Шексіз AI"
+      },
+      "premium": {
+        "badge": "Ұсынамыз",
+        "title": "Premium",
+        "subtitle": "Бизнес өсу үшін бәрі",
+        "cta": "Premium алу",
+        "f1": "Барлық блоктар шексіз",
+        "f2": "Mini-CRM - барлық өтініштер бір жерде",
+        "f3": "Лидтер туралы Telegram хабарламалары",
+        "f4": "Шексіз AI-копирайтер",
+        "f5": "Кеңейтілген басу аналитикасы",
+        "f6": "Премиум тақырыптар мен анимациялар",
+        "f7": "Су белгісі жоқ"
       }
     },
     "cta": {
@@ -291,7 +418,8 @@
       "button": "Қазір жасауды бастау"
     },
     "footer": {
-      "copyright": "© 2025 LinkMAX. Барлық құқықтар қорғалған."
+      "copyright": "© 2026 LinkMAX. Барлық құқықтар қорғалған.",
+      "alternatives": "Салыстыру"
     },
     "pricing": {
       "badge": "Қарапайым тарифтер",
@@ -535,13 +663,7 @@
       },
       "demo": {
         "title": "Қазір көріңіз",
-        "desc": "Сайтта тікелей интерактивті демо — тіркелу қажет емес"
-      }
-    },
-    "howItWorks": {
-      "step4": {
-        "title": "Сілтемемен бөлісіңіз",
-        "desc": "Биода, әлеуметтік желілерде, барлық жерде"
+        "desc": "Сайтта тікелей интерактивті демо - тіркелу қажет емес"
       }
     }
   },
@@ -644,7 +766,54 @@
     "countdown": "Кері санақ",
     "catalog": "Каталог",
     "shoutout": "Шаут-аут",
-    "beforeAfter": "Бұрын/Кейін"
+    "beforeAfter": "Бұрын/Кейін",
+    "faq": {
+      "title": "Тақырып",
+      "titlePlaceholder": "Жиі қойылатын сұрақтар",
+      "items": "Сұрақтар мен жауаптар",
+      "addItem": "Қосу",
+      "question": "Сұрақ",
+      "questionPlaceholder": "Сұрақты енгізіңіз",
+      "answer": "Жауап",
+      "answerPlaceholder": "Жауапты енгізіңіз",
+      "newQuestion": "Жаңа сұрақ",
+      "emptyHint": "Сұрақтар мен жауаптар қосыңыз"
+    },
+    "booking": {
+      "description": "Күнтізбе мен слоттармен брондау блогы",
+      "blockTitle": "Тақырып",
+      "titlePlaceholder": "Қабылдауға жазылу",
+      "blockDescription": "Сипаттама",
+      "descriptionPlaceholder": "Брондау үшін ыңғайлы уақытты таңдаңыз",
+      "workingHours": "Жұмыс сағаттары",
+      "startHour": "Басталуы",
+      "endHour": "Аяқталуы",
+      "slotDuration": "Слот ұзақтығы (минут)",
+      "workingDays": "Жұмыс күндері",
+      "clickToToggle": "Қосу/өшіру үшін күнді басыңыз",
+      "customSlots": "Арнайы слоттар",
+      "addSlot": "Қосу",
+      "noCustomSlots": "Слоттар жұмыс сағаттарына негізделіп автоматты түрде жасалады",
+      "advanced": "Қосымша",
+      "maxDays": "Брондау үшін максимум күндер",
+      "requirePhone": "Телефон қажет",
+      "requirePhoneDesc": "Клиент телефон нөмірін көрсетуі керек",
+      "requireEmail": "Email қажет",
+      "requireEmailDesc": "Клиент email көрсетуі керек",
+      "prepayment": "Алдын ала төлем",
+      "requirePrepayment": "Алдын ала төлем қажет",
+      "prepaymentDesc": "Брондаудан кейін клиент төлем үшін WhatsApp-қа бағытталады",
+      "prepaymentPhone": "Төлем үшін WhatsApp",
+      "phoneHint": "Төлем қабылдау үшін WhatsApp бар телефон нөмірі",
+      "prepaymentAmount": "Алдын ала төлем сомасы",
+      "currency": "Валюта",
+      "notifications": "Telegram хабарламалары",
+      "dailyReminder": "Таңғы еске салу",
+      "dailyReminderDesc": "Бүгінгі жазбалар тізімін алыңыз",
+      "reminderTime": "Еске салу уақыты",
+      "weeklyMotivation": "Апталық мотивация",
+      "weeklyMotivationDesc": "Дүйсенбі 9:00 - жеке шабыт"
+    }
   },
   "blockEditor": {
     "profile": "Профильді өңдеу",
@@ -710,7 +879,30 @@
     "verifiedBadge": "Тексерілген белгі",
     "productName": "Тауар атауы",
     "buyLink": "Сатып алу сілтемесі",
-    "optional": "(міндетті емес)"
+    "optional": "(міндетті емес)",
+    "images": "Суреттер",
+    "image": "Сурет",
+    "altText": "Альтернативті мәтін",
+    "imageDescription": "Сурет сипаттамасы",
+    "link": "Сілтеме",
+    "autoPlay": "Авто-ойнату",
+    "interval": "Интервал",
+    "placeholder": "Толтырғыш",
+    "required": "Міндетті",
+    "label": "Белгі",
+    "icon": "Белгіше",
+    "color": "Түс",
+    "backgroundColor": "Фон түсі",
+    "textColor": "Мәтін түсі",
+    "width": "Ені",
+    "height": "Биіктігі",
+    "padding": "Шегініс",
+    "margin": "Жиек",
+    "borderRadius": "Жиек радиусы",
+    "shadow": "Көлеңке",
+    "opacity": "Мөлдірлік",
+    "fontSize": "Қаріп өлшемі",
+    "fontWeight": "Қаріп қалыңдығы"
   },
   "settings": {
     "pageSettings": "Бет баптаулары",
@@ -735,7 +927,28 @@
   },
   "actions": {
     "download": "Жүктеу",
-    "send": "Жіберу"
+    "send": "Жіберу",
+    "addImage": "Сурет қосу",
+    "addItem": "Қосу",
+    "remove": "Жою",
+    "save": "Сақтау",
+    "cancel": "Болдырмау",
+    "edit": "Өңдеу",
+    "delete": "Жою",
+    "confirm": "Растау",
+    "apply": "Қолдану",
+    "close": "Жабу",
+    "copy": "Көшіру",
+    "share": "Бөлісу",
+    "preview": "Алдын ала қарау",
+    "publish": "Жариялау",
+    "buyNow": "Қазір сатып алу",
+    "bookNow": "Жазылу",
+    "subscribe": "Жазылу",
+    "submit": "Жіберу",
+    "tryFree": "Тегін көріңіз",
+    "learnMore": "Көбірек білу",
+    "getStarted": "Бастау"
   },
   "form": {
     "fillRequired": "Міндетті өрістерді толтырыңыз",
@@ -1222,6 +1435,15 @@
     "crm": "CRM",
     "crmDesc": "Лидтерді басқару"
   },
+  "days": {
+    "monday": "Дүйсенбі",
+    "tuesday": "Сейсенбі",
+    "wednesday": "Сәрсенбі",
+    "thursday": "Бейсенбі",
+    "friday": "Жұма",
+    "saturday": "Сенбі",
+    "sunday": "Жексенбі"
+  },
   "tokens": {
     "title": "Токендер",
     "balance": "Баланс",
@@ -1340,5 +1562,176 @@
       "completeSuccess": "Брондау аяқталды деп белгіленді",
       "noBookingsExport": "Экспорттайтын брондаулар жоқ"
     }
+  },
+  "booking": {
+    "title": "Жазылу",
+    "workingHours": "Қабылдау",
+    "step1": "Күнді таңдаңыз",
+    "step2": "Уақыт",
+    "today": "Бүгін",
+    "tomorrow": "Ертең",
+    "free": "бос",
+    "taken": "бос емес",
+    "loadingSlots": "Кесте жүктелуде...",
+    "noSlotsTitle": "Бос слоттар жоқ",
+    "noSlotsHint": "Басқа күнді таңдап көріңіз",
+    "availableSlots": "Бос уақыт",
+    "noSlots": "Бұл күнге бос слоттар жоқ",
+    "available": "Бос",
+    "booked": "Бос емес",
+    "occupied": "бос емес",
+    "selectedTime": "Таңдалды",
+    "continue": "Жалғастыру",
+    "confirmBooking": "Жазылуды рәсімдеу",
+    "name": "Сіздің атыңыз",
+    "namePlaceholder": "Атыңызды енгізіңіз",
+    "phone": "Телефон",
+    "email": "Email",
+    "notes": "Түсініктеме",
+    "notesPlaceholder": "Қосымша ақпарат...",
+    "confirm": "Жазылу",
+    "confirmAndPay": "Жазылу және төлеу",
+    "prepaymentNote": "Жазылғаннан кейін сіз WhatsApp-қа төлем үшін бағытталасыз",
+    "success": "Сіз сәтті жазылдыңыз!",
+    "error": "Жазылу қатесі. Қайталап көріңіз."
+  },
+  "fields": {
+    "avatarUrl": "Аватар",
+    "name": "Аты",
+    "bio": "Сипаттама",
+    "coverImage": "Мұқаба суреті",
+    "coverGradient": "Мұқаба градиенті",
+    "coverHeight": "Мұқаба биіктігі",
+    "avatarSize": "Аватар өлшемі",
+    "avatarPosition": "Аватар орны",
+    "avatarFrame": "Аватар жақтауы",
+    "avatarIcon": "Аватар белгішесі",
+    "selectIcon": "Белгішені таңдаңыз",
+    "shadowStyle": "Көлеңке стилі",
+    "verificationBadge": "Тексеру белгісі",
+    "autoVerifyPremium": "Premium үшін авто-тексеру",
+    "verified": "Қолмен тексеру белгісі",
+    "verifiedCustomIcon": "Өз белгішесі (PNG/SVG/GIF)",
+    "verifiedIcon": "Алдын ала белгіше",
+    "verifiedColor": "Белгі фоны",
+    "verifiedPosition": "Белгі орны",
+    "proofOfHuman": "Адам екенін растау",
+    "boostTrust": "📈 +Сенім",
+    "proofOfHumanDescription": "Келушілерге нақты адам екеніңізді көрсету үшін қысқа бейне немесе дауыстық сәлем қосыңыз",
+    "introVideo": "Бейне сәлем (макс. 30 сек)",
+    "introAudio": "Дауыстық сәлем",
+    "proofOfHumanActive": "Профиліңіз енді тексерілген адам белгісін көрсетеді",
+    "left": "Сол жақта",
+    "center": "Ортада",
+    "right": "Оң жақта",
+    "iconMode": "Белгіше",
+    "iconAuto": "Авто (сайт favicon)",
+    "iconManual": "Қолмен",
+    "refreshIcon": "Белгішені жаңарту",
+    "customIcon": "Өз белгішесі",
+    "fallbackIcon": "Стандартты белгіше",
+    "title": "Тақырып",
+    "content": "Мазмұны",
+    "style": "Стиль",
+    "heading": "Тақырып",
+    "paragraph": "Параграф",
+    "quote": "Дәйексөз",
+    "alignment": "Туралау",
+    "hoverEffect": "Апару эффектісі",
+    "none": "Жоқ",
+    "glow": "Жарқырау",
+    "scale": "Масштабтау",
+    "shadow": "Көлеңке",
+    "backgroundType": "Фон түрі",
+    "solidColor": "Біртұтас түс",
+    "gradient": "Градиент",
+    "image": "Сурет",
+    "backgroundColor": "Фон түсі",
+    "gradientColors": "Градиент түстері",
+    "enterCommaSeparatedColors": "Түстерді үтірмен енгізіңіз",
+    "gradientAngle": "Градиент бұрышы (градус)",
+    "backgroundImage": "Фон суреті",
+    "width": "Ен",
+    "fullWidth": "Толық ен",
+    "mediumWidth": "Орташа",
+    "smallWidth": "Кіші",
+    "url": "Сілтеме",
+    "placeholder": "Толтырғыш",
+    "description": "Сипаттама",
+    "price": "Баға",
+    "currency": "Валюта",
+    "buttonText": "Батырма мәтіні"
+  },
+  "gradients": {
+    "none": "Градиентсіз",
+    "dark": "Қараңғы қабат",
+    "light": "Жарық қабат",
+    "primary": "Негізгі түс",
+    "sunset": "Күн батуы",
+    "ocean": "Мұхит",
+    "purple": "Күлгін арман"
+  },
+  "heights": {
+    "small": "Кіші - 120px",
+    "medium": "Орташа - 200px",
+    "large": "Үлкен - 320px"
+  },
+  "avatarSizes": {
+    "small": "Кіші - 64px",
+    "medium": "Орташа - 96px",
+    "large": "Үлкен - 128px",
+    "xlarge": "Өте үлкен - 160px"
+  },
+  "shadows": {
+    "none": "Көлеңкесіз",
+    "soft": "Жұмсақ көлеңке",
+    "medium": "Орташа көлеңке",
+    "strong": "Күшті көлеңке",
+    "glow": "Түсті жарқырау"
+  },
+  "premium": {
+    "premiumFramesLocked": "Премиум жақтаулар PRO жазылымын қажет етеді",
+    "verificationRequiresPro": "Тексеру белгісі PRO пайдаланушыларға қолжетімді",
+    "upgradeToPro": "PRO-ға көшу →"
+  },
+  "actions": {
+    "removeCustomIcon": "Өз белгішесін жою"
+  },
+  "themes": {
+    "classic": "Классикалық",
+    "classicDesc": "Таза және минималды",
+    "darkMode": "Қараңғы режим",
+    "darkModeDesc": "Сәнді қараңғы дизайн",
+    "gradientTheme": "Градиент",
+    "gradientThemeDesc": "Жарқын және түрлі-түсті",
+    "minimal": "Минималды",
+    "minimalDesc": "Ультра таза эстетика",
+    "neon": "Неон",
+    "neonDesc": "Батыл және электрлі",
+    "pageTheme": "Бет тақырыбы",
+    "chooseTheme": "Бетіңіз үшін дайын тақырыпты таңдаңыз"
+  },
+  "placeholders": {
+    "yourName": "Сіздің атыңыз",
+    "tellAboutYourself": "Өзіңіз туралы айтыңыз...",
+    "enterText": "Мәтінді енгізіңіз...",
+    "buttonText": "Батырма мәтіні",
+    "productName": "Өнім атауы",
+    "productDescription": "Өнім сипаттамасы",
+    "subscribeNewsletter": "Жаңалықтарға жазылу",
+    "getUpdates": "Соңғы жаңартуларды поштаңызға алыңыз",
+    "subscribe": "Жазылу",
+    "askAnything": "Кез келген нәрсе сұраңыз",
+    "askQuestion": "Сұрақ қойыңыз...",
+    "scratchToReveal": "Ашу үшін қырыңыз",
+    "gallery": "Галерея"
+  },
+  "styles": {
+    "default": "Әдепкі",
+    "rounded": "Дөңгелектелген",
+    "pill": "Таблетка (толық дөңгелектелген)"
+  },
+  "ai": {
+    "generateWithAI": "AI көмегімен жасау"
   }
 }

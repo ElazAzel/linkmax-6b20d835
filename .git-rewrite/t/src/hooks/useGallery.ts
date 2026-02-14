@@ -26,6 +26,7 @@ export function useGallery() {
         getGalleryPages(selectedNiche),
         getNicheCounts(),
       ]);
+      
       setPages(pagesData);
       setNicheCounts(countsData);
     } catch (error) {

@@ -135,9 +135,6 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
   const isLast = index === totalCount - 1;
 
   const getTierBadge = () => {
-    if (blockTier === 'business') {
-      return <Badge variant="secondary" className="text-[10px] px-1 py-0">Business</Badge>;
-    }
     if (blockTier === 'pro') {
       return <Crown className="h-3 w-3 text-primary flex-shrink-0" />;
     }

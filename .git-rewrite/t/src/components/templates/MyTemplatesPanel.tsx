@@ -19,14 +19,15 @@ import {
   Package,
   ShoppingBag,
   Trash2,
-  Eye,
   Download,
   DollarSign,
   Heart,
   Globe,
   Lock,
+  Layers,
 } from 'lucide-react';
 import type { Block } from '@/types/page';
+import { TemplatePreviewCard } from './TemplatePreviewCard';
 
 interface UserTemplate {
   id: string;
@@ -172,8 +173,8 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
 
   const renderTemplateCard = (template: UserTemplate, isPurchased = false) => (
     <Card key={template.id} className="overflow-hidden group">
-      {/* Preview */}
-      <div className="aspect-[4/3] bg-muted relative">
+      {/* Preview - Use TemplatePreviewCard for visual block layout */}
+      <div className="aspect-[4/5] relative">
         {template.preview_url ? (
           <img
             src={template.preview_url}
@@ -181,9 +182,11 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-            <Package className="h-12 w-12" />
-          </div>
+          <TemplatePreviewCard 
+            blocks={template.blocks}
+            className="w-full h-full"
+            showBlockCount
+          />
         )}
         
         {/* Overlay with actions */}

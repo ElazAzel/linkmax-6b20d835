@@ -13,19 +13,19 @@ import { FREE_LIMITS } from '@/hooks/useFreemiumLimits';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 
 interface FreemiumAILimitProps {
-  remainingRequests: number;
+  remainingGenerations: number;
   isPremium: boolean;
 }
 
 export const FreemiumAILimit = memo(function FreemiumAILimit({
-  remainingRequests,
+  remainingGenerations,
   isPremium,
 }: FreemiumAILimitProps) {
   const { t } = useTranslation();
   
   if (isPremium) return null;
   
-  const isAtLimit = remainingRequests <= 0;
+  const isAtLimit = remainingGenerations <= 0;
   
   return (
     <TooltipProvider>
@@ -41,7 +41,7 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
               <Sparkles className="h-3 w-3" />
             )}
             <span>
-              AI: {remainingRequests}/{FREE_LIMITS.maxAIRequestsPerWeek}
+              AI: {remainingGenerations}/{FREE_LIMITS.maxAIPageGenerationsPerMonth}
             </span>
           </Badge>
         </TooltipTrigger>
@@ -49,12 +49,12 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
           <div className="space-y-2">
             <p className="text-sm font-medium">
               {isAtLimit 
-                ? t('freemium.aiLimitReached', 'Лимит AI запросов исчерпан')
-                : t('freemium.aiRequestsRemaining', 'Осталось AI запросов на этой неделе: {{count}}', { count: remainingRequests })
+                ? t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')
+                : t('freemium.aiGenerationsRemaining', 'Осталось AI генераций в этом месяце: {{count}}', { count: remainingGenerations })
               }
             </p>
             <p className="text-xs text-muted-foreground">
-              {t('freemium.aiLimitResetsWeekly', 'Лимит обновляется каждую неделю')}
+              {t('freemium.aiLimitResetsMonthly', 'Лимит обновляется каждый месяц')}
             </p>
             <Button 
               size="sm" 
@@ -63,7 +63,7 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
               className="w-full mt-2"
             >
               <Crown className="h-3 w-3 mr-1.5 text-amber-500" />
-              {t('freemium.unlimitedAI', 'Безлимитный AI')}
+              {t('freemium.moreAIGenerations', '5 генераций в месяц')}
             </Button>
           </div>
         </TooltipContent>

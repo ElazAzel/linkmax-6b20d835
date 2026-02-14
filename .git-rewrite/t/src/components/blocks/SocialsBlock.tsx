@@ -106,7 +106,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block }: Socia
       <div className={`flex items-center ${justifyClass} gap-4 flex-wrap`}>
         {validPlatforms.map((platform, index) => {
           // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
-          const iconName = (platform.icon || (platform as any).platform || 'globe');
+          const iconName = platform.icon || 'globe';
           const iconKey = typeof iconName === 'string' ? iconName.toLowerCase() : 'globe';
           const Icon = iconMap[iconKey] || Globe;
           const url = platform.url || '';

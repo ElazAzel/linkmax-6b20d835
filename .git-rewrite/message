@@ -1,1 +1,8 @@
-Changes
+Update legal pages and routes
+
+- Add comprehensive Terms of Service, Privacy Policy, and Payment Terms content in multiple languages
+- Create and wire new routes: /terms, /privacy, /payment-terms
+- Inject company details and regulatory text across modals
+- Update App routes to include new legal pages
+
+X-Lovable-Edit-ID: edt-30a41504-24cd-4a6a-8ff3-c1371fba88c9

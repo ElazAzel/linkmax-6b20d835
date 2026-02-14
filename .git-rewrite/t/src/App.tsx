@@ -18,10 +18,15 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const Install = lazy(() => import("./pages/Install"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const Pricing = lazy(() => import("./pages/Pricing"));
+const Alternatives = lazy(() => import("./pages/Alternatives"));
 const Admin = lazy(() => import("./pages/Admin"));
 const TeamPage = lazy(() => import("./pages/TeamPage"));
 const CollabPage = lazy(() => import("./pages/CollabPage"));
 const JoinTeam = lazy(() => import("./pages/JoinTeam"));
+const IndexBento = lazy(() => import("./pages/IndexBento"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 
 const queryClient = new QueryClient();
 
@@ -52,9 +57,14 @@ const App = () => (
               <Route path="/install" element={<Install />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/alternatives" element={<Alternatives />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/team/:slug" element={<TeamPage />} />
               <Route path="/join/:inviteCode" element={<JoinTeam />} />
+              <Route path="/bento" element={<IndexBento />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/payment-terms" element={<PaymentTerms />} />
               <Route path="/collab/:collabSlug" element={<CollabPage />} />
               <Route path="/p/:compressed" element={<PublicPage />} />
               <Route path="/:slug" element={<PublicPage />} />

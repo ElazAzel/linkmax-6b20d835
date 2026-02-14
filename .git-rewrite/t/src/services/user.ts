@@ -176,25 +176,19 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const inTrial = trialEndsAt ? trialEndsAt > now : false;
     const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
     
-    // Determine tier from premium_tier column or fallback to legacy is_premium
+    // Determine tier - Business tier is now merged into Pro
     const dbTier = (data as { premium_tier?: string }).premium_tier as 'free' | 'pro' | 'business' | undefined;
     
-    let tier: 'free' | 'pro' | 'business' = 'free';
+    let tier: 'free' | 'pro' = 'free';
     let isPremium = false;
     
-    // Check if user has active premium (either via expiration date or legacy is_premium flag)
+    // Check if user has active premium
     const hasActivePremium = premiumActive || data.is_premium || inTrial;
     
     if (hasActivePremium) {
       isPremium = true;
-      // Use the db tier if set, otherwise default to 'pro' for legacy premium users
-      if (dbTier === 'business') {
-        tier = 'business';
-      } else if (dbTier === 'pro' || data.is_premium) {
-        tier = 'pro';
-      } else if (inTrial) {
-        tier = 'pro'; // Trial users get pro features
-      }
+      // Both 'business' and 'pro' are now 'pro' tier (business merged into pro)
+      tier = 'pro';
     }
 
     return { isPremium, tier, trialEndsAt: data.trial_ends_at, inTrial };

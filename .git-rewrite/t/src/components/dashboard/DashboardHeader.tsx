@@ -71,95 +71,112 @@ export function DashboardHeader({
 
   return (
     <header className="sticky top-0 z-50 hidden md:block">
-      <div className="mx-5 mt-4">
-        <div className="backdrop-blur-2xl bg-card/60 border border-border/30 rounded-3xl shadow-glass-lg">
-          <div className="container mx-auto px-5 h-16 flex items-center justify-between gap-3">
-            {/* Logo - BOLD */}
-            <div className="flex items-center gap-4 animate-fade-in">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/30 rounded-2xl blur-xl" />
+      <div className="mx-4 mt-3">
+        <div className="backdrop-blur-2xl bg-card/75 border border-border/30 rounded-2xl shadow-glass-lg">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-2">
+            {/* Logo - Clean */}
+            <div className="flex items-center gap-3">
+              <div className="relative group cursor-pointer" onClick={() => navigate('/')}>
+                <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg group-hover:bg-primary/30 transition-colors" />
                 <img
                   src="/logo.png"
                   alt="LinkMAX"
-                  className="relative h-10 w-10 animate-scale-in hover-scale rounded-2xl shadow-glass object-contain"
+                  className="relative h-9 w-9 rounded-xl shadow-sm object-contain group-hover:scale-105 transition-transform"
                 />
               </div>
-              <h1 className="text-2xl font-black text-primary tracking-tight">LinkMAX</h1>
-              <AutoSaveIndicator status={saveStatus} />
+              <h1 className="text-xl font-black text-primary tracking-tight">LinkMAX</h1>
+              <div className="ml-1">
+                <AutoSaveIndicator status={saveStatus} />
+              </div>
             </div>
 
-            {/* Actions - BOLD */}
-            <div className="flex items-center gap-2">
+            {/* Actions - Refined */}
+            <div className="flex items-center gap-1.5">
               {/* Create Group */}
-              <Button variant="ghost" size="default" onClick={onOpenAIBuilder} className="h-11 px-4 rounded-2xl font-bold">
-                <Wand2 className="h-5 w-5 mr-2" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onOpenAIBuilder} 
+                className="h-9 px-3 rounded-xl font-semibold hover:bg-primary/10 hover:text-primary transition-colors"
+              >
+                <Wand2 className="h-4 w-4 mr-1.5" />
                 AI
               </Button>
 
-              <Button variant="ghost" size="default" onClick={onOpenTemplates} className="h-11 px-4 rounded-2xl font-bold">
-                <LayoutTemplate className="h-5 w-5 mr-2" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onOpenTemplates} 
+                className="h-9 px-3 rounded-xl font-semibold hover:bg-primary/10 hover:text-primary transition-colors"
+              >
+                <LayoutTemplate className="h-4 w-4 mr-1.5" />
                 {t('templates.title', 'Шаблоны')}
               </Button>
 
-              <div className="h-8 w-px bg-border/40" />
+              <div className="h-6 w-px bg-border/40 mx-1" />
 
               {/* Business Group */}
-              <Button variant="ghost" size="default" onClick={onOpenCRM} className="h-11 px-4 rounded-2xl font-bold">
-                <Users className="h-5 w-5 mr-2" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onOpenCRM} 
+                className="h-9 px-3 rounded-xl font-semibold hover:bg-primary/10 hover:text-primary transition-colors"
+              >
+                <Users className="h-4 w-4 mr-1.5" />
                 CRM
               </Button>
 
               <Button
-                variant={showSettings ? 'default' : 'ghost'}
-                size="default"
+                variant={showSettings ? 'secondary' : 'ghost'}
+                size="sm"
                 onClick={onToggleSettings}
-                className="h-11 px-4 rounded-2xl font-bold"
+                className="h-9 px-3 rounded-xl font-semibold transition-colors"
               >
-                <Settings className="h-5 w-5 mr-2" />
+                <Settings className="h-4 w-4 mr-1.5" />
                 {t('common.settings', 'Настройки')}
               </Button>
 
-              <div className="h-8 w-px bg-border/40" />
+              <div className="h-6 w-px bg-border/40 mx-1" />
 
               {/* Gamification & Community Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="default" className="relative h-11 px-4 rounded-2xl font-bold">
-                    <MoreHorizontal className="h-5 w-5 mr-2" />
+                  <Button variant="ghost" size="sm" className="relative h-9 px-3 rounded-xl font-semibold">
+                    <MoreHorizontal className="h-4 w-4 mr-1.5" />
                     {t('common.more', 'Ещё')}
                     {achievementCount > 0 && (
-                      <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-xs font-bold flex items-center justify-center text-primary-foreground shadow-glass">
+                      <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[10px] font-bold flex items-center justify-center text-primary-foreground shadow-sm animate-pulse">
                         {achievementCount}
                       </span>
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2">
-                  <DropdownMenuLabel className="text-sm font-bold">{t('menu.gamification', 'Геймификация')}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={onOpenAchievements} className="rounded-xl py-3 font-medium">
-                    <Trophy className="h-5 w-5 mr-3" />
+                <DropdownMenuContent align="end" className="w-52 rounded-xl p-1.5">
+                  <DropdownMenuLabel className="text-xs font-bold text-muted-foreground px-2">{t('menu.gamification', 'Геймификация')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={onOpenAchievements} className="rounded-lg py-2.5 font-medium cursor-pointer">
+                    <Trophy className="h-4 w-4 mr-2.5" />
                     {t('achievements.title', 'Достижения')}
                     {achievementCount > 0 && (
-                      <span className="ml-auto bg-primary text-primary-foreground text-sm px-2 py-0.5 rounded-lg font-bold">
+                      <span className="ml-auto bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded-md font-bold">
                         {achievementCount}
                       </span>
                     )}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={onOpenTokens} className="rounded-xl py-3 font-medium">
-                    <Coins className="h-5 w-5 mr-3" />
+                  <DropdownMenuItem onClick={onOpenTokens} className="rounded-lg py-2.5 font-medium cursor-pointer">
+                    <Coins className="h-4 w-4 mr-2.5" />
                     {t('tokens.title', 'Токены')}
                   </DropdownMenuItem>
                   
-                  <DropdownMenuSeparator className="my-2" />
-                  <DropdownMenuLabel className="text-sm font-bold">{t('menu.community', 'Сообщество')}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={onOpenGallery} className="rounded-xl py-3 font-medium">
-                    <ImageIcon className="h-5 w-5 mr-3" />
+                  <DropdownMenuSeparator className="my-1.5" />
+                  <DropdownMenuLabel className="text-xs font-bold text-muted-foreground px-2">{t('menu.community', 'Сообщество')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={onOpenGallery} className="rounded-lg py-2.5 font-medium cursor-pointer">
+                    <ImageIcon className="h-4 w-4 mr-2.5" />
                     {t('gallery.title', 'Галерея')}
                   </DropdownMenuItem>
                   
-                  <DropdownMenuSeparator className="my-2" />
-                  <DropdownMenuItem onClick={() => navigate('/pricing')} className="rounded-xl py-3 font-medium">
-                    <Crown className="h-5 w-5 mr-3" />
+                  <DropdownMenuSeparator className="my-1.5" />
+                  <DropdownMenuItem onClick={() => navigate('/pricing')} className="rounded-lg py-2.5 font-medium cursor-pointer">
+                    <Crown className="h-4 w-4 mr-2.5" />
                     {t('pricing.title', 'Тарифы')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -173,33 +190,50 @@ export function DashboardHeader({
 
               <LanguageSwitcher />
 
-              <div className="h-8 w-px bg-border/40" />
+              <div className="h-6 w-px bg-border/40 mx-1" />
 
               {/* Main Actions */}
-              <Button variant="outline" size="default" onClick={onSave} disabled={saving} className="h-11 px-5 rounded-2xl font-bold">
-                <Save className="h-5 w-5 mr-2" />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onSave} 
+                disabled={saving} 
+                className="h-9 px-4 rounded-xl font-semibold"
+              >
+                <Save className="h-4 w-4 mr-1.5" />
                 {saving ? '...' : t('common.save', 'Сохранить')}
               </Button>
 
-              <Button variant="outline" size="default" onClick={onPreview} className="h-11 px-5 rounded-2xl font-bold">
-                <Eye className="h-5 w-5 mr-2" />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onPreview} 
+                className="h-9 px-4 rounded-xl font-semibold"
+              >
+                <Eye className="h-4 w-4 mr-1.5" />
                 {t('common.preview', 'Предпросмотр')}
               </Button>
 
-              <Button size="default" onClick={onShare} data-onboarding="share-button" className="h-11 px-5 rounded-2xl font-bold shadow-glass-lg">
-                <Upload className="h-5 w-5 mr-2" />
+              <Button 
+                size="sm" 
+                onClick={onShare} 
+                data-onboarding="share-button" 
+                className="h-9 px-4 rounded-xl font-semibold shadow-lg shadow-primary/25"
+              >
+                <Upload className="h-4 w-4 mr-1.5" />
                 {t('common.share', 'Поделиться')}
               </Button>
 
-              <div className="h-8 w-px bg-border/40" />
+              <div className="h-6 w-px bg-border/40 mx-1" />
 
               <Button
                 variant="ghost"
-                size="lg"
+                size="icon"
                 onClick={onSignOut}
-                className="hover:bg-destructive/10 hover:text-destructive h-11 w-11 rounded-2xl"
+                className="hover:bg-destructive/10 hover:text-destructive h-9 w-9 rounded-xl transition-colors"
+                aria-label="Sign out"
               >
-                <LogOut className="h-5 w-5" />
+                <LogOut className="h-4 w-4" />
               </Button>
             </div>
           </div>

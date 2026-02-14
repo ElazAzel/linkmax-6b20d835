@@ -25,13 +25,13 @@ interface TimeSlot {
 }
 
 const DAYS_OF_WEEK = [
-  { value: 0, label: 'Воскресенье' },
-  { value: 1, label: 'Понедельник' },
-  { value: 2, label: 'Вторник' },
-  { value: 3, label: 'Среда' },
-  { value: 4, label: 'Четверг' },
-  { value: 5, label: 'Пятница' },
-  { value: 6, label: 'Суббота' },
+  { value: 0, key: 'sunday' },
+  { value: 1, key: 'monday' },
+  { value: 2, key: 'tuesday' },
+  { value: 3, key: 'wednesday' },
+  { value: 4, key: 'thursday' },
+  { value: 5, key: 'friday' },
+  { value: 6, key: 'saturday' },
 ];
 
 export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorProps) {
@@ -195,7 +195,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                   }`}
                   onClick={() => handleToggleDay(day.value)}
                 >
-                  {day.label.substring(0, 2)}
+                  {t(`days.${day.key}`, day.key.substring(0, 2)).substring(0, 2)}
                 </Badge>
               );
             })}

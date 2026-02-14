@@ -33,11 +33,13 @@ import {
   Loader2,
   Users,
   UserPlus,
+  BarChart3,
 } from 'lucide-react';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import { ReferralPanel } from '@/components/referral/ReferralPanel';
 import { AutomationsPanel } from '@/components/crm/AutomationsPanel';
+import { LeadsPanel } from '@/components/crm/LeadsPanel';
 import { FriendsPanel } from '@/components/friends/FriendsPanel';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
@@ -139,6 +141,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
   const [localTelegramChatId, setLocalTelegramChatId] = useState(telegramChatId || '');
   const [telegramValidating, setTelegramValidating] = useState(false);
   const [telegramValidated, setTelegramValidated] = useState(false);
+  const [leadsPanelOpen, setLeadsPanelOpen] = useState(false);
 
   // Sync local state with prop changes
   useEffect(() => {
@@ -181,37 +184,38 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card/90 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl">
-        <SheetHeader className="p-6 pb-4 border-b border-border/20 sticky top-0 bg-card/80 backdrop-blur-xl z-10">
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent side="bottom" className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card/90 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl [&>button]:hidden">
+          <SheetHeader className="p-6 pb-4 border-b border-border/20 sticky top-0 bg-card/80 backdrop-blur-xl z-10">
           <div className="flex items-center justify-between">
-            <SheetTitle className="text-xl font-black">Settings</SheetTitle>
+            <SheetTitle className="text-xl font-black">{t('mobileToolbar.settings', 'Настройки')}</SheetTitle>
             <Button variant="ghost" size="lg" onClick={() => onOpenChange(false)} className="rounded-2xl hover:bg-card/60 h-12 w-12">
               <X className="h-6 w-6" />
             </Button>
           </div>
-          <SheetDescription className="sr-only">Page and account settings</SheetDescription>
+          <SheetDescription className="sr-only">{t('settings.pageAndAccount', 'Настройки страницы и аккаунта')}</SheetDescription>
         </SheetHeader>
         
         <div className="overflow-y-auto h-full pb-28">
           <Tabs defaultValue="link" className="w-full">
-            <TabsList className="w-full sticky top-0 bg-card/80 backdrop-blur-xl z-10 h-16 rounded-none border-b border-border/20 p-2 gap-1">
-              <TabsTrigger value="link" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+            <TabsList className="w-full sticky top-0 bg-card/80 backdrop-blur-xl z-10 h-14 rounded-none border-b border-border/20 px-3 justify-between">
+              <TabsTrigger value="link" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
                 <Link2 className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="profile" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+              <TabsTrigger value="profile" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
                 <User className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="chatbot" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+              <TabsTrigger value="chatbot" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
                 <MessageCircle className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="collabs" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+              <TabsTrigger value="collabs" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
                 <Users className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="friends" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+              <TabsTrigger value="friends" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
                 <UserPlus className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="premium" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+              <TabsTrigger value="premium" className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl h-10 w-10 p-0 flex items-center justify-center">
                 <Crown className="h-5 w-5" />
               </TabsTrigger>
             </TabsList>
@@ -223,11 +227,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center">
                     <Link2 className="h-5 w-5 text-primary" />
                   </div>
-                  Your Link
+                  {t('settings.yourLink', 'Ваша ссылка')}
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Username</Label>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('settings.username', 'Имя пользователя')}</Label>
                     <div className="flex gap-3 mt-3">
                       <Input
                         value={usernameInput}
@@ -243,7 +247,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                         disabled={usernameSaving || !usernameInput.trim()}
                         className="rounded-2xl shadow-glass h-14 px-6 font-bold"
                       >
-                        {usernameSaving ? '...' : 'Save'}
+                        {usernameSaving ? '...' : t('common.save', 'Сохранить')}
                       </Button>
                     </div>
                     {usernameInput && (
@@ -262,11 +266,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                     <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                       <Grid3X3 className="h-4 w-4 text-primary" />
                     </div>
-                    Grid Settings
+                    {t('settings.gridSettings', 'Настройки сетки')}
                   </h3>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm text-muted-foreground">Desktop Columns</Label>
+                      <Label className="text-sm text-muted-foreground">{t('settings.desktopColumns', 'Колонки на ПК')}</Label>
                       <Select
                         value={String(gridConfig?.columnsDesktop || 3)}
                         onValueChange={(val) => onGridConfigChange({ columnsDesktop: parseInt(val) })}
@@ -275,14 +279,14 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="2">2 columns</SelectItem>
-                          <SelectItem value="3">3 columns</SelectItem>
-                          <SelectItem value="4">4 columns</SelectItem>
+                          <SelectItem value="2">2 {t('settings.columns', 'колонки')}</SelectItem>
+                          <SelectItem value="3">3 {t('settings.columns', 'колонки')}</SelectItem>
+                          <SelectItem value="4">4 {t('settings.columns', 'колонки')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <Label className="text-sm text-muted-foreground">Mobile Columns</Label>
+                      <Label className="text-sm text-muted-foreground">{t('settings.mobileColumns', 'Колонки на мобильном')}</Label>
                       <Select
                         value={String(gridConfig?.columnsMobile || 2)}
                         onValueChange={(val) => onGridConfigChange({ columnsMobile: parseInt(val) })}
@@ -291,8 +295,8 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="1">1 column</SelectItem>
-                          <SelectItem value="2">2 columns</SelectItem>
+                          <SelectItem value="1">1 {t('settings.column', 'колонка')}</SelectItem>
+                          <SelectItem value="2">2 {t('settings.columns', 'колонки')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -309,11 +313,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                     <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                       <User className="h-4 w-4 text-primary" />
                     </div>
-                    Profile Info
+                    {t('settings.profileInfo', 'Информация профиля')}
                   </h3>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm text-muted-foreground">Name</Label>
+                      <Label className="text-sm text-muted-foreground">{t('settings.name', 'Имя')}</Label>
                       <Input
                         value={typeof profileBlock.name === 'string' ? profileBlock.name : profileBlock.name?.ru || ''}
                         onChange={(e) => onUpdateProfile({ name: e.target.value })}
@@ -321,7 +325,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                       />
                     </div>
                     <div>
-                      <Label className="text-sm text-muted-foreground">Bio</Label>
+                      <Label className="text-sm text-muted-foreground">{t('settings.bio', 'Описание')}</Label>
                       <Textarea
                         value={typeof profileBlock.bio === 'string' ? profileBlock.bio : profileBlock.bio?.ru || ''}
                         onChange={(e) => onUpdateProfile({ bio: e.target.value })}
@@ -386,19 +390,19 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
                     <MessageCircle className="h-4 w-4 text-primary" />
                   </div>
-                  AI Chatbot Context
+                  {t('settings.chatbotContext', 'Контекст AI чатбота')}
                 </h3>
                 <div className="space-y-3">
                   <Textarea
                     value={chatbotContext}
                     onChange={(e) => onChatbotContextChange(e.target.value)}
                     onBlur={onSave}
-                    placeholder="Add hidden context for the AI chatbot (pricing, services, availability...)"
+                    placeholder={t('settings.chatbotPlaceholder', 'Добавьте скрытый контекст для AI чатбота (цены, услуги, доступность...)')}
                     rows={6}
                     className="text-sm bg-card/60 backdrop-blur-xl border-border/30 rounded-xl"
                   />
                   <p className="text-xs text-muted-foreground">
-                    This helps the AI answer visitor questions accurately
+                    {t('settings.chatbotHelp', 'Помогает AI точно отвечать на вопросы посетителей')}
                   </p>
                 </div>
               </Card>
@@ -408,7 +412,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   <div className="h-8 w-8 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Sparkles className="h-4 w-4 text-primary" />
                   </div>
-                  AI Tools
+                  {t('settings.aiTools', 'AI инструменты')}
                 </h3>
                 <Button 
                   variant="outline" 
@@ -420,7 +424,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   }}
                 >
                   <Sparkles className="h-4 w-4 mr-2 text-primary" />
-                  SEO Generator
+                  {t('settings.seoGenerator', 'SEO генератор')}
                 </Button>
               </Card>
             </TabsContent>
@@ -438,9 +442,9 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                     <UserPlus className="h-6 w-6 text-blue-500" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">Друзья</h3>
+                    <h3 className="font-semibold text-lg">{t('settings.friends', 'Друзья')}</h3>
                     <p className="text-sm text-muted-foreground">
-                      Добавляйте друзей и получайте бонусы
+                      {t('settings.friendsDesc', 'Добавляйте друзей и получайте бонусы')}
                     </p>
                   </div>
                 </div>
@@ -453,7 +457,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   }}
                 >
                   <UserPlus className="h-4 w-4 mr-2" />
-                  Открыть панель друзей
+                  {t('settings.openFriendsPanel', 'Открыть панель друзей')}
                 </Button>
               </Card>
             </TabsContent>
@@ -468,11 +472,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">
-                        {isPremium ? 'Premium Active' : 'Free Plan'}
+                        {isPremium ? t('settings.premiumActive', 'Премиум активен') : t('settings.freePlan', 'Бесплатный план')}
                       </h3>
                       {!isPremium && (
                         <p className="text-sm text-muted-foreground">
-                          Upgrade to unlock all features
+                          {t('settings.upgradeToUnlock', 'Обновитесь для доступа ко всем функциям')}
                         </p>
                       )}
                     </div>
@@ -487,6 +491,30 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   >
                     <Crown className="h-4 w-4 mr-2" />
                     {isPremium ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
+                  </Button>
+                </Card>
+              )}
+              
+              {/* CRM - Premium only */}
+              {isPremium && (
+                <Card className="p-5 bg-gradient-to-br from-emerald-500/10 via-teal-500/10 to-transparent backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-glass">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-teal-500/20 flex items-center justify-center">
+                      <BarChart3 className="h-6 w-6 text-emerald-500" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">{t('crm.title', 'CRM')}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {t('crm.description', 'Manage your leads and analytics')}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+                    onClick={() => setLeadsPanelOpen(true)}
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    {t('crm.openPanel', 'Open CRM')}
                   </Button>
                 </Card>
               )}
@@ -603,5 +631,9 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
         </div>
       </SheetContent>
     </Sheet>
+    
+    {/* CRM Leads Panel */}
+    <LeadsPanel open={leadsPanelOpen} onOpenChange={setLeadsPanelOpen} />
+  </>
   );
 });

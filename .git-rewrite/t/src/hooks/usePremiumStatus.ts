@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
 import { checkPremiumStatus as checkPremiumStatusService } from '@/services/user';
 
-export type PremiumTier = 'free' | 'pro' | 'business';
+export type PremiumTier = 'free' | 'pro';
 
 export function usePremiumStatus() {
   const { user } = useAuth();

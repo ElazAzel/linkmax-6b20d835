@@ -10,7 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ChevronDown, Crown, Lock } from 'lucide-react';
 import { useState } from 'react';
 import { AVATAR_ICON_OPTIONS, VERIFICATION_COLOR_OPTIONS, VERIFICATION_POSITION_OPTIONS, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
-import * as LucideIcons from 'lucide-react';
+import { getLucideIcon } from '@/lib/icon-utils';
 import type { ProfileFrameStyle } from '@/types/page';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { Badge } from '@/components/ui/badge';
@@ -42,7 +42,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         label={t('fields.name', 'Name')}
         value={migrateToMultilingual(formData.name)}
         onChange={(value) => onChange({ ...formData, name: value })}
-        placeholder="Your Name"
+        placeholder={t('placeholders.yourName', 'Your Name')}
       />
       
       <MultilingualInput
@@ -50,7 +50,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         value={migrateToMultilingual(formData.bio)}
         onChange={(value) => onChange({ ...formData, bio: value })}
         type="textarea"
-        placeholder="Tell people about yourself..."
+        placeholder={t('placeholders.tellAboutYourself', 'Tell people about yourself...')}
         enableRichText={true}
       />
       
@@ -301,11 +301,11 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                   </SelectTrigger>
                   <SelectContent>
                     {VERIFICATION_ICON_OPTIONS.map((option) => {
-                      const IconComponent = (LucideIcons as any)[option.icon];
+                      const IconComponent = getLucideIcon(option.icon);
                       return (
                         <SelectItem key={option.value} value={option.value}>
                           <div className="flex items-center gap-2">
-                            {IconComponent && <IconComponent className="h-4 w-4" />}
+                            <IconComponent className="h-4 w-4" />
                             {option.label}
                           </div>
                         </SelectItem>
