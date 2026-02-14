@@ -129,7 +129,7 @@ export function generateKeyFacts(
   if (pricingBlock?.items?.length) {
     // Filter out undefined/null items
     const validItems = (pricingBlock.items || []).filter(
-      (item): item is NonNullable<typeof item> => item != null && typeof item === 'object'
+      (item: any): item is NonNullable<typeof item> => item != null && typeof item === 'object'
     );
 
     // Service count
@@ -142,7 +142,7 @@ export function generateKeyFacts(
     // Service names (top 3)
     const serviceNames = validItems
       .slice(0, 3)
-      .map(item => item.name ? getI18nText(item.name, language) : '')
+      .map((item: any) => item.name ? getI18nText(item.name, language) : '')
       .filter(Boolean)
       .join(', ');
 
@@ -157,8 +157,8 @@ export function generateKeyFacts(
 
     // Min price
     const prices = validItems
-      .map(item => item.price)
-      .filter((p): p is number => typeof p === 'number' && p > 0);
+      .map((item: any) => item.price)
+      .filter((p: any): p is number => typeof p === 'number' && p > 0);
 
     if (prices.length > 0) {
       const minPrice = Math.min(...prices);
@@ -197,9 +197,9 @@ export function generateKeyFacts(
   const socialsBlock = validBlocks.find(b => b.type === 'socials') as SocialsBlock | undefined;
   if (socialsBlock?.platforms?.length) {
     const platformNames = (socialsBlock.platforms || [])
-      .filter(p => p != null && typeof p === 'object')
+      .filter((p: any) => p != null && typeof p === 'object')
       .slice(0, 4)
-      .map(p => p.name || p.url?.split('/')[2]?.replace('www.', ''))
+      .map((p: any) => p.name || p.url?.split('/')[2]?.replace('www.', ''))
       .filter(Boolean)
       .join(', ');
 
