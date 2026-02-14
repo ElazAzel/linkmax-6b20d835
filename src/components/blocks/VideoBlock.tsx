@@ -31,7 +31,7 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   const { t, i18n } = useTranslation();
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const embedUrl = getVideoEmbedUrl(block.url, block.platform);
-  
+
   const aspectRatioClass = {
     '16:9': 'aspect-video',
     '4:3': 'aspect-[4/3]',
@@ -56,18 +56,17 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
   }
 
   return (
-    <Card 
-      variant="solid"
-      className="overflow-hidden bg-card border-border shadow-sm rounded-xl"
+    <Card
+      className="overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass rounded-2xl"
       onClick={() => onClick?.()}
     >
       {title && (
-        <CardHeader className="p-3 sm:p-4 pb-2">
-          <CardTitle className="text-base sm:text-lg truncate">{title}</CardTitle>
+        <CardHeader className="p-4 sm:p-5 pb-2">
+          <CardTitle className="text-base sm:text-lg font-semibold truncate text-gradient">{title}</CardTitle>
         </CardHeader>
       )}
       <CardContent className="p-0">
-        <div className={cn("relative w-full bg-black", aspectRatioClass)}>
+        <div className={cn("relative w-full bg-black/20", aspectRatioClass)}>
           <iframe
             src={embedUrl}
             className="absolute inset-0 w-full h-full"

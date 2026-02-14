@@ -567,14 +567,14 @@ Located in `src/components/landing-v5/`:
 - `FinalCTASection.tsx` - Final call to action
 - `FooterSection.tsx` - Footer with links
 
-**Motion system:**
-
-Located in `src/components/motion/`:
-- `Reveal.tsx` - Scroll-reveal animation wrapper
-- `useReducedMotion.ts` - Accessibility hook for reduced motion
-- Supports `fade-up`, `fade-left`, `fade-right`, `scale` directions
-- `Stagger` component for cascading animations
-- Respects `prefers-reduced-motion`
+**Liquid Glass Design System** - A premium visual overhaul featuring:
+  - **Glassmorphism**: Consistent use of `glass-card`, `backdrop-blur-xl`, and `border-white/10`.
+  - **Depth & Shadows**: Layered shadows using `shadow-glass`, `shadow-glass-lg`, and `shadow-primary/20`.
+  - **Premium Typography**: Extensive use of `text-gradient` for headers.
+  - **Interactive Micro-animations**: Hover scales (`scale-[1.02]`), active presses (`scale-[0.98]`), and background glow transitions.
+- **Motion system** (CSS + IntersectionObserver)
+  - Staggered reveals and intersection-based transitions.
+  - Performance-optimized CSS animations.
 
 **Dashboard v2 (current):**
 

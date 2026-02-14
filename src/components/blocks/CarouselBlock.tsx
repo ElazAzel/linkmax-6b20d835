@@ -48,10 +48,10 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
   }
 
   return (
-    <div className="w-full overflow-hidden rounded-xl bg-card border border-border shadow-sm">
+    <div className="w-full overflow-hidden rounded-2xl glass-card backdrop-blur-md border-white/10 shadow-glass">
       {title && (
-        <div className="p-4 pb-2">
-          <h3 className="font-semibold text-sm">{title}</h3>
+        <div className="p-4 sm:p-5 pb-0">
+          <h3 className="font-bold text-base sm:text-lg text-gradient truncate">{title}</h3>
         </div>
       )}
       <Carousel
@@ -68,13 +68,13 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
             return (
               <CarouselItem key={index} className="pl-0">
                 <div
-                  className="aspect-[4/3] overflow-hidden bg-muted cursor-pointer"
+                  className="aspect-[16/9] overflow-hidden bg-black/20 cursor-pointer"
                   onClick={() => handleImageClick(image.link)}
                 >
                   <img
                     src={image.url}
                     alt={alt}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
                 </div>
@@ -84,18 +84,18 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block, onCli
         </CarouselContent>
         {block.images.length > 1 && (
           <>
-            <CarouselPrevious className="left-2 h-8 w-8" />
-            <CarouselNext className="right-2 h-8 w-8" />
+            <CarouselPrevious className="left-4 h-10 w-10 glass-button shadow-glass border-white/10" />
+            <CarouselNext className="right-4 h-10 w-10 glass-button shadow-glass border-white/10" />
           </>
         )}
       </Carousel>
       {/* Dots indicator for mobile */}
       {block.images.length > 1 && (
-        <div className="flex justify-center gap-1.5 py-2">
+        <div className="flex justify-center gap-2 py-3">
           {block.images.map((_, idx) => (
-            <div 
-              key={idx} 
-              className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30"
+            <div
+              key={idx}
+              className="w-2 h-2 rounded-full bg-primary/20 transition-all duration-300"
             />
           ))}
         </div>

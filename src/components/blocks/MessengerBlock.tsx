@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, Send } from 'lucide-react';
+import { MessageCircle, Send, ExternalLink, Phone } from 'lucide-react';
 import type { MessengerBlock as MessengerBlockType } from '@/types/page';
 import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -50,7 +50,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
   const handleMessengerClick = async (platform: string, username: string, message?: string) => {
     // Track analytics click
     onClick?.();
-    
+
     if (pageOwnerId) {
       try {
         await supabase.functions.invoke('create-lead', {
@@ -66,7 +66,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
         console.error('Failed to create lead from messenger click:', error);
       }
     }
-    
+
     const url = getMessengerUrl(platform, username, message);
     // Delay to ensure tracking request is sent before navigation
     setTimeout(() => {
@@ -75,51 +75,66 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId,
   };
 
   const messengers = block.messengers || [];
-  
+
   // Compact horizontal layout for mobile
   const isSingleMessenger = messengers.length === 1;
-  
+
   if (messengers.length === 0) {
     return null;
   }
 
   return (
-    <div 
-      className="w-full rounded-xl bg-card border border-border shadow-sm p-3"
+    <div
+      className="w-full rounded-[2rem] glass-card border border-white/10 shadow-glass p-5 relative overflow-hidden group"
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
     >
-      {title && (
-        <div className="flex items-center gap-2 mb-3">
-          <MessageCircle className="h-4 w-4 text-primary" />
-          <h3 className="font-medium text-sm">{title}</h3>
+      {/* Background glow */}
+      <div className="absolute -top-24 -left-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-colors duration-500" />
+
+      <div className="relative z-10">
+        {title && (
+          <div className="flex items-center gap-3 mb-6 px-1">
+            <div className="p-2 rounded-xl bg-primary/10 text-primary shadow-sm shadow-primary/20">
+              <MessageCircle className="h-5 w-5" />
+            </div>
+            <h3 className="font-bold text-lg text-gradient leading-tight">{title}</h3>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3">
+          {messengers.map((messenger, index) => (
+            <button
+              key={index}
+              onClick={() => handleMessengerClick(messenger.platform, messenger.username, messenger.message)}
+              className={cn(
+                "flex items-center gap-4 p-4 rounded-2xl",
+                "glass-card backdrop-blur-md border-white/10 shadow-glass",
+                "transition-all duration-300 hover:scale-[1.02] hover:shadow-glass-lg active:scale-[0.98]",
+                "group/item overflow-hidden relative text-left w-full"
+              )}
+            >
+              <div className="flex-shrink-0 relative z-10">
+                {messenger.platform === 'whatsapp' && <MessageCircle className="h-6 w-6 text-[#25D366]" />}
+                {messenger.platform === 'telegram' && <Send className="h-6 w-6 text-[#0088cc]" />}
+                {messenger.platform === 'viber' && <Phone className="h-6 w-6 text-[#7360f2]" />}
+              </div>
+              <div className="flex-1 min-w-0 relative z-10">
+                <div className="font-bold text-sm tracking-wide uppercase text-foreground/90">
+                  {getPlatformName(messenger.platform)}
+                </div>
+                {messenger.username && (
+                  <div className="text-xs text-muted-foreground/60 truncate font-medium mt-0.5">
+                    {messenger.username}
+                  </div>
+                )}
+              </div>
+              <ExternalLink className="h-4 w-4 text-muted-foreground/30 group-hover/item:text-primary transition-colors duration-300 relative z-10" />
+            </button>
+          ))}
         </div>
-      )}
-      
-      <div className={cn(
-        "flex gap-2",
-        isSingleMessenger ? "flex-col" : "flex-wrap"
-      )}>
-        {messengers.map((messenger, index) => (
-          <button
-            key={index}
-            onClick={() => handleMessengerClick(messenger.platform, messenger.username, messenger.message)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2.5",
-              "rounded-full border border-border",
-              "hover:border-primary hover:shadow-sm",
-              "transition-all active:scale-[0.98]",
-              "bg-background/50",
-              isSingleMessenger ? "w-full justify-center" : "flex-1 min-w-[120px] justify-center"
-            )}
-          >
-            <span className="text-lg">{getMessengerIcon(messenger.platform)}</span>
-            <span className="font-medium text-sm">{getPlatformName(messenger.platform)}</span>
-            <Send className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
-          </button>
-        ))}
       </div>
     </div>
   );

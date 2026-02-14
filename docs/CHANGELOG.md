@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Unit test files for `ai-content-generator` and `create-lead` edge functions.
 - `PLATFORM_SNAPSHOT.md`, `RUNBOOKS`, `ADRs` (initial overhaul).
+- **Liquid Glass Design Overhaul**: Comprehensive platform-wide refactor to adopt a premium, modern aesthetic.
+    - Updated all 28 block types (interactive and static) with glassmorphism, backdrop blurs, and premium shadows.
+    - Redesigned `BookingBlock` with a modern calendar UI, floating confirmation cards, and improved time slot selection.
+    - Enhanced `CarouselBlock`, `VideoBlock`, and `SocialsBlock` with interactive states and glass-style containers.
+    - Standardized naming and subtitles with `text-gradient` and premium typography.
 - **Pixel Analytics Integration**: Added support for Facebook, TikTok, GA4, and Yandex Metrika in Page Settings.
 - **SEO Landing Page**: Dedicated `/seo-landing` page highly optimized for SEO/AEO/GEO, serving structured data to bots and redirecting humans.
 - **Cloudflare Worker**: Added for SEO bot detection and pre-rendering support.

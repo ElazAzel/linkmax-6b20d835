@@ -14,7 +14,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
   const { i18n } = useTranslation();
   const name = getI18nText(block.name, i18n.language as SupportedLanguage);
   const subtitle = getI18nText(block.subtitle, i18n.language as SupportedLanguage);
-  
+
   const sizeClasses = {
     small: 'h-16 w-16',
     medium: 'h-24 w-24',
@@ -46,15 +46,15 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
   const paddingMap = { none: '', sm: 'p-2', md: 'p-4', lg: 'p-6', xl: 'p-8' };
   const marginMap = { none: '', sm: 'my-2', md: 'my-4', lg: 'my-6', xl: 'my-8' };
 
-  const alignmentClass = block.alignment === 'left' ? 'items-start text-left' 
-    : block.alignment === 'right' ? 'items-end text-right' 
-    : 'items-center text-center';
+  const alignmentClass = block.alignment === 'left' ? 'items-start text-left'
+    : block.alignment === 'right' ? 'items-end text-right'
+      : 'items-center text-center';
 
   const frameStyle = block.frameStyle || (block.border ? 'gradient' : 'none');
   const hasFrame = frameStyle !== 'none';
 
   return (
-    <div 
+    <div
       className={cn(
         "flex flex-col gap-3",
         alignmentClass,
@@ -63,7 +63,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
       )}
     >
       {/* Outer wrapper for animation */}
-      <div 
+      <div
         className={cn(
           "relative",
           getAnimationClass(block.blockStyle)
@@ -71,7 +71,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
         style={getAnimationStyle(block.blockStyle)}
       >
         {/* Frame wrapper - shadow applies here */}
-        <div 
+        <div
           className={cn(
             "flex items-center justify-center",
             frameSizeClasses[block.size || 'medium'],
@@ -83,7 +83,7 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
           }}
         >
           {/* Avatar - NO animation, NO shadow */}
-          <Avatar 
+          <Avatar
             className={cn(
               sizeClasses[block.size || 'medium'],
               shapeClasses[block.shape || 'circle'],
@@ -97,11 +97,11 @@ export function AvatarBlock({ block }: AvatarBlockProps) {
           </Avatar>
         </div>
       </div>
-      
-      <div className="space-y-1">
-        <h3 className="text-lg font-semibold">{name}</h3>
+
+      <div className="space-y-1.5">
+        <h3 className="text-xl font-bold text-gradient leading-tight">{name}</h3>
         {subtitle && (
-          <p className="text-sm text-muted-foreground">{subtitle}</p>
+          <p className="text-sm font-medium text-muted-foreground/80">{subtitle}</p>
         )}
       </div>
 

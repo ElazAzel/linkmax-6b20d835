@@ -26,7 +26,7 @@ export function MapBlock({ block }: MapBlockProps) {
   if (!address) {
     return (
       <div className="w-full h-40 sm:h-48 flex items-center justify-center bg-muted rounded-xl">
-      <div className="text-center text-muted-foreground">
+        <div className="text-center text-muted-foreground">
           <MapPin className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 opacity-50" />
           <p className="text-xs sm:text-sm">{t('blocks.map.noAddress', 'Укажите адрес')}</p>
         </div>
@@ -35,7 +35,7 @@ export function MapBlock({ block }: MapBlockProps) {
   }
 
   return (
-    <div 
+    <div
       className={cn(
         "w-full",
         block.blockStyle?.padding && paddingMap[block.blockStyle.padding],
@@ -44,17 +44,27 @@ export function MapBlock({ block }: MapBlockProps) {
       )}
       style={getAnimationStyle(block.blockStyle)}
     >
-      <div className="w-full h-48 sm:h-64 rounded-xl overflow-hidden border border-border">
-        <iframe
-          src={embedUrl}
-          width="100%"
-          height="100%"
-          style={{ border: 0 }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          title="Map"
-        />
+      <div className="w-full space-y-3">
+        <div className="w-full h-56 rounded-2xl overflow-hidden shadow-glass border border-white/10 glass-card">
+          {embedUrl ? (
+            <iframe
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              scrolling="no"
+              marginHeight={0}
+              marginWidth={0}
+              src={embedUrl}
+              className="filter contrast-[1.1] grayscale-[0.2] brightness-[0.9] invert-[0.05]"
+              title="Map"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-white/5 backdrop-blur-sm text-sm text-muted-foreground font-medium italic">
+              {t('blocks.map.noAddress', 'Укажите адрес')}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

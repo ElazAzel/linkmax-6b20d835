@@ -21,15 +21,15 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
   const getImageClass = () => {
     switch (block.style) {
       case 'polaroid':
-        return 'p-3 sm:p-4 bg-card border border-border shadow-md rotate-[-2deg] hover:rotate-0 transition-transform duration-300';
+        return 'p-3 sm:p-4 bg-white/5 backdrop-blur-md border border-white/10 shadow-glass rotate-[-2deg] hover:rotate-0 transition-all duration-500 rounded-sm hover:shadow-glass-lg';
       case 'vignette':
-        return 'relative rounded-xl sm:rounded-2xl shadow-sm after:absolute after:inset-0 after:shadow-[inset_0_0_100px_rgba(0,0,0,0.3)] after:pointer-events-none after:rounded-xl sm:after:rounded-2xl';
+        return 'relative rounded-2xl shadow-glass after:absolute after:inset-0 after:shadow-[inset_0_0_100px_rgba(0,0,0,0.4)] after:pointer-events-none after:rounded-2xl';
       case 'circle':
-        return 'rounded-full aspect-square object-cover shadow-sm';
+        return 'rounded-full aspect-square object-cover shadow-glass-lg border-2 border-white/10';
       case 'banner':
-        return 'w-full rounded-xl sm:rounded-2xl glass shadow-glass-lg';
+        return 'w-full rounded-2xl glass-card backdrop-blur-md border-white/10 shadow-glass-xl';
       default:
-        return 'rounded-xl sm:rounded-2xl shadow-glass transition-all duration-300 hover:shadow-glass-lg';
+        return 'rounded-2xl shadow-glass border border-white/5 transition-all duration-300 hover:shadow-glass-lg glass-card backdrop-blur-[2px]';
     }
   };
 

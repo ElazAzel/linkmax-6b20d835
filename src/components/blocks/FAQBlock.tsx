@@ -24,7 +24,7 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
   }
 
   return (
-    <div 
+    <div
       className="w-full space-y-2"
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
@@ -32,27 +32,29 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
       }}
     >
       {title && (
-        <div className="flex items-center gap-2 px-1 mb-3">
-          <HelpCircle className="h-4 w-4 text-primary" />
-          <h3 className="font-semibold text-sm">{title}</h3>
+        <div className="flex items-center gap-3 px-2 mb-4">
+          <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+            <HelpCircle className="h-4 w-4" />
+          </div>
+          <h3 className="font-bold text-sm text-gradient">{title}</h3>
         </div>
       )}
-      
-      <Accordion type="single" collapsible className="w-full space-y-1.5">
+
+      <Accordion type="single" collapsible className="w-full space-y-3">
         {block.items.map((item) => {
           const question = getI18nText(item.question, currentLang);
           const answer = getI18nText(item.answer, currentLang);
-          
+
           return (
-            <AccordionItem 
-              key={item.id} 
+            <AccordionItem
+              key={item.id}
               value={item.id}
-              className="bg-card border border-border rounded-xl px-4 shadow-sm data-[state=open]:bg-muted/30"
+              className="glass-card backdrop-blur-md border-white/10 rounded-2xl px-5 shadow-glass data-[state=open]:shadow-primary/10 data-[state=open]:border-primary/20 transition-all duration-300"
             >
-              <AccordionTrigger className="text-left text-sm font-medium hover:no-underline py-3 gap-2">
+              <AccordionTrigger className="text-left text-sm font-bold hover:no-underline py-4 gap-3 text-foreground/90 data-[state=open]:text-primary">
                 {question}
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground pb-3 leading-relaxed">
+              <AccordionContent className="text-sm text-muted-foreground/80 pb-4 leading-relaxed font-medium">
                 {answer}
               </AccordionContent>
             </AccordionItem>

@@ -1,12 +1,13 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
+import {
   Instagram, Send, Youtube, Music, Twitter, Github, Linkedin, Facebook, Globe,
-  MessageCircle, Phone, Mail, Twitch, Dribbble, Figma, Slack, 
+  MessageCircle, Phone, Mail, Twitch, Dribbble, Figma, Slack,
   Chrome, Rss, Link2, AtSign, MapPin, Calendar, Podcast
 } from 'lucide-react';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
+import { cn } from '@/lib/utils';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
@@ -37,7 +38,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   wechat: MessageCircle,
   line: MessageCircle,
   kakao: MessageCircle,
-  
+
   // Professional & Creative
   twitch: Twitch,
   dribbble: Dribbble,
@@ -47,7 +48,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   devto: Globe,
   stackoverflow: Globe,
   producthunt: Globe,
-  
+
   // Communication
   email: Mail,
   mail: Mail,
@@ -55,7 +56,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   slack: Slack,
   skype: Phone,
   zoom: Calendar,
-  
+
   // Content
   spotify: Music,
   soundcloud: Music,
@@ -63,7 +64,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   deezer: Music,
   podcast: Podcast,
   rss: Rss,
-  
+
   // Other
   website: Globe,
   globe: Globe,
@@ -90,13 +91,13 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
     }, 10);
   };
 
-  const justifyClass = block.alignment === 'left' ? 'justify-start' 
-    : block.alignment === 'right' ? 'justify-end' 
-    : 'justify-center';
+  const justifyClass = block.alignment === 'left' ? 'justify-start'
+    : block.alignment === 'right' ? 'justify-end'
+      : 'justify-center';
 
   // Safely filter and process platforms
   const validPlatforms = (block.platforms || []).filter(
-    (platform): platform is NonNullable<typeof platform> => 
+    (platform): platform is NonNullable<typeof platform> =>
       platform != null && typeof platform === 'object'
   );
 
@@ -118,17 +119,21 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
           const iconKey = typeof iconName === 'string' ? iconName.toLowerCase() : 'globe';
           const Icon = iconMap[iconKey] || Globe;
           const url = platform.url || '';
-          
+
           if (!url) return null;
-          
+
           return (
             <button
               key={index}
               onClick={() => handleClick(url)}
-              className="group relative w-11 h-11 rounded-xl bg-card border border-border shadow-sm hover:border-primary/50 transition-all duration-200 active:scale-95 hover:shadow-md flex items-center justify-center"
+              className={cn(
+                "group relative w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300",
+                "glass-card backdrop-blur-md border-white/10 shadow-glass",
+                "hover:shadow-glass-lg hover:border-white/20 active:scale-90"
+              )}
               aria-label={platform.name || iconKey}
             >
-              <Icon className="w-5 h-5 text-foreground group-hover:text-primary transition-colors duration-200" />
+              <Icon className="w-5 h-5 text-foreground/80 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
             </button>
           );
         })}
