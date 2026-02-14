@@ -34,6 +34,16 @@ vi.mock('@/platform/supabase/client', () => ({
     },
 }));
 
+// Mock lovable
+const mockLovableSignInWithOAuth = vi.fn();
+vi.mock('@/integrations/lovable/index', () => ({
+    lovable: {
+        auth: {
+            signInWithOAuth: (...args: unknown[]) => mockLovableSignInWithOAuth(...args),
+        },
+    },
+}));
+
 // Mock logger
 vi.mock('@/lib/logger', () => ({
     logger: {
@@ -180,8 +190,8 @@ describe('useAuth', () => {
     });
 
     describe('signInWithGoogle', () => {
-        it('calls supabase signInWithOAuth with google provider', async () => {
-            mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
+        it('calls lovable signInWithOAuth with google provider', async () => {
+            mockLovableSignInWithOAuth.mockResolvedValueOnce({ error: null });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -191,21 +201,18 @@ describe('useAuth', () => {
 
             await act(async () => {
                 const { error } = await result.current.signInWithGoogle();
-                expect(error).toBeNull(); // map to { error } structure from hook return
+                expect(error).toBeNull();
             });
 
-            expect(mockSignInWithOAuth).toHaveBeenCalledWith({
-                provider: 'google',
-                options: {
-                    redirectTo: expect.stringContaining(window.location.origin),
-                },
+            expect(mockLovableSignInWithOAuth).toHaveBeenCalledWith('google', {
+                redirect_uri: window.location.origin,
             });
         });
     });
 
     describe('signInWithApple', () => {
-        it('calls supabase signInWithOAuth with apple provider', async () => {
-            mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
+        it('calls lovable signInWithOAuth with apple provider', async () => {
+            mockLovableSignInWithOAuth.mockResolvedValueOnce({ error: null });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -218,11 +225,8 @@ describe('useAuth', () => {
                 expect(error).toBeNull();
             });
 
-            expect(mockSignInWithOAuth).toHaveBeenCalledWith({
-                provider: 'apple',
-                options: {
-                    redirectTo: expect.stringContaining(window.location.origin),
-                },
+            expect(mockLovableSignInWithOAuth).toHaveBeenCalledWith('apple', {
+                redirect_uri: window.location.origin,
             });
         });
     });

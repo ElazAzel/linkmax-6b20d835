@@ -15,7 +15,8 @@ account_id = "9058b638459bffbf366813802933852b"
 # ]
 
 # Environment variables (use wrangler secret for token in production)
-# [vars]
+[vars]
+SUPABASE_PROJECT = "pphdcfxucfndmwulpfwv"
 # PRERENDER_TOKEN = "your-token-here"
 
 # To set secret: wrangler secret put PRERENDER_TOKEN

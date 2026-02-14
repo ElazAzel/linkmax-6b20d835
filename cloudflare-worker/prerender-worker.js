@@ -12,11 +12,9 @@
  */
 
 // Supabase Edge Function URL (combined sitemap + SSR)
-const SUPABASE_PROJECT = 'pphdcfxucfndmwulpfwv';
-const FUNCTION_URL = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
-// Both SSR and Sitemap use the same function now (path-based SSR route)
-const SSR_FUNCTION_URL = FUNCTION_URL;
-const SITEMAP_FUNCTION_URL = FUNCTION_URL;
+// Constants derived from env in handleRequest
+// const SUPABASE_PROJECT = env.SUPABASE_PROJECT;
+// const FUNCTION_URL = `https://${env.SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
 
 // WHITELIST: Marketing/static pages - NOT treated as slugs
 // These pages have their own SPA routes
@@ -59,7 +57,7 @@ const BOT_PATTERNS = [
   'exabot',
   'facebot',
   'ia_archiver',
-  
+
   // AI/LLM Crawlers (Critical for AEO)
   'gptbot',
   'chatgpt-user',
@@ -78,7 +76,7 @@ const BOT_PATTERNS = [
   'omgili',
   'ccbot',
   'youbot',
-  
+
   // Social Media & Preview Bots
   'applebot',
   'twitterbot',
@@ -89,7 +87,7 @@ const BOT_PATTERNS = [
   'discordbot',
   'pinterestbot',
   'redditbot',
-  
+
   // SEO & Monitoring Tools
   'ahrefs',
   'semrush',
@@ -171,17 +169,26 @@ function isSlug(segments, firstSegment) {
 /**
  * Main request handler
  */
-async function handleRequest(request) {
+async function handleRequest(request, env) {
+  const SUPABASE_PROJECT = env.SUPABASE_PROJECT;
+  if (!SUPABASE_PROJECT) {
+    console.error('[Worker] Missing SUPABASE_PROJECT env var');
+    return fetch(request);
+  }
+
+  const FUNCTION_URL = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
+  const SSR_FUNCTION_URL = FUNCTION_URL;
+  const SITEMAP_FUNCTION_URL = FUNCTION_URL;
   const url = new URL(request.url);
   const pathname = url.pathname;
   const userAgent = request.headers.get('User-Agent') || '';
   const queryString = url.search || '';
-  
+
   // 1. Skip static files - always origin
   if (isStaticFile(pathname)) {
     return fetch(request);
   }
-  
+
   // 2. Handle /sitemap.xml specially - proxy to generate-sitemap
   if (pathname === '/sitemap.xml') {
     try {
@@ -192,13 +199,13 @@ async function handleRequest(request) {
           'User-Agent': userAgent,
         },
       });
-      
+
       if (sitemapResponse.ok) {
         const headers = new Headers(sitemapResponse.headers);
         headers.set('Content-Type', 'application/xml; charset=utf-8');
         headers.set('Cache-Control', 'public, max-age=21600, stale-while-revalidate=86400');
         headers.delete('set-cookie'); // Remove Supabase cookies
-        
+
         return new Response(sitemapResponse.body, {
           status: 200,
           headers,
@@ -210,12 +217,12 @@ async function handleRequest(request) {
     // Fallback to origin static sitemap
     return fetch(request);
   }
-  
+
   // 3. Handle /robots.txt - origin
   if (pathname === '/robots.txt') {
     return fetch(request);
   }
-  
+
   // 4. Bot-friendly SSR for landing + gallery
   if (isBot(userAgent) && (pathname === '/' || pathname === '/gallery')) {
     const target = pathname === '/' ? 'landing' : 'gallery';
@@ -246,7 +253,7 @@ async function handleRequest(request) {
 
   // 5. Parse path
   const { segments, first } = parsePathname(pathname);
-  
+
   // 6. Blacklisted paths - always origin (never SSR)
   if (isBlacklisted(first)) {
     const response = await fetch(request);
@@ -261,37 +268,37 @@ async function handleRequest(request) {
     }
     return response;
   }
-  
+
   // 7. Whitelisted marketing pages - always origin
   if (isWhitelisted(first)) {
     return fetch(request);
   }
-  
+
   // 8. Multi-segment paths (e.g., /experts/beauty) - origin
   if (segments.length > 1) {
     return fetch(request);
   }
-  
+
   // 9. Check if this is a slug
   if (!isSlug(segments, first)) {
     return fetch(request);
   }
-  
+
   // 10. It's a slug! Check if bot
   const isBotRequest = isBot(userAgent);
-  
+
   // For humans, serve SPA
   if (!isBotRequest) {
     return fetch(request);
   }
-  
+
   // 11. Bot + Slug = SSR
   const slug = first;
-  
+
   console.log(`[Worker] SSR for bot: slug=${slug}, ua=${userAgent.substring(0, 50)}`);
-  
+
   const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${encodeURIComponent(slug)}${queryString}`;
-  
+
   try {
     const ssrResponse = await fetch(ssrUrl, {
       method: 'GET',
@@ -301,13 +308,13 @@ async function handleRequest(request) {
         'Accept-Language': request.headers.get('Accept-Language') || '',
       },
     });
-    
+
     // Return SSR response with proper status (including 404)
     const responseHeaders = new Headers(ssrResponse.headers);
     responseHeaders.set('X-SSR-Rendered', 'true');
     responseHeaders.set('X-SSR-Slug', slug);
     responseHeaders.delete('set-cookie'); // Remove Supabase cookies
-    
+
     return new Response(ssrResponse.body, {
       status: ssrResponse.status,
       statusText: ssrResponse.statusText,
@@ -322,12 +329,12 @@ async function handleRequest(request) {
 
 // Legacy event listener
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
+  event.respondWith(handleRequest(event.request, globalThis));
 });
 
 // ES modules export
 export default {
   async fetch(request, env, ctx) {
-    return handleRequest(request);
+    return handleRequest(request, env);
   }
 };
