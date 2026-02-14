@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.next/
 
 # Environment variables - NEVER commit these!
 .env
