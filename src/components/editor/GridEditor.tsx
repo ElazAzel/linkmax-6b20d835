@@ -127,7 +127,14 @@ function SortableGridBlockItem({
       {/* Block content */}
       <div
         className="w-full h-full cursor-pointer"
-        onClick={() => onEdit(block)}
+        onClickCapture={(e) => {
+          // Capture the click event before it reaches the block content
+          // This prevents links from opening and buttons from firing their actions
+          // when we just want to select/edit the block
+          e.stopPropagation();
+          e.preventDefault();
+          onEdit(block);
+        }}
       >
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
       </div>
