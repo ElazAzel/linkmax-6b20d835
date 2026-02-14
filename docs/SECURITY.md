@@ -49,6 +49,8 @@ This document outlines the security measures implemented in the lnkmx platform a
 | `verification_requests` | ✅ | User can only view/create own |
 | `template_purchases` | ✅ | Buyer/seller access |
 | `teams` | ✅ | Owner/member access |
+| `languages` | ✅ | Admin management, public read active |
+| `language_upload_history` | ✅ | Admin only |
 
 ### RLS Policy Examples
 
