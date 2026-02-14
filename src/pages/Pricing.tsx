@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 type BillingPeriod = 3 | 6 | 12;
 
 export default function Pricing() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     t,
     i18n
@@ -186,7 +186,7 @@ export default function Pricing() {
           <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl shadow-glass-lg">
             <div className="container mx-auto px-4 h-14 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')}>
+                <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')}>
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div className="flex items-center gap-2">

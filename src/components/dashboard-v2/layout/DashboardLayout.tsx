@@ -2,8 +2,7 @@
  * DashboardLayout - Main layout wrapper for dashboard v2
  * Handles responsive layout: sidebar (desktop) + bottom nav (mobile)
  */
-import { memo, useState, useCallback, ReactNode, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { memo, useState, ReactNode } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DashboardSidebar } from './DashboardSidebar';
 import { DashboardBottomNav } from './DashboardBottomNav';

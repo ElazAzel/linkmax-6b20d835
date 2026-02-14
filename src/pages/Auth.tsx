@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,8 +38,8 @@ type AuthMode = 'signin' | 'signup' | 'reset' | 'reset-telegram' | 'update-passw
 type TelegramResetStep = 'request' | 'verify';
 
 export default function Auth() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { t, i18n } = useTranslation();
   const canonical = 'https://lnkmx.my/auth';
   const seoTitle = t('auth.seo.title', 'Sign in to lnkmx');
@@ -101,9 +101,9 @@ export default function Auth() {
           }
         });
       }
-      navigate(safeReturnTo || '/dashboard');
+      router.push(safeReturnTo || '/dashboard');
     }
-  }, [user, navigate, refCode, authMode, safeReturnTo]);
+  }, [user, router.push, refCode, authMode, safeReturnTo]);
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -422,7 +422,7 @@ export default function Auth() {
                     </p>
                     <Button
                       className="w-full h-12 rounded-xl"
-                      onClick={() => navigate('/dashboard')}
+                      onClick={() => router.push('/dashboard')}
                     >
                       {t('auth.goToDashboard', 'Go to Dashboard')}
                     </Button>
@@ -757,7 +757,7 @@ export default function Auth() {
 
           {/* Back to home */}
           <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
+            <Button variant="ghost" onClick={() => router.push('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
               {t('auth.backToHome')}
             </Button>
           </div>

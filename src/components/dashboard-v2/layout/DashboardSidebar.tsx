@@ -4,7 +4,7 @@
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   Home,
   PenTool,
@@ -95,7 +95,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   onCollapsedChange,
 }: DashboardSidebarProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleItemClick = (itemId: string) => {
     if (itemId === 'templates' || itemId === 'marketplace' || itemId === 'tokens' || itemId === 'achievements') {
@@ -199,7 +199,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         {!isPremium && !collapsed && (
           <Button
             className="w-full mb-3 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-lg shadow-amber-500/25"
-            onClick={() => navigate('/pricing')}
+            onClick={() => router.push('/pricing')}
           >
             <Crown className="h-4 w-4 mr-2" />
             {t('dashboard.sidebar.upgrade', 'Upgrade')}

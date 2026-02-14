@@ -4,7 +4,6 @@
  */
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, PenTool, Inbox, Calendar, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
@@ -68,7 +67,6 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
   activityBadge,
 }: DashboardBottomNavProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const haptic = useHapticFeedback();
 
   const handleTabClick = useCallback((tab: NavTab) => {

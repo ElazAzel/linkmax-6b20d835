@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
@@ -27,7 +27,7 @@ interface UseDashboardOptions {
 
 export function useDashboard(options?: UseDashboardOptions) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const sounds = useSoundEffects();
   const haptics = useHapticFeedback();
@@ -127,8 +127,8 @@ export function useDashboard(options?: UseDashboardOptions) {
   const handleSignOut = useCallback(async () => {
     const { supabase } = await import('@/platform/supabase/client');
     await supabase.auth.signOut();
-    navigate('/');
-  }, [navigate]);
+    router.push('/');
+  }, [router]);
 
   // Current tier string
   const currentTier = isPremium ? (tier || 'pro') : 'free';
