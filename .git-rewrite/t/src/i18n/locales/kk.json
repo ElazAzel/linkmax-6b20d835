@@ -1,0 +1,379 @@
+{
+  "niche": {
+    "barber": "Шаштараз",
+    "photographer": "Фотограф",
+    "psychologist": "Психолог",
+    "fitness": "Фитнес-жаттықтырушы",
+    "musician": "Музыкант",
+    "designer": "Дизайнер",
+    "teacher": "Мұғалім",
+    "shop": "Дүкен",
+    "marketer": "Маркетолог",
+    "beauty": "Сұлулық шебері",
+    "chef": "Аспаз"
+  },
+  "onboarding": {
+    "nicheTitle": "Өз саланызды таңдаңыз",
+    "nicheDescription": "AI сіздің жеке бетіңізді 2 минутта жасайды",
+    "detailsTitle": "Өзіңіз туралы айтыңыз",
+    "detailsDescription": "Бұл ақпарат AI-ға тамаша бет жасауға көмектеседі",
+    "yourName": "Атыңыз немесе бренд",
+    "namePlaceholder": "Мысалы: Алексей немесе Beauty Studio",
+    "additionalDetails": "Қосымша ақпарат",
+    "detailsPlaceholder": "Қала, мамандық, тәжірибе...",
+    "detailsHint": "Міндетті емес, бірақ бетті дәлірек жасауға көмектеседі",
+    "skip": "Өткізіп жіберу",
+    "generatePage": "Бетті жасау",
+    "enterName": "Атыңызды енгізіңіз",
+    "pageGenerated": "Бет сәтті жасалды!",
+    "generationFailed": "Бетті жасау сәтсіз аяқталды",
+    "generatingTitle": "AI бетіңізді жасап жатыр",
+    "generatingDescription": "Құрылым, мазмұн және дизайн жасалуда...",
+    "pleaseWait": "Бұл шамамен 30 секунд алады"
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Кіру",
+      "getStarted": "Бастау"
+    },
+    "hero": {
+      "badge": "AI арқылы сілтемелерді басқару",
+      "title1": "Бір сілтеме,",
+      "title2": "Шексіз мүмкіндіктер",
+      "subtitle": "Барлық контентіңізді, әлеуметтік желілер мен өнімдеріңізді бір әдемі жерде біріктіретін керемет визитка бетін жасаңыз.",
+      "ctaMain": "Тегін бастау",
+      "ctaDemo": "Демоны көру",
+      "trial": "Несие картасы қажет емес • 7 күндік премиум сынақ • Кез келген уақытта тоқтату"
+    },
+    "features": {
+      "title": "Сізге қажет барлық нәрсе",
+      "subtitle": "Қазіргі жасаушылар үшін қуатты функциялар",
+      "aiGeneration": {
+        "title": "AI контент генерациясы",
+        "description": "Сілтемелер мен өнімдеріңізге AI көмегімен тартымды тақырыптар мен сату мәтіндерін жасаңыз"
+      },
+      "magicLinks": {
+        "title": "Магиялық сілтемелер",
+        "description": "Бүкіл бетіңіз бір бөлісуге арналған URL-ге сығылған"
+      },
+      "fast": {
+        "title": "Найзағайдай жылдам",
+        "description": "Жедел жүктеу уақытымен оңтайландырылған өнімділік"
+      },
+      "mobile": {
+        "title": "Мобильді бірінші",
+        "description": "Кез келген құрылғыда әдемі, смартфондар үшін оңтайландырылған"
+      },
+      "sharing": {
+        "title": "Оңай бөлісу",
+        "description": "QR кодтары, тікелей сілтемелер және әлеуметтік желілерде бөлісу кіріктірілген"
+      },
+      "privacy": {
+        "title": "Құпиялылық бірінші",
+        "description": "Деректеріңіз кәсіпорын деңгейіндегі қорғаумен қауіпсіз"
+      }
+    },
+    "stats": {
+      "minutes": "Минут",
+      "minutesSuffix": " мин",
+      "blocks": "Блок түрлері",
+      "possibilities": "Мүмкіндіктер"
+    },
+    "benefits": {
+      "ai": "AI контент генерациясы",
+      "design": "Премиум дизайн",
+      "analytics": "Аналитика панелі",
+      "crm": "Мини-CRM"
+    },
+    "howItWorks": {
+      "title": "Бұл қалай жұмыс істейді",
+      "subtitle": "3 қарапайым қадаммен бетіңізді жасаңыз",
+      "step1": {
+        "title": "Саланы таңдаңыз",
+        "desc": "Мамандығыңызды таңдаңыз, AI тамаша бет жасайды"
+      },
+      "step2": {
+        "title": "Баптаңыз",
+        "desc": "Блоктар қосып, мазмұн мен дизайнды өңдеңіз"
+      },
+      "step3": {
+        "title": "Жариялаңыз",
+        "desc": "Бірегей сілтемеңізді алып, барлық жерде бөлісіңіз"
+      }
+    },
+    "cta": {
+      "badge": "Тегін бастау",
+      "title": "Өз сілтемеңізді жасауға дайынсыз ба?",
+      "subtitle": "LinkMAX-қа сенетін мыңдаған жасаушылар мен кәсіпкерлерге қосылыңыз",
+      "button": "Қазір жасауды бастау"
+    },
+    "footer": {
+      "copyright": "© 2025 LinkMAX. Барлық құқықтар қорғалған."
+    },
+    "pricing": {
+      "badge": "Қарапайым тарифтер",
+      "title": "Тарифті таңдаңыз",
+      "subtitle": "Тегін бастаңыз, қажет болғанда жаңартыңыз",
+      "month": "ай",
+      "popular": "Танымал",
+      "free": {
+        "title": "Тегін",
+        "description": "Бастау үшін тамаша",
+        "cta": "Тегін бастау"
+      },
+      "premium": {
+        "title": "Премиум",
+        "description": "Мамандар мен бизнес үшін",
+        "cta": "Premium-ға көшу"
+      },
+      "features": {
+        "blocks5": "5 блокқа дейін",
+        "basicBlocks": "Негізгі блок түрлері",
+        "ai3": "Күніне 3 AI сұрау",
+        "themes": "Барлық тақырыптар",
+        "unlimitedBlocks": "Шексіз блоктар",
+        "allBlocks": "Барлық блок түрлері",
+        "premiumBlocks": "Премиум блоктар",
+        "analytics": "Аналитика панелі",
+        "crm": "Мини-CRM",
+        "noWatermark": "Су белгісіз",
+        "unlimitedAI": "Шексіз AI",
+        "priority": "Басымдықты қолдау"
+      }
+    }
+  },
+  "auth": {
+    "title": "LinkMAX",
+    "subtitle": "Визитка бетін жасаңыз",
+    "getStarted": "Бастау",
+    "signInToAccount": "Аккаунтқа кіріңіз немесе жаңасын жасаңыз",
+    "signIn": "Кіру",
+    "signUp": "Тіркелу",
+    "email": "Email",
+    "password": "Құпия сөз",
+    "passwordHint": "Кемінде 8 таңба, бас әріппен, кіші әріппен және санмен",
+    "signingIn": "Кіру...",
+    "creatingAccount": "Аккаунт жасау...",
+    "backToHome": "← Басты бетке оралу",
+    "createAccount": "Аккаунт жасау",
+    "welcomeBack": "Қош келдіңіз!"
+  },
+  "editor": {
+    "title": "Бет редакторы",
+    "settings": "Баптаулар",
+    "preview": "Алдын ала қарау",
+    "publish": "Жариялау",
+    "addBlock": "Блок қосу",
+    "save": "Сақтау",
+    "cancel": "Болдырмау",
+    "delete": "Жою",
+    "edit": "Өңдеу",
+    "duplicate": "Көшіру",
+    "moveUp": "Жоғары",
+    "moveDown": "Төмен",
+    "language": "Тіл",
+    "editProfile": "Профильді өңдеу",
+    "close": "Жабу",
+    "autoSave": "Өзгерістер автоматты түрде сақталады"
+  },
+  "blocks": {
+    "profile": "Профиль",
+    "link": "Сілтеме",
+    "text": "Мәтін",
+    "image": "Сурет",
+    "video": "Бейне",
+    "product": "Тауар",
+    "button": "Батырма",
+    "carousel": "Карусель",
+    "socials": "Әлеуметтік желілер",
+    "form": "Форма",
+    "map": "Карта",
+    "avatar": "Аватар",
+    "separator": "Бөлгіш",
+    "customCode": "Код",
+    "messenger": "Мессенджер",
+    "download": "Жүктеу",
+    "newsletter": "Тарату",
+    "testimonial": "Пікір",
+    "scratch": "Скретч-карта",
+    "search": "Іздеу"
+  },
+  "blockEditor": {
+    "profile": "Профильді өңдеу",
+    "text": "Мәтінді өңдеу",
+    "link": "Сілтемені өңдеу",
+    "button": "Батырманы өңдеу",
+    "image": "Суретті өңдеу",
+    "video": "Бейнені өңдеу",
+    "carousel": "Каруселді өңдеу",
+    "product": "Тауарды өңдеу",
+    "search": "Іздеуді өңдеу",
+    "socials": "Әлеуметтік желілерді өңдеу",
+    "customCode": "Кодты өңдеу",
+    "messenger": "Мессенджерді өңдеу",
+    "form": "Форманы өңдеу",
+    "download": "Жүктеуді өңдеу",
+    "newsletter": "Таратуды өңдеу",
+    "testimonial": "Пікірді өңдеу",
+    "scratch": "Скретч-картаны өңдеу",
+    "map": "Картаны өңдеу",
+    "avatar": "Аватарды өңдеу",
+    "separator": "Бөлгішті өңдеу",
+    "description": "Барлық блок параметрлерін баптаңыз. Өзгерістер автоматты түрде сақталады.",
+    "notAvailable": "Бұл блок түрі үшін редактор қолжетімді емес."
+  },
+  "fields": {
+    "title": "Тақырып",
+    "content": "Мазмұн",
+    "url": "Сілтеме",
+    "description": "Сипаттама",
+    "alignment": "Туралау",
+    "style": "Стиль",
+    "animation": "Анимация",
+    "left": "Сол жақта",
+    "center": "Ортада",
+    "right": "Оң жақта",
+    "imageUrl": "Сурет URL",
+    "alt": "Альтернативті мәтін",
+    "caption": "Жазу",
+    "price": "Баға",
+    "currency": "Валюта",
+    "name": "Аты",
+    "email": "Email",
+    "message": "Хабарлама",
+    "address": "Мекенжай",
+    "avatarUrl": "Аватар URL",
+    "bio": "Өмірбаян",
+    "coverImage": "Мұқаба суреті",
+    "coverGradient": "Мұқаба градиенті",
+    "coverHeight": "Мұқаба биіктігі",
+    "avatarSize": "Аватар өлшемі",
+    "avatarPosition": "Аватар орны",
+    "avatarFrame": "Аватар жақтау стилі",
+    "shadowStyle": "Көлеңке стилі",
+    "verifiedBadge": "Тексерілген белгі",
+    "productName": "Тауар атауы",
+    "buyLink": "Сатып алу сілтемесі",
+    "optional": "(міндетті емес)"
+  },
+  "settings": {
+    "pageSettings": "Бет баптаулары",
+    "pageTitle": "Бет атауы",
+    "pageDescription": "Бет сипаттамасы",
+    "slug": "URL мекенжайы",
+    "seo": "SEO",
+    "analytics": "Аналитика",
+    "premium": "Премиум"
+  },
+"messages": {
+    "saved": "Сақталды",
+    "published": "Жарияланды",
+    "error": "Қате",
+    "loading": "Жүктелуде...",
+    "noBlocks": "Блоктар жоқ. Бірінші блокты қосыңыз!",
+    "confirmDelete": "Жоюға сенімдісіз бе?",
+    "copied": "Көшірілді",
+    "accountCreated": "Аккаунт жасалды! Бағыттау...",
+    "failedToSignUp": "Тіркелу сәтсіз аяқталды",
+    "failedToSignIn": "Кіру сәтсіз аяқталды"
+  },
+  "actions": {
+    "download": "Жүктеу",
+    "send": "Жіберу"
+  },
+  "form": {
+    "fillRequired": "Міндетті өрістерді толтырыңыз",
+    "success": "Форма сәтті жіберілді!",
+    "error": "Форманы жіберу қатесі",
+    "enterPlaceholder": "Енгізіңіз",
+    "submitting": "Жіберілуде..."
+  },
+  "ai": {
+    "generateDescription": "AI арқылы генерациялау",
+    "translate": "Аудару",
+    "translateToOthers": "Басқа тілдерге аудару",
+    "noTextToTranslate": "Аудару үшін мәтін енгізіңіз",
+    "translationSuccess": "Аударма орындалды",
+    "translationError": "Аударма қатесі"
+  },
+  "freemium": {
+    "blockLimitReached": "Блоктар лимитіне жеттіңіз. Premium-ға көшіңіз.",
+    "blocksRemaining": "Қалған блоктар: {{count}} / {{max}}",
+    "upgradeToPremium": "Premium-ға көшу",
+    "aiLimitReached": "AI сұраулар лимиті таусылды",
+    "aiRequestsRemaining": "Бүгінгі AI сұраулар: {{count}}",
+    "aiLimitResets": "Лимит күн сайын жаңарады",
+    "unlimitedAI": "Шексіз AI",
+    "premiumBlockRequired": "Бұл блок тек Premium-да қол жетімді"
+  },
+  "templates": {
+    "title": "Үлгілер галереясы",
+    "description": "Дайын үлгіні таңдап, 1 клик арқылы көшіріңіз",
+    "blocks": "блоктар"
+  },
+  "crm": {
+    "title": "CRM",
+    "description": "Лидтерді және өзара әрекеттесулерді басқарыңыз",
+    "leads": "Лидтер",
+    "premiumRequired": "Premium мүмкіндік",
+    "premiumDescription": "CRM-ге қол жеткізу үшін Premium-ға көшіңіз",
+    "addLead": "Лид қосу",
+    "searchPlaceholder": "Лидтерді іздеу...",
+    "noLeads": "Лидтер әлі жоқ. Алғашқысын қосыңыз!",
+    "noResults": "Лидтер табылмады",
+    "namePlaceholder": "Клиент аты",
+    "phone": "Телефон",
+    "source": "Көзі",
+    "notes": "Жазбалар",
+    "notesPlaceholder": "Осы лид туралы қосымша жазбалар...",
+    "contactInfo": "Байланыс ақпараты",
+    "createdAt": "Құрылған",
+    "addInteraction": "Өзара әрекет қосу",
+    "interactionPlaceholder": "Не болды?",
+    "history": "Тарих",
+    "noInteractions": "Өзара әрекеттер әлі жоқ",
+    "deleteLead": "Лидті жою",
+    "confirmDelete": "Бұл лидті жою керек пе?",
+    "deleteWarning": "Бұл әрекетті болдырмау мүмкін емес. Барлық өзара әрекеттер де жойылады.",
+    "status": {
+      "label": "Күйі",
+      "new": "Жаңа",
+      "contacted": "Байланысқан",
+      "qualified": "Біліктілік",
+      "converted": "Конверсия",
+      "lost": "Жоғалған"
+    },
+    "sources": {
+      "manual": "Қолмен",
+      "page_view": "Бет көрінісі",
+      "form": "Форма",
+      "messenger": "Мессенджер",
+      "other": "Басқа"
+    },
+    "interactionTypes": {
+      "note": "Жазба",
+      "call": "Қоңырау",
+      "email": "Email",
+      "message": "Хабарлама",
+      "meeting": "Кездесу"
+    }
+  },
+  "analytics": {
+    "title": "Аналитика",
+    "description": "Бет тиімділігін бақылаңыз",
+    "noData": "Аналитика деректері жоқ",
+    "today": "Бүгін",
+    "week": "Апта",
+    "month": "Ай",
+    "all": "Барлық уақыт",
+    "views": "Қаралымдар",
+    "clicks": "Басулар",
+    "shares": "Бөлісулер",
+    "visitors": "Келушілер",
+    "avgPerDay": "Күніне орташа",
+    "viewsPerDay": "қаралымдар / күн",
+    "activityChart": "Белсенділік",
+    "topBlocks": "Танымал мазмұн",
+    "clicksByBlock": "Блоктар бойынша басулар"
+  }
+}

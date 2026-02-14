@@ -1,0 +1,11 @@
+tree f0980efbe3da3ada92ba346603ef6c739d7fb445
+parent 99b6799feefd2d0db483267393b5d9bc0e9d5e80
+parent 673b814369f78e780b3b249900ed256c1daa2453
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765132269 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765132269 +0000
+
+Update premium number and trial period
+
+Update the WhatsApp number for premium purchases to +77051097664 and change the free trial from 7 days to 2 days by updating upgrade utils and migrating the default trial duration.
+
+X-Lovable-Edit-ID: edt-c6a01d0c-13e7-41b6-a5ba-368f05ed9227

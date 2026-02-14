@@ -1,0 +1,379 @@
+{
+  "niche": {
+    "barber": "Barber",
+    "photographer": "Photographer",
+    "psychologist": "Psychologist",
+    "fitness": "Fitness Trainer",
+    "musician": "Musician",
+    "designer": "Designer",
+    "teacher": "Teacher",
+    "shop": "Shop",
+    "marketer": "Marketer",
+    "beauty": "Beauty Master",
+    "chef": "Chef"
+  },
+  "onboarding": {
+    "nicheTitle": "Choose Your Niche",
+    "nicheDescription": "AI will create your personal page in 2 minutes",
+    "detailsTitle": "Tell Us About Yourself",
+    "detailsDescription": "This information helps AI create the perfect page",
+    "yourName": "Your Name or Brand",
+    "namePlaceholder": "e.g., Alex or Beauty Studio",
+    "additionalDetails": "Additional Details",
+    "detailsPlaceholder": "City, specialization, experience...",
+    "detailsHint": "Optional, but helps make the page more accurate",
+    "skip": "Skip",
+    "generatePage": "Create Page",
+    "enterName": "Please enter your name",
+    "pageGenerated": "Page created successfully!",
+    "generationFailed": "Failed to create page",
+    "generatingTitle": "AI is Creating Your Page",
+    "generatingDescription": "Generating structure, content, and design...",
+    "pleaseWait": "This will take about 30 seconds"
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "badge": "AI-Powered Link Management",
+      "title1": "One Link,",
+      "title2": "Infinite Possibilities",
+      "subtitle": "Create a stunning bio page that brings together all your content, social media, and products in one beautiful place.",
+      "ctaMain": "Get Started Free",
+      "ctaDemo": "View Demo",
+      "trial": "No credit card required • 7-day premium trial • Cancel anytime"
+    },
+    "features": {
+      "title": "Everything you need",
+      "subtitle": "Powerful features designed for modern creators",
+      "aiGeneration": {
+        "title": "AI Content Generation",
+        "description": "Generate catchy titles and sales copy for your links and products with AI"
+      },
+      "magicLinks": {
+        "title": "Magic Links",
+        "description": "Your entire page compressed into a single shareable URL"
+      },
+      "fast": {
+        "title": "Lightning Fast",
+        "description": "Optimized performance with instant loading times"
+      },
+      "mobile": {
+        "title": "Mobile First",
+        "description": "Beautiful on every device, optimized for mobile viewing"
+      },
+      "sharing": {
+        "title": "Easy Sharing",
+        "description": "QR codes, direct links, and social sharing built-in"
+      },
+      "privacy": {
+        "title": "Privacy First",
+        "description": "Your data stays secure with enterprise-grade protection"
+      }
+    },
+    "stats": {
+      "minutes": "Minutes",
+      "minutesSuffix": " min",
+      "blocks": "Block Types",
+      "possibilities": "Possibilities"
+    },
+    "benefits": {
+      "ai": "AI Content Generation",
+      "design": "Premium Design",
+      "analytics": "Analytics Dashboard",
+      "crm": "Mini-CRM"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Create your page in 3 simple steps",
+      "step1": {
+        "title": "Choose Your Niche",
+        "desc": "Select your profession and AI will generate a perfect page"
+      },
+      "step2": {
+        "title": "Customize",
+        "desc": "Add blocks, edit content, and adjust the design"
+      },
+      "step3": {
+        "title": "Publish & Share",
+        "desc": "Get your unique link and share it everywhere"
+      }
+    },
+    "cta": {
+      "badge": "Start for Free",
+      "title": "Ready to Build Your Link?",
+      "subtitle": "Join thousands of creators, influencers, and entrepreneurs who trust LinkMAX",
+      "button": "Start Creating Now"
+    },
+    "footer": {
+      "copyright": "© 2025 LinkMAX. All rights reserved."
+    },
+    "pricing": {
+      "badge": "Simple Pricing",
+      "title": "Choose Your Plan",
+      "subtitle": "Start free, upgrade when you need more power",
+      "month": "month",
+      "popular": "Most Popular",
+      "free": {
+        "title": "Free",
+        "description": "Perfect to get started",
+        "cta": "Get Started Free"
+      },
+      "premium": {
+        "title": "Premium",
+        "description": "For professionals and businesses",
+        "cta": "Upgrade to Premium"
+      },
+      "features": {
+        "blocks5": "Up to 5 blocks",
+        "basicBlocks": "Basic block types",
+        "ai3": "3 AI requests per day",
+        "themes": "All themes",
+        "unlimitedBlocks": "Unlimited blocks",
+        "allBlocks": "All block types",
+        "premiumBlocks": "Premium blocks",
+        "analytics": "Analytics dashboard",
+        "crm": "Mini-CRM",
+        "noWatermark": "No watermark",
+        "unlimitedAI": "Unlimited AI",
+        "priority": "Priority support"
+      }
+    }
+  },
+  "auth": {
+    "title": "LinkMAX",
+    "subtitle": "Create your link-in-bio page",
+    "getStarted": "Get Started",
+    "signInToAccount": "Sign in to your account or create a new one",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Minimum 8 characters, with uppercase, lowercase, and number",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "backToHome": "← Back to Home",
+    "createAccount": "Create Account",
+    "welcomeBack": "Welcome back!"
+  },
+  "editor": {
+    "title": "Page Editor",
+    "settings": "Settings",
+    "preview": "Preview",
+    "publish": "Publish",
+    "addBlock": "Add Block",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "moveUp": "Move Up",
+    "moveDown": "Move Down",
+    "language": "Language",
+    "editProfile": "Edit Profile",
+    "close": "Close",
+    "autoSave": "Changes are saved automatically"
+  },
+  "blocks": {
+    "profile": "Profile",
+    "link": "Link",
+    "text": "Text",
+    "image": "Image",
+    "video": "Video",
+    "product": "Product",
+    "button": "Button",
+    "carousel": "Carousel",
+    "socials": "Socials",
+    "form": "Form",
+    "map": "Map",
+    "avatar": "Avatar",
+    "separator": "Separator",
+    "customCode": "Custom Code",
+    "messenger": "Messenger",
+    "download": "Download",
+    "newsletter": "Newsletter",
+    "testimonial": "Testimonial",
+    "scratch": "Scratch Card",
+    "search": "Search"
+  },
+  "blockEditor": {
+    "profile": "Edit Profile",
+    "text": "Edit Text",
+    "link": "Edit Link",
+    "button": "Edit Button",
+    "image": "Edit Image",
+    "video": "Edit Video",
+    "carousel": "Edit Carousel",
+    "product": "Edit Product",
+    "search": "Edit Search",
+    "socials": "Edit Socials",
+    "customCode": "Edit Code",
+    "messenger": "Edit Messengers",
+    "form": "Edit Form",
+    "download": "Edit Download",
+    "newsletter": "Edit Newsletter",
+    "testimonial": "Edit Testimonial",
+    "scratch": "Edit Scratch Card",
+    "map": "Edit Map",
+    "avatar": "Edit Avatar",
+    "separator": "Edit Separator",
+    "description": "Configure all block settings. Changes are saved automatically.",
+    "notAvailable": "Editor for this block type is not available."
+  },
+  "fields": {
+    "title": "Title",
+    "content": "Content",
+    "url": "URL",
+    "description": "Description",
+    "alignment": "Alignment",
+    "style": "Style",
+    "animation": "Animation",
+    "left": "Left",
+    "center": "Center",
+    "right": "Right",
+    "imageUrl": "Image URL",
+    "alt": "Alt Text",
+    "caption": "Caption",
+    "price": "Price",
+    "currency": "Currency",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "address": "Address",
+    "avatarUrl": "Avatar URL",
+    "bio": "Bio",
+    "coverImage": "Cover Image",
+    "coverGradient": "Cover Gradient Overlay",
+    "coverHeight": "Cover Height",
+    "avatarSize": "Avatar Size",
+    "avatarPosition": "Avatar Position",
+    "avatarFrame": "Avatar Frame Style",
+    "shadowStyle": "Shadow Style",
+    "verifiedBadge": "Verified badge",
+    "productName": "Product Name",
+    "buyLink": "Buy Link",
+    "optional": "(optional)"
+  },
+  "settings": {
+    "pageSettings": "Page Settings",
+    "pageTitle": "Page Title",
+    "pageDescription": "Page Description",
+    "slug": "URL Slug",
+    "seo": "SEO",
+    "analytics": "Analytics",
+    "premium": "Premium"
+  },
+"messages": {
+    "saved": "Saved",
+    "published": "Published",
+    "error": "Error",
+    "loading": "Loading...",
+    "noBlocks": "No blocks yet. Add your first block!",
+    "confirmDelete": "Are you sure you want to delete?",
+    "copied": "Copied",
+    "accountCreated": "Account created! Redirecting...",
+    "failedToSignUp": "Failed to sign up",
+    "failedToSignIn": "Failed to sign in"
+  },
+  "actions": {
+    "download": "Download",
+    "send": "Send"
+  },
+  "form": {
+    "fillRequired": "Please fill required fields",
+    "success": "Form submitted successfully!",
+    "error": "Error submitting form",
+    "enterPlaceholder": "Enter",
+    "submitting": "Submitting..."
+  },
+  "ai": {
+    "generateDescription": "Generate with AI",
+    "translate": "Translate",
+    "translateToOthers": "Translate to other languages",
+    "noTextToTranslate": "Enter text to translate",
+    "translationSuccess": "Translation completed",
+    "translationError": "Translation error"
+  },
+  "freemium": {
+    "blockLimitReached": "Block limit reached. Upgrade to Premium for unlimited blocks.",
+    "blocksRemaining": "Blocks remaining: {{count}} of {{max}}",
+    "upgradeToPremium": "Upgrade to Premium",
+    "aiLimitReached": "AI request limit reached",
+    "aiRequestsRemaining": "AI requests remaining today: {{count}}",
+    "aiLimitResets": "Limit resets every day",
+    "unlimitedAI": "Unlimited AI",
+    "premiumBlockRequired": "This block requires Premium"
+  },
+  "templates": {
+    "title": "Template Gallery",
+    "description": "Choose a ready-made template and copy in 1 click",
+    "blocks": "blocks"
+  },
+  "crm": {
+    "title": "CRM",
+    "description": "Manage your leads and interactions",
+    "leads": "Leads",
+    "premiumRequired": "Premium Feature",
+    "premiumDescription": "Upgrade to Premium to access CRM and track your leads",
+    "addLead": "Add Lead",
+    "searchPlaceholder": "Search leads...",
+    "noLeads": "No leads yet. Add your first lead!",
+    "noResults": "No leads found",
+    "namePlaceholder": "Client name",
+    "phone": "Phone",
+    "source": "Source",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional notes about this lead...",
+    "contactInfo": "Contact Information",
+    "createdAt": "Created",
+    "addInteraction": "Add Interaction",
+    "interactionPlaceholder": "What happened?",
+    "history": "History",
+    "noInteractions": "No interactions yet",
+    "deleteLead": "Delete Lead",
+    "confirmDelete": "Delete this lead?",
+    "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
+    "status": {
+      "label": "Status",
+      "new": "New",
+      "contacted": "Contacted",
+      "qualified": "Qualified",
+      "converted": "Converted",
+      "lost": "Lost"
+    },
+    "sources": {
+      "manual": "Manual",
+      "page_view": "Page View",
+      "form": "Form",
+      "messenger": "Messenger",
+      "other": "Other"
+    },
+    "interactionTypes": {
+      "note": "Note",
+      "call": "Call",
+      "email": "Email",
+      "message": "Message",
+      "meeting": "Meeting"
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "description": "Track your page performance",
+    "noData": "No analytics data available",
+    "today": "Today",
+    "week": "Week",
+    "month": "Month",
+    "all": "All Time",
+    "views": "Views",
+    "clicks": "Clicks",
+    "shares": "Shares",
+    "visitors": "Visitors",
+    "avgPerDay": "Average per day",
+    "viewsPerDay": "views / day",
+    "activityChart": "Activity",
+    "topBlocks": "Top Content",
+    "clicksByBlock": "Clicks by Block"
+  }
+}

@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Apple-inspired neutral palette */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 13%;
+
+    /* Glass morphism backgrounds */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    /* Apple Blue accent */
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Subtle gray secondary */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 13%;
+
+    /* Muted gray tones */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 13%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Subtle borders */
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 211 100% 50%;
+
+    /* Large rounded corners */
+    --radius: 1.25rem;
+
+    /* Sidebar tokens */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 13%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 13%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 211 100% 50%;
+    --sidebar: 0 0% 98%;
+
+    /* Chart colors */
+    --chart-1: 211 100% 50%;
+    --chart-2: 221 83% 53%;
+    --chart-3: 0 0% 45%;
+    --chart-4: 0 0% 30%;
+    --chart-5: 0 0% 20%;
+
+    /* Typography - Apple SF Pro style */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* Soft shadows for depth */
+    --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.03);
+    --shadow-xs: 0 1px 3px 0 hsl(0 0% 0% / 0.04);
+    --shadow-sm: 0 2px 4px 0 hsl(0 0% 0% / 0.05), 0 1px 2px 0 hsl(0 0% 0% / 0.03);
+    --shadow: 0 4px 8px 0 hsl(0 0% 0% / 0.06), 0 2px 4px 0 hsl(0 0% 0% / 0.04);
+    --shadow-md: 0 8px 16px 0 hsl(0 0% 0% / 0.08), 0 4px 8px 0 hsl(0 0% 0% / 0.05);
+    --shadow-lg: 0 12px 24px 0 hsl(0 0% 0% / 0.10), 0 6px 12px 0 hsl(0 0% 0% / 0.06);
+    --shadow-xl: 0 20px 40px 0 hsl(0 0% 0% / 0.12), 0 10px 20px 0 hsl(0 0% 0% / 0.08);
+    --shadow-2xl: 0 25px 50px 0 hsl(0 0% 0% / 0.15);
+
+    /* Glassmorphism */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.2;
+    --glass-blur: 20px;
+
+    /* Spacing */
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    /* Dark mode - Apple style */
+    --background: 0 0% 7%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 211 100% 50%;
+
+    /* Sidebar dark mode */
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 211 100% 50%;
+    --sidebar: 0 0% 10%;
+
+    /* Chart colors dark */
+    --chart-1: 211 100% 50%;
+    --chart-2: 221 83% 53%;
+    --chart-3: 0 0% 60%;
+    --chart-4: 0 0% 45%;
+    --chart-5: 0 0% 30%;
+
+    /* Soft shadows for dark mode */
+    --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
+    --shadow-xs: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
+    --shadow-sm: 0 2px 4px 0 hsl(0 0% 0% / 0.4), 0 1px 2px 0 hsl(0 0% 0% / 0.2);
+    --shadow: 0 4px 8px 0 hsl(0 0% 0% / 0.5), 0 2px 4px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 8px 16px 0 hsl(0 0% 0% / 0.6), 0 4px 8px 0 hsl(0 0% 0% / 0.4);
+    --shadow-lg: 0 12px 24px 0 hsl(0 0% 0% / 0.7), 0 6px 12px 0 hsl(0 0% 0% / 0.5);
+    --shadow-xl: 0 20px 40px 0 hsl(0 0% 0% / 0.8), 0 10px 20px 0 hsl(0 0% 0% / 0.6);
+    --shadow-2xl: 0 25px 50px 0 hsl(0 0% 0% / 0.9);
+
+    /* Glassmorphism dark */
+    --glass-bg: 0 0% 10% / 0.7;
+    --glass-border: 0 0% 30% / 0.2;
+    --glass-blur: 20px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Prevent text size adjust on mobile */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Improve touch scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    /* Prevent horizontal overflow */
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism utility */
+  .glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  /* Apple-style text gradients */
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(221 83% 53%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Touch-friendly tap targets */
+  @media (hover: none) {
+    button,
+    a,
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}

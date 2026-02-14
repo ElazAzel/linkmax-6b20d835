@@ -1,0 +1,19 @@
+project_id = "pphdcfxucfndmwulpfwv"
+
+[functions.ai-content-generator]
+verify_jwt = false
+
+[functions.chatbot-stream]
+verify_jwt = false
+
+[functions.translate-content]
+verify_jwt = false
+
+[functions.create-lead]
+verify_jwt = false
+
+[functions.send-lead-notification]
+verify_jwt = false
+
+[functions.send-weekly-digest]
+verify_jwt = false
