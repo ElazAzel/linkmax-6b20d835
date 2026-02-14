@@ -148,7 +148,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
       {/* Tabs */}
       <div className="px-5 pb-3">
         <div className="bg-muted/50 rounded-2xl p-1">
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'leads' | 'bookings')}>
+          <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings')}>
             <TabsList className="grid grid-cols-2 h-11 bg-transparent p-0 gap-1">
               <TabsTrigger
                 value="leads"

@@ -92,7 +92,7 @@ export async function exportToExcel({
     // Add form field answers
     const fieldRow: string[] = [];
     if (includeAnswers) {
-      for (const [fieldId, field] of fieldMap) {
+      for (const [fieldId, field] of Array.from(fieldMap)) {
         const answer = answers[fieldId];
         fieldRow.push(formatAnswer(answer, field, language));
       }
@@ -103,10 +103,10 @@ export async function exportToExcel({
 
   // Create workbook with exceljs
   const workbook = new ExcelJS.Workbook();
-  
+
   // Add registrations sheet
   const worksheet = workbook.addWorksheet('Registrations');
-  
+
   // Add headers with styling
   const headerRow = worksheet.addRow(headers);
   headerRow.font = { bold: true };
@@ -115,12 +115,12 @@ export async function exportToExcel({
     pattern: 'solid',
     fgColor: { argb: 'FFE8E8E8' }
   };
-  
+
   // Add data rows
   rows.forEach(row => {
     worksheet.addRow(row);
   });
-  
+
   // Auto-size columns
   headers.forEach((header, i) => {
     const maxLength = Math.max(
@@ -142,14 +142,14 @@ export async function exportToExcel({
     ['Check-in', registrations.filter(r => r.event_tickets?.[0]?.status === 'used').length],
     ['Дата экспорта / Export date', format(new Date(), 'dd.MM.yyyy HH:mm')],
   ];
-  
+
   summaryData.forEach(row => {
     const summaryRow = summarySheet.addRow(row);
     if (row === summaryData[0]) {
       summaryRow.font = { bold: true };
     }
   });
-  
+
   summarySheet.getColumn(1).width = 25;
   summarySheet.getColumn(2).width = 30;
 
@@ -160,8 +160,8 @@ export async function exportToExcel({
 
   // Write to buffer and download
   const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], { 
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -219,7 +219,7 @@ export function exportToCSV({
 
     const fieldRow: string[] = [];
     if (includeAnswers) {
-      for (const [fieldId, field] of fieldMap) {
+      for (const [fieldId, field] of Array.from(fieldMap)) {
         fieldRow.push(formatAnswer(answers[fieldId], field, language));
       }
     }

@@ -87,9 +87,9 @@ export const TrafficSourcesChart = memo(function TrafficSourcesChart({
                   borderRadius: '8px',
                   fontSize: '12px',
                 }}
-                formatter={(value: number, name: string) => [
-                  `${value} (${chartData.find(d => d.name === name)?.percentage.toFixed(0)}%)`,
-                  name,
+                formatter={(value?: number | string | Array<number | string>, name?: string | number) => [
+                  `${value ?? 0} (${chartData.find(d => d.name === name)?.percentage.toFixed(0) ?? 0}%)`,
+                  String(name ?? ''),
                 ]}
               />
               <Legend
@@ -123,7 +123,7 @@ export const TrafficSourcesChart = memo(function TrafficSourcesChart({
             <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-500"
-                style={{ 
+                style={{
                   width: `${source.percentage}%`,
                   backgroundColor: source.color,
                 }}

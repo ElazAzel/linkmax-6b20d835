@@ -107,7 +107,6 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
     try {
       // Prepare blocks for saving (remove unnecessary data)
       const templateBlocks = blocks.map(block => ({
-        type: block.type,
         ...block,
         id: undefined, // Will be regenerated when applied
       }));
@@ -129,7 +128,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
 
       toast.success(t('templates.saved', 'Шаблон сохранён!'));
       onClose();
-      
+
       // Reset form
       setName('');
       setDescription('');
@@ -147,7 +146,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog open={open} onOpenChange={(v: boolean) => !v && onClose()}>
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -169,9 +168,9 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
             <div className="border rounded-lg overflow-hidden bg-muted/30">
               {previewUrl ? (
                 <div className="relative">
-                  <img 
-                    src={previewUrl} 
-                    alt="Template preview" 
+                  <img
+                    src={previewUrl}
+                    alt="Template preview"
                     className="w-full h-40 object-cover object-top"
                   />
                   <Button
@@ -241,7 +240,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
 
           <div className="space-y-2">
             <Label>{t('templates.category', 'Категория')}</Label>
-            <Select value={category} onValueChange={(value) => setCategory(value as TemplateCategoryKey)}>
+            <Select value={category} onValueChange={(value: string) => setCategory(value as TemplateCategoryKey)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -308,8 +307,8 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
           <Button variant="outline" onClick={onClose} className="flex-1">
             {t('common.cancel', 'Отмена')}
           </Button>
-          <Button 
-            onClick={handleSave} 
+          <Button
+            onClick={handleSave}
             disabled={isSaving || !name.trim()}
             className="flex-1"
           >

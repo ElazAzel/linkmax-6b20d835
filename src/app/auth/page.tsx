@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import Auth from '@/pages/Auth';
+import Auth from '@/components/screens/Auth';
 
 export const metadata: Metadata = {
     title: 'Sign In - LinkMAX',

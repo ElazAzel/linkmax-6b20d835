@@ -221,7 +221,7 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         </div>
 
         <EditorField label={t('fields.iconMode', 'Источник иконки')}>
-          <Select value={iconMode} onValueChange={handleIconModeChange}>
+          <Select value={iconMode} onValueChange={(v: string) => handleIconModeChange(v)}>
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
             </SelectTrigger>
@@ -291,7 +291,7 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         <EditorField label={t('fields.style', 'Стиль кнопки')}>
           <Select
             value={formData.style || 'default'}
-            onValueChange={(value) => onChange({ ...formData, style: value })}
+            onValueChange={(value: string) => onChange({ ...formData, style: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
@@ -309,7 +309,7 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         <EditorField label={t('fields.backgroundType', 'Тип фона')}>
           <Select
             value={formData.background?.type || 'solid'}
-            onValueChange={(value) =>
+            onValueChange={(value: string) =>
               onChange({
                 ...formData,
                 background: { ...formData.background, type: value },

@@ -51,7 +51,7 @@ function TextBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         <EditorField label={t('fields.style', 'Text Style')}>
           <Select
             value={formData.style || 'paragraph'}
-            onValueChange={(value) => onChange({ ...formData, style: value })}
+            onValueChange={(value: string) => onChange({ ...formData, style: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />

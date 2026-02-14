@@ -106,7 +106,6 @@ export const EditTemplateDialog = memo(function EditTemplateDialog({
       // Optionally update blocks with current page blocks
       if (updateBlocks && currentBlocks && currentBlocks.length > 0) {
         const templateBlocks = currentBlocks.map(block => ({
-          type: block.type,
           ...block,
           id: undefined,
         }));
@@ -134,7 +133,7 @@ export const EditTemplateDialog = memo(function EditTemplateDialog({
   if (!template) return null;
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog open={open} onOpenChange={(v: boolean) => !v && onClose()}>
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -174,7 +173,7 @@ export const EditTemplateDialog = memo(function EditTemplateDialog({
 
           <div className="space-y-2">
             <Label>{t('templates.category', 'Категория')}</Label>
-            <Select value={category} onValueChange={(value) => setCategory(value as TemplateCategoryKey)}>
+            <Select value={category} onValueChange={(value: string) => setCategory(value as TemplateCategoryKey)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -258,8 +257,8 @@ export const EditTemplateDialog = memo(function EditTemplateDialog({
           <Button variant="outline" onClick={onClose} className="flex-1">
             {t('common.cancel', 'Отмена')}
           </Button>
-          <Button 
-            onClick={handleSave} 
+          <Button
+            onClick={handleSave}
             disabled={isSaving || !name.trim()}
             className="flex-1"
           >

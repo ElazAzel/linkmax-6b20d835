@@ -154,7 +154,7 @@ export function EventRegistrationsList({
     total: registrations.length,
     confirmed: registrations.filter(r => r.status === 'confirmed').length,
     pending: registrations.filter(r => r.status === 'pending').length,
-    checkedIn: registrations.filter(r => (r.event_tickets as Array<{status: string}>)?.[0]?.status === 'used').length,
+    checkedIn: registrations.filter(r => (r.event_tickets as Array<{ status: string }>)?.[0]?.status === 'used').length,
   };
 
   if (loading) {
@@ -212,9 +212,9 @@ export function EventRegistrationsList({
         <Button variant="outline" size="icon" onClick={onExport} title={t('events.export', 'Экспорт')}>
           <Download className="h-4 w-4" />
         </Button>
-        <Button 
-          variant={isPremium ? 'default' : 'outline'} 
-          size="icon" 
+        <Button
+          variant={isPremium ? 'default' : 'outline'}
+          size="icon"
           onClick={onOpenScanner}
           title={t('events.scanner', 'QR-сканер')}
         >
@@ -232,7 +232,7 @@ export function EventRegistrationsList({
         ) : (
           <div className="divide-y">
             {filteredRegistrations.map((reg) => {
-              const statusConfig = STATUS_CONFIG[reg.status];
+              const statusConfig = STATUS_CONFIG[reg.status as keyof typeof STATUS_CONFIG];
               const StatusIcon = statusConfig.icon;
               const ticket = reg.event_tickets?.[0];
               const ticketStatusConfig = ticket ? TICKET_STATUS_CONFIG[ticket.status as keyof typeof TICKET_STATUS_CONFIG] : null;
@@ -360,7 +360,7 @@ export function EventRegistrationsList({
               {/* QR Code */}
               {selectedRegistration.event_tickets?.[0] && isPremium && (
                 <div className="flex flex-col items-center p-4 bg-muted rounded-lg">
-                  <QRCodeSVG 
+                  <QRCodeSVG
                     value={selectedRegistration.event_tickets[0].ticket_code}
                     size={160}
                     level="H"
@@ -405,8 +405,8 @@ export function EventRegistrationsList({
               {/* Actions */}
               {selectedRegistration.status === 'pending' && (
                 <div className="flex gap-2">
-                  <Button 
-                    className="flex-1" 
+                  <Button
+                    className="flex-1"
                     variant="outline"
                     onClick={() => {
                       updateStatus(selectedRegistration.id, 'confirmed');
@@ -416,8 +416,8 @@ export function EventRegistrationsList({
                     <Check className="h-4 w-4 mr-2" />
                     {t('events.confirm', 'Подтвердить')}
                   </Button>
-                  <Button 
-                    className="flex-1" 
+                  <Button
+                    className="flex-1"
                     variant="destructive"
                     onClick={() => {
                       updateStatus(selectedRegistration.id, 'rejected');

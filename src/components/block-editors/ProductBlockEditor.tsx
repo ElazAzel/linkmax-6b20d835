@@ -19,7 +19,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
   const handleGenerateCopy = async () => {
     const name = getI18nText(formData.name, i18n.language as SupportedLanguage);
     if (!name || !formData.price) return;
-    
+
     setAiLoading(true);
     try {
       const description = await generateSalesCopy({
@@ -28,12 +28,12 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         currency: formData.currency || 'KZT',
       });
       const currentDesc = migrateToMultilingual(formData.description);
-      onChange({ 
-        ...formData, 
-        description: { 
-          ...currentDesc, 
-          [i18n.language]: description 
-        } 
+      onChange({
+        ...formData,
+        description: {
+          ...currentDesc,
+          [i18n.language]: description
+        }
       });
     } finally {
       setAiLoading(false);
@@ -51,7 +51,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         placeholder="Product Name"
         required
       />
-      
+
       <div className="grid grid-cols-2 gap-2">
         <div>
           <Label>{t('fields.price', 'Price')}</Label>
@@ -65,11 +65,11 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.currency', 'Currency')}</Label>
           <CurrencySelect
             value={formData.currency || 'KZT'}
-            onValueChange={(value) => onChange({ ...formData, currency: value })}
+            onValueChange={(value: string) => onChange({ ...formData, currency: value })}
           />
         </div>
       </div>
-      
+
       <div>
         <MultilingualInput
           label={t('fields.description', 'Description')}
@@ -88,14 +88,14 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           />
         </div>
       </div>
-      
+
       <MediaUpload
         label={t('fields.productImage', 'Product Image') + ` (${t('fields.optional', 'optional')})`}
         value={formData.image || ''}
         onChange={(image) => onChange({ ...formData, image })}
         accept="image/*"
       />
-      
+
       <div>
         <Label>{t('fields.buyLink', 'Buy Link')} ({t('fields.optional', 'optional')})</Label>
         <Input
@@ -116,7 +116,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         <Label>{t('fields.alignment', 'Alignment')}</Label>
         <Select
           value={formData.alignment || 'center'}
-          onValueChange={(value) => onChange({ ...formData, alignment: value })}
+          onValueChange={(value: string) => onChange({ ...formData, alignment: value })}
         >
           <SelectTrigger>
             <SelectValue />
@@ -133,7 +133,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         <Label>{t('fields.backgroundType', 'Background Type')}</Label>
         <Select
           value={formData.background?.type || 'none'}
-          onValueChange={(value) =>
+          onValueChange={(value: string) =>
             onChange({
               ...formData,
               background: value === 'none' ? undefined : { ...formData.background, type: value },

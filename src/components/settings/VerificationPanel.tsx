@@ -7,13 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { 
-  Shield, 
-  Upload, 
-  CheckCircle2, 
-  Clock, 
-  XCircle, 
-  User, 
+import {
+  Shield,
+  Upload,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  User,
   Building2,
   FileImage,
   AlertCircle
@@ -30,7 +30,7 @@ export function VerificationPanel() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  
+
   const [verificationType, setVerificationType] = useState<VerificationType>('individual');
   const [facePhoto, setFacePhoto] = useState<File | null>(null);
   const [idDocument, setIdDocument] = useState<File | null>(null);
@@ -43,13 +43,13 @@ export function VerificationPanel() {
     queryKey: ['verification-status', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
-      
+
       const { data: profile } = await supabase
         .from('user_profiles')
         .select('is_verified, verification_status, verification_type')
         .eq('id', user.id)
         .single();
-      
+
       const { data: request } = await supabase
         .from('verification_requests')
         .select('*')
@@ -57,7 +57,7 @@ export function VerificationPanel() {
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
-      
+
       return { profile, request };
     },
     enabled: !!user?.id,
@@ -70,45 +70,45 @@ export function VerificationPanel() {
     const { data, error } = await supabase.storage
       .from('verification-documents')
       .upload(path, file, { upsert: true });
-    
+
     if (error) {
       console.error('Upload error:', error);
       return null;
     }
-    
+
     const { data: { publicUrl } } = supabase.storage
       .from('verification-documents')
       .getPublicUrl(data.path);
-    
+
     return publicUrl;
   };
 
   const submitMutation = useMutation({
     mutationFn: async () => {
       if (!user?.id) throw new Error('Not authenticated');
-      
+
       setUploading(true);
-      
+
       const timestamp = Date.now();
       const basePath = `${user.id}/${timestamp}`;
-      
+
       let facePhotoUrl: string | null = null;
       let idDocumentUrl: string | null = null;
       let businessDocUrl: string | null = null;
-      
+
       // Upload files
       if (facePhoto) {
         facePhotoUrl = await uploadFile(facePhoto, `${basePath}/face.${facePhoto.name.split('.').pop()}`);
       }
-      
+
       if (idDocument) {
         idDocumentUrl = await uploadFile(idDocument, `${basePath}/id.${idDocument.name.split('.').pop()}`);
       }
-      
+
       if (verificationType === 'business' && businessDoc) {
         businessDocUrl = await uploadFile(businessDoc, `${basePath}/business.${businessDoc.name.split('.').pop()}`);
       }
-      
+
       // Create verification request
       const { error: requestError } = await supabase
         .from('verification_requests')
@@ -121,9 +121,9 @@ export function VerificationPanel() {
           notes,
           status: 'pending',
         });
-      
+
       if (requestError) throw requestError;
-      
+
       // Update profile status
       const { error: profileError } = await supabase
         .from('user_profiles')
@@ -133,7 +133,7 @@ export function VerificationPanel() {
           verification_submitted_at: new Date().toISOString(),
         })
         .eq('id', user.id);
-      
+
       if (profileError) throw profileError;
     },
     onSuccess: () => {
@@ -181,8 +181,8 @@ export function VerificationPanel() {
     }
   };
 
-  const canSubmit = verificationType === 'individual' 
-    ? facePhoto && idDocument 
+  const canSubmit = verificationType === 'individual'
+    ? facePhoto && idDocument
     : facePhoto && idDocument && businessDoc;
 
   if (isLoading) {
@@ -285,16 +285,15 @@ export function VerificationPanel() {
           <Label>{t('verification.type', 'Тип верификации')}</Label>
           <RadioGroup
             value={verificationType}
-            onValueChange={(v) => setVerificationType(v as VerificationType)}
+            onValueChange={(v: string) => setVerificationType(v as VerificationType)}
             className="grid grid-cols-2 gap-4"
           >
             <Label
               htmlFor="individual"
-              className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
-                verificationType === 'individual' 
-                  ? 'border-primary bg-primary/5' 
+              className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${verificationType === 'individual'
+                  ? 'border-primary bg-primary/5'
                   : 'border-border hover:border-primary/50'
-              }`}
+                }`}
             >
               <RadioGroupItem value="individual" id="individual" />
               <User className="h-5 w-5" />
@@ -305,11 +304,10 @@ export function VerificationPanel() {
             </Label>
             <Label
               htmlFor="business"
-              className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
-                verificationType === 'business' 
-                  ? 'border-primary bg-primary/5' 
+              className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${verificationType === 'business'
+                  ? 'border-primary bg-primary/5'
                   : 'border-border hover:border-primary/50'
-              }`}
+                }`}
             >
               <RadioGroupItem value="business" id="business" />
               <Building2 className="h-5 w-5" />

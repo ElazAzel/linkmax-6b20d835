@@ -1,9 +1,11 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { 
-  Check, 
+import {
+  Check,
   Crown,
   Sparkles,
   X
@@ -16,10 +18,10 @@ interface SimplePricingSectionProps {
 }
 
 export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSectionProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t, i18n } = useTranslation();
   const [billingPeriod, setBillingPeriod] = useState<'3' | '6' | '12'>('12');
-  
+
   const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
 
   // Pricing in KZT: 3mo = 4350₸/mo, 6mo = 3698₸/mo (15% off), 12mo = 3045₸/mo (30% off)
@@ -54,13 +56,13 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
     <section ref={sectionRef} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-10 sm:mb-14 space-y-4">
-          <div 
+          <div
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
           >
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-primary">{t('landing.simplePricing.badge', 'Простые тарифы')}</span>
           </div>
-          <h2 
+          <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '100ms' }}
           >
@@ -68,7 +70,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
           </h2>
 
           {/* Billing Period Selector */}
-          <div 
+          <div
             className={`flex items-center justify-center gap-2 pt-4 opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '200ms' }}
           >
@@ -77,11 +79,10 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 <button
                   key={period}
                   onClick={() => setBillingPeriod(period)}
-                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    billingPeriod === period 
-                      ? 'bg-primary text-primary-foreground shadow-lg' 
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
+                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${billingPeriod === period
+                    ? 'bg-primary text-primary-foreground shadow-lg'
+                    : 'text-muted-foreground hover:text-foreground'
+                    }`}
                 >
                   {t(`landing.pricing.months${period}`, `${period} мес`)}
                   {period === '12' && (
@@ -103,7 +104,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
         {/* Plans */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Free */}
-          <div 
+          <div
             className={`relative p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-card/50 backdrop-blur-xl border border-border/30 opacity-0 ${isVisible ? 'animate-slide-in-left' : ''}`}
             style={{ animationDelay: '300ms' }}
           >
@@ -112,17 +113,17 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 <h3 className="text-xl font-bold">{t('landing.simplePricing.free.title', 'Бесплатно')}</h3>
                 <p className="text-muted-foreground text-sm mt-1">{t('landing.simplePricing.free.subtitle', 'Навсегда, без скрытых платежей')}</p>
               </div>
-              
+
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-bold">$0</span>
                 <span className="text-muted-foreground text-sm">/{t('landing.pricing.month', 'мес')}</span>
               </div>
 
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="w-full rounded-xl py-5"
-                onClick={() => navigate('/auth')}
+                onClick={() => router.push('/auth')}
               >
                 {t('landing.simplePricing.free.cta', 'Начать бесплатно')}
               </Button>
@@ -145,7 +146,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
           </div>
 
           {/* Premium */}
-          <div 
+          <div
             className={`relative p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-card/50 backdrop-blur-xl border-2 border-primary/30 opacity-0 ${isVisible ? 'animate-slide-in-right' : ''}`}
             style={{ animationDelay: '400ms' }}
           >
@@ -161,7 +162,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 </h3>
                 <p className="text-muted-foreground text-sm mt-1">{t('landing.simplePricing.premium.subtitle', 'Всё для роста бизнеса')}</p>
               </div>
-              
+
               <div className="space-y-1">
                 {isKztPrimary ? (
                   <>
@@ -196,8 +197,8 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 )}
               </div>
 
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="w-full rounded-xl py-5 shadow-lg shadow-primary/25"
                 onClick={openPremiumPurchase}
               >
@@ -220,7 +221,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
         </div>
 
         {/* Trust message */}
-        <div 
+        <div
           className={`text-center mt-8 opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '500ms' }}
         >

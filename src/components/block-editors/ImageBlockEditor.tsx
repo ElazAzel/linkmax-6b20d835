@@ -85,7 +85,7 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
         <EditorField label={t('fields.imageStyle', 'Image Style')}>
           <Select
             value={formData.style || 'default'}
-            onValueChange={(value) => onChange({ ...formData, style: value })}
+            onValueChange={(value: string) => onChange({ ...formData, style: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />

@@ -1,3 +1,5 @@
+'use client';
+
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
@@ -14,20 +16,20 @@ import { getLucideIcon } from '@/lib/icon-utils';
 import type { ProfileFrameStyle } from '@/types/page';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { Badge } from '@/components/ui/badge';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [frameOpen, setFrameOpen] = useState(false);
   const { canUseVerificationBadge, canUsePremiumFrames, canUseAdvancedThemes, currentTier } = useFreemiumLimits();
-  
+
   const isPremiumFrameType = (frame: string) => {
     const freeFrames = ['default', 'circle', 'rounded', 'square'];
     return !freeFrames.includes(frame);
   };
-  
-  
+
+
   return (
     <div className="space-y-4">
       <MediaUpload
@@ -37,14 +39,14 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         accept="image/*"
         allowGif={true}
       />
-      
+
       <MultilingualInput
         label={t('fields.name', 'Name')}
         value={migrateToMultilingual(formData.name)}
         onChange={(value) => onChange({ ...formData, name: value })}
         placeholder={t('placeholders.yourName', 'Your Name')}
       />
-      
+
       <MultilingualInput
         label={t('fields.bio', 'Bio')}
         value={migrateToMultilingual(formData.bio)}
@@ -53,7 +55,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         placeholder={t('placeholders.tellAboutYourself', 'Tell people about yourself...')}
         enableRichText={true}
       />
-      
+
       <div className="border-t pt-4 space-y-4">
         <MediaUpload
           label={t('fields.coverImage', 'Cover Image')}
@@ -67,7 +69,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.coverGradient', 'Cover Gradient Overlay')}</Label>
           <Select
             value={formData.coverGradient || 'none'}
-            onValueChange={(value) => onChange({ ...formData, coverGradient: value })}
+            onValueChange={(value: string) => onChange({ ...formData, coverGradient: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -88,7 +90,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.coverHeight', 'Cover Height')}</Label>
           <Select
             value={formData.coverHeight || 'medium'}
-            onValueChange={(value) => onChange({ ...formData, coverHeight: value })}
+            onValueChange={(value: string) => onChange({ ...formData, coverHeight: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -105,7 +107,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.avatarSize', 'Avatar Size')}</Label>
           <Select
             value={formData.avatarSize || 'large'}
-            onValueChange={(value) => onChange({ ...formData, avatarSize: value })}
+            onValueChange={(value: string) => onChange({ ...formData, avatarSize: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -123,7 +125,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.avatarPosition', 'Avatar Position')}</Label>
           <Select
             value={formData.avatarPosition || 'center'}
-            onValueChange={(value) => onChange({ ...formData, avatarPosition: value })}
+            onValueChange={(value: string) => onChange({ ...formData, avatarPosition: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -163,7 +165,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                 value={(formData.avatarFrame || 'default') as ProfileFrameStyle}
                 onChange={(value) => {
                   if (!canUsePremiumFrames() && isPremiumFrameType(value)) {
-                    navigate('/pricing');
+                    router.push('/pricing');
                     return;
                   }
                   onChange({ ...formData, avatarFrame: value as ProfileFrameStyle });
@@ -178,7 +180,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.avatarIcon', 'Avatar Icon')}</Label>
           <Select
             value={formData.avatarIcon || ''}
-            onValueChange={(value) => onChange({ ...formData, avatarIcon: value })}
+            onValueChange={(value: string) => onChange({ ...formData, avatarIcon: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('fields.selectIcon', 'Select icon')} />
@@ -197,7 +199,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           <Label>{t('fields.shadowStyle', 'Shadow Style')}</Label>
           <Select
             value={formData.shadowStyle || 'soft'}
-            onValueChange={(value) => onChange({ ...formData, shadowStyle: value })}
+            onValueChange={(value: string) => onChange({ ...formData, shadowStyle: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -223,7 +225,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
             </Badge>
           )}
         </div>
-        
+
         {!canUseVerificationBadge() ? (
           <div className="p-3 bg-muted/50 rounded-lg border border-dashed">
             <p className="text-xs text-muted-foreground flex items-center gap-2">
@@ -231,7 +233,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
               {t('premium.verificationRequiresPro', 'Verification badge is available for PRO users')}
             </p>
             <button
-              onClick={() => navigate('/pricing')}
+              onClick={() => router.push('/pricing')}
               className="mt-2 text-xs text-primary hover:underline"
             >
               {t('premium.upgradeToPro', 'Upgrade to PRO →')}
@@ -251,7 +253,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                 {t('fields.autoVerifyPremium', 'Auto-verify for Premium users')}
               </Label>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -295,7 +297,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                 <Label className="text-xs">{t('fields.verifiedIcon', 'Preset Icon')}</Label>
                 <Select
                   value={formData.verifiedIcon || 'check-circle'}
-                  onValueChange={(value) => onChange({ ...formData, verifiedIcon: value })}
+                  onValueChange={(value: string) => onChange({ ...formData, verifiedIcon: value })}
                 >
                   <SelectTrigger className="h-9">
                     <SelectValue />
@@ -316,13 +318,13 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                 </Select>
               </div>
             )}
-            
+
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs">{t('fields.verifiedColor', 'Badge Background')}</Label>
                 <Select
                   value={formData.verifiedColor || 'blue'}
-                  onValueChange={(value) => onChange({ ...formData, verifiedColor: value })}
+                  onValueChange={(value: string) => onChange({ ...formData, verifiedColor: value })}
                 >
                   <SelectTrigger className="h-9">
                     <SelectValue />
@@ -331,8 +333,8 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                     {VERIFICATION_COLOR_OPTIONS.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         <div className="flex items-center gap-2">
-                          <div 
-                            className="w-3 h-3 rounded-full border border-border/50" 
+                          <div
+                            className="w-3 h-3 rounded-full border border-border/50"
                             style={{ backgroundColor: option.color }}
                           />
                           {option.label}
@@ -342,12 +344,12 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <Label className="text-xs">{t('fields.verifiedPosition', 'Badge Position')}</Label>
                 <Select
                   value={formData.verifiedPosition || 'bottom-right'}
-                  onValueChange={(value) => onChange({ ...formData, verifiedPosition: value })}
+                  onValueChange={(value: string) => onChange({ ...formData, verifiedPosition: value })}
                 >
                   <SelectTrigger className="h-9">
                     <SelectValue />
@@ -374,7 +376,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
             {t('fields.boostTrust', '📈 +Trust')}
           </Badge>
         </div>
-        
+
         <p className="text-xs text-muted-foreground">
           {t('fields.proofOfHumanDescription', 'Add a short video or voice greeting to show visitors you\'re a real person and boost conversions')}
         </p>

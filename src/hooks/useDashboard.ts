@@ -60,7 +60,7 @@ export function useDashboard(options?: UseDashboardOptions) {
 
     const profileBlk = cloudState.pageData.blocks[profileIdx];
     cloudState.updateBlock(profileBlk.id, {
-      content: { ...(profileBlk as any).content, ...updates },
+      ...updates,
     } as Partial<Block>);
   }, [cloudState]);
 

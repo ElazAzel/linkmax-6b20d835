@@ -54,7 +54,7 @@ function MessengerBlockEditorComponent({ formData, onChange }: BaseBlockEditorPr
               <Label className="text-xs">{t('fields.platform', 'Platform')}</Label>
               <Select
                 value={messenger.platform}
-                onValueChange={(value) => updateMessenger(index, 'platform', value)}
+                onValueChange={(value: string) => updateMessenger(index, 'platform', value)}
               >
                 <SelectTrigger>
                   <SelectValue />

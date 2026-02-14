@@ -56,13 +56,13 @@ export function CommunityGallery({
       const newLikedPages = new Set(likedPages);
       newLikedPages.delete(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
+      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
       await unlikePage(pageId);
     } else {
       // Like
       const newLikedPages = new Set(likedPages).add(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
+      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
       await likePage(pageId);
     }
   }, [likedPages, likePage, unlikePage]);

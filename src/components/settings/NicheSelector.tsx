@@ -17,7 +17,7 @@ export function NicheSelector({ value, onChange, disabled }: NicheSelectorProps)
       <Label className="text-sm text-muted-foreground">{t('settings.niche', 'Category')}</Label>
       <Select
         value={value || 'other'}
-        onValueChange={(val) => onChange(val as Niche)}
+        onValueChange={(val: string) => onChange(val as Niche)}
         disabled={disabled}
       >
         <SelectTrigger className="bg-background/50">

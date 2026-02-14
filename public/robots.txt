@@ -1,65 +1,7 @@
-# AI Search Engine Crawlers - Full Access
-User-agent: GPTBot
-Allow: /
-Crawl-delay: 1
-
-User-agent: ChatGPT-User
-Allow: /
-Crawl-delay: 1
-
-User-agent: Google-Extended
-Allow: /
-Crawl-delay: 1
-
-User-agent: PerplexityBot
-Allow: /
-Crawl-delay: 1
-
-User-agent: ClaudeBot
-Allow: /
-Crawl-delay: 1
-
-User-agent: anthropic-ai
-Allow: /
-Crawl-delay: 1
-
-User-agent: cohere-ai
-Allow: /
-Crawl-delay: 1
-
-# Traditional Search Engines
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0.5
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 0.5
-
-User-agent: Yandex
-Allow: /
-Crawl-delay: 1
-
-User-agent: Slurp
-Allow: /
-Crawl-delay: 1
-
-# Block SEO tools and scrapers
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-# Default
 User-agent: *
 Allow: /
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /auth/callback
 
-# Sitemap
 Sitemap: https://lnkmx.my/sitemap.xml

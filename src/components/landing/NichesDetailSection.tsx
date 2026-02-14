@@ -1,12 +1,14 @@
+'use client';
+
 import { useTranslation } from 'react-i18next';
-import { 
-  Scissors, Camera, Dumbbell, GraduationCap, Heart, Brain, 
+import {
+  Scissors, Camera, Dumbbell, GraduationCap, Heart, Brain,
   Coffee, ShoppingBag, Building2, Stethoscope, Music, Palette,
   ArrowRight
 } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 interface NicheCard {
   icon: React.ElementType;
@@ -17,7 +19,7 @@ interface NicheCard {
 export function NichesDetailSection() {
   const { t } = useTranslation();
   const sectionAnimation = useScrollAnimation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const niches: NicheCard[] = [
     { icon: Scissors, key: 'barber', color: 'from-blue-500 to-cyan-500' },
@@ -35,11 +37,11 @@ export function NichesDetailSection() {
   ];
 
   const handleStartClick = () => {
-    navigate('/auth');
+    router.push('/auth');
   };
 
   return (
-    <section 
+    <section
       id="for-whom"
       ref={sectionAnimation.ref}
       className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6"
@@ -47,12 +49,12 @@ export function NichesDetailSection() {
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <header className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
-          <h2 
+          <h2
             className={`text-2xl sm:text-4xl lg:text-[3rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
           >
             {t('landing.niches.title', 'Для кого подходит LinkMAX?')}
           </h2>
-          <p 
+          <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
@@ -63,26 +65,26 @@ export function NichesDetailSection() {
         {/* Niche cards grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {niches.map((niche, index) => (
-            <article 
+            <article
               key={niche.key}
               className={`group relative p-4 sm:p-5 lg:p-6 rounded-2xl bg-card/60 backdrop-blur-xl border border-border/40 hover:border-primary/50 transition-all duration-300 hover:shadow-glass-lg hover:-translate-y-1 cursor-pointer opacity-0 ${sectionAnimation.isVisible ? 'animate-slide-in-up' : ''}`}
               style={{ animationDelay: `${200 + index * 60}ms` }}
               onClick={handleStartClick}
             >
               <div className={`absolute -inset-px rounded-2xl bg-gradient-to-br ${niche.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
-              
+
               <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-br ${niche.color} flex items-center justify-center mb-3 sm:mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                 <niche.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              
+
               <h3 className="text-sm sm:text-base lg:text-lg font-bold mb-1.5 sm:mb-2">
                 {t(`landing.niches.${niche.key}.title`)}
               </h3>
-              
+
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-2 sm:mb-3 line-clamp-2">
                 {t(`landing.niches.${niche.key}.pain`)}
               </p>
-              
+
               <p className="text-xs sm:text-sm text-primary font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                 {t(`landing.niches.${niche.key}.benefit`)}
                 <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -92,11 +94,11 @@ export function NichesDetailSection() {
         </div>
 
         {/* CTA */}
-        <div 
+        <div
           className={`text-center mt-10 sm:mt-14 opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '800ms' }}
         >
-          <Button 
+          <Button
             size="lg"
             onClick={handleStartClick}
             className="rounded-2xl font-bold shadow-lg shadow-primary/25 hover:shadow-xl px-8 py-6"

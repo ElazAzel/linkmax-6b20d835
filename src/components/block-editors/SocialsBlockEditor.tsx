@@ -108,7 +108,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                   <div className="flex-1 space-y-2">
                     <Select
                       value={item.platform}
-                      onValueChange={(value) => handleUpdatePlatform(item.id, { platform: value })}
+                      onValueChange={(value: string) => handleUpdatePlatform(item.id!, { platform: value })}
                     >
                       <SelectTrigger className="h-10">
                         <SelectValue />
@@ -131,7 +131,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
                     <Input
                       value={item.url}
-                      onChange={(e) => handleUpdatePlatform(item.id, { url: e.target.value })}
+                      onChange={(e) => handleUpdatePlatform(item.id!, { url: e.target.value })}
                       placeholder="https://"
                       className="h-10"
                     />
@@ -140,7 +140,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleRemovePlatform(item.id)}
+                    onClick={() => handleRemovePlatform(item.id!)}
                     className="text-muted-foreground hover:text-destructive h-8 w-8"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -171,7 +171,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         <EditorField label={t('fields.layout', 'Layout')}>
           <Select
             value={formData.layout || 'list'}
-            onValueChange={(value) => onChange({ ...formData, layout: value })}
+            onValueChange={(value: string) => onChange({ ...formData, layout: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
@@ -190,7 +190,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         <EditorField label={t('fields.iconStyle', 'Icon Style')}>
           <Select
             value={formData.iconStyle || 'brand'}
-            onValueChange={(value) => onChange({ ...formData, iconStyle: value })}
+            onValueChange={(value: string) => onChange({ ...formData, iconStyle: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />

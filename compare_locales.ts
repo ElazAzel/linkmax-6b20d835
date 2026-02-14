@@ -35,7 +35,7 @@ try {
             const targetData = loadJson(targetFile);
             const targetKeys = new Set(flattenKeys(targetData));
 
-            const missingKeys = [...sourceKeys].filter(k => !targetKeys.has(k));
+            const missingKeys = Array.from(sourceKeys).filter(k => !targetKeys.has(k));
 
             console.log(`Total keys: ${targetKeys.size}`);
             console.log(`Missing keys count: ${missingKeys.length}`);
@@ -43,11 +43,11 @@ try {
                 console.log('Sample missing keys (first 10):');
                 missingKeys.slice(0, 10).forEach(k => console.log(`  - ${k}`));
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(`Error processing ${targetFile}:`, error.message);
         }
     }
 
-} catch (error) {
+} catch (error: any) {
     console.error('Fatal error:', error.message);
 }

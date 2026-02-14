@@ -46,7 +46,7 @@ export function usePageVersions(onRestore?: (blocks: Block[], theme?: PageTheme,
 
       if (error) throw error;
 
-      const mapped: PageVersion[] = (data || []).map((row) => ({
+      const mapped: PageVersion[] = (data || []).map((row: any) => ({
         id: row.id,
         versionId: row.version_id,
         publishedAt: row.published_at,

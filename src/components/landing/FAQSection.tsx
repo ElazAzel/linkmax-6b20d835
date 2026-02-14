@@ -76,22 +76,22 @@ export function FAQSection() {
   return (
     <section ref={sectionAnimation.ref} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background pointer-events-none" />
-      
+
       <div className="container mx-auto max-w-4xl relative z-10">
         <div className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
-          <div 
+          <div
             className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 text-xs sm:text-sm font-medium opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in' : ''}`}
           >
             <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
             <span className="text-primary">{t('landing.faq.badge')}</span>
           </div>
-          <h2 
+          <h2
             className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
             {t('landing.faq.title')}
           </h2>
-          <p 
+          <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 font-normal ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '300ms' }}
           >
@@ -99,7 +99,7 @@ export function FAQSection() {
           </p>
         </div>
 
-        <div 
+        <div
           className={`opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '400ms' }}
         >
@@ -107,7 +107,7 @@ export function FAQSection() {
             type="single"
             collapsible
             className="w-full space-y-3 sm:space-y-4"
-            onValueChange={(value) => {
+            onValueChange={(value: string) => {
               if (!value) return;
               trackMarketingEvent({
                 eventType: 'faq_expand',
@@ -116,8 +116,8 @@ export function FAQSection() {
             }}
           >
             {faqItems.map((item, index) => (
-              <AccordionItem 
-                key={index} 
+              <AccordionItem
+                key={index}
                 value={`item-${index}`}
                 className="rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-5 sm:px-6 overflow-hidden hover:border-primary/30 transition-colors"
               >

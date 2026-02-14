@@ -20,9 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 
-    const title = page.seo?.title || page.slug;
-    const description = page.seo?.description || `Check out ${page.slug}'s page on LinkMAX`;
-    const image = page.seo?.image || 'https://lnkmx.my/og-image.png';
+    const title = page.seo?.title || page.slug || 'User Page';
+    const description = page.seo?.description || `Check out ${page.slug || 'this'}'s page on LinkMAX`;
+    const image = (page.seo as any)?.image || 'https://lnkmx.my/og-image.png';
 
     return {
         title,

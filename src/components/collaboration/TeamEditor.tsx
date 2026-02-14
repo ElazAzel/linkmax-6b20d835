@@ -59,8 +59,13 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
         .single();
 
       if (error) throw error;
-      
-      onTeamUpdate({ ...team, ...data, invite_code: inviteCode });
+
+      onTeamUpdate({
+        ...team,
+        ...data,
+        is_public: data.is_public ?? false,
+        invite_code: inviteCode
+      });
       toast.success(t('teams.updated', 'Команда обновлена'));
     } catch (error) {
       console.error('Error updating team:', error);
@@ -72,7 +77,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
 
   const handleDelete = async () => {
     if (!confirm(t('teams.deleteConfirm', 'Вы уверены, что хотите удалить команду?'))) return;
-    
+
     setDeleting(true);
     try {
       const { error } = await supabase
@@ -81,7 +86,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
         .eq('id', team.id);
 
       if (error) throw error;
-      
+
       toast.success(t('teams.deleted', 'Команда удалена'));
       onTeamDelete?.();
     } catch (error) {
@@ -95,10 +100,10 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
   const handleGenerateInviteCode = async () => {
     setGeneratingCode(true);
     try {
-      const code = inviteCode 
+      const code = inviteCode
         ? await resetTeamInviteCode(team.id)
         : await generateTeamInviteCode(team.id);
-      
+
       if (code) {
         setInviteCode(code);
         toast.success(inviteCode ? t('teams.linkUpdated', 'Ссылка обновлена') : t('teams.linkCreated', 'Ссылка создана'));
@@ -209,16 +214,16 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">
-            <Button 
-              className="flex-1" 
-              onClick={handleSave} 
+            <Button
+              className="flex-1"
+              onClick={handleSave}
               disabled={saving}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
               {t('actions.save', 'Сохранить')}
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               size="icon"
               onClick={handleDelete}
               disabled={deleting}
@@ -250,9 +255,9 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 className="w-full"
                 onClick={handleGenerateInviteCode}
                 disabled={generatingCode}
@@ -273,7 +278,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
               <p className="text-sm text-muted-foreground">
                 {t('teams.createLinkHint', 'Создайте ссылку-приглашение для добавления участников')}
               </p>
-              <Button 
+              <Button
                 className="w-full"
                 onClick={handleGenerateInviteCode}
                 disabled={generatingCode}

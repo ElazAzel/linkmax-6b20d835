@@ -76,7 +76,7 @@ export const InsightsScreen = memo(function InsightsScreen({
     uniqueVisitors: analytics?.uniqueVisitors ?? 0,
     visitorsChange: analytics?.viewsChange ?? 0,
     avgViewsPerDay: analytics?.avgViewsPerDay ?? 0,
-    ctr: analytics && analytics.totalViews > 0 
+    ctr: analytics && analytics.totalViews > 0
       ? ((analytics.totalClicks / analytics.totalViews) * 100)
       : 0,
     topBlocks: analytics?.topBlocks ?? [],
@@ -96,13 +96,13 @@ export const InsightsScreen = memo(function InsightsScreen({
 
   // Calculate device percentages
   const totalDevices = stats.devices.mobile + stats.devices.desktop + stats.devices.tablet;
-  const devicePercentages = useMemo(() => 
+  const devicePercentages = useMemo(() =>
     totalDevices > 0
       ? {
-          mobile: Math.round((stats.devices.mobile / totalDevices) * 100),
-          desktop: Math.round((stats.devices.desktop / totalDevices) * 100),
-          tablet: Math.round((stats.devices.tablet / totalDevices) * 100),
-        }
+        mobile: Math.round((stats.devices.mobile / totalDevices) * 100),
+        desktop: Math.round((stats.devices.desktop / totalDevices) * 100),
+        tablet: Math.round((stats.devices.tablet / totalDevices) * 100),
+      }
       : { mobile: 0, desktop: 0, tablet: 0 },
     [totalDevices, stats.devices]
   );
@@ -259,7 +259,7 @@ export const InsightsScreen = memo(function InsightsScreen({
         ) : (
           <>
             {/* Tab Navigation */}
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Tab)} className="w-full">
+            <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
               <TabsList className="grid w-full grid-cols-4 h-10">
                 <TabsTrigger value="overview" className="text-xs">
                   <ChartBar className="h-3.5 w-3.5 mr-1" />
@@ -344,8 +344,8 @@ export const InsightsScreen = memo(function InsightsScreen({
                           insight.impact === 'high'
                             ? "border-l-emerald-500 bg-emerald-500/5"
                             : insight.impact === 'medium'
-                            ? "border-l-amber-500 bg-amber-500/5"
-                            : "border-l-blue-500 bg-blue-500/5"
+                              ? "border-l-amber-500 bg-amber-500/5"
+                              : "border-l-blue-500 bg-blue-500/5"
                         )}
                       >
                         <div className="flex items-start gap-3">
@@ -355,8 +355,8 @@ export const InsightsScreen = memo(function InsightsScreen({
                               insight.impact === 'high'
                                 ? "bg-emerald-500/20"
                                 : insight.impact === 'medium'
-                                ? "bg-amber-500/20"
-                                : "bg-blue-500/20"
+                                  ? "bg-amber-500/20"
+                                  : "bg-blue-500/20"
                             )}
                           >
                             <Sparkles
@@ -365,8 +365,8 @@ export const InsightsScreen = memo(function InsightsScreen({
                                 insight.impact === 'high'
                                   ? "text-emerald-600"
                                   : insight.impact === 'medium'
-                                  ? "text-amber-600"
-                                  : "text-blue-600"
+                                    ? "text-amber-600"
+                                    : "text-blue-600"
                               )}
                             />
                           </div>

@@ -329,7 +329,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                 {/* Tabs */}
                 {shouldShowTabs && (
                     <div className="px-5 pb-2">
-                        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as EditorTab)}>
+                        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as EditorTab)}>
                             <TabsList className="w-full h-11 p-1 bg-muted/50 rounded-xl">
                                 {tabs.map((tab) => (
                                     <TabsTrigger

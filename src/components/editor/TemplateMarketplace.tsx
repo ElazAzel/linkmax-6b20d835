@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -20,11 +20,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  Heart, 
-  Download, 
-  ShoppingCart, 
-  Search, 
+import {
+  Heart,
+  Download,
+  ShoppingCart,
+  Search,
   TrendingUp,
   Clock,
   Star,
@@ -120,21 +120,21 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
       const { data, error } = await query.limit(100);
       if (error) throw error;
-      
+
       const templatesData = (data || []) as unknown as UserTemplate[];
-      
+
       // Fetch author profiles for all templates
-      const userIds = [...new Set(templatesData.map(t => t.user_id))];
+      const userIds = Array.from(new Set(templatesData.map(t => t.user_id).filter(Boolean)));
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
           .from('public_user_profiles')
           .select('id, username, display_name, avatar_url')
           .in('id', userIds);
-        
+
         const profilesMap = new Map(
           (profiles || []).map(p => [p.id, p])
         );
-        
+
         templatesData.forEach(template => {
           const profile = profilesMap.get(template.user_id);
           if (profile) {
@@ -146,7 +146,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
           }
         });
       }
-      
+
       setTemplates(templatesData);
 
       // Fetch purchased templates
@@ -155,7 +155,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
           .from('template_purchases')
           .select('template_id')
           .eq('buyer_id', user.id);
-        
+
         setPurchasedTemplates(purchases?.map(p => p.template_id) || []);
       }
     } catch (error) {
@@ -179,7 +179,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
     try {
       await supabase.rpc('like_template', { p_template_id: templateId });
-      setTemplates(prev => 
+      setTemplates(prev =>
         prev.map(t => t.id === templateId ? { ...t, likes_count: t.likes_count + 1 } : t)
       );
     } catch (error) {
@@ -251,19 +251,19 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
   const filteredTemplates = useMemo(() => {
     return templates.filter(t => {
       // Search by name/description
-      const matchesSearch = searchQuery === '' || 
+      const matchesSearch = searchQuery === '' ||
         t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.description?.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
       // Filter by category
-      const matchesCategory = selectedCategory === 'all' || 
+      const matchesCategory = selectedCategory === 'all' ||
         normalizeTemplateCategory(t.category) === selectedCategory;
-      
+
       // Search by author
-      const matchesAuthor = authorQuery === '' || 
+      const matchesAuthor = authorQuery === '' ||
         t.author?.username?.toLowerCase().includes(authorQuery.toLowerCase()) ||
         t.author?.display_name?.toLowerCase().includes(authorQuery.toLowerCase());
-      
+
       return matchesSearch && matchesCategory && matchesAuthor;
     });
   }, [templates, searchQuery, selectedCategory, authorQuery]);
@@ -290,7 +290,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog open={open} onOpenChange={(v: boolean) => !v && onClose()}>
       <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] p-0 overflow-hidden">
         <DialogHeader className="p-3 sm:p-6 pb-2 sm:pb-4">
           <div className="flex items-center justify-between">
@@ -322,11 +322,11 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                 className="pl-9 h-9 sm:h-10 text-sm"
               />
             </div>
-            
+
             {/* Filters row */}
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {/* Category filter */}
-              <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as TemplateCategoryKey)}>
+              <Select value={selectedCategory} onValueChange={(value: string) => setSelectedCategory(value as TemplateCategoryKey)}>
                 <SelectTrigger className="w-[130px] sm:w-[160px] h-9 sm:h-10 text-xs sm:text-sm">
                   <Filter className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                   <SelectValue placeholder={t('templates.category', 'Категория')} />
@@ -342,7 +342,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                   ))}
                 </SelectContent>
               </Select>
-              
+
               {/* Author search */}
               <div className="relative flex-1 min-w-[140px] sm:min-w-[180px]">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
@@ -353,12 +353,12 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                   className="pl-8 sm:pl-9 h-9 sm:h-10 text-xs sm:text-sm"
                 />
               </div>
-              
+
               {/* Clear filters button */}
               {hasActiveFilters && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={clearFilters}
                   className="h-9 sm:h-10 px-2 sm:px-3 text-xs sm:text-sm"
                 >
@@ -370,7 +370,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
             </div>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v)}>
             <TabsList className="grid w-full grid-cols-4 h-8 sm:h-10">
               <TabsTrigger value="popular" className="text-[10px] sm:text-sm px-1 sm:px-3">
                 <TrendingUp className="h-3 w-3 mr-0.5 sm:mr-1" />
@@ -405,9 +405,9 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                 <ShoppingCart className="h-12 w-12 mb-2 opacity-20" />
                 <p>{t('templates.noTemplates', 'Шаблоны не найдены')}</p>
                 {hasActiveFilters && (
-                  <Button 
-                    variant="link" 
-                    size="sm" 
+                  <Button
+                    variant="link"
+                    size="sm"
                     onClick={clearFilters}
                     className="mt-2"
                   >
@@ -426,26 +426,26 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                     {/* Preview - Use TemplatePreviewCard or fallback to image */}
                     <div className="aspect-[4/5] relative overflow-hidden">
                       {template.preview_url ? (
-                        <img 
-                          src={template.preview_url} 
+                        <img
+                          src={template.preview_url}
                           alt={template.name}
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <TemplatePreviewCard 
+                        <TemplatePreviewCard
                           blocks={template.blocks}
                           className="w-full h-full"
                           showBlockCount
                         />
                       )}
-                      
+
                       {/* Price badge */}
                       {template.is_for_sale && (
                         <Badge className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-[9px] sm:text-xs px-1.5 sm:px-2 shadow-lg">
                           {formatPrice(template.price, template.currency)}
                         </Badge>
                       )}
-                      
+
                       {/* Block count badge for templates with preview images */}
                       {template.preview_url && Array.isArray(template.blocks) && (
                         <div className="absolute bottom-1 left-1 sm:bottom-2 sm:left-2">
@@ -455,7 +455,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                           </Badge>
                         </div>
                       )}
-                      
+
                       {/* Purchased badge */}
                       {purchasedTemplates.includes(template.id) && (
                         <Badge className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-green-500 text-[9px] sm:text-xs px-1 sm:px-2">
@@ -465,9 +465,9 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
                       {/* Hover overlay */}
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
-                        <Button 
-                          variant="secondary" 
-                          size="sm" 
+                        <Button
+                          variant="secondary"
+                          size="sm"
                           className="text-xs sm:text-sm w-full max-w-[120px]"
                           disabled={purchasing === template.id}
                         >
@@ -481,7 +481,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                             </>
                           )}
                         </Button>
-                        
+
                         {/* Quick stats on hover */}
                         <div className="flex items-center gap-2 text-white/80 text-[10px] sm:text-xs">
                           <span className="flex items-center gap-0.5">
@@ -501,7 +501,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                       <p className="text-[9px] sm:text-xs text-muted-foreground line-clamp-2 mt-0.5 sm:mt-1 min-h-[2em] sm:min-h-[2.5em]">
                         {template.description || t('templates.noDescription', 'Без описания')}
                       </p>
-                      
+
                       {/* Author info - hidden on very small screens */}
                       <div className="hidden xs:flex items-center gap-2 mt-1.5 sm:mt-2 text-[9px] sm:text-xs text-muted-foreground">
                         <Avatar className="h-3 w-3 sm:h-4 sm:w-4">
@@ -512,14 +512,14 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                         </Avatar>
                         <span className="truncate">{getAuthorDisplayName(template.author)}</span>
                       </div>
-                      
+
                       <div className="flex items-center justify-between mt-1.5 sm:mt-3">
                         <Badge variant="secondary" className="text-[8px] sm:text-xs px-1 sm:px-2">
                           {getTemplateCategoryLabel(t, template.category)}
                         </Badge>
-                        
+
                         <div className="flex items-center gap-2 sm:gap-3 text-[9px] sm:text-xs text-muted-foreground">
-                          <button 
+                          <button
                             className="flex items-center gap-0.5 sm:gap-1 hover:text-red-500 transition-colors"
                             onClick={(e) => {
                               e.stopPropagation();

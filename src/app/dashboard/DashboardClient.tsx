@@ -466,10 +466,12 @@ export default function DashboardClient() {
                                 usernameSaving={dashboard.usernameState.saving}
                                 profileBlock={dashboard.profileBlock || undefined}
                                 onUpdateProfile={(updates) => {
-                                    // Adapter for SettingsScreen which passes Partial<ProfileBlock>
-                                    // while handleUpdateProfile expects { name, bio }
-                                    if (updates.content && 'name' in updates.content) {
-                                        dashboard.handleUpdateProfile(updates.content as { name: string; bio: string });
+                                    // ProfileBlock is flat, access name and bio directly
+                                    if (updates.name !== undefined || updates.bio !== undefined) {
+                                        dashboard.handleUpdateProfile({
+                                            name: typeof updates.name === 'string' ? updates.name : '',
+                                            bio: typeof updates.bio === 'string' ? updates.bio : ''
+                                        });
                                     }
                                 }}
                                 isPremium={dashboard.isPremium}
@@ -480,7 +482,7 @@ export default function DashboardClient() {
                                 telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
                                 onTelegramChange={(enabled, chatId) => {
                                     // Adapter for chatId null vs undefined
-                                    dashboard.userProfile.updateTelegramNotifications(enabled, chatId || undefined);
+                                    dashboard.userProfile.updateTelegramNotifications(enabled, chatId || null);
                                 }}
                                 niche={dashboard.pageData?.niche as Niche | undefined}
                                 onNicheChange={dashboard.updateNiche}

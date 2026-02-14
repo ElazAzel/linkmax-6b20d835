@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/platform/supabase/client';
-import { 
+import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
@@ -80,7 +80,7 @@ export function AdminCharts() {
     try {
       const days = 14;
       const startDate = subDays(new Date(), days);
-      
+
       // Get all data in parallel
       const [
         { data: usersData },
@@ -100,21 +100,23 @@ export function AdminCharts() {
 
       // Generate daily breakdown
       const dateRange = eachDayOfInterval({ start: startDate, end: new Date() });
-      
+
       const dailyStats = dateRange.map(day => {
         const dayStart = startOfDay(day);
         const dayEnd = new Date(dayStart);
         dayEnd.setDate(dayEnd.getDate() + 1);
-        
+
         const dateStr = format(day, 'dd.MM');
-        
-        const filterByDay = (items: any[] | null) => 
+
+        const filterByDay = (items: any[] | null) =>
           items?.filter(item => {
+            if (!item.created_at) return false;
             const d = new Date(item.created_at);
             return d >= dayStart && d < dayEnd;
           }).length || 0;
 
         const dayEvents = analyticsData?.filter(e => {
+          if (!e.created_at) return false;
           const d = new Date(e.created_at);
           return d >= dayStart && d < dayEnd;
         }) || [];
@@ -141,7 +143,7 @@ export function AdminCharts() {
   const loadUserStatus = async () => {
     try {
       const now = new Date().toISOString();
-      
+
       const { count: premiumCount } = await supabase
         .from('user_profiles')
         .select('*', { count: 'exact', head: true })
@@ -214,6 +216,7 @@ export function AdminCharts() {
       let cumulative = 0;
 
       data.forEach(u => {
+        if (!u.created_at) return;
         const dateStr = format(new Date(u.created_at), 'dd.MM');
         cumulative++;
         dateMap.set(dateStr, cumulative);
@@ -316,17 +319,17 @@ export function AdminCharts() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 12 }} 
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 12 }}
                   className="text-muted-foreground"
                 />
-                <YAxis 
-                  tick={{ fontSize: 12 }} 
+                <YAxis
+                  tick={{ fontSize: 12 }}
                   className="text-muted-foreground"
                 />
-                <Tooltip 
-                  contentStyle={{ 
+                <Tooltip
+                  contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
                     borderRadius: '8px'
@@ -359,33 +362,33 @@ export function AdminCharts() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dailyData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis 
-                    dataKey="date" 
-                    tick={{ fontSize: 11 }} 
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 11 }}
                     className="text-muted-foreground"
                   />
-                  <YAxis 
-                    tick={{ fontSize: 11 }} 
+                  <YAxis
+                    tick={{ fontSize: 11 }}
                     className="text-muted-foreground"
                     allowDecimals={false}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px'
                     }}
                   />
-                  <Bar 
-                    dataKey="users" 
+                  <Bar
+                    dataKey="users"
                     name={t('adminCharts.users', 'Пользователи')}
-                    fill={COLORS.users} 
+                    fill={COLORS.users}
                     radius={[4, 4, 0, 0]}
                   />
-                  <Bar 
-                    dataKey="pages" 
+                  <Bar
+                    dataKey="pages"
                     name={t('adminCharts.pages', 'Страницы')}
-                    fill={COLORS.pages} 
+                    fill={COLORS.pages}
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -404,44 +407,44 @@ export function AdminCharts() {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={dailyData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis 
-                    dataKey="date" 
-                    tick={{ fontSize: 11 }} 
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 11 }}
                     className="text-muted-foreground"
                   />
-                  <YAxis 
-                    tick={{ fontSize: 11 }} 
+                  <YAxis
+                    tick={{ fontSize: 11 }}
                     className="text-muted-foreground"
                   />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px'
                     }}
                   />
                   <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="views" 
+                  <Line
+                    type="monotone"
+                    dataKey="views"
                     name={t('adminCharts.events.views', 'Просмотры')}
-                    stroke={COLORS.views} 
+                    stroke={COLORS.views}
                     strokeWidth={2}
                     dot={false}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="clicks" 
+                  <Line
+                    type="monotone"
+                    dataKey="clicks"
                     name={t('adminCharts.events.clicks', 'Клики')}
-                    stroke={COLORS.clicks} 
+                    stroke={COLORS.clicks}
                     strokeWidth={2}
                     dot={false}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="shares" 
+                  <Line
+                    type="monotone"
+                    dataKey="shares"
                     name={t('adminCharts.events.shares', 'Шейры')}
-                    stroke={COLORS.shares} 
+                    stroke={COLORS.shares}
                     strokeWidth={2}
                     dot={false}
                   />
@@ -471,15 +474,15 @@ export function AdminCharts() {
                     outerRadius={90}
                     paddingAngle={2}
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                     labelLine={false}
                   >
                     {userStatusData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px'
@@ -491,8 +494,8 @@ export function AdminCharts() {
             <div className="flex justify-center gap-6 mt-4">
               {userStatusData.map((item) => (
                 <div key={item.name} className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
+                  <div
+                    className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: item.color }}
                   />
                   <span className="text-sm text-muted-foreground">
@@ -515,21 +518,21 @@ export function AdminCharts() {
                 <BarChart data={eventTypeData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                   <XAxis type="number" tick={{ fontSize: 11 }} />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    tick={{ fontSize: 12 }} 
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    tick={{ fontSize: 12 }}
                     width={80}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px'
                     }}
                   />
-                  <Bar 
-                    dataKey="count" 
+                  <Bar
+                    dataKey="count"
                     name={t('adminCharts.count', 'Количество')}
                     radius={[0, 4, 4, 0]}
                   >
@@ -556,14 +559,14 @@ export function AdminCharts() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={socialStats}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis 
-                    dataKey="name" 
-                    tick={{ fontSize: 12 }} 
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 12 }}
                     className="text-muted-foreground"
                   />
                   <YAxis tick={{ fontSize: 11 }} className="text-muted-foreground" />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px'
@@ -589,14 +592,14 @@ export function AdminCharts() {
                 <BarChart data={blockTypeStats} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                   <XAxis type="number" tick={{ fontSize: 11 }} />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    tick={{ fontSize: 11 }} 
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    tick={{ fontSize: 11 }}
                     width={80}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px'
@@ -634,14 +637,14 @@ export function AdminCharts() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 11 }} 
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 11 }}
                   className="text-muted-foreground"
                 />
                 <YAxis tick={{ fontSize: 11 }} className="text-muted-foreground" />
-                <Tooltip 
-                  contentStyle={{ 
+                <Tooltip
+                  contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
                     borderRadius: '8px'
@@ -686,14 +689,14 @@ export function AdminCharts() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 11 }} 
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 11 }}
                   className="text-muted-foreground"
                 />
                 <YAxis tick={{ fontSize: 11 }} className="text-muted-foreground" />
-                <Tooltip 
-                  contentStyle={{ 
+                <Tooltip
+                  contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
                     borderRadius: '8px'

@@ -51,8 +51,8 @@ const getFileIcon = (fileName: string): string => {
   return icons[ext || ''] || '📎';
 };
 
-export function FileUpload({ 
-  value, 
+export function FileUpload({
+  value,
   onChange,
   onFileInfoChange,
   accept = '*/*',
@@ -115,7 +115,7 @@ export function FileUpload({
         fileName: file.name,
         fileSize: formatFileSize(file.size)
       });
-      
+
       toast.success(t('upload.success', 'File uploaded successfully'));
     } catch (error: any) {
       console.error('Upload error:', error);
@@ -162,12 +162,12 @@ export function FileUpload({
     onFileInfoChange?.({ fileName: '', fileSize: '' });
   };
 
-  const fileName = value ? value.split('/').pop()?.split('-').slice(1).join('-') || value.split('/').pop() : '';
+  const fileName = value ? (value.split('/').pop()?.split('-').slice(1).join('-') || value.split('/').pop() || '') : '';
 
   return (
     <div className="space-y-2">
       {label && <Label>{label}</Label>}
-      
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="upload" className="gap-2">
@@ -185,7 +185,7 @@ export function FileUpload({
             onChange={handleFileSelect}
             className="hidden"
           />
-          
+
           {value && !uploading ? (
             <div className="relative p-4 rounded-xl border border-border bg-muted/30">
               <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export function FileUpload({
               )}
             </div>
           )}
-          
+
           {!user && (
             <p className="text-xs text-muted-foreground text-center">
               {t('upload.signInRequired', 'Войдите чтобы загружать файлы')}

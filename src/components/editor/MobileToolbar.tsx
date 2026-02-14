@@ -1,6 +1,8 @@
+'use client';
+
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   Save,
   Eye,
@@ -70,7 +72,7 @@ export const MobileToolbar = memo(function MobileToolbar({
   userId,
 }: MobileToolbarProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [moreOpen, setMoreOpen] = useState(false);
 
   // Main actions for bottom bar - simplified to 4 main actions
@@ -191,7 +193,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       description: t('mobileToolbar.pricingDesc', 'Премиум возможности'),
       onClick: () => {
         setMoreOpen(false);
-        navigate('/pricing');
+        router.push('/pricing');
       },
       color: 'from-amber-500/20 to-orange-500/20',
       iconColor: 'text-amber-500',
@@ -207,7 +209,7 @@ export const MobileToolbar = memo(function MobileToolbar({
           <div className="flex items-center justify-center py-2 border-b border-border/10 bg-background/30">
             <AutoSaveIndicator status={saveStatus} />
           </div>
-          
+
           {/* Main actions - Large touch targets */}
           <div className="flex items-center justify-around h-20 px-3">
             {mainActions.map((action) => (
@@ -238,22 +240,22 @@ export const MobileToolbar = memo(function MobileToolbar({
 
       {/* More Sheet - Premium Mobile App Design */}
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent 
-          side="bottom" 
+        <SheetContent
+          side="bottom"
           className="z-[100] h-auto max-h-[92vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl border-t border-border/20 shadow-2xl [&>button]:hidden"
         >
           {/* Handle bar */}
           <div className="flex justify-center pt-4 pb-2">
             <div className="w-12 h-1.5 rounded-full bg-muted-foreground/25" />
           </div>
-          
+
           <SheetHeader className="px-6 pb-5 border-b border-border/10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-2xl font-black">{t('mobileToolbar.moreOptions', 'Меню')}</SheetTitle>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => setMoreOpen(false)} 
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMoreOpen(false)}
                 className="rounded-2xl h-12 w-12 hover:bg-muted/50"
               >
                 <X className="h-6 w-6" />
@@ -261,7 +263,7 @@ export const MobileToolbar = memo(function MobileToolbar({
             </div>
             <SheetDescription className="sr-only">{t('mobileToolbar.moreOptions', 'Дополнительные инструменты')}</SheetDescription>
           </SheetHeader>
-          
+
           <div className="p-5 space-y-3 pb-safe overflow-y-auto max-h-[65vh]">
             {moreActions.map((action, index) => (
               <button
@@ -293,13 +295,13 @@ export const MobileToolbar = memo(function MobileToolbar({
                 </div>
               </button>
             ))}
-            
+
             {/* Status Section - Premium style */}
             <div className="pt-5 border-t border-border/10 mt-6 space-y-4">
               <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
                 {t('mobileToolbar.status', 'Статус')}
               </h3>
-              
+
               <div className="flex items-center justify-between p-5 rounded-3xl bg-gradient-to-r from-orange-500/15 to-amber-500/15 border border-orange-500/20">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-2xl bg-orange-500/20 flex items-center justify-center">
@@ -309,7 +311,7 @@ export const MobileToolbar = memo(function MobileToolbar({
                 </div>
                 <StreakDisplay userId={userId} compact />
               </div>
-              
+
               <div className="flex items-center justify-between p-5 rounded-3xl bg-gradient-to-r from-primary/15 to-violet-500/15 border border-primary/20">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center">
@@ -319,7 +321,7 @@ export const MobileToolbar = memo(function MobileToolbar({
                 </div>
                 <TokenBalanceDisplay onClick={() => { setMoreOpen(false); onOpenTokens(); }} compact />
               </div>
-              
+
               {/* Language Switcher */}
               <div className="flex items-center justify-between p-5 rounded-3xl bg-muted/30">
                 <div className="flex items-center gap-4">

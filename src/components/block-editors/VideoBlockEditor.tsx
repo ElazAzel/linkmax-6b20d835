@@ -57,7 +57,7 @@ function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
         <EditorField label={t('fields.platform', 'Platform')}>
           <Select
             value={formData.platform || 'youtube'}
-            onValueChange={(value) => onChange({ ...formData, platform: value })}
+            onValueChange={(value: string) => onChange({ ...formData, platform: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
@@ -76,7 +76,7 @@ function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
         <EditorField label={t('fields.aspectRatio', 'Aspect Ratio')}>
           <Select
             value={formData.aspectRatio || '16:9'}
-            onValueChange={(value) => onChange({ ...formData, aspectRatio: value })}
+            onValueChange={(value: string) => onChange({ ...formData, aspectRatio: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />

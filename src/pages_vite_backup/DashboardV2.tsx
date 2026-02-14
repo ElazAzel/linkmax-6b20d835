@@ -469,7 +469,7 @@ export default function DashboardV2() {
                 onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
                 usernameSaving={dashboard.usernameState.saving}
                 profileBlock={dashboard.profileBlock}
-                onUpdateProfile={dashboard.handleUpdateProfile}
+                onUpdateProfile={dashboard.handleUpdateProfile as any}
                 isPremium={dashboard.isPremium}
                 premiumTier={dashboard.currentTier}
                 emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}

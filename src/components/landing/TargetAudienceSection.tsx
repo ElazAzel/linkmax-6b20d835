@@ -1,9 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { 
-  Scissors, 
-  Heart, 
+import {
+  Scissors,
+  Heart,
   Brain,
   ArrowRight,
   Bell,
@@ -17,7 +19,7 @@ interface TargetAudienceSectionProps {
 }
 
 export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceSectionProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t } = useTranslation();
 
   const audiences = [
@@ -63,12 +65,12 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
     <section ref={sectionRef} className="py-14 sm:py-20 lg:py-28 px-5 sm:px-6 bg-muted/20">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-10 sm:mb-14 space-y-4">
-          <h2 
+          <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
           >
             {t('landing.targetAudience.title', 'Для кого создан LinkMAX')}
           </h2>
-          <p 
+          <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
@@ -78,14 +80,14 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {audiences.map((audience, index) => (
-            <div 
+            <div
               key={index}
               className={`group relative p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-card/60 backdrop-blur-xl border border-border/40 hover:border-primary/40 transition-all duration-500 hover:shadow-glass-xl hover:-translate-y-2 cursor-default opacity-0 ${isVisible ? 'animate-slide-in-up' : ''}`}
               style={{ animationDelay: `${200 + index * 100}ms` }}
             >
               {/* Hover glow effect */}
               <div className={`absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br ${audience.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500 pointer-events-none`} />
-              
+
               {/* Header */}
               <div className="flex items-start gap-4 mb-5 relative">
                 <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${audience.color} flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-110 group-hover:shadow-xl transition-all duration-300`}>
@@ -100,8 +102,8 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
               {/* Results */}
               <div className="space-y-3 relative">
                 {audience.results.map((result, resultIndex) => (
-                  <div 
-                    key={resultIndex} 
+                  <div
+                    key={resultIndex}
                     className="flex items-start gap-3 group/item"
                   >
                     <div className={`h-6 w-6 rounded-lg ${audience.bgColor} flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform`}>
@@ -118,12 +120,12 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
         </div>
 
         {/* CTA */}
-        <div 
+        <div
           className={`text-center mt-10 sm:mt-14 opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '600ms' }}
         >
-          <Button 
-            onClick={() => navigate('/auth')}
+          <Button
+            onClick={() => router.push('/auth')}
             variant="premium"
             size="lg"
             className="rounded-2xl font-bold px-6 sm:px-8"

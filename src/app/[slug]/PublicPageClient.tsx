@@ -114,21 +114,23 @@ export default function PublicPageClient({ initialPageData }: Props) {
     }, [slug, currentUrl]);
 
     const handleShare = async () => {
+        const navigatorAny = typeof navigator !== 'undefined' ? navigator as any : null;
+
         // Track share event
         if (pageData?.id) {
-            trackShare(pageData.id, navigator.share ? 'native' : 'clipboard');
+            trackShare(pageData.id, navigatorAny?.share ? 'native' : 'clipboard');
         }
 
-        if (navigator.share) {
-            navigator.share({
+        if (navigatorAny?.share) {
+            navigatorAny.share({
                 title: pageData?.seo.title || pageData?.seo.description || t('share.defaultTitle', 'Check out my page'),
                 url: currentUrl,
             }).catch(() => {
-                navigator.clipboard.writeText(currentUrl);
+                navigatorAny.clipboard?.writeText(currentUrl);
                 toast.success(t('share.linkCopied', 'Ссылка скопирована'));
             });
-        } else {
-            navigator.clipboard.writeText(currentUrl);
+        } else if (navigatorAny?.clipboard) {
+            navigatorAny.clipboard.writeText(currentUrl);
             toast.success(t('share.linkCopied', 'Ссылка скопирована'));
         }
     };

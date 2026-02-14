@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import Pricing from '@/pages/Pricing';
+import Pricing from '@/components/screens/Pricing';
 
 export const metadata: Metadata = {
     title: 'Pricing - LinkMAX',

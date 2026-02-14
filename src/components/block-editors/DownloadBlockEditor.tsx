@@ -10,12 +10,12 @@ import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
-  
+
   const handleFileInfoChange = (info: { fileName: string; fileSize: string }) => {
-    onChange({ 
-      ...formData, 
+    onChange({
+      ...formData,
       fileName: info.fileName || formData.fileName,
-      fileSize: info.fileSize || formData.fileSize 
+      fileSize: info.fileSize || formData.fileSize
     });
   };
 
@@ -77,7 +77,7 @@ function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
         <Label>{t('fields.alignment', 'Alignment')}</Label>
         <Select
           value={formData.alignment || 'center'}
-          onValueChange={(value) => onChange({ ...formData, alignment: value })}
+          onValueChange={(value: string) => onChange({ ...formData, alignment: value })}
         >
           <SelectTrigger>
             <SelectValue />

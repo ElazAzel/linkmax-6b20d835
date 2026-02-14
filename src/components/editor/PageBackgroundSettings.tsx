@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
@@ -9,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { Crown, Image, Palette, Sparkles, Lock } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import type { PageBackground } from '@/types/page';
 
 interface PageBackgroundSettingsProps {
@@ -24,8 +26,8 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
   canUseFeature,
 }: PageBackgroundSettingsProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  
+  const router = useRouter();
+
   const currentType = background?.type || 'solid';
   const currentValue = background?.value || '';
   const gradientAngle = background?.gradientAngle || 135;
@@ -63,17 +65,17 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
             Business
           </Badge>
         </div>
-        
+
         <Alert className="bg-muted/50">
           <Lock className="h-4 w-4" />
           <AlertDescription className="text-sm">
             {t('settings.pageBackgroundLocked', 'Пользовательский фон страницы доступен только на тарифе Business. Установите цвет, градиент, изображение или GIF в качестве фона вашей страницы.')}
           </AlertDescription>
         </Alert>
-        
+
         <Button
           size="sm"
-          onClick={() => navigate('/pricing')}
+          onClick={() => router.push('/pricing')}
           className="w-full mt-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
         >
           <Crown className="h-3.5 w-3.5 mr-1.5" />
@@ -106,7 +108,7 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
       <div className="space-y-4">
         <div>
           <Label className="text-xs text-muted-foreground">{t('settings.backgroundType', 'Тип фона')}</Label>
-          <Select value={currentType} onValueChange={(v) => handleTypeChange(v as PageBackground['type'])}>
+          <Select value={currentType} onValueChange={(v: string) => handleTypeChange(v as PageBackground['type'])}>
             <SelectTrigger className="bg-background/50 mt-1">
               <SelectValue />
             </SelectTrigger>
@@ -199,7 +201,7 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
         {background && (
           <div className="mt-3 p-2 rounded-lg border border-border/50 bg-muted/30">
             <Label className="text-xs text-muted-foreground">{t('settings.preview', 'Превью')}</Label>
-            <div 
+            <div
               className="mt-2 h-20 rounded-lg border border-border/30"
               style={getBackgroundPreviewStyle(background)}
             />
@@ -212,18 +214,18 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
 
 function getBackgroundPreviewStyle(background?: PageBackground): React.CSSProperties {
   if (!background) return {};
-  
+
   switch (background.type) {
     case 'solid':
       return { backgroundColor: background.value };
     case 'gradient': {
       const colors = background.value.split(',').map(c => c.trim());
-      return { 
-        background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})` 
+      return {
+        background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})`
       };
     }
     case 'image':
-      return { 
+      return {
         backgroundImage: `url(${background.value})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',

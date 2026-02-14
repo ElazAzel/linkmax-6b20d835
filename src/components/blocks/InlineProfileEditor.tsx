@@ -1,6 +1,8 @@
+'use client';
+
 import { memo, useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -43,19 +45,19 @@ interface InlineProfileEditorProps {
   onUpdate: (updates: Partial<ProfileBlockType>) => void;
 }
 
-export const InlineProfileEditor = memo(function InlineProfileEditor({ 
-  block, 
-  onUpdate 
+export const InlineProfileEditor = memo(function InlineProfileEditor({
+  block,
+  onUpdate
 }: InlineProfileEditorProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { canUsePremiumFrames } = useFreemiumLimits();
   const currentLang = i18n.language as SupportedLanguage;
-  
+
   const name = getI18nText(block.name, currentLang);
   const bio = getI18nText(block.bio, currentLang);
-  
+
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [editedName, setEditedName] = useState(name);
@@ -63,12 +65,12 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [isFullEditorOpen, setIsFullEditorOpen] = useState(false);
-  
+
   // Image cropper state
   const [cropperOpen, setCropperOpen] = useState(false);
   const [cropperImage, setCropperImage] = useState('');
   const [cropperType, setCropperType] = useState<'avatar' | 'cover'>('avatar');
-  
+
   const nameInputRef = useRef<HTMLInputElement>(null);
   const bioTextareaRef = useRef<HTMLTextAreaElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -185,7 +187,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       setCropperOpen(true);
     };
     reader.readAsDataURL(file);
-    
+
     if (avatarInputRef.current) {
       avatarInputRef.current.value = '';
     }
@@ -219,7 +221,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       setCropperOpen(true);
     };
     reader.readAsDataURL(file);
-    
+
     if (coverInputRef.current) {
       coverInputRef.current.value = '';
     }
@@ -227,7 +229,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
 
   const uploadFile = async (file: File | Blob, type: 'avatar' | 'cover') => {
     if (!user) return;
-    
+
     const setUploading = type === 'avatar' ? setIsUploadingAvatar : setIsUploadingCover;
     setUploading(true);
 
@@ -267,11 +269,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
 
   const handleCropperSave = async (croppedDataUrl: string) => {
     setCropperOpen(false);
-    
+
     // Convert data URL to blob without fetch (avoids CSP violations)
     const { dataUrlToBlob } = await import('@/lib/data-url-to-blob');
     const blob = dataUrlToBlob(croppedDataUrl);
-    
+
     await uploadFile(blob, cropperType);
   };
 
@@ -328,13 +330,13 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   // Using the new frame utils
   const frameStyle = block.avatarFrame || 'default';
   const hasGradientFrame = ['gradient', 'gradient-sunset', 'gradient-ocean', 'gradient-purple', 'rainbow', 'rainbow-spin'].includes(frameStyle);
-  
+
   const getPositionClass = () => {
     const position = block.avatarPosition || 'center';
     switch (position) {
       case 'left': return 'items-start';
       case 'right': return 'items-end';
-      case 'center': 
+      case 'center':
       default: return 'items-center';
     }
   };
@@ -370,25 +372,25 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         onChange={handleCoverUpload}
         className="hidden"
       />
-      
+
       {/* Cover image area - clickable */}
-      <div 
+      <div
         className={`relative w-full ${getCoverHeight()} overflow-hidden group/cover ${!block.coverImage ? 'bg-muted border-2 border-dashed border-border cursor-pointer' : ''}`}
         onClick={!block.coverImage ? handleCoverClick : undefined}
         title={!block.coverImage ? t('profile.clickToChangeCover', 'Click to add cover') : undefined}
       >
         {block.coverImage ? (
           <>
-            <img 
-              src={block.coverImage} 
-              alt="Cover" 
+            <img
+              src={block.coverImage}
+              alt="Cover"
               className="w-full h-full object-cover cursor-pointer"
               onClick={handleCoverClick}
             />
             {block.coverGradient !== 'none' && (
               <div className={`absolute inset-0 ${getCoverGradient()} pointer-events-none`} />
             )}
-            
+
             {/* Cover controls */}
             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover/cover:opacity-100 transition-opacity z-10">
               {/* Settings popover */}
@@ -410,7 +412,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                       <Label className="text-xs">{t('profile.coverHeight', 'Height')}</Label>
                       <Select
                         value={block.coverHeight || 'medium'}
-                        onValueChange={(value) => onUpdate({ coverHeight: value as 'small' | 'medium' | 'large' })}
+                        onValueChange={(value: string) => onUpdate({ coverHeight: value as 'small' | 'medium' | 'large' })}
                       >
                         <SelectTrigger className="h-8">
                           <SelectValue />
@@ -422,12 +424,12 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label className="text-xs">{t('profile.coverGradient', 'Gradient overlay')}</Label>
                       <Select
                         value={block.coverGradient || 'none'}
-                        onValueChange={(value) => onUpdate({ coverGradient: value as 'none' | 'dark' | 'light' | 'primary' | 'sunset' | 'ocean' | 'purple' })}
+                        onValueChange={(value: string) => onUpdate({ coverGradient: value as 'none' | 'dark' | 'light' | 'primary' | 'sunset' | 'ocean' | 'purple' })}
                       >
                         <SelectTrigger className="h-8">
                           <SelectValue />
@@ -446,7 +448,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                   </div>
                 </PopoverContent>
               </Popover>
-              
+
               {/* Delete button */}
               <Button
                 size="icon"
@@ -471,7 +473,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
             </div>
           </div>
         )}
-        
+
         {/* Upload overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover/cover:opacity-100 transition-opacity pointer-events-none">
           {isUploadingCover ? (
@@ -484,7 +486,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
           )}
         </div>
       </div>
-      
+
       <div className={`flex flex-col ${getPositionClass()} gap-5 p-8 ${block.coverImage ? '-mt-20' : ''}`}>
         {/* Hidden file input for avatar upload */}
         <input
@@ -494,11 +496,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
           onChange={handleAvatarUpload}
           className="hidden"
         />
-        
+
         {/* Avatar with settings */}
         <div className="relative group/avatar-container">
           {/* Clickable Avatar */}
-          <div 
+          <div
             className={`${getShadowClass()} relative cursor-pointer group/avatar rounded-full`}
             onClick={handleAvatarClick}
             title={t('profile.clickToChangeAvatar', 'Click to change avatar')}
@@ -509,7 +511,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                 {initials}
               </AvatarFallback>
             </Avatar>
-            
+
             {/* Upload overlay */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover/avatar:opacity-100 transition-opacity">
               {isUploadingAvatar ? (
@@ -519,7 +521,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
               )}
             </div>
           </div>
-          
+
           {/* Avatar settings button */}
           <Popover>
             <PopoverTrigger asChild>
@@ -546,23 +548,23 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                     {t('profile.nameAnim', 'Имя')}
                   </TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="frame" className="mt-0">
                   <FrameSelector
                     value={block.avatarFrame || 'default'}
                     onChange={(value) => onUpdate({ avatarFrame: value })}
                     isPremium={canUsePremiumFrames()}
                     avatarUrl={block.avatar}
-                    onUpgradeClick={() => navigate('/pricing')}
+                    onUpgradeClick={() => router.push('/pricing')}
                   />
                 </TabsContent>
-                
+
                 <TabsContent value="size" className="mt-0 space-y-4">
                   <div className="space-y-2">
                     <Label className="text-xs">{t('profile.avatarSize', 'Размер аватара')}</Label>
                     <Select
                       value={block.avatarSize || 'large'}
-                      onValueChange={(value) => onUpdate({ avatarSize: value as 'small' | 'medium' | 'large' | 'xlarge' })}
+                      onValueChange={(value: string) => onUpdate({ avatarSize: value as 'small' | 'medium' | 'large' | 'xlarge' })}
                     >
                       <SelectTrigger className="h-9">
                         <SelectValue />
@@ -575,12 +577,12 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label className="text-xs">{t('profile.shadowStyle', 'Тень')}</Label>
                     <Select
                       value={block.shadowStyle || 'soft'}
-                      onValueChange={(value) => onUpdate({ shadowStyle: value as 'none' | 'soft' | 'medium' | 'strong' | 'glow' })}
+                      onValueChange={(value: string) => onUpdate({ shadowStyle: value as 'none' | 'soft' | 'medium' | 'strong' | 'glow' })}
                     >
                       <SelectTrigger className="h-9">
                         <SelectValue />
@@ -595,25 +597,25 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                     </Select>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="animation" className="mt-0">
                   <NameAnimationSelector
                     value={(block.nameAnimation as NameAnimationType) || 'none'}
                     onChange={(value) => onUpdate({ nameAnimation: value })}
                     isPremium={canUsePremiumFrames()}
                     previewName={name}
-                    onUpgradeClick={() => navigate('/pricing')}
+                    onUpgradeClick={() => router.push('/pricing')}
                   />
                 </TabsContent>
               </Tabs>
             </PopoverContent>
           </Popover>
         </div>
-        
+
         <div className="text-center space-y-3 w-full max-w-md">
           {/* CSS for name animations */}
           <style>{NAME_ANIMATION_CSS}</style>
-          
+
           {/* Editable Name - Optimized with animations */}
           <div className="flex items-center justify-center gap-3">
             {isEditingName ? (
@@ -638,7 +640,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                 </Button>
               </div>
             ) : (
-              <h1 
+              <h1
                 className={cn(
                   "text-2xl sm:text-3xl font-black cursor-pointer transition-all duration-200",
                   "hover:text-primary border-b-2 border-transparent hover:border-primary/30",
@@ -658,7 +660,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
               </Badge>
             )}
           </div>
-          
+
           {/* Editable Bio - Optimized with animations */}
           {isEditingBio ? (
             <div className="space-y-3 w-full animate-in fade-in zoom-in-95 duration-200">
@@ -681,7 +683,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
               </div>
             </div>
           ) : (
-            <p 
+            <p
               className={cn(
                 "text-base sm:text-lg text-muted-foreground cursor-pointer transition-all duration-200",
                 "hover:text-foreground border-b-2 border-transparent hover:border-primary/30",

@@ -23,8 +23,8 @@ async function fetchPages(): Promise<AdminPageData[]> {
   if (error) throw error;
 
   // Get usernames for pages
-  const userIds = [...new Set(data?.map(p => p.user_id) || [])];
-  
+  const userIds = Array.from(new Set(data?.map(p => p.user_id) || []));
+
   if (userIds.length === 0) return [];
 
   const { data: profiles } = await supabase
@@ -36,6 +36,10 @@ async function fetchPages(): Promise<AdminPageData[]> {
 
   return (data || []).map(p => ({
     ...p,
+    is_published: p.is_published ?? false,
+    view_count: p.view_count ?? 0,
+    is_in_gallery: p.is_in_gallery ?? false,
+    created_at: p.created_at || new Date().toISOString(),
     username: profileMap.get(p.user_id) || 'Unknown'
   }));
 }

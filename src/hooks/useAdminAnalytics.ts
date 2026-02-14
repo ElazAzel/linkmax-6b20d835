@@ -157,6 +157,7 @@ export function useAdminAnalytics() {
                 dayEnd.setDate(dayEnd.getDate() + 1);
 
                 const dayEvents = events.filter(e => {
+                    if (!e.created_at) return false;
                     const d = new Date(e.created_at);
                     return d >= dayStart && d < dayEnd;
                 });
@@ -193,6 +194,7 @@ export function useAdminAnalytics() {
                 hourEnd.setHours(hourEnd.getHours() + 1);
 
                 const hourEvents = events.filter(e => {
+                    if (!e.created_at) return false;
                     const d = new Date(e.created_at);
                     return d >= hourStart && d < hourEnd;
                 });
@@ -299,6 +301,7 @@ export function useAdminAnalytics() {
             // Engagement by hour
             const hourCounts: Record<number, number> = {};
             events.forEach(e => {
+                if (!e.created_at) return;
                 const hour = new Date(e.created_at).getHours();
                 hourCounts[hour] = (hourCounts[hour] || 0) + 1;
             });
@@ -312,6 +315,7 @@ export function useAdminAnalytics() {
             // Note: day names generation needs i18n, moved to component or passed as simplified index
             const dayCounts: Record<number, number> = {};
             events.forEach(e => {
+                if (!e.created_at) return;
                 const day = new Date(e.created_at).getDay();
                 dayCounts[day] = (dayCounts[day] || 0) + 1;
             });

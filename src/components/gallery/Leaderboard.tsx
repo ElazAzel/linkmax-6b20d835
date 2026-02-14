@@ -32,8 +32,8 @@ export function Leaderboard() {
             <Trophy className="h-5 w-5 text-amber-500" />
             {t('leaderboard.title', 'Top Pages')}
           </CardTitle>
-          
-          <Tabs value={period} onValueChange={(v) => setPeriod(v as LeaderboardPeriod)}>
+
+          <Tabs value={period} onValueChange={(v: string) => setPeriod(v as LeaderboardPeriod)}>
             <TabsList className="bg-background/50 h-8">
               <TabsTrigger value="week" className="text-xs px-2 h-6">
                 <Calendar className="h-3 w-3 mr-1" />
@@ -50,7 +50,7 @@ export function Leaderboard() {
           </Tabs>
         </div>
       </CardHeader>
-      
+
       <CardContent className="pt-0">
         {loading ? (
           <div className="flex items-center justify-center py-8">
@@ -66,7 +66,7 @@ export function Leaderboard() {
             {pages.map((page, index) => {
               const rankStyle = RANK_STYLES[index] || null;
               const isTopThree = index < 3;
-              
+
               return (
                 <div
                   key={page.id}

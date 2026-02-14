@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Users, ArrowRight, Crown, Eye, Heart, Loader2, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +14,7 @@ import { toast } from 'sonner';
 
 export function LandingGallerySection() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { pages, loading, likePage, selectedNiche, setSelectedNiche, nicheCounts } = useGallery();
   const [likedPages, setLikedPages] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
@@ -22,20 +24,20 @@ export function LandingGallerySection() {
 
   const handleLike = useCallback(async (e: React.MouseEvent, pageId: string) => {
     e.stopPropagation();
-    
+
     // Check localStorage for liked pages
     const storedLikes = localStorage.getItem('linkmax_liked_pages');
     const likedSet = new Set<string>(storedLikes ? JSON.parse(storedLikes) : []);
-    
+
     if (likedSet.has(pageId)) {
       toast.info(t('gallery.alreadyLiked'));
       return;
     }
-    
+
     await likePage(pageId);
     likedSet.add(pageId);
     setLikedPages(new Set(likedSet));
-    localStorage.setItem('linkmax_liked_pages', JSON.stringify([...likedSet]));
+    localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(likedSet)));
     toast.success(t('gallery.liked'));
   }, [likePage, t]);
 
@@ -87,7 +89,7 @@ export function LandingGallerySection() {
               {t('gallery.filter')}
             </Button>
           </div>
-          
+
           <div className={`flex flex-wrap justify-center gap-2 ${showFilters ? '' : 'hidden sm:flex'}`}>
             <Button
               variant={selectedNiche === null ? 'default' : 'outline'}
@@ -100,7 +102,7 @@ export function LandingGallerySection() {
                 {Object.values(nicheCounts).reduce((a, b) => a + b, 0)}
               </Badge>
             </Button>
-            
+
             {topNiches.map((niche) => (
               <Button
                 key={niche}
@@ -137,10 +139,10 @@ export function LandingGallerySection() {
         {!loading && displayPages.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
             {displayPages.map((page) => (
-              <Card 
-                key={page.id} 
+              <Card
+                key={page.id}
                 className="group cursor-pointer bg-card/50 backdrop-blur-xl border-border/30 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
-                onClick={() => navigate(`/${page.slug}`)}
+                onClick={() => router.push(`/${page.slug}`)}
               >
                 {/* Avatar Section */}
                 <div className="relative p-3 sm:p-4 pb-2 flex flex-col items-center">
@@ -152,11 +154,11 @@ export function LandingGallerySection() {
                       </div>
                     </div>
                   )}
-                  
+
                   <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-2 border-primary/20 shadow-md group-hover:scale-105 transition-transform">
-                    <AvatarImage 
-                      src={page.avatar_url || ''} 
-                      alt={page.title || ''} 
+                    <AvatarImage
+                      src={page.avatar_url || ''}
+                      alt={page.title || ''}
                       loading="lazy"
                       decoding="async"
                     />
@@ -165,13 +167,13 @@ export function LandingGallerySection() {
                     </AvatarFallback>
                   </Avatar>
                 </div>
-                
+
                 {/* Page Info */}
                 <div className="px-2.5 sm:px-3 pb-2.5 sm:pb-3">
                   <h3 className="font-semibold text-xs sm:text-sm text-center truncate mb-1.5">
                     {page.title || page.slug}
                   </h3>
-                  
+
                   {page.niche && (
                     <div className="flex justify-center mb-2">
                       <Badge variant="secondary" className="text-[9px] sm:text-[10px] px-1.5 py-0">
@@ -179,7 +181,7 @@ export function LandingGallerySection() {
                       </Badge>
                     </div>
                   )}
-                  
+
                   {/* Stats */}
                   <div className="flex items-center justify-center gap-3 text-[10px] sm:text-xs text-muted-foreground">
                     <span className="flex items-center gap-0.5">
@@ -188,9 +190,8 @@ export function LandingGallerySection() {
                     </span>
                     <button
                       onClick={(e) => handleLike(e, page.id)}
-                      className={`flex items-center gap-0.5 transition-colors hover:text-red-500 ${
-                        likedPages.has(page.id) ? 'text-red-500' : ''
-                      }`}
+                      className={`flex items-center gap-0.5 transition-colors hover:text-red-500 ${likedPages.has(page.id) ? 'text-red-500' : ''
+                        }`}
                     >
                       <Heart className={`h-3 w-3 ${likedPages.has(page.id) ? 'fill-current' : ''}`} />
                       {page.gallery_likes || 0}
@@ -207,7 +208,7 @@ export function LandingGallerySection() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => navigate('/gallery')}
+            onClick={() => router.push('/gallery')}
             className="rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-semibold bg-background/60 backdrop-blur-xl hover:bg-accent border-border/50 hover:border-primary/30 transition-all group"
           >
             {t('landing.gallery.viewAll')}

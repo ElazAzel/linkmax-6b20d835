@@ -206,7 +206,7 @@ export function BookingsPanel() {
     link.download = `bookings-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
-    
+
     toast.success(t('bookings.exportSuccess', 'Bookings exported successfully'));
   };
 
@@ -215,7 +215,7 @@ export function BookingsPanel() {
     const startDate = parseISO(booking.slot_date);
     const [hours, minutes] = booking.slot_time.split(':').map(Number);
     startDate.setHours(hours, minutes, 0, 0);
-    
+
     const endDate = new Date(startDate);
     if (booking.slot_end_time) {
       const [endHours, endMinutes] = booking.slot_end_time.split(':').map(Number);
@@ -247,7 +247,7 @@ END:VCALENDAR`;
     link.download = `booking-${booking.client_name.replace(/\s+/g, '-')}-${booking.slot_date}.ics`;
     link.click();
     URL.revokeObjectURL(link.href);
-    
+
     toast.success(t('bookings.calendarExported', 'Added to calendar'));
   };
 
@@ -283,7 +283,7 @@ END:VCALENDAR`;
       </div>
 
       {/* Filter Tabs */}
-      <Tabs value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)} className="w-full">
+      <Tabs value={statusFilter} onValueChange={(v: string) => setStatusFilter(v as any)} className="w-full">
         <TabsList className="grid w-full grid-cols-3 mx-0 rounded-none border-b bg-transparent h-10">
           <TabsTrigger value="upcoming" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs">
             {t('bookings.upcoming', 'Upcoming')}

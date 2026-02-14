@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import Experts from '@/pages/Experts';
+import Experts from '@/components/screens/Experts';
 
 export const metadata: Metadata = {
     title: 'Experts - LinkMAX',

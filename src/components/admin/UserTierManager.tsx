@@ -73,7 +73,7 @@ export function UserTierManager() {
       if (rolesError) throw rolesError;
 
       const adminUserIds = new Set(rolesData?.map(r => r.user_id) || []);
-      
+
       const usersWithRoles = (profilesData || []).map(user => ({
         ...user,
         isAdmin: adminUserIds.has(user.id)
@@ -97,7 +97,7 @@ export function UserTierManager() {
 
   const handleSave = async () => {
     if (!editingUser) return;
-    
+
     setSaving(true);
     try {
       // Update user profile
@@ -146,7 +146,7 @@ export function UserTierManager() {
   const setQuickExpiry = (duration: 'week' | 'month' | 'year' | 'lifetime') => {
     const now = new Date();
     let newDate: Date;
-    
+
     switch (duration) {
       case 'week':
         newDate = addDays(now, 7);
@@ -161,7 +161,7 @@ export function UserTierManager() {
         newDate = addYears(now, 100);
         break;
     }
-    
+
     setExpiresAt(format(newDate, 'yyyy-MM-dd'));
   };
 
@@ -176,17 +176,17 @@ export function UserTierManager() {
 
   const getExpiryStatus = (user: UserTierData) => {
     if (user.premium_tier === 'free') return null;
-    
+
     const expiresAt = user.premium_expires_at;
     if (!expiresAt) return <span className="text-green-500 text-xs">{t('admin.lifetime')}</span>;
-    
+
     const expiryDate = new Date(expiresAt);
     const now = new Date();
-    
+
     if (expiryDate < now) {
       return <span className="text-destructive text-xs">{t('admin.expired')}</span>;
     }
-    
+
     return (
       <span className="text-muted-foreground text-xs">
         {t('admin.expiresOn')} {format(expiryDate, 'dd.MM.yyyy', { locale: getDateLocale() })}
@@ -214,7 +214,7 @@ export function UserTierManager() {
           <Crown className="h-5 w-5 text-yellow-500" />
           {t('admin.tierManagement')}
         </h2>
-        
+
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -296,8 +296,8 @@ export function UserTierManager() {
                     <TableCell className="text-right">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => openEditDialog(user)}
                           >
@@ -312,7 +312,7 @@ export function UserTierManager() {
                               {t('admin.editUserTier')}
                             </DialogTitle>
                           </DialogHeader>
-                          
+
                           {editingUser?.id === user.id && (
                             <div className="space-y-4 pt-4">
                               <div className="p-3 bg-muted rounded-lg">
@@ -324,7 +324,7 @@ export function UserTierManager() {
 
                               <div className="space-y-2">
                                 <Label>{t('admin.selectTier')}</Label>
-                                <Select value={newTier} onValueChange={(v) => setNewTier(v as PremiumTier)}>
+                                <Select value={newTier} onValueChange={(v: string) => setNewTier(v as PremiumTier)}>
                                   <SelectTrigger>
                                     <SelectValue />
                                   </SelectTrigger>
@@ -362,35 +362,35 @@ export function UserTierManager() {
                                     onChange={(e) => setExpiresAt(e.target.value)}
                                     min={format(new Date(), 'yyyy-MM-dd')}
                                   />
-                                  
+
                                   <div className="flex flex-wrap gap-2 pt-2">
-                                    <Button 
-                                      type="button" 
-                                      variant="outline" 
+                                    <Button
+                                      type="button"
+                                      variant="outline"
                                       size="sm"
                                       onClick={() => setQuickExpiry('week')}
                                     >
                                       +1 {t('admin.week')}
                                     </Button>
-                                    <Button 
-                                      type="button" 
-                                      variant="outline" 
+                                    <Button
+                                      type="button"
+                                      variant="outline"
                                       size="sm"
                                       onClick={() => setQuickExpiry('month')}
                                     >
                                       +1 {t('admin.month')}
                                     </Button>
-                                    <Button 
-                                      type="button" 
-                                      variant="outline" 
+                                    <Button
+                                      type="button"
+                                      variant="outline"
                                       size="sm"
                                       onClick={() => setQuickExpiry('year')}
                                     >
                                       +1 {t('admin.year')}
                                     </Button>
-                                    <Button 
-                                      type="button" 
-                                      variant="outline" 
+                                    <Button
+                                      type="button"
+                                      variant="outline"
                                       size="sm"
                                       onClick={() => setQuickExpiry('lifetime')}
                                     >
@@ -405,8 +405,8 @@ export function UserTierManager() {
                               )}
 
                               <div className="flex justify-end gap-2 pt-4">
-                                <Button 
-                                  variant="outline" 
+                                <Button
+                                  variant="outline"
                                   onClick={() => setEditingUser(null)}
                                 >
                                   {t('admin.cancel')}

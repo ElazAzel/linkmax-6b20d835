@@ -94,7 +94,7 @@ export const PagesScreen = memo(function PagesScreen({
     // Filter by search
     if (search.trim()) {
       const query = search.toLowerCase();
-      result = result.filter(p => 
+      result = result.filter(p =>
         p.title.toLowerCase().includes(query) ||
         p.slug.toLowerCase().includes(query)
       );
@@ -149,7 +149,7 @@ export const PagesScreen = memo(function PagesScreen({
         title={t('dashboard.pages.title', 'Pages')}
         subtitle={t('dashboard.pages.subtitle', 'Manage your pages')}
         actions={
-          <Button 
+          <Button
             onClick={onCreatePage}
             size="sm"
             className="rounded-xl"
@@ -172,13 +172,13 @@ export const PagesScreen = memo(function PagesScreen({
                 {limits.currentPages} / {limits.maxPages}
               </span>
             </div>
-            <Progress 
-              value={(limits.currentPages / limits.maxPages) * 100} 
+            <Progress
+              value={(limits.currentPages / limits.maxPages) * 100}
               className="h-2 mb-2"
             />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>
-                {limits.tier === 'pro' 
+                {limits.tier === 'pro'
                   ? t('dashboard.pages.proLimits', '1 paid included + {{free}} free', { free: limits.freePages })
                   : t('dashboard.pages.freeLimits', 'Upgrade to Pro for more pages')
                 }
@@ -203,7 +203,7 @@ export const PagesScreen = memo(function PagesScreen({
               className="pl-9 rounded-xl"
             />
           </div>
-          <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
+          <Tabs value={filter} onValueChange={(v: string) => setFilter(v as typeof filter)}>
             <TabsList className="rounded-xl">
               <TabsTrigger value="all" className="rounded-lg">
                 {t('dashboard.pages.all', 'All')}
@@ -222,7 +222,7 @@ export const PagesScreen = memo(function PagesScreen({
         {filteredPages.length === 0 ? (
           <EmptyState
             icon={<Plus className="w-8 h-8" />}
-            title={pages.length === 0 
+            title={pages.length === 0
               ? t('dashboard.pages.emptyTitle', 'No pages yet')
               : t('dashboard.pages.noResults', 'No pages found')
             }
@@ -238,7 +238,7 @@ export const PagesScreen = memo(function PagesScreen({
         ) : (
           <div className="grid gap-3">
             {filteredPages.map((page) => (
-              <Card 
+              <Card
                 key={page.id}
                 className="rounded-2xl border-border/50 hover:border-primary/30 transition-colors cursor-pointer"
                 onClick={() => onEditPage?.(page.id)}
@@ -248,8 +248,8 @@ export const PagesScreen = memo(function PagesScreen({
                     {/* Cover Thumbnail */}
                     <div className="w-16 h-16 rounded-xl bg-muted flex-shrink-0 overflow-hidden">
                       {page.coverUrl ? (
-                        <img 
-                          src={page.coverUrl} 
+                        <img
+                          src={page.coverUrl}
                           alt={page.title}
                           className="w-full h-full object-cover"
                         />
@@ -274,8 +274,8 @@ export const PagesScreen = memo(function PagesScreen({
                             lnkmx.my/{page.slug}
                           </p>
                         </div>
-                        <StatusBadge 
-                          status={page.isPublished ? 'published' : 'draft'} 
+                        <StatusBadge
+                          status={page.isPublished ? 'published' : 'draft'}
                         />
                       </div>
 
@@ -339,7 +339,7 @@ export const PagesScreen = memo(function PagesScreen({
                               {pages.length > 1 && onDeletePage && (
                                 <>
                                   <DropdownMenuSeparator />
-                                  <DropdownMenuItem 
+                                  <DropdownMenuItem
                                     onClick={() => onDeletePage(page.id)}
                                     className="text-destructive focus:text-destructive"
                                   >

@@ -672,7 +672,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
         </div>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
+        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as typeof activeTab)}>
           <TabsList className="w-full justify-start px-4 h-10 bg-transparent border-b rounded-none">
             <TabsTrigger value="all" className="text-xs">
               {t('events.all', 'Все')} ({stats.total})

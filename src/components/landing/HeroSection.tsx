@@ -1,12 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState, useCallback } from 'react';
-import { 
-  ArrowRight, 
-  Check, 
-  Bot, 
+import {
+  ArrowRight,
+  Check,
+  Bot,
   Zap,
   MessageSquare,
   Bell,
@@ -21,18 +23,18 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
   const handleCreatePage = useCallback(() => {
     if (username.trim()) {
-      navigate(`/auth?username=${encodeURIComponent(username.trim())}`);
+      router.push(`/auth?username=${encodeURIComponent(username.trim())}`);
     } else {
-      navigate('/auth');
+      router.push('/auth');
     }
-  }, [username, navigate]);
+  }, [username, router]);
 
   const benefits = [
     { icon: Bot, label: t('landing.hero.benefit1', 'AI создаёт всё сам'), color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' },
@@ -52,7 +54,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
       <div className="container mx-auto max-w-5xl relative z-10">
         <div className="text-center space-y-6 sm:space-y-8">
           {/* Badge with micro-interaction */}
-          <div 
+          <div
             className={cn(
               "inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium",
               "hover:bg-primary/15 hover:border-primary/30 hover:scale-105 transition-all duration-300 cursor-default",
@@ -65,11 +67,11 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
           </div>
 
           {/* Main headline with staggered reveal */}
-          <div 
+          <div
             className={cn(
               "space-y-4 opacity-0",
               isVisible && "animate-blur-in"
-            )} 
+            )}
             style={{ animationDelay: '100ms' }}
           >
             <h1 className="text-[2.25rem] sm:text-[3rem] lg:text-[4rem] xl:text-[4.5rem] font-extrabold tracking-[-0.03em] leading-[1.05]">
@@ -82,7 +84,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
           </div>
 
           {/* Subtitle with fade up */}
-          <p 
+          <p
             className={cn(
               "text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-normal",
               "opacity-0",
@@ -94,7 +96,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
           </p>
 
           {/* Key benefits with hover effects */}
-          <div 
+          <div
             className={cn(
               "flex flex-wrap justify-center gap-3 sm:gap-4",
               "opacity-0",
@@ -103,7 +105,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             style={{ animationDelay: '300ms' }}
           >
             {benefits.map((benefit, index) => (
-              <div 
+              <div
                 key={index}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-300",
@@ -118,7 +120,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
           </div>
 
           {/* Username Input with enhanced interaction */}
-          <div 
+          <div
             className={cn(
               "max-w-lg mx-auto",
               "opacity-0",
@@ -126,12 +128,12 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             )}
             style={{ animationDelay: '400ms' }}
           >
-            <div 
+            <div
               className={cn(
                 "relative flex items-center gap-2 p-1.5 sm:p-2 rounded-2xl transition-all duration-400",
                 "bg-card/80 backdrop-blur-2xl border shadow-glass-lg",
-                isFocused 
-                  ? "border-primary/50 shadow-glass-xl ring-4 ring-primary/10" 
+                isFocused
+                  ? "border-primary/50 shadow-glass-xl ring-4 ring-primary/10"
                   : "border-border/50 hover:border-border/70 hover:shadow-glass-xl"
               )}
             >
@@ -149,7 +151,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
                 onBlur={() => setIsFocused(false)}
                 aria-label="Username"
               />
-              <Button 
+              <Button
                 onClick={handleCreatePage}
                 size="lg"
                 className="rounded-xl font-bold px-5 sm:px-7 bg-gradient-to-r from-primary to-violet-600 hover:from-primary/90 hover:to-violet-600/90 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
@@ -159,7 +161,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
-            
+
             {/* Trust indicators */}
             <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mt-4 text-muted-foreground">
               <span className="flex items-center gap-1.5 text-sm">
@@ -178,7 +180,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
           </div>
 
           {/* Secondary CTA with subtle animation */}
-          <div 
+          <div
             className={cn(
               "pt-2",
               "opacity-0",
@@ -186,9 +188,9 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             )}
             style={{ animationDelay: '500ms' }}
           >
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/gallery')}
+            <Button
+              variant="ghost"
+              onClick={() => router.push('/gallery')}
               className="text-muted-foreground hover:text-foreground hover:bg-foreground/5 group px-6 py-2"
             >
               <Users className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />

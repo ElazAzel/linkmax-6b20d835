@@ -1,10 +1,12 @@
+'use client';
+
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { 
-  Target, 
-  Wand2, 
-  Bell, 
+import {
+  Target,
+  Wand2,
+  Bell,
   ArrowRight,
   Sparkles
 } from 'lucide-react';
@@ -16,7 +18,7 @@ interface HowItWorksSectionProps {
 
 export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const steps = [
     {
@@ -46,13 +48,13 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
     <section ref={sectionRef} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6">
       <div className="container mx-auto max-w-5xl">
         <div className="text-center mb-12 sm:mb-16 space-y-4">
-          <div 
+          <div
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
           >
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-primary">{t('landing.howItWorks.badge', '1 минута до результата')}</span>
           </div>
-          <h2 
+          <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '100ms' }}
           >
@@ -66,10 +68,10 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
           <div className="hidden md:block absolute top-24 left-[16.66%] right-[16.66%] h-0.5 overflow-hidden">
             <div className="h-full bg-gradient-to-r from-pink-500/40 via-violet-500/40 to-blue-500/40 animate-pulse" />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-8">
             {steps.map((step, index) => (
-              <div 
+              <div
                 key={index}
                 className={`group relative text-center opacity-0 ${isVisible ? 'animate-slide-in-up' : ''}`}
                 style={{ animationDelay: `${200 + index * 150}ms` }}
@@ -96,12 +98,12 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
         </div>
 
         {/* CTA */}
-        <div 
+        <div
           className={`text-center mt-14 sm:mt-20 opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '700ms' }}
         >
-          <Button 
-            onClick={() => navigate('/auth')}
+          <Button
+            onClick={() => router.push('/auth')}
             variant="premium"
             size="lg"
             className="rounded-2xl font-bold px-6 sm:px-8"

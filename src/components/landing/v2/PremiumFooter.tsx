@@ -1,5 +1,7 @@
+'use client';
+
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Heart, Mail, MapPin } from 'lucide-react';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
@@ -7,7 +9,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export const PremiumFooter = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const router = useRouter();
     const currentYear = new Date().getFullYear();
 
     return (
@@ -28,13 +30,13 @@ export const PremiumFooter = () => {
                     {/* Product */}
                     <div className="flex flex-col gap-3">
                         <h4 className="font-bold text-foreground">{t('footer.product', 'Product')}</h4>
-                        <button onClick={() => navigate('/gallery')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                        <button onClick={() => router.push('/gallery')} className="text-muted-foreground hover:text-primary transition-colors text-left">
                             {t('landingV5.footer.examples', 'Examples')}
                         </button>
-                        <button onClick={() => navigate('/pricing')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                        <button onClick={() => router.push('/pricing')} className="text-muted-foreground hover:text-primary transition-colors text-left">
                             {t('landingV5.footer.pricing', 'Pricing')}
                         </button>
-                        <button onClick={() => navigate('/alternatives')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                        <button onClick={() => router.push('/alternatives')} className="text-muted-foreground hover:text-primary transition-colors text-left">
                             {t('footer.alternatives', 'Alternatives')}
                         </button>
                     </div>
@@ -48,7 +50,7 @@ export const PremiumFooter = () => {
                         <PrivacyLink className="text-muted-foreground hover:text-primary transition-colors text-left">
                             {t('landingV5.footer.privacy', 'Privacy Policy')}
                         </PrivacyLink>
-                        <button onClick={() => navigate('/payment-terms')} className="text-muted-foreground hover:text-primary transition-colors text-left">
+                        <button onClick={() => router.push('/payment-terms')} className="text-muted-foreground hover:text-primary transition-colors text-left">
                             {t('footer.paymentTerms', 'Payment Terms')}
                         </button>
                     </div>

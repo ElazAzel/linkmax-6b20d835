@@ -245,19 +245,15 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
 
   const updateBlock = useCallback((id: string, updates: Partial<Block>) => {
     if (!pageData) return;
-    let updatedBlock: Block | null = null;
     const newPageData = {
       ...pageData,
       blocks: pageData.blocks.map(block =>
-        block.id === id ? (() => {
-          const next = { ...block, ...updates } as Block;
-          updatedBlock = next;
-          return next;
-        })() : block
+        block.id === id ? ({ ...block, ...updates } as Block) : block
       ),
     };
     setPageData(newPageData);
 
+    const updatedBlock = newPageData.blocks.find(b => b.id === id);
     if (updatedBlock?.type === 'event') {
       void syncEventBlock(updatedBlock, pageData.id, user?.id);
     }

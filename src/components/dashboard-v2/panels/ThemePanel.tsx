@@ -200,7 +200,7 @@ export const ThemePanel = memo(function ThemePanel({
       onThemeChange({ ...currentTheme, customBackground: undefined });
       return;
     }
-    
+
     if (!isPremium) {
       onUpgrade?.();
       return;
@@ -216,17 +216,17 @@ export const ThemePanel = memo(function ThemePanel({
 
   const handleBackgroundValueChange = (value: string) => {
     if (!customBackground) return;
-    onThemeChange({ 
-      ...currentTheme, 
-      customBackground: { ...customBackground, value } 
+    onThemeChange({
+      ...currentTheme,
+      customBackground: { ...customBackground, value }
     });
   };
 
   const handleGradientAngleChange = (angle: number) => {
     if (!customBackground) return;
-    onThemeChange({ 
-      ...currentTheme, 
-      customBackground: { ...customBackground, gradientAngle: angle } 
+    onThemeChange({
+      ...currentTheme,
+      customBackground: { ...customBackground, gradientAngle: angle }
     });
   };
 
@@ -242,7 +242,7 @@ export const ThemePanel = memo(function ThemePanel({
           </div>
         </SheetHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v)} className="w-full">
           <TabsList className="w-full grid grid-cols-2 m-4 mx-5" style={{ width: 'calc(100% - 40px)' }}>
             <TabsTrigger value="themes" className="gap-2">
               <Palette className="h-4 w-4" />
@@ -334,9 +334,9 @@ export const ThemePanel = memo(function ThemePanel({
               {/* Background Type Selector */}
               <div className="space-y-2">
                 <Label className="text-xs text-muted-foreground">{t('settings.backgroundType', 'Тип фона')}</Label>
-                <Select 
-                  value={currentBgType} 
-                  onValueChange={(v) => handleBackgroundTypeChange(v as any)}
+                <Select
+                  value={currentBgType}
+                  onValueChange={(v: string) => handleBackgroundTypeChange(v as any)}
                 >
                   <SelectTrigger className="bg-background/50">
                     <SelectValue />
@@ -437,7 +437,7 @@ export const ThemePanel = memo(function ThemePanel({
               {customBackground && isPremium && (
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">{t('settings.preview', 'Превью')}</Label>
-                  <div 
+                  <div
                     className="h-24 rounded-xl border border-border/30"
                     style={getBackgroundPreviewStyle(customBackground)}
                   />
@@ -476,18 +476,18 @@ export const ThemePanel = memo(function ThemePanel({
 
 function getBackgroundPreviewStyle(background?: PageBackground): React.CSSProperties {
   if (!background) return {};
-  
+
   switch (background.type) {
     case 'solid':
       return { backgroundColor: background.value };
     case 'gradient': {
       const colors = background.value.split(',').map(c => c.trim());
-      return { 
-        background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})` 
+      return {
+        background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})`
       };
     }
     case 'image':
-      return { 
+      return {
         backgroundImage: `url(${background.value})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -512,8 +512,8 @@ function ThemeCard({ theme, isActive, isLocked, onSelect }: ThemeCardProps) {
       onClick={onSelect}
       className={cn(
         "relative cursor-pointer transition-all hover:scale-[1.02] overflow-hidden",
-        isActive 
-          ? "ring-2 ring-primary shadow-lg" 
+        isActive
+          ? "ring-2 ring-primary shadow-lg"
           : "hover:ring-1 hover:ring-border",
         isLocked && "opacity-75"
       )}

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * AppTabBar - Main mobile navigation component (iOS-style)
  * Fixed bottom tab bar with: Projects, Editor, CRM, Analytics, Gallery, Settings
@@ -5,14 +7,14 @@
  */
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { 
-  FolderOpen, 
-  PenTool, 
-  Users, 
-  BarChart3, 
-  ImageIcon, 
-  Settings 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  FolderOpen,
+  PenTool,
+  Users,
+  BarChart3,
+  ImageIcon,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
@@ -31,14 +33,15 @@ interface AppTabBarProps {
   crmBadge?: number;
 }
 
-export const AppTabBar = memo(function AppTabBar({ 
+export const AppTabBar = memo(function AppTabBar({
   activeTab,
   onTabChange,
-  crmBadge 
+  crmBadge
 }: AppTabBarProps) {
   const { t } = useTranslation();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const haptic = useHapticFeedback();
 
   const tabs: TabItem[] = [
@@ -83,24 +86,23 @@ export const AppTabBar = memo(function AppTabBar({
 
   // Determine active tab from URL or prop
   const currentTab = activeTab || (() => {
-    const params = new URLSearchParams(location.search);
-    const tab = params.get('tab');
+    const tab = searchParams?.get('tab');
     if (tab) return tab;
-    if (location.pathname === '/gallery') return 'gallery';
-    if (location.pathname === '/dashboard') return 'projects';
+    if (pathname === '/gallery') return 'gallery';
+    if (pathname === '/dashboard') return 'projects';
     return 'projects';
   })();
 
   const handleTabClick = useCallback((tab: TabItem) => {
     // Haptic feedback on tab change
     haptic.lightTap();
-    
+
     if (onTabChange) {
       onTabChange(tab.id);
     } else {
-      navigate(tab.path);
+      router.push(tab.path);
     }
-  }, [onTabChange, navigate, haptic]);
+  }, [onTabChange, router, haptic]);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom md:hidden">
@@ -110,15 +112,15 @@ export const AppTabBar = memo(function AppTabBar({
           {tabs.map((tab) => {
             const isActive = currentTab === tab.id;
             const Icon = tab.icon;
-            
+
             return (
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab)}
                 className={cn(
                   "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-200 active:scale-95 min-w-0",
-                  isActive 
-                    ? "text-primary" 
+                  isActive
+                    ? "text-primary"
                     : "text-muted-foreground"
                 )}
               >
@@ -126,13 +128,13 @@ export const AppTabBar = memo(function AppTabBar({
                 {isActive && (
                   <div className="absolute top-1 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-primary" />
                 )}
-                
+
                 {/* Icon with badge */}
                 <div className="relative">
                   <Icon className={cn(
                     "h-5 w-5 shrink-0"
                   )} />
-                  
+
                   {/* Badge */}
                   {tab.badge && tab.badge > 0 && (
                     <span className="absolute -top-1 -right-1 min-w-4 h-4 px-0.5 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold">
@@ -140,7 +142,7 @@ export const AppTabBar = memo(function AppTabBar({
                     </span>
                   )}
                 </div>
-                
+
                 {/* Label - truncated */}
                 <span className={cn(
                   "text-[9px] font-medium leading-none truncate max-w-full px-0.5",

@@ -29,6 +29,7 @@ export const storage = {
      * @returns Parsed value or null if not found
      */
     get<T = unknown>(key: string): T | null {
+        if (typeof window === 'undefined') return null;
         try {
             const item = localStorage.getItem(getKey(key));
             if (item === null) return null;
@@ -45,6 +46,7 @@ export const storage = {
      * @param value - Value to store (will be JSON stringified)
      */
     set<T = unknown>(key: string, value: T): void {
+        if (typeof window === 'undefined') return;
         try {
             localStorage.setItem(getKey(key), JSON.stringify(value));
         } catch (error) {
@@ -62,6 +64,7 @@ export const storage = {
      * @param key - Storage key (will be namespaced automatically)
      */
     remove(key: string): void {
+        if (typeof window === 'undefined') return;
         try {
             localStorage.removeItem(getKey(key));
         } catch (error) {
@@ -74,6 +77,7 @@ export const storage = {
      * @param key - Storage key (will be namespaced automatically)
      */
     has(key: string): boolean {
+        if (typeof window === 'undefined') return false;
         return localStorage.getItem(getKey(key)) !== null;
     },
 
@@ -81,6 +85,7 @@ export const storage = {
      * Clear all inkmax storage (keeps other apps' data)
      */
     clear(): void {
+        if (typeof window === 'undefined') return;
         try {
             const keys = Object.keys(localStorage);
             keys.forEach((key) => {
@@ -97,6 +102,7 @@ export const storage = {
      * Get all keys (namespaced)
      */
     keys(): string[] {
+        if (typeof window === 'undefined') return [];
         const keys = Object.keys(localStorage);
         return keys
             .filter((key) => key.startsWith(getKey('')))
@@ -107,6 +113,7 @@ export const storage = {
      * Get storage size in bytes (approximate)
      */
     getSize(): number {
+        if (typeof window === 'undefined') return 0;
         let size = 0;
         try {
             const keys = Object.keys(localStorage);
@@ -128,6 +135,7 @@ export const storage = {
      * Clear old version data (migration utility)
      */
     clearOldVersions(): void {
+        if (typeof window === 'undefined') return;
         try {
             const keys = Object.keys(localStorage);
             keys.forEach((key) => {
@@ -145,6 +153,7 @@ export const storage = {
      * Get raw value without parsing (for debugging)
      */
     getRaw(key: string): string | null {
+        if (typeof window === 'undefined') return null;
         return localStorage.getItem(getKey(key));
     },
 
@@ -152,6 +161,7 @@ export const storage = {
      * Set raw value without stringifying (use with caution)
      */
     setRaw(key: string, value: string): void {
+        if (typeof window === 'undefined') return;
         localStorage.setItem(getKey(key), value);
     },
 };
@@ -164,6 +174,7 @@ export const session = {
      * Get item from sessionStorage
      */
     get<T = unknown>(key: string): T | null {
+        if (typeof window === 'undefined') return null;
         try {
             const item = sessionStorage.getItem(getKey(key));
             if (item === null) return null;
@@ -178,6 +189,7 @@ export const session = {
      * Set item in sessionStorage
      */
     set<T = unknown>(key: string, value: T): void {
+        if (typeof window === 'undefined') return;
         try {
             sessionStorage.setItem(getKey(key), JSON.stringify(value));
         } catch (error) {
@@ -189,6 +201,7 @@ export const session = {
      * Remove item from sessionStorage
      */
     remove(key: string): void {
+        if (typeof window === 'undefined') return;
         try {
             sessionStorage.removeItem(getKey(key));
         } catch (error) {
@@ -200,6 +213,7 @@ export const session = {
      * Check if key exists in sessionStorage
      */
     has(key: string): boolean {
+        if (typeof window === 'undefined') return false;
         return sessionStorage.getItem(getKey(key)) !== null;
     },
 
@@ -207,6 +221,7 @@ export const session = {
      * Clear all inkmax session storage
      */
     clear(): void {
+        if (typeof window === 'undefined') return;
         try {
             const keys = Object.keys(sessionStorage);
             keys.forEach((key) => {

@@ -1,10 +1,12 @@
+'use client';
+
 /**
  * PublicPageError - Error state for public pages
  * Shown when page not found or failed to load
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FileQuestion, Home, RefreshCw } from 'lucide-react';
 
@@ -13,9 +15,9 @@ interface PublicPageErrorProps {
   onRetry?: () => void;
 }
 
-export const PublicPageError = memo(function PublicPageError({ 
+export const PublicPageError = memo(function PublicPageError({
   type = 'not-found',
-  onRetry 
+  onRetry
 }: PublicPageErrorProps) {
   const { t } = useTranslation();
 
@@ -25,14 +27,14 @@ export const PublicPageError = memo(function PublicPageError({
         <div className="h-20 w-20 rounded-[24px] bg-muted/50 flex items-center justify-center mx-auto mb-6">
           <FileQuestion className="h-10 w-10 text-muted-foreground" />
         </div>
-        
+
         <h1 className="text-2xl font-black mb-2">
-          {type === 'not-found' 
+          {type === 'not-found'
             ? t('errors.pageNotFound', 'Страница не найдена')
             : t('errors.loadError', 'Ошибка загрузки')
           }
         </h1>
-        
+
         <p className="text-muted-foreground mb-8">
           {type === 'not-found'
             ? t('errors.invalidLink', 'Проверьте правильность ссылки или страница была удалена')
@@ -42,8 +44,8 @@ export const PublicPageError = memo(function PublicPageError({
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {onRetry && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="h-12 px-6 rounded-xl"
               onClick={onRetry}
             >
@@ -51,12 +53,12 @@ export const PublicPageError = memo(function PublicPageError({
               {t('common.retry', 'Попробовать снова')}
             </Button>
           )}
-          
-          <Button 
-            asChild 
+
+          <Button
+            asChild
             className="h-12 px-6 rounded-xl"
           >
-            <Link to="/">
+            <Link href="/">
               <Home className="h-4 w-4 mr-2" />
               {t('common.goHome', 'На главную')}
             </Link>
@@ -65,7 +67,7 @@ export const PublicPageError = memo(function PublicPageError({
 
         <p className="text-xs text-muted-foreground mt-8">
           {t('errors.createYourPage', 'Хотите создать свою страницу?')}{' '}
-          <Link to="/auth" className="text-primary hover:underline font-medium">
+          <Link href="/auth" className="text-primary hover:underline font-medium">
             {t('common.signUp', 'Регистрация')}
           </Link>
         </p>

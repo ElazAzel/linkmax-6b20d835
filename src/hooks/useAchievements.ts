@@ -93,7 +93,7 @@ export function useAchievements() {
           newlyUnlocked.push(achievement);
 
           // Update local state
-          setUnlockedAchievements(prev => new Set([...prev, achievement.key]));
+          setUnlockedAchievements(prev => new Set([...Array.from(prev), achievement.key]));
         } catch (error) {
           logger.error('Error unlocking achievement:', error, { context: 'useAchievements' });
         }

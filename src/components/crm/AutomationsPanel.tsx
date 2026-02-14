@@ -68,7 +68,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
       // Initialize with defaults if not exists
       const types: Automation['automation_type'][] = ['follow_up', 'time_clarification', 'review_request'];
       const existingTypes = new Set((data || []).map(a => a.automation_type));
-      
+
       const allAutomations: Automation[] = (data || []).map(a => ({
         id: a.id,
         user_id: a.user_id,
@@ -77,7 +77,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
         trigger_hours: a.trigger_hours,
         template_message: a.template_message
       }));
-      
+
       for (const type of types) {
         if (!existingTypes.has(type)) {
           allAutomations.push({
@@ -127,7 +127,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
 
         if (error) throw error;
 
-        setAutomations(prev => prev.map(a => 
+        setAutomations(prev => prev.map(a =>
           a.automation_type === automation.automation_type ? { ...a, id: data.id } : a
         ));
       }
@@ -142,7 +142,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
   };
 
   const updateAutomation = (type: string, updates: Partial<Automation>) => {
-    setAutomations(prev => prev.map(a => 
+    setAutomations(prev => prev.map(a =>
       a.automation_type === type ? { ...a, ...updates } : a
     ));
   };
@@ -224,7 +224,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
           const isExpanded = expandedType === automation.automation_type;
 
           return (
-            <Collapsible 
+            <Collapsible
               key={automation.automation_type}
               open={isExpanded}
               onOpenChange={(open) => setExpandedType(open ? automation.automation_type : null)}
@@ -267,7 +267,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
                       </Label>
                       <Select
                         value={String(automation.trigger_hours)}
-                        onValueChange={(val) => updateAutomation(automation.automation_type, { trigger_hours: parseInt(val) })}
+                        onValueChange={(val: string) => updateAutomation(automation.automation_type, { trigger_hours: parseInt(val) })}
                       >
                         <SelectTrigger className="bg-background/50 mt-1">
                           <SelectValue />

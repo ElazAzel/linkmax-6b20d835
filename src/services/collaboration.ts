@@ -145,7 +145,7 @@ export async function getMyCollaborations(): Promise<Collaboration[]> {
 
   // Fetch user profiles for each collaboration
   const collaborations = data || [];
-  const userIds = [...new Set(collaborations.flatMap(c => [c.requester_id, c.target_id]))];
+  const userIds = Array.from(new Set(collaborations.flatMap(c => [c.requester_id, c.target_id])));
 
   const { data: profiles } = await supabase
     .from('user_profiles')
@@ -258,7 +258,7 @@ export async function createTeam(
       role: 'owner',
     });
 
-  return { success: true, team: data };
+  return { success: true, team: { ...data, is_public: data.is_public ?? true } as Team };
 }
 
 export async function getMyTeams(): Promise<Team[]> {
@@ -285,7 +285,7 @@ export async function getMyTeams(): Promise<Team[]> {
     return [];
   }
 
-  return data || [];
+  return (data || []).map(t => ({ ...t, is_public: t.is_public ?? true })) as Team[];
 }
 
 export async function getTeamWithMembers(teamId: string): Promise<Team | null> {
@@ -312,11 +312,12 @@ export async function getTeamWithMembers(teamId: string): Promise<Team | null> {
 
   return {
     ...team,
+    is_public: team.is_public ?? true,
     members: members?.map(m => ({
       ...m,
       profile: profileMap.get(m.user_id),
     })) || [],
-  };
+  } as Team;
 }
 
 export async function inviteToTeam(
@@ -346,7 +347,7 @@ export async function inviteToTeam(
       .select('name')
       .eq('id', teamId)
       .single();
-    
+
     if (teamData) {
       await supabase.functions.invoke('send-team-notification', {
         body: {
@@ -547,7 +548,7 @@ export async function joinTeamByInviteCode(inviteCode: string): Promise<{ succes
     logger.error('Failed to send join notification', e, { context: 'collaboration' });
   }
 
-  return { success: true, team };
+  return { success: true, team: { ...team, is_public: team.is_public ?? true } as Team };
 }
 
 // Get team by invite code (for preview)
@@ -559,7 +560,7 @@ export async function getTeamByInviteCode(inviteCode: string): Promise<Team | nu
     .maybeSingle();
 
   if (error || !data) return null;
-  return data;
+  return { ...data, is_public: data.is_public ?? true } as Team;
 }
 
 // Shoutout functions
@@ -614,6 +615,7 @@ export async function getMyShoutouts(): Promise<Shoutout[]> {
 
   return data?.map(s => ({
     ...s,
+    is_featured: s.is_featured ?? false,
     to_user: profileMap.get(s.to_user_id),
   })) || [];
 }
@@ -637,6 +639,7 @@ export async function getShoutoutsForUser(userId: string): Promise<Shoutout[]> {
 
   return data?.map(s => ({
     ...s,
+    is_featured: s.is_featured ?? false,
     from_user: profileMap.get(s.from_user_id),
   })) || [];
 }

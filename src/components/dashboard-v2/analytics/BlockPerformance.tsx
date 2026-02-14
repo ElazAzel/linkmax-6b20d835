@@ -39,8 +39,8 @@ export const BlockPerformance = memo(function BlockPerformance({
   const { t } = useTranslation();
 
   const chartData = blocks.slice(0, 8).map(block => ({
-    name: block.blockTitle.length > 12 
-      ? block.blockTitle.substring(0, 12) + '...' 
+    name: block.blockTitle.length > 12
+      ? block.blockTitle.substring(0, 12) + '...'
       : block.blockTitle,
     clicks: block.clicks,
     ctr: block.ctr,
@@ -86,13 +86,13 @@ export const BlockPerformance = memo(function BlockPerformance({
         <div className="h-32 mb-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-              <XAxis 
-                dataKey="name" 
+              <XAxis
+                dataKey="name"
                 tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
                 tickLine={false}
                 axisLine={false}
               />
-              <YAxis 
+              <YAxis
                 tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
                 tickLine={false}
                 axisLine={false}
@@ -104,14 +104,14 @@ export const BlockPerformance = memo(function BlockPerformance({
                   borderRadius: '8px',
                   fontSize: '12px',
                 }}
-                formatter={(value: number, name: string) => [
-                  name === 'clicks' ? `${value} кликов` : `${value.toFixed(1)}%`,
+                formatter={(value?: number | string | Array<number | string>, name?: string | number) => [
+                  name === 'clicks' ? `${value ?? 0} кликов` : `${Number(value ?? 0).toFixed(1)}%`,
                   name === 'clicks' ? 'Клики' : 'CTR',
                 ]}
               />
-              <Bar 
-                dataKey="clicks" 
-                fill="hsl(var(--primary))" 
+              <Bar
+                dataKey="clicks"
+                fill="hsl(var(--primary))"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>
@@ -124,16 +124,16 @@ export const BlockPerformance = memo(function BlockPerformance({
         {blocks.slice(0, 5).map((block, index) => {
           const level = getPerformanceLevel(block.ctr);
           const colorClass = getPerformanceColor(level);
-          
+
           return (
-            <div 
+            <div
               key={block.blockId}
               className="flex items-center gap-3 p-2 rounded-lg bg-muted/30"
             >
               <div className="h-7 w-7 rounded-lg bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground">
                 {index + 1}
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium truncate">{block.blockTitle}</span>
@@ -148,7 +148,7 @@ export const BlockPerformance = memo(function BlockPerformance({
                   <Progress value={Math.min(100, block.ctr * 3)} className="h-1 w-16" />
                 </div>
               </div>
-              
+
               <div className={cn("px-2 py-1 rounded-md text-xs font-bold", colorClass)}>
                 {block.ctr.toFixed(1)}%
               </div>

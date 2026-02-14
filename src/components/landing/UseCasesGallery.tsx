@@ -1,13 +1,15 @@
+'use client';
+
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Camera, 
-  Scissors, 
-  Dumbbell, 
-  Brain, 
-  Music, 
-  ShoppingBag, 
+import { useRouter } from 'next/navigation';
+import {
+  Camera,
+  Scissors,
+  Dumbbell,
+  Brain,
+  Music,
+  ShoppingBag,
   Star,
   ArrowRight,
   Heart,
@@ -28,7 +30,7 @@ interface UseCase {
 
 export function UseCasesGallery() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const sectionAnimation = useScrollAnimation();
 
   const useCases: UseCase[] = [
@@ -123,22 +125,22 @@ export function UseCasesGallery() {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[800px] h-[400px] sm:h-[800px] bg-gradient-radial from-primary/5 via-transparent to-transparent rounded-full" />
       </div>
-      
+
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
-          <div 
+          <div
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in' : ''}`}
           >
             <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
             <span className="text-primary">{t('landing.useCases.badge', 'Примеры использования')}</span>
           </div>
-          <h2 
+          <h2
             className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
             {t('landing.useCases.title', 'Кто использует LinkMAX.')}
           </h2>
-          <p 
+          <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 font-normal ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '300ms' }}
           >
@@ -148,7 +150,7 @@ export function UseCasesGallery() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {useCases.map((useCase, index) => (
-            <div 
+            <div
               key={useCase.id}
               className={`group relative rounded-2xl sm:rounded-3xl bg-card/50 backdrop-blur-xl border border-border/40 overflow-hidden hover:border-primary/40 transition-all duration-500 hover:shadow-glass-lg hover:-translate-y-1 sm:hover:-translate-y-2 opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
               style={{ animationDelay: `${400 + index * 100}ms` }}
@@ -172,7 +174,7 @@ export function UseCasesGallery() {
                 {/* Mock links */}
                 <div className="space-y-1.5 sm:space-y-2">
                   {useCase.links.slice(0, 2).map((link, linkIndex) => (
-                    <div 
+                    <div
                       key={linkIndex}
                       className="py-2 sm:py-2.5 px-2 sm:px-4 rounded-lg sm:rounded-xl bg-muted/50 hover:bg-muted text-[10px] sm:text-xs lg:text-sm font-medium transition-colors cursor-default truncate"
                     >
@@ -196,13 +198,13 @@ export function UseCasesGallery() {
         </div>
 
         {/* CTA */}
-        <div 
+        <div
           className={`text-center mt-8 sm:mt-12 opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '1000ms' }}
         >
           <Button
             size="lg"
-            onClick={() => navigate('/gallery')}
+            onClick={() => router.push('/gallery')}
             className="rounded-xl sm:rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all group active:scale-[0.98]"
           >
             {t('landing.useCases.cta', 'Смотреть все страницы в галерее')}

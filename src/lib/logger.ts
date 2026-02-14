@@ -6,8 +6,8 @@
  * - Ready for Sentry/LogRocket integration
  */
 
-const isDev = import.meta.env.DEV;
-const isProd = import.meta.env.PROD;
+const isDev = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'production';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'trace';
 

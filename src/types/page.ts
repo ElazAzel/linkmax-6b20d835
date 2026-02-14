@@ -55,6 +55,7 @@ export interface PageData {
     title: string;
     description: string;
     keywords: string[];
+    image?: string;
   };
   isPremium?: boolean;
   isPublished?: boolean;

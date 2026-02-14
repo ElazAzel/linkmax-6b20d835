@@ -29,10 +29,10 @@ export function useGridLayout({ blocks, config = DEFAULT_GRID_CONFIG, columns }:
   // Calculate grid positions for all blocks
   const gridPositions = useMemo(() => {
     const positions = new Map<string, GridPosition>();
-    
+
     blocks.forEach((block, index) => {
       const layout = block.gridLayout;
-      
+
       if (layout?.gridColumn && layout?.gridRow) {
         // Use existing grid position
         positions.set(block.id, {
@@ -53,7 +53,7 @@ export function useGridLayout({ blocks, config = DEFAULT_GRID_CONFIG, columns }:
         });
       }
     });
-    
+
     return positions;
   }, [blocks, columns]);
 
@@ -63,12 +63,12 @@ export function useGridLayout({ blocks, config = DEFAULT_GRID_CONFIG, columns }:
     const right1 = pos1.column + pos1.width;
     const top1 = pos1.row;
     const bottom1 = pos1.row + pos1.height;
-    
+
     const left2 = pos2.column;
     const right2 = pos2.column + pos2.width;
     const top2 = pos2.row;
     const bottom2 = pos2.row + pos2.height;
-    
+
     return !(right1 <= left2 || left1 >= right2 || bottom1 <= top2 || top1 >= bottom2);
   }, []);
 
@@ -79,47 +79,47 @@ export function useGridLayout({ blocks, config = DEFAULT_GRID_CONFIG, columns }:
     if (newPos.row < 1) return false;
     if (newPos.width < 1 || newPos.width > 4) return false;
     if (newPos.height < 1 || newPos.height > 4) return false;
-    
+
     // Check collisions with other blocks
-    for (const [id, pos] of gridPositions) {
+    for (const [id, pos] of Array.from(gridPositions)) {
       if (id !== blockId && isColliding(newPos, pos)) {
         return false;
       }
     }
-    
+
     return true;
   }, [gridPositions, columns, isColliding]);
 
   // Find a free position for a new block
   const findFreePosition = useCallback((width: number = 1, height: number = 1): GridPosition | null => {
     const maxRow = Math.max(...Array.from(gridPositions.values()).map(p => p.row + p.height), 1);
-    
+
     // Try to find a free spot
     for (let row = 1; row <= maxRow + 5; row++) {
       for (let col = 1; col <= columns - width + 1; col++) {
         const testPos = { column: col, row, width, height };
         let hasCollision = false;
-        
-        for (const pos of gridPositions.values()) {
+
+        for (const pos of Array.from(gridPositions.values())) {
           if (isColliding(testPos, pos)) {
             hasCollision = true;
             break;
           }
         }
-        
+
         if (!hasCollision) {
           return testPos;
         }
       }
     }
-    
+
     return null;
   }, [gridPositions, columns, isColliding]);
 
   // Calculate the total rows needed for the grid
   const totalRows = useMemo(() => {
     let maxRow = 1;
-    for (const pos of gridPositions.values()) {
+    for (const pos of Array.from(gridPositions.values())) {
       maxRow = Math.max(maxRow, pos.row + pos.height - 1);
     }
     return maxRow;
@@ -129,7 +129,7 @@ export function useGridLayout({ blocks, config = DEFAULT_GRID_CONFIG, columns }:
   const getBlockStyle = useCallback((blockId: string): React.CSSProperties => {
     const pos = gridPositions.get(blockId);
     if (!pos) return {};
-    
+
     return {
       gridColumn: `${pos.column} / span ${pos.width}`,
       gridRow: `${pos.row} / span ${pos.height}`,
@@ -140,7 +140,7 @@ export function useGridLayout({ blocks, config = DEFAULT_GRID_CONFIG, columns }:
   const getLayoutData = useCallback((blockId: string): GridLayoutData | undefined => {
     const pos = gridPositions.get(blockId);
     if (!pos) return undefined;
-    
+
     return {
       gridColumn: pos.column,
       gridRow: pos.row,

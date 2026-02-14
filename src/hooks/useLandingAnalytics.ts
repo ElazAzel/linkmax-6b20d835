@@ -256,7 +256,7 @@ export function useLandingAnalytics() {
       };
 
       navigator.sendBeacon?.(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`,
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/analytics`,
         JSON.stringify({
           page_id: null,
           block_id: null,

@@ -360,9 +360,10 @@ function generateDailyData(events: AnalyticsEvent[], start: Date, end: Date): Ti
 
   return days.map(day => {
     const dayStr = format(day, 'yyyy-MM-dd');
-    const dayEvents = events.filter(e =>
-      format(new Date(e.created_at), 'yyyy-MM-dd') === dayStr
-    );
+    const dayEvents = events.filter(e => {
+      if (!e.created_at) return false;
+      return format(new Date(e.created_at), 'yyyy-MM-dd') === dayStr;
+    });
 
     return {
       date: format(day, 'dd MMM'),
@@ -381,6 +382,7 @@ function generateWeeklyData(events: AnalyticsEvent[], start: Date, end: Date): T
     weekEnd.setDate(weekEnd.getDate() + 6);
 
     const weekEvents = events.filter(e => {
+      if (!e.created_at) return false;
       const eventDate = new Date(e.created_at);
       return eventDate >= weekStart && eventDate <= weekEnd;
     });
@@ -403,6 +405,7 @@ function generateMonthlyData(events: AnalyticsEvent[], start: Date, end: Date): 
     monthEnd.setDate(0);
 
     const monthEvents = events.filter(e => {
+      if (!e.created_at) return false;
       const eventDate = new Date(e.created_at);
       return eventDate >= monthStart && eventDate <= monthEnd;
     });

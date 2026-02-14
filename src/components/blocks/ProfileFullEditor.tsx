@@ -1,3 +1,5 @@
+'use client';
+
 import type { CoverHeight, CoverGradient, AvatarSize, ShadowStyle, AvatarPosition } from "@/types/profile-editor";
 /**
  * ProfileFullEditor - Unified full-screen editor for the top profile section
@@ -5,12 +7,12 @@ import type { CoverHeight, CoverGradient, AvatarSize, ShadowStyle, AvatarPositio
  */
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Drawer, 
-  DrawerContent, 
-  DrawerHeader, 
-  DrawerTitle, 
+import { useRouter } from 'next/navigation';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
   DrawerDescription,
 } from '@/components/ui/drawer';
 import {
@@ -24,10 +26,10 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Image, 
-  User, 
-  Type, 
+import {
+  Image,
+  User,
+  Type,
   Palette,
   Camera,
   Upload,
@@ -107,18 +109,18 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
 }: ProfileFullEditorProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const isMobile = useIsMobile();
   const { canUsePremiumFrames } = useFreemiumLimits();
   const currentLang = i18n.language as SupportedLanguage;
-  
+
   const [formData, setFormData] = useState<Partial<ProfileBlockType>>(() => ({ ...block }));
   const [isUploading, setIsUploading] = useState(false);
   const [uploadType, setUploadType] = useState<'avatar' | 'cover'>('avatar');
   const [cropperOpen, setCropperOpen] = useState(false);
   const [cropperImage, setCropperImage] = useState('');
   const [activeTab, setActiveTab] = useState('cover');
-  
+
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
@@ -129,10 +131,10 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
     }
   }, [block]);
 
-  const name = typeof formData.name === 'object' 
+  const name = typeof formData.name === 'object'
     ? getI18nText(formData.name, currentLang)
     : formData.name || '';
-  
+
   const bio = typeof formData.bio === 'object'
     ? getI18nText(formData.bio, currentLang)
     : formData.bio || '';
@@ -171,7 +173,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
 
   const uploadFile = async (file: File | Blob, type: 'avatar' | 'cover') => {
     if (!user) return;
-    
+
     setIsUploading(true);
     try {
       let processedFile = file;
@@ -272,7 +274,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               </div>
 
               {/* Cover Preview */}
-              <div 
+              <div
                 className={cn(
                   "relative aspect-[2.5/1] rounded-2xl overflow-hidden border-2 border-dashed cursor-pointer group",
                   formData.coverImage ? "border-transparent" : "border-border bg-muted/30"
@@ -295,7 +297,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                     <span className="text-sm text-muted-foreground">{t('profileEditor.uploadCover', 'Загрузить обложку')}</span>
                   </div>
                 )}
-                
+
                 <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
                   {isUploading && uploadType === 'cover' ? (
                     <Loader2 className="h-10 w-10 text-white animate-spin" />
@@ -328,8 +330,8 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                       onClick={() => setFormData(prev => ({ ...prev, coverHeight: height.value as CoverHeight }))}
                       className={cn(
                         "py-3 rounded-xl border-2 text-sm font-medium transition-all",
-                        formData.coverHeight === height.value 
-                          ? "border-primary bg-primary/5" 
+                        formData.coverHeight === height.value
+                          ? "border-primary bg-primary/5"
                           : "border-border/20 hover:border-border/50"
                       )}
                     >
@@ -352,8 +354,8 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                         className={cn(
                           "aspect-[2/1] rounded-xl border-2 transition-all",
                           gradient.preview,
-                          formData.coverGradient === gradient.value 
-                            ? "border-primary ring-2 ring-primary/30" 
+                          formData.coverGradient === gradient.value
+                            ? "border-primary ring-2 ring-primary/30"
                             : "border-border/20 hover:border-border/50"
                         )}
                         title={t(gradient.label)}
@@ -373,7 +375,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
 
               {/* Avatar Preview */}
               <div className="flex justify-center">
-                <div 
+                <div
                   className="relative cursor-pointer group"
                   onClick={() => avatarInputRef.current?.click()}
                 >
@@ -383,7 +385,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  
+
                   <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                     {isUploading && uploadType === 'avatar' ? (
                       <Loader2 className="h-8 w-8 text-white animate-spin" />
@@ -405,12 +407,12 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                       onClick={() => setFormData(prev => ({ ...prev, avatarSize: size.value as AvatarSize }))}
                       className={cn(
                         "flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all",
-                        formData.avatarSize === size.value 
-                          ? "border-primary bg-primary/5" 
+                        formData.avatarSize === size.value
+                          ? "border-primary bg-primary/5"
                           : "border-border/20 hover:border-border/50"
                       )}
                     >
-                      <div className={cn("rounded-full bg-muted", 
+                      <div className={cn("rounded-full bg-muted",
                         size.value === 'small' && 'h-5 w-5',
                         size.value === 'medium' && 'h-7 w-7',
                         size.value === 'large' && 'h-9 w-9',
@@ -430,7 +432,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   onChange={(value) => setFormData(prev => ({ ...prev, avatarFrame: value }))}
                   isPremium={canUsePremiumFrames()}
                   avatarUrl={formData.avatar}
-                  onUpgradeClick={() => navigate('/pricing')}
+                  onUpgradeClick={() => router.push('/pricing')}
                 />
               </div>
 
@@ -445,8 +447,8 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                       onClick={() => setFormData(prev => ({ ...prev, shadowStyle: shadow.value as ShadowStyle }))}
                       className={cn(
                         "py-2.5 rounded-xl border-2 text-xs font-medium transition-all",
-                        formData.shadowStyle === shadow.value 
-                          ? "border-primary bg-primary/5" 
+                        formData.shadowStyle === shadow.value
+                          ? "border-primary bg-primary/5"
                           : "border-border/20 hover:border-border/50"
                       )}
                     >
@@ -463,7 +465,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   onChange={(value) => setFormData(prev => ({ ...prev, nameAnimation: value }))}
                   isPremium={canUsePremiumFrames()}
                   previewName={name}
-                  onUpgradeClick={() => navigate('/pricing')}
+                  onUpgradeClick={() => router.push('/pricing')}
                 />
               </div>
             </TabsContent>
@@ -512,7 +514,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                     <img src={formData.coverImage} alt="" className="w-full h-full object-cover" />
                   )}
                 </div>
-                
+
                 <div className={cn(
                   "flex items-center gap-3 p-3 -mt-6",
                   formData.avatarPosition === 'left' && 'justify-start',
@@ -548,8 +550,8 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                       onClick={() => setFormData(prev => ({ ...prev, avatarPosition: pos.value as AvatarPosition }))}
                       className={cn(
                         "py-3 rounded-xl border-2 text-sm font-medium transition-all",
-                        formData.avatarPosition === pos.value 
-                          ? "border-primary bg-primary/5" 
+                        formData.avatarPosition === pos.value
+                          ? "border-primary bg-primary/5"
                           : "border-border/20 hover:border-border/50"
                       )}
                     >
@@ -584,14 +586,14 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
           <div className="flex justify-center pt-3 pb-2 shrink-0">
             <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
           </div>
-          
+
           {/* Header */}
           <DrawerHeader className="shrink-0 border-b border-border/10 px-5 py-4">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={onClose} 
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
                 className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
               >
                 <ChevronLeft className="h-6 w-6" />
@@ -609,25 +611,25 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
               </div>
             </div>
           </DrawerHeader>
-          
+
           {/* Content */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {renderContent()}
           </div>
-          
+
           {/* Footer Actions */}
           <div className="shrink-0 border-t border-border/10 px-5 py-5 pb-safe bg-background/98 backdrop-blur-xl">
             <div className="flex gap-4">
-              <Button 
-                variant="outline" 
-                onClick={onClose} 
+              <Button
+                variant="outline"
+                onClick={onClose}
                 className="flex-1 h-14 rounded-2xl text-base font-bold active:scale-[0.98] transition-all border-2"
               >
                 <X className="h-5 w-5 mr-2" />
                 {t('editor.cancel', 'Отмена')}
               </Button>
-              <Button 
-                onClick={handleSave} 
+              <Button
+                onClick={handleSave}
                 className="flex-[2] h-14 rounded-2xl text-base font-bold shadow-xl shadow-primary/25 active:scale-[0.98] transition-all"
               >
                 <Check className="h-5 w-5 mr-2" />
@@ -659,7 +661,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
             </div>
           </div>
         </DialogHeader>
-        
+
         <div className="flex-1 flex flex-col overflow-hidden py-2">
           {renderContent()}
         </div>

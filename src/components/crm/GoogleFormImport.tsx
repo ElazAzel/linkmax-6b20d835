@@ -50,12 +50,12 @@ export function GoogleFormImport({ open, onOpenChange, onImport }: GoogleFormImp
   const handleUrlImport = async () => {
     setError(null);
     setParsedForm(null);
-    
+
     if (!formUrl.trim()) {
       setError(t('googleForms.urlRequired', 'Введите ссылку на Google Form'));
       return;
     }
-    
+
     if (!isValidGoogleFormsUrl(formUrl)) {
       setError(t('googleForms.invalidUrl', 'Неверная ссылка. Используйте ссылку вида docs.google.com/forms/...'));
       return;
@@ -107,20 +107,20 @@ export function GoogleFormImport({ open, onOpenChange, onImport }: GoogleFormImp
   const handleJsonParse = () => {
     setError(null);
     setLoading(true);
-    
+
     try {
       const result = parseGoogleFormJson(jsonData);
-      
+
       if (result.error === 'parse_error') {
         setError(t('googleForms.parseError', 'Ошибка парсинга JSON. Проверьте формат.'));
         return;
       }
-      
+
       if (result.fields.length === 0) {
         setError(t('googleForms.noFields', 'Не найдено полей для импорта.'));
         return;
       }
-      
+
       setParsedForm(result);
     } catch {
       setError(t('googleForms.parseError', 'Ошибка парсинга JSON. Проверьте формат.'));
@@ -131,10 +131,10 @@ export function GoogleFormImport({ open, onOpenChange, onImport }: GoogleFormImp
 
   const handleImport = () => {
     if (!parsedForm || parsedForm.fields.length === 0) return;
-    
+
     const eventFields = convertToEventFormFields(parsedForm.fields, lang);
     onImport(eventFields, parsedForm.title);
-    
+
     toast.success(t('googleForms.importSuccess', 'Импортировано полей: {{count}}', { count: eventFields.length }));
     handleClose();
   };
@@ -165,7 +165,7 @@ export function GoogleFormImport({ open, onOpenChange, onImport }: GoogleFormImp
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'url' | 'json')}>
+        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'url' | 'json')}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="url">
               <Link className="h-4 w-4 mr-2" />
@@ -190,7 +190,7 @@ export function GoogleFormImport({ open, onOpenChange, onImport }: GoogleFormImp
                 {t('googleForms.urlHint', 'Форма должна быть публичной')}
               </p>
             </div>
-            
+
             <Button onClick={handleUrlImport} className="w-full" disabled={loading || !formUrl.trim()}>
               {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
               {loading ? t('googleForms.loading', 'Загрузка...') : t('googleForms.importFromUrl', 'Импортировать')}
@@ -221,7 +221,7 @@ export function GoogleFormImport({ open, onOpenChange, onImport }: GoogleFormImp
                 {t('googleForms.jsonHint', 'Поддерживаемые типы: short_text, long_text, single_choice, multiple_choice, dropdown, date, checkbox')}
               </p>
             </div>
-            
+
             <Button onClick={handleJsonParse} className="w-full" disabled={loading || !jsonData.trim()}>
               {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
               {t('googleForms.parseJson', 'Распарсить')}

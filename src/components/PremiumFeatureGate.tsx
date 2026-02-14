@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Crown, Sparkles, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
@@ -22,7 +24,7 @@ export function PremiumFeatureGate({
   compact = false,
 }: PremiumFeatureGateProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { currentTier } = useFreemiumLimits();
 
   // Tier hierarchy: free < pro
@@ -78,17 +80,17 @@ export function PremiumFeatureGate({
           <TierIcon className="h-5 w-5 text-white" />
         </div>
         <p className="text-sm font-medium text-center">
-          {t('premium.featureRequires', '{{feature}} доступно в {{tier}}', { 
-            feature, 
-            tier: tierNames[requiredTier] 
+          {t('premium.featureRequires', '{{feature}} доступно в {{tier}}', {
+            feature,
+            tier: tierNames[requiredTier]
           })}
         </p>
         {showUpgradeButton && (
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             variant="default"
             className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700"
-            onClick={() => navigate('/pricing')}
+            onClick={() => router.push('/pricing')}
           >
             {t('premium.upgrade', 'Улучшить до {{tier}}', { tier: tierNames[requiredTier] })}
           </Button>
@@ -101,7 +103,7 @@ export function PremiumFeatureGate({
 // Hook for checking feature access
 export function useFeatureAccess(requiredTier: FreeTier): boolean {
   const { currentTier } = useFreemiumLimits();
-  
+
   const tierLevel = (tier: FreeTier): number => {
     switch (tier) {
       case 'pro': return 2;

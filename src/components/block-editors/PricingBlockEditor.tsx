@@ -93,7 +93,7 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
         <Label>{t('pricingBlock.defaultCurrency', 'Валюта по умолчанию')}</Label>
         <CurrencySelect
           value={formData.currency || 'KZT'}
-          onValueChange={(value) => onChange({ currency: value as Currency })}
+          onValueChange={(value: string) => onChange({ currency: value as Currency })}
         />
       </div>
 
@@ -109,7 +109,7 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
         <div className="space-y-2 max-h-[400px] overflow-y-auto">
           {items.map((item) => {
             const serviceType = SERVICE_TYPES.find(s => s.value === item.serviceType);
-            
+
             return (
               <Card key={item.id} className={cn('transition-all', expandedItem === item.id && 'ring-2 ring-primary')}>
                 <CardContent className="p-3">
@@ -133,7 +133,7 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
                     <div className="mt-4 space-y-3 border-t pt-4">
                       <div className="space-y-2">
                         <Label>{t('pricingBlock.serviceType', 'Тип услуги')}</Label>
-                        <Select value={item.serviceType || 'other'} onValueChange={(value) => updateItem(item.id, { serviceType: value as ServiceType })}>
+                        <Select value={item.serviceType || 'other'} onValueChange={(value: string) => updateItem(item.id, { serviceType: value as ServiceType })}>
                           <SelectTrigger><SelectValue /></SelectTrigger>
                           <SelectContent>
                             {SERVICE_TYPES.map(({ value, labelKey, emoji }) => (
@@ -153,7 +153,7 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
                         </div>
                         <div className="space-y-2">
                           <Label>{t('pricingBlock.duration', 'Длительность')}</Label>
-                          <Select value={String(item.duration || 60)} onValueChange={(value) => updateItem(item.id, { duration: parseInt(value) })}>
+                          <Select value={String(item.duration || 60)} onValueChange={(value: string) => updateItem(item.id, { duration: parseInt(value) })}>
                             <SelectTrigger><SelectValue /></SelectTrigger>
                             <SelectContent>
                               {DURATION_OPTIONS.map(({ value, labelKey }) => (<SelectItem key={value} value={String(value)}>{t(labelKey)}</SelectItem>))}

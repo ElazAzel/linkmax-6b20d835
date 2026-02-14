@@ -40,7 +40,7 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
 
   const updateCategory = (categoryId: string, updates: Partial<CatalogCategory>) => {
     onChange({
-      categories: categories.map(cat => 
+      categories: categories.map(cat =>
         cat.id === categoryId ? { ...cat, ...updates } : cat
       ),
     });
@@ -48,9 +48,9 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
 
   const removeCategory = (categoryId: string) => {
     // Remove category and unassign items from it
-    onChange({ 
+    onChange({
       categories: categories.filter(cat => cat.id !== categoryId),
-      items: items.map(item => 
+      items: items.map(item =>
         item.categoryId === categoryId ? { ...item, categoryId: undefined } : item
       ),
     });
@@ -77,7 +77,7 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
 
   const updateItem = (itemId: string, updates: Partial<CatalogItem>) => {
     onChange({
-      items: items.map(item => 
+      items: items.map(item =>
         item.id === itemId ? { ...item, ...updates } : item
       ),
     });
@@ -143,13 +143,13 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
           <Label>{t('blocks.catalog.defaultCurrency', 'Валюта по умолчанию')}</Label>
           <CurrencySelect
             value={formData.currency || 'KZT'}
-            onValueChange={(value) => onChange({ currency: value as Currency })}
+            onValueChange={(value: string) => onChange({ currency: value as Currency })}
           />
         </div>
       )}
 
       {/* Tabs for Items and Categories */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'items' | 'categories')}>
+      <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'items' | 'categories')}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="items">
             {t('blocks.catalog.items', 'Позиции')} ({items.length})
@@ -226,10 +226,10 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
           <div className="space-y-2 max-h-[400px] overflow-y-auto">
             {items.map((item, index) => {
               const categoryName = getItemCategoryName(item);
-              
+
               return (
-                <Card 
-                  key={item.id} 
+                <Card
+                  key={item.id}
                   className={cn(
                     'transition-all',
                     expandedItem === item.id && 'ring-2 ring-primary'
@@ -237,15 +237,15 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
                 >
                   <CardContent className="p-3">
                     {/* Collapsed view */}
-                    <div 
+                    <div
                       className="flex items-center gap-2 cursor-pointer"
                       onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
                     >
                       <GripVertical className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       {item.image ? (
-                        <img 
-                          src={item.image} 
-                          alt="" 
+                        <img
+                          src={item.image}
+                          alt=""
                           className="h-10 w-10 rounded object-cover flex-shrink-0"
                         />
                       ) : (
@@ -293,8 +293,8 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
                             <Label>{t('blocks.catalog.itemCategory', 'Категория')}</Label>
                             <Select
                               value={item.categoryId || 'none'}
-                              onValueChange={(value) => updateItem(item.id, { 
-                                categoryId: value === 'none' ? undefined : value 
+                              onValueChange={(value: string) => updateItem(item.id, {
+                                categoryId: value === 'none' ? undefined : value
                               })}
                             >
                               <SelectTrigger>
@@ -350,8 +350,8 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
                                 type="number"
                                 min="0"
                                 value={item.price || ''}
-                                onChange={(e) => updateItem(item.id, { 
-                                  price: e.target.value ? parseFloat(e.target.value) : undefined 
+                                onChange={(e) => updateItem(item.id, {
+                                  price: e.target.value ? parseFloat(e.target.value) : undefined
                                 })}
                                 placeholder="0"
                               />
@@ -360,7 +360,7 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
                               <Label>{t('blocks.catalog.itemCurrency', 'Валюта')}</Label>
                               <CurrencySelect
                                 value={item.currency || formData.currency || 'KZT'}
-                                onValueChange={(value) => updateItem(item.id, { currency: value as Currency })}
+                                onValueChange={(value: string) => updateItem(item.id, { currency: value as Currency })}
                               />
                             </div>
                           </div>

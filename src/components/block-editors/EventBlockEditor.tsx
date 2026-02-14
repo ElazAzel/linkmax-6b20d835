@@ -50,11 +50,11 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
   const handleGoogleFormImport = (importedFields: EventFormField[], title?: string) => {
     const updatedFields = [...fields, ...importedFields];
     const updates: Record<string, unknown> = { formFields: updatedFields };
-    
+
     if (title && (!formData.title || !(formData.title as I18nText).en)) {
       updates.title = { en: title, ru: title, kk: '' };
     }
-    
+
     onChange({ ...formData, ...updates });
   };
 
@@ -66,7 +66,7 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
         </AlertDescription>
       </Alert>
 
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
+      <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as typeof activeTab)}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="info" className="text-xs">
             <Info className="h-3.5 w-3.5 mr-1.5" />
@@ -140,7 +140,7 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
               <Label>{t('eventBuilder.locationType', 'Тип локации')}</Label>
               <Select
                 value={formData.locationType || 'online'}
-                onValueChange={(value) => onChange({ ...formData, locationType: value })}
+                onValueChange={(value: string) => onChange({ ...formData, locationType: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -175,7 +175,7 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
               <Label>{t('eventBuilder.status', 'Статус')}</Label>
               <Select
                 value={formData.status || 'draft'}
-                onValueChange={(value) => onChange({ ...formData, status: value })}
+                onValueChange={(value: string) => onChange({ ...formData, status: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -193,10 +193,10 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
         {/* Form Tab */}
         <TabsContent value="form" className="space-y-4 mt-4">
           <div className="flex gap-2 flex-wrap">
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="sm" 
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
               onClick={() => setShowGoogleImport(true)}
               className="gap-2"
             >
@@ -256,7 +256,7 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
                   {isPremium ? (
                     <CurrencySelect
                       value={formData.currency || 'KZT'}
-                      onValueChange={(value) => onChange({ ...formData, currency: value })}
+                      onValueChange={(value: string) => onChange({ ...formData, currency: value })}
                     />
                   ) : (
                     <Input value={formData.currency || 'KZT'} disabled />
@@ -269,7 +269,7 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           {/* Registration settings */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">{t('eventBuilder.registrationSettings', 'Настройки регистрации')}</Label>
-            
+
             <div className="grid gap-3">
               <label className="flex items-center gap-2 text-sm">
                 <Checkbox
@@ -283,7 +283,7 @@ function EventBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
                 />
                 {t('eventBuilder.requireApproval', 'Требовать подтверждение')}
               </label>
-              
+
               <label className="flex items-center gap-2 text-sm">
                 <Checkbox
                   checked={Boolean(formData.settings?.allowDuplicateEmail)}

@@ -13,11 +13,11 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
   const fields = formData.fields || [];
 
   const addField = () => {
-    const newField = { 
-      name: { ru: '', en: '', kk: '' }, 
+    const newField = {
+      name: { ru: '', en: '', kk: '' },
       placeholder: { ru: '', en: '', kk: '' },
-      type: 'text' as const, 
-      required: false 
+      type: 'text' as const,
+      required: false
     };
     onChange({
       ...formData,
@@ -80,7 +80,7 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
               <Label className="text-xs">{t('fields.fieldType', 'Field Type')}</Label>
               <Select
                 value={field.type}
-                onValueChange={(value) => updateField(index, 'type', value)}
+                onValueChange={(value: string) => updateField(index, 'type', value)}
               >
                 <SelectTrigger>
                   <SelectValue />

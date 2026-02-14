@@ -36,35 +36,35 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
     const html = data.html || '';
     const css = data.css || '';
     const js = data.javascript || '';
-    
+
     let bodyContent = html;
     let headContent = '';
-    
+
     const hasDoctype = html.toLowerCase().includes('<!doctype');
     const hasHtmlTag = html.toLowerCase().includes('<html');
-    
+
     if (hasDoctype || hasHtmlTag) {
       const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
       if (headMatch) headContent = headMatch[1];
-      
+
       const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
       if (bodyMatch) bodyContent = bodyMatch[1];
-      
+
       const scriptMatches = html.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
       if (scriptMatches && !js) {
         const inlineScripts = scriptMatches
-          .map(script => {
+          .map((script: string) => {
             const contentMatch = script.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
             return contentMatch ? contentMatch[1] : '';
           })
           .filter(Boolean);
-        
+
         if (inlineScripts.length > 0) {
           bodyContent += `<script>${inlineScripts.join('\n')}</script>`;
         }
       }
     }
-    
+
     return `<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -118,11 +118,10 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
                     key={key}
                     type="button"
                     onClick={() => setSelectedCategory(key)}
-                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs transition-colors ${
-                      selectedCategory === key 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted hover:bg-muted/80'
-                    }`}
+                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs transition-colors ${selectedCategory === key
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted hover:bg-muted/80'
+                      }`}
                   >
                     <Icon className="h-3 w-3" />
                     {i18n.language === 'ru' ? cat.nameRu : cat.name}
@@ -185,7 +184,7 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
             JavaScript
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="html" className="mt-3">
           <div>
             <Label className="text-xs text-muted-foreground mb-2 block">
@@ -210,7 +209,7 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
             />
           </div>
         </TabsContent>
-        
+
         <TabsContent value="css" className="mt-3">
           <div>
             <Label className="text-xs text-muted-foreground mb-2 block">
@@ -234,7 +233,7 @@ h1 {
             />
           </div>
         </TabsContent>
-        
+
         <TabsContent value="js" className="mt-3">
           <div>
             <Label className="text-xs text-muted-foreground mb-2 block">
@@ -264,7 +263,7 @@ function startGame() {
           <Label>{t('fields.height', 'Высота блока')}</Label>
           <Select
             value={formData.height || 'medium'}
-            onValueChange={(value) => onChange({ ...formData, height: value })}
+            onValueChange={(value: string) => onChange({ ...formData, height: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -315,7 +314,7 @@ function startGame() {
             )}
           </button>
         </div>
-        
+
         {showPreview && formData.html && (
           <div className="border rounded-lg overflow-hidden bg-background">
             <iframe
@@ -327,7 +326,7 @@ function startGame() {
             />
           </div>
         )}
-        
+
         {showPreview && !formData.html && (
           <div className="text-center py-8 text-muted-foreground text-sm">
             Добавьте HTML код для предпросмотра
@@ -338,7 +337,7 @@ function startGame() {
       <Alert>
         <Code className="h-4 w-4" />
         <AlertDescription className="text-xs">
-          <strong>Совет:</strong> Вы можете вставить полную HTML страницу (включая {`<!DOCTYPE html>`}, {`<head>`} и {`<body>`}). 
+          <strong>Совет:</strong> Вы можете вставить полную HTML страницу (включая {`<!DOCTYPE html>`}, {`<head>`} и {`<body>`}).
           Все скрипты и стили будут автоматически извлечены и выполнены в изолированном iframe.
         </AlertDescription>
       </Alert>

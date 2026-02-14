@@ -107,8 +107,8 @@ export function extractEntityLinks(
   }
 
   // Remove duplicates
-  result.sameAs = [...new Set(result.sameAs)];
-  result.knowsAbout = [...new Set(result.knowsAbout)];
+  result.sameAs = Array.from(new Set(result.sameAs));
+  result.knowsAbout = Array.from(new Set(result.knowsAbout));
 
   return result;
 }
@@ -170,5 +170,5 @@ export function extractSkillTags(
     }
   }
 
-  return [...new Set(tags)].slice(0, 10);
+  return Array.from(new Set(tags)).slice(0, 10);
 }

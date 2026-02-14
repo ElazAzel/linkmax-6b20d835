@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Crown, Eye, Heart, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,7 +13,7 @@ import { parseMultilingualField, type SupportedLanguage } from '@/lib/i18n-helpe
 
 export function LandingFeaturedPages() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [pages, setPages] = useState<GalleryPage[]>([]);
   const [loading, setLoading] = useState(true);
   const currentLang = i18n.language as SupportedLanguage;
@@ -86,7 +88,7 @@ export function LandingFeaturedPages() {
                   <h3 className="font-semibold text-xs sm:text-sm truncate">
                     {parseMultilingualField(page.title, currentLang) || page.slug}
                   </h3>
-                  
+
                   {page.niche && (
                     <div className="hidden sm:flex justify-center">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs">
@@ -120,7 +122,7 @@ export function LandingFeaturedPages() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => navigate('/gallery')}
+            onClick={() => router.push('/gallery')}
             className="rounded-xl font-semibold bg-background/60 backdrop-blur-xl hover:bg-accent border-border/50 hover:border-primary/30 group"
           >
             {t('landing.featured.viewAll', 'View All Pages')}

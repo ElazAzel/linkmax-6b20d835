@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 
 import type { PageIntegrations } from '@/types/page';
 
@@ -19,7 +21,7 @@ declare global {
 }
 
 export function TrackingScripts({ integrations }: TrackingScriptsProps) {
-    const location = useLocation();
+    const pathname = usePathname();
 
     useEffect(() => {
         // Facebook Pixel
@@ -76,7 +78,7 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
             document.head.appendChild(script);
 
             window.dataLayer = window.dataLayer || [];
-            function gtag(...args: any[]) { window.dataLayer.push(args); }
+            const gtag = function (...args: any[]) { window.dataLayer.push(args); }
             window.gtag = gtag;
             gtag('js', new Date());
             gtag('config', integrations.ga4_id);
@@ -124,10 +126,10 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
         if (integrations.ga4_id && window.gtag) {
             window.gtag('event', 'page_view', {
                 page_location: window.location.href,
-                page_path: location.pathname
+                page_path: pathname
             });
         }
-    }, [location, integrations]);
+    }, [pathname, integrations]);
 
     return null;
 }

@@ -41,7 +41,7 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
   }
 
   // Get premium status for each page owner
-  const userIds = [...new Set((data || []).map(p => p.user_id))];
+  const userIds = Array.from(new Set((data || []).map(p => p.user_id)));
   if (userIds.length === 0) return [];
 
   const { data: profiles } = await supabase

@@ -18,7 +18,7 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
     const { t } = useTranslation();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious();
+        const previous = scrollY.getPrevious() ?? 0;
         if (latest > previous && latest > 150 && !expanded) {
             setHidden(true);
         } else {

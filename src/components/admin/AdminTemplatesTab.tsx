@@ -1,6 +1,8 @@
+'use client';
+
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +18,7 @@ import { toast } from 'sonner';
 
 export function AdminTemplatesTab() {
     const { t, i18n } = useTranslation();
-    const navigate = useNavigate();
+    const router = useRouter();
     const { data: templates, isLoading, isFetching, refetch, deleteTemplate, updateTemplateStatus } = useAdminTemplates();
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -86,7 +88,7 @@ export function AdminTemplatesTab() {
                         <RefreshCw className={`h-4 w-4 mr-2 ${isFetching ? 'animate-spin' : ''}`} />
                         {t('admin.refresh', 'Refresh')}
                     </Button>
-                    <Button onClick={() => navigate('/admin/templates/new')}>
+                    <Button onClick={() => router.push('/admin/templates/new')}>
                         <Plus className="h-4 w-4 mr-2" />
                         {t('admin.createTemplate', 'Create Template')}
                     </Button>
@@ -149,7 +151,7 @@ export function AdminTemplatesTab() {
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
-                                                onClick={() => navigate(`/admin/templates/${template.id}`)}
+                                                onClick={() => router.push(`/admin/templates/${template.id}`)}
                                             >
                                                 <Edit className="h-4 w-4" />
                                             </Button>

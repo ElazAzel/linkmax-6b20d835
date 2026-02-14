@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import Privacy from '@/pages/Privacy';
+import Privacy from '@/components/screens/Privacy';
 
 export const metadata: Metadata = {
     title: 'Privacy Policy - LinkMAX',

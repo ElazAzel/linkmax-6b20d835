@@ -21,7 +21,7 @@ type DeviceType = 'desktop' | 'android' | 'ios';
 
 function detectDevice(): DeviceType {
   const userAgent = navigator.userAgent.toLowerCase();
-  
+
   if (/iphone|ipad|ipod/.test(userAgent)) {
     return 'ios';
   }
@@ -80,7 +80,7 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
             <p className="font-medium text-primary break-all">{pageUrl}</p>
           </div>
 
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as DeviceType)}>
+          <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as DeviceType)}>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="ios" className="flex items-center gap-1">
                 <Apple className="h-4 w-4" />
@@ -216,8 +216,8 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
             <Button variant="outline" className="flex-1" onClick={onClose}>
               {t('install.later', 'Maybe Later')}
             </Button>
-            <Button 
-              className="flex-1" 
+            <Button
+              className="flex-1"
               onClick={() => {
                 navigator.clipboard.writeText(pageUrl);
                 onClose();

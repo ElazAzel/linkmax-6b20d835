@@ -236,7 +236,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
       <FieldWrapper>
         <Select
           value={typeof value === 'string' ? value : ''}
-          onValueChange={(val) => onChange(val)}
+          onValueChange={(val: string) => onChange(val)}
           disabled={disabled}
         >
           <SelectTrigger>
@@ -259,7 +259,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
       <FieldWrapper>
         <RadioGroup
           value={typeof value === 'string' ? value : ''}
-          onValueChange={(val) => onChange(val)}
+          onValueChange={(val: string) => onChange(val)}
           disabled={disabled}
         >
           {(field.options || []).map((option) => (
@@ -389,7 +389,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
   // Grid types
   if (field.type === 'grid' && field.grid) {
     const currentValues = typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, string>) : {};
-    
+
     return (
       <FieldWrapper>
         <div className="overflow-x-auto">
@@ -433,7 +433,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
 
   if (field.type === 'checkbox_grid' && field.grid) {
     const currentValues = typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, string[]>) : {};
-    
+
     return (
       <FieldWrapper>
         <div className="overflow-x-auto">

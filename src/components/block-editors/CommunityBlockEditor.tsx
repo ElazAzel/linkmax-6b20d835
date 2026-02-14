@@ -102,11 +102,10 @@ export function CommunityBlockEditor({ formData, onChange }: CommunityBlockEdito
               key={value}
               type="button"
               onClick={() => onChange({ icon: value })}
-              className={`p-3 rounded-lg border transition-all flex items-center justify-center ${
-                formData.icon === value 
-                  ? 'border-primary bg-primary/10' 
+              className={`p-3 rounded-lg border transition-all flex items-center justify-center ${formData.icon === value
+                  ? 'border-primary bg-primary/10'
                   : 'border-border hover:border-primary/50'
-              }`}
+                }`}
               title={t(`blocks.community.${labelKey}`)}
             >
               <Icon className="h-5 w-5" />
@@ -120,7 +119,7 @@ export function CommunityBlockEditor({ formData, onChange }: CommunityBlockEdito
         <Label>{t('blocks.community.style', 'Стиль')}</Label>
         <Select
           value={formData.style || 'default'}
-          onValueChange={(value) => onChange({ style: value as CommunityBlock['style'] })}
+          onValueChange={(value: string) => onChange({ style: value as CommunityBlock['style'] })}
         >
           <SelectTrigger>
             <SelectValue />

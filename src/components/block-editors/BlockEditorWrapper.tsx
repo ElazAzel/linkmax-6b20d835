@@ -309,7 +309,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                 {/* @ts-ignore - modal prop exists in Radix Select but might be missing in local types */}
                 <Select
                   value={currentFontFamily}
-                  onValueChange={(v) => handleFontFamilyChange(v as BlockFontFamily)}
+                  onValueChange={(v: string) => handleFontFamilyChange(v as BlockFontFamily)}
                   modal={false}
                 >
                   <SelectTrigger className="bg-background/50">
@@ -337,7 +337,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                 {/* @ts-ignore - modal prop exists in Radix Select but might be missing in local types */}
                 <Select
                   value={currentTextEffect}
-                  onValueChange={(v) => handleTextEffectChange(v as BlockStyle['textEffect'])}
+                  onValueChange={(v: string) => handleTextEffectChange(v as BlockStyle['textEffect'])}
                   modal={false}
                 >
                   <SelectTrigger className="bg-background/50">

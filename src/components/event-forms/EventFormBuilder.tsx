@@ -58,28 +58,28 @@ const FIELD_TYPES: Array<{
   proOnly?: boolean;
   category: 'text' | 'choice' | 'date' | 'special' | 'layout';
 }> = [
-  { value: 'short_text', label: 'Короткий текст', labelKey: 'eventFields.shortText', icon: Type, category: 'text' },
-  { value: 'long_text', label: 'Длинный текст', labelKey: 'eventFields.longText', icon: AlignLeft, category: 'text' },
-  { value: 'email', label: 'Email', labelKey: 'eventFields.email', icon: Mail, category: 'text' },
-  { value: 'phone', label: 'Телефон', labelKey: 'eventFields.phone', icon: Phone, category: 'text' },
-  { value: 'number', label: 'Число', labelKey: 'eventFields.number', icon: Hash, category: 'text' },
-  { value: 'url', label: 'Ссылка', labelKey: 'eventFields.url', icon: LinkIcon, category: 'text' },
-  { value: 'dropdown', label: 'Выпадающий список', labelKey: 'eventFields.dropdown', icon: List, hasOptions: true, category: 'choice' },
-  { value: 'single_choice', label: 'Один вариант', labelKey: 'eventFields.singleChoice', icon: CheckSquare, hasOptions: true, category: 'choice' },
-  { value: 'multiple_choice', label: 'Несколько вариантов', labelKey: 'eventFields.multipleChoice', icon: CheckSquare, hasOptions: true, category: 'choice' },
-  { value: 'checkbox', label: 'Согласие', labelKey: 'eventFields.checkbox', icon: CheckSquare, category: 'choice' },
-  { value: 'linear_scale', label: 'Линейная шкала', labelKey: 'eventFields.linearScale', icon: BarChart3, category: 'choice' },
-  { value: 'rating', label: 'Рейтинг', labelKey: 'eventFields.rating', icon: Star, category: 'choice' },
-  { value: 'date', label: 'Дата', labelKey: 'eventFields.date', icon: Calendar, category: 'date' },
-  { value: 'time', label: 'Время', labelKey: 'eventFields.time', icon: Clock, category: 'date' },
-  { value: 'datetime', label: 'Дата и время', labelKey: 'eventFields.datetime', icon: Calendar, category: 'date' },
-  { value: 'grid', label: 'Сетка выбора', labelKey: 'eventFields.grid', icon: Grid3X3, category: 'choice' },
-  { value: 'checkbox_grid', label: 'Сетка флажков', labelKey: 'eventFields.checkboxGrid', icon: Grid3X3, category: 'choice' },
-  { value: 'section_header', label: 'Заголовок секции', labelKey: 'eventFields.sectionHeader', icon: Heading, category: 'layout' },
-  { value: 'description', label: 'Описание', labelKey: 'eventFields.description', icon: FileText, category: 'layout' },
-  { value: 'file', label: 'Файл', labelKey: 'eventFields.file', icon: Upload, proOnly: true, category: 'special' },
-  { value: 'media', label: 'Медиа', labelKey: 'eventFields.media', icon: Image, proOnly: true, category: 'special' },
-];
+    { value: 'short_text', label: 'Короткий текст', labelKey: 'eventFields.shortText', icon: Type, category: 'text' },
+    { value: 'long_text', label: 'Длинный текст', labelKey: 'eventFields.longText', icon: AlignLeft, category: 'text' },
+    { value: 'email', label: 'Email', labelKey: 'eventFields.email', icon: Mail, category: 'text' },
+    { value: 'phone', label: 'Телефон', labelKey: 'eventFields.phone', icon: Phone, category: 'text' },
+    { value: 'number', label: 'Число', labelKey: 'eventFields.number', icon: Hash, category: 'text' },
+    { value: 'url', label: 'Ссылка', labelKey: 'eventFields.url', icon: LinkIcon, category: 'text' },
+    { value: 'dropdown', label: 'Выпадающий список', labelKey: 'eventFields.dropdown', icon: List, hasOptions: true, category: 'choice' },
+    { value: 'single_choice', label: 'Один вариант', labelKey: 'eventFields.singleChoice', icon: CheckSquare, hasOptions: true, category: 'choice' },
+    { value: 'multiple_choice', label: 'Несколько вариантов', labelKey: 'eventFields.multipleChoice', icon: CheckSquare, hasOptions: true, category: 'choice' },
+    { value: 'checkbox', label: 'Согласие', labelKey: 'eventFields.checkbox', icon: CheckSquare, category: 'choice' },
+    { value: 'linear_scale', label: 'Линейная шкала', labelKey: 'eventFields.linearScale', icon: BarChart3, category: 'choice' },
+    { value: 'rating', label: 'Рейтинг', labelKey: 'eventFields.rating', icon: Star, category: 'choice' },
+    { value: 'date', label: 'Дата', labelKey: 'eventFields.date', icon: Calendar, category: 'date' },
+    { value: 'time', label: 'Время', labelKey: 'eventFields.time', icon: Clock, category: 'date' },
+    { value: 'datetime', label: 'Дата и время', labelKey: 'eventFields.datetime', icon: Calendar, category: 'date' },
+    { value: 'grid', label: 'Сетка выбора', labelKey: 'eventFields.grid', icon: Grid3X3, category: 'choice' },
+    { value: 'checkbox_grid', label: 'Сетка флажков', labelKey: 'eventFields.checkboxGrid', icon: Grid3X3, category: 'choice' },
+    { value: 'section_header', label: 'Заголовок секции', labelKey: 'eventFields.sectionHeader', icon: Heading, category: 'layout' },
+    { value: 'description', label: 'Описание', labelKey: 'eventFields.description', icon: FileText, category: 'layout' },
+    { value: 'file', label: 'Файл', labelKey: 'eventFields.file', icon: Upload, proOnly: true, category: 'special' },
+    { value: 'media', label: 'Медиа', labelKey: 'eventFields.media', icon: Image, proOnly: true, category: 'special' },
+  ];
 
 interface FieldCardProps {
   field: EventFormField;
@@ -150,7 +150,7 @@ function SortableFieldCard({ field, index, isExpanded, onToggle, onUpdate, onRem
                 {field.required && <span className="text-destructive text-xs">*</span>}
                 {isProField && <Badge variant="secondary" className="text-[10px] h-4"><Crown className="h-2.5 w-2.5 mr-0.5" />Pro</Badge>}
               </div>
-              <span className="text-xs text-muted-foreground">{t(fieldConfig?.labelKey || '', fieldConfig?.label)}</span>
+              <span className="text-xs text-muted-foreground">{t(fieldConfig?.labelKey || '', fieldConfig?.label || '')}</span>
             </div>
 
             <div className="flex items-center gap-1">

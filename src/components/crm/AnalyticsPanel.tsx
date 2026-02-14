@@ -3,12 +3,12 @@ import { usePageAnalytics, TimePeriod } from '@/hooks/usePageAnalytics';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Eye, 
-  MousePointerClick, 
-  Share2, 
-  Users, 
-  TrendingUp, 
+import {
+  Eye,
+  MousePointerClick,
+  Share2,
+  Users,
+  TrendingUp,
   TrendingDown,
   BarChart3,
   Calendar,
@@ -18,13 +18,13 @@ import {
   Monitor,
   RefreshCw
 } from 'lucide-react';
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -56,14 +56,14 @@ export function AnalyticsPanel() {
     );
   }
 
-  const chartData = period === 'month' || period === 'all' 
-    ? analytics.monthlyData 
-    : period === 'week' 
-      ? analytics.weeklyData 
+  const chartData = period === 'month' || period === 'all'
+    ? analytics.monthlyData
+    : period === 'week'
+      ? analytics.weeklyData
       : analytics.dailyData;
 
   const DEVICE_COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))'];
-  
+
   const deviceData = [
     { name: t('analytics.mobile', 'Mobile'), value: analytics.deviceBreakdown.mobile, icon: Smartphone },
     { name: t('analytics.tablet', 'Tablet'), value: analytics.deviceBreakdown.tablet, icon: Tablet },
@@ -77,7 +77,7 @@ export function AnalyticsPanel() {
       <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 overflow-hidden">
         {/* Period Selector - Scrollable on mobile */}
         <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
-          <Tabs value={period} onValueChange={(v) => setPeriod(v as TimePeriod)}>
+          <Tabs value={period} onValueChange={(v: string) => setPeriod(v as TimePeriod)}>
             <TabsList className="grid w-full min-w-[280px] grid-cols-4">
               <TabsTrigger value="day" className="text-[10px] sm:text-xs px-2">
                 {t('analytics.today', 'Today')}
@@ -148,32 +148,32 @@ export function AnalyticsPanel() {
               <AreaChart data={chartData} margin={{ left: -25, right: 5, top: 5, bottom: 5 }}>
                 <defs>
                   <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorClicks" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--chart-2))" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="hsl(var(--chart-2))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" vertical={false} />
-                <XAxis 
-                  dataKey="date" 
-                  tick={{ fontSize: 9 }} 
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 9 }}
                   tickLine={false}
                   axisLine={false}
                   className="text-muted-foreground"
                   interval="preserveStartEnd"
                 />
-                <YAxis 
-                  tick={{ fontSize: 9 }} 
+                <YAxis
+                  tick={{ fontSize: 9 }}
                   tickLine={false}
                   axisLine={false}
                   className="text-muted-foreground"
                   width={30}
                 />
-                <Tooltip 
-                  contentStyle={{ 
+                <Tooltip
+                  contentStyle={{
                     backgroundColor: 'hsl(var(--popover))',
                     border: '1px solid hsl(var(--border))',
                     borderRadius: '8px',
@@ -256,32 +256,32 @@ export function AnalyticsPanel() {
             <div className="h-40 sm:h-48 -mx-1 sm:mx-0">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={analytics.topBlocks.slice(0, 5)} 
+                  data={analytics.topBlocks.slice(0, 5)}
                   layout="vertical"
                   margin={{ left: 0, right: 10, top: 0, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" horizontal={false} />
                   <XAxis type="number" tick={{ fontSize: 9 }} tickLine={false} axisLine={false} />
-                  <YAxis 
-                    type="category" 
-                    dataKey="blockTitle" 
-                    tick={{ fontSize: 9 }} 
+                  <YAxis
+                    type="category"
+                    dataKey="blockTitle"
+                    tick={{ fontSize: 9 }}
                     width={70}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(value) => value.length > 10 ? value.slice(0, 10) + '...' : value}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'hsl(var(--popover))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
                       fontSize: '11px'
                     }}
                   />
-                  <Bar 
-                    dataKey="clicks" 
-                    fill="hsl(var(--primary))" 
+                  <Bar
+                    dataKey="clicks"
+                    fill="hsl(var(--primary))"
                     radius={[0, 4, 4, 0]}
                   />
                 </BarChart>
@@ -307,8 +307,8 @@ export function AnalyticsPanel() {
                     </span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-1.5">
-                    <div 
-                      className="bg-primary h-1.5 rounded-full transition-all" 
+                    <div
+                      className="bg-primary h-1.5 rounded-full transition-all"
                       style={{ width: `${Math.min(source.percentage, 100)}%` }}
                     />
                   </div>
@@ -353,8 +353,8 @@ export function AnalyticsPanel() {
                   const percentage = total > 0 ? (device.value / total) * 100 : 0;
                   return (
                     <div key={device.name} className="flex items-center gap-1.5 text-xs sm:text-sm">
-                      <div 
-                        className="w-2.5 h-2.5 rounded-full shrink-0" 
+                      <div
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
                         style={{ backgroundColor: DEVICE_COLORS[index] }}
                       />
                       <Icon className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
@@ -369,10 +369,10 @@ export function AnalyticsPanel() {
         )}
 
         {/* Refresh Button */}
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="w-full" 
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
           onClick={refresh}
         >
           <RefreshCw className="h-4 w-4 mr-2" />
@@ -393,7 +393,7 @@ interface StatCardProps {
 function StatCard({ icon: Icon, label, value, change }: StatCardProps) {
   const showChange = change !== undefined && change !== 0;
   const isPositive = change && change > 0;
-  
+
   return (
     <Card className="p-2.5 sm:p-3">
       <div className="flex items-center gap-1.5 text-muted-foreground mb-0.5 sm:mb-1">
@@ -403,9 +403,8 @@ function StatCard({ icon: Icon, label, value, change }: StatCardProps) {
       <div className="flex items-baseline gap-1.5">
         <span className="text-lg sm:text-2xl font-bold">{value.toLocaleString()}</span>
         {showChange && (
-          <span className={`text-[10px] sm:text-xs flex items-center gap-0.5 ${
-            isPositive ? 'text-green-500' : 'text-red-500'
-          }`}>
+          <span className={`text-[10px] sm:text-xs flex items-center gap-0.5 ${isPositive ? 'text-green-500' : 'text-red-500'
+            }`}>
             {isPositive ? <TrendingUp className="h-2.5 w-2.5 sm:h-3 sm:w-3" /> : <TrendingDown className="h-2.5 w-2.5 sm:h-3 sm:w-3" />}
             {Math.abs(change).toFixed(0)}%
           </span>

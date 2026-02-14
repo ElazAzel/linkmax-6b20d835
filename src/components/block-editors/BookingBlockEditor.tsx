@@ -40,10 +40,10 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
   const block = formData;
 
   // Ensure title and description are MultilingualString
-  const titleValue: MultilingualString = isMultilingualString(block.title) 
-    ? block.title 
+  const titleValue: MultilingualString = isMultilingualString(block.title)
+    ? block.title
     : createMultilingualString(typeof block.title === 'string' ? block.title : '');
-  
+
   const descriptionValue: MultilingualString = isMultilingualString(block.description)
     ? block.description
     : createMultilingualString(typeof block.description === 'string' ? block.description : '');
@@ -112,8 +112,8 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
 
           <MultilingualInput
             label={t('bookingBlock.buttonText', 'Текст кнопки')}
-            value={isMultilingualString(block.buttonText) 
-              ? block.buttonText 
+            value={isMultilingualString(block.buttonText)
+              ? block.buttonText
               : createMultilingualString(typeof block.buttonText === 'string' ? block.buttonText : '')}
             onChange={(val) => handleChange({ buttonText: val })}
             type="input"
@@ -129,13 +129,13 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
             <Clock className="h-4 w-4" />
             {t('bookingBlock.workingHours', 'Рабочие часы')}
           </h4>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>{t('bookingBlock.startHour', 'Начало')}</Label>
               <Select
                 value={String(block.workingHoursStart || 9)}
-                onValueChange={v => handleChange({ workingHoursStart: Number(v) })}
+                onValueChange={(v: string) => handleChange({ workingHoursStart: Number(v) })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -154,7 +154,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
               <Label>{t('bookingBlock.endHour', 'Конец')}</Label>
               <Select
                 value={String(block.workingHoursEnd || 18)}
-                onValueChange={v => handleChange({ workingHoursEnd: Number(v) })}
+                onValueChange={(v: string) => handleChange({ workingHoursEnd: Number(v) })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -174,7 +174,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
             <Label>{t('bookingBlock.slotDuration', 'Длительность слота (минут)')}</Label>
             <Select
               value={String(block.slotDuration || 60)}
-              onValueChange={v => handleChange({ slotDuration: Number(v) })}
+              onValueChange={(v: string) => handleChange({ slotDuration: Number(v) })}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -199,7 +199,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
             <CalendarDays className="h-4 w-4" />
             {t('bookingBlock.workingDays', 'Рабочие дни')}
           </h4>
-          
+
           <div className="flex flex-wrap gap-2">
             {DAYS_OF_WEEK.map(day => {
               const isDisabled = (block.disabledWeekdays || []).includes(day.value);
@@ -207,9 +207,8 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
                 <Badge
                   key={day.value}
                   variant={isDisabled ? "outline" : "default"}
-                  className={`cursor-pointer transition-colors ${
-                    isDisabled ? 'opacity-50 line-through' : ''
-                  }`}
+                  className={`cursor-pointer transition-colors ${isDisabled ? 'opacity-50 line-through' : ''
+                    }`}
                   onClick={() => handleToggleDay(day.value)}
                 >
                   {t(`days.${day.key}`, day.key.substring(0, 2))}
@@ -277,12 +276,12 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
         {/* Advanced Settings */}
         <div className="space-y-4">
           <h4 className="font-medium">{t('bookingBlock.advanced', 'Дополнительно')}</h4>
-          
+
           <div className="space-y-2">
             <Label>{t('bookingBlock.maxDays', 'Максимум дней для записи')}</Label>
             <Select
               value={String(block.maxBookingDays || 30)}
-              onValueChange={v => handleChange({ maxBookingDays: Number(v) })}
+              onValueChange={(v: string) => handleChange({ maxBookingDays: Number(v) })}
             >
               <SelectTrigger>
                 <SelectValue />

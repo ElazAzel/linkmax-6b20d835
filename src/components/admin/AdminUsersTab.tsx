@@ -85,48 +85,48 @@ export function AdminUsersTab() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map(user => (
-                <TableRow key={user.id}>
+              {filteredUsers.map((adminUser: AdminUserData) => (
+                <TableRow key={adminUser.id}>
                   <TableCell>
                     <div>
-                      <p className="font-medium">{user.display_name || user.username || 'Без имени'}</p>
-                      <p className="text-sm text-muted-foreground">@{user.username || 'unknown'}</p>
+                      <p className="font-medium">{adminUser.display_name || adminUser.username || 'Без имени'}</p>
+                      <p className="text-sm text-muted-foreground">@{adminUser.username || 'unknown'}</p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={user.is_premium ? 'default' : 'secondary'}>
-                      {user.is_premium ? 'Premium' : 'Free'}
+                    <Badge variant={adminUser.is_premium ? 'default' : 'secondary'}>
+                      {adminUser.is_premium ? 'Premium' : 'Free'}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {user.trial_ends_at ? (
-                      <span className={new Date(user.trial_ends_at) > new Date() ? 'text-green-600' : 'text-muted-foreground'}>
-                        {format(new Date(user.trial_ends_at), 'dd.MM.yyyy', { locale: getDateLocale() })}
+                    {adminUser.trial_ends_at ? (
+                      <span className={new Date(adminUser.trial_ends_at) > new Date() ? 'text-green-600' : 'text-muted-foreground'}>
+                        {format(new Date(adminUser.trial_ends_at), 'dd.MM.yyyy', { locale: getDateLocale() })}
                       </span>
                     ) : '-'}
                   </TableCell>
                   <TableCell>
-                    {user.current_streak > 0 && (
+                    {adminUser.current_streak > 0 && (
                       <div className="flex items-center gap-1">
                         <Flame className="h-4 w-4 text-orange-500" />
-                        <span>{user.current_streak}</span>
+                        <span>{adminUser.current_streak}</span>
                       </div>
                     )}
                   </TableCell>
                   <TableCell className="text-muted-foreground text-sm">
-                    {format(new Date(user.created_at), 'dd.MM.yyyy', { locale: getDateLocale() })}
+                    {format(new Date(adminUser.created_at), 'dd.MM.yyyy', { locale: getDateLocale() })}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Button
                         size="sm"
-                        variant={user.is_premium ? 'destructive' : 'default'}
-                        onClick={() => togglePremium.mutate({ userId: user.id, currentStatus: user.is_premium })}
+                        variant={adminUser.is_premium ? 'destructive' : 'default'}
+                        onClick={() => togglePremium.mutate({ userId: adminUser.id, currentStatus: adminUser.is_premium })}
                         disabled={togglePremium.isPending}
                       >
-                        {togglePremium.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : (user.is_premium ? 'Убрать Premium' : 'Дать Premium')}
+                        {togglePremium.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : (adminUser.is_premium ? 'Убрать Premium' : 'Дать Premium')}
                       </Button>
-                      <Select onValueChange={(v) => extendTrial.mutate({ userId: user.id, days: parseInt(v) })}>
+                      <Select onValueChange={(v: string) => extendTrial.mutate({ userId: adminUser.id, days: parseInt(v) })}>
                         <SelectTrigger className="w-[100px]">
                           <SelectValue placeholder="+Триал" />
                         </SelectTrigger>

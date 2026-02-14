@@ -2,9 +2,12 @@
  * Gallery v1.3 - Mobile-first community gallery with performance optimizations
  * iOS-style design with filters, skeleton loading, and one-tap copy
  */
+'use client';
+
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
   Users,
@@ -44,8 +47,8 @@ import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 
 export default function Gallery() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { pages, loading, likePage } = useGallery();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
@@ -120,14 +123,14 @@ export default function Gallery() {
 
   const updateNiche = useCallback((niche: string | null) => {
     setSelectedNiche(niche);
-    const nextParams = new URLSearchParams(searchParams);
+    const nextParams = new URLSearchParams(searchParams.toString());
     if (niche) {
       nextParams.set('niche', niche);
     } else {
       nextParams.delete('niche');
     }
-    setSearchParams(nextParams, { replace: true });
-  }, [searchParams, setSearchParams]);
+    router.replace(`/gallery?${nextParams.toString()}`);
+  }, [searchParams, router]);
 
   // Handlers - memoized
   const handleCopyTemplate = useCallback((pageSlug: string) => {
@@ -135,10 +138,10 @@ export default function Gallery() {
       description: t('gallery.goToEditor', 'Откройте редактор чтобы настроить'),
       action: {
         label: t('gallery.openEditor', 'Открыть'),
-        onClick: () => navigate('/dashboard?tab=editor'),
+        onClick: () => router.push('/dashboard?tab=editor'),
       },
     });
-  }, [t, navigate]);
+  }, [t, router]);
 
   return (
     <>
@@ -192,7 +195,7 @@ export default function Gallery() {
           <div className="px-5 pt-4 pb-3">
             <div className="flex items-center gap-4 mb-4">
               <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl" asChild>
-                <Link to="/">
+                <Link href="/">
                   <ArrowLeft className="h-5 w-5" />
                 </Link>
               </Button>
@@ -209,7 +212,7 @@ export default function Gallery() {
               <Button
                 size="sm"
                 className="h-10 rounded-xl font-bold"
-                onClick={() => navigate('/auth')}
+                onClick={() => router.push('/auth')}
               >
                 <Sparkles className="h-4 w-4 mr-1.5" />
                 {t('gallery.create', 'Создать')}
@@ -344,7 +347,7 @@ export default function Gallery() {
                         key={page.id}
                         page={page}
                         onCopy={() => handleCopyTemplate(page.slug)}
-                        onView={() => navigate(`/${page.slug}`)}
+                        onView={() => router.push(`/${page.slug}`)}
                       />
                     ))}
                   </div>
@@ -379,7 +382,7 @@ export default function Gallery() {
                       key={page.id}
                       page={page}
                       onCopy={() => handleCopyTemplate(page.slug)}
-                      onView={() => navigate(`/${page.slug}`)}
+                      onView={() => router.push(`/${page.slug}`)}
                       onLike={() => likePage(page.id)}
                     />
                   ))}

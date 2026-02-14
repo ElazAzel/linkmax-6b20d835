@@ -70,7 +70,7 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         <EditorField label={t('fields.backgroundType', 'Background Type')}>
           <Select
             value={data.background?.type || 'solid'}
-            onValueChange={(value) => handleChange({ ...data, background: { ...data.background, type: value } })}
+            onValueChange={(value: string) => handleChange({ ...data, background: { ...data.background, type: value } })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
@@ -142,7 +142,7 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         <EditorDivider />
 
         <EditorField label={t('fields.width', 'Width')}>
-          <Select value={data.width || 'medium'} onValueChange={(value) => handleChange({ ...data, width: value })}>
+          <Select value={data.width || 'medium'} onValueChange={(value: string) => handleChange({ ...data, width: value })}>
             <SelectTrigger className="h-12 rounded-xl"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="full"><span className="flex items-center gap-2"><Maximize2 className="h-4 w-4" />{t('fields.fullWidth', 'Full Width')}</span></SelectItem>
@@ -188,7 +188,7 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         <EditorField label={t('fields.hoverEffect', 'Hover Effect')}>
           <Select
             value={data.hoverEffect || 'none'}
-            onValueChange={(value) => handleChange({ ...data, hoverEffect: value })}
+            onValueChange={(value: string) => handleChange({ ...data, hoverEffect: value })}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />

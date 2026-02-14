@@ -8,19 +8,19 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Sheet, 
-  SheetContent, 
-  SheetHeader, 
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
   SheetTitle,
-  SheetDescription 
+  SheetDescription
 } from '@/components/ui/sheet';
-import { 
-  Users, 
-  Plus, 
-  Search, 
-  Phone, 
-  Mail, 
+import {
+  Users,
+  Plus,
+  Search,
+  Phone,
+  Mail,
   Calendar,
   Crown,
   Download,
@@ -100,10 +100,10 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
       (lead.email?.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (lead.phone?.includes(searchQuery)) ||
       (lead.notes?.toLowerCase().includes(searchQuery.toLowerCase()));
-    
+
     const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
     const matchesSource = sourceFilter === 'all' || lead.source === sourceFilter;
-    
+
     return matchesSearch && matchesStatus && matchesSource;
   });
 
@@ -150,7 +150,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
     link.download = `leads-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
-    
+
     toast.success(t('crm.exportSuccess', 'Leads exported successfully'));
   };
 
@@ -190,15 +190,15 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               {activeTab === 'leads' ? t('crm.title', 'CRM') : t('analytics.title', 'Analytics')}
             </SheetTitle>
             <SheetDescription className="text-xs sm:text-sm">
-              {activeTab === 'leads' 
+              {activeTab === 'leads'
                 ? t('crm.description', 'Manage your leads and interactions')
                 : t('analytics.description', 'Track your page performance')
               }
             </SheetDescription>
           </SheetHeader>
-          
+
           {/* Tabs for Leads / Analytics */}
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)} className="w-full">
+          <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as typeof activeTab)} className="w-full">
             <TabsList className="grid w-full grid-cols-5 mx-0 rounded-none border-b bg-transparent h-10 sm:h-11">
               <TabsTrigger value="leads" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5">
                 <Users className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -227,23 +227,23 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                 <span className="hidden sm:inline ml-1">{t('heatmap.short', 'Heat')}</span>
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="bookings" className="mt-0 h-[calc(100vh-150px)]">
               <BookingsPanel />
             </TabsContent>
-            
+
             <TabsContent value="analytics" className="mt-0">
               <AnalyticsPanel />
             </TabsContent>
-            
+
             <TabsContent value="funnel" className="mt-0">
               <FunnelAnalysis />
             </TabsContent>
-            
+
             <TabsContent value="heatmap" className="mt-0">
               <HeatmapVisualization />
             </TabsContent>
-            
+
             <TabsContent value="leads" className="mt-0">
               {/* Status Stats - Scrollable on mobile */}
               <div className="overflow-x-auto -mx-0">
@@ -252,9 +252,8 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                     <button
                       key={status}
                       onClick={() => setStatusFilter(statusFilter === status ? 'all' : status)}
-                      className={`p-1.5 sm:p-2 rounded-lg text-center transition-all ${
-                        statusFilter === status ? 'ring-2 ring-primary ring-offset-1' : ''
-                      } ${statusColors[status]}`}
+                      className={`p-1.5 sm:p-2 rounded-lg text-center transition-all ${statusFilter === status ? 'ring-2 ring-primary ring-offset-1' : ''
+                        } ${statusColors[status]}`}
                     >
                       <div className="text-base sm:text-lg font-bold">{stats[status]}</div>
                       <div className="text-[8px] sm:text-[10px] uppercase opacity-70 truncate">
@@ -269,9 +268,8 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               <div className="flex gap-1.5 sm:gap-2 p-3 sm:p-4 border-b overflow-x-auto scrollbar-hide">
                 <button
                   onClick={() => setSourceFilter('all')}
-                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
-                    sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
-                  }`}
+                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
+                    }`}
                 >
                   {t('crm.allSources', 'All')} ({stats.total})
                 </button>
@@ -280,9 +278,8 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                     <button
                       key={source}
                       onClick={() => setSourceFilter(sourceFilter === source ? 'all' : source)}
-                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1 shrink-0 ${
-                        sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
-                      } ${sourceColors[source]}`}
+                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1 shrink-0 ${sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
+                        } ${sourceColors[source]}`}
                     >
                       <span>{sourceIcons[source]}</span>
                       <span className="hidden sm:inline">{t(`crm.source.${source}`, source)}</span>
@@ -319,7 +316,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                   </div>
                 ) : filteredLeads.length === 0 ? (
                   <div className="p-8 text-center text-muted-foreground text-sm">
-                    {searchQuery || statusFilter !== 'all' 
+                    {searchQuery || statusFilter !== 'all'
                       ? t('crm.noResults', 'No leads found')
                       : t('crm.noLeads', 'No leads yet. Add your first lead!')
                     }
@@ -379,19 +376,19 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
         </SheetContent>
       </Sheet>
 
-      <AddLeadDialog 
-        open={addDialogOpen} 
+      <AddLeadDialog
+        open={addDialogOpen}
         onOpenChange={(isOpen) => {
           setAddDialogOpen(isOpen);
           if (!isOpen) refreshLeads();
-        }} 
+        }}
       />
-      
+
       {selectedLead && (
-        <LeadDetails 
-          lead={selectedLead} 
-          open={!!selectedLead} 
-          onOpenChange={handleLeadDetailsClose} 
+        <LeadDetails
+          lead={selectedLead}
+          open={!!selectedLead}
+          onOpenChange={handleLeadDetailsClose}
         />
       )}
     </>

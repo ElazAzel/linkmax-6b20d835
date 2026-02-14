@@ -87,7 +87,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
 
       <div className="px-5 py-4">
         {/* Tab Switcher */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'page' | 'account')} className="w-full">
+        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'page' | 'account')} className="w-full">
           <TabsList className="w-full h-12 p-1 bg-muted/50 rounded-2xl mb-6">
             <TabsTrigger
               value="page"

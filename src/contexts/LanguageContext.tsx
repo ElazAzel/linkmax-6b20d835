@@ -44,6 +44,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 // Detect browser language
 function detectBrowserLanguage(): LocaleCode {
+  if (typeof window === 'undefined') return 'en';
   const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
   const langCode = browserLang.split('-')[0].toLowerCase();
 
@@ -71,6 +72,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [browserLanguage] = useState<LocaleCode>(() => detectBrowserLanguage());
 
   const [currentLanguage, setCurrentLanguageState] = useState<LocaleCode>(() => {
+    if (typeof window === 'undefined') return 'en';
     const stored = localStorage.getItem('i18nextLng');
     if (stored === 'kz') {
       localStorage.setItem('i18nextLng', 'kk');
@@ -81,12 +83,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [isTranslating, setIsTranslating] = useState(false);
 
   const [autoTranslateEnabled, setAutoTranslateEnabled] = useState(() => {
+    if (typeof window === 'undefined') return true;
     const stored = localStorage.getItem('autoTranslateEnabled');
     return stored !== 'false'; // Default to true
   });
 
   // Target languages for translation (stored in localStorage)
   const [targetTranslationLanguages, setTargetTranslationLanguagesState] = useState<LocaleCode[]>(() => {
+    if (typeof window === 'undefined') return ['en', 'ru'];
     const stored = localStorage.getItem('targetTranslationLanguages');
     if (stored) {
       try {
@@ -173,17 +177,17 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (isI18nText(obj) || isMultilingualString(obj)) {
       // Find source language with content
       const keys = Object.keys(obj);
-      const sourceLang = keys.find(k => obj[k] && String(obj[k]).trim()) as LocaleCode | undefined;
+      const sourceLang = keys.find(k => (obj as any)[k] && String((obj as any)[k]).trim()) as LocaleCode | undefined;
       if (!sourceLang) return obj;
 
       // Filter out languages that already have content
       const languagesNeedingTranslation = targetLanguages.filter(
-        lang => lang !== sourceLang && (!obj[lang] || !String(obj[lang]).trim())
+        lang => lang !== sourceLang && (!(obj as any)[lang] || !String((obj as any)[lang]).trim())
       );
 
       if (languagesNeedingTranslation.length === 0) return obj;
 
-      const sourceText = String(obj[sourceLang]);
+      const sourceText = String((obj as any)[sourceLang]);
       const translations = await translateText(sourceText, sourceLang, languagesNeedingTranslation);
 
       if (translations) {
@@ -238,7 +242,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           const fieldValue = content[field];
           if (fieldValue && (isI18nText(fieldValue) || isMultilingualString(fieldValue))) {
             for (const targetLang of targetLanguages) {
-              if (!fieldValue[targetLang]?.trim()) {
+              if (!(fieldValue as any)[targetLang]?.trim()) {
                 // Check if there's source content
                 const hasSource = Object.values(fieldValue).some(v => typeof v === 'string' && v.trim());
                 if (hasSource) {
@@ -258,7 +262,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
               const fieldValue = item[field];
               if (fieldValue && (isI18nText(fieldValue) || isMultilingualString(fieldValue))) {
                 for (const targetLang of targetLanguages) {
-                  if (!fieldValue[targetLang]?.trim()) {
+                  if (!(fieldValue as any)[targetLang]?.trim()) {
                     const hasSource = Object.values(fieldValue).some(v => typeof v === 'string' && v.trim());
                     if (hasSource) {
                       needsTranslation = true;

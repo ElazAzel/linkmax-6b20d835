@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import Link from 'next/link';
 import { Check, X, Settings, ExternalLink, Copy } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -91,7 +93,7 @@ export function CollabsTab({
                   target_blocks: [],
                   show_all: true,
                 };
-                
+
                 return (
                   <div key={collab.id} className="p-3 bg-muted/50 rounded-lg space-y-2">
                     <div className="flex items-center justify-between">
@@ -133,13 +135,13 @@ export function CollabsTab({
                     </div>
                     {collabUrl && (
                       <div className="flex items-center gap-2 text-xs">
-                        <Link to={`/collab/${collab.collab_slug}`} className="text-primary hover:underline flex items-center gap-1">
+                        <Link href={`/collab/${collab.collab_slug}`} className="text-primary hover:underline flex items-center gap-1">
                           <ExternalLink className="h-3 w-3" />
                           {t('collaboration.sharedPage', 'Совместная страница')}
                         </Link>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           className="h-6 px-2"
                           onClick={() => navigator.clipboard.writeText(collabUrl)}
                         >
@@ -161,7 +163,7 @@ export function CollabsTab({
           <CardTitle className="text-sm">{t('collaboration.findPartner', 'Найти партнёра')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <UserSearch 
+          <UserSearch
             mode="collab"
             onCollabRequest={onSendRequest}
           />

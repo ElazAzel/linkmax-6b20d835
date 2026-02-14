@@ -5,9 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  X, Users, UserPlus, Search, Check, 
-  X as XIcon, UserMinus, Trophy, 
+import {
+  X, Users, UserPlus, Search, Check,
+  X as XIcon, UserMinus, Trophy,
   Sparkles, Clock, ExternalLink, Heart, Gift, Activity
 } from 'lucide-react';
 import { useFriends } from '@/hooks/useFriends';
@@ -65,18 +65,18 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
 
   const handleToggleLike = async (pageId: string) => {
     const isCurrentlyLiked = likedPages.has(pageId);
-    
+
     if (isCurrentlyLiked) {
       const newLikedPages = new Set(likedPages);
       newLikedPages.delete(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
+      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
       await unlikeGalleryPage(pageId);
       toast.success(t('friends.likeRemoved', 'Like removed'));
     } else {
       const newLikedPages = new Set(likedPages).add(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
+      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
       await likeGalleryPage(pageId);
       toast.success(t('friends.pageLiked', 'Page liked!'));
     }
@@ -116,10 +116,10 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
               </p>
             </div>
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={onClose} 
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
             className="h-10 w-10 rounded-xl"
           >
             <X className="h-5 w-5" />
@@ -252,7 +252,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                 ))}
               </>
             ) : (
-              <EmptyState 
+              <EmptyState
                 icon={<Users className="h-8 w-8" />}
                 title={t('friends.noFriends', 'No friends yet')}
                 description={t('friends.findFriends', 'Find friends through search above')}
@@ -296,7 +296,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                 />
               ))
             ) : (
-              <EmptyState 
+              <EmptyState
                 icon={<Clock className="h-8 w-8" />}
                 title={t('friends.noRequests', 'No incoming requests')}
                 description={t('friends.noRequestsDesc', 'When someone wants to add you as a friend, the request will appear here')}
@@ -327,7 +327,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                 />
               ))
             ) : (
-              <EmptyState 
+              <EmptyState
                 icon={<UserPlus className="h-8 w-8" />}
                 title={t('friends.noSentRequests', 'No sent requests')}
                 description={t('friends.noSentRequestsDesc', 'Find friends through search')}

@@ -1,21 +1,23 @@
+'use client';
+
 /**
  * FreePremiumBlockGate - Visual separation for Free vs Premium blocks
  * Shows lock overlay and upgrade prompts for premium-only blocks
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Crown, Lock, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { 
-  FREE_BLOCK_TYPES, 
-  PREMIUM_BLOCK_TYPES, 
-  isFreeBlock, 
+import {
+  FREE_BLOCK_TYPES,
+  PREMIUM_BLOCK_TYPES,
+  isFreeBlock,
   isPremiumBlock,
   type FreeBlockType,
-  type PremiumBlockType 
+  type PremiumBlockType
 } from '@/lib/block-registry';
 
 // Re-export from registry for backward compatibility
@@ -35,7 +37,7 @@ export const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
   className,
 }: PremiumBlockOverlayProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div className={cn(
@@ -53,10 +55,10 @@ export const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
       <p className="text-sm text-muted-foreground mb-4 max-w-xs">
         {t('premium.unlockWith', 'Разблокируйте этот блок с подпиской Pro')}
       </p>
-      <Button 
-        size="sm" 
+      <Button
+        size="sm"
         className="h-10 px-5 rounded-xl font-bold shadow-lg shadow-primary/25"
-        onClick={() => navigate('/pricing')}
+        onClick={() => router.push('/pricing')}
       >
         <Sparkles className="h-4 w-4 mr-2" />
         {t('premium.upgrade', 'Перейти на Pro')}
@@ -81,8 +83,8 @@ export const BlockTierBadge = memo(function BlockTierBadge({
 
   if (tier === 'free') {
     return (
-      <Badge 
-        variant="secondary" 
+      <Badge
+        variant="secondary"
         className={cn(
           "font-bold",
           size === 'sm' ? "text-xs h-5 px-2" : "text-sm h-6 px-3",
@@ -96,7 +98,7 @@ export const BlockTierBadge = memo(function BlockTierBadge({
   }
 
   return (
-    <Badge 
+    <Badge
       className={cn(
         "font-bold",
         size === 'sm' ? "text-xs h-5 px-2" : "text-sm h-6 px-3",
@@ -150,11 +152,11 @@ export const LockedBlockCard = memo(function LockedBlockCard({
   onClick,
 }: LockedBlockCardProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <button
-      onClick={onClick || (() => navigate('/pricing'))}
+      onClick={onClick || (() => router.push('/pricing'))}
       className="relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all opacity-60 hover:opacity-80"
     >
       {/* Colorful icon with lock overlay */}
@@ -169,12 +171,12 @@ export const LockedBlockCard = memo(function LockedBlockCard({
           <Lock className="h-3 w-3 text-muted-foreground" />
         </div>
       </div>
-      
+
       {/* Label */}
       <span className="text-sm font-bold text-center leading-tight text-muted-foreground">
         {label}
       </span>
-      
+
       {/* PRO badge */}
       <div className="absolute top-2 right-2">
         <Crown className="h-4 w-4 text-amber-500" />

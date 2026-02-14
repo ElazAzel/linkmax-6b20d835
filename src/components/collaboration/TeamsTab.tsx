@@ -1,9 +1,11 @@
+'use client';
+
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { 
-  ExternalLink, Settings, Loader2, Users, Copy, 
-  UserPlus, Crown, Check, Link2 
+import {
+  ExternalLink, Settings, Loader2, Users, Copy,
+  UserPlus, Crown, Check, Link2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,14 +30,14 @@ interface TeamsTabProps {
   onRefresh: () => void;
 }
 
-export function TeamsTab({ 
-  userId, 
-  teams, 
-  onCreateTeam, 
-  onLeaveTeam, 
+export function TeamsTab({
+  userId,
+  teams,
+  onCreateTeam,
+  onLeaveTeam,
   onJoinByCode,
   onGetInviteCode,
-  onRefresh 
+  onRefresh
 }: TeamsTabProps) {
   const { t } = useTranslation();
   const [newTeamName, setNewTeamName] = useState('');
@@ -105,12 +107,12 @@ export function TeamsTab({
 
   const handleCopyInviteLink = async (team: Team) => {
     if (!onGetInviteCode) return;
-    
+
     let code = team.invite_code;
     if (!code) {
       code = await onGetInviteCode(team.id);
     }
-    
+
     if (code) {
       const inviteUrl = `${window.location.origin}/join-team/${code}`;
       await navigator.clipboard.writeText(inviteUrl);
@@ -191,15 +193,15 @@ export function TeamsTab({
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <Link to={`/team/${team.slug}`}>
+                      <Link href={`/team/${team.slug}`}>
                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
                           <ExternalLink className="h-4 w-4" />
                         </Button>
                       </Link>
                       {team.owner_id === userId && (
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
+                        <Button
+                          size="sm"
+                          variant="ghost"
                           className="h-8 w-8 p-0"
                           onClick={() => handleCopyInviteLink(team)}
                         >
@@ -212,9 +214,9 @@ export function TeamsTab({
                       )}
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button 
-                            size="sm" 
-                            variant="ghost" 
+                          <Button
+                            size="sm"
+                            variant="ghost"
                             className="h-8 w-8 p-0"
                             onClick={() => handleOpenTeamSettings(team)}
                           >
@@ -251,8 +253,8 @@ export function TeamsTab({
                         </DialogContent>
                       </Dialog>
                       {team.owner_id !== userId && (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           variant="ghost"
                           className="h-8 text-xs text-destructive hover:text-destructive"
                           onClick={() => onLeaveTeam(team.id)}
@@ -300,9 +302,9 @@ export function TeamsTab({
                 onChange={(e) => setInviteCode(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleJoinByCode()}
               />
-              <Button 
-                className="w-full" 
-                onClick={handleJoinByCode} 
+              <Button
+                className="w-full"
+                onClick={handleJoinByCode}
                 disabled={!inviteCode.trim() || isJoining || !onJoinByCode}
               >
                 {isJoining ? (
@@ -341,9 +343,9 @@ export function TeamsTab({
                 onChange={(e) => setNewTeamDesc(e.target.value)}
                 className="min-h-[60px]"
               />
-              <Button 
-                className="w-full" 
-                onClick={handleCreateTeam} 
+              <Button
+                className="w-full"
+                onClick={handleCreateTeam}
                 disabled={!newTeamName || !newTeamSlug}
               >
                 <Crown className="h-4 w-4 mr-2" />

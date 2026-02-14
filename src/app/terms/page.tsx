@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import Terms from '@/pages/Terms';
+import Terms from '@/components/screens/Terms';
 
 export const metadata: Metadata = {
     title: 'Terms of Service - LinkMAX',

@@ -1,10 +1,12 @@
+'use client';
+
 /**
  * EventsPanel - CRM tab for managing events and registrations
  * Features: Event list, registration management, QR scanner access, Excel/CSV export
  */
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Card } from '@/components/ui/card';
@@ -61,7 +63,7 @@ interface EventsPanelProps {
 export function EventsPanel({ isPremium }: EventsPanelProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft' | 'closed'>('all');
@@ -141,8 +143,8 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
     try {
       // Fetch event details for form fields
       const event = events.find(e => e.id === eventId);
-      const eventTitle = event 
-        ? getI18nText((event.title_i18n_json || {}) as Record<string, string>, language) 
+      const eventTitle = event
+        ? getI18nText((event.title_i18n_json || {}) as Record<string, string>, language)
         : 'Event';
       const formFields = (event?.form_schema_json as EventFormField[]) || [];
 
@@ -202,7 +204,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
       toast.error(t('events.scannerProOnly', 'QR-сканер доступен в Pro'));
       return;
     }
-    navigate(`/dashboard/events/${eventId}/scanner`);
+    router.push(`/dashboard/events/${eventId}/scanner`);
   };
 
   const getStatusBadge = (status: string) => {
@@ -229,8 +231,8 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
   // If viewing a specific event's registrations
   if (selectedEventId) {
     const selectedEvent = events.find(e => e.id === selectedEventId);
-    const selectedTitle = selectedEvent 
-      ? getI18nText((selectedEvent.title_i18n_json || {}) as Record<string, string>, language) 
+    const selectedTitle = selectedEvent
+      ? getI18nText((selectedEvent.title_i18n_json || {}) as Record<string, string>, language)
       : '';
     return (
       <EventRegistrationsList
@@ -267,7 +269,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
       </div>
 
       {/* Filter Tabs */}
-      <Tabs value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)} className="w-full">
+      <Tabs value={statusFilter} onValueChange={(v: string) => setStatusFilter(v as typeof statusFilter)} className="w-full">
         <TabsList className="grid w-full grid-cols-4 mx-0 rounded-none border-b bg-transparent h-10">
           <TabsTrigger value="all" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs">
             {t('events.all', 'Все')}
@@ -313,7 +315,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
               const titleJson = (event.title_i18n_json || {}) as Record<string, string>;
               const title = getI18nText(titleJson, language);
               const isEventPast = event.end_at ? isPast(new Date(event.end_at)) : false;
-              
+
               return (
                 <Card
                   key={event.id}

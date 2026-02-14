@@ -3,20 +3,29 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import { AppTabBar } from '../AppTabBar';
+
+// Mock next/navigation
+const useRouterMock = vi.fn();
+const usePathnameMock = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: useRouterMock,
+  }),
+  usePathname: () => usePathnameMock(),
+}));
 
 const renderAppTabBar = (props = {}) => {
   return render(
-    <BrowserRouter>
-      <AppTabBar {...props} />
-    </BrowserRouter>
+    <AppTabBar {...props} />
   );
 };
 
 describe('AppTabBar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    usePathnameMock.mockReturnValue('/dashboard/editor');
   });
 
   it('renders all 6 tabs', () => {
@@ -36,10 +45,10 @@ describe('AppTabBar', () => {
   it('calls onTabChange when tab is clicked', () => {
     const onTabChange = vi.fn();
     renderAppTabBar({ onTabChange });
-    
+
     const buttons = screen.getAllByRole('button');
     fireEvent.click(buttons[2]); // Click CRM tab
-    
+
     expect(onTabChange).toHaveBeenCalledWith('crm');
   });
 

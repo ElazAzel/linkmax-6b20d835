@@ -301,7 +301,7 @@ export default function AdminTemplateEditor() {
                     block={editingBlock}
                     isOpen={!!editingBlock}
                     onClose={() => setEditingBlock(null)}
-                    onSave={handleSaveBlockContent}
+                    onSave={handleSaveBlockContent as any}
                     enableAutosave={false}
                 />
             )}

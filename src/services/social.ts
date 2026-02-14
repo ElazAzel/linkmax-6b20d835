@@ -276,7 +276,7 @@ export async function getPendingGifts(): Promise<PremiumGift[]> {
 
   // Fetch sender profiles
   if (data && data.length > 0) {
-    const senderIds = [...new Set(data.map(g => g.sender_id))];
+    const senderIds = Array.from(new Set(data.map(g => g.sender_id)));
     const { data: profiles } = await supabase
       .from('user_profiles')
       .select('id, display_name, username, avatar_url')
@@ -427,7 +427,7 @@ export async function getFriendActivities(limit: number = 20): Promise<FriendAct
   if (!data || data.length === 0) return [];
 
   // Fetch user profiles
-  const userIds = [...new Set(data.map(a => a.user_id))];
+  const userIds = Array.from(new Set(data.map(a => a.user_id)));
   const { data: profiles } = await supabase
     .from('user_profiles')
     .select('id, display_name, username, avatar_url')

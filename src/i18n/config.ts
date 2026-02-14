@@ -33,10 +33,11 @@ const mergeNamespaces = (json: Record<string, unknown>) => {
 
 // Migrate 'kz' to 'kk' if stored in localStorage
 const migrateKzToKk = () => {
+  if (typeof window === 'undefined') return;
   const stored = localStorage.getItem('i18nextLng');
   if (stored === 'kz') {
     localStorage.setItem('i18nextLng', 'kk');
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.warn('[i18n] Migrated language from "kz" to "kk"');
     }
   }
@@ -69,6 +70,7 @@ const normalizeLanguage = (lng: string): string => {
 const customLanguageDetector = {
   name: 'customDetector',
   lookup() {
+    if (typeof window === 'undefined') return 'ru';
     // 1. URL parameter has highest priority (for language switching)
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang') || params.get('lng');
@@ -93,10 +95,11 @@ const customLanguageDetector = {
     }
 
     // 3. Auto-detect from browser language
-    const browserLang = navigator.language || navigator.languages?.[0] || '';
+    const browserLang = navigator.language || (navigator as any).languages?.[0] || '';
     return normalizeLanguage(browserLang);
   },
   cacheUserLanguage(lng: string) {
+    if (typeof window === 'undefined') return;
     // Normalize before caching
     const normalizedLng = normalizeLanguage(lng);
     localStorage.setItem('i18nextLng', normalizedLng);
@@ -149,8 +152,8 @@ i18n
       caches: ['localStorage'],
     },
     // Handling missing keys
-    saveMissing: import.meta.env.DEV,
-    missingKeyHandler: import.meta.env.DEV
+    saveMissing: process.env.NODE_ENV === 'development',
+    missingKeyHandler: process.env.NODE_ENV === 'development'
       ? (lngs, ns, key, fallbackValue) => {
         console.warn(`[i18n] Missing key: "${key}" for languages: [${lngs.join(', ')}], namespace: "${ns}"`);
       }
@@ -161,7 +164,7 @@ i18n
   });
 
 // Development diagnostics
-if (import.meta.env.DEV) {
+if (process.env.NODE_ENV === 'development') {
   console.log('[i18n] Initialized with language:', i18n.language);
   console.log('[i18n] Supported languages:', SUPPORTED_LANGUAGES);
   console.log('[i18n] Resources loaded:', Object.keys(i18n.options.resources || {}));
@@ -179,7 +182,7 @@ i18n.on('languageChanged', (lng) => {
     return;
   }
 
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     console.log('[i18n] Language changed to:', lng);
   }
 
@@ -188,6 +191,8 @@ i18n.on('languageChanged', (lng) => {
 });
 
 // Set initial HTML lang
-document.documentElement.lang = i18n.language || 'ru';
+if (typeof document !== 'undefined') {
+  document.documentElement.lang = i18n.language || 'ru';
+}
 
 export default i18n;
