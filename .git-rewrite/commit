@@ -1,12 +1,11 @@
-tree 227c43c5096c19936a5b68452f66dd3cda2c4ae0
-parent 77eaa120b082862634318b27992fbd14f1082d88
-parent 728279ee1dc1ac17fcd557596e8b08cb71841fc9
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767302179 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767302179 +0000
+tree 5828ab2d5cc6c5b5bd3185f556856291e0449978
+parent 7c6b14b0656bd254e7440b2d5cd8290937cc9874
+parent 66c72b1cb803114f643e8e9c9ae4b158c17ca2a7
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767347095 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767347095 +0000
 
-Fix block tiers and update docs
+Добавить кнопку маркетплейс в моб тулбар
 
-- Revert previous tier changes to keep Download, FAQ, Shoutout as premium blocks
-- Update FEATURES.md to reflect premium status accordingly
+Добавлен проп и состояние маркетплейса в Dashboard. Обновлен MobileToolbar чтобы включать кнопку маркетплейса в боковой панели и пробросить обработчик открытия. Реализовано открытие TemplateMarketplace напрямую из мобильного тулбара через Dashboard.
 
-X-Lovable-Edit-ID: edt-6f0607e2-5f31-4d7c-bba8-647b4fbdee3a
+X-Lovable-Edit-ID: edt-a7ac7c09-6321-4d9e-8e61-7264c30c16fc
