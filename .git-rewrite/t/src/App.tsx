@@ -1,32 +1,15 @@
-import { lazy, Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
-
-// Lazy load page components for route-based code splitting
-const Index = lazy(() => import("./pages/Index"));
-const Auth = lazy(() => import("./pages/Auth"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const PublicPage = lazy(() => import("./pages/PublicPage"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const Install = lazy(() => import("./pages/Install"));
-const Gallery = lazy(() => import("./pages/Gallery"));
-const Pricing = lazy(() => import("./pages/Pricing"));
-const Alternatives = lazy(() => import("./pages/Alternatives"));
-const Admin = lazy(() => import("./pages/Admin"));
-const TeamPage = lazy(() => import("./pages/TeamPage"));
-const CollabPage = lazy(() => import("./pages/CollabPage"));
-const JoinTeam = lazy(() => import("./pages/JoinTeam"));
-const IndexBento = lazy(() => import("./pages/IndexBento"));
-const Terms = lazy(() => import("./pages/Terms"));
-const Privacy = lazy(() => import("./pages/Privacy"));
-const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
+import { useWebVitals } from "@/hooks/useWebVitals";
 
 const queryClient = new QueryClient();
 
@@ -42,42 +25,27 @@ const PageLoader = () => (
   </div>
 );
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/install" element={<Install />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/alternatives" element={<Alternatives />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/team/:slug" element={<TeamPage />} />
-              <Route path="/join/:inviteCode" element={<JoinTeam />} />
-              <Route path="/bento" element={<IndexBento />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/payment-terms" element={<PaymentTerms />} />
-              <Route path="/collab/:collabSlug" element={<CollabPage />} />
-              <Route path="/p/:compressed" element={<PublicPage />} />
-              <Route path="/:slug" element={<PublicPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-        <PWAInstallPrompt />
-        <PWAUpdatePrompt />
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  // Initialize Web Vitals monitoring in development
+  useWebVitals();
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <LanguageProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <Suspense fallback={<PageLoader />}>
+              <Outlet />
+            </Suspense>
+            <PWAInstallPrompt />
+            <PWAUpdatePrompt />
+          </TooltipProvider>
+        </LanguageProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -2,12 +2,25 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SEOHead } from '@/components/SEOHead';
 import { COMPANY_DETAILS } from '@/components/legal/TermsOfServiceModal';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 
 const Privacy = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const canonical = 'https://lnkmx.my/privacy';
+  const seoTitle =
+    lang === 'ru'
+      ? 'Политика конфиденциальности — lnkmx'
+      : lang === 'kk'
+        ? 'Құпиялылық саясаты — lnkmx'
+        : 'Privacy Policy — lnkmx';
+  const seoDescription =
+    lang === 'ru'
+      ? 'Политика конфиденциальности lnkmx: какие данные обрабатываются и как они защищаются.'
+      : lang === 'kk'
+        ? 'lnkmx құпиялылық саясаты: қандай деректер өңделеді және қалай қорғалады.'
+        : 'Privacy policy for lnkmx: what data is processed and how it is protected.';
 
   const getPrivacyContent = () => {
     if (lang === 'en') {
@@ -160,9 +173,17 @@ const Privacy = () => {
 
   return (
     <>
-      <SEOHead
-        title={lang === 'ru' ? 'Политика конфиденциальности - LinkMAX' : lang === 'kk' ? 'Құпиялылық саясаты - LinkMAX' : 'Privacy Policy - LinkMAX'}
-        description={lang === 'ru' ? 'Политика конфиденциальности платформы LinkMAX' : lang === 'kk' ? 'LinkMAX платформасының құпиялылық саясаты' : 'LinkMAX Platform Privacy Policy'}
+      <StaticSEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        currentLanguage={lang}
+        alternates={[
+          { hreflang: 'ru', href: `${canonical}?lang=ru` },
+          { hreflang: 'en', href: `${canonical}?lang=en` },
+          { hreflang: 'kk', href: `${canonical}?lang=kk` },
+          { hreflang: 'x-default', href: canonical },
+        ]}
       />
       <div className="min-h-screen bg-background">
         <div className="container max-w-4xl mx-auto px-4 py-8">

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useSocialFeatures } from '@/hooks/useSocialFeatures';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface WeeklyChallengesPanelProps {
   compact?: boolean;
@@ -30,6 +31,7 @@ const CHALLENGE_COLORS: Record<string, string> = {
 };
 
 export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
+  const { t } = useTranslation();
   const { progress, loading, claimChallenge, stats } = useSocialFeatures();
 
   if (loading) {
@@ -50,14 +52,17 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold">Недельные челленджи</p>
+            <p className="text-sm font-semibold">{t('social.weeklyChallenges.title', 'Недельные челленджи')}</p>
             <p className="text-xs text-muted-foreground">
-              {stats.completedChallenges}/{progress.length} выполнено
+              {t('social.weeklyChallenges.completed', '{{completed}}/{{total}} выполнено', {
+                completed: stats.completedChallenges,
+                total: progress.length,
+              })}
             </p>
           </div>
           {stats.unclaimedRewards > 0 && (
             <Badge className="bg-primary text-primary-foreground animate-pulse">
-              +{stats.totalRewardHours}ч
+              {t('social.weeklyChallenges.rewardHoursShort', '+{{count}}ч', { count: stats.totalRewardHours })}
             </Badge>
           )}
         </div>
@@ -74,15 +79,15 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
             <Trophy className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h3 className="font-bold">Недельные челленджи</h3>
+            <h3 className="font-bold">{t('social.weeklyChallenges.title', 'Недельные челленджи')}</h3>
             <p className="text-xs text-muted-foreground">
-              Обновляются каждый понедельник
+              {t('social.weeklyChallenges.refreshesOnMonday', 'Обновляются каждый понедельник')}
             </p>
           </div>
         </div>
         <Badge variant="secondary" className="gap-1">
           <Clock className="h-3 w-3" />
-          {getDaysLeft()} дн.
+          {t('social.weeklyChallenges.daysLeftShort', '{{count}} дн.', { count: getDaysLeft() })}
         </Badge>
       </div>
 
@@ -90,15 +95,23 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-card/50 rounded-xl p-3 text-center border border-border/30">
           <p className="text-lg font-bold text-primary">{stats.completedChallenges}</p>
-          <p className="text-[10px] text-muted-foreground">Выполнено</p>
+          <p className="text-[10px] text-muted-foreground">
+            {t('social.weeklyChallenges.stats.completed', 'Выполнено')}
+          </p>
         </div>
         <div className="bg-card/50 rounded-xl p-3 text-center border border-border/30">
           <p className="text-lg font-bold text-amber-500">{stats.unclaimedRewards}</p>
-          <p className="text-[10px] text-muted-foreground">Награды</p>
+          <p className="text-[10px] text-muted-foreground">
+            {t('social.weeklyChallenges.stats.rewards', 'Награды')}
+          </p>
         </div>
         <div className="bg-card/50 rounded-xl p-3 text-center border border-border/30">
-          <p className="text-lg font-bold text-green-500">+{stats.totalRewardHours}ч</p>
-          <p className="text-[10px] text-muted-foreground">К получению</p>
+          <p className="text-lg font-bold text-green-500">
+            {t('social.weeklyChallenges.rewardHoursShort', '+{{count}}ч', { count: stats.totalRewardHours })}
+          </p>
+          <p className="text-[10px] text-muted-foreground">
+            {t('social.weeklyChallenges.stats.toClaim', 'К получению')}
+          </p>
         </div>
       </div>
 
@@ -141,7 +154,7 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-semibold text-sm">{challenge.title}</h4>
                     <Badge variant="secondary" className="text-[10px] h-5">
-                      +{challenge.reward_hours}ч
+                      {t('social.weeklyChallenges.rewardHoursShort', '+{{count}}ч', { count: challenge.reward_hours })}
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mb-2 line-clamp-1">
@@ -165,14 +178,14 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
                     className="h-9 gap-1 rounded-xl bg-gradient-to-r from-primary to-purple-500 hover:opacity-90"
                   >
                     <Gift className="h-4 w-4" />
-                    Забрать
+                    {t('social.weeklyChallenges.claim', 'Забрать')}
                   </Button>
                 )}
 
                 {item.reward_claimed && (
                   <Badge variant="secondary" className="h-9 px-3 rounded-xl">
                     <Sparkles className="h-4 w-4 mr-1" />
-                    Получено
+                    {t('social.weeklyChallenges.claimed', 'Получено')}
                   </Badge>
                 )}
               </div>

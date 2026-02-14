@@ -3,7 +3,7 @@
  * Infrastructure layer - handles actual data access
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { success, failure, tryCatchAsync, type Result } from '@/domain/value-objects/Result';
 import type {
   IAnalyticsRepository,
@@ -12,7 +12,7 @@ import type {
   AnalyticsEvent,
   AnalyticsSummary,
 } from '../interfaces/IAnalyticsRepository';
-import type { Json } from '@/integrations/supabase/types';
+import type { Json } from '@/platform/supabase/types';
 
 // ============= Helpers =============
 

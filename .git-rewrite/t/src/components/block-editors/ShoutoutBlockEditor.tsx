@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { searchUsers } from '@/services/collaboration';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
+import i18n from '@/i18n/config';
 
 interface UserSearchResult {
   id: string;
@@ -26,7 +27,7 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
 
   const handleSearch = async () => {
     if (!searchQuery.trim() || searchQuery.length < 2) {
-      setSearchError('Введите минимум 2 символа');
+      setSearchError(t('shoutout.searchMinChars', 'Введите минимум 2 символа'));
       return;
     }
     setSearching(true);
@@ -36,7 +37,7 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
       setSearchResults(results || []);
     } catch (error) {
       console.error('Search error:', error);
-      setSearchError('Ошибка поиска. Попробуйте позже.');
+      setSearchError(t('shoutout.searchError', 'Ошибка поиска. Попробуйте позже.'));
       setSearchResults([]);
     } finally {
       setSearching(false);
@@ -69,7 +70,7 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
     <div className="space-y-4">
       {formData.userId ? (
         <Card className="p-4">
-          <Label className="text-sm mb-3 block">Выбранный пользователь</Label>
+          <Label className="text-sm mb-3 block">{t('shoutout.selectedUser', 'Выбранный пользователь')}</Label>
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12 ring-2 ring-primary/30">
               <AvatarImage src={formData.avatarUrl || ''} />
@@ -90,16 +91,16 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
               variant="outline"
               onClick={clearUser}
             >
-              Изменить
+              {t('common.edit', 'Изменить')}
             </Button>
           </div>
         </Card>
       ) : (
         <div className="space-y-3">
-          <Label>Выберите пользователя для рекомендации</Label>
+          <Label>{t('shoutout.selectUser', 'Выберите пользователя для рекомендации')}</Label>
           <div className="flex gap-2">
             <Input
-              placeholder="Поиск по имени или @username..."
+              placeholder={t('shoutout.searchPlaceholder', 'Поиск по имени или @username...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -141,18 +142,18 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
 
           {!searchError && searchQuery.length >= 2 && searchResults.length === 0 && !searching && (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Пользователи не найдены. Попробуйте другой запрос.
+              {t('shoutout.noResults', 'Пользователи не найдены. Попробуйте другой запрос.')}
             </p>
           )}
         </div>
       )}
 
       <div className="space-y-2">
-        <Label>Почему рекомендуете?</Label>
+        <Label>{t('shoutout.reasonLabel', 'Почему рекомендуете?')}</Label>
         <Textarea
           value={typeof formData.message === 'string' ? formData.message : formData.message?.ru || ''}
           onChange={(e) => onChange({ ...formData, message: e.target.value })}
-          placeholder="Отличный специалист, рекомендую!"
+          placeholder={t('shoutout.reasonPlaceholder', 'Отличный специалист, рекомендую!')}
         />
       </div>
     </div>
@@ -161,5 +162,5 @@ function ShoutoutBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
 
 export const ShoutoutBlockEditor = withBlockEditor(ShoutoutBlockEditorComponent, {
   isPremium: false,
-  description: 'Рекомендуйте других пользователей вашей аудитории',
+  description: i18n.t('shoutout.blockDescription', 'Рекомендуйте других пользователей вашей аудитории'),
 });

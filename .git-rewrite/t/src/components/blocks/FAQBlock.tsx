@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FAQBlock as FAQBlockType } from '@/types/page';
-import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getTranslatedString } from '@/lib/i18n-helpers';
+import { HelpCircle } from 'lucide-react';
 
 interface FAQBlockProps {
   block: FAQBlockType;
@@ -17,22 +17,29 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
 
   if (!block.items || block.items.length === 0) {
     return (
-      <Card className="w-full bg-card border-border shadow-sm">
-        <CardContent className="p-6 text-center text-muted-foreground">
-          {t('blocks.faq.empty', 'Добавьте вопросы и ответы')}
-        </CardContent>
-      </Card>
+      <div className="w-full p-4 rounded-xl bg-card border border-border text-center text-muted-foreground text-sm">
+        {t('blocks.faq.empty', 'Добавьте вопросы и ответы')}
+      </div>
     );
   }
 
   return (
-    <div className="w-full space-y-3">
+    <div 
+      className="w-full space-y-2"
+      style={{
+        backgroundColor: block.blockStyle?.backgroundColor,
+        backgroundImage: block.blockStyle?.backgroundGradient,
+      }}
+    >
       {title && (
-        <h3 className="text-xl font-semibold text-center">{title}</h3>
+        <div className="flex items-center gap-2 px-1 mb-3">
+          <HelpCircle className="h-4 w-4 text-primary" />
+          <h3 className="font-semibold text-sm">{title}</h3>
+        </div>
       )}
       
-      <Accordion type="single" collapsible className="w-full space-y-2">
-        {block.items.map((item, index) => {
+      <Accordion type="single" collapsible className="w-full space-y-1.5">
+        {block.items.map((item) => {
           const question = getTranslatedString(item.question, currentLang);
           const answer = getTranslatedString(item.answer, currentLang);
           
@@ -40,12 +47,12 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
             <AccordionItem 
               key={item.id} 
               value={item.id}
-              className="bg-card border border-border rounded-lg px-4 shadow-sm"
+              className="bg-card border border-border rounded-xl px-4 shadow-sm data-[state=open]:bg-muted/30"
             >
-              <AccordionTrigger className="text-left font-medium hover:no-underline">
+              <AccordionTrigger className="text-left text-sm font-medium hover:no-underline py-3 gap-2">
                 {question}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
+              <AccordionContent className="text-sm text-muted-foreground pb-3 leading-relaxed">
                 {answer}
               </AccordionContent>
             </AccordionItem>

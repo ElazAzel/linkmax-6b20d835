@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { X, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { useTranslation } from 'react-i18next';
 import type { Achievement } from '@/types/achievements';
-import { RARITY_LABELS } from '@/types/achievements';
 
 interface AchievementNotificationProps {
   achievement: Achievement;
@@ -15,6 +15,7 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const { playAchievement } = useSoundEffects();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Play achievement sound
@@ -78,9 +79,9 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
             </div>
             <div>
               <div className="text-[10px] font-medium opacity-80 uppercase tracking-wide">
-                {RARITY_LABELS[achievement.rarity]}
+                {t(`achievements.rarity.${achievement.rarity}`)}
               </div>
-              <div className="text-sm font-bold">Новое достижение!</div>
+              <div className="text-sm font-bold">{t('achievements.newAchievement', 'Новое достижение!')}</div>
             </div>
           </div>
           <Button
@@ -99,8 +100,8 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
             <span className="text-3xl">{achievement.icon}</span>
           </div>
           <div className="flex-1 min-w-0">
-            <h5 className="font-bold text-base truncate">{achievement.title}</h5>
-            <p className="text-sm opacity-90 line-clamp-2">{achievement.description}</p>
+            <h5 className="font-bold text-base truncate">{t(achievement.titleKey)}</h5>
+            <p className="text-sm opacity-90 line-clamp-2">{t(achievement.descriptionKey)}</p>
           </div>
         </div>
 

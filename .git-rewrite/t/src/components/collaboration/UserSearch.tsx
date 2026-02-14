@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,10 +13,12 @@ interface UserSearchProps {
   onShoutout?: (userId: string, message: string) => void;
 }
 
-export function UserSearch({ mode, placeholder = 'Поиск по имени...', onCollabRequest, onShoutout }: UserSearchProps) {
+export function UserSearch({ mode, placeholder, onCollabRequest, onShoutout }: UserSearchProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<UserResult[]>([]);
   const [searching, setSearching] = useState(false);
+  const resolvedPlaceholder = placeholder ?? t('collab.userSearchPlaceholder', 'Поиск по имени...');
 
   const handleSearch = useCallback(async () => {
     if (!query.trim()) return;
@@ -33,7 +36,7 @@ export function UserSearch({ mode, placeholder = 'Поиск по имени...'
     <div className="space-y-3">
       <div className="flex gap-2">
         <Input
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}

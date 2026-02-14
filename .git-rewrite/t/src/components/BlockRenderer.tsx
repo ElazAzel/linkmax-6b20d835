@@ -1,11 +1,12 @@
 import { lazy, Suspense, useCallback } from 'react';
-import type { Block } from '@/types/page';
+import type { Block, ShoutoutBlock as ShoutoutBlockType, BookingBlock as BookingBlockType, CommunityBlock as CommunityBlockType, EventBlock as EventBlockType } from '@/types/page';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 import { useAnalytics } from '@/hooks/useAnalyticsTracking';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
+import { PaidBlockWrapper } from '@/components/blocks/PaidBlockWrapper';
 
 // Helper function to check if block should be visible based on schedule
 function isBlockVisible(block: Block): boolean {
@@ -37,7 +38,6 @@ const ImageBlock = lazy(() => import('./blocks/ImageBlock').then(m => ({ default
 const ProductBlock = lazy(() => import('./blocks/ProductBlock').then(m => ({ default: m.ProductBlock })));
 const VideoBlock = lazy(() => import('./blocks/VideoBlock').then(m => ({ default: m.VideoBlock })));
 const CarouselBlock = lazy(() => import('./blocks/CarouselBlock').then(m => ({ default: m.CarouselBlock })));
-const SearchBlock = lazy(() => import('./blocks/SearchBlock').then(m => ({ default: m.SearchBlock })));
 const CustomCodeBlock = lazy(() => import('./blocks/CustomCodeBlock').then(m => ({ default: m.CustomCodeBlock })));
 const MessengerBlock = lazy(() => import('./blocks/MessengerBlock').then(m => ({ default: m.MessengerBlock })));
 const FormBlock = lazy(() => import('./blocks/FormBlock').then(m => ({ default: m.FormBlock })));
@@ -56,6 +56,7 @@ const PricingBlock = lazy(() => import('./blocks/PricingBlock').then(m => ({ def
 const ShoutoutBlock = lazy(() => import('./blocks/ShoutoutBlock').then(m => ({ default: m.ShoutoutBlock })));
 const BookingBlock = lazy(() => import('./blocks/BookingBlock').then(m => ({ default: m.BookingBlock })));
 const CommunityBlock = lazy(() => import('./blocks/CommunityBlock').then(m => ({ default: m.CommunityBlock })));
+const EventBlock = lazy(() => import('./blocks/EventBlock').then(m => ({ default: m.EventBlock })));
 
 interface BlockRendererProps {
   block: Block;
@@ -74,17 +75,74 @@ const BlockSkeleton = () => (
 );
 
 /**
- * Get block title for analytics
+ * Get block title for analytics - type-safe extraction
  */
 function getBlockTitle(block: Block, lang: SupportedLanguage): string {
-  const content = block as any;
-  const rawTitle = content.title || content.name || content.content?.title || content.content?.name || block.type;
-  return typeof rawTitle === 'object' ? getTranslatedString(rawTitle, lang) : String(rawTitle || block.type);
+  // Type-safe title extraction using discriminated union
+  let rawTitle: string | { ru?: string; en?: string; kk?: string } | undefined;
+  
+  switch (block.type) {
+    case 'profile':
+    case 'product':
+    case 'avatar':
+      rawTitle = block.name;
+      break;
+    case 'link':
+    case 'button':
+    case 'video':
+    case 'carousel':
+    case 'custom_code':
+    case 'messenger':
+    case 'form':
+    case 'download':
+    case 'newsletter':
+    case 'testimonial':
+    case 'scratch':
+    case 'catalog':
+    case 'before_after':
+    case 'faq':
+    case 'countdown':
+    case 'pricing':
+    case 'booking':
+    case 'community':
+    case 'socials':
+      rawTitle = block.title;
+      break;
+    case 'text':
+      rawTitle = block.content;
+      break;
+    case 'event':
+      rawTitle = block.title;
+      break;
+    case 'shoutout':
+      rawTitle = block.displayName || block.username;
+      break;
+    case 'image':
+      rawTitle = block.alt;
+      break;
+    case 'map':
+      rawTitle = block.address;
+      break;
+    case 'separator':
+      rawTitle = 'separator';
+      break;
+  }
+  
+  if (!rawTitle) return block.type;
+  return typeof rawTitle === 'object' ? getTranslatedString(rawTitle, lang) : String(rawTitle);
 }
 
 export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
   const { onBlockClick } = useAnalytics();
   const { i18n } = useTranslation();
+  
+  // Click handler for tracking - must be before any conditional returns
+  const handleClick = useCallback(() => {
+    if (!isPreview) {
+      const title = getBlockTitle(block, i18n.language as SupportedLanguage);
+      onBlockClick(block.id, block.type, title);
+    }
+  }, [block, isPreview, onBlockClick, i18n.language]);
   
   // Check if block should be visible based on schedule
   // In preview mode, always show blocks
@@ -95,19 +153,18 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
 
-  // Click handler for tracking
-  const handleClick = useCallback(() => {
-    if (!isPreview) {
-      const title = getBlockTitle(block, i18n.language as SupportedLanguage);
-      onBlockClick(block.id, block.type, title);
-    }
-  }, [block, isPreview, onBlockClick, i18n.language]);
-
   // Wrapper component for all blocks - tracks clicks for interactive ones
   const TrackableWrapper = ({ children, trackClicks = false }: { children: React.ReactNode; trackClicks?: boolean }) => (
-    <div className={animationClass} style={animationStyle} onClick={trackClicks ? handleClick : undefined}>
-      {children}
-    </div>
+    <PaidBlockWrapper 
+      blockId={block.id} 
+      blockStyle={block.blockStyle} 
+      pageOwnerId={pageOwnerId}
+      isPreview={isPreview}
+    >
+      <div className={animationClass} style={animationStyle} onClick={trackClicks ? handleClick : undefined}>
+        {children}
+      </div>
+    </PaidBlockWrapper>
   );
 
   // For blocks that need click tracking passed as prop
@@ -183,14 +240,6 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
             <CarouselBlock block={block} />
           </Suspense>
         </TrackableWrapper>
-      );
-    case 'search':
-      return (
-        <div className={animationClass} style={animationStyle}>
-          <Suspense fallback={<BlockSkeleton />}>
-            <SearchBlock block={block} />
-          </Suspense>
-        </div>
       );
     case 'custom_code':
       return (
@@ -312,37 +361,58 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
           </Suspense>
         </TrackableWrapper>
       );
-      case 'shoutout':
+    case 'shoutout': {
+      const shoutoutBlock = block as ShoutoutBlockType;
       return (
         <TrackableWrapper trackClicks>
           <Suspense fallback={<BlockSkeleton />}>
             <ShoutoutBlock 
-              userId={(block as any).userId} 
-              message={(block as any).message}
+              userId={shoutoutBlock.userId} 
+              message={shoutoutBlock.message}
             />
           </Suspense>
         </TrackableWrapper>
       );
-    case 'booking':
+    }
+    case 'booking': {
+      const bookingBlock = block as BookingBlockType;
       return (
         <TrackableWrapper trackClicks>
           <Suspense fallback={<BlockSkeleton />}>
             <BookingBlock 
-              block={block as any}
+              block={bookingBlock}
               pageOwnerId={pageOwnerId}
               pageId={pageId}
             />
           </Suspense>
         </TrackableWrapper>
       );
-    case 'community':
+    }
+    case 'community': {
+      const communityBlock = block as CommunityBlockType;
       return (
         <TrackableWrapper trackClicks>
           <Suspense fallback={<BlockSkeleton />}>
-            <CommunityBlock block={block as any} />
+            <CommunityBlock block={communityBlock} />
           </Suspense>
         </TrackableWrapper>
       );
+    }
+    case 'event': {
+      const eventBlock = block as EventBlockType;
+      return (
+        <TrackableWrapper trackClicks>
+          <Suspense fallback={<BlockSkeleton />}>
+            <EventBlock
+              block={eventBlock}
+              pageOwnerId={pageOwnerId}
+              pageId={pageId}
+              isOwnerPremium={isOwnerPremium}
+            />
+          </Suspense>
+        </TrackableWrapper>
+      );
+    }
     default:
       return null;
   }

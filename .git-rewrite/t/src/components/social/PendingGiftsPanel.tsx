@@ -4,14 +4,17 @@ import { Badge } from '@/components/ui/badge';
 import { Gift, Crown, Sparkles, X } from 'lucide-react';
 import { useSocialFeatures } from '@/hooks/useSocialFeatures';
 import { formatDistanceToNow } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import { enUS, kk, ru } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 interface PendingGiftsPanelProps {
   onClose?: () => void;
 }
 
 export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
+  const { t, i18n } = useTranslation();
   const { pendingGifts, loading, claimGift } = useSocialFeatures();
+  const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
   if (loading) {
     return (
@@ -35,9 +38,9 @@ export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
             <Gift className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-sm">Подарки для вас!</h3>
+            <h3 className="font-bold text-sm">{t('social.pendingGifts.title', 'Подарки для вас!')}</h3>
             <p className="text-xs text-muted-foreground">
-              {pendingGifts.length} {pendingGifts.length === 1 ? 'подарок' : 'подарка'}
+              {t('social.pendingGifts.count', { count: pendingGifts.length })}
             </p>
           </div>
         </div>
@@ -68,11 +71,11 @@ export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <p className="font-semibold text-sm truncate">
-                      {sender?.display_name || sender?.username || 'Друг'}
+                      {sender?.display_name || sender?.username || t('common.friend', 'Друг')}
                     </p>
                     <Badge className="h-5 bg-gradient-to-r from-amber-500 to-orange-500 text-[10px]">
                       <Crown className="h-3 w-3 mr-1" />
-                      +{gift.days_gifted} дней
+                      {t('social.pendingGifts.days', { count: gift.days_gifted })}
                     </Badge>
                   </div>
                   
@@ -86,7 +89,7 @@ export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
                     <p className="text-[10px] text-muted-foreground">
                       {formatDistanceToNow(new Date(gift.created_at), { 
                         addSuffix: true, 
-                        locale: ru 
+                        locale 
                       })}
                     </p>
                     
@@ -96,7 +99,7 @@ export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
                       className="h-8 rounded-lg gap-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90"
                     >
                       <Sparkles className="h-3 w-3" />
-                      Активировать
+                      {t('social.pendingGifts.activate', 'Активировать')}
                     </Button>
                   </div>
                 </div>

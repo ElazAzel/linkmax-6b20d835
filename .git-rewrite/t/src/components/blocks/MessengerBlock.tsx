@@ -2,9 +2,9 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageCircle, Send } from 'lucide-react';
 import type { MessengerBlock as MessengerBlockType } from '@/types/page';
-import { Card } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { cn } from '@/lib/utils';
 
 interface MessengerBlockProps {
   block: MessengerBlockType;
@@ -67,30 +67,47 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId 
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // Compact horizontal layout for mobile
+  const isSingleMessenger = block.messengers.length === 1;
+
   return (
-    <Card className="p-6 bg-card border-border shadow-sm">
+    <div 
+      className="w-full rounded-xl bg-card border border-border shadow-sm p-3"
+      style={{
+        backgroundColor: block.blockStyle?.backgroundColor,
+        backgroundImage: block.blockStyle?.backgroundGradient,
+      }}
+    >
       {title && (
-        <div className="flex items-center gap-2 mb-4">
-          <MessageCircle className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-lg">{title}</h3>
+        <div className="flex items-center gap-2 mb-3">
+          <MessageCircle className="h-4 w-4 text-primary" />
+          <h3 className="font-medium text-sm">{title}</h3>
         </div>
       )}
-      <div className="grid gap-3">
+      
+      <div className={cn(
+        "flex gap-2",
+        isSingleMessenger ? "flex-col" : "flex-wrap"
+      )}>
         {block.messengers.map((messenger, index) => (
           <button
             key={index}
             onClick={() => handleMessengerClick(messenger.platform, messenger.username, messenger.message)}
-            className="flex items-center gap-3 p-4 rounded-lg border border-border hover:border-primary transition-all hover:shadow-md bg-card text-left w-full"
+            className={cn(
+              "flex items-center gap-2 px-4 py-2.5",
+              "rounded-full border border-border",
+              "hover:border-primary hover:shadow-sm",
+              "transition-all active:scale-[0.98]",
+              "bg-background/50",
+              isSingleMessenger ? "w-full justify-center" : "flex-1 min-w-[120px] justify-center"
+            )}
           >
-            <span className="text-2xl">{getMessengerIcon(messenger.platform)}</span>
-            <div className="flex-1">
-              <div className="font-medium">{getPlatformName(messenger.platform)}</div>
-              <div className="text-sm text-muted-foreground">@{messenger.username}</div>
-            </div>
-            <Send className="h-4 w-4 text-muted-foreground" />
+            <span className="text-lg">{getMessengerIcon(messenger.platform)}</span>
+            <span className="font-medium text-sm">{getPlatformName(messenger.platform)}</span>
+            <Send className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
           </button>
         ))}
       </div>
-    </Card>
+    </div>
   );
 });

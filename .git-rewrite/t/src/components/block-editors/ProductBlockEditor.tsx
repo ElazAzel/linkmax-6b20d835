@@ -105,6 +105,13 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         />
       </div>
 
+      <MultilingualInput
+        label={t('fields.buttonText', 'Button Text')}
+        value={migrateToMultilingual(formData.buttonText)}
+        onChange={(value) => onChange({ ...formData, buttonText: value })}
+        placeholder={t('actions.buy', 'Buy')}
+      />
+
       <div>
         <Label>{t('fields.alignment', 'Alignment')}</Label>
         <Select

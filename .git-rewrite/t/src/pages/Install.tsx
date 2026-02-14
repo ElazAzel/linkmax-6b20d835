@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Download, Check, Smartphone, Monitor, Zap, Cloud } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -11,6 +13,10 @@ interface BeforeInstallPromptEvent extends Event {
 
 export default function Install() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const canonical = 'https://lnkmx.my/install';
+  const seoTitle = t('install.seo.title', 'Install lnkmx');
+  const seoDescription = t('install.seo.description', 'Install lnkmx as a PWA for quick access.');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [platform, setPlatform] = useState<'ios' | 'android' | 'desktop'>('desktop');
@@ -74,8 +80,22 @@ export default function Install() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-6">
+    <>
+      <StaticSEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        currentLanguage={i18n.language}
+        indexable={false}
+        alternates={[
+          { hreflang: 'ru', href: `${canonical}?lang=ru` },
+          { hreflang: 'en', href: `${canonical}?lang=en` },
+          { hreflang: 'kk', href: `${canonical}?lang=kk` },
+          { hreflang: 'x-default', href: canonical },
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="h-20 w-20 rounded-2xl bg-primary/10 mx-auto flex items-center justify-center">
@@ -193,6 +213,7 @@ export default function Install() {
           )}
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

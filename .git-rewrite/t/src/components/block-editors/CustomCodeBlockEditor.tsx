@@ -94,14 +94,14 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />
-            <Label className="font-semibold">Готовые шаблоны</Label>
+            <Label className="font-semibold">{t('customCodeBlock.readyTemplates', 'Готовые шаблоны')}</Label>
           </div>
           <button
             type="button"
             onClick={() => setShowTemplates(!showTemplates)}
             className="text-xs text-primary hover:underline"
           >
-            {showTemplates ? 'Скрыть' : 'Показать'}
+            {showTemplates ? t('customCodeBlock.hide', 'Скрыть') : t('customCodeBlock.show', 'Показать')}
           </button>
         </div>
 

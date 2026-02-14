@@ -16,6 +16,7 @@ import { useDashboardUsername } from '@/hooks/useDashboardUsername';
 import { useDashboardAI } from '@/hooks/useDashboardAI';
 import { useBlockEditor } from '@/hooks/useBlockEditor';
 import { useDailyQuests } from '@/hooks/useDailyQuests';
+import { useTokens } from '@/hooks/useTokens';
 import type { Block, ProfileBlock } from '@/types/page';
 import type { UserStats } from '@/types/achievements';
 
@@ -44,8 +45,14 @@ export function useDashboard() {
   // Daily quests
   const dailyQuests = useDailyQuests(user?.id);
 
+  // Token economy
+  const tokens = useTokens();
+
   // User profile
   const userProfile = useUserProfile(user?.id);
+
+  // NOTE: Daily visit tokens are claimed via useDailyQuests (daily_visit quest)
+  // Do NOT claim here to avoid double rewards
 
   // Check achievements when page data or profile changes
   const lastCheckedRef = useRef<string>('');
@@ -91,7 +98,7 @@ export function useDashboard() {
     };
 
     achievements.checkAchievements(stats);
-  }, [pageData?.blocks, userProfile.profile?.friends_count, achievements.loading]);
+  }, [pageData?.blocks, userProfile.profile?.friends_count, achievements]);
 
   // Username management
   const usernameState = useDashboardUsername({
@@ -118,6 +125,7 @@ export function useDashboard() {
     onAddBlock: addBlock,
     onReplaceBlocks: pageState.replaceBlocks,
     onQuestComplete: dailyQuests.markQuestComplete,
+    onClaimAIToken: () => tokens.claimDailyTokens('use_ai'),
   });
 
   // Block editing with undo
@@ -133,6 +141,7 @@ export function useDashboard() {
     hapticSuccess: haptic.success,
     onBlockHint: blockHints.showHint,
     onQuestComplete: dailyQuests.markQuestComplete,
+    onClaimBlockToken: () => tokens.claimDailyTokens('add_block'),
   });
 
   // Onboarding
@@ -202,6 +211,7 @@ export function useDashboard() {
     isMobile,
     isPremium,
     currentTier,
+    premiumTier: currentTier,
     premiumLoading,
 
     // Page operations
@@ -237,6 +247,9 @@ export function useDashboard() {
 
     // Daily quests
     dailyQuests,
+
+    // Tokens
+    tokens,
 
     // Actions
     handleSignOut,

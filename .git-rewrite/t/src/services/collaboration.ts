@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 
 export type CollabStatus = 'pending' | 'accepted' | 'rejected';
 

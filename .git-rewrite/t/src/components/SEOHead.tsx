@@ -38,10 +38,13 @@ function getProfileInfo(blocks: Block[]): { name?: string; bio?: string; avatar?
 export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
   useEffect(() => {
     const profileInfo = getProfileInfo(pageData.blocks);
-    const pageTitle = pageData.seo.title || profileInfo.name || 'LinkMAX Page';
+    const pageTitle = pageData.seo.title || profileInfo.name || 'lnkmx Page';
     
-    // Update document title
-    document.title = pageTitle;
+    // Update document title - include name + role for clear OG
+    const fullTitle = profileInfo.name 
+      ? `${profileInfo.name}${profileInfo.bio ? ` - ${profileInfo.bio.slice(0, 50)}` : ''}`
+      : pageTitle;
+    document.title = fullTitle;
 
     // Helper to update or create meta tag
     const setMetaTag = (name: string, content: string, property = false) => {
@@ -56,43 +59,67 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
       meta.content = content;
     };
 
+    const removeMetaTag = (name: string, property = false) => {
+      const attr = property ? 'property' : 'name';
+      const meta = document.querySelector(`meta[${attr}="${name}"]`);
+      if (meta) meta.remove();
+    };
+
+    const setLinkTag = (rel: string, href: string, hreflang?: string) => {
+      const selector = hreflang
+        ? `link[rel="${rel}"][hreflang="${hreflang}"]`
+        : `link[rel="${rel}"]:not([hreflang])`;
+      let link = document.querySelector(selector) as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = rel;
+        if (hreflang) link.hreflang = hreflang;
+        document.head.appendChild(link);
+      }
+      link.href = href;
+    };
+
     // Basic meta tags
-    const description = pageData.seo.description || profileInfo.bio || `Check out ${profileInfo.name || 'this page'} on LinkMAX`;
+    const description = pageData.seo.description || profileInfo.bio || `${profileInfo.name || 'This page'} on lnkmx`;
     setMetaTag('description', description);
+    setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    setMetaTag('googlebot', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
     
     if (pageData.seo.keywords?.length) {
       setMetaTag('keywords', pageData.seo.keywords.join(', '));
+    } else {
+      removeMetaTag('keywords');
     }
 
-    // Open Graph tags
+    // Open Graph tags - optimized for social sharing
     setMetaTag('og:type', 'profile', true);
-    setMetaTag('og:title', pageTitle, true);
+    setMetaTag('og:title', fullTitle, true);
     setMetaTag('og:description', description, true);
     setMetaTag('og:url', pageUrl, true);
-    setMetaTag('og:site_name', 'LinkMAX', true);
+    setMetaTag('og:site_name', 'lnkmx', true);
     
     // Use avatar or a default image for OG
     const imageUrl = profileInfo.avatar || pageData.previewUrl || 'https://lnkmx.my/favicon.jpg';
     setMetaTag('og:image', imageUrl, true);
-    setMetaTag('og:image:alt', `${profileInfo.name || 'User'} profile picture`, true);
+    setMetaTag('og:image:alt', `${profileInfo.name || 'User'} profile`, true);
 
     // Twitter Card tags
-    setMetaTag('twitter:card', 'summary');
-    setMetaTag('twitter:title', pageTitle);
+    setMetaTag('twitter:card', 'summary_large_image');
+    setMetaTag('twitter:title', fullTitle);
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', imageUrl);
-    setMetaTag('twitter:site', '@LinkMAX');
+    setMetaTag('twitter:site', '@lnkmx_app');
 
     // Canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = pageUrl;
+    setLinkTag('canonical', pageUrl);
 
-    // JSON-LD structured data for profile
+    // Hreflang for translated versions
+    setLinkTag('alternate', `${pageUrl}?lang=ru`, 'ru');
+    setLinkTag('alternate', `${pageUrl}?lang=en`, 'en');
+    setLinkTag('alternate', `${pageUrl}?lang=kk`, 'kk');
+    setLinkTag('alternate', pageUrl, 'x-default');
+
+    // JSON-LD structured data for Person profile
     let jsonLd = document.querySelector('script[type="application/ld+json"]#page-schema');
     if (!jsonLd) {
       jsonLd = document.createElement('script');
@@ -104,15 +131,22 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
-      name: pageTitle,
+      name: fullTitle,
       description: description,
       url: pageUrl,
+      dateModified: new Date().toISOString(),
       mainEntity: {
         '@type': 'Person',
         name: profileInfo.name || pageTitle,
         description: profileInfo.bio || description,
         image: profileInfo.avatar || undefined,
         url: pageUrl,
+        sameAs: [], // Could be populated from social blocks
+      },
+      isPartOf: {
+        '@type': 'WebSite',
+        name: 'lnkmx',
+        url: 'https://lnkmx.my',
       },
     };
     jsonLd.textContent = JSON.stringify(structuredData);
@@ -120,8 +154,8 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
     // Cleanup on unmount - restore original meta tags
     return () => {
       // Reset to defaults
-      document.title = 'LinkMAX - AI-Powered Link-in-Bio Platform';
-      setMetaTag('description', 'Create a stunning bio page that brings together all your content, social media, and products. Powered by AI.');
+      document.title = 'lnkmx - AI Bio Page Builder';
+      setMetaTag('description', 'Create your bio page in 2 minutes with AI. For experts, freelancers and small business.');
       
       // Remove page-specific tags
       const tagsToRemove = [
@@ -129,7 +163,9 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
         'meta[property="og:url"]',
         'meta[property="og:site_name"]',
         'meta[property="og:image:alt"]',
+        'meta[name="keywords"]',
         'link[rel="canonical"]',
+        'link[rel="alternate"]',
         'script#page-schema'
       ];
       

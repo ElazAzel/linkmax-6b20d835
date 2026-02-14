@@ -31,23 +31,23 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
   };
 
   const freeFeatures = [
-    { text: t('landing.simplePricing.free.f1', 'Базовые блоки (ссылки, текст, фото)'), included: true },
-    { text: t('landing.simplePricing.free.f2', 'AI-генерация (3 раза в день)'), included: true },
-    { text: t('landing.simplePricing.free.f3', 'Базовая статистика'), included: true },
-    { text: t('landing.simplePricing.free.f4', 'QR-код страницы'), included: true },
-    { text: t('landing.simplePricing.free.f5', 'Mini-CRM и лиды'), included: false },
-    { text: t('landing.simplePricing.free.f6', 'Telegram-уведомления'), included: false },
-    { text: t('landing.simplePricing.free.f7', 'Безлимитный AI'), included: false },
+    { text: t('landing.simplePricing.free.f1_v2', 'Базовые блоки (ссылки, текст, фото)'), included: true },
+    { text: t('landing.simplePricing.free.f2_v2', 'AI-генерация (1 раз/месяц)'), included: true },
+    { text: t('landing.simplePricing.free.f3_v2', 'Базовая статистика просмотров'), included: true },
+    { text: t('landing.simplePricing.free.f4_v2', 'QR-код страницы'), included: true },
+    { text: t('landing.simplePricing.free.f5_v2', 'Mini-CRM и Telegram-уведомления'), included: false },
+    { text: t('landing.simplePricing.free.f6_v2', 'Расширенная аналитика'), included: false },
+    { text: t('landing.simplePricing.free.f7_v2', 'AI-генерация (5 раз/месяц)'), included: false },
   ];
 
   const premiumFeatures = [
-    { text: t('landing.simplePricing.premium.f1', 'Все блоки без ограничений'), included: true },
-    { text: t('landing.simplePricing.premium.f2', 'Mini-CRM - все заявки в одном месте'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f3', 'Telegram-уведомления о лидах'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f4', 'Безлимитный AI-копирайтер'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f5', 'Расширенная аналитика кликов'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f6', 'Премиум-темы и анимации'), included: true },
-    { text: t('landing.simplePricing.premium.f7', 'Без водяного знака'), included: true },
+    { text: t('landing.simplePricing.premium.f1_v2', 'Все 25+ типов блоков'), included: true },
+    { text: t('landing.simplePricing.premium.f2_v2', 'Mini-CRM - все заявки в одном месте'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f3_v2', 'Telegram-уведомления о лидах'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f4_v2', 'AI-генерация (5 раз/месяц)'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f5_v2', 'Расширенная аналитика кликов'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f6_v2', 'Премиум-темы и анимации'), included: true },
+    { text: t('landing.simplePricing.premium.f7_v2', 'Планировщик блоков'), included: true },
   ];
 
   return (

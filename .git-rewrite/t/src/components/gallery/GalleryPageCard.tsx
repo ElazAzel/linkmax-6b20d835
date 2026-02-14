@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import type { GalleryPage } from '@/services/gallery';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
 import { PagePreview } from './PagePreview';
+import { parseMultilingualField, type SupportedLanguage } from '@/lib/i18n-helpers';
 
 interface GalleryPageCardProps {
   page: GalleryPage;
@@ -18,7 +19,8 @@ interface GalleryPageCardProps {
 }
 
 export function GalleryPageCard({ page, onLike, isLiked, featured = false }: GalleryPageCardProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as SupportedLanguage;
   const [isLiking, setIsLiking] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -62,7 +64,7 @@ export function GalleryPageCard({ page, onLike, isLiked, featured = false }: Gal
       <a href={`/${page.slug}`} target="_blank" rel="noopener noreferrer" className="block">
         <PagePreview
           slug={page.slug}
-          title={page.title}
+          title={parseMultilingualField(page.title, currentLang)}
           avatarUrl={page.avatar_url}
           previewUrl={page.preview_url}
           className="aspect-[4/3] w-full"
@@ -75,7 +77,7 @@ export function GalleryPageCard({ page, onLike, isLiked, featured = false }: Gal
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
               <h3 className="font-semibold text-foreground truncate">
-                {page.title || page.slug}
+                {parseMultilingualField(page.title, currentLang) || page.slug}
               </h3>
               {page.is_premium && (
                 <Crown className="h-4 w-4 text-primary flex-shrink-0" />
@@ -102,7 +104,7 @@ export function GalleryPageCard({ page, onLike, isLiked, featured = false }: Gal
         {/* Description */}
         {page.description && (
           <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
-            {page.description}
+            {parseMultilingualField(page.description, currentLang)}
           </p>
         )}
 

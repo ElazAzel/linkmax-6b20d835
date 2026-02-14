@@ -104,7 +104,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
             />
           </div>
         )}
-        <CardContent className={cn('p-3', isGrid && 'p-2')}>
+        <CardContent className={cn('p-4', isGrid && 'p-3')}>
           <div className="flex justify-between items-start gap-2">
             <div className="flex-1 min-w-0">
               <h4 className={cn(

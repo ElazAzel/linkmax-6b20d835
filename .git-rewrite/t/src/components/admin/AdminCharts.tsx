@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { 
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -53,6 +54,7 @@ const COLORS = {
 };
 
 export function AdminCharts() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [dailyData, setDailyData] = useState<DailyData[]>([]);
   const [userStatusData, setUserStatusData] = useState<UserStatusData[]>([]);
@@ -63,7 +65,7 @@ export function AdminCharts() {
 
   useEffect(() => {
     loadChartData();
-  }, []);
+  }, [t]);
 
   const loadChartData = async () => {
     setLoading(true);
@@ -190,9 +192,9 @@ export function AdminCharts() {
       });
 
       setEventTypeData([
-        { name: 'Просмотры', count: counts.view, color: COLORS.views },
-        { name: 'Клики', count: counts.click, color: COLORS.clicks },
-        { name: 'Шейры', count: counts.share, color: COLORS.shares }
+        { name: t('adminCharts.events.views', 'Просмотры'), count: counts.view, color: COLORS.views },
+        { name: t('adminCharts.events.clicks', 'Клики'), count: counts.click, color: COLORS.clicks },
+        { name: t('adminCharts.events.shares', 'Шейры'), count: counts.share, color: COLORS.shares }
       ]);
     } catch (error) {
       console.error('Error loading event types:', error);
@@ -248,9 +250,9 @@ export function AdminCharts() {
       ]);
 
       setSocialStats([
-        { name: 'Дружбы', total: totalFriends || 0, accepted: acceptedFriends || 0 },
-        { name: 'Коллаборации', total: totalCollabs || 0, accepted: acceptedCollabs || 0 },
-        { name: 'Команды', total: totalTeams || 0, accepted: totalTeams || 0 }
+        { name: t('adminCharts.social.friendships', 'Дружбы'), total: totalFriends || 0, accepted: acceptedFriends || 0 },
+        { name: t('adminCharts.social.collaborations', 'Коллаборации'), total: totalCollabs || 0, accepted: acceptedCollabs || 0 },
+        { name: t('adminCharts.social.teams', 'Команды'), total: totalTeams || 0, accepted: totalTeams || 0 }
       ]);
     } catch (error) {
       console.error('Error loading social stats:', error);
@@ -301,7 +303,7 @@ export function AdminCharts() {
       {/* User Growth Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Рост пользователей</CardTitle>
+          <CardTitle>{t('adminCharts.userGrowth', 'Рост пользователей')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
@@ -334,7 +336,7 @@ export function AdminCharts() {
                 <Area
                   type="monotone"
                   dataKey="total"
-                  name="Всего пользователей"
+                  name={t('adminCharts.totalUsers', 'Всего пользователей')}
                   stroke={COLORS.users}
                   fill="url(#userGradient)"
                   strokeWidth={2}
@@ -350,7 +352,7 @@ export function AdminCharts() {
         {/* New Registrations */}
         <Card>
           <CardHeader>
-            <CardTitle>Новые регистрации (14 дней)</CardTitle>
+            <CardTitle>{t('adminCharts.newRegistrations', 'Новые регистрации (14 дней)')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -376,13 +378,13 @@ export function AdminCharts() {
                   />
                   <Bar 
                     dataKey="users" 
-                    name="Пользователи" 
+                    name={t('adminCharts.users', 'Пользователи')}
                     fill={COLORS.users} 
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar 
                     dataKey="pages" 
-                    name="Страницы" 
+                    name={t('adminCharts.pages', 'Страницы')}
                     fill={COLORS.pages} 
                     radius={[4, 4, 0, 0]}
                   />
@@ -395,7 +397,7 @@ export function AdminCharts() {
         {/* Events Chart */}
         <Card>
           <CardHeader>
-            <CardTitle>События (14 дней)</CardTitle>
+            <CardTitle>{t('adminCharts.eventsTitle', 'События (14 дней)')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -422,7 +424,7 @@ export function AdminCharts() {
                   <Line 
                     type="monotone" 
                     dataKey="views" 
-                    name="Просмотры" 
+                    name={t('adminCharts.events.views', 'Просмотры')}
                     stroke={COLORS.views} 
                     strokeWidth={2}
                     dot={false}
@@ -430,7 +432,7 @@ export function AdminCharts() {
                   <Line 
                     type="monotone" 
                     dataKey="clicks" 
-                    name="Клики" 
+                    name={t('adminCharts.events.clicks', 'Клики')}
                     stroke={COLORS.clicks} 
                     strokeWidth={2}
                     dot={false}
@@ -438,7 +440,7 @@ export function AdminCharts() {
                   <Line 
                     type="monotone" 
                     dataKey="shares" 
-                    name="Шейры" 
+                    name={t('adminCharts.events.shares', 'Шейры')}
                     stroke={COLORS.shares} 
                     strokeWidth={2}
                     dot={false}
@@ -455,7 +457,7 @@ export function AdminCharts() {
         {/* User Status Distribution */}
         <Card>
           <CardHeader>
-            <CardTitle>Распределение пользователей</CardTitle>
+            <CardTitle>{t('adminCharts.userDistribution', 'Распределение пользователей')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -505,7 +507,7 @@ export function AdminCharts() {
         {/* Event Types Distribution */}
         <Card>
           <CardHeader>
-            <CardTitle>Типы событий</CardTitle>
+            <CardTitle>{t('adminCharts.eventTypes', 'Типы событий')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -528,7 +530,7 @@ export function AdminCharts() {
                   />
                   <Bar 
                     dataKey="count" 
-                    name="Количество"
+                    name={t('adminCharts.count', 'Количество')}
                     radius={[0, 4, 4, 0]}
                   >
                     {eventTypeData.map((entry, index) => (
@@ -547,7 +549,7 @@ export function AdminCharts() {
         {/* Social Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Социальная активность</CardTitle>
+            <CardTitle>{t('adminCharts.socialActivity', 'Социальная активность')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -568,8 +570,8 @@ export function AdminCharts() {
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="total" name="Всего" fill={COLORS.users} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="accepted" name="Принято" fill={COLORS.pages} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="total" name={t('adminCharts.total', 'Всего')} fill={COLORS.users} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="accepted" name={t('adminCharts.accepted', 'Принято')} fill={COLORS.pages} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -579,7 +581,7 @@ export function AdminCharts() {
         {/* Block Types Distribution */}
         <Card>
           <CardHeader>
-            <CardTitle>Популярные типы блоков</CardTitle>
+            <CardTitle>{t('adminCharts.popularBlockTypes', 'Популярные типы блоков')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px]">
@@ -600,7 +602,7 @@ export function AdminCharts() {
                       borderRadius: '8px'
                     }}
                   />
-                  <Bar dataKey="count" name="Количество" radius={[0, 4, 4, 0]}>
+                  <Bar dataKey="count" name={t('adminCharts.count', 'Количество')} radius={[0, 4, 4, 0]}>
                     {blockTypeStats.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
@@ -615,7 +617,7 @@ export function AdminCharts() {
       {/* Daily Social Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Социальная активность за 14 дней</CardTitle>
+          <CardTitle>{t('adminCharts.socialActivity14Days', 'Социальная активность за 14 дней')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
@@ -649,7 +651,7 @@ export function AdminCharts() {
                 <Area
                   type="monotone"
                   dataKey="friendships"
-                  name="Дружбы"
+                  name={t('adminCharts.social.friendships', 'Дружбы')}
                   stroke={COLORS.pages}
                   fill="url(#friendsGradient)"
                   strokeWidth={2}
@@ -657,7 +659,7 @@ export function AdminCharts() {
                 <Area
                   type="monotone"
                   dataKey="collabs"
-                  name="Коллаборации"
+                  name={t('adminCharts.social.collaborations', 'Коллаборации')}
                   stroke={COLORS.trial}
                   fill="url(#collabsGradient)"
                   strokeWidth={2}
@@ -671,7 +673,7 @@ export function AdminCharts() {
       {/* Content Creation Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Создание контента за 14 дней</CardTitle>
+          <CardTitle>{t('adminCharts.contentCreation14Days', 'Создание контента за 14 дней')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">
@@ -701,7 +703,7 @@ export function AdminCharts() {
                 <Area
                   type="monotone"
                   dataKey="pages"
-                  name="Страницы"
+                  name={t('adminCharts.pages', 'Страницы')}
                   stroke={COLORS.pages}
                   fill={COLORS.pages}
                   fillOpacity={0.3}
@@ -710,7 +712,7 @@ export function AdminCharts() {
                 <Area
                   type="monotone"
                   dataKey="blocks"
-                  name="Блоки"
+                  name={t('adminCharts.blocks', 'Блоки')}
                   stroke={COLORS.shares}
                   fill="url(#blocksGradient)"
                   strokeWidth={2}

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 
 interface FormBlockProps {
   block: FormBlockType;
@@ -116,21 +116,25 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
   };
 
   return (
-    <Card className="p-6 bg-card border-border shadow-sm">
-      <div className="flex items-center gap-2 mb-4">
-        <h3 className="font-semibold text-lg">{title}</h3>
-        <Crown className="h-4 w-4 text-primary" />
+    <Card className="p-5 sm:p-6 bg-card border-border shadow-sm rounded-xl">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <h3 className="font-semibold text-base sm:text-lg truncate">{title}</h3>
+        <Crown className="h-4 w-4 text-primary flex-shrink-0" />
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         {block.fields?.map((field, index) => (
           <div key={index}>
-            <Label htmlFor={`field-${index}`}>
+            <Label htmlFor={`field-${index}`} className="text-sm">
               {getFieldDisplayName(field, index)} {field.required && <span className="text-destructive">*</span>}
             </Label>
             {renderField(field, index)}
           </div>
         ))}
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <Button 
+          type="submit" 
+          className="w-full h-12 sm:h-10 rounded-xl text-base sm:text-sm font-semibold" 
+          disabled={isSubmitting}
+        >
           <Send className="h-4 w-4 mr-2" />
           {isSubmitting ? t('form.submitting', 'Submitting...') : buttonText}
         </Button>

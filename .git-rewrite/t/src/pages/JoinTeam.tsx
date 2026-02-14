@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Users, ArrowLeft, Check, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { getNicheLabel } from '@/lib/niches';
 import type { Niche } from '@/lib/niches';
@@ -120,22 +120,22 @@ export default function JoinTeam() {
     mutationFn: () => joinTeam(team!.id),
     onSuccess: (result) => {
       if (result.success) {
-        toast.success('Вы присоединились к команде!');
+        toast.success(t('teams.joined', 'Вы присоединились к команде!'));
         navigate(`/team/${team!.slug}`);
       } else if (result.error === 'already_member') {
-        toast.info('Вы уже состоите в этой команде');
+        toast.info(t('teams.alreadyMember', 'Вы уже состоите в этой команде'));
         navigate(`/team/${team!.slug}`);
       } else {
-        toast.error(result.error || 'Ошибка');
+        toast.error(result.error || t('common.error', 'Ошибка'));
       }
     },
   });
 
   useEffect(() => {
     if (team) {
-      document.title = `Присоединиться к ${team.name} | LinkMAX`;
+      document.title = `${t('teams.joinTitle', 'Присоединиться к')} ${team.name} | LinkMAX`;
     }
-  }, [team]);
+  }, [team, t]);
 
   if (isLoading) {
     return (
@@ -153,14 +153,14 @@ export default function JoinTeam() {
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <Card className="p-8 text-center max-w-md bg-card/60 backdrop-blur-xl border-border/30 rounded-2xl">
           <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Приглашение недействительно</h1>
+          <h1 className="text-2xl font-bold mb-2">{t('teams.invalidInvite', 'Приглашение недействительно')}</h1>
           <p className="text-muted-foreground mb-6">
-            Эта ссылка-приглашение недействительна или срок её действия истёк.
+            {t('teams.invalidInviteDesc', 'Эта ссылка-приглашение недействительна или срок её действия истёк.')}
           </p>
           <Link to="/">
             <Button variant="outline" className="rounded-xl">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              На главную
+              {t('common.toHome', 'На главную')}
             </Button>
           </Link>
         </Card>
@@ -199,18 +199,18 @@ export default function JoinTeam() {
           )}
           <Badge variant="outline" className="rounded-full">
             <Users className="h-3 w-3 mr-1" />
-            {team.membersCount} участников
+            {team.membersCount} {t('teams.members', 'участников')}
           </Badge>
         </div>
 
         {!userId ? (
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              Войдите, чтобы присоединиться к команде
+              {t('teams.loginToJoin', 'Войдите, чтобы присоединиться к команде')}
             </p>
             <Link to="/auth">
               <Button className="w-full rounded-xl">
-                Войти
+                {t('auth.login', 'Войти')}
               </Button>
             </Link>
           </div>
@@ -225,14 +225,14 @@ export default function JoinTeam() {
             ) : (
               <Check className="h-4 w-4 mr-2" />
             )}
-            Присоединиться к команде
+            {t('teams.joinTeam', 'Присоединиться к команде')}
           </Button>
         )}
 
         <Link to="/" className="block mt-4">
           <Button variant="ghost" size="sm" className="text-muted-foreground">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            На главную
+            {t('common.toHome', 'На главную')}
           </Button>
         </Link>
       </Card>

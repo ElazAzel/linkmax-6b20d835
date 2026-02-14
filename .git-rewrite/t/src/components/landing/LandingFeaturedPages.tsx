@@ -7,12 +7,14 @@ import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getTopPremiumPages, type GalleryPage } from '@/services/gallery';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
+import { parseMultilingualField, type SupportedLanguage } from '@/lib/i18n-helpers';
 
 export function LandingFeaturedPages() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [pages, setPages] = useState<GalleryPage[]>([]);
   const [loading, setLoading] = useState(true);
+  const currentLang = i18n.language as SupportedLanguage;
 
   useEffect(() => {
     getTopPremiumPages(5).then(data => {
@@ -72,9 +74,9 @@ export function LandingFeaturedPages() {
                 {/* Avatar */}
                 <div className="flex justify-center mb-3">
                   <Avatar className="h-12 w-12 sm:h-16 sm:w-16 border-2 border-primary/20 shadow-lg group-hover:scale-105 transition-transform">
-                    <AvatarImage src={page.avatar_url || ''} alt={page.title || ''} />
+                    <AvatarImage src={page.avatar_url || ''} alt={parseMultilingualField(page.title, currentLang) || page.slug} />
                     <AvatarFallback className="bg-primary/10 text-primary text-lg font-bold">
-                      {(page.title || 'U')[0].toUpperCase()}
+                      {(parseMultilingualField(page.title, currentLang) || page.slug || 'U')[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </div>
@@ -82,7 +84,7 @@ export function LandingFeaturedPages() {
                 {/* Info */}
                 <div className="text-center space-y-1.5">
                   <h3 className="font-semibold text-xs sm:text-sm truncate">
-                    {page.title || page.slug}
+                    {parseMultilingualField(page.title, currentLang) || page.slug}
                   </h3>
                   
                   {page.niche && (

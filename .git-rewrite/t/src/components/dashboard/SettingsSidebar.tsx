@@ -23,7 +23,7 @@ import { PageBackgroundSettings } from '@/components/editor/PageBackgroundSettin
 import { AutomationsPanel } from '@/components/crm/AutomationsPanel';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import type { Quest } from '@/services/quests';
 import type { Niche } from '@/lib/niches';
@@ -38,7 +38,7 @@ interface SettingsSidebarProps {
   profileBlock?: ProfileBlock;
   onUpdateProfile: (updates: Partial<ProfileBlock>) => void;
   isPremium: boolean;
-  premiumTier?: 'free' | 'pro' | 'business';
+  premiumTier?: 'free' | 'pro';
   premiumLoading: boolean;
   chatbotContext: string;
   onChatbotContextChange: (value: string) => void;
@@ -167,16 +167,16 @@ export function SettingsSidebar({
   };
 
   return (
-    <div className="fixed left-4 top-20 bottom-4 w-80 bg-card/50 backdrop-blur-2xl border border-border/30 rounded-2xl shadow-glass-lg z-40 overflow-y-auto hidden md:block">
+    <div className="fixed left-4 top-4 bottom-4 w-80 bg-card/50 backdrop-blur-2xl border border-border/30 rounded-2xl shadow-glass-lg z-40 overflow-y-auto hidden md:block mt-16">
       <div className="p-4 space-y-4">
         {/* Header with Close and Tabs */}
         <div className="flex items-center justify-between">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
             <TabsList className="grid w-full grid-cols-2 bg-background/50">
-              <TabsTrigger value="settings" className="text-xs">Настройки</TabsTrigger>
+              <TabsTrigger value="settings" className="text-xs">{t('dashboard.settings', 'Настройки')}</TabsTrigger>
               <TabsTrigger value="collabs" className="text-xs">
                 <Users className="h-3 w-3 mr-1" />
-                Коллабы
+                {t('dashboard.collabs', 'Коллабы')}
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -349,24 +349,18 @@ export function SettingsSidebar({
         {!premiumLoading && (
           <Card
             className={`p-4 backdrop-blur-xl border-border/30 ${
-              premiumTier === 'business' 
-                ? 'bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30'
-                : premiumTier === 'pro'
+              premiumTier === 'pro'
                 ? 'bg-gradient-to-br from-violet-500/10 to-purple-500/10 border-violet-500/30'
                 : 'bg-card/60'
             }`}
           >
             <div className="flex items-center gap-2 mb-2">
               <div className={`p-1.5 rounded-lg ${
-                premiumTier === 'business'
-                  ? 'bg-gradient-to-br from-amber-500 to-orange-600'
-                  : premiumTier === 'pro'
+                premiumTier === 'pro'
                   ? 'bg-gradient-to-br from-violet-500 to-purple-600'
                   : 'bg-muted'
               }`}>
-                {premiumTier === 'business' ? (
-                  <Sparkles className="h-4 w-4 text-white" />
-                ) : premiumTier === 'pro' ? (
+                {premiumTier === 'pro' ? (
                   <Crown className="h-4 w-4 text-white" />
                 ) : (
                   <Zap className="h-4 w-4 text-muted-foreground" />
@@ -374,14 +368,14 @@ export function SettingsSidebar({
               </div>
               <div>
                 <span className="font-semibold">
-                  {premiumTier === 'business' ? 'BUSINESS' : premiumTier === 'pro' ? 'PRO' : 'BASIC'}
+                  {premiumTier === 'pro' ? 'PRO' : 'BASIC'}
                 </span>
-                {premiumTier !== 'free' && (
+                {premiumTier === 'pro' && (
                   <span className="text-xs text-muted-foreground ml-2">{t('premium.active', 'Active')}</span>
                 )}
               </div>
             </div>
-            {premiumTier === 'free' && (
+            {premiumTier !== 'pro' && (
               <>
                 <p className="text-xs text-muted-foreground mb-3">
                   {t('premium.upgradeDescription', 'Upgrade to unlock all blocks and features')}
@@ -395,17 +389,6 @@ export function SettingsSidebar({
                   {t('premium.viewPlans', 'View Plans')}
                 </Button>
               </>
-            )}
-            {premiumTier === 'pro' && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/pricing')}
-                className="w-full text-xs"
-              >
-                <Sparkles className="h-3 w-3 mr-1.5" />
-                {t('premium.upgradeToBusiness', 'Upgrade to BUSINESS')}
-              </Button>
             )}
           </Card>
         )}

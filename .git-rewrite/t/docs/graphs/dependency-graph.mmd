@@ -1,0 +1,37 @@
+flowchart TD
+  subgraph UI[UI Layer]
+    Pages[pages]
+    Components[components]
+    Hooks[hooks]
+    Contexts[contexts]
+  end
+
+  subgraph Data[Data/Application Layer]
+    UseCases[use-cases]
+    Services[services]
+    Repos[repositories]
+  end
+
+  subgraph Core[Core/Shared Layer]
+    Domain[domain]
+    Types[types]
+    Lib[lib]
+    Platform[platform]
+    I18n[i18n]
+    Assets[assets]
+  end
+
+  External[External Systems]
+
+  Pages --> Components
+  Pages --> Hooks
+  Pages --> Services
+  Pages --> Lib
+  Hooks --> Services
+  Hooks --> Lib
+  Services --> Repos
+  Services --> Platform
+  UseCases --> Services
+  Repos --> Platform
+  Platform --> External
+  I18n --> External

@@ -79,12 +79,12 @@ export function DashboardHeader({
               <div className="relative group cursor-pointer" onClick={() => navigate('/')}>
                 <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg group-hover:bg-primary/30 transition-colors" />
                 <img
-                  src="/logo.png"
-                  alt="LinkMAX"
+                  src="/favicon.png"
+                  alt="lnkmx"
                   className="relative h-9 w-9 rounded-xl shadow-sm object-contain group-hover:scale-105 transition-transform"
                 />
               </div>
-              <h1 className="text-xl font-black text-primary tracking-tight">LinkMAX</h1>
+              <h1 className="text-xl font-black text-primary tracking-tight">lnkmx</h1>
               <div className="ml-1">
                 <AutoSaveIndicator status={saveStatus} />
               </div>

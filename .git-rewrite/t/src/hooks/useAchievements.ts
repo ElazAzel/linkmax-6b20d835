@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useTranslation } from 'react-i18next';
+import { supabase } from '@/platform/supabase/client';
 import { useAuth } from './useAuth';
 import type { Achievement, UnlockedAchievement, UserStats } from '@/types/achievements';
 import { ACHIEVEMENTS } from '@/types/achievements';
@@ -14,6 +15,7 @@ const ACHIEVEMENT_TOKEN_REWARDS: Record<Achievement['rarity'], number> = {
 };
 
 export function useAchievements() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [unlockedAchievements, setUnlockedAchievements] = useState<Set<string>>(new Set());
   const [newAchievement, setNewAchievement] = useState<Achievement | null>(null);
@@ -82,7 +84,9 @@ export function useAchievements() {
             user.id,
             tokenReward,
             `achievement_${achievement.rarity}`,
-            `Награда за достижение: ${achievement.title}`
+            t('achievements.rewardDescription', 'Награда за достижение: {{title}}', {
+              title: t(achievement.titleKey),
+            })
           );
 
           newlyUnlocked.push(achievement);
@@ -99,7 +103,7 @@ export function useAchievements() {
     if (newlyUnlocked.length > 0) {
       setNewAchievement(newlyUnlocked[0]);
     }
-  }, [user, unlockedAchievements]);
+  }, [user, unlockedAchievements, t]);
 
   const dismissAchievementNotification = useCallback(() => {
     setNewAchievement(null);

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-type HapticPattern = 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning';
+type HapticPattern = 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' | 'selection' | 'impact';
 
 const patterns: Record<HapticPattern, number | number[]> = {
   light: 10,
@@ -9,6 +9,8 @@ const patterns: Record<HapticPattern, number | number[]> = {
   success: [10, 50, 10],
   error: [50, 100, 50],
   warning: [30, 50, 30],
+  selection: 5,
+  impact: [20, 30],
 };
 
 export function useHapticFeedback() {
@@ -22,7 +24,7 @@ export function useHapticFeedback() {
       navigator.vibrate(patterns[pattern]);
       return true;
     } catch (error) {
-      console.warn('Haptic feedback failed:', error);
+      // Silently fail - haptic feedback is not critical
       return false;
     }
   }, []);
@@ -33,6 +35,8 @@ export function useHapticFeedback() {
   const success = useCallback(() => vibrate('success'), [vibrate]);
   const error = useCallback(() => vibrate('error'), [vibrate]);
   const warning = useCallback(() => vibrate('warning'), [vibrate]);
+  const selection = useCallback(() => vibrate('selection'), [vibrate]);
+  const impact = useCallback(() => vibrate('impact'), [vibrate]);
 
   return {
     vibrate,
@@ -42,6 +46,8 @@ export function useHapticFeedback() {
     success,
     error,
     warning,
+    selection,
+    impact,
     isSupported: typeof navigator !== 'undefined' && 'vibrate' in navigator,
   };
 }

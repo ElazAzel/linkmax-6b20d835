@@ -1,7 +1,7 @@
 /**
  * Referral service - handles referral code generation and application
  */
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 
 export interface ReferralStats {
   code: string;

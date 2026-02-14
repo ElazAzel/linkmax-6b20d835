@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 
@@ -24,6 +25,7 @@ export function useDashboardOnboarding({
   isPageReady,
   onNicheComplete,
 }: UseDashboardOnboardingOptions) {
+  const { t } = useTranslation();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showNicheOnboarding, setShowNicheOnboarding] = useState(false);
 
@@ -44,8 +46,8 @@ export function useDashboardOnboarding({
   const handleOnboardingComplete = useCallback(() => {
     localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
     setShowOnboarding(false);
-    toast.success('Добро пожаловать! Начните создавать свою страницу.');
-  }, []);
+    toast.success(t('dashboard.onboardingComplete', 'Добро пожаловать! Начните создавать свою страницу.'));
+  }, [t]);
 
   const handleOnboardingSkip = useCallback(() => {
     localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');

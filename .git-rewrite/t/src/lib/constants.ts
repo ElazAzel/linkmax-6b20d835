@@ -40,19 +40,8 @@ export const createDefaultPageData = (id: string): PageData => ({
   seo: DEFAULT_SEO,
 });
 
-// Premium block types
-export const PREMIUM_BLOCK_TYPES = [
-  'video',
-  'carousel',
-  'custom_code',
-  'form',
-  'newsletter',
-  'testimonial',
-  'scratch',
-  'search',
-  'catalog',
-  'countdown',
-] as const;
+// Premium block types - re-export from registry for backward compatibility
+export { PREMIUM_BLOCK_TYPES } from './block-registry';
 
 // App config
 export const APP_CONFIG = {

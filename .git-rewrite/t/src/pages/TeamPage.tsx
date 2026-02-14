@@ -8,8 +8,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Users, ExternalLink, Crown, ArrowLeft } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { getNicheLabel } from '@/lib/niches';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import type { Team, TeamMember } from '@/services/collaboration';
 import type { Niche } from '@/lib/niches';
 
@@ -93,14 +94,14 @@ export default function TeamPage() {
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <Card className="p-8 text-center max-w-md bg-card/60 backdrop-blur-xl border-border/30 rounded-2xl">
           <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Команда не найдена</h1>
+          <h1 className="text-2xl font-bold mb-2">{t('teams.notFoundTitle', 'Команда не найдена')}</h1>
           <p className="text-muted-foreground mb-6">
-            Эта команда не существует или является приватной.
+            {t('teams.notFoundDesc', 'Эта команда не существует или является приватной.')}
           </p>
           <Link to="/">
             <Button variant="outline" className="rounded-xl">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              На главную
+              {t('common.backHome', 'На главную')}
             </Button>
           </Link>
         </Card>
@@ -110,6 +111,9 @@ export default function TeamPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <div className="fixed top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
       {/* Header */}
       <div className="bg-gradient-to-b from-primary/10 to-background pb-8 pt-12 px-6">
         <div className="max-w-2xl mx-auto text-center">
@@ -142,7 +146,7 @@ export default function TeamPage() {
             )}
             <Badge variant="outline" className="rounded-full">
               <Users className="h-3 w-3 mr-1" />
-              {team.members.length} участников
+              {team.members.length} {t('teams.members', 'участников')}
             </Badge>
           </div>
         </div>
@@ -152,7 +156,7 @@ export default function TeamPage() {
       <div className="max-w-2xl mx-auto px-6 py-8">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <Users className="h-5 w-5 text-primary" />
-          Участники команды
+          {t('teams.membersTitle', 'Участники команды')}
         </h2>
 
         <div className="space-y-3">
@@ -172,7 +176,7 @@ export default function TeamPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-medium truncate">
-                      {member.profile?.display_name || member.profile?.username || 'Пользователь'}
+                      {member.profile?.display_name || member.profile?.username || t('common.user', 'Пользователь')}
                     </span>
                     {member.role === 'owner' && (
                       <Crown className="h-4 w-4 text-amber-500 shrink-0" />
@@ -201,7 +205,7 @@ export default function TeamPage() {
 
           {team.members.length === 0 && (
             <Card className="p-8 text-center bg-card/40 border-border/20 rounded-xl">
-              <p className="text-muted-foreground">В команде пока нет участников</p>
+              <p className="text-muted-foreground">{t('teams.noMembers', 'В команде пока нет участников')}</p>
             </Card>
           )}
         </div>
@@ -212,7 +216,7 @@ export default function TeamPage() {
         <Link to="/">
           <Button variant="outline" className="w-full rounded-xl">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            На главную
+            {t('common.backHome', 'На главную')}
           </Button>
         </Link>
       </div>

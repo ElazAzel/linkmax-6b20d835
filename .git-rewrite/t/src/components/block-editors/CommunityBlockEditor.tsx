@@ -14,19 +14,19 @@ interface CommunityBlockEditorProps {
   onChange: (data: Partial<CommunityBlock>) => void;
 }
 
-const icons = [
-  { value: 'users', label: 'Участники', icon: Users },
-  { value: 'crown', label: 'Корона', icon: Crown },
-  { value: 'star', label: 'Звезда', icon: Star },
-  { value: 'heart', label: 'Сердце', icon: Heart },
-  { value: 'zap', label: 'Молния', icon: Zap },
-  { value: 'lock', label: 'Замок', icon: Lock },
+const iconsList = [
+  { value: 'users', labelKey: 'iconUsers', icon: Users },
+  { value: 'crown', labelKey: 'iconCrown', icon: Crown },
+  { value: 'star', labelKey: 'iconStar', icon: Star },
+  { value: 'heart', labelKey: 'iconHeart', icon: Heart },
+  { value: 'zap', labelKey: 'iconZap', icon: Zap },
+  { value: 'lock', labelKey: 'iconLock', icon: Lock },
 ] as const;
 
-const styles = [
-  { value: 'default', label: 'Стандартный', description: 'Простой и чистый' },
-  { value: 'premium', label: 'Premium', description: 'Золотой градиент' },
-  { value: 'exclusive', label: 'Exclusive', description: 'Фиолетовый градиент' },
+const stylesList = [
+  { value: 'default', labelKey: 'styleDefault', descKey: 'styleDefaultDesc' },
+  { value: 'premium', labelKey: 'stylePremium', descKey: 'stylePremiumDesc' },
+  { value: 'exclusive', labelKey: 'styleExclusive', descKey: 'styleExclusiveDesc' },
 ] as const;
 
 export function CommunityBlockEditor({ formData, onChange }: CommunityBlockEditorProps) {
@@ -85,11 +85,19 @@ export function CommunityBlockEditor({ formData, onChange }: CommunityBlockEdito
         />
       </div>
 
+      {/* Button Text */}
+      <MultilingualInput
+        label={t('fields.buttonText', 'Текст кнопки')}
+        value={typeof formData.buttonText === 'string' ? createMultilingualString(formData.buttonText) : (formData.buttonText || createMultilingualString(''))}
+        onChange={(value) => onChange({ buttonText: value })}
+        placeholder={t('blocks.community.join', 'Вступить')}
+      />
+
       {/* Icon */}
       <div className="space-y-2">
         <Label>{t('blocks.community.icon', 'Иконка')}</Label>
         <div className="grid grid-cols-6 gap-2">
-          {icons.map(({ value, label, icon: Icon }) => (
+          {iconsList.map(({ value, labelKey, icon: Icon }) => (
             <button
               key={value}
               type="button"
@@ -99,7 +107,7 @@ export function CommunityBlockEditor({ formData, onChange }: CommunityBlockEdito
                   ? 'border-primary bg-primary/10' 
                   : 'border-border hover:border-primary/50'
               }`}
-              title={label}
+              title={t(`blocks.community.${labelKey}`)}
             >
               <Icon className="h-5 w-5" />
             </button>
@@ -118,11 +126,11 @@ export function CommunityBlockEditor({ formData, onChange }: CommunityBlockEdito
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {styles.map(({ value, label, description }) => (
+            {stylesList.map(({ value, labelKey, descKey }) => (
               <SelectItem key={value} value={value}>
                 <div className="flex flex-col">
-                  <span>{label}</span>
-                  <span className="text-xs text-muted-foreground">{description}</span>
+                  <span>{t(`blocks.community.${labelKey}`)}</span>
+                  <span className="text-xs text-muted-foreground">{t(`blocks.community.${descKey}`)}</span>
                 </div>
               </SelectItem>
             ))}

@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,13 +8,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Info, Calendar as CalendarIcon, X, Maximize2, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Crown, Info, Calendar as CalendarIcon, X, Maximize2, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, ChevronDown, Settings2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { AnimationSettings } from '@/components/editor/AnimationSettings';
+import { PaidContentSettings } from './PaidContentSettings';
 import type { BlockStyle, BlockSizePreset } from '@/types/page';
-import { BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 
 export interface BaseBlockEditorProps {
   formData: any;
@@ -37,6 +38,8 @@ export function BlockEditorWrapper({
   description,
   hint,
 }: BlockEditorWrapperProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
       {isPremium && (
@@ -48,7 +51,7 @@ export function BlockEditorWrapper({
                 <Crown className="h-3 w-3" />
                 Premium
               </Badge>
-              <span>{description || 'This is a Premium feature.'}</span>
+              <span>{description || t('blockEditor.premiumFeature', 'This is a Premium feature.')}</span>
             </div>
           </AlertDescription>
         </Alert>
@@ -79,7 +82,9 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
   }
 ) {
   return function WrappedBlockEditor(props: P) {
+    const { t } = useTranslation();
     const { formData, onChange } = props;
+    const [advancedOpen, setAdvancedOpen] = useState(false);
     
     // Validation logic
     const validationError = options?.validate?.(formData);
@@ -122,8 +127,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
       });
     };
 
-    const currentSize = formData.blockSize || 'full-medium';
-    const sizeInfo = BLOCK_SIZE_DIMENSIONS[currentSize as BlockSizePreset];
+    const currentSize = formData.blockSize || 'full';
     const currentContentAlignment = formData.blockStyle?.contentAlignment || 'center';
 
     return (
@@ -138,141 +142,156 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
           </Alert>
         )}
         
-        {/* Block Size Selector */}
-        <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
-          <div className="flex items-center gap-2">
-            <Maximize2 className="h-4 w-4 text-primary" />
-            <Label className="text-base font-semibold">Размер блока</Label>
-          </div>
-          
-          <Select value={currentSize} onValueChange={(v) => handleBlockSizeChange(v as BlockSizePreset)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите размер" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(BLOCK_SIZE_DIMENSIONS).map(([key, info]) => (
-                <SelectItem key={key} value={key}>
-                  <div className="flex items-center gap-2">
-                    <span className={cn(
-                      "w-4 h-3 rounded border",
-                      info.gridCols === 1 ? "bg-primary/30" : "bg-primary/20"
-                    )} />
-                    {info.label}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          {sizeInfo && (
-            <Alert className="bg-primary/5 border-primary/20">
-              <Info className="h-4 w-4 text-primary" />
-              <AlertDescription className="text-sm">
-                {sizeInfo.gridCols === 1 
-                  ? 'Блок занимает всю ширину строки' 
-                  : 'Блок занимает половину ширины (2 блока в строке)'}
-              </AlertDescription>
-            </Alert>
-          )}
-        </div>
-
-        {/* Content Alignment */}
-        <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
-          <div className="flex items-center gap-2">
-            <AlignVerticalJustifyCenter className="h-4 w-4 text-primary" />
-            <Label className="text-base font-semibold">Выравнивание контента</Label>
-          </div>
-          
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant={currentContentAlignment === 'top' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleContentAlignmentChange('top')}
-              className="flex-1"
-            >
-              <AlignVerticalJustifyStart className="h-4 w-4 mr-1" />
-              Верх
-            </Button>
-            <Button
-              type="button"
-              variant={currentContentAlignment === 'center' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleContentAlignmentChange('center')}
-              className="flex-1"
-            >
-              <AlignVerticalJustifyCenter className="h-4 w-4 mr-1" />
-              Центр
-            </Button>
-            <Button
-              type="button"
-              variant={currentContentAlignment === 'bottom' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleContentAlignmentChange('bottom')}
-              className="flex-1"
-            >
-              <AlignVerticalJustifyEnd className="h-4 w-4 mr-1" />
-              Низ
-            </Button>
-          </div>
-        </div>
+        {/* Main block content editor */}
+        <Component {...props} onChange={handleChange} />
         
         <Separator className="my-4" />
         
-        <Component {...props} onChange={handleChange} />
-        
-        <Separator className="my-6" />
-        
-        <AnimationSettings
-          style={formData.blockStyle}
-          onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
-        />
-        
-        <Separator className="my-6" />
-        
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label className="text-base font-semibold">Расписание показа блока</Label>
-            {formData.schedule && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleRemoveSchedule}
-                className="h-8"
-              >
-                <X className="h-4 w-4 mr-1" />
-                Очистить
-              </Button>
-            )}
-          </div>
+        {/* Collapsible Advanced Settings */}
+        <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              className="w-full justify-between p-4 h-auto rounded-xl bg-muted/30 border border-border/50 hover:bg-muted/50"
+            >
+              <div className="flex items-center gap-2">
+                <Settings2 className="h-4 w-4 text-primary" />
+                <span className="font-semibold">{t('blockEditor.advancedSettings', 'Дополнительные настройки')}</span>
+              </div>
+              <ChevronDown className={cn(
+                "h-4 w-4 transition-transform",
+                advancedOpen && "rotate-180"
+              )} />
+            </Button>
+          </CollapsibleTrigger>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Дата и время появления</Label>
-              <DateTimePicker
-                value={formData.schedule?.startDate}
-                onChange={(value) => handleScheduleChange('startDate', value)}
-                placeholder="Выберите дату и время"
-              />
+          <CollapsibleContent className="space-y-4 mt-4">
+            {/* Block Size Selector */}
+            <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
+              <div className="flex items-center gap-2">
+                <Maximize2 className="h-4 w-4 text-primary" />
+                <Label className="text-base font-semibold">{t('blockEditor.blockSize', 'Размер блока')}</Label>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={currentSize === 'full' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleBlockSizeChange('full')}
+                  className="flex-1"
+                >
+                  <span className="w-5 h-3 rounded border bg-primary/30 mr-2" />
+                  {t('blockEditor.sizeFull', 'Полная')}
+                </Button>
+                <Button
+                  type="button"
+                  variant={currentSize === 'half' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleBlockSizeChange('half')}
+                  className="flex-1"
+                >
+                  <span className="w-3 h-3 rounded border bg-primary/20 mr-2" />
+                  {t('blockEditor.sizeHalf', 'Половина')}
+                </Button>
+              </div>
             </div>
-            
-            <div className="space-y-2">
-              <Label>Дата и время исчезновения</Label>
-              <DateTimePicker
-                value={formData.schedule?.endDate}
-                onChange={(value) => handleScheduleChange('endDate', value)}
-                placeholder="Выберите дату и время"
-              />
+
+            {/* Content Alignment - simplified to buttons */}
+            <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
+              <div className="flex items-center gap-2">
+                <AlignVerticalJustifyCenter className="h-4 w-4 text-primary" />
+                <Label className="text-base font-semibold">{t('blockEditor.alignment', 'Выравнивание')}</Label>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={currentContentAlignment === 'top' ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={() => handleContentAlignmentChange('top')}
+                  className="flex-1 h-10"
+                >
+                  <AlignVerticalJustifyStart className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant={currentContentAlignment === 'center' ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={() => handleContentAlignmentChange('center')}
+                  className="flex-1 h-10"
+                >
+                  <AlignVerticalJustifyCenter className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant={currentContentAlignment === 'bottom' ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={() => handleContentAlignmentChange('bottom')}
+                  className="flex-1 h-10"
+                >
+                  <AlignVerticalJustifyEnd className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </div>
-          
-          <Alert>
-            <Info className="h-4 w-4" />
-            <AlertDescription className="text-xs">
-              Блок будет виден только в указанный период времени. Если даты не заданы, блок будет виден всегда.
-            </AlertDescription>
-          </Alert>
-        </div>
+        
+            {/* Paid Content Settings */}
+            <PaidContentSettings
+              blockStyle={formData.blockStyle}
+              onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
+            />
+        
+            {/* Animation Settings */}
+            <AnimationSettings
+              style={formData.blockStyle}
+              onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
+            />
+        
+            <Separator className="my-4" />
+        
+            {/* Schedule Settings */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-semibold">{t('blockEditor.schedule', 'Расписание показа')}</Label>
+                {formData.schedule && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleRemoveSchedule}
+                    className="h-8"
+                  >
+                    <X className="h-4 w-4 mr-1" />
+                    {t('blockEditor.clearSchedule', 'Очистить')}
+                  </Button>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-1 gap-3">
+                <div className="space-y-2">
+                  <Label className="text-sm">{t('blockEditor.appearDate', 'Появление')}</Label>
+                  <DateTimePicker
+                    value={formData.schedule?.startDate}
+                    onChange={(value) => handleScheduleChange('startDate', value)}
+                    placeholder={t('blockEditor.selectDate', 'Выберите дату')}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-sm">{t('blockEditor.disappearDate', 'Исчезновение')}</Label>
+                  <DateTimePicker
+                    value={formData.schedule?.endDate}
+                    onChange={(value) => handleScheduleChange('endDate', value)}
+                    placeholder={t('blockEditor.selectDate', 'Выберите дату')}
+                  />
+                </div>
+              </div>
+              
+              <p className="text-xs text-muted-foreground">
+                {t('blockEditor.scheduleHint', 'Блок будет виден только в указанный период')}
+              </p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </BlockEditorWrapper>
     );
   };
@@ -316,7 +335,7 @@ function DateTimePicker({ value, onChange, placeholder }: DateTimePickerProps) {
           <Button
             variant="outline"
             className={cn(
-              'flex-1 justify-start text-left font-normal',
+              'flex-1 justify-start text-left font-normal h-10',
               !date && 'text-muted-foreground'
             )}
           >
@@ -338,7 +357,7 @@ function DateTimePicker({ value, onChange, placeholder }: DateTimePickerProps) {
         type="time"
         value={time}
         onChange={(e) => handleTimeChange(e.target.value)}
-        className="w-32"
+        className="w-24"
       />
     </div>
   );

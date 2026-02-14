@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { BlockRenderer } from '@/components/BlockRenderer';
 import { cn } from '@/lib/utils';
+import { createRowKey } from '@/lib/block-utils';
 import type { Block, BlockSizePreset } from '@/types/page';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
 
@@ -96,13 +97,16 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
 
   return (
     <div className={cn('space-y-3', className)}>
-      {rows.map((row, rowIndex) => {
+      {rows.map((row) => {
+        // Use stable key based on block IDs in row
+        const rowKey = createRowKey(row.blocks);
+        
         // Check if this is a profile row (single profile block)
         const isProfileRow = row.blocks.length === 1 && row.blocks[0].type === 'profile';
         
         if (isProfileRow) {
           return (
-            <div key={rowIndex} className="w-full">
+            <div key={rowKey} className="w-full">
               <BlockRenderer 
                 block={row.blocks[0]} 
                 isPreview={isPreview}
@@ -116,7 +120,7 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
         }
 
         return (
-          <div key={rowIndex} className="grid grid-cols-2 gap-3">
+          <div key={rowKey} className="grid grid-cols-2 gap-3">
             {row.blocks.map((block) => {
               const isFullWidth = isFullWidthBlock(block.blockSize);
               const contentAlignment = block.blockStyle?.contentAlignment || 'center';

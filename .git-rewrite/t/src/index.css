@@ -612,4 +612,25 @@
       min-width: 44px;
     }
   }
+  
+  /* Safe area insets for notched devices */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  .pb-safe {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0));
+  }
+  
+  .pt-safe {
+    padding-top: max(1rem, env(safe-area-inset-top, 0));
+  }
+  
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0);
+  }
 }

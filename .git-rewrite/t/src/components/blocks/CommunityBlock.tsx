@@ -45,6 +45,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
 
   const title = block.title ? getTranslatedString(block.title, currentLang) : t('blocks.community.defaultTitle', 'Мой закрытый клуб');
   const description = block.description ? getTranslatedString(block.description, currentLang) : '';
+  const buttonText = block.buttonText ? getTranslatedString(block.buttonText, currentLang) : t('blocks.community.join', 'Вступить');
   
   const style = block.style || 'default';
   const styles = styleConfig[style];
@@ -58,7 +59,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
 
   return (
     <Card className={cn('w-full transition-all shadow-sm hover:shadow-md', styles.card)}>
-      <CardContent className="p-5">
+      <CardContent className="p-5 sm:p-6">
         <div className="flex items-start gap-4">
           {/* Icon */}
           <div className={cn(
@@ -108,7 +109,7 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
           className={cn('w-full mt-4', styles.button)}
           onClick={handleJoin}
         >
-          {t('blocks.community.join', 'Вступить')}
+          {buttonText}
           <ExternalLink className="w-4 h-4 ml-2" />
         </Button>
       </CardContent>

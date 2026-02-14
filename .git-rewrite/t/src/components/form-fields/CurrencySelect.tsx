@@ -4,6 +4,7 @@
  */
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useTranslation } from 'react-i18next';
 
 interface CurrencySelectProps {
   value: string;
@@ -11,26 +12,28 @@ interface CurrencySelectProps {
 }
 
 export const currencies = [
-  { code: 'KZT', symbol: '₸', name: 'Тенге (Казахстан)' },
-  { code: 'RUB', symbol: '₽', name: 'Рубль (Россия)' },
-  { code: 'BYN', symbol: 'Br', name: 'Рубль (Беларусь)' },
-  { code: 'AMD', symbol: '֏', name: 'Драм (Армения)' },
-  { code: 'AZN', symbol: '₼', name: 'Манат (Азербайджан)' },
-  { code: 'KGS', symbol: 'с', name: 'Сом (Кыргызстан)' },
-  { code: 'TJS', symbol: 'ЅМ', name: 'Сомони (Таджикистан)' },
-  { code: 'TMT', symbol: 'm', name: 'Манат (Туркменистан)' },
-  { code: 'UZS', symbol: '', name: 'Сум (Узбекистан)' },
-  { code: 'USD', symbol: '$', name: 'Доллар США' },
-  { code: 'EUR', symbol: '€', name: 'Евро' },
-  { code: 'GBP', symbol: '£', name: 'Фунт стерлингов' },
-  { code: 'CNY', symbol: '¥', name: 'Юань' },
-  { code: 'JPY', symbol: '¥', name: 'Йена' },
-  { code: 'CHF', symbol: '₣', name: 'Швейцарский франк' },
-  { code: 'CAD', symbol: '$', name: 'Канадский доллар' },
-  { code: 'AUD', symbol: '$', name: 'Австралийский доллар' },
+  { code: 'KZT', symbol: '₸', labelKey: 'currency.names.KZT', defaultLabel: 'Tenge (Kazakhstan)' },
+  { code: 'RUB', symbol: '₽', labelKey: 'currency.names.RUB', defaultLabel: 'Ruble (Russia)' },
+  { code: 'BYN', symbol: 'Br', labelKey: 'currency.names.BYN', defaultLabel: 'Ruble (Belarus)' },
+  { code: 'AMD', symbol: '֏', labelKey: 'currency.names.AMD', defaultLabel: 'Dram (Armenia)' },
+  { code: 'AZN', symbol: '₼', labelKey: 'currency.names.AZN', defaultLabel: 'Manat (Azerbaijan)' },
+  { code: 'KGS', symbol: 'с', labelKey: 'currency.names.KGS', defaultLabel: 'Som (Kyrgyzstan)' },
+  { code: 'TJS', symbol: 'ЅМ', labelKey: 'currency.names.TJS', defaultLabel: 'Somoni (Tajikistan)' },
+  { code: 'TMT', symbol: 'm', labelKey: 'currency.names.TMT', defaultLabel: 'Manat (Turkmenistan)' },
+  { code: 'UZS', symbol: '', labelKey: 'currency.names.UZS', defaultLabel: 'Som (Uzbekistan)' },
+  { code: 'USD', symbol: '$', labelKey: 'currency.names.USD', defaultLabel: 'US Dollar' },
+  { code: 'EUR', symbol: '€', labelKey: 'currency.names.EUR', defaultLabel: 'Euro' },
+  { code: 'GBP', symbol: '£', labelKey: 'currency.names.GBP', defaultLabel: 'Pound Sterling' },
+  { code: 'CNY', symbol: '¥', labelKey: 'currency.names.CNY', defaultLabel: 'Yuan' },
+  { code: 'JPY', symbol: '¥', labelKey: 'currency.names.JPY', defaultLabel: 'Yen' },
+  { code: 'CHF', symbol: '₣', labelKey: 'currency.names.CHF', defaultLabel: 'Swiss Franc' },
+  { code: 'CAD', symbol: '$', labelKey: 'currency.names.CAD', defaultLabel: 'Canadian Dollar' },
+  { code: 'AUD', symbol: '$', labelKey: 'currency.names.AUD', defaultLabel: 'Australian Dollar' },
 ];
 
 export function CurrencySelect({ value, onValueChange }: CurrencySelectProps) {
+  const { t } = useTranslation();
+
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
@@ -39,7 +42,7 @@ export function CurrencySelect({ value, onValueChange }: CurrencySelectProps) {
       <SelectContent>
         {currencies.map((currency) => (
           <SelectItem key={currency.code} value={currency.code}>
-            {currency.symbol} {currency.code} - {currency.name}
+            {currency.symbol} {currency.code} - {t(currency.labelKey, currency.defaultLabel)}
           </SelectItem>
         ))}
       </SelectContent>

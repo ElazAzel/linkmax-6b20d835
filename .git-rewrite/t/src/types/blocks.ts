@@ -75,7 +75,7 @@ export interface BlockRegistryEntry {
 export const BLOCK_CATEGORIES = {
   basic: ['link', 'button', 'text', 'separator', 'avatar'],
   media: ['image', 'video', 'carousel', 'before_after'],
-  interactive: ['form', 'messenger', 'map', 'faq', 'scratch', 'search'],
+  interactive: ['form', 'messenger', 'map', 'faq', 'scratch', 'event'],
   commerce: ['product', 'catalog', 'pricing', 'download'],
   advanced: ['custom_code', 'newsletter', 'testimonial', 'countdown', 'socials'],
 } as const;

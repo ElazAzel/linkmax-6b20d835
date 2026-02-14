@@ -1,7 +1,7 @@
 import { useState, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import {
   Sheet,
@@ -25,9 +25,12 @@ import {
   Globe,
   Lock,
   Layers,
+  Pencil,
 } from 'lucide-react';
 import type { Block } from '@/types/page';
 import { TemplatePreviewCard } from './TemplatePreviewCard';
+import { EditTemplateDialog } from './EditTemplateDialog';
+import { getTemplateCategoryLabel } from '@/lib/templateCategories';
 
 interface UserTemplate {
   id: string;
@@ -57,12 +60,14 @@ interface MyTemplatesPanelProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onApplyTemplate: (blocks: Block[]) => void;
+  currentBlocks?: Block[];
 }
 
 export const MyTemplatesPanel = memo(function MyTemplatesPanel({
   open,
   onOpenChange,
   onApplyTemplate,
+  currentBlocks,
 }: MyTemplatesPanelProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -71,6 +76,7 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
   const [purchasedTemplates, setPurchasedTemplates] = useState<PurchasedTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [editingTemplate, setEditingTemplate] = useState<UserTemplate | null>(null);
 
   useEffect(() => {
     if (open && user) {
@@ -190,24 +196,36 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
         )}
         
         {/* Overlay with actions */}
-        <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+        <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 flex-wrap p-2">
           <Button size="sm" onClick={() => handleApply(template.blocks)}>
             <Download className="h-4 w-4 mr-1" />
             {t('templates.apply', 'Применить')}
           </Button>
           {!isPurchased && (
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => handleDelete(template.id)}
-              disabled={deleting === template.id}
-            >
-              {deleting === template.id ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Trash2 className="h-4 w-4" />
-              )}
-            </Button>
+            <>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingTemplate(template);
+                }}
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => handleDelete(template.id)}
+                disabled={deleting === template.id}
+              >
+                {deleting === template.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
+              </Button>
+            </>
           )}
         </div>
       </div>
@@ -217,7 +235,7 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
         <div className="flex items-start justify-between gap-2">
           <div>
             <h4 className="font-medium text-sm line-clamp-1">{template.name}</h4>
-            <p className="text-xs text-muted-foreground">{template.category}</p>
+            <p className="text-xs text-muted-foreground">{getTemplateCategoryLabel(t, template.category)}</p>
           </div>
           {template.is_public ? (
             <Globe className="h-4 w-4 text-green-500 shrink-0" />
@@ -313,6 +331,15 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
             )}
           </TabsContent>
         </Tabs>
+
+        {/* Edit Template Dialog */}
+        <EditTemplateDialog
+          open={!!editingTemplate}
+          onClose={() => setEditingTemplate(null)}
+          template={editingTemplate}
+          onUpdated={loadTemplates}
+          currentBlocks={currentBlocks}
+        />
       </SheetContent>
     </Sheet>
   );

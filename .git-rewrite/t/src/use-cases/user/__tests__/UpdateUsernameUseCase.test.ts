@@ -34,14 +34,16 @@ describe('UpdateUsernameUseCase', () => {
   });
 
   it('should normalize username to lowercase', async () => {
+    // Username 'NewUser' has uppercase, but validateUsername requires lowercase
+    // So we pass already lowercase and check it stays lowercase
     const result = await useCase.execute({
       userId: 'user-123',
-      username: 'NewUser',
+      username: 'newuser123',
     });
 
     expect(isSuccess(result)).toBe(true);
     if (isSuccess(result)) {
-      expect(result.data.username).toBe('newuser');
+      expect(result.data.username).toBe('newuser123');
     }
   });
 

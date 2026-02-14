@@ -28,9 +28,12 @@ import {
   ArrowLeft,
   Laptop,
   Crown,
-  Lock
+  Lock,
+  MousePointerClick,
+  MessageSquare,
+  CalendarCheck
 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
@@ -84,7 +87,8 @@ const NICHE_COLORS: Record<Niche, string> = {
 export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboardingProps) {
   const { t } = useTranslation();
   const { canUseAIPageGeneration, getRemainingAIPageGenerations, incrementAIPageGeneration, isPremium, limits } = useFreemiumLimits();
-  const [step, setStep] = useState<'niche' | 'details' | 'generating'>('niche');
+  const [step, setStep] = useState<'goal' | 'niche' | 'details' | 'generating'>('goal');
+  const [selectedGoal, setSelectedGoal] = useState<'clicks' | 'leads' | 'bookings' | null>(null);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
@@ -93,18 +97,28 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
   const canGenerate = canUseAIPageGeneration();
   const remainingGenerations = getRemainingAIPageGenerations();
 
+  const handleSelectGoal = (goal: 'clicks' | 'leads' | 'bookings') => {
+    setSelectedGoal(goal);
+    localStorage.setItem('linkmax_primary_goal', goal);
+    setStep('niche');
+  };
+
   const handleSelectNiche = (niche: Niche) => {
     setSelectedNiche(niche);
     setStep('details');
   };
 
   const handleBack = () => {
-    setStep('niche');
-    setSelectedNiche(null);
+    if (step === 'details') {
+      setStep('niche');
+      setSelectedNiche(null);
+    } else if (step === 'niche') {
+      setStep('goal');
+    }
   };
 
   const handleGenerate = async () => {
-    if (!selectedNiche || !name.trim()) {
+    if (!selectedNiche || !name.trim() || !selectedGoal) {
       toast.error(t('onboarding.enterName'));
       return;
     }
@@ -125,6 +139,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
             niche: selectedNiche,
             name: name.trim(),
             details: details.trim(),
+            primaryGoal: selectedGoal,
           },
         },
       });
@@ -165,12 +180,67 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
-        {step === 'niche' && (
+        {step === 'goal' && (
           <>
             <DialogHeader className="space-y-3 text-center">
               <div className="flex items-center justify-center gap-2">
                 <Sparkles className="h-6 w-6 text-primary animate-pulse" />
-                <DialogTitle className="text-xl sm:text-2xl">{t('onboarding.nicheTitle')}</DialogTitle>
+                <DialogTitle className="text-xl sm:text-2xl">{t('onboarding.goalTitle')}</DialogTitle>
+              </div>
+              <DialogDescription className="text-sm sm:text-base">
+                {t('onboarding.goalDescription')}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 py-6">
+              <Card
+                onClick={() => handleSelectGoal('clicks')}
+                className="p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50"
+              >
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 mx-auto">
+                  <MousePointerClick className="h-6 w-6 text-primary" />
+                </div>
+                <p className="text-sm font-semibold text-center">{t('onboarding.goalClicks')}</p>
+              </Card>
+              <Card
+                onClick={() => handleSelectGoal('leads')}
+                className="p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50"
+              >
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 mx-auto">
+                  <MessageSquare className="h-6 w-6 text-primary" />
+                </div>
+                <p className="text-sm font-semibold text-center">{t('onboarding.goalLeads')}</p>
+              </Card>
+              <Card
+                onClick={() => handleSelectGoal('bookings')}
+                className="p-4 cursor-pointer hover:scale-[1.02] transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50"
+              >
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 mx-auto">
+                  <CalendarCheck className="h-6 w-6 text-primary" />
+                </div>
+                <p className="text-sm font-semibold text-center">{t('onboarding.goalBookings')}</p>
+              </Card>
+            </div>
+
+            <div className="flex justify-center">
+              <Button variant="ghost" onClick={handleSkip}>
+                {t('onboarding.skip')}
+              </Button>
+            </div>
+          </>
+        )}
+
+        {step === 'niche' && (
+          <>
+            <DialogHeader className="space-y-3 text-center">
+              <div className="flex items-center gap-2 justify-center">
+                <Button variant="ghost" size="sm" onClick={handleBack}>
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 text-primary animate-pulse" />
+                  <DialogTitle className="text-xl sm:text-2xl">{t('onboarding.nicheTitle')}</DialogTitle>
+                </div>
               </div>
               <DialogDescription className="text-sm sm:text-base">
                 {t('onboarding.nicheDescription')}

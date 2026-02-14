@@ -12,7 +12,7 @@ export type BlockType =
   | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' 
   | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' 
   | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' 
-  | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community';
+  | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';
 
 export type Currency = 
   | 'KZT' | 'RUB' | 'BYN' | 'AMD' | 'AZN' | 'KGS' | 'TJS' | 'TMT' | 'UZS' 
@@ -59,7 +59,8 @@ export const BLOCK_CATEGORIES = {
 
 export const PREMIUM_BLOCK_TYPES: readonly BlockType[] = [
   'video', 'carousel', 'custom_code', 'form', 'newsletter', 
-  'testimonial', 'scratch', 'search', 'catalog', 'countdown', 'booking',
+  'testimonial', 'scratch', 'catalog', 'countdown', 'booking',
+  'before_after', 'download', 'product', 'pricing', 'shoutout', 'community', 'event',
 ];
 
 // ============= Base Block Interface =============

@@ -50,7 +50,7 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
           >
             <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-primary">{t('landing.howItWorks.badge', '2 минуты до результата')}</span>
+            <span className="text-primary">{t('landing.howItWorks.badge', '1 минута до результата')}</span>
           </div>
           <h2 
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}

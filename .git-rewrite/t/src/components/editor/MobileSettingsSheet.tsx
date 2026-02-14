@@ -34,6 +34,10 @@ import {
   Users,
   UserPlus,
   BarChart3,
+  Package,
+  Save,
+  Shield,
+  Palette,
 } from 'lucide-react';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
@@ -43,9 +47,10 @@ import { LeadsPanel } from '@/components/crm/LeadsPanel';
 import { FriendsPanel } from '@/components/friends/FriendsPanel';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
-import type { ProfileBlock, EditorMode, GridConfig } from '@/types/page';
+import { PageBackgroundSettings } from './PageBackgroundSettings';
+import type { ProfileBlock, EditorMode, GridConfig, PageBackground } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 
 interface MobileSettingsSheetProps {
@@ -64,6 +69,7 @@ interface MobileSettingsSheetProps {
   
   // Premium status
   isPremium: boolean;
+  premiumTier?: 'free' | 'pro';
   premiumLoading: boolean;
   
   // Chatbot settings
@@ -102,6 +108,15 @@ interface MobileSettingsSheetProps {
   previewUrl?: string;
   onPreviewUrlChange?: (url: string | null) => void;
   
+  // Templates
+  onOpenSaveTemplate?: () => void;
+  onOpenMyTemplates?: () => void;
+  
+  // Page Background
+  pageBackground?: PageBackground;
+  onPageBackgroundChange?: (background: PageBackground | undefined) => void;
+  canUseCustomPageBackground?: boolean;
+  
   // Sign out
   onSignOut: () => void;
 }
@@ -116,6 +131,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
   profileBlock,
   onUpdateProfile,
   isPremium,
+  premiumTier = 'free',
   premiumLoading,
   chatbotContext,
   onChatbotContextChange,
@@ -135,6 +151,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
   onNicheChange,
   previewUrl,
   onPreviewUrlChange,
+  onOpenSaveTemplate,
+  onOpenMyTemplates,
+  pageBackground,
+  onPageBackgroundChange,
+  canUseCustomPageBackground,
   onSignOut,
 }: MobileSettingsSheetProps) {
   const { t } = useTranslation();
@@ -381,6 +402,23 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   </div>
                 </Card>
               )}
+
+              {/* Page Background Settings */}
+              {onPageBackgroundChange && (
+                <Card className="p-5 bg-card/40 backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">
+                  <h3 className="font-semibold mb-4 flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                      <Palette className="h-4 w-4 text-indigo-500" />
+                    </div>
+                    {t('settings.pageBackground', 'Фон страницы')}
+                  </h3>
+                  <PageBackgroundSettings
+                    background={pageBackground}
+                    onChange={onPageBackgroundChange}
+                    canUseFeature={canUseCustomPageBackground ?? false}
+                  />
+                </Card>
+              )}
             </TabsContent>
             
             {/* Chatbot Tab */}
@@ -531,7 +569,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   {/* Email */}
                   <div className="flex items-center justify-between p-3 rounded-xl bg-background/30 border border-border/20">
                     <div className="space-y-0.5">
-                      <Label className="text-sm font-medium">Email</Label>
+                      <Label className="text-sm font-medium">{t('settings.emailLabel', 'Email')}</Label>
                       <p className="text-xs text-muted-foreground">{t('settings.emailDesc', 'New leads via email')}</p>
                     </div>
                     <Switch
@@ -546,7 +584,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                       <div className="flex items-center gap-2">
                         <Send className="h-4 w-4 text-blue-500" />
                         <div>
-                          <Label className="text-sm font-medium">Telegram</Label>
+                          <Label className="text-sm font-medium">{t('settings.telegramLabel', 'Telegram')}</Label>
                           <p className="text-xs text-muted-foreground">{t('settings.telegramDesc', 'Instant notifications')}</p>
                         </div>
                       </div>
@@ -615,6 +653,73 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                 <AutomationsPanel userId={userId} isPremium={isPremium} />
               )}
               
+              {/* Templates Section */}
+              {(onOpenSaveTemplate || onOpenMyTemplates) && (
+                <Card className="p-5 bg-card/40 backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">
+                  <h3 className="font-semibold mb-4 flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-xl bg-orange-500/10 flex items-center justify-center">
+                      <Package className="h-4 w-4 text-orange-500" />
+                    </div>
+                    {t('settings.templates', 'Шаблоны')}
+                  </h3>
+                  <div className="space-y-2">
+                    {onOpenSaveTemplate && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start rounded-xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60"
+                        onClick={() => {
+                          onOpenChange(false);
+                          onOpenSaveTemplate();
+                        }}
+                      >
+                        <Save className="h-4 w-4 mr-2" />
+                        {t('settings.saveAsTemplate', 'Сохранить как шаблон')}
+                      </Button>
+                    )}
+                    {onOpenMyTemplates && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start rounded-xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60"
+                        onClick={() => {
+                          onOpenChange(false);
+                          onOpenMyTemplates();
+                        }}
+                      >
+                        <Package className="h-4 w-4 mr-2" />
+                        {t('settings.myTemplates', 'Мои шаблоны')}
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              )}
+              
+              {/* Verification Section */}
+              <Card className="p-5 bg-card/40 backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">
+                <h3 className="font-semibold mb-4 flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                    <Shield className="h-4 w-4 text-blue-500" />
+                  </div>
+                  {t('settings.verification', 'Верификация')}
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  {t('settings.verificationDesc', 'Подтвердите личность для получения значка верификации')}
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full rounded-xl bg-card/40 backdrop-blur-xl border-border/30 hover:bg-card/60"
+                  onClick={() => {
+                    onOpenChange(false);
+                    window.dispatchEvent(new CustomEvent('openVerification'));
+                  }}
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  {t('settings.openVerification', 'Пройти верификацию')}
+                </Button>
+              </Card>
+              
               {/* Sign Out */}
               <Card className="p-5 bg-card/40 backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">
                 <Button 
@@ -623,7 +728,7 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                   className="w-full text-destructive hover:text-destructive rounded-xl bg-destructive/5 border-destructive/20 hover:bg-destructive/10"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
+                  {t('auth.signOut', 'Выйти')}
                 </Button>
               </Card>
             </TabsContent>

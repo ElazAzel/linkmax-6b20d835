@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
 import { createBlock } from '@/lib/block-factory';
 import logger from '@/lib/logger';
@@ -35,6 +36,7 @@ interface UseDashboardAIOptions {
   onAddBlock: (block: Block) => void;
   onReplaceBlocks?: (blocks: Block[]) => void;
   onQuestComplete?: (questKey: string) => void;
+  onClaimAIToken?: () => Promise<boolean>;
 }
 
 /**
@@ -111,7 +113,8 @@ function createBlockFromAI(blockData: AIBlockData, index: number): Block | null 
 /**
  * Hook to manage AI generator state and handlers
  */
-export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, onQuestComplete }: UseDashboardAIOptions) {
+export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, onQuestComplete, onClaimAIToken }: UseDashboardAIOptions) {
+  const { t } = useTranslation();
   const [aiGeneratorOpen, setAiGeneratorOpen] = useState(false);
   const [aiGeneratorType, setAiGeneratorType] = useState<AIGeneratorType>('ai-builder');
 
@@ -147,6 +150,9 @@ export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, o
       // Trigger use_ai quest on any AI result
       onQuestComplete?.('use_ai');
       
+      // Claim token reward for using AI
+      onClaimAIToken?.();
+      
       if (aiGeneratorType === 'ai-builder') {
         const { profile, blocks } = result;
 
@@ -169,17 +175,21 @@ export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, o
         // This is better UX than adding one by one
         if (onReplaceBlocks && validBlocks.length > 0) {
           onReplaceBlocks(validBlocks);
-          toast.success(`✨ Создано ${validBlocks.length} блоков с помощью AI`);
+          toast.success(t('dashboard.aiBlocksCreated', '✨ Создано {{count}} блоков с помощью AI', {
+            count: validBlocks.length,
+          }));
         } else {
           // Fallback: add blocks one by one
           validBlocks.forEach((block) => {
             onAddBlock(block);
           });
-          toast.success(`Добавлено ${validBlocks.length} блоков`);
+          toast.success(t('dashboard.blocksAdded', 'Добавлено {{count}} блоков', {
+            count: validBlocks.length,
+          }));
         }
       }
     },
-    [aiGeneratorType, onUpdateProfile, onAddBlock, onReplaceBlocks, onQuestComplete]
+    [aiGeneratorType, onUpdateProfile, onAddBlock, onReplaceBlocks, onQuestComplete, onClaimAIToken, t]
   );
 
   return {

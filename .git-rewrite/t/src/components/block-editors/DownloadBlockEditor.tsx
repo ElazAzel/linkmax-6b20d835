@@ -5,11 +5,20 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { validateDownloadBlock } from '@/lib/block-validators';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { FileUpload } from '@/components/form-fields/FileUpload';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
   
+  const handleFileInfoChange = (info: { fileName: string; fileSize: string }) => {
+    onChange({ 
+      ...formData, 
+      fileName: info.fileName || formData.fileName,
+      fileSize: info.fileSize || formData.fileSize 
+    });
+  };
+
   return (
     <div className="space-y-4">
       <MultilingualInput
@@ -28,32 +37,40 @@ function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
         placeholder="Brief description of the file"
       />
 
-      <div>
-        <Label>{t('fields.fileUrl', 'File URL')}</Label>
-        <Input
-          type="url"
-          value={formData.fileUrl || ''}
-          onChange={(e) => onChange({ ...formData, fileUrl: e.target.value })}
-          placeholder="https://example.com/file.pdf"
-        />
-      </div>
+      <MultilingualInput
+        label={t('fields.buttonText', 'Button Text')}
+        value={migrateToMultilingual(formData.buttonText)}
+        onChange={(value) => onChange({ ...formData, buttonText: value })}
+        placeholder={t('actions.download', 'Download')}
+      />
 
-      <div>
-        <Label>{t('fields.fileName', 'File Name')}</Label>
-        <Input
-          value={formData.fileName || ''}
-          onChange={(e) => onChange({ ...formData, fileName: e.target.value })}
-          placeholder="document.pdf"
-        />
-      </div>
+      <FileUpload
+        label={t('fields.file', 'Файл')}
+        value={formData.fileUrl || ''}
+        onChange={(url) => onChange({ ...formData, fileUrl: url })}
+        onFileInfoChange={handleFileInfoChange}
+        accept="*/*"
+        maxSizeMB={50}
+      />
 
-      <div>
-        <Label>{t('fields.fileSize', 'File Size')} {t('fields.optional', '(optional)')}</Label>
-        <Input
-          value={formData.fileSize || ''}
-          onChange={(e) => onChange({ ...formData, fileSize: e.target.value })}
-          placeholder="2.5 MB"
-        />
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>{t('fields.fileName', 'File Name')}</Label>
+          <Input
+            value={formData.fileName || ''}
+            onChange={(e) => onChange({ ...formData, fileName: e.target.value })}
+            placeholder="document.pdf"
+          />
+        </div>
+
+        <div>
+          <Label>{t('fields.fileSize', 'File Size')}</Label>
+          <Input
+            value={formData.fileSize || ''}
+            onChange={(e) => onChange({ ...formData, fileSize: e.target.value })}
+            placeholder="2.5 MB"
+          />
+        </div>
       </div>
 
       <div>
@@ -77,6 +94,6 @@ function DownloadBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
 }
 
 export const DownloadBlockEditor = withBlockEditor(DownloadBlockEditorComponent, {
-  hint: 'Add downloadable files like PDFs, documents, or media',
+  hint: 'Add downloadable files - upload directly to platform storage or use external URLs',
   validate: validateDownloadBlock,
 });

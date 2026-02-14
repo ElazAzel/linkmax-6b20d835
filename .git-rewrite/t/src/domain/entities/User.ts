@@ -117,7 +117,7 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
 
 // ============= Freemium Limits =============
 
-export type PremiumTier = 'free' | 'pro' | 'business';
+export type PremiumTier = 'free' | 'pro';
 
 export interface FreemiumLimits {
   maxBlocks: number;
@@ -159,29 +159,8 @@ export const FREE_TIER_LIMITS: FreemiumLimits = {
   canUseAdvancedThemes: false,
 };
 
-// Premium gets ALL Business features except white label
+// Pro tier includes ALL premium features
 export const PRO_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 5,
-  canUseAnalytics: true,
-  canUseCRM: true,
-  showWatermark: false,
-  maxLeadsPerMonth: Infinity,
-  canUseScheduler: true,
-  canUsePixels: true,
-  canUseCustomDomain: true,
-  canUseChatbot: true,
-  canUseAutoNotifications: true,
-  canUsePayments: true,
-  canUseWhiteLabel: false, // Only Business
-  canUseMultiPage: true,
-  canUseVerificationBadge: true,
-  canUsePremiumFrames: true,
-  canUseAdvancedThemes: true,
-};
-
-// Business only adds white label
-export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
   maxAIPageGenerationsPerMonth: Infinity,
   canUseAnalytics: true,
@@ -194,7 +173,7 @@ export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
   canUseChatbot: true,
   canUseAutoNotifications: true,
   canUsePayments: true,
-  canUseWhiteLabel: true, // Only Business gets white label
+  canUseWhiteLabel: true,
   canUseMultiPage: true,
   canUseVerificationBadge: true,
   canUsePremiumFrames: true,
@@ -205,7 +184,6 @@ export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
  * Get user's limits based on tier
  */
 export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
-  if (status.tier === 'business') return BUSINESS_TIER_LIMITS;
   if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
   return FREE_TIER_LIMITS;
 }
@@ -215,7 +193,6 @@ export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): F
  */
 export function getTierDisplayName(tier: PremiumTier): string {
   switch (tier) {
-    case 'business': return 'BUSINESS';
     case 'pro': return 'PRO';
     default: return 'BASIC';
   }

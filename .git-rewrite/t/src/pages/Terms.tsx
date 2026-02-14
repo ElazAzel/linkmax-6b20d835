@@ -3,12 +3,25 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SEOHead } from '@/components/SEOHead';
 import { COMPANY_DETAILS } from '@/components/legal/TermsOfServiceModal';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 
 const Terms = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const canonical = 'https://lnkmx.my/terms';
+  const seoTitle =
+    lang === 'ru'
+      ? 'Пользовательское соглашение — lnkmx'
+      : lang === 'kk'
+        ? 'Пайдаланушы келісімі — lnkmx'
+        : 'Terms of Service — lnkmx';
+  const seoDescription =
+    lang === 'ru'
+      ? 'Условия использования платформы lnkmx: права, обязанности и порядок работы сервиса.'
+      : lang === 'kk'
+        ? 'lnkmx платформасын пайдалану шарттары: құқықтар, міндеттер және қызмет тәртібі.'
+        : 'Terms of Service for lnkmx: user rights, responsibilities, and service usage rules.';
 
   const getTermsContent = () => {
     if (lang === 'en') {
@@ -193,9 +206,17 @@ const Terms = () => {
 
   return (
     <>
-      <SEOHead
-        title={lang === 'ru' ? 'Пользовательское соглашение - LinkMAX' : lang === 'kk' ? 'Пайдаланушы келісімі - LinkMAX' : 'Terms of Service - LinkMAX'}
-        description={lang === 'ru' ? 'Пользовательское соглашение платформы LinkMAX' : lang === 'kk' ? 'LinkMAX платформасының пайдаланушы келісімі' : 'LinkMAX Platform User Agreement'}
+      <StaticSEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        currentLanguage={lang}
+        alternates={[
+          { hreflang: 'ru', href: `${canonical}?lang=ru` },
+          { hreflang: 'en', href: `${canonical}?lang=en` },
+          { hreflang: 'kk', href: `${canonical}?lang=kk` },
+          { hreflang: 'x-default', href: canonical },
+        ]}
       />
       <div className="min-h-screen bg-background">
         <div className="container max-w-4xl mx-auto px-4 py-8">

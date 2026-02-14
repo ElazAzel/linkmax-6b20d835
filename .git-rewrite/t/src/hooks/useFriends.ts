@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 import {
@@ -15,6 +16,7 @@ import {
 
 export function useFriends() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [friends, setFriends] = useState<Friendship[]>([]);
   const [pendingRequests, setPendingRequests] = useState<Friendship[]>([]);
   const [sentRequests, setSentRequests] = useState<Friendship[]>([]);
@@ -50,51 +52,51 @@ export function useFriends() {
   const handleSendRequest = useCallback(async (friendId: string) => {
     const result = await sendFriendRequest(friendId);
     if (result.success) {
-      toast.success('Запрос в друзья отправлен');
+      toast.success(t('friends.requestSent', 'Запрос в друзья отправлен'));
       loadFriends();
     } else {
       const errorMessages: Record<string, string> = {
-        cannot_add_self: 'Нельзя добавить себя в друзья',
-        friendship_exists: 'Вы уже друзья или запрос отправлен',
-        not_authenticated: 'Необходимо войти в аккаунт'
+        cannot_add_self: t('friends.errors.cannotAddSelf', 'Нельзя добавить себя в друзья'),
+        friendship_exists: t('friends.errors.friendshipExists', 'Вы уже друзья или запрос отправлен'),
+        not_authenticated: t('friends.errors.notAuthenticated', 'Необходимо войти в аккаунт'),
       };
-      toast.error(errorMessages[result.error || ''] || 'Ошибка отправки запроса');
+      toast.error(errorMessages[result.error || ''] || t('friends.errors.sendRequest', 'Ошибка отправки запроса'));
     }
     return result;
-  }, [loadFriends]);
+  }, [loadFriends, t]);
 
   const handleAcceptRequest = useCallback(async (friendshipId: string) => {
     const result = await acceptFriendRequest(friendshipId);
     if (result.success) {
-      toast.success('Запрос принят!');
+      toast.success(t('friends.requestAccepted', 'Запрос принят!'));
       loadFriends();
     } else {
-      toast.error('Ошибка принятия запроса');
+      toast.error(t('friends.errors.acceptRequest', 'Ошибка принятия запроса'));
     }
     return result;
-  }, [loadFriends]);
+  }, [loadFriends, t]);
 
   const handleRejectRequest = useCallback(async (friendshipId: string) => {
     const result = await rejectFriendRequest(friendshipId);
     if (result.success) {
-      toast.success('Запрос отклонён');
+      toast.success(t('friends.requestRejected', 'Запрос отклонён'));
       loadFriends();
     } else {
-      toast.error('Ошибка отклонения запроса');
+      toast.error(t('friends.errors.rejectRequest', 'Ошибка отклонения запроса'));
     }
     return result;
-  }, [loadFriends]);
+  }, [loadFriends, t]);
 
   const handleRemoveFriend = useCallback(async (friendshipId: string) => {
     const result = await removeFriend(friendshipId);
     if (result.success) {
-      toast.success('Друг удалён');
+      toast.success(t('friends.friendRemoved', 'Друг удалён'));
       loadFriends();
     } else {
-      toast.error('Ошибка удаления');
+      toast.error(t('friends.errors.removeFriend', 'Ошибка удаления'));
     }
     return result;
-  }, [loadFriends]);
+  }, [loadFriends, t]);
 
   const handleSearchUsers = useCallback(async (query: string) => {
     return searchUsers(query);

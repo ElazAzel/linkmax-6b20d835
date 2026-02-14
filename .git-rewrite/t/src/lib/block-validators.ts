@@ -154,6 +154,20 @@ export function validateFormBlock(formData: any): string | null {
   return null;
 }
 
+export function validateEventBlock(formData: any): string | null {
+  const titleError = validateRequired(formData.title, 'Event title');
+  if (titleError) return titleError;
+
+  const fields = formData.formFields || [];
+  for (let i = 0; i < fields.length; i++) {
+    const field = fields[i];
+    const nameError = validateRequired(field.label_i18n, `Field ${i + 1} label`);
+    if (nameError) return nameError;
+  }
+
+  return null;
+}
+
 export function validateDownloadBlock(formData: any): string | null {
   return (
     validateRequired(formData.title, 'Title') ||
@@ -183,11 +197,6 @@ export function validateTestimonialBlock(formData: any): string | null {
 
 export function validateScratchBlock(formData: any): string | null {
   return validateRequired(formData.revealText, 'Reveal text');
-}
-
-export function validateSearchBlock(formData: any): string | null {
-  // Search block has no required fields, placeholder is optional
-  return null;
 }
 
 export function validateMapBlock(formData: any): string | null {

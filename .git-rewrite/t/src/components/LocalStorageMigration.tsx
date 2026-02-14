@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Upload, X } from 'lucide-react';
-import { savePage } from '@/lib/database';
+import { savePage } from '@/services/database';
 import { toast } from 'sonner';
 import type { PageData } from '@/types/page';
 

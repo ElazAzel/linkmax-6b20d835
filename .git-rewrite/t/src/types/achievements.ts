@@ -1,7 +1,7 @@
 export interface Achievement {
   key: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon: string;
   category: 'blocks' | 'features' | 'milestones' | 'social';
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
@@ -29,8 +29,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Block Usage Achievements
   {
     key: 'first_link',
-    title: 'Первая ссылка',
-    description: 'Добавьте свою первую ссылку',
+    titleKey: 'achievements.items.firstLink.title',
+    descriptionKey: 'achievements.items.firstLink.description',
     icon: '🔗',
     category: 'blocks',
     rarity: 'common',
@@ -38,8 +38,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'social_butterfly',
-    title: 'Социальная бабочка',
-    description: 'Добавьте блок социальных сетей',
+    titleKey: 'achievements.items.socialButterfly.title',
+    descriptionKey: 'achievements.items.socialButterfly.description',
     icon: '🦋',
     category: 'blocks',
     rarity: 'common',
@@ -47,8 +47,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'merchant',
-    title: 'Торговец',
-    description: 'Добавьте первый товар в магазин',
+    titleKey: 'achievements.items.merchant.title',
+    descriptionKey: 'achievements.items.merchant.description',
     icon: '🛒',
     category: 'blocks',
     rarity: 'common',
@@ -56,8 +56,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'content_creator',
-    title: 'Создатель контента',
-    description: 'Добавьте видео блок',
+    titleKey: 'achievements.items.contentCreator.title',
+    descriptionKey: 'achievements.items.contentCreator.description',
     icon: '🎬',
     category: 'blocks',
     rarity: 'rare',
@@ -65,8 +65,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'gallery_master',
-    title: 'Мастер галерей',
-    description: 'Создайте карусель изображений',
+    titleKey: 'achievements.items.galleryMaster.title',
+    descriptionKey: 'achievements.items.galleryMaster.description',
     icon: '🖼️',
     category: 'blocks',
     rarity: 'rare',
@@ -74,8 +74,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'developer',
-    title: 'Разработчик',
-    description: 'Используйте блок с кастомным кодом',
+    titleKey: 'achievements.items.developer.title',
+    descriptionKey: 'achievements.items.developer.description',
     icon: '👨‍💻',
     category: 'blocks',
     rarity: 'epic',
@@ -83,8 +83,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'communicator',
-    title: 'Коммуникатор',
-    description: 'Добавьте форму обратной связи',
+    titleKey: 'achievements.items.communicator.title',
+    descriptionKey: 'achievements.items.communicator.description',
     icon: '📬',
     category: 'blocks',
     rarity: 'rare',
@@ -92,8 +92,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'search_guru',
-    title: 'Гуру поиска',
-    description: 'Добавьте AI Search блок',
+    titleKey: 'achievements.items.searchGuru.title',
+    descriptionKey: 'achievements.items.searchGuru.description',
     icon: '🔍',
     category: 'blocks',
     rarity: 'epic',
@@ -103,8 +103,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Feature Usage Achievements
   {
     key: 'ai_powered',
-    title: 'AI-помощник',
-    description: 'Используйте AI для генерации контента',
+    titleKey: 'achievements.items.aiPowered.title',
+    descriptionKey: 'achievements.items.aiPowered.description',
     icon: '🤖',
     category: 'features',
     rarity: 'rare',
@@ -112,8 +112,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'template_user',
-    title: 'Быстрый старт',
-    description: 'Используйте готовый шаблон',
+    titleKey: 'achievements.items.templateUser.title',
+    descriptionKey: 'achievements.items.templateUser.description',
     icon: '⚡',
     category: 'features',
     rarity: 'common',
@@ -121,8 +121,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'chatbot_expert',
-    title: 'Эксперт чат-ботов',
-    description: 'Настройте AI чат-бота',
+    titleKey: 'achievements.items.chatbotExpert.title',
+    descriptionKey: 'achievements.items.chatbotExpert.description',
     icon: '💬',
     category: 'features',
     rarity: 'rare',
@@ -132,8 +132,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Milestone Achievements
   {
     key: 'collector',
-    title: 'Коллекционер',
-    description: 'Добавьте 5 разных типов блоков',
+    titleKey: 'achievements.items.collector.title',
+    descriptionKey: 'achievements.items.collector.description',
     icon: '🎯',
     category: 'milestones',
     rarity: 'rare',
@@ -141,8 +141,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'master_builder',
-    title: 'Мастер-строитель',
-    description: 'Добавьте 10 блоков на страницу',
+    titleKey: 'achievements.items.masterBuilder.title',
+    descriptionKey: 'achievements.items.masterBuilder.description',
     icon: '🏗️',
     category: 'milestones',
     rarity: 'epic',
@@ -150,8 +150,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'completionist',
-    title: 'Перфекционист',
-    description: 'Используйте все типы блоков',
+    titleKey: 'achievements.items.completionist.title',
+    descriptionKey: 'achievements.items.completionist.description',
     icon: '💯',
     category: 'milestones',
     rarity: 'legendary',
@@ -161,8 +161,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Social Achievements
   {
     key: 'publisher',
-    title: 'Издатель',
-    description: 'Опубликуйте свою первую страницу',
+    titleKey: 'achievements.items.publisher.title',
+    descriptionKey: 'achievements.items.publisher.description',
     icon: '📢',
     category: 'social',
     rarity: 'common',
@@ -170,8 +170,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'popular',
-    title: 'Популярный',
-    description: 'Получите 100 просмотров',
+    titleKey: 'achievements.items.popular.title',
+    descriptionKey: 'achievements.items.popular.description',
     icon: '🌟',
     category: 'social',
     rarity: 'rare',
@@ -179,8 +179,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'influencer',
-    title: 'Инфлюенсер',
-    description: 'Получите 1000 просмотров',
+    titleKey: 'achievements.items.influencer.title',
+    descriptionKey: 'achievements.items.influencer.description',
     icon: '👑',
     category: 'social',
     rarity: 'legendary',
@@ -190,8 +190,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Friend Achievements
   {
     key: 'first_friend',
-    title: 'Первый друг',
-    description: 'Добавьте первого друга',
+    titleKey: 'achievements.items.firstFriend.title',
+    descriptionKey: 'achievements.items.firstFriend.description',
     icon: '🤝',
     category: 'social',
     rarity: 'common',
@@ -199,8 +199,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'social_circle',
-    title: 'Социальный круг',
-    description: 'Добавьте 5 друзей',
+    titleKey: 'achievements.items.socialCircle.title',
+    descriptionKey: 'achievements.items.socialCircle.description',
     icon: '👥',
     category: 'social',
     rarity: 'rare',
@@ -208,8 +208,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'networking_pro',
-    title: 'Мастер нетворкинга',
-    description: 'Добавьте 10 друзей',
+    titleKey: 'achievements.items.networkingPro.title',
+    descriptionKey: 'achievements.items.networkingPro.description',
     icon: '🌐',
     category: 'social',
     rarity: 'epic',
@@ -217,8 +217,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     key: 'community_leader',
-    title: 'Лидер сообщества',
-    description: 'Добавьте 25 друзей',
+    titleKey: 'achievements.items.communityLeader.title',
+    descriptionKey: 'achievements.items.communityLeader.description',
     icon: '🎖️',
     category: 'social',
     rarity: 'legendary',
@@ -231,11 +231,4 @@ export const RARITY_COLORS: Record<Achievement['rarity'], string> = {
   rare: 'from-blue-400 to-blue-600',
   epic: 'from-purple-400 to-purple-600',
   legendary: 'from-yellow-400 to-orange-600',
-};
-
-export const RARITY_LABELS: Record<Achievement['rarity'], string> = {
-  common: 'Обычное',
-  rare: 'Редкое',
-  epic: 'Эпическое',
-  legendary: 'Легендарное',
 };

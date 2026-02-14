@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { 
   getCompletedQuestsToday, 
@@ -9,6 +10,7 @@ import {
 } from '@/services/quests';
 
 export function useDailyQuests(userId: string | undefined) {
+  const { t } = useTranslation();
   const [completedQuests, setCompletedQuests] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +27,9 @@ export function useDailyQuests(userId: string | undefined) {
         const result = await completeQuest(userId, 'daily_visit');
         if (result.success) {
           setCompletedQuests(prev => [...prev, 'daily_visit']);
-          toast.success(`👋 +${result.tokensEarned} Linkkon за ежедневный визит!`, {
+          toast.success(t('quests.toastDailyVisit', '👋 +{{count}} Linkkon за ежедневный визит!', {
+            count: result.tokensEarned,
+          }), {
             duration: 3000,
           });
         }
@@ -49,12 +53,16 @@ export function useDailyQuests(userId: string | undefined) {
       setCompletedQuests(prev => [...prev, questKey]);
       const quest = DAILY_QUESTS.find(q => q.key === questKey);
       if (quest) {
-        toast.success(`${quest.icon} +${result.tokensEarned} Linkkon за "${quest.title}"!`, {
+        toast.success(t('quests.toastCompleted', '{{icon}} +{{count}} Linkkon за "{{title}}"!', {
+          icon: quest.icon,
+          count: result.tokensEarned,
+          title: t(quest.titleKey),
+        }), {
           duration: 3000,
         });
       }
     }
-  }, [userId, completedQuests]);
+  }, [userId, completedQuests, t]);
 
   const isQuestCompleted = useCallback((questKey: string) => {
     return completedQuests.includes(questKey);

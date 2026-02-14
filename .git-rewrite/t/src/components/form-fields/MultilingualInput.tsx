@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Languages, Loader2 } from 'lucide-react';
 import { LANGUAGES, type MultilingualString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { RichTextEditor } from './RichTextEditor';

@@ -99,11 +99,11 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block }: Socia
   return (
     <div className="w-full">
       {title && (
-        <h3 className={`text-sm font-medium text-muted-foreground mb-4 ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>
+        <h3 className={`text-xs font-medium text-muted-foreground mb-3 ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>
           {title}
         </h3>
       )}
-      <div className={`flex items-center ${justifyClass} gap-4 flex-wrap`}>
+      <div className={`flex items-center ${justifyClass} gap-2 flex-wrap`}>
         {validPlatforms.map((platform, index) => {
           // Support both 'icon' and 'platform' fields (AI generates 'platform', factory uses 'icon')
           const iconName = platform.icon || 'globe';
@@ -117,10 +117,10 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block }: Socia
             <button
               key={index}
               onClick={() => handleClick(url)}
-              className="group relative w-14 h-14 rounded-2xl bg-card border border-border shadow-sm hover:border-primary/50 transition-all duration-300 hover:scale-110 hover:shadow-md flex items-center justify-center"
+              className="group relative w-11 h-11 rounded-xl bg-card border border-border shadow-sm hover:border-primary/50 transition-all duration-200 active:scale-95 hover:shadow-md flex items-center justify-center"
               aria-label={platform.name || iconKey}
             >
-              <Icon className="w-6 h-6 text-foreground group-hover:text-primary transition-colors duration-300" />
+              <Icon className="w-5 h-5 text-foreground group-hover:text-primary transition-colors duration-200" />
             </button>
           );
         })}

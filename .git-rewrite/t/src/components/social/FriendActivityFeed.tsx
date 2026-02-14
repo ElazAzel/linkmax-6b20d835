@@ -7,67 +7,97 @@ import {
 } from 'lucide-react';
 import { useSocialFeatures } from '@/hooks/useSocialFeatures';
 import { formatDistanceToNow } from 'date-fns';
-import { ru } from 'date-fns/locale';
-
-const ACTIVITY_CONFIG: Record<string, { icon: React.ReactNode; color: string; label: string }> = {
-  page_published: { 
-    icon: <Globe className="h-4 w-4" />, 
-    color: 'bg-green-500', 
-    label: 'опубликовал(а) страницу' 
-  },
-  new_block: { 
-    icon: <Blocks className="h-4 w-4" />, 
-    color: 'bg-blue-500', 
-    label: 'добавил(а) новый блок' 
-  },
-  achievement: { 
-    icon: <Trophy className="h-4 w-4" />, 
-    color: 'bg-amber-500', 
-    label: 'получил(а) достижение' 
-  },
-  streak_milestone: { 
-    icon: <Flame className="h-4 w-4" />, 
-    color: 'bg-orange-500', 
-    label: 'достиг(ла) milestone стрика' 
-  },
-  challenge_completed: { 
-    icon: <Target className="h-4 w-4" />, 
-    color: 'bg-purple-500', 
-    label: 'выполнил(а) челлендж' 
-  },
-  gift_sent: { 
-    icon: <Gift className="h-4 w-4" />, 
-    color: 'bg-pink-500', 
-    label: 'отправил(а) подарок' 
-  },
-  gift_received: { 
-    icon: <Gift className="h-4 w-4" />, 
-    color: 'bg-pink-500', 
-    label: 'получил(а) подарок' 
-  },
-  page_boosted: { 
-    icon: <Rocket className="h-4 w-4" />, 
-    color: 'bg-indigo-500', 
-    label: 'продвигает страницу' 
-  },
-  new_friend: { 
-    icon: <Users className="h-4 w-4" />, 
-    color: 'bg-cyan-500', 
-    label: 'добавил(а) друга' 
-  },
-  page_liked: { 
-    icon: <Heart className="h-4 w-4" />, 
-    color: 'bg-red-500', 
-    label: 'понравилась страница' 
-  }
-};
+import { enUS, kk, ru } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 interface FriendActivityFeedProps {
   maxHeight?: string;
 }
 
 export function FriendActivityFeed({ maxHeight = '400px' }: FriendActivityFeedProps) {
+  const { t, i18n } = useTranslation();
   const { activities, loading } = useSocialFeatures();
+  const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
+  const activityConfig: Record<string, { icon: React.ReactNode; color: string; label: string }> = {
+    page_published: { 
+      icon: <Globe className="h-4 w-4" />, 
+      color: 'bg-green-500', 
+      label: t('social.activity.pagePublished', 'опубликовал(а) страницу'),
+    },
+    new_block: { 
+      icon: <Blocks className="h-4 w-4" />, 
+      color: 'bg-blue-500', 
+      label: t('social.activity.newBlock', 'добавил(а) новый блок'),
+    },
+    achievement: { 
+      icon: <Trophy className="h-4 w-4" />, 
+      color: 'bg-amber-500', 
+      label: t('social.activity.achievement', 'получил(а) достижение'),
+    },
+    streak_milestone: { 
+      icon: <Flame className="h-4 w-4" />, 
+      color: 'bg-orange-500', 
+      label: t('social.activity.streakMilestone', 'достиг(ла) milestone стрика'),
+    },
+    challenge_completed: { 
+      icon: <Target className="h-4 w-4" />, 
+      color: 'bg-purple-500', 
+      label: t('social.activity.challengeCompleted', 'выполнил(а) челлендж'),
+    },
+    gift_sent: { 
+      icon: <Gift className="h-4 w-4" />, 
+      color: 'bg-pink-500', 
+      label: t('social.activity.giftSent', 'отправил(а) подарок'),
+    },
+    gift_received: { 
+      icon: <Gift className="h-4 w-4" />, 
+      color: 'bg-pink-500', 
+      label: t('social.activity.giftReceived', 'получил(а) подарок'),
+    },
+    page_boosted: { 
+      icon: <Rocket className="h-4 w-4" />, 
+      color: 'bg-indigo-500', 
+      label: t('social.activity.pageBoosted', 'продвигает страницу'),
+    },
+    new_friend: { 
+      icon: <Users className="h-4 w-4" />, 
+      color: 'bg-cyan-500', 
+      label: t('social.activity.newFriend', 'добавил(а) друга'),
+    },
+    page_liked: { 
+      icon: <Heart className="h-4 w-4" />, 
+      color: 'bg-red-500', 
+      label: t('social.activity.pageLiked', 'понравилась страница'),
+    },
+  };
+
+  const formatActivityMetadata = (type: string, metadata: Record<string, unknown>): string => {
+    switch (type) {
+      case 'achievement': {
+        const title = typeof metadata.name === 'string' ? metadata.name : t('social.metadata.achievementFallback', 'Новое достижение');
+        return t('social.metadata.achievement', '🏆 {{title}}', { title });
+      }
+      case 'streak_milestone': {
+        const count = typeof metadata.days === 'number' ? metadata.days : 0;
+        return t('social.metadata.streak', '🔥 {{count}} дней подряд', { count });
+      }
+      case 'challenge_completed': {
+        const title = typeof metadata.title === 'string' ? metadata.title : t('social.metadata.challengeFallback', 'Челлендж выполнен');
+        return t('social.metadata.challenge', '✅ {{title}}', { title });
+      }
+      case 'gift_sent':
+      case 'gift_received': {
+        const count = typeof metadata.days === 'number' ? metadata.days : 0;
+        return t('social.metadata.gift', '💝 +{{count}} дней Premium', { count });
+      }
+      case 'page_boosted': {
+        const typeLabel = typeof metadata.boost_type === 'string' ? metadata.boost_type : t('social.metadata.boostFallback', 'standard');
+        return t('social.metadata.boost', '🚀 {{type}} буст', { type: typeLabel });
+      }
+      default:
+        return '';
+    }
+  };
 
   if (loading) {
     return (
@@ -91,9 +121,9 @@ export function FriendActivityFeed({ maxHeight = '400px' }: FriendActivityFeedPr
         <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
           <Activity className="h-8 w-8 text-muted-foreground" />
         </div>
-        <h3 className="font-semibold text-lg mb-1">Пока нет активности</h3>
+        <h3 className="font-semibold text-lg mb-1">{t('social.feed.emptyTitle', 'Пока нет активности')}</h3>
         <p className="text-sm text-muted-foreground max-w-[240px]">
-          Добавьте друзей, чтобы видеть их активность
+          {t('social.feed.emptyDescription', 'Добавьте друзей, чтобы видеть их активность')}
         </p>
       </div>
     );
@@ -103,16 +133,16 @@ export function FriendActivityFeed({ maxHeight = '400px' }: FriendActivityFeedPr
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Activity className="h-5 w-5 text-primary" />
-        <h3 className="font-bold">Лента друзей</h3>
+        <h3 className="font-bold">{t('social.feed.title', 'Лента друзей')}</h3>
         <Badge variant="secondary" className="ml-auto">
-          {activities.length} событий
+          {t('social.feed.events', '{{count}} событий', { count: activities.length })}
         </Badge>
       </div>
 
       <ScrollArea style={{ maxHeight }} className="pr-4">
         <div className="space-y-2">
           {activities.map((activity) => {
-            const config = ACTIVITY_CONFIG[activity.activity_type] || {
+            const config = activityConfig[activity.activity_type] || {
               icon: <Activity className="h-4 w-4" />,
               color: 'bg-gray-500',
               label: activity.activity_type
@@ -141,7 +171,7 @@ export function FriendActivityFeed({ maxHeight = '400px' }: FriendActivityFeedPr
                 <div className="flex-1 min-w-0">
                   <p className="text-sm">
                     <span className="font-semibold">
-                      {profile?.display_name || profile?.username || 'Пользователь'}
+                      {profile?.display_name || profile?.username || t('common.user', 'Пользователь')}
                     </span>{' '}
                     <span className="text-muted-foreground">{config.label}</span>
                   </p>
@@ -156,7 +186,7 @@ export function FriendActivityFeed({ maxHeight = '400px' }: FriendActivityFeedPr
                   <p className="text-[11px] text-muted-foreground mt-1">
                     {formatDistanceToNow(new Date(activity.created_at), { 
                       addSuffix: true, 
-                      locale: ru 
+                      locale 
                     })}
                   </p>
                 </div>
@@ -167,22 +197,4 @@ export function FriendActivityFeed({ maxHeight = '400px' }: FriendActivityFeedPr
       </ScrollArea>
     </div>
   );
-}
-
-function formatActivityMetadata(type: string, metadata: Record<string, unknown>): string {
-  switch (type) {
-    case 'achievement':
-      return `🏆 ${metadata.name || 'Новое достижение'}`;
-    case 'streak_milestone':
-      return `🔥 ${metadata.days || 0} дней подряд`;
-    case 'challenge_completed':
-      return `✅ ${metadata.title || 'Челлендж выполнен'}`;
-    case 'gift_sent':
-    case 'gift_received':
-      return `💝 +${metadata.days || 0} дней Premium`;
-    case 'page_boosted':
-      return `🚀 ${metadata.boost_type || 'standard'} буст`;
-    default:
-      return '';
-  }
 }

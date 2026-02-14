@@ -4,7 +4,7 @@ import { Megaphone, ExternalLink } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 
 interface ShoutoutBlockProps {
   userId: string;
@@ -51,7 +51,7 @@ export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
   if (loading) {
     return (
       <Card className="animate-pulse" style={style}>
-        <CardContent className="p-4">
+        <CardContent className="p-5">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-full bg-muted" />
             <div className="space-y-2 flex-1">
@@ -71,7 +71,7 @@ export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
         className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20"
         style={style}
       >
-        <CardContent className="p-4">
+        <CardContent className="p-5">
           <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
             <Megaphone className="h-3 w-3" />
             <span>Рекомендую</span>
@@ -96,7 +96,7 @@ export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
       style={style}
       onClick={handleClick}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-5">
         <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
           <Megaphone className="h-3 w-3" />
           <span>Рекомендую</span>

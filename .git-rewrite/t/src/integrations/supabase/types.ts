@@ -463,6 +463,231 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_token_limits: {
+        Row: {
+          action_date: string
+          action_type: string
+          claimed: boolean
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action_date?: string
+          action_type: string
+          claimed?: boolean
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action_date?: string
+          action_type?: string
+          claimed?: boolean
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      event_registrations: {
+        Row: {
+          answers_json: Json | null
+          attendee_email: string
+          attendee_name: string
+          attendee_phone: string | null
+          block_id: string
+          created_at: string
+          event_id: string
+          id: string
+          owner_id: string
+          page_id: string
+          payment_status: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          answers_json?: Json | null
+          attendee_email: string
+          attendee_name: string
+          attendee_phone?: string | null
+          block_id: string
+          created_at?: string
+          event_id: string
+          id?: string
+          owner_id: string
+          page_id: string
+          payment_status?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          answers_json?: Json | null
+          attendee_email?: string
+          attendee_name?: string
+          attendee_phone?: string | null
+          block_id?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          owner_id?: string
+          page_id?: string
+          payment_status?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_tickets: {
+        Row: {
+          checked_in_at: string | null
+          created_at: string
+          id: string
+          registration_id: string
+          status: string
+          ticket_code: string
+        }
+        Insert: {
+          checked_in_at?: string | null
+          created_at?: string
+          id?: string
+          registration_id: string
+          status?: string
+          ticket_code: string
+        }
+        Update: {
+          checked_in_at?: string | null
+          created_at?: string
+          id?: string
+          registration_id?: string
+          status?: string
+          ticket_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_tickets_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "event_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          block_id: string
+          capacity: number | null
+          cover_url: string | null
+          created_at: string
+          currency: string | null
+          description_i18n_json: Json | null
+          end_at: string | null
+          form_schema_json: Json | null
+          id: string
+          is_paid: boolean
+          location_type: string | null
+          location_value: string | null
+          owner_id: string
+          page_id: string
+          price_amount: number | null
+          registration_closes_at: string | null
+          settings_json: Json | null
+          start_at: string | null
+          status: string
+          timezone: string | null
+          title_i18n_json: Json
+          updated_at: string
+        }
+        Insert: {
+          block_id: string
+          capacity?: number | null
+          cover_url?: string | null
+          created_at?: string
+          currency?: string | null
+          description_i18n_json?: Json | null
+          end_at?: string | null
+          form_schema_json?: Json | null
+          id?: string
+          is_paid?: boolean
+          location_type?: string | null
+          location_value?: string | null
+          owner_id: string
+          page_id: string
+          price_amount?: number | null
+          registration_closes_at?: string | null
+          settings_json?: Json | null
+          start_at?: string | null
+          status?: string
+          timezone?: string | null
+          title_i18n_json?: Json
+          updated_at?: string
+        }
+        Update: {
+          block_id?: string
+          capacity?: number | null
+          cover_url?: string | null
+          created_at?: string
+          currency?: string | null
+          description_i18n_json?: Json | null
+          end_at?: string | null
+          form_schema_json?: Json | null
+          id?: string
+          is_paid?: boolean
+          location_type?: string | null
+          location_value?: string | null
+          owner_id?: string
+          page_id?: string
+          price_amount?: number | null
+          registration_closes_at?: string | null
+          settings_json?: Json | null
+          start_at?: string | null
+          status?: string
+          timezone?: string | null
+          title_i18n_json?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       friend_activities: {
         Row: {
           activity_type: string
@@ -684,6 +909,57 @@ export type Database = {
           },
         ]
       }
+      page_snapshots: {
+        Row: {
+          blocks_json: Json
+          content_hash: string
+          created_at: string
+          id: string
+          page_id: string
+          published_at: string
+          seo_json: Json | null
+          theme_json: Json | null
+          version_id: string
+        }
+        Insert: {
+          blocks_json: Json
+          content_hash: string
+          created_at?: string
+          id?: string
+          page_id: string
+          published_at?: string
+          seo_json?: Json | null
+          theme_json?: Json | null
+          version_id: string
+        }
+        Update: {
+          blocks_json?: Json
+          content_hash?: string
+          created_at?: string
+          id?: string
+          page_id?: string
+          published_at?: string
+          seo_json?: Json | null
+          theme_json?: Json | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_snapshots_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_snapshots_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pages: {
         Row: {
           avatar_style: Json | null
@@ -696,9 +972,15 @@ export type Database = {
           grid_config: Json | null
           id: string
           is_in_gallery: boolean | null
+          is_indexable: boolean | null
+          is_paid: boolean | null
+          is_primary_paid: boolean | null
           is_published: boolean | null
+          last_snapshot_at: string | null
           niche: string | null
+          page_type: string | null
           preview_url: string | null
+          quality_score: number | null
           seo_meta: Json | null
           slug: string
           theme_settings: Json | null
@@ -718,9 +1000,15 @@ export type Database = {
           grid_config?: Json | null
           id?: string
           is_in_gallery?: boolean | null
+          is_indexable?: boolean | null
+          is_paid?: boolean | null
+          is_primary_paid?: boolean | null
           is_published?: boolean | null
+          last_snapshot_at?: string | null
           niche?: string | null
+          page_type?: string | null
           preview_url?: string | null
+          quality_score?: number | null
           seo_meta?: Json | null
           slug: string
           theme_settings?: Json | null
@@ -740,9 +1028,15 @@ export type Database = {
           grid_config?: Json | null
           id?: string
           is_in_gallery?: boolean | null
+          is_indexable?: boolean | null
+          is_paid?: boolean | null
+          is_primary_paid?: boolean | null
           is_published?: boolean | null
+          last_snapshot_at?: string | null
           niche?: string | null
+          page_type?: string | null
           preview_url?: string | null
+          quality_score?: number | null
           seo_meta?: Json | null
           slug?: string
           theme_settings?: Json | null
@@ -1109,29 +1403,92 @@ export type Database = {
       token_transactions: {
         Row: {
           amount: number
+          buyer_id: string | null
           created_at: string
           description: string | null
           id: string
+          item_id: string | null
+          item_type: string | null
+          net_amount: number | null
+          original_price: number | null
+          platform_fee: number | null
+          seller_id: string | null
           source: string
           type: string
           user_id: string
         }
         Insert: {
           amount: number
+          buyer_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          item_id?: string | null
+          item_type?: string | null
+          net_amount?: number | null
+          original_price?: number | null
+          platform_fee?: number | null
+          seller_id?: string | null
           source: string
           type: string
           user_id: string
         }
         Update: {
           amount?: number
+          buyer_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          item_id?: string | null
+          item_type?: string | null
+          net_amount?: number | null
+          original_price?: number | null
+          platform_fee?: number | null
+          seller_id?: string | null
           source?: string
           type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      token_withdrawals: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_details: Json | null
+          payment_method: string | null
+          processed_at: string | null
+          processed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -1540,6 +1897,11 @@ export type Database = {
         Args: { p_code: string; p_referred_user_id: string }
         Returns: Json
       }
+      check_page_limits: { Args: { p_user_id: string }; Returns: Json }
+      claim_daily_token_reward: {
+        Args: { p_action_type: string; p_amount: number; p_user_id: string }
+        Returns: Json
+      }
       claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       complete_daily_quest: {
@@ -1551,8 +1913,32 @@ export type Database = {
         Returns: Json
       }
       convert_tokens_to_premium: { Args: { p_user_id: string }; Returns: Json }
+      create_user_page: {
+        Args: { p_slug: string; p_title: string; p_user_id: string }
+        Returns: Json
+      }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
+      get_event_registration_count: {
+        Args: { p_event_id: string }
+        Returns: number
+      }
+      get_page_version: {
+        Args: { p_slug: string; p_version_id?: string }
+        Returns: {
+          blocks_json: Json
+          page_id: string
+          published_at: string
+          seo_json: Json
+          slug: string
+          theme_json: Json
+          version_id: string
+        }[]
+      }
+      get_token_analytics: {
+        Args: { p_end_date?: string; p_start_date?: string }
+        Returns: Json
+      }
       get_top_referrers: {
         Args: { p_limit?: number }
         Returns: {
@@ -1563,6 +1949,7 @@ export type Database = {
           username: string
         }[]
       }
+      get_user_pages: { Args: { p_user_id: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1581,10 +1968,25 @@ export type Database = {
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
+      process_marketplace_purchase: {
+        Args: {
+          p_buyer_id: string
+          p_description?: string
+          p_item_id: string
+          p_item_type: string
+          p_price: number
+          p_seller_id: string
+        }
+        Returns: Json
+      }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }
         Returns: undefined
+      }
+      set_primary_paid_page: {
+        Args: { p_page_id: string; p_user_id: string }
+        Returns: Json
       }
       spend_linkkon_tokens: {
         Args: {

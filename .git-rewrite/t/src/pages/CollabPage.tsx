@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
@@ -7,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Users, ArrowLeft, Sparkles } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { BlockRenderer } from '@/components/BlockRenderer';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import type { Block, PageTheme } from '@/types/page';
@@ -143,6 +144,7 @@ async function fetchCollabPage(collabSlug: string): Promise<CollabPageData | nul
 }
 
 export default function CollabPage() {
+  const { t } = useTranslation();
   const { collabSlug } = useParams<{ collabSlug: string }>();
 
   const { data: collabData, isLoading, error } = useQuery({
@@ -179,14 +181,14 @@ export default function CollabPage() {
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <Card className="p-8 text-center max-w-md bg-card/60 backdrop-blur-xl border-border/30 rounded-2xl">
           <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Коллаборация не найдена</h1>
+          <h1 className="text-2xl font-bold mb-2">{t('collab.notFoundTitle', 'Коллаборация не найдена')}</h1>
           <p className="text-muted-foreground mb-6">
-            Эта страница не существует или коллаборация ещё не принята.
+            {t('collab.notFoundDesc', 'Эта страница не существует или коллаборация ещё не принята.')}
           </p>
           <Link to="/">
             <Button variant="outline" className="rounded-xl">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              На главную
+              {t('common.backHome', 'На главную')}
             </Button>
           </Link>
         </Card>
@@ -221,7 +223,7 @@ export default function CollabPage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Badge variant="secondary" className="rounded-full gap-1.5 px-3 py-1">
               <Sparkles className="h-3.5 w-3.5" />
-              Коллаборация
+              {t('collab.title', 'Коллаборация')}
             </Badge>
           </div>
 
@@ -251,9 +253,9 @@ export default function CollabPage() {
 
           <div className="text-center mt-4">
             <p className="text-lg font-semibold">
-              {collabData.requester?.display_name || collabData.requester?.username || 'User'} 
+              {collabData.requester?.display_name || collabData.requester?.username || t('common.user', 'User')}
               {' × '}
-              {collabData.target?.display_name || collabData.target?.username || 'User'}
+              {collabData.target?.display_name || collabData.target?.username || t('common.user', 'User')}
             </p>
           </div>
         </div>
@@ -271,7 +273,7 @@ export default function CollabPage() {
 
         {collabData.blocks.length === 0 && (
           <Card className="p-8 text-center bg-card/40 border-border/20 rounded-xl">
-            <p className="text-muted-foreground">Блоки ещё не добавлены</p>
+            <p className="text-muted-foreground">{t('collab.pageNoBlocks', 'Блоки ещё не добавлены')}</p>
           </Card>
         )}
       </div>

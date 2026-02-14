@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,7 @@ import { Search, Loader2, Crown, Edit, Calendar, User, RefreshCw, Shield } from 
 import { format, addDays, addMonths, addYears } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 
-type PremiumTier = 'free' | 'pro' | 'business';
+type PremiumTier = 'free' | 'pro';
 
 interface UserTierData {
   id: string;
@@ -167,8 +167,6 @@ export function UserTierManager() {
 
   const getTierBadge = (tier: PremiumTier) => {
     switch (tier) {
-      case 'business':
-        return <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">{t('admin.tierBusiness')}</Badge>;
       case 'pro':
         return <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white">{t('admin.tierPro')}</Badge>;
       default:
@@ -234,10 +232,10 @@ export function UserTierManager() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold">{users.filter(u => u.premium_tier === 'free').length}</div>
+            <div className="text-2xl font-bold">{users.filter(u => u.premium_tier === 'free' || !u.premium_tier).length}</div>
             <div className="text-sm text-muted-foreground">{t('admin.tierFree')}</div>
           </CardContent>
         </Card>
@@ -245,12 +243,6 @@ export function UserTierManager() {
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-yellow-500">{users.filter(u => u.premium_tier === 'pro').length}</div>
             <div className="text-sm text-muted-foreground">{t('admin.tierPro')}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-purple-500">{users.filter(u => u.premium_tier === 'business').length}</div>
-            <div className="text-sm text-muted-foreground">{t('admin.tierBusiness')}</div>
           </CardContent>
         </Card>
       </div>
@@ -339,7 +331,6 @@ export function UserTierManager() {
                                   <SelectContent>
                                     <SelectItem value="free">{t('admin.tierFree')}</SelectItem>
                                     <SelectItem value="pro">{t('admin.tierPro')}</SelectItem>
-                                    <SelectItem value="business">{t('admin.tierBusiness')}</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>

@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { CollabBlockManager } from './CollabBlockManager';
 import { UserSearch } from './UserSearch';
 import type { Collaboration } from '@/services/collaboration';
+import { useTranslation } from 'react-i18next';
 
 interface CollabsTabProps {
   userId: string;
@@ -30,6 +31,8 @@ export function CollabsTab({
   onSendRequest,
   onRefresh,
 }: CollabsTabProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
       {/* Pending requests */}
@@ -38,7 +41,7 @@ export function CollabsTab({
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
               <Badge variant="destructive">{pendingRequests.length}</Badge>
-              Входящие запросы
+              {t('collaboration.incomingRequests', 'Входящие запросы')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -71,12 +74,12 @@ export function CollabsTab({
       {/* Active collabs */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Активные коллаборации</CardTitle>
+          <CardTitle className="text-sm">{t('collaboration.activeCollabs', 'Активные коллаборации')}</CardTitle>
         </CardHeader>
         <CardContent>
           {activeCollabs.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Нет активных коллабораций
+              {t('collaboration.noActiveCollabs', 'Нет активных коллабораций')}
             </p>
           ) : (
             <div className="space-y-2">
@@ -108,7 +111,7 @@ export function CollabsTab({
                           </DialogTrigger>
                           <DialogContent className="max-h-[80vh] overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle>Управление блоками</DialogTitle>
+                              <DialogTitle>{t('collaboration.manageBlocks', 'Управление блоками')}</DialogTitle>
                             </DialogHeader>
                             <CollabBlockManager
                               collabId={collab.id}
@@ -132,7 +135,7 @@ export function CollabsTab({
                       <div className="flex items-center gap-2 text-xs">
                         <Link to={`/collab/${collab.collab_slug}`} className="text-primary hover:underline flex items-center gap-1">
                           <ExternalLink className="h-3 w-3" />
-                          Совместная страница
+                          {t('collaboration.sharedPage', 'Совместная страница')}
                         </Link>
                         <Button 
                           variant="ghost" 
@@ -155,7 +158,7 @@ export function CollabsTab({
       {/* Search for new collab */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Найти партнёра</CardTitle>
+          <CardTitle className="text-sm">{t('collaboration.findPartner', 'Найти партнёра')}</CardTitle>
         </CardHeader>
         <CardContent>
           <UserSearch 

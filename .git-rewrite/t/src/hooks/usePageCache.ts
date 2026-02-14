@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { loadPageBySlug, loadUserPage, savePage, publishPage } from '@/lib/database';
+import { loadPageBySlug, loadUserPage, savePage, publishPage } from '@/services/database';
 import type { PageData } from '@/types/page';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -57,18 +57,24 @@ export function useSavePageMutation(userId: string | undefined) {
     }: { 
       pageData: PageData; 
       chatbotContext?: string;
-    }) => {
+    }): Promise<{ dbPage: { id: string; slug: string; is_published: boolean } | null; pageData: PageData; chatbotContext?: string }> => {
       if (!userId) throw new Error('User ID is required');
       const { data, error } = await savePage(pageData, userId, chatbotContext);
       if (error) throw error;
-      return { dbPage: data, pageData, chatbotContext };
+      return { 
+        dbPage: data ? { id: data.id, slug: data.slug, is_published: data.is_published } : null, 
+        pageData, 
+        chatbotContext 
+      };
     },
     onSuccess: ({ dbPage, pageData, chatbotContext }) => {
       // Update cache directly instead of invalidating to preserve local state
+      // Also update pageData with the saved id if available
+      const updatedPageData = dbPage?.id ? { ...pageData, id: dbPage.id } : pageData;
       if (userId) {
         queryClient.setQueryData(
           pageQueryKeys.userPage(userId),
-          { pageData, chatbotContext }
+          { pageData: updatedPageData, chatbotContext }
         );
       }
       // Invalidate public page cache if published
@@ -78,7 +84,7 @@ export function useSavePageMutation(userId: string | undefined) {
         });
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Error saving page:', error);
       console.error('Error details:', JSON.stringify(error, null, 2));
       toast.error(t('toasts.page.saveError') + `: ${error.message || ''}`);

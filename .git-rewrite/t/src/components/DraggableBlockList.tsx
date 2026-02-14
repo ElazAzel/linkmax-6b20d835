@@ -77,34 +77,32 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
       case 'button':
         return `Кнопка: ${getTranslatedString(block.title, currentLang)}`;
       case 'socials':
-        return `Соцсети: ${block.title || 'Социальные сети'}`;
+        return `Соцсети: ${block.title ? getTranslatedString(block.title, currentLang) : 'Социальные сети'}`;
       case 'product':
         return `Товар: ${getTranslatedString(block.name, currentLang)}`;
       case 'text':
         const content = getTranslatedString(block.content, currentLang);
         return `Текст: ${content.slice(0, 30)}...`;
       case 'image':
-        return `Изображение: ${block.alt || 'Без описания'}`;
+        return `Изображение: ${block.alt ? getTranslatedString(block.alt, currentLang) : 'Без описания'}`;
       case 'video':
-        return `Видео: ${block.title || 'Без названия'}`;
+        return `Видео: ${block.title ? getTranslatedString(block.title, currentLang) : 'Без названия'}`;
       case 'carousel':
-        return `Галерея: ${block.title || `${block.images?.length || 0} фото`}`;
-      case 'search':
-        return `Поиск: ${block.title || 'Поиск'}`;
+        return `Галерея: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.images?.length || 0} фото`}`;
       case 'custom_code':
-        return `HTML код: ${block.title || 'Без названия'}`;
+        return `HTML код: ${block.title ? getTranslatedString(block.title, currentLang) : 'Без названия'}`;
       case 'messenger':
-        return `Мессенджеры: ${block.title || 'Связь'}`;
+        return `Мессенджеры: ${block.title ? getTranslatedString(block.title, currentLang) : 'Связь'}`;
       case 'form':
-        return `Форма: ${block.title}`;
+        return `Форма: ${block.title ? getTranslatedString(block.title, currentLang) : 'Форма'}`;
       case 'download':
-        return `Файл: ${block.title}`;
+        return `Файл: ${block.title ? getTranslatedString(block.title, currentLang) : 'Файл'}`;
       case 'newsletter':
-        return `Подписка: ${block.title}`;
+        return `Подписка: ${block.title ? getTranslatedString(block.title, currentLang) : 'Подписка'}`;
       case 'testimonial':
-        return `Отзывы: ${block.title || 'Отзывы'}`;
+        return `Отзывы: ${block.title ? getTranslatedString(block.title, currentLang) : 'Отзывы'}`;
       case 'scratch':
-        return `Скретч: ${block.title || 'Сюрприз'}`;
+        return `Скретч: ${block.title ? getTranslatedString(block.title, currentLang) : 'Сюрприз'}`;
       case 'map':
         return `Карта: ${getTranslatedString(block.address, currentLang) || 'Местоположение'}`;
       case 'avatar':

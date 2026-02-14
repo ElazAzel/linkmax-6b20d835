@@ -2,11 +2,24 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SEOHead } from '@/components/SEOHead';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 
 const PaymentTerms = () => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const canonical = 'https://lnkmx.my/payment-terms';
+  const seoTitle =
+    lang === 'ru'
+      ? 'Условия оплаты — lnkmx'
+      : lang === 'kk'
+        ? 'Төлем шарттары — lnkmx'
+        : 'Payment Terms — lnkmx';
+  const seoDescription =
+    lang === 'ru'
+      ? 'Условия оплаты и возвратов для тарифов lnkmx.'
+      : lang === 'kk'
+        ? 'lnkmx тарифтері үшін төлем және қайтару шарттары.'
+        : 'Payment and refund terms for lnkmx plans.';
 
   const getPaymentTermsContent = () => {
     if (lang === 'en') {
@@ -167,9 +180,17 @@ const PaymentTerms = () => {
 
   return (
     <>
-      <SEOHead
-        title={lang === 'ru' ? 'Условия оплаты - LinkMAX' : lang === 'kk' ? 'Төлем шарттары - LinkMAX' : 'Payment Terms - LinkMAX'}
-        description={lang === 'ru' ? 'Условия оплаты для пользователей LinkMAX' : lang === 'kk' ? 'LinkMAX пайдаланушылары үшін төлем шарттары' : 'Payment Terms for LinkMAX Users'}
+      <StaticSEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        currentLanguage={lang}
+        alternates={[
+          { hreflang: 'ru', href: `${canonical}?lang=ru` },
+          { hreflang: 'en', href: `${canonical}?lang=en` },
+          { hreflang: 'kk', href: `${canonical}?lang=kk` },
+          { hreflang: 'x-default', href: canonical },
+        ]}
       />
       <div className="min-h-screen bg-background">
         <div className="container max-w-4xl mx-auto px-4 py-8">

@@ -1,10 +1,12 @@
-import { memo, useState, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CheckCircle2, Check, X, Camera, Loader2, Settings2 } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { CheckCircle2, Check, X, Camera, Loader2, Settings2, Pencil, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -18,14 +20,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { compressImage } from '@/lib/image-compression';
 import { toast } from 'sonner';
 import { ImageCropper } from '@/components/form-fields/ImageCropper';
 import { RichTextEditor } from '@/components/form-fields/RichTextEditor';
-import type { ProfileBlock as ProfileBlockType } from '@/types/page';
+import { FrameSelector } from '@/components/profile/FrameSelector';
+import { NameAnimationSelector } from '@/components/profile/NameAnimationSelector';
+import { NAME_ANIMATION_CSS, getNameAnimationClass } from '@/lib/profile-frame-system';
+import type { ProfileBlock as ProfileBlockType, NameAnimationType } from '@/types/page';
+import { cn } from '@/lib/utils';
+
+// Lazy load full editor
+const ProfileFullEditor = lazy(() => import('./ProfileFullEditor'));
 
 interface InlineProfileEditorProps {
   block: ProfileBlockType;
@@ -38,6 +49,8 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
 }: InlineProfileEditorProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { canUsePremiumFrames } = useFreemiumLimits();
   const currentLang = i18n.language as SupportedLanguage;
   
   const name = getTranslatedString(block.name, currentLang);
@@ -49,6 +62,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const [editedBio, setEditedBio] = useState(bio);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [isFullEditorOpen, setIsFullEditorOpen] = useState(false);
   
   // Image cropper state
   const [cropperOpen, setCropperOpen] = useState(false);
@@ -56,10 +70,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const [cropperType, setCropperType] = useState<'avatar' | 'cover'>('avatar');
   
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const bioInputRef = useRef<HTMLTextAreaElement>(null);
+  const bioTextareaRef = useRef<HTMLTextAreaElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
+  // Sync state when block changes
   useEffect(() => {
     setEditedName(name);
   }, [name]);
@@ -68,41 +83,55 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
     setEditedBio(bio);
   }, [bio]);
 
+  // Focus management with animation
   useEffect(() => {
     if (isEditingName && nameInputRef.current) {
-      nameInputRef.current.focus();
-      nameInputRef.current.select();
+      requestAnimationFrame(() => {
+        nameInputRef.current?.focus();
+        nameInputRef.current?.select();
+      });
     }
   }, [isEditingName]);
 
   useEffect(() => {
-    if (isEditingBio && bioInputRef.current) {
-      bioInputRef.current.focus();
-      bioInputRef.current.select();
+    if (isEditingBio && bioTextareaRef.current) {
+      requestAnimationFrame(() => {
+        bioTextareaRef.current?.focus();
+        // Move cursor to end
+        const len = bioTextareaRef.current?.value.length || 0;
+        bioTextareaRef.current?.setSelectionRange(len, len);
+      });
     }
   }, [isEditingBio]);
 
-  const handleSaveName = () => {
-    if (editedName.trim()) {
-      onUpdate({ name: editedName.trim() });
+  // Optimized save handlers with debounce
+  const handleSaveName = useCallback(() => {
+    const trimmedName = editedName.trim();
+    if (trimmedName && trimmedName !== name) {
+      onUpdate({ name: trimmedName });
+      toast.success(t('profile.nameSaved', 'Имя сохранено'));
     }
     setIsEditingName(false);
-  };
+  }, [editedName, name, onUpdate, t]);
 
-  const handleSaveBio = () => {
-    onUpdate({ bio: editedBio.trim() });
+  const handleSaveBio = useCallback(() => {
+    const trimmedBio = editedBio.trim();
+    if (trimmedBio !== bio) {
+      onUpdate({ bio: trimmedBio });
+      toast.success(t('profile.bioSaved', 'Описание сохранено'));
+    }
     setIsEditingBio(false);
-  };
+  }, [editedBio, bio, onUpdate, t]);
 
-  const handleCancelName = () => {
+  const handleCancelName = useCallback(() => {
     setEditedName(name);
     setIsEditingName(false);
-  };
+  }, [name]);
 
-  const handleCancelBio = () => {
+  const handleCancelBio = useCallback(() => {
     setEditedBio(bio);
     setIsEditingBio(false);
-  };
+  }, [bio]);
 
   const handleNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -316,6 +345,17 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
 
   return (
     <div className={`relative flex flex-col ${getPositionClass()}`}>
+      {/* Full Editor Button - Floating */}
+      <Button
+        size="icon"
+        variant="secondary"
+        onClick={() => setIsFullEditorOpen(true)}
+        className="absolute top-2 left-2 z-20 h-10 w-10 rounded-xl shadow-lg bg-background/90 backdrop-blur-sm hover:bg-background"
+        title={t('profileEditor.openEditor', 'Открыть редактор')}
+      >
+        <Pencil className="h-4 w-4" />
+      </Button>
+
       {/* Hidden file input for cover upload */}
       <input
         ref={coverInputRef}
@@ -484,147 +524,171 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                 onClick={(e) => e.stopPropagation()}
                 title={t('profile.avatarSettings', 'Avatar settings')}
               >
-                <Settings2 className="h-3.5 w-3.5" />
+                <Palette className="h-3.5 w-3.5" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-56" align="center" onClick={(e) => e.stopPropagation()}>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="text-xs">{t('profile.avatarSize', 'Size')}</Label>
-                  <Select
-                    value={block.avatarSize || 'large'}
-                    onValueChange={(value) => onUpdate({ avatarSize: value as 'small' | 'medium' | 'large' | 'xlarge' })}
-                  >
-                    <SelectTrigger className="h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="small">{t('profile.small', 'Small')}</SelectItem>
-                      <SelectItem value="medium">{t('profile.medium', 'Medium')}</SelectItem>
-                      <SelectItem value="large">{t('profile.large', 'Large')}</SelectItem>
-                      <SelectItem value="xlarge">{t('profile.xlarge', 'Extra Large')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            <PopoverContent className="w-80" align="center" onClick={(e) => e.stopPropagation()}>
+              <Tabs defaultValue="frame" className="w-full">
+                <TabsList className="grid grid-cols-3 w-full h-auto mb-3">
+                  <TabsTrigger value="frame" className="text-xs py-2">
+                    {t('profile.frame', 'Рамка')}
+                  </TabsTrigger>
+                  <TabsTrigger value="size" className="text-xs py-2">
+                    {t('profile.size', 'Размер')}
+                  </TabsTrigger>
+                  <TabsTrigger value="animation" className="text-xs py-2">
+                    {t('profile.nameAnim', 'Имя')}
+                  </TabsTrigger>
+                </TabsList>
                 
-                <div className="space-y-2">
-                  <Label className="text-xs">{t('profile.avatarFrame', 'Frame style')}</Label>
-                  <Select
+                <TabsContent value="frame" className="mt-0">
+                  <FrameSelector
                     value={block.avatarFrame || 'default'}
-                    onValueChange={(value) => onUpdate({ avatarFrame: value as any })}
-                  >
-                    <SelectTrigger className="h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="default">{t('frames.default', 'Default')}</SelectItem>
-                      <SelectItem value="none">{t('frames.none', 'No Frame')}</SelectItem>
-                      <SelectItem value="solid">{t('frames.solid', 'Solid')}</SelectItem>
-                      <SelectItem value="gradient">{t('frames.gradient', 'Gradient')}</SelectItem>
-                      <SelectItem value="gradient-sunset">{t('frames.gradientSunset', 'Sunset')}</SelectItem>
-                      <SelectItem value="gradient-ocean">{t('frames.gradientOcean', 'Ocean')}</SelectItem>
-                      <SelectItem value="gradient-purple">{t('frames.gradientPurple', 'Purple')}</SelectItem>
-                      <SelectItem value="neon-blue">{t('frames.neonBlue', 'Neon Blue')}</SelectItem>
-                      <SelectItem value="neon-pink">{t('frames.neonPink', 'Neon Pink')}</SelectItem>
-                      <SelectItem value="neon-green">{t('frames.neonGreen', 'Neon Green')}</SelectItem>
-                      <SelectItem value="rainbow">{t('frames.rainbow', 'Rainbow')}</SelectItem>
-                      <SelectItem value="rainbow-spin">{t('frames.rainbowSpin', 'Rainbow Spin')}</SelectItem>
-                      <SelectItem value="double">{t('frames.double', 'Double')}</SelectItem>
-                      <SelectItem value="dashed">{t('frames.dashed', 'Dashed')}</SelectItem>
-                      <SelectItem value="dotted">{t('frames.dotted', 'Dotted')}</SelectItem>
-                      <SelectItem value="glow-pulse">{t('frames.glowPulse', 'Glow Pulse')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                    onChange={(value) => onUpdate({ avatarFrame: value })}
+                    isPremium={canUsePremiumFrames()}
+                    avatarUrl={block.avatar}
+                    onUpgradeClick={() => navigate('/pricing')}
+                  />
+                </TabsContent>
                 
-                <div className="space-y-2">
-                  <Label className="text-xs">{t('profile.shadowStyle', 'Shadow')}</Label>
-                  <Select
-                    value={block.shadowStyle || 'soft'}
-                    onValueChange={(value) => onUpdate({ shadowStyle: value as 'none' | 'soft' | 'medium' | 'strong' | 'glow' })}
-                  >
-                    <SelectTrigger className="h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">{t('profile.none', 'None')}</SelectItem>
-                      <SelectItem value="soft">{t('profile.soft', 'Soft')}</SelectItem>
-                      <SelectItem value="medium">{t('profile.medium', 'Medium')}</SelectItem>
-                      <SelectItem value="strong">{t('profile.strong', 'Strong')}</SelectItem>
-                      <SelectItem value="glow">{t('profile.glow', 'Glow')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+                <TabsContent value="size" className="mt-0 space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-xs">{t('profile.avatarSize', 'Размер аватара')}</Label>
+                    <Select
+                      value={block.avatarSize || 'large'}
+                      onValueChange={(value) => onUpdate({ avatarSize: value as 'small' | 'medium' | 'large' | 'xlarge' })}
+                    >
+                      <SelectTrigger className="h-9">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="small">{t('profile.small', 'Маленький')}</SelectItem>
+                        <SelectItem value="medium">{t('profile.medium', 'Средний')}</SelectItem>
+                        <SelectItem value="large">{t('profile.large', 'Большой')}</SelectItem>
+                        <SelectItem value="xlarge">{t('profile.xlarge', 'Очень большой')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label className="text-xs">{t('profile.shadowStyle', 'Тень')}</Label>
+                    <Select
+                      value={block.shadowStyle || 'soft'}
+                      onValueChange={(value) => onUpdate({ shadowStyle: value as 'none' | 'soft' | 'medium' | 'strong' | 'glow' })}
+                    >
+                      <SelectTrigger className="h-9">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('profile.none', 'Нет')}</SelectItem>
+                        <SelectItem value="soft">{t('profile.soft', 'Мягкая')}</SelectItem>
+                        <SelectItem value="medium">{t('profile.medium', 'Средняя')}</SelectItem>
+                        <SelectItem value="strong">{t('profile.strong', 'Сильная')}</SelectItem>
+                        <SelectItem value="glow">{t('profile.glow', 'Свечение')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="animation" className="mt-0">
+                  <NameAnimationSelector
+                    value={(block.nameAnimation as NameAnimationType) || 'none'}
+                    onChange={(value) => onUpdate({ nameAnimation: value })}
+                    isPremium={canUsePremiumFrames()}
+                    previewName={name}
+                    onUpgradeClick={() => navigate('/pricing')}
+                  />
+                </TabsContent>
+              </Tabs>
             </PopoverContent>
           </Popover>
         </div>
         
         <div className="text-center space-y-3 w-full max-w-md">
-          {/* Editable Name - BOLD */}
+          {/* CSS for name animations */}
+          <style>{NAME_ANIMATION_CSS}</style>
+          
+          {/* Editable Name - Optimized with animations */}
           <div className="flex items-center justify-center gap-3">
             {isEditingName ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 animate-in fade-in zoom-in-95 duration-200">
                 <Input
                   ref={nameInputRef}
                   value={editedName}
                   onChange={(e) => setEditedName(e.target.value)}
-                  onKeyDown={handleNameKeyDown}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveName();
+                    if (e.key === 'Escape') handleCancelName();
+                  }}
                   onBlur={handleSaveName}
-                  className="text-3xl font-black text-center h-14 w-56 rounded-2xl"
-                  placeholder="Your Name"
+                  className="text-2xl sm:text-3xl font-black text-center h-14 w-full max-w-[280px] rounded-2xl border-2 border-primary/50 focus:border-primary transition-colors"
+                  placeholder={t('profile.namePlaceholder', 'Ваше имя')}
                 />
-                <Button size="lg" variant="ghost" className="h-10 w-10 rounded-xl" onClick={handleSaveName}>
+                <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl hover:bg-primary/10 active:scale-95 transition-all" onClick={handleSaveName}>
                   <Check className="h-5 w-5 text-primary" />
                 </Button>
-                <Button size="lg" variant="ghost" className="h-10 w-10 rounded-xl" onClick={handleCancelName}>
+                <Button size="icon" variant="ghost" className="h-12 w-12 rounded-xl hover:bg-destructive/10 active:scale-95 transition-all" onClick={handleCancelName}>
                   <X className="h-5 w-5 text-muted-foreground" />
                 </Button>
               </div>
             ) : (
               <h1 
-                className="text-3xl font-black cursor-pointer hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary/30 tracking-tight"
+                className={cn(
+                  "text-2xl sm:text-3xl font-black cursor-pointer transition-all duration-200",
+                  "hover:text-primary border-b-2 border-transparent hover:border-primary/30",
+                  "active:scale-[0.98] tracking-tight px-2 py-1 rounded-lg hover:bg-muted/50",
+                  getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
+                )}
                 onClick={() => setIsEditingName(true)}
-                title="Click to edit"
+                title={t('profile.clickToEdit', 'Нажмите для редактирования')}
               >
-                {name || 'Click to add name'}
+                {name || t('profile.addName', 'Добавить имя')}
               </h1>
             )}
             {block.verified && !isEditingName && (
-              <Badge variant="secondary" className="gap-1.5 text-sm px-3 py-1 rounded-xl font-bold">
+              <Badge variant="secondary" className="gap-1.5 text-sm px-3 py-1 rounded-xl font-bold animate-in fade-in duration-300">
                 <CheckCircle2 className="h-4 w-4" />
-                Verified
+                {t('profile.verified', 'Verified')}
               </Badge>
             )}
           </div>
           
-          {/* Editable Bio - BOLD */}
+          {/* Editable Bio - Optimized with animations */}
           {isEditingBio ? (
-            <div className="space-y-3 w-full">
-              <RichTextEditor
+            <div className="space-y-3 w-full animate-in fade-in zoom-in-95 duration-200">
+              <Textarea
+                ref={bioTextareaRef}
                 value={editedBio}
-                onChange={setEditedBio}
-                placeholder={t('profile.bioPlaceholder', 'Tell people about yourself')}
-                className="min-h-[100px] text-base rounded-2xl"
+                onChange={(e) => setEditedBio(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') handleCancelBio();
+                }}
+                placeholder={t('profile.bioPlaceholder', 'Расскажите о себе...')}
+                className="min-h-[100px] text-base rounded-2xl border-2 border-primary/50 focus:border-primary resize-none transition-colors"
+                rows={3}
               />
               <div className="flex items-center justify-center gap-3">
-                <Button size="lg" variant="default" onClick={handleSaveBio} className="rounded-2xl px-6 h-12 font-bold">
+                <Button size="lg" onClick={handleSaveBio} className="rounded-2xl px-6 h-12 font-bold shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
                   <Check className="h-5 w-5 mr-2" />
-                  {t('common.save', 'Save')}
+                  {t('common.save', 'Сохранить')}
                 </Button>
-                <Button size="lg" variant="ghost" onClick={handleCancelBio} className="rounded-2xl px-6 h-12 font-bold">
+                <Button size="lg" variant="outline" onClick={handleCancelBio} className="rounded-2xl px-6 h-12 font-bold active:scale-[0.98] transition-all">
                   <X className="h-5 w-5 mr-2" />
-                  {t('editor.cancel', 'Cancel')}
+                  {t('editor.cancel', 'Отмена')}
                 </Button>
               </div>
             </div>
           ) : (
             <p 
-              className="text-lg text-muted-foreground cursor-pointer hover:text-foreground transition-colors border-b-2 border-transparent hover:border-primary/30 px-3 py-2 font-medium"
+              className={cn(
+                "text-base sm:text-lg text-muted-foreground cursor-pointer transition-all duration-200",
+                "hover:text-foreground border-b-2 border-transparent hover:border-primary/30",
+                "px-3 py-2 font-medium rounded-lg hover:bg-muted/50 active:scale-[0.98]"
+              )}
               onClick={() => setIsEditingBio(true)}
-              title={t('profile.clickToEdit', 'Click to edit')}
+              title={t('profile.clickToEdit', 'Нажмите для редактирования')}
             >
-              {bio || t('profile.addBio', 'Click to add bio')}
+              {bio || t('profile.addBio', 'Добавить описание')}
             </p>
           )}
         </div>
@@ -639,6 +703,16 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         aspectRatio={cropperType === 'avatar' ? 1 : 16 / 9}
         shape={cropperType === 'avatar' ? 'circle' : 'rectangle'}
       />
+
+      {/* Full Profile Editor */}
+      <Suspense fallback={null}>
+        <ProfileFullEditor
+          block={block}
+          isOpen={isFullEditorOpen}
+          onClose={() => setIsFullEditorOpen(false)}
+          onSave={onUpdate}
+        />
+      </Suspense>
     </div>
   );
 });

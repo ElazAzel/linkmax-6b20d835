@@ -28,7 +28,7 @@ export function LandingGallerySection() {
     const likedSet = new Set<string>(storedLikes ? JSON.parse(storedLikes) : []);
     
     if (likedSet.has(pageId)) {
-      toast.info(t('gallery.alreadyLiked', 'You already liked this page'));
+      toast.info(t('gallery.alreadyLiked'));
       return;
     }
     
@@ -36,7 +36,7 @@ export function LandingGallerySection() {
     likedSet.add(pageId);
     setLikedPages(new Set(likedSet));
     localStorage.setItem('linkmax_liked_pages', JSON.stringify([...likedSet]));
-    toast.success(t('gallery.liked', 'Page liked!'));
+    toast.success(t('gallery.liked'));
   }, [likePage, t]);
 
   // Load liked pages from localStorage on mount
@@ -64,13 +64,13 @@ export function LandingGallerySection() {
         <div className="text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium mb-4">
             <Users className="h-4 w-4 text-primary" />
-            <span className="text-primary">{t('landing.gallery.badge', 'Community')}</span>
+            <span className="text-primary">{t('landing.gallery.badge')}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
-            {t('landing.gallery.title', 'Explore Community Pages')}
+            {t('landing.gallery.title')}
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.gallery.subtitle', 'Get inspired by amazing pages created by our community')}
+            {t('landing.gallery.subtitle')}
           </p>
         </div>
 
@@ -84,7 +84,7 @@ export function LandingGallerySection() {
               className="sm:hidden text-muted-foreground"
             >
               <Filter className="h-4 w-4 mr-1" />
-              {t('gallery.filter', 'Filter')}
+              {t('gallery.filter')}
             </Button>
           </div>
           
@@ -95,7 +95,7 @@ export function LandingGallerySection() {
               onClick={() => setSelectedNiche(null)}
               className="rounded-full text-xs sm:text-sm"
             >
-              {t('gallery.all', 'All')}
+              {t('gallery.all')}
               <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5">
                 {Object.values(nicheCounts).reduce((a, b) => a + b, 0)}
               </Badge>
@@ -129,7 +129,7 @@ export function LandingGallerySection() {
         {/* Empty State */}
         {!loading && displayPages.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">{t('gallery.empty', 'No pages found')}</p>
+            <p className="text-muted-foreground">{t('gallery.empty')}</p>
           </div>
         )}
 
@@ -210,7 +210,7 @@ export function LandingGallerySection() {
             onClick={() => navigate('/gallery')}
             className="rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-semibold bg-background/60 backdrop-blur-xl hover:bg-accent border-border/50 hover:border-primary/30 transition-all group"
           >
-            {t('landing.gallery.viewAll', 'Explore All Pages')}
+            {t('landing.gallery.viewAll')}
             <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>

@@ -1,11 +1,11 @@
 /**
  * Page service - handles all page-related API operations
  */
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import type { PageData, Block, ProfileBlock, PageTheme, EditorMode, GridConfig } from '@/types/page';
 import { createDefaultPageData } from '@/lib/constants';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import type { Json } from '@/integrations/supabase/types';
+import type { Json } from '@/platform/supabase/types';
 
 // ============= Types (exported for backward compatibility) =============
 export interface DbPage {
@@ -271,10 +271,13 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
     const pageData: PageData = {
       id: page.id,
       userId: page.user_id,
+      slug: page.slug,
       blocks: convertDbBlocksToBlocks(blocks),
       theme: page.theme_settings as unknown as PageTheme,
       seo: page.seo_meta as unknown as PageData['seo'],
       isPremium: blocks.some((b) => b.is_premium),
+      isPublished: page.is_published || false,
+      viewCount: page.view_count || 0,
       editorMode: 'grid',
       gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
       niche: (page as unknown as { niche?: string }).niche || 'other',
@@ -320,10 +323,14 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
     const blocks = page.blocks as unknown as DbBlock[];
     const pageData: PageData = {
       id: page.id,
+      userId: page.user_id,
+      slug: page.slug,
       blocks: convertDbBlocksToBlocks(blocks),
       theme: page.theme_settings as unknown as PageTheme,
       seo: page.seo_meta as unknown as PageData['seo'],
       isPremium: blocks.some((b) => b.is_premium),
+      isPublished: page.is_published || false,
+      viewCount: page.view_count || 0,
       editorMode: 'grid',
       gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
       niche: (page as unknown as { niche?: string }).niche || 'other',

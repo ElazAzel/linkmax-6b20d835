@@ -21,6 +21,7 @@ import {
   ListOrdered,
   Gift,
   Megaphone,
+  CalendarDays,
 } from 'lucide-react';
 
 interface TemplatePreviewCardProps {
@@ -52,6 +53,7 @@ const BLOCK_ICONS: Record<string, { icon: React.ElementType; color: string }> = 
   catalog: { icon: ListOrdered, color: 'bg-teal-500' },
   scratch: { icon: Gift, color: 'bg-red-400' },
   shoutout: { icon: Megaphone, color: 'bg-orange-500' },
+  event: { icon: CalendarDays, color: 'bg-emerald-600' },
   avatar: { icon: User, color: 'bg-cyan-500' },
   separator: { icon: () => <span className="text-[10px]">—</span>, color: 'bg-gray-400' },
 };

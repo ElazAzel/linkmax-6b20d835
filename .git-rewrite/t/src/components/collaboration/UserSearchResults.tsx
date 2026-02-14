@@ -60,11 +60,13 @@ export function UserSearchResults({ users, mode, onCollabRequest, onShoutout }: 
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Рекомендовать {user.display_name || user.username}</DialogTitle>
+                  <DialogTitle>
+                    {t('collab.shoutoutRecommendTitle', 'Рекомендовать {{name}}', { name: user.display_name || user.username })}
+                  </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <Textarea
-                    placeholder="Напишите почему рекомендуете этого человека..."
+                    placeholder={t('collab.shoutoutReasonPlaceholder', 'Напишите почему рекомендуете этого человека...')}
                     value={shoutoutMessage}
                     onChange={(e) => setShoutoutMessage(e.target.value)}
                   />
@@ -75,7 +77,7 @@ export function UserSearchResults({ users, mode, onCollabRequest, onShoutout }: 
                       setShoutoutMessage('');
                     }}
                   >
-                    Добавить шаут-аут
+                    {t('collab.addShoutout', 'Добавить шаут-аут')}
                   </Button>
                 </div>
               </DialogContent>

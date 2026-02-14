@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -105,13 +105,13 @@ export function AdminVerificationPanel() {
         })
         .eq('id', selectedRequest.user_id);
 
-      toast.success('Верификация одобрена');
+      toast.success(t('adminVerification.approveSuccess', 'Верификация одобрена'));
       queryClient.invalidateQueries({ queryKey: ['admin-verification-requests'] });
       setSelectedRequest(null);
       setAdminNotes('');
     } catch (error) {
       console.error('Error approving:', error);
-      toast.error('Ошибка при одобрении');
+      toast.error(t('adminVerification.approveError', 'Ошибка при одобрении'));
     } finally {
       setProcessing(false);
     }
@@ -119,7 +119,7 @@ export function AdminVerificationPanel() {
 
   const handleReject = async () => {
     if (!selectedRequest || !adminNotes.trim()) {
-      toast.error('Укажите причину отклонения');
+      toast.error(t('adminVerification.rejectReasonRequired', 'Укажите причину отклонения'));
       return;
     }
     setProcessing(true);
@@ -145,13 +145,13 @@ export function AdminVerificationPanel() {
         })
         .eq('id', selectedRequest.user_id);
 
-      toast.success('Верификация отклонена');
+      toast.success(t('adminVerification.rejectSuccess', 'Верификация отклонена'));
       queryClient.invalidateQueries({ queryKey: ['admin-verification-requests'] });
       setSelectedRequest(null);
       setAdminNotes('');
     } catch (error) {
       console.error('Error rejecting:', error);
-      toast.error('Ошибка при отклонении');
+      toast.error(t('adminVerification.rejectError', 'Ошибка при отклонении'));
     } finally {
       setProcessing(false);
     }
@@ -163,21 +163,21 @@ export function AdminVerificationPanel() {
         return (
           <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
             <CheckCircle2 className="h-3 w-3 mr-1" />
-            Одобрено
+            {t('adminVerification.statusApproved', 'Одобрено')}
           </Badge>
         );
       case 'rejected':
         return (
           <Badge className="bg-red-500/20 text-red-600 border-red-500/30">
             <XCircle className="h-3 w-3 mr-1" />
-            Отклонено
+            {t('adminVerification.statusRejected', 'Отклонено')}
           </Badge>
         );
       default:
         return (
           <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
             <Clock className="h-3 w-3 mr-1" />
-            Ожидает
+            {t('adminVerification.statusPending', 'Ожидает')}
           </Badge>
         );
     }
@@ -198,7 +198,7 @@ export function AdminVerificationPanel() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Всего заявок
+              {t('adminVerification.totalRequests', 'Всего заявок')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -212,7 +212,7 @@ export function AdminVerificationPanel() {
         <Card className={pendingCount > 0 ? 'border-amber-500/50 bg-amber-500/5' : ''}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Ожидают
+              {t('adminVerification.pending', 'Ожидают')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -226,7 +226,7 @@ export function AdminVerificationPanel() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Одобрено
+              {t('adminVerification.approved', 'Одобрено')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -242,7 +242,7 @@ export function AdminVerificationPanel() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Отклонено
+              {t('adminVerification.rejected', 'Отклонено')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -261,7 +261,7 @@ export function AdminVerificationPanel() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            Заявки на верификацию
+            {t('adminVerification.title', 'Заявки на верификацию')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -269,11 +269,11 @@ export function AdminVerificationPanel() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Пользователь</TableHead>
-                  <TableHead>Тип</TableHead>
-                  <TableHead>Статус</TableHead>
-                  <TableHead>Дата</TableHead>
-                  <TableHead className="text-right">Действия</TableHead>
+                  <TableHead>{t('adminVerification.user', 'Пользователь')}</TableHead>
+                  <TableHead>{t('adminVerification.type', 'Тип')}</TableHead>
+                  <TableHead>{t('adminVerification.status', 'Статус')}</TableHead>
+                  <TableHead>{t('adminVerification.date', 'Дата')}</TableHead>
+                  <TableHead className="text-right">{t('adminVerification.actions', 'Действия')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -281,7 +281,7 @@ export function AdminVerificationPanel() {
                   <TableRow key={request.id} className={request.status === 'pending' ? 'bg-amber-500/5' : ''}>
                     <TableCell>
                       <div>
-                        <p className="font-medium">{request.display_name || 'Без имени'}</p>
+                        <p className="font-medium">{request.display_name || t('adminVerification.noName', 'Без имени')}</p>
                         <p className="text-sm text-muted-foreground">@{request.username || 'unknown'}</p>
                       </div>
                     </TableCell>
@@ -293,7 +293,9 @@ export function AdminVerificationPanel() {
                           <User className="h-4 w-4 text-violet-500" />
                         )}
                         <span className="text-sm">
-                          {request.verification_type === 'business' ? 'Юр. лицо' : 'Физ. лицо'}
+                          {request.verification_type === 'business'
+                            ? t('adminVerification.business', 'Юр. лицо')
+                            : t('adminVerification.personal', 'Физ. лицо')}
                         </span>
                       </div>
                     </TableCell>
@@ -311,7 +313,7 @@ export function AdminVerificationPanel() {
                         }}
                       >
                         <Eye className="h-4 w-4 mr-1" />
-                        Просмотр
+                        {t('adminVerification.view', 'Просмотр')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -319,7 +321,7 @@ export function AdminVerificationPanel() {
                 {!requests?.length && (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      Нет заявок на верификацию
+                      {t('adminVerification.noRequests', 'Нет заявок на верификацию')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -335,7 +337,7 @@ export function AdminVerificationPanel() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              Заявка на верификацию
+              {t('adminVerification.request', 'Заявка на верификацию')}
             </DialogTitle>
             <DialogDescription>
               {selectedRequest?.display_name} (@{selectedRequest?.username})
@@ -345,16 +347,16 @@ export function AdminVerificationPanel() {
           <div className="space-y-4">
             {/* Type */}
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">Тип:</span>
+              <span className="text-muted-foreground">{t('adminVerification.typeLabel', 'Тип:')}</span>
               {selectedRequest?.verification_type === 'business' ? (
                 <Badge variant="secondary">
                   <Building2 className="h-3 w-3 mr-1" />
-                  Юридическое лицо
+                  {t('adminVerification.businessFull', 'Юридическое лицо')}
                 </Badge>
               ) : (
                 <Badge variant="secondary">
                   <User className="h-3 w-3 mr-1" />
-                  Физическое лицо
+                  {t('adminVerification.personalFull', 'Физическое лицо')}
                 </Badge>
               )}
               {getStatusBadge(selectedRequest?.status || 'pending')}
@@ -371,7 +373,7 @@ export function AdminVerificationPanel() {
                 >
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <ExternalLink className="h-4 w-4" />
-                    Фото с документом
+                    {t('adminVerification.facePhoto', 'Фото с документом')}
                   </div>
                 </a>
               )}
@@ -384,7 +386,7 @@ export function AdminVerificationPanel() {
                 >
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <ExternalLink className="h-4 w-4" />
-                    Удостоверение
+                    {t('adminVerification.idDocument', 'Удостоверение')}
                   </div>
                 </a>
               )}
@@ -397,7 +399,7 @@ export function AdminVerificationPanel() {
                 >
                   <div className="flex items-center gap-2 text-sm font-medium">
                     <ExternalLink className="h-4 w-4" />
-                    Справка о регистрации
+                    {t('adminVerification.businessDoc', 'Справка о регистрации')}
                   </div>
                 </a>
               )}
@@ -406,7 +408,7 @@ export function AdminVerificationPanel() {
             {/* User notes */}
             {selectedRequest?.notes && (
               <div className="p-3 rounded-lg bg-muted/50">
-                <p className="text-sm text-muted-foreground mb-1">Примечание от пользователя:</p>
+                <p className="text-sm text-muted-foreground mb-1">{t('adminVerification.userNote', 'Примечание от пользователя:')}</p>
                 <p className="text-sm">{selectedRequest.notes}</p>
               </div>
             )}
@@ -414,12 +416,13 @@ export function AdminVerificationPanel() {
             {/* Admin notes */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                Комментарий администратора {selectedRequest?.status === 'pending' && '(обязателен при отклонении)'}
+                {t('adminVerification.adminNote', 'Комментарий администратора')}{' '}
+                {selectedRequest?.status === 'pending' && t('adminVerification.adminNoteRequired', '(обязателен при отклонении)')}
               </label>
               <Textarea
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
-                placeholder="Комментарий к решению..."
+                placeholder={t('adminVerification.adminNotePlaceholder', 'Комментарий к решению...')}
                 rows={3}
                 disabled={selectedRequest?.status !== 'pending'}
               />
@@ -436,7 +439,7 @@ export function AdminVerificationPanel() {
                   className="text-red-600 hover:text-red-700 hover:bg-red-500/10"
                 >
                   <XCircle className="h-4 w-4 mr-2" />
-                  Отклонить
+                  {t('adminVerification.reject', 'Отклонить')}
                 </Button>
                 <Button
                   onClick={handleApprove}
@@ -444,12 +447,12 @@ export function AdminVerificationPanel() {
                   className="bg-emerald-600 hover:bg-emerald-700"
                 >
                   <CheckCircle2 className="h-4 w-4 mr-2" />
-                  Одобрить
+                  {t('adminVerification.approve', 'Одобрить')}
                 </Button>
               </>
             ) : (
               <Button variant="outline" onClick={() => setSelectedRequest(null)}>
-                Закрыть
+                {t('adminVerification.close', 'Закрыть')}
               </Button>
             )}
           </DialogFooter>

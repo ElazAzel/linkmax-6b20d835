@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { VideoBlock as VideoBlockType } from '@/types/page';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { cn } from '@/lib/utils';
 
 interface VideoBlockProps {
   block: VideoBlockType;
@@ -38,12 +39,12 @@ export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBloc
 
   if (!embedUrl) {
     return (
-      <Card className="bg-card border-border shadow-sm">
-        <CardHeader>
+      <Card className="bg-card border-border shadow-sm rounded-xl">
+        <CardHeader className="p-3 sm:p-4">
           <CardTitle className="text-sm text-destructive">Invalid Video URL</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
+        <CardContent className="p-3 sm:p-4 pt-0">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Please check the video URL and try again.
           </p>
         </CardContent>
@@ -52,14 +53,14 @@ export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBloc
   }
 
   return (
-    <Card className="overflow-hidden bg-card border-border shadow-sm">
+    <Card className="overflow-hidden bg-card border-border shadow-sm rounded-xl">
       {title && (
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
+        <CardHeader className="p-3 sm:p-4 pb-2">
+          <CardTitle className="text-base sm:text-lg truncate">{title}</CardTitle>
         </CardHeader>
       )}
       <CardContent className="p-0">
-        <div className={`w-full ${aspectRatioClass}`}>
+        <div className={cn("w-full", aspectRatioClass)}>
           <iframe
             src={embedUrl}
             className="w-full h-full"

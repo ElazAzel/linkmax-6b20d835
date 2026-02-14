@@ -1,7 +1,16 @@
 import type { Block, BlockSizePreset } from '@/types/page';
+import { createMultilingualString } from '@/lib/i18n-helpers';
 
 // Default size for new blocks
 const DEFAULT_BLOCK_SIZE: BlockSizePreset = 'full';
+
+const generateUuid = () =>
+  crypto.randomUUID?.() ||
+  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+    const rand = (Math.random() * 16) | 0;
+    const value = char === 'x' ? rand : (rand & 0x3) | 0x8;
+    return value.toString(16);
+  });
 
 export function createBlock(type: string): Block {
   const timestamp = Date.now();
@@ -210,16 +219,6 @@ export function createBlock(type: string): Block {
         isPremium: true,
       };
     
-    case 'search':
-      return {
-        ...baseProps,
-        id: `search-${timestamp}`,
-        type: 'search',
-        title: 'Search',
-        placeholder: 'Search...',
-        isPremium: true,
-      };
-    
     case 'map':
       return {
         ...baseProps,
@@ -356,6 +355,47 @@ export function createBlock(type: string): Block {
         icon: 'users',
         style: 'default',
       };
+    
+    case 'event': {
+      const eventId = generateUuid();
+      const startAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      const registrationClosesAt = new Date(startAt.getTime() - 60 * 60 * 1000);
+
+      return {
+        ...baseProps,
+        id: `event-${timestamp}`,
+        type: 'event',
+        eventId,
+        title: createMultilingualString('Ивент'),
+        description: createMultilingualString('Описание события'),
+        coverUrl: '',
+        startAt: startAt.toISOString(),
+        endAt: new Date(startAt.getTime() + 2 * 60 * 60 * 1000).toISOString(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        registrationClosesAt: registrationClosesAt.toISOString(),
+        locationType: 'online',
+        locationValue: '',
+        capacity: 100,
+        isPaid: false,
+        price: 0,
+        currency: 'KZT',
+        status: 'published',
+        formFields: [
+          {
+            id: generateUuid(),
+            type: 'short_text',
+            label_i18n: createMultilingualString('Имя и фамилия'),
+            placeholder_i18n: createMultilingualString('Введите имя'),
+            helpText_i18n: createMultilingualString('Как к вам обращаться'),
+            required: true,
+          },
+        ],
+        settings: {
+          requireApproval: false,
+          allowDuplicateEmail: false,
+        },
+      };
+    }
     
     default:
       throw new Error(`Unknown block type: ${type}`);

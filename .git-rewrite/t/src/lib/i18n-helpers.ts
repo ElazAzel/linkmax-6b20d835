@@ -67,3 +67,29 @@ export function migrateToMultilingual(value: string | MultilingualString | undef
   // Put the original value in all language fields so it shows regardless of selected language
   return { ru: value, en: value, kk: value };
 }
+
+/**
+ * Parse a database field that might be JSON (MultilingualString) or plain string
+ * Used when fetching data from Supabase where title/description could be stored as JSON
+ */
+export function parseMultilingualField(
+  value: string | null | undefined,
+  language: SupportedLanguage,
+  fallbackLanguage: SupportedLanguage = 'ru'
+): string {
+  if (!value) return '';
+  
+  // Try to parse as JSON if it looks like JSON
+  if (value.startsWith('{') && value.endsWith('}')) {
+    try {
+      const parsed = JSON.parse(value);
+      if (isMultilingualString(parsed)) {
+        return getTranslatedString(parsed, language, fallbackLanguage);
+      }
+    } catch {
+      // Not valid JSON, return as plain string
+    }
+  }
+  
+  return value;
+}

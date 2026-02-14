@@ -61,8 +61,8 @@ export const CountdownBlock = React.memo(function CountdownBlock({ block }: Coun
 
   if (!block.targetDate) {
     return (
-      <Card className="w-full bg-card border-border shadow-sm">
-        <CardContent className="p-6 text-center text-muted-foreground">
+      <Card className="w-full bg-card border-border shadow-sm rounded-xl p-4 sm:p-5">
+        <CardContent className="p-0 text-center text-muted-foreground text-sm">
           {t('blocks.countdown.noDate', 'Укажите дату')}
         </CardContent>
       </Card>
@@ -71,27 +71,27 @@ export const CountdownBlock = React.memo(function CountdownBlock({ block }: Coun
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
-      <div className="bg-card border border-border shadow-sm rounded-lg p-3 min-w-[60px]">
-        <span className="text-2xl md:text-3xl font-bold text-primary">
+      <div className="bg-card border border-border shadow-sm rounded-lg p-2 sm:p-3 min-w-[48px] sm:min-w-[60px]">
+        <span className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">
           {value.toString().padStart(2, '0')}
         </span>
       </div>
-      <span className="text-xs md:text-sm text-muted-foreground mt-1">{label}</span>
+      <span className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">{label}</span>
     </div>
   );
 
   return (
-    <div className="w-full space-y-3">
+    <div className="w-full space-y-2 sm:space-y-3">
       {title && (
-        <h3 className="text-xl font-semibold text-center">{title}</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-center truncate">{title}</h3>
       )}
       
       {isExpired ? (
-        <div className="text-center py-6">
-          <p className="text-lg font-medium text-primary">{expiredText}</p>
+        <div className="text-center py-4 sm:py-6">
+          <p className="text-base sm:text-lg font-medium text-primary">{expiredText}</p>
         </div>
       ) : timeLeft ? (
-        <div className="flex justify-center gap-2 md:gap-4">
+        <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-4">
           {showDays && (
             <TimeUnit 
               value={timeLeft.days} 

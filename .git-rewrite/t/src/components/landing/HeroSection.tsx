@@ -73,7 +73,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
             style={{ animationDelay: '100ms' }}
           >
             <h1 className="text-[2.25rem] sm:text-[3rem] lg:text-[4rem] xl:text-[4.5rem] font-extrabold tracking-[-0.03em] leading-[1.05]">
-              {t('landing.hero.title', 'AI-страница за 2 минуты,')}
+              {t('landing.hero.title', 'AI-страница за минуту,')}
               <br />
               <span className="text-gradient bg-[length:200%_auto] animate-gradient-x inline-block">
                 {t('landing.hero.titleHighlight', 'которая собирает заявки')}

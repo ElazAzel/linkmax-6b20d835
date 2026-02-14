@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,31 +28,32 @@ interface GiftPremiumDialogProps {
   };
 }
 
-const GIFT_OPTIONS = [
-  { days: 3, label: '3 дня', popular: false },
-  { days: 7, label: '1 неделя', popular: true },
-  { days: 14, label: '2 недели', popular: false },
-  { days: 30, label: '1 месяц', popular: false },
-];
-
 export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremiumDialogProps) {
+  const { t } = useTranslation();
   const [selectedDays, setSelectedDays] = useState(7);
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
+
+  const GIFT_OPTIONS = [
+    { days: 3, label: t('gift.days3', '3 дня'), popular: false },
+    { days: 7, label: t('gift.week1', '1 неделя'), popular: true },
+    { days: 14, label: t('gift.weeks2', '2 недели'), popular: false },
+    { days: 30, label: t('gift.month1', '1 месяц'), popular: false },
+  ];
 
   const handleSend = async () => {
     setSending(true);
     try {
       const result = await sendPremiumGift(recipient.id, selectedDays, message);
       if (result.success) {
-        toast.success('Подарок отправлен!', {
-          description: `${recipient.display_name || recipient.username} получит +${selectedDays} дней Premium`
+        toast.success(t('gift.sent', 'Подарок отправлен!'), {
+          description: `${recipient.display_name || recipient.username} ${t('gift.sentDesc', 'получит дней Premium')}: +${selectedDays}`
         });
         onOpenChange(false);
         setMessage('');
         setSelectedDays(7);
       } else {
-        toast.error('Не удалось отправить подарок');
+        toast.error(t('gift.sendError', 'Не удалось отправить подарок'));
       }
     } finally {
       setSending(false);
@@ -64,10 +66,10 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Gift className="h-5 w-5 text-primary" />
-            Подарить Premium
+            {t('gift.title', 'Подарить Premium')}
           </DialogTitle>
           <DialogDescription>
-            Порадуйте друга подарком Premium-подписки
+            {t('gift.description', 'Порадуйте друга подарком Premium-подписки')}
           </DialogDescription>
         </DialogHeader>
 
@@ -82,7 +84,7 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
             </Avatar>
             <div className="flex-1">
               <p className="font-semibold">
-                {recipient.display_name || recipient.username || 'Пользователь'}
+                {recipient.display_name || recipient.username || t('friends.user', 'Пользователь')}
               </p>
               {recipient.username && (
                 <p className="text-sm text-muted-foreground">@{recipient.username}</p>
@@ -91,9 +93,8 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
             <Heart className="h-5 w-5 text-pink-500" />
           </div>
 
-          {/* Duration Selection */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Длительность подписки</label>
+            <label className="text-sm font-medium">{t('gift.duration', 'Длительность подписки')}</label>
             <div className="grid grid-cols-2 gap-2">
               {GIFT_OPTIONS.map((option) => (
                 <button
@@ -109,7 +110,7 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
                   {option.popular && (
                     <Badge className="absolute -top-2 -right-2 text-[10px] bg-gradient-to-r from-amber-500 to-orange-500">
                       <Sparkles className="h-3 w-3 mr-1" />
-                      Популярно
+                      {t('gift.popular', 'Популярно')}
                     </Badge>
                   )}
                   <Crown className={cn(
@@ -122,13 +123,12 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
             </div>
           </div>
 
-          {/* Message */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Сообщение (необязательно)</label>
+            <label className="text-sm font-medium">{t('gift.message', 'Сообщение (необязательно)')}</label>
             <Textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Напишите тёплые слова..."
+              placeholder={t('gift.messagePlaceholder', 'Напишите тёплые слова...')}
               className="min-h-[80px] resize-none rounded-xl"
               maxLength={200}
             />
@@ -137,7 +137,6 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
             </p>
           </div>
 
-          {/* Send Button */}
           <Button
             onClick={handleSend}
             disabled={sending}
@@ -148,7 +147,7 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
             ) : (
               <>
                 <Send className="h-5 w-5" />
-                Отправить подарок
+                {t('gift.send', 'Отправить подарок')}
               </>
             )}
           </Button>

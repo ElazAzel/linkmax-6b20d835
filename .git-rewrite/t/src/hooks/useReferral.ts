@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   getOrCreateReferralCode, 
   getReferralStats, 
@@ -9,6 +10,7 @@ import {
 import { toast } from 'sonner';
 
 export function useReferral(userId: string | undefined) {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<ReferralStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -50,40 +52,42 @@ export function useReferral(userId: string | undefined) {
       const result = await applyReferralCode(code.trim(), userId);
 
       if (result.success) {
-        toast.success(`🎉 +${result.bonusDays} дней Premium для вас и друга!`);
+        toast.success(t('referral.toastSuccess', '🎉 +{{count}} дней Premium для вас и друга!', {
+          count: result.bonusDays,
+        }));
         setWasReferred(true);
         return true;
       } else {
         const errorMessages: Record<string, string> = {
-          'invalid_code': 'Неверный код приглашения',
-          'already_referred': 'Вы уже использовали реферальный код',
-          'self_referral': 'Нельзя использовать свой код'
+          'invalid_code': t('referral.errors.invalidCode', 'Неверный код приглашения'),
+          'already_referred': t('referral.errors.alreadyReferred', 'Вы уже использовали реферальный код'),
+          'self_referral': t('referral.errors.selfReferral', 'Нельзя использовать свой код'),
         };
         toast.error(errorMessages[result.error || 'invalid_code']);
         return false;
       }
     } catch (error) {
-      toast.error('Ошибка при применении кода');
+      toast.error(t('referral.errors.applyFailed', 'Ошибка при применении кода'));
       return false;
     } finally {
       setApplying(false);
     }
-  }, [userId]);
+  }, [userId, t]);
 
   const copyCode = useCallback(() => {
     if (stats?.code) {
       navigator.clipboard.writeText(stats.code);
-      toast.success('Код скопирован!');
+      toast.success(t('referral.codeCopied', 'Код скопирован!'));
     }
-  }, [stats?.code]);
+  }, [stats?.code, t]);
 
   const shareLink = useCallback(() => {
     if (stats?.code) {
       const url = `${window.location.origin}/auth?ref=${stats.code}`;
       navigator.clipboard.writeText(url);
-      toast.success('Ссылка скопирована!');
+      toast.success(t('referral.linkCopied', 'Ссылка скопирована!'));
     }
-  }, [stats?.code]);
+  }, [stats?.code, t]);
 
   return {
     stats,

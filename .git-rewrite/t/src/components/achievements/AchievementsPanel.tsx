@@ -4,8 +4,8 @@ import { Progress } from '@/components/ui/progress';
 import { Trophy, Lock, X, ChevronRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAchievements } from '@/hooks/useAchievements';
-import { RARITY_COLORS, RARITY_LABELS } from '@/types/achievements';
 import type { Achievement } from '@/types/achievements';
+import { useTranslation } from 'react-i18next';
 
 interface AchievementsPanelProps {
   onClose: () => void;
@@ -13,6 +13,7 @@ interface AchievementsPanelProps {
 
 export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
   const { getAllAchievements, getAchievementsByCategory, getProgress } = useAchievements();
+  const { t } = useTranslation();
   const progress = getProgress();
   const [selectedCategory, setSelectedCategory] = useState<Achievement['category'] | 'all'>('all');
 
@@ -24,11 +25,11 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
   const lockedAchievements = achievements.filter(a => !a.unlocked);
 
   const categories = [
-    { key: 'all' as const, label: 'Все', icon: '🏆' },
-    { key: 'blocks' as const, label: 'Блоки', icon: '🧩' },
-    { key: 'features' as const, label: 'Функции', icon: '⚡' },
-    { key: 'milestones' as const, label: 'Вехи', icon: '🎯' },
-    { key: 'social' as const, label: 'Соц.', icon: '🌟' },
+    { key: 'all' as const, label: t('achievements.categories.all', 'Все'), icon: '🏆' },
+    { key: 'blocks' as const, label: t('achievements.categories.blocks', 'Блоки'), icon: '🧩' },
+    { key: 'features' as const, label: t('achievements.categories.features', 'Функции'), icon: '⚡' },
+    { key: 'milestones' as const, label: t('achievements.categories.milestones', 'Вехи'), icon: '🎯' },
+    { key: 'social' as const, label: t('achievements.categories.social', 'Соц.'), icon: '🌟' },
   ];
 
   const getRarityGradient = (rarity: Achievement['rarity'], unlocked: boolean) => {
@@ -53,9 +54,12 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
               <Trophy className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">Достижения</h2>
+              <h2 className="text-lg font-bold">{t('achievements.title', 'Достижения')}</h2>
               <p className="text-xs text-muted-foreground">
-                {progress.unlocked} из {progress.total} открыто
+                {t('achievements.progress', '{{unlocked}} из {{total}} открыто', {
+                  unlocked: progress.unlocked,
+                  total: progress.total,
+                })}
               </p>
             </div>
           </div>
@@ -117,7 +121,9 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
                 <Trophy className="h-3.5 w-3.5 text-primary" />
               </div>
               <h3 className="text-sm font-semibold text-foreground">
-                Открытые ({unlockedAchievements.length})
+                {t('achievements.sections.unlocked', 'Открытые ({{count}})', {
+                  count: unlockedAchievements.length,
+                })}
               </h3>
             </div>
             <div className="space-y-2">
@@ -135,13 +141,13 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h4 className="font-semibold text-sm truncate">{achievement.title}</h4>
+                        <h4 className="font-semibold text-sm truncate">{t(achievement.titleKey)}</h4>
                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 flex-shrink-0">
-                          {RARITY_LABELS[achievement.rarity]}
+                          {t(`achievements.rarity.${achievement.rarity}`)}
                         </span>
                       </div>
                       <p className="text-xs opacity-90 mt-0.5 line-clamp-1">
-                        {achievement.description}
+                        {t(achievement.descriptionKey)}
                       </p>
                     </div>
                     <ChevronRight className="h-4 w-4 opacity-50 flex-shrink-0" />
@@ -165,7 +171,9 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
                 <Lock className="h-3.5 w-3.5 text-muted-foreground" />
               </div>
               <h3 className="text-sm font-semibold text-muted-foreground">
-                Заблокированные ({lockedAchievements.length})
+                {t('achievements.sections.locked', 'Заблокированные ({{count}})', {
+                  count: lockedAchievements.length,
+                })}
               </h3>
             </div>
             <div className="space-y-2">
@@ -181,7 +189,7 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="font-medium text-sm text-muted-foreground truncate">
-                          {achievement.title}
+                          {t(achievement.titleKey)}
                         </h4>
                         <span className={cn(
                           "text-[10px] px-2 py-0.5 rounded-full flex-shrink-0",
@@ -190,11 +198,11 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
                           achievement.rarity === 'rare' && "bg-blue-500/20 text-blue-600",
                           achievement.rarity === 'common' && "bg-muted text-muted-foreground"
                         )}>
-                          {RARITY_LABELS[achievement.rarity]}
+                          {t(`achievements.rarity.${achievement.rarity}`)}
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                        {achievement.description}
+                        {t(achievement.descriptionKey)}
                       </p>
                     </div>
                   </div>
@@ -210,10 +218,8 @@ export function AchievementsPanel({ onClose }: AchievementsPanelProps) {
             <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
               <Trophy className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="font-semibold text-lg mb-1">Нет достижений</h3>
-            <p className="text-sm text-muted-foreground">
-              В этой категории пока нет достижений
-            </p>
+            <h3 className="font-semibold text-lg mb-1">{t('achievements.emptyTitle', 'Нет достижений')}</h3>
+            <p className="text-sm text-muted-foreground">{t('achievements.emptyDescription', 'В этой категории пока нет достижений')}</p>
           </div>
         )}
       </div>

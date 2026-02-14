@@ -6,6 +6,8 @@ import { parseRichText } from '@/lib/rich-text-parser';
 import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS, getVerificationPositionClasses, getVerificationColor, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
 import { getLucideIcon, CheckCircle2 } from '@/lib/icon-utils';
 import { cn } from '@/lib/utils';
+import { VerifiedBadge } from './VerifiedBadge';
+import { NAME_ANIMATION_CSS, getNameAnimationClass, type NameAnimationType } from '@/lib/profile-frame-system';
 import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle, VerificationIconType } from '@/types/page';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
 
@@ -14,10 +16,11 @@ interface ProfileBlockProps {
   isPreview?: boolean;
   isOwnerPremium?: boolean;
   ownerTier?: PremiumTier;
+  isOwnerVerified?: boolean;
 }
 
-// Verification badge component with custom icon support
-const VerificationBadge = memo(function VerificationBadgeComponent({ 
+// Custom verification badge component for user-selected styling
+const CustomVerificationBadge = memo(function CustomVerificationBadgeComponent({ 
   iconType, 
   customIcon,
   color, 
@@ -67,16 +70,22 @@ const VerificationBadge = memo(function VerificationBadgeComponent({
   );
 });
 
-export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPreview, isOwnerPremium, ownerTier }: ProfileBlockProps) {
+export const ProfileBlock = memo(function ProfileBlockComponent({ 
+  block, 
+  isPreview, 
+  isOwnerPremium, 
+  ownerTier,
+  isOwnerVerified = false 
+}: ProfileBlockProps) {
   const { t, i18n } = useTranslation();
   const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
   const bio = getTranslatedString(block.bio, i18n.language as SupportedLanguage);
   
-  // Pro tier users can get verification badge (previously business-only)
-  const isProTier = ownerTier === 'pro';
+  // Pro tier users are considered premium
+  const isPremiumUser = ownerTier === 'pro' || isOwnerPremium;
   
-  // Determine if verified badge should show (manual or auto-premium or pro tier)
-  const showVerified = block.verified || (block.autoVerifyPremium && isOwnerPremium) || isProTier;
+  // Use platform verification status + premium status for badge
+  const showPlatformBadge = isOwnerVerified || isPremiumUser;
   
   const initials = name
     .split(' ')
@@ -198,20 +207,37 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
             </div>
           )}
           
-          {/* Verification badge on frame - Pro users get gold badge option */}
-          {showVerified && (
-            <VerificationBadge 
-              iconType={isProTier ? 'badge-check' : block.verifiedIcon}
-              customIcon={isProTier ? undefined : block.verifiedCustomIcon}
-              color={isProTier ? 'gold' : block.verifiedColor}
-              position={block.verifiedPosition || 'top-right'}
+          {/* Platform verification badge - shows based on actual verification + premium status */}
+          {showPlatformBadge && (
+            <div className={cn("absolute z-10", getVerificationPositionClasses(block.verifiedPosition || 'bottom-right'))}>
+              <VerifiedBadge 
+                isVerified={isOwnerVerified}
+                isPremium={isPremiumUser}
+                size="md"
+              />
+            </div>
+          )}
+          
+          {/* Custom user-defined badge (if manually set and different from platform badge) */}
+          {block.verified && !showPlatformBadge && (
+            <CustomVerificationBadge 
+              iconType={block.verifiedIcon}
+              customIcon={block.verifiedCustomIcon}
+              color={block.verifiedColor}
+              position={block.verifiedPosition || 'bottom-right'}
             />
           )}
         </div>
         
         <div className="text-center space-y-2">
+          <style>{NAME_ANIMATION_CSS}</style>
           <div className="flex items-center justify-center gap-2">
-            <h1 className="text-2xl font-bold">{name}</h1>
+            <h1 className={cn(
+              "text-2xl font-bold",
+              getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
+            )}>
+              {name}
+            </h1>
           </div>
           
           {bio && (

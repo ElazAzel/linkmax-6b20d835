@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useMemo } from 'react';
+import { memo, useCallback, useState, useMemo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Edit2, Trash2, GripVertical, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import {
@@ -27,6 +27,7 @@ import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { createRowKey } from '@/lib/block-utils';
 import type { Block, ProfileBlock, GridConfig, BlockSizePreset } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 import type { FreeTier } from '@/hooks/useFreemiumLimits';
@@ -69,6 +70,7 @@ interface SortableGridBlockItemProps {
   isPremium?: boolean;
   premiumTier?: PremiumTier;
   isDragging?: boolean;
+  isMobile?: boolean;
 }
 
 function SortableGridBlockItem({
@@ -82,6 +84,7 @@ function SortableGridBlockItem({
   canMoveDown = true,
   isPremium,
   premiumTier,
+  isMobile = false,
 }: SortableGridBlockItemProps) {
   const {
     attributes,
@@ -107,25 +110,17 @@ function SortableGridBlockItem({
         isDragging && 'opacity-50 ring-2 ring-primary z-50'
       )}
     >
-      {/* Left controls: Drag handle + arrows */}
-      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex flex-col gap-1">
-        {/* Drag handle */}
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-grab active:cursor-grabbing"
-        >
-          <div className="bg-background/95 rounded-lg p-1.5 shadow-sm border">
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
-          </div>
-        </div>
-        
-        {/* Move arrows */}
+      {/* Left controls: Move arrows (always visible on mobile, hover on desktop) */}
+      <div className={cn(
+        "absolute top-2 left-2 z-20 flex flex-col gap-1 transition-opacity",
+        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+      )}>
+        {/* Move arrows - reliable fallback for DnD issues on mobile */}
         <div className="flex flex-col gap-0.5">
           <Button
             size="sm"
             variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm"
+            className="h-8 w-8 p-0 rounded-lg shadow-sm touch-none"
             onClick={(e) => {
               e.stopPropagation();
               onMoveUp?.();
@@ -137,7 +132,7 @@ function SortableGridBlockItem({
           <Button
             size="sm"
             variant="secondary"
-            className="h-7 w-7 p-0 rounded-lg shadow-sm"
+            className="h-8 w-8 p-0 rounded-lg shadow-sm touch-none"
             onClick={(e) => {
               e.stopPropagation();
               onMoveDown?.();
@@ -147,6 +142,19 @@ function SortableGridBlockItem({
             <ChevronDown className="h-4 w-4" />
           </Button>
         </div>
+        
+        {/* Drag handle - hidden on mobile for cleaner UX, move arrows are primary */}
+        {!isMobile && (
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing"
+          >
+            <div className="bg-background/95 rounded-lg p-1.5 shadow-sm border">
+              <GripVertical className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Block content */}
@@ -157,8 +165,11 @@ function SortableGridBlockItem({
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
       </div>
 
-      {/* Edit/Delete - visible on hover, positioned clearly */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1.5 z-10">
+      {/* Edit/Delete - visible on hover (desktop) or always (mobile) */}
+      <div className={cn(
+        "absolute top-2 right-2 flex gap-1.5 z-10 transition-opacity",
+        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+      )}>
         <Button
           size="sm"
           variant="secondary"
@@ -347,9 +358,15 @@ export const GridEditor = memo(function GridEditor({
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<string | null>(null);
+  
+  // Unique ID for DndContext to prevent stale DOM reference issues
+  const dndContextId = useId();
 
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
+  
+  // Create stable block IDs string to detect when we need to reset DnD
+  const blockIdsKey = useMemo(() => contentBlocks.map(b => b.id).join(','), [contentBlocks]);
 
   // DnD sensors - optimized for both desktop and mobile
   const sensors = useSensors(
@@ -441,8 +458,9 @@ export const GridEditor = memo(function GridEditor({
         </div>
       )}
 
-      {/* Grid container with DnD */}
+      {/* Grid container with DnD - key resets context when blocks change to prevent stale DOM refs */}
       <DndContext
+        key={`${dndContextId}-${blockIdsKey}`}
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
@@ -453,15 +471,18 @@ export const GridEditor = memo(function GridEditor({
           strategy={verticalListSortingStrategy}
         >
           <div className="space-y-1">
-            {rows.map((row, rowIndex) => {
+            {rows.map((row) => {
               // Calculate the position for inserting after this row
               const lastBlockInRow = row.blocks[row.blocks.length - 1];
               const insertPosition = lastBlockInRow 
                 ? contentBlocks.findIndex(b => b.id === lastBlockInRow.id) + 1
                 : 0;
               
+              // Use stable key based on block IDs in row
+              const rowKey = createRowKey(row.blocks);
+              
               return (
-                <div key={rowIndex}>
+                <div key={rowKey}>
                   {/* Row with blocks */}
                   <div className="grid grid-cols-2 gap-4">
                     {row.blocks.map((block) => {
@@ -479,6 +500,7 @@ export const GridEditor = memo(function GridEditor({
                           canMoveDown={blockIndex < contentBlocks.length - 1}
                           isPremium={isPremium}
                           premiumTier={premiumTier}
+                          isMobile={isMobile}
                         />
                       );
                     })}

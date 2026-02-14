@@ -5,6 +5,7 @@ import type { DownloadBlock as DownloadBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { cn } from '@/lib/utils';
 
 interface DownloadBlockProps {
   block: DownloadBlockType;
@@ -19,27 +20,27 @@ export const DownloadBlock = memo(function DownloadBlock({ block }: DownloadBloc
 
   const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
   const description = getTranslatedString(block.description, i18n.language as SupportedLanguage);
-
-  const alignmentClass = block.alignment === 'left' ? 'mr-auto' 
-    : block.alignment === 'right' ? 'ml-auto' 
-    : 'mx-auto';
+  const buttonText = getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('actions.download', 'Download');
 
   return (
-    <div className={`flex ${block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'}`}>
-      <Card className={`${alignmentClass} max-w-md p-6 bg-card border-border shadow-sm`}>
-        <div className="flex items-start gap-4">
+    <div className={cn(
+      "flex w-full",
+      block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'
+    )}>
+      <Card className="w-full max-w-md p-4 sm:p-5 bg-card border-border shadow-sm rounded-xl">
+        <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <FileText className="h-6 w-6 text-primary" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+              <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-lg mb-1">{title}</h3>
+            <h3 className="font-semibold text-base sm:text-lg mb-0.5 sm:mb-1 line-clamp-2">{title}</h3>
             {description && (
-              <p className="text-sm text-muted-foreground mb-2">{description}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 sm:mb-2 line-clamp-2">{description}</p>
             )}
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-              <span>{block.fileName}</span>
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-muted-foreground mb-2 sm:mb-3">
+              <span className="truncate max-w-[120px] sm:max-w-none">{block.fileName}</span>
               {block.fileSize && (
                 <>
                   <span>•</span>
@@ -47,9 +48,13 @@ export const DownloadBlock = memo(function DownloadBlock({ block }: DownloadBloc
                 </>
               )}
             </div>
-            <Button onClick={handleDownload} size="sm" className="w-full sm:w-auto">
+            <Button 
+              onClick={handleDownload} 
+              size="sm" 
+              className="w-full h-10 rounded-xl text-sm font-semibold active:scale-[0.98] transition-transform"
+            >
               <Download className="h-4 w-4 mr-2" />
-              {t('actions.download', 'Download')}
+              {buttonText}
             </Button>
           </div>
         </div>

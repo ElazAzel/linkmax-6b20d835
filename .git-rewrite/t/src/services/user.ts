@@ -1,7 +1,7 @@
 /**
  * User service - handles user profile and authentication-related operations
  */
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import type { DbUserProfile, PremiumStatusResult, ApiResult } from '@/types/api';
 
 // ============= Types =============
@@ -176,9 +176,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const inTrial = trialEndsAt ? trialEndsAt > now : false;
     const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
     
-    // Determine tier - Business tier is now merged into Pro
-    const dbTier = (data as { premium_tier?: string }).premium_tier as 'free' | 'pro' | 'business' | undefined;
-    
+    // Determine tier
     let tier: 'free' | 'pro' = 'free';
     let isPremium = false;
     
@@ -187,7 +185,6 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     
     if (hasActivePremium) {
       isPremium = true;
-      // Both 'business' and 'pro' are now 'pro' tier (business merged into pro)
       tier = 'pro';
     }
 

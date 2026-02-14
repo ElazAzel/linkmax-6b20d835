@@ -43,48 +43,58 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block }: Car
   }
 
   return (
-    <Card className="overflow-hidden bg-card border-border shadow-sm">
+    <div className="w-full overflow-hidden rounded-xl bg-card border border-border shadow-sm">
       {title && (
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
+        <div className="p-4 pb-2">
+          <h3 className="font-semibold text-sm">{title}</h3>
+        </div>
       )}
-      <CardContent className="p-0">
-        <Carousel
-          opts={{
-            align: 'start',
-            loop: true,
-          }}
-          plugins={autoplayPlugin ? [autoplayPlugin] : undefined}
-          className="w-full"
-        >
-          <CarouselContent>
+      <Carousel
+        opts={{
+          align: 'start',
+          loop: true,
+        }}
+        plugins={autoplayPlugin ? [autoplayPlugin] : undefined}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-0">
           {block.images.map((image, index) => {
-              const alt = getTranslatedString(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
-              return (
-                <CarouselItem key={index}>
-                  <div
-                    className="aspect-video overflow-hidden bg-muted cursor-pointer"
-                    onClick={() => handleImageClick(image.link)}
-                  >
-                    <img
-                      src={image.url}
-                      alt={alt}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-          {block.images.length > 1 && (
-            <>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </>
-          )}
-        </Carousel>
-      </CardContent>
-    </Card>
+            const alt = getTranslatedString(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
+            return (
+              <CarouselItem key={index} className="pl-0">
+                <div
+                  className="aspect-[4/3] overflow-hidden bg-muted cursor-pointer"
+                  onClick={() => handleImageClick(image.link)}
+                >
+                  <img
+                    src={image.url}
+                    alt={alt}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+        {block.images.length > 1 && (
+          <>
+            <CarouselPrevious className="left-2 h-8 w-8" />
+            <CarouselNext className="right-2 h-8 w-8" />
+          </>
+        )}
+      </Carousel>
+      {/* Dots indicator for mobile */}
+      {block.images.length > 1 && (
+        <div className="flex justify-center gap-1.5 py-2">
+          {block.images.map((_, idx) => (
+            <div 
+              key={idx} 
+              className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30"
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 });

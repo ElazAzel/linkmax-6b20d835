@@ -1,8 +1,8 @@
 import { usePremiumStatus } from './usePremiumStatus';
 
-// Block tiers based on pricing plans
+// Block tiers based on pricing plans (Free + Pro only)
 export const FREE_BLOCKS = [
-  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar'
+  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'event'
 ] as const;
 
 export const PRO_BLOCKS = [
@@ -10,8 +10,9 @@ export const PRO_BLOCKS = [
   'before_after', 'faq', 'testimonial', 'newsletter', 'scratch', 'search', 'shoutout'
 ] as const;
 
-export const BUSINESS_BLOCKS = [
-  'download', 'form', 'countdown', 'booking'
+// Business blocks merged into Pro
+export const PRO_EXTENDED_BLOCKS = [
+  'download', 'form', 'countdown', 'booking', 'community'
 ] as const;
 
 export type FreeTier = 'free' | 'pro';
@@ -42,10 +43,10 @@ export interface TierFeatures {
 
 export const FREE_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 1, // 1 generation per month for free
+  maxAIPageGenerationsPerMonth: 1,
   showWatermark: true,
   allowedBlocks: [...FREE_BLOCKS] as string[],
-  premiumBlocks: [...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
+  premiumBlocks: [...PRO_BLOCKS, ...PRO_EXTENDED_BLOCKS] as unknown as string[],
   maxLeadsPerMonth: 0,
   canUseAnalytics: false,
   canUseCRM: false,
@@ -63,36 +64,12 @@ export const FREE_LIMITS: TierFeatures = {
   canUseCustomPageBackground: false,
 };
 
-// Premium gets ALL Business features except white label
+// Pro tier includes ALL premium features (business merged)
 export const PRO_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 5, // 5 generations per month for premium
+  maxAIPageGenerationsPerMonth: Infinity,
   showWatermark: false,
-  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
-  premiumBlocks: [] as string[], // No premium-locked blocks for pro
-  maxLeadsPerMonth: Infinity, // Unlimited leads
-  canUseAnalytics: true,
-  canUseCRM: true,
-  canUseScheduler: true,
-  canUsePixels: true,
-  canUseCustomDomain: true,
-  canUseChatbot: true,
-  canUseAutoNotifications: true,
-  canUsePayments: true,
-  canUseWhiteLabel: false, // White label only for Business
-  canUseMultiPage: true,
-  canUseVerificationBadge: true,
-  canUsePremiumFrames: true,
-  canUseAdvancedThemes: true,
-  canUseCustomPageBackground: true,
-};
-
-// Business only adds white label
-export const BUSINESS_LIMITS: TierFeatures = {
-  maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: Infinity, // Unlimited for business
-  showWatermark: false,
-  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
+  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...PRO_EXTENDED_BLOCKS] as unknown as string[],
   premiumBlocks: [] as string[],
   maxLeadsPerMonth: Infinity,
   canUseAnalytics: true,
@@ -103,7 +80,7 @@ export const BUSINESS_LIMITS: TierFeatures = {
   canUseChatbot: true,
   canUseAutoNotifications: true,
   canUsePayments: true,
-  canUseWhiteLabel: true, // Only Business gets white label
+  canUseWhiteLabel: true,
   canUseMultiPage: true,
   canUseVerificationBadge: true,
   canUsePremiumFrames: true,
@@ -111,13 +88,12 @@ export const BUSINESS_LIMITS: TierFeatures = {
   canUseCustomPageBackground: true,
 };
 
-// Helper to get block tier (business merged into pro)
+// Helper to get block tier
 export function getBlockTier(blockType: string): FreeTier {
   if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'free';
-  // Both pro and business blocks now require 'pro' tier
   if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
-  if ((BUSINESS_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
-  return 'free'; // Default to free for unknown blocks
+  if ((PRO_EXTENDED_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
+  return 'free';
 }
 
 export function useFreemiumLimits() {

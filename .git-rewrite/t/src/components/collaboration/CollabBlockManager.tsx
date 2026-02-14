@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Save, Eye, EyeOff } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface BlockSettings {
   requester_blocks: string[];
@@ -50,6 +51,7 @@ export function CollabBlockManager({
   targetProfile,
   onSettingsChange,
 }: CollabBlockManagerProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [blocks, setBlocks] = useState<BlockData[]>([]);
@@ -127,45 +129,46 @@ export function CollabBlockManager({
 
       if (error) throw error;
       onSettingsChange(settings);
-      toast.success('Настройки блоков сохранены');
+      toast.success(t('collab.blocksSaved', 'Настройки блоков сохранены'));
     } catch (error) {
       console.error('Error saving block settings:', error);
-      toast.error('Ошибка сохранения');
+      toast.error(t('collab.blocksSaveError', 'Ошибка сохранения'));
     } finally {
       setSaving(false);
     }
   };
 
   const getBlockLabel = (block: BlockData): string => {
-    const typeLabels: Record<string, string> = {
-      profile: 'Профиль',
-      link: 'Ссылка',
-      button: 'Кнопка',
-      text: 'Текст',
-      image: 'Изображение',
-      video: 'Видео',
-      carousel: 'Карусель',
-      product: 'Товар',
-      socials: 'Соцсети',
-      messenger: 'Мессенджер',
-      form: 'Форма',
-      download: 'Скачать',
-      newsletter: 'Рассылка',
-      testimonial: 'Отзыв',
-      faq: 'FAQ',
-      countdown: 'Таймер',
-      map: 'Карта',
-      custom_code: 'Код',
-      scratch: 'Скретч',
-      search: 'Поиск',
-      avatar: 'Аватар',
-      shoutout: 'Шаут-аут',
-      separator: 'Разделитель',
-      catalog: 'Каталог',
-      pricing: 'Цены',
-      before_after: 'До/После',
+    const typeKeys: Record<string, string> = {
+      profile: 'blocks.profile',
+      link: 'blocks.link',
+      button: 'blocks.button',
+      text: 'blocks.text',
+      image: 'blocks.image',
+      video: 'blocks.video',
+      carousel: 'blocks.carousel',
+      product: 'blocks.product',
+      socials: 'blocks.socials',
+      messenger: 'blocks.messenger',
+      form: 'blocks.form',
+      download: 'blocks.download',
+      newsletter: 'blocks.newsletter',
+      testimonial: 'blocks.testimonial',
+      faq: 'blocks.faq',
+      countdown: 'blocks.countdown',
+      map: 'blocks.map',
+      custom_code: 'blocks.customCode',
+      scratch: 'blocks.scratch',
+      search: 'blocks.search',
+      avatar: 'blocks.avatar',
+      shoutout: 'blocks.shoutout',
+      separator: 'blocks.separator',
+      catalog: 'blocks.catalog',
+      pricing: 'blocks.pricing',
+      before_after: 'blocks.beforeAfter',
     };
-    return typeLabels[block.type] || block.type;
+    const key = typeKeys[block.type];
+    return key ? t(key, block.type) : block.type;
   };
 
   if (loading) {
@@ -188,11 +191,11 @@ export function CollabBlockManager({
           onClick={toggleShowAll}
         >
           {settings.show_all ? <Eye className="h-4 w-4 mr-2" /> : <EyeOff className="h-4 w-4 mr-2" />}
-          {settings.show_all ? 'Показать все' : 'Выборочно'}
+          {settings.show_all ? t('collab.showAll', 'Показать все') : t('collab.selective', 'Выборочно')}
         </Button>
         <Button size="sm" onClick={handleSave} disabled={saving}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-          Сохранить
+          {t('collab.save', 'Сохранить')}
         </Button>
       </div>
 
@@ -206,12 +209,12 @@ export function CollabBlockManager({
                 {(requesterProfile?.display_name || 'U').charAt(0)}
               </AvatarFallback>
             </Avatar>
-            {requesterProfile?.display_name || requesterProfile?.username || 'Инициатор'}
+            {requesterProfile?.display_name || requesterProfile?.username || t('collab.initiator', 'Инициатор')}
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           {requesterBlocks.length === 0 ? (
-            <p className="text-xs text-muted-foreground">Нет блоков</p>
+            <p className="text-xs text-muted-foreground">{t('collab.noBlocks', 'Нет блоков')}</p>
           ) : (
             <div className="space-y-2">
               {requesterBlocks.map(block => (
@@ -241,17 +244,17 @@ export function CollabBlockManager({
             <CardTitle className="text-sm flex items-center gap-2">
               <Avatar className="h-6 w-6">
                 <AvatarImage src={targetProfile?.avatar_url || ''} />
-                <AvatarFallback className="text-xs">
-                  {(targetProfile?.display_name || 'U').charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              {targetProfile?.display_name || targetProfile?.username || 'Партнёр'}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {targetBlocks.length === 0 ? (
-              <p className="text-xs text-muted-foreground">Нет блоков</p>
-            ) : (
+              <AvatarFallback className="text-xs">
+                {(targetProfile?.display_name || 'U').charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            {targetProfile?.display_name || targetProfile?.username || t('collab.partner', 'Партнёр')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          {targetBlocks.length === 0 ? (
+            <p className="text-xs text-muted-foreground">{t('collab.noBlocks', 'Нет блоков')}</p>
+          ) : (
               <div className="space-y-2">
                 {targetBlocks.map(block => (
                   <div 

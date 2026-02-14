@@ -1,0 +1,25 @@
+# Cloudflare Worker Configuration for Prerender.io
+# Documentation: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "lnkmx-prerender"
+main = "prerender-worker.js"
+compatibility_date = "2024-01-01"
+
+# Production route - adjust domain as needed
+# routes = [
+#   { pattern = "lnkmx.my/*", zone_name = "lnkmx.my" }
+# ]
+
+# Environment variables (use wrangler secret for token in production)
+# [vars]
+# PRERENDER_TOKEN = "your-token-here"
+
+# To set secret: wrangler secret put PRERENDER_TOKEN
+
+[build]
+command = ""
+
+# Development settings
+[dev]
+port = 8787
+local_protocol = "http"

@@ -15,8 +15,8 @@ interface TermsOfServiceModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-// Company details constant
-const COMPANY_DETAILS = {
+// Company details constant - exported for use in other legal pages
+export const COMPANY_DETAILS = {
   name: 'ИП BEEGIN',
   address: 'г. Алматы, ул. Шолохова, д. 20/7',
   bin: '971207300019',

@@ -1,4 +1,5 @@
 import { memo, useState, useRef, useCallback, TouchEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pencil, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +16,7 @@ export const SwipeableBlock = memo(function SwipeableBlock({
   onDelete,
   disabled = false,
 }: SwipeableBlockProps) {
+  const { t } = useTranslation();
   const [offsetX, setOffsetX] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const startXRef = useRef(0);
@@ -113,7 +115,7 @@ export const SwipeableBlock = memo(function SwipeableBlock({
       >
         <div className="flex flex-col items-center gap-1 text-destructive-foreground">
           <Trash2 className="h-6 w-6" />
-          <span className="text-xs font-medium">Delete</span>
+          <span className="text-xs font-medium">{t('common.delete', 'Delete')}</span>
         </div>
       </div>
       
@@ -127,7 +129,7 @@ export const SwipeableBlock = memo(function SwipeableBlock({
       >
         <div className="flex flex-col items-center gap-1 text-primary-foreground">
           <Pencil className="h-6 w-6" />
-          <span className="text-xs font-medium">Edit</span>
+          <span className="text-xs font-medium">{t('common.edit', 'Edit')}</span>
         </div>
       </div>
       

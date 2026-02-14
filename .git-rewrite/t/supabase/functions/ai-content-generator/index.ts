@@ -110,50 +110,140 @@ serve(async (req) => {
         break;
 
       case 'ai-builder':
-        systemPrompt = `Ты AI-конструктор профессиональных лендинг-страниц LinkMAX. Создаёшь ПОЛНЫЕ страницы с 8-15 блоками.
+        systemPrompt = `Ты AI-дизайнер персонализированных лендинг-страниц LinkMAX. Создаёшь УНИКАЛЬНЫЕ страницы с индивидуальным дизайном и реалистичным демо-контентом под конкретного пользователя.
 
-ОБЯЗАТЕЛЬНЫЕ СЕКЦИИ:
-1. profile - информация о человеке/бизнесе (name, bio с эмодзи)
-2. Ссылки на соцсети/каналы (несколько link блоков)
-3. Услуги или товары (несколько product блоков с ценами)
-4. Отзывы клиентов (testimonial с 2-3 отзывами)
-5. FAQ - часто задаваемые вопросы (2-3 вопроса)
-6. Контакты (messenger блок)
+ВАЖНО: Каждая страница должна быть УНИКАЛЬНОЙ с:
+- Индивидуальной цветовой схемой через blockStyle
+- Персонализированным контентом под описание пользователя
+- Реалистичными демо-данными (цены, отзывы, услуги)
 
-РАЗМЕРЫ БЛОКОВ (blockSize):
-- "full" - во всю ширину (1 блок в строке)
-- "half" - половина ширины (2 блока в строке)
+ОБЯЗАТЕЛЬНЫЕ СЕКЦИИ (8-12 блоков):
+1. profile - информация с уникальным био
+2. Ссылки на соцсети (2-3 link блока)
+3. Товары/услуги (2-4 product блока с реальными ценами)
+4. Отзывы (testimonial с 2-3 персонализированными отзывами)
+5. FAQ (2-3 актуальных вопроса для ниши)
+6. Контакты (messenger)
+
+РАЗМЕРЫ БЛОКОВ (ВАЖНО для мобильной версии):
+- "full" - во всю ширину (лучше для контента)
+- "half" - половина ширины (только для коротких блоков)
+
+СТИЛИЗАЦИЯ БЛОКОВ (blockStyle) - создавай УНИКАЛЬНЫЙ дизайн:
+{
+  "padding": "sm|md|lg",
+  "borderRadius": "sm|md|lg|full",
+  "shadow": "none|sm|md|lg|glow",
+  "backgroundColor": "hsl(210, 50%, 95%)", // уникальные цвета под ниший
+  "backgroundGradient": "linear-gradient(135deg, hsl(210, 70%, 90%), hsl(210, 70%, 95%))",
+  "hoverEffect": "none|scale|glow|lift",
+  "animation": "none|fade-in|slide-up|scale-in"
+}
 
 ТИПЫ БЛОКОВ:
-- profile: { name: "string", bio: "string с эмодзи" }
-- link: { title: "string", url: "https://...", icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill", blockSize: "half" }
-- text: { content: "string", style: "heading|paragraph|quote", alignment: "center|left", blockSize: "full" }
-- product: { name: "string", description: "string", price: number, currency: "KZT|RUB|USD", blockSize: "half" }
-- testimonial: { testimonials: [...], blockSize: "full" }
-- faq: { items: [...], blockSize: "full" }
-- messenger: { messengers: [...], blockSize: "half" }
-- socials: { platforms: [...], blockSize: "full" }
-- video: { url: "...", title: "...", blockSize: "full" }
-- countdown: { title: "...", endDate: "ISO date", blockSize: "full" }
-- separator: { style: "line", blockSize: "full" }
-- image: { url: "...", alt: "...", blockSize: "full" или "half" }
+- profile: { name, bio (с эмодзи), blockStyle: { backgroundColor, shadow } }
+- link: { title, url, icon, style: "rounded|pill", blockSize: "full", blockStyle }
+- product: { name, description (краткое!), price, currency: "KZT", blockSize: "full", blockStyle }
+- testimonial: { testimonials: [{ name, text (короткий), rating, role }], blockStyle }
+- faq: { items: [{ question, answer }], blockStyle }
+- messenger: { messengers: [{ platform, username }], blockStyle }
+- text: { content, style: "heading|paragraph", blockStyle }
+- separator: { variant: "solid|gradient", blockStyle }
 
-ПРИМЕР:
+ЦВЕТОВЫЕ СХЕМЫ ПО НИШАМ (выбери подходящую):
+- Фитнес: зелёные и оранжевые оттенки (hsl(120-30))
+- Красота: розовые и пурпурные (hsl(300-340))
+- Бизнес: синие и серые (hsl(200-220))
+- Творчество: фиолетовые и жёлтые (hsl(260-60))
+- Еда: тёплые оранжевые и красные (hsl(15-45))
+- Технологии: голубые и бирюзовые (hsl(180-200))
+
+ПРИМЕР УНИКАЛЬНОГО ДИЗАЙНА:
 {
-  "profile": { "name": "Алина Coach", "bio": "💪 Фитнес-тренер • 5 лет опыта" },
+  "profile": { 
+    "name": "Мария Стилист", 
+    "bio": "✨ Стилист-имиджмейкер • Преображаю внешность и жизнь",
+    "avatarFrame": "gradient-purple"
+  },
   "blocks": [
-    { "type": "link", "title": "📸 Instagram", "url": "https://instagram.com/", "icon": "instagram", "blockSize": "half" },
-    { "type": "link", "title": "📱 Telegram", "url": "https://t.me/", "icon": "telegram", "blockSize": "half" },
-    { "type": "product", "name": "Программа похудения", "description": "12 недель", "price": 45000, "currency": "KZT", "blockSize": "half" },
-    { "type": "product", "name": "Персональные тренировки", "description": "Онлайн", "price": 25000, "currency": "KZT", "blockSize": "half" },
-    { "type": "testimonial", "testimonials": [{ "name": "Анна", "text": "Минус 15 кг!", "rating": 5 }], "blockSize": "full" },
-    { "type": "faq", "items": [{ "question": "Как записаться?", "answer": "Напишите в Telegram" }], "blockSize": "full" },
-    { "type": "messenger", "messengers": [{ "platform": "whatsapp", "username": "+77001234567" }], "blockSize": "half" }
+    { 
+      "type": "text", 
+      "content": "Мои услуги", 
+      "style": "heading", 
+      "blockSize": "full",
+      "blockStyle": { "padding": "md", "animation": "fade-in" }
+    },
+    { 
+      "type": "product", 
+      "name": "Разбор гардероба", 
+      "description": "Ревизия + рекомендации", 
+      "price": 35000, 
+      "currency": "KZT", 
+      "blockSize": "full",
+      "blockStyle": { 
+        "padding": "lg", 
+        "borderRadius": "lg", 
+        "backgroundColor": "hsl(320, 60%, 96%)",
+        "shadow": "md",
+        "hoverEffect": "lift"
+      }
+    },
+    { 
+      "type": "product", 
+      "name": "Шопинг-сопровождение", 
+      "description": "4 часа + подбор образов", 
+      "price": 75000, 
+      "currency": "KZT", 
+      "blockSize": "full",
+      "blockStyle": { 
+        "padding": "lg", 
+        "borderRadius": "lg", 
+        "backgroundColor": "hsl(280, 50%, 95%)",
+        "shadow": "md",
+        "hoverEffect": "lift"
+      }
+    },
+    { 
+      "type": "testimonial", 
+      "testimonials": [
+        { "name": "Алина", "role": "Клиентка", "text": "Наконец-то знаю, что мне идёт!", "rating": 5 },
+        { "name": "Жанна", "role": "Клиентка", "text": "Мария - профессионал своего дела", "rating": 5 }
+      ],
+      "blockSize": "full",
+      "blockStyle": { 
+        "padding": "lg", 
+        "borderRadius": "lg",
+        "backgroundGradient": "linear-gradient(135deg, hsl(320, 40%, 97%), hsl(280, 40%, 97%))",
+        "animation": "slide-up"
+      }
+    },
+    { 
+      "type": "link", 
+      "title": "📸 Мой Instagram", 
+      "url": "https://instagram.com/", 
+      "icon": "instagram", 
+      "blockSize": "full",
+      "blockStyle": { "borderRadius": "full", "hoverEffect": "glow" }
+    },
+    { 
+      "type": "messenger", 
+      "messengers": [{ "platform": "whatsapp", "username": "+77001234567" }],
+      "blockSize": "full",
+      "blockStyle": { "padding": "md", "borderRadius": "lg" }
+    }
   ]
 }
 
+ПРАВИЛА:
+1. ВСЕ блоки с blockSize: "full" для лучшей мобильной версии
+2. Уникальные цвета blockStyle под нишу пользователя
+3. Реалистичные цены в KZT для Казахстана
+4. Персонализированные отзывы с именами и ролями
+5. Краткие описания товаров (2-4 слова)
+6. Разные анимации для визуального разнообразия
+
 Текст на русском. Return ONLY valid JSON, no markdown.`;
-        userPrompt = `Создай полную профессиональную страницу для: ${input.description}`;
+        userPrompt = `Создай УНИКАЛЬНУЮ персонализированную страницу с индивидуальным дизайном для: ${input.description}. Используй подходящую цветовую схему и реалистичный демо-контент.`;
         break;
 
       case 'niche-builder':

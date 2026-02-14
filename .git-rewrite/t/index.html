@@ -4,15 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     
-    <!-- Primary SEO Meta Tags -->
-    <title>LinkMAX — Бесплатный конструктор мультиссылок | Linktree и Taplink альтернатива</title>
-    <meta name="title" content="LinkMAX — Бесплатный конструктор мультиссылок | Linktree и Taplink альтернатива">
-    <meta name="description" content="Бесплатный конструктор мультиссылок для Instagram, TikTok, Telegram. Лучшая альтернатива Linktree и Taplink без комиссий. AI-генерация страницы за 2 минуты. 20+ блоков, аналитика, CRM.">
-    <meta name="keywords" content="link in bio, линк в био, мультиссылка, страница ссылок, linktree альтернатива, taplink аналог, конструктор визиток, мини лендинг, ссылка в профиле">
-    <meta name="author" content="LinkMAX" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <link rel="canonical" href="https://lnkmx.my/">
+    <!-- Primary SEO Meta Tags (client-side updates in SEOLandingHead) -->
+    <title>lnkmx - мини-сайт и заявки из одной ссылки</title>
+    <meta name="description" content="AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса. Соберите оффер, прайс и формы заявок за 2 минуты." />
+    <meta name="author" content="lnkmx" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    
+    <!-- Canonical URL Strategy: https://lnkmx.my (no www, no trailing slash) -->
+    <link rel="canonical" href="https://lnkmx.my/" />
+    
+    <!-- Hreflang for multi-language support -->
+    <link rel="alternate" hreflang="ru" href="https://lnkmx.my/?lang=ru" />
+    <link rel="alternate" hreflang="en" href="https://lnkmx.my/?lang=en" />
+    <link rel="alternate" hreflang="kk" href="https://lnkmx.my/?lang=kk" />
+    <link rel="alternate" hreflang="x-default" href="https://lnkmx.my/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lnkmx.my/" />
+    <meta property="og:title" content="lnkmx - мини-сайт и заявки из одной ссылки" />
+    <meta property="og:description" content="AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса. Соберите оффер, прайс и формы заявок за 2 минуты." />
+    <meta property="og:image" content="https://lnkmx.my/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="lnkmx - создай мини-сайт за 2 минуты" />
+    <meta property="og:site_name" content="lnkmx" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="kk_KZ" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://lnkmx.my/" />
+    <meta name="twitter:title" content="lnkmx - мини-сайт и заявки из одной ссылки" />
+    <meta name="twitter:description" content="AI-конструктор мини-сайтов для экспертов и малого бизнеса. Соберите страницу за 2 минуты." />
+    <meta name="twitter:image" content="https://lnkmx.my/og-image.png" />
+    <meta name="twitter:image:alt" content="lnkmx - создай мини-сайт за 2 минуты" />
+    <meta name="twitter:site" content="@lnkmx_app" />
+    <meta name="twitter:creator" content="@lnkmx_app" />
+    
+    <!-- Verification tags (add your codes here after GSC setup) -->
+    <!-- <meta name="google-site-verification" content="YOUR_GSC_CODE" /> -->
     
     <!-- Preconnect to external origins for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,98 +53,156 @@
     <link rel="preconnect" href="https://pphdcfxucfndmwulpfwv.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://ai.gateway.lovable.dev" />
     
-    <!-- Load fonts with display=swap for better FCP -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
+    <!-- Critical CSS for LCP - inline minimal styles for above-the-fold content -->
+    <style>
+      /* Critical font fallback to prevent layout shift */
+      body { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; }
+      /* Initial loading state to prevent FOUC */
+      #root { min-height: 100vh; }
+      /* SSR fallback content styling */
+      .ssr-fallback { max-width: 800px; margin: 0 auto; padding: 2rem; }
+      .ssr-fallback h1 { font-size: 2rem; margin-bottom: 1rem; }
+      .ssr-fallback p { font-size: 1.125rem; line-height: 1.7; margin-bottom: 1rem; }
+      .ssr-fallback ul { list-style: disc; padding-left: 1.5rem; }
+      .ssr-fallback li { margin-bottom: 0.5rem; }
+      .ssr-fallback a { color: #0080ff; text-decoration: underline; }
+    </style>
+    
+    <!-- Load fonts with display=swap - non-blocking -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#0080ff" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="LinkMAX">
-    <meta name="application-name" content="LinkMAX">
+    <meta name="apple-mobile-web-app-title" content="lnkmx">
+    <meta name="application-name" content="lnkmx">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
-    <link rel="apple-touch-icon" href="/favicon.jpg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
     <link rel="manifest" href="/manifest.webmanifest">
     
-    <!-- Hreflang for international SEO -->
-    <link rel="alternate" hreflang="ru" href="https://lnkmx.my/?lang=ru">
-    <link rel="alternate" hreflang="en" href="https://lnkmx.my/?lang=en">
-    <link rel="alternate" hreflang="kk" href="https://lnkmx.my/?lang=kk">
-    <link rel="alternate" hreflang="x-default" href="https://lnkmx.my/">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://lnkmx.my/" />
-    <meta property="og:title" content="LinkMAX — Бесплатный конструктор мультиссылок | Лучше чем Linktree и Taplink">
-    <meta property="og:description" content="Бесплатный конструктор мультиссылок для Instagram, TikTok, Telegram. AI-генерация страницы за 2 минуты. 20+ блоков, аналитика, CRM. 0% комиссии.">
-    <meta property="og:site_name" content="LinkMAX - Link in Bio Builder" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:locale:alternate" content="en_US" />
-    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/rsd687zRxRaxAP6X1wwlUq9nqwo1/social-images/social-1764234683859-Generated Image November 27, 2025 - 11_54AM.jpeg">
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="LinkMAX - AI-Powered Link-in-Bio Platform" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@LinkMAX" />
-    <meta name="twitter:creator" content="@LinkMAX" />
-    <meta name="twitter:title" content="LinkMAX — Бесплатный конструктор мультиссылок | Лучше чем Linktree">
-    <meta name="twitter:description" content="Бесплатный конструктор мультиссылок для Instagram, TikTok, Telegram. AI-генерация страницы за 2 минуты. 20+ блоков, аналитика, CRM.">
-    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/rsd687zRxRaxAP6X1wwlUq9nqwo1/social-images/social-1764234683859-Generated Image November 27, 2025 - 11_54AM.jpeg">
+    <!-- JSON-LD Schema for Landing Page -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "lnkmx",
+      "alternateName": "lnkmx.my",
+      "url": "https://lnkmx.my/",
+      "description": "AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KZT",
+        "description": "Бесплатный тариф с базовыми функциями"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "150"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "lnkmx",
+        "url": "https://lnkmx.my/"
+      }
+    }
+    </script>
     
-    <!-- Additional SEO signals for AI search engines -->
-    <meta name="generator" content="LinkMAX">
-    <meta name="revisit-after" content="7 days">
-    <meta name="rating" content="general">
-    <meta name="distribution" content="global">
-    <meta name="coverage" content="worldwide">
-    
-    <!-- AI Crawlers & LLM Discovery -->
-    <meta name="ai-content-type" content="SoftwareApplication">
-    <meta name="ai-primary-topic" content="Link in Bio Builder, Multilink Page Creator">
-    <meta name="ai-target-audience" content="Creators, Influencers, Freelancers, Small Businesses">
-    <meta name="ai-key-features" content="AI Generation, CRM, Analytics, Telegram Notifications, 20+ Block Types">
-    <meta name="ai-competitors" content="Linktree, Taplink, Beacons, Lnk.bio, Shorby">
-    <meta name="ai-use-cases" content="Instagram Bio Link, TikTok Bio Link, Social Media Landing Page, Digital Business Card">
-    <meta name="ai-pricing" content="Free tier available, Pro from $3.15/month">
-    
-    <!-- Dublin Core Metadata -->
-    <meta name="DC.title" content="LinkMAX - Free Link in Bio Builder">
-    <meta name="DC.creator" content="LinkMAX">
-    <meta name="DC.subject" content="Link in Bio, Multilink, Bio Page Builder">
-    <meta name="DC.description" content="Free AI-powered link in bio builder. Best Linktree and Taplink alternative.">
-    <meta name="DC.publisher" content="LinkMAX">
-    <meta name="DC.type" content="Software">
-    <meta name="DC.format" content="text/html">
-    <meta name="DC.language" content="ru, en, kk">
-    <meta name="DC.rights" content="Copyright LinkMAX">
-    
-    <!-- Additional structured hints -->
-    <meta name="product:category" content="Software > Web Applications > Social Media Tools">
-    <meta name="product:price:amount" content="0">
-    <meta name="product:price:currency" content="USD">
-    <meta name="product:availability" content="in stock">
-    <meta name="product:brand" content="LinkMAX">
-    
-    <!-- Geographic targeting -->
-    <meta name="geo.region" content="RU, KZ, BY, UA">
-    <meta name="geo.placename" content="Russia, Kazakhstan, Belarus, Ukraine">
-    <meta name="ICBM" content="55.7558, 37.6173">
-    
-    <!-- Verification and trust signals -->
-    <meta name="classification" content="Business, Technology, Social Media">
-    <meta name="category" content="Link in Bio Tools">
-    <meta name="pagetype" content="Homepage">
-    <meta name="HandheldFriendly" content="true">
-    <meta name="MobileOptimized" content="width">
-</head>
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "lnkmx",
+      "url": "https://lnkmx.my/",
+      "logo": "https://lnkmx.my/favicon.png",
+      "sameAs": [
+        "https://t.me/lnkmx_app",
+        "https://instagram.com/lnkmx_app"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "availableLanguage": ["Russian", "English", "Kazakh"]
+      }
+    }
+    </script>
+  </head>
 
   <body>
+    <!-- Main React App Container -->
     <div id="root"></div>
+    
+    <!-- SSR Fallback Content for Crawlers (noscript) -->
+    <noscript>
+      <div class="ssr-fallback" itemscope itemtype="https://schema.org/WebApplication">
+        <header>
+          <h1 itemprop="name">lnkmx - мини-сайт и заявки из одной ссылки</h1>
+        </header>
+        
+        <main>
+          <section id="about">
+            <h2>О платформе</h2>
+            <p itemprop="description">
+              lnkmx - это AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса в Казахстане и СНГ. 
+              Создайте профессиональную страницу с ссылками, прайс-листом, формами для заявок и бронированием за 2 минуты.
+            </p>
+          </section>
+          
+          <section id="features">
+            <h2>Возможности</h2>
+            <ul>
+              <li>Мини-сайт с вашими ссылками и контактами</li>
+              <li>Прайс-лист с услугами и ценами</li>
+              <li>Форма сбора заявок и лидов</li>
+              <li>Онлайн-бронирование консультаций</li>
+              <li>Аналитика переходов и кликов</li>
+              <li>Интеграция с Telegram-ботом</li>
+              <li>Поддержка 3 языков: русский, английский, казахский</li>
+            </ul>
+          </section>
+          
+          <section id="pricing">
+            <h2>Тарифы</h2>
+            <p>Бесплатный тариф включает все базовые функции. Premium открывает расширенную аналитику, приоритетную поддержку и дополнительные блоки.</p>
+            <p><a href="https://lnkmx.my/pricing">Смотреть все тарифы →</a></p>
+          </section>
+          
+          <section id="experts">
+            <h2>Каталог экспертов</h2>
+            <p>Найдите проверенных специалистов в разных нишах: красота, фитнес, образование, консалтинг и другие.</p>
+            <p><a href="https://lnkmx.my/experts">Открыть каталог →</a></p>
+          </section>
+          
+          <section id="get-started">
+            <h2>Начать бесплатно</h2>
+            <p>Создайте свой мини-сайт прямо сейчас - регистрация занимает меньше минуты.</p>
+            <p><a href="https://lnkmx.my/auth">Создать страницу →</a></p>
+          </section>
+        </main>
+        
+        <footer>
+          <nav aria-label="Footer navigation">
+            <ul>
+              <li><a href="https://lnkmx.my/pricing">Тарифы</a></li>
+              <li><a href="https://lnkmx.my/gallery">Галерея</a></li>
+              <li><a href="https://lnkmx.my/experts">Эксперты</a></li>
+              <li><a href="https://lnkmx.my/alternatives">Сравнение</a></li>
+              <li><a href="https://lnkmx.my/terms">Условия</a></li>
+              <li><a href="https://lnkmx.my/privacy">Конфиденциальность</a></li>
+            </ul>
+          </nav>
+          <p>© 2024-2025 lnkmx. Все права защищены.</p>
+          <link itemprop="url" href="https://lnkmx.my/">
+        </footer>
+      </div>
+    </noscript>
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

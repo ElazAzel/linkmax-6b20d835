@@ -3,7 +3,7 @@
  * Handles all AI-powered content generation
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 
 export interface MagicTitleInput {

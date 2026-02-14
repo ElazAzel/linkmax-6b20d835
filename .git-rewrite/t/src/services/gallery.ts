@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { incrementChallengeProgress } from '@/services/social';
 import type { Niche } from '@/lib/niches';
 

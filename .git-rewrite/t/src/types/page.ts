@@ -1,4 +1,4 @@
-export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community';
+export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';
 
 // Editor mode is now always 'grid'
 export type EditorMode = 'grid';
@@ -33,6 +33,11 @@ export interface BlockStyle {
   animation?: 'none' | 'fade-in' | 'slide-up' | 'scale-in' | 'bounce';
   animationDelay?: number; // in milliseconds (0-2000)
   animationSpeed?: 'slow' | 'normal' | 'fast'; // slow: 0.8s, normal: 0.5s, fast: 0.3s
+  
+  // Paid content access (coming soon)
+  isPaidContent?: boolean;
+  paidContentPrice?: number;
+  paidContentCurrency?: Currency;
 }
 
 export interface BlockSchedule {
@@ -41,6 +46,8 @@ export interface BlockSchedule {
 }
 
 export type ProfileFrameStyle = 'default' | 'none' | 'solid' | 'gradient' | 'gradient-sunset' | 'gradient-ocean' | 'gradient-purple' | 'neon-blue' | 'neon-pink' | 'neon-green' | 'rainbow' | 'rainbow-spin' | 'double' | 'dashed' | 'dotted' | 'glow-pulse' | 'fire' | 'electric' | 'wave' | 'heartbeat' | 'sparkle' | 'glitch';
+
+export type NameAnimationType = 'none' | 'typing' | 'wave' | 'bounce' | 'glow' | 'gradient' | 'shake' | 'pulse' | 'rainbow' | 'neon';
 
 export type VerificationIconColor = 'blue' | 'green' | 'gold' | 'purple' | 'pink' | 'red' | 'white';
 export type VerificationIconPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
@@ -60,6 +67,7 @@ export interface ProfileBlock {
   autoVerifyPremium?: boolean; // Auto-verify if page owner is premium
   avatarFrame?: ProfileFrameStyle;
   avatarIcon?: string; // Lucide icon name
+  nameAnimation?: NameAnimationType; // Name text animation
   coverImage?: string;
   coverGradient?: 'none' | 'dark' | 'light' | 'primary' | 'sunset' | 'ocean' | 'purple';
   coverHeight?: 'small' | 'medium' | 'large';
@@ -114,6 +122,7 @@ export interface ProductBlock {
   currency: Currency;
   image?: string;
   buyLink?: string;
+  buttonText?: string | MultilingualString;
   alignment?: 'left' | 'center' | 'right';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -165,7 +174,7 @@ export interface ButtonBlock {
 export interface SocialsBlock {
   id: string;
   type: 'socials';
-  title?: string;
+  title?: string | MultilingualString;
   platforms: Array<{
     name: string;
     url: string;
@@ -180,21 +189,11 @@ export interface ImageBlock {
   id: string;
   type: 'image';
   url: string;
-  alt: string;
-  caption?: string;
+  alt: string | MultilingualString;
+  caption?: string | MultilingualString;
   link?: string;
   style?: 'polaroid' | 'vignette' | 'circle' | 'default' | 'banner';
   alignment?: 'left' | 'center' | 'right';
-  schedule?: BlockSchedule;
-  blockStyle?: BlockStyle;
-}
-
-export interface SearchBlock {
-  id: string;
-  type: 'search';
-  title?: string | MultilingualString;
-  placeholder?: string | MultilingualString;
-  isPremium: true;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -252,6 +251,7 @@ export interface DownloadBlock {
   fileName: string;
   fileSize?: string;
   icon?: string;
+  buttonText?: string | MultilingualString;
   alignment?: 'left' | 'center' | 'right';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -456,6 +456,7 @@ export interface CommunityBlock {
   icon?: 'users' | 'crown' | 'star' | 'heart' | 'zap' | 'lock';
   memberCount?: string; // e.g., "500+ участников"
   style?: 'default' | 'premium' | 'exclusive';
+  buttonText?: string | MultilingualString;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -501,7 +502,119 @@ export interface BookingBlock {
   dailyReminderEnabled?: boolean; // Send daily reminder about today's bookings
   dailyReminderTime?: string; // Time for daily reminder in HH:MM format (default: 08:50)
   weeklyMotivationEnabled?: boolean; // Send weekly motivation on Mondays at 9:00
+  buttonText?: string | MultilingualString; // Custom button text
   isPremium: true;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+export type EventLocationType = 'online' | 'offline';
+
+// Extended field types matching Google Forms capabilities
+export type EventFieldType =
+  | 'short_text'      // Single line text
+  | 'long_text'       // Multi-line paragraph
+  | 'email'           // Email with validation
+  | 'phone'           // Phone number
+  | 'number'          // Numeric input
+  | 'dropdown'        // Single select dropdown
+  | 'single_choice'   // Radio buttons
+  | 'multiple_choice' // Checkboxes (multiple select)
+  | 'date'            // Date picker
+  | 'time'            // Time picker
+  | 'datetime'        // Date and time
+  | 'checkbox'        // Single agreement checkbox
+  | 'url'             // URL with validation
+  | 'linear_scale'    // 1-10 scale rating
+  | 'rating'          // Star rating (1-5)
+  | 'grid'            // Multiple choice grid
+  | 'checkbox_grid'   // Checkbox grid
+  | 'media'           // Media section (Pro)
+  | 'file'            // File upload (Pro)
+  | 'section_header'  // Section divider with title
+  | 'description';    // Description/instruction text
+
+export interface EventFieldOption {
+  id: string;
+  label_i18n: MultilingualString;
+  goToSection?: string; // Section navigation for conditional logic
+}
+
+export interface EventFormSection {
+  id: string;
+  title_i18n: MultilingualString;
+  description_i18n?: MultilingualString;
+  fieldIds: string[]; // Fields belonging to this section
+}
+
+export interface LinearScaleConfig {
+  min: number;
+  max: number;
+  minLabel_i18n?: MultilingualString;
+  maxLabel_i18n?: MultilingualString;
+}
+
+export interface FieldGridConfig {
+  rows: EventFieldOption[];
+  columns: EventFieldOption[];
+}
+
+export interface EventFormField {
+  id: string;
+  type: EventFieldType;
+  label_i18n: MultilingualString;
+  placeholder_i18n?: MultilingualString;
+  helpText_i18n?: MultilingualString;
+  required?: boolean;
+  options?: EventFieldOption[];
+  sectionId?: string; // Which section this field belongs to
+  validation?: {
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+    pattern?: string;
+  };
+  // Type-specific configs
+  linearScale?: LinearScaleConfig;
+  grid?: FieldGridConfig;
+  // Conditional logic
+  showIf?: {
+    fieldId: string;
+    operator: 'equals' | 'not_equals' | 'contains' | 'not_empty';
+    value?: string | string[];
+  };
+}
+
+export interface EventBlock {
+  id: string;
+  type: 'event';
+  eventId: string;
+  title: MultilingualString;
+  description?: MultilingualString;
+  coverUrl?: string;
+  startAt?: string;
+  endAt?: string;
+  timezone?: string;
+  registrationClosesAt?: string;
+  locationType?: EventLocationType;
+  locationValue?: string;
+  capacity?: number;
+  isPaid?: boolean;
+  price?: number;
+  currency?: Currency;
+  status?: 'draft' | 'published' | 'closed';
+  formFields?: EventFormField[];
+  formSections?: EventFormSection[];
+  settings?: {
+    requireApproval?: boolean;
+    allowDuplicateEmail?: boolean;
+    note?: string;
+    showProgressBar?: boolean;
+    shuffleQuestions?: boolean;
+    confirmationMessage_i18n?: MultilingualString;
+  };
+  buttonText?: MultilingualString; // Custom button text
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -512,9 +625,9 @@ export type BlockSizePreset =
   | 'full'        // Full width block
   | 'half';       // Half width block (2 per row)
 
-export const BLOCK_SIZE_DIMENSIONS: Record<BlockSizePreset, { gridCols: 1 | 2; label: string }> = {
-  'full': { gridCols: 1, label: 'Во всю ширину' },
-  'half': { gridCols: 2, label: 'Половина ширины' },
+export const BLOCK_SIZE_DIMENSIONS: Record<BlockSizePreset, { gridCols: 1 | 2 }> = {
+  'full': { gridCols: 1 },
+  'half': { gridCols: 2 },
 };
 
 // Base block type with optional grid layout
@@ -524,7 +637,7 @@ interface BlockGridProps {
   createdAt?: string;
 }
 
-export type Block = (ProfileBlock | LinkBlock | ButtonBlock | SocialsBlock | TextBlock | ImageBlock | ProductBlock | VideoBlock | CarouselBlock | SearchBlock | CustomCodeBlock | MessengerBlock | FormBlock | DownloadBlock | NewsletterBlock | TestimonialBlock | ScratchBlock | MapBlock | AvatarBlock | SeparatorBlock | CatalogBlock | BeforeAfterBlock | FAQBlock | CountdownBlock | PricingBlock | ShoutoutBlock | BookingBlock | CommunityBlock) & BlockGridProps;
+export type Block = (ProfileBlock | LinkBlock | ButtonBlock | SocialsBlock | TextBlock | ImageBlock | ProductBlock | VideoBlock | CarouselBlock | CustomCodeBlock | MessengerBlock | FormBlock | DownloadBlock | NewsletterBlock | TestimonialBlock | ScratchBlock | MapBlock | AvatarBlock | SeparatorBlock | CatalogBlock | BeforeAfterBlock | FAQBlock | CountdownBlock | PricingBlock | ShoutoutBlock | BookingBlock | CommunityBlock | EventBlock) & BlockGridProps;
 
 // Page background configuration
 export interface PageBackground {
@@ -570,6 +683,7 @@ export interface GridConfig {
 export interface PageData {
   id: string;
   userId?: string;
+  slug?: string;
   blocks: Block[];
   theme: PageTheme;
   seo: {
@@ -578,6 +692,9 @@ export interface PageData {
     keywords: string[];
   };
   isPremium?: boolean;
+  isPublished?: boolean;
+  isIndexable?: boolean;
+  viewCount?: number;
   metrics?: PageMetrics;
   editorMode?: EditorMode;
   gridConfig?: GridConfig;

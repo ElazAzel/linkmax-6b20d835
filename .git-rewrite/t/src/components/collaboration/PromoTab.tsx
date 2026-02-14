@@ -32,7 +32,7 @@ export function PromoTab({ onSendRequest }: PromoTabProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm">Взаимный пиар по нише</CardTitle>
+        <CardTitle className="text-sm">{t('collaboration.promoTitle', 'Взаимный пиар по нише')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex flex-wrap gap-2">
@@ -51,7 +51,9 @@ export function PromoTab({ onSendRequest }: PromoTabProps) {
         {nicheUsers.length > 0 && (
           <div className="space-y-2 max-h-64 overflow-y-auto">
             <p className="text-xs text-muted-foreground">
-              Пользователи в нише "{t(`niches.${selectedNiche}`, selectedNiche)}"
+              {t('collaboration.nicheUsers', 'Пользователи в нише "{{niche}}"', {
+                niche: t(`niches.${selectedNiche}`, selectedNiche),
+              })}
             </p>
             {nicheUsers.map(user => (
               <div key={user.id} className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
@@ -64,7 +66,7 @@ export function PromoTab({ onSendRequest }: PromoTabProps) {
                 </div>
                 <Button size="sm" onClick={() => onSendRequest(user.id)}>
                   <UserPlus className="h-4 w-4 mr-1" />
-                  Предложить
+                  {t('collaboration.offer', 'Предложить')}
                 </Button>
               </div>
             ))}

@@ -5,6 +5,7 @@ import { ExternalLink, Instagram, Twitter, Youtube, Facebook, Linkedin, Globe, L
 import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/block-utils';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
+import { cn } from '@/lib/utils';
 import type { LinkBlock as LinkBlockType } from '@/types/page';
 
 interface LinkBlockProps {
@@ -72,10 +73,20 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const isImageBackground = block.background?.type === 'image';
 
   return (
-    <div className={`flex ${block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'}`}>
+    <div className={cn(
+      "flex w-full",
+      block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'
+    )}>
       <Button
         variant="outline"
-        className={`max-w-full sm:max-w-md w-full justify-between h-auto py-4 px-6 hover:scale-[1.02] transition-all shadow-sm hover:shadow-md ${getButtonClass(block.style)} ${hasCustomBackground ? 'border-transparent text-white hover:bg-transparent' : 'bg-card border-border hover:bg-accent'} ${isImageBackground ? 'relative overflow-hidden' : ''}`}
+        className={cn(
+          "w-full justify-between h-auto min-h-[56px] py-3 px-4 sm:px-6",
+          "hover:scale-[1.02] transition-all shadow-sm hover:shadow-md rounded-xl",
+          "active:scale-[0.98]",
+          getButtonClass(block.style),
+          hasCustomBackground ? 'border-transparent text-white hover:bg-transparent' : 'bg-card border-border hover:bg-accent',
+          isImageBackground && 'relative overflow-hidden'
+        )}
         onClick={handleClick}
         style={backgroundStyle}
       >
@@ -83,21 +94,36 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
         {isImageBackground && (
           <div className="absolute inset-0 bg-black/30 pointer-events-none" />
         )}
-        <div className={`flex items-center gap-3 min-w-0 ${isImageBackground ? 'relative z-10' : ''}`}>
+        <div className={cn(
+          "flex items-center gap-3 min-w-0 flex-1",
+          isImageBackground && 'relative z-10'
+        )}>
           {shouldShowFavicon ? (
             <img 
               src={faviconSrc}
               alt=""
-              className="h-5 w-5 flex-shrink-0 rounded-sm object-contain"
+              className="h-6 w-6 flex-shrink-0 rounded-md object-contain"
               onError={handleFaviconError}
               onLoad={() => setFaviconLoaded(true)}
             />
           ) : (
-            <FallbackIcon className={`h-5 w-5 flex-shrink-0 ${hasCustomBackground ? 'text-white' : 'text-primary'}`} />
+            <FallbackIcon className={cn(
+              "h-6 w-6 flex-shrink-0",
+              hasCustomBackground ? 'text-white' : 'text-primary'
+            )} />
           )}
-          <span className={`font-medium truncate ${hasCustomBackground ? 'text-white drop-shadow-md' : 'text-foreground'}`}>{title}</span>
+          <span className={cn(
+            "font-medium text-sm sm:text-base line-clamp-2 text-left",
+            hasCustomBackground ? 'text-white drop-shadow-md' : 'text-foreground'
+          )}>
+            {title}
+          </span>
         </div>
-        <ExternalLink className={`h-4 w-4 flex-shrink-0 ml-2 ${isImageBackground ? 'relative z-10' : ''} ${hasCustomBackground ? 'text-white/80' : 'text-muted-foreground'}`} />
+        <ExternalLink className={cn(
+          "h-4 w-4 flex-shrink-0 ml-2",
+          isImageBackground && 'relative z-10',
+          hasCustomBackground ? 'text-white/80' : 'text-muted-foreground'
+        )} />
       </Button>
     </div>
   );

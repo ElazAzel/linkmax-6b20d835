@@ -1,4 +1,5 @@
 import { Check, Gift, Clock, Coins } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { type Quest } from '@/services/quests';
@@ -16,6 +17,7 @@ export function DailyQuestsPanel({
   progress,
   loading 
 }: DailyQuestsPanelProps) {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div className="p-4 rounded-2xl bg-card/50 backdrop-blur-xl border border-border/30">
@@ -41,7 +43,7 @@ export function DailyQuestsPanel({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Gift className="w-5 h-5 text-primary" />
-          <span className="font-semibold text-foreground">Ежедневные задания</span>
+          <span className="font-semibold text-foreground">{t('quests.panelTitle', 'Ежедневные задания')}</span>
         </div>
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <Clock className="w-4 h-4" />
@@ -54,8 +56,14 @@ export function DailyQuestsPanel({
         <Progress value={progressPercent} className="h-2" />
         <p className="text-xs text-muted-foreground flex items-center gap-1">
           {allCompleted 
-            ? <>🎉 Все задания выполнены! <Coins className="h-3 w-3 text-yellow-500" /> +{progress.tokensEarned}</>
-            : <><Coins className="h-3 w-3 text-yellow-500" /> +{progress.tokensEarned} Linkkon заработано</>
+            ? <>
+                {t('quests.allCompleted', '🎉 Все задания выполнены!')}{' '}
+                <Coins className="h-3 w-3 text-yellow-500" /> +{progress.tokensEarned}
+              </>
+            : <>
+                <Coins className="h-3 w-3 text-yellow-500" />{' '}
+                {t('quests.tokensEarned', '+{{count}} Linkkon заработано', { count: progress.tokensEarned })}
+              </>
           }
         </p>
       </div>
@@ -82,10 +90,10 @@ export function DailyQuestsPanel({
                   "font-medium text-sm truncate",
                   isCompleted && "text-primary"
                 )}>
-                  {quest.title}
+                  {t(quest.titleKey)}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
-                  {quest.description}
+                  {t(quest.descriptionKey)}
                 </p>
               </div>
 

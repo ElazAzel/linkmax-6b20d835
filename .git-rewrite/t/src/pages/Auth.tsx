@@ -13,10 +13,11 @@ import { Gift, Mail, Check } from 'lucide-react';
 import { z } from 'zod';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { applyReferralCode } from '@/services/referral';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { Checkbox } from '@/components/ui/checkbox';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 
 const authSchema = z.object({
   email: z
@@ -38,7 +39,13 @@ type TelegramResetStep = 'request' | 'verify';
 export default function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const canonical = 'https://lnkmx.my/auth';
+  const seoTitle = t('auth.seo.title', 'Sign in to lnkmx');
+  const seoDescription = t(
+    'auth.seo.description',
+    'Access your lnkmx dashboard to build and publish your link in bio page.'
+  );
   const { user, signUp, signIn, signInWithGoogle, signInWithApple } = useAuth();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +62,8 @@ export default function Auth() {
   // Get referral code and mode from URL
   const refCode = searchParams.get('ref');
   const urlMode = searchParams.get('mode');
+  const returnTo = searchParams.get('returnTo');
+  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : null;
 
   // Check for password update mode from URL or hash params (from email link)
   useEffect(() => {
@@ -90,9 +99,9 @@ export default function Auth() {
           }
         });
       }
-      navigate('/dashboard');
+      navigate(safeReturnTo || '/dashboard');
     }
-  }, [user, navigate, refCode, authMode]);
+  }, [user, navigate, refCode, authMode, safeReturnTo]);
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -325,7 +334,21 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4 relative overflow-hidden">
+    <>
+      <StaticSEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        currentLanguage={i18n.language}
+        indexable={false}
+        alternates={[
+          { hreflang: 'ru', href: `${canonical}?lang=ru` },
+          { hreflang: 'en', href: `${canonical}?lang=en` },
+          { hreflang: 'kk', href: `${canonical}?lang=kk` },
+          { hreflang: 'x-default', href: canonical },
+        ]}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
       {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gradient-to-bl from-primary/20 via-violet-500/10 to-transparent rounded-full blur-[150px] animate-morph" />
@@ -355,7 +378,7 @@ export default function Auth() {
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
             <div className="h-16 w-16 rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/30 shadow-glass-lg flex items-center justify-center animate-scale-in">
-              <img src="/logo.png" alt="LinkMAX" className="h-10 w-10 object-contain" />
+              <img src="/favicon.png" alt="lnkmx" className="h-10 w-10 object-contain" />
             </div>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
@@ -546,7 +569,7 @@ export default function Auth() {
                           <span className="w-full border-t border-border/30" />
                         </div>
                         <div className="relative flex justify-center text-xs">
-                          <span className="bg-card px-2 text-muted-foreground">или</span>
+                          <span className="bg-card px-2 text-muted-foreground">{t('common.or', 'or')}</span>
                         </div>
                       </div>
                       <Button 
@@ -555,7 +578,7 @@ export default function Auth() {
                         className="w-full h-12 rounded-xl"
                         onClick={() => setAuthMode('reset-telegram')}
                       >
-                        Восстановить через Telegram
+                        {t('auth.telegram.recoverViaTelegram', 'Recover via Telegram')}
                       </Button>
                       <Button 
                         type="button"
@@ -570,9 +593,9 @@ export default function Auth() {
                 ) : authMode === 'reset-telegram' ? (
                   <div className="space-y-4 pt-4">
                     <div className="text-center mb-4">
-                      <h3 className="text-lg font-semibold">Восстановление через Telegram</h3>
+                      <h3 className="text-lg font-semibold">{t('auth.telegram.recoveryTitle', 'Recovery via Telegram')}</h3>
                       <p className="text-sm text-muted-foreground">
-                        {telegramResetStep === 'request' ? 'Введите ваш Telegram Chat ID' : 'Введите код из Telegram'}
+                        {telegramResetStep === 'request' ? t('auth.telegram.enterChatId', 'Enter your Telegram Chat ID') : t('auth.telegram.enterCode', 'Enter code from Telegram')}
                       </p>
                     </div>
                     {telegramResetStep === 'request' ? (
@@ -584,7 +607,7 @@ export default function Auth() {
                           className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30"
                         />
                         <Button onClick={handleTelegramResetRequest} className="w-full h-12 rounded-xl" disabled={isLoading}>
-                          {isLoading ? 'Отправка...' : 'Получить код'}
+                          {isLoading ? t('auth.telegram.sending', 'Sending...') : t('auth.telegram.getCode', 'Get code')}
                         </Button>
                       </div>
                     ) : (
@@ -599,12 +622,12 @@ export default function Auth() {
                         <Input
                           name="new-password"
                           type="password"
-                          placeholder="Новый пароль"
+                          placeholder={t('auth.telegram.newPassword', 'New password')}
                           required
                           className="h-12 rounded-xl bg-card/40"
                         />
                         <Button type="submit" className="w-full h-12 rounded-xl" disabled={isLoading}>
-                          {isLoading ? 'Сохранение...' : 'Сохранить пароль'}
+                          {isLoading ? t('auth.telegram.saving', 'Saving...') : t('auth.telegram.savePassword', 'Save password')}
                         </Button>
                       </form>
                     )}
@@ -613,7 +636,7 @@ export default function Auth() {
                       className="w-full rounded-xl"
                       onClick={() => { setAuthMode('signin'); setTelegramResetStep('request'); }}
                     >
-                      Назад
+                      {t('auth.telegram.back', 'Back')}
                     </Button>
                   </div>
                 ) : (
@@ -713,6 +736,7 @@ export default function Auth() {
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { TeamEditor } from './TeamEditor';
 import { TeamMembersList } from './TeamMembersList';
 import { getTeamWithMembers, type Team, type TeamMember } from '@/services/collaboration';
+import { useTranslation } from 'react-i18next';
 
 interface TeamsTabProps {
   userId: string;
@@ -20,6 +21,7 @@ interface TeamsTabProps {
 }
 
 export function TeamsTab({ userId, teams, onCreateTeam, onLeaveTeam, onRefresh }: TeamsTabProps) {
+  const { t } = useTranslation();
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamSlug, setNewTeamSlug] = useState('');
   const [newTeamDesc, setNewTeamDesc] = useState('');
@@ -76,12 +78,12 @@ export function TeamsTab({ userId, teams, onCreateTeam, onLeaveTeam, onRefresh }
     <div className="space-y-4">
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Мои команды</CardTitle>
+          <CardTitle className="text-sm">{t('teams.myTeams', 'Мои команды')}</CardTitle>
         </CardHeader>
         <CardContent>
           {teams.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Вы не состоите ни в одной команде
+              {t('teams.noTeams', 'Вы не состоите ни в одной команде')}
             </p>
           ) : (
             <div className="space-y-2">
@@ -111,7 +113,7 @@ export function TeamsTab({ userId, teams, onCreateTeam, onLeaveTeam, onRefresh }
                       </DialogTrigger>
                       <DialogContent className="max-h-[80vh] overflow-y-auto">
                         <DialogHeader>
-                          <DialogTitle>Настройки команды</DialogTitle>
+                          <DialogTitle>{t('teams.settings', 'Настройки команды')}</DialogTitle>
                         </DialogHeader>
                         {selectedTeam && selectedTeam.id === team.id && (
                           <div className="space-y-4">
@@ -140,7 +142,7 @@ export function TeamsTab({ userId, teams, onCreateTeam, onLeaveTeam, onRefresh }
                     </Dialog>
                     {team.owner_id !== userId && (
                       <Button size="sm" variant="outline" onClick={() => onLeaveTeam(team.id)}>
-                        Выйти
+                        {t('teams.leave', 'Выйти')}
                       </Button>
                     )}
                   </div>
@@ -154,26 +156,26 @@ export function TeamsTab({ userId, teams, onCreateTeam, onLeaveTeam, onRefresh }
       {/* Create team */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Создать команду</CardTitle>
+          <CardTitle className="text-sm">{t('teams.createTeam', 'Создать команду')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Input
-            placeholder="Название команды"
+            placeholder={t('teams.teamNamePlaceholder', 'Название команды')}
             value={newTeamName}
             onChange={(e) => setNewTeamName(e.target.value)}
           />
           <Input
-            placeholder="URL команды (slug)"
+            placeholder={t('teams.teamSlugPlaceholder', 'URL команды (slug)')}
             value={newTeamSlug}
             onChange={(e) => setNewTeamSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
           />
           <Textarea
-            placeholder="Описание команды"
+            placeholder={t('teams.teamDescriptionPlaceholder', 'Описание команды')}
             value={newTeamDesc}
             onChange={(e) => setNewTeamDesc(e.target.value)}
           />
           <Button className="w-full" onClick={handleCreateTeam} disabled={!newTeamName || !newTeamSlug}>
-            Создать команду
+            {t('teams.createTeamButton', 'Создать команду')}
           </Button>
         </CardContent>
       </Card>

@@ -6,6 +6,7 @@ import { CollabsTab } from './CollabsTab';
 import { PromoTab } from './PromoTab';
 import { ShoutoutsTab } from './ShoutoutsTab';
 import { TeamsTab } from './TeamsTab';
+import { useTranslation } from 'react-i18next';
 
 interface CollaborationPanelProps {
   userId: string;
@@ -13,6 +14,7 @@ interface CollaborationPanelProps {
 }
 
 export function CollaborationPanel({ userId, pageId }: CollaborationPanelProps) {
+  const { t } = useTranslation();
   const {
     teams,
     shoutouts,
@@ -51,19 +53,19 @@ export function CollaborationPanel({ userId, pageId }: CollaborationPanelProps) 
         <TabsList className="grid w-full grid-cols-4 bg-card/50">
           <TabsTrigger value="collabs" className="text-xs">
             <Users className="h-4 w-4 mr-1" />
-            Коллабы
+            {t('collaboration.tabs.collabs', 'Коллабы')}
           </TabsTrigger>
           <TabsTrigger value="promo" className="text-xs">
             <Heart className="h-4 w-4 mr-1" />
-            Взаимный пиар
+            {t('collaboration.tabs.promo', 'Взаимный пиар')}
           </TabsTrigger>
           <TabsTrigger value="shoutouts" className="text-xs">
             <Megaphone className="h-4 w-4 mr-1" />
-            Шаут-ауты
+            {t('collaboration.tabs.shoutouts', 'Шаут-ауты')}
           </TabsTrigger>
           <TabsTrigger value="teams" className="text-xs">
             <UserPlus className="h-4 w-4 mr-1" />
-            Команды
+            {t('collaboration.tabs.teams', 'Команды')}
           </TabsTrigger>
         </TabsList>
 

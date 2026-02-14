@@ -56,3 +56,9 @@ verify_jwt = false
 
 [functions.seed-demo-accounts]
 verify_jwt = false
+
+[functions.send-event-confirmation]
+verify_jwt = false
+
+[functions.send-attendee-email]
+verify_jwt = false

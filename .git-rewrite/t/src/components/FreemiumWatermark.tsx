@@ -17,7 +17,7 @@ export const FreemiumWatermark = memo(function FreemiumWatermark({ show }: Freem
     >
       <Sparkles className="h-4 w-4 text-primary group-hover:animate-pulse" />
       <span className="text-sm font-medium text-foreground">
-        Made with <span className="text-primary font-semibold">LinkMAX</span>
+        Made with <span className="text-primary font-semibold">lnkmx</span>
       </span>
     </a>
   );

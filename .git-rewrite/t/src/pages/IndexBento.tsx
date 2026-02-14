@@ -295,7 +295,7 @@ export default function IndexBento() {
                 </div>
                 <div className="flex items-baseline gap-2 mb-6">
                   <span className="text-3xl font-bold">$5.10</span>
-                  <span className="text-muted-foreground">/мес</span>
+                  <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
                   <span className="text-xs text-emerald-500 font-medium">-40%</span>
                 </div>
                 <ul className="space-y-2 text-sm mb-6">
@@ -352,8 +352,8 @@ export default function IndexBento() {
               
               {/* Company Details for RoboKassa compliance */}
               <div className="text-center text-xs text-muted-foreground pt-4 border-t border-border/30">
-                <p className="mb-1">ИП BEEGIN • БИН: 971207300019</p>
-                <p className="mb-2">г. Алматы, ул. Шолохова, д. 20/7</p>
+                <p className="mb-1">{t('pricing.companyDetails.nameLine', 'ИП BEEGIN • БИН: 971207300019')}</p>
+                <p className="mb-2">{t('pricing.companyDetails.addressLine', 'г. Алматы, ул. Шолохова, д. 20/7')}</p>
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   <a href="mailto:admin@lnkmx.my" className="hover:text-foreground transition-colors">
                     admin@lnkmx.my

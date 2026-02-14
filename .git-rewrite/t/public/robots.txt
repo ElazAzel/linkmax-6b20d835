@@ -1,6 +1,116 @@
+# =============================================================================
+# lnkmx.my robots.txt
+# Canonical Domain: https://lnkmx.my (no www, HTTPS only)
+# Last Updated: 2026-01-27
+# =============================================================================
+
+# Default rules for all crawlers
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin
+Disallow: /dashboard
+Disallow: /dashboard-v2
+Disallow: /auth
+Disallow: /auth/
+Disallow: /install
+Disallow: /join/
+Disallow: /team/
+Disallow: /p/
+Disallow: /crm
+Disallow: /crm/
+Disallow: /event-scanner
+Disallow: /legacy
 
+# Sitemap (static fallback, dynamic via Edge Function)
 Sitemap: https://lnkmx.my/sitemap.xml
+
+# =============================================================================
+# Search Engine Bots
+# =============================================================================
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# =============================================================================
+# AI Crawlers
+# =============================================================================
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# =============================================================================
+# Social Media Bots
+# =============================================================================
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# =============================================================================
+# Block SEO Scraper Bots
+# =============================================================================
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /

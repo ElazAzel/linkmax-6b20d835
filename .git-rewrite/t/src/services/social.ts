@@ -1,7 +1,8 @@
 /**
  * Social features service - gifts, boosts, challenges, activities
  */
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
+import i18n from '@/i18n/config';
 
 // ==================== TYPES ====================
 
@@ -149,7 +150,7 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
           type: 'challenge_completed',
           recipientId: user.id,
           data: {
-            challengeTitle: challengeInfo?.title || 'Еженедельный челлендж'
+            challengeTitle: challengeInfo?.title || i18n.t('social.weeklyChallenge', 'Еженедельный челлендж')
           }
         }
       });
@@ -158,7 +159,7 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
     }
 
     // Notify friends about completed challenge
-    await notifyFriendsAboutChallenge(user.id, challengeInfo?.title || 'Челлендж');
+    await notifyFriendsAboutChallenge(user.id, challengeInfo?.title || i18n.t('social.challenge', 'Челлендж'));
   }
   
   return result;
@@ -183,7 +184,7 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
   if (!friendships || friendships.length === 0) return;
 
   const friendIds = friendships.map(f => f.user_id === userId ? f.friend_id : f.user_id);
-  const friendName = userProfile?.display_name || userProfile?.username || 'Друг';
+  const friendName = userProfile?.display_name || userProfile?.username || i18n.t('common.friend', 'Друг');
 
   // Notify each friend (in parallel, but limited)
   await Promise.all(
@@ -243,7 +244,7 @@ export async function sendPremiumGift(
         type: 'gift_received',
         recipientId,
         data: {
-          senderName: senderProfile?.display_name || senderProfile?.username || 'Пользователь',
+          senderName: senderProfile?.display_name || senderProfile?.username || i18n.t('common.user', 'Пользователь'),
           days,
           message
         }
@@ -327,7 +328,7 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
             type: 'gift_claimed',
             recipientId: giftInfo.sender_id,
             data: {
-              senderName: recipientProfile?.display_name || recipientProfile?.username || 'Получатель'
+              senderName: recipientProfile?.display_name || recipientProfile?.username || i18n.t('common.recipient', 'Получатель')
             }
           }
         });

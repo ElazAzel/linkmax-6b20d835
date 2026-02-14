@@ -1,73 +1,145 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+/**
+ * Dashboard v1.2 - Mobile-first App Experience
+ * Main hub with tab-based navigation: Projects, Editor, CRM, Analytics, Gallery, Settings
+ */
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useDashboard } from '@/hooks/useDashboard';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
-import { PreviewEditor } from '@/components/editor/PreviewEditor';
+import { useEditorHistory } from '@/hooks/useEditorHistory';
+import { useTranslation } from 'react-i18next';
+import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+
+// Layout & Navigation
+import { AppTabBar } from '@/components/layout/AppTabBar';
+
+// Tab Content Components
+import { ProjectsTab } from '@/components/dashboard/ProjectsTab';
+import { EditorTab } from '@/components/dashboard/EditorTab';
+import { CRMTab } from '@/components/dashboard/CRMTab';
+import { AnalyticsTab } from '@/components/dashboard/AnalyticsTab';
+import { SettingsTab } from '@/components/dashboard/SettingsTab';
+
+// Modals & Sheets
+import { BlockEditor } from '@/components/BlockEditor';
 import { TemplateGallery } from '@/components/editor/TemplateGallery';
 import { TemplateMarketplace } from '@/components/editor/TemplateMarketplace';
 import { SaveTemplateDialog } from '@/components/editor/SaveTemplateDialog';
-import { MobileToolbar } from '@/components/editor/MobileToolbar';
-import { MobileSettingsSheet } from '@/components/editor/MobileSettingsSheet';
-import { PullToRefresh } from '@/components/editor/PullToRefresh';
-import { BlockEditor } from '@/components/BlockEditor';
 import { AIGenerator } from '@/components/AIGenerator';
-import { LocalStorageMigration } from '@/components/LocalStorageMigration';
-import { OnboardingTour } from '@/components/onboarding/OnboardingTour';
+import { QuickStartFlow } from '@/components/onboarding/QuickStartFlow';
 import { NicheOnboarding } from '@/components/onboarding/NicheOnboarding';
 import { AchievementNotification } from '@/components/achievements/AchievementNotification';
 import { InstallPromptDialog } from '@/components/InstallPromptDialog';
-import { AchievementsPanel } from '@/components/achievements/AchievementsPanel';
-import { LeadsPanel } from '@/components/crm/LeadsPanel';
-import { ReferralPanel } from '@/components/referral/ReferralPanel';
 import { ShareAfterPublishDialog } from '@/components/referral/ShareAfterPublishDialog';
+import { TokensPanel } from '@/components/tokens/TokensPanel';
 import { FriendsPanel } from '@/components/friends/FriendsPanel';
 import { MyTemplatesPanel } from '@/components/templates/MyTemplatesPanel';
-import { TokensPanel } from '@/components/tokens/TokensPanel';
-import {
-  DashboardHeader,
-  MobileHeader,
-  SettingsSidebar,
-  LoadingState,
-  ErrorState,
-  BackgroundEffects,
-} from '@/components/dashboard';
+import { AchievementsPanel } from '@/components/achievements/AchievementsPanel';
+import { LocalStorageMigration } from '@/components/LocalStorageMigration';
+
+// Loading & Background
+import { LoadingState, BackgroundEffects } from '@/components/dashboard';
+
+import type { Block } from '@/types/page';
+
+type TabId = 'projects' | 'editor' | 'crm' | 'analytics' | 'gallery' | 'settings';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { t, i18n } = useTranslation();
+  const canonical = 'https://lnkmx.my/dashboard';
+  const seoTitle = t('dashboard.seo.title', 'lnkmx Dashboard');
+  const seoDescription = t('dashboard.seo.description', 'Manage your lnkmx pages, leads, and analytics.');
   const dashboard = useDashboard();
   const { canUseCustomPageBackground } = useFreemiumLimits();
+  
+  // Editor history for undo/redo
+  const editorHistory = useEditorHistory(
+    dashboard.pageData?.blocks || [],
+    {
+      onStateChange: (blocks) => {
+        dashboard.updatePageDataPartial({ blocks });
+      },
+    }
+  );
 
-  // Local UI state
+  // Current tab from URL params
+  const currentTab = (searchParams.get('tab') as TabId) || 'editor';
+  
+  // UI State
   const [migrationKey, setMigrationKey] = useState(0);
   const [templateGalleryOpen, setTemplateGalleryOpen] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showMobileSettings, setShowMobileSettings] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
-  const [showLeads, setShowLeads] = useState(false);
-  const [showReferral, setShowReferral] = useState(false);
   const [showFriends, setShowFriends] = useState(false);
   const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [showMyTemplates, setShowMyTemplates] = useState(false);
   const [showTokens, setShowTokens] = useState(false);
   const [showMarketplace, setShowMarketplace] = useState(false);
+  const [showQuickStart, setShowQuickStart] = useState(false);
 
-  const handleOpenGallery = () => navigate('/gallery');
+  // Check if new user needs quick start
+  useEffect(() => {
+    const completed = localStorage.getItem('linkmax_onboarding_completed');
+    if (!completed && dashboard.pageData?.blocks.length === 1) {
+      // Only profile block exists - show quick start
+      setShowQuickStart(true);
+    }
+  }, [dashboard.pageData?.blocks.length]);
 
-  // Listen for openFriends event from MobileSettingsSheet
+  // Handle tab change
+  const handleTabChange = useCallback((tabId: string) => {
+    if (tabId === 'gallery') {
+      navigate('/gallery');
+    } else {
+      setSearchParams({ tab: tabId });
+    }
+  }, [navigate, setSearchParams]);
+
+  // Listen for global events
   useEffect(() => {
     const handleOpenFriends = () => setShowFriends(true);
     window.addEventListener('openFriends', handleOpenFriends);
     return () => window.removeEventListener('openFriends', handleOpenFriends);
   }, []);
 
-  // Loading/Error states
+  // Loading state
   if (dashboard.loading) return <LoadingState />;
-  if (!dashboard.pageData) return <ErrorState />;
+  if (!dashboard.pageData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center p-6">
+          <h2 className="text-xl font-bold mb-2">Ошибка загрузки</h2>
+          <p className="text-muted-foreground mb-4">Не удалось загрузить данные страницы</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-xl"
+          >
+            Попробовать снова
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background relative">
-      <BackgroundEffects />
+    <>
+      <StaticSEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        currentLanguage={i18n.language}
+        indexable={false}
+        alternates={[
+          { hreflang: 'ru', href: `${canonical}?lang=ru` },
+          { hreflang: 'en', href: `${canonical}?lang=en` },
+          { hreflang: 'kk', href: `${canonical}?lang=kk` },
+          { hreflang: 'x-default', href: canonical },
+        ]}
+      />
+      <div className="min-h-screen bg-background relative">
+        <BackgroundEffects />
 
       {/* Migration Notice */}
       {dashboard.user && (
@@ -81,187 +153,116 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Desktop Header */}
-      <DashboardHeader
-        saving={dashboard.saving}
-        saveStatus={dashboard.saveStatus}
-        achievementCount={dashboard.achievements.getProgress().unlocked}
-        showSettings={showSettings}
-        onToggleSettings={() => setShowSettings(!showSettings)}
-        onSave={dashboard.save}
-        onPreview={dashboard.sharingState.handlePreview}
-        onShare={dashboard.sharingState.handleShare}
-        onSignOut={dashboard.handleSignOut}
-        onOpenAIBuilder={dashboard.aiState.openAIBuilder}
-        onOpenTemplates={() => setTemplateGalleryOpen(true)}
-        onOpenAchievements={() => setShowAchievements(true)}
-        onOpenCRM={() => setShowLeads(true)}
-        onOpenGallery={handleOpenGallery}
-        userId={dashboard.user?.id}
-        onOpenTokens={() => setShowTokens(true)}
-      />
-
-      {/* Mobile Header */}
-      <MobileHeader onSignOut={dashboard.handleSignOut} onOpenGallery={handleOpenGallery} />
-
-      {/* Main Content */}
-      <div className="relative">
-        {/* Settings Sidebar */}
-        <SettingsSidebar
-          show={showSettings && !dashboard.isMobile}
-          onClose={() => setShowSettings(false)}
-          usernameInput={dashboard.usernameState.usernameInput}
-          onUsernameChange={dashboard.usernameState.setUsernameInput}
-          onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
-          usernameSaving={dashboard.usernameState.saving}
-          profileBlock={dashboard.profileBlock}
-          onUpdateProfile={(updates) => {
-            dashboard.handleUpdateProfile(updates);
-            // Trigger edit_profile quest
-            dashboard.dailyQuests.markQuestComplete('edit_profile');
-          }}
-          isPremium={dashboard.isPremium}
-          premiumLoading={dashboard.premiumLoading}
-          chatbotContext={dashboard.chatbotContext}
-          onChatbotContextChange={dashboard.setChatbotContext}
-          onSave={dashboard.save}
-          onOpenSEOGenerator={dashboard.aiState.openSEOGenerator}
-          editorMode={dashboard.pageData?.editorMode}
-          gridConfig={dashboard.pageData?.gridConfig}
-          onGridConfigChange={(config) => {
-            dashboard.updatePageDataPartial({
-              gridConfig: { ...dashboard.pageData?.gridConfig, ...config },
-            });
-          }}
-          emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}
-          onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
-          telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
-          telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-          onTelegramChange={dashboard.userProfile.updateTelegramNotifications}
-          userId={dashboard.user?.id}
-          dailyQuests={dashboard.dailyQuests.quests}
-          completedQuests={dashboard.dailyQuests.completedQuests}
-          questsProgress={dashboard.dailyQuests.progress}
-          questsLoading={dashboard.dailyQuests.loading}
-          niche={dashboard.pageData?.niche as any}
-          onNicheChange={dashboard.updateNiche}
-          previewUrl={dashboard.pageData?.previewUrl}
-          onPreviewUrlChange={(url) => {
-            dashboard.updatePageDataPartial({ previewUrl: url || undefined });
-          }}
-          pageId={dashboard.pageData?.id}
-          onOpenFriends={() => setShowFriends(true)}
-          onOpenSaveTemplate={() => setShowSaveTemplate(true)}
-          onOpenMyTemplates={() => setShowMyTemplates(true)}
-          pageBackground={dashboard.pageData?.theme?.customBackground}
-          onPageBackgroundChange={(background) => {
-            dashboard.updatePageDataPartial({ 
-              theme: { 
-                ...dashboard.pageData.theme, 
-                customBackground: background 
-              } 
-            });
-          }}
-          canUseCustomPageBackground={canUseCustomPageBackground()}
-        />
-
-        {/* Referral Panel in Settings Area */}
-        {showSettings && !dashboard.isMobile && (
-          <div className="fixed left-4 bottom-4 w-80 z-40 hidden md:block">
-            <ReferralPanel userId={dashboard.user?.id} compact />
-          </div>
+      {/* Main Content Area - Full height with bottom padding for tab bar */}
+      <main className="pb-24 min-h-screen">
+        {/* Projects Tab */}
+        {currentTab === 'projects' && (
+          <ProjectsTab
+            pageData={dashboard.pageData}
+            user={dashboard.user}
+            isPremium={dashboard.isPremium}
+            onOpenEditor={() => handleTabChange('editor')}
+            onOpenSettings={() => handleTabChange('settings')}
+            onPreview={dashboard.sharingState.handlePreview}
+            onShare={dashboard.sharingState.handleShare}
+            onOpenTemplates={() => setTemplateGalleryOpen(true)}
+            onOpenMarketplace={() => setShowMarketplace(true)}
+          />
         )}
 
-        {/* Preview Editor */}
-        <div
-          className={`transition-all duration-300 ${
-            showSettings && !dashboard.isMobile ? 'md:ml-80' : ''
-          }`}
-        >
-          <PullToRefresh
-            onRefresh={async () => {
-              if (dashboard.refresh) {
-                await dashboard.refresh();
-                toast.success('Page refreshed');
-              }
+        {/* Editor Tab */}
+        {currentTab === 'editor' && (
+          <EditorTab
+            blocks={dashboard.pageData.blocks}
+            isPremium={dashboard.isPremium}
+            currentTier={dashboard.currentTier}
+            premiumTier={dashboard.currentTier}
+            gridConfig={dashboard.pageData.gridConfig}
+            saving={dashboard.saving}
+            saveStatus={dashboard.saveStatus}
+            editorHistory={editorHistory}
+            pageNiche={dashboard.pageData?.niche}
+            onInsertBlock={dashboard.blockEditor.handleInsertBlock}
+            onEditBlock={dashboard.blockEditor.handleEditBlock}
+            onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
+            onReorderBlocks={dashboard.reorderBlocks}
+            onUpdateBlock={dashboard.updateBlock}
+            onSave={dashboard.save}
+            onPreview={dashboard.sharingState.handlePreview}
+            onShare={dashboard.sharingState.handleShare}
+            onOpenAI={dashboard.aiState.openAIBuilder}
+            onOpenTemplates={() => setTemplateGalleryOpen(true)}
+          />
+        )}
+
+        {/* CRM Tab */}
+        {currentTab === 'crm' && (
+          <CRMTab isPremium={dashboard.isPremium} />
+        )}
+
+        {/* Analytics Tab */}
+        {currentTab === 'analytics' && (
+          <AnalyticsTab 
+            pageId={dashboard.pageData.id}
+            blocks={dashboard.pageData.blocks}
+            isPremium={dashboard.isPremium}
+            editorHistory={editorHistory}
+            onApplyInsight={(action) => {
+              // Navigate to editor and apply the insight
+              handleTabChange('editor');
+              // The action will be executed by EditorTab
             }}
-            disabled={dashboard.loading || dashboard.saving}
-          >
-            <div className="py-4 pb-24 md:pb-8">
-              <PreviewEditor
-                blocks={dashboard.pageData.blocks}
-                isPremium={dashboard.isPremium}
-                currentTier={dashboard.currentTier}
-                premiumTier={dashboard.currentTier}
-                gridConfig={dashboard.pageData.gridConfig}
-                onInsertBlock={dashboard.blockEditor.handleInsertBlock}
-                onEditBlock={dashboard.blockEditor.handleEditBlock}
-                onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
-                onReorderBlocks={dashboard.reorderBlocks}
-                onUpdateBlock={dashboard.updateBlock}
-                activeBlockHint={dashboard.blockHints.activeHint}
-                onDismissHint={dashboard.blockHints.dismissHint}
-              />
-            </div>
-          </PullToRefresh>
-        </div>
-      </div>
+          />
+        )}
 
-      {/* Mobile Bottom Toolbar */}
-      {dashboard.isMobile && (
-        <MobileToolbar
-          saving={dashboard.saving}
-          saveStatus={dashboard.saveStatus}
-          onSave={dashboard.save}
-          onPreview={dashboard.sharingState.handlePreview}
-          onShare={dashboard.sharingState.handleShare}
-          onOpenSettings={() => setShowMobileSettings(true)}
-          onOpenAIBuilder={dashboard.aiState.openAIBuilder}
-          onOpenTemplates={() => setTemplateGalleryOpen(true)}
-          onOpenMarketplace={() => setShowMarketplace(true)}
-          onOpenAchievements={() => setShowAchievements(true)}
-          onOpenCRM={() => setShowLeads(true)}
-          achievementCount={dashboard.achievements.getProgress().unlocked}
-        />
-      )}
+        {/* Settings Tab */}
+        {currentTab === 'settings' && (
+          <SettingsTab
+            usernameInput={dashboard.usernameState.usernameInput}
+            onUsernameChange={dashboard.usernameState.setUsernameInput}
+            onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
+            usernameSaving={dashboard.usernameState.saving}
+            profileBlock={dashboard.profileBlock}
+            onUpdateProfile={dashboard.handleUpdateProfile}
+            isPremium={dashboard.isPremium}
+            premiumTier={dashboard.premiumTier}
+            premiumLoading={dashboard.premiumLoading}
+            chatbotContext={dashboard.chatbotContext}
+            onChatbotContextChange={dashboard.setChatbotContext}
+            onSave={dashboard.save}
+            emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}
+            onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
+            telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
+            telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
+            onTelegramChange={dashboard.userProfile.updateTelegramNotifications}
+            userId={dashboard.user?.id}
+            pageId={dashboard.pageData?.id}
+            niche={dashboard.pageData?.niche as any}
+            onNicheChange={dashboard.updateNiche}
+            pageBackground={dashboard.pageData?.theme?.customBackground}
+            onPageBackgroundChange={(background) => {
+              dashboard.updatePageDataPartial({ 
+                theme: { 
+                  ...dashboard.pageData.theme, 
+                  customBackground: background 
+                } 
+              });
+            }}
+            canUseCustomPageBackground={canUseCustomPageBackground()}
+            onSignOut={dashboard.handleSignOut}
+            onOpenFriends={() => setShowFriends(true)}
+            onOpenSaveTemplate={() => setShowSaveTemplate(true)}
+            onOpenMyTemplates={() => setShowMyTemplates(true)}
+            onOpenTokens={() => setShowTokens(true)}
+            onOpenAchievements={() => setShowAchievements(true)}
+          />
+        )}
+      </main>
 
-      {/* Mobile Settings Sheet */}
-      <MobileSettingsSheet
-        open={showMobileSettings}
-        onOpenChange={setShowMobileSettings}
-        usernameInput={dashboard.usernameState.usernameInput}
-        onUsernameChange={dashboard.usernameState.setUsernameInput}
-        onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
-        usernameSaving={dashboard.usernameState.saving}
-        profileBlock={dashboard.profileBlock}
-        onUpdateProfile={dashboard.handleUpdateProfile}
-        isPremium={dashboard.isPremium}
-        premiumLoading={dashboard.premiumLoading}
-        chatbotContext={dashboard.chatbotContext}
-        onChatbotContextChange={dashboard.setChatbotContext}
-        onSave={dashboard.save}
-        onOpenSEOGenerator={dashboard.aiState.openSEOGenerator}
-        editorMode={dashboard.pageData?.editorMode}
-        gridConfig={dashboard.pageData?.gridConfig}
-        onGridConfigChange={(config) => {
-          dashboard.updatePageDataPartial({
-            gridConfig: { ...dashboard.pageData?.gridConfig, ...config },
-          });
-        }}
-        emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}
-        onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
-        telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
-        telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-        onTelegramChange={dashboard.userProfile.updateTelegramNotifications}
-        userId={dashboard.user?.id}
-        pageId={dashboard.pageData?.id}
-        niche={dashboard.pageData?.niche as any}
-        onNicheChange={dashboard.updateNiche}
-        previewUrl={dashboard.pageData?.previewUrl}
-        onPreviewUrlChange={(url) => {
-          dashboard.updatePageDataPartial({ previewUrl: url || undefined });
-        }}
-        onSignOut={dashboard.handleSignOut}
+      {/* Mobile Tab Bar */}
+      <AppTabBar
+        activeTab={currentTab}
+        onTabChange={handleTabChange}
       />
 
       {/* Block Editor Modal */}
@@ -274,11 +275,23 @@ export default function Dashboard() {
         />
       )}
 
+      {/* Onboarding Wizard - Disabled per v1.2 */}
+
       {/* Template Gallery */}
       <TemplateGallery
         open={templateGalleryOpen}
         onClose={() => setTemplateGalleryOpen(false)}
         onSelect={dashboard.handleApplyTemplate}
+      />
+
+      {/* Template Marketplace */}
+      <TemplateMarketplace
+        open={showMarketplace}
+        onClose={() => setShowMarketplace(false)}
+        onApplyTemplate={(blocks) => {
+          dashboard.handleApplyTemplate(blocks);
+          setShowMarketplace(false);
+        }}
       />
 
       {/* AI Generator */}
@@ -291,23 +304,6 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Niche Onboarding */}
-      {dashboard.onboardingState.showNicheOnboarding && (
-        <NicheOnboarding
-          isOpen={dashboard.onboardingState.showNicheOnboarding}
-          onClose={dashboard.onboardingState.handleNicheOnboardingClose}
-          onComplete={dashboard.onboardingState.handleNicheOnboardingComplete}
-        />
-      )}
-
-      {/* Onboarding Tour */}
-      {dashboard.onboardingState.showOnboarding && (
-        <OnboardingTour
-          onComplete={dashboard.onboardingState.handleOnboardingComplete}
-          onSkip={dashboard.onboardingState.handleOnboardingSkip}
-        />
-      )}
-
       {/* Achievement Notification */}
       {dashboard.achievements.newAchievement && (
         <AchievementNotification
@@ -316,59 +312,55 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Achievements Panel */}
+      {/* Quick Start Flow for new users */}
+      <QuickStartFlow
+        open={showQuickStart}
+        onClose={() => setShowQuickStart(false)}
+        onComplete={(data) => {
+          dashboard.onboardingState.handleNicheOnboardingComplete(data.profile, data.blocks, data.niche);
+          setShowQuickStart(false);
+        }}
+      />
+
+      <NicheOnboarding
+        isOpen={dashboard.onboardingState.showNicheOnboarding}
+        onClose={dashboard.onboardingState.handleNicheOnboardingClose}
+        onComplete={dashboard.onboardingState.handleNicheOnboardingComplete}
+      />
+
+      {/* Panels & Dialogs */}
       {showAchievements && <AchievementsPanel onClose={() => setShowAchievements(false)} />}
-
-      {/* Friends Panel */}
-      {showFriends && (
-        <FriendsPanel onClose={() => setShowFriends(false)} />
-      )}
-
-      {/* Save Template Dialog */}
+      {showFriends && <FriendsPanel onClose={() => setShowFriends(false)} />}
+      
       <SaveTemplateDialog
         open={showSaveTemplate}
         onClose={() => setShowSaveTemplate(false)}
         blocks={dashboard.pageData.blocks}
         previewContainerId="preview-container"
       />
-
-      {/* My Templates Panel */}
+      
       <MyTemplatesPanel
         open={showMyTemplates}
         onOpenChange={setShowMyTemplates}
         onApplyTemplate={dashboard.handleApplyTemplate}
+        currentBlocks={dashboard.pageData.blocks}
       />
-
-      {/* Tokens Panel */}
+      
       <TokensPanel open={showTokens} onOpenChange={setShowTokens} />
 
-      {/* Leads Panel (CRM) */}
-      <LeadsPanel open={showLeads} onOpenChange={setShowLeads} />
-
-      {/* Install Prompt Dialog */}
       <InstallPromptDialog
         open={dashboard.sharingState.showInstallPrompt}
         onClose={dashboard.sharingState.closeInstallPrompt}
         pageUrl={dashboard.sharingState.publishedUrl}
       />
 
-      {/* Share After Publish Dialog with Referral */}
       <ShareAfterPublishDialog
         open={dashboard.sharingState.showShareDialog}
         onOpenChange={dashboard.sharingState.closeShareDialog}
         userId={dashboard.user?.id}
         publishedUrl={dashboard.sharingState.publishedUrl}
       />
-
-      {/* Template Marketplace - direct access from mobile toolbar */}
-      <TemplateMarketplace
-        open={showMarketplace}
-        onClose={() => setShowMarketplace(false)}
-        onApplyTemplate={(blocks) => {
-          dashboard.handleApplyTemplate(blocks);
-          setShowMarketplace(false);
-        }}
-      />
-    </div>
+      </div>
+    </>
   );
 }

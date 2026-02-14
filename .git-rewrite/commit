@@ -1,6 +1,14 @@
-tree 8b0fbf2a7eb3e59b0de7fa9b3b788aff4e092162
-parent aacef5ac394f911d61a4add7953adf60006a709c
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767608676 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767608676 +0000
+tree c150f9cf02c90c94905121e42e10cd13476299d5
+parent 95c4d234a5e875c1bdcbf15720245128f3b4f24c
+parent 22f8d03fc39bce2f3fa96b045c87e8e699ca9565
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
 
-Changes
+Enhance SEO with AEO/GEO
+
+Add advanced AEO/GEO utilities, auto FAQ, GEO schemas, enhanced
+CrawlerFriendlyContent, and Cloudflare Prerender worker integration.
+Includes new answer-block, auto-faq, geo-schemas, key-facts, entity linking,
+SEO index, tests, and extensive TS/JSX updates with multilingual support.
+
+X-Lovable-Edit-ID: edt-ebfab774-d60f-4088-9017-a88a2dfd2232

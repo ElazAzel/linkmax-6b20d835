@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Save, Users, Trash2, Link2, Copy, RefreshCw } from 'lucide-react';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
 import { generateTeamInviteCode, resetTeamInviteCode, type Team } from '@/services/collaboration';
@@ -38,7 +38,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
 
   const handleSave = async () => {
     if (!name.trim()) {
-      toast.error('Введите название команды');
+      toast.error(t('teams.enterName', 'Введите название команды'));
       return;
     }
 
@@ -61,17 +61,17 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
       if (error) throw error;
       
       onTeamUpdate({ ...team, ...data, invite_code: inviteCode });
-      toast.success('Команда обновлена');
+      toast.success(t('teams.updated', 'Команда обновлена'));
     } catch (error) {
       console.error('Error updating team:', error);
-      toast.error('Ошибка обновления');
+      toast.error(t('errors.updateFailed', 'Ошибка обновления'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!confirm('Вы уверены, что хотите удалить команду?')) return;
+    if (!confirm(t('teams.deleteConfirm', 'Вы уверены, что хотите удалить команду?'))) return;
     
     setDeleting(true);
     try {
@@ -82,11 +82,11 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
 
       if (error) throw error;
       
-      toast.success('Команда удалена');
+      toast.success(t('teams.deleted', 'Команда удалена'));
       onTeamDelete?.();
     } catch (error) {
       console.error('Error deleting team:', error);
-      toast.error('Ошибка удаления');
+      toast.error(t('errors.deleteFailed', 'Ошибка удаления'));
     } finally {
       setDeleting(false);
     }
@@ -101,11 +101,11 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
       
       if (code) {
         setInviteCode(code);
-        toast.success(inviteCode ? 'Ссылка обновлена' : 'Ссылка создана');
+        toast.success(inviteCode ? t('teams.linkUpdated', 'Ссылка обновлена') : t('teams.linkCreated', 'Ссылка создана'));
       }
     } catch (error) {
       console.error('Error generating invite code:', error);
-      toast.error('Ошибка');
+      toast.error(t('common.error', 'Ошибка'));
     } finally {
       setGeneratingCode(false);
     }
@@ -113,7 +113,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
 
   const handleCopyInviteLink = () => {
     navigator.clipboard.writeText(inviteUrl);
-    toast.success('Ссылка скопирована');
+    toast.success(t('common.copied', 'Ссылка скопирована'));
   };
 
   const handleAvatarUpload = async (url: string) => {
@@ -125,7 +125,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
       <Card className="bg-card/50">
         <CardContent className="pt-6">
           <p className="text-sm text-muted-foreground text-center">
-            Только владелец команды может редактировать настройки
+            {t('teams.onlyOwnerCanEdit', 'Только владелец команды может редактировать настройки')}
           </p>
         </CardContent>
       </Card>
@@ -138,7 +138,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Настройки команды
+            {t('teams.settings', 'Настройки команды')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -153,35 +153,35 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
             <MediaUpload
               value={avatarUrl}
               onChange={handleAvatarUpload}
-              label="Аватар команды"
+              label={t('teams.avatar', 'Аватар команды')}
               accept="image/*"
             />
           </div>
 
           {/* Name */}
           <div className="space-y-2">
-            <Label>Название</Label>
+            <Label>{t('fields.name', 'Название')}</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Название команды"
+              placeholder={t('teams.namePlaceholder', 'Название команды')}
             />
           </div>
 
           {/* Description */}
           <div className="space-y-2">
-            <Label>Описание</Label>
+            <Label>{t('fields.description', 'Описание')}</Label>
             <Textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Описание команды..."
+              placeholder={t('teams.descriptionPlaceholder', 'Описание команды...')}
               rows={3}
             />
           </div>
 
           {/* Niche */}
           <div className="space-y-2">
-            <Label>Ниша</Label>
+            <Label>{t('fields.niche', 'Ниша')}</Label>
             <Select value={niche} onValueChange={setNiche}>
               <SelectTrigger>
                 <SelectValue />
@@ -199,9 +199,9 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
           {/* Public/Private */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Публичная команда</Label>
+              <Label>{t('teams.publicTeam', 'Публичная команда')}</Label>
               <p className="text-xs text-muted-foreground">
-                Публичные команды видны всем
+                {t('teams.publicTeamHint', 'Публичные команды видны всем')}
               </p>
             </div>
             <Switch checked={isPublic} onCheckedChange={setIsPublic} />
@@ -215,7 +215,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
               disabled={saving}
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-              Сохранить
+              {t('actions.save', 'Сохранить')}
             </Button>
             <Button 
               variant="destructive" 
@@ -234,7 +234,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
         <CardHeader className="pb-3">
           <CardTitle className="text-sm flex items-center gap-2">
             <Link2 className="h-4 w-4" />
-            Ссылка-приглашение
+            {t('teams.inviteLink', 'Ссылка-приглашение')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -262,16 +262,16 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
                 ) : (
                   <RefreshCw className="h-4 w-4 mr-2" />
                 )}
-                Обновить ссылку
+                {t('teams.updateLink', 'Обновить ссылку')}
               </Button>
               <p className="text-xs text-muted-foreground">
-                Поделитесь этой ссылкой, чтобы пригласить людей в команду
+                {t('teams.shareLinkHint', 'Поделитесь этой ссылкой, чтобы пригласить людей в команду')}
               </p>
             </>
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                Создайте ссылку-приглашение для добавления участников
+                {t('teams.createLinkHint', 'Создайте ссылку-приглашение для добавления участников')}
               </p>
               <Button 
                 className="w-full"
@@ -283,7 +283,7 @@ export function TeamEditor({ team, isOwner, onTeamUpdate, onTeamDelete }: TeamEd
                 ) : (
                   <Link2 className="h-4 w-4 mr-2" />
                 )}
-                Создать ссылку
+                {t('teams.createLink', 'Создать ссылку')}
               </Button>
             </>
           )}

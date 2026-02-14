@@ -168,6 +168,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                   }
                   onChange({ ...formData, avatarFrame: value as ProfileFrameStyle });
                 }}
+                avatarUrl={formData.avatar}
               />
             </div>
           </CollapsibleContent>

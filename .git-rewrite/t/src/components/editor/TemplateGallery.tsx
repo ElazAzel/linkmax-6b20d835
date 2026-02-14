@@ -16,12 +16,18 @@ import { createBlock as createBaseBlock } from '@/lib/block-factory';
 import type { Block } from '@/types/page';
 import { TemplatePersonalization } from './TemplatePersonalization';
 import { TemplateMarketplace } from './TemplateMarketplace';
+import {
+  TEMPLATE_CATEGORY_KEYS,
+  type TemplateCategoryKey,
+  getTemplateCategoryLabel,
+  normalizeTemplateCategory,
+} from '@/lib/templateCategories';
 
 interface Template {
   id: string;
   name: string;
   description: string;
-  category: string;
+  category: TemplateCategoryKey;
   preview: string;
   isPremium?: boolean;
   blocks: Array<{ type: string; overrides?: Record<string, unknown> }>;
@@ -73,7 +79,7 @@ const TEMPLATES: Template[] = [
     id: 'influencer',
     name: 'Блогер / Инфлюенсер',
     description: 'Для контент-мейкеров и блогеров — полный набор',
-    category: 'Креаторы',
+    category: 'creators',
     preview: '👤',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Алина Lifestyle', en: 'Alina Lifestyle', kk: 'Алина Lifestyle' }, bio: { ru: '✨ Блогер • 500K подписчиков\n🎥 Влоги о путешествиях и моде\n📍 Алматы → Мир', en: '✨ Blogger • 500K followers\n🎥 Travel & fashion vlogs\n📍 Almaty → World', kk: '✨ Блогер • 500K жазылушы\n🎥 Саяхат және сән влогтары\n📍 Алматы → Әлем' } } },
@@ -96,7 +102,7 @@ const TEMPLATES: Template[] = [
     id: 'musician',
     name: 'Музыкант / Артист',
     description: 'Для музыкантов и исполнителей — концерты, музыка, мерч',
-    category: 'Креаторы',
+    category: 'creators',
     preview: '🎵',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'ARMAN', en: 'ARMAN', kk: 'ARMAN' }, bio: { ru: '🎤 Хип-хоп артист\n🏆 Лучший альбом 2023\n🎧 5M+ прослушиваний', en: '🎤 Hip-hop artist\n🏆 Best Album 2023\n🎧 5M+ streams', kk: '🎤 Хип-хоп әртіс\n🏆 2023 үздік альбом\n🎧 5M+ тыңдау' } } },
@@ -122,7 +128,7 @@ const TEMPLATES: Template[] = [
     id: 'designer',
     name: 'Дизайнер / Иллюстратор',
     description: 'Портфолио для творческих специалистов с примерами работ',
-    category: 'Креаторы',
+    category: 'creators',
     preview: '🎨',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Дария Ким', en: 'Dariya Kim', kk: 'Дария Ким' }, bio: { ru: '🎨 UI/UX дизайнер • 7 лет опыта\n✨ Брендинг • Веб-дизайн • Иллюстрации\n🏆 Behance Featured', en: '🎨 UI/UX designer • 7 years exp\n✨ Branding • Web design • Illustrations\n🏆 Behance Featured', kk: '🎨 UI/UX дизайнер • 7 жыл тәжірибе\n✨ Брендинг • Веб-дизайн • Иллюстрациялар\n🏆 Behance Featured' } } },
@@ -142,7 +148,7 @@ const TEMPLATES: Template[] = [
     id: 'streamer',
     name: 'Стример / Геймер',
     description: 'Для стримеров и киберспортсменов',
-    category: 'Креаторы',
+    category: 'creators',
     preview: '🎮',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'DarkNight', en: 'DarkNight', kk: 'DarkNight' }, bio: { ru: '🎮 Twitch Partner • 100K followers\n🏆 CS2 • Valorant • GTA RP\n⏰ Стримы: ПН-ПТ 20:00', en: '🎮 Twitch Partner • 100K followers\n🏆 CS2 • Valorant • GTA RP\n⏰ Streams: MON-FRI 8PM', kk: '🎮 Twitch Partner • 100K жазылушы\n🏆 CS2 • Valorant • GTA RP\n⏰ Стримдер: ДС-ЖМ 20:00' } } },
@@ -167,7 +173,7 @@ const TEMPLATES: Template[] = [
     id: 'barber',
     name: 'Барбершоп',
     description: 'Полный шаблон для барберов — прайс, галерея, запись',
-    category: 'Бизнес',
+    category: 'business',
     preview: '💈',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'BLACKBEARD Barbershop', en: 'BLACKBEARD Barbershop', kk: 'BLACKBEARD Barbershop' }, bio: { ru: '✂️ Мужские стрижки в центре Алматы\n🏆 Лучший барбершоп 2023 по версии 2GIS\n⭐ 4.9 рейтинг • 500+ отзывов', en: '✂️ Men\'s haircuts in Almaty center\n🏆 Best barbershop 2023 by 2GIS\n⭐ 4.9 rating • 500+ reviews', kk: '✂️ Алматы орталығында ерлер шаш қию\n🏆 2GIS бойынша 2023 үздік барбершоп\n⭐ 4.9 рейтинг • 500+ пікір' } } },
@@ -193,7 +199,7 @@ const TEMPLATES: Template[] = [
     id: 'photographer',
     name: 'Фотограф',
     description: 'Полное портфолио — пакеты услуг, галерея, отзывы',
-    category: 'Бизнес',
+    category: 'business',
     preview: '📷',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Анна Фото', en: 'Anna Photo', kk: 'Анна Фото' }, bio: { ru: '📸 Профессиональный фотограф\n💍 Свадьбы • Портреты • Love Story\n🏆 10 лет опыта • 500+ свадеб\n📍 Алматы и выезд', en: '📸 Professional photographer\n💍 Weddings • Portraits • Love Story\n🏆 10 years exp • 500+ weddings\n📍 Almaty & travel', kk: '📸 Кәсіби фотограф\n💍 Тойлар • Портреттер • Love Story\n🏆 10 жыл тәжірибе • 500+ той\n📍 Алматы және сапар' } } },
@@ -213,7 +219,7 @@ const TEMPLATES: Template[] = [
     id: 'beauty',
     name: 'Салон красоты',
     description: 'Для салонов и бьюти-мастеров — полный прайс с бронированием',
-    category: 'Бизнес',
+    category: 'business',
     preview: '💅',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'GLOW Beauty Studio', en: 'GLOW Beauty Studio', kk: 'GLOW Beauty Studio' }, bio: { ru: '✨ Салон красоты премиум-класса\n💅 Маникюр • Брови • Ресницы • Макияж\n⭐ 4.9 рейтинг • 1000+ отзывов\n📍 Алматы, Достык Плаза', en: '✨ Premium beauty salon\n💅 Nails • Brows • Lashes • Makeup\n⭐ 4.9 rating • 1000+ reviews\n📍 Almaty, Dostyk Plaza', kk: '✨ Премиум сұлулық салоны\n💅 Маникюр • Қастар • Кірпіктер • Макияж\n⭐ 4.9 рейтинг • 1000+ пікір\n📍 Алматы, Достық Плаза' } } },
@@ -244,7 +250,7 @@ const TEMPLATES: Template[] = [
     id: 'fitness',
     name: 'Фитнес-тренер',
     description: 'Для тренеров — программы, результаты, онлайн-курсы',
-    category: 'Бизнес',
+    category: 'business',
     preview: '💪',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Артём Fitness', en: 'Artem Fitness', kk: 'Артём Fitness' }, bio: { ru: '💪 Сертифицированный тренер\n🏆 Мастер спорта • 8 лет опыта\n🔥 1000+ клиентов • 50 000 кг сброшено\n📍 World Class Almaty + Онлайн', en: '💪 Certified trainer\n🏆 Master of Sports • 8 years exp\n🔥 1000+ clients • 50,000 kg lost\n📍 World Class Almaty + Online', kk: '💪 Сертификатталған жаттықтырушы\n🏆 Спорт шебері • 8 жыл тәжірибе\n🔥 1000+ клиент • 50 000 кг тасталды\n📍 World Class Almaty + Онлайн' } } },
@@ -264,7 +270,7 @@ const TEMPLATES: Template[] = [
     id: 'chef',
     name: 'Повар / Кондитер',
     description: 'Для кулинаров — меню, цены, доставка, FAQ',
-    category: 'Бизнес',
+    category: 'business',
     preview: '👨‍🍳',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Sweet Dreams', en: 'Sweet Dreams', kk: 'Sweet Dreams' }, bio: { ru: '🍰 Торты и десерты на заказ\n✨ 100% натуральные ингредиенты\n🚗 Доставка по Алматы\n📸 1000+ выполненных заказов', en: '🍰 Custom cakes & desserts\n✨ 100% natural ingredients\n🚗 Delivery in Almaty\n📸 1000+ completed orders', kk: '🍰 Тапсырыс бойынша торттар\n✨ 100% табиғи ингредиенттер\n🚗 Алматы бойынша жеткізу\n📸 1000+ орындалған тапсырыс' } } },
@@ -290,7 +296,7 @@ const TEMPLATES: Template[] = [
     id: 'shop',
     name: 'Онлайн-магазин',
     description: 'Мини-витрина товаров с каталогом и доставкой',
-    category: 'Бизнес',
+    category: 'business',
     preview: '🛍️',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'TREND Store', en: 'TREND Store', kk: 'TREND Store' }, bio: { ru: '🛍️ Модная одежда из Кореи и Турции\n✈️ Доставка по Казахстану 1-3 дня\n💯 Гарантия качества • Обмен/возврат\n⭐ 5000+ довольных клиентов', en: '🛍️ Fashion from Korea & Turkey\n✈️ Delivery across KZ 1-3 days\n💯 Quality guarantee • Exchange/return\n⭐ 5000+ happy customers', kk: '🛍️ Корея мен Түркиядан сән\n✈️ ҚР бойынша жеткізу 1-3 күн\n💯 Сапа кепілдігі • Ауыстыру/қайтару\n⭐ 5000+ қанағаттанған клиент' } } },
@@ -316,7 +322,7 @@ const TEMPLATES: Template[] = [
     id: 'realestate',
     name: 'Риелтор',
     description: 'Для агентов недвижимости — объекты, услуги, консультация',
-    category: 'Бизнес',
+    category: 'business',
     preview: '🏠',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Айгуль Риелтор', en: 'Aigul Realtor', kk: 'Айгүл Риелтор' }, bio: { ru: '🏠 Риелтор • 10 лет на рынке\n🔑 500+ успешных сделок\n📍 Алматы и пригород\n💼 Купля • Продажа • Аренда', en: '🏠 Realtor • 10 years in market\n🔑 500+ successful deals\n📍 Almaty and suburbs\n💼 Buy • Sell • Rent', kk: '🏠 Риелтор • Нарықта 10 жыл\n🔑 500+ сәтті мәміле\n📍 Алматы және маңы\n💼 Сатып алу • Сату • Жалға беру' } } },
@@ -340,7 +346,7 @@ const TEMPLATES: Template[] = [
     id: 'wedding',
     name: 'Свадебные услуги',
     description: 'Для организаторов свадеб, ведущих, декораторов',
-    category: 'Бизнес',
+    category: 'business',
     preview: '💒',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Wedding Dream', en: 'Wedding Dream', kk: 'Wedding Dream' }, bio: { ru: '💍 Организация свадеб под ключ\n✨ 7 лет • 300+ свадеб\n🏆 Лучший организатор 2023\n📍 Алматы, Астана, выезд', en: '💍 Turnkey wedding planning\n✨ 7 years • 300+ weddings\n🏆 Best organizer 2023\n📍 Almaty, Astana, travel', kk: '💍 Кілтке дейін той ұйымдастыру\n✨ 7 жыл • 300+ той\n🏆 2023 үздік ұйымдастырушы\n📍 Алматы, Астана, сапар' } } },
@@ -359,7 +365,7 @@ const TEMPLATES: Template[] = [
     id: 'psychologist',
     name: 'Психолог',
     description: 'Для психологов и терапевтов — полный профиль с записью',
-    category: 'Эксперты',
+    category: 'experts',
     preview: '🧠',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Айгерим Нурланова', en: 'Aigerim Nurlanova', kk: 'Айгерім Нұрланова' }, bio: { ru: '🎓 Клинический психолог • КазНУ\n💼 12 лет практики • 3000+ клиентов\n🌟 Тревога • Отношения • Самооценка\n📍 Онлайн + офлайн (Алматы)', en: '🎓 Clinical psychologist • KazNU\n💼 12 years practice • 3000+ clients\n🌟 Anxiety • Relationships • Self-esteem\n📍 Online + offline (Almaty)', kk: '🎓 Клиникалық психолог • ҚазҰУ\n💼 12 жыл тәжірибе • 3000+ клиент\n🌟 Үрей • Қарым-қатынас • Өзін-өзі бағалау\n📍 Онлайн + офлайн (Алматы)' } } },
@@ -380,7 +386,7 @@ const TEMPLATES: Template[] = [
     id: 'teacher',
     name: 'Репетитор',
     description: 'Для преподавателей — курсы, результаты, материалы',
-    category: 'Эксперты',
+    category: 'experts',
     preview: '📚',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'English with Kate', en: 'English with Kate', kk: 'English with Kate' }, bio: { ru: '🇬🇧 Преподаватель английского\n🎓 IELTS 8.5 • CELTA certified\n📚 Подготовка к IELTS, SAT, NIS\n🏆 95% учеников — IELTS 7.0+', en: '🇬🇧 English teacher\n🎓 IELTS 8.5 • CELTA certified\n📚 IELTS, SAT, NIS preparation\n🏆 95% students — IELTS 7.0+', kk: '🇬🇧 Ағылшын тілі мұғалімі\n🎓 IELTS 8.5 • CELTA сертификаты\n📚 IELTS, SAT, NIS дайындық\n🏆 95% оқушылар — IELTS 7.0+' } } },
@@ -399,7 +405,7 @@ const TEMPLATES: Template[] = [
     id: 'marketer',
     name: 'SMM / Маркетолог',
     description: 'Для digital-специалистов — кейсы, услуги, результаты',
-    category: 'Эксперты',
+    category: 'experts',
     preview: '📊',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Тимур Digital', en: 'Timur Digital', kk: 'Тимур Digital' }, bio: { ru: '📈 SMM-маркетолог • Таргетолог\n🏆 100+ проектов • ROI до 400%\n💼 Работал с: Kaspi, Chocofamily, Sulpak\n🔥 Увеличу ваши продажи через соцсети', en: '📈 SMM marketer • Targeting specialist\n🏆 100+ projects • ROI up to 400%\n💼 Worked with: Kaspi, Chocofamily, Sulpak\n🔥 I\'ll boost your social sales', kk: '📈 SMM маркетолог • Таргетолог\n🏆 100+ жоба • ROI 400%-ға дейін\n💼 Жұмыс істеді: Kaspi, Chocofamily, Sulpak\n🔥 Соцсеттер арқылы сатылымды арттырамын' } } },
@@ -421,7 +427,7 @@ const TEMPLATES: Template[] = [
     id: 'lawyer',
     name: 'Юрист / Адвокат',
     description: 'Для юридических услуг — специализация, консультации',
-    category: 'Эксперты',
+    category: 'experts',
     preview: '⚖️',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Адвокат Серик Касымов', en: 'Attorney Serik Kasymov', kk: 'Адвокат Серік Қасымов' }, bio: { ru: '⚖️ Адвокат • 15 лет практики\n🏛 Гражданские и уголовные дела\n🏆 500+ выигранных дел\n📍 Алматы • Онлайн по всему РК', en: '⚖️ Attorney • 15 years practice\n🏛 Civil and criminal cases\n🏆 500+ won cases\n📍 Almaty • Online across KZ', kk: '⚖️ Адвокат • 15 жыл тәжірибе\n🏛 Азаматтық және қылмыстық істер\n🏆 500+ жеңілген іс\n📍 Алматы • ҚР бойынша онлайн' } } },
@@ -443,7 +449,7 @@ const TEMPLATES: Template[] = [
     id: 'agency',
     name: 'Digital-агентство',
     description: 'Для агентств и студий — showreel, кейсы, заявки',
-    category: 'Премиум',
+    category: 'premium',
     preview: '🚀',
     isPremium: true,
     blocks: [
@@ -463,7 +469,7 @@ const TEMPLATES: Template[] = [
     id: 'restaurant',
     name: 'Ресторан / Кафе',
     description: 'Для заведений общепита — меню, бронь, атмосфера',
-    category: 'Премиум',
+    category: 'premium',
     preview: '🍽️',
     isPremium: true,
     blocks: [
@@ -484,7 +490,7 @@ const TEMPLATES: Template[] = [
     id: 'portfolio-pro',
     name: 'Портфолио PRO',
     description: 'Расширенное профессиональное портфолио с резюме',
-    category: 'Премиум',
+    category: 'premium',
     preview: '💼',
     isPremium: true,
     blocks: [
@@ -508,7 +514,7 @@ const TEMPLATES: Template[] = [
     id: 'personal',
     name: 'Личная страница',
     description: 'Простая страница со ссылками для всех',
-    category: 'Другое',
+    category: 'other',
     preview: '👤',
     blocks: [
       { type: 'profile', overrides: { name: { ru: 'Ваше имя', en: 'Your Name', kk: 'Сіздің атыңыз' }, bio: { ru: '✨ Расскажите о себе\n📍 Ваш город\n💼 Чем занимаетесь', en: '✨ Tell about yourself\n📍 Your city\n💼 What you do', kk: '✨ Өзіңіз туралы айтыңыз\n📍 Сіздің қалаңыз\n💼 Не істейсіз' } } },
@@ -523,13 +529,13 @@ const TEMPLATES: Template[] = [
     id: 'blank',
     name: 'Пустой шаблон',
     description: 'Начните с чистого листа — полная свобода',
-    category: 'Другое',
+    category: 'other',
     preview: '📄',
     blocks: [],
   },
 ];
 
-const CATEGORIES = ['Все', 'Креаторы', 'Бизнес', 'Эксперты', 'Премиум', 'Другое'];
+const CATEGORIES: TemplateCategoryKey[] = [...TEMPLATE_CATEGORY_KEYS];
 
 interface TemplateGalleryProps {
   open: boolean;
@@ -543,7 +549,7 @@ export const TemplateGallery = memo(function TemplateGallery({
   onSelect,
 }: TemplateGalleryProps) {
   const { t } = useTranslation();
-  const [selectedCategory, setSelectedCategory] = useState('Все');
+  const [selectedCategory, setSelectedCategory] = useState<TemplateCategoryKey>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
@@ -562,9 +568,9 @@ export const TemplateGallery = memo(function TemplateGallery({
     }, 500);
   };
 
-  const filteredTemplates = selectedCategory === 'Все' 
+  const filteredTemplates = selectedCategory === 'all' 
     ? TEMPLATES 
-    : TEMPLATES.filter(t => t.category === selectedCategory);
+    : TEMPLATES.filter(t => normalizeTemplateCategory(t.category) === selectedCategory);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -601,7 +607,7 @@ export const TemplateGallery = memo(function TemplateGallery({
                 onClick={() => setSelectedCategory(category)}
                 className="whitespace-nowrap text-[11px] sm:text-sm px-2.5 sm:px-3 h-7 sm:h-9 flex-shrink-0"
               >
-                {category}
+                {getTemplateCategoryLabel(t, category)}
               </Button>
             ))}
           </div>

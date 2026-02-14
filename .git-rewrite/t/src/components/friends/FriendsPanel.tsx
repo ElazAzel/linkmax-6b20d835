@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,6 +22,7 @@ interface FriendsPanelProps {
 }
 
 export function FriendsPanel({ onClose }: FriendsPanelProps) {
+  const { t } = useTranslation();
   const {
     friends,
     pendingRequests,
@@ -70,13 +72,13 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
       setLikedPages(newLikedPages);
       localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
       await unlikeGalleryPage(pageId);
-      toast.success('Лайк убран');
+      toast.success(t('friends.likeRemoved', 'Like removed'));
     } else {
       const newLikedPages = new Set(likedPages).add(pageId);
       setLikedPages(newLikedPages);
       localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
       await likeGalleryPage(pageId);
-      toast.success('Страница понравилась!');
+      toast.success(t('friends.pageLiked', 'Page liked!'));
     }
   };
 
@@ -108,9 +110,9 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
               <Users className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">Друзья</h2>
+              <h2 className="text-lg font-bold">{t('friends.title', 'Friends')}</h2>
               <p className="text-xs text-muted-foreground">
-                {friends.length} друзей
+                {friends.length} {t('friends.count', 'friends')}
               </p>
             </div>
           </div>
@@ -131,7 +133,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
             <Input
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Поиск пользователей..."
+              placeholder={t('friends.search', 'Search users...')}
               className="pl-10 h-11 rounded-xl bg-card/40 backdrop-blur-xl border-border/30"
             />
           </div>
@@ -141,14 +143,14 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="px-4 pb-3">
           <TabsList className="grid w-full grid-cols-4 h-10 rounded-xl bg-muted/50">
             <TabsTrigger value="friends" className="rounded-lg text-xs px-2">
-              Друзья
+              {t('friends.title', 'Friends')}
             </TabsTrigger>
             <TabsTrigger value="activity" className="rounded-lg text-xs px-2">
               <Activity className="h-3 w-3 mr-1" />
-              Лента
+              {t('friends.activity', 'Feed')}
             </TabsTrigger>
             <TabsTrigger value="requests" className="rounded-lg text-xs px-2 relative">
-              Запросы
+              {t('friends.requests', 'Requests')}
               {pendingCount > 0 && (
                 <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">
                   {pendingCount}
@@ -156,7 +158,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
               )}
             </TabsTrigger>
             <TabsTrigger value="sent" className="rounded-lg text-xs px-2">
-              Отправ.
+              {t('friends.sent', 'Sent')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -169,7 +171,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
           <div className="space-y-3 mb-6">
             <h3 className="text-sm font-semibold text-muted-foreground flex items-center gap-2">
               <Search className="h-4 w-4" />
-              Результаты поиска
+              {t('friends.searchResults', 'Search results')}
             </h3>
             {isSearching ? (
               <div className="flex items-center justify-center py-8">
@@ -188,7 +190,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                         className="h-8 rounded-lg gap-1"
                       >
                         <UserPlus className="h-4 w-4" />
-                        Добавить
+                        {t('friends.add', 'Add')}
                       </Button>
                     }
                   />
@@ -196,7 +198,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
               </div>
             ) : (
               <p className="text-center text-sm text-muted-foreground py-4">
-                Пользователи не найдены
+                {t('friends.noResults', 'Users not found')}
               </p>
             )}
           </div>
@@ -214,17 +216,17 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                   <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl p-3 text-center">
                     <Users className="h-5 w-5 mx-auto mb-1 text-blue-500" />
                     <p className="text-lg font-bold">{friends.length}</p>
-                    <p className="text-[10px] text-muted-foreground">Друзей</p>
+                    <p className="text-[10px] text-muted-foreground">{t('friends.title', 'Friends')}</p>
                   </div>
                   <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-3 text-center">
                     <Trophy className="h-5 w-5 mx-auto mb-1 text-amber-500" />
                     <p className="text-lg font-bold">{Math.floor(friends.length / 5)}</p>
-                    <p className="text-[10px] text-muted-foreground">Награды</p>
+                    <p className="text-[10px] text-muted-foreground">{t('friends.rewards', 'Rewards')}</p>
                   </div>
                   <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl p-3 text-center">
                     <Sparkles className="h-5 w-5 mx-auto mb-1 text-green-500" />
-                    <p className="text-lg font-bold">+{friends.length * 2}ч</p>
-                    <p className="text-[10px] text-muted-foreground">Бонусы</p>
+                    <p className="text-lg font-bold">+{friends.length * 2}h</p>
+                    <p className="text-[10px] text-muted-foreground">{t('friends.bonuses', 'Bonuses')}</p>
                   </div>
                 </div>
 
@@ -252,8 +254,8 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
             ) : (
               <EmptyState 
                 icon={<Users className="h-8 w-8" />}
-                title="Пока нет друзей"
-                description="Найдите друзей через поиск выше"
+                title={t('friends.noFriends', 'No friends yet')}
+                description={t('friends.findFriends', 'Find friends through search above')}
               />
             )}
           </div>
@@ -296,8 +298,8 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
             ) : (
               <EmptyState 
                 icon={<Clock className="h-8 w-8" />}
-                title="Нет входящих запросов"
-                description="Когда кто-то захочет добавить вас в друзья, запрос появится здесь"
+                title={t('friends.noRequests', 'No incoming requests')}
+                description={t('friends.noRequestsDesc', 'When someone wants to add you as a friend, the request will appear here')}
               />
             )}
           </div>
@@ -311,7 +313,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                 <UserCard
                   key={request.id}
                   user={request.friend_profile}
-                  badge={<Badge variant="secondary" className="text-[10px]">Ожидание</Badge>}
+                  badge={<Badge variant="secondary" className="text-[10px]">{t('friends.pending', 'Pending')}</Badge>}
                   action={
                     <Button
                       variant="ghost"
@@ -327,8 +329,8 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
             ) : (
               <EmptyState 
                 icon={<UserPlus className="h-8 w-8" />}
-                title="Нет отправленных запросов"
-                description="Найдите друзей через поиск"
+                title={t('friends.noSentRequests', 'No sent requests')}
+                description={t('friends.noSentRequestsDesc', 'Find friends through search')}
               />
             )}
           </div>
@@ -343,13 +345,13 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
               <Trophy className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold">Приглашайте друзей!</p>
+              <p className="text-sm font-semibold">{t('friends.inviteFriends', 'Invite friends!')}</p>
               <p className="text-xs text-muted-foreground">
-                +2 часа Premium за каждого друга
+                {t('friends.inviteReward', '+2 hours Premium per friend')}
               </p>
             </div>
             <Badge variant="secondary" className="bg-primary/20 text-primary">
-              +{friends.length * 2}ч
+              +{friends.length * 2}h
             </Badge>
           </div>
         </div>
@@ -383,6 +385,7 @@ interface UserCardProps {
 }
 
 function UserCard({ user, badge, action, showViewPage, onToggleLike, likedPages, onGift }: UserCardProps) {
+  const { t } = useTranslation();
   const [pageId, setPageId] = useState<string | null>(null);
   const [isLiking, setIsLiking] = useState(false);
 
@@ -401,7 +404,7 @@ function UserCard({ user, badge, action, showViewPage, onToggleLike, likedPages,
     if (slug) {
       window.open(`/${slug}`, '_blank');
     } else {
-      toast.error('Страница не опубликована');
+      toast.error(t('friends.pageNotPublished', 'Page not published'));
     }
   };
 
@@ -428,7 +431,7 @@ function UserCard({ user, badge, action, showViewPage, onToggleLike, likedPages,
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-medium truncate">
-            {user.display_name || user.username || 'Пользователь'}
+            {user.display_name || user.username || t('friends.user', 'User')}
           </p>
           {badge}
         </div>
@@ -443,7 +446,7 @@ function UserCard({ user, badge, action, showViewPage, onToggleLike, likedPages,
             size="sm"
             onClick={() => onGift(user)}
             className="h-8 w-8 p-0 rounded-lg text-pink-500 hover:text-pink-600 hover:bg-pink-500/10"
-            title="Подарить Premium"
+            title={t('friends.giftPremium', 'Gift Premium')}
           >
             <Gift className="h-4 w-4" />
           </Button>
@@ -455,7 +458,7 @@ function UserCard({ user, badge, action, showViewPage, onToggleLike, likedPages,
             onClick={handleLike}
             disabled={isLiking}
             className="h-8 w-8 p-0 rounded-lg"
-            title={isLiked ? 'Убрать лайк' : 'Поставить лайк'}
+            title={isLiked ? t('friends.removeLike', 'Убрать лайк') : t('friends.addLike', 'Поставить лайк')}
           >
             <Heart className={`h-4 w-4 transition-all ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
           </Button>
@@ -466,7 +469,7 @@ function UserCard({ user, badge, action, showViewPage, onToggleLike, likedPages,
             size="sm"
             onClick={handleViewPage}
             className="h-8 w-8 p-0 rounded-lg"
-            title="Открыть страницу"
+            title={t('friends.viewPage', 'Открыть страницу')}
           >
             <ExternalLink className="h-4 w-4" />
           </Button>

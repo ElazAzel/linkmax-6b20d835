@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Check, Loader2, MessageCircle, ArrowLeft, AlertCircle, Copy, ExternalLink } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 
 interface TelegramVerificationProps {
@@ -77,16 +77,16 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
         }, 500);
       } else {
         if (data?.error === 'invalid_chat_id' || data?.description?.includes('chat not found')) {
-          setError('Сначала нажмите START в боте @linkmaxmy_bot');
+          setError(t('telegram.clickStartFirst', 'Сначала нажмите START в боте @linkmaxmy_bot'));
         } else if (data?.error === 'cannot_send_message') {
-          setError('Нажмите START в боте @linkmaxmy_bot');
+          setError(t('telegram.clickStart', 'Нажмите START в боте @linkmaxmy_bot'));
         } else {
-          setError('Неверный Chat ID');
+          setError(t('telegram.invalidChatId', 'Неверный Chat ID'));
         }
       }
     } catch (err: any) {
       console.error('Telegram verification error:', err);
-      setError('Ошибка проверки. Попробуйте снова');
+      setError(t('telegram.verificationError', 'Ошибка проверки. Попробуйте снова'));
     } finally {
       setIsVerifying(false);
     }
@@ -106,7 +106,7 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
         // Auto-verify will trigger via useEffect
       }
     } catch {
-      toast.error('Не удалось вставить');
+      toast.error(t('common.pasteFailed', 'Не удалось вставить'));
     }
   };
 
@@ -123,9 +123,9 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h3 className="font-semibold text-lg">Подключите Telegram</h3>
+          <h3 className="font-semibold text-lg">{t('telegram.connectTitle', 'Подключите Telegram')}</h3>
           <p className="text-sm text-muted-foreground">
-            Для уведомлений о заявках
+            {t('telegram.connectSubtitle', 'Для уведомлений о заявках')}
           </p>
         </div>
       </div>
@@ -137,8 +137,8 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
             1
           </div>
           <div className="flex-1">
-            <p className="font-medium text-sm">Откройте бота и нажмите START</p>
-            <p className="text-xs text-muted-foreground">Бот покажет ваш Chat ID</p>
+            <p className="font-medium text-sm">{t('telegram.step1Title', 'Откройте бота и нажмите START')}</p>
+            <p className="text-xs text-muted-foreground">{t('telegram.step1Desc', 'Бот покажет ваш Chat ID')}</p>
           </div>
         </div>
         
@@ -147,7 +147,7 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
           onClick={openBot}
         >
           <MessageCircle className="h-5 w-5" />
-          Открыть @linkmaxmy_bot
+          {t('telegram.openBot', 'Открыть @linkmaxmy_bot')}
           <ExternalLink className="h-4 w-4 ml-auto" />
         </Button>
       </Card>
@@ -159,8 +159,8 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
             2
           </div>
           <div className="flex-1">
-            <p className="font-medium text-sm">Скопируйте Chat ID и вставьте сюда</p>
-            <p className="text-xs text-muted-foreground">Нажмите на номер в боте для копирования</p>
+            <p className="font-medium text-sm">{t('telegram.step2Title', 'Скопируйте Chat ID и вставьте сюда')}</p>
+            <p className="text-xs text-muted-foreground">{t('telegram.step2Desc', 'Нажмите на номер в боте для копирования')}</p>
           </div>
         </div>
         
@@ -199,7 +199,7 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
       {isVerified && (
         <div className="flex items-center gap-2 text-sm text-green-500 bg-green-500/10 p-3 rounded-xl">
           <Check className="h-4 w-4" />
-          Telegram успешно подключен!
+          {t('telegram.connected', 'Telegram успешно подключен!')}
         </div>
       )}
 
@@ -207,20 +207,13 @@ export function TelegramVerification({ onVerified, onBack }: TelegramVerificatio
       {isVerifying && (
         <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          Проверяем Chat ID...
-        </div>
-      )}
-
-      {isVerified && (
-        <div className="flex items-center gap-2 text-sm text-green-500 bg-green-500/10 p-3 rounded-xl">
-          <Check className="h-4 w-4" />
-          Telegram успешно подключен!
+          {t('telegram.verifying', 'Проверяем Chat ID...')}
         </div>
       )}
 
       {/* Info */}
       <p className="text-xs text-muted-foreground text-center px-4">
-        Telegram нужен для мгновенных уведомлений о новых заявках с вашей страницы
+        {t('telegram.infoHint', 'Telegram нужен для мгновенных уведомлений о новых заявках с вашей страницы')}
       </p>
     </div>
   );

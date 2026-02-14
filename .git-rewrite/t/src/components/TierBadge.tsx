@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crown, Sparkles, Zap } from 'lucide-react';
+import { Crown, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import type { FreeTier } from '@/hooks/useFreemiumLimits';
 
@@ -20,11 +20,6 @@ export function TierBadge({ tier, size = 'md', showIcon = true }: TierBadgeProps
       label: 'PRO',
       icon: Crown,
       className: 'bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/30',
-    },
-    business: {
-      label: 'BUSINESS',
-      icon: Sparkles,
-      className: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
     },
   };
 
@@ -63,20 +58,12 @@ interface RequiredTierProps {
 export function RequiredTier({ tier, inline = false }: RequiredTierProps) {
   if (tier === 'free') return null;
 
-  const tierConfig = {
-    pro: {
-      label: 'PRO',
-      icon: Crown,
-      className: 'text-violet-500',
-    },
-    business: {
-      label: 'BUSINESS',
-      icon: Sparkles,
-      className: 'text-amber-500',
-    },
+  const config = {
+    label: 'PRO',
+    icon: Crown,
+    className: 'text-violet-500',
   };
 
-  const config = tierConfig[tier as 'pro' | 'business'];
   const Icon = config.icon;
 
   if (inline) {

@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Clock, CalendarDays, User, Phone, Mail, Check, Loader2, MessageCircle, CheckCircle2, XCircle, Info } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { toast } from 'sonner';
 import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date-fns';
@@ -116,29 +116,34 @@ export const BookingBlock = memo(function BookingBlockComponent({
         });
       } else {
         // Generate default slots from block settings
-        const startHour = block.workingHoursStart || 9;
-        const endHour = block.workingHoursEnd || 18;
+        const startHour = block.workingHoursStart ?? 9;
+        const endHour = block.workingHoursEnd ?? 18;
         const duration = block.slotDuration || 60;
 
-        for (let hour = startHour; hour < endHour; hour++) {
-          for (let min = 0; min < 60; min += duration) {
-            if (hour + min / 60 >= endHour) break;
-            
-            const timeStr = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}:00`;
-            const endMinutes = min + duration;
-            const endHourCalc = hour + Math.floor(endMinutes / 60);
-            const endMinCalc = endMinutes % 60;
-            const endTimeStr = `${endHourCalc.toString().padStart(2, '0')}:${endMinCalc.toString().padStart(2, '0')}:00`;
+        // Calculate total minutes from start to end
+        const startMinutes = startHour * 60;
+        const endMinutes = endHour * 60;
+        
+        // Generate slots based on duration
+        for (let slotStart = startMinutes; slotStart + duration <= endMinutes; slotStart += duration) {
+          const slotEnd = slotStart + duration;
+          
+          const startHr = Math.floor(slotStart / 60);
+          const startMin = slotStart % 60;
+          const endHr = Math.floor(slotEnd / 60);
+          const endMin = slotEnd % 60;
+          
+          const timeStr = `${startHr.toString().padStart(2, '0')}:${startMin.toString().padStart(2, '0')}:00`;
+          const endTimeStr = `${endHr.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}:00`;
 
-            const isBooked = bookings?.some(b => b.slot_time === timeStr);
-            
-            generatedSlots.push({
-              time: timeStr,
-              endTime: endTimeStr,
-              available: !isBooked,
-              bookingId: bookings?.find(b => b.slot_time === timeStr)?.id
-            });
-          }
+          const isBooked = bookings?.some(b => b.slot_time === timeStr);
+          
+          generatedSlots.push({
+            time: timeStr,
+            endTime: endTimeStr,
+            available: !isBooked,
+            bookingId: bookings?.find(b => b.slot_time === timeStr)?.id
+          });
         }
       }
 
@@ -279,75 +284,100 @@ export const BookingBlock = memo(function BookingBlockComponent({
   };
 
   return (
-    <Card className="w-full overflow-hidden">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-lg">
+    <div className="w-full rounded-xl overflow-hidden bg-card border border-border shadow-sm">
+      {/* Header */}
+      <div className="p-4 sm:p-5 pb-2">
+        <div className="flex items-center gap-2">
           <CalendarDays className="h-5 w-5 text-primary" />
-          {blockTitle || t('booking.title', 'Записаться')}
-        </CardTitle>
-        {blockDescription && (
-          <p className="text-sm text-muted-foreground">{blockDescription}</p>
-        )}
-        {/* Working hours info */}
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
-          <Clock className="h-3 w-3" />
-          <span>{t('booking.workingHours', 'Приём')}: {getWorkingHours()}</span>
+          <h3 className="font-semibold text-base">
+            {blockTitle || t('booking.title', 'Записаться')}
+          </h3>
         </div>
-      </CardHeader>
+        {blockDescription && (
+          <p className="text-sm text-muted-foreground mt-1">{blockDescription}</p>
+        )}
+        {/* Working hours - compact */}
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-2">
+          <Clock className="h-3 w-3" />
+          <span>{getWorkingHours()}</span>
+        </div>
+      </div>
 
-      <CardContent className="space-y-4 pt-2">
-        {/* Step indicator */}
-        <div className="flex items-center gap-2 text-sm">
-          <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium ${
+      <div className="p-4 sm:p-5 pt-2 space-y-4">
+        {/* Step indicator - compact */}
+        <div className="flex items-center gap-2 text-xs">
+          <div className={`flex items-center justify-center w-5 h-5 rounded-full font-medium ${
             selectedDate ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
           }`}>
             1
           </div>
-          <span className="text-muted-foreground">{t('booking.step1', 'Выберите дату')}</span>
+          <span className={selectedDate ? 'text-foreground' : 'text-muted-foreground'}>
+            {t('booking.step1', 'Дата')}
+          </span>
           {selectedDate && (
             <>
               <div className="h-px flex-1 bg-border" />
-              <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium ${
+              <div className={`flex items-center justify-center w-5 h-5 rounded-full font-medium ${
                 selectedSlot ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
               }`}>
                 2
               </div>
-              <span className="text-muted-foreground">{t('booking.step2', 'Время')}</span>
+              <span className={selectedSlot ? 'text-foreground' : 'text-muted-foreground'}>
+                {t('booking.step2', 'Время')}
+              </span>
             </>
           )}
         </div>
 
-        {/* Calendar */}
-        <div className="flex justify-center">
+        {/* Calendar - optimized for mobile */}
+        <div className="flex justify-center -mx-2">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
             disabled={disabledDays}
             locale={locale}
-            className="rounded-xl border bg-card"
+            className="rounded-xl border-0 w-full max-w-[320px]"
+            classNames={{
+              months: "w-full",
+              month: "w-full space-y-2",
+              caption: "flex justify-center pt-1 relative items-center",
+              caption_label: "text-sm font-medium",
+              nav: "space-x-1 flex items-center",
+              nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+              table: "w-full border-collapse",
+              head_row: "flex w-full",
+              head_cell: "text-muted-foreground rounded-md w-full font-normal text-[0.7rem]",
+              row: "flex w-full mt-1",
+              cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 flex-1 aspect-square",
+              day: "h-full w-full p-0 font-normal hover:bg-accent rounded-lg transition-colors text-sm flex items-center justify-center",
+              day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+              day_today: "bg-accent text-accent-foreground",
+              day_disabled: "text-muted-foreground opacity-50",
+              day_outside: "text-muted-foreground opacity-50",
+            }}
           />
         </div>
 
-        {/* Time slots section */}
+        {/* Time slots section - mobile optimized */}
         {selectedDate && (
           <div className="space-y-3">
             {/* Date header with stats */}
-            <div className="flex items-center justify-between gap-2 p-3 rounded-xl bg-muted/50">
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-primary" />
-                <span className="font-medium text-sm">{getDateLabel(selectedDate)}</span>
+            <div className="flex items-center justify-between gap-2 p-2.5 rounded-lg bg-muted/50">
+              <div className="flex items-center gap-2 min-w-0">
+                <CalendarDays className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="font-medium text-sm truncate">{getDateLabel(selectedDate)}</span>
               </div>
               {!loading && totalCount > 0 && (
-                <div className="flex items-center gap-3 text-xs">
+                <div className="flex items-center gap-2 text-xs flex-shrink-0">
                   <span className="flex items-center gap-1 text-emerald-600">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                    {availableCount} {t('booking.free', 'свободно')}
+                    <CheckCircle2 className="h-3 w-3" />
+                    {availableCount}
                   </span>
                   {bookedCount > 0 && (
                     <span className="flex items-center gap-1 text-muted-foreground">
-                      <XCircle className="h-3.5 w-3.5" />
-                      {bookedCount} {t('booking.taken', 'занято')}
+                      <XCircle className="h-3 w-3" />
+                      {bookedCount}
                     </span>
                   )}
                 </div>
@@ -355,75 +385,67 @@ export const BookingBlock = memo(function BookingBlockComponent({
             </div>
             
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-8 gap-2">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  {t('booking.loadingSlots', 'Загружаем расписание...')}
+              <div className="flex flex-col items-center justify-center py-6 gap-2">
+                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                <span className="text-xs text-muted-foreground">
+                  {t('booking.loadingSlots', 'Загружаем...')}
                 </span>
               </div>
             ) : slots.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 gap-2 text-center">
-                <Info className="h-8 w-8 text-muted-foreground" />
+              <div className="flex flex-col items-center justify-center py-6 gap-2 text-center">
+                <Info className="h-6 w-6 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">
-                    {t('booking.noSlotsTitle', 'Нет доступных слотов')}
+                    {t('booking.noSlotsTitle', 'Нет слотов')}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t('booking.noSlotsHint', 'Попробуйте выбрать другую дату')}
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {t('booking.noSlotsHint', 'Выберите другую дату')}
                   </p>
                 </div>
               </div>
             ) : (
-              <ScrollArea className="max-h-[200px]">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pr-3">
-                  {slots.map((slot, idx) => (
-                    <Button
-                      key={idx}
-                      variant={selectedSlot?.time === slot.time ? "default" : slot.available ? "outline" : "ghost"}
-                      size="default"
-                      disabled={!slot.available}
-                      onClick={() => handleSelectSlot(slot)}
-                      className={`relative h-auto py-3 flex flex-col items-center gap-0.5 transition-all ${
-                        slot.available 
-                          ? selectedSlot?.time === slot.time
-                            ? 'ring-2 ring-primary ring-offset-2'
-                            : 'hover:bg-primary/10 hover:border-primary'
-                          : 'opacity-40 cursor-not-allowed bg-muted/30'
-                      }`}
-                    >
-                      <span className={`text-base font-semibold ${
-                        slot.available ? '' : 'line-through'
-                      }`}>
-                        {formatTime(slot.time)}
+              /* Time slots grid - mobile optimized with 3 columns */
+              <div className="grid grid-cols-3 gap-1.5 max-h-[180px] overflow-y-auto pr-1">
+                {slots.map((slot, idx) => (
+                  <button
+                    key={idx}
+                    disabled={!slot.available}
+                    onClick={() => handleSelectSlot(slot)}
+                    className={`
+                      relative py-2.5 px-1 rounded-lg text-center transition-all
+                      ${slot.available 
+                        ? selectedSlot?.time === slot.time
+                          ? 'bg-primary text-primary-foreground ring-2 ring-primary ring-offset-1'
+                          : 'bg-background border border-border hover:border-primary hover:bg-primary/5 active:scale-95'
+                        : 'bg-muted/30 opacity-40 cursor-not-allowed'
+                      }
+                    `}
+                  >
+                    <span className={`text-sm font-medium ${!slot.available ? 'line-through' : ''}`}>
+                      {formatTime(slot.time)}
+                    </span>
+                    {slot.endTime && (
+                      <span className="block text-[9px] text-muted-foreground mt-0.5">
+                        – {formatTime(slot.endTime)}
                       </span>
-                      {slot.endTime && (
-                        <span className="text-[10px] text-muted-foreground">
-                          — {formatTime(slot.endTime)}
-                        </span>
-                      )}
-                      {!slot.available && (
-                        <Badge variant="secondary" className="absolute -top-1 -right-1 text-[9px] px-1 py-0">
-                          {t('booking.occupied', 'занято')}
-                        </Badge>
-                      )}
-                    </Button>
-                  ))}
-                </div>
-              </ScrollArea>
+                    )}
+                  </button>
+                ))}
+              </div>
             )}
 
-            {/* Quick action after slot selection */}
+            {/* Selected slot confirmation - compact */}
             {selectedSlot && (
-              <div className="p-3 rounded-xl bg-primary/5 border border-primary/20">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-primary" />
-                    <span className="text-sm">
-                      {t('booking.selectedTime', 'Выбрано')}: <strong>{formatTime(selectedSlot.time)}</strong>
-                      {selectedSlot.endTime && ` — ${formatTime(selectedSlot.endTime)}`}
+              <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="text-sm truncate">
+                      <strong>{formatTime(selectedSlot.time)}</strong>
+                      {selectedSlot.endTime && ` – ${formatTime(selectedSlot.endTime)}`}
                     </span>
                   </div>
-                  <Button size="sm" onClick={() => setShowForm(true)}>
+                  <Button size="sm" onClick={() => setShowForm(true)} className="h-8 px-3 text-xs">
                     {t('booking.continue', 'Далее')}
                   </Button>
                 </div>
@@ -432,18 +454,18 @@ export const BookingBlock = memo(function BookingBlockComponent({
           </div>
         )}
 
-        {/* Legend - more compact */}
-        <div className="flex items-center justify-center gap-6 text-[11px] text-muted-foreground pt-2">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded border-2 border-primary/30 bg-background" />
+        {/* Legend - compact */}
+        <div className="flex items-center justify-center gap-4 text-[10px] text-muted-foreground pt-1">
+          <div className="flex items-center gap-1">
+            <div className="w-2.5 h-2.5 rounded border border-primary/30 bg-background" />
             <span>{t('booking.available', 'Свободно')}</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-muted opacity-50" />
+          <div className="flex items-center gap-1">
+            <div className="w-2.5 h-2.5 rounded bg-muted opacity-50" />
             <span>{t('booking.booked', 'Занято')}</span>
           </div>
         </div>
-      </CardContent>
+      </div>
 
       {/* Booking Form Dialog */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
@@ -552,8 +574,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   <Check className="h-4 w-4 mr-2" />
                 )}
                 {block.requirePrepayment 
-                  ? t('booking.confirmAndPay', 'Записаться и оплатить')
-                  : t('booking.confirm', 'Записаться')
+                  ? (getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('booking.confirmAndPay', 'Записаться и оплатить'))
+                  : (getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('booking.confirm', 'Записаться'))
                 }
               </Button>
             </div>
@@ -567,6 +589,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
           </form>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   );
 });

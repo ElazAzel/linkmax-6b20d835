@@ -1,7 +1,37 @@
 {
+  "googleForms": {
+    "importTitle": "Import from Google Forms",
+    "importDescription": "Import field structure from a public Google Form",
+    "byUrl": "By URL",
+    "manualJson": "Manual (JSON)",
+    "formUrl": "Google Form URL",
+    "urlHint": "Form must be public (accessible to anyone with the link)",
+    "urlRequired": "Enter a Google Form URL",
+    "invalidUrl": "Invalid URL. Use a link like docs.google.com/forms/...",
+    "loading": "Loading...",
+    "importFromUrl": "Import",
+    "fetchFailed": "Failed to load form. Check the URL.",
+    "formClosed": "Form is closed for responses",
+    "formNotPublic": "Form is not public. Enable access in Google Forms settings.",
+    "formDataNotFound": "Could not find form data",
+    "parseError": "Parse error. Check the format.",
+    "unknownError": "Unknown error",
+    "noFields": "No fields found to import",
+    "parseSuccess": "Form parsed successfully!",
+    "serverError": "Server error. Try again later.",
+    "jsonStructure": "Form structure (JSON)",
+    "loadTemplate": "Load template",
+    "jsonHint": "Types: short_text, long_text, single_choice, multiple_choice, dropdown, date",
+    "parseJson": "Parse",
+    "templateLoaded": "Template loaded",
+    "foundFields": "Fields found",
+    "formTitle": "Form title",
+    "importSuccess": "Imported {{count}} fields",
+    "import": "Import"
+  },
   "legal": {
     "termsOfService": "Terms of Service",
-    "termsDescription": "Read the terms of use of the LinkMAX platform",
+    "termsDescription": "Read the terms of use of the lnkmx platform",
     "agreeToTerms": "I accept the",
     "termsLink": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
@@ -11,7 +41,337 @@
   },
   "common": {
     "close": "Close",
-    "language": "Language"
+    "language": "Language",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "back": "Back",
+    "backHome": "Back to home",
+    "next": "Next",
+    "confirm": "Confirm",
+    "apply": "Apply",
+    "reset": "Reset",
+    "search": "Search",
+    "noData": "No data",
+    "all": "All",
+    "more": "More",
+    "less": "Less",
+    "copy": "Copy",
+    "copied": "Copied",
+    "share": "Share",
+    "download": "Download",
+    "upload": "Upload",
+    "remove": "Remove",
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "view": "View",
+    "show": "Show",
+    "hide": "Hide",
+    "enable": "Enable",
+    "disable": "Disable",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and",
+    "user": "User",
+    "friend": "Friend",
+    "recipient": "Recipient",
+    "skip": "Skip",
+    "retry": "Try again",
+    "goHome": "Go home",
+    "signUp": "Sign up",
+    "pleaseWait": "Please wait...",
+    "comingSoon": "Coming soon"
+  },
+  "fields": {
+    "name": "Name",
+    "bio": "Bio",
+    "left": "Left",
+    "center": "Center",
+    "right": "Right",
+    "buttonText": "Button Text"
+  },
+  "quickStart": {
+    "welcomeTitle": "Create your page in 60 seconds",
+    "welcomeDescription": "AI will generate a personalized page based on your niche and description",
+    "startWithAI": "Create with AI",
+    "skipToEditor": "Skip and create manually",
+    "nicheTitle": "Choose your niche",
+    "nicheDescription": "AI will pick the design and blocks",
+    "detailsTitle": "Tell us about yourself",
+    "detailsDescription": "AI will personalize your page",
+    "yourName": "Your name",
+    "namePlaceholder": "What's your name?",
+    "additionalDetails": "Description (optional)",
+    "detailsPlaceholder": "What do you do? What services do you offer?",
+    "detailsHint": "The more detail - the better the result",
+    "generate": "Create",
+    "generatingTitle": "AI is creating your page",
+    "generatingDescription": "Selecting blocks and content just for you",
+    "completeTitle": "Done! 🎉",
+    "completeDescription": "Your page is ready for editing"
+  },
+  "wizard": {
+    "back": "Back",
+    "next": "Next",
+    "finish": "Done",
+    "cover": {
+      "title": "Profile Cover",
+      "description": "Add a beautiful cover for your profile",
+      "placeholder": "Click to upload",
+      "gradient": "Gradient overlay",
+      "remove": "Remove cover"
+    },
+    "avatar": {
+      "title": "Your Photo",
+      "description": "Add an avatar - it helps people recognize you",
+      "hint": "Recommended: square photo at least 400×400px",
+      "size": "Avatar size"
+    },
+    "info": {
+      "title": "About You",
+      "description": "Tell about yourself - name and short description"
+    },
+    "style": {
+      "title": "Final Touches",
+      "description": "Customize profile appearance",
+      "position": "Avatar position",
+      "ready": "Great! Your profile is ready to publish"
+    },
+    "preview": {
+      "name": "Your name",
+      "bio": "About you"
+    }
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "invalidLink": "Check the link or the page may have been deleted",
+    "loadError": "Loading error",
+    "tryAgain": "Try refreshing the page",
+    "createYourPage": "Want to create your own page?"
+  },
+  "form": {
+    "fillRequired": "Please fill required fields",
+    "success": "Form submitted successfully!",
+    "error": "Error submitting form",
+    "enterPlaceholder": "Enter",
+    "submitting": "Submitting..."
+  },
+  "profile": {
+    "nameSaved": "Name saved",
+    "bioSaved": "Bio saved",
+    "namePlaceholder": "Your name",
+    "bioPlaceholder": "Tell us about yourself...",
+    "clickToEdit": "Click to edit",
+    "addName": "Add name",
+    "addBio": "Add bio",
+    "shadowStyle": "Shadow Style",
+    "none": "None",
+    "soft": "Soft",
+    "medium": "Medium",
+    "strong": "Strong",
+    "glow": "Glow",
+    "small": "Small",
+    "large": "Large",
+    "xlarge": "Extra Large",
+    "dark": "Dark",
+    "light": "Light",
+    "primary": "Primary",
+    "sunset": "Sunset",
+    "ocean": "Ocean",
+    "purple": "Purple",
+    "verified": "Verified",
+    "coverSettings": "Cover settings",
+    "coverHeight": "Height",
+    "coverGradient": "Gradient overlay",
+    "removeCover": "Remove cover",
+    "coverRemoved": "Cover removed",
+    "addCover": "Add cover image",
+    "changeCover": "Change cover",
+    "clickToChangeCover": "Click to add cover",
+    "avatarSettings": "Avatar settings",
+    "avatarSize": "Avatar size",
+    "avatarFrame": "Frame style",
+    "clickToChangeAvatar": "Click to change avatar",
+    "frame": "Frame",
+    "size": "Size",
+    "nameAnim": "Name"
+  },
+  "verification": {
+    "platformBadge": "Identity verified by platform",
+    "premiumBadge": "Premium account",
+    "verifiedPremium": "Verified + Premium",
+    "verified": "Verified",
+    "notVerified": "Not verified"
+  },
+  "frames": {
+    "default": "Default",
+    "none": "No Frame",
+    "solid": "Solid",
+    "gradient": "Gradient",
+    "gradientSunset": "Sunset",
+    "gradientOcean": "Ocean",
+    "gradientPurple": "Purple",
+    "neonBlue": "Neon Blue",
+    "neonPink": "Neon Pink",
+    "neonGreen": "Neon Green",
+    "rainbow": "Rainbow",
+    "rainbowSpin": "Rainbow Spin",
+    "double": "Double",
+    "dashed": "Dashed",
+    "dotted": "Dotted",
+    "glowPulse": "Glow Pulse",
+    "fire": "Fire",
+    "electric": "Electric",
+    "wave": "Wave",
+    "heartbeat": "Heartbeat",
+    "sparkle": "Sparkle",
+    "glitch": "Glitch",
+    "unlockProFrames": "Unlock all frames with PRO subscription",
+    "categories": {
+      "basic": "Basic",
+      "gradient": "Gradient",
+      "neon": "Neon",
+      "animated": "Animated"
+    }
+  },
+  "nameAnimation": {
+    "title": "Name Animation",
+    "none": "No animation",
+    "typing": "Typewriter",
+    "wave": "Wave",
+    "bounce": "Bounce",
+    "glow": "Glow",
+    "gradient": "Gradient",
+    "shake": "Shake",
+    "pulse": "Pulse",
+    "rainbow": "Rainbow",
+    "neon": "Neon",
+    "unlockAll": "Unlock all animations"
+  },
+  "profileEditor": {
+    "title": "Profile Editor",
+    "subtitle": "Customize your profile",
+    "cover": "Cover",
+    "coverDesc": "Add a beautiful cover",
+    "uploadCover": "Upload cover",
+    "removeCover": "Remove cover",
+    "avatar": "Avatar",
+    "avatarDesc": "Your profile photo",
+    "info": "About",
+    "infoDesc": "Name and bio in 3 languages",
+    "style": "Layout",
+    "styleDesc": "Customize appearance",
+    "position": "Position",
+    "yourName": "Your name",
+    "yourBio": "About you",
+    "openEditor": "Open editor"
+  },
+  "blockTypes": {
+    "text": "Text",
+    "link": "Link",
+    "button": "Button",
+    "image": "Photo",
+    "video": "Video",
+    "carousel": "Gallery",
+    "avatar": "Avatar",
+    "separator": "Separator",
+    "socials": "Socials",
+    "messenger": "Messengers",
+    "shoutout": "Shoutout",
+    "product": "Product",
+    "catalog": "Catalog",
+    "pricing": "Pricing",
+    "download": "File",
+    "form": "Form",
+    "newsletter": "Newsletter",
+    "booking": "Booking",
+    "testimonial": "Testimonials",
+    "scratch": "Scratch",
+    "faq": "FAQ",
+    "countdown": "Countdown",
+    "map": "Map",
+    "beforeAfter": "Before/After",
+    "customCode": "Code",
+    "community": "Community",
+    "profile": "Profile",
+    "event": "Event"
+  },
+  "recommendations": {
+    "title": "Recommended for you",
+    "relevant": "Relevant",
+    "allBlocks": "All blocks",
+    "reason": {
+      "socials_creator": "Social media is key for creators",
+      "video_creator": "Video increases engagement",
+      "carousel_creator": "Gallery for your portfolio",
+      "link_creator": "Links to your content",
+      "testimonial_creator": "Reviews build trust",
+      "community_creator": "Unite your audience",
+      "messenger": "Quick contact with you",
+      "newsletter": "Collect subscribers",
+      "pricing_freelancer": "Show your services and prices",
+      "booking_freelancer": "Clients can book online",
+      "testimonial_freelancer": "Reviews build trust",
+      "form_freelancer": "Collect inquiries",
+      "socials": "Show your social media",
+      "before_after": "Show your results",
+      "faq": "Answer common questions",
+      "messenger_business": "Quick business contact",
+      "map_business": "Show your location",
+      "form_business": "Collect leads",
+      "catalog_business": "Service/product catalog",
+      "pricing_business": "Transparent pricing",
+      "testimonial": "Social proof",
+      "faq_business": "Address objections",
+      "booking_business": "Online booking",
+      "booking_education": "Class scheduling",
+      "pricing_education": "Schedule and pricing",
+      "video_education": "Educational content",
+      "testimonial_education": "Student reviews",
+      "form_education": "Course enrollment",
+      "faq_education": "Common questions",
+      "download_education": "Study materials",
+      "event": "Event announcement",
+      "countdown_events": "Countdown timer",
+      "carousel_events": "Event photos",
+      "map_events": "Event location",
+      "form_events": "Event registration",
+      "video": "Video content",
+      "carousel_portfolio": "Showcase your work",
+      "before_after_portfolio": "Before/After projects",
+      "video_portfolio": "Video presentation",
+      "testimonial_portfolio": "Client reviews",
+      "pricing": "Service pricing",
+      "form": "Contact form",
+      "download_portfolio": "Download portfolio",
+      "product": "Sell products",
+      "catalog": "Product catalog",
+      "testimonial_ecommerce": "Customer reviews",
+      "messenger_ecommerce": "Chat consultation",
+      "faq_ecommerce": "Product questions",
+      "carousel_ecommerce": "Product gallery",
+      "countdown_sale": "Sale timer",
+      "booking_health": "Book appointment",
+      "pricing_health": "Service costs",
+      "testimonial_health": "Patient reviews",
+      "before_after_health": "Before/After results",
+      "video_health": "Procedure videos",
+      "community": "Build a community",
+      "event_community": "Community events",
+      "messenger_community": "Member contact",
+      "socials_community": "Community socials",
+      "newsletter_community": "Member newsletter",
+      "link_general": "Add a link",
+      "button_general": "Action button",
+      "text_general": "Text block",
+      "image_general": "Photo or banner"
+    }
   },
   "settings": {
     "niche": "Category",
@@ -20,7 +380,9 @@
     "previewDesc": "Custom image shown in the gallery",
     "removePreview": "Remove custom preview",
     "notifications": "Notifications",
+    "emailLabel": "Email",
     "emailDesc": "New leads via email",
+    "telegramLabel": "Telegram",
     "telegramDesc": "Instant notifications",
     "telegramChatId": "Your Chat ID",
     "telegramHelp": "Get your ID from",
@@ -57,10 +419,12 @@
     "referralProgram": "Referral Program",
     "emailNotifications": "Email Notifications",
     "telegramNotifications": "Telegram Notifications",
-    "signOut": "Sign Out"
-  },
-  "common": {
-    "save": "Save"
+    "signOut": "Sign Out",
+    "verification": "Verification",
+    "verificationDesc": "Verify your identity to get a badge",
+    "verificationPending": "Verification pending",
+    "verificationApproved": "Account verified",
+    "verificationRejected": "Verification rejected"
   },
   "niche": {
     "barber": "Barber",
@@ -75,9 +439,31 @@
     "beauty": "Beauty Master",
     "chef": "Chef"
   },
+  "niches": {
+    "beauty": "Beauty",
+    "fitness": "Fitness",
+    "food": "Food",
+    "education": "Education",
+    "art": "Art",
+    "music": "Music",
+    "tech": "Tech",
+    "business": "Business",
+    "health": "Health",
+    "fashion": "Fashion",
+    "travel": "Travel",
+    "realestate": "Real Estate",
+    "events": "Events",
+    "services": "Services",
+    "other": "Other"
+  },
   "onboarding": {
+    "goalTitle": "What do you want from this page?",
+    "goalDescription": "We’ll build blocks that get you there faster.",
+    "goalClicks": "Clicks",
+    "goalLeads": "Leads",
+    "goalBookings": "Bookings",
     "nicheTitle": "Choose Your Niche",
-    "nicheDescription": "AI will create your personal page in 2 minutes",
+    "nicheDescription": "AI will create your personal page in 1 minute",
     "detailsTitle": "Tell Us About Yourself",
     "detailsDescription": "This information helps AI create the perfect page",
     "yourName": "Your Name or Brand",
@@ -94,680 +480,938 @@
     "generatingDescription": "Generating structure, content, and design...",
     "pleaseWait": "This will take about 30 seconds"
   },
-"landing": {
-    "nav": {
-      "signIn": "Sign In",
-      "getStarted": "Get Started",
-      "gallery": "Gallery"
-    },
-    "floatingCta": "Create page for free",
-    "featured": {
-      "badge": "Top Creators",
-      "title": "Featured Pages",
-      "subtitle": "Discover the most popular pages created with LinkMAX",
-      "viewAll": "View All Pages"
-    },
+  "landing": {
     "gallery": {
       "badge": "Community",
-      "title": "Page Gallery",
-      "subtitle": "Get inspired by pages created by our community",
-      "viewAll": "Explore All"
+      "title": "Explore Community Pages",
+      "subtitle": "Get inspired by amazing pages created by our community",
+      "viewAll": "View all"
     },
-    "hero": {
-      "badge": "AI-powered link-in-bio",
-      "title": "AI page in 2 minutes,",
-      "titleHighlight": "that collects leads",
-      "description": "For beauty masters, experts and small businesses. AI designer + AI copywriter + Mini-CRM + Telegram notifications about new clients.",
-      "usernamePlaceholder": "yourname",
-      "free": "Free",
-      "noCode": "No code",
-      "aiHelps": "AI helps",
-      "create": "Create",
-      "benefit1": "AI creates everything",
-      "benefit2": "Mini-CRM inside",
-      "benefit3": "Telegram notifications",
-      "viewExamples": "View example pages",
-      "badges": {
-        "aiReady": "AI Ready",
-        "autoGenerate": "Auto-generate",
-        "clicks": "Clicks",
-        "verified": "Verified",
-        "premium": "Premium"
+    "v4": {
+      "hero": {
+        "badge": "Free. No code. In 2 minutes.",
+        "title": "Build a page that brings clients",
+        "subtitle": "AI writes the copy. Leads go to Telegram. You see what works.",
+        "cta": "Create page",
+        "secondary": "See examples",
+        "trust1": "No card required",
+        "trust2": "Mobile editor",
+        "trust3": "Publish in one click"
       },
-      "mockup": {
-        "name": "Alex Creator",
-        "role": "Digital Artist",
-        "portfolio": "Portfolio"
-      }
-    },
-    "problems": {
-      "title": "Sound Familiar?",
-      "subtitle": "LinkMAX solves problems faced by 90% of experts and entrepreneurs",
-      "noTime": {
-        "title": "No time to build a website",
-        "description": "Development takes weeks, but you need income now"
+      "forWhom": {
+        "label": "For those who sell via socials:",
+        "expert": "Experts",
+        "beauty": "Beauty",
+        "creator": "Creators",
+        "business": "Business"
       },
-      "expensive": {
-        "title": "Developers are expensive",
-        "description": "A simple landing page costs $500+ and up"
+      "problem": {
+        "title": "Sound familiar?",
+        "item1": "Your bio links to WhatsApp, and clients ask the same questions",
+        "item2": "No clear pricing - you lose those who don't want to message",
+        "item3": "You don't know which posts actually bring leads",
+        "solution": "- one page where everything is clear: who you are, how you help, pricing, and where to click."
       },
-      "oneLink": {
-        "title": "Only 1 link in Instagram bio",
-        "description": "Cannot fit all your social media and services"
-      },
-      "noLeads": {
-        "title": "Losing potential clients",
-        "description": "People leave because they do not know how to reach you"
-      },
-      "oldDesign": {
-        "title": "Taplink looks outdated",
-        "description": "2018 templates do not inspire trust"
-      },
-      "noAnalytics": {
-        "title": "No idea what works",
-        "description": "No data on clicks and audience behavior"
-      }
-    },
-    "solutions": {
-      "title": "How LinkMAX Solves This",
-      "subtitle": "Modern tools for growing your business",
-      "ai": {
-        "title": "AI writes copy for you",
-        "description": "Headlines, product descriptions, SEO — all generated automatically"
-      },
-      "speed": {
-        "title": "2 minutes to publish",
-        "description": "Choose your niche — AI creates a ready page with content"
-      },
-      "design": {
-        "title": "Premium design",
-        "description": "Modern Apple-style themes, not outdated templates"
-      },
-      "crm": {
-        "title": "Built-in Mini-CRM",
-        "description": "Lead capture forms and client database in one place"
-      },
-      "analytics": {
-        "title": "Click analytics",
-        "description": "See which links work and where clients come from"
-      },
-      "mobile": {
-        "title": "Works from phone",
-        "description": "Edit your page directly from your smartphone"
-      }
-    },
-    "audiences": {
-      "title": "Who Is LinkMAX For?",
-      "subtitle": "Perfect for experts, freelancers, and small businesses",
-      "items": {
-        "barber": "Barbers",
-        "photographer": "Photographers",
-        "coach": "Coaches",
-        "tutor": "Tutors",
-        "beauty": "Beauty Masters",
-        "psychologist": "Psychologists",
-        "cafe": "Cafes",
-        "shop": "Shops",
-        "agency": "Agencies",
-        "clinic": "Clinics",
-        "school": "Schools",
-        "service": "Services"
-      }
-    },
-    "features": {
-      "title": "Everything You Need to Succeed",
-      "subtitle": "20+ block types for any task",
-      "aiGeneration": {
-        "title": "AI Content Generation",
-        "description": "Headlines, descriptions, and copy created automatically"
-      },
-      "magicLinks": {
-        "title": "All links in one place",
-        "description": "Social media, messengers, shop — one bio link"
-      },
-      "fast": {
-        "title": "Instant loading",
-        "description": "Pages load in milliseconds"
-      },
-      "mobile": {
-        "title": "Mobile editor",
-        "description": "Create and edit directly from your phone"
-      },
-      "sharing": {
-        "title": "QR codes & sharing",
-        "description": "Share your page anywhere with one tap"
-      },
-      "privacy": {
-        "title": "Data security",
-        "description": "Enterprise-grade information protection"
-      }
-    },
-    "stats": {
-      "minutes": "Minutes",
-      "minutesSuffix": " min",
-      "blocks": "Block Types",
-      "possibilities": "Possibilities",
-      "timeLabel": "To create a page",
-      "blocksLabel": "Block types",
-      "commissionLabel": "Platform commission"
-    },
-    "benefits": {
-      "ai": "AI Generation",
-      "design": "Premium Design",
-      "analytics": "Analytics",
-      "crm": "Mini-CRM"
-    },
-    "unique": {
-      "title": "Why Choose LinkMAX",
-      "subtitle": "Not just a builder — a smart assistant for your business",
-      "ai": {
-        "title": "AI does everything for you",
-        "desc": "Describe your business — get a ready page in 2 minutes. No manual construction."
-      },
-      "price": {
-        "title": "0% commission",
-        "desc": "All sales revenue is yours. We don't take a cut from transactions."
-      },
-      "gamification": {
-        "title": "Gamification",
-        "desc": "Achievements, daily quests, streaks and rewards. Page management becomes a game."
-      },
-      "community": {
-        "title": "Community",
-        "desc": "Page gallery, collaborations, teams, shoutouts. Grow together with others."
-      }
-    },
-    "capabilities": {
-      "title": "Everything for your page",
-      "links": {
-        "title": "All links in one place",
-        "desc": "Social media, messengers, portfolio — one link for everything"
-      },
-      "sell": {
-        "title": "Sell your services",
-        "desc": "Product catalog, price lists, online booking and payment"
-      },
-      "analytics": {
-        "title": "Click analytics",
-        "desc": "Find out which links perform best"
-      },
-      "crm": {
-        "title": "Mini-CRM",
-        "desc": "Manage leads and requests right in the platform"
-      },
-      "teams": {
-        "title": "Teams",
-        "desc": "Create team pages with your colleagues"
-      },
-      "aiGen": {
-        "title": "AI generation",
-        "desc": "Content, copy, structure — all created automatically"
-      }
-    },
-    "cta": {
-      "badge": "Ready to start?",
-      "title": "Create your page right now"
-    },
-    "howItWorks": {
-      "badge": "2 minutes to results",
-      "title": "How It Works",
-      "subtitle": "3 steps to a ready page",
-      "cta": "Try for free",
-      "step1": {
-        "title": "Choose your niche",
-        "description": "Tell us who you are - beauty master, expert or business. AI will understand what you need."
-      },
-      "step2": {
-        "title": "AI creates the page",
-        "description": "In 30 seconds AI generates design, texts, structure and all blocks. You just need to check."
-      },
-      "step3": {
-        "title": "Get leads",
-        "description": "Clients fill out the form → lead in Mini-CRM → Telegram notification. No lead will be lost."
-      }
-    },
-    "targetAudience": {
-      "title": "Who is LinkMAX for",
-      "subtitle": "Specific results for your niche",
-      "cta": "Create Page",
-      "beauty": {
-        "title": "Beauty masters",
-        "subtitle": "Nails, brows, lashes, hair",
-        "result1": "All services and prices in one link",
-        "result2": "Clients book through the form",
-        "result3": "Telegram notification about booking"
-      },
-      "expert": {
-        "title": "Experts and coaches",
-        "subtitle": "Psychologists, tutors, consultants",
-        "result1": "Portfolio and reviews beautifully presented",
-        "result2": "Leads automatically in Mini-CRM",
-        "result3": "Client statuses: new → in progress → done"
-      },
-      "business": {
-        "title": "Small business",
-        "subtitle": "Barbers, photographers, cafes",
-        "result1": "Product and service catalog",
-        "result2": "Analytics: where clients come from",
-        "result3": "Lead management without Excel"
-      }
-    },
-    "premiumValue": {
-      "badge": "Premium - more money",
-      "title": "Why pay for Premium",
-      "subtitle": "Not visual decorations, but tools for earning",
-      "cta": "Get Premium",
-      "price": "From $5.10/month with annual billing (≈2,610₸)",
-      "bonusTitle": "Plus nice bonuses:",
-      "crm": {
-        "title": "Mini-CRM",
-        "description": "All form submissions automatically go to CRM. Statuses: new → in progress → done. No more Excel."
-      },
-      "telegram": {
-        "title": "Telegram notifications",
-        "description": "Instant message in Telegram when a client leaves a request. Never miss a lead."
-      },
-      "ai": {
-        "title": "Unlimited AI",
-        "description": "Generate texts, headlines, product descriptions - without limits. AI copywriter works for you."
-      },
-      "analytics": {
-        "title": "Extended analytics",
-        "description": "Which links get clicked more, where clients come from, when activity is higher."
-      },
-      "bonus": {
-        "themes": "Premium themes and animations",
-        "noWatermark": "No watermark",
-        "scheduler": "Block scheduler",
-        "video": "Video and media blocks"
-      }
-    },
-    "simplePricing": {
-      "badge": "Simple pricing",
-      "title": "Free or Premium",
-      "free": {
-        "title": "Free",
-        "subtitle": "Forever, no hidden fees",
-        "cta": "Start free",
-        "f1": "Basic blocks (links, text, photos)",
-        "f2": "AI generation (3 times per day)",
-        "f3": "Basic statistics",
-        "f4": "Page QR code",
-        "f5": "Mini-CRM and leads",
-        "f6": "Telegram notifications",
-        "f7": "Unlimited AI"
-      },
-      "premium": {
-        "badge": "Recommended",
-        "title": "Premium",
-        "subtitle": "Everything for business growth",
-        "cta": "Get Premium",
-        "f1": "All blocks without limits",
-        "f2": "Mini-CRM - all leads in one place",
-        "f3": "Telegram notifications about leads",
-        "f4": "Unlimited AI copywriter",
-        "f5": "Extended click analytics",
-        "f6": "Premium themes and animations",
-        "f7": "No watermark"
-      }
-    },
-    "cta": {
-      "badge": "Start for Free",
-      "title": "Ready to Build Your Link?",
-      "subtitle": "Join thousands of creators and entrepreneurs who trust LinkMAX",
-      "button": "Start Creating Now"
-    },
-    "footer": {
-      "copyright": "© 2026 LinkMAX. All rights reserved.",
-      "alternatives": "Comparison"
-    },
-    "pricing": {
-      "badge": "Simple Pricing",
-      "title": "Choose Your Plan",
-      "subtitle": "No monthly billing — only 3, 6, or 12 month plans",
-      "month": "mo",
-      "year": "year",
-      "perMonth": "per month",
-      "months3": "3 months",
-      "months6": "6 months",
-      "months12": "12 months",
-      "savePercent": "Save {{percent}}%",
-      "billedOnce": "One-time payment",
-      "total": "Total",
-      "popular": "Most Popular",
-      "bestValue": "Best Value",
-      "entryLevel": "Easy Start",
-      "maxSavings": "Max Savings",
-      "free": {
-        "title": "Basic",
-        "description": "Free forever",
-        "cta": "Get Started Free"
-      },
-      "pro": {
-        "title": "Pro",
-        "description": "For professionals",
-        "cta": "Upgrade to Pro"
-      },
-      "business": {
-        "title": "Business",
-        "description": "For teams and businesses",
-        "cta": "Upgrade to Business"
-      },
-      "features": {
-        "free": {
-          "presetThemes": "Preset themes (limited)",
-          "basicCustomization": "Basic customization (colors, fonts)",
-          "unlimitedLinks": "Unlimited links",
-          "textBlocks": "Text blocks",
-          "basicBlocks": "Basic blocks (Profile, Link, Text, Image, Button, Socials, Separator)",
-          "messengers": "Messengers & social links",
-          "maps": "Maps (address + map)",
-          "basicStats": "Basic page view statistics",
-          "qrCode": "Page QR code",
-          "watermark": "LinkMAX watermark",
-          "ai3": "3 AI requests per day"
+      "howItWorks": {
+        "badge": "2 minutes to results",
+        "title": "How it works",
+        "step1": {
+          "title": "Tell us what you do",
+          "desc": "Pick a niche and add a few facts about yourself"
         },
-        "pro": {
-          "allFree": "Everything in Basic, plus:",
-          "proThemes": "Professional themes & animations",
-          "media": "Media: images, video, music",
-          "pricing": "Price lists, Product/Catalog blocks",
-          "customCode": "Custom HTML/CSS block (limited)",
-          "pixels": "Social Media pixels (Meta, TikTok, Google)",
-          "scheduler": "Block scheduler (show by schedule)",
-          "clickAnalytics": "Extended click analytics",
-          "noWatermark": "No watermark",
-          "miniCrm": "Mini-CRM up to 100 leads/month",
-          "telegramLeads": "Telegram notifications for leads",
-          "unlimitedAi": "Unlimited AI within plan limits"
+        "step2": {
+          "title": "AI builds your page",
+          "desc": "Structure, copy, buttons - edit as you like"
         },
-        "business": {
-          "allPro": "Everything in Pro, plus:",
-          "innerPages": "Inner pages (multi-page mini-site)",
-          "digitalProducts": "Digital products (course/file landing pages)",
-          "applicationForms": "Application forms for leads",
-          "payments": "Payment acceptance (Stripe/Kaspi integration)",
-          "whiteLabel": "Full branding removal (white-label)",
-          "fullCrm": "Full CRM (unlimited leads, statuses, funnel)",
-          "autoNotifications": "Auto email/Telegram notifications",
-          "realtimeNotifications": "Real-time payment & lead notifications",
-          "timers": "Timers (launches, sales, scarcity)",
-          "customDomain": "Custom domain connection",
-          "ssl": "SSL certificate for custom domain",
-          "marketingAddons": "Marketing add-ons (referrals, promo codes)"
+        "step3": {
+          "title": "Get leads",
+          "desc": "Your link is ready for socials, leads go to Telegram"
+        },
+        "cta": "Try it"
+      },
+      "benefits": {
+        "title": "What you get",
+        "crm": {
+          "title": "Mini-CRM + Telegram",
+          "desc": "All leads in one place. Instant notifications to your phone."
+        },
+        "analytics": {
+          "title": "Click analytics",
+          "desc": "See which blocks work. Know what to improve."
+        },
+        "ai": {
+          "title": "AI assistant",
+          "desc": "Generates copy, structure, and ideas. Saves hours of work."
+        },
+        "mobile": {
+          "title": "Mobile editor",
+          "desc": "Edit from your phone. Publish in a second."
         }
+      },
+      "blocks": {
+        "title": "25+ ready blocks",
+        "subtitle": "Drag & drop. Works on any device."
+      },
+      "useCases": {
+        "title": "Ready scenarios",
+        "subtitle": "Pick a template - AI adapts it for you",
+        "expert": {
+          "title": "Expert / Consultant",
+          "item1": "Offer on the first screen",
+          "item2": "Service packages and prices",
+          "item3": "Lead form"
+        },
+        "beauty": {
+          "title": "Beauty / Services",
+          "item1": "Online booking",
+          "item2": "Reviews and before/after",
+          "item3": "Map and contacts"
+        },
+        "creator": {
+          "title": "Creator / Portfolio",
+          "item1": "Best works",
+          "item2": "Socials and subscriptions",
+          "item3": "Brief for orders"
+        },
+        "shop": {
+          "title": "Shop / Catalog",
+          "item1": "Products with prices",
+          "item2": "FAQ and delivery",
+          "item3": "Quick order"
+        },
+        "cta": "Choose scenario"
+      },
+      "proof": {
+        "title": "Example pages",
+        "subtitle": "See how others use lnkmx"
+      },
+      "pricing": {
+        "title": "Simple pricing",
+        "subtitle": "Start free. Upgrade to Pro when you need more.",
+        "forever": "Forever",
+        "month": "mo",
+        "save": "save 40%",
+        "recommended": "Recommended",
+        "guarantee": "0% commission on sales. 14-day refund.",
+        "free": {
+          "f1": "Basic blocks",
+          "f2": "1 AI generation/month",
+          "f3": "Basic stats"
+        },
+        "freeCta": "Start free",
+        "pro": {
+          "f1": "All 25+ blocks",
+          "f2": "Mini-CRM + Telegram notifications",
+          "f3": "5 AI generations/month",
+          "f4": "Advanced analytics",
+          "f5": "No watermark"
+        },
+        "proCta": "Choose Pro"
+      },
+      "finalCta": {
+        "title": "Ready to build your page?",
+        "subtitle": "Free. No code. Results in 2 minutes.",
+        "cta": "Create page",
+        "secondary": "Or see examples"
       }
     },
-    "faq": {
-      "badge": "FAQ",
-      "title": "Frequently Asked Questions",
-      "subtitle": "Answers to common questions about LinkMAX",
-      "q1": {
-        "question": "What is LinkMAX and what is it for?",
-        "answer": "LinkMAX is an AI-powered link-in-bio page builder that lets you create a mini-website in 2 minutes. Perfect for experts, freelancers, and businesses to combine all links, social media, and contact info in one place."
+    "niches": {
+      "title": "Who is LinkMAX for?",
+      "subtitle": "We created special templates for each niche. AI knows your audience's pain points and creates a page for your tasks",
+      "cta": "Create a page for my niche",
+      "barber": {
+        "title": "Barber",
+        "pain": "Clients message to book",
+        "benefit": "Online booking"
       },
-      "q2": {
-        "question": "How much does LinkMAX cost?",
-        "answer": "The Basic plan is free forever and includes unlimited links, basic blocks, and 3 AI requests per day. Premium plans start at $5.10/month with annual billing."
+      "photographer": {
+        "title": "Photographer",
+        "pain": "Portfolio is scattered",
+        "benefit": "Gallery on one page"
       },
-      "q3": {
-        "question": "How does AI page generation work?",
-        "answer": "During registration, you choose your niche (barber, photographer, trainer, etc.), and AI automatically creates a ready page with profile, needed blocks, and texts adapted to your profession."
+      "fitness": {
+        "title": "Fitness Trainer",
+        "pain": "Collects bookings manually",
+        "benefit": "Schedule + form"
       },
-      "q4": {
-        "question": "Can I use my own domain?",
-        "answer": "Yes, the Business plan allows you to connect your own domain with an SSL certificate. On free and Pro plans, your page is available at lnkmx.my/your-name."
+      "beauty": {
+        "title": "Beauty Master",
+        "pain": "Sends prices via DM",
+        "benefit": "Pricing + booking"
       },
-      "q5": {
-        "question": "How do I accept payments through my page?",
-        "answer": "The Business plan includes Stripe and Kaspi Pay integration. You can sell products, services, and digital products directly from your page."
+      "psychologist": {
+        "title": "Psychologist",
+        "pain": "Wants to sell consultations",
+        "benefit": "Offer + experience"
       },
-      "q6": {
-        "question": "Is there a mobile editor?",
-        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit your page from your smartphone."
+      "tutor": {
+        "title": "Tutor",
+        "pain": "Looking for students on socials",
+        "benefit": "Formats + inquiry"
       },
-      "q7": {
-        "question": "What blocks are available?",
-        "answer": "20+ block types are available: profile, links, buttons, images, video, carousels, products, price lists, forms, maps, messengers, testimonials, timers, and more."
+      "clinic": {
+        "title": "Clinic",
+        "pain": "Patients can't find services",
+        "benefit": "Catalog + map"
       },
-      "q8": {
-        "question": "Is there analytics and CRM?",
-        "answer": "Yes, LinkMAX includes built-in view and click analytics. Pro plan offers mini-CRM for up to 100 leads/month, and Business has full CRM without limits."
+      "musician": {
+        "title": "Musician",
+        "pain": "Music scattered across platforms",
+        "benefit": "Everything in one link"
       },
-      "q9": {
-        "question": "Can I install Meta, TikTok, Google pixels?",
-        "answer": "Yes, Pro and Business plans allow you to add pixels for retargeting and conversion tracking: Meta Pixel, TikTok Pixel, Google Analytics and more."
+      "designer": {
+        "title": "Designer",
+        "pain": "Portfolio site is expensive",
+        "benefit": "Free showcase"
       },
-      "q10": {
-        "question": "What integrations does LinkMAX support?",
-        "answer": "LinkMAX integrates with Telegram for notifications, Stripe and Kaspi Pay for payments, Google Calendar for bookings. All social networks and messengers are supported."
+      "cafe": {
+        "title": "Cafe",
+        "pain": "Menu is a PDF",
+        "benefit": "Online menu"
       },
-      "q11": {
-        "question": "Does LinkMAX take commission from sales?",
-        "answer": "No! We don't take a percentage from your transactions — 0% commission. You only pay for the plan, all sales revenue stays with you."
+      "shop": {
+        "title": "Shop",
+        "pain": "Instagram as catalog",
+        "benefit": "Mini-store"
       },
-      "q12": {
-        "question": "How secure is data on LinkMAX?",
-        "answer": "We use SSL encryption, secure servers and comply with security standards. Your data and your customers' data is safe."
-      },
-      "q13": {
-        "question": "Can I see examples of pages?",
-        "answer": "Yes! Our gallery features real user pages from different niches: barbers, photographers, trainers, psychologists, shops and more."
-      },
-      "q14": {
-        "question": "How is LinkMAX better than Linktree and Taplink?",
-        "answer": "LinkMAX offers AI content generation, 0% sales commission, built-in CRM, gamification (achievements, quests) and modern design. Plus Russian and Kazakh language support."
+      "agency": {
+        "title": "Agency",
+        "pain": "Website is expensive and slow",
+        "benefit": "Page in 1 day"
       }
-    },
-    "toc": {
-      "title": "Contents",
-      "ariaLabel": "Page contents",
-      "linkInBio": "What is Link-in-Bio",
-      "forWhom": "Who it's for",
-      "features": "Features",
-      "useCases": "Examples",
-      "pricing": "Pricing",
-      "faq": "FAQ"
     },
     "linkInBio": {
       "title": "What is Link-in-Bio and why do you need it?",
       "subtitle": "A link page is a mini-site that combines all your resources: social media, messengers, portfolio, products and services",
-      "p1": "Link-in-Bio (multi-link, bio link) is a page you place in your Instagram, TikTok, YouTube or Telegram profile. Instead of one link, you get a full mini-landing with buttons, contacts and even a product catalog.",
-      "p2": "LinkMAX is a modern Linktree and Taplink alternative with AI content generation. Choose your niche (barber, photographer, trainer, psychologist), and AI creates a ready page in 2 minutes with profile, blocks and texts.",
-      "p3": "Unlike competitors, we don't take commission from your sales. All money from products and services is yours. Built-in analytics and CRM help understand which links work best.",
+      "p1": "Link-in-Bio (multi-link page) is a page you place in your Instagram, TikTok, YouTube or Telegram profile description. Instead of one link, you get a full mini-landing with buttons, contacts, and even a product catalog.",
+      "p2": "LinkMAX is a modern Linktree and Taplink alternative with AI content generation. Pick a niche (barber, photographer, trainer, psychologist) and AI creates a ready page in 2 minutes: with profile, needed blocks and copy.",
+      "p3": "Unlike competitors, we don't take commission on your sales. All money from products and services is yours. Built-in analytics and CRM help understand which links work best.",
       "benefit1": "All links in one place",
       "benefit2": "AI creates content",
       "benefit3": "Click analytics",
       "benefit4": "No commissions",
       "benefit5": "Custom domain",
       "benefit6": "Mobile editor",
-      "keywords": "Keywords: link page, bio link, link in bio, multilink, linktree alternative, taplink alternative, mini-landing"
+      "keywords": "Keywords: link page, link in bio, multi-link, linktree alternative, taplink analog, mini-landing"
     },
-    "niches": {
-      "title": "Who is LinkMAX for?",
-      "subtitle": "We created special templates for each niche. AI knows your audience's pain points and creates a page for your tasks",
-      "cta": "Create page for my niche",
-      "barber": { "title": "Barbers & stylists", "pain": "Clients don't know how to book, confused by messengers", "benefit": "Online booking + price list in one place" },
-      "photographer": { "title": "Photographers", "pain": "Hard to show portfolio and prices together", "benefit": "Gallery + pricing + booking" },
-      "fitness": { "title": "Fitness trainers", "pain": "Selling online programs but nowhere to present them", "benefit": "Program catalog + payment + reviews" },
-      "beauty": { "title": "Beauty masters", "pain": "Clients ask prices in DM — it's slow", "benefit": "Price list + before/after + online booking" },
-      "psychologist": { "title": "Psychologists & coaches", "pain": "Want to show my approach but can't build websites", "benefit": "About + directions + booking" },
-      "tutor": { "title": "Tutors & teachers", "pain": "Nowhere to post schedule and prices", "benefit": "Subjects + schedule + inquiry form" },
-      "clinic": { "title": "Clinics & salons", "pain": "Need quick page for promotions", "benefit": "Services + specialists + contacts" },
-      "musician": { "title": "Musicians & DJs", "pain": "Links to Spotify, Apple Music, booking — scattered", "benefit": "All platforms + events + contact" },
-      "designer": { "title": "Designers & artists", "pain": "Want to show work without complex portfolio site", "benefit": "Gallery + service prices + order" },
-      "cafe": { "title": "Cafes & restaurants", "pain": "PDF menu is inconvenient, need current version", "benefit": "Menu + promos + map + delivery" },
-      "shop": { "title": "Shops & brands", "pain": "No budget for full e-commerce store", "benefit": "Mini-catalog + payment + delivery" },
-      "agency": { "title": "Agencies & studios", "pain": "Need quick page for each project", "benefit": "Cases + services + team contacts" }
-    },
-    "useCases": {
-      "badge": "Use Cases",
-      "title": "Who Uses LinkMAX",
-      "subtitle": "Real page examples for different professions and businesses",
-      "cta": "View all pages in gallery",
-      "photographer": {
-        "name": "Alex Photo",
-        "role": "Photographer",
-        "desc": "Portfolio, pricing, booking",
-        "link1": "🎨 Portfolio",
-        "link2": "💰 Price List",
-        "link3": "📅 Book Now"
+    "faq": {
+      "badge": "Questions and Answers",
+      "title": "Frequently Asked Questions.",
+      "subtitle": "Answers to popular questions about LinkMAX",
+      "q1": {
+        "question": "What is LinkMAX and what is it for?",
+        "answer": "lnkmx is an AI link in bio and mini-site builder that helps create one clear page for links, services, booking, and inquiries."
       },
-      "barber": {
-        "name": "BarberShop MAX",
-        "role": "Barber Shop",
-        "desc": "Services, prices, online booking",
-        "link1": "✂️ Services",
-        "link2": "📍 Location",
-        "link3": "📱 WhatsApp"
+      "q2": {
+        "question": "How much does LinkMAX cost?",
+        "answer": "Basic plan is free forever. Pro: 3 mo - 4,350 ₸/mo, 6 mo - 3,500 ₸/mo, 12 mo - 2,610 ₸/mo. Online payment, 14-day refund."
       },
-      "fitness": {
-        "name": "Maria Fitness",
-        "role": "Fitness Trainer",
-        "desc": "Training programs, online courses",
-        "link1": "🏋️ Programs",
-        "link2": "📹 Online Course",
-        "link3": "✉️ Telegram"
+      "q3": {
+        "question": "How does AI page generation work?",
+        "answer": "Pick a niche and write a few facts about yourself - AI builds structure, copy, and CTAs in minutes. Free plan has 1 generation/month, Pro has 5/month."
       },
-      "psychologist": {
-        "name": "Anna Psychologist",
-        "role": "Psychologist",
-        "desc": "Consultations, therapy directions",
-        "link1": "💬 About Therapy",
-        "link2": "📋 Book Session",
-        "link3": "📚 Blog"
+      "q4": {
+        "question": "What blocks are available for pages?",
+        "answer": "20+ block types: profile, links, buttons, images, videos, carousels, products, pricing, forms, maps, messengers, testimonials, FAQ, timers, and more."
       },
-      "musician": {
-        "name": "DJ Max",
-        "role": "Musician",
-        "desc": "Music, events, booking",
-        "link1": "🎧 Spotify",
-        "link2": "🎟️ Events",
-        "link3": "📞 Booking"
+      "q5": {
+        "question": "Is there CRM and analytics?",
+        "answer": "Yes. Pro includes CRM for leads and Telegram notifications. Analytics shows clicks, traffic sources, and visitor behavior."
       },
-      "shop": {
-        "name": "Fashion Boutique",
-        "role": "Clothing Store",
-        "desc": "Catalog, delivery, sales",
-        "link1": "👗 Catalog",
-        "link2": "🏷️ Sales",
-        "link3": "🚚 Delivery"
+      "q6": {
+        "question": "Is mobile editor supported?",
+        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit pages from your smartphone."
+      },
+      "q7": {
+        "question": "What integrations does LinkMAX support?",
+        "answer": "Telegram for lead notifications and Google Calendar for scheduling. Social media and messengers are available as blocks."
+      },
+      "q8": {
+        "question": "Does LinkMAX take commission on sales?",
+        "answer": "No. 0% commission on your sales - you only pay for subscription."
+      },
+      "q9": {
+        "question": "How to pay for Premium subscription?",
+        "answer": "Payment by card and available payment methods. You can also use tokens (100 tokens = 1 day of Pro)."
+      },
+      "q10": {
+        "question": "What are the refund conditions?",
+        "answer": "Refund is possible within 14 days of payment according to Kazakhstan law. Details in user agreement."
+      },
+      "q11": {
+        "question": "Can I see page examples?",
+        "answer": "Yes. The gallery has real pages from different niches: specialists, shops, services, and creators."
+      },
+      "q12": {
+        "question": "Why is LinkMAX better than Linktree and Taplink?",
+        "answer": "lnkmx has AI page building, CRM, and notifications without extra cost. Plus flexible blocks, clear pricing, and local languages."
+      },
+      "q13": {
+        "question": "Is lnkmx suitable for a shop or service?",
+        "answer": "Yes. You can add catalog, pricing, inquiry forms, and contact buttons so clients can quickly order or book."
+      },
+      "q14": {
+        "question": "Can I connect my own domain?",
+        "answer": "Yes, Pro includes custom domains and page branding."
       }
     },
-    "demo": {
-      "badge": "Try it now",
-      "title": "Experience the Magic.",
-      "subtitle": "Play with the editor right here. Add blocks, edit content, and see changes in real-time.",
-      "profile": "Profile",
-      "addBlocks": "Add Blocks",
-      "link": "Link",
-      "text": "Text",
-      "image": "Image",
-      "socials": "Socials",
-      "yourBlocks": "Your Blocks",
-      "dragToReorder": "drag to reorder",
-      "noBlocks": "No blocks yet. Add some above!",
-      "addBlocksHint": "Add blocks to see them here",
-      "livePreview": "Live Preview"
+    "nav": {
+      "signIn": "Sign In",
+      "getStarted": "Create",
+      "gallery": "Gallery",
+      "examples": "Examples"
     },
-    "capabilities": {
-      "noCode": {
-        "title": "No-Code Builder",
-        "desc": "Create pages easily and quickly"
-      },
-      "ai": {
-        "title": "AI Creates for You",
-        "desc": "Choose your niche — AI builds the page"
-      },
-      "sell": {
-        "title": "Sell Effectively",
-        "desc": "Products, services, and digital goods"
-      },
-      "tickets": {
-        "title": "Tickets & Donations",
-        "desc": "Engage your audience and collect funds"
-      },
-      "analytics": {
-        "title": "Analytics",
-        "desc": "Only useful data — no clutter"
-      },
-      "partnership": {
-        "title": "Partner Program",
-        "desc": "Grow together with partners"
-      }
+    "floatingCta": {
+      "create": "Create"
     },
-    "segments": {
-      "creators": {
-        "title": "Creators",
-        "desc": "Create pages, sell tickets, digital content or publish premium materials. Easy and without technical hassles.",
-        "cta": "Start Creating"
+    "footer": {
+      "alternatives": "Comparison"
+    },
+    "hero": {
+      "badge": "AI Mini-Site Builder",
+      "mainTitle": "A mini-site that brings leads in 2 minutes",
+      "mainHighlight": "One link - a clear path to booking",
+      "valueProposition": "AI builder for experts, freelancers, and small businesses. Create offer, pricing, forms, and contacts without designers or code.",
+      "benefit1": "AI drafts the structure and first screen copy",
+      "benefit2": "Leads land in mini-CRM and Telegram",
+      "benefit3": "Analytics show which blocks drive leads",
+      "primaryCta": "Create page for free",
+      "secondaryCta": "View examples",
+      "microNote": "Free start. Mobile editor. Publish in one click.",
+      "pricingCta": "Compare plans"
+    },
+    "forWhom": {
+      "title": "Who lnkmx is for",
+      "expert": {
+        "title": "Experts & coaches",
+        "desc": "Services, cases, clear offer"
       },
-      "influencers": {
-        "title": "Influencers",
-        "desc": "Share content and promote favorite brands on your page. Convenient way to interact with audience and partners.",
-        "cta": "Become an Ambassador"
+      "freelancer": {
+        "title": "Freelancers",
+        "desc": "Portfolio, brief, inquiries"
+      },
+      "beauty": {
+        "title": "Beauty & services",
+        "desc": "Booking, reviews, map"
       },
       "business": {
-        "title": "Business",
-        "desc": "Unite bloggers, fans and ambassadors in one space. Simplify communication and promote your product without bureaucracy.",
-        "cta": "Contact Us"
+        "title": "Small business",
+        "desc": "Catalog, leads, analytics"
       }
     },
-    "advantages": {
+    "problem": {
+      "title": "Why leads are lost today",
+      "item1": "Bio is chaos: pricing, booking, and cases scattered across posts and links",
+      "item2": "People ask the same questions, you answer manually and lose time",
+      "item3": "A page becomes a menu of links, not a path to booking",
+      "item4": "No understanding: what actually gets clicked and where attention is lost",
+      "solution": "lnkmx creates one clear page where visitors quickly understand who you are, how you help, how much it costs, and where to click to book. And you see leads and analytics in one place."
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "cta": "Try now",
+      "step1": {
+        "title": "Tell us about your work",
+        "description": "Niche, services, and links - AI understands the context"
+      },
+      "step2": {
+        "title": "AI builds the page",
+        "description": "Ready blocks, copy, and CTAs you can edit"
+      },
+      "step3": {
+        "title": "Publish and collect leads",
+        "description": "Your link is ready for socials, leads go to CRM"
+      }
+    },
+    "features": {
+      "title": "What you get in the first version",
       "ai": {
-        "title": "AI Creates Everything",
-        "desc": "LinkMAX uses AI to generate content, copy, and structure"
+        "title": "A page with a clear offer",
+        "item1": "First screen with a result promise and CTA",
+        "item2": "Pricing or service packages without manual layout",
+        "item3": "Lead form and contacts on one page"
       },
-      "price": {
-        "title": "10x Cheaper",
-        "desc": "Just $2.50/mo instead of $10-15 at competitors"
+      "crm": {
+        "title": "Leads and order",
+        "item1": "Mini-CRM: leads, statuses, notes",
+        "item2": "Lead notifications in Telegram",
+        "item3": "Quick replies and conversation history"
       },
-      "verified": {
-        "title": "Verification Badge",
-        "desc": "Premium users get a trust badge on their page"
+      "analytics": {
+        "title": "Understand what works",
+        "item1": "Views and clicks by block",
+        "item2": "Traffic sources, devices",
+        "item3": "Hints on what to improve next"
+      }
+    },
+    "useCases": {
+      "title": "Ready scenarios for your tasks",
+      "subtitle": "Pick a scenario, tweak a few blocks, and publish.",
+      "expert": {
+        "title": "Expert or consulting",
+        "bullet1": "Offer and outcome on the first screen",
+        "bullet2": "Pricing and service packages",
+        "bullet3": "Lead form and messengers"
       },
-      "demo": {
-        "title": "Try It Now",
-        "desc": "Interactive demo right on the site - no registration needed"
+      "service": {
+        "title": "Services and appointments",
+        "bullet1": "Booking and schedule",
+        "bullet2": "Address, map, and reviews",
+        "bullet3": "Contacts and quick replies"
+      },
+      "creator": {
+        "title": "Creator and portfolio",
+        "bullet1": "Top projects and cases",
+        "bullet2": "Socials and subscriptions",
+        "bullet3": "Inquiries and brief"
+      },
+      "shop": {
+        "title": "Shop or catalog",
+        "bullet1": "Products and prices",
+        "bullet2": "FAQ and delivery terms",
+        "bullet3": "Fast contact for orders"
+      },
+      "primaryCta": "Create page",
+      "secondaryCta": "View examples"
+    },
+    "comparison": {
+      "title": "Why a mini-site beats a link list",
+      "feature": "Feature",
+      "others": "Others",
+      "ai": "AI page building",
+      "crm": "Mini-CRM for leads",
+      "telegram": "Telegram notifications",
+      "mobile": "Mobile editor",
+      "blockAnalytics": "Block analytics"
+    },
+    "socialProof": {
+      "title": "Example pages"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "subtitle": "Start free and upgrade to Pro when you need more",
+      "forever": "Forever",
+      "bestValue": "Best value",
+      "freeAction": "Start free",
+      "viewPlans": "Choose Pro",
+      "otherPlans": "Other options:",
+      "annualPriceKzt": "31,320 ₸ for 12 months",
+      "annualPriceUsd": "$60/year",
+      "otherPlansSix": "6 months: 3,500 ₸/mo",
+      "otherPlansThree": "3 months: 4,350 ₸/mo",
+      "free": {
+        "item1": "6 basic blocks",
+        "item2": "1 AI generation/month",
+        "item3": "Basic analytics"
+      },
+      "pro": {
+        "item1": "Unlimited blocks and templates",
+        "item2": "5 AI generations/month",
+        "item3": "CRM + Telegram notifications",
+        "item4": "Advanced analytics",
+        "item5": "No watermark"
+      }
+    },
+    "finalCta": {
+      "title": "Build a page that leads to a booking in 2 minutes",
+      "description": "Don't lose clients in chats. Give them a clear path: who you are - how you help - how much - book.",
+      "primaryCta": "Create page for free",
+      "secondaryCta": "View examples"
+    },
+    "footer": {
+      "copyright": "© 2025 lnkmx",
+      "alternatives": "Comparison"
+    },
+    "faq": {
+      "badge": "Questions & Answers",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Answers to popular questions about lnkmx",
+      "q1": {
+        "question": "What is lnkmx and who is it for?",
+        "answer": "lnkmx is an AI builder for link in bio pages and mini-sites that helps you collect links, services, and lead forms in one place."
+      },
+      "q2": {
+        "question": "How much does lnkmx cost?",
+        "answer": "The basic plan is free forever. Pro: 3 months - 4,350₸/mo, 6 months - 3,500₸/mo, 12 months - 2,610₸/mo. Online payment and 14-day refund."
+      },
+      "q3": {
+        "question": "How does AI page generation work?",
+        "answer": "Pick a niche and share a few details - AI builds the structure, copy, and CTAs in minutes. Free: 1 generation/month, Pro: 5/month."
+      },
+      "q4": {
+        "question": "What blocks are available?",
+        "answer": "20+ blocks: profile, links, buttons, images, video, carousels, products, price lists, forms, maps, messengers, reviews, FAQ, timers, and more."
+      },
+      "q5": {
+        "question": "Do you have CRM and analytics?",
+        "answer": "Yes. Pro includes CRM for leads and Telegram notifications. Analytics show clicks, sources, and behavior."
+      },
+      "q6": {
+        "question": "Is there a mobile editor?",
+        "answer": "Yes. You can edit your page directly from your phone."
+      },
+      "q7": {
+        "question": "What integrations are supported?",
+        "answer": "Telegram for lead alerts and Google Calendar for scheduling. Socials and messengers are available as blocks."
+      },
+      "q8": {
+        "question": "Do you take a commission on sales?",
+        "answer": "No. 0% commission on your sales - you only pay the subscription."
+      },
+      "q9": {
+        "question": "How can I pay for Pro?",
+        "answer": "Pay by card and available payment methods. You can also use tokens (100 tokens = 1 day Pro)."
+      },
+      "q10": {
+        "question": "What is the refund policy?",
+        "answer": "Refunds are available within 14 days of payment according to local regulations. See the user agreement for details."
+      },
+      "q11": {
+        "question": "Can I see real examples?",
+        "answer": "Yes. The gallery features real pages from creators, shops, and service providers."
+      },
+      "q12": {
+        "question": "How is lnkmx different from Linktree or Taplink?",
+        "answer": "lnkmx includes AI page creation, CRM, and notifications without extra fees, plus flexible blocks and local languages."
+      },
+      "q13": {
+        "question": "Is lnkmx suitable for shops or services?",
+        "answer": "Yes. Add a catalog, pricing, lead forms, and contact buttons to speed up booking or orders."
+      },
+      "q14": {
+        "question": "Can I connect my own domain?",
+        "answer": "Yes, Pro includes custom domains and branding."
       }
     }
   },
+  "dashboard": {
+    "loadError": "Load Error",
+    "loadErrorDesc": "Failed to load page data",
+    "tryAgain": "Try Again",
+    "settings": "Settings",
+    "collabs": "Collabs",
+    "aiBlocksCreated": "✨ Created {{count}} blocks with AI",
+    "blocksAdded": "Added {{count}} blocks",
+    "onboardingComplete": "Welcome! Start building your page.",
+    "errors": {
+      "loadFailed": "Load Error",
+      "loadFailedDesc": "Failed to load page data"
+    },
+    "nav": {
+      "home": "Home",
+      "editor": "Editor",
+      "pages": "Pages",
+      "activity": "Inbox",
+      "insights": "Analytics",
+      "settings": "Settings"
+    },
+    "sidebar": {
+      "tools": "Tools",
+      "templates": "Templates",
+      "marketplace": "Marketplace",
+      "account": "Account",
+      "tokens": "Tokens",
+      "achievements": "Achievements",
+      "upgrade": "Upgrade",
+      "signOut": "Sign Out"
+    },
+    "editor": {
+      "title": "Editor",
+      "blocks": "blocks"
+    },
+    "seo": {
+      "title": "lnkmx Dashboard",
+      "description": "Manage your pages, leads, and analytics in one place."
+    },
+    "home": {
+      "title": "Home",
+      "subtitle": "Your page overview",
+      "myPage": "My Page",
+      "blocks": "blocks",
+      "views": "views",
+      "leads": "leads",
+      "edit": "Edit",
+      "share": "Share",
+      "publish": "Publish",
+      "preview": "Preview",
+      "quickActions": "Quick Actions",
+      "templates": "Templates",
+      "templatesDesc": "Ready-made pages",
+      "marketplace": "Marketplace",
+      "marketplaceDesc": "From community",
+      "gallery": "Gallery",
+      "galleryDesc": "Inspiration",
+      "premium": "Premium",
+      "premiumDesc": "More features",
+      "tip": "Tip",
+      "tipContent": "Add a pricing block to increase conversions by 40%"
+    },
+    "activity": {
+      "title": "Inbox",
+      "totalLeads": "leads",
+      "premiumRequired": "Premium Required",
+      "premiumDescription": "Manage leads like in a messenger. Telegram notifications, statuses, and history.",
+      "upgradeToPremium": "Get Premium",
+      "tabs": {
+        "leads": "Leads",
+        "bookings": "Bookings"
+      },
+      "all": "All",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "searchPlaceholder": "Search by name, phone...",
+      "noResults": "Nothing found",
+      "noLeads": "No leads yet",
+      "noLeadsHint": "Leads will appear here when visitors fill out forms on your page"
+    },
+    "insights": {
+      "title": "Analytics",
+      "subtitle": "Page statistics",
+      "period": {
+        "7d": "7 days",
+        "14d": "14 days",
+        "30d": "30 days"
+      },
+      "views": "Views",
+      "clicks": "Clicks",
+      "clicksCount": "clicks",
+      "uniqueVisitors": "Unique visitors",
+      "noData": "No data",
+      "noDataDesc": "Publish your page to start collecting statistics",
+      "aiInsights": "AI Recommendations",
+      "addPricing": "Add a pricing block",
+      "addPricingDesc": "Pages with pricing get 40% more leads",
+      "addTestimonials": "Add testimonials",
+      "addTestimonialsDesc": "Reviews increase trust and conversions by 25%",
+      "duplicateTop": "Duplicate popular link",
+      "duplicateTopDesc": "\"{{title}}\" gets {{percentage}}% of clicks",
+      "apply": "Apply",
+      "topBlocks": "Popular blocks",
+      "devices": "Devices",
+      "mobile": "Mobile",
+      "desktop": "Desktop",
+      "tablet": "Tablet",
+      "sources": "Traffic sources"
+    },
+    "settings": {
+      "title": "Settings",
+      "myPage": "My Page",
+      "username": "Username",
+      "tokens": "Tokens",
+      "tokensDesc": "Balance & history",
+      "achievements": "Achievements",
+      "achievementsDesc": "Your progress",
+      "account": "Account",
+      "friends": "Friends",
+      "myTemplates": "My Templates",
+      "saveTemplate": "Save as Template",
+      "verification": "Verification",
+      "page": "Page",
+      "notifications": "Notifications",
+      "emailNotifications": "Email notifications",
+      "emailNotificationsDesc": "About new leads",
+      "telegramNotifications": "Telegram",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "connectTelegram": "Connect Telegram",
+      "appearance": "Appearance",
+      "language": "Interface language",
+      "upgradeToPremium": "Upgrade to Premium",
+      "premiumBenefits": "All blocks, CRM, analytics, and more",
+      "getPremium": "Get Premium",
+      "signOut": "Sign Out"
+    },
+    "pages": {
+      "title": "Pages",
+      "subtitle": "Manage your pages",
+      "create": "Create",
+      "searchPlaceholder": "Search pages...",
+      "all": "All",
+      "published": "Published",
+      "draft": "Drafts",
+      "emptyTitle": "No pages yet",
+      "emptyDescription": "Create your first page",
+      "noResults": "No pages found",
+      "noResultsDescription": "Try adjusting your search or filters",
+      "createFirst": "Create Page",
+      "untitled": "Untitled",
+      "duplicate": "Duplicate",
+      "settings": "Settings",
+      "delete": "Delete",
+      "linkCopied": "Link copied!",
+      "createSuccess": "Page created!",
+      "pagesUsed": "Pages Used",
+      "proLimits": "1 paid included + {{free}} free",
+      "freeLimits": "Upgrade to Pro for more pages",
+      "upgrade": "Upgrade",
+      "primaryPaid": "Paid",
+      "paidAddon": "Add-on",
+      "free": "Free",
+      "upgradeToPaid": "Upgrade to Paid",
+      "errors": {
+        "page_limit_exceeded": "Page limit reached",
+        "slug_taken": "This URL is taken",
+        "invalid_slug": "Invalid URL"
+      }
+    },
+    "multiPage": {
+      "switchPage": "Switch Page",
+      "currentPage": "Current Page",
+      "createNew": "Create Page",
+      "managePages": "All Pages",
+      "searchPages": "Search pages...",
+      "noPages": "No pages",
+      "createFirst": "Create your first page",
+      "limitReached": "Limit reached",
+      "upgradeForMore": "Upgrade to Pro",
+      "pageName": "Page Name",
+      "pageSlug": "Page URL",
+      "slugHint": "Only lowercase letters, numbers, and hyphens",
+      "creating": "Creating..."
+    },
+    "pageSettings": {
+      "title": "Page Settings",
+      "untitled": "Untitled Page",
+      "primaryPaid": "Primary Paid",
+      "paidAddon": "Paid Add-on",
+      "freePage": "Free",
+      "upgradeToPaid": "Upgrade to Paid (70% off)",
+      "domain": "Domain",
+      "slug": "Page URL",
+      "slugHint": "Changing this will update your public URL",
+      "slugInvalid": "Only lowercase letters, numbers, and hyphens. 3-30 characters.",
+      "seo": "SEO",
+      "seoTitle": "Meta Title",
+      "seoTitlePlaceholder": "Page title for search engines",
+      "seoDescription": "Meta Description",
+      "seoDescPlaceholder": "Brief description for search results",
+      "indexable": "Allow Search Indexing",
+      "indexableHint": "Show page in Google and other search engines",
+      "category": "Category",
+      "branding": "Branding",
+      "theme": "Theme & Colors",
+      "themeDesc": "Customize colors and fonts",
+      "templates": "Templates",
+      "templatesDesc": "Ready-made page designs",
+      "marketplace": "Marketplace",
+      "marketplaceDesc": "Community templates",
+      "errors": {
+        "slug_taken": "This URL is taken",
+        "invalid_slug": "Invalid URL"
+      }
+    },
+    "accountSettings": {
+      "title": "Account Settings",
+      "user": "User",
+      "username": "Username",
+      "tokens": "Tokens",
+      "tokensDesc": "Balance & history",
+      "achievements": "Achievements",
+      "achievementsDesc": "Your progress",
+      "account": "Account",
+      "friends": "Friends",
+      "myTemplates": "My Templates",
+      "saveTemplate": "Save as Template",
+      "verification": "Verification",
+      "notifications": "Notifications",
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDesc": "About new leads",
+      "telegram": "Telegram",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "connectTelegram": "Connect Telegram",
+      "appearance": "Appearance",
+      "language": "Language",
+      "planBilling": "Plan & Billing",
+      "proPlan": "Pro Plan",
+      "freePlan": "Free Plan",
+      "manageSubscription": "Manage subscription",
+      "upgradeForMore": "Upgrade for more features",
+      "billingHistory": "Billing History",
+      "security": "Security",
+      "changePassword": "Change Password",
+      "signOut": "Sign Out"
+    },
+    "settingsTabs": {
+      "page": "Page",
+      "account": "Account"
+    },
+    "pageSwitcher": {
+      "title": "Your Pages",
+      "select": "Select page",
+      "pagesUsed": "Pages used",
+      "createPage": "Create new page",
+      "managePages": "Manage all pages",
+      "upgradePro": "Upgrade to Pro for more pages",
+      "getMore": "Get more pages",
+      "upgradeDesc": "Upgrade to Pro",
+      "included": "Incl.",
+      "addon": "Add-on",
+      "free": "Free",
+      "search": "Search pages..."
+    },
+    "monetize": {
+      "title": "Monetize",
+      "subtitle": "Your plan and billing",
+      "proPlan": "Pro Plan",
+      "freePlan": "Free Plan",
+      "trial": "Trial",
+      "trialEnds": "Trial ends {{date}}",
+      "manageBilling": "Billing",
+      "usage": "Usage",
+      "pages": "Pages",
+      "paidPages": "Paid Pages",
+      "freePages": "Free Pages",
+      "blocks": "Blocks",
+      "aiGenerations": "AI Generations",
+      "upgradeTitle": "Upgrade to Pro",
+      "unlockAll": "Unlock all features",
+      "upgradeDescription": "Get more pages, blocks, AI generations, and premium features.",
+      "upgradeCta": "Upgrade Now",
+      "guarantee": "14-day money-back guarantee",
+      "proIncludes": "Your Pro benefits",
+      "secure": "Secure payment",
+      "noCommission": "0% commission",
+      "free": {
+        "feature1": "Basic blocks",
+        "feature2": "1 page",
+        "feature3": "3 AI generations",
+        "feature4": "Basic analytics"
+      },
+      "pro": {
+        "feature1": "All 25+ blocks",
+        "feature2": "6 pages (1 paid + 5 free)",
+        "feature3": "20 AI generations/month",
+        "feature4": "Mini-CRM + Telegram",
+        "feature5": "Advanced analytics",
+        "feature6": "No watermark",
+        "feature7": "Priority support"
+      }
+    }
+  },
+  "blocks": {
+    "profile": "Profile",
+    "link": "Link",
+    "button": "Button",
+    "text": "Text",
+    "image": "Image",
+    "video": "Video",
+    "socials": "Socials",
+    "messenger": "Messenger",
+    "separator": "Separator",
+    "product": "Product",
+    "catalog": {
+      "empty": "Add products to catalog",
+      "uncategorized": "Uncategorized"
+    },
+    "pricing": {
+      "empty": "Add services",
+      "hit": "Popular"
+    },
+    "form": "Form",
+    "booking": "Booking",
+    "map": {
+      "noAddress": "Specify address"
+    },
+    "faq": {
+      "empty": "Add questions and answers"
+    },
+    "testimonial": "Testimonials",
+    "countdown": {
+      "expired": "Time is up!",
+      "noDate": "Set a date",
+      "days": "days",
+      "hours": "hours",
+      "minutes": "minutes",
+      "seconds": "seconds"
+    },
+    "carousel": "Gallery",
+    "newsletter": "Newsletter",
+    "avatar": "Avatar",
+    "download": "File",
+    "shoutout": "Shoutout",
+    "community": {
+      "title": "Title",
+      "titlePlaceholder": "My Private Club",
+      "description": "Description",
+      "descriptionPlaceholder": "Exclusive content, behind the scenes, Q&A",
+      "telegramLink": "Telegram Link",
+      "linkHint": "Use an invite link to your private channel or group",
+      "memberCount": "Member Count",
+      "icon": "Icon",
+      "style": "Style",
+      "iconUsers": "Members",
+      "iconCrown": "Crown",
+      "iconStar": "Star",
+      "iconHeart": "Heart",
+      "iconZap": "Lightning",
+      "iconLock": "Lock",
+      "styleDefault": "Default",
+      "styleDefaultDesc": "Simple and clean",
+      "stylePremium": "Premium",
+      "stylePremiumDesc": "Golden gradient",
+      "styleExclusive": "Exclusive",
+      "styleExclusiveDesc": "Purple gradient"
+    },
+    "beforeAfter": {
+      "before": "Before",
+      "after": "After",
+      "noImages": "Add images"
+    },
+    "customCode": "Code",
+    "scratch": "Scratch",
+    "added": "Block added",
+    "deleted": "Block deleted",
+    "restored": "Block restored",
+    "addFailed": "Failed to add block",
+    "premiumRequired": "This block is PRO only",
+    "limitReached": "Block limit reached. Upgrade to Premium."
+  },
   "auth": {
-    "title": "LinkMAX",
-    "subtitle": "Create your link-in-bio page",
-    "getStarted": "Get Started",
-    "signInToAccount": "Sign in to your account or create a new one",
     "signIn": "Sign In",
     "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "signingIn": "Signing in...",
     "email": "Email",
     "password": "Password",
-    "passwordHint": "Minimum 8 characters, with uppercase, lowercase, and number",
-    "signingIn": "Signing in...",
-    "creatingAccount": "Creating account...",
-    "backToHome": "← Back to Home",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset password",
+    "confirmEmail": "Confirm your email",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "No account?",
+    "orContinueWith": "Or continue with",
+    "getStarted": "Get Started",
     "createAccount": "Create Account",
     "welcomeBack": "Welcome back!",
+    "enterCredentials": "Enter your credentials to sign in",
+    "signInToAccount": "Sign in to your account",
+    "title": "lnkmx",
+    "subtitle": "Mini-site in 1 minute",
+    "backToHome": "Back to home",
+    "passwordHint": "Min 8 characters, uppercase letter and number",
     "continueWithGoogle": "Continue with Google",
     "continueWithApple": "Continue with Apple",
-    "orContinueWith": "or continue with email",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset Password",
-    "resetDescription": "Enter your email to receive a reset link",
-    "sendResetLink": "Send Reset Link",
+    "invalidEmail": "Please enter a valid email",
+    "resetFailed": "Failed to send reset email",
     "checkEmail": "Check your email",
     "resetEmailSent": "We sent a password reset link to your email",
     "backToSignIn": "Back to Sign In",
-    "invalidEmail": "Please enter a valid email address",
-    "resetFailed": "Failed to send reset email",
+    "resetDescription": "Enter your email to receive a reset link",
+    "sendResetLink": "Send Reset Link",
     "newPassword": "New Password",
-    "confirmPassword": "Confirm Password",
     "enterNewPassword": "Enter your new password",
-    "updatePassword": "Update Password",
+    "confirmPassword": "Confirm Password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "updateFailed": "Failed to update password",
     "passwordUpdated": "Password Updated",
     "passwordUpdatedDesc": "Your password has been successfully updated",
     "goToDashboard": "Go to Dashboard",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "updateFailed": "Failed to update password",
+    "updatePassword": "Update Password",
+    "referral": {
+      "invited": "You have been invited!",
+      "bonus": "Sign up and get +3 days Premium",
+      "success": "🎉 +{{days}} days Premium for referral code!"
+    },
     "telegram": {
       "invalidChatId": "Enter a valid Telegram Chat ID",
       "notFound": "Account with this Telegram not found",
@@ -777,597 +1421,178 @@
       "connectionError": "Connection error",
       "invalidToken": "Invalid or expired code",
       "resetError": "Password reset error",
-      "passwordChanged": "Password successfully changed!"
+      "passwordChanged": "Password successfully changed!",
+      "recoveryTitle": "Recovery via Telegram",
+      "enterChatId": "Enter your Telegram Chat ID",
+      "enterCode": "Enter code from Telegram",
+      "sending": "Sending...",
+      "getCode": "Get code",
+      "newPassword": "New password",
+      "saving": "Saving...",
+      "savePassword": "Save password",
+      "back": "Back",
+      "recoverViaTelegram": "Recover via Telegram"
     },
-    "referral": {
-      "invited": "You have been invited!",
-      "bonus": "Sign up and get +3 days Premium",
-      "success": "🎉 +{{days}} days Premium for referral code!"
+    "seo": {
+      "title": "Sign in to lnkmx",
+      "description": "Sign in to create and publish your link in bio page."
     }
-  },
-  "editor": {
-    "title": "Page Editor",
-    "settings": "Settings",
-    "preview": "Preview",
-    "publish": "Publish",
-    "addBlock": "Add Block",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "duplicate": "Duplicate",
-    "moveUp": "Move Up",
-    "moveDown": "Move Down",
-    "language": "Language",
-    "editProfile": "Edit Profile",
-    "close": "Close",
-    "autoSave": "Changes are saved automatically"
-  },
-  "blocks": {
-    "profile": "Profile",
-    "link": "Link",
-    "text": "Text",
-    "image": "Image",
-    "video": "Video",
-    "product": "Product",
-    "button": "Button",
-    "carousel": "Carousel",
-    "socials": "Socials",
-    "form": "Form",
-    "map": "Map",
-    "avatar": "Avatar",
-    "separator": "Separator",
-    "customCode": "Custom Code",
-    "messenger": "Messenger",
-    "download": "Download",
-    "newsletter": "Newsletter",
-    "testimonial": "Testimonial",
-    "scratch": "Scratch Card",
-    "search": "Search",
-    "booking": "Booking",
-    "faq": "FAQ",
-    "pricing": "Pricing",
-    "catalog": "Catalog",
-    "countdown": "Timer",
-    "community": "Community",
-    "shoutout": "Shoutout",
-    "beforeAfter": "Before/After",
-    "faq": {
-      "title": "Title",
-      "titlePlaceholder": "Frequently Asked Questions",
-      "items": "Questions & Answers",
-      "addItem": "Add",
-      "question": "Question",
-      "questionPlaceholder": "Enter question",
-      "answer": "Answer",
-      "answerPlaceholder": "Enter answer",
-      "newQuestion": "New Question",
-      "emptyHint": "Add questions and answers"
-    },
-    "booking": {
-      "description": "Booking block with calendar and time slots",
-      "blockTitle": "Title",
-      "titlePlaceholder": "Book an Appointment",
-      "blockDescription": "Description",
-      "descriptionPlaceholder": "Select a convenient time to book",
-      "workingHours": "Working Hours",
-      "startHour": "Start",
-      "endHour": "End",
-      "slotDuration": "Slot Duration (minutes)",
-      "workingDays": "Working Days",
-      "clickToToggle": "Click a day to enable/disable",
-      "customSlots": "Custom Slots",
-      "addSlot": "Add",
-      "noCustomSlots": "Slots are generated automatically based on working hours",
-      "advanced": "Advanced",
-      "maxDays": "Max booking days",
-      "requirePhone": "Phone required",
-      "requirePhoneDesc": "Client must provide phone number",
-      "requireEmail": "Email required",
-      "requireEmailDesc": "Client must provide email",
-      "prepayment": "Prepayment",
-      "requirePrepayment": "Require prepayment",
-      "prepaymentDesc": "After booking, client will be redirected to WhatsApp for payment",
-      "prepaymentPhone": "WhatsApp for payment",
-      "phoneHint": "Phone number with WhatsApp for receiving payments",
-      "prepaymentAmount": "Prepayment amount",
-      "currency": "Currency",
-      "notifications": "Telegram Notifications",
-      "dailyReminder": "Morning reminder",
-      "dailyReminderDesc": "Get a list of today's appointments",
-      "reminderTime": "Reminder time",
-      "weeklyMotivation": "Weekly motivation",
-      "weeklyMotivationDesc": "Monday at 9:00 - personal inspiration"
-    }
-  },
-  "blockEditor": {
-    "profile": "Edit Profile",
-    "text": "Edit Text",
-    "link": "Edit Link",
-    "button": "Edit Button",
-    "image": "Edit Image",
-    "video": "Edit Video",
-    "carousel": "Edit Carousel",
-    "product": "Edit Product",
-    "search": "Edit Search",
-    "socials": "Edit Socials",
-    "customCode": "Edit Code",
-    "messenger": "Edit Messengers",
-    "form": "Edit Form",
-    "download": "Edit Download",
-    "newsletter": "Edit Newsletter",
-    "testimonial": "Edit Testimonial",
-    "scratch": "Edit Scratch Card",
-    "map": "Edit Map",
-    "avatar": "Edit Avatar",
-    "separator": "Edit Separator",
-    "catalog": "Edit Catalog",
-    "description": "Configure all block settings. Changes are saved automatically.",
-    "notAvailable": "Editor for this block type is not available."
-  },
-  "fields": {
-    "title": "Title",
-    "content": "Content",
-    "url": "URL",
-    "description": "Description",
-    "alignment": "Alignment",
-    "style": "Style",
-    "animation": "Animation",
-    "left": "Left",
-    "center": "Center",
-    "right": "Right",
-    "imageUrl": "Image URL",
-    "alt": "Alt Text",
-    "caption": "Caption",
-    "price": "Price",
-    "currency": "Currency",
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
-    "address": "Address",
-    "avatarUrl": "Avatar URL",
-    "bio": "Bio",
-    "coverImage": "Cover Image",
-    "coverGradient": "Cover Gradient Overlay",
-    "coverHeight": "Cover Height",
-    "avatarSize": "Avatar Size",
-    "avatarPosition": "Avatar Position",
-    "avatarFrame": "Avatar Frame Style",
-    "shadowStyle": "Shadow Style",
-    "verifiedBadge": "Verified badge",
-    "productName": "Product Name",
-    "buyLink": "Buy Link",
-    "optional": "(optional)",
-    "proofOfHuman": "Proof of Human",
-    "boostTrust": "📈 +Trust",
-    "proofOfHumanDescription": "Add a short video or voice greeting to show visitors you're a real person and boost conversions",
-    "introVideo": "Video Greeting (max 30s)",
-    "introAudio": "Voice Greeting",
-    "proofOfHumanActive": "Your profile now shows a verified human badge with media",
-    "telegramLink": "Telegram Link",
-    "memberCount": "Member Count",
-    "communityStyle": "Style",
-    "serviceType": "Service Type",
-    "duration": "Duration",
-    "priceType": "Price Type",
-    "priceMax": "Max Price",
-    "isBookable": "Bookable",
-    "availableDays": "Available Days",
-    "verificationBadge": "Verification Badge",
-    "images": "Images",
-    "image": "Image",
-    "altText": "Alt Text",
-    "imageDescription": "Image description",
-    "link": "Link",
-    "autoPlay": "Auto-play",
-    "interval": "Interval",
-    "placeholder": "Placeholder",
-    "required": "Required",
-    "label": "Label",
-    "icon": "Icon",
-    "color": "Color",
-    "backgroundColor": "Background Color",
-    "textColor": "Text Color",
-    "width": "Width",
-    "height": "Height",
-    "padding": "Padding",
-    "margin": "Margin",
-    "borderRadius": "Border Radius",
-    "shadow": "Shadow",
-    "opacity": "Opacity",
-    "fontSize": "Font Size",
-    "fontWeight": "Font Weight"
-  },
-  "settings": {
-    "pageSettings": "Page Settings",
-    "pageTitle": "Page Title",
-    "pageDescription": "Page Description",
-    "slug": "URL Slug",
-    "seo": "SEO",
-    "analytics": "Analytics",
-    "premium": "Premium"
-  },
-"messages": {
-    "saved": "Saved",
-    "published": "Published",
-    "error": "Error",
-    "loading": "Loading...",
-    "noBlocks": "No blocks yet. Add your first block!",
-    "confirmDelete": "Are you sure you want to delete?",
-    "copied": "Copied",
-    "accountCreated": "Account created! Redirecting...",
-    "failedToSignUp": "Failed to sign up",
-    "failedToSignIn": "Failed to sign in"
-  },
-  "actions": {
-    "download": "Download",
-    "send": "Send",
-    "addImage": "Add Image",
-    "addItem": "Add",
-    "remove": "Remove",
-    "save": "Save",
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "apply": "Apply",
-    "close": "Close",
-    "copy": "Copy",
-    "share": "Share",
-    "preview": "Preview",
-    "publish": "Publish",
-    "buyNow": "Buy Now",
-    "bookNow": "Book Now",
-    "subscribe": "Subscribe",
-    "submit": "Submit",
-    "tryFree": "Try Free",
-    "learnMore": "Learn More",
-    "getStarted": "Get Started"
-  },
-  "form": {
-    "fillRequired": "Please fill required fields",
-    "success": "Form submitted successfully!",
-    "error": "Error submitting form",
-    "enterPlaceholder": "Enter",
-    "submitting": "Submitting..."
-  },
-  "ai": {
-    "generateDescription": "Generate with AI",
-    "translate": "Translate",
-    "translateToOthers": "Translate to other languages",
-    "noTextToTranslate": "Enter text to translate",
-    "translationSuccess": "Translation completed",
-    "translationError": "Translation error",
-    "translating": "Translating...",
-    "autoTranslate": "Auto-translate content"
-  },
-  "freemium": {
-    "blockLimitReached": "Block limit reached. Upgrade to Premium for unlimited blocks.",
-    "blocksRemaining": "Blocks remaining: {{count}} of {{max}}",
-    "upgradeToPremium": "Upgrade to Premium",
-    "aiLimitReached": "AI request limit reached",
-    "aiRequestsRemaining": "AI requests remaining this week: {{count}}",
-    "aiLimitResetsWeekly": "Limit resets every week",
-    "unlimitedAI": "Unlimited AI",
-    "premiumBlockRequired": "This block requires Premium",
-    "viewOnly": "View only",
-    "viewOnlyHint": "Requires {{tier}} to edit",
-    "upgradeToEdit": "Upgrade to {{tier}} to edit",
-    "proRequired": "Requires PRO",
-    "businessRequired": "Requires BUSINESS"
-  },
-  "templates": {
-    "title": "Template Gallery",
-    "description": "Choose a ready-made template and copy in 1 click",
-    "blocks": "blocks"
-  },
-  "crm": {
-    "title": "CRM",
-    "description": "Manage your leads and interactions",
-    "leads": "Leads",
-    "premiumRequired": "Premium Feature",
-    "premiumDescription": "Upgrade to Premium to access CRM and track your leads",
-    "addLead": "Add Lead",
-    "searchPlaceholder": "Search leads...",
-    "noLeads": "No leads yet. Add your first lead!",
-    "noResults": "No leads found",
-    "namePlaceholder": "Client name",
-    "phone": "Phone",
-    "source": "Source",
-    "notes": "Notes",
-    "notesPlaceholder": "Additional notes about this lead...",
-    "contactInfo": "Contact Information",
-    "createdAt": "Created",
-    "addInteraction": "Add Interaction",
-    "interactionPlaceholder": "What happened?",
-    "history": "History",
-    "noInteractions": "No interactions yet",
-    "deleteLead": "Delete Lead",
-    "confirmDelete": "Delete this lead?",
-    "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
-    "status": {
-      "label": "Status",
-      "new": "New",
-      "contacted": "Contacted",
-      "qualified": "Qualified",
-      "converted": "Converted",
-      "lost": "Lost"
-    },
-    "sources": {
-      "manual": "Manual",
-      "page_view": "Page View",
-      "form": "Form",
-      "messenger": "Messenger",
-      "other": "Other"
-    },
-    "interactionTypes": {
-      "note": "Note",
-      "call": "Call",
-      "email": "Email",
-      "message": "Message",
-      "meeting": "Meeting"
-    }
-  },
-  "analytics": {
-    "title": "Analytics",
-    "description": "Track your page performance",
-    "noData": "No analytics data available",
-    "today": "Today",
-    "week": "Week",
-    "month": "Month",
-    "all": "All Time",
-    "views": "Views",
-    "clicks": "Clicks",
-    "shares": "Shares",
-    "visitors": "Visitors",
-    "avgPerDay": "Average per day",
-    "viewsPerDay": "views / day",
-    "activityChart": "Activity",
-    "topBlocks": "Top Content",
-    "clicksByBlock": "Clicks by Block"
-  },
-  "gallery": {
-    "title": "Community Gallery",
-    "subtitle": "Discover amazing pages created by our community",
-    "shareToGallery": "Share to Gallery",
-    "shareDescription": "Show your page in the community gallery",
-    "empty": "No pages yet",
-    "emptyDescription": "Be the first to share your page!",
-    "noResults": "No pages found matching your search",
-    "searchPlaceholder": "Search pages...",
-    "sortBy": "Sort by",
-    "sortRecent": "Recent",
-    "sortPopular": "Popular",
-    "sortTrending": "Trending",
-    "totalPages": "{{count}} pages in gallery",
-    "searchResults": "Filtering by \"{{search}}\"",
-    "featuredPages": "Featured Pages",
-    "featured": "Featured",
-    "like": "Like",
-    "liked": "Liked!",
-    "alreadyLiked": "You already liked this page",
-    "likeTooltip": "Show some love!",
-    "shareTooltip": "Copy page link",
-    "viewPage": "Open page",
-    "linkCopied": "Link copied!",
-    "copyError": "Failed to copy",
-    "statsPages": "Pages",
-    "statsLikes": "Likes",
-    "statsViews": "Views",
-    "filter": "Filter",
-    "all": "All"
-  },
-  "leaderboard": {
-    "title": "Top Pages",
-    "week": "Week",
-    "month": "Month",
-    "all": "All",
-    "allTime": "All Time",
-    "empty": "No pages yet for this period"
-  },
-  "share": {
-    "published": "Page Published!",
-    "yourPageLink": "Your page link",
-    "linkCopied": "Link copied!",
-    "shareNow": "Share Now",
-    "title": "Check out my LinkMAX page!"
-  },
-  "referral": {
-    "inviteFriend": "Invite a friend",
-    "bothGetBonus": "You both get +3 days Premium!",
-    "shareReferralLink": "Share Referral Link",
-    "friendsInvited": "Friends invited",
-    "bonusEarned": "Bonus days earned",
-    "topReferrers": "Top Referrers"
-  },
-  "niches": {
-    "beauty": "Beauty",
-    "fitness": "Fitness",
-    "food": "Food & Dining",
-    "education": "Education",
-    "art": "Art & Design",
-    "music": "Music",
-    "tech": "Tech & IT",
-    "business": "Business",
-    "health": "Health & Wellness",
-    "fashion": "Fashion",
-    "travel": "Travel",
-    "realestate": "Real Estate",
-    "events": "Events",
-    "services": "Services",
-    "other": "Other"
   },
   "pricing": {
     "title": "Pricing",
-    "choosePlan": "Choose the right plan for you",
-    "description": "Unlock all LinkMAX features for your business",
-    "months": "mo",
+    "subtitle": "Choose the right plan",
     "month": "mo",
-    "totalFor": "for",
-    "free": "Free",
-    "popular": "Popular",
-    "currentPlan": "Current Plan",
-    "startFree": "Start Free",
-    "subscribe": "Subscribe",
-    "comingSoon": "Payment coming soon! Stay tuned for updates.",
-    "alreadyFree": "Free plan is already active",
-    "basicDesc": "Start for free",
-    "proDesc": "For professionals",
-    "businessDesc": "For business",
-    "savingsText": "Save",
-    "securePayments": "Secure payments",
-    "cancelAnytime": "Cancel anytime",
-    "moneyBack": "7-day money-back guarantee",
-    "features": {
-      "basicThemes": "Basic themes",
-      "basicCustomization": "Basic customization (colors, fonts)",
-      "unlimitedLinks": "Unlimited links",
-      "textBlocks": "Text blocks",
-      "basicBlocks": "Basic blocks (Profile, Link, Text, Image, Button, Socials)",
-      "messengers": "Messengers and social links",
-      "maps": "Maps (address + map)",
-      "basicStats": "Basic page view statistics",
-      "qrCode": "Page QR code",
-      "aiRequestsWeek": "3 AI requests per week",
-      "allBasic": "Everything in BASIC",
-      "proThemes": "Professional themes and animations",
-      "media": "Media: images, video, music",
-      "priceLists": "Price lists, Product / Catalog blocks",
-      "customCode": "Custom HTML/CSS block",
-      "socialPixel": "Social Media pixel (Meta, TikTok, Google)",
-      "scheduler": "Block scheduler",
-      "advancedAnalytics": "Advanced click analytics",
-      "noWatermark": "No watermark",
-      "miniCRM": "Mini-CRM up to 100 leads/month",
-      "telegramNotifications": "Telegram lead notifications",
-      "unlimitedAI": "Unlimited AI",
-      "allPro": "Everything in PRO",
-      "multiPage": "Internal pages (multi-page site)",
-      "digitalProducts": "Digital products (course landings)",
-      "applicationForms": "Applications via advanced forms",
-      "payments": "Accept payments (Stripe/Kaspi)",
-      "whiteLabel": "Full white-label (remove branding)",
-      "fullCRM": "Full CRM (unlimited leads)",
-      "autoNotifications": "Automatic email/Telegram notifications",
-      "timers": "Timers (launches, promotions)",
-      "customDomain": "Custom domain connection",
-      "sslCertificate": "SSL certificate",
-      "marketing": "Marketing add-ons (referrals, promo codes)"
+    "tokens": {
+      "title": "Or pay with Linkkon tokens",
+      "balanceDescription": "100 Linkkon = 1 day Premium. Your balance: {{balance}} tokens",
+      "converting": "Converting...",
+      "buyDay": "Buy 1 day for {{cost}} Linkkon",
+      "buyTokens": "Buy tokens"
     },
-    "limitations": {
-      "watermark": "LinkMAX watermark",
-      "limitedBlocks": "Limited blocks"
+    "companyDetails": {
+      "nameLine": "IE BEEGIN • BIN: 971207300019",
+      "addressLine": "Almaty, Sholokhova st., 20/7"
+    },
+    "free": {
+      "title": "Free",
+      "description": "To start",
+      "price": "$0",
+      "period": "forever"
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "For growth",
+      "popular": "Popular"
+    },
+    "features": {
+      "blocks": "blocks",
+      "aiGenerations": "AI generations/mo",
+      "crm": "Mini-CRM",
+      "telegram": "Telegram notifications",
+      "analytics": "Advanced analytics",
+      "noWatermark": "No watermark",
+      "themes": "Premium themes"
+    },
+    "choosePlan": "Choose plan",
+    "description": "Unlock all LinkMAX features for your business",
+    "alreadyFree": "The free plan is already active",
+    "comingSoon": "Payments are coming soon. Stay tuned for updates.",
+    "currentPlan": "Current plan",
+    "seo": {
+      "title": "lnkmx Pricing - plans for link in bio and mini-sites",
+      "description": "Compare free and Pro plans: AI generation, CRM, analytics, and branding for your link in bio page."
+    }
+  },
+  "gallery": {
+    "title": "Page Gallery",
+    "subtitle": "Get inspired by pages from our community",
+    "filter": "Filter",
+    "all": "All",
+    "featured": "Featured",
+    "latest": "Latest",
+    "popular": "Popular",
+    "viewPage": "View",
+    "like": "Like",
+    "liked": "Page liked!",
+    "alreadyLiked": "You already liked this page",
+    "views": "views",
+    "untitled": "Untitled",
+    "empty": "No pages found",
+    "seo": {
+      "title": "lnkmx Gallery - link in bio examples & templates",
+      "description": "Real lnkmx pages from creators and businesses. Browse niches, templates, and inspiration."
+    }
+  },
+  "errors": {
+    "general": "An error occurred",
+    "notFound": "Page not found",
+    "pageNotFound": "Page not found",
+    "invalidLink": "Invalid or corrupted link",
+    "unauthorized": "Authorization required",
+    "forbidden": "Access denied",
+    "networkError": "Network error"
+  },
+  "language": {
+    "autoTranslate": "Auto-translate",
+    "autoTranslated": "Content auto-translated",
+    "translating": "Translating...",
+    "translationError": "Translation error"
+  },
+  "share": {
+    "shareLink": "Share",
+    "qrCode": "QR Code",
+    "linkCopied": "Link copied",
+    "scanQR": "Scan to open the page",
+    "defaultTitle": "Check out my page",
+    "qrDialogTitle": "QR Code",
+    "qrDialogDescription": "Scan this code to share your page"
+  },
+  "toasts": {
+    "sharing": {
+      "linkCopied": "Link copied!",
+      "copyError": "Failed to copy link"
+    },
+    "save": {
+      "success": "Changes saved",
+      "error": "Failed to save"
+    },
+    "publish": {
+      "success": "Page published!",
+      "error": "Failed to publish"
     }
   },
   "admin": {
     "title": "Admin Panel",
-    "signOut": "Sign Out",
     "overview": "Overview",
     "users": "Users",
     "pages": "Pages",
+    "tokens": "Tokens",
     "analytics": "Analytics",
     "charts": "Charts",
     "detailed": "Detailed",
-    "totalUsers": "Total Users",
+    "tiers": "Tiers",
+    "verification": "Verification",
+    "translations": "Translations",
+    "signOut": "Sign Out",
+    "noData": "No data",
+    "totalUsers": "Total users",
     "premium": "Premium",
-    "activeTrials": "Active Trials",
-    "withStreak": "With Streak",
-    "pagesSection": "Pages",
+    "activeTrials": "Active trials",
+    "withStreak": "With streak",
+    "pagesSection": "Pages & Content",
     "total": "Total",
     "published": "Published",
-    "inGallery": "In Gallery",
-    "totalBlocks": "Blocks",
+    "inGallery": "In gallery",
+    "totalBlocks": "Total blocks",
     "engagementSection": "Engagement",
     "views": "Views",
     "clicks": "Clicks",
     "shares": "Shares",
-    "leads": "Leads",
+    "achievements": "Achievements",
     "socialSection": "Social",
     "friendships": "Friendships",
-    "accepted": "Accepted",
-    "pending": "Pending",
+    "accepted": "accepted",
+    "pending": "pending",
     "collaborations": "Collaborations",
-    "teamsSection": "Teams",
-    "teams": "Teams",
-    "members": "Members",
-    "gamificationSection": "Gamification",
-    "achievements": "Achievements",
-    "shoutouts": "Shoutouts",
-    "referrals": "Referrals",
-    "searchPlaceholder": "Search...",
-    "username": "Username",
-    "name": "Name",
-    "status": "Status",
-    "streak": "Streak",
-    "registered": "Registered",
-    "actions": "Actions",
-    "togglePremium": "Toggle Premium",
-    "extendTrial": "Extend Trial",
-    "days": "days",
     "statusUpdated": "Status updated",
     "premiumEnabled": "Premium enabled",
     "premiumDisabled": "Premium disabled",
-    "trialExtended": "Trial extended",
     "error": "Error",
-    "updateFailed": "Failed to update status",
-    "extendFailed": "Failed to extend trial",
-    "slug": "Slug",
-    "owner": "Owner",
-    "created": "Created",
-    "openPage": "Open page",
-    "recentEvents": "Recent Events",
-    "event": "Event",
-    "page": "Page",
-    "time": "Time",
-    "userGrowth": "User Growth",
-    "newRegistrations": "New Registrations (14 days)",
-    "events": "Events (14 days)",
-    "userDistribution": "User Distribution",
-    "eventTypes": "Event Types",
-    "socialActivity": "Social Activity",
-    "blockTypes": "Block Types",
-    "detailedAnalytics": "Detailed Analytics",
-    "period7d": "7 days",
-    "period14d": "14 days",
-    "period30d": "30 days",
-    "period90d": "90 days",
-    "sessions": "Sessions",
-    "visitors": "Visitors",
-    "events": "Events",
-    "totalCTR": "Total CTR",
-    "clicksOfViews": "clicks / views",
-    "timeline": "Timeline",
-    "breakdown": "Breakdown",
-    "engagement": "Engagement",
-    "topContent": "Top Content",
-    "eventsByDays": "Events by Days",
-    "viewsClicksShares": "Views, clicks and shares for period",
-    "sessionsAndVisitors": "Sessions and Visitors",
-    "uniqueSessionsVisitors": "Unique sessions and visitors by day",
-    "activity24h": "Activity for 24 hours",
-    "hourlyDistribution": "Hourly distribution of events",
-    "distribution": "Distribution",
-    "devices": "Devices",
-    "sources": "Sources",
-    "byHours": "By Hours",
-    "activityDuringDay": "Activity during the day",
-    "byDaysOfWeek": "By Days of Week",
-    "activityDistribution": "Activity distribution",
-    "topPages": "Top Pages",
-    "byViews": "By views",
-    "topBlocks": "Top Blocks",
-    "byClicks": "By clicks",
-    "noData": "No data",
-    "viewsShort": "views",
-    "clicksShort": "clicks",
-    "totalLabel": "Total",
-    "acceptedLabel": "Accepted",
-    "popularBlockTypes": "Popular Block Types",
-    "socialActivity14d": "Social Activity (14 days)",
-    "contentCreation14d": "Content Creation (14 days)",
-    "pagesLabel": "Pages",
-    "blocksLabel": "Blocks",
-    "countLabel": "Count",
+    "updateFailed": "Update failed",
+    "trialExtended": "Trial extended",
+    "days": "days",
+    "extendFailed": "Failed to extend",
+    "loadError": "Load error",
+    "tierUpdated": "Tier updated",
+    "tierUpdateError": "Tier update error",
+    "tierManagement": "Tier Management",
+    "searchUsers": "Search users...",
+    "tierBusiness": "Business",
+    "tierPro": "Pro",
+    "tierFree": "Free",
+    "lifetime": "Lifetime",
+    "expired": "Expired",
+    "expiresOn": "Expires on",
     "dayNames": {
       "sun": "Sun",
       "mon": "Mon",
@@ -1377,218 +1602,980 @@
       "fri": "Fri",
       "sat": "Sat"
     },
-    "tiers": "Tiers",
-    "tierManagement": "Tier Management",
-    "searchUsers": "Search users",
-    "tierFree": "Free",
-    "tierPro": "Pro",
-    "tierBusiness": "Business",
-    "user": "User",
-    "tier": "Tier",
-    "expiry": "Expiry",
-    "edit": "Edit",
-    "editUserTier": "Edit User Tier",
-    "selectTier": "Select tier",
-    "expiryDate": "Expiry date",
-    "week": "week",
-    "month": "month",
-    "year": "year",
-    "lifetime": "Lifetime",
-    "expiresOn": "expires",
-    "expired": "Expired",
-    "leaveEmptyLifetime": "Leave empty for lifetime access",
-    "cancel": "Cancel",
-    "save": "Save",
-    "tierUpdated": "Tier updated",
-    "tierUpdateError": "Failed to update tier",
-    "loadError": "Failed to load",
-    "adminRole": "Administrator",
-    "adminRoleDesc": "Access to admin panel"
+    "seo": {
+      "title": "lnkmx Admin",
+      "description": "Internal admin tools for lnkmx."
+    }
   },
-  "dashboard": {
-    "pageRefreshed": "Page refreshed",
-    "addFirstBlock": "Click + to add your first block"
+  "adminCharts": {
+    "userGrowth": "User growth",
+    "totalUsers": "Total users",
+    "newRegistrations": "New registrations (14 days)",
+    "users": "Users",
+    "pages": "Pages",
+    "blocks": "Blocks",
+    "eventsTitle": "Events (14 days)",
+    "userDistribution": "User distribution",
+    "eventTypes": "Event types",
+    "count": "Count",
+    "socialActivity": "Social activity",
+    "socialActivity14Days": "Social activity (14 days)",
+    "contentCreation14Days": "Content creation (14 days)",
+    "popularBlockTypes": "Popular block types",
+    "total": "Total",
+    "accepted": "Accepted",
+    "events": {
+      "views": "Views",
+      "clicks": "Clicks",
+      "shares": "Shares"
+    },
+    "social": {
+      "friendships": "Friendships",
+      "collaborations": "Collaborations",
+      "teams": "Teams"
+    }
   },
-  "common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "close": "Close",
-    "preview": "Preview",
-    "share": "Share",
-    "more": "More",
-    "settings": "Settings",
-    "language": "Language",
-    "noResults": "No results found"
-  },
-  "menu": {
-    "gamification": "Gamification",
-    "community": "Community",
-    "signOut": "Sign Out"
-  },
-  "mobileToolbar": {
-    "save": "Save",
-    "preview": "Preview",
-    "share": "Share",
-    "settings": "Settings",
-    "more": "More",
-    "moreOptions": "More Options",
-    "aiBuilder": "AI Builder",
-    "aiBuilderDesc": "Create page with AI",
-    "templates": "Templates",
-    "templatesDesc": "Ready templates",
-    "achievements": "Achievements",
-    "achievementsDesc": "Your progress",
-    "crm": "CRM",
-    "crmDesc": "Manage leads"
-  },
-  "days": {
-    "monday": "Monday",
-    "tuesday": "Tuesday",
-    "wednesday": "Wednesday",
-    "thursday": "Thursday",
-    "friday": "Friday",
-    "saturday": "Saturday",
-    "sunday": "Sunday"
-  },
-  "tokens": {
-    "title": "Tokens",
-    "balance": "Balance",
-    "earn": "Earn",
-    "spend": "Spend"
+  "adminTokens": {
+    "title": "Token economy",
+    "stats": {
+      "inCirculation": "In circulation",
+      "inCirculationDesc": "All user tokens",
+      "totalEarned": "Total earned",
+      "totalSpent": "Total spent",
+      "platformFee": "Platform fee",
+      "platformFeeDesc": "4% of sales",
+      "premiumPurchases": "Premium purchases",
+      "templatePurchases": "Template purchases",
+      "productPurchases": "Product purchases",
+      "activeUsers": "Active users",
+      "pendingWithdrawals": "Pending withdrawals",
+      "paidOut": "Paid out"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "transactions": "Transactions",
+      "withdrawals": "Withdrawals"
+    },
+    "distributionTitle": "Distribution by transaction type",
+    "historyTitle": "Transaction history",
+    "withdrawalsTitle": "Withdrawal requests",
+    "noData": "No data",
+    "noTransactions": "No transactions",
+    "noWithdrawals": "No withdrawals",
+    "platformFeeLabel": "Fee",
+    "notProvided": "Not provided",
+    "filter": {
+      "allTypes": "All types",
+      "premium": "Premium",
+      "templates": "Templates",
+      "products": "Products",
+      "paidBlocks": "Paid blocks"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "completed": "Completed",
+      "rejected": "Rejected"
+    },
+    "actions": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "markPaid": "Mark as paid"
+    }
   },
   "achievements": {
     "title": "Achievements",
-    "progress": "Progress"
-  },
-  "freemium": {
-    "left": "left",
-    "limit": "limit",
-    "blockLimitReached": "Block limit reached. Upgrade to Premium for unlimited blocks.",
-    "blocksRemaining": "Blocks remaining: {{count}} of {{max}}",
-    "upgradeToPremium": "Upgrade to Premium",
-    "aiLimitReached": "AI request limit reached",
-    "aiRequestsRemaining": "AI requests remaining this week: {{count}}",
-    "aiLimitResetsWeekly": "Limit resets every week",
-    "unlimitedAI": "Unlimited AI",
-    "premiumBlockRequired": "This block requires Premium",
-    "viewOnly": "View only",
-    "viewOnlyHint": "Requires {{tier}} to edit",
-    "upgradeToEdit": "Upgrade to {{tier}} to edit",
-    "proRequired": "Requires PRO",
-    "businessRequired": "Requires BUSINESS"
-  },
-  "editor": {
-    "addBlock": "Add Block",
-    "selectBlock": "Select a block",
-    "searchBlocks": "Search blocks..."
-  },
-  "toasts": {
-    "collaboration": {
-      "requestSent": "Collaboration request sent!",
-      "requestError": "Failed to send request",
-      "accepted": "Collaboration accepted!",
-      "rejected": "Request rejected",
-      "deleted": "Collaboration deleted",
-      "error": "Error"
+    "progress": "{{unlocked}} of {{total}} unlocked",
+    "newAchievement": "New achievement!",
+    "rewardDescription": "Achievement reward: {{title}}",
+    "emptyTitle": "No achievements",
+    "emptyDescription": "There are no achievements in this category yet",
+    "sections": {
+      "unlocked": "Unlocked ({{count}})",
+      "locked": "Locked ({{count}})"
     },
-    "team": {
-      "created": "Team created!",
-      "createError": "Failed to create team",
-      "memberInvited": "User invited to team!",
-      "inviteError": "Failed to invite",
-      "left": "You left the team",
-      "deleted": "Team deleted",
-      "memberRemoved": "Member removed",
-      "removeError": "Failed to remove",
-      "confirmRemove": "Remove {{name}} from team?"
+    "categories": {
+      "all": "All",
+      "blocks": "Blocks",
+      "features": "Features",
+      "milestones": "Milestones",
+      "social": "Social"
     },
-    "shoutout": {
-      "added": "Shoutout added!",
-      "deleted": "Shoutout deleted",
-      "error": "Error"
+    "rarity": {
+      "common": "Common",
+      "rare": "Rare",
+      "epic": "Epic",
+      "legendary": "Legendary"
     },
-    "social": {
-      "rewardClaimed": "Reward claimed: +{{hours}} hours Premium!",
-      "rewardError": "Failed to claim reward",
-      "giftActivated": "Gift activated: +{{days}} days Premium!",
-      "giftError": "Failed to activate gift"
-    },
-    "leads": {
-      "loadError": "Failed to load leads",
-      "created": "Lead created",
-      "createError": "Failed to create lead",
-      "updated": "Lead updated",
-      "updateError": "Failed to update lead",
-      "deleted": "Lead deleted",
-      "deleteError": "Failed to delete lead",
-      "interactionError": "Failed to add interaction",
-      "noLeadsExport": "No leads to export"
-    },
-    "gallery": {
-      "likeError": "Failed to like page",
-      "unlikeError": "Failed to unlike page",
-      "addedToGallery": "Your page is now in the community gallery!",
-      "removedFromGallery": "Your page has been removed from the gallery",
-      "updateError": "Failed to update gallery status"
-    },
-    "sharing": {
-      "linkCopied": "Link copied to clipboard!",
-      "copyError": "Failed to copy link"
-    },
-    "username": {
-      "authRequired": "User not authenticated",
-      "enterUsername": "Please enter a username",
-      "invalid": "Invalid username",
-      "updated": "Username updated successfully!",
-      "updateError": "Failed to update username"
-    },
-    "page": {
-      "saveError": "Failed to save",
-      "publishError": "Failed to publish page"
-    },
-    "ai": {
-      "enterUrl": "Please enter a URL",
-      "enterProduct": "Please enter product name and price",
-      "describePage": "Please describe your page",
-      "generationError": "Failed to generate content",
-      "generated": "Content generated!"
-    },
-    "upload": {
-      "authRequired": "Please sign in to upload",
-      "fileTooLarge": "File size must be less than 10MB",
-      "error": "Failed to upload image"
-    },
-    "bookings": {
-      "fetchError": "Failed to load bookings",
-      "cancelError": "Failed to cancel booking",
-      "cancelSuccess": "Booking cancelled",
-      "confirmError": "Failed to confirm booking",
-      "confirmSuccess": "Booking confirmed",
-      "completeError": "Failed to complete booking",
-      "completeSuccess": "Booking marked as completed",
-      "noBookingsExport": "No bookings to export"
+    "items": {
+      "firstLink": {
+        "title": "First link",
+        "description": "Add your first link"
+      },
+      "socialButterfly": {
+        "title": "Social butterfly",
+        "description": "Add a social block"
+      },
+      "merchant": {
+        "title": "Merchant",
+        "description": "Add your first product"
+      },
+      "contentCreator": {
+        "title": "Content creator",
+        "description": "Add a video block"
+      },
+      "galleryMaster": {
+        "title": "Gallery master",
+        "description": "Create an image carousel"
+      },
+      "developer": {
+        "title": "Developer",
+        "description": "Use the custom code block"
+      },
+      "communicator": {
+        "title": "Communicator",
+        "description": "Add a contact form"
+      },
+      "searchGuru": {
+        "title": "Search guru",
+        "description": "Add an AI Search block"
+      },
+      "aiPowered": {
+        "title": "AI assistant",
+        "description": "Use AI to generate content"
+      },
+      "templateUser": {
+        "title": "Quick start",
+        "description": "Use a ready-made template"
+      },
+      "chatbotExpert": {
+        "title": "Chatbot expert",
+        "description": "Set up an AI chatbot"
+      },
+      "collector": {
+        "title": "Collector",
+        "description": "Add 5 different block types"
+      },
+      "masterBuilder": {
+        "title": "Master builder",
+        "description": "Add 10 blocks to the page"
+      },
+      "completionist": {
+        "title": "Completionist",
+        "description": "Use all block types"
+      },
+      "publisher": {
+        "title": "Publisher",
+        "description": "Publish your first page"
+      },
+      "popular": {
+        "title": "Popular",
+        "description": "Get 100 views"
+      },
+      "influencer": {
+        "title": "Influencer",
+        "description": "Get 1000 views"
+      },
+      "firstFriend": {
+        "title": "First friend",
+        "description": "Add your first friend"
+      },
+      "socialCircle": {
+        "title": "Social circle",
+        "description": "Add 5 friends"
+      },
+      "networkingPro": {
+        "title": "Networking pro",
+        "description": "Add 10 friends"
+      },
+      "communityLeader": {
+        "title": "Community leader",
+        "description": "Add 25 friends"
+      }
     }
   },
+  "templates": {
+    "title": "Templates",
+    "save": "Save as template",
+    "apply": "Apply template",
+    "myTemplates": "My Templates",
+    "marketplace": "Marketplace",
+    "category": "Category",
+    "selectCategory": "Select category",
+    "categories": {
+      "all": "All",
+      "creators": "Creators",
+      "business": "Business",
+      "service": "Service",
+      "realEstate": "Real estate",
+      "wedding": "Wedding",
+      "personal": "Personal",
+      "experts": "Experts",
+      "premium": "Premium",
+      "other": "Other"
+    }
+  },
+  "alternatives": {
+    "seo": {
+      "title": "lnkmx alternatives - Linktree, Taplink, Carrd, Beacons comparison",
+      "description": "Compare lnkmx with Linktree, Taplink, Carrd and Beacons. See which tool fits link-in-bio, mini-landing, or lead capture needs.",
+      "keywords": "linktree alternative, taplink alternative, carrd alternative, beacons alternative, link in bio comparison, mini landing comparison",
+      "schemaName": "Link in Bio Platforms Comparison",
+      "schemaDescription": "AI-powered link-in-bio builder with CRM and 0% commission",
+      "defaultTitle": "lnkmx - AI link-in-bio builder",
+      "ogTitle": "lnkmx vs Linktree vs Taplink — comparison & alternative",
+      "ogDescription": "Compare lnkmx, Linktree, and Taplink by features, pricing, and usability. See why lnkmx is a strong alternative.",
+      "breadcrumb": "Alternatives"
+    },
+    "header": {
+      "cta": "Get Started"
+    },
+    "hero": {
+      "badge": "Comparison guide",
+      "title": "lnkmx vs Linktree, Taplink, Carrd, Beacons",
+      "description": "A neutral comparison: when lnkmx fits your goal, and when another tool is better.",
+      "ctaPrimary": "Create page for free",
+      "ctaSecondary": "View pricing",
+      "ctaTertiary": "View examples"
+    },
+    "segments": {
+      "title": "Which job are you trying to do",
+      "cta": "Try lnkmx",
+      "linkInBio": {
+        "title": "Link-in-bio tools",
+        "description": "Need quick links and a minimal profile without complex structure.",
+        "examples": "Examples: Linktree, Beacons"
+      },
+      "miniLanding": {
+        "title": "Mini-landings",
+        "description": "Need blocks for offer, pricing, and leads without a full website.",
+        "examples": "Examples: Taplink, Carrd"
+      },
+      "leadCapture": {
+        "title": "Lead capture",
+        "description": "You want to collect leads and reply fast, not only show links.",
+        "examples": "Focus: CRM, forms, notifications"
+      }
+    },
+    "matrix": {
+      "title": "Comparison by key capabilities",
+      "featureLabel": "Feature",
+      "note": "Competitor columns are indicative. Check current plans on their websites.",
+      "depends": "Depends on plan",
+      "cta": "Create page",
+      "rows": {
+        "linkPage": "Basic link page",
+        "miniLanding": "Mini-landing with blocks (pricing, FAQ, forms)",
+        "aiGeneration": "AI-generated page structure",
+        "leadsCrm": "Leads and mini-CRM",
+        "telegram": "Telegram notifications",
+        "localization": "RU/EN/KK localization",
+        "localPricing": "Local pricing in KZT"
+      }
+    },
+    "whenToChoose": {
+      "title": "When to choose lnkmx",
+      "item1": "You need one link that leads to a booking, not a link list.",
+      "item2": "You want to capture leads and manage them in a mini-CRM.",
+      "item3": "You want to launch fast without designers or code.",
+      "item4": "You need analytics by blocks and traffic sources.",
+      "item5": "You work in RU and KK and need localized pricing.",
+      "cta": "Create page"
+    },
+    "whenNotToChoose": {
+      "title": "When lnkmx might not fit",
+      "item1": "You need a complex multi-page website with custom logic.",
+      "item2": "You require full control over HTML and hosting.",
+      "item3": "You only want social links without lead capture.",
+      "ctaPrimary": "Compare plans",
+      "ctaSecondary": "View examples"
+    },
+    "finalCta": {
+      "title": "Ready to Try?",
+      "description": "Create a page and see whether lnkmx fits your use case.",
+      "primary": "Create page",
+      "secondary": "View examples"
+    },
+    "footer": {
+      "pricing": "Pricing",
+      "gallery": "Gallery",
+      "signIn": "Sign In",
+      "company": "IP BEEGIN • BIN: 971207300019",
+      "address": "Almaty, Sholokhov St., 20/7"
+    }
+  },
+  "blockPreview": {
+    "title": "Block preview",
+    "unavailable": "Preview unavailable",
+    "linkTitle": "My link",
+    "buttonTitle": "Click me",
+    "textContent": "This is a text block",
+    "imageAlt": "Sample image",
+    "socialsTitle": "My socials",
+    "productName": "Product",
+    "productDescription": "Product description",
+    "videoTitle": "Video",
+    "carouselImage1": "Image 1",
+    "carouselImage2": "Image 2",
+    "customCodeHtml": "<div style=\"padding: 20px; text-align: center;\">Custom HTML</div>",
+    "formTitle": "Contact form",
+    "formButton": "Send",
+    "newsletterTitle": "Subscribe to the newsletter",
+    "newsletterDescription": "Get news first",
+    "newsletterButton": "Subscribe",
+    "testimonialName": "John Doe",
+    "testimonialText": "Great service!",
+    "messengerTitle": "Contact me",
+    "downloadTitle": "Download file",
+    "downloadDescription": "File description",
+    "scratchTitle": "Scratch and win",
+    "scratchReveal": "20% off!"
+  },
+  "animationSettings": {
+    "title": "Entrance animation",
+    "type": "Animation type",
+    "none": "No animation",
+    "fadeIn": "Fade in",
+    "slideUp": "Slide up",
+    "scaleIn": "Scale in",
+    "bounce": "Bounce",
+    "speed": "Animation speed",
+    "speedSlow": "Slow (0.8s)",
+    "speedNormal": "Normal (0.5s)",
+    "speedFast": "Fast (0.3s)",
+    "delay": "Delay: {{value}}ms",
+    "delayHint": "Time before animation starts (0-2000ms)"
+  },
+  "tokens": {
+    "balance": "Token balance",
+    "earn": "Earn",
+    "spend": "Spend",
+    "history": "History",
+    "dailyVisit": "daily login",
+    "addBlock": "adding a block",
+    "useAi": "using AI",
+    "toastEarned": "+{{count}} Linkkon for {{action}}!",
+    "insufficientForPremium": "Not enough Linkkon. {{count}} tokens required.",
+    "premiumGranted": "🎉 You received 1 day of Premium!",
+    "insufficientTokens": "Not enough tokens",
+    "convertError": "Conversion error",
+    "insufficientForPurchase": "Not enough Linkkon. {{count}} tokens required.",
+    "purchaseSuccess": "✨ Purchase successful!",
+    "purchaseError": "Purchase error",
+    "withdrawalCreated": "Withdrawal request created!",
+    "withdrawalPremiumRequired": "Withdrawals are available only for Premium users",
+    "withdrawalError": "Withdrawal request error"
+  },
+  "quests": {
+    "dailyVisit": {
+      "title": "Daily visit",
+      "description": "Open the app"
+    },
+    "addBlock": {
+      "title": "Add a block",
+      "description": "Add a new block to your page"
+    },
+    "editProfile": {
+      "title": "Update profile",
+      "description": "Change your name or bio"
+    },
+    "sharePage": {
+      "title": "Share your page",
+      "description": "Copy the link to your page"
+    },
+    "useAi": {
+      "title": "Use AI",
+      "description": "Generate content with AI"
+    },
+    "toastDailyVisit": "👋 +{{count}} Linkkon for a daily visit!",
+    "toastCompleted": "{{icon}} +{{count}} Linkkon for \"{{title}}\"!",
+    "panelTitle": "Daily quests",
+    "allCompleted": "🎉 All quests completed!",
+    "tokensEarned": "+{{count}} Linkkon earned"
+  },
+  "referral": {
+    "title": "Referral Program",
+    "yourCode": "Your code",
+    "invited": "Invited",
+    "earned": "Earned",
+    "toastSuccess": "🎉 +{{count}} days of Premium for you and your friend!",
+    "codeCopied": "Code copied!",
+    "linkCopied": "Link copied!",
+    "errors": {
+      "invalidCode": "Invalid invite code",
+      "alreadyReferred": "You already used a referral code",
+      "selfReferral": "You can't use your own code",
+      "applyFailed": "Failed to apply code"
+    }
+  },
+  "social": {
+    "weeklyChallenge": "Weekly challenge",
+    "challenge": "Challenge",
+    "activity": {
+      "pagePublished": "published a page",
+      "newBlock": "added a new block",
+      "achievement": "earned an achievement",
+      "streakMilestone": "reached a streak milestone",
+      "challengeCompleted": "completed a challenge",
+      "giftSent": "sent a gift",
+      "giftReceived": "received a gift",
+      "pageBoosted": "boosted a page",
+      "newFriend": "added a friend",
+      "pageLiked": "liked a page"
+    },
+    "feed": {
+      "emptyTitle": "No activity yet",
+      "emptyDescription": "Add friends to see their activity",
+      "title": "Friends feed",
+      "events_one": "{{count}} event",
+      "events_few": "{{count}} events",
+      "events_many": "{{count}} events",
+      "events_other": "{{count}} events"
+    },
+    "metadata": {
+      "achievement": "🏆 {{title}}",
+      "achievementFallback": "New achievement",
+      "streak": "🔥 {{count}} days in a row",
+      "challenge": "✅ {{title}}",
+      "challengeFallback": "Challenge completed",
+      "gift": "💝 +{{count}} Premium days",
+      "boost": "🚀 {{type}} boost",
+      "boostFallback": "standard"
+    },
+    "pendingGifts": {
+      "title": "Gifts for you!",
+      "count_one": "{{count}} gift",
+      "count_few": "{{count}} gifts",
+      "count_many": "{{count}} gifts",
+      "count_other": "{{count}} gifts",
+      "days_one": "+{{count}} day",
+      "days_few": "+{{count}} days",
+      "days_many": "+{{count}} days",
+      "days_other": "+{{count}} days",
+      "activate": "Activate"
+    },
+    "weeklyChallenges": {
+      "title": "Weekly challenges",
+      "completed": "{{completed}}/{{total}} completed",
+      "refreshesOnMonday": "Refresh every Monday",
+      "daysLeftShort": "{{count}} days",
+      "rewardHoursShort": "+{{count}}h",
+      "stats": {
+        "completed": "Completed",
+        "rewards": "Rewards",
+        "toClaim": "To claim"
+      },
+      "claim": "Claim",
+      "claimed": "Claimed"
+    }
+  },
+  "premium": {
+    "upgrade": "Upgrade to Pro",
+    "features": "Pro features",
+    "trial": "Trial period",
+    "active": "Pro active"
+  },
+  "pwa": {
+    "install": "Install app",
+    "updateAvailable": "Update available"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "Page statistics",
+    "description": "Track your page performance",
+    "views": "Views",
+    "clicks": "Clicks",
+    "uniqueVisitors": "Unique visitors",
+    "topBlocks": "Top Blocks",
+    "devices": "Devices",
+    "sources": "Sources",
+    "noData": "No data for selected period",
+    "aiInsights": "AI Recommendations",
+    "apply": "Apply",
+    "insights": {
+      "addPricing": "Add a pricing block",
+      "addPricingDesc": "Pages with pricing get 40% more leads",
+      "addTestimonials": "Add testimonials",
+      "addTestimonialsDesc": "Testimonials increase trust and conversion by 25%",
+      "duplicateTop": "Duplicate popular link",
+      "duplicateTopDesc": "receives clicks"
+    }
+  },
+  "editor": {
+    "undo": "Undo",
+    "redo": "Redo",
+    "addBlock": "Add Block",
+    "structure": "Structure",
+    "reorder": "Reorder",
+    "preview": "Preview",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "history": {
+      "undoHint": "Click to undo",
+      "undone": "Action undone",
+      "redone": "Action redone",
+      "blockAdded": "Block added: {{type}}",
+      "blockDeleted": "Block deleted: {{type}}",
+      "blockUpdated": "Block updated: {{type}}",
+      "blocksReordered": "Blocks reordered"
+    }
+  },
+  "crm": {
+    "title": "CRM",
+    "description": "Manage your leads and interactions",
+    "leads": "Leads",
+    "bookings": "Bookings",
+    "analytics": "Analytics",
+    "premiumRequired": "Premium Feature",
+    "premiumDescription": "Upgrade to Premium to access CRM and track your leads",
+    "noLeadsToExport": "No leads to export",
+    "exportSuccess": "Leads exported successfully",
+    "allSources": "All",
+    "searchPlaceholder": "Search...",
+    "export": "Export CSV",
+    "noResults": "No leads found",
+    "noLeads": "No leads yet. Add your first lead!",
+    "contactInfo": "Contact Information",
+    "formData": "Form Data",
+    "addLead": "Add Lead",
+    "status": {
+      "label": "Status",
+      "new": "New",
+      "contacted": "Contacted",
+      "qualified": "Qualified",
+      "converted": "Converted",
+      "lost": "Lost"
+    },
+    "source": {
+      "form": "Form",
+      "messenger": "Messenger",
+      "manual": "Manual",
+      "page_view": "Page View",
+      "other": "Other"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "morePages": "More pages"
+  },
+  "publicPage": {
+    "loading": "Loading page...",
+    "notFound": "Page not found",
+    "invalidLink": "Invalid or corrupted link",
+    "shareLink": "Share Link",
+    "qrCode": "QR Code",
+    "scanToShare": "Scan this code to share your page"
+  },
+  "teams": {
+    "title": "Teams",
+    "myTeams": "My teams",
+    "noTeams": "You're not in any team yet",
+    "createTeam": "Create team",
+    "teamNamePlaceholder": "Team name",
+    "teamSlugPlaceholder": "Team URL (slug)",
+    "teamDescriptionPlaceholder": "Team description",
+    "createTeamButton": "Create team",
+    "leave": "Leave",
+    "notFoundTitle": "Team not found",
+    "notFoundDesc": "This team does not exist or is private.",
+    "membersTitle": "Team members",
+    "noMembers": "There are no members in this team yet",
+    "settings": "Team Settings",
+    "name": "Name",
+    "description": "Description",
+    "niche": "Niche",
+    "isPublic": "Public Team",
+    "isPublicDesc": "Public teams are visible to everyone",
+    "save": "Save",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this team?",
+    "inviteLink": "Invite Link",
+    "createLink": "Create Link",
+    "updateLink": "Update Link",
+    "shareLink": "Share this link to invite people to the team",
+    "noInviteLink": "Create an invite link to add members",
+    "avatar": "Team Avatar",
+    "ownerOnly": "Only the team owner can edit settings",
+    "members": "members",
+    "joined": "You joined the team!",
+    "alreadyMember": "You're already a member of this team",
+    "invalidInvite": "Invalid Invitation",
+    "invalidInviteDesc": "This invite link is invalid or expired",
+    "loginToJoin": "Log in to join the team",
+    "login": "Log In",
+    "join": "Join Team",
+    "backHome": "Back Home",
+    "updated": "Team updated",
+    "deleted": "Team deleted",
+    "linkCreated": "Link created",
+    "linkUpdated": "Link updated",
+    "linkCopied": "Link copied",
+    "error": "Error",
+    "updateError": "Update failed",
+    "deleteError": "Delete failed",
+    "enterName": "Enter team name"
+  },
+  "friends": {
+    "title": "Friends",
+    "count": "friends",
+    "search": "Search users...",
+    "searchResults": "Search Results",
+    "noResults": "No users found",
+    "noFriends": "No friends yet",
+    "findFriends": "Find friends using search above",
+    "add": "Add",
+    "remove": "Remove",
+    "pending": "Pending",
+    "requests": "Requests",
+    "sent": "Sent",
+    "activity": "Feed",
+    "noRequests": "No incoming requests",
+    "noRequestsDesc": "When someone wants to add you as a friend, the request will appear here",
+    "noSentRequests": "No sent requests",
+    "noSentRequestsDesc": "Find friends using search",
+    "rewards": "Rewards",
+    "bonuses": "Bonuses",
+    "inviteFriends": "Invite friends!",
+    "inviteReward": "+2 hours Premium per friend",
+    "user": "User",
+    "likeRemoved": "Like removed",
+    "pageLiked": "Page liked!",
+    "pageNotPublished": "Page not published",
+    "giftPremium": "Gift Premium",
+    "requestSent": "Friend request sent",
+    "requestAccepted": "Request accepted!",
+    "requestRejected": "Request rejected",
+    "friendRemoved": "Friend removed",
+    "addLike": "Add like",
+    "removeLike": "Remove like",
+    "viewPage": "View page",
+    "errors": {
+      "cannotAddSelf": "You can't add yourself",
+      "friendshipExists": "You're already friends or a request exists",
+      "notAuthenticated": "Please sign in",
+      "sendRequest": "Failed to send request",
+      "acceptRequest": "Failed to accept request",
+      "rejectRequest": "Failed to reject request",
+      "removeFriend": "Failed to remove friend"
+    }
+  },
+  "gift": {
+    "title": "Gift Premium",
+    "description": "Surprise a friend with a Premium subscription gift",
+    "duration": "Subscription Duration",
+    "days3": "3 days",
+    "week1": "1 week",
+    "weeks2": "2 weeks",
+    "month1": "1 month",
+    "popular": "Popular",
+    "message": "Message (optional)",
+    "messagePlaceholder": "Write warm words...",
+    "send": "Send Gift",
+    "sent": "Gift sent!",
+    "sentDesc": "will receive days of Premium",
+    "sendError": "Failed to send gift"
+  },
+  "telegram": {
+    "title": "Connect Telegram",
+    "description": "For lead notifications",
+    "step1Title": "Open the bot and tap START",
+    "step1Desc": "The bot will show your Chat ID",
+    "openBot": "Open @linkmaxmy_bot",
+    "step2Title": "Copy Chat ID and paste here",
+    "step2Desc": "Tap the number in the bot to copy",
+    "verified": "Telegram verified!",
+    "connected": "Telegram connected successfully!",
+    "checking": "Checking Chat ID...",
+    "info": "Telegram is needed for instant notifications about new leads from your page",
+    "errorStart": "First tap START in @linkmaxmy_bot",
+    "errorInvalid": "Invalid Chat ID",
+    "errorCheck": "Verification error. Try again",
+    "pasteError": "Failed to paste"
+  },
+  "product": {
+    "authRequired": "Login required to purchase",
+    "notEnoughTokens": "Not enough tokens",
+    "needMore": "Need more",
+    "purchaseSuccess": "You successfully purchased",
+    "buying": "Buying...",
+    "buyTokens": "Buy tokens",
+    "buyFor": "Buy for",
+    "buy": "Buy",
+    "tapToView": "Details →"
+  },
+  "paidContent": {
+    "title": "Paid Content",
+    "description": "Unlock this content with Linkkon tokens",
+    "settingsDescription": "Restrict access to the block content. Visitors can unlock it with Linkkon tokens (1 token = 1 ₸).",
+    "priceLabel": "Price (in Linkkon tokens)",
+    "pricePlaceholder": "100",
+    "priceHint": "Minimum: 1 token. Recommended: 50-500 tokens.",
+    "unlock": "Unlock",
+    "unlocking": "Unlocking...",
+    "yourBalance": "Your balance",
+    "loginRequired": "Log in to purchase",
+    "unlockContent": "Unlock paid content"
+  },
+  "adminVerification": {
+    "totalRequests": "Total requests",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "title": "Verification Requests",
+    "user": "User",
+    "type": "Type",
+    "status": "Status",
+    "date": "Date",
+    "actions": "Actions",
+    "view": "View",
+    "noRequests": "No verification requests",
+    "noName": "No name",
+    "personal": "Individual",
+    "business": "Business",
+    "statusApproved": "Approved",
+    "statusRejected": "Rejected",
+    "statusPending": "Pending",
+    "request": "Verification Request",
+    "typeLabel": "Type:",
+    "personalFull": "Individual",
+    "businessFull": "Legal Entity",
+    "facePhoto": "Photo with document",
+    "idDocument": "ID Document",
+    "businessDoc": "Business Registration",
+    "userNote": "User's note:",
+    "adminNote": "Admin comment",
+    "adminNoteRequired": "(required for rejection)",
+    "adminNotePlaceholder": "Decision comment...",
+    "approve": "Approve",
+    "reject": "Reject",
+    "close": "Close",
+    "approveSuccess": "Verification approved",
+    "approveError": "Error approving",
+    "rejectSuccess": "Verification rejected",
+    "rejectError": "Error rejecting",
+    "rejectReasonRequired": "Please specify rejection reason"
+  },
+  "collab": {
+    "blocksSaved": "Block settings saved",
+    "blocksSaveError": "Save failed",
+    "showAll": "Show all",
+    "selective": "Selective",
+    "save": "Save",
+    "noBlocks": "No blocks",
+    "initiator": "Initiator",
+    "partner": "Partner",
+    "userSearchPlaceholder": "Search by name...",
+    "myShoutouts": "My recommendations",
+    "noShoutouts": "You haven't recommended anyone yet",
+    "addShoutout": "Add shoutout",
+    "shoutoutRecommendTitle": "Recommend {{name}}",
+    "shoutoutReasonPlaceholder": "Write why you're recommending this person...",
+    "title": "Collaboration",
+    "notFoundTitle": "Collaboration not found",
+    "notFoundDesc": "This page does not exist or the collaboration has not been accepted yet.",
+    "pageNoBlocks": "No blocks have been added yet"
+  },
+  "collaboration": {
+    "tabs": {
+      "collabs": "Collabs",
+      "promo": "Cross-promo",
+      "shoutouts": "Shoutouts",
+      "teams": "Teams"
+    },
+    "incomingRequests": "Incoming requests",
+    "activeCollabs": "Active collaborations",
+    "noActiveCollabs": "No active collaborations",
+    "manageBlocks": "Manage blocks",
+    "sharedPage": "Shared page",
+    "findPartner": "Find a partner",
+    "promoTitle": "Cross-promo by niche",
+    "nicheUsers": "Users in \"{{niche}}\" niche",
+    "offer": "Offer",
+    "noMembers": "No members",
+    "members": "Members",
+    "user": "User",
+    "owner": "Owner"
+  },
+  "shoutout": {
+    "selectedUser": "Selected user",
+    "selectUser": "Choose a user to recommend",
+    "searchPlaceholder": "Search by name or @username...",
+    "searchMinChars": "Enter at least 2 characters",
+    "searchError": "Search error. Try again later.",
+    "noResults": "No users found. Try another query.",
+    "reasonLabel": "Why do you recommend?",
+    "reasonPlaceholder": "Great specialist, highly recommend!",
+    "blockDescription": "Recommend other users to your audience"
+  },
+  "blockEditor": {
+    "advancedSettings": "Advanced settings",
+    "blockSize": "Block size",
+    "sizeSmall": "Small",
+    "sizeFull": "Full",
+    "sizeHalf": "Half",
+    "alignment": "Alignment",
+    "schedule": "Display schedule",
+    "clearSchedule": "Clear",
+    "appearDate": "Appear",
+    "disappearDate": "Disappear",
+    "selectDate": "Select date",
+    "scheduleHint": "Block will be visible only during the specified period",
+    "premiumFeature": "This is a Premium feature."
+  },
+  "currency": {
+    "names": {
+      "KZT": "Tenge (Kazakhstan)",
+      "RUB": "Ruble (Russia)",
+      "BYN": "Ruble (Belarus)",
+      "AMD": "Dram (Armenia)",
+      "AZN": "Manat (Azerbaijan)",
+      "KGS": "Som (Kyrgyzstan)",
+      "TJS": "Somoni (Tajikistan)",
+      "TMT": "Manat (Turkmenistan)",
+      "UZS": "Som (Uzbekistan)",
+      "USD": "US Dollar",
+      "EUR": "Euro",
+      "GBP": "Pound Sterling",
+      "CNY": "Yuan",
+      "JPY": "Yen",
+      "CHF": "Swiss Franc",
+      "CAD": "Canadian Dollar",
+      "AUD": "Australian Dollar"
+    }
+  },
+  "separatorBlock": {
+    "lineStyle": "Line style",
+    "solid": "Solid",
+    "dashed": "Dashed",
+    "dotted": "Dotted",
+    "gradient": "Gradient",
+    "thickness": "Thickness",
+    "thin": "Thin",
+    "medium": "Medium",
+    "thick": "Thick",
+    "width": "Width",
+    "full": "Full",
+    "half": "Half",
+    "third": "Third",
+    "spacing": "Spacing",
+    "small": "Small",
+    "large": "Large",
+    "extraLarge": "Extra large",
+    "color": "Color (optional)"
+  },
+  "customCodeBlock": {
+    "readyTemplates": "Ready templates",
+    "show": "Show",
+    "hide": "Hide",
+    "htmlHint": "Paste HTML code or full HTML page",
+    "cssHint": "Additional styles (if needed)",
+    "jsHint": "JavaScript code (runs in isolated iframe)",
+    "height": "Block height",
+    "auto": "Auto",
+    "smallHeight": "Small (200px)",
+    "mediumHeight": "Medium (400px)",
+    "largeHeight": "Large (600px)",
+    "fullHeight": "Fullscreen",
+    "interactivity": "Interactivity",
+    "allowInteraction": "Allow interaction",
+    "preview": "Preview",
+    "addHtmlForPreview": "Add HTML code for preview",
+    "tip": "Tip",
+    "tipText": "You can paste a full HTML page (including <!DOCTYPE html>, <head> and <body>). All scripts and styles will be automatically extracted and executed in an isolated iframe."
+  },
+  "pricingBlock": {
+    "servicesHint": "The more detailed the services, the better AI assistant understands your business.",
+    "defaultCurrency": "Default currency",
+    "services": "Services",
+    "serviceType": "Service type",
+    "haircut": "Haircut",
+    "consultation": "Consultation",
+    "training": "Training",
+    "manicure": "Manicure",
+    "lesson": "Lesson",
+    "massage": "Massage",
+    "photo": "Photo session",
+    "other": "Other",
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "duration": "Duration",
+    "min30": "30 min",
+    "hour1": "1 hour",
+    "hours1_5": "1.5 hours",
+    "hours2": "2 hours",
+    "featured": "Featured",
+    "emptyHint": "Tell us what services you provide"
+  },
+  "bookingBlock": {
+    "description": "Booking block with calendar and time slots",
+    "blockTitle": "Title",
+    "titlePlaceholder": "Book an appointment",
+    "blockDescription": "Description",
+    "descriptionPlaceholder": "Choose a convenient time for your appointment",
+    "workingHours": "Working hours",
+    "startHour": "Start",
+    "endHour": "End",
+    "slotDuration": "Slot duration (minutes)",
+    "min15": "15 minutes",
+    "min30": "30 minutes",
+    "min45": "45 minutes",
+    "hour1": "1 hour",
+    "hour1_5": "1.5 hours",
+    "hour2": "2 hours",
+    "workingDays": "Working days",
+    "clickToToggle": "Click on a day to enable/disable",
+    "customSlots": "Custom slots",
+    "addSlot": "Add",
+    "noCustomSlots": "Slots are generated automatically based on working hours",
+    "advanced": "Advanced",
+    "maxDays": "Maximum booking days",
+    "days7": "7 days",
+    "days14": "14 days",
+    "days30": "30 days",
+    "days60": "60 days",
+    "days90": "90 days",
+    "requirePhone": "Phone required",
+    "requirePhoneDesc": "Client must provide phone number",
+    "requireEmail": "Email required",
+    "requireEmailDesc": "Client must provide email",
+    "prepayment": "Prepayment",
+    "requirePrepayment": "Require prepayment",
+    "prepaymentDesc": "After booking, client will be redirected to WhatsApp for payment",
+    "prepaymentPhone": "WhatsApp for payment",
+    "phoneHint": "WhatsApp phone number for receiving payments",
+    "prepaymentAmount": "Prepayment amount",
+    "currency": "Currency",
+    "notifications": "Telegram notifications",
+    "dailyReminder": "Morning reminder",
+    "dailyReminderDesc": "Get list of today's bookings",
+    "reminderTime": "Reminder time",
+    "weeklyMotivation": "Weekly motivation",
+    "weeklyMotivationDesc": "Monday at 9:00 AM - personal inspiration",
+    "buttonText": "Button text",
+    "buttonTextPlaceholder": "Book Now"
+  },
+  "mapBlock": {
+    "address": "Address",
+    "addressPlaceholder": "New York, 5th Avenue 123",
+    "hint": "Enter address - the map will find the location automatically",
+    "enterAddress": "Enter address"
+  },
   "booking": {
-    "title": "Book Appointment",
-    "workingHours": "Hours",
-    "step1": "Select date",
+    "title": "Book Now",
+    "step1": "Date",
     "step2": "Time",
     "today": "Today",
     "tomorrow": "Tomorrow",
-    "free": "available",
-    "taken": "taken",
-    "loadingSlots": "Loading schedule...",
-    "noSlotsTitle": "No available slots",
-    "noSlotsHint": "Try selecting another date",
-    "availableSlots": "Available times",
-    "noSlots": "No slots available for this date",
+    "loadingSlots": "Loading...",
+    "noSlotsTitle": "No slots",
+    "noSlotsHint": "Choose another date",
+    "continue": "Continue",
     "available": "Available",
     "booked": "Booked",
-    "occupied": "booked",
-    "selectedTime": "Selected",
-    "continue": "Continue",
-    "confirmBooking": "Complete booking",
+    "confirmBooking": "Confirm Booking",
     "name": "Your name",
     "namePlaceholder": "Enter your name",
     "phone": "Phone",
@@ -1596,148 +2583,477 @@
     "notes": "Notes",
     "notesPlaceholder": "Additional information...",
     "confirm": "Book",
-    "confirmAndPay": "Book & Pay",
+    "confirmAndPay": "Book and Pay",
     "prepaymentNote": "After booking you will be redirected to WhatsApp for payment",
-    "success": "Successfully booked!",
-    "error": "Booking failed. Please try again."
+    "success": "You have successfully booked!",
+    "error": "Booking error. Please try again."
   },
-  "fields": {
-    "avatarUrl": "Avatar",
-    "name": "Name",
-    "bio": "Bio",
-    "coverImage": "Cover Image",
-    "coverGradient": "Cover Gradient Overlay",
-    "coverHeight": "Cover Height",
-    "avatarSize": "Avatar Size",
-    "avatarPosition": "Avatar Position",
-    "avatarFrame": "Avatar Frame Style",
-    "avatarIcon": "Avatar Icon",
-    "selectIcon": "Select icon",
-    "shadowStyle": "Shadow Style",
-    "verificationBadge": "Verification Badge",
-    "autoVerifyPremium": "Auto-verify for Premium users",
-    "verified": "Manual verified badge",
-    "verifiedCustomIcon": "Custom Icon (PNG/SVG/GIF)",
-    "verifiedIcon": "Preset Icon",
-    "verifiedColor": "Badge Background",
-    "verifiedPosition": "Badge Position",
-    "proofOfHuman": "Proof of Human",
-    "boostTrust": "📈 +Trust",
-    "proofOfHumanDescription": "Add a short video or voice greeting to show visitors you're a real person",
-    "introVideo": "Video Greeting (max 30s)",
-    "introAudio": "Voice Greeting",
-    "proofOfHumanActive": "Your profile now shows a verified human badge with media",
-    "left": "Left",
-    "center": "Center",
-    "right": "Right",
-    "iconMode": "Icon",
-    "iconAuto": "Auto (site favicon)",
-    "iconManual": "Manual",
-    "refreshIcon": "Refresh icon",
-    "customIcon": "Custom icon",
-    "fallbackIcon": "Default icon",
-    "title": "Title",
-    "content": "Content",
-    "style": "Style",
-    "heading": "Heading",
-    "paragraph": "Paragraph",
-    "quote": "Quote",
-    "alignment": "Alignment",
-    "hoverEffect": "Hover Effect",
-    "none": "None",
-    "glow": "Glow",
-    "scale": "Scale",
-    "shadow": "Shadow",
-    "backgroundType": "Background Type",
-    "solidColor": "Solid Color",
-    "gradient": "Gradient",
-    "image": "Image",
-    "backgroundColor": "Background Color",
-    "gradientColors": "Gradient Colors",
-    "enterCommaSeparatedColors": "Enter comma-separated colors",
-    "gradientAngle": "Gradient Angle (degrees)",
-    "backgroundImage": "Background Image",
-    "width": "Width",
-    "fullWidth": "Full Width",
-    "mediumWidth": "Medium",
-    "smallWidth": "Small",
-    "url": "URL",
-    "placeholder": "Placeholder",
+  "days": {
+    "sunday": "Sun",
+    "monday": "Mon",
+    "tuesday": "Tue",
+    "wednesday": "Wed",
+    "thursday": "Thu",
+    "friday": "Fri",
+    "saturday": "Sat"
+  },
+  "seo": {
+    "landing": {
+      "title": "lnkmx - mini-site and leads from one link",
+      "description": "AI mini-site builder for experts, freelancers, and small businesses. Create offer, pricing, and lead forms in 2 minutes.",
+      "keywords": "link in bio, link page, mini-site, linktree alternative, taplink alternative"
+    }
+  },
+  "adminTranslations": {
+    "seo": {
+      "title": "lnkmx Translations",
+      "description": "Internal translation management for lnkmx."
+    }
+  },
+  "install": {
+    "seo": {
+      "title": "Install lnkmx",
+      "description": "Install lnkmx as a PWA for faster access."
+    }
+  },
+  "event": {
+    "register": "Register",
+    "free": "Free",
+    "spots": "spots",
+    "full": "sold out",
+    "noSpots": "Sold out",
+    "registrationClosed": "Registration closed",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "emailHelp": "Your ticket and confirmation will be sent to this email.",
+    "emailRequired": "Email is required",
+    "fillRequired": "Please fill required fields",
+    "urlInvalid": "URL must start with https://",
+    "selectOption": "Select an option",
+    "mediaSection": "Media section is available in Pro",
+    "fileUploadPro": "File upload is available in Pro",
+    "submitting": "Submitting...",
+    "submit": "Register",
+    "registrationSuccess": "Registration confirmed",
+    "registrationPending": "Application submitted for review",
+    "registrationError": "Failed to register",
+    "duplicateRegistration": "You are already registered for this event.",
+    "configError": "Event configuration error",
+    "eventNotFound": "Event not found. Please refresh the page.",
+    "noSpotsMessage": "Unfortunately, all spots are taken.",
+    "registrationClosedMessage": "Registration for this event is closed.",
+    "successTitle": "Registration confirmed",
+    "ticketCode": "Ticket code",
+    "postGuestCta": "Create an account to save your tickets",
+    "createAccount": "Create account",
+    "later": "Later",
+    "promptTitle": "Want to keep your tickets in one place?",
+    "promptText": "Sign up to see all your tickets in your profile and create your own page in a few clicks.",
+    "promptSignup": "Sign up",
+    "promptContinue": "Continue without account",
+    "field": "Field",
+    "mediaUpload": "Upload media",
+    "fileUpload": "Upload file",
+    "addToCalendar": "Add to calendar",
+    "calendar": "Calendar",
+    "downloadICS": "Download .ics",
+    "googleCalendar": "Google Calendar",
+    "outlook": "Outlook"
+  },
+  "eventBuilder": {
+    "emailRequired": "Email field is always added automatically and is required.",
+    "title": "Event title",
+    "titlePlaceholder": "Enter title",
     "description": "Description",
+    "descriptionPlaceholder": "Briefly describe the event",
+    "coverUrl": "Cover image (URL)",
+    "startAt": "Start",
+    "endAt": "End",
+    "registrationClosesAt": "Registration closes at",
+    "locationType": "Location type",
+    "locationOnline": "Online",
+    "locationOffline": "Offline",
+    "locationValue": "Address or link",
+    "capacity": "Capacity",
+    "status": "Status",
+    "statusDraft": "Draft",
+    "statusPublished": "Published",
+    "statusClosed": "Closed",
+    "paidEvent": "Paid event (Pro)",
+    "paidEventProOnly": "Payments are available only in Pro.",
     "price": "Price",
     "currency": "Currency",
-    "buttonText": "Button Text"
-  },
-  "gradients": {
-    "none": "No Gradient",
-    "dark": "Dark Overlay",
-    "light": "Light Overlay",
-    "primary": "Primary Color",
-    "sunset": "Sunset Gradient",
-    "ocean": "Ocean Gradient",
-    "purple": "Purple Dream"
-  },
-  "heights": {
-    "small": "Small - 120px",
-    "medium": "Medium - 200px",
-    "large": "Large - 320px"
-  },
-  "avatarSizes": {
-    "small": "Small - 64px",
-    "medium": "Medium - 96px",
-    "large": "Large - 128px",
-    "xlarge": "Extra Large - 160px"
-  },
-  "shadows": {
-    "none": "No Shadow",
-    "soft": "Soft Shadow",
-    "medium": "Medium Shadow",
-    "strong": "Strong Shadow",
-    "glow": "Colored Glow"
-  },
-  "premium": {
-    "premiumFramesLocked": "Premium frames require PRO subscription",
-    "verificationRequiresPro": "Verification badge is available for PRO users",
-    "upgradeToPro": "Upgrade to PRO →"
-  },
-  "actions": {
-    "removeCustomIcon": "Remove custom icon"
-  },
-  "themes": {
-    "classic": "Classic",
-    "classicDesc": "Clean and minimal",
-    "darkMode": "Dark Mode",
-    "darkModeDesc": "Sleek dark design",
-    "gradientTheme": "Gradient",
-    "gradientThemeDesc": "Colorful and vibrant",
-    "minimal": "Minimal",
-    "minimalDesc": "Ultra clean aesthetic",
-    "neon": "Neon",
-    "neonDesc": "Bold and electric",
-    "pageTheme": "Page Theme",
-    "chooseTheme": "Choose a pre-designed theme for your page"
-  },
-  "placeholders": {
-    "yourName": "Your Name",
-    "tellAboutYourself": "Tell people about yourself...",
-    "enterText": "Enter your text...",
+    "shortNote": "Short note",
+    "requireApproval": "Require approval",
+    "allowDuplicateEmail": "Allow duplicate emails",
+    "formFields": "Form fields",
+    "field": "Field",
+    "fieldLabel": "Field label",
+    "fieldLabelPlaceholder": "Enter label",
+    "fieldPlaceholder": "Placeholder",
+    "fieldPlaceholderPlaceholder": "Example: Your answer",
+    "fieldHelp": "Help text",
+    "fieldHelpPlaceholder": "Additional information",
+    "fieldType": "Field type",
+    "requiredField": "Required field",
+    "proOnlyField": "This field is available in Pro only.",
+    "options": "Options",
+    "option": "Option",
+    "optionLabel": "Option text",
+    "optionLabelPlaceholder": "Enter text",
+    "tabInfo": "Info",
+    "tabForm": "Form",
+    "tabSettings": "Settings",
+    "registrationSettings": "Registration settings",
+    "showProgressBar": "Show form progress",
+    "confirmationMessage": "Confirmation message",
+    "confirmationMessagePlaceholder": "Thank you for registering!",
+    "shortNotePlaceholder": "Internal note for organizer",
+    "importFromGoogleForms": "Import from Google Forms",
+    "moreTypes": "More",
+    "allFieldTypes": "All field types",
+    "addField": "Add field",
+    "noFields": "No form fields",
+    "addFieldHint": "Add fields using the buttons above",
+    "untitledField": "Untitled",
+    "addOption": "Add option",
+    "optionPlaceholder": "Option text",
+    "scaleMin": "From",
+    "scaleMax": "To",
     "buttonText": "Button text",
-    "productName": "Product Name",
-    "productDescription": "Product description",
-    "subscribeNewsletter": "Subscribe to Newsletter",
-    "getUpdates": "Get the latest updates delivered to your inbox",
-    "subscribe": "Subscribe",
-    "askAnything": "Ask me anything",
-    "askQuestion": "Ask a question...",
-    "scratchToReveal": "Scratch to Reveal",
-    "gallery": "Gallery"
+    "buttonTextPlaceholder": "Register"
   },
-  "styles": {
-    "default": "Default",
-    "rounded": "Rounded",
-    "pill": "Pill (Fully Rounded)"
+  "eventFields": {
+    "shortText": "Short text",
+    "longText": "Long text",
+    "email": "Email",
+    "phone": "Phone",
+    "number": "Number",
+    "dropdown": "Dropdown",
+    "singleChoice": "Single choice",
+    "multipleChoice": "Multiple choice",
+    "date": "Date",
+    "time": "Time",
+    "datetime": "Date and time",
+    "checkbox": "Checkbox",
+    "url": "URL",
+    "linearScale": "Linear scale",
+    "rating": "Rating",
+    "grid": "Choice grid",
+    "checkboxGrid": "Checkbox grid",
+    "sectionHeader": "Section header",
+    "description": "Description",
+    "media": "Media (Pro)",
+    "file": "File (Pro)",
+    "choice": "Choice",
+    "category": {
+      "text": "Text",
+      "choice": "Choice",
+      "date": "Date",
+      "special": "Special",
+      "layout": "Layout"
+    }
   },
-  "ai": {
-    "generateWithAI": "Generate with AI"
+  "landingV5": {
+    "nav": {
+      "examples": "Examples",
+      "pricing": "Pricing",
+      "login": "Log in",
+      "create": "Create"
+    },
+    "hero": {
+      "badge": "Free. 2 minutes. No code",
+      "title1": "A page that",
+      "title2": "brings you clients",
+      "subtitle": "Build a mini-site with your services, pricing, and contact form. Visitors get it instantly - and reach out.",
+      "cta": "Create your page",
+      "secondary": "See examples",
+      "trust1": "No card needed",
+      "trust2": "Mobile editor",
+      "trust3": "0% commission",
+      "previewCta": "Book now"
+    },
+    "problem": {
+      "badge": "Sound familiar?",
+      "title": "Your link in bio isn't working",
+      "description": "Visitors land on 10 random buttons. No context. No offer. They bounce.",
+      "item1": "Link chaos",
+      "item1desc": "Visitors get confused and leave",
+      "item2": "No clear offer",
+      "item2desc": "Hard to tell what you do",
+      "item3": "No contact form",
+      "item3desc": "They want to reach out - but can't"
+    },
+    "solution": {
+      "badge": "The solution",
+      "title": "A mini-site, not a link menu",
+      "description": "One page: who you are, what you offer, how much, where to contact. Clear in 30 seconds.",
+      "item1": "Everything in one place",
+      "item1desc": "Profile, services, pricing, contacts",
+      "item2": "Leads go to Telegram",
+      "item2desc": "Instant notification on your phone",
+      "item3": "Edit from your phone",
+      "item3desc": "Update text without a laptop"
+    },
+    "howItWorks": {
+      "badge": "3 steps",
+      "title": "How it works",
+      "subtitle": "Answer a few questions - AI builds your page. No code. No designer.",
+      "step1": {
+        "title": "Pick your niche",
+        "description": "Expert, freelancer, salon - AI picks the right blocks"
+      },
+      "step2": {
+        "title": "Describe yourself",
+        "description": "A few sentences - AI writes your page copy"
+      },
+      "step3": {
+        "title": "Publish",
+        "description": "Get your link lnkmx.my/name and add it to your bio"
+      },
+      "cta": "Try it",
+      "note": "2 minutes to create"
+    },
+    "results": {
+      "badge": "Who it's for",
+      "title": "One page - different problems solved",
+      "subtitle": "Whatever your niche, lnkmx helps you get leads",
+      "creators": {
+        "title": "Creators & influencers",
+        "problem": "Followers don't know where to buy your stuff",
+        "solution": "Courses, merch, links - all on one page",
+        "cta": "Create"
+      },
+      "freelancers": {
+        "title": "Freelancers",
+        "problem": "\"How much?\" - in every single message",
+        "solution": "Pricing and form - clients see rates upfront",
+        "cta": "Create"
+      },
+      "business": {
+        "title": "Small businesses",
+        "problem": "Website is expensive, socials don't tell the full story",
+        "solution": "Catalog, map, booking - on one page",
+        "cta": "Create"
+      },
+      "education": {
+        "title": "Tutors & coaches",
+        "problem": "Parents want to see the program first",
+        "solution": "Schedule, pricing, reviews in one place",
+        "cta": "Create"
+      },
+      "events": {
+        "title": "Event organizers",
+        "problem": "Info is scattered, people drop off",
+        "solution": "Date, venue, program, signup - in one place",
+        "cta": "Create"
+      },
+      "health": {
+        "title": "Salons & specialists",
+        "problem": "Clients call to check prices",
+        "solution": "Pricing and booking online - fewer calls",
+        "cta": "Create"
+      }
+    },
+    "blocks": {
+      "badge": "25+ blocks",
+      "title": "Build like LEGO",
+      "subtitle": "Drag, reorder. No code needed.",
+      "profile": "Profile",
+      "links": "Links",
+      "products": "Products",
+      "pricing": "Pricing",
+      "form": "Form",
+      "booking": "Booking",
+      "testimonials": "Reviews",
+      "faq": "FAQ",
+      "map": "Map",
+      "messenger": "Chat",
+      "video": "Video",
+      "gallery": "Gallery",
+      "countdown": "Timer",
+      "event": "Event",
+      "proLabel": "Pro"
+    },
+    "examples": {
+      "badge": "Examples",
+      "title": "Pages that work",
+      "subtitle": "Real examples from users",
+      "viewAll": "View all",
+      "useTemplate": "Use this",
+      "creator": "Creator",
+      "business": "Business",
+      "expert": "Expert"
+    },
+    "trust": {
+      "badge": "Why lnkmx",
+      "title": "For people who value their time",
+      "subtitle": "No fluff. Just what gets you leads.",
+      "speed": {
+        "title": "Fast on mobile",
+        "description": "Pages load instantly. Visitors won't leave"
+      },
+      "mobile": {
+        "title": "Editor in your pocket",
+        "description": "Update text and prices from your phone"
+      },
+      "telegram": {
+        "title": "Leads to Telegram",
+        "description": "New lead - instant notification"
+      },
+      "noCommission": {
+        "title": "0% commission",
+        "description": "You sell - you keep it all"
+      }
+    },
+    "pricing": {
+      "badge": "Pricing",
+      "title": "Free to start, Pro when you need more",
+      "subtitle": "Core features free forever",
+      "free": {
+        "title": "Free",
+        "price": "$0",
+        "period": "forever",
+        "description": "To try it out",
+        "features": {
+          "1": "1 page",
+          "2": "Basic blocks",
+          "3": "3 AI generations",
+          "4": "lnkmx watermark"
+        },
+        "cta": "Start free"
+      },
+      "pro": {
+        "title": "Pro",
+        "period": "/mo",
+        "description": "For serious work",
+        "features": {
+          "1": "6 pages",
+          "2": "All 25+ blocks",
+          "3": "CRM + Telegram alerts",
+          "4": "No watermark",
+          "5": "Custom domain",
+          "6": "Advanced analytics"
+        },
+        "cta": "Get Pro",
+        "popular": "Popular"
+      },
+      "guarantee": "14-day refund",
+      "year": "year",
+      "halfYear": "6 months",
+      "quarter": "quarter",
+      "perMonth": "/mo",
+      "bestValue": "Best value"
+    },
+    "seo": {
+      "badge": "What is it",
+      "title": "A mini-site for your bio link",
+      "items": {
+        "1": "A modern link-in-bio alternative",
+        "2": "Mini landing with contact form",
+        "3": "Digital card for experts",
+        "4": "No-code builder",
+        "5": "AI writes the copy for you"
+      }
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Common questions",
+      "subtitle": "Can't find your answer? Reach out to support",
+      "q1": {
+        "question": "What is lnkmx?",
+        "answer": "A mini-site builder. Create one page with your info, services, and pricing. Visitors click your Instagram or TikTok link and instantly get what you offer."
+      },
+      "q2": {
+        "question": "How much does it cost?",
+        "answer": "Basic plan is free forever. Pro is $5/mo when paid yearly. 14-day refund."
+      },
+      "q3": {
+        "question": "How does AI work?",
+        "answer": "Pick your niche, write 2-3 sentences about yourself. AI picks the structure, writes copy, arranges blocks. Then edit."
+      },
+      "q4": {
+        "question": "What blocks are there?",
+        "answer": "25+: profile, links, products, pricing, form, booking, reviews, FAQ, map, messengers, video, gallery, and more."
+      },
+      "q5": {
+        "question": "Is there a CRM?",
+        "answer": "Yes, on Pro. All leads in one place, statuses, notes. Plus Telegram notifications."
+      },
+      "q6": {
+        "question": "Can I edit on phone?",
+        "answer": "Yes. Editor works the same on phone and desktop."
+      },
+      "q7": {
+        "question": "Do you take sales commission?",
+        "answer": "No. 0%. You sell through your page - you keep it all."
+      },
+      "q8": {
+        "question": "How is it better than Linktree?",
+        "answer": "AI builds your page. Built-in CRM. Telegram alerts. Local pricing. Interface in Russian."
+      },
+      "q9": {
+        "question": "Good for stores?",
+        "answer": "Yes. Catalog, pricing, booking blocks. Visitors see products and prices, leave an inquiry."
+      },
+      "q10": {
+        "question": "Can I use my own domain?",
+        "answer": "Yes, on Pro. Instead of lnkmx.my/name - yoursite.com."
+      },
+      "q11": {
+        "question": "How to pay for Pro?",
+        "answer": "Visa, Mastercard, or local methods. Pricing in your currency."
+      },
+      "q12": {
+        "question": "Refund policy?",
+        "answer": "14 days from payment. Doesn't work for you - we refund, no questions."
+      }
+    },
+    "finalCta": {
+      "badge": "Ready?",
+      "title": "Create your page in 2 minutes",
+      "subtitle": "Free. No card. No code.",
+      "cta": "Create your page",
+      "secondary": "See examples"
+    },
+    "footer": {
+      "description": "Mini-site for your bio link. Services, pricing, contact form - in 2 minutes.",
+      "product": "Product",
+      "examples": "Examples",
+      "pricing": "Pricing",
+      "templates": "Templates",
+      "company": "Company",
+      "about": "About",
+      "blog": "Blog",
+      "contacts": "Contact",
+      "legal": "Legal",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "language": "Language",
+      "copyright": "© {{year}} lnkmx. Made in Kazakhstan."
+    },
+    "floatingCta": "Create"
+  },
+  "experts": {
+    "title": "experts",
+    "directoryTitle": "Experts Directory | lnkmx",
+    "directoryDescription": "Find experts and specialists on lnkmx",
+    "tagDescription": "{{tag}} specialists profiles on lnkmx",
+    "findExperts": "Find Experts",
+    "onLnkmx": "on lnkmx",
+    "subtitle": "Mini-sites of experts, freelancers, and small businesses",
+    "searchPlaceholder": "Search by name or niche...",
+    "profiles": "profiles",
+    "all": "All",
+    "noResults": "No profiles in this category yet",
+    "beFirst": "Be the first",
+    "views": "views",
+    "noDescription": "No description",
+    "ctaTitle": "Create your page for free",
+    "ctaSubtitle": "Join the community of experts on lnkmx",
+    "ctaButton": "Create page"
+  },
+  "footer": {
+    "rights": "All rights reserved."
   }
 }

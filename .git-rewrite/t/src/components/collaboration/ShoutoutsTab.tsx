@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserSearch } from './UserSearch';
 import type { Shoutout } from '@/services/collaboration';
+import { useTranslation } from 'react-i18next';
 
 interface ShoutoutsTabProps {
   shoutouts: Shoutout[];
@@ -12,16 +13,18 @@ interface ShoutoutsTabProps {
 }
 
 export function ShoutoutsTab({ shoutouts, onAddShoutout, onRemoveShoutout }: ShoutoutsTabProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Мои рекомендации</CardTitle>
+          <CardTitle className="text-sm">{t('collab.myShoutouts', 'Мои рекомендации')}</CardTitle>
         </CardHeader>
         <CardContent>
           {shoutouts.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Вы ещё никого не рекомендовали
+              {t('collab.noShoutouts', 'Вы ещё никого не рекомендовали')}
             </p>
           ) : (
             <div className="space-y-2">
@@ -52,12 +55,12 @@ export function ShoutoutsTab({ shoutouts, onAddShoutout, onRemoveShoutout }: Sho
       {/* Add shoutout */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Добавить шаут-аут</CardTitle>
+          <CardTitle className="text-sm">{t('collab.addShoutout', 'Добавить шаут-аут')}</CardTitle>
         </CardHeader>
         <CardContent>
           <UserSearch 
             mode="shoutout"
-            placeholder="Поиск пользователя..."
+            placeholder={t('collab.userSearchPlaceholder', 'Поиск пользователя...')}
             onShoutout={onAddShoutout}
           />
         </CardContent>

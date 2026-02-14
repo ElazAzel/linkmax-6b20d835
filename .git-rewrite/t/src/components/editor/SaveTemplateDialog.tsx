@@ -21,21 +21,16 @@ import {
 } from '@/components/ui/select';
 import { Loader2, Save, Share2, DollarSign, Camera, Image } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import type { Block } from '@/types/page';
-import type { Json } from '@/integrations/supabase/types';
-
-const CATEGORIES = [
-  'Креаторы',
-  'Бизнес',
-  'Сервис',
-  'Недвижимость',
-  'Свадьба',
-  'Личное',
-  'Другое',
-];
+import type { Json } from '@/platform/supabase/types';
+import {
+  TEMPLATE_CATEGORY_KEYS,
+  type TemplateCategoryKey,
+  getTemplateCategoryLabel,
+} from '@/lib/templateCategories';
 
 interface SaveTemplateDialogProps {
   open: boolean;
@@ -54,7 +49,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
   const { user } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('Другое');
+  const [category, setCategory] = useState<TemplateCategoryKey>('other');
   const [isPublic, setIsPublic] = useState(false);
   const [isForSale, setIsForSale] = useState(false);
   const [price, setPrice] = useState('');
@@ -138,7 +133,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
       // Reset form
       setName('');
       setDescription('');
-      setCategory('Другое');
+      setCategory('other');
       setIsPublic(false);
       setIsForSale(false);
       setPrice('');
@@ -246,14 +241,14 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
 
           <div className="space-y-2">
             <Label>{t('templates.category', 'Категория')}</Label>
-            <Select value={category} onValueChange={setCategory}>
+            <Select value={category} onValueChange={(value) => setCategory(value as TemplateCategoryKey)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
+                {TEMPLATE_CATEGORY_KEYS.filter((key) => key !== 'all').map((key) => (
+                  <SelectItem key={key} value={key}>
+                    {getTemplateCategoryLabel(t, key)}
                   </SelectItem>
                 ))}
               </SelectContent>

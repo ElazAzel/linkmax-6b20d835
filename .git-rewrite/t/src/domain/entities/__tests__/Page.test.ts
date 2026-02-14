@@ -26,7 +26,7 @@ describe('Page Entity', () => {
     it('should have default theme settings', () => {
       const page = createDefaultPage('user-123');
       expect(page.theme).toBeDefined();
-      expect(page.editorMode).toBe('linear');
+      expect(page.editorMode).toBe('grid');
     });
   });
 

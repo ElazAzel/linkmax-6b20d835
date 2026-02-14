@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getFrameStyles, isGradientFrame, type FrameStyle, FRAME_CSS } from '@/lib/avatar-frame-utils';
+import { getFrameStyles, isGradientFrame, isAnimatedFrame, type FrameStyle, FRAME_CSS } from '@/lib/avatar-frame-utils';
 import { cn } from '@/lib/utils';
 
 interface FramePreviewProps {
@@ -7,6 +7,7 @@ interface FramePreviewProps {
   size?: 'small' | 'medium';
   selected?: boolean;
   onClick?: () => void;
+  avatarUrl?: string;
 }
 
 const sizeMap = {
@@ -14,9 +15,13 @@ const sizeMap = {
   medium: { container: 'w-16 h-16', avatar: 'w-14 h-14' },
 };
 
-export function FramePreview({ frameStyle, size = 'small', selected, onClick }: FramePreviewProps) {
+// Demo avatar for frame preview
+const DEMO_AVATAR = 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo&backgroundColor=b6e3f4';
+
+export function FramePreview({ frameStyle, size = 'small', selected, onClick, avatarUrl }: FramePreviewProps) {
   const frameStyles = getFrameStyles(frameStyle);
   const isGradient = isGradientFrame(frameStyle);
+  const isAnimated = isAnimatedFrame(frameStyle);
   const sizes = sizeMap[size];
 
   return (
@@ -28,13 +33,18 @@ export function FramePreview({ frameStyle, size = 'small', selected, onClick }: 
           'rounded-full cursor-pointer transition-all duration-200 hover:scale-105',
           sizes.container,
           'flex items-center justify-center',
-          selected && 'ring-2 ring-primary ring-offset-2 ring-offset-background'
+          selected && 'ring-2 ring-primary ring-offset-2 ring-offset-background',
+          isAnimated && 'animate-pulse-slow'
         )}
         style={frameStyles}
       >
         <Avatar className={cn(sizes.avatar, isGradient && 'p-0')}>
-          <AvatarImage src="/placeholder.svg" alt="Preview" className="object-cover" />
-          <AvatarFallback className="bg-muted text-muted-foreground text-xs">
+          <AvatarImage 
+            src={avatarUrl || DEMO_AVATAR} 
+            alt="Frame preview" 
+            className="object-cover"
+          />
+          <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-primary text-xs font-medium">
             AB
           </AvatarFallback>
         </Avatar>
@@ -73,17 +83,24 @@ interface FrameGridSelectorProps {
   onChange: (value: FrameStyle) => void;
 }
 
-export function FrameGridSelector({ value, onChange }: FrameGridSelectorProps) {
+interface FrameGridSelectorProps {
+  value: FrameStyle;
+  onChange: (value: FrameStyle) => void;
+  avatarUrl?: string;
+}
+
+export function FrameGridSelector({ value, onChange, avatarUrl }: FrameGridSelectorProps) {
   return (
-    <div className="grid grid-cols-4 gap-3 p-2">
+    <div className="grid grid-cols-4 gap-3 p-3">
       {FRAME_OPTIONS.map((option) => (
-        <div key={option.value} className="flex flex-col items-center gap-1">
+        <div key={option.value} className="flex flex-col items-center gap-1.5">
           <FramePreview
             frameStyle={option.value}
             selected={value === option.value}
             onClick={() => onChange(option.value)}
+            avatarUrl={avatarUrl}
           />
-          <span className="text-[10px] text-muted-foreground text-center leading-tight">
+          <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[48px] truncate">
             {option.label}
           </span>
         </div>

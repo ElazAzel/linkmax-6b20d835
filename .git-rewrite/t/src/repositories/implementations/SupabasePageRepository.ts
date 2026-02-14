@@ -3,7 +3,7 @@
  * Infrastructure layer - handles actual data access
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { success, failure, tryCatchAsync, type Result } from '@/domain/value-objects/Result';
 import type { Page } from '@/domain/entities/Page';
 import type { Block, ProfileBlock, EditorMode, GridConfig, PageTheme } from '@/types/page';
@@ -20,7 +20,7 @@ import type {
 } from '../interfaces/IPageRepository';
 import { createDefaultPageData, DEFAULT_THEME, DEFAULT_SEO } from '@/lib/constants';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import type { Json } from '@/integrations/supabase/types';
+import type { Json } from '@/platform/supabase/types';
 
 // ============= Helpers =============
 

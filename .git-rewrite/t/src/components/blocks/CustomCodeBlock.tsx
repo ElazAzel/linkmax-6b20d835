@@ -200,8 +200,8 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
             }}
             sandbox={
               block.enableInteraction !== false
-                ? 'allow-scripts allow-same-origin allow-forms allow-popups allow-modals'
-                : 'allow-same-origin'
+                ? 'allow-scripts allow-forms allow-popups allow-modals'
+                : ''
             }
             loading="lazy"
           />
