@@ -255,14 +255,16 @@ export function useLandingAnalytics() {
         }
       };
 
+      const blob = new Blob([JSON.stringify({
+        page_id: null,
+        block_id: null,
+        event_type: 'landing_exit',
+        metadata: data.metadata,
+      })], { type: 'application/json' });
+
       navigator.sendBeacon?.(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`,
-        JSON.stringify({
-          page_id: null,
-          block_id: null,
-          event_type: 'landing_exit',
-          metadata: data.metadata,
-        })
+        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics?apikey=${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        blob
       );
     };
 
