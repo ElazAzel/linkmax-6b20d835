@@ -130,6 +130,7 @@ CREATE TABLE rate_limits (
 ### ✅ Implemented
 
 - [x] **Form Validation** with Zod schemas
+- [x] **Edge Function Validation** - Regex checks for emails, length limits for text inputs
 - [x] **XSS Prevention** with DOMPurify
 - [x] **SQL Injection** prevented by Supabase parameterized queries
 - [x] **File Upload Validation** - type and size checks

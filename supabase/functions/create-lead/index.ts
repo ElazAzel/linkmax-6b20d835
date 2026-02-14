@@ -98,6 +98,30 @@ serve(async (req: Request) => {
       );
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email.trim())) {
+      return new Response(
+        JSON.stringify({ error: "Invalid email format" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Validate lengths
+    if (name.length > 255) {
+      return new Response(
+        JSON.stringify({ error: "Name too long (max 255 chars)" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (notes && notes.length > 1000) {
+      return new Response(
+        JSON.stringify({ error: "Notes too long (max 1000 chars)" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Verify that the page owner exists
     const { data: profile, error: profileError } = await supabase
       .from('user_profiles')
