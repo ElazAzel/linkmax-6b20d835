@@ -1968,10 +1968,15 @@ export type Database = {
         Returns: boolean
       }
       check_page_limits: { Args: { p_user_id: string }; Returns: Json }
-      claim_daily_token_reward: {
-        Args: { p_action_type: string; p_amount: number; p_user_id: string }
-        Returns: Json
-      }
+      claim_daily_token_reward:
+        | {
+            Args: { p_action_type: string; p_amount: number; p_user_id: string }
+            Returns: Json
+          }
+        | {
+            Args: { p_action_type: string; p_amount: number; p_user_id: string }
+            Returns: Json
+          }
       claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       complete_daily_quest: {
@@ -2039,17 +2044,29 @@ export type Database = {
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
-      process_marketplace_purchase: {
-        Args: {
-          p_buyer_id: string
-          p_description?: string
-          p_item_id: string
-          p_item_type: string
-          p_price: number
-          p_seller_id: string
-        }
-        Returns: Json
-      }
+      process_marketplace_purchase:
+        | {
+            Args: {
+              p_buyer_id: string
+              p_description?: string
+              p_item_id: string
+              p_item_type: string
+              p_price: number
+              p_seller_id: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_buyer_id: string
+              p_description?: string
+              p_item_id: string
+              p_item_type: string
+              p_price: number
+              p_seller_id: string
+            }
+            Returns: Json
+          }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }
