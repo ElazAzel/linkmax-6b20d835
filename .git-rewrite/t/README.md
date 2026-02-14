@@ -31,76 +31,9 @@ npm run lint:i18n
 npm run e2e
 ```
 
-## Tech Stack
+## Architecture
 
-| Layer     | Technology                                           |
-| --------- | ---------------------------------------------------- |
-| Frontend  | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui  |
-| Backend   | Supabase (PostgreSQL, Edge Functions, Storage, Auth) |
-| AI        | Gemini 2.5 Flash (content generation, translations)  |
-| State     | TanStack Query, React Context                        |
-| i18n      | i18next (RU/EN/KK)                                   |
-| PWA       | vite-plugin-pwa                                      |
-| Animation | CSS + IntersectionObserver (motion system)           |
-
-## Project Structure
-
-```
-src/
-├── assets/              # Static assets (images, icons)
-├── components/          # UI components
-│   ├── blocks/          # Page block renderers (28 types)
-│   ├── block-editors/   # Block editor modals
-│   ├── dashboard/       # Dashboard tabs (legacy)
-│   ├── dashboard-v2/    # Dashboard v2 (current)
-│   ├── landing/         # Landing page sections (legacy)
-│   ├── landing-v5/      # Landing page v5 (current)
-│   ├── motion/          # Animation system (Reveal, Stagger)
-│   ├── ui/              # Base shadcn/ui components
-│   ├── admin/           # Admin panel components
-│   ├── analytics/       # Analytics components
-│   ├── auth/            # Auth forms and flows
-│   ├── crm/             # Lead management (CRM)
-│   ├── editor/          # Page editor components
-│   ├── gallery/         # Public gallery
-│   ├── onboarding/      # User onboarding flow
-│   ├── settings/        # User settings
-│   ├── templates/       # Template marketplace
-│   └── tokens/          # Linkkon token economy
-├── contexts/            # React contexts
-├── domain/              # Domain entities (Block, Page, User)
-├── hooks/               # React hooks (50+ hooks)
-├── i18n/                # Localization (ru, en, kk)
-├── lib/                 # Shared utilities
-├── pages/               # Route pages
-├── platform/            # External integrations (Supabase)
-├── repositories/        # Data access layer
-├── services/            # Business logic services
-├── testing/             # Test setup & fixtures
-├── types/               # TypeScript interfaces
-└── use-cases/           # Application use cases
-
-docs/
-├── architecture.md      # Architecture overview
-├── platform.md          # Platform documentation
-├── project_overview.md  # Product vision
-├── Features.md          # Feature documentation
-├── SECURITY.md          # Security guidelines
-├── i18n_ops.md          # i18n operations
-└── ...                  # Other docs
-
-supabase/
-├── functions/           # 20 Edge Functions
-│   ├── ai-content-generator/
-│   ├── chatbot-stream/
-│   ├── create-lead/
-│   ├── send-*-notification/
-│   ├── telegram-bot-webhook/
-│   └── translate-content/
-└── migrations/          # Database migrations
-```
-
-## Clean Architecture Layers
+The project follows Clean Architecture principles with separation of concerns.
 
 1. **Domain** - Business entities with validation logic
 2. **Repositories** - Data access abstraction (IPageRepository, IUserRepository)
@@ -112,7 +45,7 @@ supabase/
 ## Key Features
 
 ### Page Builder
-- 28 block types (profile, links, products, forms, booking, etc.)
+- **28 block types** (profile, links, products, forms, booking, events, etc.)
 - Drag-and-drop reordering
 - AI-powered content generation
 - Theme customization
@@ -122,18 +55,33 @@ supabase/
 - Lead capture and management
 - Telegram notifications
 - Page analytics (views, clicks, conversions)
-- Heatmap tracking
+- Real-time dashboard with filters
+- Device & source breakdown
 
 ### Social Features
 - Gallery showcase
-- Template marketplace
+- Template marketplace (50+ templates)
 - Collaboration (shoutouts)
+- Community (Telegram channels)
 - Friends & activity feed
 
 ### Monetization
-- Free/Pro/Business tiers
+- Free/Pro/Business/Enterprise tiers
 - Linkkon token economy
 - Template sales
+- Paid content gates
+
+## Documentation
+
+📚 **Platform Documentation:**
+- [📖 PLATFORM-DOCUMENTATION.md](./docs/PLATFORM-DOCUMENTATION.md) - Complete platform overview
+- [🧩 BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md) - All 28 blocks with examples
+- [📋 BLOCKS-AUDIT.md](./docs/BLOCKS-AUDIT.md) - Full audit of all blocks
+
+**Other Resources:**
+- [🏗️ Architecture](./docs/architecture.md) - System design
+- [🔒 Security](./docs/SECURITY.md) - Security measures
+- [⚡ Performance](./docs/performance.md) - Performance metrics
 
 ## Database Schema
 

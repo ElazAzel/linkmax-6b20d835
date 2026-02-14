@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 const MAX_WIDTH = 1920;
 const MAX_HEIGHT = 1920;
 const DEFAULT_QUALITY = 0.85;
@@ -79,7 +81,7 @@ export async function compressImage(
             lastModified: Date.now(),
           });
 
-          console.log(
+          logger.debug(
             `[Compression] ${file.name}: ${formatBytes(file.size)} → ${formatBytes(compressedFile.size)} (${Math.round((1 - compressedFile.size / file.size) * 100)}% saved)`
           );
 

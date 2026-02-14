@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { CountdownBlock as CountdownBlockType } from '@/types/page';
 import { Card, CardContent } from '@/components/ui/card';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface CountdownBlockProps {
@@ -22,9 +22,9 @@ export const CountdownBlock = React.memo(function CountdownBlock({ block }: Coun
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [isExpired, setIsExpired] = useState(false);
 
-  const title = block.title ? getTranslatedString(block.title, currentLang) : '';
+  const title = block.title ? getI18nText(block.title, currentLang) : '';
   const expiredText = block.expiredText 
-    ? getTranslatedString(block.expiredText, currentLang) 
+    ? getI18nText(block.expiredText, currentLang) 
     : t('blocks.countdown.expired', 'Время вышло!');
 
   const showDays = block.showDays !== false;

@@ -9,12 +9,14 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Crown, Info, Calendar as CalendarIcon, X, Maximize2, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, ChevronDown, Settings2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Crown, Info, Calendar as CalendarIcon, X, Maximize2, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, ChevronDown, Settings2, Palette, Type, Sparkles } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { AnimationSettings } from '@/components/editor/AnimationSettings';
 import { PaidContentSettings } from './PaidContentSettings';
-import type { BlockStyle, BlockSizePreset } from '@/types/page';
+import { getTextEffectClass } from '@/lib/block-styling';
+import type { Block, BlockStyle, BlockSizePreset, BlockFontFamily } from '@/types/page';
 
 export interface BaseBlockEditorProps {
   formData: any;
@@ -27,6 +29,26 @@ interface BlockEditorWrapperProps {
   description?: string;
   hint?: string;
 }
+
+// Font families that support RU/EN/KK
+const FONT_FAMILIES: { value: BlockFontFamily; label: string; preview: string }[] = [
+  { value: 'sans', label: 'Sans-serif', preview: 'Aa' },
+  { value: 'serif', label: 'Serif', preview: 'Aa' },
+  { value: 'mono', label: 'Monospace', preview: 'Aa' },
+  { value: 'display', label: 'Display', preview: 'Aa' },
+  { value: 'rounded', label: 'Rounded', preview: 'Aa' },
+];
+
+const getFontClass = (font: BlockFontFamily): string => {
+  switch (font) {
+    case 'sans': return 'font-sans';
+    case 'serif': return 'font-serif';
+    case 'mono': return 'font-mono';
+    case 'display': return 'font-sans font-bold tracking-tight';
+    case 'rounded': return 'font-sans';
+    default: return 'font-sans';
+  }
+};
 
 /**
  * Wrapper component for block editors
@@ -127,8 +149,63 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
       });
     };
 
+    // Block styling handlers
+    const handleBackgroundColorChange = (color: string) => {
+      handleChange({
+        ...formData,
+        blockStyle: {
+          ...(formData.blockStyle || {}),
+          backgroundColor: color || undefined,
+        }
+      });
+    };
+
+    const handleTextColorChange = (color: string) => {
+      handleChange({
+        ...formData,
+        blockStyle: {
+          ...(formData.blockStyle || {}),
+          textColor: color || undefined,
+        }
+      });
+    };
+
+    const handleFontFamilyChange = (font: BlockFontFamily) => {
+      handleChange({
+        ...formData,
+        blockStyle: {
+          ...(formData.blockStyle || {}),
+          fontFamily: font,
+        }
+      });
+    };
+
+    const handleTextEffectChange = (effect: BlockStyle['textEffect']) => {
+      handleChange({
+        ...formData,
+        blockStyle: {
+          ...(formData.blockStyle || {}),
+          textEffect: effect === 'none' ? undefined : effect,
+        }
+      });
+    };
+
+    const handleClearBlockStyle = () => {
+      const { blockStyle, ...rest } = formData;
+      const { backgroundColor, textColor, fontFamily, textEffect, ...otherStyles } = blockStyle || {};
+      handleChange({
+        ...rest,
+        blockStyle: Object.keys(otherStyles).length > 0 ? otherStyles : undefined,
+      });
+    };
+
     const currentSize = formData.blockSize || 'full';
     const currentContentAlignment = formData.blockStyle?.contentAlignment || 'center';
+    const currentBgColor = formData.blockStyle?.backgroundColor || '';
+    const currentTextColor = formData.blockStyle?.textColor || '';
+    const currentFontFamily = formData.blockStyle?.fontFamily || 'sans';
+    const currentTextEffect = formData.blockStyle?.textEffect || 'none';
+    const hasBlockStyles = currentBgColor || currentTextColor || formData.blockStyle?.fontFamily || formData.blockStyle?.textEffect;
 
     return (
       <BlockEditorWrapper
@@ -166,6 +243,129 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
           </CollapsibleTrigger>
           
           <CollapsibleContent className="space-y-4 mt-4">
+            {/* Block Color & Font Settings */}
+            <div className="space-y-4 p-4 rounded-xl bg-muted/30 border border-border/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Palette className="h-4 w-4 text-primary" />
+                  <Label className="text-base font-semibold">{t('blockEditor.blockStyle', 'Цвет и шрифт блока')}</Label>
+                </div>
+                {hasBlockStyles && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleClearBlockStyle}
+                    className="h-7 text-xs"
+                  >
+                    <X className="h-3 w-3 mr-1" />
+                    {t('common.reset', 'Сбросить')}
+                  </Button>
+                )}
+              </div>
+              
+              {/* Background Color */}
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('blockEditor.backgroundColor', 'Цвет фона')}</Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    value={currentBgColor || '#ffffff'}
+                    onChange={(e) => handleBackgroundColorChange(e.target.value)}
+                    className="w-12 h-10 p-1 cursor-pointer rounded-lg"
+                  />
+                  <Input
+                    type="text"
+                    value={currentBgColor}
+                    onChange={(e) => handleBackgroundColorChange(e.target.value)}
+                    placeholder={t('blockEditor.noColor', 'Без цвета')}
+                    className="flex-1 bg-background/50"
+                  />
+                </div>
+              </div>
+
+              {/* Text Color */}
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('blockEditor.textColor', 'Цвет текста')}</Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    value={currentTextColor || '#000000'}
+                    onChange={(e) => handleTextColorChange(e.target.value)}
+                    className="w-12 h-10 p-1 cursor-pointer rounded-lg"
+                  />
+                  <Input
+                    type="text"
+                    value={currentTextColor}
+                    onChange={(e) => handleTextColorChange(e.target.value)}
+                    placeholder={t('blockEditor.noColor', 'Без цвета')}
+                    className="flex-1 bg-background/50"
+                  />
+                </div>
+              </div>
+
+              {/* Font Family */}
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('blockEditor.fontFamily', 'Шрифт')}</Label>
+                <Select value={currentFontFamily} onValueChange={(v) => handleFontFamilyChange(v as BlockFontFamily)}>
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {FONT_FAMILIES.map((font) => (
+                      <SelectItem key={font.value} value={font.value}>
+                        <div className="flex items-center gap-3">
+                          <span className={cn("text-lg w-8", getFontClass(font.value))}>{font.preview}</span>
+                          <span>{font.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Text Effect */}
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground flex items-center gap-2">
+                  <Sparkles className="h-3 w-3" />
+                  {t('blockEditor.textEffect', 'Эффект текста')}
+                </Label>
+                <Select value={currentTextEffect} onValueChange={(v) => handleTextEffectChange(v as BlockStyle['textEffect'])}>
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">{t('textEffects.none', 'Без эффекта')}</SelectItem>
+                    <SelectItem value="shimmer">{t('textEffects.shimmer', '✨ Переливание')}</SelectItem>
+                    <SelectItem value="glow">{t('textEffects.glow', '💡 Свечение')}</SelectItem>
+                    <SelectItem value="pulse">{t('textEffects.pulse', '💓 Пульсация')}</SelectItem>
+                    <SelectItem value="blink">{t('textEffects.blink', '👁 Мигание')}</SelectItem>
+                    <SelectItem value="rainbow">{t('textEffects.rainbow', '🌈 Радуга')}</SelectItem>
+                    <SelectItem value="neon">{t('textEffects.neon', '🔮 Неон')}</SelectItem>
+                    <SelectItem value="typewriter">{t('textEffects.typewriter', '⌨️ Печатная машинка')}</SelectItem>
+                    <SelectItem value="gradient-flow">{t('textEffects.gradientFlow', '🌊 Текучий градиент')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Preview */}
+              {hasBlockStyles && (
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">{t('blockEditor.preview', 'Превью')}</Label>
+                  <div 
+                    className={cn("p-4 rounded-lg border border-border/30", getFontClass(currentFontFamily))}
+                    style={{
+                      backgroundColor: currentBgColor || 'var(--card)',
+                      color: currentTextColor || 'var(--foreground)',
+                    }}
+                  >
+                    <p className={cn("text-sm", getTextEffectClass(currentTextEffect as BlockStyle['textEffect']))}>
+                      {t('blockEditor.previewText', 'Пример текста блока')}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Block Size Selector */}
             <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
               <div className="flex items-center gap-2">
@@ -362,3 +562,6 @@ function DateTimePicker({ value, onChange, placeholder }: DateTimePickerProps) {
     </div>
   );
 }
+
+// Export font class helper for use in blocks
+export { getFontClass };

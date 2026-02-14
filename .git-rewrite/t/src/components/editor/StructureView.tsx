@@ -4,7 +4,7 @@
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import {
   Sheet,
   SheetContent,
@@ -108,7 +108,7 @@ export const StructureView = memo(function StructureView({
     if (rawTitle && typeof rawTitle === 'object') {
       // Check if it's a multilingual object with language keys
       if ('ru' in rawTitle || 'en' in rawTitle || 'kk' in rawTitle) {
-        const translated = getTranslatedString(rawTitle, currentLang);
+        const translated = getI18nText(rawTitle, currentLang);
         return translated ? translated.substring(0, 30) : t(`blocks.${block.type}`, block.type);
       }
       // If it's some other object, don't render it

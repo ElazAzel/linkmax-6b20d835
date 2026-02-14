@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { GripVertical, Trash2, Crown, ChevronUp, ChevronDown, Lock, Eye } from 'lucide-react';
 import type { Block } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
 import { useFreemiumLimits, getBlockTier } from '@/hooks/useFreemiumLimits';
 import {
@@ -71,54 +71,55 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
     
     switch (block.type) {
       case 'profile':
-        return `Профиль: ${getTranslatedString(block.name, currentLang)}`;
+        return `Профиль: ${getI18nText(block.name, currentLang)}`;
       case 'link':
-        return `Ссылка: ${getTranslatedString(block.title, currentLang)}`;
+        return `Ссылка: ${getI18nText(block.title, currentLang)}`;
       case 'button':
-        return `Кнопка: ${getTranslatedString(block.title, currentLang)}`;
+        return `Кнопка: ${getI18nText(block.title, currentLang)}`;
       case 'socials':
-        return `Соцсети: ${block.title ? getTranslatedString(block.title, currentLang) : 'Социальные сети'}`;
+        return `Соцсети: ${block.title ? getI18nText(block.title, currentLang) : 'Социальные сети'}`;
       case 'product':
-        return `Товар: ${getTranslatedString(block.name, currentLang)}`;
-      case 'text':
-        const content = getTranslatedString(block.content, currentLang);
+        return `Товар: ${getI18nText(block.name, currentLang)}`;
+      case 'text': {
+        const content = getI18nText(block.content, currentLang);
         return `Текст: ${content.slice(0, 30)}...`;
+      }
       case 'image':
-        return `Изображение: ${block.alt ? getTranslatedString(block.alt, currentLang) : 'Без описания'}`;
+        return `Изображение: ${block.alt ? getI18nText(block.alt, currentLang) : 'Без описания'}`;
       case 'video':
-        return `Видео: ${block.title ? getTranslatedString(block.title, currentLang) : 'Без названия'}`;
+        return `Видео: ${block.title ? getI18nText(block.title, currentLang) : 'Без названия'}`;
       case 'carousel':
-        return `Галерея: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.images?.length || 0} фото`}`;
+        return `Галерея: ${block.title ? getI18nText(block.title, currentLang) : `${block.images?.length || 0} фото`}`;
       case 'custom_code':
-        return `HTML код: ${block.title ? getTranslatedString(block.title, currentLang) : 'Без названия'}`;
+        return `HTML код: ${block.title ? getI18nText(block.title, currentLang) : 'Без названия'}`;
       case 'messenger':
-        return `Мессенджеры: ${block.title ? getTranslatedString(block.title, currentLang) : 'Связь'}`;
+        return `Мессенджеры: ${block.title ? getI18nText(block.title, currentLang) : 'Связь'}`;
       case 'form':
-        return `Форма: ${block.title ? getTranslatedString(block.title, currentLang) : 'Форма'}`;
+        return `Форма: ${block.title ? getI18nText(block.title, currentLang) : 'Форма'}`;
       case 'download':
-        return `Файл: ${block.title ? getTranslatedString(block.title, currentLang) : 'Файл'}`;
+        return `Файл: ${block.title ? getI18nText(block.title, currentLang) : 'Файл'}`;
       case 'newsletter':
-        return `Подписка: ${block.title ? getTranslatedString(block.title, currentLang) : 'Подписка'}`;
+        return `Подписка: ${block.title ? getI18nText(block.title, currentLang) : 'Подписка'}`;
       case 'testimonial':
-        return `Отзывы: ${block.title ? getTranslatedString(block.title, currentLang) : 'Отзывы'}`;
+        return `Отзывы: ${block.title ? getI18nText(block.title, currentLang) : 'Отзывы'}`;
       case 'scratch':
-        return `Скретч: ${block.title ? getTranslatedString(block.title, currentLang) : 'Сюрприз'}`;
+        return `Скретч: ${block.title ? getI18nText(block.title, currentLang) : 'Сюрприз'}`;
       case 'map':
-        return `Карта: ${getTranslatedString(block.address, currentLang) || 'Местоположение'}`;
+        return `Карта: ${getI18nText(block.address, currentLang) || 'Местоположение'}`;
       case 'avatar':
-        return `Аватар: ${getTranslatedString(block.name, currentLang)}`;
+        return `Аватар: ${getI18nText(block.name, currentLang)}`;
       case 'separator':
         return `Разделитель`;
       case 'catalog':
-        return `Каталог: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.items?.length || 0} позиций`}`;
+        return `Каталог: ${block.title ? getI18nText(block.title, currentLang) : `${block.items?.length || 0} позиций`}`;
       case 'before_after':
-        return `До/После: ${block.title ? getTranslatedString(block.title, currentLang) : 'Сравнение'}`;
+        return `До/После: ${block.title ? getI18nText(block.title, currentLang) : 'Сравнение'}`;
       case 'faq':
-        return `FAQ: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.items?.length || 0} вопросов`}`;
+        return `FAQ: ${block.title ? getI18nText(block.title, currentLang) : `${block.items?.length || 0} вопросов`}`;
       case 'countdown':
-        return `Таймер: ${block.title ? getTranslatedString(block.title, currentLang) : 'Обратный отсчёт'}`;
+        return `Таймер: ${block.title ? getI18nText(block.title, currentLang) : 'Обратный отсчёт'}`;
       case 'pricing':
-        return `Прайс: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.items?.length || 0} услуг`}`;
+        return `Прайс: ${block.title ? getI18nText(block.title, currentLang) : `${block.items?.length || 0} услуг`}`;
       case 'shoutout':
         return `Шаут-аут: ${(block as any).displayName || 'Рекомендация'}`;
       default:

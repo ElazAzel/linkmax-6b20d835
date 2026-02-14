@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { logger } from '@/lib/logger';
 import {
   Collaboration,
   Team,
@@ -47,7 +48,7 @@ export function useCollaboration(userId: string | undefined) {
       setTeams(userTeams);
       setShoutouts(userShoutouts);
     } catch (error) {
-      console.error('Error loading collaboration data:', error);
+      logger.error('Error loading collaboration data:', error, { context: 'useCollaboration' });
     } finally {
       setLoading(false);
     }

@@ -5,7 +5,7 @@
 
 import type { Block, FAQBlock, EventBlock, ProfileBlock, AvatarBlock, SocialsBlock, PricingBlock } from '@/types/page';
 import type { MultilingualString } from '@/lib/i18n-helpers';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 
 // ============= Quality Gate =============
 
@@ -146,16 +146,16 @@ export function extractProfileFromBlocks(
   // Try profile block first
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   if (profileBlock) {
-    result.name = getTranslatedString(profileBlock.name, language);
-    result.bio = getTranslatedString(profileBlock.bio, language);
+    result.name = getI18nText(profileBlock.name, language);
+    result.bio = getI18nText(profileBlock.bio, language);
     result.avatar = profileBlock.avatar;
   }
 
   // Try avatar block
   const avatarBlock = blocks.find(b => b.type === 'avatar') as AvatarBlock | undefined;
   if (avatarBlock && !result.name) {
-    result.name = getTranslatedString(avatarBlock.name, language);
-    result.bio = avatarBlock.subtitle ? getTranslatedString(avatarBlock.subtitle, language) : undefined;
+    result.name = getI18nText(avatarBlock.name, language);
+    result.bio = avatarBlock.subtitle ? getI18nText(avatarBlock.subtitle, language) : undefined;
     result.avatar = avatarBlock.imageUrl;
   }
 
@@ -385,10 +385,10 @@ export function generateSchemas(
       '@type': 'FAQPage',
       mainEntity: faqBlock.items.map(item => ({
         '@type': 'Question',
-        name: getTranslatedString(item.question, language),
+        name: getI18nText(item.question, language),
         acceptedAnswer: {
           '@type': 'Answer',
-          text: getTranslatedString(item.answer, language),
+          text: getI18nText(item.answer, language),
         },
       })),
     };
@@ -400,8 +400,8 @@ export function generateSchemas(
     result.events = eventBlocks.map(event => ({
       '@context': 'https://schema.org',
       '@type': 'Event',
-      name: getTranslatedString(event.title, language),
-      description: event.description ? getTranslatedString(event.description, language) : undefined,
+      name: getI18nText(event.title, language),
+      description: event.description ? getI18nText(event.description, language) : undefined,
       startDate: event.startAt,
       endDate: event.endAt,
       eventStatus: 'https://schema.org/EventScheduled',
@@ -443,8 +443,8 @@ export function generateSchemas(
     result.services = pricingBlock.items.slice(0, 5).map(item => ({
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: getTranslatedString(item.name, language),
-      description: item.description ? getTranslatedString(item.description, language) : undefined,
+      name: getI18nText(item.name, language),
+      description: item.description ? getI18nText(item.description, language) : undefined,
       provider: {
         '@type': profile.type,
         name: profile.name,

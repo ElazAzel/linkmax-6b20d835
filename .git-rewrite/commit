@@ -1,14 +1,11 @@
-tree c150f9cf02c90c94905121e42e10cd13476299d5
-parent 95c4d234a5e875c1bdcbf15720245128f3b4f24c
-parent 22f8d03fc39bce2f3fa96b045c87e8e699ca9565
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
+tree 149fc13c2fc93f453d99d7f785c6d1d6c6addf6b
+parent 84d05ccd5f6801a7bb83806e4a90dea598b9294f
+parent 57070f0a5f97b3dd6063b0bdf001e1b34ade264c
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1770345593 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1770345593 +0000
 
-Enhance SEO with AEO/GEO
+Fix i18n config wrapper
 
-Add advanced AEO/GEO utilities, auto FAQ, GEO schemas, enhanced
-CrawlerFriendlyContent, and Cloudflare Prerender worker integration.
-Includes new answer-block, auto-faq, geo-schemas, key-facts, entity linking,
-SEO index, tests, and extensive TS/JSX updates with multilingual support.
+Unwrap translation resources to load directly from files, enabling proper multilingual translations across all locales.
 
-X-Lovable-Edit-ID: edt-ebfab774-d60f-4088-9017-a88a2dfd2232
+X-Lovable-Edit-ID: edt-5db2f3b9-42ee-4b4d-8870-6d19276d8e62

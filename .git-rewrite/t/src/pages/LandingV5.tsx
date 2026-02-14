@@ -26,6 +26,7 @@ const ExamplesGallerySection = lazy(() => import('@/components/landing-v5/Exampl
 const TrustSection = lazy(() => import('@/components/landing-v5/TrustSection'));
 const PricingSection = lazy(() => import('@/components/landing-v5/PricingSection'));
 const SEOExplainerSection = lazy(() => import('@/components/landing-v5/SEOExplainerSection'));
+const AEOSection = lazy(() => import('@/components/landing-v5/AEOSection'));
 const FAQSection = lazy(() => import('@/components/landing-v5/FAQSection'));
 const FinalCTASection = lazy(() => import('@/components/landing-v5/FinalCTASection'));
 const FooterSection = lazy(() => import('@/components/landing-v5/FooterSection'));
@@ -150,12 +151,17 @@ export default function LandingV5() {
             <SEOExplainerSection />
           </Suspense>
 
-          {/* 10. FAQ */}
+          {/* 10. AEO + GEO Quick Answers */}
+          <Suspense fallback={<SectionSkeleton height="py-12" />}>
+            <AEOSection />
+          </Suspense>
+
+          {/* 11. FAQ */}
           <Suspense fallback={<SectionSkeleton />}>
             <FAQSection />
           </Suspense>
 
-          {/* 11. FINAL CTA */}
+          {/* 12. FINAL CTA */}
           <Suspense fallback={<SectionSkeleton height="py-16" />}>
             <FinalCTASection 
               onCreatePage={() => handleCreatePage('final_cta')}
@@ -164,7 +170,7 @@ export default function LandingV5() {
           </Suspense>
         </main>
 
-        {/* 12. FOOTER */}
+        {/* 13. FOOTER */}
         <Suspense fallback={null}>
           <FooterSection />
         </Suspense>

@@ -23,11 +23,11 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
   const removePlatform = (index: number) => {
     onChange({
       ...formData,
-      platforms: platforms.filter((_: any, i: number) => i !== index),
+      platforms: platforms.filter((_: unknown, i: number) => i !== index),
     });
   };
 
-  const updatePlatform = (index: number, field: string, value: any) => {
+  const updatePlatform = (index: number, field: string, value: unknown) => {
     const updated = [...platforms];
     updated[index] = { ...updated[index], [field]: value };
     onChange({ ...formData, platforms: updated });

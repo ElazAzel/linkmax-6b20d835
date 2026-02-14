@@ -7,7 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { 
   Dialog, 
   DialogContent,
+  DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -143,6 +146,11 @@ export const QuickStartFlow = memo(function QuickStartFlow({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] sm:max-w-xl max-h-[90vh] overflow-hidden p-0 gap-0 rounded-[28px] border-0 bg-card/98 backdrop-blur-3xl [&>button]:hidden">
+        {/* Accessible but visually hidden title for screen readers */}
+        <VisuallyHidden.Root>
+          <DialogTitle>{t('quickStart.title', 'Quick Start')}</DialogTitle>
+          <DialogDescription>{t('quickStart.description', 'Create your page quickly with AI assistance')}</DialogDescription>
+        </VisuallyHidden.Root>
         {/* Progress bar */}
         {step !== 'intro' && (
           <div className="px-6 pt-5">

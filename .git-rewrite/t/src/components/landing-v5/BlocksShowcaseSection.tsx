@@ -36,7 +36,7 @@ export default function BlocksShowcaseSection() {
     
     const el = scrollRef.current;
     let animationFrame: number;
-    let scrollSpeed = 0.3;
+    const scrollSpeed = 0.3;
     
     const scroll = () => {
       if (!el || !isAutoScrolling) return;

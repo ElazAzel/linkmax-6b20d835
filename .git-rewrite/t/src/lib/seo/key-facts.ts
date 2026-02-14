@@ -6,7 +6,7 @@
  */
 
 import type { Block, PricingBlock, SocialsBlock, BookingBlock, EventBlock } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import type { AnswerBlockData } from './answer-block';
 
 export interface KeyFact {
@@ -134,7 +134,7 @@ export function generateKeyFacts(
     // Service names (top 3)
     const serviceNames = pricingBlock.items
       .slice(0, 3)
-      .map(item => getTranslatedString(item.name, language))
+      .map(item => getI18nText(item.name, language))
       .filter(Boolean)
       .join(', ');
     

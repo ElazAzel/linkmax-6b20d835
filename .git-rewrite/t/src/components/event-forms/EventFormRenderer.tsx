@@ -11,7 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { Star, Crown } from 'lucide-react';
 import { EventFileUpload } from './EventFileUpload';
 import type { EventFormField } from '@/types/page';
@@ -40,12 +40,12 @@ export const EventFormRenderer = memo(function EventFormRenderer({
 }: EventFormRendererProps) {
   const { t } = useTranslation();
 
-  const label = getTranslatedString(field.label_i18n, language);
+  const label = getI18nText(field.label_i18n, language);
   const placeholder = field.placeholder_i18n
-    ? getTranslatedString(field.placeholder_i18n, language)
+    ? getI18nText(field.placeholder_i18n, language)
     : undefined;
   const helpText = field.helpText_i18n
-    ? getTranslatedString(field.helpText_i18n, language)
+    ? getI18nText(field.helpText_i18n, language)
     : undefined;
 
   const isRequired = field.required || field.type === 'email';
@@ -245,7 +245,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
           <SelectContent>
             {(field.options || []).map((option) => (
               <SelectItem key={option.id} value={option.id}>
-                {getTranslatedString(option.label_i18n, language)}
+                {getI18nText(option.label_i18n, language)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -266,7 +266,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
             <div key={option.id} className="flex items-center space-x-2">
               <RadioGroupItem value={option.id} id={`${field.id}-${option.id}`} />
               <Label htmlFor={`${field.id}-${option.id}`} className="text-sm font-normal cursor-pointer">
-                {getTranslatedString(option.label_i18n, language)}
+                {getI18nText(option.label_i18n, language)}
               </Label>
             </div>
           ))}
@@ -294,7 +294,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
                   }}
                   disabled={disabled}
                 />
-                {getTranslatedString(option.label_i18n, language)}
+                {getI18nText(option.label_i18n, language)}
               </label>
             );
           })}
@@ -325,10 +325,10 @@ export const EventFormRenderer = memo(function EventFormRenderer({
     const max = field.linearScale?.max ?? 10;
     const currentValue = typeof value === 'number' ? value : typeof value === 'string' ? Number(value) : min;
     const minLabel = field.linearScale?.minLabel_i18n
-      ? getTranslatedString(field.linearScale.minLabel_i18n, language)
+      ? getI18nText(field.linearScale.minLabel_i18n, language)
       : String(min);
     const maxLabel = field.linearScale?.maxLabel_i18n
-      ? getTranslatedString(field.linearScale.maxLabel_i18n, language)
+      ? getI18nText(field.linearScale.maxLabel_i18n, language)
       : String(max);
 
     return (

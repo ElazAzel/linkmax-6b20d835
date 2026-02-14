@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { useTranslation } from 'react-i18next';
 import { updateUsername as updateUsernameService, validateUsername } from '@/services/user';
 
@@ -68,7 +69,7 @@ export function useDashboardUsername({
       return true;
     } catch (error) {
       toast.error(t('toasts.username.updateError'));
-      console.error('Username update error:', error);
+      logger.error('Username update error:', error);
       return false;
     } finally {
       setSaving(false);

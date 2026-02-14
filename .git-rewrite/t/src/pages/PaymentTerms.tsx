@@ -38,8 +38,8 @@ const PaymentTerms = () => {
           <p className="mb-2">2.2. Base rates for PRO subscription at the time of publication:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>3 months - 4,350 ₸ per month (total 13,050 ₸ for the period);</li>
-            <li>6 months - 3,500 ₸ per month (total 21,000 ₸ for the period);</li>
-            <li>12 months - 2,610 ₸ per month (total 31,320 ₸ for the period).</li>
+            <li>6 months - 3,698 ₸ per month (total 22,185 ₸ for the period) - 15% discount;</li>
+            <li>12 months - 3,045 ₸ per month (total 36,540 ₸ for the period) - 30% discount.</li>
           </ul>
           <p className="mb-2">2.3. All prices are shown in the national currency of the Republic of Kazakhstan - tenge (KZT). Foreign currency equivalents are for informational purposes only.</p>
           <p className="mb-4">2.4. The current list of plans, pricing, and included features are published on the Platform's pricing page and may be updated by the Administration unilaterally for new payment periods.</p>
@@ -102,7 +102,7 @@ const PaymentTerms = () => {
           <ul className="list-disc pl-6 mb-4">
             <li>3 ай - айына 4 350 ₸ (кезең үшін барлығы 13 050 ₸);</li>
             <li>6 ай - айына 3 500 ₸ (кезең үшін барлығы 21 000 ₸);</li>
-            <li>12 ай - айына 2 610 ₸ (кезең үшін барлығы 31 320 ₸).</li>
+            <li>12 ай - айына 3 045 ₸ (кезең үшін барлығы 36 540 ₸).</li>
           </ul>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">3-9. Толық мәтін</h2>
@@ -128,7 +128,7 @@ const PaymentTerms = () => {
         <ul className="list-disc pl-6 mb-4">
           <li>3 месяца - 4 350 ₸ в месяц (итого 13 050 ₸ за период);</li>
           <li>6 месяцев - 3 500 ₸ в месяц (итого 21 000 ₸ за период);</li>
-          <li>12 месяцев - 2 610 ₸ в месяц (итого 31 320 ₸ за период).</li>
+          <li>12 месяцев - 3 045 ₸ в месяц (итого 36 540 ₸ за период).</li>
         </ul>
         <p className="mb-2">2.3. Все цены указываются в национальной валюте Республики Казахстан - тенге (KZT). При отображении эквивалента в иностранной валюте такое значение носит информационный характер.</p>
         <p className="mb-4">2.4. Актуальный перечень тарифов, их стоимость и включённые функции публикуются на странице тарифов Платформы и могут обновляться Администрацией в одностороннем порядке для новых периодов оплаты.</p>

@@ -38,7 +38,20 @@ export interface GridConfig {
   cellHeight: number;
 }
 
-// ============= Page Entity =============
+  /**
+   * NEW: Page i18n configuration
+   * Controls which languages are available on this page and defaults
+   */
+  export interface PageI18nConfig {
+    /** List of active language codes for this page (e.g., ['ru', 'en', 'tr']) */
+    languages: string[];
+    /** Default/primary language code (must be in languages list) */
+    defaultLanguage: string;
+    /** Auto-detection mode: if 'auto', use Accept-Language / geo / browser language */
+    languageMode?: 'auto' | 'manual';
+  }
+
+  // ============= Page Entity =============
 
 export interface Page<TBlock extends BaseBlock = BaseBlock> {
   id: string;
@@ -55,6 +68,8 @@ export interface Page<TBlock extends BaseBlock = BaseBlock> {
   viewCount?: number;
   createdAt?: string;
   updatedAt?: string;
+    /** NEW: i18n configuration for this page */
+    i18n?: PageI18nConfig;
 }
 
 // ============= Default Values =============
@@ -78,6 +93,12 @@ export const DEFAULT_GRID_CONFIG: GridConfig = {
   gapSize: 16,
   cellHeight: 100,
 };
+
+  export const DEFAULT_I18N_CONFIG: PageI18nConfig = {
+    languages: ['ru', 'en', 'kk'],
+    defaultLanguage: 'ru',
+    languageMode: 'auto',
+  };
 
 // ============= Factory Functions =============
 
@@ -105,6 +126,7 @@ export function createDefaultPage<TBlock extends BaseBlock = BaseBlock>(
     theme: { ...DEFAULT_THEME },
     seo: { ...DEFAULT_SEO },
     editorMode: 'grid',
+    i18n: { ...DEFAULT_I18N_CONFIG },
   };
 }
 

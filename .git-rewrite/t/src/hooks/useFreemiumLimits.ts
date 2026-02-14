@@ -1,4 +1,5 @@
 import { usePremiumStatus } from './usePremiumStatus';
+import { storage } from '@/lib/storage';
 
 // Block tiers based on pricing plans (Free + Pro only)
 export const FREE_BLOCKS = [
@@ -6,7 +7,7 @@ export const FREE_BLOCKS = [
 ] as const;
 
 export const PRO_BLOCKS = [
-  'video', 'carousel', 'pricing', 'product', 'catalog', 'custom_code', 
+  'video', 'carousel', 'pricing', 'product', 'catalog', 'custom_code',
   'before_after', 'faq', 'testimonial', 'newsletter', 'scratch', 'search', 'shoutout'
 ] as const;
 
@@ -98,93 +99,93 @@ export function getBlockTier(blockType: string): FreeTier {
 
 export function useFreemiumLimits() {
   const { isPremium, isLoading, tier = 'free' } = usePremiumStatus();
-  
+
   // Determine current tier limits (business is now pro)
   const getCurrentLimits = () => {
     if (tier === 'pro' || isPremium) return PRO_LIMITS;
     return FREE_LIMITS;
   };
-  
+
   const limits = getCurrentLimits();
   const currentTier: FreeTier = (tier === 'pro' || isPremium) ? 'pro' : 'free';
-  
+
   const canAddBlock = (currentBlockCount: number) => {
     return currentBlockCount < limits.maxBlocks;
   };
-  
+
   // Check if user can USE (add new) this block type
   const canUseBlockType = (blockType: string) => {
     return limits.allowedBlocks.includes(blockType);
   };
-  
+
   // Check if user can EDIT an existing block (for downgraded users)
   // If block exists but is premium, user can only view/delete, not edit
   const canEditBlock = (blockType: string) => {
     return limits.allowedBlocks.includes(blockType);
   };
-  
+
   // Check if block is view-only (exists but can't be edited due to tier)
   const isBlockViewOnly = (blockType: string) => {
     return !limits.allowedBlocks.includes(blockType);
   };
-  
+
   // Get required tier for a block type
   const getRequiredTier = (blockType: string): FreeTier => {
     return getBlockTier(blockType);
   };
-  
+
   const getRemainingBlocks = (currentBlockCount: number) => {
     if (limits.maxBlocks === Infinity) return Infinity;
     return Math.max(0, limits.maxBlocks - currentBlockCount);
   };
-  
-  // Get AI page generation usage from localStorage (monthly tracking)
+
+  // Get AI page generation usage from storage (monthly tracking)
   const getAIPageGenerationsThisMonth = (): number => {
     const now = new Date();
     const monthKey = getMonthKey(now);
-    const stored = localStorage.getItem('linkmax_ai_page_generations');
+    const stored = storage.get<{ monthKeyDate: string; count: number }>('ai_page_generations');
     if (!stored) return 0;
-    
+
     try {
-      const { monthKeyDate, count } = JSON.parse(stored);
+      const { monthKeyDate, count } = stored;
       if (monthKeyDate === monthKey) return count;
       return 0;
     } catch {
       return 0;
     }
   };
-  
+
   const incrementAIPageGeneration = () => {
     const now = new Date();
     const monthKey = getMonthKey(now);
     const current = getAIPageGenerationsThisMonth();
-    localStorage.setItem('linkmax_ai_page_generations', JSON.stringify({
+    storage.set('ai_page_generations', {
       monthKeyDate: monthKey,
       count: current + 1,
-    }));
+    });
   };
-  
+
   const canUseAIPageGeneration = () => {
     return getAIPageGenerationsThisMonth() < limits.maxAIPageGenerationsPerMonth;
   };
-  
+
   const getRemainingAIPageGenerations = () => {
     if (limits.maxAIPageGenerationsPerMonth === Infinity) return Infinity;
     return Math.max(0, limits.maxAIPageGenerationsPerMonth - getAIPageGenerationsThisMonth());
   };
-  
+
   // Legacy AI usage (for other AI features - unlimited for all)
   const canUseAI = () => true;
   const getRemainingAIRequests = () => Infinity;
-  const incrementAIUsage = () => {};
+  const incrementAIUsage = () => { };
   const getAIUsageThisWeek = () => 0;
-  
+
   // Feature checks
   const canUseFeature = (feature: keyof TierFeatures): boolean => {
     const value = limits[feature];
     return typeof value === 'boolean' ? value : true;
   };
-  
+
   const canUseAnalytics = () => limits.canUseAnalytics;
   const canUseCRM = () => limits.canUseCRM;
   const canUseScheduler = () => limits.canUseScheduler;
@@ -199,7 +200,7 @@ export function useFreemiumLimits() {
   const canUsePremiumFrames = () => limits.canUsePremiumFrames;
   const canUseAdvancedThemes = () => limits.canUseAdvancedThemes;
   const canUseCustomPageBackground = () => limits.canUseCustomPageBackground;
-  
+
   const getMaxLeads = () => limits.maxLeadsPerMonth;
 
   return {

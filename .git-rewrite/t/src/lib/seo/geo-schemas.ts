@@ -7,7 +7,7 @@
  */
 
 import type { Block, PricingBlock, EventBlock, FAQBlock, SocialsBlock, BookingBlock, MapBlock } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import type { AnswerBlockData } from './answer-block';
 
 export interface GEOSchemas {
@@ -248,10 +248,10 @@ function generateFAQSchema(
     '@type': 'FAQPage',
     mainEntity: faqBlock.items.map(item => ({
       '@type': 'Question',
-      name: getTranslatedString(item.question, language),
+      name: getI18nText(item.question, language),
       acceptedAnswer: {
         '@type': 'Answer',
-        text: getTranslatedString(item.answer, language),
+        text: getI18nText(item.answer, language),
       },
     })),
   };
@@ -271,7 +271,7 @@ function generateEventSchemas(
       const eventSchema: Record<string, unknown> = {
         '@context': 'https://schema.org',
         '@type': 'Event',
-        name: getTranslatedString(event.title, context.language),
+        name: getI18nText(event.title, context.language),
         startDate: event.startAt,
         eventStatus: 'https://schema.org/EventScheduled',
         organizer: {
@@ -280,7 +280,7 @@ function generateEventSchemas(
       };
       
       if (event.description) {
-        eventSchema.description = getTranslatedString(event.description, context.language);
+        eventSchema.description = getI18nText(event.description, context.language);
       }
       
       if (event.endAt) {
@@ -333,9 +333,9 @@ function generateServiceSchemas(
     '@context': 'https://schema.org',
     '@type': 'Service',
     '@id': `${pageUrl}#service-${index}`,
-    name: getTranslatedString(item.name, context.language),
+    name: getI18nText(item.name, context.language),
     description: item.description 
-      ? getTranslatedString(item.description, context.language)
+      ? getI18nText(item.description, context.language)
       : undefined,
     provider: {
       '@id': `${pageUrl}#main`,

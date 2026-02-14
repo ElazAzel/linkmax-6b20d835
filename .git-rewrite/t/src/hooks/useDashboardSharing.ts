@@ -13,12 +13,13 @@ interface UseDashboardSharingOptions {
   onPublish: () => Promise<string | null>;
   onSave: () => Promise<void>;
   onQuestComplete?: (questKey: string) => void;
+  onSaveVersion?: () => Promise<void>;
 }
 
 /**
  * Hook to manage sharing, preview, referral dialog, and install prompt logic
  */
-export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseDashboardSharingOptions) {
+export function useDashboardSharing({ onPublish, onSave, onQuestComplete, onSaveVersion }: UseDashboardSharingOptions) {
   const { t } = useTranslation();
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
@@ -27,6 +28,9 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
   const handleShare = useCallback(async () => {
     const slug = await onPublish();
     if (!slug) return;
+
+    // Save version snapshot on publish
+    await onSaveVersion?.();
 
     // Mark page as published for achievements
     localStorage.setItem('linkmax_published', 'true');
@@ -64,7 +68,7 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
       setTimeout(() => setShowInstallPrompt(true), 2000);
       localStorage.setItem(STORAGE_KEYS.INSTALL_PROMPT_SHOWN, 'true');
     }
-  }, [onPublish, onQuestComplete, t]);
+  }, [onPublish, onQuestComplete, onSaveVersion, t]);
 
   const handlePreview = useCallback(async () => {
     await onSave();

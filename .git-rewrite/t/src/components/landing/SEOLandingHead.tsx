@@ -13,14 +13,14 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const isKazakh = currentLanguage === 'kk';
     const locale = isRussian ? 'ru_RU' : isKazakh ? 'kk_KZ' : 'en_US';
     
-    // Localized, product-focused title with primary benefit
+    // New positioning: Micro-Business OS - page builder + CRM + analytics
     const title = t(
       'seo.landing.title',
       isRussian
-        ? 'lnkmx - мини-сайт и заявки из одной ссылки'
+        ? 'lnkmx - операционная система для микробизнеса | Конструктор страниц + CRM'
         : isKazakh
-          ? 'lnkmx - бір сілтемеден мини-сайт пен өтінім'
-          : 'lnkmx - mini-site and leads from one link'
+          ? 'lnkmx - микробизнеске арналған операциялық жүйе | Бет конструкторы + CRM'
+          : 'lnkmx - The Micro-Business OS | Page Builder + CRM + Analytics'
     );
     document.title = title;
 
@@ -51,25 +51,25 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       link.href = href;
     };
 
-    // Clear meta description: what + for whom + result
+    // Clear meta description: OS + page builder + CRM + analytics
     const description = t(
       'seo.landing.description',
       isRussian
-        ? 'AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса. Соберите оффер, прайс и формы заявок за 2 минуты.'
+        ? 'lnkmx - операционная система для микробизнеса. Конструктор страниц, мини-CRM, аналитика и AI-генерация. Создайте сайт, принимайте заявки и управляйте клиентами в одном месте.'
         : isKazakh
-          ? 'Эксперттер мен шағын бизнеске арналған AI мини-сайт құрастырушысы. Оффер, прайс және өтінім формасын 2 минутта жасаңыз.'
-          : 'AI mini-site builder for experts, freelancers, and small businesses. Create offer, pricing, and lead forms in 2 minutes.'
+          ? 'lnkmx - микробизнеске арналған операциялық жүйе. Бет конструкторы, мини-CRM, аналитика және AI. Сайт жасаңыз, өтінімдер алыңыз және клиенттерді бір жерде басқарыңыз.'
+          : 'lnkmx - The Micro-Business OS. Page builder, mini-CRM, analytics, and AI generation. Build your site, capture leads, and manage clients in one place.'
     );
     setMetaTag('description', description);
 
-    // Extensive keywords targeting search queries and competitors
+    // Keywords: OS, CRM, page builder, analytics + link-in-bio for discoverability
     const keywords = t(
       'seo.landing.keywords',
       isRussian
-        ? 'link in bio, линк в био, страница ссылок, мини-сайт, сайт-визитка, linktree альтернатива, taplink альтернатива'
+        ? 'операционная система для бизнеса, конструктор страниц, мини-CRM, CRM для малого бизнеса, аналитика сайта, AI конструктор, link in bio, мини-сайт, linktree альтернатива, taplink альтернатива, сайт визитка'
         : isKazakh
-          ? 'link in bio, сілтемелер беті, мини-сайт, linktree баламасы, taplink баламасы'
-          : 'link in bio, link page, mini-site, linktree alternative, taplink alternative'
+          ? 'бизнеске арналған ОЖ, бет конструкторы, мини-CRM, шағын бизнес CRM, сайт аналитикасы, AI конструктор, link in bio, мини-сайт, linktree баламасы'
+          : 'micro-business OS, page builder, mini-CRM, small business CRM, website analytics, AI builder, link in bio, mini-site, linktree alternative, taplink alternative, business card website'
     );
     setMetaTag('keywords', keywords);
 
@@ -115,11 +115,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     // Update html lang attribute
     document.documentElement.lang = currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
 
-    // OG Image - modern 1200x630 format with cache-busting
-    // Using a high-quality generated OG image for social sharing
+    // OG Image
     const ogImageUrl = 'https://lnkmx.my/og-image.png';
     
-    // Open Graph optimized for social sharing (Facebook, LinkedIn, etc.)
+    // Open Graph optimized for social sharing
     setMetaTag('og:type', 'website', true);
     setMetaTag('og:url', 'https://lnkmx.my/', true);
     setMetaTag('og:title', title, true);
@@ -128,28 +127,28 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     setMetaTag('og:locale', locale, true);
     setMetaTag('og:locale:alternate', isRussian ? 'en_US' : 'ru_RU', true);
     
-    // OG Image with proper dimensions for social cards
+    // OG Image with proper dimensions
     setMetaTag('og:image', ogImageUrl, true);
     setMetaTag('og:image:secure_url', ogImageUrl, true);
     setMetaTag('og:image:type', 'image/png', true);
     setMetaTag('og:image:width', '1200', true);
     setMetaTag('og:image:height', '630', true);
     setMetaTag('og:image:alt', isRussian 
-      ? 'lnkmx - создай мини-сайт за 2 минуты' 
+      ? 'lnkmx - операционная система для микробизнеса' 
       : isKazakh 
-        ? 'lnkmx - 2 минутта мини-сайт жасаңыз'
-        : 'lnkmx - create a mini-site in 2 minutes', true);
+        ? 'lnkmx - микробизнеске арналған ОЖ'
+        : 'lnkmx - The Micro-Business OS', true);
 
-    // Twitter Cards - use summary_large_image for big preview
+    // Twitter Cards
     setMetaTag('twitter:card', 'summary_large_image');
     setMetaTag('twitter:title', title);
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', ogImageUrl);
     setMetaTag('twitter:image:alt', isRussian 
-      ? 'lnkmx - создай мини-сайт за 2 минуты' 
+      ? 'lnkmx - операционная система для микробизнеса' 
       : isKazakh 
-        ? 'lnkmx - 2 минутта мини-сайт жасаңыз'
-        : 'lnkmx - create a mini-site in 2 minutes');
+        ? 'lnkmx - микробизнеске арналған ОЖ'
+        : 'lnkmx - The Micro-Business OS');
     setMetaTag('twitter:site', '@lnkmx_app');
     setMetaTag('twitter:creator', '@lnkmx_app');
 
@@ -164,7 +163,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       '@type': 'Organization',
       '@id': 'https://lnkmx.my/#organization',
       name: 'lnkmx',
-      alternateName: 'LinkMAX',
+      alternateName: ['lnkmx.my', 'The Micro-Business OS'],
       url: 'https://lnkmx.my/',
       logo: {
         '@type': 'ImageObject',
@@ -185,7 +184,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       '@id': 'https://lnkmx.my/#website',
-      name: 'lnkmx',
+      name: 'lnkmx - The Micro-Business OS',
       url: 'https://lnkmx.my/',
       inLanguage: ['ru', 'en', 'kk'],
       potentialAction: {
@@ -201,16 +200,39 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       },
     };
 
+    // Updated to reflect OS positioning with multiple application categories
     const softwareAppSchema = {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      name: 'lnkmx',
+      name: 'lnkmx - The Micro-Business OS',
       url: 'https://lnkmx.my/',
       applicationCategory: 'BusinessApplication',
-      applicationSubCategory: 'Link in Bio Tool',
+      applicationSubCategory: [
+        'Website Builder',
+        'CRM Software',
+        'Analytics Platform',
+        'Link in Bio Tool',
+      ],
       operatingSystem: 'Web',
       inLanguage: pageLanguage,
       description: description,
+      featureList: isRussian 
+        ? [
+            'Конструктор страниц с AI',
+            'Мини-CRM для управления заявками',
+            'Аналитика кликов и конверсий',
+            'Онлайн-бронирование',
+            'Telegram-уведомления',
+            '25+ готовых блоков',
+          ]
+        : [
+            'AI-powered page builder',
+            'Mini-CRM for lead management',
+            'Click and conversion analytics',
+            'Online booking system',
+            'Telegram notifications',
+            '25+ ready-to-use blocks',
+          ],
       offers: [
         {
           '@type': 'Offer',
@@ -245,12 +267,70 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       isPartOf: {
         '@id': 'https://lnkmx.my/#website',
       },
-      about: {
-        '@type': 'Thing',
-        name: isRussian ? 'Конструктор link in bio' : isKazakh ? 'Link in bio құрастырушы' : 'Link in bio builder',
-      },
+      about: [
+        {
+          '@type': 'Thing',
+          name: isRussian ? 'Конструктор страниц' : 'Page Builder',
+        },
+        {
+          '@type': 'Thing',
+          name: isRussian ? 'CRM для малого бизнеса' : 'Small Business CRM',
+        },
+        {
+          '@type': 'Thing',
+          name: isRussian ? 'Аналитика сайта' : 'Website Analytics',
+        },
+      ],
       mainEntity: {
         '@id': 'https://lnkmx.my/#organization',
+      },
+    };
+
+    // Service schema to highlight CRM and page builder capabilities
+    const serviceSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: isRussian 
+        ? 'lnkmx - Операционная система для микробизнеса'
+        : 'lnkmx - The Micro-Business Operating System',
+      serviceType: [
+        isRussian ? 'Конструктор сайтов' : 'Website Builder',
+        isRussian ? 'CRM система' : 'CRM System',
+        isRussian ? 'Аналитическая платформа' : 'Analytics Platform',
+      ],
+      provider: {
+        '@id': 'https://lnkmx.my/#organization',
+      },
+      description: isRussian
+        ? 'Полноценная платформа для микробизнеса: конструктор страниц с AI, встроенная CRM для управления заявками, аналитика и автоматизация.'
+        : 'Complete platform for micro-businesses: AI page builder, built-in CRM for lead management, analytics, and automation.',
+      areaServed: {
+        '@type': 'Place',
+        name: 'Worldwide',
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: isRussian ? 'Тарифные планы' : 'Pricing Plans',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Free',
+            },
+            price: '0',
+            priceCurrency: 'KZT',
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Pro',
+            },
+            price: '2900',
+            priceCurrency: 'KZT',
+          },
+        ],
       },
     };
 
@@ -314,6 +394,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       websiteSchema,
       softwareAppSchema,
       webPageSchema,
+      serviceSchema,
       faqSchema,
       breadcrumbSchema,
     ];
@@ -327,7 +408,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
 
     // Cleanup
     return () => {
-      document.title = 'LinkMAX - AI-Powered Link-in-Bio Platform';
+      document.title = 'lnkmx - The Micro-Business OS';
       const schemasToRemove = document.querySelectorAll('script.seo-schema');
       schemasToRemove.forEach(el => el.remove());
     };

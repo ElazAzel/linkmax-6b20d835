@@ -2,6 +2,8 @@
  * URL helper functions for generating and managing page URLs
  */
 
+import { logger } from './logger';
+
 /**
  * Get the base URL of the application
  */
@@ -31,7 +33,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     await navigator.clipboard.writeText(text);
     return true;
   } catch (error) {
-    console.error('Failed to copy to clipboard:', error);
+    logger.error('Failed to copy to clipboard', error, { context: 'url-helpers' });
     return false;
   }
 }

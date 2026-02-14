@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FAQBlock as FAQBlockType } from '@/types/page';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { HelpCircle } from 'lucide-react';
 
 interface FAQBlockProps {
@@ -13,7 +13,7 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
-  const title = block.title ? getTranslatedString(block.title, currentLang) : '';
+  const title = block.title ? getI18nText(block.title, currentLang) : '';
 
   if (!block.items || block.items.length === 0) {
     return (
@@ -40,8 +40,8 @@ export const FAQBlock = React.memo(function FAQBlock({ block }: FAQBlockProps) {
       
       <Accordion type="single" collapsible className="w-full space-y-1.5">
         {block.items.map((item) => {
-          const question = getTranslatedString(item.question, currentLang);
-          const answer = getTranslatedString(item.answer, currentLang);
+          const question = getI18nText(item.question, currentLang);
+          const answer = getI18nText(item.answer, currentLang);
           
           return (
             <AccordionItem 

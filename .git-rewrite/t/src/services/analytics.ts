@@ -1,10 +1,12 @@
 /**
  * Analytics Service
  * Handles all analytics tracking operations
+ * @version 2.1 - Fixed UUID validation for block_id
  */
 
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
+import { logger } from '@/lib/logger';
 
 // ============================================
 // Types
@@ -44,7 +46,7 @@ function getVisitorFingerprint(): string {
     screen.height,
     new Date().getTimezoneOffset(),
   ].join('|');
-  
+
   // Simple hash function
   let hash = 0;
   for (let i = 0; i < data.length; i++) {
@@ -63,11 +65,11 @@ function getReferrerInfo(): { source: string; medium: string } {
   if (!referrer) {
     return { source: 'direct', medium: 'none' };
   }
-  
+
   try {
     const url = new URL(referrer);
     const hostname = url.hostname.toLowerCase();
-    
+
     // Social media
     if (hostname.includes('instagram')) return { source: 'instagram', medium: 'social' };
     if (hostname.includes('facebook') || hostname.includes('fb.')) return { source: 'facebook', medium: 'social' };
@@ -78,12 +80,12 @@ function getReferrerInfo(): { source: string; medium: string } {
     if (hostname.includes('telegram')) return { source: 'telegram', medium: 'social' };
     if (hostname.includes('whatsapp')) return { source: 'whatsapp', medium: 'social' };
     if (hostname.includes('vk.com')) return { source: 'vkontakte', medium: 'social' };
-    
+
     // Search engines
     if (hostname.includes('google')) return { source: 'google', medium: 'organic' };
     if (hostname.includes('yandex')) return { source: 'yandex', medium: 'organic' };
     if (hostname.includes('bing')) return { source: 'bing', medium: 'organic' };
-    
+
     return { source: hostname, medium: 'referral' };
   } catch {
     return { source: 'unknown', medium: 'unknown' };
@@ -110,12 +112,12 @@ function getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
 function getUtmParams(): Record<string, string> {
   const params = new URLSearchParams(window.location.search);
   const utmParams: Record<string, string> = {};
-  
+
   ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(key => {
     const value = params.get(key);
     if (value) utmParams[key] = value;
   });
-  
+
   return utmParams;
 }
 
@@ -145,20 +147,20 @@ function getOrCreateSession(): Session {
   } catch {
     // Ignore storage errors
   }
-  
+
   // Create new session
   const session: Session = {
     id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
     startedAt: Date.now(),
     visitorId: getVisitorFingerprint(),
   };
-  
+
   try {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   } catch {
     // Ignore storage errors
   }
-  
+
   return session;
 }
 
@@ -180,7 +182,10 @@ export async function trackEvent({
     const session = getOrCreateSession();
     const referrer = getReferrerInfo();
     const utmParams = getUtmParams();
-    
+
+    // Validate blockId is a proper UUID before using it as foreign key
+    const isValidUuid = blockId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(blockId);
+
     const enrichedMetadata = {
       ...metadata,
       ...utmParams,
@@ -194,17 +199,19 @@ export async function trackEvent({
       screenWidth: screen.width,
       screenHeight: screen.height,
       timestamp: new Date().toISOString(),
+      // Store non-UUID blockId in metadata if present
+      ...(blockId && !isValidUuid ? { blockIdRaw: blockId } : {}),
     };
 
     await supabase.from('analytics').insert({
       page_id: pageId,
-      block_id: blockId || null,
+      block_id: isValidUuid ? blockId : null,
       event_type: eventType,
       metadata: enrichedMetadata as Json,
     });
   } catch (error) {
     // Silent fail for analytics - don't break user experience
-    console.debug('Analytics tracking failed:', error);
+    logger.debug('Analytics tracking failed', { data: error });
   }
 }
 
@@ -220,14 +227,14 @@ export async function trackPageView(pageId: string): Promise<void> {
       .select('slug')
       .eq('id', pageId)
       .maybeSingle();
-    
+
     if (data?.slug) {
       await supabase.rpc('increment_view_count', { page_slug: data.slug });
     }
   } catch {
     // Silent fail
   }
-  
+
   return trackEvent({
     pageId,
     eventType: 'view',
@@ -243,13 +250,18 @@ export async function trackBlockClick(
   blockType?: string,
   blockTitle?: string
 ): Promise<void> {
-  // Increment click count in blocks table
-  try {
-    await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
-  } catch {
-    // Silent fail
+  // Validate blockId is a proper UUID before calling RPC
+  const isValidUuid = blockId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(blockId);
+
+  // Increment click count in blocks table - only if valid UUID
+  if (isValidUuid) {
+    try {
+      await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
+    } catch {
+      // Silent fail
+    }
   }
-  
+
   return trackEvent({
     pageId,
     eventType: 'click',
@@ -339,7 +351,7 @@ export async function fetchPageAnalytics(
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error('Error fetching analytics:', error);
+    logger.error('Error fetching analytics', error, { context: 'analytics' });
     return [];
   }
 

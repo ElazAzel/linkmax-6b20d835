@@ -17,13 +17,18 @@ import { useDashboardAI } from '@/hooks/useDashboardAI';
 import { useBlockEditor } from '@/hooks/useBlockEditor';
 import { useDailyQuests } from '@/hooks/useDailyQuests';
 import { useTokens } from '@/hooks/useTokens';
+import { storage } from '@/lib/storage';
 import type { Block, ProfileBlock } from '@/types/page';
 import type { UserStats } from '@/types/achievements';
+
+interface UseDashboardOptions {
+  onPublish?: (pageData: import('@/types/page').PageData) => void;
+}
 
 /**
  * Main dashboard state hook - composes all dashboard-related hooks
  */
-export function useDashboard() {
+export function useDashboard(options?: UseDashboardOptions) {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const { isPremium, isLoading: premiumLoading, tier: currentTier = 'free' } = usePremiumStatus();
@@ -33,8 +38,8 @@ export function useDashboard() {
   const isMobile = useIsMobile();
   const haptic = useHapticFeedback();
 
-  // Page state from cloud
-  const pageState = useCloudPageState();
+  // Page state from cloud - with onPublish callback for versioning
+  const pageState = useCloudPageState({ onPublish: options?.onPublish });
   const { pageData, loading, addBlock, updateBlock, save, publish } = pageState;
 
   // Auth guard - redirects to /auth if not logged in
@@ -56,7 +61,7 @@ export function useDashboard() {
 
   // Check achievements when page data or profile changes
   const lastCheckedRef = useRef<string>('');
-  
+
   useEffect(() => {
     if (!pageData?.blocks || achievements.loading) return;
 
@@ -74,17 +79,17 @@ export function useDashboard() {
       blocksUsed.add(block.type);
     });
 
-    // Check if features were used (stored in localStorage)
-    if (localStorage.getItem('linkmax_ai_used') === 'true') {
+    // Check if features were used (stored in storage)
+    if (storage.get<string>('ai_used') === 'true') {
       featuresUsed.add('ai');
     }
-    if (localStorage.getItem('linkmax_template_used') === 'true') {
+    if (storage.get<string>('template_used') === 'true') {
       featuresUsed.add('template');
     }
-    if (localStorage.getItem('linkmax_chatbot_used') === 'true') {
+    if (storage.get<string>('chatbot_used') === 'true') {
       featuresUsed.add('chatbot');
     }
-    if (localStorage.getItem('linkmax_published') === 'true') {
+    if (storage.get<string>('published') === 'true') {
       featuresUsed.add('published');
     }
 
@@ -92,8 +97,8 @@ export function useDashboard() {
       blocksUsed,
       totalBlocks: pageData.blocks.length,
       featuresUsed,
-      pageViews: parseInt(localStorage.getItem('linkmax_page_views') || '0', 10),
-      published: localStorage.getItem('linkmax_published') === 'true',
+      pageViews: parseInt(storage.get<string>('page_views') || '0', 10),
+      published: storage.get<string>('published') === 'true',
       friendsCount,
     };
 
@@ -144,10 +149,11 @@ export function useDashboard() {
     onClaimBlockToken: () => tokens.claimDailyTokens('add_block'),
   });
 
-  // Onboarding
+  // Onboarding - skip if user already has content (more than 2 blocks)
   const onboardingState = useDashboardOnboarding({
     isUserReady: !!user,
     isPageReady: !!pageData,
+    blockCount: pageData?.blocks?.length || 0,
     onNicheComplete: (profile, blocks, niche) => {
       const profileBlock = pageData?.blocks.find((b) => b.type === 'profile');
       if (profile && profileBlock) {
@@ -180,17 +186,17 @@ export function useDashboard() {
   const handleApplyTemplate = useCallback(
     (blocks: Block[]) => {
       // Mark template as used for achievements
-      localStorage.setItem('linkmax_template_used', 'true');
-      
+      storage.set('template_used', 'true');
+
       // Generate unique IDs for all blocks
       const blocksWithIds = blocks.map((block, index) => ({
         ...block,
         id: `${block.type}-${Date.now()}-${index}`,
       }));
-      
+
       // Replace all content blocks at once (keeps profile block)
       pageState.replaceBlocks(blocksWithIds);
-      
+
       // Complete quest
       dailyQuests.markQuestComplete('use_template');
     },

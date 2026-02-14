@@ -19,7 +19,7 @@ import type {
   PublishPageResponse,
 } from '../interfaces/IPageRepository';
 import { createDefaultPageData, DEFAULT_THEME, DEFAULT_SEO } from '@/lib/constants';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { Json } from '@/platform/supabase/types';
 
 // ============= Helpers =============
@@ -64,7 +64,7 @@ function extractBlockTitle(block: Block, lang: SupportedLanguage = 'ru'): string
   if (!rawTitle) return null;
   
   if (typeof rawTitle === 'string') return rawTitle;
-  return getTranslatedString(rawTitle, lang);
+  return getI18nText(rawTitle, lang);
 }
 
 // ============= Implementation =============
@@ -118,7 +118,7 @@ export class SupabasePageRepository implements IPageRepository {
       const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
       const profileName = profileBlock ? extractBlockTitle(profileBlock) : 'My Page';
       const profileBio = profileBlock?.bio;
-      const bioText = typeof profileBio === 'string' ? profileBio : (profileBio ? getTranslatedString(profileBio, 'ru') : null);
+      const bioText = typeof profileBio === 'string' ? profileBio : (profileBio ? getI18nText(profileBio, 'ru') : null);
 
       // Upsert page atomically
       const { data: pageId, error: upsertError } = await supabase.rpc('upsert_user_page', {

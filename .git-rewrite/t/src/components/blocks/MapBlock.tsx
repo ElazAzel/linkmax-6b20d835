@@ -3,7 +3,7 @@ import type { MapBlock as MapBlockType } from '@/types/page';
 import { cn } from '@/lib/utils';
 import { MapPin } from 'lucide-react';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useMemo } from 'react';
 
 interface MapBlockProps {
@@ -12,7 +12,7 @@ interface MapBlockProps {
 
 export function MapBlock({ block }: MapBlockProps) {
   const { t, i18n } = useTranslation();
-  const address = getTranslatedString(block.address, i18n.language as SupportedLanguage);
+  const address = getI18nText(block.address, i18n.language as SupportedLanguage);
 
   const paddingMap = { none: '', sm: 'p-2', md: 'p-4', lg: 'p-6', xl: 'p-8' };
   const marginMap = { none: '', sm: 'my-2', md: 'my-4', lg: 'my-6', xl: 'my-8' };

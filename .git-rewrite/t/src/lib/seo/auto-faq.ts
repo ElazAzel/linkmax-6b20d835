@@ -6,7 +6,7 @@
  */
 
 import type { Block, PricingBlock, BookingBlock } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 
 export interface AutoFAQItem {
   question: string;
@@ -258,7 +258,7 @@ export function extractFAQContext(
   const services: string[] = [];
   if (pricingBlock?.items) {
     for (const item of pricingBlock.items.slice(0, 3)) {
-      const serviceName = getTranslatedString(item.name, language);
+      const serviceName = getI18nText(item.name, language);
       if (serviceName) services.push(serviceName);
     }
   }

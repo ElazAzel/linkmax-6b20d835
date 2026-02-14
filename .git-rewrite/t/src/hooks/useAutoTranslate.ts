@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { SupportedLanguage, MultilingualString } from '@/lib/i18n-helpers';
@@ -38,7 +39,7 @@ export function useAutoTranslate() {
       if (error) throw error;
       return data.translations;
     } catch (error) {
-      console.error('Translation error:', error);
+      logger.error('Translation error:', error, { context: 'useAutoTranslate' });
       return null;
     }
   }, []);
@@ -130,7 +131,7 @@ export function useAutoTranslate() {
         toast.success(t('ai.translationSuccess', 'Контент переведён'));
       }
     } catch (error) {
-      console.error('Block translation error:', error);
+      logger.error('Block translation error:', error, { context: 'useAutoTranslate' });
       toast.error(t('ai.translationError', 'Ошибка перевода'));
     } finally {
       setIsTranslating(false);

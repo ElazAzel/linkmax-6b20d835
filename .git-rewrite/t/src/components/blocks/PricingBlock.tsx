@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PricingBlock as PricingBlockType } from '@/types/page';
 import { Badge } from '@/components/ui/badge';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 import { Star, Tag } from 'lucide-react';
 
@@ -34,7 +34,7 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
-  const title = block.title ? getTranslatedString(block.title, currentLang) : '';
+  const title = block.title ? getI18nText(block.title, currentLang) : '';
 
   const formatPrice = (price: number, currency: string = 'KZT') => {
     const symbol = currencySymbols[currency] || currency;
@@ -66,12 +66,12 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
       
       <div className="space-y-1.5">
         {block.items.map((item) => {
-          const name = getTranslatedString(item.name, currentLang);
+          const name = getI18nText(item.name, currentLang);
           const description = item.description 
-            ? getTranslatedString(item.description, currentLang) 
+            ? getI18nText(item.description, currentLang) 
             : '';
           const period = item.period 
-            ? getTranslatedString(item.period, currentLang) 
+            ? getI18nText(item.period, currentLang) 
             : '';
 
           return (

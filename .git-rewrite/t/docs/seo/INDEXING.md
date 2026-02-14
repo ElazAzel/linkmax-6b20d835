@@ -1,5 +1,10 @@
 # lnkmx.my SEO & Indexing Documentation
 
+## Lovable prompt (RU)
+
+For a ready-to-use Russian prompt focused on SEO + AI visibility, see:
+[`docs/seo/LOVABLE_PROMPT_RU.md`](./LOVABLE_PROMPT_RU.md).
+
 ## Canonical URL Strategy
 
 ### Domain Configuration

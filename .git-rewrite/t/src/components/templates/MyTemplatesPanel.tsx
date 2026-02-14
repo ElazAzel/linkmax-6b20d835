@@ -171,8 +171,13 @@ export const MyTemplatesPanel = memo(function MyTemplatesPanel({
     }
   };
 
-  const handleApply = (blocks: Block[]) => {
-    onApplyTemplate(blocks);
+  const handleApply = (templateBlocks: Block[]) => {
+    // Generate new unique IDs for all blocks to avoid conflicts with existing blocks
+    const blocksWithNewIds = templateBlocks.map((block, index) => ({
+      ...block,
+      id: `${block.type}-${Date.now()}-${index}`,
+    }));
+    onApplyTemplate(blocksWithNewIds);
     onOpenChange(false);
     toast.success(t('templates.applied', 'Шаблон применён!'));
   };

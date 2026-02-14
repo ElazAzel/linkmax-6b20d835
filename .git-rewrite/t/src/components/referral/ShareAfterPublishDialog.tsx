@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -68,6 +69,9 @@ export function ShareAfterPublishDialog({
             </div>
             {t('share.published', 'Page Published!')}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('share.publishedDesc', 'Share your published page with others')}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">

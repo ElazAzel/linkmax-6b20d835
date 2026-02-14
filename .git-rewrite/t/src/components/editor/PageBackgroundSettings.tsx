@@ -216,11 +216,12 @@ function getBackgroundPreviewStyle(background?: PageBackground): React.CSSProper
   switch (background.type) {
     case 'solid':
       return { backgroundColor: background.value };
-    case 'gradient':
+    case 'gradient': {
       const colors = background.value.split(',').map(c => c.trim());
       return { 
         background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})` 
       };
+    }
     case 'image':
       return { 
         backgroundImage: `url(${background.value})`,

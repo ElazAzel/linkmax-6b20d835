@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { 
-  getGalleryPages, 
+import { logger } from '@/lib/logger';
+import {
+  getGalleryPages,
   getNicheCounts,
-  toggleGalleryStatus, 
+  toggleGalleryStatus,
   likeGalleryPage,
   unlikeGalleryPage,
   getMyGalleryStatus,
-  type GalleryPage 
+  type GalleryPage
 } from '@/services/gallery';
 import type { Niche } from '@/lib/niches';
 
@@ -26,11 +27,11 @@ export function useGallery() {
         getGalleryPages(selectedNiche),
         getNicheCounts(),
       ]);
-      
+
       setPages(pagesData);
       setNicheCounts(countsData);
     } catch (error) {
-      console.error('Failed to fetch gallery:', error);
+      logger.error('Failed to fetch gallery:', error, { context: 'useGallery' });
     } finally {
       setLoading(false);
     }
@@ -43,8 +44,8 @@ export function useGallery() {
   const likePage = useCallback(async (pageId: string) => {
     try {
       await likeGalleryPage(pageId);
-      setPages(prev => 
-        prev.map(p => 
+      setPages(prev =>
+        prev.map(p =>
           p.id === pageId ? { ...p, gallery_likes: p.gallery_likes + 1 } : p
         )
       );
@@ -56,8 +57,8 @@ export function useGallery() {
   const unlikePage = useCallback(async (pageId: string) => {
     try {
       await unlikeGalleryPage(pageId);
-      setPages(prev => 
-        prev.map(p => 
+      setPages(prev =>
+        prev.map(p =>
           p.id === pageId ? { ...p, gallery_likes: Math.max(0, p.gallery_likes - 1) } : p
         )
       );
@@ -66,9 +67,9 @@ export function useGallery() {
     }
   }, [t]);
 
-  return { 
-    pages, 
-    loading, 
+  return {
+    pages,
+    loading,
     likePage,
     unlikePage,
     refetch: fetchPages,
@@ -95,7 +96,7 @@ export function useGalleryStatus(userId: string | undefined) {
       const newStatus = await toggleGalleryStatus(userId);
       setIsInGallery(newStatus);
       toast.success(
-        newStatus 
+        newStatus
           ? t('toasts.gallery.addedToGallery')
           : t('toasts.gallery.removedFromGallery')
       );

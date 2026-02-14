@@ -23,7 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { migrateToMultilingual, getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { migrateToMultilingual, getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { compressImage } from '@/lib/image-compression';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -81,11 +81,11 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
 
   // Get current name/bio for display
   const nameValue = typeof formData.name === 'object' 
-    ? getTranslatedString(formData.name, currentLang)
+    ? getI18nText(formData.name, currentLang)
     : formData.name || '';
   
   const bioValue = typeof formData.bio === 'object'
-    ? getTranslatedString(formData.bio, currentLang)
+    ? getI18nText(formData.bio, currentLang)
     : formData.bio || '';
 
   const initials = nameValue

@@ -33,7 +33,8 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import { BrowserQRCodeReader } from '@zxing/browser';
+import { logger } from '@/lib/logger';
+import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
 
 interface ScanResult {
   ticketCode: string;
@@ -56,7 +57,7 @@ export default function EventScanner() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { isPremium, isLoading: premiumLoading } = usePremiumStatus();
-  
+
   const [eventInfo, setEventInfo] = useState<EventInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
@@ -66,11 +67,13 @@ export default function EventScanner() {
   const [recentScans, setRecentScans] = useState<ScanResult[]>([]);
   const [torchOn, setTorchOn] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
-  
+  const [cameraReady, setCameraReady] = useState(false);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const readerRef = useRef<BrowserQRCodeReader | null>(null);
-  const controlsRef = useRef<{ stop: () => void } | null>(null);
+  const controlsRef = useRef<IScannerControls | null>(null);
+  const readerRef = useRef<BrowserMultiFormatReader | null>(null);
+  const isMountedRef = useRef(true);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
@@ -78,7 +81,7 @@ export default function EventScanner() {
   useEffect(() => {
     const fetchEventInfo = async () => {
       if (!user || !eventId) return;
-      
+
       try {
         const { data: event, error } = await supabase
           .from('events')
@@ -101,19 +104,19 @@ export default function EventScanner() {
           .eq('status', 'confirmed');
 
         const total = registrations?.length || 0;
-        const checkedIn = registrations?.filter(r => 
+        const checkedIn = registrations?.filter(r =>
           r.event_tickets?.some((t: { status: string }) => t.status === 'used')
         ).length || 0;
 
         setEventInfo({
           id: event.id,
-          title: (event.title_i18n_json as Record<string, string>)?.[i18n.language] || 
-                 (event.title_i18n_json as Record<string, string>)?.ru || 'Event',
+          title: (event.title_i18n_json as Record<string, string>)?.[i18n.language] ||
+            (event.title_i18n_json as Record<string, string>)?.ru || 'Event',
           totalRegistrations: total,
           checkedIn,
         });
       } catch (error) {
-        console.error('Error fetching event:', error);
+        logger.error('Error fetching event:', error, { context: 'EventScanner' });
         toast.error(t('events.fetchError', 'Ошибка загрузки'));
       } finally {
         setLoading(false);
@@ -163,10 +166,10 @@ export default function EventScanner() {
         };
       }
 
-      const registration = ticket.registration as { 
-        id: string; 
-        attendee_name: string; 
-        event_id: string; 
+      const registration = ticket.registration as {
+        id: string;
+        attendee_name: string;
+        event_id: string;
         owner_id: string;
       };
 
@@ -215,9 +218,9 @@ export default function EventScanner() {
       // Mark as used
       const { error: updateError } = await supabase
         .from('event_tickets')
-        .update({ 
-          status: 'used', 
-          checked_in_at: new Date().toISOString() 
+        .update({
+          status: 'used',
+          checked_in_at: new Date().toISOString()
         })
         .eq('id', ticket.id);
 
@@ -242,7 +245,7 @@ export default function EventScanner() {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('Check-in error:', error);
+      logger.error('Check-in error:', error, { context: 'EventScanner' });
       return {
         ticketCode,
         attendeeName: '',
@@ -256,7 +259,7 @@ export default function EventScanner() {
   // Process scan result
   const processScan = useCallback(async (code: string) => {
     if (processing || !code.trim()) return;
-    
+
     // Check if already scanned recently
     if (recentScans.some(s => s.ticketCode === code.toUpperCase())) {
       return;
@@ -265,7 +268,7 @@ export default function EventScanner() {
     setProcessing(true);
     const result = await checkInTicket(code.trim());
     setRecentScans(prev => [result, ...prev.slice(0, 9)]);
-    
+
     if (result.success) {
       toast.success(`✓ ${result.attendeeName}`);
       // Vibrate on success
@@ -278,70 +281,175 @@ export default function EventScanner() {
         navigator.vibrate(300);
       }
     }
-    
+
     setProcessing(false);
     setManualCode('');
   }, [processing, recentScans, checkInTicket]);
 
+  // Stop camera and cleanup
+  const stopCamera = useCallback(() => {
+    logger.debug('[Scanner] Stopping camera...');
+
+    if (controlsRef.current) {
+      try {
+        controlsRef.current.stop();
+      } catch (e) {
+        logger.warn('[Scanner] Error stopping controls:', e);
+      }
+      controlsRef.current = null;
+    }
+
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => {
+        track.stop();
+      });
+      streamRef.current = null;
+    }
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+
+    setScanning(false);
+    setCameraReady(false);
+    setTorchOn(false);
+  }, []);
+
   // Start camera with QR reader
   const startCamera = useCallback(async () => {
+    logger.debug('[Scanner] Starting camera...');
+
+    // Cleanup any existing camera first
+    stopCamera();
+
     try {
       setCameraError(null);
-      
-      if (!readerRef.current) {
-        readerRef.current = new BrowserQRCodeReader();
-      }
-      
-      const videoInputDevices = await BrowserQRCodeReader.listVideoInputDevices();
-      
-      // Prefer back camera
-      const backCamera = videoInputDevices.find(device => 
-        device.label.toLowerCase().includes('back') || 
-        device.label.toLowerCase().includes('rear') ||
-        device.label.toLowerCase().includes('environment')
-      );
-      
-      const deviceId = backCamera?.deviceId || videoInputDevices[0]?.deviceId;
-      
-      if (!deviceId) {
-        throw new Error('No camera found');
+
+      // Check if we have a video element
+      if (!videoRef.current) {
+        logger.error('[Scanner] Video element not found');
+        setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
+        setManualMode(true);
+        return;
       }
 
-      const controls = await readerRef.current.decodeFromVideoDevice(
-        deviceId,
-        videoRef.current!,
+      // Step 1: Request camera permission explicitly
+      logger.debug('[Scanner] Requesting camera permission...');
+      let stream: MediaStream;
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'environment',
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+          audio: false,
+        });
+      } catch (permError) {
+        logger.error('[Scanner] Permission error:', permError);
+
+        if (permError instanceof DOMException) {
+          if (permError.name === 'NotAllowedError') {
+            setCameraError(t('events.cameraPermissionDenied', 'Разрешите доступ к камере в настройках браузера'));
+          } else if (permError.name === 'NotFoundError') {
+            setCameraError(t('events.noCameraFound', 'Камера не найдена на устройстве'));
+          } else if (permError.name === 'NotReadableError') {
+            setCameraError(t('events.cameraInUse', 'Камера используется другим приложением'));
+          } else {
+            setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
+          }
+        } else {
+          setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
+        }
+
+        setManualMode(true);
+        return;
+      }
+
+      if (!isMountedRef.current) {
+        stream.getTracks().forEach(track => track.stop());
+        return;
+      }
+
+      logger.debug('[Scanner] Got camera stream, attaching to video...');
+      streamRef.current = stream;
+
+      // Step 2: Attach stream to video element
+      videoRef.current.srcObject = stream;
+
+      // Wait for video to be ready
+      await new Promise<void>((resolve, reject) => {
+        const video = videoRef.current!;
+
+        const onLoadedMetadata = () => {
+          video.removeEventListener('loadedmetadata', onLoadedMetadata);
+          video.removeEventListener('error', onError);
+          resolve();
+        };
+
+        const onError = (e: Event) => {
+          video.removeEventListener('loadedmetadata', onLoadedMetadata);
+          video.removeEventListener('error', onError);
+          reject(new Error('Video element error'));
+        };
+
+        video.addEventListener('loadedmetadata', onLoadedMetadata);
+        video.addEventListener('error', onError);
+
+        // Timeout fallback
+        setTimeout(() => {
+          video.removeEventListener('loadedmetadata', onLoadedMetadata);
+          video.removeEventListener('error', onError);
+          resolve(); // Continue anyway
+        }, 3000);
+      });
+
+      // Step 3: Play the video
+      logger.debug('[Scanner] Playing video...');
+      try {
+        await videoRef.current.play();
+      } catch (playError) {
+        logger.warn('[Scanner] Video play error (may be fine):', { data: { error: playError } });
+      }
+
+      if (!isMountedRef.current) {
+        stopCamera();
+        return;
+      }
+
+      setCameraReady(true);
+      setScanning(true);
+      logger.debug('[Scanner] Camera is ready and streaming');
+
+      // Step 4: Initialize QR code reader
+      logger.debug('[Scanner] Initializing QR reader...');
+      if (!readerRef.current) {
+        readerRef.current = new BrowserMultiFormatReader();
+      }
+
+      // Step 5: Start decoding from the video element
+      const controls = await readerRef.current.decodeFromVideoElement(
+        videoRef.current,
         (result, error) => {
           if (result) {
             const code = result.getText();
+            logger.debug('[Scanner] QR Code detected:', { data: { code } });
             processScan(code);
           }
-          // Ignore errors during continuous scanning
+          // Errors during scanning are normal (no QR in frame), ignore them
         }
       );
-      
+
       controlsRef.current = controls;
-      streamRef.current = videoRef.current?.srcObject as MediaStream || null;
-      setScanning(true);
-      
+      logger.debug('[Scanner] QR reader started successfully');
+
     } catch (error) {
-      console.error('Camera error:', error);
+      logger.error('[Scanner] Camera error:', error);
       setCameraError(t('events.cameraError', 'Не удалось запустить камеру'));
       setManualMode(true);
     }
-  }, [t, processScan]);
-
-  // Stop camera
-  const stopCamera = useCallback(() => {
-    if (controlsRef.current) {
-      controlsRef.current.stop();
-      controlsRef.current = null;
-    }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
-    setScanning(false);
-  }, []);
+  }, [t, processScan, stopCamera]);
 
   // Toggle torch
   const toggleTorch = useCallback(async () => {
@@ -358,12 +466,34 @@ export default function EventScanner() {
     }
   }, [torchOn, t]);
 
+  // Track mounted state
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopCamera();
     };
   }, [stopCamera]);
+
+  // Auto-start camera when conditions are met
+  useEffect(() => {
+    if (!loading && !premiumLoading && isPremium && eventInfo && !manualMode) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        if (isMountedRef.current && !scanning) {
+          startCamera();
+        }
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading, premiumLoading, isPremium, eventInfo, manualMode]);
 
   // Premium gate
   if (!premiumLoading && !isPremium) {
@@ -377,8 +507,8 @@ export default function EventScanner() {
           <p className="text-muted-foreground mb-6 leading-relaxed">
             {t('events.scannerProDescription', 'Отмечайте гостей по QR-кодам на входе')}
           </p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="h-14 px-8 rounded-2xl text-base font-bold shadow-xl shadow-primary/30"
             onClick={openPremiumPurchase}
           >
@@ -424,43 +554,57 @@ export default function EventScanner() {
       {/* Main content */}
       <div className="flex-1 flex flex-col p-4 gap-4">
         {/* Camera view or manual input */}
-        {!manualMode && scanning ? (
+        {!manualMode ? (
           <div className="relative aspect-square max-w-sm mx-auto w-full rounded-2xl overflow-hidden bg-black">
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
+              autoPlay
               playsInline
               muted
             />
-            {/* Canvas removed - using zxing video directly */}
-            
+
+            {/* Loading state */}
+            {!cameraReady && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black">
+                <div className="text-center text-white">
+                  <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                  <p className="text-sm">{t('events.startingCamera', 'Запуск камеры...')}</p>
+                </div>
+              </div>
+            )}
+
             {/* Scan overlay */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-48 h-48 border-2 border-primary rounded-2xl" />
-            </div>
+            {cameraReady && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-48 h-48 border-2 border-primary rounded-2xl" />
+              </div>
+            )}
 
             {/* Camera controls */}
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-              <Button
-                size="icon"
-                variant="secondary"
-                className="h-12 w-12 rounded-full"
-                onClick={toggleTorch}
-              >
-                {torchOn ? <FlashlightOff className="h-5 w-5" /> : <Flashlight className="h-5 w-5" />}
-              </Button>
-              <Button
-                size="icon"
-                variant="destructive"
-                className="h-12 w-12 rounded-full"
-                onClick={() => {
-                  stopCamera();
-                  setManualMode(true);
-                }}
-              >
-                <CameraOff className="h-5 w-5" />
-              </Button>
-            </div>
+            {cameraReady && (
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="h-12 w-12 rounded-full"
+                  onClick={toggleTorch}
+                >
+                  {torchOn ? <FlashlightOff className="h-5 w-5" /> : <Flashlight className="h-5 w-5" />}
+                </Button>
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  className="h-12 w-12 rounded-full"
+                  onClick={() => {
+                    stopCamera();
+                    setManualMode(true);
+                  }}
+                >
+                  <CameraOff className="h-5 w-5" />
+                </Button>
+              </div>
+            )}
 
             {processing && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -487,7 +631,7 @@ export default function EventScanner() {
                 maxLength={12}
                 disabled={processing}
               />
-              <Button 
+              <Button
                 onClick={() => processScan(manualCode)}
                 disabled={!manualCode.trim() || processing}
               >
@@ -506,7 +650,11 @@ export default function EventScanner() {
               <Button
                 variant="outline"
                 className="flex-1"
-                onClick={startCamera}
+                onClick={() => {
+                  setManualMode(false);
+                  setCameraError(null);
+                  startCamera();
+                }}
               >
                 <Camera className="h-4 w-4 mr-2" />
                 {t('events.useCamera', 'Камера')}
@@ -514,7 +662,7 @@ export default function EventScanner() {
               <Button
                 variant="outline"
                 className="flex-1"
-                onClick={() => setManualMode(true)}
+                disabled
               >
                 <Keyboard className="h-4 w-4 mr-2" />
                 {t('events.manual', 'Вручную')}
@@ -529,7 +677,7 @@ export default function EventScanner() {
             <Clock className="h-4 w-4" />
             {t('events.recentScans', 'Последние сканы')}
           </h3>
-          
+
           <ScrollArea className="h-64">
             {recentScans.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground text-sm">
@@ -538,18 +686,16 @@ export default function EventScanner() {
             ) : (
               <div className="space-y-2">
                 {recentScans.map((scan, idx) => (
-                  <Card 
+                  <Card
                     key={`${scan.ticketCode}-${idx}`}
-                    className={`p-3 flex items-center gap-3 ${
-                      scan.success 
-                        ? 'border-green-500/30 bg-green-500/5' 
-                        : 'border-red-500/30 bg-red-500/5'
-                    }`}
+                    className={`p-3 flex items-center gap-3 ${scan.success
+                      ? 'border-green-500/30 bg-green-500/5'
+                      : 'border-red-500/30 bg-red-500/5'
+                      }`}
                   >
-                    <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                      scan.success ? 'bg-green-500/20' : 'bg-red-500/20'
-                    }`}>
-                      {scan.success 
+                    <div className={`h-8 w-8 rounded-full flex items-center justify-center ${scan.success ? 'bg-green-500/20' : 'bg-red-500/20'
+                      }`}>
+                      {scan.success
                         ? <Check className="h-4 w-4 text-green-500" />
                         : <X className="h-4 w-4 text-red-500" />
                       }

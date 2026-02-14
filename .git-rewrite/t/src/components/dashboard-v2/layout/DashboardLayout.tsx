@@ -31,7 +31,7 @@ export const DashboardLayout = memo(function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar - sticky to stay fixed while content scrolls */}
       {!isMobile && (
         <DashboardSidebar
           activeTab={activeTab}
@@ -44,11 +44,11 @@ export const DashboardLayout = memo(function DashboardLayout({
         />
       )}
 
-      {/* Main Content */}
+      {/* Main Content - scrollable independently */}
       <main
         className={cn(
-          "flex-1 min-w-0",
-          isMobile && "pb-24" // Space for bottom nav
+          "flex-1 min-w-0 h-screen overflow-y-auto",
+          isMobile && "pb-24 h-auto" // Space for bottom nav, reset height on mobile
         )}
       >
         {children}

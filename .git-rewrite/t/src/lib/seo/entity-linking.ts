@@ -4,7 +4,7 @@
  */
 
 import type { Block, SocialsBlock, LinkBlock } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 
 // Known social platforms for sameAs extraction
 const SOCIAL_PLATFORMS: Record<string, string> = {
@@ -84,7 +84,7 @@ export function extractEntityLinks(
   const pricingBlock = blocks.find(b => b.type === 'pricing') as any;
   if (pricingBlock?.items) {
     for (const item of pricingBlock.items.slice(0, 5)) {
-      const name = getTranslatedString(item.name, language);
+      const name = getI18nText(item.name, language);
       if (name && name.length > 2 && name.length < 50) {
         result.knowsAbout.push(name);
       }
@@ -95,7 +95,7 @@ export function extractEntityLinks(
   const catalogBlock = blocks.find(b => b.type === 'catalog') as any;
   if (catalogBlock?.categories) {
     for (const category of catalogBlock.categories.slice(0, 3)) {
-      const name = getTranslatedString(category.name, language);
+      const name = getI18nText(category.name, language);
       if (name && name.length > 2 && name.length < 50) {
         result.knowsAbout.push(name);
       }
@@ -156,7 +156,7 @@ export function extractSkillTags(
   const catalogBlock = blocks.find(b => b.type === 'catalog') as any;
   if (catalogBlock?.categories) {
     for (const category of catalogBlock.categories) {
-      const name = getTranslatedString(category.name, language);
+      const name = getI18nText(category.name, language);
       if (name) {
         tags.push(name.toLowerCase().replace(/\s+/g, '-'));
       }

@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export type CollabStatus = 'pending' | 'accepted' | 'rejected';
 
@@ -83,7 +84,7 @@ async function sendCollabNotification(
       body: { targetUserId, requesterName, message, type }
     });
   } catch (error) {
-    console.error('Failed to send collab notification:', error);
+    logger.error('Failed to send collab notification', error, { context: 'collaboration' });
   }
 }
 
@@ -102,7 +103,7 @@ export async function sendCollabRequest(
     .select('display_name, username')
     .eq('id', user.id)
     .maybeSingle();
-  
+
   const requesterName = profile?.display_name || profile?.username || 'Someone';
 
   const { error } = await supabase
@@ -138,14 +139,14 @@ export async function getMyCollaborations(): Promise<Collaboration[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching collaborations:', error);
+    logger.error('Error fetching collaborations', error, { context: 'collaboration' });
     return [];
   }
 
   // Fetch user profiles for each collaboration
   const collaborations = data || [];
   const userIds = [...new Set(collaborations.flatMap(c => [c.requester_id, c.target_id]))];
-  
+
   const { data: profiles } = await supabase
     .from('user_profiles')
     .select('id, username, display_name, avatar_url')
@@ -202,7 +203,7 @@ export async function respondToCollab(
       .select('display_name, username')
       .eq('id', user.id)
       .maybeSingle();
-    
+
     const responderName = profile?.display_name || profile?.username || 'Someone';
     await sendCollabNotification(collab.requester_id, responderName, undefined, accept ? 'accepted' : 'rejected');
   }
@@ -271,7 +272,7 @@ export async function getMyTeams(): Promise<Team[]> {
     .eq('user_id', user.id);
 
   const teamIds = memberTeams?.map(m => m.team_id) || [];
-  
+
   if (teamIds.length === 0) return [];
 
   const { data, error } = await supabase
@@ -280,7 +281,7 @@ export async function getMyTeams(): Promise<Team[]> {
     .in('id', teamIds);
 
   if (error) {
-    console.error('Error fetching teams:', error);
+    logger.error('Error fetching teams', error, { context: 'collaboration' });
     return [];
   }
 
@@ -401,14 +402,14 @@ export async function removeMemberFromTeam(
   if (memberProfile?.telegram_notifications_enabled && memberProfile?.telegram_chat_id) {
     try {
       await supabase.functions.invoke('send-team-notification', {
-        body: { 
-          targetUserId: memberId, 
-          teamName: team.name, 
-          type: 'removed' 
+        body: {
+          targetUserId: memberId,
+          teamName: team.name,
+          type: 'removed'
         }
       });
     } catch (e) {
-      console.error('Failed to send removal notification:', e);
+      logger.error('Failed to send removal notification', e, { context: 'collaboration' });
     }
   }
 
@@ -430,14 +431,14 @@ export async function generateTeamInviteCode(teamId: string): Promise<string | n
 
   // Generate new code
   const code = `team-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
-  
+
   const { error } = await supabase
     .from('teams')
     .update({ invite_code: code })
     .eq('id', teamId);
 
   if (error) {
-    console.error('Error generating invite code:', error);
+    logger.error('Error generating invite code', error, { context: 'collaboration', data: { teamId } });
     return null;
   }
 
@@ -447,14 +448,14 @@ export async function generateTeamInviteCode(teamId: string): Promise<string | n
 // Reset invite code
 export async function resetTeamInviteCode(teamId: string): Promise<string | null> {
   const code = `team-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 8)}`;
-  
+
   const { error } = await supabase
     .from('teams')
     .update({ invite_code: code })
     .eq('id', teamId);
 
   if (error) {
-    console.error('Error resetting invite code:', error);
+    logger.error('Error resetting invite code', error, { context: 'collaboration', data: { teamId } });
     return null;
   }
 
@@ -558,7 +559,7 @@ export async function searchUsers(query: string): Promise<Array<{
   niche?: string | null;
 }>> {
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   const { data, error } = await supabase
     .from('user_profiles')
     .select('id, username, display_name, avatar_url')

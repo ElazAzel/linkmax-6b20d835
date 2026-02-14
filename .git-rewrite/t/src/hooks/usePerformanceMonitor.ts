@@ -1,4 +1,6 @@
 import { useCallback, useRef } from 'react';
+import { storage } from '@/lib/storage';
+import { logger } from '@/lib/logger';
 
 interface PerformanceEntry {
   name: string;
@@ -22,7 +24,7 @@ export function usePerformanceMonitor() {
 
   const logEntry = useCallback((entry: PerformanceEntry) => {
     entriesRef.current.push(entry);
-    
+
     // Keep only last MAX_ENTRIES
     if (entriesRef.current.length > MAX_ENTRIES) {
       entriesRef.current = entriesRef.current.slice(-MAX_ENTRIES);
@@ -30,7 +32,7 @@ export function usePerformanceMonitor() {
 
     // Log slow operations in development
     if (entry.duration > SLOW_THRESHOLD_MS) {
-      console.warn(`[PERF] Slow ${entry.type}: ${entry.name} took ${entry.duration.toFixed(2)}ms`);
+      logger.warn(`[PERF] Slow ${entry.type}: ${entry.name} took ${entry.duration.toFixed(2)}ms`, { context: 'usePerformanceMonitor' });
     }
   }, []);
 
@@ -43,14 +45,14 @@ export function usePerformanceMonitor() {
     try {
       const result = await fn();
       const duration = performance.now() - start;
-      
+
       logEntry({
         name,
         duration,
         timestamp: Date.now(),
         type
       });
-      
+
       return result;
     } catch (error) {
       const duration = performance.now() - start;
@@ -73,14 +75,14 @@ export function usePerformanceMonitor() {
     try {
       const result = fn();
       const duration = performance.now() - start;
-      
+
       logEntry({
         name,
         duration,
         timestamp: Date.now(),
         type
       });
-      
+
       return result;
     } catch (error) {
       const duration = performance.now() - start;
@@ -95,7 +97,7 @@ export function usePerformanceMonitor() {
   }, [logEntry]);
 
   const getStats = useCallback((filterType?: PerformanceEntry['type']): PerformanceStats => {
-    const filtered = filterType 
+    const filtered = filterType
       ? entriesRef.current.filter(e => e.type === filterType)
       : entriesRef.current;
 
@@ -125,7 +127,7 @@ export function usePerformanceMonitor() {
   }, []);
 
   const toggleMonitoring = useCallback((enabled: boolean) => {
-    localStorage.setItem('linkmax_perf_monitor', String(enabled));
+    storage.set('perf_monitor', String(enabled));
   }, []);
 
   return {
@@ -136,7 +138,7 @@ export function usePerformanceMonitor() {
     getRecentEntries,
     clearEntries,
     toggleMonitoring,
-    isEnabled: () => localStorage.getItem('linkmax_perf_monitor') === 'true'
+    isEnabled: () => storage.get<string>('perf_monitor') === 'true'
   };
 }
 
@@ -148,13 +150,13 @@ export const perfMonitor = {
       end: () => {
         const duration = performance.now() - start;
         if (duration > SLOW_THRESHOLD_MS) {
-          console.warn(`[PERF] Slow operation: ${name} took ${duration.toFixed(2)}ms`);
+          logger.warn(`[PERF] Slow operation: ${name} took ${duration.toFixed(2)}ms`, { context: 'usePerformanceMonitor' });
         }
         return duration;
       }
     };
   },
-  
+
   wrap: async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
     const timer = perfMonitor.start(name);
     try {

@@ -187,7 +187,53 @@ npm run build
 
 ## Тестовое покрытие
 
-- ✅ 151 тест проходит
+- ✅ 37 тестов проходят
 - ✅ FreePremiumBlockGate tests
 - ✅ EventBlock tests
 - ✅ Blocks rendering tests
+- ✅ FAQ, Countdown, ImageBlock tests
+- ✅ CarouselBlock empty state test
+
+## Аудит v2.1 (31.01.2026)
+
+### Исправлено в этом аудите:
+
+| Проблема | Блоки | Решение |
+|----------|-------|---------|
+| Нет onClick для аналитики | MessengerBlock | Добавлен `onClick` prop + задержка 15ms |
+| Нет onClick для аналитики | CarouselBlock | Добавлен `onClick` prop для кликов по изображениям |
+| Нет onClick для аналитики | ImageBlock | Добавлен `onClick` prop для кликов по ссылке |
+| Навигация без задержки | Messenger, Carousel, Image | setTimeout(15ms) перед window.open |
+
+### Статус всех блоков по аналитике:
+
+| Блок | onClick | Tracking | Статус |
+|------|---------|----------|--------|
+| profile | N/A | Не требуется | ✅ OK |
+| link | ✅ | ✅ | ✅ OK |
+| button | ✅ | ✅ | ✅ OK |
+| socials | ✅ | ✅ | ✅ OK |
+| text | N/A | Не кликабелен | ✅ OK |
+| image | ✅ | ✅ | ✅ FIXED |
+| product | ✅ | ✅ | ✅ OK |
+| video | ✅ | ✅ | ✅ OK |
+| carousel | ✅ | ✅ | ✅ FIXED |
+| custom_code | N/A | Iframe isolation | ✅ OK |
+| messenger | ✅ | ✅ | ✅ FIXED |
+| form | N/A | Форма внутри | ✅ OK |
+| download | ✅ | ✅ | ✅ OK |
+| newsletter | N/A | Форма внутри | ✅ OK |
+| testimonial | N/A | Не кликабелен | ✅ OK |
+| scratch | N/A | Canvas interaction | ✅ OK |
+| map | N/A | Iframe | ✅ OK |
+| avatar | N/A | Не кликабелен | ✅ OK |
+| separator | N/A | Не кликабелен | ✅ OK |
+| catalog | N/A | Внутренние клики | ✅ OK |
+| before_after | N/A | Slider interaction | ✅ OK |
+| faq | N/A | Accordion | ✅ OK |
+| countdown | N/A | Не кликабелен | ✅ OK |
+| pricing | N/A | Внутренние кнопки | ✅ OK |
+| shoutout | N/A | Profile link | ✅ OK |
+| booking | N/A | Форма внутри | ✅ OK |
+| community | N/A | Кнопка внутри | ✅ OK |
+| event | N/A | Форма внутри | ✅ OK |

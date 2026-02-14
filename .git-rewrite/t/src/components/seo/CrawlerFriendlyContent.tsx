@@ -12,7 +12,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Block, FAQBlock, EventBlock, PricingBlock, SocialsBlock, TextBlock } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { extractProfileFromBlocks, generateSourceContext } from '@/lib/seo-utils';
 import { generateSectionAnchors, SECTION_LABELS } from '@/lib/seo/anchors';
 import { extractEntityLinks } from '@/lib/seo/entity-linking';
@@ -129,7 +129,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
           <section aria-label="Details">
             <h2>{SECTION_LABELS.about[language]}</h2>
             {textBlocks.map(block => (
-              <p key={block.id}>{getTranslatedString(block.content, language)}</p>
+              <p key={block.id}>{getI18nText(block.content, language)}</p>
             ))}
           </section>
         )}
@@ -157,9 +157,9 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
                   itemScope 
                   itemType="https://schema.org/Service"
                 >
-                  <h3 itemProp="name">{getTranslatedString(item.name, language)}</h3>
+                  <h3 itemProp="name">{getI18nText(item.name, language)}</h3>
                   {item.description && (
-                    <p itemProp="description">{getTranslatedString(item.description, language)}</p>
+                    <p itemProp="description">{getI18nText(item.description, language)}</p>
                   )}
                   <span 
                     itemProp="offers" 
@@ -185,9 +185,9 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
                 itemScope 
                 itemType="https://schema.org/Event"
               >
-                <h3 itemProp="name">{getTranslatedString(event.title, language)}</h3>
+                <h3 itemProp="name">{getI18nText(event.title, language)}</h3>
                 {event.description && (
-                  <p itemProp="description">{getTranslatedString(event.description, language)}</p>
+                  <p itemProp="description">{getI18nText(event.description, language)}</p>
                 )}
                 {event.startAt && (
                   <time itemProp="startDate" dateTime={event.startAt}>
@@ -220,13 +220,13 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
                   itemType="https://schema.org/Question"
                   itemProp="mainEntity"
                 >
-                  <dt itemProp="name">{getTranslatedString(item.question, language)}</dt>
+                  <dt itemProp="name">{getI18nText(item.question, language)}</dt>
                   <dd 
                     itemScope 
                     itemType="https://schema.org/Answer"
                     itemProp="acceptedAnswer"
                   >
-                    <span itemProp="text">{getTranslatedString(item.answer, language)}</span>
+                    <span itemProp="text">{getI18nText(item.answer, language)}</span>
                   </dd>
                 </div>
               ))}
@@ -260,7 +260,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
               {linkBlocks.map(block => (
                 <li key={block.id}>
                   <a href={block.url} rel="noopener noreferrer">
-                    {getTranslatedString(block.title, language)}
+                    {getI18nText(block.title, language)}
                   </a>
                 </li>
               ))}

@@ -62,3 +62,15 @@ verify_jwt = false
 
 [functions.send-attendee-email]
 verify_jwt = false
+
+[functions.generate-sitemap]
+verify_jwt = false
+
+[functions.seo-ssr]
+verify_jwt = false
+
+[functions.google-forms-parser]
+verify_jwt = false
+
+[functions.public-experts]
+verify_jwt = false

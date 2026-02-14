@@ -8,15 +8,18 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { Maximize2, Square, Minus } from 'lucide-react';
+
 function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
+  const data = formData as any;
+  const handleChange = (updates: any) => onChange(updates);
   
   return (
     <div className="space-y-4">
       <MultilingualInput
         label={t('fields.title', 'Title')}
-        value={migrateToMultilingual(formData.title)}
-        onChange={(value) => onChange({ ...formData, title: value })}
+        value={migrateToMultilingual(data.title)}
+        onChange={(value) => handleChange({ ...data, title: value })}
         placeholder={t('placeholders.buttonText', 'Button text')}
         required
       />
@@ -25,8 +28,8 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         <Label>URL</Label>
         <Input
           type="url"
-          value={formData.url || ''}
-          onChange={(e) => onChange({ ...formData, url: e.target.value })}
+          value={data.url || ''}
+          onChange={(e) => handleChange({ ...data, url: e.target.value })}
           placeholder="https://example.com"
         />
       </div>
@@ -34,8 +37,8 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
       <div>
         <Label>{t('fields.hoverEffect', 'Hover Effect')}</Label>
         <Select
-          value={formData.hoverEffect || 'none'}
-          onValueChange={(value) => onChange({ ...formData, hoverEffect: value })}
+          value={data.hoverEffect || 'none'}
+          onValueChange={(value) => handleChange({ ...data, hoverEffect: value })}
         >
           <SelectTrigger>
             <SelectValue />
@@ -52,13 +55,8 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
       <div className="border-t pt-4">
         <Label>{t('fields.backgroundType', 'Background Type')}</Label>
         <Select
-          value={formData.background?.type || 'solid'}
-          onValueChange={(value) =>
-            onChange({
-              ...formData,
-              background: { ...formData.background, type: value },
-            })
-          }
+          value={data.background?.type || 'solid'}
+          onValueChange={(value) => handleChange({ ...data, background: { ...data.background, type: value } })}
         >
           <SelectTrigger>
             <SelectValue />
@@ -71,54 +69,33 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         </Select>
       </div>
 
-      {formData.background?.type === 'solid' && (
+      {data.background?.type === 'solid' && (
         <div>
           <Label>{t('fields.backgroundColor', 'Background Color')}</Label>
           <Input
             type="color"
-            value={formData.background?.value || '#000000'}
-            onChange={(e) =>
-              onChange({
-                ...formData,
-                background: { ...formData.background, value: e.target.value },
-              })
-            }
+            value={data.background?.value || '#000000'}
+            onChange={(e) => handleChange({ ...data, background: { ...data.background, value: e.target.value } })}
           />
         </div>
       )}
 
-      {formData.background?.type === 'gradient' && (
+      {data.background?.type === 'gradient' && (
         <>
           <div>
             <Label>{t('fields.gradientColors', 'Gradient Colors')}</Label>
             <Input
-              value={formData.background?.value || ''}
-              onChange={(e) =>
-                onChange({
-                  ...formData,
-                  background: { ...formData.background, value: e.target.value },
-                })
-              }
+              value={data.background?.value || ''}
+              onChange={(e) => handleChange({ ...data, background: { ...data.background, value: e.target.value } })}
               placeholder="#ff0000, #0000ff"
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              {t('fields.enterCommaSeparatedColors', 'Enter comma-separated colors')}
-            </p>
           </div>
           <div>
             <Label>{t('fields.gradientAngle', 'Gradient Angle (degrees)')}</Label>
             <Input
               type="number"
-              value={formData.background?.gradientAngle || 135}
-              onChange={(e) =>
-                onChange({
-                  ...formData,
-                  background: {
-                    ...formData.background,
-                    gradientAngle: parseInt(e.target.value),
-                  },
-                })
-              }
+              value={data.background?.gradientAngle || 135}
+              onChange={(e) => handleChange({ ...data, background: { ...data.background, gradientAngle: parseInt(e.target.value) } })}
               min="0"
               max="360"
             />
@@ -126,61 +103,31 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
         </>
       )}
 
-      {formData.background?.type === 'image' && (
+      {data.background?.type === 'image' && (
         <MediaUpload
           label={t('fields.backgroundImage', 'Background Image')}
-          value={formData.background?.value || ''}
-          onChange={(value) =>
-            onChange({
-              ...formData,
-              background: { ...formData.background, value },
-            })
-          }
+          value={data.background?.value || ''}
+          onChange={(value) => handleChange({ ...data, background: { ...data.background, value } })}
           accept="image/*"
         />
       )}
 
       <div>
         <Label>{t('fields.width', 'Width')}</Label>
-        <Select
-          value={formData.width || 'medium'}
-          onValueChange={(value) => onChange({ ...formData, width: value })}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
+        <Select value={data.width || 'medium'} onValueChange={(value) => handleChange({ ...data, width: value })}>
+          <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="full">
-              <span className="flex items-center gap-2">
-                <Maximize2 className="h-4 w-4" />
-                {t('fields.fullWidth', 'Full Width')}
-              </span>
-            </SelectItem>
-            <SelectItem value="medium">
-              <span className="flex items-center gap-2">
-                <Square className="h-4 w-4" />
-                {t('fields.mediumWidth', 'Medium')}
-              </span>
-            </SelectItem>
-            <SelectItem value="small">
-              <span className="flex items-center gap-2">
-                <Minus className="h-4 w-4" />
-                {t('fields.smallWidth', 'Small')}
-              </span>
-            </SelectItem>
+            <SelectItem value="full"><span className="flex items-center gap-2"><Maximize2 className="h-4 w-4" />{t('fields.fullWidth', 'Full Width')}</span></SelectItem>
+            <SelectItem value="medium"><span className="flex items-center gap-2"><Square className="h-4 w-4" />{t('fields.mediumWidth', 'Medium')}</span></SelectItem>
+            <SelectItem value="small"><span className="flex items-center gap-2"><Minus className="h-4 w-4" />{t('fields.smallWidth', 'Small')}</span></SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div>
         <Label>{t('fields.alignment', 'Alignment')}</Label>
-        <Select
-          value={formData.alignment || 'center'}
-          onValueChange={(value) => onChange({ ...formData, alignment: value })}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
+        <Select value={data.alignment || 'center'} onValueChange={(value) => handleChange({ ...data, alignment: value })}>
+          <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="left">{t('fields.left', 'Left')}</SelectItem>
             <SelectItem value="center">{t('fields.center', 'Center')}</SelectItem>

@@ -39,6 +39,9 @@ export function AppRoutes() {
       <Route path="/dashboard/insights" element={<DashboardV2 />} />
       <Route path="/dashboard/monetize" element={<DashboardV2 />} />
       <Route path="/dashboard/settings" element={<DashboardV2 />} />
+      {/* Events management */}
+      <Route path="/dashboard/events" element={<DashboardV2 />} />
+      <Route path="/dashboard/events/:eventId" element={<DashboardV2 />} />
       {/* Event scanner (Pro feature) */}
       <Route path="/dashboard/events/:eventId/scanner" element={<EventScanner />} />
       <Route path="/install" element={<Install />} />

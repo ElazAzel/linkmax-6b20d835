@@ -4,7 +4,7 @@
 
 Users can create multiple pages, with limits based on their plan:
 - **Free**: 1 page
-- **Pro**: 6 pages (1 primary paid + 5 free)
+- **Pro**: 6 pages (1 primary paid + 5 additional)
 
 ## Database Schema
 

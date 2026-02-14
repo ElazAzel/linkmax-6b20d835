@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
@@ -53,8 +53,8 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const { canUsePremiumFrames } = useFreemiumLimits();
   const currentLang = i18n.language as SupportedLanguage;
   
-  const name = getTranslatedString(block.name, currentLang);
-  const bio = getTranslatedString(block.bio, currentLang);
+  const name = getI18nText(block.name, currentLang);
+  const bio = getI18nText(block.bio, currentLang);
   
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingBio, setIsEditingBio] = useState(false);

@@ -3,6 +3,7 @@ import { loadPageBySlug, loadUserPage, savePage, publishPage } from '@/services/
 import type { PageData } from '@/types/page';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { logger } from '@/lib/logger';
 
 // Query keys for cache management
 export const pageQueryKeys = {
@@ -49,22 +50,22 @@ export function useUserPage(userId: string | undefined) {
 export function useSavePageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  
+
   return useMutation({
-    mutationFn: async ({ 
-      pageData, 
-      chatbotContext 
-    }: { 
-      pageData: PageData; 
+    mutationFn: async ({
+      pageData,
+      chatbotContext
+    }: {
+      pageData: PageData;
       chatbotContext?: string;
     }): Promise<{ dbPage: { id: string; slug: string; is_published: boolean } | null; pageData: PageData; chatbotContext?: string }> => {
       if (!userId) throw new Error('User ID is required');
       const { data, error } = await savePage(pageData, userId, chatbotContext);
       if (error) throw error;
-      return { 
-        dbPage: data ? { id: data.id, slug: data.slug, is_published: data.is_published } : null, 
-        pageData, 
-        chatbotContext 
+      return {
+        dbPage: data ? { id: data.id, slug: data.slug, is_published: data.is_published } : null,
+        pageData,
+        chatbotContext
       };
     },
     onSuccess: ({ dbPage, pageData, chatbotContext }) => {
@@ -79,14 +80,14 @@ export function useSavePageMutation(userId: string | undefined) {
       }
       // Invalidate public page cache if published
       if (dbPage?.slug && dbPage?.is_published) {
-        queryClient.invalidateQueries({ 
-          queryKey: pageQueryKeys.publicPage(dbPage.slug) 
+        queryClient.invalidateQueries({
+          queryKey: pageQueryKeys.publicPage(dbPage.slug)
         });
       }
     },
     onError: (error: Error) => {
-      console.error('Error saving page:', error);
-      console.error('Error details:', JSON.stringify(error, null, 2));
+      logger.error('Error saving page', error, { context: 'usePageCache' });
+      logger.error('Error details', error, { context: 'usePageCache', data: { details: JSON.stringify(error, null, 2) } });
       toast.error(t('toasts.page.saveError') + `: ${error.message || ''}`);
     },
   });
@@ -96,7 +97,7 @@ export function useSavePageMutation(userId: string | undefined) {
 export function usePublishPageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  
+
   return useMutation({
     mutationFn: async () => {
       if (!userId) throw new Error('User ID is required');
@@ -108,13 +109,13 @@ export function usePublishPageMutation(userId: string | undefined) {
       // Don't invalidate user cache to preserve local state
       // Only invalidate public page cache
       if (slug) {
-        queryClient.invalidateQueries({ 
-          queryKey: pageQueryKeys.publicPage(slug) 
+        queryClient.invalidateQueries({
+          queryKey: pageQueryKeys.publicPage(slug)
         });
       }
     },
     onError: (error) => {
-      console.error('Error publishing page:', error);
+      logger.error('Error publishing page', error, { context: 'usePageCache' });
       toast.error(t('toasts.page.publishError'));
     },
   });
@@ -123,7 +124,7 @@ export function usePublishPageMutation(userId: string | undefined) {
 // Utility to prefetch public page (useful for link hovers)
 export function usePrefetchPublicPage() {
   const queryClient = useQueryClient();
-  
+
   return (slug: string) => {
     queryClient.prefetchQuery({
       queryKey: pageQueryKeys.publicPage(slug),

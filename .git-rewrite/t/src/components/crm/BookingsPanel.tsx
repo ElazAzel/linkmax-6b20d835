@@ -216,7 +216,7 @@ export function BookingsPanel() {
     const [hours, minutes] = booking.slot_time.split(':').map(Number);
     startDate.setHours(hours, minutes, 0, 0);
     
-    let endDate = new Date(startDate);
+    const endDate = new Date(startDate);
     if (booking.slot_end_time) {
       const [endHours, endMinutes] = booking.slot_end_time.split(':').map(Number);
       endDate.setHours(endHours, endMinutes, 0, 0);

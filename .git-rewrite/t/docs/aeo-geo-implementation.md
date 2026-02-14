@@ -209,8 +209,31 @@ bun run test src/lib/seo/
 
 ## Roadmap
 
-- [ ] Landing page FAQ/HowTo Schema
+- [x] Landing page FAQ/HowTo Schema
+- [x] User pages SSR with full Schema.org
+- [x] sameAs entity linking from social blocks
+- [x] knowsAbout from services
 - [ ] /guides/* content pages
 - [ ] /compare/* comparison tables
 - [ ] /experts/{niche} directory pages
 - [ ] CI/CD schema validation
+
+## Verification (Updated)
+
+### Test User Page SSR
+
+```bash
+curl -s -H "User-Agent: Googlebot" "https://lnkmx.my/{slug}" | head -100
+```
+
+### Test Edge Function SSR Directly
+
+```bash
+curl -s "https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/generate-sitemap/ssr/{slug}?lang=ru"
+```
+
+### Validate JSON-LD
+
+```bash
+curl -s "https://lnkmx.my/{slug}" | grep -oP '<script type="application/ld\+json">.*?</script>' | head -1
+```

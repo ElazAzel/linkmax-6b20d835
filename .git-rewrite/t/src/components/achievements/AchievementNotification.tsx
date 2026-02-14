@@ -33,7 +33,8 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
       clearTimeout(showTimer);
       clearTimeout(dismissTimer);
     };
-  }, [playAchievement]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDismiss = () => {
     setIsExiting(true);

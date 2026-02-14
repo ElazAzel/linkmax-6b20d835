@@ -134,6 +134,12 @@ function generateICSLink(event: EventData, lang: string): string {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+function generateQRCodeDataUrl(ticketCode: string): string {
+  // Generate QR code using Google Charts API (simple, no dependencies)
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(ticketCode)}&format=png&margin=10`;
+  return qrUrl;
+}
+
 function generateEmailHTML(
   event: EventData,
   registration: RegistrationData,
@@ -149,6 +155,7 @@ function generateEmailHTML(
   const isConfirmed = registration.status === 'confirmed';
   const organizerName = owner?.display_name || owner?.username || 'Organizer';
   const pageUrl = page?.slug ? `${baseUrl}/${page.slug}` : baseUrl;
+  const qrCodeUrl = generateQRCodeDataUrl(ticketCode);
   
   return `
 <!DOCTYPE html>
@@ -181,11 +188,15 @@ function generateEmailHTML(
                 ${isConfirmed ? t.confirmed : t.pending}
               </p>
               
-              <!-- Ticket Code Box -->
+              <!-- QR Code and Ticket Box -->
               ${isConfirmed ? `
               <div style="background-color: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 30px;">
-                <p style="color: #15803d; font-size: 14px; margin: 0 0 8px 0; font-weight: 500;">${t.ticketCode}</p>
-                <p style="font-size: 32px; font-weight: 700; color: #166534; margin: 0; letter-spacing: 2px;">${ticketCode}</p>
+                <p style="color: #15803d; font-size: 14px; margin: 0 0 16px 0; font-weight: 500;">${t.ticketCode}</p>
+                
+                <!-- QR Code -->
+                <img src="${qrCodeUrl}" alt="QR Code" width="160" height="160" style="display: block; margin: 0 auto 16px auto; border-radius: 8px;" />
+                
+                <p style="font-size: 28px; font-weight: 700; color: #166534; margin: 0; letter-spacing: 2px;">${ticketCode}</p>
                 <p style="color: #16a34a; font-size: 12px; margin: 12px 0 0 0;">${t.saveTicket}</p>
               </div>
               ` : ''}
@@ -338,8 +349,9 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     // Send email via Resend
+    // NOTE: Using onboarding@resend.dev for testing. Replace with your verified domain.
     const { data: emailResult, error: emailError } = await resend.emails.send({
-      from: "LNKMX <noreply@linkmax.lovable.app>",
+      from: "LNKMX Events <onboarding@resend.dev>",
       to: [regData.attendee_email],
       subject: `🎫 ${t.subject} — ${eventTitle}`,
       html: emailHTML,

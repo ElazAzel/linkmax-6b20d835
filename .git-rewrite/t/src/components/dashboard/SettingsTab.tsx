@@ -40,7 +40,7 @@ import { cn } from '@/lib/utils';
 import type { ProfileBlock } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
 
 interface SettingsTabProps {
@@ -135,7 +135,7 @@ export const SettingsTab = memo(function SettingsTab(props: SettingsTabProps) {
   const avatarUrl = props.profileBlock?.avatar;
   const rawName = props.profileBlock?.name;
   const name = rawName 
-    ? getTranslatedString(rawName, i18n.language as any) || t('settings.myPage', 'Моя страница')
+    ? getI18nText(rawName, i18n.language as any) || t('settings.myPage', 'Моя страница')
     : t('settings.myPage', 'Моя страница');
   const displayName = typeof name === 'string' ? name : t('settings.myPage', 'Моя страница');
 

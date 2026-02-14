@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -64,6 +65,9 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
             <Download className="h-5 w-5 text-primary" />
             {t('install.title', 'Install LinkMAX')}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('install.description', 'Install LinkMAX on your device for quick access')}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">

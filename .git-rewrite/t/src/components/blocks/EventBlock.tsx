@@ -16,7 +16,7 @@ import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/platform/supabase/client';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { getEventRegistrationCount, isEmailRegistered } from '@/services/events';
 import { downloadICS, getGoogleCalendarUrl, type CalendarEvent } from '@/lib/calendar-utils';
@@ -53,8 +53,8 @@ export const EventBlock = memo(function EventBlock({
 
   const language = i18n.language as SupportedLanguage;
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
-  const title = getTranslatedString(block.title, language);
-  const description = getTranslatedString(block.description, language);
+  const title = getI18nText(block.title, language);
+  const description = getI18nText(block.description, language);
 
   // Check capacity
   const isFull = useMemo(() => {
@@ -149,7 +149,7 @@ export const EventBlock = memo(function EventBlock({
         .filter((field) => isFieldRequired(field))
         .map((field) => ({
           id: field.id,
-          label: getTranslatedString(field.label_i18n, language) || t('event.field', 'Поле'),
+          label: getI18nText(field.label_i18n, language) || t('event.field', 'Поле'),
         })),
     ];
 
@@ -426,7 +426,7 @@ export const EventBlock = memo(function EventBlock({
               ? t('event.noSpots', 'Мест нет')
               : registrationClosed 
                 ? t('event.registrationClosed', 'Регистрация закрыта')
-                : (block.buttonText && getTranslatedString(block.buttonText, language)) || t('event.register', 'Зарегистрироваться')
+                : (block.buttonText && getI18nText(block.buttonText, language)) || t('event.register', 'Зарегистрироваться')
             }
           </Button>
         </div>

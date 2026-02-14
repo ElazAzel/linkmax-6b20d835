@@ -47,7 +47,7 @@ import { NicheSelector } from '@/components/settings/NicheSelector';
 import { TelegramVerification } from '@/components/auth/TelegramVerification';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { cn } from '@/lib/utils';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import type { ProfileBlock } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
@@ -166,7 +166,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
   const avatarUrl = props.profileBlock?.avatar;
   const rawName = props.profileBlock?.name;
   const name = rawName
-    ? getTranslatedString(rawName, i18n.language as 'ru' | 'en' | 'kk') || t('dashboard.settings.myPage', 'Моя страница')
+    ? getI18nText(rawName, i18n.language as 'ru' | 'en' | 'kk') || t('dashboard.settings.myPage', 'Моя страница')
     : t('dashboard.settings.myPage', 'Моя страница');
   const displayName = typeof name === 'string' ? name : t('dashboard.settings.myPage', 'Моя страница');
 

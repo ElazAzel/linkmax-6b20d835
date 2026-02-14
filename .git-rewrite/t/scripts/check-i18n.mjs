@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const localesDir = path.resolve(__dirname, '../src/i18n/locales');
-const languages = ['ru', 'en', 'kk'];
+const languages = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
 
 function collectKeys(obj, prefix = '') {
   const keys = [];

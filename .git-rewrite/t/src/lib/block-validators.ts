@@ -3,7 +3,28 @@
  * Returns error message if validation fails, null if valid
  */
 
-import { isMultilingualString, getTranslatedString } from '@/lib/i18n-helpers';
+import { isMultilingualString, getI18nText } from '@/lib/i18n-helpers';
+import type {
+  BlockFormData,
+  LinkBlockData,
+  ButtonBlockData,
+  ProductBlockData,
+  VideoBlockData,
+  ImageBlockData,
+  CarouselBlockData,
+  SocialsBlockData,
+  CustomCodeBlockData,
+  MessengerBlockData,
+  FormBlockData,
+  EventBlockData,
+  DownloadBlockData,
+  NewsletterBlockData,
+  TestimonialBlockData,
+  ScratchBlockData,
+  MapBlockData,
+  AvatarBlockData,
+  SeparatorBlockData,
+} from '@/types/block-forms';
 
 /**
  * Normalize value to string - handles MultilingualString objects
@@ -13,9 +34,9 @@ function normalizeToString(value: unknown): string {
   if (typeof value === 'string') return value;
   if (isMultilingualString(value)) {
     // Get any non-empty translation
-    return getTranslatedString(value, 'en') || 
-           getTranslatedString(value, 'ru') || 
-           getTranslatedString(value, 'kk') || '';
+    return getI18nText(value, 'en') || 
+           getI18nText(value, 'ru') || 
+           getI18nText(value, 'kk') || '';
   }
   return String(value);
 }
@@ -62,7 +83,7 @@ export function validateNumber(
   return null;
 }
 
-export function validateArrayNotEmpty(arr: any[] | undefined, fieldName: string): string | null {
+export function validateArrayNotEmpty(arr: unknown[] | undefined, fieldName: string): string | null {
   if (!arr || arr.length === 0) {
     return `${fieldName} must have at least one item`;
   }
@@ -70,30 +91,30 @@ export function validateArrayNotEmpty(arr: any[] | undefined, fieldName: string)
 }
 
 // Block-specific validators
-export function validateLinkBlock(formData: any): string | null {
+export function validateLinkBlock(formData: LinkBlockData): string | null {
   return validateRequired(formData.title, 'Title') || validateUrl(formData.url);
 }
 
-export function validateButtonBlock(formData: any): string | null {
+export function validateButtonBlock(formData: ButtonBlockData): string | null {
   return validateRequired(formData.title, 'Title') || validateUrl(formData.url);
 }
 
-export function validateProductBlock(formData: any): string | null {
+export function validateProductBlock(formData: ProductBlockData): string | null {
   return (
     validateRequired(formData.name, 'Product name') ||
     validateNumber(formData.price, 'Price', { min: 0 })
   );
 }
 
-export function validateVideoBlock(formData: any): string | null {
+export function validateVideoBlock(formData: VideoBlockData): string | null {
   return validateUrl(formData.url, 'Video URL');
 }
 
-export function validateImageBlock(formData: any): string | null {
+export function validateImageBlock(formData: ImageBlockData): string | null {
   return validateUrl(formData.url, 'Image URL') || validateRequired(formData.alt, 'Alt text');
 }
 
-export function validateCarouselBlock(formData: any): string | null {
+export function validateCarouselBlock(formData: CarouselBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.images, 'Images');
   if (arrayError) return arrayError;
   
@@ -107,7 +128,7 @@ export function validateCarouselBlock(formData: any): string | null {
   return null;
 }
 
-export function validateSocialsBlock(formData: any): string | null {
+export function validateSocialsBlock(formData: SocialsBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.platforms, 'Platforms');
   if (arrayError) return arrayError;
   
@@ -121,11 +142,11 @@ export function validateSocialsBlock(formData: any): string | null {
   return null;
 }
 
-export function validateCustomCodeBlock(formData: any): string | null {
+export function validateCustomCodeBlock(formData: CustomCodeBlockData): string | null {
   return validateRequired(formData.html, 'HTML code');
 }
 
-export function validateMessengerBlock(formData: any): string | null {
+export function validateMessengerBlock(formData: MessengerBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.messengers, 'Messengers');
   if (arrayError) return arrayError;
   
@@ -138,7 +159,7 @@ export function validateMessengerBlock(formData: any): string | null {
   return null;
 }
 
-export function validateFormBlock(formData: any): string | null {
+export function validateFormBlock(formData: FormBlockData): string | null {
   const titleError = validateRequired(formData.title, 'Form title');
   if (titleError) return titleError;
   
@@ -154,7 +175,7 @@ export function validateFormBlock(formData: any): string | null {
   return null;
 }
 
-export function validateEventBlock(formData: any): string | null {
+export function validateEventBlock(formData: EventBlockData): string | null {
   const titleError = validateRequired(formData.title, 'Event title');
   if (titleError) return titleError;
 
@@ -168,7 +189,7 @@ export function validateEventBlock(formData: any): string | null {
   return null;
 }
 
-export function validateDownloadBlock(formData: any): string | null {
+export function validateDownloadBlock(formData: DownloadBlockData): string | null {
   return (
     validateRequired(formData.title, 'Title') ||
     validateUrl(formData.fileUrl, 'File URL') ||
@@ -176,11 +197,11 @@ export function validateDownloadBlock(formData: any): string | null {
   );
 }
 
-export function validateNewsletterBlock(formData: any): string | null {
+export function validateNewsletterBlock(formData: NewsletterBlockData): string | null {
   return validateRequired(formData.title, 'Title');
 }
 
-export function validateTestimonialBlock(formData: any): string | null {
+export function validateTestimonialBlock(formData: TestimonialBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.testimonials, 'Testimonials');
   if (arrayError) return arrayError;
   
@@ -195,22 +216,22 @@ export function validateTestimonialBlock(formData: any): string | null {
   return null;
 }
 
-export function validateScratchBlock(formData: any): string | null {
+export function validateScratchBlock(formData: ScratchBlockData): string | null {
   return validateRequired(formData.revealText, 'Reveal text');
 }
 
-export function validateMapBlock(formData: any): string | null {
+export function validateMapBlock(formData: MapBlockData): string | null {
   return validateRequired(formData.embedUrl, 'Embed URL');
 }
 
-export function validateAvatarBlock(formData: any): string | null {
+export function validateAvatarBlock(formData: AvatarBlockData): string | null {
   return (
     validateUrl(formData.imageUrl, 'Image URL') ||
     validateRequired(formData.name, 'Name')
   );
 }
 
-export function validateSeparatorBlock(formData: any): string | null {
+export function validateSeparatorBlock(formData: SeparatorBlockData): string | null {
   // Separator block has no required fields
   return null;
 }

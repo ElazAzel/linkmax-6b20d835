@@ -141,7 +141,7 @@ export function PremiumValueSection({ isVisible, sectionRef }: PremiumValueSecti
             <span className="truncate">{t('landing.premiumValue.cta', 'Попробовать Premium')}</span>
           </Button>
           <p className="text-sm text-muted-foreground font-medium">
-            {t('landing.premiumValue.price', 'От 2 610 ₸/месяц при оплате за год (~$5)')}
+            {t('landing.premiumValue.price', 'От 3 045 ₸/месяц при оплате за год (~$6)')}
           </p>
         </div>
       </div>

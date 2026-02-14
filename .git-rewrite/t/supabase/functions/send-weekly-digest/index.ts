@@ -43,7 +43,7 @@ serve(async (req) => {
     }
 
     let emailsSent = 0;
-    let errors: string[] = [];
+    const errors: string[] = [];
 
     for (const user of users || []) {
       try {

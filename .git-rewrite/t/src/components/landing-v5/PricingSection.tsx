@@ -101,11 +101,11 @@ export default function PricingSection({ isKZ, onSelectFree, onSelectPro }: Pric
                     {t('landingV5.pricing.pro.title')} <Crown className="h-4 w-4 text-primary" />
                   </h3>
                   <p className="text-2xl font-black">
-                    {isKZ ? '2 610 ₸' : '$5'}
+                    {isKZ ? '3 045 ₸' : '$6'}
                     <span className="text-sm font-normal text-muted-foreground">{t('landingV5.pricing.pro.period')}</span>
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {isKZ ? '31 320 ₸ ' : '$60 '}{t('landingV5.pricing.year')} · {t('landingV5.pricing.bestValue')}
+                    {isKZ ? '36 540 ₸ ' : '$71 '}{t('landingV5.pricing.year')} · {t('landingV5.pricing.bestValue')}
                   </p>
                 </div>
               </div>

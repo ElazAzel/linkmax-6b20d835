@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Megaphone, ExternalLink } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
 
 interface ShoutoutBlockProps {
@@ -45,7 +45,7 @@ export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
 
   const lang = i18n.language as SupportedLanguage;
   const displayMessage = typeof message === 'object' 
-    ? getTranslatedString(message, lang)
+    ? getI18nText(message, lang)
     : message;
 
   if (loading) {

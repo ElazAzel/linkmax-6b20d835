@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  loadUserProfile, 
-  updateEmailNotifications, 
+import {
+  loadUserProfile,
+  updateEmailNotifications,
   updateTelegramNotifications,
-  type UserProfile 
+  type UserProfile
 } from '@/services/user';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 export function useUserProfile(userId: string | undefined) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -24,7 +25,7 @@ export function useUserProfile(userId: string | undefined) {
         setProfile(data);
       }
     } catch (error) {
-      console.error('Error loading profile:', error);
+      logger.error('Error loading profile', error, { context: 'useUserProfile' });
     } finally {
       setLoading(false);
     }
@@ -36,7 +37,7 @@ export function useUserProfile(userId: string | undefined) {
 
   const handleUpdateEmailNotifications = useCallback(async (enabled: boolean) => {
     if (!userId) return;
-    
+
     setSaving(true);
     try {
       const { error } = await updateEmailNotifications(userId, enabled);
@@ -44,11 +45,11 @@ export function useUserProfile(userId: string | undefined) {
         toast.error('Failed to update notification settings');
         return;
       }
-      
+
       setProfile(prev => prev ? { ...prev, email_notifications_enabled: enabled } : null);
       toast.success(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
     } catch (error) {
-      console.error('Error updating email notifications:', error);
+      logger.error('Error updating email notifications', error, { context: 'useUserProfile' });
       toast.error('Failed to update notification settings');
     } finally {
       setSaving(false);
@@ -57,7 +58,7 @@ export function useUserProfile(userId: string | undefined) {
 
   const handleUpdateTelegramNotifications = useCallback(async (enabled: boolean, chatId: string | null) => {
     if (!userId) return;
-    
+
     setSaving(true);
     try {
       const { error } = await updateTelegramNotifications(userId, enabled, chatId);
@@ -65,15 +66,15 @@ export function useUserProfile(userId: string | undefined) {
         toast.error('Failed to update Telegram settings');
         return;
       }
-      
-      setProfile(prev => prev ? { 
-        ...prev, 
+
+      setProfile(prev => prev ? {
+        ...prev,
         telegram_notifications_enabled: enabled,
         telegram_chat_id: chatId
       } : null);
       toast.success(enabled ? 'Telegram notifications enabled' : 'Telegram notifications disabled');
     } catch (error) {
-      console.error('Error updating Telegram notifications:', error);
+      logger.error('Error updating Telegram notifications', error, { context: 'useUserProfile' });
       toast.error('Failed to update Telegram settings');
     } finally {
       setSaving(false);

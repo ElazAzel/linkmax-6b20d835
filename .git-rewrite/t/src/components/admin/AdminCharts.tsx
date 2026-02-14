@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/platform/supabase/client';
@@ -62,10 +62,6 @@ export function AdminCharts() {
   const [cumulativeUsers, setCumulativeUsers] = useState<{ date: string; total: number }[]>([]);
   const [socialStats, setSocialStats] = useState<SocialStatsData[]>([]);
   const [blockTypeStats, setBlockTypeStats] = useState<{ name: string; count: number; color: string }[]>([]);
-
-  useEffect(() => {
-    loadChartData();
-  }, [t]);
 
   const loadChartData = async () => {
     setLoading(true);
@@ -289,6 +285,10 @@ export function AdminCharts() {
       console.error('Error loading block type stats:', error);
     }
   };
+
+  useEffect(() => {
+    void loadChartData();
+  }, []);
 
   if (loading) {
     return (

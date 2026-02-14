@@ -22,12 +22,12 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
   
   const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
 
-  // Pricing in KZT: 3mo = 4350₸/mo, 6mo = 3500₸/mo, 12mo = 2610₸/mo
-  // USD equivalent (approximate): 3mo = $8.50, 6mo = $6.80, 12mo = $5.10
+  // Pricing in KZT: 3mo = 4350₸/mo, 6mo = 3698₸/mo (15% off), 12mo = 3045₸/mo (30% off)
+  // USD equivalent (approximate): 3mo = $8.50, 6mo = $7.20, 12mo = $5.95
   const pricingPlans = {
     '3': { monthlyKzt: 4350, totalKzt: 13050, monthlyUsd: 8.50, totalUsd: 25.50 },
-    '6': { monthlyKzt: 3500, totalKzt: 21000, monthlyUsd: 6.80, totalUsd: 40.80 },
-    '12': { monthlyKzt: 2610, totalKzt: 31320, monthlyUsd: 5.10, totalUsd: 61.20 },
+    '6': { monthlyKzt: 3698, totalKzt: 22185, monthlyUsd: 7.20, totalUsd: 43.20 },
+    '12': { monthlyKzt: 3045, totalKzt: 36540, monthlyUsd: 5.95, totalUsd: 71.40 },
   };
 
   const freeFeatures = [
@@ -86,12 +86,12 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                   {t(`landing.pricing.months${period}`, `${period} мес`)}
                   {period === '12' && (
                     <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
-                      -40%
+                      -30%
                     </span>
                   )}
                   {period === '6' && (
                     <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[10px] font-bold">
-                      -20%
+                      -15%
                     </span>
                   )}
                 </button>

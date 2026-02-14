@@ -1,4 +1,6 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
+import { logger } from '@/lib/logger';
+import { storage } from '@/lib/storage';
 
 type SoundType = 'achievement' | 'success' | 'click' | 'add' | 'delete' | 'error';
 
@@ -54,62 +56,62 @@ export function useSoundEffects() {
 
   const vibrate = useCallback((pattern: number | number[]) => {
     // Check if haptics are enabled
-    const hapticsEnabled = localStorage.getItem('linkmax_haptics_enabled') !== 'false';
+    const hapticsEnabled = storage.get<string>('haptics_enabled') !== 'false';
     if (!hapticsEnabled) return;
 
     try {
-      if ('vibrate' in navigator) {
+      if (navigator.vibrate) {
         navigator.vibrate(pattern);
       }
     } catch (error) {
-      // Silently fail if vibration is not available
-      console.debug('Haptic feedback unavailable:', error);
+      // Ignore haptic errors
+      logger.debug('Haptic feedback unavailable:', { context: 'useSoundEffects', data: { error } });
     }
   }, []);
 
   const playSound = useCallback((type: SoundType) => {
     const config = SOUND_CONFIGS[type];
-    
+
     // Always try haptics (even if sounds disabled)
     vibrate(config.vibration);
 
     // Check if sounds are enabled
-    const soundsEnabled = localStorage.getItem('linkmax_sounds_enabled') !== 'false';
+    const soundsEnabled = storage.get<string>('sounds_enabled') !== 'false';
     if (!soundsEnabled) return;
 
     try {
       const ctx = getAudioContext();
-      
+
       if (ctx.state === 'suspended') {
         ctx.resume();
       }
 
       let startTime = ctx.currentTime;
-      
+
       config.frequencies.forEach((freq, index) => {
         const oscillator = ctx.createOscillator();
         const gainNode = ctx.createGain();
-        
+
         oscillator.type = config.type;
         oscillator.frequency.setValueAtTime(freq, startTime);
-        
+
         // Create envelope
         const duration = config.durations[index] / 1000;
         gainNode.gain.setValueAtTime(0, startTime);
         gainNode.gain.linearRampToValueAtTime(0.15, startTime + 0.01);
         gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-        
+
         oscillator.connect(gainNode);
         gainNode.connect(ctx.destination);
-        
+
         oscillator.start(startTime);
         oscillator.stop(startTime + duration);
-        
+
         startTime += duration * 0.7; // Slight overlap for smoother sound
       });
     } catch (error) {
       // Silently fail if audio is not available
-      console.debug('Sound effect unavailable:', error);
+      logger.debug('Sound effect unavailable:', { context: 'useSoundEffects', data: { error } });
     }
   }, [getAudioContext, vibrate]);
 
@@ -121,19 +123,19 @@ export function useSoundEffects() {
   const playError = useCallback(() => playSound('error'), [playSound]);
 
   const toggleSounds = useCallback((enabled: boolean) => {
-    localStorage.setItem('linkmax_sounds_enabled', String(enabled));
+    storage.set('sounds_enabled', String(enabled));
   }, []);
 
   const toggleHaptics = useCallback((enabled: boolean) => {
-    localStorage.setItem('linkmax_haptics_enabled', String(enabled));
+    storage.set('haptics_enabled', String(enabled));
   }, []);
 
   const isSoundsEnabled = useCallback(() => {
-    return localStorage.getItem('linkmax_sounds_enabled') !== 'false';
+    return storage.get<string>('sounds_enabled') !== 'false';
   }, []);
 
   const isHapticsEnabled = useCallback(() => {
-    return localStorage.getItem('linkmax_haptics_enabled') !== 'false';
+    return storage.get<string>('haptics_enabled') !== 'false';
   }, []);
 
   const isHapticsSupported = useCallback(() => {

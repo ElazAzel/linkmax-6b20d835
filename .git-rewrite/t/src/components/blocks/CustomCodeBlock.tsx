@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Crown, Maximize2, Minimize2 } from 'lucide-react';
 import type { CustomCodeBlock as CustomCodeBlockType } from '@/types/page';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { Button } from '@/components/ui/button';
 
 interface CustomCodeBlockProps {
@@ -25,7 +25,7 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<string>(HEIGHT_MAP[block.height || 'medium']);
   
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   // Build complete HTML document for iframe
   const iframeContent = useMemo(() => {

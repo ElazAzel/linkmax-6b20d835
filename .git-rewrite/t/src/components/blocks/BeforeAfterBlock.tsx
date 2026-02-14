@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BeforeAfterBlock as BeforeAfterBlockType } from '@/types/page';
 import { Card, CardContent } from '@/components/ui/card';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface BeforeAfterBlockProps {
@@ -16,12 +16,12 @@ export const BeforeAfterBlock = React.memo(function BeforeAfterBlock({ block }: 
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
-  const title = block.title ? getTranslatedString(block.title, currentLang) : '';
+  const title = block.title ? getI18nText(block.title, currentLang) : '';
   const beforeLabel = block.beforeLabel 
-    ? getTranslatedString(block.beforeLabel, currentLang) 
+    ? getI18nText(block.beforeLabel, currentLang) 
     : t('blocks.beforeAfter.before', 'До');
   const afterLabel = block.afterLabel 
-    ? getTranslatedString(block.afterLabel, currentLang) 
+    ? getI18nText(block.afterLabel, currentLang) 
     : t('blocks.beforeAfter.after', 'После');
 
   const handleMove = useCallback((clientX: number) => {

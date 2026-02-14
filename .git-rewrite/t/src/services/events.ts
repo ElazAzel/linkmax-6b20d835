@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import type { EventBlock } from '@/types/page';
 import type { Json } from '@/integrations/supabase/types';
 
@@ -27,20 +28,20 @@ const mapEventBlockToRecord = (block: EventBlock, pageId: string, ownerId: strin
 
 export async function syncEventBlock(block: EventBlock, pageId?: string, ownerId?: string) {
   if (!pageId || !ownerId || !block.eventId) {
-    console.warn('syncEventBlock: missing pageId, ownerId, or eventId');
+    logger.warn('syncEventBlock: missing pageId, ownerId, or eventId', { context: 'events' });
     return;
   }
   try {
     const record = mapEventBlockToRecord(block, pageId, ownerId);
-    const { error } = await supabase.from('events').upsert([record], { 
+    const { error } = await supabase.from('events').upsert([record], {
       onConflict: 'id',
-      ignoreDuplicates: false 
+      ignoreDuplicates: false
     });
     if (error) {
-      console.error('Failed to sync event block:', error);
+      logger.error('Failed to sync event block', error, { context: 'events', data: { eventId: block.eventId } });
     }
   } catch (error) {
-    console.error('Failed to sync event block', error);
+    logger.error('Failed to sync event block', error, { context: 'events' });
   }
 }
 
@@ -49,10 +50,10 @@ export async function deleteEventBlock(eventId?: string, ownerId?: string) {
   try {
     const { error } = await supabase.from('events').delete().eq('id', eventId).eq('owner_id', ownerId);
     if (error) {
-      console.error('Failed to delete event block:', error);
+      logger.error('Failed to delete event block', error, { context: 'events', data: { eventId } });
     }
   } catch (error) {
-    console.error('Failed to delete event block', error);
+    logger.error('Failed to delete event block', error, { context: 'events' });
   }
 }
 
@@ -66,9 +67,9 @@ export async function getPublicEvent(eventId: string) {
     .eq('id', eventId)
     .eq('status', 'published')
     .maybeSingle();
-  
+
   if (error) {
-    console.error('Failed to fetch public event:', error);
+    logger.error('Failed to fetch public event', error, { context: 'events', data: { eventId } });
     return null;
   }
   return data;
@@ -81,9 +82,9 @@ export async function getEventRegistrationCount(eventId: string): Promise<number
   // Use security definer function to bypass RLS for public count access
   const { data, error } = await supabase
     .rpc('get_event_registration_count' as never, { p_event_id: eventId } as never);
-  
+
   if (error) {
-    console.error('Failed to get registration count:', error);
+    logger.error('Failed to get registration count', error, { context: 'events', data: { eventId } });
     return 0;
   }
   return (data as number) || 0;
@@ -91,18 +92,18 @@ export async function getEventRegistrationCount(eventId: string): Promise<number
 
 /**
  * Check if email is already registered for event
+ * Uses SECURITY DEFINER function to bypass RLS for public access
  */
 export async function isEmailRegistered(eventId: string, email: string): Promise<boolean> {
-  const { count, error } = await supabase
-    .from('event_registrations')
-    .select('*', { count: 'exact', head: true })
-    .eq('event_id', eventId)
-    .eq('attendee_email', email)
-    .not('status', 'eq', 'cancelled');
-  
+  const { data, error } = await supabase
+    .rpc('check_email_registered_for_event' as never, {
+      p_event_id: eventId,
+      p_email: email
+    } as never);
+
   if (error) {
-    console.error('Failed to check email registration:', error);
+    logger.error('Failed to check email registration', error, { context: 'events', data: { eventId, email } });
     return false;
   }
-  return (count || 0) > 0;
+  return Boolean(data);
 }

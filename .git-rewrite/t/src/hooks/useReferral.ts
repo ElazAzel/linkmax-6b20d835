@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
-  getOrCreateReferralCode, 
-  getReferralStats, 
+import {
+  getOrCreateReferralCode,
+  getReferralStats,
   applyReferralCode,
   wasUserReferred,
-  type ReferralStats 
+  type ReferralStats
 } from '@/services/referral';
+import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 
 export function useReferral(userId: string | undefined) {
@@ -25,7 +26,7 @@ export function useReferral(userId: string | undefined) {
     try {
       // First ensure user has a referral code
       await getOrCreateReferralCode(userId);
-      
+
       // Then get stats
       const data = await getReferralStats(userId);
       setStats(data);
@@ -34,7 +35,7 @@ export function useReferral(userId: string | undefined) {
       const referred = await wasUserReferred(userId);
       setWasReferred(referred);
     } catch (error) {
-      console.error('Error loading referral stats:', error);
+      logger.error('Error loading referral stats:', error, { context: 'useReferral' });
     } finally {
       setLoading(false);
     }

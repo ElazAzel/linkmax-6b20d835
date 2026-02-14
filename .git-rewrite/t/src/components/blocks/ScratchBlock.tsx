@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Crown } from 'lucide-react';
 import type { ScratchBlock as ScratchBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 
 interface ScratchBlockProps {
   block: ScratchBlockType;
@@ -15,8 +15,8 @@ export const ScratchBlock = memo(function ScratchBlock({ block }: ScratchBlockPr
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScratching, setIsScratching] = useState(false);
 
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
-  const revealText = getTranslatedString(block.revealText, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
+  const revealText = getI18nText(block.revealText, i18n.language as SupportedLanguage);
 
   useEffect(() => {
     const canvas = canvasRef.current;

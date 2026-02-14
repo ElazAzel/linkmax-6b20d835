@@ -6,7 +6,7 @@
  */
 
 import type { Block, ProfileBlock, AvatarBlock, PricingBlock, SocialsBlock, MessengerBlock } from '@/types/page';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 
 export interface AnswerBlockData {
   /** 2-4 sentence summary for AI extraction */
@@ -127,15 +127,15 @@ export function generateAnswerBlock(
   const avatarBlock = blocks.find(b => b.type === 'avatar') as AvatarBlock | undefined;
   
   const name = profileBlock 
-    ? getTranslatedString(profileBlock.name, language)
+    ? getI18nText(profileBlock.name, language)
     : avatarBlock 
-    ? getTranslatedString(avatarBlock.name, language)
+    ? getI18nText(avatarBlock.name, language)
     : undefined;
   
   const bio = profileBlock 
-    ? getTranslatedString(profileBlock.bio, language)
+    ? getI18nText(profileBlock.bio, language)
     : avatarBlock?.subtitle
-    ? getTranslatedString(avatarBlock.subtitle, language)
+    ? getI18nText(avatarBlock.subtitle, language)
     : undefined;
   
   // Detect niche from bio and services
@@ -195,7 +195,7 @@ function detectNiche(
   const pricingBlock = blocks.find(b => b.type === 'pricing') as PricingBlock | undefined;
   if (pricingBlock?.items) {
     for (const item of pricingBlock.items) {
-      const serviceName = getTranslatedString(item.name, language)?.toLowerCase() || '';
+      const serviceName = getI18nText(item.name, language)?.toLowerCase() || '';
       for (const [keyword, translations] of Object.entries(NICHE_KEYWORDS)) {
         if (serviceName.includes(keyword)) {
           return translations[language];
@@ -233,7 +233,7 @@ function extractServices(blocks: Block[], language: 'ru' | 'en' | 'kk'): string[
   
   return pricingBlock.items
     .slice(0, 3)
-    .map(item => getTranslatedString(item.name, language))
+    .map(item => getI18nText(item.name, language))
     .filter((name): name is string => !!name && name.length > 0);
 }
 

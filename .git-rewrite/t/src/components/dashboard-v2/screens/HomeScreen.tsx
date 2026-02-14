@@ -15,6 +15,7 @@ import {
   LayoutTemplate,
   Store,
   Users,
+  History,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,7 +26,7 @@ import { StatusBadge } from '../common/StatusBadge';
 import { ActionCard } from '../common/ActionCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
 
 interface HomeScreenProps {
@@ -38,6 +39,7 @@ interface HomeScreenProps {
   onOpenTemplates: () => void;
   onOpenMarketplace: () => void;
   pageSwitcher?: ReactNode;
+  onOpenVersions?: () => void;
 }
 
 export const HomeScreen = memo(function HomeScreen({
@@ -50,6 +52,7 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenTemplates,
   onOpenMarketplace,
   pageSwitcher,
+  onOpenVersions,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -62,7 +65,7 @@ export const HomeScreen = memo(function HomeScreen({
   const rawName = profileBlock?.name;
   const name = rawName
     ? typeof rawName === 'object'
-      ? getTranslatedString(rawName, i18n.language as 'ru' | 'en' | 'kk') || t('dashboard.home.myPage', 'Моя страница')
+      ? getI18nText(rawName, i18n.language as 'ru' | 'en' | 'kk') || t('dashboard.home.myPage', 'Моя страница')
       : rawName
     : t('dashboard.home.myPage', 'Моя страница');
   const avatarUrl = profileBlock?.avatar || '';
@@ -70,6 +73,10 @@ export const HomeScreen = memo(function HomeScreen({
   const viewCount = pageData.viewCount || 0;
   const isPublished = pageData.isPublished || false;
   const slug = pageData.slug || 'mypage';
+  
+  // Page has content if it has more than just a profile block
+  const hasContent = pageData.blocks.length > 1 || 
+    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
   // Stats for this week (mock for now, would come from analytics hook)
   const weeklyStats = {
@@ -185,16 +192,33 @@ export const HomeScreen = memo(function HomeScreen({
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
-            <ActionCard
-              icon={LayoutTemplate}
-              iconBg="bg-emerald-500/20"
-              iconColor="text-emerald-600"
-              title={t('dashboard.home.templates', 'Шаблоны')}
-              description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
-              onClick={onOpenTemplates}
-              gradient="from-emerald-500/15 to-green-500/15"
-              border="border-emerald-500/20"
-            />
+            {/* Show templates only for pages without content */}
+            {!hasContent && (
+              <ActionCard
+                icon={LayoutTemplate}
+                iconBg="bg-emerald-500/20"
+                iconColor="text-emerald-600"
+                title={t('dashboard.home.templates', 'Шаблоны')}
+                description={t('dashboard.home.templatesDesc', 'Готовые страницы')}
+                onClick={onOpenTemplates}
+                gradient="from-emerald-500/15 to-green-500/15"
+                border="border-emerald-500/20"
+              />
+            )}
+
+            {/* Show version history for pages with content */}
+            {hasContent && onOpenVersions && (
+              <ActionCard
+                icon={History}
+                iconBg="bg-blue-500/20"
+                iconColor="text-blue-600"
+                title={t('dashboard.home.versions', 'История')}
+                description={t('dashboard.home.versionsDesc', 'Версии страницы')}
+                onClick={onOpenVersions}
+                gradient="from-blue-500/15 to-cyan-500/15"
+                border="border-blue-500/20"
+              />
+            )}
 
             <ActionCard
               icon={Store}

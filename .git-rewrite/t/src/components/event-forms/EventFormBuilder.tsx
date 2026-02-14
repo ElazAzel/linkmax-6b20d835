@@ -16,7 +16,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
-import { createMultilingualString, getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { createMultilingualString, getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import {
   Plus,
@@ -108,7 +108,7 @@ function SortableFieldCard({ field, index, isExpanded, onToggle, onUpdate, onRem
   const hasOptions = fieldConfig?.hasOptions;
   const isProField = fieldConfig?.proOnly && !isPremium;
 
-  const fieldLabel = getTranslatedString(field.label_i18n, language) || t('eventBuilder.untitledField', 'Без названия');
+  const fieldLabel = getI18nText(field.label_i18n, language) || t('eventBuilder.untitledField', 'Без названия');
 
   const addOption = useCallback(() => {
     const newOption: EventFieldOption = {
@@ -242,7 +242,7 @@ function SortableFieldCard({ field, index, isExpanded, onToggle, onUpdate, onRem
                     <div key={option.id} className="flex items-center gap-2">
                       <span className="w-6 text-center text-xs text-muted-foreground">{optIndex + 1}.</span>
                       <Input
-                        value={getTranslatedString(option.label_i18n, language)}
+                        value={getI18nText(option.label_i18n, language)}
                         onChange={(e) => updateOption(optIndex, { label_i18n: createMultilingualString(e.target.value) })}
                         placeholder={t('eventBuilder.optionPlaceholder', 'Вариант ответа')}
                         className="h-8 text-sm flex-1"
@@ -354,9 +354,9 @@ export function EventFormBuilder({ fields, sections, onChange }: EventFormBuilde
       ...original,
       id: crypto.randomUUID(),
       label_i18n: {
-        ru: `${getTranslatedString(original.label_i18n, 'ru')} (копия)`,
-        en: `${getTranslatedString(original.label_i18n, 'en')} (copy)`,
-        kk: `${getTranslatedString(original.label_i18n, 'kk')} (көшірме)`,
+        ru: `${getI18nText(original.label_i18n, 'ru')} (копия)`,
+        en: `${getI18nText(original.label_i18n, 'en')} (copy)`,
+        kk: `${getI18nText(original.label_i18n, 'kk')} (көшірме)`,
       },
       options: original.options?.map(opt => ({ ...opt, id: crypto.randomUUID() })),
     };

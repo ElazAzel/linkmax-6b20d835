@@ -10,14 +10,14 @@ import { generateSalesCopy } from '@/lib/ai-helpers';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateProductBlock } from '@/lib/block-validators';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
-import { migrateToMultilingual, getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { migrateToMultilingual, getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 
 function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const [aiLoading, setAiLoading] = useState(false);
 
   const handleGenerateCopy = async () => {
-    const name = getTranslatedString(formData.name, i18n.language as SupportedLanguage);
+    const name = getI18nText(formData.name, i18n.language as SupportedLanguage);
     if (!name || !formData.price) return;
     
     setAiLoading(true);
@@ -40,7 +40,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
     }
   };
 
-  const productName = getTranslatedString(formData.name, i18n.language as SupportedLanguage);
+  const productName = getI18nText(formData.name, i18n.language as SupportedLanguage);
 
   return (
     <div className="space-y-4">

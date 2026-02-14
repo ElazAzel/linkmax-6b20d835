@@ -2,17 +2,18 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { VideoBlock as VideoBlockType } from '@/types/page';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface VideoBlockProps {
   block: VideoBlockType;
+  onClick?: () => void;
 }
 
 function getVideoEmbedUrl(url: string, platform: 'youtube' | 'vimeo'): string | null {
   try {
     if (platform === 'youtube') {
-      const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\\/\s]{11})/);
       const videoId = videoIdMatch ? videoIdMatch[1] : null;
       return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
     } else if (platform === 'vimeo') {
@@ -26,9 +27,9 @@ function getVideoEmbedUrl(url: string, platform: 'youtube' | 'vimeo'): string | 
   return null;
 }
 
-export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBlockProps) {
+export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: VideoBlockProps) {
   const { i18n } = useTranslation();
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const embedUrl = getVideoEmbedUrl(block.url, block.platform);
   
   const aspectRatioClass = {
@@ -53,7 +54,10 @@ export const VideoBlock = memo(function VideoBlockComponent({ block }: VideoBloc
   }
 
   return (
-    <Card className="overflow-hidden bg-card border-border shadow-sm rounded-xl">
+    <Card 
+      className="overflow-hidden bg-card border-border shadow-sm rounded-xl"
+      onClick={() => onClick?.()}
+    >
       {title && (
         <CardHeader className="p-3 sm:p-4 pb-2">
           <CardTitle className="text-base sm:text-lg truncate">{title}</CardTitle>

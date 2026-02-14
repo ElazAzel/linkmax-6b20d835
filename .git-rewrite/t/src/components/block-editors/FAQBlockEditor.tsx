@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Plus, Trash2, GripVertical, ChevronDown, ChevronUp } from 'lucide-react';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import type { FAQBlock, FAQItem } from '@/types/page';
-import { createMultilingualString, getTranslatedString } from '@/lib/i18n-helpers';
+import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface FAQBlockEditorProps {
@@ -47,7 +47,7 @@ export function FAQBlockEditor({ formData, onChange }: FAQBlockEditorProps) {
   };
 
   const getQuestionPreview = (item: FAQItem): string => {
-    return getTranslatedString(item.question, currentLang) || t('blocks.faq.newQuestion', 'Новый вопрос');
+    return getI18nText(item.question, currentLang) || t('blocks.faq.newQuestion', 'Новый вопрос');
   };
 
   return (

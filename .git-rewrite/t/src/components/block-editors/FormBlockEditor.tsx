@@ -28,11 +28,11 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
   const removeField = (index: number) => {
     onChange({
       ...formData,
-      fields: fields.filter((_: any, i: number) => i !== index),
+      fields: fields.filter((_: unknown, i: number) => i !== index),
     });
   };
 
-  const updateField = (index: number, field: string, value: any) => {
+  const updateField = (index: number, field: string, value: unknown) => {
     const updated = [...fields];
     updated[index] = { ...updated[index], [field]: value };
     onChange({ ...formData, fields: updated });

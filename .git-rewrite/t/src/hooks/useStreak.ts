@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 import { updateUserStreak, getStreakData, type StreakData, type UpdateStreakResult } from '@/services/streak';
 
 export function useStreak(userId: string | undefined) {
@@ -9,12 +10,12 @@ export function useStreak(userId: string | undefined) {
 
   const checkStreak = useCallback(async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       // Update streak (will check if already updated today)
       const result = await updateUserStreak(userId);
-      
+
       if (result?.updated && result.milestone && result.bonusDays > 0) {
         setMilestoneReached(result);
         toast.success(`🔥 ${result.currentStreak} day streak! +${result.bonusDays} bonus trial days!`, {
@@ -30,7 +31,7 @@ export function useStreak(userId: string | undefined) {
       const data = await getStreakData(userId);
       setStreakData(data);
     } catch (error) {
-      console.error('Failed to check streak:', error);
+      logger.error('Failed to check streak:', error);
     } finally {
       setLoading(false);
     }
@@ -44,11 +45,11 @@ export function useStreak(userId: string | undefined) {
     setMilestoneReached(null);
   }, []);
 
-  return { 
-    streakData, 
-    loading, 
-    milestoneReached, 
+  return {
+    streakData,
+    loading,
+    milestoneReached,
     dismissMilestone,
-    refetch: checkStreak 
+    refetch: checkStreak
   };
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
@@ -39,7 +40,7 @@ export function useFriends() {
       setPendingRequests(pendingData);
       setSentRequests(sentData);
     } catch (error) {
-      console.error('Failed to load friends:', error);
+      logger.error('Failed to load friends:', error, { context: 'useFriends' });
     } finally {
       setLoading(false);
     }

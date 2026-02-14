@@ -4,7 +4,7 @@
  */
 import { memo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import {
   Sheet,
   SheetContent,
@@ -117,7 +117,7 @@ export const BlockManager = memo(function BlockManager({
     
     if (rawTitle && typeof rawTitle === 'object') {
       if ('ru' in rawTitle || 'en' in rawTitle || 'kk' in rawTitle) {
-        const translated = getTranslatedString(rawTitle, currentLang);
+        const translated = getI18nText(rawTitle, currentLang);
         return translated ? translated.substring(0, 25) : t(`blocks.${block.type}`, block.type);
       }
       return t(`blocks.${block.type}`, block.type);

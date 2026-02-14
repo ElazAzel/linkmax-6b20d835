@@ -3,7 +3,7 @@ import { Star, Quote } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { TestimonialBlock as TestimonialBlockType } from '@/types/page';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface TestimonialBlockProps {
@@ -14,7 +14,7 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
   const { i18n } = useTranslation();
   const currentLang = i18n.language as SupportedLanguage;
   
-  const title = getTranslatedString(block.title, currentLang);
+  const title = getI18nText(block.title, currentLang);
 
   const renderStars = (rating: number = 5) => {
     return (
@@ -50,9 +50,9 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
       {/* Horizontal scroll on mobile */}
       <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
         {block.testimonials.map((testimonial, index) => {
-          const name = getTranslatedString(testimonial.name, currentLang);
-          const text = getTranslatedString(testimonial.text, currentLang);
-          const role = getTranslatedString(testimonial.role, currentLang);
+          const name = getI18nText(testimonial.name, currentLang);
+          const text = getI18nText(testimonial.text, currentLang);
+          const role = getI18nText(testimonial.role, currentLang);
           
           return (
             <div 

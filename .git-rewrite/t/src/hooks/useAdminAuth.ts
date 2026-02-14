@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from './useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export function useAdminAuth() {
   const { user, loading: authLoading } = useAuth();
@@ -24,13 +25,13 @@ export function useAdminAuth() {
           .maybeSingle();
 
         if (error) {
-          console.error('Error checking admin role:', error);
+          logger.error('Error checking admin role:', error, { context: 'useAdminAuth' });
           setIsAdmin(false);
         } else {
           setIsAdmin(!!data);
         }
       } catch (err) {
-        console.error('Error checking admin role:', err);
+        logger.error('Error checking admin role:', err, { context: 'useAdminAuth' });
         setIsAdmin(false);
       } finally {
         setLoading(false);

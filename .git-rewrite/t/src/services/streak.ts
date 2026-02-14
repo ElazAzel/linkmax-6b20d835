@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface StreakData {
   currentStreak: number;
@@ -21,7 +22,7 @@ export async function updateUserStreak(userId: string): Promise<UpdateStreakResu
   });
 
   if (error) {
-    console.error('Error updating streak:', error);
+    logger.error('Error updating streak', error, { context: 'streak', data: { userId } });
     return null;
   }
 
@@ -36,8 +37,8 @@ export async function getStreakData(userId: string): Promise<StreakData | null> 
     .eq('id', userId)
     .maybeSingle();
 
-  if (error || !data) {
-    console.error('Error fetching streak data:', error);
+  if (error) {
+    logger.error('Error fetching streak data', error, { context: 'streak', data: { userId } });
     return null;
   }
 

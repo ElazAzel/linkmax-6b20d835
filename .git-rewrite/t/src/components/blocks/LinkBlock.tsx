@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Instagram, Twitter, Youtube, Facebook, Linkedin, Globe, Link2 } from 'lucide-react';
 import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/block-utils';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
+import { getBlockStyles, hasCustomBlockStyle } from '@/lib/block-styling';
 import { cn } from '@/lib/utils';
 import type { LinkBlock as LinkBlockType } from '@/types/page';
 
@@ -52,7 +53,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
     : Link2;
 
   const handleClick = createBlockClickHandler(block.url, onClick);
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const shouldShowFavicon = faviconSrc && !faviconError;
   
   const handleFaviconError = () => {
@@ -67,10 +68,18 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
     }
   };
 
-  // Check if we have a custom background
-  const hasCustomBackground = block.background && block.background.type && block.background.value;
-  const backgroundStyle = hasCustomBackground ? getBackgroundStyle(block.background) : {};
+  // Check if we have a custom background from block.background
+  const hasLegacyBackground = block.background && block.background.type && block.background.value;
+  const legacyBackgroundStyle = hasLegacyBackground ? getBackgroundStyle(block.background) : {};
   const isImageBackground = block.background?.type === 'image';
+
+  // Get custom block styles (new system)
+  const { style: blockStyleObj, textEffectClass } = getBlockStyles(block.blockStyle);
+  const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
+  
+  // Combine styles - new blockStyle takes precedence
+  const combinedStyle = { ...legacyBackgroundStyle, ...blockStyleObj };
+  const hasAnyCustomStyle = hasLegacyBackground || hasBlockStyle;
 
   return (
     <div className={cn(
@@ -84,11 +93,11 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           "hover:scale-[1.02] transition-all shadow-sm hover:shadow-md rounded-xl",
           "active:scale-[0.98]",
           getButtonClass(block.style),
-          hasCustomBackground ? 'border-transparent text-white hover:bg-transparent' : 'bg-card border-border hover:bg-accent',
+          hasAnyCustomStyle ? 'border-transparent hover:bg-transparent' : 'bg-card border-border hover:bg-accent',
           isImageBackground && 'relative overflow-hidden'
         )}
         onClick={handleClick}
-        style={backgroundStyle}
+        style={combinedStyle}
       >
         {/* Overlay for image backgrounds */}
         {isImageBackground && (
@@ -109,21 +118,22 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           ) : (
             <FallbackIcon className={cn(
               "h-6 w-6 flex-shrink-0",
-              hasCustomBackground ? 'text-white' : 'text-primary'
-            )} />
+              hasAnyCustomStyle ? '' : 'text-primary'
+            )} style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined} />
           )}
           <span className={cn(
             "font-medium text-sm sm:text-base line-clamp-2 text-left",
-            hasCustomBackground ? 'text-white drop-shadow-md' : 'text-foreground'
-          )}>
+            hasLegacyBackground ? 'text-white drop-shadow-md' : hasBlockStyle ? '' : 'text-foreground',
+            textEffectClass
+          )} style={blockStyleObj.color ? { color: blockStyleObj.color } : undefined}>
             {title}
           </span>
         </div>
         <ExternalLink className={cn(
           "h-4 w-4 flex-shrink-0 ml-2",
           isImageBackground && 'relative z-10',
-          hasCustomBackground ? 'text-white/80' : 'text-muted-foreground'
-        )} />
+          hasLegacyBackground ? 'text-white/80' : hasBlockStyle ? '' : 'text-muted-foreground'
+        )} style={blockStyleObj.color ? { color: blockStyleObj.color, opacity: 0.8 } : undefined} />
       </Button>
     </div>
   );

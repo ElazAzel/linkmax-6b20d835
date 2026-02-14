@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { applyReferralCode } from '@/services/referral';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -53,12 +54,12 @@ export default function Auth() {
   const [authMode, setAuthMode] = useState<AuthMode>('signin');
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
-  
+
   // Telegram password reset state
   const [telegramResetStep, setTelegramResetStep] = useState<TelegramResetStep>('request');
   const [telegramChatId, setTelegramChatId] = useState('');
   const [resetToken, setResetToken] = useState('');
-  
+
   // Get referral code and mode from URL
   const refCode = searchParams.get('ref');
   const urlMode = searchParams.get('mode');
@@ -71,18 +72,18 @@ export default function Auth() {
       setAuthMode('update-password');
       return;
     }
-    
+
     // Check hash params for recovery token (from Supabase email link)
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = hashParams.get('access_token');
     const type = hashParams.get('type');
-    
+
     if (accessToken && type === 'recovery') {
-      console.log('Recovery token detected, setting up password update mode');
+      logger.debug('Recovery token detected, setting up password update mode');
       // Supabase will automatically set the session from hash params
       // We just need to set the mode
       setAuthMode('update-password');
-      
+
       // Clean up the URL hash for better UX
       window.history.replaceState(null, '', `${window.location.pathname}?mode=update-password`);
     }
@@ -114,7 +115,7 @@ export default function Auth() {
 
     // Validate with zod schema
     const validation = authSchema.safeParse({ email, password });
-    
+
     if (!validation.success) {
       const firstError = validation.error.errors[0];
       toast.error(firstError.message);
@@ -126,7 +127,7 @@ export default function Auth() {
     const { error } = await signUp(validation.data.email, validation.data.password);
 
     if (error) {
-      console.error('Signup error:', error);
+      logger.error('Signup error:', error, { context: 'Auth' });
       toast.error(error.message || t('messages.failedToSignUp'));
       playError();
       setIsLoading(false);
@@ -149,7 +150,7 @@ export default function Auth() {
 
     // Validate with zod schema
     const validation = authSchema.safeParse({ email, password });
-    
+
     if (!validation.success) {
       const firstError = validation.error.errors[0];
       toast.error(firstError.message);
@@ -161,7 +162,7 @@ export default function Auth() {
     const { error } = await signIn(validation.data.email, validation.data.password);
 
     if (error) {
-      console.error('Signin error:', error);
+      logger.error('Signin error:', error, { context: 'Auth' });
       toast.error(error.message || t('messages.failedToSignIn'));
       playError();
       setIsLoading(false);
@@ -193,7 +194,7 @@ export default function Auth() {
     });
 
     if (error) {
-      console.error('Password reset error:', error);
+      logger.error('Password reset error:', error, { context: 'Auth' });
       toast.error(error.message || t('auth.resetFailed', 'Failed to send reset email'));
       playError();
       setIsLoading(false);
@@ -301,7 +302,7 @@ export default function Auth() {
     });
 
     if (error) {
-      console.error('Password update error:', error);
+      logger.error('Password update error:', error, { context: 'Auth' });
       toast.error(error.message || t('auth.updateFailed', 'Failed to update password'));
       playError();
       setIsLoading(false);
@@ -349,125 +350,125 @@ export default function Auth() {
         ]}
       />
       <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4 relative overflow-x-hidden pb-safe">
-      {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gradient-to-bl from-primary/20 via-violet-500/10 to-transparent rounded-full blur-[150px] animate-morph" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/15 via-cyan-500/10 to-transparent rounded-full blur-[120px] animate-morph" style={{ animationDelay: '-7s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-purple-500/10 via-pink-500/5 to-transparent rounded-full blur-[100px] animate-float-slow" />
-      </div>
-      
-      <div className="w-full max-w-md space-y-6">
-        {/* Referral Banner */}
-        {refCode && (
-          <Card className="bg-gradient-to-r from-violet-500/20 to-purple-500/20 backdrop-blur-xl border-violet-500/30 rounded-2xl p-4 animate-fade-in">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-violet-500/30 flex items-center justify-center">
-                <Gift className="h-5 w-5 text-violet-400" />
-              </div>
-              <div>
-                <p className="font-medium text-sm">{t('auth.referral.invited', 'You have been invited!')}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t('auth.referral.bonus', 'Sign up and get +3 days Premium')}
-                </p>
-              </div>
-            </div>
-          </Card>
-        )}
-
-        {/* Logo */}
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
-            <div className="h-16 w-16 rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/30 shadow-glass-lg flex items-center justify-center animate-scale-in">
-              <img src="/favicon.png" alt="lnkmx" className="h-10 w-10 object-contain" />
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            {t('auth.title')}
-          </h1>
-          <p className="text-muted-foreground mt-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            {t('auth.subtitle')}
-          </p>
-          <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <LanguageSwitcher />
-          </div>
+        {/* Background Effects */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+          <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-gradient-to-bl from-primary/20 via-violet-500/10 to-transparent rounded-full blur-[150px] animate-morph will-change-transform" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/15 via-cyan-500/10 to-transparent rounded-full blur-[120px] animate-morph will-change-transform" style={{ animationDelay: '-7s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-purple-500/10 via-pink-500/5 to-transparent rounded-full blur-[100px] animate-float-slow will-change-transform" />
         </div>
 
-        {/* Password Update Card */}
-        {authMode === 'update-password' ? (
-          <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
-              <CardDescription>
-                {t('auth.enterNewPassword', 'Enter your new password')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {passwordUpdated ? (
-                <div className="space-y-4 text-center">
-                  <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
-                    <Check className="h-8 w-8 text-green-500" />
-                  </div>
-                  <h3 className="text-lg font-semibold">{t('auth.passwordUpdated', 'Password Updated')}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t('auth.passwordUpdatedDesc', 'Your password has been successfully updated')}
-                  </p>
-                  <Button 
-                    className="w-full h-12 rounded-xl"
-                    onClick={() => navigate('/dashboard')}
-                  >
-                    {t('auth.goToDashboard', 'Go to Dashboard')}
-                  </Button>
+        <div className="w-full max-w-md space-y-6">
+          {/* Referral Banner */}
+          {refCode && (
+            <Card className="bg-gradient-to-r from-violet-500/20 to-purple-500/20 backdrop-blur-xl border-violet-500/30 rounded-2xl p-4 animate-fade-in">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-violet-500/30 flex items-center justify-center">
+                  <Gift className="h-5 w-5 text-violet-400" />
                 </div>
-              ) : (
-                <form onSubmit={handleUpdatePassword} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="new-password" className="text-sm text-muted-foreground">
-                      {t('auth.newPassword', 'New Password')}
-                    </Label>
-                    <Input
-                      id="new-password"
-                      name="new-password"
-                      type="password"
-                      placeholder="••••••••"
-                      required
-                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password" className="text-sm text-muted-foreground">
-                      {t('auth.confirmPassword', 'Confirm Password')}
-                    </Label>
-                    <Input
-                      id="confirm-password"
-                      name="confirm-password"
-                      type="password"
-                      placeholder="••••••••"
-                      required
-                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
-                      {t('auth.passwordHint')}
+                <div>
+                  <p className="font-medium text-sm">{t('auth.referral.invited', 'You have been invited!')}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t('auth.referral.bonus', 'Sign up and get +3 days Premium')}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Logo */}
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-3 animate-fade-in">
+              <div className="h-16 w-16 rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/30 shadow-glass-lg flex items-center justify-center animate-scale-in">
+                <img src="/favicon.png" alt="lnkmx" className="h-10 w-10 object-contain" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              {t('auth.title')}
+            </h1>
+            <p className="text-muted-foreground mt-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              {t('auth.subtitle')}
+            </p>
+            <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <LanguageSwitcher />
+            </div>
+          </div>
+
+          {/* Password Update Card */}
+          {authMode === 'update-password' ? (
+            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
+                <CardDescription>
+                  {t('auth.enterNewPassword', 'Enter your new password')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {passwordUpdated ? (
+                  <div className="space-y-4 text-center">
+                    <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
+                      <Check className="h-8 w-8 text-green-500" />
+                    </div>
+                    <h3 className="text-lg font-semibold">{t('auth.passwordUpdated', 'Password Updated')}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {t('auth.passwordUpdatedDesc', 'Your password has been successfully updated')}
                     </p>
+                    <Button
+                      className="w-full h-12 rounded-xl"
+                      onClick={() => navigate('/dashboard')}
+                    >
+                      {t('auth.goToDashboard', 'Go to Dashboard')}
+                    </Button>
                   </div>
-                  <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                    {isLoading ? t('messages.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
-                  </Button>
-                </form>
-              )}
-            </CardContent>
-          </Card>
-        ) : (
-          /* Auth Card - Liquid Glass */
-          <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-xl">{t('auth.getStarted')}</CardTitle>
-              <CardDescription>
-                {t('auth.signInToAccount')}
-              </CardDescription>
-            </CardHeader>
-          <CardContent className="space-y-4">
-            {/* OAuth Buttons - Hidden until configured */}
-            {/* TODO: Uncomment when Google/Apple OAuth is configured in Lovable Cloud
+                ) : (
+                  <form onSubmit={handleUpdatePassword} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="new-password" className="text-sm text-muted-foreground">
+                        {t('auth.newPassword', 'New Password')}
+                      </Label>
+                      <Input
+                        id="new-password"
+                        name="new-password"
+                        type="password"
+                        placeholder="••••••••"
+                        required
+                        className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password" className="text-sm text-muted-foreground">
+                        {t('auth.confirmPassword', 'Confirm Password')}
+                      </Label>
+                      <Input
+                        id="confirm-password"
+                        name="confirm-password"
+                        type="password"
+                        placeholder="••••••••"
+                        required
+                        className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                      />
+                      <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
+                        {t('auth.passwordHint')}
+                      </p>
+                    </div>
+                    <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
+                      {isLoading ? t('messages.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
+                    </Button>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            /* Auth Card - Liquid Glass */
+            <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl">{t('auth.getStarted')}</CardTitle>
+                <CardDescription>
+                  {t('auth.signInToAccount')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* OAuth Buttons - Hidden until configured */}
+                {/* TODO: Uncomment when Google/Apple OAuth is configured in Lovable Cloud
             <div className="space-y-3">
               <Button
                 type="button"
@@ -517,225 +518,225 @@ export default function Auth() {
             </div>
             */}
 
-            <Tabs defaultValue="signin" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
-                <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signIn')}</TabsTrigger>
-                <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signUp')}</TabsTrigger>
-              </TabsList>
+                <Tabs defaultValue="signin" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
+                    <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signIn')}</TabsTrigger>
+                    <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signUp')}</TabsTrigger>
+                  </TabsList>
 
-              <TabsContent value="signin">
-                {authMode === 'reset' ? (
-                  resetEmailSent ? (
-                    <div className="space-y-4 pt-4 text-center">
-                      <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
-                        <Mail className="h-8 w-8 text-green-500" />
+                  <TabsContent value="signin">
+                    {authMode === 'reset' ? (
+                      resetEmailSent ? (
+                        <div className="space-y-4 pt-4 text-center">
+                          <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
+                            <Mail className="h-8 w-8 text-green-500" />
+                          </div>
+                          <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {t('auth.resetEmailSent', 'We sent a password reset link to your email')}
+                          </p>
+                          <Button
+                            variant="outline"
+                            className="w-full h-12 rounded-xl"
+                            onClick={() => { setAuthMode('signin'); setResetEmailSent(false); }}
+                          >
+                            {t('auth.backToSignIn', 'Back to Sign In')}
+                          </Button>
+                        </div>
+                      ) : (
+                        <form onSubmit={handlePasswordReset} className="space-y-4 pt-4">
+                          <div className="text-center mb-4">
+                            <h3 className="text-lg font-semibold">{t('auth.resetPassword', 'Reset Password')}</h3>
+                            <p className="text-sm text-muted-foreground">
+                              {t('auth.resetDescription', 'Enter your email to receive a reset link')}
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="reset-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                            <Input
+                              id="reset-email"
+                              name="reset-email"
+                              type="email"
+                              placeholder="your@email.com"
+                              required
+                              className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                            />
+                          </div>
+                          <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
+                            {isLoading ? t('messages.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
+                          </Button>
+                          <div className="relative py-2">
+                            <div className="absolute inset-0 flex items-center">
+                              <span className="w-full border-t border-border/30" />
+                            </div>
+                            <div className="relative flex justify-center text-xs">
+                              <span className="bg-card px-2 text-muted-foreground">{t('common.or', 'or')}</span>
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full h-12 rounded-xl"
+                            onClick={() => setAuthMode('reset-telegram')}
+                          >
+                            {t('auth.telegram.recoverViaTelegram', 'Recover via Telegram')}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="w-full rounded-xl"
+                            onClick={() => setAuthMode('signin')}
+                          >
+                            {t('auth.backToSignIn', 'Back to Sign In')}
+                          </Button>
+                        </form>
+                      )
+                    ) : authMode === 'reset-telegram' ? (
+                      <div className="space-y-4 pt-4">
+                        <div className="text-center mb-4">
+                          <h3 className="text-lg font-semibold">{t('auth.telegram.recoveryTitle', 'Recovery via Telegram')}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {telegramResetStep === 'request' ? t('auth.telegram.enterChatId', 'Enter your Telegram Chat ID') : t('auth.telegram.enterCode', 'Enter code from Telegram')}
+                          </p>
+                        </div>
+                        {telegramResetStep === 'request' ? (
+                          <div className="space-y-4">
+                            <Input
+                              value={telegramChatId}
+                              onChange={(e) => setTelegramChatId(e.target.value.replace(/\D/g, ''))}
+                              placeholder="123456789"
+                              className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30"
+                            />
+                            <Button onClick={handleTelegramResetRequest} className="w-full h-12 rounded-xl" disabled={isLoading}>
+                              {isLoading ? t('auth.telegram.sending', 'Sending...') : t('auth.telegram.getCode', 'Get code')}
+                            </Button>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleTelegramResetVerify} className="space-y-4">
+                            <Input
+                              value={resetToken}
+                              onChange={(e) => setResetToken(e.target.value.toUpperCase())}
+                              placeholder="XXXXXX"
+                              maxLength={6}
+                              className="h-12 rounded-xl bg-card/40 text-center text-xl tracking-widest font-mono"
+                            />
+                            <Input
+                              name="new-password"
+                              type="password"
+                              placeholder={t('auth.telegram.newPassword', 'New password')}
+                              required
+                              className="h-12 rounded-xl bg-card/40"
+                            />
+                            <Button type="submit" className="w-full h-12 rounded-xl" disabled={isLoading}>
+                              {isLoading ? t('auth.telegram.saving', 'Saving...') : t('auth.telegram.savePassword', 'Save password')}
+                            </Button>
+                          </form>
+                        )}
+                        <Button
+                          variant="ghost"
+                          className="w-full rounded-xl"
+                          onClick={() => { setAuthMode('signin'); setTelegramResetStep('request'); }}
+                        >
+                          {t('auth.telegram.back', 'Back')}
+                        </Button>
                       </div>
-                      <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {t('auth.resetEmailSent', 'We sent a password reset link to your email')}
-                      </p>
-                      <Button 
-                        variant="outline" 
-                        className="w-full h-12 rounded-xl"
-                        onClick={() => { setAuthMode('signin'); setResetEmailSent(false); }}
-                      >
-                        {t('auth.backToSignIn', 'Back to Sign In')}
-                      </Button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handlePasswordReset} className="space-y-4 pt-4">
-                      <div className="text-center mb-4">
-                        <h3 className="text-lg font-semibold">{t('auth.resetPassword', 'Reset Password')}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {t('auth.resetDescription', 'Enter your email to receive a reset link')}
-                        </p>
-                      </div>
+                    ) : (
+                      <form onSubmit={handleSignIn} className="space-y-4 pt-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="signin-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                          <Input
+                            id="signin-email"
+                            name="signin-email"
+                            type="email"
+                            placeholder="your@email.com"
+                            required
+                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="signin-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                            <button
+                              type="button"
+                              onClick={() => setAuthMode('reset')}
+                              className="text-xs text-primary hover:underline"
+                            >
+                              {t('auth.forgotPassword', 'Forgot password?')}
+                            </button>
+                          </div>
+                          <Input
+                            id="signin-password"
+                            name="signin-password"
+                            type="password"
+                            placeholder="••••••••"
+                            required
+                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                          />
+                        </div>
+                        <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
+                          {isLoading ? t('auth.signingIn') : t('auth.signIn')}
+                        </Button>
+                      </form>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="signup">
+                    <form onSubmit={handleSignUp} className="space-y-4 pt-4">
                       <div className="space-y-2">
-                        <Label htmlFor="reset-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                        <Label htmlFor="signup-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
                         <Input
-                          id="reset-email"
-                          name="reset-email"
+                          id="signup-email"
+                          name="signup-email"
                           type="email"
                           placeholder="your@email.com"
                           required
                           className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                         />
                       </div>
-                      <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                        {isLoading ? t('messages.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
-                      </Button>
-                      <div className="relative py-2">
-                        <div className="absolute inset-0 flex items-center">
-                          <span className="w-full border-t border-border/30" />
-                        </div>
-                        <div className="relative flex justify-center text-xs">
-                          <span className="bg-card px-2 text-muted-foreground">{t('common.or', 'or')}</span>
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                        <Input
+                          id="signup-password"
+                          name="signup-password"
+                          type="password"
+                          placeholder="••••••••"
+                          required
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                        />
+                        <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
+                          {t('auth.passwordHint')}
+                        </p>
                       </div>
-                      <Button 
-                        type="button"
-                        variant="outline" 
-                        className="w-full h-12 rounded-xl"
-                        onClick={() => setAuthMode('reset-telegram')}
-                      >
-                        {t('auth.telegram.recoverViaTelegram', 'Recover via Telegram')}
-                      </Button>
-                      <Button 
-                        type="button"
-                        variant="ghost" 
-                        className="w-full rounded-xl"
-                        onClick={() => setAuthMode('signin')}
-                      >
-                        {t('auth.backToSignIn', 'Back to Sign In')}
+                      <div className="flex items-start space-x-2">
+                        <Checkbox id="terms" required className="mt-0.5" />
+                        <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight">
+                          {t('legal.agreeToTerms')}{' '}
+                          <TermsLink className="text-primary hover:underline">
+                            {t('legal.termsLink')}
+                          </TermsLink>
+                          {' '}{t('legal.andThe')}{' '}
+                          <PrivacyLink className="text-primary hover:underline">
+                            {t('legal.privacyLink')}
+                          </PrivacyLink>
+                        </label>
+                      </div>
+                      <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
+                        {isLoading ? t('messages.loading', 'Loading...') : t('auth.signUp')}
                       </Button>
                     </form>
-                  )
-                ) : authMode === 'reset-telegram' ? (
-                  <div className="space-y-4 pt-4">
-                    <div className="text-center mb-4">
-                      <h3 className="text-lg font-semibold">{t('auth.telegram.recoveryTitle', 'Recovery via Telegram')}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {telegramResetStep === 'request' ? t('auth.telegram.enterChatId', 'Enter your Telegram Chat ID') : t('auth.telegram.enterCode', 'Enter code from Telegram')}
-                      </p>
-                    </div>
-                    {telegramResetStep === 'request' ? (
-                      <div className="space-y-4">
-                        <Input
-                          value={telegramChatId}
-                          onChange={(e) => setTelegramChatId(e.target.value.replace(/\D/g, ''))}
-                          placeholder="123456789"
-                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30"
-                        />
-                        <Button onClick={handleTelegramResetRequest} className="w-full h-12 rounded-xl" disabled={isLoading}>
-                          {isLoading ? t('auth.telegram.sending', 'Sending...') : t('auth.telegram.getCode', 'Get code')}
-                        </Button>
-                      </div>
-                    ) : (
-                      <form onSubmit={handleTelegramResetVerify} className="space-y-4">
-                        <Input
-                          value={resetToken}
-                          onChange={(e) => setResetToken(e.target.value.toUpperCase())}
-                          placeholder="XXXXXX"
-                          maxLength={6}
-                          className="h-12 rounded-xl bg-card/40 text-center text-xl tracking-widest font-mono"
-                        />
-                        <Input
-                          name="new-password"
-                          type="password"
-                          placeholder={t('auth.telegram.newPassword', 'New password')}
-                          required
-                          className="h-12 rounded-xl bg-card/40"
-                        />
-                        <Button type="submit" className="w-full h-12 rounded-xl" disabled={isLoading}>
-                          {isLoading ? t('auth.telegram.saving', 'Saving...') : t('auth.telegram.savePassword', 'Save password')}
-                        </Button>
-                      </form>
-                    )}
-                    <Button 
-                      variant="ghost" 
-                      className="w-full rounded-xl"
-                      onClick={() => { setAuthMode('signin'); setTelegramResetStep('request'); }}
-                    >
-                      {t('auth.telegram.back', 'Back')}
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSignIn} className="space-y-4 pt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signin-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
-                      <Input
-                        id="signin-email"
-                        name="signin-email"
-                        type="email"
-                        placeholder="your@email.com"
-                        required
-                        className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="signin-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
-                        <button 
-                          type="button"
-                          onClick={() => setAuthMode('reset')}
-                          className="text-xs text-primary hover:underline"
-                        >
-                          {t('auth.forgotPassword', 'Forgot password?')}
-                        </button>
-                      </div>
-                      <Input
-                        id="signin-password"
-                        name="signin-password"
-                        type="password"
-                        placeholder="••••••••"
-                        required
-                        className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                      />
-                    </div>
-                    <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                      {isLoading ? t('auth.signingIn') : t('auth.signIn')}
-                    </Button>
-                  </form>
-                )}
-              </TabsContent>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+          )}
 
-              <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
-                    <Input
-                      id="signup-email"
-                      name="signup-email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
-                    <Input
-                      id="signup-password"
-                      name="signup-password"
-                      type="password"
-                      placeholder="••••••••"
-                      required
-                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
-                      {t('auth.passwordHint')}
-                    </p>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <Checkbox id="terms" required className="mt-0.5" />
-                    <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight">
-                      {t('legal.agreeToTerms')}{' '}
-                      <TermsLink className="text-primary hover:underline">
-                        {t('legal.termsLink')}
-                      </TermsLink>
-                      {' '}{t('legal.andThe')}{' '}
-                      <PrivacyLink className="text-primary hover:underline">
-                        {t('legal.privacyLink')}
-                      </PrivacyLink>
-                    </label>
-                  </div>
-                  <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                    {isLoading ? t('messages.loading', 'Loading...') : t('auth.signUp')}
-                  </Button>
-                </form>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-        )}
-
-        {/* Back to home */}
-        <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
-            {t('auth.backToHome')}
-          </Button>
+          {/* Back to home */}
+          <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
+              {t('auth.backToHome')}
+            </Button>
+          </div>
         </div>
-      </div>
       </div>
     </>
   );

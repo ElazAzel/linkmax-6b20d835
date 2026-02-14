@@ -3,7 +3,7 @@ import type { AvatarBlock as AvatarBlockType, AvatarFrameStyle } from '@/types/p
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getFrameStyles, getShadowStyles, FRAME_CSS, isAnimatedFrame } from '@/lib/avatar-frame-utils';
 
 interface AvatarBlockProps {
@@ -12,8 +12,8 @@ interface AvatarBlockProps {
 
 export function AvatarBlock({ block }: AvatarBlockProps) {
   const { i18n } = useTranslation();
-  const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
-  const subtitle = getTranslatedString(block.subtitle, i18n.language as SupportedLanguage);
+  const name = getI18nText(block.name, i18n.language as SupportedLanguage);
+  const subtitle = getI18nText(block.subtitle, i18n.language as SupportedLanguage);
   
   const sizeClasses = {
     small: 'h-16 w-16',

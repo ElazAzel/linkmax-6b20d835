@@ -246,7 +246,7 @@ serve(async (req) => {
         userPrompt = `Создай УНИКАЛЬНУЮ персонализированную страницу с индивидуальным дизайном для: ${input.description}. Используй подходящую цветовую схему и реалистичный демо-контент.`;
         break;
 
-      case 'niche-builder':
+      case 'niche-builder': {
         const nichePrompts: Record<string, string> = {
           barber: 'барбера/парикмахера с услугами стрижки, бороды, укладки. Добавь ссылки на запись, портфолио работ, прайс-лист.',
           photographer: 'фотографа с портфолио, услугами съёмки (портрет, свадьба, предметная), ценами и контактами для записи.',
@@ -316,6 +316,7 @@ serve(async (req) => {
 Текст на русском, профессиональный. Return ONLY valid JSON, no markdown.`;
         userPrompt = `Создай полную страницу для ниши: ${input.niche}. Имя: ${input.name}. Детали: ${input.details || 'нет'}`;
         break;
+      }
 
       case 'personalize-template':
         systemPrompt = `Ты AI для персонализации шаблонов страниц. Получаешь шаблон и информацию о бизнесе.

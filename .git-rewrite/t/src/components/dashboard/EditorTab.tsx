@@ -87,9 +87,9 @@ export const EditorTab = memo(function EditorTab({
   useEffect(() => {
     if (!autoTranslateEnabled || blocks.length === 0) return;
 
-    translateBlocksToLanguage(blocks, currentLanguage).then((translatedBlocks) => {
-      if (translatedBlocks !== blocks) {
-        onReorderBlocks(translatedBlocks);
+    translateBlocksToLanguage(blocks as any[], currentLanguage).then((translatedBlocks) => {
+      if (translatedBlocks !== blocks as any) {
+        onReorderBlocks(translatedBlocks as any);
       }
     });
   }, [autoTranslateEnabled, blocks, currentLanguage, onReorderBlocks, translateBlocksToLanguage]);

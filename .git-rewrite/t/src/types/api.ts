@@ -90,11 +90,13 @@ export interface ApiResult<T> {
 /**
  * Save page operation result
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SavePageResult extends ApiResult<DbPage> {}
 
 /**
  * Load page operation result
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LoadPageResult extends ApiResult<PageData> {}
 
 /**

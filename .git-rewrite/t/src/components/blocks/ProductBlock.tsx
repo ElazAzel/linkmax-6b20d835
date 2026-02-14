@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ExternalLink, Coins, MessageCircle, Loader2 } from 'lucide-react';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { ProductBlock as ProductBlockType } from '@/types/page';
 import { cn } from '@/lib/utils';
 import {
@@ -25,10 +25,11 @@ import { toast } from 'sonner';
 
 interface ProductBlockProps {
   block: ProductBlockType;
+  onClick?: () => void;
 }
 
 
-export const ProductBlock = memo(function ProductBlockComponent({ block }: ProductBlockProps) {
+export const ProductBlock = memo(function ProductBlockComponent({ block, onClick }: ProductBlockProps) {
   const { t, i18n } = useTranslation();
   const isMobile = useIsMobile();
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -36,9 +37,9 @@ export const ProductBlock = memo(function ProductBlockComponent({ block }: Produ
   const { user } = useAuth();
   const tokens = useTokens();
   
-  const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
-  const description = getTranslatedString(block.description, i18n.language as SupportedLanguage);
-  const buttonText = getTranslatedString(block.buttonText, i18n.language as SupportedLanguage);
+  const name = getI18nText(block.name, i18n.language as SupportedLanguage);
+  const description = getI18nText(block.description, i18n.language as SupportedLanguage);
+  const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage);
   
   // Check if this product uses token payment (price in KZT = tokens)
   const tokenPrice = block.currency === 'KZT' ? block.price : null;
@@ -194,7 +195,10 @@ export const ProductBlock = memo(function ProductBlockComponent({ block }: Produ
         backgroundColor: block.blockStyle?.backgroundColor,
         backgroundImage: block.blockStyle?.backgroundGradient,
       }}
-      onClick={() => setIsDetailOpen(true)}
+      onClick={() => {
+        if (onClick) onClick();
+        setIsDetailOpen(true);
+      }}
     >
       <div className="flex gap-3 p-4">
         {/* Compact image */}

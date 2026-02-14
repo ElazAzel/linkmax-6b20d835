@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export type FriendshipStatus = 'pending' | 'accepted' | 'blocked';
 
@@ -51,7 +52,7 @@ export async function sendFriendRequest(friendId: string): Promise<{ success: bo
     });
 
   if (error) {
-    console.error('Send friend request error:', error);
+    logger.error('Send friend request error', error, { context: 'friends', data: { friend_id: friendId } });
     return { success: false, error: error.message };
   }
 
@@ -61,7 +62,7 @@ export async function sendFriendRequest(friendId: string): Promise<{ success: bo
       body: { targetUserId: friendId, type: 'request' }
     });
   } catch (e) {
-    console.log('Friend notification failed:', e);
+    logger.debug('Friend notification failed', { data: e, context: 'friends' });
   }
 
   return { success: true };
@@ -91,7 +92,7 @@ export async function acceptFriendRequest(friendshipId: string): Promise<{ succe
     .eq('id', friendshipId);
 
   if (error) {
-    console.error('Accept friend request error:', error);
+    logger.error('Accept friend request error', error, { context: 'friends', data: { friendshipId } });
     return { success: false, error: error.message };
   }
 
@@ -105,7 +106,7 @@ export async function acceptFriendRequest(friendshipId: string): Promise<{ succe
       body: { targetUserId: friendship.user_id, type: 'accepted' }
     });
   } catch (e) {
-    console.log('Friend notification failed:', e);
+    logger.debug('Friend notification failed', { data: e, context: 'friends' });
   }
 
   return { success: true };
@@ -118,7 +119,7 @@ export async function rejectFriendRequest(friendshipId: string): Promise<{ succe
     .eq('id', friendshipId);
 
   if (error) {
-    console.error('Reject friend request error:', error);
+    logger.error('Reject friend request error', error, { context: 'friends', data: { friendshipId } });
     return { success: false, error: error.message };
   }
 
@@ -141,7 +142,7 @@ export async function removeFriend(friendshipId: string): Promise<{ success: boo
     .eq('id', friendshipId);
 
   if (error) {
-    console.error('Remove friend error:', error);
+    logger.error('Remove friend error', error, { context: 'friends', data: { friendshipId } });
     return { success: false, error: error.message };
   }
 
@@ -168,7 +169,7 @@ export async function getFriends(): Promise<Friendship[]> {
 
   // Get all friend IDs
   const friendIds = friendships.map(f => f.user_id === user.id ? f.friend_id : f.user_id);
-  
+
   // Fetch profiles
   const { data: profiles } = await supabase
     .from('user_profiles')
@@ -200,7 +201,7 @@ export async function getPendingRequests(): Promise<Friendship[]> {
   if (error || !friendships) return [];
 
   const userIds = friendships.map(f => f.user_id);
-  
+
   const { data: profiles } = await supabase
     .from('user_profiles')
     .select('id, username, display_name, avatar_url')
@@ -228,7 +229,7 @@ export async function getSentRequests(): Promise<Friendship[]> {
   if (error || !friendships) return [];
 
   const friendIds = friendships.map(f => f.friend_id);
-  
+
   const { data: profiles } = await supabase
     .from('user_profiles')
     .select('id, username, display_name, avatar_url')
@@ -260,7 +261,7 @@ export async function searchUsers(query: string): Promise<Array<{ id: string; us
   if (!query || query.length < 2) return [];
 
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   const { data, error } = await supabase
     .from('user_profiles')
     .select('id, username, display_name, avatar_url')
@@ -269,7 +270,7 @@ export async function searchUsers(query: string): Promise<Array<{ id: string; us
     .limit(10);
 
   if (error) {
-    console.error('Search users error:', error);
+    logger.error('Search users error', error, { context: 'friends', data: { query } });
     return [];
   }
 

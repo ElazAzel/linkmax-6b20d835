@@ -12,7 +12,7 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/types/page';
-import { createMultilingualString, isMultilingualString, getTranslatedString } from '@/lib/i18n-helpers';
+import { createMultilingualString, isMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface CatalogBlockEditorProps {
@@ -57,7 +57,7 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
   };
 
   const getCategoryName = (category: CatalogCategory): string => {
-    return getTranslatedString(category.name, currentLang) || t('blocks.catalog.newCategory', 'Новая категория');
+    return getI18nText(category.name, currentLang) || t('blocks.catalog.newCategory', 'Новая категория');
   };
 
   // Item functions
@@ -91,7 +91,7 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
   };
 
   const getItemName = (item: CatalogItem): string => {
-    return getTranslatedString(item.name, currentLang) || t('blocks.catalog.noName', 'Без названия');
+    return getI18nText(item.name, currentLang) || t('blocks.catalog.noName', 'Без названия');
   };
 
   const getItemCategoryName = (item: CatalogItem): string | null => {

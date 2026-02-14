@@ -1,10 +1,10 @@
 /**
  * Excel Export utility for event registrations
- * Uses SheetJS (xlsx) for generating XLSX files
+ * Uses exceljs for generating XLSX files (safer than SheetJS)
  */
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { format } from 'date-fns';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { EventFormField } from '@/types/page';
 
 interface Registration {
@@ -34,13 +34,13 @@ interface ExportOptions {
 /**
  * Export registrations to XLSX file
  */
-export function exportToExcel({
+export async function exportToExcel({
   eventTitle,
   registrations,
   formFields = [],
   language,
   includeAnswers = true,
-}: ExportOptions): void {
+}: ExportOptions): Promise<void> {
   if (registrations.length === 0) {
     throw new Error('No registrations to export');
   }
@@ -65,7 +65,7 @@ export function exportToExcel({
     for (const field of formFields) {
       // Skip layout fields
       if (['section_header', 'description', 'media'].includes(field.type)) continue;
-      const label = getTranslatedString(field.label_i18n, language) || field.id;
+      const label = getI18nText(field.label_i18n, language) || field.id;
       fieldHeaders.push(label);
       fieldMap.set(field.id, field);
     }
@@ -101,36 +101,38 @@ export function exportToExcel({
     return [...baseRow, ...fieldRow];
   });
 
-  // Create workbook
-  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
-
+  // Create workbook with exceljs
+  const workbook = new ExcelJS.Workbook();
+  
+  // Add registrations sheet
+  const worksheet = workbook.addWorksheet('Registrations');
+  
+  // Add headers with styling
+  const headerRow = worksheet.addRow(headers);
+  headerRow.font = { bold: true };
+  headerRow.fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFE8E8E8' }
+  };
+  
+  // Add data rows
+  rows.forEach(row => {
+    worksheet.addRow(row);
+  });
+  
   // Auto-size columns
-  const colWidths = headers.map((header, i) => {
+  headers.forEach((header, i) => {
     const maxLength = Math.max(
       header.length,
       ...rows.map(row => String(row[i] || '').length)
     );
-    return { wch: Math.min(maxLength + 2, 50) };
+    const colWidth = Math.min(maxLength + 2, 50);
+    worksheet.getColumn(i + 1).width = colWidth;
   });
-  ws['!cols'] = colWidths;
-
-  // Style header row (basic styling)
-  const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
-  for (let col = range.s.c; col <= range.e.c; col++) {
-    const cell = ws[XLSX.utils.encode_cell({ r: 0, c: col })];
-    if (cell) {
-      cell.s = {
-        font: { bold: true },
-        fill: { fgColor: { rgb: 'E8E8E8' } },
-      };
-    }
-  }
-
-  // Create workbook and add sheet
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
 
   // Add summary sheet
+  const summarySheet = workbook.addWorksheet('Summary');
   const summaryData = [
     ['Событие / Event', eventTitle],
     ['Всего регистраций / Total', registrations.length],
@@ -140,17 +142,35 @@ export function exportToExcel({
     ['Check-in', registrations.filter(r => r.event_tickets?.[0]?.status === 'used').length],
     ['Дата экспорта / Export date', format(new Date(), 'dd.MM.yyyy HH:mm')],
   ];
-  const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
-  summaryWs['!cols'] = [{ wch: 25 }, { wch: 30 }];
-  XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
+  
+  summaryData.forEach(row => {
+    const summaryRow = summarySheet.addRow(row);
+    if (row === summaryData[0]) {
+      summaryRow.font = { bold: true };
+    }
+  });
+  
+  summarySheet.getColumn(1).width = 25;
+  summarySheet.getColumn(2).width = 30;
 
-  // Generate filename
+  // Generate filename and download
   const safeTitle = eventTitle.replace(/[^a-zA-Zа-яА-Я0-9]/g, '_').slice(0, 30);
   const dateStr = format(new Date(), 'yyyy-MM-dd');
   const filename = `${safeTitle}_registrations_${dateStr}.xlsx`;
 
-  // Download file
-  XLSX.writeFile(wb, filename);
+  // Write to buffer and download
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { 
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 /**
@@ -175,7 +195,7 @@ export function exportToCSV({
   if (includeAnswers && formFields.length > 0) {
     for (const field of formFields) {
       if (['section_header', 'description', 'media'].includes(field.type)) continue;
-      fieldHeaders.push(getTranslatedString(field.label_i18n, language) || field.id);
+      fieldHeaders.push(getI18nText(field.label_i18n, language) || field.id);
       fieldMap.set(field.id, field);
     }
   }
@@ -255,7 +275,7 @@ function formatAnswer(answer: unknown, field: EventFormField, language: Supporte
   if (Array.isArray(answer)) {
     return answer.map(id => {
       const option = field.options?.find(o => o.id === id);
-      return option ? getTranslatedString(option.label_i18n, language) : id;
+      return option ? getI18nText(option.label_i18n, language) : id;
     }).join('; ');
   }
 
@@ -263,7 +283,7 @@ function formatAnswer(answer: unknown, field: EventFormField, language: Supporte
   if (typeof answer === 'string' && field.options?.length) {
     const option = field.options.find(o => o.id === answer);
     if (option) {
-      return getTranslatedString(option.label_i18n, language);
+      return getI18nText(option.label_i18n, language);
     }
   }
 

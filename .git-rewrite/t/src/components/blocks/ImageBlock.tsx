@@ -1,18 +1,19 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { LazyImage } from '@/components/ui/lazy-image';
 import { cn } from '@/lib/utils';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 
 interface ImageBlockProps {
   block: ImageBlockType;
+  onClick?: () => void;
 }
 
-export const ImageBlock = memo(function ImageBlockComponent({ block }: ImageBlockProps) {
+export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: ImageBlockProps) {
   const { i18n } = useTranslation();
-  const alt = getTranslatedString(block.alt, i18n.language as SupportedLanguage);
-  const caption = getTranslatedString(block.caption, i18n.language as SupportedLanguage);
+  const alt = getI18nText(block.alt, i18n.language as SupportedLanguage);
+  const caption = getI18nText(block.caption, i18n.language as SupportedLanguage);
 
   const isBanner = block.style === 'banner';
 
@@ -37,7 +38,11 @@ export const ImageBlock = memo(function ImageBlockComponent({ block }: ImageBloc
 
   const handleClick = () => {
     if (block.link) {
-      window.open(block.link, '_blank', 'noopener,noreferrer');
+      onClick?.();
+      // Delay to ensure tracking request is sent before navigation
+      setTimeout(() => {
+        window.open(block.link, '_blank', 'noopener,noreferrer');
+      }, 15);
     }
   };
 

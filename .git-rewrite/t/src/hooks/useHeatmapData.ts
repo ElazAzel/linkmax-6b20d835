@@ -1,7 +1,9 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { subDays } from 'date-fns';
+import { subDays, startOfYear, endOfYear, eachDayOfInterval, format, parseISO, isSameDay } from 'date-fns';
+import { logger } from '@/lib/logger';
 
 export interface ClickPoint {
   x: number;
@@ -35,18 +37,18 @@ export function useHeatmapData(days: number = 30) {
   useEffect(() => {
     async function fetchPageId() {
       if (!user) return;
-      
+
       const { data } = await supabase
         .from('pages')
         .select('id')
         .eq('user_id', user.id)
         .maybeSingle();
-      
+
       if (data) {
         setPageId(data.id);
       }
     }
-    
+
     fetchPageId();
   }, [user]);
 
@@ -85,13 +87,13 @@ export function useHeatmapData(days: number = 30) {
           relX: number;
           relY: number;
         }> | undefined;
-        
+
         clicks?.forEach(click => {
           // Normalize to grid cell
           const gridX = Math.floor((click.relX * 100) / (100 / 20)); // 20 columns
           const gridY = Math.floor((click.relY * 100) / (100 / 50)); // 50 rows
-          const key = `${gridX},${gridY}`;
-          
+          const key = `${gridX},${gridY} `;
+
           const existing = clickGrid.get(key);
           if (existing) {
             existing.count++;
@@ -115,18 +117,18 @@ export function useHeatmapData(days: number = 30) {
       (scrollEvents || []).forEach(event => {
         const meta = event.metadata as Record<string, unknown>;
         const depth = (meta?.maxDepth as number) || 0;
-        
+
         // Round to nearest 10%
         const bucket = Math.floor(depth / 10) * 10;
         scrollDepthCounts.set(bucket, (scrollDepthCounts.get(bucket) || 0) + 1);
-        
+
         totalScrollDepth += depth;
         maxScrollDepth = Math.max(maxScrollDepth, depth);
       });
 
       const totalScrollSessions = scrollEvents?.length || 1;
       const scrollDepths: ScrollDepthData[] = [];
-      
+
       // Build cumulative scroll depth data
       for (let depth = 0; depth <= 100; depth += 10) {
         // Count sessions that reached at least this depth
@@ -134,12 +136,12 @@ export function useHeatmapData(days: number = 30) {
         scrollDepthCounts.forEach((count, d) => {
           if (d >= depth) reachedCount += count;
         });
-        
+
         scrollDepths.push({
           depth,
           count: reachedCount,
-          percentage: totalScrollSessions > 0 
-            ? Math.round((reachedCount / totalScrollSessions) * 100) 
+          percentage: totalScrollSessions > 0
+            ? Math.round((reachedCount / totalScrollSessions) * 100)
             : 0,
         });
       }
@@ -148,13 +150,13 @@ export function useHeatmapData(days: number = 30) {
         clicks: Array.from(clickGrid.values()).sort((a, b) => b.count - a.count),
         scrollDepths,
         totalSessions: totalScrollSessions,
-        avgScrollDepth: totalScrollSessions > 0 
-          ? Math.round(totalScrollDepth / totalScrollSessions) 
+        avgScrollDepth: totalScrollSessions > 0
+          ? Math.round(totalScrollDepth / totalScrollSessions)
           : 0,
         maxScrollDepth,
       });
     } catch (error) {
-      console.error('Error fetching heatmap data:', error);
+      logger.error('Error fetching heatmap data:', error, { context: 'useHeatmapData' });
     } finally {
       setLoading(false);
     }

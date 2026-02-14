@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import { incrementChallengeProgress } from '@/services/social';
 import type { Niche } from '@/lib/niches';
 
@@ -35,7 +36,7 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
     .limit(100);
 
   if (error) {
-    console.error('Error fetching gallery pages:', error);
+    logger.error('Error fetching gallery pages', error, { context: 'gallery' });
     return [];
   }
 
@@ -47,13 +48,13 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
     .from('user_profiles')
     .select('id, is_premium, trial_ends_at')
     .in('id', userIds);
-  
+
   const premiumMap = new Map<string, boolean>();
   profiles?.forEach(p => {
     const isPremium = p.is_premium || (p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
     premiumMap.set(p.id, isPremium);
   });
-  
+
   // Add premium flag and sort: premium first, then by views
   const pagesWithPremium = (data || []).map(p => ({
     id: p.id,
@@ -68,7 +69,7 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
     niche: p.niche,
     is_premium: premiumMap.get(p.user_id) || false
   }));
-  
+
   pagesWithPremium.sort((a, b) => {
     // Premium pages first
     if (a.is_premium && !b.is_premium) return -1;
@@ -80,7 +81,7 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
     // Then by likes
     return (b.gallery_likes || 0) - (a.gallery_likes || 0);
   });
-  
+
   return pagesWithPremium;
 }
 
@@ -91,13 +92,13 @@ export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage
     .from('user_profiles')
     .select('id')
     .or('is_premium.eq.true,trial_ends_at.gt.now()');
-  
+
   if (!premiumProfiles || premiumProfiles.length === 0) {
     return [];
   }
-  
+
   const premiumUserIds = premiumProfiles.map(p => p.id);
-  
+
   const { data, error } = await supabase
     .from('pages')
     .select('id, slug, title, description, avatar_url, preview_url, gallery_likes, gallery_featured_at, view_count, niche')
@@ -107,7 +108,7 @@ export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage
     .limit(limit);
 
   if (error) {
-    console.error('Error fetching top premium pages:', error);
+    logger.error('Error fetching top premium pages', error, { context: 'gallery' });
     return [];
   }
 
@@ -121,7 +122,7 @@ export async function getNicheCounts(): Promise<Record<string, number>> {
     .eq('is_published', true);
 
   if (error) {
-    console.error('Error fetching niche counts:', error);
+    logger.error('Error fetching niche counts', error, { context: 'gallery' });
     return {};
   }
 
@@ -157,7 +158,7 @@ export async function getLeaderboardPages(period: LeaderboardPeriod = 'week'): P
     .limit(10);
 
   if (error) {
-    console.error('Error fetching leaderboard:', error);
+    logger.error('Error fetching leaderboard', error, { context: 'gallery' });
     return [];
   }
 
@@ -170,7 +171,7 @@ export async function toggleGalleryStatus(userId: string): Promise<boolean> {
   });
 
   if (error) {
-    console.error('Error toggling gallery status:', error);
+    logger.error('Error toggling gallery status', error, { context: 'gallery', data: { userId } });
     throw error;
   }
 
@@ -183,7 +184,7 @@ export async function likeGalleryPage(pageId: string): Promise<void> {
   });
 
   if (error) {
-    console.error('Error liking page:', error);
+    logger.error('Error liking page', error, { context: 'gallery', data: { pageId } });
     throw error;
   }
 
@@ -197,7 +198,7 @@ export async function unlikeGalleryPage(pageId: string): Promise<void> {
   });
 
   if (error) {
-    console.error('Error unliking page:', error);
+    logger.error('Error unliking page', error, { context: 'gallery', data: { pageId } });
     throw error;
   }
 }
@@ -210,7 +211,10 @@ export async function getPageByUserId(userId: string): Promise<{ id: string; slu
     .eq('is_published', true)
     .maybeSingle();
 
-  if (error || !data) return null;
+  if (error || !data) {
+    logger.error('Error getting page by user ID', error, { context: 'gallery', data: { userId } });
+    return null;
+  }
   return data;
 }
 
@@ -222,7 +226,7 @@ export async function getMyGalleryStatus(userId: string): Promise<boolean> {
     .maybeSingle();
 
   if (error) {
-    console.error('Error getting gallery status:', error);
+    logger.error('Error getting gallery status', error, { context: 'gallery', data: { userId } });
     return false;
   }
 

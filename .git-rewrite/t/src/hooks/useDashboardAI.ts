@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
 import { createBlock } from '@/lib/block-factory';
 import logger from '@/lib/logger';
+import { storage } from '@/lib/storage';
 
 export type AIGeneratorType = 'magic-title' | 'sales-copy' | 'seo' | 'ai-builder';
 
@@ -46,7 +47,7 @@ function normalizeSocialsBlock(blockData: AIBlockData): AIBlockData {
   if (blockData.type !== 'socials' || !Array.isArray(blockData.platforms)) {
     return blockData;
   }
-  
+
   // Normalize platforms array - AI may use 'platform' instead of 'icon'
   const normalizedPlatforms = blockData.platforms
     .filter((p): p is AIBlockPlatform => p != null && typeof p === 'object')
@@ -55,7 +56,7 @@ function normalizeSocialsBlock(blockData: AIBlockData): AIBlockData {
       url: p.url || '',
       icon: p.icon || p.platform || 'globe',
     }));
-  
+
   return {
     ...blockData,
     platforms: normalizedPlatforms,
@@ -70,7 +71,7 @@ function normalizeBlockData(blockData: AIBlockData): AIBlockData {
   if (blockData.type === 'socials') {
     return normalizeSocialsBlock(blockData);
   }
-  
+
   // Normalize countdown blocks - AI may use 'endDate' instead of 'targetDate'
   if (blockData.type === 'countdown') {
     return {
@@ -78,7 +79,7 @@ function normalizeBlockData(blockData: AIBlockData): AIBlockData {
       targetDate: blockData.targetDate || blockData.endDate,
     };
   }
-  
+
   return blockData;
 }
 
@@ -89,20 +90,20 @@ function createBlockFromAI(blockData: AIBlockData, index: number): Block | null 
   try {
     // Normalize block data first
     const normalizedData = normalizeBlockData(blockData);
-    
+
     // Create base block from factory
     const baseBlock = createBlock(normalizedData.type);
-    
+
     // Generate unique ID
     const id = `${normalizedData.type}-${Date.now()}-${index}`;
-    
+
     // Merge AI data with base block, AI data takes precedence
     const mergedBlock = {
       ...baseBlock,
       ...normalizedData,
       id,
     };
-    
+
     return mergedBlock as Block;
   } catch (error) {
     logger.warn(`Unknown block type from AI: ${blockData.type}`, { context: 'AI', data: error });
@@ -144,15 +145,17 @@ export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, o
 
   const handleAIResult = useCallback(
     (result: AIBuilderResult) => {
+
+      // ... inside hook
       // Mark AI as used for achievements
-      localStorage.setItem('linkmax_ai_used', 'true');
-      
+      storage.set('ai_used', 'true');
+
       // Trigger use_ai quest on any AI result
       onQuestComplete?.('use_ai');
-      
+
       // Claim token reward for using AI
       onClaimAIToken?.();
-      
+
       if (aiGeneratorType === 'ai-builder') {
         const { profile, blocks } = result;
 
@@ -163,7 +166,7 @@ export function useDashboardAI({ onUpdateProfile, onAddBlock, onReplaceBlocks, o
 
         // Convert AI blocks to proper Block objects
         const validBlocks: Block[] = [];
-        
+
         blocks.forEach((blockData, index) => {
           const block = createBlockFromAI(blockData, index);
           if (block) {

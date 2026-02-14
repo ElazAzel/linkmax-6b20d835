@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 interface UsePullToRefreshOptions {
   onRefresh: () => Promise<void>;
@@ -33,7 +34,7 @@ export function usePullToRefresh({
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (disabled || state.isRefreshing) return;
-    
+
     // Only trigger if at top of scroll
     const scrollTop = containerRef.current?.scrollTop ?? window.scrollY;
     if (scrollTop > 0) return;
@@ -87,19 +88,19 @@ export function usePullToRefresh({
 
     if (state.canRefresh) {
       setState(prev => ({ ...prev, isRefreshing: true, pullDistance: threshold }));
-      
+
       try {
         await onRefresh();
       } catch (error) {
-        console.error('Refresh failed:', error);
+        logger.error('Refresh failed:', error, { context: 'usePullToRefresh' });
+      } finally {
+        setState({
+          isPulling: false,
+          isRefreshing: false,
+          pullDistance: 0,
+          canRefresh: false,
+        });
       }
-      
-      setState({
-        isPulling: false,
-        isRefreshing: false,
-        pullDistance: 0,
-        canRefresh: false,
-      });
     } else {
       setState({
         isPulling: false,
@@ -114,7 +115,7 @@ export function usePullToRefresh({
 
   useEffect(() => {
     const container = containerRef.current || document;
-    
+
     container.addEventListener('touchstart', handleTouchStart as EventListener, { passive: true });
     container.addEventListener('touchmove', handleTouchMove as EventListener, { passive: false });
     container.addEventListener('touchend', handleTouchEnd as EventListener, { passive: true });

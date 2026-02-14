@@ -6,6 +6,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
+import { logger } from '@/lib/logger';
 
 // Filter out bots and dev traffic
 function isBot(): boolean {
@@ -45,7 +46,7 @@ function getOrCreateSession(): LandingSession {
   } catch {
     // Ignore
   }
-  
+
   const session: LandingSession = {
     id: crypto.randomUUID?.() || Math.random().toString(36).substring(2),
     startedAt: Date.now(),
@@ -53,13 +54,13 @@ function getOrCreateSession(): LandingSession {
     sectionsViewed: [],
     ctaClicks: [],
   };
-  
+
   try {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   } catch {
     // Ignore
   }
-  
+
   return session;
 }
 
@@ -75,7 +76,7 @@ function updateSession(updates: Partial<LandingSession>) {
 }
 
 // Event types for landing page
-type LandingEventType = 
+type LandingEventType =
   | 'landing_view'
   | 'landing_scroll'
   | 'landing_section_view'
@@ -94,10 +95,10 @@ interface TrackLandingEventOptions {
 async function trackLandingEvent({ eventType, metadata = {} }: TrackLandingEventOptions): Promise<void> {
   // Filter bots and dev traffic
   if (isBot() || isDevTraffic()) return;
-  
+
   try {
     const session = getOrCreateSession();
-    
+
     const enrichedMetadata = {
       ...metadata,
       sessionId: session.id,
@@ -118,7 +119,8 @@ async function trackLandingEvent({ eventType, metadata = {} }: TrackLandingEvent
       metadata: enrichedMetadata as Json,
     });
   } catch (error) {
-    console.debug('Landing analytics failed:', error);
+    // Silently fail for analytics
+    logger.debug('Landing analytics failed:', { context: 'useLandingAnalytics', data: { error } });
   }
 }
 
@@ -126,16 +128,16 @@ export function useLandingAnalytics() {
   const hasTrackedView = useRef(false);
   const scrollDepths = useRef<Set<number>>(new Set());
   const sectionsInViewport = useRef<Set<string>>(new Set());
-  
+
   // Track initial page view
   useEffect(() => {
     if (hasTrackedView.current || isBot() || isDevTraffic()) return;
-    
+
     const sessionKey = 'lnkmx_landing_viewed';
     const alreadyViewed = sessionStorage.getItem(sessionKey);
-    
+
     if (!alreadyViewed) {
-      trackLandingEvent({ 
+      trackLandingEvent({
         eventType: 'landing_view',
         metadata: {
           referrer: document.referrer,
@@ -148,16 +150,16 @@ export function useLandingAnalytics() {
       hasTrackedView.current = true;
     }
   }, []);
-  
+
   // Track scroll depth
   useEffect(() => {
     if (isBot() || isDevTraffic()) return;
-    
+
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = Math.round((scrollTop / docHeight) * 100);
-      
+
       // Track at 25%, 50%, 75%, 90%, 100% thresholds
       const thresholds = [25, 50, 75, 90, 100];
       for (const threshold of thresholds) {
@@ -167,7 +169,7 @@ export function useLandingAnalytics() {
             eventType: 'landing_scroll',
             metadata: { depth: threshold }
           });
-          
+
           // Update session max scroll depth
           const session = getOrCreateSession();
           if (threshold > session.maxScrollDepth) {
@@ -176,69 +178,69 @@ export function useLandingAnalytics() {
         }
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   // Track section visibility
   const trackSectionView = useCallback((sectionId: string) => {
     if (isBot() || isDevTraffic()) return;
     if (sectionsInViewport.current.has(sectionId)) return;
-    
+
     sectionsInViewport.current.add(sectionId);
-    
+
     trackLandingEvent({
       eventType: 'landing_section_view',
       metadata: { section: sectionId }
     });
-    
+
     // Update session
     const session = getOrCreateSession();
     if (!session.sectionsViewed.includes(sectionId)) {
       updateSession({ sectionsViewed: [...session.sectionsViewed, sectionId] });
     }
   }, []);
-  
+
   // Track CTA clicks
   const trackCtaClick = useCallback((ctaType: 'create' | 'gallery' | 'pricing' | 'signup', location?: string) => {
     if (isBot() || isDevTraffic()) return;
-    
+
     const eventTypeMap: Record<string, LandingEventType> = {
       create: 'cta_create_click',
       gallery: 'cta_gallery_click',
       pricing: 'cta_pricing_click',
       signup: 'signup_start',
     };
-    
+
     trackLandingEvent({
       eventType: eventTypeMap[ctaType],
-      metadata: { 
+      metadata: {
         ctaType,
         location: location || 'unknown',
         scrollDepth: Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100),
       }
     });
-    
+
     // Update session
     const session = getOrCreateSession();
     updateSession({ ctaClicks: [...session.ctaClicks, `${ctaType}_${location || 'unknown'}`] });
   }, []);
-  
+
   // Track pricing toggle
   const trackPricingToggle = useCallback((plan: string) => {
     if (isBot() || isDevTraffic()) return;
-    
+
     trackLandingEvent({
       eventType: 'pricing_toggle',
       metadata: { selectedPlan: plan }
     });
   }, []);
-  
+
   // Track exit (before unload)
   useEffect(() => {
     if (isBot() || isDevTraffic()) return;
-    
+
     const handleBeforeUnload = () => {
       const session = getOrCreateSession();
       // Use sendBeacon for reliable exit tracking
@@ -252,7 +254,7 @@ export function useLandingAnalytics() {
           ctaClicks: session.ctaClicks,
         }
       };
-      
+
       navigator.sendBeacon?.(
         `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`,
         JSON.stringify({
@@ -263,11 +265,11 @@ export function useLandingAnalytics() {
         })
       );
     };
-    
+
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
-  
+
   return {
     trackSectionView,
     trackCtaClick,
@@ -278,7 +280,7 @@ export function useLandingAnalytics() {
 // Intersection Observer hook for section tracking
 export function useSectionObserver(sectionId: string, trackSectionView: (id: string) => void) {
   const sectionRef = useRef<HTMLElement>(null);
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -290,13 +292,13 @@ export function useSectionObserver(sectionId: string, trackSectionView: (id: str
       },
       { threshold: 0.3 } // 30% visibility triggers tracking
     );
-    
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-    
+
     return () => observer.disconnect();
   }, [sectionId, trackSectionView]);
-  
+
   return sectionRef;
 }

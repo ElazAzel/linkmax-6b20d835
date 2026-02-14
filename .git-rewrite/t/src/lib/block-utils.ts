@@ -4,6 +4,7 @@
  */
 
 import type { Block } from '@/types/page';
+import { logger } from './logger';
 
 export type ButtonStyle = 'default' | 'rounded' | 'pill';
 export type HoverEffect = 'default' | 'none' | 'glow' | 'scale' | 'shadow';
@@ -51,7 +52,7 @@ export function getHoverClass(effect?: HoverEffect): string {
  */
 export function getBackgroundStyle(background?: BackgroundConfig): React.CSSProperties {
   if (!background) return {};
-  
+
   switch (background.type) {
     case 'gradient':
       return {
@@ -73,27 +74,45 @@ export function getBackgroundStyle(background?: BackgroundConfig): React.CSSProp
 
 /**
  * Safely open URL in new tab with security attributes
+ * Uses sendBeacon for tracking to ensure it completes before navigation
  */
 export function openUrlSafely(url: string, trackingCallback?: () => void): void {
+  // Call tracking first - it uses async but we don't wait
   if (trackingCallback) {
     trackingCallback();
   }
-  window.open(url, '_blank', 'noopener,noreferrer');
+  // Small delay to allow tracking request to be sent
+  // Using setTimeout 0 puts this in the next event loop tick
+  setTimeout(() => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }, 10);
 }
 
 /**
  * Common block click handler factory
+ * Ensures tracking is called before URL navigation
  */
 export function createBlockClickHandler(
   url?: string,
   onClick?: () => void
-): () => void {
-  return () => {
+): (e?: React.MouseEvent) => void {
+  return (e?: React.MouseEvent) => {
+    // Prevent double tracking from event bubbling
+    if (e) {
+      e.stopPropagation();
+    }
+
+    // Call tracking callback
     if (onClick) {
       onClick();
     }
+
+    // Open URL after tracking
     if (url) {
-      openUrlSafely(url);
+      // Small delay to ensure tracking request is sent
+      setTimeout(() => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }, 10);
     }
   };
 }
@@ -129,7 +148,7 @@ export function validateBlocksIntegrity(blocks: Block[]): { valid: boolean; issu
 
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
-    
+
     // Check for duplicate IDs
     if (seenIds.has(block.id)) {
       issues.push(`Duplicate block ID: ${block.id} at index ${i}`);
@@ -160,9 +179,9 @@ export function validateBlocksIntegrity(blocks: Block[]): { valid: boolean; issu
 export function ensureBlockIds(blocks: Block[]): Block[] {
   return blocks.map((block, index) => {
     if (block.id) return block;
-    
+
     // Generate ID for block missing one (safety net)
-    console.warn(`Block at position ${index} had no ID, generating one`);
+    logger.warn(`Block at position ${index} had no ID, generating one`, { context: 'block-utils' });
     return {
       ...block,
       id: generateBlockId(block.type || 'unknown'),
@@ -180,7 +199,7 @@ export function deduplicateBlocks(blocks: Block[]): Block[] {
 
   for (const block of blocks) {
     if (seenIds.has(block.id)) {
-      console.warn(`Duplicate block removed: ${block.id}`);
+      logger.warn(`Duplicate block removed: ${block.id}`, { context: 'block-utils' });
       continue;
     }
     seenIds.add(block.id);
@@ -210,10 +229,10 @@ export function reorderBlocks<T>(
  */
 export function blocksOrderChanged(oldBlocks: Block[], newBlocks: Block[]): boolean {
   if (oldBlocks.length !== newBlocks.length) return true;
-  
+
   for (let i = 0; i < oldBlocks.length; i++) {
     if (oldBlocks[i].id !== newBlocks[i].id) return true;
   }
-  
+
   return false;
 }

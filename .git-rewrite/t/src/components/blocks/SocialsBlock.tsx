@@ -5,11 +5,12 @@ import {
   MessageCircle, Phone, Mail, Twitch, Dribbble, Figma, Slack, 
   Chrome, Rss, Link2, AtSign, MapPin, Calendar, Podcast
 } from 'lucide-react';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;
+  onPlatformClick?: () => void;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -72,14 +73,21 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   location: MapPin,
 };
 
-export const SocialsBlock = memo(function SocialsBlockComponent({ block }: SocialsBlockProps) {
+export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatformClick }: SocialsBlockProps) {
   const { i18n } = useTranslation();
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   const handleClick = (url: string) => {
-    if (url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
+    // Track click first
+    if (onPlatformClick) {
+      onPlatformClick();
     }
+    // Small delay to ensure tracking request is sent
+    setTimeout(() => {
+      if (url) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    }, 10);
   };
 
   const justifyClass = block.alignment === 'left' ? 'justify-start' 

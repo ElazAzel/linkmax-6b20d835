@@ -498,14 +498,19 @@ export type Database = {
           attendee_phone: string | null
           block_id: string
           created_at: string
+          currency: string | null
           event_id: string
           id: string
           owner_id: string
           page_id: string
+          paid_amount: number | null
           payment_status: string
+          provider: string | null
+          provider_payment_id: string | null
           status: string
           updated_at: string
           user_id: string | null
+          utm_json: Json | null
         }
         Insert: {
           answers_json?: Json | null
@@ -514,14 +519,19 @@ export type Database = {
           attendee_phone?: string | null
           block_id: string
           created_at?: string
+          currency?: string | null
           event_id: string
           id?: string
           owner_id: string
           page_id: string
+          paid_amount?: number | null
           payment_status?: string
+          provider?: string | null
+          provider_payment_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
+          utm_json?: Json | null
         }
         Update: {
           answers_json?: Json | null
@@ -530,14 +540,19 @@ export type Database = {
           attendee_phone?: string | null
           block_id?: string
           created_at?: string
+          currency?: string | null
           event_id?: string
           id?: string
           owner_id?: string
           page_id?: string
+          paid_amount?: number | null
           payment_status?: string
+          provider?: string | null
+          provider_payment_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
+          utm_json?: Json | null
         }
         Relationships: [
           {
@@ -821,6 +836,57 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      newsletter_subscriptions: {
+        Row: {
+          block_id: string | null
+          created_at: string
+          email: string
+          id: string
+          owner_id: string
+          page_id: string | null
+          status: string
+          subscribed_at: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          block_id?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          owner_id: string
+          page_id?: string | null
+          status?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          block_id?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          owner_id?: string
+          page_id?: string | null
+          status?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_subscriptions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "newsletter_subscriptions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       page_boosts: {
         Row: {
@@ -1897,6 +1963,10 @@ export type Database = {
         Args: { p_code: string; p_referred_user_id: string }
         Returns: Json
       }
+      check_email_registered_for_event: {
+        Args: { p_email: string; p_event_id: string }
+        Returns: boolean
+      }
       check_page_limits: { Args: { p_user_id: string }; Returns: Json }
       claim_daily_token_reward: {
         Args: { p_action_type: string; p_amount: number; p_user_id: string }
@@ -1919,6 +1989,7 @@ export type Database = {
       }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
+      get_auth_user_email: { Args: never; Returns: string }
       get_event_registration_count: {
         Args: { p_event_id: string }
         Returns: number

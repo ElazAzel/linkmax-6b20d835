@@ -3,6 +3,7 @@
  */
 import { supabase } from '@/platform/supabase/client';
 import i18n from '@/i18n/config';
+import { logger } from '@/lib/logger';
 
 // ==================== TYPES ====================
 
@@ -73,7 +74,7 @@ export async function getWeeklyChallenges(): Promise<WeeklyChallenge[]> {
     .eq('week_start', getWeekStart());
 
   if (error) {
-    console.error('Error fetching challenges:', error);
+    logger.error('Error fetching challenges', error, { context: 'social' });
     return [];
   }
 
@@ -85,7 +86,7 @@ export async function getChallengeProgress(userId: string): Promise<ChallengePro
   if (challenges.length === 0) return [];
 
   const challengeIds = challenges.map(c => c.id);
-  
+
   const { data, error } = await supabase
     .from('challenge_progress')
     .select('*')
@@ -93,7 +94,7 @@ export async function getChallengeProgress(userId: string): Promise<ChallengePro
     .in('challenge_id', challengeIds);
 
   if (error) {
-    console.error('Error fetching progress:', error);
+    logger.error('Error fetching progress', error, { context: 'social', data: { userId } });
     return [];
   }
 
@@ -117,13 +118,13 @@ export async function incrementChallengeProgress(challengeKey: string): Promise<
   });
 
   if (error) {
-    console.error('Error incrementing challenge:', error);
+    logger.error('Error incrementing challenge', error, { context: 'social', data: { challengeKey } });
   }
 }
 
 export async function claimChallengeReward(challengeId: string): Promise<{ success: boolean; hours?: number }> {
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   // Get challenge info
   const { data: challengeInfo } = await supabase
     .from('weekly_challenges')
@@ -136,12 +137,12 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
   });
 
   if (error) {
-    console.error('Error claiming reward:', error);
+    logger.error('Error claiming reward', error, { context: 'social', data: { challengeId } });
     return { success: false };
   }
 
   const result = data as { success: boolean; hours?: number };
-  
+
   if (result.success && user) {
     // Send notification to user
     try {
@@ -155,13 +156,13 @@ export async function claimChallengeReward(challengeId: string): Promise<{ succe
         }
       });
     } catch (e) {
-      console.error('Failed to send challenge notification:', e);
+      logger.error('Failed to send challenge notification', e, { context: 'social' });
     }
 
     // Notify friends about completed challenge
     await notifyFriendsAboutChallenge(user.id, challengeInfo?.title || i18n.t('social.challenge', 'Челлендж'));
   }
-  
+
   return result;
 }
 
@@ -198,7 +199,7 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
             challengeTitle
           }
         }
-      }).catch(e => console.error('Failed to notify friend:', e))
+      }).catch(e => logger.error('Failed to notify friend', e, { context: 'social' }))
     )
   );
 }
@@ -206,8 +207,8 @@ async function notifyFriendsAboutChallenge(userId: string, challengeTitle: strin
 // ==================== PREMIUM GIFTS ====================
 
 export async function sendPremiumGift(
-  recipientId: string, 
-  days: number = 7, 
+  recipientId: string,
+  days: number = 7,
   message?: string
 ): Promise<{ success: boolean; error?: string }> {
   const { data: { user } } = await supabase.auth.getUser();
@@ -230,7 +231,7 @@ export async function sendPremiumGift(
     });
 
   if (error) {
-    console.error('Error sending gift:', error);
+    logger.error('Error sending gift', error, { context: 'social', data: { recipientId, days } });
     return { success: false, error: 'failed' };
   }
 
@@ -251,7 +252,7 @@ export async function sendPremiumGift(
       }
     });
   } catch (e) {
-    console.error('Failed to send gift notification:', e);
+    logger.error('Failed to send gift notification', e, { context: 'social' });
   }
 
   return { success: true };
@@ -269,7 +270,7 @@ export async function getPendingGifts(): Promise<PremiumGift[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching gifts:', error);
+    logger.error('Error fetching gifts', error, { context: 'social' });
     return [];
   }
 
@@ -292,7 +293,7 @@ export async function getPendingGifts(): Promise<PremiumGift[]> {
 
 export async function claimPremiumGift(giftId: string): Promise<{ success: boolean; days?: number }> {
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   // Get gift info before claiming
   const { data: giftInfo } = await supabase
     .from('premium_gifts')
@@ -305,12 +306,12 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
   });
 
   if (error) {
-    console.error('Error claiming gift:', error);
+    logger.error('Error claiming gift', error, { context: 'social', data: { giftId } });
     return { success: false };
   }
 
   const result = data as { success: boolean; days?: number };
-  
+
   if (result.success) {
     await recordActivity('gift_received', { days: result.days });
 
@@ -333,7 +334,7 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
           }
         });
       } catch (e) {
-        console.error('Failed to send claim notification:', e);
+        logger.error('Failed to send claim notification', e, { context: 'social' });
       }
     }
   }
@@ -344,7 +345,7 @@ export async function claimPremiumGift(giftId: string): Promise<{ success: boole
 // ==================== PAGE BOOSTS ====================
 
 export async function boostPage(
-  pageId: string, 
+  pageId: string,
   boostType: 'standard' | 'premium' | 'super' = 'standard',
   durationHours: number = 24
 ): Promise<{ success: boolean; error?: string }> {
@@ -364,7 +365,7 @@ export async function boostPage(
     });
 
   if (error) {
-    console.error('Error boosting page:', error);
+    logger.error('Error boosting page', error, { context: 'social', data: { pageId, boostType } });
     return { success: false, error: 'failed' };
   }
 
@@ -382,7 +383,7 @@ export async function getActiveBoosts(pageId: string): Promise<PageBoost[]> {
     .gte('ends_at', new Date().toISOString());
 
   if (error) {
-    console.error('Error fetching boosts:', error);
+    logger.error('Error fetching boosts', error, { context: 'social', data: { pageId } });
     return [];
   }
 
@@ -392,7 +393,7 @@ export async function getActiveBoosts(pageId: string): Promise<PageBoost[]> {
 // ==================== FRIEND ACTIVITIES ====================
 
 export async function recordActivity(
-  activityType: string, 
+  activityType: string,
   metadata: Record<string, unknown> = {}
 ): Promise<void> {
   const { data: { user } } = await supabase.auth.getUser();
@@ -407,7 +408,7 @@ export async function recordActivity(
     }]);
 
   if (error) {
-    console.error('Error recording activity:', error);
+    logger.error('Error recording activity', error, { context: 'social', data: { activityType } });
   }
 }
 
@@ -419,7 +420,7 @@ export async function getFriendActivities(limit: number = 20): Promise<FriendAct
     .limit(limit);
 
   if (error) {
-    console.error('Error fetching activities:', error);
+    logger.error('Error fetching activities', error, { context: 'social' });
     return [];
   }
 

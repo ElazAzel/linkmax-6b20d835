@@ -15,7 +15,7 @@ import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { toast } from 'sonner';
 import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { ru, kk } from 'date-fns/locale';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { BookingBlock as BookingBlockType } from '@/types/page';
 
 interface BookingBlockProps {
@@ -257,11 +257,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
   };
 
   const blockTitle = typeof block.title === 'object' 
-    ? getTranslatedString(block.title, i18n.language as SupportedLanguage)
+    ? getI18nText(block.title, i18n.language as SupportedLanguage)
     : block.title;
   
   const blockDescription = typeof block.description === 'object'
-    ? getTranslatedString(block.description, i18n.language as SupportedLanguage)
+    ? getI18nText(block.description, i18n.language as SupportedLanguage)
     : block.description;
 
   // Calculate stats for the selected date
@@ -574,8 +574,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   <Check className="h-4 w-4 mr-2" />
                 )}
                 {block.requirePrepayment 
-                  ? (getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('booking.confirmAndPay', 'Записаться и оплатить'))
-                  : (getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('booking.confirm', 'Записаться'))
+                  ? (getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('booking.confirmAndPay', 'Записаться и оплатить'))
+                  : (getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('booking.confirm', 'Записаться'))
                 }
               </Button>
             </div>

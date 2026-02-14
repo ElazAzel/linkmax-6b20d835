@@ -4,23 +4,28 @@ import { useTranslation } from 'react-i18next';
 import type { DownloadBlock as DownloadBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface DownloadBlockProps {
   block: DownloadBlockType;
+  onClick?: () => void;
 }
 
-export const DownloadBlock = memo(function DownloadBlock({ block }: DownloadBlockProps) {
+export const DownloadBlock = memo(function DownloadBlock({ block, onClick }: DownloadBlockProps) {
   const { t, i18n } = useTranslation();
   
   const handleDownload = () => {
-    window.open(block.fileUrl, '_blank', 'noopener,noreferrer');
+    if (onClick) onClick();
+    // Small delay to ensure tracking request is sent
+    setTimeout(() => {
+      window.open(block.fileUrl, '_blank', 'noopener,noreferrer');
+    }, 10);
   };
 
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
-  const description = getTranslatedString(block.description, i18n.language as SupportedLanguage);
-  const buttonText = getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('actions.download', 'Download');
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
+  const description = getI18nText(block.description, i18n.language as SupportedLanguage);
+  const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('actions.download', 'Download');
 
   return (
     <div className={cn(

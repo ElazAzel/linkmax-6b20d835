@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
 import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS, getVerificationPositionClasses, getVerificationColor, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
 import { getLucideIcon, CheckCircle2 } from '@/lib/icon-utils';
@@ -78,8 +78,8 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
   isOwnerVerified = false 
 }: ProfileBlockProps) {
   const { t, i18n } = useTranslation();
-  const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
-  const bio = getTranslatedString(block.bio, i18n.language as SupportedLanguage);
+  const name = getI18nText(block.name, i18n.language as SupportedLanguage);
+  const bio = getI18nText(block.bio, i18n.language as SupportedLanguage);
   
   // Pro tier users are considered premium
   const isPremiumUser = ownerTier === 'pro' || isOwnerPremium;

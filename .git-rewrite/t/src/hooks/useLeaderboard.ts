@@ -1,5 +1,7 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { getLeaderboardPages, type GalleryPage, type LeaderboardPeriod } from '@/services/gallery';
+import { logger } from '@/lib/logger';
 
 export function useLeaderboard(initialPeriod: LeaderboardPeriod = 'week') {
   const [pages, setPages] = useState<GalleryPage[]>([]);
@@ -12,7 +14,7 @@ export function useLeaderboard(initialPeriod: LeaderboardPeriod = 'week') {
       const data = await getLeaderboardPages(period);
       setPages(data);
     } catch (error) {
-      console.error('Failed to fetch leaderboard:', error);
+      logger.error('Failed to fetch leaderboard:', error, { context: 'useLeaderboard' });
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface TokenBalance {
   balance: number;
@@ -67,12 +68,12 @@ export async function getTokenBalance(userId: string): Promise<TokenBalance | nu
       const { error: insertError } = await supabase
         .from('user_tokens')
         .insert({ user_id: userId, balance: 0, total_earned: 0, total_spent: 0 });
-      
+
       if (!insertError) {
         return { balance: 0, totalEarned: 0, totalSpent: 0 };
       }
     }
-    console.error('Error getting token balance:', error);
+    logger.error('Error getting token balance', error, { context: 'tokens', data: { userId } });
     return null;
   }
 
@@ -92,7 +93,7 @@ export async function getTokenTransactions(userId: string, limit = 50): Promise<
     .limit(limit);
 
   if (error) {
-    console.error('Error getting transactions:', error);
+    logger.error('Error getting transactions', error, { context: 'tokens', data: { userId } });
     return [];
   }
 
@@ -119,7 +120,7 @@ export async function claimDailyReward(
   actionType: 'daily_visit' | 'add_block' | 'use_ai'
 ): Promise<{ success: boolean; error?: string; newBalance?: number }> {
   const amount = TOKEN_REWARDS[actionType];
-  
+
   const { data, error } = await supabase.rpc('claim_daily_token_reward', {
     p_user_id: userId,
     p_amount: amount,
@@ -127,13 +128,13 @@ export async function claimDailyReward(
   });
 
   if (error) {
-    console.error('Error claiming daily reward:', error);
+    logger.error('Error claiming daily reward', error, { context: 'tokens', data: { userId, actionType } });
     return { success: false, error: 'server_error' };
   }
 
   const result = data as { success: boolean; error?: string; new_balance?: number };
-  return { 
-    success: result.success, 
+  return {
+    success: result.success,
     error: result.error,
     newBalance: result.new_balance,
   };
@@ -154,7 +155,7 @@ export async function addTokens(
   });
 
   if (error) {
-    console.error('Error adding tokens:', error);
+    logger.error('Error adding tokens', error, { context: 'tokens', data: { userId, amount, source } });
     return { success: false };
   }
 
@@ -172,7 +173,7 @@ export async function convertToPremium(userId: string): Promise<{
   });
 
   if (error) {
-    console.error('Error converting to premium:', error);
+    logger.error('Error converting to premium', error, { context: 'tokens', data: { userId } });
     return { success: false, error: 'server_error' };
   }
 
@@ -203,7 +204,7 @@ export async function purchaseItem(
   });
 
   if (error) {
-    console.error('Error processing purchase:', error);
+    logger.error('Error processing purchase', error, { context: 'tokens', data: { buyerId, itemType, price } });
     return { success: false, error: 'server_error' };
   }
 
@@ -265,7 +266,7 @@ export async function requestWithdrawal(
     }]);
 
   if (error) {
-    console.error('Error creating withdrawal request:', error);
+    logger.error('Error creating withdrawal request', error, { context: 'tokens', data: { userId, amount } });
     return { success: false, error: 'server_error' };
   }
 
@@ -281,7 +282,7 @@ export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error getting withdrawals:', error);
+    logger.error('Error getting withdrawals', error, { context: 'tokens', data: { userId } });
     return [];
   }
 
@@ -307,7 +308,7 @@ export async function getTokenAnalytics(startDate?: string, endDate?: string): P
   });
 
   if (error) {
-    console.error('Error getting token analytics:', error);
+    logger.error('Error getting token analytics', error, { context: 'tokens' });
     return null;
   }
 
@@ -328,7 +329,7 @@ export async function getAllWithdrawals(status?: string): Promise<WithdrawalRequ
   const { data, error } = await query;
 
   if (error) {
-    console.error('Error getting withdrawals:', error);
+    logger.error('Error getting withdrawals', error, { context: 'tokens' });
     return [];
   }
 
@@ -365,7 +366,7 @@ export async function processWithdrawal(
     .eq('id', withdrawalId);
 
   if (error) {
-    console.error('Error processing withdrawal:', error);
+    logger.error('Error processing withdrawal', error, { context: 'tokens', data: { withdrawalId, status } });
     return { success: false };
   }
 
@@ -394,7 +395,7 @@ export async function getAllTransactions(
   const { data, error } = await query;
 
   if (error) {
-    console.error('Error getting all transactions:', error);
+    logger.error('Error getting all transactions', error, { context: 'tokens' });
     return [];
   }
 

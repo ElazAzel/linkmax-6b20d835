@@ -5,9 +5,13 @@ name = "lnkmx-prerender"
 main = "prerender-worker.js"
 compatibility_date = "2024-01-01"
 
-# Production route - adjust domain as needed
+# Cloudflare Account ID
+account_id = "9058b638459bffbf366813802933852b"
+
+# Production routes (if using custom domain)
+# To enable routes, uncomment and update with your zone_id and domain
 # routes = [
-#   { pattern = "lnkmx.my/*", zone_name = "lnkmx.my" }
+#   { pattern = "example.com/*", zone_name = "example.com" }
 # ]
 
 # Environment variables (use wrangler secret for token in production)
@@ -23,3 +27,8 @@ command = ""
 [dev]
 port = 8787
 local_protocol = "http"
+
+# Note: To publish the Worker you still need to authenticate the Wrangler CLI.
+# Recommended: run `wrangler login` locally or set an API token as a secret:
+#   wrangler secret put PRERENDER_TOKEN
+# or configure the environment variable `CLOUDFLARE_API_TOKEN` before `wrangler publish`.

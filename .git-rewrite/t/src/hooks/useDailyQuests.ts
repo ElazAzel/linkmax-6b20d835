@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { 
-  getCompletedQuestsToday, 
-  completeQuest, 
-  DAILY_QUESTS, 
+import { logger } from '@/lib/logger';
+import {
+  getCompletedQuestsToday,
+  completeQuest,
+  DAILY_QUESTS,
   getQuestProgress,
-  type Quest 
+  type Quest
 } from '@/services/quests';
 
 export function useDailyQuests(userId: string | undefined) {
@@ -16,12 +17,12 @@ export function useDailyQuests(userId: string | undefined) {
 
   const loadQuests = useCallback(async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       const completed = await getCompletedQuestsToday(userId);
       setCompletedQuests(completed);
-      
+
       // Auto-complete daily visit quest
       if (!completed.includes('daily_visit')) {
         const result = await completeQuest(userId, 'daily_visit');
@@ -35,7 +36,7 @@ export function useDailyQuests(userId: string | undefined) {
         }
       }
     } catch (error) {
-      console.error('Failed to load quests:', error);
+      logger.error('Failed to load quests:', error, { context: 'useDailyQuests' });
     } finally {
       setLoading(false);
     }

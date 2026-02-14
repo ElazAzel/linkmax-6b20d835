@@ -4,7 +4,7 @@ import type { CommunityBlock as CommunityBlockType } from '@/types/page';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 import { Users, Crown, Star, Heart, Zap, Lock, ExternalLink } from 'lucide-react';
 
@@ -43,9 +43,9 @@ export const CommunityBlock = React.memo(function CommunityBlock({ block }: Comm
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
-  const title = block.title ? getTranslatedString(block.title, currentLang) : t('blocks.community.defaultTitle', 'Мой закрытый клуб');
-  const description = block.description ? getTranslatedString(block.description, currentLang) : '';
-  const buttonText = block.buttonText ? getTranslatedString(block.buttonText, currentLang) : t('blocks.community.join', 'Вступить');
+  const title = block.title ? getI18nText(block.title, currentLang) : t('blocks.community.defaultTitle', 'Мой закрытый клуб');
+  const description = block.description ? getI18nText(block.description, currentLang) : '';
+  const buttonText = block.buttonText ? getI18nText(block.buttonText, currentLang) : t('blocks.community.join', 'Вступить');
   
   const style = block.style || 'default';
   const styles = styleConfig[style];

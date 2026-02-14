@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import { useAuth } from '@/hooks/useAuth';
 import { subDays } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -34,18 +35,18 @@ export function useFunnelAnalytics(days: number = 30) {
   useEffect(() => {
     async function fetchPageId() {
       if (!user) return;
-      
+
       const { data } = await supabase
         .from('pages')
         .select('id')
         .eq('user_id', user.id)
         .maybeSingle();
-      
+
       if (data) {
         setPageId(data.id);
       }
     }
-    
+
     fetchPageId();
   }, [user]);
 
@@ -85,14 +86,14 @@ export function useFunnelAnalytics(days: number = 30) {
       const viewEvents = events?.filter(e => e.event_type === 'view') || [];
       const clickEvents = events?.filter(e => e.event_type === 'click') || [];
       const shareEvents = events?.filter(e => e.event_type === 'share') || [];
-      
+
       // Unique visitors based on different sessions (approximation)
       const uniqueViewers = viewEvents.length;
       const uniqueClickers = new Set(clickEvents.map(e => (e.metadata as Record<string, unknown>)?.session || e.id)).size;
-      
+
       // Engagements = clicks + shares
       const engagements = clickEvents.length + shareEvents.length;
-      
+
       // Conversions = leads + bookings
       const conversions = (leads?.length || 0) + (bookings?.length || 0);
 
@@ -125,8 +126,8 @@ export function useFunnelAnalytics(days: number = 30) {
       ];
 
       // Calculate overall conversion rate
-      const overallConversionRate = uniqueViewers > 0 
-        ? (conversions / uniqueViewers) * 100 
+      const overallConversionRate = uniqueViewers > 0
+        ? (conversions / uniqueViewers) * 100
         : 0;
 
       // Generate insights
@@ -182,7 +183,7 @@ export function useFunnelAnalytics(days: number = 30) {
         insights,
       });
     } catch (error) {
-      console.error('Error fetching funnel data:', error);
+      logger.error('Error fetching funnel analytics:', error, { context: 'useFunnelAnalytics' });
     } finally {
       setLoading(false);
     }

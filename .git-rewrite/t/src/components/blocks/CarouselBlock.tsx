@@ -10,15 +10,16 @@ import {
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import type { CarouselBlock as CarouselBlockType } from '@/types/page';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 
 interface CarouselBlockProps {
   block: CarouselBlockType;
+  onClick?: () => void;
 }
 
-export const CarouselBlock = memo(function CarouselBlockComponent({ block }: CarouselBlockProps) {
+export const CarouselBlock = memo(function CarouselBlockComponent({ block, onClick }: CarouselBlockProps) {
   const { i18n, t } = useTranslation();
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   const autoplayPlugin = block.autoPlay
     ? Autoplay({ delay: block.interval || 3000, stopOnInteraction: true })
@@ -26,7 +27,11 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block }: Car
 
   const handleImageClick = (link?: string) => {
     if (link) {
-      window.open(link, '_blank', 'noopener,noreferrer');
+      onClick?.();
+      // Delay to ensure tracking request is sent before navigation
+      setTimeout(() => {
+        window.open(link, '_blank', 'noopener,noreferrer');
+      }, 15);
     }
   };
 
@@ -59,7 +64,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block }: Car
       >
         <CarouselContent className="-ml-0">
           {block.images.map((image, index) => {
-            const alt = getTranslatedString(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
+            const alt = getI18nText(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
             return (
               <CarouselItem key={index} className="pl-0">
                 <div

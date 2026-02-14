@@ -2,6 +2,7 @@
  * Hook for managing social features - challenges, gifts, activities
  */
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { useAuth } from './useAuth';
 import { useTranslation } from 'react-i18next';
 import {
@@ -47,7 +48,7 @@ export function useSocialFeatures() {
       setPendingGifts(giftsData);
       setActivities(activitiesData);
     } catch (error) {
-      console.error('Error loading social data:', error);
+      logger.error('Error loading social data:', error, { context: 'useSocialFeatures' });
     } finally {
       setLoading(false);
     }

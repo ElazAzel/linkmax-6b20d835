@@ -36,6 +36,8 @@ used to detect regressions (cycles, layer violations, unused code).
 
 ## System Map (High-level)
 
+See also: [Dependency Graph Visualization](./graphs/dependency-graph.mmd)
+
 ```mermaid
 flowchart TD
   UI[UI: pages/components/hooks/contexts]

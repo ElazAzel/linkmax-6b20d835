@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import type { Json } from '@/platform/supabase/types';
 
 interface HeatmapEvent {
@@ -66,7 +67,8 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
         });
       }
     } catch (error) {
-      console.debug('Heatmap tracking error:', error);
+      // Silently fail for analytics
+      logger.debug('Heatmap tracking error:', { context: 'useHeatmapTracking', data: { error } });
     }
   }, [pageId]);
 

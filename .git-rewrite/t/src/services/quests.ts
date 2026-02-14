@@ -1,4 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface Quest {
   key: string;
@@ -55,7 +56,7 @@ export interface CompletedQuest {
 
 export async function getCompletedQuestsToday(userId: string): Promise<string[]> {
   const today = new Date().toISOString().split('T')[0];
-  
+
   const { data, error } = await supabase
     .from('daily_quests_completed')
     .select('quest_key')
@@ -63,7 +64,7 @@ export async function getCompletedQuestsToday(userId: string): Promise<string[]>
     .eq('completed_date', today);
 
   if (error) {
-    console.error('Error fetching completed quests:', error);
+    logger.error('Error fetching completed quests', error, { context: 'quests', data: { userId } });
     return [];
   }
 
@@ -84,14 +85,14 @@ export async function completeQuest(userId: string, questKey: string): Promise<{
   });
 
   if (error) {
-    console.error('Error completing quest:', error);
+    logger.error('Error completing quest', error, { context: 'quests', data: { questKey } });
     return { success: false, tokensEarned: 0 };
   }
 
   const result = data as { success: boolean; tokens_earned?: number; reason?: string };
-  return { 
-    success: result.success, 
-    tokensEarned: result.tokens_earned || quest.tokens 
+  return {
+    success: result.success,
+    tokensEarned: result.tokens_earned || quest.tokens
   };
 }
 

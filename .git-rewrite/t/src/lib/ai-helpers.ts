@@ -5,6 +5,7 @@
 
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { logger } from './logger';
 
 export interface MagicTitleInput {
   url: string;
@@ -43,7 +44,7 @@ async function generateAIContent<T>(
     if (error) throw error;
     return data.result;
   } catch (error) {
-    console.error(`AI ${type} generation error:`, error);
+    logger.error(`AI ${type} generation error`, error, { context: 'ai-helpers', data: { type } });
     throw error;
   }
 }

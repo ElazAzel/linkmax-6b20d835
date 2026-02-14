@@ -1,5 +1,6 @@
 import LZString from 'lz-string';
 import type { PageData } from '@/types/page';
+import { logger } from './logger';
 
 export function compressPageData(data: PageData): string {
   const json = JSON.stringify(data);
@@ -13,7 +14,7 @@ export function decompressPageData(compressed: string): PageData | null {
     if (!decompressed) return null;
     return JSON.parse(decompressed) as PageData;
   } catch (error) {
-    console.error('Failed to decompress page data:', error);
+    logger.error('Failed to decompress page data', error, { context: 'compression' });
     return null;
   }
 }

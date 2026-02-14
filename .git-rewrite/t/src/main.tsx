@@ -30,6 +30,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
+const EventScanner = lazy(() => import("./pages/EventScanner"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -46,6 +47,9 @@ const router = createBrowserRouter([
       { path: "dashboard/insights", element: <Dashboard /> },
       { path: "dashboard/monetize", element: <Dashboard /> },
       { path: "dashboard/settings", element: <Dashboard /> },
+      { path: "dashboard/events", element: <Dashboard /> },
+      { path: "dashboard/events/:eventId", element: <Dashboard /> },
+      { path: "dashboard/events/:eventId/scanner", element: <EventScanner /> },
       { path: "install", element: <Install /> },
       { path: "gallery", element: <Gallery /> },
       { path: "pricing", element: <Pricing /> },

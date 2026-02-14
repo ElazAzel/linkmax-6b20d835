@@ -13,6 +13,10 @@ import { TestimonialBlock } from '../TestimonialBlock';
 import { ScratchBlock } from '../ScratchBlock';
 import { AvatarBlock } from '../AvatarBlock';
 import { SeparatorBlock } from '../SeparatorBlock';
+import { CarouselBlock } from '../CarouselBlock';
+import { FAQBlock } from '../FAQBlock';
+import { CountdownBlock } from '../CountdownBlock';
+import { ImageBlock } from '../ImageBlock';
 import * as fixtures from '@/testing/block-fixtures';
 
 // Mock useAuth for ProductBlock
@@ -59,11 +63,15 @@ describe('Block Components', () => {
       expect(screen.getByText('Test Link')).toBeInTheDocument();
     });
 
-    it('opens URL on click', () => {
+    it('opens URL on click', async () => {
+      vi.useFakeTimers();
       render(<LinkBlock block={fixtures.mockLinkBlock} />);
       const button = screen.getByRole('button');
       fireEvent.click(button);
+      // Wait for setTimeout to complete
+      vi.advanceTimersByTime(20);
       expect(window.open).toHaveBeenCalledWith('https://example.com', '_blank', 'noopener,noreferrer');
+      vi.useRealTimers();
     });
   });
 
@@ -89,10 +97,13 @@ describe('Block Components', () => {
     });
 
     it('opens platform URL on click', () => {
+      vi.useFakeTimers();
       render(<SocialsBlock block={fixtures.mockSocialsBlock} />);
       const instagramBtn = screen.getByLabelText('Instagram');
       fireEvent.click(instagramBtn);
+      vi.advanceTimersByTime(15);
       expect(window.open).toHaveBeenCalledWith('https://instagram.com/test', '_blank', 'noopener,noreferrer');
+      vi.useRealTimers();
     });
   });
 
@@ -210,6 +221,70 @@ describe('Block Components', () => {
     it('renders separator element', () => {
       const { container } = render(<SeparatorBlock block={fixtures.mockSeparatorBlock} />);
       expect(container.querySelector('[data-orientation]')).toBeInTheDocument();
+    });
+  });
+
+  describe('CarouselBlock', () => {
+    it('renders empty state when no images', () => {
+      const emptyCarousel = { ...fixtures.mockCarouselBlock, images: [] };
+      render(<CarouselBlock block={emptyCarousel} />);
+      expect(screen.getByText(/No images added/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('FAQBlock', () => {
+    it('renders empty state when no items', () => {
+      const emptyFaq = { id: 'faq-1', type: 'faq' as const, items: [] };
+      render(<FAQBlock block={emptyFaq} />);
+      expect(screen.getByText(/Добавьте вопросы/i)).toBeInTheDocument();
+    });
+
+    it('renders FAQ items', () => {
+      const faqBlock = {
+        id: 'faq-1',
+        type: 'faq' as const,
+        title: 'FAQ',
+        items: [
+          { id: 'q1', question: 'Test Question', answer: 'Test Answer' }
+        ]
+      };
+      render(<FAQBlock block={faqBlock} />);
+      expect(screen.getByText('FAQ')).toBeInTheDocument();
+      expect(screen.getByText('Test Question')).toBeInTheDocument();
+    });
+  });
+
+  describe('CountdownBlock', () => {
+    it('renders countdown timer', () => {
+      const futureDate = new Date(Date.now() + 86400000).toISOString(); // tomorrow
+      const countdownBlock = {
+        id: 'countdown-1',
+        type: 'countdown' as const,
+        title: 'Sale Ends',
+        targetDate: futureDate,
+        isPremium: true as const,
+      };
+      render(<CountdownBlock block={countdownBlock} />);
+      expect(screen.getByText('Sale Ends')).toBeInTheDocument();
+    });
+
+    it('shows no date message when targetDate is missing', () => {
+      const noDateBlock = {
+        id: 'countdown-1',
+        type: 'countdown' as const,
+        title: 'Timer',
+        targetDate: '',
+        isPremium: true as const,
+      };
+      render(<CountdownBlock block={noDateBlock} />);
+      expect(screen.getByText(/Укажите дату/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('ImageBlock', () => {
+    it('renders caption when provided', () => {
+      render(<ImageBlock block={fixtures.mockImageBlock} />);
+      expect(screen.getByText('Image caption')).toBeInTheDocument();
     });
   });
 });

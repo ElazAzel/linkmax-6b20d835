@@ -206,7 +206,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
           
           <h3 className="font-semibold mt-6 mb-2">5. Paid Services, Tariffs, and Payments</h3>
           <p className="text-sm text-muted-foreground mb-2">5.1. Access to additional Platform features (PRO tariff) is provided on a prepaid subscription basis with a minimum term of 3 months.</p>
-          <p className="text-sm text-muted-foreground mb-2">5.2. Current pricing in Kazakhstani tenge (KZT): 3 months - 4,350₸/month (total 13,050₸); 6 months - 3,500₸/month (total 21,000₸); 12 months - 2,610₸/month (total 31,320₸). Approximate USD equivalent: $8.50, $6.80, $5.10 per month respectively.</p>
+          <p className="text-sm text-muted-foreground mb-2">5.2. Current pricing in Kazakhstani tenge (KZT): 3 months - 4,350₸/month (total 13,050₸); 6 months - 3,698₸/month (total 22,185₸, 15% discount); 12 months - 3,045₸/month (total 36,540₸, 30% discount). Approximate USD equivalent: $8.50, $7.20, $5.95 per month respectively.</p>
           <p className="text-sm text-muted-foreground mb-2">5.3. Prices, tariff composition and payment terms are published on the tariffs page at https://lnkmx.my/pricing and may be changed by the Administration unilaterally for new periods.</p>
           <p className="text-sm text-muted-foreground mb-2">5.4. Payment is made through the RoboKassa payment system and other available payment methods.</p>
           
@@ -270,7 +270,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
           
           <h3 className="font-semibold mt-6 mb-2">5. Ақылы қызметтер, тарифтер және төлемдер</h3>
           <p className="text-sm text-muted-foreground mb-2">5.1. Платформаның қосымша мүмкіндіктеріне қол жеткізу (PRO тарифі) кемінде 3 айлық мерзімге алдын ала төлемді жазылым негізінде ұсынылады.</p>
-          <p className="text-sm text-muted-foreground mb-2">5.2. Қазақстан теңгесіндегі (KZT) ағымдағы бағалар: 3 ай - 4 350₸/ай (барлығы 13 050₸); 6 ай - 3 500₸/ай (барлығы 21 000₸); 12 ай - 2 610₸/ай (барлығы 31 320₸). АҚШ долларындағы болжамды баламасы: тиісінше $8.50, $6.80, $5.10/ай.</p>
+          <p className="text-sm text-muted-foreground mb-2">5.2. Қазақстан теңгесіндегі (KZT) ағымдағы бағалар: 3 ай - 4 350₸/ай (барлығы 13 050₸); 6 ай - 3 500₸/ай (барлығы 21 000₸); 12 ай - 3 045₸/ай (барлығы 36 540₸). АҚШ долларындағы болжамды баламасы: тиісінше $8.50, $6.80, $5.95/ай.</p>
           <p className="text-sm text-muted-foreground mb-2">5.3. Ағымдағы бағалар, тарифтік жоспарлар мен төлем шарттары https://lnkmx.my/pricing тарифтер бетінде жарияланған.</p>
           <p className="text-sm text-muted-foreground mb-2">5.4. Төлем RoboKassa төлем жүйесі және басқа қолжетімді төлем әдістері арқылы жүзеге асырылады.</p>
           
@@ -340,7 +340,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
         
         <h3 className="font-semibold mt-6 mb-2">5. Платные сервисы, тарифы и платежи</h3>
         <p className="text-sm text-muted-foreground mb-2">5.1. Доступ к дополнительным возможностям Платформы (тариф PRO) предоставляется на условиях предоплатной подписки с минимальным периодом 3 месяца.</p>
-        <p className="text-sm text-muted-foreground mb-2">5.2. Актуальные цены в казахстанских тенге (KZT): 3 месяца - 4 350₸/мес (итого 13 050₸); 6 месяцев - 3 500₸/мес (итого 21 000₸); 12 месяцев - 2 610₸/мес (итого 31 320₸). Эквивалент в долларах США: $8.50, $6.80, $5.10/мес соответственно.</p>
+        <p className="text-sm text-muted-foreground mb-2">5.2. Актуальные цены в казахстанских тенге (KZT): 3 месяца - 4 350₸/мес (итого 13 050₸); 6 месяцев - 3 500₸/мес (итого 21 000₸); 12 месяцев - 3 045₸/мес (итого 36 540₸). Эквивалент в долларах США: $8.50, $6.80, $5.95/мес соответственно.</p>
         <p className="text-sm text-muted-foreground mb-2">5.3. Цены, состав тарифов и условия оплаты публикуются на странице тарифов https://lnkmx.my/pricing и могут изменяться Администрацией в одностороннем порядке для новых периодов.</p>
         <p className="text-sm text-muted-foreground mb-2">5.4. Оплата производится через платёжную систему RoboKassa и другие доступные способы оплаты.</p>
         <p className="text-sm text-muted-foreground mb-2">5.5. Факт успешной оплаты подтверждается электронной квитанцией/уведомлением. С этого момента услуги считаются оказанными в объёме, соответствующем выбранному тарифу и периоду.</p>

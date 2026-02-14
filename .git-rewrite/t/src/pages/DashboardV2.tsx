@@ -2,7 +2,7 @@
  * DashboardV2 - New mobile-first dashboard with multi-page support
  * Entry point for the redesigned dashboard experience
  */
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import { useDashboard } from '@/hooks/useDashboard';
 import { useMultiPage } from '@/hooks/useMultiPage';
 import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { useEditorHistory } from '@/hooks/useEditorHistory';
+import { usePageVersions } from '@/hooks/usePageVersions';
 
 // SEO
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
@@ -29,8 +30,10 @@ import {
   InsightsScreen,
   MonetizeScreen,
   SettingsScreen,
+  EventsScreen,
+  EventDetailScreen,
 } from '@/components/dashboard-v2/screens';
-import { CreatePageDialog } from '@/components/dashboard-v2/dialogs';
+import { CreatePageDialog, PageVersionsDialog } from '@/components/dashboard-v2/dialogs';
 
 // Modals & Panels (reused from v1)
 import { UnifiedBlockEditor } from '@/components/block-editors/UnifiedBlockEditor';
@@ -49,22 +52,39 @@ import { MyTemplatesPanel } from '@/components/templates/MyTemplatesPanel';
 import { AchievementsPanel } from '@/components/achievements/AchievementsPanel';
 import { LocalStorageMigration } from '@/components/LocalStorageMigration';
 import { LoadingState, BackgroundEffects } from '@/components/dashboard';
+import { ThemePanel } from '@/components/dashboard-v2/panels';
+import { storage } from '@/lib/storage';
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events';
 
 export default function DashboardV2() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
-  
-  // Core state
-  const dashboard = useDashboard();
+
+  // Page versions - hook defined early for onPublish callback
+  const pageVersionsRef = useRef<ReturnType<typeof usePageVersions> | null>(null);
+
+  // Callback for saving version on each publish
+  const handlePublishVersion = useCallback((pageData: import('@/types/page').PageData) => {
+    if (pageData?.id && pageVersionsRef.current) {
+      pageVersionsRef.current.saveVersion(
+        pageData.id,
+        pageData.blocks,
+        pageData.theme,
+        pageData.seo
+      );
+    }
+  }, []);
+
+  // Core state - with onPublish callback for automatic versioning
+  const dashboard = useDashboard({ onPublish: handlePublishVersion });
   const multiPage = useMultiPage();
   const { canUseCustomPageBackground } = useFreemiumLimits();
-  
+
   // Editor history
   const editorHistory = useEditorHistory(
     dashboard.pageData?.blocks || [],
@@ -77,20 +97,24 @@ export default function DashboardV2() {
 
   // Current tab from URL - support both query params and pathname
   const currentTab = useMemo((): TabId => {
+    // Check for events routes first
+    if (location.pathname.startsWith('/dashboard/events')) {
+      return 'events';
+    }
     // First check query params
     const tabParam = searchParams.get('tab') as TabId;
-    if (tabParam && ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings'].includes(tabParam)) {
+    if (tabParam && ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events'].includes(tabParam)) {
       return tabParam;
     }
     // Fall back to pathname
     const pathParts = location.pathname.split('/');
     const lastPart = pathParts[pathParts.length - 1];
-    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings'].includes(lastPart)) {
+    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events'].includes(lastPart)) {
       return lastPart as TabId;
     }
     return 'home';
   }, [searchParams, location.pathname]);
-  
+
   // UI State
   const [migrationKey, setMigrationKey] = useState(0);
   const [templateGalleryOpen, setTemplateGalleryOpen] = useState(false);
@@ -102,16 +126,39 @@ export default function DashboardV2() {
   const [showMarketplace, setShowMarketplace] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
   const [showCreatePage, setShowCreatePage] = useState(false);
+  const [showVersions, setShowVersions] = useState(false);
+  const [showTheme, setShowTheme] = useState(false);
+
+  // Page versions
+  const handleRestoreVersion = useCallback((blocks: any[], theme?: any, seo?: any) => {
+    dashboard.updatePageDataPartial({
+      blocks,
+      theme: theme || dashboard.pageData?.theme,
+      seo: seo ? { ...dashboard.pageData?.seo, ...seo } : dashboard.pageData?.seo,
+    });
+    setShowVersions(false);
+  }, [dashboard]);
+
+  const pageVersions = usePageVersions(handleRestoreVersion);
+
+  // Keep ref updated for onPublish callback
+  useEffect(() => {
+    pageVersionsRef.current = pageVersions;
+  }, [pageVersions]);
 
   // SEO
   const canonical = 'https://lnkmx.my/dashboard';
   const seoTitle = t('dashboard.seo.title', 'lnkmx Dashboard');
   const seoDescription = t('dashboard.seo.description', 'Manage your lnkmx pages, leads, and analytics.');
 
-  // Check for new user quick start
+  // Check for new user quick start - show only for users with 2 or fewer blocks
   useEffect(() => {
-    const completed = localStorage.getItem('linkmax_onboarding_completed');
-    if (!completed && dashboard.pageData?.blocks.length === 1) {
+    // Check using name-spaced key via storage wrapper
+    // Note: onboarding/useDashboardOnboarding uses 'onboarding_completed' key
+    const completed = storage.get('onboarding_completed');
+    const blocksCount = dashboard.pageData?.blocks.length || 0;
+    // Only show quick start for new users with profile block only or just 1 content block
+    if (!completed && blocksCount <= 2) {
       setShowQuickStart(true);
     }
   }, [dashboard.pageData?.blocks.length]);
@@ -166,11 +213,27 @@ export default function DashboardV2() {
     }
   }, [multiPage.pages, t]);
 
-  // Listen for global events
+  // Listen for global events from sidebar
   useEffect(() => {
     const handleOpenFriends = () => setShowFriends(true);
+    const handleOpenTemplates = () => setTemplateGalleryOpen(true);
+    const handleOpenMarketplace = () => setShowMarketplace(true);
+    const handleOpenTokens = () => setShowTokens(true);
+    const handleOpenAchievements = () => setShowAchievements(true);
+
     window.addEventListener('openFriends', handleOpenFriends);
-    return () => window.removeEventListener('openFriends', handleOpenFriends);
+    window.addEventListener('openTemplates', handleOpenTemplates);
+    window.addEventListener('openMarketplace', handleOpenMarketplace);
+    window.addEventListener('openTokens', handleOpenTokens);
+    window.addEventListener('openAchievements', handleOpenAchievements);
+
+    return () => {
+      window.removeEventListener('openFriends', handleOpenFriends);
+      window.removeEventListener('openTemplates', handleOpenTemplates);
+      window.removeEventListener('openMarketplace', handleOpenMarketplace);
+      window.removeEventListener('openTokens', handleOpenTokens);
+      window.removeEventListener('openAchievements', handleOpenAchievements);
+    };
   }, []);
 
   // Loading state
@@ -184,7 +247,7 @@ export default function DashboardV2() {
         <div className="text-center p-6">
           <h2 className="text-xl font-bold mb-2">{t('dashboard.errors.loadFailed', 'Loading failed')}</h2>
           <p className="text-muted-foreground mb-4">{t('dashboard.errors.loadFailedDesc', 'Could not load page data')}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-primary text-primary-foreground rounded-xl"
           >
@@ -269,6 +332,7 @@ export default function DashboardV2() {
               onOpenTemplates={() => setTemplateGalleryOpen(true)}
               onOpenMarketplace={() => setShowMarketplace(true)}
               pageSwitcher={pageSwitcherElement}
+              onOpenVersions={() => setShowVersions(true)}
             />
           )}
 
@@ -293,6 +357,7 @@ export default function DashboardV2() {
               canRedo={editorHistory.canRedo}
               onUndo={editorHistory.undo}
               onRedo={editorHistory.redo}
+              onOpenVersions={() => setShowVersions(true)}
             />
           )}
 
@@ -393,7 +458,7 @@ export default function DashboardV2() {
               onOpenMyTemplates={() => setShowMyTemplates(true)}
               onOpenTokens={() => setShowTokens(true)}
               onOpenAchievements={() => setShowAchievements(true)}
-              onOpenTheme={() => navigate('/dashboard/home?tab=editor')}
+              onOpenTheme={() => setShowTheme(true)}
               onOpenMarketplace={() => setShowMarketplace(true)}
               onOpenTemplates={() => setTemplateGalleryOpen(true)}
               // Page settings props
@@ -417,6 +482,15 @@ export default function DashboardV2() {
                 toast.info(t('common.comingSoon', 'Coming soon'));
               }}
             />
+          )}
+
+          {/* Events Screen */}
+          {currentTab === 'events' && (
+            location.pathname.match(/\/dashboard\/events\/[^/]+$/) && !location.pathname.includes('/scanner') ? (
+              <EventDetailScreen />
+            ) : (
+              <EventsScreen />
+            )
           )}
         </DashboardLayout>
 
@@ -494,21 +568,21 @@ export default function DashboardV2() {
         {/* Panels & Dialogs */}
         {showAchievements && <AchievementsPanel onClose={() => setShowAchievements(false)} />}
         {showFriends && <FriendsPanel onClose={() => setShowFriends(false)} />}
-        
+
         <SaveTemplateDialog
           open={showSaveTemplate}
           onClose={() => setShowSaveTemplate(false)}
           blocks={dashboard.pageData.blocks}
           previewContainerId="preview-container"
         />
-        
+
         <MyTemplatesPanel
           open={showMyTemplates}
           onOpenChange={setShowMyTemplates}
           onApplyTemplate={dashboard.handleApplyTemplate}
           currentBlocks={dashboard.pageData.blocks}
         />
-        
+
         <TokensPanel open={showTokens} onOpenChange={setShowTokens} />
 
         <InstallPromptDialog
@@ -522,6 +596,29 @@ export default function DashboardV2() {
           onOpenChange={dashboard.sharingState.closeShareDialog}
           userId={dashboard.user?.id}
           publishedUrl={dashboard.sharingState.publishedUrl}
+        />
+
+        {/* Page Versions Dialog */}
+        <PageVersionsDialog
+          open={showVersions}
+          onClose={() => setShowVersions(false)}
+          versions={pageVersions.versions}
+          loading={pageVersions.loading}
+          onRestore={pageVersions.restoreVersion}
+          pageId={dashboard.pageData?.id}
+          onFetch={pageVersions.fetchVersions}
+        />
+
+        {/* Theme Panel */}
+        <ThemePanel
+          open={showTheme}
+          onClose={() => setShowTheme(false)}
+          currentTheme={dashboard.pageData?.theme || {}}
+          onThemeChange={(theme) => {
+            dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } });
+          }}
+          isPremium={dashboard.isPremium}
+          onUpgrade={() => navigate('/pricing')}
         />
       </div>
     </>

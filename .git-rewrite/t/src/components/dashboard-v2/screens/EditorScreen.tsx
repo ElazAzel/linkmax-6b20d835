@@ -4,7 +4,7 @@
  */
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Eye, Share2, Sparkles, LayoutTemplate, Undo2, Redo2 } from 'lucide-react';
+import { Eye, Share2, Sparkles, LayoutTemplate, Undo2, Redo2, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
@@ -35,6 +35,8 @@ interface EditorScreenProps {
   canRedo?: boolean;
   onUndo?: () => void;
   onRedo?: () => void;
+  // Versions
+  onOpenVersions?: () => void;
 }
 
 export const EditorScreen = memo(function EditorScreen({
@@ -56,6 +58,7 @@ export const EditorScreen = memo(function EditorScreen({
   canRedo = false,
   onUndo,
   onRedo,
+  onOpenVersions,
 }: EditorScreenProps) {
   const { t } = useTranslation();
 
@@ -65,6 +68,10 @@ export const EditorScreen = memo(function EditorScreen({
 
   const isPublished = pageData.isPublished || false;
   const blockCount = pageData.blocks.length;
+  
+  // Page has content if it has more than just a profile block
+  const hasContent = pageData.blocks.length > 1 || 
+    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -131,15 +138,32 @@ export const EditorScreen = memo(function EditorScreen({
 
         {/* Quick tools bar */}
         <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide border-t border-border/5">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 rounded-xl shrink-0 gap-1.5"
-            onClick={onOpenTemplates}
-          >
-            <LayoutTemplate className="h-3.5 w-3.5" />
-            {t('editor.templates', 'Шаблоны')}
-          </Button>
+          {/* Show templates only for pages without content */}
+          {!hasContent && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 rounded-xl shrink-0 gap-1.5"
+              onClick={onOpenTemplates}
+            >
+              <LayoutTemplate className="h-3.5 w-3.5" />
+              {t('editor.templates', 'Шаблоны')}
+            </Button>
+          )}
+          
+          {/* Show version history for pages with content */}
+          {hasContent && onOpenVersions && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 rounded-xl shrink-0 gap-1.5"
+              onClick={onOpenVersions}
+            >
+              <History className="h-3.5 w-3.5" />
+              {t('editor.versions', 'История')}
+            </Button>
+          )}
+          
           <Button
             variant="outline"
             size="sm"

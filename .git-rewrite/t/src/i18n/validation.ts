@@ -1,29 +1,42 @@
 import ru from './locales/ru.json';
 import en from './locales/en.json';
 import kk from './locales/kk.json';
+import de from './locales/de.json';
+import uk from './locales/uk.json';
+import uz from './locales/uz.json';
+import be from './locales/be.json';
+import es from './locales/es.json';
+import fr from './locales/fr.json';
+import it from './locales/it.json';
+import pt from './locales/pt.json';
+import zh from './locales/zh.json';
+import tr from './locales/tr.json';
+import ja from './locales/ja.json';
+import ko from './locales/ko.json';
+import ar from './locales/ar.json';
 
 type TranslationObject = Record<string, unknown>;
-type LanguageCode = 'ru' | 'en' | 'kk';
+type LanguageCode = 'ru' | 'en' | 'kk' | 'de' | 'uk' | 'uz' | 'be' | 'es' | 'fr' | 'it' | 'pt' | 'zh' | 'tr' | 'ja' | 'ko' | 'ar';
 
-const translations: Record<LanguageCode, TranslationObject> = { ru, en, kk };
+const translations: Record<LanguageCode, TranslationObject> = { ru, en, kk, de, uk, uz, be, es, fr, it, pt, zh, tr, ja, ko, ar };
 
 /**
  * Recursively extracts all keys from a nested object
  */
 function getAllKeys(obj: TranslationObject, prefix = ''): string[] {
   const keys: string[] = [];
-  
+
   for (const key of Object.keys(obj)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
     const value = obj[key];
-    
+
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       keys.push(...getAllKeys(value as TranslationObject, fullKey));
     } else {
       keys.push(fullKey);
     }
   }
-  
+
   return keys;
 }
 
@@ -45,7 +58,7 @@ function getNestedValue(obj: TranslationObject, key: string): unknown {
 function setNestedValue(obj: TranslationObject, key: string, value: string): void {
   const parts = key.split('.');
   let current = obj;
-  
+
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i];
     if (!current[part] || typeof current[part] !== 'object') {
@@ -53,7 +66,7 @@ function setNestedValue(obj: TranslationObject, key: string, value: string): voi
     }
     current = current[part] as TranslationObject;
   }
-  
+
   current[parts[parts.length - 1]] = value;
 }
 
@@ -82,6 +95,19 @@ export function getMissingTranslations(): Record<LanguageCode, string[]> {
     ru: getAllKeys(ru as TranslationObject),
     en: getAllKeys(en as TranslationObject),
     kk: getAllKeys(kk as TranslationObject),
+    de: getAllKeys(de as TranslationObject),
+    uk: getAllKeys(uk as TranslationObject),
+    uz: getAllKeys(uz as TranslationObject),
+    be: getAllKeys(be as TranslationObject),
+    es: getAllKeys(es as TranslationObject),
+    fr: getAllKeys(fr as TranslationObject),
+    it: getAllKeys(it as TranslationObject),
+    pt: getAllKeys(pt as TranslationObject),
+    zh: getAllKeys(zh as TranslationObject),
+    tr: getAllKeys(tr as TranslationObject),
+    ja: getAllKeys(ja as TranslationObject),
+    ko: getAllKeys(ko as TranslationObject),
+    ar: getAllKeys(ar as TranslationObject),
   };
 
   const allKeys = new Set<string>();
@@ -93,6 +119,19 @@ export function getMissingTranslations(): Record<LanguageCode, string[]> {
     ru: Array.from(allKeys).filter(key => !langKeys.ru.includes(key)),
     en: Array.from(allKeys).filter(key => !langKeys.en.includes(key)),
     kk: Array.from(allKeys).filter(key => !langKeys.kk.includes(key)),
+    de: Array.from(allKeys).filter(key => !langKeys.de.includes(key)),
+    uk: Array.from(allKeys).filter(key => !langKeys.uk.includes(key)),
+    uz: Array.from(allKeys).filter(key => !langKeys.uz.includes(key)),
+    be: Array.from(allKeys).filter(key => !langKeys.be.includes(key)),
+    es: Array.from(allKeys).filter(key => !langKeys.es.includes(key)),
+    fr: Array.from(allKeys).filter(key => !langKeys.fr.includes(key)),
+    it: Array.from(allKeys).filter(key => !langKeys.it.includes(key)),
+    pt: Array.from(allKeys).filter(key => !langKeys.pt.includes(key)),
+    zh: Array.from(allKeys).filter(key => !langKeys.zh.includes(key)),
+    tr: Array.from(allKeys).filter(key => !langKeys.tr.includes(key)),
+    ja: Array.from(allKeys).filter(key => !langKeys.ja.includes(key)),
+    ko: Array.from(allKeys).filter(key => !langKeys.ko.includes(key)),
+    ar: Array.from(allKeys).filter(key => !langKeys.ar.includes(key)),
   };
 }
 
@@ -102,13 +141,12 @@ export function getMissingTranslations(): Record<LanguageCode, string[]> {
 export function generateMissingKeysWithPlaceholders(): Record<LanguageCode, TranslationObject> {
   const missing = getMissingTranslations();
   const result: Record<LanguageCode, TranslationObject> = {
-    ru: {},
-    en: {},
-    kk: {},
+    ru: {}, en: {}, kk: {}, de: {}, uk: {}, uz: {}, be: {},
+    es: {}, fr: {}, it: {}, pt: {}, zh: {}, tr: {}, ja: {}, ko: {}, ar: {}
   };
 
-  const languages: LanguageCode[] = ['ru', 'en', 'kk'];
-  
+  const languages: LanguageCode[] = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
+
   languages.forEach(lang => {
     missing[lang].forEach(key => {
       // Try to find reference value from another language
@@ -122,7 +160,7 @@ export function generateMissingKeysWithPlaceholders(): Record<LanguageCode, Tran
           }
         }
       }
-      
+
       const placeholder = generatePlaceholder(key, lang, referenceValue);
       setNestedValue(result[lang], key, placeholder);
     });
@@ -139,9 +177,9 @@ export function logMissingKeysAsJSON(): void {
 
   const missingWithPlaceholders = generateMissingKeysWithPlaceholders();
   const languages: LanguageCode[] = ['ru', 'en', 'kk'];
-  
+
   let hasMissing = false;
-  
+
   languages.forEach(lang => {
     const keys = Object.keys(missingWithPlaceholders[lang]);
     if (keys.length > 0) {
@@ -163,7 +201,7 @@ export function logMissingKeysAsJSON(): void {
 export async function copyMissingToClipboard(lang: LanguageCode): Promise<void> {
   const missingWithPlaceholders = generateMissingKeysWithPlaceholders();
   const json = JSON.stringify(missingWithPlaceholders[lang], null, 2);
-  
+
   try {
     await navigator.clipboard.writeText(json);
     console.log(`✅ Copied missing ${lang.toUpperCase()} keys to clipboard!`);
@@ -180,11 +218,24 @@ export function validateTranslations(): void {
   if (!import.meta.env.DEV) return;
 
   console.group('🌐 [i18n] Translation Validation');
-  
+
   const langKeys: Record<LanguageCode, string[]> = {
     ru: getAllKeys(ru as TranslationObject),
     en: getAllKeys(en as TranslationObject),
     kk: getAllKeys(kk as TranslationObject),
+    de: getAllKeys(de as TranslationObject),
+    uk: getAllKeys(uk as TranslationObject),
+    uz: getAllKeys(uz as TranslationObject),
+    be: getAllKeys(be as TranslationObject),
+    es: getAllKeys(es as TranslationObject),
+    fr: getAllKeys(fr as TranslationObject),
+    it: getAllKeys(it as TranslationObject),
+    pt: getAllKeys(pt as TranslationObject),
+    zh: getAllKeys(zh as TranslationObject),
+    tr: getAllKeys(tr as TranslationObject),
+    ja: getAllKeys(ja as TranslationObject),
+    ko: getAllKeys(ko as TranslationObject),
+    ar: getAllKeys(ar as TranslationObject),
   };
 
   // Get all unique keys from all languages
@@ -197,13 +248,13 @@ export function validateTranslations(): void {
   console.log(`📊 Total unique keys: ${totalKeys}`);
 
   // Check each language
-  const languages: LanguageCode[] = ['ru', 'en', 'kk'];
+  const languages: LanguageCode[] = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
   let hasIssues = false;
 
   languages.forEach(lang => {
     const keys = langKeys[lang];
     const missingFromLang = Array.from(allKeys).filter(key => !keys.includes(key));
-    
+
     if (missingFromLang.length > 0) {
       hasIssues = true;
       console.group(`❌ Missing in ${lang.toUpperCase()} (${missingFromLang.length} keys):`);

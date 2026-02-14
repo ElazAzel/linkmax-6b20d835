@@ -2,6 +2,7 @@
  * Referral service - handles referral code generation and application
  */
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 export interface ReferralStats {
   code: string;
@@ -25,13 +26,13 @@ export async function getOrCreateReferralCode(userId: string): Promise<string | 
     });
 
     if (error) {
-      console.error('Error generating referral code:', error);
+      logger.error('Error generating referral code', error, { context: 'referral', data: { userId } });
       return null;
     }
 
     return data as string;
   } catch (error) {
-    console.error('Error in getOrCreateReferralCode:', error);
+    logger.error('Error in getOrCreateReferralCode', error, { context: 'referral', data: { userId } });
     return null;
   }
 }
@@ -64,7 +65,7 @@ export async function getReferralStats(userId: string): Promise<ReferralStats | 
       bonusDaysEarned: (count || 0) * 3
     };
   } catch (error) {
-    console.error('Error getting referral stats:', error);
+    logger.error('Error getting referral stats', error, { context: 'referral', data: { userId } });
     return null;
   }
 }
@@ -83,25 +84,25 @@ export async function applyReferralCode(
     });
 
     if (error) {
-      console.error('Error applying referral:', error);
+      logger.error('Error applying referral', error, { context: 'referral' });
       return { success: false, error: 'invalid_code' };
     }
 
     const result = data as { success: boolean; error?: string; bonus_days?: number };
-    
+
     if (!result.success) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: result.error as ApplyReferralResult['error']
       };
     }
 
-    return { 
-      success: true, 
-      bonusDays: result.bonus_days 
+    return {
+      success: true,
+      bonusDays: result.bonus_days
     };
   } catch (error) {
-    console.error('Error in applyReferralCode:', error);
+    logger.error('Error in applyReferralCode:', error, { context: 'referral' });
     return { success: false, error: 'invalid_code' };
   }
 }
@@ -119,7 +120,7 @@ export async function wasUserReferred(userId: string): Promise<boolean> {
 
     return !!data;
   } catch (error) {
-    console.error('Error checking referral status:', error);
+    logger.error('Error checking referral status', error, { context: 'referral', data: { userId } });
     return false;
   }
 }

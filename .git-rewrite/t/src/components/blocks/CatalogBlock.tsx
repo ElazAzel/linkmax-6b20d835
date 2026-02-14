@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { CatalogBlock as CatalogBlockType, CatalogItem } from '@/types/page';
 import { Card, CardContent } from '@/components/ui/card';
-import { getTranslatedString } from '@/lib/i18n-helpers';
+import { getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface CatalogBlockProps {
@@ -33,7 +33,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
-  const title = block.title ? getTranslatedString(block.title, currentLang) : '';
+  const title = block.title ? getI18nText(block.title, currentLang) : '';
   const isGrid = block.layout === 'grid';
 
   const formatPrice = (price: number, currency: string = 'KZT') => {
@@ -54,7 +54,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
       if (categoryItems.length > 0) {
         groups.push({
           categoryId: category.id,
-          categoryName: getTranslatedString(category.name, currentLang),
+          categoryName: getI18nText(category.name, currentLang),
           items: categoryItems,
         });
       }
@@ -84,9 +84,9 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
   }
 
   const renderItem = (item: CatalogItem) => {
-    const itemName = getTranslatedString(item.name, currentLang);
+    const itemName = getI18nText(item.name, currentLang);
     const itemDescription = item.description 
-      ? getTranslatedString(item.description, currentLang) 
+      ? getI18nText(item.description, currentLang) 
       : '';
 
     return (

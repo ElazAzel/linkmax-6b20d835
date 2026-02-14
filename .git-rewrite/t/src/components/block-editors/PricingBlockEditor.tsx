@@ -11,7 +11,7 @@ import { Plus, Trash2, GripVertical, Star, Clock, Lightbulb } from 'lucide-react
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import type { PricingBlock, PricingItem, Currency, ServiceType } from '@/types/page';
-import { createMultilingualString, getTranslatedString } from '@/lib/i18n-helpers';
+import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface PricingBlockEditorProps {
@@ -70,7 +70,7 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
   };
 
   const getItemName = (item: PricingItem): string => {
-    return getTranslatedString(item.name, currentLang) || t('blocks.pricing.newItem', 'Новая услуга');
+    return getI18nText(item.name, currentLang) || t('blocks.pricing.newItem', 'Новая услуга');
   };
 
   return (

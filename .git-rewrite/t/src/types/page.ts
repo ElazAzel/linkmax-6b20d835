@@ -4,7 +4,7 @@ export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'im
 export type EditorMode = 'grid';
 
 // Multilingual string support
-import type { MultilingualString } from '@/lib/i18n-helpers';
+import type { I18nText, MultilingualString } from '@/lib/i18n-helpers';
 
 // Extended style system for all blocks
 export interface BlockStyle {
@@ -25,6 +25,13 @@ export interface BlockStyle {
   backgroundGradient?: string;
   backgroundOpacity?: number;
   
+  // Text styling
+  textColor?: string;
+  fontFamily?: BlockFontFamily;
+  
+  // Text effects (like Taplink)
+  textEffect?: 'none' | 'shimmer' | 'glow' | 'pulse' | 'blink' | 'rainbow' | 'neon' | 'typewriter' | 'gradient-flow';
+  
   // Content alignment (vertical)
   contentAlignment?: 'top' | 'center' | 'bottom';
   
@@ -39,6 +46,9 @@ export interface BlockStyle {
   paidContentPrice?: number;
   paidContentCurrency?: Currency;
 }
+
+// Font families that support RU/EN/KK
+export type BlockFontFamily = 'sans' | 'serif' | 'mono' | 'display' | 'rounded';
 
 export interface BlockSchedule {
   startDate?: string; // ISO date string
@@ -57,8 +67,8 @@ export interface ProfileBlock {
   id: string;
   type: 'profile';
   avatar?: string;
-  name: string | MultilingualString;
-  bio: string | MultilingualString;
+  name: string | I18nText | MultilingualString;
+  bio: string | I18nText | MultilingualString;
   verified?: boolean;
   verifiedColor?: VerificationIconColor;
   verifiedPosition?: VerificationIconPosition;
@@ -84,7 +94,7 @@ export interface ProfileBlock {
 export interface LinkBlock {
   id: string;
   type: 'link';
-  title: string | MultilingualString;
+  title: string | I18nText | MultilingualString;
   url: string;
   icon?: string;
   iconMode?: 'auto' | 'manual'; // 'auto' = fetch favicon, 'manual' = use custom icon
@@ -104,7 +114,7 @@ export interface LinkBlock {
 export interface TextBlock {
   id: string;
   type: 'text';
-  content: string | MultilingualString;
+  content: string | I18nText | MultilingualString;
   style?: 'heading' | 'paragraph' | 'quote';
   alignment?: 'left' | 'center' | 'right';
   schedule?: BlockSchedule;
@@ -116,13 +126,13 @@ export type Currency = 'KZT' | 'RUB' | 'BYN' | 'AMD' | 'AZN' | 'KGS' | 'TJS' | '
 export interface ProductBlock {
   id: string;
   type: 'product';
-  name: string | MultilingualString;
-  description: string | MultilingualString;
+  name: string | I18nText | MultilingualString;
+  description: string | I18nText | MultilingualString;
   price: number;
   currency: Currency;
   image?: string;
   buyLink?: string;
-  buttonText?: string | MultilingualString;
+  buttonText?: string | I18nText | MultilingualString;
   alignment?: 'left' | 'center' | 'right';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -131,7 +141,7 @@ export interface ProductBlock {
 export interface VideoBlock {
   id: string;
   type: 'video';
-  title: string | MultilingualString;
+  title: string | I18nText | MultilingualString;
   url: string;
   platform: 'youtube' | 'vimeo';
   aspectRatio?: '16:9' | '4:3' | '1:1';
@@ -142,10 +152,10 @@ export interface VideoBlock {
 export interface CarouselBlock {
   id: string;
   type: 'carousel';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   images: Array<{
     url: string;
-    alt: string | MultilingualString;
+    alt: string | I18nText | MultilingualString;
     link?: string;
   }>;
   autoPlay?: boolean;
@@ -157,7 +167,7 @@ export interface CarouselBlock {
 export interface ButtonBlock {
   id: string;
   type: 'button';
-  title: string | MultilingualString;
+  title: string | I18nText | MultilingualString;
   url: string;
   background?: {
     type: 'solid' | 'gradient' | 'image';
@@ -174,7 +184,7 @@ export interface ButtonBlock {
 export interface SocialsBlock {
   id: string;
   type: 'socials';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   platforms: Array<{
     name: string;
     url: string;
@@ -189,8 +199,8 @@ export interface ImageBlock {
   id: string;
   type: 'image';
   url: string;
-  alt: string | MultilingualString;
-  caption?: string | MultilingualString;
+  alt: string | I18nText | MultilingualString;
+  caption?: string | I18nText | MultilingualString;
   link?: string;
   style?: 'polaroid' | 'vignette' | 'circle' | 'default' | 'banner';
   alignment?: 'left' | 'center' | 'right';
@@ -201,7 +211,7 @@ export interface ImageBlock {
 export interface CustomCodeBlock {
   id: string;
   type: 'custom_code';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   html: string;
   css?: string;
   javascript?: string;
@@ -215,7 +225,7 @@ export interface CustomCodeBlock {
 export interface MessengerBlock {
   id: string;
   type: 'messenger';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   messengers: Array<{
     platform: 'whatsapp' | 'telegram' | 'viber' | 'wechat';
     username: string;
@@ -228,15 +238,15 @@ export interface MessengerBlock {
 export interface FormBlock {
   id: string;
   type: 'form';
-  title: string | MultilingualString;
+  title: string | I18nText | MultilingualString;
   fields: Array<{
-    name: string | MultilingualString;
+    name: string | I18nText | MultilingualString;
     type: 'text' | 'email' | 'phone' | 'textarea';
     required: boolean;
-    placeholder?: string | MultilingualString;
+    placeholder?: string | I18nText | MultilingualString;
   }>;
   submitEmail: string;
-  buttonText: string | MultilingualString;
+  buttonText: string | I18nText | MultilingualString;
   isPremium: true;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -245,13 +255,13 @@ export interface FormBlock {
 export interface DownloadBlock {
   id: string;
   type: 'download';
-  title: string | MultilingualString;
-  description?: string | MultilingualString;
+  title: string | I18nText | MultilingualString;
+  description?: string | I18nText | MultilingualString;
   fileUrl: string;
   fileName: string;
   fileSize?: string;
   icon?: string;
-  buttonText?: string | MultilingualString;
+  buttonText?: string | I18nText | MultilingualString;
   alignment?: 'left' | 'center' | 'right';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -260,9 +270,9 @@ export interface DownloadBlock {
 export interface NewsletterBlock {
   id: string;
   type: 'newsletter';
-  title: string | MultilingualString;
-  description?: string | MultilingualString;
-  buttonText: string | MultilingualString;
+  title: string | I18nText | MultilingualString;
+  description?: string | I18nText | MultilingualString;
+  buttonText: string | I18nText | MultilingualString;
   apiEndpoint?: string;
   isPremium: true;
   schedule?: BlockSchedule;
@@ -272,13 +282,13 @@ export interface NewsletterBlock {
 export interface TestimonialBlock {
   id: string;
   type: 'testimonial';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   testimonials: Array<{
-    name: string | MultilingualString;
-    text: string | MultilingualString;
+    name: string | I18nText | MultilingualString;
+    text: string | I18nText | MultilingualString;
     rating?: number;
     avatar?: string;
-    role?: string | MultilingualString;
+    role?: string | I18nText | MultilingualString;
   }>;
   isPremium: true;
   schedule?: BlockSchedule;
@@ -288,8 +298,8 @@ export interface TestimonialBlock {
 export interface ScratchBlock {
   id: string;
   type: 'scratch';
-  title?: string | MultilingualString;
-  revealText: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
+  revealText: string | I18nText | MultilingualString;
   scratchImage?: string;
   backgroundColor?: string;
   isPremium: true;
@@ -300,7 +310,7 @@ export interface ScratchBlock {
 export interface MapBlock {
   id: string;
   type: 'map';
-  address: string | MultilingualString;
+  address: string | I18nText | MultilingualString;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -311,8 +321,8 @@ export interface AvatarBlock {
   id: string;
   type: 'avatar';
   imageUrl: string;
-  name: string | MultilingualString;
-  subtitle?: string | MultilingualString;
+  name: string | I18nText | MultilingualString;
+  subtitle?: string | I18nText | MultilingualString;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   shape?: 'circle' | 'rounded' | 'square';
   border?: boolean;
@@ -338,13 +348,13 @@ export interface SeparatorBlock {
 
 export interface CatalogCategory {
   id: string;
-  name: string | MultilingualString;
+  name: string | I18nText | MultilingualString;
 }
 
 export interface CatalogItem {
   id: string;
-  name: string | MultilingualString;
-  description?: string | MultilingualString;
+  name: string | I18nText | MultilingualString;
+  description?: string | I18nText | MultilingualString;
   price?: number;
   currency?: Currency;
   image?: string;
@@ -354,7 +364,7 @@ export interface CatalogItem {
 export interface CatalogBlock {
   id: string;
   type: 'catalog';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   categories?: CatalogCategory[];
   items: CatalogItem[];
   layout?: 'list' | 'grid';
@@ -369,11 +379,11 @@ export interface CatalogBlock {
 export interface BeforeAfterBlock {
   id: string;
   type: 'before_after';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   beforeImage: string;
   afterImage: string;
-  beforeLabel?: string | MultilingualString;
-  afterLabel?: string | MultilingualString;
+  beforeLabel?: string | I18nText | MultilingualString;
+  afterLabel?: string | I18nText | MultilingualString;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -381,14 +391,14 @@ export interface BeforeAfterBlock {
 // FAQ Block
 export interface FAQItem {
   id: string;
-  question: string | MultilingualString;
-  answer: string | MultilingualString;
+  question: string | I18nText | MultilingualString;
+  answer: string | I18nText | MultilingualString;
 }
 
 export interface FAQBlock {
   id: string;
   type: 'faq';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   items: FAQItem[];
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -398,9 +408,9 @@ export interface FAQBlock {
 export interface CountdownBlock {
   id: string;
   type: 'countdown';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   targetDate: string; // ISO date string
-  expiredText?: string | MultilingualString;
+  expiredText?: string | I18nText | MultilingualString;
   showDays?: boolean;
   showHours?: boolean;
   showMinutes?: boolean;
@@ -421,11 +431,11 @@ export type ServiceType =
 // Pricing Block with structured service data
 export interface PricingItem {
   id: string;
-  name: string | MultilingualString;
-  description?: string | MultilingualString;
+  name: string | I18nText | MultilingualString;
+  description?: string | I18nText | MultilingualString;
   price: number;
   currency?: Currency;
-  period?: string | MultilingualString; // e.g., "per hour", "per session"
+  period?: string | I18nText | MultilingualString; // e.g., "per hour", "per session"
   featured?: boolean;
   // Structured service data for GEO
   serviceType?: ServiceType;
@@ -439,7 +449,7 @@ export interface PricingItem {
 export interface PricingBlock {
   id: string;
   type: 'pricing';
-  title?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
   items: PricingItem[];
   currency?: Currency;
   schedule?: BlockSchedule;
@@ -450,13 +460,13 @@ export interface PricingBlock {
 export interface CommunityBlock {
   id: string;
   type: 'community';
-  title?: string | MultilingualString;
-  description?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
+  description?: string | I18nText | MultilingualString;
   telegramLink: string;
   icon?: 'users' | 'crown' | 'star' | 'heart' | 'zap' | 'lock';
   memberCount?: string; // e.g., "500+ участников"
   style?: 'default' | 'premium' | 'exclusive';
-  buttonText?: string | MultilingualString;
+  buttonText?: string | I18nText | MultilingualString;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -469,7 +479,7 @@ export interface ShoutoutBlock {
   username?: string;
   displayName?: string;
   avatarUrl?: string;
-  message?: string | MultilingualString;
+  message?: string | I18nText | MultilingualString;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -484,8 +494,8 @@ export interface BookingSlot {
 export interface BookingBlock {
   id: string;
   type: 'booking';
-  title?: string | MultilingualString;
-  description?: string | MultilingualString;
+  title?: string | I18nText | MultilingualString;
+  description?: string | I18nText | MultilingualString;
   workingHoursStart?: number;
   workingHoursEnd?: number;
   slotDuration?: number;
@@ -502,7 +512,7 @@ export interface BookingBlock {
   dailyReminderEnabled?: boolean; // Send daily reminder about today's bookings
   dailyReminderTime?: string; // Time for daily reminder in HH:MM format (default: 08:50)
   weeklyMotivationEnabled?: boolean; // Send weekly motivation on Mondays at 9:00
-  buttonText?: string | MultilingualString; // Custom button text
+  buttonText?: string | I18nText | MultilingualString; // Custom button text
   isPremium: true;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;

@@ -31,7 +31,7 @@ import {
 import { toast } from 'sonner';
 import { format, isPast } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { EventRegistrationsList } from './EventRegistrationsList';
 import { exportToExcel, exportToCSV } from '@/lib/excel-export';
 import type { EventFormField } from '@/types/page';
@@ -123,7 +123,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
     return events.filter(event => {
       const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
       const titleJson = (event.title_i18n_json || {}) as Record<string, string>;
-      const title = getTranslatedString(titleJson, language);
+      const title = getI18nText(titleJson, language);
       const matchesSearch = !searchQuery ||
         title.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesStatus && matchesSearch;
@@ -142,7 +142,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
       // Fetch event details for form fields
       const event = events.find(e => e.id === eventId);
       const eventTitle = event 
-        ? getTranslatedString((event.title_i18n_json || {}) as Record<string, string>, language) 
+        ? getI18nText((event.title_i18n_json || {}) as Record<string, string>, language) 
         : 'Event';
       const formFields = (event?.form_schema_json as EventFormField[]) || [];
 
@@ -185,7 +185,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
       };
 
       if (formatType === 'xlsx' && isPremium) {
-        exportToExcel(exportData);
+        await exportToExcel(exportData);
         toast.success(t('events.exportSuccess', 'Экспорт в Excel завершен'));
       } else {
         exportToCSV(exportData);
@@ -230,7 +230,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
   if (selectedEventId) {
     const selectedEvent = events.find(e => e.id === selectedEventId);
     const selectedTitle = selectedEvent 
-      ? getTranslatedString((selectedEvent.title_i18n_json || {}) as Record<string, string>, language) 
+      ? getI18nText((selectedEvent.title_i18n_json || {}) as Record<string, string>, language) 
       : '';
     return (
       <EventRegistrationsList
@@ -311,7 +311,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
           <div className="divide-y">
             {filteredEvents.map((event) => {
               const titleJson = (event.title_i18n_json || {}) as Record<string, string>;
-              const title = getTranslatedString(titleJson, language);
+              const title = getI18nText(titleJson, language);
               const isEventPast = event.end_at ? isPast(new Date(event.end_at)) : false;
               
               return (

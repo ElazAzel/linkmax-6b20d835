@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import type { Json } from '@/platform/supabase/types';
 
 export type MarketingEventType =
@@ -63,7 +64,8 @@ export function useMarketingAnalytics() {
         } as Json,
       });
     } catch (error) {
-      console.debug('Marketing analytics failed:', error);
+      // Silently fail for analytics
+      logger.debug('Marketing analytics failed:', { context: 'useMarketingAnalytics', data: { error } });
     }
   }, []);
 

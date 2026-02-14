@@ -35,8 +35,8 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
           <p className="text-sm text-muted-foreground mb-2">2.1. LinkMAX services are provided on a subscription model for plans (e.g., PRO, BUSINESS).</p>
           <p className="text-sm text-muted-foreground mb-2">2.2. Base rates for PRO subscription at the time of publication:</p>
           <p className="text-sm text-muted-foreground mb-2">• 3 months - 4,350 ₸ per month (total 13,050 ₸ for the period);</p>
-          <p className="text-sm text-muted-foreground mb-2">• 6 months - 3,500 ₸ per month (total 21,000 ₸ for the period);</p>
-          <p className="text-sm text-muted-foreground mb-2">• 12 months - 2,610 ₸ per month (total 31,320 ₸ for the period).</p>
+          <p className="text-sm text-muted-foreground mb-2">• 6 months - 3,698 ₸ per month (total 22,185 ₸ for the period) - 15% discount;</p>
+          <p className="text-sm text-muted-foreground mb-2">• 12 months - 3,045 ₸ per month (total 36,540 ₸ for the period) - 30% discount.</p>
           <p className="text-sm text-muted-foreground mb-2">2.3. All prices are shown in the national currency of the Republic of Kazakhstan - tenge (KZT). Foreign currency equivalents are for informational purposes only.</p>
           <p className="text-sm text-muted-foreground mb-2">2.4. The current list of plans, pricing, and included features are published on the Platform's pricing page and may be updated by the Administration unilaterally for new payment periods.</p>
 
@@ -96,7 +96,7 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
           <p className="text-sm text-muted-foreground mb-2">2.2. Осы Төлем шарттарын жариялау сәтіндегі PRO жазылымының базалық тарифтері:</p>
           <p className="text-sm text-muted-foreground mb-2">• 3 ай - айына 4 350 ₸ (кезең үшін барлығы 13 050 ₸);</p>
           <p className="text-sm text-muted-foreground mb-2">• 6 ай - айына 3 500 ₸ (кезең үшін барлығы 21 000 ₸);</p>
-          <p className="text-sm text-muted-foreground mb-2">• 12 ай - айына 2 610 ₸ (кезең үшін барлығы 31 320 ₸).</p>
+          <p className="text-sm text-muted-foreground mb-2">• 12 ай - айына 3 045 ₸ (кезең үшін барлығы 36 540 ₸).</p>
           <p className="text-sm text-muted-foreground mb-2">2.3. Барлық бағалар Қазақстан Республикасының ұлттық валютасымен - теңгемен (KZT) көрсетілген. Шетел валютасындағы эквивалент ақпараттық сипатта.</p>
           <p className="text-sm text-muted-foreground mb-2">2.4. Тарифтердің, олардың құны мен қамтылған функциялардың ағымдағы тізімі Платформаның тарифтер бетінде жарияланады және жаңа төлем кезеңдері үшін Әкімшілікпен біржақты тәртіпте жаңартылуы мүмкін.</p>
 
@@ -156,7 +156,7 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
         <p className="text-sm text-muted-foreground mb-2">2.2. Базовые тарифы для PRO подписки на момент публикации настоящих Условий оплаты:</p>
         <p className="text-sm text-muted-foreground mb-2">• 3 месяца - 4 350 ₸ в месяц (итого 13 050 ₸ за период);</p>
         <p className="text-sm text-muted-foreground mb-2">• 6 месяцев - 3 500 ₸ в месяц (итого 21 000 ₸ за период);</p>
-        <p className="text-sm text-muted-foreground mb-2">• 12 месяцев - 2 610 ₸ в месяц (итого 31 320 ₸ за период).</p>
+        <p className="text-sm text-muted-foreground mb-2">• 12 месяцев - 3 045 ₸ в месяц (итого 36 540 ₸ за период).</p>
         <p className="text-sm text-muted-foreground mb-2">2.3. Все цены указываются в национальной валюте Республики Казахстан - тенге (KZT). При отображении эквивалента в иностранной валюте такое значение носит информационный характер.</p>
         <p className="text-sm text-muted-foreground mb-2">2.4. Актуальный перечень тарифов, их стоимость и включённые функции публикуются на странице тарифов Платформы и могут обновляться Администрацией в одностороннем порядке для новых периодов оплаты.</p>
 

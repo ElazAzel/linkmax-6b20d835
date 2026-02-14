@@ -4,7 +4,7 @@ import type { PremiumTier } from '@/hooks/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 import { useAnalytics } from '@/hooks/useAnalyticsTracking';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
 import { PaidBlockWrapper } from '@/components/blocks/PaidBlockWrapper';
 
@@ -129,7 +129,7 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
   }
   
   if (!rawTitle) return block.type;
-  return typeof rawTitle === 'object' ? getTranslatedString(rawTitle, lang) : String(rawTitle);
+  return typeof rawTitle === 'object' ? getI18nText(rawTitle, lang) : String(rawTitle);
 }
 
 export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
@@ -153,15 +153,15 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
 
-  // Wrapper component for all blocks - tracks clicks for interactive ones
-  const TrackableWrapper = ({ children, trackClicks = false }: { children: React.ReactNode; trackClicks?: boolean }) => (
+  // Wrapper component for all blocks - NO onClick here, blocks handle their own tracking
+  const TrackableWrapper = ({ children }: { children: React.ReactNode }) => (
     <PaidBlockWrapper 
       blockId={block.id} 
       blockStyle={block.blockStyle} 
       pageOwnerId={pageOwnerId}
       isPreview={isPreview}
     >
-      <div className={animationClass} style={animationStyle} onClick={trackClicks ? handleClick : undefined}>
+      <div className={animationClass} style={animationStyle}>
         {children}
       </div>
     </PaidBlockWrapper>
@@ -179,7 +179,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'link':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <LinkBlock block={block} onClick={handleTrackClick} />
           </Suspense>
@@ -187,7 +187,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'button':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <ButtonBlock block={block} onClick={handleTrackClick} />
           </Suspense>
@@ -195,9 +195,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'socials':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <SocialsBlock block={block} />
+            <SocialsBlock block={block} onPlatformClick={handleTrackClick} />
           </Suspense>
         </TrackableWrapper>
       );
@@ -211,33 +211,33 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'image':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <ImageBlock block={block} />
+            <ImageBlock block={block} onClick={handleTrackClick} />
           </Suspense>
-        </div>
+        </TrackableWrapper>
       );
     case 'product':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <ProductBlock block={block} />
+            <ProductBlock block={block} onClick={handleTrackClick} />
           </Suspense>
         </TrackableWrapper>
       );
     case 'video':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <VideoBlock block={block} />
+            <VideoBlock block={block} onClick={handleTrackClick} />
           </Suspense>
         </TrackableWrapper>
       );
     case 'carousel':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <CarouselBlock block={block} />
+            <CarouselBlock block={block} onClick={handleTrackClick} />
           </Suspense>
         </TrackableWrapper>
       );
@@ -251,9 +251,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'messenger':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <MessengerBlock block={block} pageOwnerId={pageOwnerId} />
+            <MessengerBlock block={block} pageOwnerId={pageOwnerId} onClick={handleTrackClick} />
           </Suspense>
         </TrackableWrapper>
       );
@@ -267,9 +267,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'download':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <DownloadBlock block={block} />
+            <DownloadBlock block={block} onClick={handleTrackClick} />
           </Suspense>
         </TrackableWrapper>
       );
@@ -277,7 +277,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       return (
         <div className={animationClass} style={animationStyle}>
           <Suspense fallback={<BlockSkeleton />}>
-            <NewsletterBlock block={block} />
+            <NewsletterBlock block={block} pageOwnerId={pageOwnerId} pageId={pageId} />
           </Suspense>
         </div>
       );
@@ -323,7 +323,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'catalog':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <CatalogBlock block={block} />
           </Suspense>
@@ -331,7 +331,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'before_after':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <BeforeAfterBlock block={block} />
           </Suspense>
@@ -339,7 +339,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'faq':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <FAQBlock block={block} />
           </Suspense>
@@ -355,7 +355,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'pricing':
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <PricingBlock block={block} />
           </Suspense>
@@ -364,7 +364,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     case 'shoutout': {
       const shoutoutBlock = block as ShoutoutBlockType;
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <ShoutoutBlock 
               userId={shoutoutBlock.userId} 
@@ -377,7 +377,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     case 'booking': {
       const bookingBlock = block as BookingBlockType;
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <BookingBlock 
               block={bookingBlock}
@@ -391,7 +391,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     case 'community': {
       const communityBlock = block as CommunityBlockType;
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <CommunityBlock block={communityBlock} />
           </Suspense>
@@ -401,7 +401,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
     case 'event': {
       const eventBlock = block as EventBlockType;
       return (
-        <TrackableWrapper trackClicks>
+        <TrackableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
             <EventBlock
               block={eventBlock}

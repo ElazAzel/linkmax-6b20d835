@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
 
 interface FormBlockProps {
@@ -21,12 +21,12 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
-  const buttonText = getTranslatedString(block.buttonText, i18n.language as SupportedLanguage) || t('actions.send', 'Send');
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
+  const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('actions.send', 'Send');
 
   const getFieldKey = (field: FormBlockType['fields'][0], index: number): string => {
     if (typeof field.name === 'object' && field.name) {
-      return getTranslatedString(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`;
+      return getI18nText(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`;
     }
     return (field.name as string) || `Field ${index + 1}`;
   };
@@ -81,11 +81,11 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
 
   const renderField = (field: FormBlockType['fields'][0], index: number) => {
     const fieldName = typeof field.name === 'object' && field.name 
-      ? getTranslatedString(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`
+      ? getI18nText(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`
       : (field.name as string) || `Field ${index + 1}`;
     
     const fieldPlaceholder = typeof field.placeholder === 'object' && field.placeholder
-      ? getTranslatedString(field.placeholder, i18n.language as SupportedLanguage)
+      ? getI18nText(field.placeholder, i18n.language as SupportedLanguage)
       : (field.placeholder as string);
 
     const commonProps = {
@@ -110,7 +110,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId }: FormBlo
 
   const getFieldDisplayName = (field: FormBlockType['fields'][0], index: number) => {
     if (typeof field.name === 'object' && field.name) {
-      return getTranslatedString(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`;
+      return getI18nText(field.name, i18n.language as SupportedLanguage) || `Field ${index + 1}`;
     }
     return (field.name as string) || `Field ${index + 1}`;
   };

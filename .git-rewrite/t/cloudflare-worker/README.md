@@ -1,6 +1,37 @@
-# Cloudflare Worker для Prerender.io
+# Cloudflare Worker для SSR публичных страниц
 
-Этот воркер перенаправляет запросы от поисковых ботов и AI-краулеров на Prerender.io для получения pre-rendered HTML.
+Этот воркер перенаправляет запросы от поисковых ботов и AI-краулеров на Edge Function `render-page` для получения серверно-отрендеренного HTML.
+
+## Архитектура
+
+```
+┌─────────────────┐
+│  Входящий       │
+│  запрос         │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Cloudflare      │
+│ Worker          │
+└────────┬────────┘
+         │
+    ┌────┴────┐
+    │         │
+  Bot?      Human
+    │         │
+    ▼         ▼
+┌─────────┐ ┌─────────┐
+│ SSR     │ │ SPA     │
+│ Edge Fn │ │ (React) │
+└────┬────┘ └────┬────┘
+     │           │
+     ▼           ▼
+┌─────────────────┐
+│   HTML          │
+│   Response      │
+└─────────────────┘
+```
 
 ## Поддерживаемые боты
 
@@ -13,10 +44,11 @@
 
 ### AI/Answer Engines (AEO/GEO)
 - ChatGPT (GPTBot, ChatGPT-User)
-- Claude (claude-web)
+- Claude (claude-web, anthropic-ai)
 - Perplexity
 - You.com
-- Meta AI
+- Google Extended (Bard)
+- Apple (Applebot)
 
 ### Социальные сети
 - Facebook
@@ -42,28 +74,23 @@ npm install -g wrangler
 wrangler login
 ```
 
-### 3. Добавьте секретный токен
-
-```bash
-cd cloudflare-worker
-wrangler secret put PRERENDER_TOKEN
-# Введите: 0viuc489f58Vc5A0G7q9
-```
-
-### 4. Настройте роутинг
-
-Отредактируйте `wrangler.toml` и раскомментируйте routes:
+### 3. Настройте wrangler.toml
 
 ```toml
+name = "lnkmx-ssr-worker"
+main = "prerender-worker.js"
+compatibility_date = "2024-01-01"
+
 routes = [
   { pattern = "lnkmx.my/*", zone_name = "lnkmx.my" }
 ]
 ```
 
-### 5. Деплой
+### 4. Деплой
 
 ```bash
-wrangler publish
+cd cloudflare-worker
+wrangler deploy
 ```
 
 ## Тестирование
@@ -77,49 +104,68 @@ wrangler dev
 ### Проверка работы
 
 ```bash
-# Googlebot
-curl -H "User-Agent: Googlebot/2.1" https://lnkmx.my/ | head -50
+# Googlebot - должен вернуть полный HTML
+curl -H "User-Agent: Googlebot/2.1" https://lnkmx.my/elazart | head -50
 
-# ChatGPT
-curl -H "User-Agent: ChatGPT-User" https://lnkmx.my/test-slug | head -50
+# ChatGPT - должен вернуть полный HTML
+curl -H "User-Agent: ChatGPT-User" https://lnkmx.my/elazart | head -50
 
-# Perplexity
-curl -H "User-Agent: PerplexityBot" https://lnkmx.my/ | head -50
+# Обычный пользователь - должен вернуть SPA
+curl https://lnkmx.my/elazart | head -50
 
-# Проверка заголовков
-curl -I -H "User-Agent: Googlebot" https://lnkmx.my/
-# Должен быть X-Prerendered: true
+# Проверка заголовков для бота
+curl -I -H "User-Agent: Googlebot" https://lnkmx.my/elazart
+# Должен быть заголовок: X-SSR-Rendered: true
 ```
 
-## Логика работы
+## Edge Function API
+
+SSR контент генерируется через Edge Function:
 
 ```
-┌─────────────────┐
-│  Incoming       │
-│  Request        │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Check User-Agent│
-│ (Bot detection) │
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    │         │
-  Bot?      Human
-    │         │
-    ▼         ▼
-┌─────────┐ ┌─────────┐
-│Prerender│ │ Origin  │
-│.io      │ │ Server  │
-└────┬────┘ └────┬────┘
-     │           │
-     ▼           ▼
-┌─────────────────┐
-│   Response      │
-└─────────────────┘
+GET https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/render-page?slug={slug}&lang={lang}
 ```
+
+Параметры:
+- `slug` - slug страницы (обязательно)
+- `lang` - язык (ru, en, kk), по умолчанию "ru"
+
+Возвращает:
+- `200` - полный HTML с meta тегами, JSON-LD и контентом
+- `404` - страница не найдена или не опубликована
+
+## SSR HTML включает
+
+1. **Meta Tags**
+   - `<title>` с именем и ролью
+   - `<meta name="description">` из био
+   - `<meta name="robots">` - index, follow
+   - Canonical URL
+   - Hreflang (ru, en, kk, x-default)
+
+2. **Open Graph**
+   - og:title, og:description, og:image
+   - og:url, og:type (profile)
+   - og:site_name, og:locale
+
+3. **Twitter Card**
+   - summary_large_image
+   - twitter:title, twitter:description
+   - twitter:image
+
+4. **JSON-LD Schema.org**
+   - Person или LocalBusiness
+   - WebPage
+   - BreadcrumbList
+   - FAQPage (если есть FAQ блок)
+   - Service (если есть прайс)
+
+5. **Видимый контент**
+   - Имя и роль
+   - Описание/био
+   - Услуги/прайс
+   - Ссылки
+   - FAQ
 
 ## Исключения
 
@@ -130,6 +176,7 @@ curl -I -H "User-Agent: Googlebot" https://lnkmx.my/
 - `/auth`, `/login`, `/signup` - Аутентификация
 - `/editor` - Редактор
 - Статические файлы (.js, .css, .png, .jpg, etc.)
+- Статические страницы (/, /gallery, /pricing) - уже имеют хороший HTML
 
 ## Мониторинг
 
@@ -139,29 +186,19 @@ curl -I -H "User-Agent: Googlebot" https://lnkmx.my/
 - Время ответа
 - Ошибки
 
-## Инвалидация кэша
-
-Для обновления кэша страницы после публикации:
-
-```bash
-curl -X POST "https://api.prerender.io/recache" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prerenderToken": "0viuc489f58Vc5A0G7q9",
-    "url": "https://lnkmx.my/your-slug"
-  }'
-```
-
 ## Troubleshooting
 
 ### Воркер не срабатывает
 1. Проверьте routes в wrangler.toml
 2. Убедитесь что DNS проксируется через Cloudflare (оранжевое облако)
+3. Проверьте что домен добавлен в Cloudflare
 
-### Prerender возвращает ошибку
-1. Проверьте токен: `wrangler secret list`
-2. Проверьте IP в белом списке Prerender.io
-3. Проверьте лимиты аккаунта Prerender.io
+### SSR возвращает ошибку
+1. Проверьте Edge Function логи в Supabase Dashboard
+2. Убедитесь что страница опубликована (is_published = true)
+3. Проверьте slug - он должен совпадать точно
 
 ### Контент не обновляется
-Используйте API recache после публикации или подождите TTL кэша.
+Edge Function кеширует ответ на 1 час. Для немедленного обновления:
+- Измените slug страницы
+- Дождитесь истечения TTL кэша (1 час)

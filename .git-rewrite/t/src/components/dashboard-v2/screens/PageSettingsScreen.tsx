@@ -47,6 +47,7 @@ interface PageSettingsScreenProps {
   onUpdateNiche: (niche: Niche) => void;
   onToggleIndexable: (indexable: boolean) => void;
   onUpgradePage?: () => void;
+  onOpenTheme?: () => void;
 }
 
 export const PageSettingsScreen = memo(function PageSettingsScreen({
@@ -68,6 +69,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   onUpdateNiche,
   onToggleIndexable,
   onUpgradePage,
+  onOpenTheme,
 }: PageSettingsScreenProps) {
   const { t } = useTranslation();
 
@@ -286,7 +288,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
           <Card className="p-4">
             <button
               className="w-full flex items-center gap-4 text-left"
-              onClick={() => {/* TODO: Open theme editor */}}
+              onClick={onOpenTheme}
             >
               <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
                 <Palette className="w-5 h-5 text-primary" />

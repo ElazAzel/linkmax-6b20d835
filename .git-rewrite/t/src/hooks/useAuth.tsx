@@ -1,6 +1,8 @@
+
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface AuthContextType {
   user: User | null;
@@ -23,55 +25,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log('Auth state change:', event, session?.user?.id);
-        
+      (_event, session) => {
+        // Only log critical auth state changes in debug
+        logger.debug('Auth state change', { context: 'useAuth', data: { event: _event, userId: session?.user?.id } });
+
         // Handle token refresh errors
-        if (event === 'TOKEN_REFRESHED' && !session) {
+        if (_event === 'TOKEN_REFRESHED' && !session) {
           // Token refresh failed, clear session
           setSession(null);
           setUser(null);
           setLoading(false);
           return;
         }
-        
-        if (event === 'SIGNED_OUT') {
+
+        if (_event === 'SIGNED_OUT') {
           setSession(null);
           setUser(null);
           setLoading(false);
           return;
         }
-        
-        // Handle password recovery - don't redirect, let Auth page handle it
-        if (event === 'PASSWORD_RECOVERY') {
-          console.log('Password recovery event detected');
-          setSession(session);
-          setUser(session?.user ?? null);
-          setLoading(false);
-          return;
+
+        // Check for password recovery
+        if (_event === 'PASSWORD_RECOVERY') {
+          logger.debug('Password recovery event detected', { context: 'useAuth' });
         }
-        
+
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
 
         // Check for pending Telegram chat ID after signup
-        if (event === 'SIGNED_IN' && session?.user) {
+        if (_event === 'SIGNED_IN' && session?.user) {
           const pendingChatId = localStorage.getItem('pending_telegram_chat_id');
           if (pendingChatId) {
             localStorage.removeItem('pending_telegram_chat_id');
             // Use setTimeout to avoid deadlock with Supabase auth
             setTimeout(async () => {
-              try {
-                await supabase
-                  .from('user_profiles')
-                  .update({ 
-                    telegram_chat_id: pendingChatId,
-                    telegram_notifications_enabled: true 
-                  })
-                  .eq('id', session.user.id);
-              } catch (err) {
-                console.error('Failed to save telegram chat id:', err);
+              const { error: err } = await supabase
+                .from('user_profiles')
+                .update({
+                  telegram_chat_id: pendingChatId,
+                  telegram_notifications_enabled: true
+                })
+                .eq('id', session.user.id);
+
+              if (err) {
+                logger.error('Failed to save telegram chat id:', err, { context: 'useAuth' });
               }
             }, 0);
           }
@@ -88,7 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(false);
         return;
       }
-      
+
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -99,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/dashboard`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -107,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: redirectUrl,
       },
     });
-    
+
     return { error };
   };
 
@@ -116,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email,
       password,
     });
-    
+
     return { error };
   };
 

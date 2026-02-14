@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
+import { logger } from '@/lib/logger';
 import { useAuth } from './useAuth';
 import type { Achievement, UnlockedAchievement, UserStats } from '@/types/achievements';
 import { ACHIEVEMENTS } from '@/types/achievements';
@@ -40,7 +41,7 @@ export function useAchievements() {
         const unlocked = new Set(data?.map(a => a.achievement_key) || []);
         setUnlockedAchievements(unlocked);
       } catch (error) {
-        console.error('Failed to load achievements:', error);
+        logger.error('Failed to load achievements:', error, { context: 'useAchievements' });
       } finally {
         setLoading(false);
       }
@@ -73,7 +74,7 @@ export function useAchievements() {
           if (error) {
             // Ignore unique constraint violations (already unlocked)
             if (!error.message.includes('duplicate key')) {
-              console.error('Failed to unlock achievement:', error);
+              logger.error('Failed to unlock achievement:', error, { context: 'useAchievements' });
             }
             continue;
           }
@@ -90,11 +91,11 @@ export function useAchievements() {
           );
 
           newlyUnlocked.push(achievement);
-          
+
           // Update local state
           setUnlockedAchievements(prev => new Set([...prev, achievement.key]));
         } catch (error) {
-          console.error('Error unlocking achievement:', error);
+          logger.error('Error unlocking achievement:', error, { context: 'useAchievements' });
         }
       }
     }

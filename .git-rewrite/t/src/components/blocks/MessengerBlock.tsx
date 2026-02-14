@@ -3,17 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { MessageCircle, Send } from 'lucide-react';
 import type { MessengerBlock as MessengerBlockType } from '@/types/page';
 import { supabase } from '@/platform/supabase/client';
-import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
 interface MessengerBlockProps {
   block: MessengerBlockType;
   pageOwnerId?: string;
+  onClick?: () => void;
 }
 
-export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId }: MessengerBlockProps) {
+export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId, onClick }: MessengerBlockProps) {
   const { i18n } = useTranslation();
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   const getMessengerIcon = (platform: string) => {
     const icons: Record<string, string> = {
@@ -47,6 +48,9 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId 
   };
 
   const handleMessengerClick = async (platform: string, username: string, message?: string) => {
+    // Track analytics click
+    onClick?.();
+    
     if (pageOwnerId) {
       try {
         await supabase.functions.invoke('create-lead', {
@@ -64,11 +68,20 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId 
     }
     
     const url = getMessengerUrl(platform, username, message);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    // Delay to ensure tracking request is sent before navigation
+    setTimeout(() => {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }, 15);
   };
 
+  const messengers = block.messengers || [];
+  
   // Compact horizontal layout for mobile
-  const isSingleMessenger = block.messengers.length === 1;
+  const isSingleMessenger = messengers.length === 1;
+  
+  if (messengers.length === 0) {
+    return null;
+  }
 
   return (
     <div 
@@ -89,7 +102,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId 
         "flex gap-2",
         isSingleMessenger ? "flex-col" : "flex-wrap"
       )}>
-        {block.messengers.map((messenger, index) => (
+        {messengers.map((messenger, index) => (
           <button
             key={index}
             onClick={() => handleMessengerClick(messenger.platform, messenger.username, messenger.message)}

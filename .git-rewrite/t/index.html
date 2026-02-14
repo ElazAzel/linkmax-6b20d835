@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co https://lnkmx.my; connect-src 'self' https://*.supabase.co https://ai.gateway.lovable.dev https://vitals.vercel-analytics.com; frame-src 'self';" />
     
     <!-- Primary SEO Meta Tags (client-side updates in SEOLandingHead) -->
-    <title>lnkmx - мини-сайт и заявки из одной ссылки</title>
-    <meta name="description" content="AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса. Соберите оффер, прайс и формы заявок за 2 минуты." />
+    <title>lnkmx - The Micro-Business OS | Конструктор страниц + CRM + Аналитика</title>
+    <meta name="description" content="lnkmx - операционная система для микробизнеса. Конструктор страниц с AI, мини-CRM, аналитика кликов. Создайте сайт, принимайте заявки и управляйте клиентами." />
     <meta name="author" content="lnkmx" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
     
-    <!-- Canonical URL Strategy: https://lnkmx.my (no www, no trailing slash) -->
-    <link rel="canonical" href="https://lnkmx.my/" />
+    <!-- Canonical URL will be set by client-side JavaScript based on route -->
+    <!-- Removed hardcoded canonical to allow page-specific canonicals -->
     
     <!-- Hreflang for multi-language support -->
     <link rel="alternate" hreflang="ru" href="https://lnkmx.my/?lang=ru" />
@@ -23,12 +24,12 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://lnkmx.my/" />
-    <meta property="og:title" content="lnkmx - мини-сайт и заявки из одной ссылки" />
-    <meta property="og:description" content="AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса. Соберите оффер, прайс и формы заявок за 2 минуты." />
+    <meta property="og:title" content="lnkmx - The Micro-Business OS | Конструктор + CRM + Аналитика" />
+    <meta property="og:description" content="Операционная система для микробизнеса. Конструктор страниц, CRM, аналитика и AI-генерация в одном месте." />
     <meta property="og:image" content="https://lnkmx.my/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="lnkmx - создай мини-сайт за 2 минуты" />
+    <meta property="og:image:alt" content="lnkmx - The Micro-Business OS" />
     <meta property="og:site_name" content="lnkmx" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:locale:alternate" content="en_US" />
@@ -37,10 +38,10 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://lnkmx.my/" />
-    <meta name="twitter:title" content="lnkmx - мини-сайт и заявки из одной ссылки" />
-    <meta name="twitter:description" content="AI-конструктор мини-сайтов для экспертов и малого бизнеса. Соберите страницу за 2 минуты." />
+    <meta name="twitter:title" content="lnkmx - The Micro-Business OS" />
+    <meta name="twitter:description" content="Операционная система для микробизнеса: конструктор страниц, CRM, аналитика." />
     <meta name="twitter:image" content="https://lnkmx.my/og-image.png" />
-    <meta name="twitter:image:alt" content="lnkmx - создай мини-сайт за 2 минуты" />
+    <meta name="twitter:image:alt" content="lnkmx - The Micro-Business OS" />
     <meta name="twitter:site" content="@lnkmx_app" />
     <meta name="twitter:creator" content="@lnkmx_app" />
     
@@ -87,19 +88,35 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "lnkmx",
+      "@type": "SoftwareApplication",
+      "name": "lnkmx - The Micro-Business OS",
       "alternateName": "lnkmx.my",
       "url": "https://lnkmx.my/",
-      "description": "AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса",
+      "description": "Операционная система для микробизнеса: конструктор страниц с AI, мини-CRM для управления заявками, аналитика кликов и конверсий",
       "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": ["Website Builder", "CRM Software", "Analytics Platform"],
       "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "KZT",
-        "description": "Бесплатный тариф с базовыми функциями"
-      },
+      "featureList": [
+        "AI-конструктор страниц",
+        "Мини-CRM для заявок",
+        "Аналитика кликов",
+        "Онлайн-бронирование",
+        "Telegram-уведомления"
+      ],
+      "offers": [
+        {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "KZT",
+          "description": "Бесплатный тариф"
+        },
+        {
+          "@type": "Offer",
+          "price": "2900",
+          "priceCurrency": "KZT",
+          "description": "Pro тариф (годовая подписка)"
+        }
+      ],
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.8",
@@ -142,28 +159,27 @@
     <noscript>
       <div class="ssr-fallback" itemscope itemtype="https://schema.org/WebApplication">
         <header>
-          <h1 itemprop="name">lnkmx - мини-сайт и заявки из одной ссылки</h1>
+          <h1 itemprop="name">lnkmx - The Micro-Business OS</h1>
         </header>
         
         <main>
           <section id="about">
-            <h2>О платформе</h2>
+            <h2>Операционная система для микробизнеса</h2>
             <p itemprop="description">
-              lnkmx - это AI-конструктор мини-сайтов для экспертов, фрилансеров и малого бизнеса в Казахстане и СНГ. 
-              Создайте профессиональную страницу с ссылками, прайс-листом, формами для заявок и бронированием за 2 минуты.
+              lnkmx - это полноценная платформа для микробизнеса: конструктор страниц с AI, мини-CRM для управления заявками, 
+              аналитика кликов и конверсий. Создайте профессиональный сайт, принимайте заявки и управляйте клиентами в одном месте.
             </p>
           </section>
           
           <section id="features">
-            <h2>Возможности</h2>
+            <h2>Возможности платформы</h2>
             <ul>
-              <li>Мини-сайт с вашими ссылками и контактами</li>
-              <li>Прайс-лист с услугами и ценами</li>
-              <li>Форма сбора заявок и лидов</li>
-              <li>Онлайн-бронирование консультаций</li>
-              <li>Аналитика переходов и кликов</li>
-              <li>Интеграция с Telegram-ботом</li>
-              <li>Поддержка 3 языков: русский, английский, казахский</li>
+              <li><strong>Конструктор страниц</strong> - 25+ блоков, drag & drop, AI-генерация контента</li>
+              <li><strong>Мини-CRM</strong> - управление заявками, статусы, история взаимодействий</li>
+              <li><strong>Аналитика</strong> - клики, конверсии, источники трафика, география</li>
+              <li><strong>Онлайн-бронирование</strong> - календарь, слоты, автоматические напоминания</li>
+              <li><strong>Telegram-интеграция</strong> - мгновенные уведомления о заявках</li>
+              <li><strong>Мультиязычность</strong> - русский, английский, казахский</li>
             </ul>
           </section>
           

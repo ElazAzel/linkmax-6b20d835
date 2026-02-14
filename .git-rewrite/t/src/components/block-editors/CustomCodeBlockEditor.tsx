@@ -19,21 +19,23 @@ const CATEGORY_ICONS = { games: Gamepad2, calculators: Calculator, timers: Timer
 
 function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
+  const data = formData as any;
+  const handleChange = (updates: any) => onChange(updates);
   const [showPreview, setShowPreview] = useState(false);
-  const [showTemplates, setShowTemplates] = useState(!formData.html);
+  const [showTemplates, setShowTemplates] = useState(!data.html);
   const [selectedCategory, setSelectedCategory] = useState<string>('games');
 
   const applyTemplate = (template: WidgetTemplate) => {
-    onChange({ ...formData, html: template.html, css: template.css, javascript: template.javascript, title: i18n.language === 'ru' ? template.nameRu : template.name, enableInteraction: true });
+    handleChange({ ...data, html: template.html, css: template.css, javascript: template.javascript, title: i18n.language === 'ru' ? template.nameRu : template.name, enableInteraction: true });
     setShowTemplates(false);
   };
 
   const filteredTemplates = WIDGET_TEMPLATES.filter(t => t.category === selectedCategory);
 
   const previewContent = useMemo(() => {
-    const html = formData.html || '';
-    const css = formData.css || '';
-    const js = formData.javascript || '';
+    const html = data.html || '';
+    const css = data.css || '';
+    const js = data.javascript || '';
     
     let bodyContent = html;
     let headContent = '';
@@ -80,7 +82,7 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
   ${js ? `<script>${js}</script>` : ''}
 </body>
 </html>`;
-  }, [formData.html, formData.css, formData.javascript]);
+  }, [data.html, data.css, data.javascript]);
 
   const previewSrc = useMemo(() => {
     const blob = new Blob([previewContent], { type: 'text/html' });
