@@ -1,5 +1,0 @@
-Add ai content edge function
-
-Implement a new Supabase Edge Function at supabase/functions/ai-content-generator to generate content (magic-title, sales-copy, seo, ai-builder) using Gemini 2.5 Flash via Lovable AI, and integrate with Dashboard UI hooks. Update config.toml for function exposure and prepare frontend components to invoke the new AI endpoints.
-
-X-Lovable-Edit-ID: edt-c056bd6a-3c68-4a2b-b367-8ca8315c9dcd
