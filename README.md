@@ -36,8 +36,8 @@
 ## 🛠 Tech Stack
 
 **Core**
-- **Framework**: [React 18](https://react.dev/)
-- **Build Tool**: [Vite 5](https://vitejs.dev/)
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **UI Library**: [React 18](https://react.dev/)
 - **Language**: [TypeScript 5](https://www.typescriptlang.org/)
 
 **Styling & UI**

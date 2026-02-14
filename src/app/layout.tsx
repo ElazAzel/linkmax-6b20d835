@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         template: '%s | LinkMAX',
     },
     description: 'The Micro-Business Operating System. Create your perfect link-in-bio page with AI.',
-    metadataBase: new URL('https://lnkmx.my'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://lnkmx.my'),
     openGraph: {
         type: 'website',
         locale: 'en_US',

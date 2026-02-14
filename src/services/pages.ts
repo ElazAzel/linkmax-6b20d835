@@ -393,3 +393,20 @@ export async function updatePageNiche(userId: string, niche: string): Promise<{ 
 
 // Note: trackEvent has been moved to src/services/analytics.ts
 // with enhanced functionality including visitor tracking and metadata enrichment
+
+/**
+ * Get all public pages for sitemap generation
+ */
+export async function getPublicPages(): Promise<{ slug: string; updated_at: string }[]> {
+  const { data, error } = await supabase
+    .from('pages')
+    .select('slug, updated_at')
+    .eq('is_published', true);
+
+  if (error) {
+    logger.error('Error fetching public pages', error, { context: 'sitemap' });
+    return [];
+  }
+
+  return data || [];
+}
