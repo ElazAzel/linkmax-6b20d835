@@ -52,7 +52,7 @@ export function useLanguageUpload() {
         try {
             // Use edge function since 'languages' table might not exist yet
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/language-upload`,
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/language-upload`,
                 {
                     method: 'POST',
                     headers: {
@@ -126,7 +126,7 @@ export function useLanguageUpload() {
 
             // Call Edge Function
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/language-upload`,
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/language-upload`,
                 {
                     method: 'POST',
                     headers: {
@@ -186,7 +186,7 @@ export function useLanguageUpload() {
             }
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/language-upload`,
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/language-upload`,
                 {
                     method: 'POST',
                     headers: {
@@ -236,7 +236,7 @@ export function useLanguageUpload() {
             }
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/language-upload`,
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/language-upload`,
                 {
                     method: 'POST',
                     headers: {
