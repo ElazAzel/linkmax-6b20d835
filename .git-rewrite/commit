@@ -1,11 +1,24 @@
-tree 5828ab2d5cc6c5b5bd3185f556856291e0449978
-parent 7c6b14b0656bd254e7440b2d5cd8290937cc9874
-parent 66c72b1cb803114f643e8e9c9ae4b158c17ca2a7
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767347095 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767347095 +0000
+tree 8e4cc72307e8a08ed0f2f93e543e0a2e579dc782
+parent cdb5c1aa57db6c17d1ab1831569165c46b38b653
+parent 44d761f41e0a0fdd8d4941ac6eed5eb09174f6e1
+author ElazAzel <35068027+ElazAzel@users.noreply.github.com> 1769235612 +0500
+committer GitHub <noreply@github.com> 1769235612 +0500
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJpdGScCRC1aQ7uu5UhlAAA3FcQADl9y8lHYBPKu/QHovEHOACc
+ gfhuxIFQNcOKkaRHWZtJilVaS9RoGx/ZrggBS8EFswM+GlOk6rcG90ITzWzVOwxr
+ /8IcsAUHj5mBgane/I1C9IggG3hUr0n+bQlVhIYypPb1VuHgZSiL1zIJjgDlD9Dy
+ b3mjApIUZRA4pIf7YY1ajuqm1lrD+lh85uT1OWj14Npi6DFhDMRUlvzDQ4B+KPnY
+ A7MPN2Icdz3aBAIMhCXN8OgEEEhCL+y5YDncYULIHuM1zWG85Q7uz0KnrjJYSuXU
+ PyQlQmeqEfRv39Yo+BDsZESCyf4oGX8z/lw4ECCV1PNLY3dJ+yQd4fJSXicmozAZ
+ B19FO3PQ81HpnSi8XTaj7Al+WZTZkJnmGNEf404vZLoPDv8seeubzcd+DFeBN8dV
+ XP7qxhx7X6M/HkBPmqv1lxISd6aF65LZEQkmjVrfao+rWtMU908SpjQwJ9ln6lhN
+ h5RjllOXYJ0gukpeulN3icGpl5jUfJbtroifsYZH9+L71T5JtcmxEh45ccnlYrAh
+ wy+eNQVR9eAIah4Jdu4N1v0Qk9A8ffgJhQ2mnrKw324aiGTmdT1LtTaoXrhrroMn
+ rRoMaT9v/w0K1vBY3sUOSacZfaQOOO6L5LPxb1AsZLzi4i+l7GvBPO7nB9o6EWML
+ 3riAtT+dym/vZ36xisZt
+ =yVmR
+ -----END PGP SIGNATURE-----
+ 
 
-Добавить кнопку маркетплейс в моб тулбар
-
-Добавлен проп и состояние маркетплейса в Dashboard. Обновлен MobileToolbar чтобы включать кнопку маркетплейса в боковой панели и пробросить обработчик открытия. Реализовано открытие TemplateMarketplace напрямую из мобильного тулбара через Dashboard.
-
-X-Lovable-Edit-ID: edt-a7ac7c09-6321-4d9e-8e61-7264c30c16fc
+Merge branch 'main' into codex/add-event-block-with-pro-features-187wij
