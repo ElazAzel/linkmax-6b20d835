@@ -271,7 +271,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
 
                     {/* Block Size Selector */}
                     {onBlockUpdate && block && (
-                        <div className="hidden sm:flex items-center gap-1 bg-muted/40 p-1 rounded-lg">
+                        <div className="flex items-center gap-1 bg-muted/40 p-1 rounded-lg">
                             {/* 1x1 (Small) */}
                             <Button
                                 variant={(!block.blockSize || block.blockSize === 'small' || block.blockSize === 'half') ? 'secondary' : 'ghost'}
