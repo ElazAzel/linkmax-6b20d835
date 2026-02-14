@@ -1,4 +1,4 @@
-export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout';
+export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking';
 
 // Multilingual string support
 import type { MultilingualString } from '@/lib/i18n-helpers';
@@ -34,6 +34,8 @@ export interface BlockSchedule {
   endDate?: string; // ISO date string
 }
 
+export type ProfileFrameStyle = 'default' | 'none' | 'solid' | 'gradient' | 'gradient-sunset' | 'gradient-ocean' | 'gradient-purple' | 'neon-blue' | 'neon-pink' | 'neon-green' | 'rainbow' | 'rainbow-spin' | 'double' | 'dashed' | 'dotted' | 'glow-pulse';
+
 export interface ProfileBlock {
   id: string;
   type: 'profile';
@@ -41,7 +43,8 @@ export interface ProfileBlock {
   name: string | MultilingualString;
   bio: string | MultilingualString;
   verified?: boolean;
-  avatarFrame?: 'default' | 'neon' | 'glitch' | 'aura' | 'gradient' | 'pulse' | 'rainbow' | 'double' | 'spinning' | 'dash' | 'wave';
+  avatarFrame?: ProfileFrameStyle;
+  avatarIcon?: string; // Lucide icon name
   coverImage?: string;
   coverGradient?: 'none' | 'dark' | 'light' | 'primary' | 'sunset' | 'ocean' | 'purple';
   coverHeight?: 'small' | 'medium' | 'large';
@@ -176,6 +179,9 @@ export interface CustomCodeBlock {
   title?: string | MultilingualString;
   html: string;
   css?: string;
+  javascript?: string;
+  height?: 'auto' | 'small' | 'medium' | 'large' | 'full';
+  enableInteraction?: boolean;
   isPremium: true;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -268,14 +274,12 @@ export interface ScratchBlock {
 export interface MapBlock {
   id: string;
   type: 'map';
-  title?: string | MultilingualString;
-  provider: 'google' | 'yandex';
-  embedUrl: string;
-  address?: string | MultilingualString;
-  height?: 'small' | 'medium' | 'large';
+  address: string | MultilingualString;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
+
+export type AvatarFrameStyle = 'none' | 'solid' | 'gradient' | 'gradient-sunset' | 'gradient-ocean' | 'gradient-purple' | 'neon-blue' | 'neon-pink' | 'neon-green' | 'rainbow' | 'rainbow-spin' | 'double' | 'dashed' | 'dotted' | 'glow-pulse';
 
 export interface AvatarBlock {
   id: string;
@@ -286,6 +290,7 @@ export interface AvatarBlock {
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   shape?: 'circle' | 'rounded' | 'square';
   border?: boolean;
+  frameStyle?: AvatarFrameStyle;
   borderColor?: string;
   shadow?: 'none' | 'soft' | 'medium' | 'strong' | 'glow';
   alignment?: 'left' | 'center' | 'right';
@@ -413,13 +418,42 @@ export interface ShoutoutBlock {
   blockStyle?: BlockStyle;
 }
 
+// Booking Block - appointment scheduling
+export interface BookingSlot {
+  id: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface BookingBlock {
+  id: string;
+  type: 'booking';
+  title?: string | MultilingualString;
+  description?: string | MultilingualString;
+  workingHoursStart?: number;
+  workingHoursEnd?: number;
+  slotDuration?: number;
+  slots?: BookingSlot[];
+  disabledWeekdays?: number[];
+  maxBookingDays?: number;
+  requirePhone?: boolean;
+  requireEmail?: boolean;
+  requirePrepayment?: boolean;
+  prepaymentPhone?: string; // WhatsApp phone for payment
+  prepaymentAmount?: number;
+  prepaymentCurrency?: Currency;
+  isPremium: true;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
 // Base block type with optional grid layout
 interface BlockGridProps {
   gridLayout?: GridLayoutData;
   createdAt?: string;
 }
 
-export type Block = (ProfileBlock | LinkBlock | ButtonBlock | SocialsBlock | TextBlock | ImageBlock | ProductBlock | VideoBlock | CarouselBlock | SearchBlock | CustomCodeBlock | MessengerBlock | FormBlock | DownloadBlock | NewsletterBlock | TestimonialBlock | ScratchBlock | MapBlock | AvatarBlock | SeparatorBlock | CatalogBlock | BeforeAfterBlock | FAQBlock | CountdownBlock | PricingBlock | ShoutoutBlock) & BlockGridProps;
+export type Block = (ProfileBlock | LinkBlock | ButtonBlock | SocialsBlock | TextBlock | ImageBlock | ProductBlock | VideoBlock | CarouselBlock | SearchBlock | CustomCodeBlock | MessengerBlock | FormBlock | DownloadBlock | NewsletterBlock | TestimonialBlock | ScratchBlock | MapBlock | AvatarBlock | SeparatorBlock | CatalogBlock | BeforeAfterBlock | FAQBlock | CountdownBlock | PricingBlock | ShoutoutBlock | BookingBlock) & BlockGridProps;
 
 export interface PageTheme {
   backgroundColor: string;

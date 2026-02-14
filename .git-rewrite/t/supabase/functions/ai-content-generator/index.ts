@@ -110,17 +110,49 @@ serve(async (req) => {
         break;
 
       case 'ai-builder':
-        systemPrompt = `You are a page builder AI. Based on the user's description, suggest a complete page layout with blocks. Return a JSON object with this exact structure:
+        systemPrompt = `Ты AI-конструктор профессиональных лендинг-страниц LinkMAX. Создаёшь ПОЛНЫЕ страницы с 8-15 блоками.
+
+На основе описания пользователя создай структуру страницы как у профессионального одностраничника.
+
+ОБЯЗАТЕЛЬНЫЕ СЕКЦИИ:
+1. profile - информация о человеке/бизнесе (name, bio с эмодзи)
+2. Ссылки на соцсети/каналы (несколько link блоков)
+3. Услуги или товары (несколько product блоков с ценами)
+4. Отзывы клиентов (testimonial с 2-3 отзывами)
+5. FAQ - часто задаваемые вопросы (2-3 вопроса)
+6. Контакты (messenger блок)
+
+ТИПЫ БЛОКОВ:
+- profile: { name: "string", bio: "string с эмодзи и переносами строк" }
+- link: { title: "string", url: "https://...", icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill|outline" }
+- text: { content: "string", style: "heading|paragraph|quote", alignment: "center|left" }
+- product: { name: "string", description: "string", price: number, currency: "KZT|RUB|USD", imageUrl?: "string" }
+- testimonial: { testimonials: [{ name: "string", role: "string", text: "string", rating: 5 }] }
+- faq: { items: [{ question: "string", answer: "string" }] }
+- messenger: { messengers: [{ platform: "telegram|whatsapp|email", username: "string" }] }
+- socials: { platforms: [{ platform: "instagram|telegram|youtube|tiktok", url: "string" }] }
+- video: { url: "https://youtube.com/...", title: "string" }
+- countdown: { title: "string", endDate: "ISO date string", style: "modern" }
+- separator: { style: "line|dots|space" }
+
+ПРИМЕР СТРУКТУРЫ:
 {
-  "profile": { "name": "string", "bio": "string" },
+  "profile": { "name": "Алина Coach", "bio": "💪 Фитнес-тренер • 5 лет опыта\\n🏆 Помогла 500+ клиентам\\n📍 Онлайн и офлайн" },
   "blocks": [
-    { "type": "link", "title": "string", "url": "string" },
-    { "type": "product", "name": "string", "description": "string", "price": number, "currency": "string" },
-    { "type": "text", "content": "string", "style": "heading|paragraph|quote" }
+    { "type": "link", "title": "📸 Instagram — тренировки и мотивация", "url": "https://instagram.com/example", "icon": "instagram", "style": "rounded" },
+    { "type": "link", "title": "📱 Telegram-канал — советы бесплатно", "url": "https://t.me/example", "icon": "telegram", "style": "rounded" },
+    { "type": "text", "content": "💰 Мои программы", "style": "heading", "alignment": "center" },
+    { "type": "product", "name": "Программа похудения", "description": "12 недель • План питания • Поддержка", "price": 45000, "currency": "KZT" },
+    { "type": "product", "name": "Персональные тренировки", "description": "Индивидуальный подход • Онлайн", "price": 25000, "currency": "KZT" },
+    { "type": "testimonial", "testimonials": [{ "name": "Анна", "role": "Клиент", "text": "Минус 15 кг за 3 месяца!", "rating": 5 }] },
+    { "type": "faq", "items": [{ "question": "Как проходят тренировки?", "answer": "Онлайн через Zoom или в зале." }] },
+    { "type": "messenger", "messengers": [{ "platform": "whatsapp", "username": "+77001234567" }, { "platform": "telegram", "username": "alina_coach" }] }
   ]
 }
-Include 3-6 relevant blocks based on the description. Return ONLY valid JSON, no markdown.`;
-        userPrompt = `Create a page layout for: ${input.description}`;
+
+Текст на русском, профессиональный и продающий. Цены реалистичные для Казахстана.
+Return ONLY valid JSON, no markdown or code blocks.`;
+        userPrompt = `Создай полную профессиональную страницу для: ${input.description}`;
         break;
 
       case 'niche-builder':
@@ -140,30 +172,90 @@ Include 3-6 relevant blocks based on the description. Return ONLY valid JSON, no
         
         const nicheDescription = nichePrompts[input.niche] || 'специалиста с услугами и контактами';
         
-        systemPrompt = `Ты AI-конструктор страниц LinkMAX. Создай профессиональную страницу для ${nicheDescription}
+        systemPrompt = `Ты AI-конструктор профессиональных страниц LinkMAX. Создай полную страницу для ${nicheDescription}
 
-ВАЖНО:
-- Имя пользователя: "${input.name}"
-- Дополнительная информация: "${input.details || 'не указана'}"
+ИНФОРМАЦИЯ:
+- Имя: "${input.name}"
+- Детали: "${input.details || 'не указаны'}"
 
-Создай структуру страницы с 4-7 блоками, которые максимально подходят для этой ниши.
+СОЗДАЙ ПОЛНУЮ СТРАНИЦУ с 10-15 блоками, включая ВСЕ секции:
 
-Возможные типы блоков:
-- link: кнопка-ссылка (title, url, icon: globe|instagram|telegram|youtube|tiktok)
-- product: товар/услуга (name, description, price: число, currency: "KZT"|"RUB"|"USD")
-- text: текстовый блок (content, style: "heading"|"paragraph"|"quote")
-- socials: соцсети (platforms: [{name, url, icon}])
-- messenger: мессенджеры (messengers: [{platform: "whatsapp"|"telegram", username}])
-- video: видео (title, url, platform: "youtube"|"tiktok")
+1. ПРОФИЛЬ (profile):
+   - name: имя/название бизнеса
+   - bio: краткое описание с эмодзи (2-3 строки)
+
+2. СОЦСЕТИ (2-4 блока link):
+   - Ссылки на Instagram, Telegram, YouTube и т.д.
+   - Используй эмодзи в заголовках
+
+3. УСЛУГИ/ТОВАРЫ (2-4 блока product):
+   - Реалистичные цены в KZT для Казахстана
+   - Конкретные описания услуг
+
+4. ОТЗЫВЫ (testimonial):
+   - 2-3 реалистичных отзыва клиентов
+   - С именами и ролями
+
+5. FAQ (faq):
+   - 2-3 частых вопроса для этой ниши
+
+6. КОНТАКТЫ (messenger):
+   - WhatsApp и/или Telegram
+
+ТИПЫ БЛОКОВ:
+- profile: { name, bio }
+- link: { title, url, icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill" }
+- text: { content, style: "heading|paragraph|quote", alignment: "center|left" }
+- product: { name, description, price: number, currency: "KZT" }
+- testimonial: { testimonials: [{ name, role, text, rating: 5 }] }
+- faq: { items: [{ question, answer }] }
+- messenger: { messengers: [{ platform: "telegram|whatsapp", username }] }
+- socials: { platforms: [{ platform, url }] }
+- video: { url, title }
+- countdown: { title, endDate, style: "modern" }
+- separator: { style: "line" }
+- carousel: { images: [{ url, alt }], title }
+
+ОТВЕТ В JSON:
+{
+  "profile": { "name": "...", "bio": "..." },
+  "blocks": [... 10-15 блоков ...]
+}
+
+Текст на русском, профессиональный. Return ONLY valid JSON, no markdown.`;
+        userPrompt = `Создай полную страницу для ниши: ${input.niche}. Имя: ${input.name}. Детали: ${input.details || 'нет'}`;
+        break;
+
+      case 'personalize-template':
+        systemPrompt = `Ты AI для персонализации шаблонов страниц. Получаешь шаблон и информацию о бизнесе.
+        
+Задача: адаптировать ВСЕ текстовое содержимое шаблона под конкретный бизнес, сохраняя структуру.
 
 Верни JSON:
 {
-  "profile": { "name": "Имя", "bio": "Краткое профессиональное описание (1-2 предложения)" },
-  "blocks": [массив блоков]
+  "profile": { "name": "Название бизнеса", "bio": "Профессиональное описание" },
+  "blocks": [
+    // Та же структура что во входных данных, но с персонализированным контентом
+  ]
 }
 
-Текст должен быть на русском языке, профессиональный и продающий. Return ONLY valid JSON, no markdown.`;
-        userPrompt = `Создай страницу для: ${input.niche}. Имя: ${input.name}. Детали: ${input.details || 'нет'}`;
+Правила:
+1. Сохрани ВСЕ типы блоков и структуру из входного шаблона
+2. Замени плейсхолдеры на контент для конкретного бизнеса
+3. Обнови цены на реалистичные для типа бизнеса
+4. Сохрани мультиязычный формат: { "ru": "...", "en": "...", "kk": "..." }
+5. Сделай отзывы аутентичными для данного бизнеса
+6. Обнови FAQ под специфику бизнеса
+7. НЕ меняй URL изображений
+
+Return ONLY valid JSON, no markdown.`;
+        
+        userPrompt = `Бизнес: ${input.businessName}
+Описание: ${input.businessDescription || "Нет описания"}
+Шаблон: ${input.templateName}
+Блоки шаблона: ${JSON.stringify(input.templateBlocks)}
+
+Персонализируй этот шаблон. Сохрани те же типы и количество блоков, обнови только контент.`;
         break;
 
       case 'search':
@@ -216,8 +308,8 @@ Include 3-6 relevant blocks based on the description. Return ONLY valid JSON, no
     const data = await response.json();
     const content = data.choices[0].message.content;
 
-    // For SEO and AI Builder, parse JSON response
-    if (type === 'seo' || type === 'ai-builder' || type === 'niche-builder') {
+    // For SEO, AI Builder, niche-builder and personalize-template, parse JSON response
+    if (type === 'seo' || type === 'ai-builder' || type === 'niche-builder' || type === 'personalize-template') {
       try {
         const cleanContent = content.replace(/```json\n?|\n?```/g, '').trim();
         const parsed = JSON.parse(cleanContent);
@@ -227,8 +319,8 @@ Include 3-6 relevant blocks based on the description. Return ONLY valid JSON, no
         );
       } catch (e) {
         console.error('Failed to parse JSON:', content);
-        // For niche-builder, return error if JSON fails
-        if (type === 'niche-builder') {
+        // For niche-builder and personalize-template, return error if JSON fails
+        if (type === 'niche-builder' || type === 'personalize-template') {
           throw new Error('Invalid JSON response from AI');
         }
         // For others, return raw content

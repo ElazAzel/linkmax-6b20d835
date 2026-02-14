@@ -14,6 +14,7 @@ export interface UserStats {
   featuresUsed: Set<string>;
   pageViews: number;
   published: boolean;
+  friendsCount: number;
 }
 
 export interface UnlockedAchievement {
@@ -184,6 +185,44 @@ export const ACHIEVEMENTS: Achievement[] = [
     category: 'social',
     rarity: 'legendary',
     condition: (stats) => stats.pageViews >= 1000,
+  },
+  
+  // Friend Achievements
+  {
+    key: 'first_friend',
+    title: 'Первый друг',
+    description: 'Добавьте первого друга',
+    icon: '🤝',
+    category: 'social',
+    rarity: 'common',
+    condition: (stats) => stats.friendsCount >= 1,
+  },
+  {
+    key: 'social_circle',
+    title: 'Социальный круг',
+    description: 'Добавьте 5 друзей',
+    icon: '👥',
+    category: 'social',
+    rarity: 'rare',
+    condition: (stats) => stats.friendsCount >= 5,
+  },
+  {
+    key: 'networking_pro',
+    title: 'Мастер нетворкинга',
+    description: 'Добавьте 10 друзей',
+    icon: '🌐',
+    category: 'social',
+    rarity: 'epic',
+    condition: (stats) => stats.friendsCount >= 10,
+  },
+  {
+    key: 'community_leader',
+    title: 'Лидер сообщества',
+    description: 'Добавьте 25 друзей',
+    icon: '🎖️',
+    category: 'social',
+    rarity: 'legendary',
+    condition: (stats) => stats.friendsCount >= 25,
   },
 ];
 

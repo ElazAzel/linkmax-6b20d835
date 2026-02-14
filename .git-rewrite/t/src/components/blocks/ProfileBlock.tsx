@@ -3,9 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2 } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
-import type { ProfileBlock as ProfileBlockType } from '@/types/page';
+import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS } from '@/lib/avatar-frame-utils';
+import { cn } from '@/lib/utils';
+import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle } from '@/types/page';
+
 interface ProfileBlockProps {
   block: ProfileBlockType;
   isPreview?: boolean;
@@ -34,15 +38,14 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
     }
   };
 
-  const getShadowClass = () => {
-    const shadow = block.shadowStyle || 'soft';
-    switch (shadow) {
-      case 'none': return '';
-      case 'soft': return 'shadow-md';
-      case 'medium': return 'shadow-xl';
-      case 'strong': return 'shadow-2xl';
-      case 'glow': return 'shadow-[0_0_30px_hsl(var(--primary)/0.4)]';
-      default: return 'shadow-md';
+  const getFrameSize = () => {
+    const size = block.avatarSize || 'large';
+    switch (size) {
+      case 'small': return 'h-[72px] w-[72px]';
+      case 'medium': return 'h-[104px] w-[104px]';
+      case 'large': return 'h-[140px] w-[140px]';
+      case 'xlarge': return 'h-[172px] w-[172px]';
+      default: return 'h-[140px] w-[140px]';
     }
   };
 
@@ -60,37 +63,6 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
     }
   };
 
-  const getAvatarFrameClass = () => {
-    const frameStyle = block.avatarFrame || 'default';
-    
-    switch (frameStyle) {
-      case 'neon':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background shadow-[0_0_30px_hsl(var(--primary)/0.5)] animate-pulse';
-      case 'glitch':
-        return 'ring-2 ring-primary ring-offset-2 ring-offset-background relative after:absolute after:inset-0 after:ring-2 after:ring-destructive after:rounded-full after:animate-ping';
-      case 'aura':
-        return 'ring-4 ring-primary/30 ring-offset-4 ring-offset-background shadow-[0_0_40px_20px_hsl(var(--primary)/0.2)]';
-      case 'gradient':
-        return 'ring-4 ring-offset-4 ring-offset-background bg-gradient-to-r from-primary via-secondary to-accent p-1 rounded-full';
-      case 'pulse':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background animate-[pulse_2s_ease-in-out_infinite]';
-      case 'rainbow':
-        return 'ring-4 ring-offset-4 ring-offset-background animate-[spin_3s_linear_infinite] bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 p-1 rounded-full';
-      case 'double':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background shadow-[0_0_0_8px_hsl(var(--secondary))]';
-      case 'spinning':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background animate-[spin_4s_linear_infinite]';
-      case 'dash':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background [background:conic-gradient(from_0deg,hsl(var(--primary))_0%,transparent_50%,hsl(var(--primary))_100%)] animate-[spin_3s_linear_infinite] p-1 rounded-full';
-      case 'wave':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background animate-[pulse_3s_ease-in-out_infinite] shadow-[0_0_20px_hsl(var(--primary)/0.3)]';
-      default:
-        return 'ring-2 ring-primary ring-offset-2 ring-offset-background';
-    }
-  };
-
-  const isGradientFrame = block.avatarFrame === 'gradient' || block.avatarFrame === 'rainbow' || block.avatarFrame === 'dash';
-  
   const getPositionClass = () => {
     const position = block.avatarPosition || 'center';
     switch (position) {
@@ -111,6 +83,22 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
     }
   };
 
+  const frameStyle: ProfileFrameStyle = block.avatarFrame || 'default';
+  const hasGradientFrame = isGradientFrame(frameStyle);
+
+  // Get icon component dynamically
+  const getIconComponent = () => {
+    if (!block.avatarIcon) return null;
+    const iconName = block.avatarIcon
+      .split('-')
+      .map((part, i) => i === 0 ? part.charAt(0).toUpperCase() + part.slice(1) : part.charAt(0).toUpperCase() + part.slice(1))
+      .join('');
+    const IconComponent = (LucideIcons as any)[iconName];
+    return IconComponent || null;
+  };
+
+  const IconComponent = getIconComponent();
+
   return (
     <div className={`relative flex flex-col ${getPositionClass()}`}>
       {block.coverImage && (
@@ -127,13 +115,34 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
       )}
       
       <div className={`flex flex-col ${getPositionClass()} gap-4 p-6 ${block.coverImage ? '-mt-16' : ''}`}>
-        <div className={`${isGradientFrame ? getAvatarFrameClass() : ''} ${getShadowClass()}`}>
-          <Avatar className={`${getAvatarSize()} ${!isGradientFrame ? getAvatarFrameClass() : ''}`}>
-            <AvatarImage src={block.avatar} alt={name} />
-            <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+        {/* Outer container for positioning icon */}
+        <div className="relative">
+          {/* Frame wrapper - shadow and frame styles apply here only */}
+          <div 
+            className={cn(
+              "flex items-center justify-center rounded-full",
+              getFrameSize(),
+            )}
+            style={{
+              ...getShadowStyles(block.shadowStyle || 'soft'),
+              ...getFrameStyles(frameStyle),
+            }}
+          >
+            {/* Avatar - NO animation, NO shadow */}
+            <Avatar className={cn(getAvatarSize(), "bg-background")}>
+              <AvatarImage src={block.avatar} alt={name} className="object-cover" />
+              <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+
+          {/* Icon badge */}
+          {IconComponent && (
+            <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full p-1.5 shadow-lg">
+              <IconComponent className="h-4 w-4" />
+            </div>
+          )}
         </div>
         
         <div className="text-center space-y-2">
@@ -152,6 +161,8 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
           )}
         </div>
       </div>
+
+      <style>{FRAME_CSS}</style>
     </div>
   );
 });

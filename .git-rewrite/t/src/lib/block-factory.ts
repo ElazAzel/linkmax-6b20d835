@@ -197,11 +197,7 @@ export function createBlock(type: string): Block {
       return {
         id: `map-${timestamp}`,
         type: 'map',
-        title: 'Наше местоположение',
-        provider: 'google',
-        embedUrl: '',
         address: '',
-        height: 'medium',
       };
     
     case 'avatar':
@@ -287,6 +283,20 @@ export function createBlock(type: string): Block {
         type: 'shoutout',
         userId: '',
         message: 'Рекомендую этого специалиста!',
+      };
+    
+    case 'booking':
+      return {
+        id: `booking-${timestamp}`,
+        type: 'booking',
+        title: 'Записаться на прием',
+        description: 'Выберите удобное время',
+        workingHoursStart: 9,
+        workingHoursEnd: 18,
+        slotDuration: 60,
+        maxBookingDays: 30,
+        disabledWeekdays: [0, 6],
+        isPremium: true,
       };
     
     default:

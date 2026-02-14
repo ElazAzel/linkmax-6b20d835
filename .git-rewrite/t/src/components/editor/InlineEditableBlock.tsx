@@ -146,7 +146,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
   const isAtThreshold = Math.abs(offsetX) >= threshold;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl">
+    <div className="relative overflow-visible rounded-2xl">
       {/* Delete action background (swipe left) */}
       {isMobile && !isProfileBlock && (
         <div 

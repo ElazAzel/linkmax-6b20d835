@@ -5,6 +5,7 @@ import {
   getNicheCounts,
   toggleGalleryStatus, 
   likeGalleryPage,
+  unlikeGalleryPage,
   getMyGalleryStatus,
   type GalleryPage 
 } from '@/services/gallery';
@@ -49,10 +50,24 @@ export function useGallery() {
     }
   }, []);
 
+  const unlikePage = useCallback(async (pageId: string) => {
+    try {
+      await unlikeGalleryPage(pageId);
+      setPages(prev => 
+        prev.map(p => 
+          p.id === pageId ? { ...p, gallery_likes: Math.max(0, p.gallery_likes - 1) } : p
+        )
+      );
+    } catch {
+      toast.error('Failed to unlike page');
+    }
+  }, []);
+
   return { 
     pages, 
     loading, 
-    likePage, 
+    likePage,
+    unlikePage,
     refetch: fetchPages,
     selectedNiche,
     setSelectedNiche,

@@ -203,6 +203,26 @@ export function useCloudPageState() {
     autoSaveAndPublish(newPageData, chatbotContext);
   }, [pageData, chatbotContext, autoSaveAndPublish]);
 
+  // Replace all content blocks (keep profile block)
+  const replaceBlocks = useCallback((newBlocks: Block[]) => {
+    if (!pageData) return;
+    
+    // Keep the profile block
+    const profileBlock = pageData.blocks.find(b => b.type === 'profile');
+    const finalBlocks = profileBlock 
+      ? [profileBlock, ...newBlocks.filter(b => b.type !== 'profile')]
+      : newBlocks;
+    
+    const newPageData = {
+      ...pageData,
+      blocks: finalBlocks,
+    };
+    setPageData(newPageData);
+    
+    // Auto-save and publish
+    autoSaveAndPublish(newPageData, chatbotContext);
+  }, [pageData, chatbotContext, autoSaveAndPublish]);
+
   const updateTheme = useCallback((theme: Partial<PageData['theme']>) => {
     if (!pageData) return;
     const newPageData = {
@@ -278,6 +298,7 @@ export function useCloudPageState() {
     updateBlock,
     deleteBlock,
     reorderBlocks,
+    replaceBlocks,
     updateTheme,
     updateEditorMode,
     updatePageDataPartial,

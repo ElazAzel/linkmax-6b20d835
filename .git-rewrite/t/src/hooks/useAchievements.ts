@@ -3,6 +3,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import type { Achievement, UnlockedAchievement, UserStats } from '@/types/achievements';
 import { ACHIEVEMENTS } from '@/types/achievements';
+import { addTokens } from '@/services/tokens';
+
+// Token rewards by achievement rarity
+const ACHIEVEMENT_TOKEN_REWARDS: Record<Achievement['rarity'], number> = {
+  common: 10,
+  rare: 25,
+  epic: 50,
+  legendary: 100,
+};
 
 export function useAchievements() {
   const { user } = useAuth();
@@ -66,6 +75,15 @@ export function useAchievements() {
             }
             continue;
           }
+
+          // Award tokens for the achievement
+          const tokenReward = ACHIEVEMENT_TOKEN_REWARDS[achievement.rarity];
+          await addTokens(
+            user.id,
+            tokenReward,
+            `achievement_${achievement.rarity}`,
+            `Награда за достижение: ${achievement.title}`
+          );
 
           newlyUnlocked.push(achievement);
           

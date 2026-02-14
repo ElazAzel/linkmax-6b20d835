@@ -22,7 +22,7 @@ export function CommunityGallery({
   showFeatured = true,
 }: CommunityGalleryProps) {
   const { t } = useTranslation();
-  const { pages, loading, likePage, selectedNiche, setSelectedNiche, nicheCounts } = useGallery();
+  const { pages, loading, likePage, unlikePage, selectedNiche, setSelectedNiche, nicheCounts } = useGallery();
   const [likedPages, setLikedPages] = useState<Set<string>>(() => {
     const storedLikes = localStorage.getItem('linkmax_liked_pages');
     if (storedLikes) {
@@ -47,15 +47,24 @@ export function CommunityGallery({
 
   const displayPages = maxItems ? filteredPages.slice(0, maxItems) : filteredPages;
 
-  const handleLike = useCallback(async (pageId: string) => {
-    if (likedPages.has(pageId)) return;
+  const handleToggleLike = useCallback(async (pageId: string) => {
+    const isCurrentlyLiked = likedPages.has(pageId);
     
-    const newLikedPages = new Set(likedPages).add(pageId);
-    setLikedPages(newLikedPages);
-    localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
-    
-    await likePage(pageId);
-  }, [likedPages, likePage]);
+    if (isCurrentlyLiked) {
+      // Unlike
+      const newLikedPages = new Set(likedPages);
+      newLikedPages.delete(pageId);
+      setLikedPages(newLikedPages);
+      localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
+      await unlikePage(pageId);
+    } else {
+      // Like
+      const newLikedPages = new Set(likedPages).add(pageId);
+      setLikedPages(newLikedPages);
+      localStorage.setItem('linkmax_liked_pages', JSON.stringify([...newLikedPages]));
+      await likePage(pageId);
+    }
+  }, [likedPages, likePage, unlikePage]);
 
   if (loading) {
     return (
@@ -92,7 +101,7 @@ export function CommunityGallery({
       {showFeatured && !compact && !selectedNiche && featuredPages.length > 0 && (
         <FeaturedPages
           pages={featuredPages}
-          onLike={handleLike}
+          onLike={handleToggleLike}
           likedPages={likedPages}
         />
       )}
@@ -125,7 +134,7 @@ export function CommunityGallery({
             <GalleryPageCard
               key={page.id}
               page={page}
-              onLike={handleLike}
+              onLike={handleToggleLike}
               isLiked={likedPages.has(page.id)}
             />
           ))}

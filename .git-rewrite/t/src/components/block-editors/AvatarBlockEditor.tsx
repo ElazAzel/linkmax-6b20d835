@@ -1,12 +1,15 @@
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
-import type { AvatarBlock } from '@/types/page';
+import type { AvatarBlock, AvatarFrameStyle } from '@/types/page';
 import { withBlockEditor } from './BlockEditorWrapper';
 import { useTranslation } from 'react-i18next';
+import { FrameGridSelector } from '@/components/editor/FramePreview';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 interface AvatarBlockEditorProps {
   formData: AvatarBlock;
@@ -15,6 +18,7 @@ interface AvatarBlockEditorProps {
 
 function AvatarBlockEditorComponent({ formData, onChange }: AvatarBlockEditorProps) {
   const { t } = useTranslation();
+  const [frameOpen, setFrameOpen] = useState(false);
   
   return (
     <div className="space-y-4">
@@ -95,13 +99,20 @@ function AvatarBlockEditorComponent({ formData, onChange }: AvatarBlockEditorPro
         </Select>
       </div>
 
-      <div className="flex items-center justify-between">
-        <Label>{t('fields.border', 'Border')}</Label>
-        <Switch
-          checked={formData.border || false}
-          onCheckedChange={(checked) => onChange({ border: checked })}
-        />
-      </div>
+      <Collapsible open={frameOpen} onOpenChange={setFrameOpen}>
+        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-medium">
+          <span>{t('fields.frameStyle', 'Frame Style')}</span>
+          <ChevronDown className={`h-4 w-4 transition-transform ${frameOpen ? 'rotate-180' : ''}`} />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="border rounded-lg bg-muted/30 mt-2">
+            <FrameGridSelector
+              value={(formData.frameStyle || 'none') as AvatarFrameStyle}
+              onChange={(value) => onChange({ frameStyle: value as AvatarFrameStyle, border: value !== 'none' })}
+            />
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
 
       <div className="space-y-2">
         <Label>{t('fields.alignment', 'Alignment')}</Label>

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { getPublicPageUrl, copyToClipboard } from '@/lib/url-helpers';
+import { incrementChallengeProgress, recordActivity } from '@/services/social';
 
 const STORAGE_KEYS = {
   INSTALL_PROMPT_SHOWN: 'linkmax_install_prompt_shown',
@@ -25,6 +26,9 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
     const slug = await onPublish();
     if (!slug) return;
 
+    // Mark page as published for achievements
+    localStorage.setItem('linkmax_published', 'true');
+
     const url = getPublicPageUrl(slug);
     setPublishedUrl(url);
     
@@ -34,6 +38,10 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
       toast.success('Link copied to clipboard!');
       // Trigger share_page quest
       onQuestComplete?.('share_page');
+      // Track challenge progress
+      incrementChallengeProgress('share_page');
+      // Record activity for friends feed
+      recordActivity('page_published', { slug });
     } else {
       toast.error('Failed to copy link');
     }

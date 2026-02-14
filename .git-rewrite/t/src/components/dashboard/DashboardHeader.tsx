@@ -1,9 +1,19 @@
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { AutoSaveIndicator, SaveStatus } from '@/components/editor/AutoSaveIndicator';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { EditorModeToggle } from '@/components/editor/EditorModeToggle';
 import { StreakDisplay } from '@/components/streak/StreakDisplay';
+import { TokenBalanceDisplay } from '@/components/tokens/TokenBalanceDisplay';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
 import type { EditorMode } from '@/types/page';
 import {
   LogOut,
@@ -11,10 +21,14 @@ import {
   Eye,
   Upload,
   Wand2,
-  MessageCircle,
   LayoutTemplate,
   Trophy,
   Users,
+  Crown,
+  MoreHorizontal,
+  Settings,
+  ImageIcon,
+  Coins,
 } from 'lucide-react';
 
 interface DashboardHeaderProps {
@@ -35,6 +49,7 @@ interface DashboardHeaderProps {
   onOpenCRM: () => void;
   userId?: string;
   onOpenGallery: () => void;
+  onOpenTokens: () => void;
 }
 
 export function DashboardHeader({
@@ -55,8 +70,10 @@ export function DashboardHeader({
   onOpenCRM,
   onOpenGallery,
   userId,
+  onOpenTokens,
 }: DashboardHeaderProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-50 hidden md:block">
@@ -78,15 +95,16 @@ export function DashboardHeader({
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
+              {/* Create Group */}
               <Button variant="ghost" size="sm" onClick={onOpenAIBuilder}>
                 <Wand2 className="h-4 w-4 mr-2" />
-                AI Builder
+                AI
               </Button>
 
               <Button variant="ghost" size="sm" onClick={onOpenTemplates}>
                 <LayoutTemplate className="h-4 w-4 mr-2" />
-                Templates
+                {t('templates.title', 'Templates')}
               </Button>
 
               <EditorModeToggle
@@ -94,69 +112,102 @@ export function DashboardHeader({
                 onToggle={onToggleEditorMode}
               />
 
-              {/* Compact Streak */}
-              <StreakDisplay userId={userId} compact />
+              <div className="h-6 w-px bg-border/50" />
 
-              <LanguageSwitcher />
+              {/* Business Group */}
+              <Button variant="ghost" size="sm" onClick={onOpenCRM}>
+                <Users className="h-4 w-4 mr-2" />
+                CRM
+              </Button>
 
               <Button
                 variant={showSettings ? 'default' : 'ghost'}
                 size="sm"
                 onClick={onToggleSettings}
               >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
-
-              <Button variant="ghost" size="sm" onClick={onOpenCRM}>
-                <Users className="h-4 w-4 mr-2" />
-                CRM
-              </Button>
-
-              <Button variant="ghost" size="sm" onClick={onOpenGallery}>
-                <Users className="h-4 w-4 mr-2" />
-                Gallery
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onOpenAchievements}
-                className="relative"
-              >
-                <Trophy className="h-4 w-4 mr-2" />
-                Achievements
-                {achievementCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold flex items-center justify-center text-primary-foreground">
-                    {achievementCount}
-                  </span>
-                )}
+                <Settings className="h-4 w-4 mr-2" />
+                {t('settings.title', 'Settings')}
               </Button>
 
               <div className="h-6 w-px bg-border/50" />
 
+              {/* Gamification & Community Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative">
+                    <MoreHorizontal className="h-4 w-4 mr-2" />
+                    {t('common.more', 'More')}
+                    {achievementCount > 0 && (
+                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold flex items-center justify-center text-primary-foreground">
+                        {achievementCount}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>{t('menu.gamification', 'Gamification')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={onOpenAchievements}>
+                    <Trophy className="h-4 w-4 mr-2" />
+                    {t('achievements.title', 'Achievements')}
+                    {achievementCount > 0 && (
+                      <span className="ml-auto bg-primary text-primary-foreground text-xs px-1.5 rounded">
+                        {achievementCount}
+                      </span>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onOpenTokens}>
+                    <Coins className="h-4 w-4 mr-2" />
+                    {t('tokens.title', 'Tokens')}
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>{t('menu.community', 'Community')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={onOpenGallery}>
+                    <ImageIcon className="h-4 w-4 mr-2" />
+                    {t('gallery.title', 'Gallery')}
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/pricing')}>
+                    <Crown className="h-4 w-4 mr-2" />
+                    {t('pricing.title', 'Pricing')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Compact Streak */}
+              <StreakDisplay userId={userId} compact />
+
+              {/* Token Balance */}
+              <TokenBalanceDisplay onClick={onOpenTokens} compact />
+
+              <LanguageSwitcher />
+
+              <div className="h-6 w-px bg-border/50" />
+
+              {/* Main Actions */}
               <Button variant="outline" size="sm" onClick={onSave} disabled={saving}>
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Saving...' : 'Save'}
+                {saving ? '...' : t('common.save', 'Save')}
               </Button>
 
               <Button variant="outline" size="sm" onClick={onPreview}>
                 <Eye className="h-4 w-4 mr-2" />
-                Preview
+                {t('common.preview', 'Preview')}
               </Button>
 
               <Button size="sm" onClick={onShare} data-onboarding="share-button">
                 <Upload className="h-4 w-4 mr-2" />
-                Share
+                {t('common.share', 'Share')}
               </Button>
 
               <div className="h-6 w-px bg-border/50" />
 
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={onSignOut}
-                className="hover:bg-destructive/10 hover:text-destructive"
+                className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
               >
                 <LogOut className="h-4 w-4" />
               </Button>

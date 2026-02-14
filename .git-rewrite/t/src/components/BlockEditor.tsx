@@ -270,11 +270,7 @@ export function BlockEditor({ block, isOpen, onClose, onSave }: BlockEditorProps
       case 'shoutout':
         return (
           <Suspense fallback={<EditorFallback />}>
-            <ShoutoutBlockEditor 
-              block={formData} 
-              onChange={setFormData} 
-              onDelete={onClose} 
-            />
+            <ShoutoutBlockEditor {...commonProps} />
           </Suspense>
         );
       

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { CheckCircle2, Check, X, Camera, Loader2, Settings2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +24,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { compressImage } from '@/lib/image-compression';
 import { toast } from 'sonner';
 import { ImageCropper } from '@/components/form-fields/ImageCropper';
+import { RichTextEditor } from '@/components/form-fields/RichTextEditor';
 import type { ProfileBlock as ProfileBlockType } from '@/types/page';
 
 interface InlineProfileEditorProps {
@@ -290,36 +290,9 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
     }
   };
 
-  const getAvatarFrameClass = () => {
-    const frameStyle = block.avatarFrame || 'default';
-    
-    switch (frameStyle) {
-      case 'neon':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background shadow-[0_0_30px_hsl(var(--primary)/0.5)] animate-pulse';
-      case 'glitch':
-        return 'ring-2 ring-primary ring-offset-2 ring-offset-background relative after:absolute after:inset-0 after:ring-2 after:ring-destructive after:rounded-full after:animate-ping';
-      case 'aura':
-        return 'ring-4 ring-primary/30 ring-offset-4 ring-offset-background shadow-[0_0_40px_20px_hsl(var(--primary)/0.2)]';
-      case 'gradient':
-        return 'ring-4 ring-offset-4 ring-offset-background bg-gradient-to-r from-primary via-secondary to-accent p-1 rounded-full';
-      case 'pulse':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background animate-[pulse_2s_ease-in-out_infinite]';
-      case 'rainbow':
-        return 'ring-4 ring-offset-4 ring-offset-background animate-[spin_3s_linear_infinite] bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 p-1 rounded-full';
-      case 'double':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background shadow-[0_0_0_8px_hsl(var(--secondary))]';
-      case 'spinning':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background animate-[spin_4s_linear_infinite]';
-      case 'dash':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background [background:conic-gradient(from_0deg,hsl(var(--primary))_0%,transparent_50%,hsl(var(--primary))_100%)] animate-[spin_3s_linear_infinite] p-1 rounded-full';
-      case 'wave':
-        return 'ring-4 ring-primary ring-offset-4 ring-offset-background animate-[pulse_3s_ease-in-out_infinite] shadow-[0_0_20px_hsl(var(--primary)/0.3)]';
-      default:
-        return 'ring-2 ring-primary ring-offset-2 ring-offset-background';
-    }
-  };
-
-  const isGradientFrame = block.avatarFrame === 'gradient' || block.avatarFrame === 'rainbow' || block.avatarFrame === 'dash';
+  // Using the new frame utils
+  const frameStyle = block.avatarFrame || 'default';
+  const hasGradientFrame = ['gradient', 'gradient-sunset', 'gradient-ocean', 'gradient-purple', 'rainbow', 'rainbow-spin'].includes(frameStyle);
   
   const getPositionClass = () => {
     const position = block.avatarPosition || 'center';
@@ -480,11 +453,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         <div className="relative group/avatar-container">
           {/* Clickable Avatar */}
           <div 
-            className={`${isGradientFrame ? getAvatarFrameClass() : ''} ${getShadowClass()} relative cursor-pointer group/avatar`}
+            className={`${getShadowClass()} relative cursor-pointer group/avatar rounded-full`}
             onClick={handleAvatarClick}
             title={t('profile.clickToChangeAvatar', 'Click to change avatar')}
           >
-            <Avatar className={`${getAvatarSize()} ${!isGradientFrame ? getAvatarFrameClass() : ''}`}>
+            <Avatar className={`${getAvatarSize()} ring-2 ring-primary ring-offset-2 ring-offset-background`}>
               <AvatarImage src={block.avatar} alt={name} />
               <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
                 {initials}
@@ -538,23 +511,28 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                   <Label className="text-xs">{t('profile.avatarFrame', 'Frame style')}</Label>
                   <Select
                     value={block.avatarFrame || 'default'}
-                    onValueChange={(value) => onUpdate({ avatarFrame: value as 'default' | 'neon' | 'glitch' | 'aura' | 'gradient' | 'pulse' | 'rainbow' | 'double' | 'spinning' | 'dash' | 'wave' })}
+                    onValueChange={(value) => onUpdate({ avatarFrame: value as any })}
                   >
                     <SelectTrigger className="h-8">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="default">{t('profile.default', 'Default')}</SelectItem>
-                      <SelectItem value="neon">{t('profile.neon', 'Neon')}</SelectItem>
-                      <SelectItem value="glitch">{t('profile.glitch', 'Glitch')}</SelectItem>
-                      <SelectItem value="aura">{t('profile.aura', 'Aura')}</SelectItem>
-                      <SelectItem value="gradient">{t('profile.gradient', 'Gradient')}</SelectItem>
-                      <SelectItem value="pulse">{t('profile.pulse', 'Pulse')}</SelectItem>
-                      <SelectItem value="rainbow">{t('profile.rainbow', 'Rainbow')}</SelectItem>
-                      <SelectItem value="double">{t('profile.double', 'Double')}</SelectItem>
-                      <SelectItem value="spinning">{t('profile.spinning', 'Spinning')}</SelectItem>
-                      <SelectItem value="dash">{t('profile.dash', 'Dash')}</SelectItem>
-                      <SelectItem value="wave">{t('profile.wave', 'Wave')}</SelectItem>
+                      <SelectItem value="default">{t('frames.default', 'Default')}</SelectItem>
+                      <SelectItem value="none">{t('frames.none', 'No Frame')}</SelectItem>
+                      <SelectItem value="solid">{t('frames.solid', 'Solid')}</SelectItem>
+                      <SelectItem value="gradient">{t('frames.gradient', 'Gradient')}</SelectItem>
+                      <SelectItem value="gradient-sunset">{t('frames.gradientSunset', 'Sunset')}</SelectItem>
+                      <SelectItem value="gradient-ocean">{t('frames.gradientOcean', 'Ocean')}</SelectItem>
+                      <SelectItem value="gradient-purple">{t('frames.gradientPurple', 'Purple')}</SelectItem>
+                      <SelectItem value="neon-blue">{t('frames.neonBlue', 'Neon Blue')}</SelectItem>
+                      <SelectItem value="neon-pink">{t('frames.neonPink', 'Neon Pink')}</SelectItem>
+                      <SelectItem value="neon-green">{t('frames.neonGreen', 'Neon Green')}</SelectItem>
+                      <SelectItem value="rainbow">{t('frames.rainbow', 'Rainbow')}</SelectItem>
+                      <SelectItem value="rainbow-spin">{t('frames.rainbowSpin', 'Rainbow Spin')}</SelectItem>
+                      <SelectItem value="double">{t('frames.double', 'Double')}</SelectItem>
+                      <SelectItem value="dashed">{t('frames.dashed', 'Dashed')}</SelectItem>
+                      <SelectItem value="dotted">{t('frames.dotted', 'Dotted')}</SelectItem>
+                      <SelectItem value="glow-pulse">{t('frames.glowPulse', 'Glow Pulse')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -622,34 +600,31 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
           
           {/* Editable Bio */}
           {isEditingBio ? (
-            <div className="space-y-2">
-              <Textarea
-                ref={bioInputRef}
+            <div className="space-y-2 w-full">
+              <RichTextEditor
                 value={editedBio}
-                onChange={(e) => setEditedBio(e.target.value)}
-                onKeyDown={handleBioKeyDown}
-                className="text-center resize-none min-h-[60px]"
-                placeholder="Tell people about yourself"
-                rows={2}
+                onChange={setEditedBio}
+                placeholder={t('profile.bioPlaceholder', 'Tell people about yourself')}
+                className="min-h-[80px] text-sm"
               />
               <div className="flex items-center justify-center gap-2">
                 <Button size="sm" variant="default" onClick={handleSaveBio}>
                   <Check className="h-4 w-4 mr-1" />
-                  Save
+                  {t('common.save', 'Save')}
                 </Button>
                 <Button size="sm" variant="ghost" onClick={handleCancelBio}>
                   <X className="h-4 w-4 mr-1" />
-                  Cancel
+                  {t('editor.cancel', 'Cancel')}
                 </Button>
               </div>
             </div>
           ) : (
             <p 
-              className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors border-b-2 border-transparent hover:border-primary/30"
+              className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors border-b-2 border-transparent hover:border-primary/30 px-2 py-1"
               onClick={() => setIsEditingBio(true)}
-              title="Click to edit"
+              title={t('profile.clickToEdit', 'Click to edit')}
             >
-              {bio || 'Click to add bio'}
+              {bio || t('profile.addBio', 'Click to add bio')}
             </p>
           )}
         </div>

@@ -31,3 +31,5 @@ export { SocialsBlockEditor } from './SocialsBlockEditor';
 export { TestimonialBlockEditor } from './TestimonialBlockEditor';
 export { TextBlockEditor } from './TextBlockEditor';
 export { VideoBlockEditor } from './VideoBlockEditor';
+export { ShoutoutBlockEditor } from './ShoutoutBlockEditor';
+export { BookingBlockEditor } from './BookingBlockEditor';

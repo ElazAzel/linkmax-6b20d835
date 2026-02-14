@@ -23,7 +23,7 @@ export function GalleryPageCard({ page, onLike, isLiked, featured = false }: Gal
   const [copied, setCopied] = useState(false);
 
   const handleLike = async () => {
-    if (isLiked || isLiking) return;
+    if (isLiking) return;
     setIsLiking(true);
     try {
       await onLike(page.id);
@@ -133,19 +133,19 @@ export function GalleryPageCard({ page, onLike, isLiked, featured = false }: Gal
                 size="sm"
                 className="flex-1 gap-2"
                 onClick={handleLike}
-                disabled={isLiked || isLiking}
+                disabled={isLiking}
               >
                 <Heart 
                   className={`h-4 w-4 transition-all ${
                     isLiked ? 'fill-red-500 text-red-500 scale-110' : ''
                   }`} 
                 />
-                {isLiked ? t('gallery.liked', 'Liked') : t('gallery.like', 'Like')}
+                {isLiked ? t('gallery.unlike', 'Unlike') : t('gallery.like', 'Like')}
               </Button>
             </TooltipTrigger>
             <TooltipContent>
               {isLiked 
-                ? t('gallery.alreadyLiked', 'You already liked this page')
+                ? t('gallery.clickToUnlike', 'Click to remove like')
                 : t('gallery.likeTooltip', 'Show some love!')
               }
             </TooltipContent>

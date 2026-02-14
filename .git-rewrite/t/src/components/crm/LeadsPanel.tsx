@@ -24,12 +24,14 @@ import {
   Calendar,
   Crown,
   Download,
-  BarChart3
+  BarChart3,
+  CalendarDays
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AddLeadDialog } from './AddLeadDialog';
 import { LeadDetails } from './LeadDetails';
 import { AnalyticsPanel } from './AnalyticsPanel';
+import { BookingsPanel } from './BookingsPanel';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import type { Lead } from '@/hooks/useLeads';
 
@@ -70,7 +72,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [activeTab, setActiveTab] = useState<'leads' | 'analytics'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'bookings' | 'analytics'>('leads');
   const [sourceFilter, setSourceFilter] = useState<string>('all');
 
   const stats = getLeadStats();
@@ -194,17 +196,25 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
           </SheetHeader>
           
           {/* Tabs for Leads / Analytics */}
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'leads' | 'analytics')} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mx-0 rounded-none border-b bg-transparent h-10 sm:h-11">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'leads' | 'bookings' | 'analytics')} className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mx-0 rounded-none border-b bg-transparent h-10 sm:h-11">
               <TabsTrigger value="leads" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-sm">
                 <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
                 {t('crm.leads', 'Leads')}
+              </TabsTrigger>
+              <TabsTrigger value="bookings" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-sm">
+                <CalendarDays className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
+                {t('crm.bookings', 'Bookings')}
               </TabsTrigger>
               <TabsTrigger value="analytics" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-sm">
                 <BarChart3 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
                 {t('analytics.title', 'Analytics')}
               </TabsTrigger>
             </TabsList>
+            
+            <TabsContent value="bookings" className="mt-0 h-[calc(100vh-150px)]">
+              <BookingsPanel />
+            </TabsContent>
             
             <TabsContent value="analytics" className="mt-0">
               <AnalyticsPanel />

@@ -5,9 +5,16 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
+import { FrameGridSelector } from '@/components/editor/FramePreview';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { AVATAR_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
+import type { ProfileFrameStyle } from '@/types/page';
 
 function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
+  const [frameOpen, setFrameOpen] = useState(false);
   
   return (
     <div className="space-y-4">
@@ -117,27 +124,36 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           </Select>
         </div>
 
+        <Collapsible open={frameOpen} onOpenChange={setFrameOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-sm font-medium">
+            <span>{t('fields.avatarFrame', 'Avatar Frame Style')}</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${frameOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="border rounded-lg bg-muted/30 mt-2">
+              <FrameGridSelector
+                value={(formData.avatarFrame || 'default') as ProfileFrameStyle}
+                onChange={(value) => onChange({ ...formData, avatarFrame: value as ProfileFrameStyle })}
+              />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
         <div>
-          <Label>{t('fields.avatarFrame', 'Avatar Frame Style')}</Label>
+          <Label>{t('fields.avatarIcon', 'Avatar Icon')}</Label>
           <Select
-            value={formData.avatarFrame || 'default'}
-            onValueChange={(value) => onChange({ ...formData, avatarFrame: value })}
+            value={formData.avatarIcon || ''}
+            onValueChange={(value) => onChange({ ...formData, avatarIcon: value })}
           >
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue placeholder={t('fields.selectIcon', 'Select icon')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="default">{t('frames.default', 'Default - Simple Ring')}</SelectItem>
-              <SelectItem value="neon">{t('frames.neon', 'Neon - Glowing Effect')}</SelectItem>
-              <SelectItem value="glitch">{t('frames.glitch', 'Glitch - Digital Effect')}</SelectItem>
-              <SelectItem value="aura">{t('frames.aura', 'Aura - Soft Glow')}</SelectItem>
-              <SelectItem value="gradient">{t('frames.gradient', 'Gradient - Color Shift')}</SelectItem>
-              <SelectItem value="pulse">{t('frames.pulse', 'Pulse - Animated Beat')}</SelectItem>
-              <SelectItem value="rainbow">{t('frames.rainbow', 'Rainbow - Color Wave')}</SelectItem>
-              <SelectItem value="double">{t('frames.double', 'Double - Two Rings')}</SelectItem>
-              <SelectItem value="spinning">{t('frames.spinning', 'Spinning Border')}</SelectItem>
-              <SelectItem value="dash">{t('frames.dash', 'Dashed Animation')}</SelectItem>
-              <SelectItem value="wave">{t('frames.wave', 'Wave Border')}</SelectItem>
+              {AVATAR_ICON_OPTIONS.map((icon) => (
+                <SelectItem key={icon.value} value={icon.value || 'none'}>
+                  {icon.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

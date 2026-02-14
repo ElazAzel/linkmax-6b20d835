@@ -17,10 +17,18 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { GripVertical, Trash2, Crown, ChevronUp, ChevronDown } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { GripVertical, Trash2, Crown, ChevronUp, ChevronDown, Lock, Eye } from 'lucide-react';
 import type { Block } from '@/types/page';
 import { getTranslatedString } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
+import { useFreemiumLimits, getBlockTier } from '@/hooks/useFreemiumLimits';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface DraggableBlockListProps {
   blocks: Block[];
@@ -37,10 +45,12 @@ interface SortableBlockItemProps {
   onEdit?: (id: string) => void;
   onMoveUp: (id: string) => void;
   onMoveDown: (id: string) => void;
+  isViewOnly: boolean;
+  requiredTier: string;
 }
 
-function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveUp, onMoveDown }: SortableBlockItemProps) {
-  const { i18n } = useTranslation();
+function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveUp, onMoveDown, isViewOnly, requiredTier }: SortableBlockItemProps) {
+  const { i18n, t } = useTranslation();
   const {
     attributes,
     listeners,
@@ -96,7 +106,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
       case 'scratch':
         return `Скретч: ${block.title || 'Сюрприз'}`;
       case 'map':
-        return `Карта: ${block.title || 'Местоположение'}`;
+        return `Карта: ${getTranslatedString(block.address, currentLang) || 'Местоположение'}`;
       case 'avatar':
         return `Аватар: ${getTranslatedString(block.name, currentLang)}`;
       case 'separator':
@@ -118,93 +128,142 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
     }
   };
 
-  const isPremiumBlock = block.type === 'video' || block.type === 'carousel' || block.type === 'custom_code' || block.type === 'form' || block.type === 'newsletter' || block.type === 'testimonial' || block.type === 'scratch' || block.type === 'search' || block.type === 'catalog' || block.type === 'countdown';
+  const blockTier = getBlockTier(block.type);
+  const isPremiumBlock = blockTier !== 'free';
 
   const isFirst = index === 0;
   const isLast = index === totalCount - 1;
 
-  return (
-    <Card
-      ref={setNodeRef}
-      style={style}
-      className="p-3 hover:shadow-lg transition-all duration-200 border-l-4 border-l-primary/20 hover:border-l-primary"
-    >
-      <div className="flex items-center gap-2 sm:gap-3">
-        {/* Position indicator */}
-        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-xs font-semibold text-primary">{index + 1}</span>
-        </div>
+  const getTierBadge = () => {
+    if (blockTier === 'business') {
+      return <Badge variant="secondary" className="text-[10px] px-1 py-0">Business</Badge>;
+    }
+    if (blockTier === 'pro') {
+      return <Crown className="h-3 w-3 text-primary flex-shrink-0" />;
+    }
+    return null;
+  };
 
-        {/* Drag handle */}
-        <button
-          className="cursor-grab active:cursor-grabbing touch-none flex-shrink-0 hidden sm:block"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
-        </button>
-        
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="font-medium text-sm truncate">
-              {getBlockTitle(block)}
+  return (
+    <TooltipProvider>
+      <Card
+        ref={setNodeRef}
+        style={style}
+        className={`p-3 hover:shadow-lg transition-all duration-200 border-l-4 ${
+          isViewOnly 
+            ? 'border-l-amber-500/50 bg-amber-50/30 dark:bg-amber-900/10' 
+            : 'border-l-primary/20 hover:border-l-primary'
+        }`}
+      >
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Position indicator */}
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <span className="text-xs font-semibold text-primary">{index + 1}</span>
+          </div>
+
+          {/* Drag handle */}
+          <button
+            className="cursor-grab active:cursor-grabbing touch-none flex-shrink-0 hidden sm:block"
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
+          </button>
+          
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-sm truncate">
+                {getBlockTitle(block)}
+              </span>
+              {getTierBadge()}
+              {isViewOnly && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Badge variant="outline" className="text-[10px] px-1 py-0 border-amber-500 text-amber-600">
+                      <Eye className="h-2.5 w-2.5 mr-0.5" />
+                      {t('freemium.viewOnly', 'Просмотр')}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">
+                      {t('freemium.viewOnlyHint', 'Требуется {{tier}} для редактирования', { tier: requiredTier.toUpperCase() })}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+            <span className="text-xs text-muted-foreground capitalize">
+              {block.type.replace('_', ' ')}
             </span>
-            {isPremiumBlock && (
-              <Crown className="h-3 w-3 text-primary flex-shrink-0" />
+          </div>
+
+          {/* Arrow controls */}
+          <div className="flex flex-col gap-0.5 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-5 w-6 p-0 hover:bg-primary/10"
+              onClick={() => onMoveUp(block.id)}
+              disabled={isFirst}
+            >
+              <ChevronUp className="h-3 w-3" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-5 w-6 p-0 hover:bg-primary/10"
+              onClick={() => onMoveDown(block.id)}
+              disabled={isLast}
+            >
+              <ChevronDown className="h-3 w-3" />
+            </Button>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-1 flex-shrink-0">
+            {onEdit && block.type !== 'profile' && (
+              isViewOnly ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 sm:h-8 text-xs opacity-50"
+                      disabled
+                    >
+                      <Lock className="h-3 w-3 mr-1" />
+                      Edit
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">{t('freemium.upgradeToEdit', 'Обновите до {{tier}} для редактирования', { tier: requiredTier.toUpperCase() })}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 sm:h-8 text-xs"
+                  onClick={() => onEdit(block.id)}
+                >
+                  Edit
+                </Button>
+              )
+            )}
+            {block.type !== 'profile' && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 sm:h-8 w-7 sm:w-8 p-0"
+                onClick={() => onDelete(block.id)}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
             )}
           </div>
-          <span className="text-xs text-muted-foreground capitalize">
-            {block.type.replace('_', ' ')}
-          </span>
         </div>
-
-        {/* Arrow controls */}
-        <div className="flex flex-col gap-0.5 flex-shrink-0">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-5 w-6 p-0 hover:bg-primary/10"
-            onClick={() => onMoveUp(block.id)}
-            disabled={isFirst}
-          >
-            <ChevronUp className="h-3 w-3" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-5 w-6 p-0 hover:bg-primary/10"
-            onClick={() => onMoveDown(block.id)}
-            disabled={isLast}
-          >
-            <ChevronDown className="h-3 w-3" />
-          </Button>
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex gap-1 flex-shrink-0">
-          {onEdit && block.type !== 'profile' && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 sm:h-8 text-xs"
-              onClick={() => onEdit(block.id)}
-            >
-              Edit
-            </Button>
-          )}
-          {block.type !== 'profile' && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 sm:h-8 w-7 sm:w-8 p-0"
-              onClick={() => onDelete(block.id)}
-            >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          )}
-        </div>
-      </div>
-    </Card>
+      </Card>
+    </TooltipProvider>
   );
 }
 
@@ -214,6 +273,8 @@ export function DraggableBlockList({
   onDelete,
   onEdit,
 }: DraggableBlockListProps) {
+  const { isBlockViewOnly, getRequiredTier } = useFreemiumLimits();
+  
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -286,6 +347,8 @@ export function DraggableBlockList({
               onEdit={onEdit}
               onMoveUp={handleMoveUp}
               onMoveDown={handleMoveDown}
+              isViewOnly={isBlockViewOnly(block.type)}
+              requiredTier={getRequiredTier(block.type)}
             />
           ))}
         </div>

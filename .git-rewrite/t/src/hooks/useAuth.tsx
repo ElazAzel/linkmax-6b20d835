@@ -25,6 +25,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state change:', event, session?.user?.id);
+        
         // Handle token refresh errors
         if (event === 'TOKEN_REFRESHED' && !session) {
           // Token refresh failed, clear session
@@ -37,6 +39,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (event === 'SIGNED_OUT') {
           setSession(null);
           setUser(null);
+          setLoading(false);
+          return;
+        }
+        
+        // Handle password recovery - don't redirect, let Auth page handle it
+        if (event === 'PASSWORD_RECOVERY') {
+          console.log('Password recovery event detected');
+          setSession(session);
+          setUser(session?.user ?? null);
           setLoading(false);
           return;
         }

@@ -120,6 +120,173 @@ export type Database = {
           },
         ]
       }
+      booking_slots: {
+        Row: {
+          block_id: string
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          is_available: boolean
+          owner_id: string
+          page_id: string
+          specific_date: string | null
+          start_time: string
+        }
+        Insert: {
+          block_id: string
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          is_available?: boolean
+          owner_id: string
+          page_id: string
+          specific_date?: string | null
+          start_time: string
+        }
+        Update: {
+          block_id?: string
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          is_available?: boolean
+          owner_id?: string
+          page_id?: string
+          specific_date?: string | null
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_slots_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_slots_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          block_id: string
+          cancelled_by: string | null
+          client_email: string | null
+          client_name: string
+          client_notes: string | null
+          client_phone: string | null
+          created_at: string
+          id: string
+          owner_id: string
+          page_id: string
+          slot_date: string
+          slot_end_time: string | null
+          slot_time: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          block_id: string
+          cancelled_by?: string | null
+          client_email?: string | null
+          client_name: string
+          client_notes?: string | null
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          owner_id: string
+          page_id: string
+          slot_date: string
+          slot_end_time?: string | null
+          slot_time: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          block_id?: string
+          cancelled_by?: string | null
+          client_email?: string | null
+          client_name?: string
+          client_notes?: string | null
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          owner_id?: string
+          page_id?: string
+          slot_date?: string
+          slot_end_time?: string | null
+          slot_time?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      challenge_progress: {
+        Row: {
+          challenge_id: string
+          completed_at: string | null
+          created_at: string
+          current_count: number
+          id: string
+          is_completed: boolean
+          reward_claimed: boolean
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          completed_at?: string | null
+          created_at?: string
+          current_count?: number
+          id?: string
+          is_completed?: boolean
+          reward_claimed?: boolean
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          completed_at?: string | null
+          created_at?: string
+          current_count?: number
+          id?: string
+          is_completed?: boolean
+          reward_claimed?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_progress_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "weekly_challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       collaborations: {
         Row: {
           block_settings: Json | null
@@ -218,6 +385,57 @@ export type Database = {
         }
         Relationships: []
       }
+      friend_activities: {
+        Row: {
+          activity_type: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      friendships: {
+        Row: {
+          created_at: string
+          friend_id: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_id: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_id?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       lead_interactions: {
         Row: {
           content: string
@@ -295,6 +513,93 @@ export type Database = {
         }
         Relationships: []
       }
+      page_boosts: {
+        Row: {
+          boost_type: string
+          created_at: string
+          ends_at: string
+          id: string
+          is_active: boolean
+          page_id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          boost_type?: string
+          created_at?: string
+          ends_at: string
+          id?: string
+          is_active?: boolean
+          page_id: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          boost_type?: string
+          created_at?: string
+          ends_at?: string
+          id?: string
+          is_active?: boolean
+          page_id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_boosts_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_boosts_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      page_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip_hash: string | null
+          page_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip_hash?: string | null
+          page_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip_hash?: string | null
+          page_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_likes_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_likes_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pages: {
         Row: {
           avatar_style: Json | null
@@ -361,6 +666,66 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           view_count?: number | null
+        }
+        Relationships: []
+      }
+      password_reset_tokens: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          token: string
+          used: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          token: string
+          used?: boolean
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          token?: string
+          used?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      premium_gifts: {
+        Row: {
+          claimed_at: string | null
+          created_at: string
+          days_gifted: number
+          id: string
+          is_claimed: boolean
+          message: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          created_at?: string
+          days_gifted?: number
+          id?: string
+          is_claimed?: boolean
+          message?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          created_at?: string
+          days_gifted?: number
+          id?: string
+          is_claimed?: boolean
+          message?: string | null
+          recipient_id?: string
+          sender_id?: string
         }
         Relationships: []
       }
@@ -590,6 +955,103 @@ export type Database = {
         }
         Relationships: []
       }
+      template_likes: {
+        Row: {
+          created_at: string
+          id: string
+          template_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          template_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          template_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_likes_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "user_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      template_purchases: {
+        Row: {
+          buyer_id: string
+          currency: string
+          id: string
+          price: number
+          purchased_at: string
+          seller_id: string
+          template_id: string
+        }
+        Insert: {
+          buyer_id: string
+          currency?: string
+          id?: string
+          price: number
+          purchased_at?: string
+          seller_id: string
+          template_id: string
+        }
+        Update: {
+          buyer_id?: string
+          currency?: string
+          id?: string
+          price?: number
+          purchased_at?: string
+          seller_id?: string
+          template_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_purchases_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "user_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      token_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          source: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          source: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          source?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_achievements: {
         Row: {
           achievement_key: string
@@ -622,6 +1084,7 @@ export type Database = {
           current_streak: number | null
           display_name: string | null
           email_notifications_enabled: boolean | null
+          friends_count: number | null
           id: string
           is_premium: boolean | null
           last_active_date: string | null
@@ -630,6 +1093,7 @@ export type Database = {
           push_subscription: Json | null
           streak_bonus_days: number | null
           telegram_chat_id: string | null
+          telegram_language: string | null
           telegram_notifications_enabled: boolean | null
           trial_ends_at: string | null
           updated_at: string | null
@@ -642,6 +1106,7 @@ export type Database = {
           current_streak?: number | null
           display_name?: string | null
           email_notifications_enabled?: boolean | null
+          friends_count?: number | null
           id: string
           is_premium?: boolean | null
           last_active_date?: string | null
@@ -650,6 +1115,7 @@ export type Database = {
           push_subscription?: Json | null
           streak_bonus_days?: number | null
           telegram_chat_id?: string | null
+          telegram_language?: string | null
           telegram_notifications_enabled?: boolean | null
           trial_ends_at?: string | null
           updated_at?: string | null
@@ -662,6 +1128,7 @@ export type Database = {
           current_streak?: number | null
           display_name?: string | null
           email_notifications_enabled?: boolean | null
+          friends_count?: number | null
           id?: string
           is_premium?: boolean | null
           last_active_date?: string | null
@@ -670,10 +1137,155 @@ export type Database = {
           push_subscription?: Json | null
           streak_bonus_days?: number | null
           telegram_chat_id?: string | null
+          telegram_language?: string | null
           telegram_notifications_enabled?: boolean | null
           trial_ends_at?: string | null
           updated_at?: string | null
           username?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_templates: {
+        Row: {
+          blocks: Json
+          category: string
+          created_at: string
+          currency: string | null
+          description: string | null
+          downloads_count: number
+          id: string
+          is_for_sale: boolean
+          is_public: boolean
+          likes_count: number
+          name: string
+          preview_url: string | null
+          price: number | null
+          theme_settings: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blocks: Json
+          category?: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          downloads_count?: number
+          id?: string
+          is_for_sale?: boolean
+          is_public?: boolean
+          likes_count?: number
+          name: string
+          preview_url?: string | null
+          price?: number | null
+          theme_settings?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blocks?: Json
+          category?: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          downloads_count?: number
+          id?: string
+          is_for_sale?: boolean
+          is_public?: boolean
+          likes_count?: number
+          name?: string
+          preview_url?: string | null
+          price?: number | null
+          theme_settings?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_tokens: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          total_earned: number
+          total_spent: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_challenges: {
+        Row: {
+          challenge_key: string
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          reward_hours: number
+          target_count: number
+          title: string
+          week_start: string
+        }
+        Insert: {
+          challenge_key: string
+          created_at?: string
+          description: string
+          id?: string
+          is_active?: boolean
+          reward_hours?: number
+          target_count?: number
+          title: string
+          week_start?: string
+        }
+        Update: {
+          challenge_key?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          reward_hours?: number
+          target_count?: number
+          title?: string
+          week_start?: string
         }
         Relationships: []
       }
@@ -724,17 +1336,71 @@ export type Database = {
         }
         Relationships: []
       }
+      public_user_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          current_streak: number | null
+          display_name: string | null
+          friends_count: number | null
+          id: string | null
+          is_premium: boolean | null
+          longest_streak: number | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          current_streak?: number | null
+          display_name?: string | null
+          friends_count?: number | null
+          id?: string | null
+          is_premium?: boolean | null
+          longest_streak?: number | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          current_streak?: number | null
+          display_name?: string | null
+          friends_count?: number | null
+          id?: string | null
+          is_premium?: boolean | null
+          longest_streak?: number | null
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      add_linkkon_tokens: {
+        Args: {
+          p_amount: number
+          p_description?: string
+          p_source: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       apply_referral: {
         Args: { p_code: string; p_referred_user_id: string }
         Returns: Json
       }
+      claim_premium_gift: { Args: { p_gift_id: string }; Returns: Json }
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
       complete_daily_quest: {
         Args: { p_bonus_hours?: number; p_quest_key: string; p_user_id: string }
         Returns: Json
       }
+      complete_weekly_challenge: {
+        Args: { p_challenge_id: string }
+        Returns: Json
+      }
+      convert_tokens_to_premium: { Args: { p_user_id: string }; Returns: Json }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
       get_top_referrers: {
@@ -747,17 +1413,40 @@ export type Database = {
           username: string
         }[]
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       increment_block_clicks: {
         Args: { block_uuid: string }
         Returns: undefined
       }
+      increment_challenge_progress: {
+        Args: { p_challenge_key: string }
+        Returns: undefined
+      }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
+      like_template: { Args: { p_template_id: string }; Returns: undefined }
+      purchase_template: { Args: { p_template_id: string }; Returns: Json }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }
         Returns: undefined
       }
+      spend_linkkon_tokens: {
+        Args: {
+          p_amount: number
+          p_description?: string
+          p_source: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       toggle_gallery_status: { Args: { p_user_id: string }; Returns: boolean }
+      unlike_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       update_user_streak: { Args: { p_user_id: string }; Returns: Json }
       upsert_user_page:
         | {
@@ -790,6 +1479,7 @@ export type Database = {
           }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       collab_status: "pending" | "accepted" | "rejected"
       interaction_type: "note" | "call" | "email" | "message" | "meeting"
       lead_source: "page_view" | "form" | "messenger" | "manual" | "other"
@@ -921,6 +1611,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       collab_status: ["pending", "accepted", "rejected"],
       interaction_type: ["note", "call", "email", "message", "meeting"],
       lead_source: ["page_view", "form", "messenger", "manual", "other"],

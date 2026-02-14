@@ -102,7 +102,7 @@ export const SwipeableBlock = memo(function SwipeableBlock({
   const actionOpacity = Math.min(1, Math.abs(offsetX) / threshold);
 
   return (
-    <div className="relative overflow-hidden rounded-xl">
+    <div className="relative overflow-visible rounded-xl">
       {/* Delete action (swipe left) */}
       <div 
         className={cn(

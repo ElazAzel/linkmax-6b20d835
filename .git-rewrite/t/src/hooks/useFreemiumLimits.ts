@@ -1,47 +1,108 @@
 import { usePremiumStatus } from './usePremiumStatus';
 
+// Block tiers based on pricing plans
+export const FREE_BLOCKS = [
+  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar'
+] as const;
+
+export const PRO_BLOCKS = [
+  'video', 'carousel', 'pricing', 'product', 'catalog', 'custom_code', 
+  'before_after', 'faq', 'testimonial', 'newsletter', 'scratch', 'search', 'shoutout'
+] as const;
+
+export const BUSINESS_BLOCKS = [
+  'download', 'form', 'countdown'
+] as const;
+
+export type FreeTier = 'free' | 'pro' | 'business';
+
 export const FREE_LIMITS = {
-  maxBlocks: 5,
-  maxAIRequestsPerDay: 3,
+  maxBlocks: Infinity, // Unlimited links/blocks as per pricing
+  maxAIRequestsPerWeek: 3,
   showWatermark: true,
-  premiumBlocks: ['video', 'carousel', 'download', 'form', 'newsletter', 'messenger', 'testimonial', 'scratch', 'search', 'custom_code', 'catalog', 'countdown'],
+  allowedBlocks: FREE_BLOCKS as unknown as string[],
+  premiumBlocks: [...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
 };
 
-export const PREMIUM_LIMITS = {
+export const PRO_LIMITS = {
   maxBlocks: Infinity,
-  maxAIRequestsPerDay: Infinity,
+  maxAIRequestsPerWeek: Infinity,
   showWatermark: false,
-  premiumBlocks: [],
+  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
+  premiumBlocks: [] as string[],
+  maxLeadsPerMonth: 100,
 };
+
+export const BUSINESS_LIMITS = {
+  maxBlocks: Infinity,
+  maxAIRequestsPerWeek: Infinity,
+  showWatermark: false,
+  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
+  premiumBlocks: [] as string[],
+  maxLeadsPerMonth: Infinity,
+};
+
+// Helper to get block tier
+export function getBlockTier(blockType: string): FreeTier {
+  if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'free';
+  if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
+  if ((BUSINESS_BLOCKS as readonly string[]).includes(blockType)) return 'business';
+  return 'free'; // Default to free for unknown blocks
+}
 
 export function useFreemiumLimits() {
-  const { isPremium, isLoading } = usePremiumStatus();
+  const { isPremium, isLoading, tier = 'free' } = usePremiumStatus();
   
-  const limits = isPremium ? PREMIUM_LIMITS : FREE_LIMITS;
-  
-  const canAddBlock = (currentBlockCount: number) => {
-    return isPremium || currentBlockCount < FREE_LIMITS.maxBlocks;
+  // Determine current tier limits
+  const getCurrentLimits = () => {
+    if (tier === 'business') return BUSINESS_LIMITS;
+    if (tier === 'pro' || isPremium) return PRO_LIMITS;
+    return FREE_LIMITS;
   };
   
+  const limits = getCurrentLimits();
+  const currentTier: FreeTier = tier === 'business' ? 'business' : (tier === 'pro' || isPremium) ? 'pro' : 'free';
+  
+  const canAddBlock = (currentBlockCount: number) => {
+    return currentBlockCount < limits.maxBlocks;
+  };
+  
+  // Check if user can USE (add new) this block type
   const canUseBlockType = (blockType: string) => {
-    if (isPremium) return true;
-    return !FREE_LIMITS.premiumBlocks.includes(blockType);
+    return limits.allowedBlocks.includes(blockType);
+  };
+  
+  // Check if user can EDIT an existing block (for downgraded users)
+  // If block exists but is premium, user can only view/delete, not edit
+  const canEditBlock = (blockType: string) => {
+    return limits.allowedBlocks.includes(blockType);
+  };
+  
+  // Check if block is view-only (exists but can't be edited due to tier)
+  const isBlockViewOnly = (blockType: string) => {
+    return !limits.allowedBlocks.includes(blockType);
+  };
+  
+  // Get required tier for a block type
+  const getRequiredTier = (blockType: string): FreeTier => {
+    return getBlockTier(blockType);
   };
   
   const getRemainingBlocks = (currentBlockCount: number) => {
-    if (isPremium) return Infinity;
-    return Math.max(0, FREE_LIMITS.maxBlocks - currentBlockCount);
+    if (limits.maxBlocks === Infinity) return Infinity;
+    return Math.max(0, limits.maxBlocks - currentBlockCount);
   };
   
-  // Get AI usage from localStorage (simple tracking)
-  const getAIUsageToday = (): number => {
-    const today = new Date().toDateString();
+  // Get AI usage from localStorage (weekly tracking)
+  const getAIUsageThisWeek = (): number => {
+    const now = new Date();
+    const weekStart = getWeekStart(now);
     const stored = localStorage.getItem('linkmax_ai_usage');
     if (!stored) return 0;
     
     try {
-      const { date, count } = JSON.parse(stored);
-      if (date === today) return count;
+      const { weekStartDate, count } = JSON.parse(stored);
+      if (weekStartDate === weekStart) return count;
       return 0;
     } catch {
       return 0;
@@ -49,34 +110,48 @@ export function useFreemiumLimits() {
   };
   
   const incrementAIUsage = () => {
-    const today = new Date().toDateString();
-    const current = getAIUsageToday();
+    const now = new Date();
+    const weekStart = getWeekStart(now);
+    const current = getAIUsageThisWeek();
     localStorage.setItem('linkmax_ai_usage', JSON.stringify({
-      date: today,
+      weekStartDate: weekStart,
       count: current + 1,
     }));
   };
   
   const canUseAI = () => {
-    if (isPremium) return true;
-    return getAIUsageToday() < FREE_LIMITS.maxAIRequestsPerDay;
+    if (currentTier !== 'free') return true;
+    return getAIUsageThisWeek() < FREE_LIMITS.maxAIRequestsPerWeek;
   };
   
   const getRemainingAIRequests = () => {
-    if (isPremium) return Infinity;
-    return Math.max(0, FREE_LIMITS.maxAIRequestsPerDay - getAIUsageToday());
+    if (currentTier !== 'free') return Infinity;
+    return Math.max(0, FREE_LIMITS.maxAIRequestsPerWeek - getAIUsageThisWeek());
   };
   
   return {
-    isPremium,
+    isPremium: currentTier !== 'free',
+    currentTier,
     isLoading,
     limits,
     canAddBlock,
     canUseBlockType,
+    canEditBlock,
+    isBlockViewOnly,
+    getRequiredTier,
     getRemainingBlocks,
     canUseAI,
     getRemainingAIRequests,
     incrementAIUsage,
-    getAIUsageToday,
+    getAIUsageThisWeek,
   };
+}
+
+// Helper to get week start date string (Monday)
+function getWeekStart(date: Date): string {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday
+  d.setDate(diff);
+  return d.toISOString().split('T')[0];
 }

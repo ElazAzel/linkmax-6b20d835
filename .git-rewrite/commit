@@ -1,11 +1,11 @@
-tree fc6592c752efc6ac35981308d55b43efbb8b309f
-parent c2d3bb8d0bd2168d1ece4f0e9a624269ff180470
-parent 4b121a477ce3bd9a5f131d4803a1e74cfe8e6911
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765816546 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765816546 +0000
+tree 24f05f9c38433919ea9832007b195d66ed5be4bd
+parent 31da1dcdea435ffe5c2aeb09f1ca2a0b35bf6e33
+parent 8a9230e9c923fa00b3c3cd1411fbc57df1e4ba47
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766772074 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766772074 +0000
 
-Add telegram bind at signup
+Integrate FAQ and UseCases
 
-Require Telegram binding during registration with chat_id verification, enable inline bio editing in profile block, add image cropper with zoom/position for avatars and covers, and fix responsive onboarding to stay within screen bounds.
+Integrate FAQSection and UseCasesGallery into landing between pricing and footer; restructure landing to emphasize LinkMAX strengths, with unique layout and messaging that differentiates from competitors. Added enhanced sections and updated translations and UI to highlight advantages.
 
-X-Lovable-Edit-ID: edt-5503ac1b-5941-4cbb-8f80-c756bff93c30
+X-Lovable-Edit-ID: edt-a014a93d-8ed6-4cee-b113-3bfcb8f177d0

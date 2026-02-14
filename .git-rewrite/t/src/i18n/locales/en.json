@@ -1,4 +1,17 @@
 {
+  "legal": {
+    "termsOfService": "Terms of Service",
+    "termsDescription": "Read the terms of use of the LinkMAX platform",
+    "agreeToTerms": "I accept the",
+    "termsLink": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "privacyDescription": "Read the personal data processing policy",
+    "privacyLink": "Privacy Policy",
+    "andThe": "and"
+  },
+  "common": {
+    "close": "Close"
+  },
   "settings": {
     "niche": "Category",
     "nicheDescription": "Choose a category for your page",
@@ -230,32 +243,244 @@
     "pricing": {
       "badge": "Simple Pricing",
       "title": "Choose Your Plan",
-      "subtitle": "Start free, upgrade when you need more power",
-      "month": "month",
+      "subtitle": "No monthly billing — only 3, 6, or 12 month plans",
+      "month": "mo",
+      "year": "year",
+      "perMonth": "per month",
+      "months3": "3 months",
+      "months6": "6 months",
+      "months12": "12 months",
+      "savePercent": "Save {{percent}}%",
+      "billedOnce": "One-time payment",
+      "total": "Total",
       "popular": "Most Popular",
+      "bestValue": "Best Value",
+      "entryLevel": "Easy Start",
+      "maxSavings": "Max Savings",
       "free": {
-        "title": "Free",
-        "description": "Perfect to get started",
+        "title": "Basic",
+        "description": "Free forever",
         "cta": "Get Started Free"
       },
-      "premium": {
-        "title": "Premium",
-        "description": "For professionals and businesses",
-        "cta": "Upgrade to Premium"
+      "pro": {
+        "title": "Pro",
+        "description": "For professionals",
+        "cta": "Upgrade to Pro"
+      },
+      "business": {
+        "title": "Business",
+        "description": "For teams and businesses",
+        "cta": "Upgrade to Business"
       },
       "features": {
-        "blocks5": "Up to 5 blocks",
-        "basicBlocks": "Basic block types",
-        "ai3": "3 AI requests per day",
-        "themes": "All themes",
-        "unlimitedBlocks": "Unlimited blocks",
-        "allBlocks": "All block types",
-        "premiumBlocks": "Premium blocks",
-        "analytics": "Analytics dashboard",
-        "crm": "Mini-CRM",
-        "noWatermark": "No watermark",
-        "unlimitedAI": "Unlimited AI",
-        "priority": "Priority support"
+        "free": {
+          "presetThemes": "Preset themes (limited)",
+          "basicCustomization": "Basic customization (colors, fonts)",
+          "unlimitedLinks": "Unlimited links",
+          "textBlocks": "Text blocks",
+          "basicBlocks": "Basic blocks (Profile, Link, Text, Image, Button, Socials, Separator)",
+          "messengers": "Messengers & social links",
+          "maps": "Maps (address + map)",
+          "basicStats": "Basic page view statistics",
+          "qrCode": "Page QR code",
+          "watermark": "LinkMAX watermark",
+          "ai3": "3 AI requests per day"
+        },
+        "pro": {
+          "allFree": "Everything in Basic, plus:",
+          "proThemes": "Professional themes & animations",
+          "media": "Media: images, video, music",
+          "pricing": "Price lists, Product/Catalog blocks",
+          "customCode": "Custom HTML/CSS block (limited)",
+          "pixels": "Social Media pixels (Meta, TikTok, Google)",
+          "scheduler": "Block scheduler (show by schedule)",
+          "clickAnalytics": "Extended click analytics",
+          "noWatermark": "No watermark",
+          "miniCrm": "Mini-CRM up to 100 leads/month",
+          "telegramLeads": "Telegram notifications for leads",
+          "unlimitedAi": "Unlimited AI within plan limits"
+        },
+        "business": {
+          "allPro": "Everything in Pro, plus:",
+          "innerPages": "Inner pages (multi-page mini-site)",
+          "digitalProducts": "Digital products (course/file landing pages)",
+          "applicationForms": "Application forms for leads",
+          "payments": "Payment acceptance (Stripe/Kaspi integration)",
+          "whiteLabel": "Full branding removal (white-label)",
+          "fullCrm": "Full CRM (unlimited leads, statuses, funnel)",
+          "autoNotifications": "Auto email/Telegram notifications",
+          "realtimeNotifications": "Real-time payment & lead notifications",
+          "timers": "Timers (launches, sales, scarcity)",
+          "customDomain": "Custom domain connection",
+          "ssl": "SSL certificate for custom domain",
+          "marketingAddons": "Marketing add-ons (referrals, promo codes)"
+        }
+      }
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Answers to common questions about LinkMAX",
+      "q1": {
+        "question": "What is LinkMAX and what is it for?",
+        "answer": "LinkMAX is an AI-powered link-in-bio page builder that lets you create a mini-website in 2 minutes. Perfect for experts, freelancers, and businesses to combine all links, social media, and contact info in one place."
+      },
+      "q2": {
+        "question": "How much does LinkMAX cost?",
+        "answer": "The Basic plan is free forever and includes unlimited links, basic blocks, and 3 AI requests per day. Premium plans start at $2.50/month with annual billing and unlock professional themes, analytics, CRM, and unlimited AI."
+      },
+      "q3": {
+        "question": "How does AI page generation work?",
+        "answer": "During registration, you choose your niche (barber, photographer, trainer, etc.), and AI automatically creates a ready page with profile, needed blocks, and texts adapted to your profession. This takes about 30 seconds."
+      },
+      "q4": {
+        "question": "Can I use my own domain?",
+        "answer": "Yes, the Business plan allows you to connect your own domain with an SSL certificate. On free and Pro plans, your page is available at linkmax.app/your-name."
+      },
+      "q5": {
+        "question": "How do I accept payments through my page?",
+        "answer": "The Business plan includes Stripe and Kaspi Pay integration. You can sell products, services, and digital products directly from your page, receive payment notifications, and track them in CRM."
+      },
+      "q6": {
+        "question": "Is there a mobile editor?",
+        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit your page from your smartphone — add blocks, change design, view analytics, and manage leads."
+      },
+      "q7": {
+        "question": "What blocks are available?",
+        "answer": "20+ block types are available: profile, links, buttons, images, video, carousels, products, price lists, forms, maps, messengers, testimonials, timers, and more. Premium blocks unlock with paid plans."
+      },
+      "q8": {
+        "question": "Is there analytics and CRM?",
+        "answer": "Yes, LinkMAX includes built-in view and click analytics. Pro plan offers mini-CRM for up to 100 leads/month with Telegram notifications, and Business has full CRM without limits."
+      }
+    },
+    "useCases": {
+      "badge": "Use Cases",
+      "title": "Who Uses LinkMAX",
+      "subtitle": "Real page examples for different professions and businesses",
+      "cta": "View all pages in gallery",
+      "photographer": {
+        "name": "Alex Photo",
+        "role": "Photographer",
+        "desc": "Portfolio, pricing, booking",
+        "link1": "🎨 Portfolio",
+        "link2": "💰 Price List",
+        "link3": "📅 Book Now"
+      },
+      "barber": {
+        "name": "BarberShop MAX",
+        "role": "Barber Shop",
+        "desc": "Services, prices, online booking",
+        "link1": "✂️ Services",
+        "link2": "📍 Location",
+        "link3": "📱 WhatsApp"
+      },
+      "fitness": {
+        "name": "Maria Fitness",
+        "role": "Fitness Trainer",
+        "desc": "Training programs, online courses",
+        "link1": "🏋️ Programs",
+        "link2": "📹 Online Course",
+        "link3": "✉️ Telegram"
+      },
+      "psychologist": {
+        "name": "Anna Psychologist",
+        "role": "Psychologist",
+        "desc": "Consultations, therapy directions",
+        "link1": "💬 About Therapy",
+        "link2": "📋 Book Session",
+        "link3": "📚 Blog"
+      },
+      "musician": {
+        "name": "DJ Max",
+        "role": "Musician",
+        "desc": "Music, events, booking",
+        "link1": "🎧 Spotify",
+        "link2": "🎟️ Events",
+        "link3": "📞 Booking"
+      },
+      "shop": {
+        "name": "Fashion Boutique",
+        "role": "Clothing Store",
+        "desc": "Catalog, delivery, sales",
+        "link1": "👗 Catalog",
+        "link2": "🏷️ Sales",
+        "link3": "🚚 Delivery"
+      }
+    },
+    "capabilities": {
+      "noCode": {
+        "title": "No-Code Builder",
+        "desc": "Create pages easily and quickly"
+      },
+      "ai": {
+        "title": "AI Creates for You",
+        "desc": "Choose your niche — AI builds the page"
+      },
+      "sell": {
+        "title": "Sell Effectively",
+        "desc": "Products, services, and digital goods"
+      },
+      "tickets": {
+        "title": "Tickets & Donations",
+        "desc": "Engage your audience and collect funds"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "desc": "Only useful data — no clutter"
+      },
+      "partnership": {
+        "title": "Partner Program",
+        "desc": "Grow together with partners"
+      }
+    },
+    "segments": {
+      "creators": {
+        "title": "Creators",
+        "desc": "Create pages, sell tickets, digital content or publish premium materials. Easy and without technical hassles.",
+        "cta": "Start Creating"
+      },
+      "influencers": {
+        "title": "Influencers",
+        "desc": "Share content and promote favorite brands on your page. Convenient way to interact with audience and partners.",
+        "cta": "Become an Ambassador"
+      },
+      "business": {
+        "title": "Business",
+        "desc": "Unite bloggers, fans and ambassadors in one space. Simplify communication and promote your product without bureaucracy.",
+        "cta": "Contact Us"
+      }
+    },
+    "advantages": {
+      "ai": {
+        "title": "AI Creates Everything",
+        "desc": "LinkMAX uses AI to generate content, copy, and structure"
+      },
+      "price": {
+        "title": "10x Cheaper",
+        "desc": "Just $2.50/mo instead of $10-15 at competitors"
+      },
+      "verified": {
+        "title": "Verification Badge",
+        "desc": "Premium users get a trust badge on their page"
+      },
+      "demo": {
+        "title": "Try It Now",
+        "desc": "Interactive demo right on the site — no registration needed"
+      }
+    },
+    "hero": {
+      "usernamePlaceholder": "yourname",
+      "create": "Create",
+      "free": "Free forever",
+      "noCode": "No coding",
+      "aiPowered": "AI-powered",
+      "subtitle2": "One link for all your socials, portfolio and business"
+    },
+    "howItWorks": {
+      "step4": {
+        "title": "Share your link",
+        "desc": "In bio, socials, everywhere"
       }
     }
   },
@@ -276,7 +501,25 @@
     "welcomeBack": "Welcome back!",
     "continueWithGoogle": "Continue with Google",
     "continueWithApple": "Continue with Apple",
-    "orContinueWith": "or continue with email"
+    "orContinueWith": "or continue with email",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset Password",
+    "resetDescription": "Enter your email to receive a reset link",
+    "sendResetLink": "Send Reset Link",
+    "checkEmail": "Check your email",
+    "resetEmailSent": "We sent a password reset link to your email",
+    "backToSignIn": "Back to Sign In",
+    "invalidEmail": "Please enter a valid email address",
+    "resetFailed": "Failed to send reset email",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "enterNewPassword": "Enter your new password",
+    "updatePassword": "Update Password",
+    "passwordUpdated": "Password Updated",
+    "passwordUpdatedDesc": "Your password has been successfully updated",
+    "goToDashboard": "Go to Dashboard",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "updateFailed": "Failed to update password"
   },
   "editor": {
     "title": "Page Editor",
@@ -422,10 +665,15 @@
     "blocksRemaining": "Blocks remaining: {{count}} of {{max}}",
     "upgradeToPremium": "Upgrade to Premium",
     "aiLimitReached": "AI request limit reached",
-    "aiRequestsRemaining": "AI requests remaining today: {{count}}",
-    "aiLimitResets": "Limit resets every day",
+    "aiRequestsRemaining": "AI requests remaining this week: {{count}}",
+    "aiLimitResetsWeekly": "Limit resets every week",
     "unlimitedAI": "Unlimited AI",
-    "premiumBlockRequired": "This block requires Premium"
+    "premiumBlockRequired": "This block requires Premium",
+    "viewOnly": "View only",
+    "viewOnlyHint": "Requires {{tier}} to edit",
+    "upgradeToEdit": "Upgrade to {{tier}} to edit",
+    "proRequired": "Requires PRO",
+    "businessRequired": "Requires BUSINESS"
   },
   "templates": {
     "title": "Template Gallery",
@@ -567,5 +815,189 @@
     "events": "Events",
     "services": "Services",
     "other": "Other"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "choosePlan": "Choose the right plan for you",
+    "description": "Unlock all LinkMAX features for your business",
+    "months": "mo",
+    "month": "mo",
+    "totalFor": "for",
+    "free": "Free",
+    "popular": "Popular",
+    "currentPlan": "Current Plan",
+    "startFree": "Start Free",
+    "subscribe": "Subscribe",
+    "comingSoon": "Payment coming soon! Stay tuned for updates.",
+    "alreadyFree": "Free plan is already active",
+    "basicDesc": "Start for free",
+    "proDesc": "For professionals",
+    "businessDesc": "For business",
+    "savingsText": "Save",
+    "securePayments": "Secure payments",
+    "cancelAnytime": "Cancel anytime",
+    "moneyBack": "7-day money-back guarantee",
+    "features": {
+      "basicThemes": "Basic themes",
+      "basicCustomization": "Basic customization (colors, fonts)",
+      "unlimitedLinks": "Unlimited links",
+      "textBlocks": "Text blocks",
+      "basicBlocks": "Basic blocks (Profile, Link, Text, Image, Button, Socials)",
+      "messengers": "Messengers and social links",
+      "maps": "Maps (address + map)",
+      "basicStats": "Basic page view statistics",
+      "qrCode": "Page QR code",
+      "aiRequestsWeek": "3 AI requests per week",
+      "allBasic": "Everything in BASIC",
+      "proThemes": "Professional themes and animations",
+      "media": "Media: images, video, music",
+      "priceLists": "Price lists, Product / Catalog blocks",
+      "customCode": "Custom HTML/CSS block",
+      "socialPixel": "Social Media pixel (Meta, TikTok, Google)",
+      "scheduler": "Block scheduler",
+      "advancedAnalytics": "Advanced click analytics",
+      "noWatermark": "No watermark",
+      "miniCRM": "Mini-CRM up to 100 leads/month",
+      "telegramNotifications": "Telegram lead notifications",
+      "unlimitedAI": "Unlimited AI",
+      "allPro": "Everything in PRO",
+      "multiPage": "Internal pages (multi-page site)",
+      "digitalProducts": "Digital products (course landings)",
+      "applicationForms": "Applications via advanced forms",
+      "payments": "Accept payments (Stripe/Kaspi)",
+      "whiteLabel": "Full white-label (remove branding)",
+      "fullCRM": "Full CRM (unlimited leads)",
+      "autoNotifications": "Automatic email/Telegram notifications",
+      "timers": "Timers (launches, promotions)",
+      "customDomain": "Custom domain connection",
+      "sslCertificate": "SSL certificate",
+      "marketing": "Marketing add-ons (referrals, promo codes)"
+    },
+    "limitations": {
+      "watermark": "LinkMAX watermark",
+      "limitedBlocks": "Limited blocks"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "signOut": "Sign Out",
+    "overview": "Overview",
+    "users": "Users",
+    "pages": "Pages",
+    "analytics": "Analytics",
+    "charts": "Charts",
+    "detailed": "Detailed",
+    "totalUsers": "Total Users",
+    "premium": "Premium",
+    "activeTrials": "Active Trials",
+    "withStreak": "With Streak",
+    "pagesSection": "Pages",
+    "total": "Total",
+    "published": "Published",
+    "inGallery": "In Gallery",
+    "totalBlocks": "Blocks",
+    "engagementSection": "Engagement",
+    "views": "Views",
+    "clicks": "Clicks",
+    "shares": "Shares",
+    "leads": "Leads",
+    "socialSection": "Social",
+    "friendships": "Friendships",
+    "accepted": "Accepted",
+    "pending": "Pending",
+    "collaborations": "Collaborations",
+    "teamsSection": "Teams",
+    "teams": "Teams",
+    "members": "Members",
+    "gamificationSection": "Gamification",
+    "achievements": "Achievements",
+    "shoutouts": "Shoutouts",
+    "referrals": "Referrals",
+    "searchPlaceholder": "Search...",
+    "username": "Username",
+    "name": "Name",
+    "status": "Status",
+    "streak": "Streak",
+    "registered": "Registered",
+    "actions": "Actions",
+    "togglePremium": "Toggle Premium",
+    "extendTrial": "Extend Trial",
+    "days": "days",
+    "statusUpdated": "Status updated",
+    "premiumEnabled": "Premium enabled",
+    "premiumDisabled": "Premium disabled",
+    "trialExtended": "Trial extended",
+    "error": "Error",
+    "updateFailed": "Failed to update status",
+    "extendFailed": "Failed to extend trial",
+    "slug": "Slug",
+    "owner": "Owner",
+    "created": "Created",
+    "openPage": "Open page",
+    "recentEvents": "Recent Events",
+    "event": "Event",
+    "page": "Page",
+    "time": "Time",
+    "userGrowth": "User Growth",
+    "newRegistrations": "New Registrations (14 days)",
+    "events": "Events (14 days)",
+    "userDistribution": "User Distribution",
+    "eventTypes": "Event Types",
+    "socialActivity": "Social Activity",
+    "blockTypes": "Block Types",
+    "detailedAnalytics": "Detailed Analytics",
+    "period7d": "7 days",
+    "period14d": "14 days",
+    "period30d": "30 days",
+    "period90d": "90 days",
+    "sessions": "Sessions",
+    "visitors": "Visitors",
+    "events": "Events",
+    "totalCTR": "Total CTR",
+    "clicksOfViews": "clicks / views",
+    "timeline": "Timeline",
+    "breakdown": "Breakdown",
+    "engagement": "Engagement",
+    "topContent": "Top Content",
+    "eventsByDays": "Events by Days",
+    "viewsClicksShares": "Views, clicks and shares for period",
+    "sessionsAndVisitors": "Sessions and Visitors",
+    "uniqueSessionsVisitors": "Unique sessions and visitors by day",
+    "activity24h": "Activity for 24 hours",
+    "hourlyDistribution": "Hourly distribution of events",
+    "distribution": "Distribution",
+    "devices": "Devices",
+    "sources": "Sources",
+    "byHours": "By Hours",
+    "activityDuringDay": "Activity during the day",
+    "byDaysOfWeek": "By Days of Week",
+    "activityDistribution": "Activity distribution",
+    "topPages": "Top Pages",
+    "byViews": "By views",
+    "topBlocks": "Top Blocks",
+    "byClicks": "By clicks",
+    "noData": "No data",
+    "viewsShort": "views",
+    "clicksShort": "clicks",
+    "totalLabel": "Total",
+    "acceptedLabel": "Accepted",
+    "popularBlockTypes": "Popular Block Types",
+    "socialActivity14d": "Social Activity (14 days)",
+    "contentCreation14d": "Content Creation (14 days)",
+    "pagesLabel": "Pages",
+    "blocksLabel": "Blocks",
+    "countLabel": "Count",
+    "dayNames": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    }
+  },
+  "dashboard": {
+    "pageRefreshed": "Page refreshed"
   }
 }

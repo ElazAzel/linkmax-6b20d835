@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { LazyImage } from '@/components/ui/lazy-image';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 
 interface ImageBlockProps {
@@ -39,14 +40,6 @@ export const ImageBlock = memo(function ImageBlockComponent({ block }: ImageBloc
     }
   };
 
-  const imageElement = (
-    <img
-      src={block.url}
-      alt={alt}
-      className={`${isBanner ? 'w-full h-auto' : 'w-full h-auto object-cover'}`}
-    />
-  );
-
   const containerClass = isBanner ? 'w-full' : 'overflow-hidden max-w-md';
 
   return (
@@ -56,7 +49,13 @@ export const ImageBlock = memo(function ImageBlockComponent({ block }: ImageBloc
         onClick={block.link ? handleClick : undefined}
         role={block.link ? 'link' : undefined}
       >
-        {imageElement}
+        <LazyImage
+          src={block.url}
+          alt={alt || 'Image'}
+          className={`${isBanner ? 'w-full h-auto' : 'w-full h-auto object-cover'}`}
+          wrapperClassName={block.style === 'circle' ? 'rounded-full aspect-square' : 'rounded-2xl'}
+          placeholderClassName={block.style === 'circle' ? 'rounded-full' : 'rounded-2xl'}
+        />
       </div>
       {caption && (
         <p className={`text-sm text-muted-foreground mt-4 ${block.alignment === 'center' ? 'text-center' : block.alignment === 'right' ? 'text-right' : 'text-left'}`}>

@@ -64,7 +64,25 @@ export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
     );
   }
 
-  if (!user) return null;
+  // If user not found, show fallback with provided data
+  if (!user) {
+    return (
+      <Card 
+        className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20"
+        style={style}
+      >
+        <CardContent className="p-4">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+            <Megaphone className="h-3 w-3" />
+            <span>Рекомендую</span>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            Пользователь не найден
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const handleClick = () => {
     if (user.username) {

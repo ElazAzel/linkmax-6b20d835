@@ -96,14 +96,17 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
   const getTooltipPosition = () => {
     if (!highlightPosition) return {};
 
-    const tooltipOffset = 12;
+    const tooltipOffset = 16;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    const tooltipWidth = Math.min(320, viewportWidth - 32); // Max 320px or viewport - padding
-    const tooltipHeight = 200; // Approximate height
-    const safeMargin = 16;
+    const isMobile = viewportWidth < 640;
+    
+    // Calculate tooltip dimensions based on screen size
+    const tooltipWidth = isMobile ? viewportWidth - 32 : Math.min(320, viewportWidth - 64);
+    const tooltipHeight = isMobile ? 180 : 200;
+    const safeMargin = isMobile ? 16 : 24;
 
-    // Calculate safe bounds
+    // Calculate safe bounds ensuring tooltip stays on screen
     const safeLeft = safeMargin;
     const safeRight = viewportWidth - tooltipWidth - safeMargin;
     const safeTop = safeMargin;
@@ -111,34 +114,44 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
 
     // Calculate center position of the target element
     const targetCenterX = highlightPosition.left + highlightPosition.width / 2;
-    const targetCenterY = highlightPosition.top + highlightPosition.height / 2;
 
-    // Determine best position based on available space
+    // Determine available space around the element
     const spaceAbove = highlightPosition.top - safeMargin;
     const spaceBelow = viewportHeight - highlightPosition.bottom - safeMargin;
-    const spaceLeft = highlightPosition.left - safeMargin;
-    const spaceRight = viewportWidth - highlightPosition.right - safeMargin;
 
-    // Default: position below if enough space, otherwise above
-    let top = highlightPosition.bottom + tooltipOffset;
-    let left = Math.max(safeLeft, Math.min(safeRight, targetCenterX - tooltipWidth / 2));
-    let transform = 'none';
-
-    if (spaceBelow < tooltipHeight && spaceAbove > spaceBelow) {
-      // Position above
-      top = Math.max(safeTop, highlightPosition.top - tooltipOffset - tooltipHeight);
-    } else {
-      // Position below
-      top = Math.min(safeBottom, highlightPosition.bottom + tooltipOffset);
-    }
-
-    // Ensure left is within bounds
+    // Start with horizontal centering, constrained to screen bounds
+    let left = targetCenterX - tooltipWidth / 2;
     left = Math.max(safeLeft, Math.min(safeRight, left));
 
-    // Ensure top is within bounds
+    // Determine vertical position - prefer below, then above, then overlay
+    let top: number;
+    
+    if (spaceBelow >= tooltipHeight + tooltipOffset) {
+      // Enough space below
+      top = highlightPosition.bottom + tooltipOffset;
+    } else if (spaceAbove >= tooltipHeight + tooltipOffset) {
+      // Enough space above
+      top = highlightPosition.top - tooltipHeight - tooltipOffset;
+    } else {
+      // Not enough space - position at center of screen on mobile, or best fit on desktop
+      if (isMobile) {
+        top = Math.max(safeTop, (viewportHeight - tooltipHeight) / 2);
+      } else {
+        top = spaceBelow > spaceAbove 
+          ? Math.min(safeBottom, highlightPosition.bottom + tooltipOffset)
+          : Math.max(safeTop, highlightPosition.top - tooltipHeight - tooltipOffset);
+      }
+    }
+
+    // Final bounds check
     top = Math.max(safeTop, Math.min(safeBottom, top));
 
-    return { top, left };
+    return { 
+      top, 
+      left,
+      width: isMobile ? `calc(100vw - ${safeMargin * 2}px)` : tooltipWidth,
+      maxWidth: '100%'
+    };
   };
 
   return (
@@ -162,8 +175,8 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
       {/* Tooltip */}
       <Card
         className={cn(
-          "fixed p-4 sm:p-5 shadow-2xl z-[101] max-w-[calc(100vw-2rem)] w-80",
-          isCenterStep && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          "fixed p-4 shadow-2xl z-[101]",
+          isCenterStep && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] sm:w-80 max-w-80"
         )}
         style={!isCenterStep ? getTooltipPosition() : {}}
       >

@@ -9,12 +9,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
-import { Sparkles, Gift } from 'lucide-react';
+import { Gift, Mail, Check } from 'lucide-react';
 import { z } from 'zod';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { applyReferralCode } from '@/services/referral';
-import { TelegramVerification } from '@/components/auth/TelegramVerification';
 import { supabase } from '@/integrations/supabase/client';
+import { TermsLink } from '@/components/legal/TermsOfServiceModal';
+import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const authSchema = z.object({
   email: z
@@ -30,7 +32,8 @@ const authSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least one number'),
 });
 
-type SignupStep = 'credentials' | 'telegram';
+type AuthMode = 'signin' | 'signup' | 'reset' | 'reset-telegram' | 'update-password';
+type TelegramResetStep = 'request' | 'verify';
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -40,18 +43,45 @@ export default function Auth() {
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState<'google' | 'apple' | null>(null);
+  const [authMode, setAuthMode] = useState<AuthMode>('signin');
+  const [resetEmailSent, setResetEmailSent] = useState(false);
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
   
-  // Signup flow state
-  const [signupStep, setSignupStep] = useState<SignupStep>('credentials');
-  const [pendingEmail, setPendingEmail] = useState('');
-  const [pendingPassword, setPendingPassword] = useState('');
+  // Telegram password reset state
+  const [telegramResetStep, setTelegramResetStep] = useState<TelegramResetStep>('request');
+  const [telegramChatId, setTelegramChatId] = useState('');
+  const [resetToken, setResetToken] = useState('');
   
-  // Get referral code from URL
+  // Get referral code and mode from URL
   const refCode = searchParams.get('ref');
+  const urlMode = searchParams.get('mode');
 
-  // Redirect if already logged in and apply referral
+  // Check for password update mode from URL or hash params (from email link)
   useEffect(() => {
-    if (user) {
+    if (urlMode === 'update-password') {
+      setAuthMode('update-password');
+      return;
+    }
+    
+    // Check hash params for recovery token (from Supabase email link)
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const type = hashParams.get('type');
+    
+    if (accessToken && type === 'recovery') {
+      console.log('Recovery token detected, setting up password update mode');
+      // Supabase will automatically set the session from hash params
+      // We just need to set the mode
+      setAuthMode('update-password');
+      
+      // Clean up the URL hash for better UX
+      window.history.replaceState(null, '', `${window.location.pathname}?mode=update-password`);
+    }
+  }, [urlMode]);
+
+  // Redirect if already logged in (but not during password update)
+  useEffect(() => {
+    if (user && authMode !== 'update-password') {
       // Apply referral code if present
       if (refCode) {
         applyReferralCode(refCode, user.id).then((result) => {
@@ -62,10 +92,12 @@ export default function Auth() {
       }
       navigate('/dashboard');
     }
-  }, [user, navigate, refCode]);
+  }, [user, navigate, refCode, authMode]);
 
-  const handleSignUpStep1 = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Simplified signup - no Telegram required for free users
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get('signup-email') as string;
@@ -78,37 +110,24 @@ export default function Auth() {
       const firstError = validation.error.errors[0];
       toast.error(firstError.message);
       playError();
+      setIsLoading(false);
       return;
     }
 
-    // Save credentials and move to Telegram step
-    setPendingEmail(validation.data.email);
-    setPendingPassword(validation.data.password);
-    setSignupStep('telegram');
-  };
-
-  const handleTelegramVerified = async (telegramChatId: string) => {
-    setIsLoading(true);
-
-    const { error } = await signUp(pendingEmail, pendingPassword);
+    const { error } = await signUp(validation.data.email, validation.data.password);
 
     if (error) {
       console.error('Signup error:', error);
       toast.error(error.message || t('messages.failedToSignUp'));
       playError();
       setIsLoading(false);
-      setSignupStep('credentials');
       return;
     }
-
-    // Update user profile with telegram chat id after signup
-    // This will be handled by the auth state change and profile creation trigger
-    // We'll store the chat ID temporarily and update it after the user is created
-    localStorage.setItem('pending_telegram_chat_id', telegramChatId);
 
     playSuccess();
     toast.success(t('messages.accountCreated'));
     // Auth state change will trigger redirect
+    setIsLoading(false);
   };
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -141,8 +160,148 @@ export default function Auth() {
     }
 
     playSuccess();
-    toast.success(t('auth.welcomeBack'));
+    toast.success(t('auth.welcomeBack', 'Welcome back!'));
     // Auth state change will trigger redirect
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('reset-email') as string;
+
+    const emailValidation = z.string().trim().email().safeParse(email);
+    if (!emailValidation.success) {
+      toast.error(t('auth.invalidEmail', 'Please enter a valid email address'));
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(emailValidation.data, {
+      redirectTo: `${window.location.origin}/auth?mode=update-password`,
+    });
+
+    if (error) {
+      console.error('Password reset error:', error);
+      toast.error(error.message || t('auth.resetFailed', 'Failed to send reset email'));
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    playSuccess();
+    setResetEmailSent(true);
+    setIsLoading(false);
+  };
+
+  const handleTelegramResetRequest = async () => {
+    if (!telegramChatId || !/^\d+$/.test(telegramChatId)) {
+      toast.error('Введите корректный Telegram Chat ID');
+      playError();
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('telegram-password-reset', {
+        body: { telegram_chat_id: telegramChatId, action: 'request' }
+      });
+
+      if (error || !data?.success) {
+        const errorMessages: Record<string, string> = {
+          telegram_not_found: 'Аккаунт с таким Telegram не найден',
+          telegram_send_failed: 'Не удалось отправить сообщение'
+        };
+        toast.error(errorMessages[data?.error] || 'Ошибка отправки кода');
+        playError();
+      } else {
+        playSuccess();
+        setTelegramResetStep('verify');
+        toast.success('Код отправлен в Telegram!');
+      }
+    } catch (e) {
+      toast.error('Ошибка соединения');
+      playError();
+    }
+    setIsLoading(false);
+  };
+
+  const handleTelegramResetVerify = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const newPassword = formData.get('new-password') as string;
+
+    const passwordValidation = authSchema.shape.password.safeParse(newPassword);
+    if (!passwordValidation.success) {
+      toast.error(passwordValidation.error.errors[0].message);
+      playError();
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('telegram-password-reset', {
+        body: { telegram_chat_id: telegramChatId, action: 'verify', token: resetToken, new_password: newPassword }
+      });
+
+      if (error || !data?.success) {
+        toast.error(data?.error === 'invalid_token' ? 'Неверный или истёкший код' : 'Ошибка сброса пароля');
+        playError();
+      } else {
+        playSuccess();
+        toast.success('Пароль успешно изменён!');
+        setAuthMode('signin');
+        setTelegramResetStep('request');
+        setTelegramChatId('');
+        setResetToken('');
+      }
+    } catch (e) {
+      toast.error('Ошибка соединения');
+      playError();
+    }
+    setIsLoading(false);
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const newPassword = formData.get('new-password') as string;
+    const confirmPassword = formData.get('confirm-password') as string;
+
+    if (newPassword !== confirmPassword) {
+      toast.error(t('auth.passwordsDoNotMatch', 'Passwords do not match'));
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    const passwordValidation = authSchema.shape.password.safeParse(newPassword);
+    if (!passwordValidation.success) {
+      toast.error(passwordValidation.error.errors[0].message);
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) {
+      console.error('Password update error:', error);
+      toast.error(error.message || t('auth.updateFailed', 'Failed to update password'));
+      playError();
+      setIsLoading(false);
+      return;
+    }
+
+    playSuccess();
+    setPasswordUpdated(true);
+    setIsLoading(false);
   };
 
   const handleGoogleSignIn = async () => {
@@ -210,14 +369,79 @@ export default function Auth() {
           </div>
         </div>
 
-        {/* Auth Card - Liquid Glass */}
-        <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl">{t('auth.getStarted')}</CardTitle>
-            <CardDescription>
-              {t('auth.signInToAccount')}
-            </CardDescription>
-          </CardHeader>
+        {/* Password Update Card */}
+        {authMode === 'update-password' ? (
+          <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl">{t('auth.newPassword', 'New Password')}</CardTitle>
+              <CardDescription>
+                {t('auth.enterNewPassword', 'Enter your new password')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {passwordUpdated ? (
+                <div className="space-y-4 text-center">
+                  <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
+                    <Check className="h-8 w-8 text-green-500" />
+                  </div>
+                  <h3 className="text-lg font-semibold">{t('auth.passwordUpdated', 'Password Updated')}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {t('auth.passwordUpdatedDesc', 'Your password has been successfully updated')}
+                  </p>
+                  <Button 
+                    className="w-full h-12 rounded-xl"
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    {t('auth.goToDashboard', 'Go to Dashboard')}
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleUpdatePassword} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password" className="text-sm text-muted-foreground">
+                      {t('auth.newPassword', 'New Password')}
+                    </Label>
+                    <Input
+                      id="new-password"
+                      name="new-password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-password" className="text-sm text-muted-foreground">
+                      {t('auth.confirmPassword', 'Confirm Password')}
+                    </Label>
+                    <Input
+                      id="confirm-password"
+                      name="confirm-password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
+                      {t('auth.passwordHint')}
+                    </p>
+                  </div>
+                  <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
+                    {isLoading ? t('messages.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
+                  </Button>
+                </form>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          /* Auth Card - Liquid Glass */
+          <Card className="bg-card/60 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-glass-xl animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl">{t('auth.getStarted')}</CardTitle>
+              <CardDescription>
+                {t('auth.signInToAccount')}
+              </CardDescription>
+            </CardHeader>
           <CardContent className="space-y-4">
             {/* OAuth Buttons - Hidden until configured */}
             {/* TODO: Uncomment when Google/Apple OAuth is configured in Lovable Cloud
@@ -277,43 +501,128 @@ export default function Auth() {
               </TabsList>
 
               <TabsContent value="signin">
-                <form onSubmit={handleSignIn} className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
-                    <Input
-                      id="signin-email"
-                      name="signin-email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                    />
+                {authMode === 'reset' ? (
+                  resetEmailSent ? (
+                    <div className="space-y-4 pt-4 text-center">
+                      <div className="h-16 w-16 mx-auto rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Mail className="h-8 w-8 text-green-500" />
+                      </div>
+                      <h3 className="text-lg font-semibold">{t('auth.checkEmail', 'Check your email')}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {t('auth.resetEmailSent', 'We sent a password reset link to your email')}
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="w-full h-12 rounded-xl"
+                        onClick={() => { setAuthMode('signin'); setResetEmailSent(false); }}
+                      >
+                        {t('auth.backToSignIn', 'Back to Sign In')}
+                      </Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handlePasswordReset} className="space-y-4 pt-4">
+                      <div className="text-center mb-4">
+                        <h3 className="text-lg font-semibold">{t('auth.resetPassword', 'Reset Password')}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {t('auth.resetDescription', 'Enter your email to receive a reset link')}
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="reset-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                        <Input
+                          id="reset-email"
+                          name="reset-email"
+                          type="email"
+                          placeholder="your@email.com"
+                          required
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                        />
+                      </div>
+                      <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
+                        {isLoading ? t('messages.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
+                      </Button>
+                      <div className="relative py-2">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-border/30" />
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                          <span className="bg-card px-2 text-muted-foreground">или</span>
+                        </div>
+                      </div>
+                      <Button 
+                        type="button"
+                        variant="outline" 
+                        className="w-full h-12 rounded-xl"
+                        onClick={() => setAuthMode('reset-telegram')}
+                      >
+                        Восстановить через Telegram
+                      </Button>
+                      <Button 
+                        type="button"
+                        variant="ghost" 
+                        className="w-full rounded-xl"
+                        onClick={() => setAuthMode('signin')}
+                      >
+                        {t('auth.backToSignIn', 'Back to Sign In')}
+                      </Button>
+                    </form>
+                  )
+                ) : authMode === 'reset-telegram' ? (
+                  <div className="space-y-4 pt-4">
+                    <div className="text-center mb-4">
+                      <h3 className="text-lg font-semibold">Восстановление через Telegram</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {telegramResetStep === 'request' ? 'Введите ваш Telegram Chat ID' : 'Введите код из Telegram'}
+                      </p>
+                    </div>
+                    {telegramResetStep === 'request' ? (
+                      <div className="space-y-4">
+                        <Input
+                          value={telegramChatId}
+                          onChange={(e) => setTelegramChatId(e.target.value.replace(/\D/g, ''))}
+                          placeholder="123456789"
+                          className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30"
+                        />
+                        <Button onClick={handleTelegramResetRequest} className="w-full h-12 rounded-xl" disabled={isLoading}>
+                          {isLoading ? 'Отправка...' : 'Получить код'}
+                        </Button>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleTelegramResetVerify} className="space-y-4">
+                        <Input
+                          value={resetToken}
+                          onChange={(e) => setResetToken(e.target.value.toUpperCase())}
+                          placeholder="XXXXXX"
+                          maxLength={6}
+                          className="h-12 rounded-xl bg-card/40 text-center text-xl tracking-widest font-mono"
+                        />
+                        <Input
+                          name="new-password"
+                          type="password"
+                          placeholder="Новый пароль"
+                          required
+                          className="h-12 rounded-xl bg-card/40"
+                        />
+                        <Button type="submit" className="w-full h-12 rounded-xl" disabled={isLoading}>
+                          {isLoading ? 'Сохранение...' : 'Сохранить пароль'}
+                        </Button>
+                      </form>
+                    )}
+                    <Button 
+                      variant="ghost" 
+                      className="w-full rounded-xl"
+                      onClick={() => { setAuthMode('signin'); setTelegramResetStep('request'); }}
+                    >
+                      Назад
+                    </Button>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
-                    <Input
-                      id="signin-password"
-                      name="signin-password"
-                      type="password"
-                      placeholder="••••••••"
-                      required
-                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                    {isLoading ? t('auth.signingIn') : t('auth.signIn')}
-                  </Button>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="signup">
-                {signupStep === 'credentials' ? (
-                  <form onSubmit={handleSignUpStep1} className="space-y-4 pt-4">
+                ) : (
+                  <form onSubmit={handleSignIn} className="space-y-4 pt-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                      <Label htmlFor="signin-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
                       <Input
-                        id="signup-email"
-                        name="signup-email"
+                        id="signin-email"
+                        name="signin-email"
                         type="email"
                         placeholder="your@email.com"
                         required
@@ -321,35 +630,81 @@ export default function Auth() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="signin-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                        <button 
+                          type="button"
+                          onClick={() => setAuthMode('reset')}
+                          className="text-xs text-primary hover:underline"
+                        >
+                          {t('auth.forgotPassword', 'Forgot password?')}
+                        </button>
+                      </div>
                       <Input
-                        id="signup-password"
-                        name="signup-password"
+                        id="signin-password"
+                        name="signin-password"
                         type="password"
                         placeholder="••••••••"
                         required
                         className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                       />
-                      <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
-                        {t('auth.passwordHint')}
-                      </p>
                     </div>
                     <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                      {t('auth.continue', 'Продолжить')}
+                      {isLoading ? t('auth.signingIn') : t('auth.signIn')}
                     </Button>
                   </form>
-                ) : (
-                  <div className="pt-4">
-                    <TelegramVerification 
-                      onVerified={handleTelegramVerified}
-                      onBack={() => setSignupStep('credentials')}
+                )}
+              </TabsContent>
+
+              <TabsContent value="signup">
+                <form onSubmit={handleSignUp} className="space-y-4 pt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email" className="text-sm text-muted-foreground">{t('auth.email')}</Label>
+                    <Input
+                      id="signup-email"
+                      name="signup-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      required
+                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
                     />
                   </div>
-                )}
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password" className="text-sm text-muted-foreground">{t('auth.password')}</Label>
+                    <Input
+                      id="signup-password"
+                      name="signup-password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2 bg-muted/20 backdrop-blur-xl p-2 rounded-lg">
+                      {t('auth.passwordHint')}
+                    </p>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <Checkbox id="terms" required className="mt-0.5" />
+                    <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight">
+                      {t('legal.agreeToTerms')}{' '}
+                      <TermsLink className="text-primary hover:underline">
+                        {t('legal.termsLink')}
+                      </TermsLink>
+                      {' '}{t('legal.andThe')}{' '}
+                      <PrivacyLink className="text-primary hover:underline">
+                        {t('legal.privacyLink')}
+                      </PrivacyLink>
+                    </label>
+                  </div>
+                  <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
+                    {isLoading ? t('messages.loading', 'Loading...') : t('auth.signUp')}
+                  </Button>
+                </form>
               </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
+        )}
 
         {/* Back to home */}
         <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>

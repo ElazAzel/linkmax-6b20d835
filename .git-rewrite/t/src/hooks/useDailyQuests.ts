@@ -25,7 +25,7 @@ export function useDailyQuests(userId: string | undefined) {
         const result = await completeQuest(userId, 'daily_visit');
         if (result.success) {
           setCompletedQuests(prev => [...prev, 'daily_visit']);
-          toast.success(`👋 +${result.bonusHours}ч trial за ежедневный визит!`, {
+          toast.success(`👋 +${result.tokensEarned} Linkkon за ежедневный визит!`, {
             duration: 3000,
           });
         }
@@ -49,7 +49,7 @@ export function useDailyQuests(userId: string | undefined) {
       setCompletedQuests(prev => [...prev, questKey]);
       const quest = DAILY_QUESTS.find(q => q.key === questKey);
       if (quest) {
-        toast.success(`${quest.icon} +${result.bonusHours}ч trial за "${quest.title}"!`, {
+        toast.success(`${quest.icon} +${result.tokensEarned} Linkkon за "${quest.title}"!`, {
           duration: 3000,
         });
       }

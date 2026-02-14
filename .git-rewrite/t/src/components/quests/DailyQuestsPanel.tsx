@@ -1,4 +1,4 @@
-import { Check, Gift, Clock } from 'lucide-react';
+import { Check, Gift, Clock, Coins } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { type Quest } from '@/services/quests';
@@ -6,7 +6,7 @@ import { type Quest } from '@/services/quests';
 interface DailyQuestsPanelProps {
   quests: Quest[];
   completedQuests: string[];
-  progress: { completed: number; total: number; bonusEarned: number };
+  progress: { completed: number; total: number; tokensEarned: number };
   loading?: boolean;
 }
 
@@ -52,10 +52,10 @@ export function DailyQuestsPanel({
       {/* Progress */}
       <div className="space-y-1.5">
         <Progress value={progressPercent} className="h-2" />
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground flex items-center gap-1">
           {allCompleted 
-            ? `🎉 Все задания выполнены! +${progress.bonusEarned}ч trial`
-            : `+${progress.bonusEarned}ч trial заработано`
+            ? <>🎉 Все задания выполнены! <Coins className="h-3 w-3 text-yellow-500" /> +{progress.tokensEarned}</>
+            : <><Coins className="h-3 w-3 text-yellow-500" /> +{progress.tokensEarned} Linkkon заработано</>
           }
         </p>
       </div>
@@ -91,12 +91,13 @@ export function DailyQuestsPanel({
 
               <div className="flex items-center gap-2">
                 <span className={cn(
-                  "text-xs font-medium px-2 py-1 rounded-full",
+                  "text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1",
                   isCompleted 
-                    ? "bg-primary/20 text-primary" 
+                    ? "bg-yellow-500/20 text-yellow-600" 
                     : "bg-muted text-muted-foreground"
                 )}>
-                  +{quest.bonusHours}ч
+                  <Coins className="h-3 w-3" />
+                  +{quest.tokens}
                 </span>
                 
                 {isCompleted && (

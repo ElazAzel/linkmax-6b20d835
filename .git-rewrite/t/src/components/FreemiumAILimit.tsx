@@ -41,7 +41,7 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
               <Sparkles className="h-3 w-3" />
             )}
             <span>
-              AI: {remainingRequests}/{FREE_LIMITS.maxAIRequestsPerDay}
+              AI: {remainingRequests}/{FREE_LIMITS.maxAIRequestsPerWeek}
             </span>
           </Badge>
         </TooltipTrigger>
@@ -50,11 +50,11 @@ export const FreemiumAILimit = memo(function FreemiumAILimit({
             <p className="text-sm font-medium">
               {isAtLimit 
                 ? t('freemium.aiLimitReached', 'Лимит AI запросов исчерпан')
-                : t('freemium.aiRequestsRemaining', 'Осталось AI запросов сегодня: {{count}}', { count: remainingRequests })
+                : t('freemium.aiRequestsRemaining', 'Осталось AI запросов на этой неделе: {{count}}', { count: remainingRequests })
               }
             </p>
             <p className="text-xs text-muted-foreground">
-              {t('freemium.aiLimitResets', 'Лимит обновляется каждый день')}
+              {t('freemium.aiLimitResetsWeekly', 'Лимит обновляется каждую неделю')}
             </p>
             <Button 
               size="sm" 

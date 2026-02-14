@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { incrementChallengeProgress } from '@/services/social';
 import type { Niche } from '@/lib/niches';
 
 export interface GalleryPage {
@@ -185,6 +186,32 @@ export async function likeGalleryPage(pageId: string): Promise<void> {
     console.error('Error liking page:', error);
     throw error;
   }
+
+  // Track challenge progress
+  incrementChallengeProgress('like_pages');
+}
+
+export async function unlikeGalleryPage(pageId: string): Promise<void> {
+  const { error } = await supabase.rpc('unlike_gallery_page', {
+    p_page_id: pageId,
+  });
+
+  if (error) {
+    console.error('Error unliking page:', error);
+    throw error;
+  }
+}
+
+export async function getPageByUserId(userId: string): Promise<{ id: string; slug: string } | null> {
+  const { data, error } = await supabase
+    .from('pages')
+    .select('id, slug')
+    .eq('user_id', userId)
+    .eq('is_published', true)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return data;
 }
 
 export async function getMyGalleryStatus(userId: string): Promise<boolean> {

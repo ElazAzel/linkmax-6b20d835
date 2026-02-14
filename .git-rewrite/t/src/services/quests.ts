@@ -5,7 +5,7 @@ export interface Quest {
   title: string;
   description: string;
   icon: string;
-  bonusHours: number;
+  tokens: number; // Changed from bonusHours to tokens
   checkCompletion?: () => boolean;
 }
 
@@ -15,35 +15,35 @@ export const DAILY_QUESTS: Quest[] = [
     title: 'Ежедневный визит',
     description: 'Зайди в приложение',
     icon: '👋',
-    bonusHours: 1,
+    tokens: 5,
   },
   {
     key: 'add_block',
     title: 'Добавь блок',
     description: 'Добавь новый блок на страницу',
     icon: '➕',
-    bonusHours: 2,
+    tokens: 10,
   },
   {
     key: 'edit_profile',
     title: 'Обнови профиль',
     description: 'Измени имя или био профиля',
     icon: '✏️',
-    bonusHours: 1,
+    tokens: 5,
   },
   {
     key: 'share_page',
     title: 'Поделись страницей',
     description: 'Скопируй ссылку на свою страницу',
     icon: '🔗',
-    bonusHours: 2,
+    tokens: 10,
   },
   {
     key: 'use_ai',
     title: 'Используй AI',
     description: 'Сгенерируй контент с помощью AI',
     icon: '🤖',
-    bonusHours: 3,
+    tokens: 15,
   },
 ];
 
@@ -70,36 +70,37 @@ export async function getCompletedQuestsToday(userId: string): Promise<string[]>
   return (data || []).map(q => q.quest_key);
 }
 
-export async function completeQuest(userId: string, questKey: string): Promise<{ success: boolean; bonusHours: number }> {
+export async function completeQuest(userId: string, questKey: string): Promise<{ success: boolean; tokensEarned: number }> {
   const quest = DAILY_QUESTS.find(q => q.key === questKey);
   if (!quest) {
-    return { success: false, bonusHours: 0 };
+    return { success: false, tokensEarned: 0 };
   }
 
+  // Use bonus_hours param but it will be converted to tokens in the DB function
   const { data, error } = await supabase.rpc('complete_daily_quest', {
     p_user_id: userId,
     p_quest_key: questKey,
-    p_bonus_hours: quest.bonusHours,
+    p_bonus_hours: Math.ceil(quest.tokens / 5), // Convert tokens to hours for backward compat
   });
 
   if (error) {
     console.error('Error completing quest:', error);
-    return { success: false, bonusHours: 0 };
+    return { success: false, tokensEarned: 0 };
   }
 
-  const result = data as { success: boolean; bonus_hours?: number; reason?: string };
+  const result = data as { success: boolean; tokens_earned?: number; reason?: string };
   return { 
     success: result.success, 
-    bonusHours: result.bonus_hours || 0 
+    tokensEarned: result.tokens_earned || quest.tokens 
   };
 }
 
-export function getQuestProgress(completedKeys: string[]): { completed: number; total: number; bonusEarned: number } {
+export function getQuestProgress(completedKeys: string[]): { completed: number; total: number; tokensEarned: number } {
   const completed = completedKeys.length;
   const total = DAILY_QUESTS.length;
-  const bonusEarned = DAILY_QUESTS
+  const tokensEarned = DAILY_QUESTS
     .filter(q => completedKeys.includes(q.key))
-    .reduce((sum, q) => sum + q.bonusHours, 0);
+    .reduce((sum, q) => sum + q.tokens, 0);
 
-  return { completed, total, bonusEarned };
+  return { completed, total, tokensEarned };
 }

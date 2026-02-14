@@ -32,10 +32,12 @@ import {
   Check,
   Loader2,
   Users,
+  UserPlus,
 } from 'lucide-react';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import { ReferralPanel } from '@/components/referral/ReferralPanel';
+import { FriendsPanel } from '@/components/friends/FriendsPanel';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { supabase } from '@/integrations/supabase/client';
@@ -204,6 +206,9 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
               </TabsTrigger>
               <TabsTrigger value="collabs" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
                 <Users className="h-4 w-4" />
+              </TabsTrigger>
+              <TabsTrigger value="friends" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
+                <UserPlus className="h-4 w-4" />
               </TabsTrigger>
               <TabsTrigger value="premium" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
                 <Crown className="h-4 w-4" />
@@ -424,6 +429,34 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
               <CollaborationPanel userId={userId} pageId={pageId} />
             </TabsContent>
             
+            {/* Friends Tab */}
+            <TabsContent value="friends" className="p-4 space-y-4 mt-0">
+              <Card className="p-5 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-transparent backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-400/20 to-purple-500/20 flex items-center justify-center">
+                    <UserPlus className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Друзья</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Добавляйте друзей и получайте бонусы
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                  onClick={() => {
+                    onOpenChange(false);
+                    // Will be handled by parent
+                    window.dispatchEvent(new CustomEvent('openFriends'));
+                  }}
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Открыть панель друзей
+                </Button>
+              </Card>
+            </TabsContent>
+            
             {/* Premium Tab */}
             <TabsContent value="premium" className="p-4 space-y-4 mt-0">
               {!premiumLoading && (
@@ -443,15 +476,17 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
                       )}
                     </div>
                   </div>
-                  {!isPremium && (
-                    <Button 
-                      onClick={openPremiumPurchase}
-                      className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-glass-lg transition-all duration-300 hover:scale-[1.02]"
-                    >
-                      <Crown className="h-4 w-4 mr-2" />
-                      Upgrade to Premium
-                    </Button>
-                  )}
+                  <Button 
+                    onClick={() => {
+                      onOpenChange(false);
+                      window.location.href = '/pricing';
+                    }}
+                    className={`w-full rounded-xl ${!isPremium ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600' : ''} shadow-glass-lg transition-all duration-300 hover:scale-[1.02]`}
+                    variant={isPremium ? 'outline' : 'default'}
+                  >
+                    <Crown className="h-4 w-4 mr-2" />
+                    {isPremium ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
+                  </Button>
                 </Card>
               )}
               

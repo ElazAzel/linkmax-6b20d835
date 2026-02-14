@@ -87,41 +87,57 @@ export function ImageCropper({
   };
 
   const handleSave = () => {
-    // Create canvas and draw the cropped image
     const canvas = document.createElement('canvas');
     const img = new Image();
     img.crossOrigin = 'anonymous';
     
     img.onload = () => {
-      const outputSize = shape === 'circle' ? 512 : aspectRatio >= 1 ? 1200 : 800;
-      const outputHeight = shape === 'circle' ? outputSize : Math.round(outputSize / aspectRatio);
+      // Fixed output dimensions
+      const outputWidth = shape === 'circle' ? 512 : 1200;
+      const outputHeight = shape === 'circle' ? 512 : 400; // 3:1 aspect for cover
       
-      canvas.width = outputSize;
+      canvas.width = outputWidth;
       canvas.height = outputHeight;
       
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      // Calculate source dimensions
-      const sourceWidth = img.width / zoom;
-      const sourceHeight = img.height / zoom;
-      const sourceX = (img.width - sourceWidth) * (position.x / 100);
-      const sourceY = (img.height - sourceHeight) * (position.y / 100);
+      // Calculate crop area maintaining image proportions (object-fit: cover logic)
+      const outputAspect = outputWidth / outputHeight;
+      const imgAspect = img.width / img.height;
+      
+      let cropWidth: number;
+      let cropHeight: number;
+      
+      if (imgAspect > outputAspect) {
+        // Image is wider - crop sides
+        cropHeight = img.height / zoom;
+        cropWidth = cropHeight * outputAspect;
+      } else {
+        // Image is taller - crop top/bottom
+        cropWidth = img.width / zoom;
+        cropHeight = cropWidth / outputAspect;
+      }
+      
+      // Position the crop area based on user pan
+      const maxOffsetX = Math.max(0, img.width - cropWidth);
+      const maxOffsetY = Math.max(0, img.height - cropHeight);
+      const cropX = maxOffsetX * (position.x / 100);
+      const cropY = maxOffsetY * (position.y / 100);
 
-      // Draw image
+      // Draw cropped image (no stretching)
       ctx.drawImage(
         img,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
         0,
         0,
-        outputSize,
+        outputWidth,
         outputHeight
       );
 
-      // Convert to data URL
       const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
       onSave(dataUrl);
     };
@@ -154,7 +170,7 @@ export function ImageCropper({
           <div
             ref={containerRef}
             className={`relative mx-auto overflow-hidden bg-muted border-2 border-dashed border-border ${
-              shape === 'circle' ? 'rounded-full w-48 h-48' : 'rounded-xl w-full aspect-video'
+              shape === 'circle' ? 'rounded-full w-48 h-48' : 'rounded-xl w-full aspect-[3/1]'
             }`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}

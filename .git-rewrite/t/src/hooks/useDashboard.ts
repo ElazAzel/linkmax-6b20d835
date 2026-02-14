@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useCloudPageState } from '@/hooks/useCloudPageState';
@@ -18,6 +18,7 @@ import { useBlockEditor } from '@/hooks/useBlockEditor';
 import { useEditorModeToggle } from '@/hooks/useEditorModeToggle';
 import { useDailyQuests } from '@/hooks/useDailyQuests';
 import type { Block, ProfileBlock, PageData } from '@/types/page';
+import type { UserStats } from '@/types/achievements';
 
 /**
  * Main dashboard state hook - composes all dashboard-related hooks
@@ -47,6 +48,52 @@ export function useDashboard() {
   // User profile
   const userProfile = useUserProfile(user?.id);
 
+  // Check achievements when page data or profile changes
+  const lastCheckedRef = useRef<string>('');
+  
+  useEffect(() => {
+    if (!pageData?.blocks || achievements.loading) return;
+
+    // Create a simple hash to avoid checking on every render
+    const friendsCount = userProfile.profile?.friends_count ?? 0;
+    const checksum = `${pageData.blocks.length}-${friendsCount}`;
+    if (lastCheckedRef.current === checksum) return;
+    lastCheckedRef.current = checksum;
+
+    // Build UserStats from current state
+    const blocksUsed = new Set<string>();
+    const featuresUsed = new Set<string>();
+
+    pageData.blocks.forEach(block => {
+      blocksUsed.add(block.type);
+    });
+
+    // Check if features were used (stored in localStorage)
+    if (localStorage.getItem('linkmax_ai_used') === 'true') {
+      featuresUsed.add('ai');
+    }
+    if (localStorage.getItem('linkmax_template_used') === 'true') {
+      featuresUsed.add('template');
+    }
+    if (localStorage.getItem('linkmax_chatbot_used') === 'true') {
+      featuresUsed.add('chatbot');
+    }
+    if (localStorage.getItem('linkmax_published') === 'true') {
+      featuresUsed.add('published');
+    }
+
+    const stats: UserStats = {
+      blocksUsed,
+      totalBlocks: pageData.blocks.length,
+      featuresUsed,
+      pageViews: parseInt(localStorage.getItem('linkmax_page_views') || '0', 10),
+      published: localStorage.getItem('linkmax_published') === 'true',
+      friendsCount,
+    };
+
+    achievements.checkAchievements(stats);
+  }, [pageData?.blocks, userProfile.profile?.friends_count, achievements.loading]);
+
   // Username management
   const usernameState = useDashboardUsername({
     userId: user?.id,
@@ -70,6 +117,7 @@ export function useDashboard() {
       }
     },
     onAddBlock: addBlock,
+    onReplaceBlocks: pageState.replaceBlocks,
     onQuestComplete: dailyQuests.markQuestComplete,
   });
 
@@ -126,14 +174,25 @@ export function useDashboard() {
     [pageData, updateBlock]
   );
 
-  // Apply template
+  // Apply template - replaces all blocks at once (like AI Builder)
   const handleApplyTemplate = useCallback(
     (blocks: Block[]) => {
-      blocks.forEach((block, index) => {
-        addBlock({ ...block, id: `${block.type}-${Date.now()}-${index}` });
-      });
+      // Mark template as used for achievements
+      localStorage.setItem('linkmax_template_used', 'true');
+      
+      // Generate unique IDs for all blocks
+      const blocksWithIds = blocks.map((block, index) => ({
+        ...block,
+        id: `${block.type}-${Date.now()}-${index}`,
+      }));
+      
+      // Replace all content blocks at once (keeps profile block)
+      pageState.replaceBlocks(blocksWithIds);
+      
+      // Complete quest
+      dailyQuests.markQuestComplete('use_template');
     },
-    [addBlock]
+    [pageState.replaceBlocks, dailyQuests.markQuestComplete]
   );
 
   // Get profile block

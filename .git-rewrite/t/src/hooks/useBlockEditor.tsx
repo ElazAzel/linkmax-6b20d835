@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Undo2 } from 'lucide-react';
 import { createBlock } from '@/lib/block-factory';
 import { PREMIUM_BLOCK_TYPES, APP_CONFIG } from '@/lib/constants';
+import { incrementChallengeProgress, recordActivity } from '@/services/social';
 import type { Block, BlockType } from '@/types/page';
 import type { DeletedBlockInfo, BlockInsertResult } from '@/types/blocks';
 
@@ -78,6 +79,9 @@ export function useBlockEditor({
         
         // Trigger add_block quest
         onQuestComplete?.('add_block');
+        // Track challenge progress
+        incrementChallengeProgress('add_blocks');
+        recordActivity('new_block', { block_type: blockType });
         
         return { success: true, blockId: newBlock.id };
       } catch (error) {

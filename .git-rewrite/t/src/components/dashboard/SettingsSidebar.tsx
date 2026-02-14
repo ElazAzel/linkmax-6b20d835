@@ -8,12 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Crown, Grid3X3, MessageCircle, Sparkles, X, Bell, Send, Tag, Image, ExternalLink, Check, Loader2, Users } from 'lucide-react';
+import { Crown, Grid3X3, MessageCircle, Sparkles, X, Bell, Send, Tag, Image, ExternalLink, Check, Loader2, Users, UserPlus, Package, Save } from 'lucide-react';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import type { ProfileBlock, GridConfig, EditorMode } from '@/types/page';
+import type { ProfileBlock, GridConfig, EditorMode, Block } from '@/types/page';
 import { GalleryToggle } from '@/components/gallery/GalleryToggle';
 import { StreakDisplay } from '@/components/streak/StreakDisplay';
 import { DailyQuestsPanel } from '@/components/quests/DailyQuestsPanel';
+import { WeeklyChallengesPanel, PendingGiftsPanel } from '@/components/social';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
@@ -50,13 +51,16 @@ interface SettingsSidebarProps {
   userId?: string;
   dailyQuests?: Quest[];
   completedQuests?: string[];
-  questsProgress?: { completed: number; total: number; bonusEarned: number };
+  questsProgress?: { completed: number; total: number; tokensEarned: number };
   questsLoading?: boolean;
   niche?: Niche;
   onNicheChange?: (niche: Niche) => void;
   previewUrl?: string;
   onPreviewUrlChange?: (url: string | null) => void;
   pageId?: string;
+  onOpenFriends?: () => void;
+  onOpenSaveTemplate?: () => void;
+  onOpenMyTemplates?: () => void;
 }
 
 export function SettingsSidebar({
@@ -92,6 +96,9 @@ export function SettingsSidebar({
   previewUrl,
   onPreviewUrlChange,
   pageId,
+  onOpenFriends,
+  onOpenSaveTemplate,
+  onOpenMyTemplates,
 }: SettingsSidebarProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('settings');
@@ -363,8 +370,30 @@ export function SettingsSidebar({
           />
         )}
 
+        {/* Pending Gifts */}
+        <PendingGiftsPanel />
+
+        {/* Weekly Challenges */}
+        <Card className="p-4 bg-card/60 backdrop-blur-xl border-border/30">
+          <WeeklyChallengesPanel compact />
+        </Card>
+
         {/* Gallery Toggle */}
         <GalleryToggle userId={userId} />
+
+        {/* Friends Button */}
+        {onOpenFriends && (
+          <Card className="p-4 bg-card/60 backdrop-blur-xl border-border/30">
+            <Button
+              variant="outline"
+              className="w-full justify-start bg-background/50 hover:bg-background/70"
+              onClick={onOpenFriends}
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              {t('settings.friends', 'Friends')}
+            </Button>
+          </Card>
+        )}
 
         {/* Notifications Settings */}
         <Card className="p-4 bg-card/60 backdrop-blur-xl border-border/30">
@@ -387,70 +416,72 @@ export function SettingsSidebar({
               />
             </div>
             
-            {/* Telegram */}
-            <div className="p-3 rounded-xl bg-background/30 border border-border/20 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Send className="h-4 w-4 text-blue-500" />
-                  <div>
-                    <Label className="text-sm font-medium">Telegram</Label>
-                    <p className="text-xs text-muted-foreground">{t('settings.telegramDesc', 'Instant notifications')}</p>
+            {/* Telegram - Premium only */}
+            {isPremium && (
+              <div className="p-3 rounded-xl bg-background/30 border border-border/20 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Send className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <Label className="text-sm font-medium">Telegram</Label>
+                      <p className="text-xs text-muted-foreground">{t('settings.telegramDesc', 'Instant notifications')}</p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={telegramEnabled ?? false}
+                    onCheckedChange={(enabled) => {
+                      if (!enabled) {
+                        onTelegramChange?.(false, null);
+                      } else if (localTelegramChatId.trim()) {
+                        onTelegramChange?.(true, localTelegramChatId.trim());
+                      }
+                    }}
+                  />
+                </div>
+                
+                {/* Telegram Setup */}
+                <div className="space-y-2 pt-2 border-t border-border/20">
+                  <Label className="text-xs text-muted-foreground">{t('settings.telegramChatId', 'Your Chat ID')}</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="123456789"
+                      value={localTelegramChatId}
+                      onChange={(e) => {
+                        setLocalTelegramChatId(e.target.value.replace(/\D/g, ''));
+                        setTelegramValidated(false);
+                      }}
+                      className="bg-background/50 text-sm font-mono"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={handleValidateAndSaveTelegram}
+                      disabled={!localTelegramChatId.trim() || telegramValidating || telegramValidated}
+                      className="shrink-0"
+                    >
+                      {telegramValidating ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : telegramValidated ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        t('settings.telegramVerify', 'Verify')
+                      )}
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <span>{t('settings.telegramHelp', 'Get your ID from')}</span>
+                    <a 
+                      href="https://t.me/userinfobot" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:text-blue-400 inline-flex items-center gap-0.5"
+                    >
+                      @userinfobot
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
                   </div>
                 </div>
-                <Switch
-                  checked={telegramEnabled ?? false}
-                  onCheckedChange={(enabled) => {
-                    if (!enabled) {
-                      onTelegramChange?.(false, null);
-                    } else if (localTelegramChatId.trim()) {
-                      onTelegramChange?.(true, localTelegramChatId.trim());
-                    }
-                  }}
-                />
               </div>
-              
-              {/* Telegram Setup */}
-              <div className="space-y-2 pt-2 border-t border-border/20">
-                <Label className="text-xs text-muted-foreground">{t('settings.telegramChatId', 'Your Chat ID')}</Label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="123456789"
-                    value={localTelegramChatId}
-                    onChange={(e) => {
-                      setLocalTelegramChatId(e.target.value.replace(/\D/g, ''));
-                      setTelegramValidated(false);
-                    }}
-                    className="bg-background/50 text-sm font-mono"
-                  />
-                  <Button
-                    size="sm"
-                    onClick={handleValidateAndSaveTelegram}
-                    disabled={!localTelegramChatId.trim() || telegramValidating || telegramValidated}
-                    className="shrink-0"
-                  >
-                    {telegramValidating ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : telegramValidated ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      t('settings.telegramVerify', 'Verify')
-                    )}
-                  </Button>
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <span>{t('settings.telegramHelp', 'Get your ID from')}</span>
-                  <a 
-                    href="https://t.me/userinfobot" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-400 inline-flex items-center gap-0.5"
-                  >
-                    @userinfobot
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </Card>
         <Card className="p-4 bg-card/60 backdrop-blur-xl border-border/30">
@@ -470,6 +501,36 @@ export function SettingsSidebar({
               rows={6}
               className="text-sm bg-background/50"
             />
+          </div>
+        </Card>
+
+        {/* Templates Section */}
+        <Card className="p-4 bg-card/60 backdrop-blur-xl border-border/30">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="p-1.5 rounded-lg bg-orange-500/10">
+              <Package className="h-4 w-4 text-orange-500" />
+            </div>
+            <h3 className="font-semibold">{t('settings.templates', 'Templates')}</h3>
+          </div>
+          <div className="space-y-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start bg-background/50 hover:bg-background/70"
+              onClick={onOpenSaveTemplate}
+            >
+              <Save className="h-3 w-3 mr-2" />
+              {t('settings.saveAsTemplate', 'Save as template')}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start bg-background/50 hover:bg-background/70"
+              onClick={onOpenMyTemplates}
+            >
+              <Package className="h-3 w-3 mr-2" />
+              {t('settings.myTemplates', 'My templates')}
+            </Button>
           </div>
         </Card>
 

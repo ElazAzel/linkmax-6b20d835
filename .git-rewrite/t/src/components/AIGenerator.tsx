@@ -227,10 +227,10 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[95vw] sm:max-w-[500px] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+      <DialogContent className="max-w-[95vw] sm:max-w-[500px] max-h-[85vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader className="space-y-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
             <DialogTitle className="text-base sm:text-lg">{getTitle()}</DialogTitle>
           </div>
           <DialogDescription className="text-xs sm:text-sm">{getDescription()}</DialogDescription>
@@ -240,11 +240,20 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
           {renderInput()}
         </div>
 
-        <DialogFooter className="flex-col sm:flex-row gap-2">
-          <Button variant="outline" onClick={onClose} disabled={loading} className="w-full sm:w-auto">
+        <DialogFooter className="flex-col-reverse sm:flex-row gap-2 pt-2">
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            disabled={loading} 
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button onClick={handleGenerate} disabled={loading} className="w-full sm:w-auto">
+          <Button 
+            onClick={handleGenerate} 
+            disabled={loading} 
+            className="w-full sm:w-auto"
+          >
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
