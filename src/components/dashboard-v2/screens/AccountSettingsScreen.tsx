@@ -1,10 +1,12 @@
+'use client';
+
 /**
  * AccountSettingsScreen - User-level settings (account-scoped)
  * Profile, billing, language, security
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   User,
   Bell,
@@ -111,14 +113,14 @@ function SettingsItem({
 
 export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: AccountSettingsScreenProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [showVerification, setShowVerification] = useState(false);
   const [showTelegramVerification, setShowTelegramVerification] = useState(false);
 
   return (
     <div className="min-h-screen safe-area-top">
-      <DashboardHeader 
-        title={t('dashboard.accountSettings.title', 'Account Settings')} 
+      <DashboardHeader
+        title={t('dashboard.accountSettings.title', 'Account Settings')}
         showBack
         onBack={props.onBack}
       />
@@ -309,7 +311,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               iconColor={props.isPremium ? "text-amber-500" : "text-muted-foreground"}
               label={props.isPremium ? t('dashboard.accountSettings.proPlan', 'Pro Plan') : t('dashboard.accountSettings.freePlan', 'Free Plan')}
               description={props.isPremium ? t('dashboard.accountSettings.manageSubscription', 'Manage subscription') : t('dashboard.accountSettings.upgradeForMore', 'Upgrade for more features')}
-              onClick={() => navigate('/pricing')}
+              onClick={() => router.push('/pricing')}
             />
             {props.isPremium && (
               <SettingsItem
@@ -317,7 +319,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
                 iconBg="bg-slate-500/15"
                 iconColor="text-slate-500"
                 label={t('dashboard.accountSettings.billingHistory', 'Billing History')}
-                onClick={() => {/* TODO: Open billing history */}}
+                onClick={() => {/* TODO: Open billing history */ }}
               />
             )}
           </Card>
@@ -337,7 +339,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               iconBg="bg-destructive/15"
               iconColor="text-destructive"
               label={t('dashboard.accountSettings.changePassword', 'Change Password')}
-              onClick={() => {/* TODO: Open password change */}}
+              onClick={() => {/* TODO: Open password change */ }}
             />
           </Card>
         </div>

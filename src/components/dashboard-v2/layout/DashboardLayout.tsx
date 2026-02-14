@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * DashboardLayout - Main layout wrapper for dashboard v2
  * Handles responsive layout: sidebar (desktop) + bottom nav (mobile)

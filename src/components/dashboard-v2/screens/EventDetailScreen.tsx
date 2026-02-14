@@ -1,9 +1,11 @@
+'use client';
+
 /**
  * EventDetailScreen - Detailed event view with registrations management
  * Shows all registrations, allows check-in, export, and management
  */
 import { memo, useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
@@ -106,8 +108,9 @@ interface EventDetail {
 }
 
 export const EventDetailScreen = memo(function EventDetailScreen() {
-  const { eventId } = useParams<{ eventId: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const eventId = params?.eventId as string;
+  const router = useRouter();
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { isPremium } = usePremiumStatus();
@@ -153,7 +156,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
       if (eventError || !eventData) {
         toast.error(t('events.notFound', 'Событие не найдено'));
-        navigate('/dashboard/events');
+        router.push('/dashboard/events');
         return;
       }
 
@@ -162,9 +165,9 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       setEvent({
         id: eventData.id,
         title: (eventData.title_i18n_json as Record<string, string>)?.[i18n.language] ||
-               (eventData.title_i18n_json as Record<string, string>)?.ru || '',
+          (eventData.title_i18n_json as Record<string, string>)?.ru || '',
         description: (eventData.description_i18n_json as Record<string, string>)?.[i18n.language] ||
-                     (eventData.description_i18n_json as Record<string, string>)?.ru || null,
+          (eventData.description_i18n_json as Record<string, string>)?.ru || null,
         startAt: eventData.start_at,
         endAt: eventData.end_at,
         locationType: eventData.location_type || 'online',
@@ -191,7 +194,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       // Fetch tickets for these registrations
       const regIds = (regsData || []).map(r => r.id);
       let ticketsData: Array<{ registration_id: string; ticket_code: string; status: string; checked_in_at: string | null }> = [];
-      
+
       if (regIds.length > 0) {
         const { data } = await supabase
           .from('event_tickets')
@@ -245,7 +248,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [user, eventId, i18n.language, t, navigate]);
+  }, [user, eventId, i18n.language, t, router]);
 
   useEffect(() => {
     fetchData();
@@ -258,7 +261,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
   // Filter registrations
   const filteredRegistrations = registrations.filter(reg => {
-    const matchesSearch = 
+    const matchesSearch =
       reg.attendeeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       reg.attendeeEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
       reg.ticketCode?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -294,7 +297,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
       if (error) throw error;
 
-      setRegistrations(prev => prev.map(r => 
+      setRegistrations(prev => prev.map(r =>
         r.id === regId ? { ...r, status: 'confirmed' as const } : r
       ));
       toast.success(t('events.approved', 'Регистрация подтверждена'));
@@ -312,7 +315,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
       if (error) throw error;
 
-      setRegistrations(prev => prev.map(r => 
+      setRegistrations(prev => prev.map(r =>
         r.id === regId ? { ...r, status: 'cancelled' as const } : r
       ));
       toast.success(t('events.rejected', 'Регистрация отклонена'));
@@ -332,7 +335,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
       if (error) throw error;
 
-      setRegistrations(prev => prev.map(r => 
+      setRegistrations(prev => prev.map(r =>
         r.id === regId ? { ...r, ticketStatus: 'used' as const, checkedInAt: new Date().toISOString() } : r
       ));
       toast.success(t('events.checkedIn', 'Гость отмечен!'));
@@ -414,11 +417,11 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
         i18n.language as SupportedLanguage
       );
 
-      const eventDate = event.startAt 
+      const eventDate = event.startAt
         ? format(new Date(event.startAt), 'dd MMMM yyyy, HH:mm', { locale })
         : undefined;
-      
-      const eventLocation = event.locationType === 'online' 
+
+      const eventLocation = event.locationType === 'online'
         ? t('events.online', 'Онлайн')
         : event.locationValue || t('events.offline', 'Офлайн');
 
@@ -554,7 +557,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/10">
         <div className="px-4 py-3">
           <div className="flex items-center gap-3 mb-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard/events')}>
+            <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard/events')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex-1 min-w-0">
@@ -572,9 +575,9 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
                 </span>
               </div>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={handleRefresh}
               disabled={refreshing}
             >
@@ -604,29 +607,29 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
           {/* Actions */}
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="flex-1 h-9 text-xs"
               onClick={() => {
                 if (!isPremium) {
                   openPremiumPurchase();
                   return;
                 }
-                navigate(`/dashboard/events/${eventId}/scanner`);
+                router.push(`/dashboard/events/${eventId}/scanner`);
               }}
             >
               <QrCode className="h-4 w-4 mr-1.5" />
               {t('events.scanner', 'Сканер')}
               {!isPremium && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
             </Button>
-            
+
             {/* Export Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   className="flex-1 h-9 text-xs"
                   disabled={exporting || registrations.length === 0}
                 >
@@ -656,10 +659,10 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            
-            <Button 
-              variant="outline" 
-              size="sm" 
+
+            <Button
+              variant="outline"
+              size="sm"
               className="h-9 w-9 p-0"
               onClick={() => window.open(`https://lnkmx.my/${event.pageSlug}`, '_blank')}
             >
@@ -707,7 +710,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
             <Card className="p-6 text-center">
               <Users className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
               <p className="text-sm text-muted-foreground">
-                {searchQuery 
+                {searchQuery
                   ? t('events.noSearchResults', 'Ничего не найдено')
                   : t('events.noRegistrations', 'Пока нет регистраций')}
               </p>

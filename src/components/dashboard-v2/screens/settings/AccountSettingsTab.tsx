@@ -1,6 +1,8 @@
+'use client';
+
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
     User,
     Crown,
@@ -134,7 +136,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     onOpenAchievements,
 }: AccountSettingsTabProps) {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const router = useRouter();
     const [showVerification, setShowVerification] = useState(false);
     const [showTelegramVerification, setShowTelegramVerification] = useState(false);
 
@@ -325,7 +327,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                         iconColor={isPremium ? "text-amber-500" : "text-muted-foreground"}
                         label={isPremium ? t('dashboard.accountSettings.proPlan', 'Pro Plan') : t('dashboard.accountSettings.freePlan', 'Free Plan')}
                         description={isPremium ? t('dashboard.accountSettings.manageSubscription', 'Manage subscription') : t('dashboard.accountSettings.upgradeForMore', 'Upgrade for more features')}
-                        onClick={() => navigate('/pricing')}
+                        onClick={() => router.push('/pricing')}
                     />
                     {isPremium && (
                         <SettingsItem

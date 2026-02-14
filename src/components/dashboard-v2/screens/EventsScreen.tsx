@@ -1,9 +1,11 @@
+'use client';
+
 /**
  * EventsScreen - Events management dashboard
  * Shows all user events with stats, registrations access, and quick actions
  */
 import { memo, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
@@ -62,10 +64,10 @@ interface EventsScreenProps {
 
 export const EventsScreen = memo(function EventsScreen({ className }: EventsScreenProps) {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const { isPremium, isLoading: premiumLoading } = usePremiumStatus();
-  
+
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -111,7 +113,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
               .eq('event_id', event.id);
 
             const total = regs?.filter(r => r.status !== 'cancelled').length || 0;
-            const checkedIn = regs?.filter(r => 
+            const checkedIn = regs?.filter(r =>
               r.event_tickets?.some((t: { status: string }) => t.status === 'used')
             ).length || 0;
             const pending = regs?.filter(r => r.status === 'pending').length || 0;
@@ -121,9 +123,9 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
               blockId: event.block_id,
               pageId: event.page_id,
               pageSlug: (event.pages as { slug: string })?.slug || '',
-              title: (event.title_i18n_json as Record<string, string>)?.[i18n.language] || 
-                     (event.title_i18n_json as Record<string, string>)?.ru || 
-                     t('events.untitled', 'Без названия'),
+              title: (event.title_i18n_json as Record<string, string>)?.[i18n.language] ||
+                (event.title_i18n_json as Record<string, string>)?.ru ||
+                t('events.untitled', 'Без названия'),
               startAt: event.start_at,
               endAt: event.end_at,
               locationType: event.location_type || 'online',
@@ -158,10 +160,10 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   );
 
   // Group events by status
-  const upcomingEvents = filteredEvents.filter(e => 
+  const upcomingEvents = filteredEvents.filter(e =>
     e.status === 'published' && (!e.startAt || new Date(e.startAt) >= new Date())
   );
-  const pastEvents = filteredEvents.filter(e => 
+  const pastEvents = filteredEvents.filter(e =>
     e.startAt && new Date(e.startAt) < new Date()
   );
   const draftEvents = filteredEvents.filter(e => e.status === 'draft');
@@ -171,7 +173,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       openPremiumPurchase();
       return;
     }
-    navigate(`/dashboard/events/${eventId}/scanner`);
+    router.push(`/dashboard/events/${eventId}/scanner`);
   };
 
   const handleExportRegistrations = async (eventId: string, eventTitle: string) => {
@@ -213,7 +215,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       a.download = `${eventTitle.replace(/\s+/g, '_')}_registrations.csv`;
       a.click();
       URL.revokeObjectURL(url);
-      
+
       toast.success(t('events.exportSuccess', 'Экспорт завершён'));
     } catch (error) {
       console.error('Export error:', error);
@@ -230,10 +232,10 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
     };
 
     return (
-      <Card 
+      <Card
         key={event.id}
         className="p-4 hover:shadow-md transition-shadow cursor-pointer"
-        onClick={() => navigate(`/dashboard/events/${event.id}`)}
+        onClick={() => router.push(`/dashboard/events/${event.id}`)}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -258,7 +260,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
               )}
               <span className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
-                {event.locationType === 'online' 
+                {event.locationType === 'online'
                   ? t('events.online', 'Онлайн')
                   : t('events.offline', 'Офлайн')}
               </span>
@@ -290,9 +292,9 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
         {/* Quick Actions */}
         <div className="flex items-center gap-2 mt-3 pt-3 border-t">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="h-8 text-xs gap-1.5"
             onClick={(e) => {
               e.stopPropagation();
@@ -303,9 +305,9 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
             {t('events.scanner', 'Сканер')}
             {!isPremium && <Crown className="h-3 w-3 text-amber-500" />}
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="h-8 text-xs gap-1.5"
             onClick={(e) => {
               e.stopPropagation();
@@ -316,9 +318,9 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
             {t('events.export', 'Экспорт')}
             {!isPremium && <Crown className="h-3 w-3 text-amber-500" />}
           </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="h-8 text-xs gap-1.5 ml-auto"
             onClick={(e) => {
               e.stopPropagation();
@@ -358,7 +360,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
               </p>
             </div>
           </div>
-          
+
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -382,7 +384,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
               <p className="text-sm text-muted-foreground mb-4">
                 {t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
               </p>
-              <Button onClick={() => navigate('/dashboard/home?tab=editor')}>
+              <Button onClick={() => router.push('/dashboard/home?tab=editor')}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('events.addEventBlock', 'Добавить блок')}
               </Button>

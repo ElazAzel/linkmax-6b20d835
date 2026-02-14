@@ -1,10 +1,12 @@
+'use client';
+
 /**
  * HomeScreen - Dashboard overview with primary page card and quick actions
  * Now includes PageSwitcher in the header for multi-page context
  */
 import { memo, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import {
   Eye,
   Share2,
@@ -55,7 +57,7 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenVersions,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
@@ -73,9 +75,9 @@ export const HomeScreen = memo(function HomeScreen({
   const viewCount = pageData.viewCount || 0;
   const isPublished = pageData.isPublished || false;
   const slug = pageData.slug || 'mypage';
-  
+
   // Page has content if it has more than just a profile block
-  const hasContent = pageData.blocks.length > 1 || 
+  const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
   // Stats for this week (mock for now, would come from analytics hook)
@@ -237,7 +239,7 @@ export const HomeScreen = memo(function HomeScreen({
               iconColor="text-pink-600"
               title={t('dashboard.home.gallery', 'Галерея')}
               description={t('dashboard.home.galleryDesc', 'Вдохновение')}
-              onClick={() => navigate('/gallery')}
+              onClick={() => router.push('/gallery')}
               gradient="from-pink-500/15 to-rose-500/15"
               border="border-pink-500/20"
             />
@@ -249,7 +251,7 @@ export const HomeScreen = memo(function HomeScreen({
                 iconColor="text-amber-600"
                 title={t('dashboard.home.premium', 'Premium')}
                 description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
-                onClick={() => navigate('/pricing')}
+                onClick={() => router.push('/pricing')}
                 gradient="from-amber-500/15 to-orange-500/15"
                 border="border-amber-500/20"
               />
