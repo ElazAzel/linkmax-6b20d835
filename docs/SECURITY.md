@@ -275,3 +275,13 @@ Security issues: admin@lnkmx.my
 ---
 
 *Last updated: 2026-01-15*
+## 11. Repository Security & IP Protection
+
+### ? Implemented
+- [x] **Private Repository**: Codebase access restricted to authorized personnel only.
+- [x] **History Sanitization**: Git history periodically audited and purged of sensitive credentials.
+- [x] **Unified Gitignore**: Standardized tracking of internal documentation while strictly excluding secrets.
+
+### ?? Measures
+Commit hashes were reset in February 2026 following a full history cleanup of accidentally committed environment variables.
+

@@ -1,0 +1,12 @@
+tree 227c43c5096c19936a5b68452f66dd3cda2c4ae0
+parent 77eaa120b082862634318b27992fbd14f1082d88
+parent 728279ee1dc1ac17fcd557596e8b08cb71841fc9
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767302179 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767302179 +0000
+
+Fix block tiers and update docs
+
+- Revert previous tier changes to keep Download, FAQ, Shoutout as premium blocks
+- Update FEATURES.md to reflect premium status accordingly
+
+X-Lovable-Edit-ID: edt-6f0607e2-5f31-4d7c-bba8-647b4fbdee3a

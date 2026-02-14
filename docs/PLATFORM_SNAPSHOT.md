@@ -16,6 +16,9 @@ lnkmx is a comprehensive SaaS platform that combines three core capabilities int
 
 The platform enables creators, freelancers, and small businesses to build their online presence, capture leads, and manage client relationships from a single dashboard. Core value: complete business system accessible in minutes.
 
+### Repository Security & Privacy
+The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/inkmax/docs/ADR/0024-repository-security.md) for details on recent security hardening.
+
 **Target audiences:**
 - Experts and consultants showcasing services with booking and lead capture
 - Small businesses managing products, clients, and analytics

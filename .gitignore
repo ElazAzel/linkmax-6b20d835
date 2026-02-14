@@ -36,8 +36,3 @@ playwright-report/
 test-results/
 .playwright/
 
-# Internal documentation - admin only
-README.md
-CONTRIBUTING.md
-docs/
-
