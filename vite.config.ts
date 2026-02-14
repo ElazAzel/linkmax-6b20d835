@@ -15,6 +15,8 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "next/navigation": path.resolve(__dirname, "./src/platform/next/navigation.ts"),
+      "next/link": path.resolve(__dirname, "./src/platform/next/link.ts"),
     },
   },
   build: {
