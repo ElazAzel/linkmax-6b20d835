@@ -33,6 +33,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
+const SeoLanding = lazy(() => import("./pages/SeoLanding")); // New SEO/AEO Landing Page
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
       { path: "gallery", element: <Gallery /> },
       { path: "pricing", element: <Pricing /> },
       { path: "alternatives", element: <Alternatives /> },
+      { path: "seo-landing", element: <SeoLanding /> },
       { path: "admin", element: <Admin /> },
       { path: "admin/translations", element: <AdminTranslations /> },
       { path: "admin/templates/new", element: <AdminTemplateEditor /> },

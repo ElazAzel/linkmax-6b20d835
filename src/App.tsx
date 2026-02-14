@@ -1,4 +1,5 @@
 import { Suspense, useEffect } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner, toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -46,21 +47,23 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <LanguageProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <Suspense fallback={<PageLoader />}>
-              <Outlet />
-            </Suspense>
-            <PWAInstallPrompt />
-            <PWAUpdatePrompt />
-          </TooltipProvider>
-        </LanguageProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <LanguageProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <Suspense fallback={<PageLoader />}>
+                <Outlet />
+              </Suspense>
+              <PWAInstallPrompt />
+              <PWAUpdatePrompt />
+            </TooltipProvider>
+          </LanguageProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 
