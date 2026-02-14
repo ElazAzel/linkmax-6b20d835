@@ -79,7 +79,7 @@ describe('Page Entity', () => {
         blocks: [{ id: '1', type: 'link' }],
         theme: DEFAULT_THEME,
         seo: DEFAULT_SEO,
-        editorMode: 'linear',
+        editorMode: 'grid',
       };
       expect(hasProfileBlock(page)).toBe(false);
     });
@@ -101,7 +101,7 @@ describe('Page Entity', () => {
         ],
         theme: DEFAULT_THEME,
         seo: DEFAULT_SEO,
-        editorMode: 'linear',
+        editorMode: 'grid',
       };
       expect(hasPremiumContent(page)).toBe(true);
     });
@@ -119,7 +119,7 @@ describe('Page Entity', () => {
         ],
         theme: DEFAULT_THEME,
         seo: DEFAULT_SEO,
-        editorMode: 'linear',
+        editorMode: 'grid',
       };
 
       const newOrder = ['3', '1', '2'];

@@ -3,6 +3,7 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
+import { useTranslation } from 'react-i18next';
 import {
   getWeeklyChallenges,
   getChallengeProgress,
@@ -19,6 +20,7 @@ import { toast } from 'sonner';
 
 export function useSocialFeatures() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [challenges, setChallenges] = useState<WeeklyChallenge[]>([]);
   const [progress, setProgress] = useState<ChallengeProgress[]>([]);
   const [pendingGifts, setPendingGifts] = useState<PremiumGift[]>([]);
@@ -58,24 +60,24 @@ export function useSocialFeatures() {
   const claimChallenge = useCallback(async (challengeId: string) => {
     const result = await claimChallengeReward(challengeId);
     if (result.success) {
-      toast.success(`Награда получена: +${result.hours} часов Premium!`);
+      toast.success(t('toasts.social.rewardClaimed', { hours: result.hours }));
       loadData();
     } else {
-      toast.error('Не удалось получить награду');
+      toast.error(t('toasts.social.rewardError'));
     }
     return result;
-  }, [loadData]);
+  }, [loadData, t]);
 
   const claimGift = useCallback(async (giftId: string) => {
     const result = await claimPremiumGift(giftId);
     if (result.success) {
-      toast.success(`Подарок активирован: +${result.days} дней Premium!`);
+      toast.success(t('toasts.social.giftActivated', { days: result.days }));
       loadData();
     } else {
-      toast.error('Не удалось активировать подарок');
+      toast.error(t('toasts.social.giftError'));
     }
     return result;
-  }, [loadData]);
+  }, [loadData, t]);
 
   // Calculate stats
   const completedChallenges = progress.filter(p => p.is_completed).length;

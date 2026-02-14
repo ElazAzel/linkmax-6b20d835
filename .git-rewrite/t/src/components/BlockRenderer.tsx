@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback } from 'react';
 import type { Block } from '@/types/page';
+import type { PremiumTier } from '@/hooks/usePremiumStatus';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 import { useAnalytics } from '@/hooks/useAnalyticsTracking';
@@ -54,11 +55,15 @@ const CountdownBlock = lazy(() => import('./blocks/CountdownBlock').then(m => ({
 const PricingBlock = lazy(() => import('./blocks/PricingBlock').then(m => ({ default: m.PricingBlock })));
 const ShoutoutBlock = lazy(() => import('./blocks/ShoutoutBlock').then(m => ({ default: m.ShoutoutBlock })));
 const BookingBlock = lazy(() => import('./blocks/BookingBlock').then(m => ({ default: m.BookingBlock })));
+const CommunityBlock = lazy(() => import('./blocks/CommunityBlock').then(m => ({ default: m.CommunityBlock })));
 
 interface BlockRendererProps {
   block: Block;
   isPreview?: boolean;
   pageOwnerId?: string;
+  pageId?: string;
+  isOwnerPremium?: boolean;
+  ownerTier?: PremiumTier;
 }
 
 // Loading skeleton for blocks
@@ -77,7 +82,7 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
   return typeof rawTitle === 'object' ? getTranslatedString(rawTitle, lang) : String(rawTitle || block.type);
 }
 
-export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererProps) {
+export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
   const { onBlockClick } = useAnalytics();
   const { i18n } = useTranslation();
   
@@ -112,7 +117,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererPr
     case 'profile':
       return (
         <Suspense fallback={<BlockSkeleton />}>
-          <ProfileBlock block={block} isPreview={isPreview} />
+          <ProfileBlock block={block} isPreview={isPreview} isOwnerPremium={isOwnerPremium} ownerTier={ownerTier} />
         </Suspense>
       );
     case 'link':
@@ -325,8 +330,16 @@ export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererPr
             <BookingBlock 
               block={block as any}
               pageOwnerId={pageOwnerId}
-              pageId={undefined}
+              pageId={pageId}
             />
+          </Suspense>
+        </TrackableWrapper>
+      );
+    case 'community':
+      return (
+        <TrackableWrapper trackClicks>
+          <Suspense fallback={<BlockSkeleton />}>
+            <CommunityBlock block={block as any} />
           </Suspense>
         </TrackableWrapper>
       );

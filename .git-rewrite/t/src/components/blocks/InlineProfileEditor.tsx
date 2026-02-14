@@ -256,11 +256,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const getAvatarSize = () => {
     const size = block.avatarSize || 'large';
     switch (size) {
-      case 'small': return 'h-16 w-16';
-      case 'medium': return 'h-24 w-24';
-      case 'large': return 'h-32 w-32';
-      case 'xlarge': return 'h-40 w-40';
-      default: return 'h-32 w-32';
+      case 'small': return 'h-20 w-20';
+      case 'medium': return 'h-28 w-28';
+      case 'large': return 'h-36 w-36';
+      case 'xlarge': return 'h-44 w-44';
+      default: return 'h-36 w-36';
     }
   };
 
@@ -307,10 +307,10 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const getCoverHeight = () => {
     const height = block.coverHeight || 'medium';
     switch (height) {
-      case 'small': return 'h-[120px]';
-      case 'medium': return 'h-[200px]';
-      case 'large': return 'h-[320px]';
-      default: return 'h-[200px]';
+      case 'small': return 'h-[140px]';
+      case 'medium': return 'h-[240px]';
+      case 'large': return 'h-[360px]';
+      default: return 'h-[240px]';
     }
   };
 
@@ -439,7 +439,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         </div>
       </div>
       
-      <div className={`flex flex-col ${getPositionClass()} gap-4 p-6 ${block.coverImage ? '-mt-16' : ''}`}>
+      <div className={`flex flex-col ${getPositionClass()} gap-5 p-8 ${block.coverImage ? '-mt-20' : ''}`}>
         {/* Hidden file input for avatar upload */}
         <input
           ref={avatarInputRef}
@@ -457,9 +457,9 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
             onClick={handleAvatarClick}
             title={t('profile.clickToChangeAvatar', 'Click to change avatar')}
           >
-            <Avatar className={`${getAvatarSize()} ring-2 ring-primary ring-offset-2 ring-offset-background`}>
+            <Avatar className={`${getAvatarSize()} ring-4 ring-primary ring-offset-4 ring-offset-background`}>
               <AvatarImage src={block.avatar} alt={name} />
-              <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
+              <AvatarFallback className="bg-primary text-primary-foreground text-3xl font-black">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -560,9 +560,9 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
           </Popover>
         </div>
         
-        <div className="text-center space-y-2 w-full max-w-md">
-          {/* Editable Name */}
-          <div className="flex items-center justify-center gap-2">
+        <div className="text-center space-y-3 w-full max-w-md">
+          {/* Editable Name - BOLD */}
+          <div className="flex items-center justify-center gap-3">
             {isEditingName ? (
               <div className="flex items-center gap-2">
                 <Input
@@ -571,19 +571,19 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                   onChange={(e) => setEditedName(e.target.value)}
                   onKeyDown={handleNameKeyDown}
                   onBlur={handleSaveName}
-                  className="text-2xl font-bold text-center h-10 w-48"
+                  className="text-3xl font-black text-center h-14 w-56 rounded-2xl"
                   placeholder="Your Name"
                 />
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleSaveName}>
-                  <Check className="h-4 w-4 text-primary" />
+                <Button size="lg" variant="ghost" className="h-10 w-10 rounded-xl" onClick={handleSaveName}>
+                  <Check className="h-5 w-5 text-primary" />
                 </Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={handleCancelName}>
-                  <X className="h-4 w-4 text-muted-foreground" />
+                <Button size="lg" variant="ghost" className="h-10 w-10 rounded-xl" onClick={handleCancelName}>
+                  <X className="h-5 w-5 text-muted-foreground" />
                 </Button>
               </div>
             ) : (
               <h1 
-                className="text-2xl font-bold cursor-pointer hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary/30"
+                className="text-3xl font-black cursor-pointer hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary/30 tracking-tight"
                 onClick={() => setIsEditingName(true)}
                 title="Click to edit"
               >
@@ -591,36 +591,36 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
               </h1>
             )}
             {block.verified && !isEditingName && (
-              <Badge variant="secondary" className="gap-1">
-                <CheckCircle2 className="h-3 w-3" />
+              <Badge variant="secondary" className="gap-1.5 text-sm px-3 py-1 rounded-xl font-bold">
+                <CheckCircle2 className="h-4 w-4" />
                 Verified
               </Badge>
             )}
           </div>
           
-          {/* Editable Bio */}
+          {/* Editable Bio - BOLD */}
           {isEditingBio ? (
-            <div className="space-y-2 w-full">
+            <div className="space-y-3 w-full">
               <RichTextEditor
                 value={editedBio}
                 onChange={setEditedBio}
                 placeholder={t('profile.bioPlaceholder', 'Tell people about yourself')}
-                className="min-h-[80px] text-sm"
+                className="min-h-[100px] text-base rounded-2xl"
               />
-              <div className="flex items-center justify-center gap-2">
-                <Button size="sm" variant="default" onClick={handleSaveBio}>
-                  <Check className="h-4 w-4 mr-1" />
+              <div className="flex items-center justify-center gap-3">
+                <Button size="lg" variant="default" onClick={handleSaveBio} className="rounded-2xl px-6 h-12 font-bold">
+                  <Check className="h-5 w-5 mr-2" />
                   {t('common.save', 'Save')}
                 </Button>
-                <Button size="sm" variant="ghost" onClick={handleCancelBio}>
-                  <X className="h-4 w-4 mr-1" />
+                <Button size="lg" variant="ghost" onClick={handleCancelBio} className="rounded-2xl px-6 h-12 font-bold">
+                  <X className="h-5 w-5 mr-2" />
                   {t('editor.cancel', 'Cancel')}
                 </Button>
               </div>
             </div>
           ) : (
             <p 
-              className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors border-b-2 border-transparent hover:border-primary/30 px-2 py-1"
+              className="text-lg text-muted-foreground cursor-pointer hover:text-foreground transition-colors border-b-2 border-transparent hover:border-primary/30 px-3 py-2 font-medium"
               onClick={() => setIsEditingBio(true)}
               title={t('profile.clickToEdit', 'Click to edit')}
             >

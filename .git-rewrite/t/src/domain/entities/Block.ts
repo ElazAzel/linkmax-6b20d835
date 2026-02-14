@@ -12,7 +12,7 @@ export type BlockType =
   | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' 
   | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' 
   | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' 
-  | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking';
+  | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community';
 
 export type Currency = 
   | 'KZT' | 'RUB' | 'BYN' | 'AMD' | 'AZN' | 'KGS' | 'TJS' | 'TMT' | 'UZS' 
@@ -54,6 +54,7 @@ export const BLOCK_CATEGORIES = {
   interactive: ['form', 'messenger', 'map', 'faq', 'scratch', 'search'],
   commerce: ['product', 'catalog', 'pricing', 'download'],
   advanced: ['custom_code', 'newsletter', 'testimonial', 'countdown', 'socials'],
+  social: ['shoutout', 'community'],
 } as const;
 
 export const PREMIUM_BLOCK_TYPES: readonly BlockType[] = [

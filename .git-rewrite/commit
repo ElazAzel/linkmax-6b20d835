@@ -1,6 +1,11 @@
-tree db59533667c31dc9ba5bb35500061d57021fc283
-parent 92c003ac55291c0a50c67cdd70d3f81e7e024a78
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766774786 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766774786 +0000
+tree 3e15ce5013adabec0827f92bce9ba9587bd628f2
+parent dcd2446d0276f38d8d8fcf777f4d0b31b3a2dccc
+parent 3dd309cb2aff1c0500ea0ab60f5713a716bd03db
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767248476 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1767248476 +0000
 
-Changes
+Add AutomationsPanel to mobile settings
+
+Integrate CRM AutomationsPanel into MobileSettingsSheet premium tab for mobile users and update imports.
+
+X-Lovable-Edit-ID: edt-f3e397cc-5597-4c2e-adc5-fcd6351459ba

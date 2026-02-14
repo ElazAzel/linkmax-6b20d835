@@ -207,7 +207,7 @@ export class SupabasePageRepository implements IPageRepository {
         seo: pageRow.seo_meta as unknown as Page['seo'],
         isPremium: blocks.some((b) => b.is_premium),
         isPublished: pageRow.is_published ?? false,
-        editorMode: (pageRow as unknown as { editor_mode?: string }).editor_mode as EditorMode || 'linear',
+        editorMode: 'grid',
         gridConfig: (pageRow as unknown as { grid_config?: GridConfig }).grid_config || undefined,
         viewCount: pageRow.view_count ?? 0,
       };
@@ -247,7 +247,7 @@ export class SupabasePageRepository implements IPageRepository {
         seo: pageRow.seo_meta as unknown as Page['seo'],
         isPremium: blocks.some((b) => b.is_premium),
         isPublished: pageRow.is_published ?? false,
-        editorMode: (pageRow as unknown as { editor_mode?: string }).editor_mode as EditorMode || 'linear',
+        editorMode: 'grid',
         gridConfig: (pageRow as unknown as { grid_config?: GridConfig }).grid_config || undefined,
       };
 

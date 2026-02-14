@@ -22,6 +22,8 @@ import { ru, enUS, kk } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { AdminCharts } from '@/components/admin/AdminCharts';
 import { AdminAnalyticsDashboard } from '@/components/admin/AdminAnalyticsDashboard';
+import { UserTierManager } from '@/components/admin/UserTierManager';
+import { Crown } from 'lucide-react';
 
 interface PlatformStats {
   totalUsers: number;
@@ -417,6 +419,11 @@ export default function Admin() {
                 <TrendingUp className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 md:mr-2" />
                 <span className="hidden sm:inline">{t('admin.detailed')}</span>
                 <span className="sm:hidden">{t('admin.detailed').slice(0, 5)}</span>
+              </TabsTrigger>
+              <TabsTrigger value="tiers" className="text-xs md:text-sm px-2 md:px-3 py-1.5 md:py-2">
+                <Crown className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">{t('admin.tiers')}</span>
+                <span className="sm:hidden">{t('admin.tiers').slice(0, 4)}</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -1010,6 +1017,11 @@ export default function Admin() {
           {/* Detailed Analytics Tab */}
           <TabsContent value="detailed">
             <AdminAnalyticsDashboard />
+          </TabsContent>
+
+          {/* User Tiers Tab */}
+          <TabsContent value="tiers">
+            <UserTierManager />
           </TabsContent>
         </Tabs>
       </main>

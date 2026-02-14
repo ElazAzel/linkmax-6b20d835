@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+/* Font is loaded via HTML preload for better FCP */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,6 +11,54 @@
   100% {
     background-position: -200% 0;
   }
+}
+
+/* Chaotic grid animations - slower for calm effect */
+@keyframes grid-morph-1 {
+  0%, 100% { background-size: 60px 60px; }
+  12% { background-size: 85px 42px; }
+  28% { background-size: 48px 95px; }
+  41% { background-size: 72px 58px; }
+  55% { background-size: 38px 78px; }
+  68% { background-size: 92px 45px; }
+  84% { background-size: 52px 88px; }
+}
+
+@keyframes grid-morph-2 {
+  0%, 100% { background-size: 45px 80px; }
+  18% { background-size: 70px 50px; }
+  35% { background-size: 55px 100px; }
+  52% { background-size: 95px 40px; }
+  70% { background-size: 42px 72px; }
+  88% { background-size: 78px 55px; }
+}
+
+@keyframes grid-morph-3 {
+  0%, 100% { background-size: 75px 50px; }
+  22% { background-size: 50px 85px; }
+  44% { background-size: 88px 38px; }
+  66% { background-size: 42px 92px; }
+  88% { background-size: 68px 62px; }
+}
+
+.animate-grid-morph-1 {
+  animation: grid-morph-1 45s ease-in-out infinite;
+}
+
+.animate-grid-morph-2 {
+  animation: grid-morph-2 38s ease-in-out infinite;
+  animation-delay: -15s;
+}
+
+.animate-grid-morph-3 {
+  animation: grid-morph-3 42s ease-in-out infinite;
+  animation-delay: -25s;
+}
+
+/* Grid edge fade effect */
+.grid-fade-edges {
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
 }
 
 /* ============================================
@@ -514,5 +562,54 @@
   @keyframes pulse-ring {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0; transform: scale(1.1); }
+  }
+
+  /* ========================================
+     MOBILE PERFORMANCE OPTIMIZATIONS
+     ======================================== */
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* Optimize blur effects on mobile for better performance */
+  @media (max-width: 640px) {
+    .backdrop-blur-xl {
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+    
+    .backdrop-blur-2xl {
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+    }
+    
+    /* Reduce animation complexity on mobile */
+    .animate-morph {
+      animation: none !important;
+    }
+    
+    .animate-gradient-x {
+      animation: none !important;
+      background-position: 0% 50% !important;
+    }
+  }
+  
+  /* GPU acceleration hints for smooth scrolling */
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  /* Optimize touch interactions */
+  @media (pointer: coarse) {
+    button, a, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }

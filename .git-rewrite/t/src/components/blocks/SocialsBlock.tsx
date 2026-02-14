@@ -1,6 +1,10 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Instagram, Send, Youtube, Music, Twitter, Github, Linkedin, Facebook, Globe } from 'lucide-react';
+import { 
+  Instagram, Send, Youtube, Music, Twitter, Github, Linkedin, Facebook, Globe,
+  MessageCircle, Phone, Mail, Twitch, Dribbble, Figma, Slack, 
+  Chrome, Rss, Link2, AtSign, MapPin, Calendar, Podcast
+} from 'lucide-react';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 
@@ -9,17 +13,63 @@ interface SocialsBlockProps {
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  // Social Media
   instagram: Instagram,
   telegram: Send,
   youtube: Youtube,
   tiktok: Music,
   twitter: Twitter,
+  x: Twitter,
   github: Github,
   linkedin: Linkedin,
   facebook: Facebook,
-  threads: Instagram,
+  threads: AtSign,
+  whatsapp: MessageCircle,
+  viber: Phone,
+  discord: MessageCircle,
+  snapchat: MessageCircle,
+  pinterest: Globe,
+  reddit: MessageCircle,
+  tumblr: Globe,
+  vk: Globe,
+  ok: Globe,
+  wechat: MessageCircle,
+  line: MessageCircle,
+  kakao: MessageCircle,
+  
+  // Professional & Creative
+  twitch: Twitch,
+  dribbble: Dribbble,
+  behance: Globe,
+  figma: Figma,
+  medium: Globe,
+  devto: Globe,
+  stackoverflow: Globe,
+  producthunt: Globe,
+  
+  // Communication
+  email: Mail,
+  mail: Mail,
+  phone: Phone,
+  slack: Slack,
+  skype: Phone,
+  zoom: Calendar,
+  
+  // Content
+  spotify: Music,
+  soundcloud: Music,
+  applemusic: Music,
+  deezer: Music,
+  podcast: Podcast,
+  rss: Rss,
+  
+  // Other
+  website: Globe,
   globe: Globe,
-  whatsapp: Send,
+  link: Link2,
+  chrome: Chrome,
+  maps: MapPin,
+  location: MapPin,
 };
 
 export const SocialsBlock = memo(function SocialsBlockComponent({ block }: SocialsBlockProps) {

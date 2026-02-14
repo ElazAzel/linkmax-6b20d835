@@ -15,9 +15,8 @@ import { useDashboardSharing } from '@/hooks/useDashboardSharing';
 import { useDashboardUsername } from '@/hooks/useDashboardUsername';
 import { useDashboardAI } from '@/hooks/useDashboardAI';
 import { useBlockEditor } from '@/hooks/useBlockEditor';
-import { useEditorModeToggle } from '@/hooks/useEditorModeToggle';
 import { useDailyQuests } from '@/hooks/useDailyQuests';
-import type { Block, ProfileBlock, PageData } from '@/types/page';
+import type { Block, ProfileBlock } from '@/types/page';
 import type { UserStats } from '@/types/achievements';
 
 /**
@@ -26,7 +25,7 @@ import type { UserStats } from '@/types/achievements';
 export function useDashboard() {
   const navigate = useNavigate();
   const { signOut } = useAuth();
-  const { isPremium, isLoading: premiumLoading } = usePremiumStatus();
+  const { isPremium, isLoading: premiumLoading, tier: currentTier = 'free' } = usePremiumStatus();
   const blockHints = useBlockHints();
   const achievements = useAchievements();
   const { playAdd, playDelete, playError } = useSoundEffects();
@@ -136,12 +135,6 @@ export function useDashboard() {
     onQuestComplete: dailyQuests.markQuestComplete,
   });
 
-  // Editor mode toggle (linear/grid)
-  const editorModeState = useEditorModeToggle({
-    pageData,
-    updatePageData: pageState.updatePageDataPartial,
-  });
-
   // Onboarding
   const onboardingState = useDashboardOnboarding({
     isUserReady: !!user,
@@ -208,16 +201,12 @@ export function useDashboard() {
     loading: loading || authLoading,
     isMobile,
     isPremium,
+    currentTier,
     premiumLoading,
 
     // Page operations
     ...pageState,
     updateNiche: pageState.updateNiche,
-
-    // Editor mode
-    editorMode: editorModeState.currentMode,
-    toggleEditorMode: editorModeState.toggleMode,
-    isGridMode: editorModeState.isGridMode,
 
     // User profile
     userProfile,

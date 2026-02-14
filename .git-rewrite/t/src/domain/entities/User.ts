@@ -117,33 +117,104 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
 
 // ============= Freemium Limits =============
 
+export type PremiumTier = 'free' | 'pro' | 'business';
+
 export interface FreemiumLimits {
   maxBlocks: number;
-  maxAiRequestsPerDay: number;
+  maxAiRequestsPerWeek: number;
   canUseAnalytics: boolean;
   canUseCRM: boolean;
   showWatermark: boolean;
+  maxLeadsPerMonth: number;
+  canUseScheduler: boolean;
+  canUsePixels: boolean;
+  canUseCustomDomain: boolean;
+  canUseChatbot: boolean;
+  canUseAutoNotifications: boolean;
+  canUsePayments: boolean;
+  canUseWhiteLabel: boolean;
+  canUseMultiPage: boolean;
+  canUseVerificationBadge: boolean;
+  canUsePremiumFrames: boolean;
+  canUseAdvancedThemes: boolean;
 }
 
 export const FREE_TIER_LIMITS: FreemiumLimits = {
-  maxBlocks: 5,
-  maxAiRequestsPerDay: 3,
+  maxBlocks: Infinity,
+  maxAiRequestsPerWeek: 3,
   canUseAnalytics: false,
   canUseCRM: false,
   showWatermark: true,
+  maxLeadsPerMonth: 0,
+  canUseScheduler: false,
+  canUsePixels: false,
+  canUseCustomDomain: false,
+  canUseChatbot: false,
+  canUseAutoNotifications: false,
+  canUsePayments: false,
+  canUseWhiteLabel: false,
+  canUseMultiPage: false,
+  canUseVerificationBadge: false,
+  canUsePremiumFrames: false,
+  canUseAdvancedThemes: false,
 };
 
-export const PREMIUM_TIER_LIMITS: FreemiumLimits = {
+export const PRO_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
-  maxAiRequestsPerDay: Infinity,
+  maxAiRequestsPerWeek: Infinity,
   canUseAnalytics: true,
   canUseCRM: true,
   showWatermark: false,
+  maxLeadsPerMonth: 100,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: false,
+  canUseChatbot: false,
+  canUseAutoNotifications: false,
+  canUsePayments: false,
+  canUseWhiteLabel: false,
+  canUseMultiPage: false,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
+};
+
+export const BUSINESS_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: Infinity,
+  maxAiRequestsPerWeek: Infinity,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  showWatermark: false,
+  maxLeadsPerMonth: Infinity,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: true,
+  canUseChatbot: true,
+  canUseAutoNotifications: true,
+  canUsePayments: true,
+  canUseWhiteLabel: true,
+  canUseMultiPage: true,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
 };
 
 /**
- * Get user's limits based on premium status
+ * Get user's limits based on tier
  */
-export function getUserLimits(status: PremiumStatus): FreemiumLimits {
-  return status.isPremium ? PREMIUM_TIER_LIMITS : FREE_TIER_LIMITS;
+export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): FreemiumLimits {
+  if (status.tier === 'business') return BUSINESS_TIER_LIMITS;
+  if (status.tier === 'pro' || status.isPremium) return PRO_TIER_LIMITS;
+  return FREE_TIER_LIMITS;
+}
+
+/**
+ * Get tier display name
+ */
+export function getTierDisplayName(tier: PremiumTier): string {
+  switch (tier) {
+    case 'business': return 'BUSINESS';
+    case 'pro': return 'PRO';
+    default: return 'BASIC';
+  }
 }

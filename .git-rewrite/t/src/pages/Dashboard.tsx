@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useDashboard } from '@/hooks/useDashboard';
+import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
 import { PreviewEditor } from '@/components/editor/PreviewEditor';
 import { TemplateGallery } from '@/components/editor/TemplateGallery';
 import { SaveTemplateDialog } from '@/components/editor/SaveTemplateDialog';
@@ -34,6 +35,7 @@ import {
 export default function Dashboard() {
   const navigate = useNavigate();
   const dashboard = useDashboard();
+  const { canUseCustomPageBackground } = useFreemiumLimits();
 
   // Local UI state
   const [migrationKey, setMigrationKey] = useState(0);
@@ -83,8 +85,6 @@ export default function Dashboard() {
         saveStatus={dashboard.saveStatus}
         achievementCount={dashboard.achievements.getProgress().unlocked}
         showSettings={showSettings}
-        editorMode={dashboard.pageData?.editorMode || 'linear'}
-        onToggleEditorMode={dashboard.toggleEditorMode}
         onToggleSettings={() => setShowSettings(!showSettings)}
         onSave={dashboard.save}
         onPreview={dashboard.sharingState.handlePreview}
@@ -151,6 +151,16 @@ export default function Dashboard() {
           onOpenFriends={() => setShowFriends(true)}
           onOpenSaveTemplate={() => setShowSaveTemplate(true)}
           onOpenMyTemplates={() => setShowMyTemplates(true)}
+          pageBackground={dashboard.pageData?.theme?.customBackground}
+          onPageBackgroundChange={(background) => {
+            dashboard.updatePageDataPartial({ 
+              theme: { 
+                ...dashboard.pageData.theme, 
+                customBackground: background 
+              } 
+            });
+          }}
+          canUseCustomPageBackground={canUseCustomPageBackground()}
         />
 
         {/* Referral Panel in Settings Area */}
@@ -179,7 +189,8 @@ export default function Dashboard() {
               <PreviewEditor
                 blocks={dashboard.pageData.blocks}
                 isPremium={dashboard.isPremium}
-                editorMode={dashboard.pageData.editorMode || 'linear'}
+                currentTier={dashboard.currentTier}
+                premiumTier={dashboard.currentTier}
                 gridConfig={dashboard.pageData.gridConfig}
                 onInsertBlock={dashboard.blockEditor.handleInsertBlock}
                 onEditBlock={dashboard.blockEditor.handleEditBlock}
@@ -199,7 +210,6 @@ export default function Dashboard() {
         <MobileToolbar
           saving={dashboard.saving}
           saveStatus={dashboard.saveStatus}
-          editorMode={dashboard.editorMode}
           onSave={dashboard.save}
           onPreview={dashboard.sharingState.handlePreview}
           onShare={dashboard.sharingState.handleShare}
@@ -208,7 +218,6 @@ export default function Dashboard() {
           onOpenTemplates={() => setTemplateGalleryOpen(true)}
           onOpenAchievements={() => setShowAchievements(true)}
           onOpenCRM={() => setShowLeads(true)}
-          onToggleEditorMode={dashboard.toggleEditorMode}
           achievementCount={dashboard.achievements.getProgress().unlocked}
         />
       )}

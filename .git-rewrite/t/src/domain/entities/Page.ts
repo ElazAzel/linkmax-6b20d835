@@ -7,7 +7,7 @@ import type { BaseBlock, BlockType } from './Block';
 
 // ============= Value Objects =============
 
-export type EditorMode = 'linear' | 'grid';
+export type EditorMode = 'grid';
 
 export interface PageTheme {
   backgroundColor: string;
@@ -104,7 +104,7 @@ export function createDefaultPage<TBlock extends BaseBlock = BaseBlock>(
     blocks: [profileBlock || createDefaultProfileBlock() as unknown as TBlock],
     theme: { ...DEFAULT_THEME },
     seo: { ...DEFAULT_SEO },
-    editorMode: 'linear',
+    editorMode: 'grid',
   };
 }
 

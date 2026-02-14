@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { getPublicPageUrl, copyToClipboard } from '@/lib/url-helpers';
 import { incrementChallengeProgress, recordActivity } from '@/services/social';
 
@@ -18,6 +19,7 @@ interface UseDashboardSharingOptions {
  * Hook to manage sharing, preview, referral dialog, and install prompt logic
  */
 export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseDashboardSharingOptions) {
+  const { t } = useTranslation();
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState('');
@@ -35,7 +37,7 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
     const copied = await copyToClipboard(url);
 
     if (copied) {
-      toast.success('Link copied to clipboard!');
+      toast.success(t('toasts.sharing.linkCopied'));
       // Trigger share_page quest
       onQuestComplete?.('share_page');
       // Track challenge progress
@@ -43,7 +45,7 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
       // Record activity for friends feed
       recordActivity('page_published', { slug });
     } else {
-      toast.error('Failed to copy link');
+      toast.error(t('toasts.sharing.copyError'));
     }
 
     // Show share/referral dialog periodically (every 3 publishes)
@@ -62,7 +64,7 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete }: UseD
       setTimeout(() => setShowInstallPrompt(true), 2000);
       localStorage.setItem(STORAGE_KEYS.INSTALL_PROMPT_SHOWN, 'true');
     }
-  }, [onPublish, onQuestComplete]);
+  }, [onPublish, onQuestComplete, t]);
 
   const handlePreview = useCallback(async () => {
     await onSave();

@@ -92,7 +92,19 @@
       "free": "Free",
       "noCode": "No code",
       "aiHelps": "AI helps",
-      "create": "Create"
+      "create": "Create",
+      "badges": {
+        "aiReady": "AI Ready",
+        "autoGenerate": "Auto-generate",
+        "clicks": "Clicks",
+        "verified": "Verified",
+        "premium": "Premium"
+      },
+      "mockup": {
+        "name": "Alex Creator",
+        "role": "Digital Artist",
+        "portfolio": "Portfolio"
+      }
     },
     "problems": {
       "title": "Sound Familiar?",
@@ -374,32 +386,97 @@
       },
       "q2": {
         "question": "How much does LinkMAX cost?",
-        "answer": "The Basic plan is free forever and includes unlimited links, basic blocks, and 3 AI requests per day. Premium plans start at $2.50/month with annual billing and unlock professional themes, analytics, CRM, and unlimited AI."
+        "answer": "The Basic plan is free forever and includes unlimited links, basic blocks, and 3 AI requests per day. Premium plans start at $3.15/month with annual billing."
       },
       "q3": {
         "question": "How does AI page generation work?",
-        "answer": "During registration, you choose your niche (barber, photographer, trainer, etc.), and AI automatically creates a ready page with profile, needed blocks, and texts adapted to your profession. This takes about 30 seconds."
+        "answer": "During registration, you choose your niche (barber, photographer, trainer, etc.), and AI automatically creates a ready page with profile, needed blocks, and texts adapted to your profession."
       },
       "q4": {
         "question": "Can I use my own domain?",
-        "answer": "Yes, the Business plan allows you to connect your own domain with an SSL certificate. On free and Pro plans, your page is available at linkmax.app/your-name."
+        "answer": "Yes, the Business plan allows you to connect your own domain with an SSL certificate. On free and Pro plans, your page is available at lnkmx.my/your-name."
       },
       "q5": {
         "question": "How do I accept payments through my page?",
-        "answer": "The Business plan includes Stripe and Kaspi Pay integration. You can sell products, services, and digital products directly from your page, receive payment notifications, and track them in CRM."
+        "answer": "The Business plan includes Stripe and Kaspi Pay integration. You can sell products, services, and digital products directly from your page."
       },
       "q6": {
         "question": "Is there a mobile editor?",
-        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit your page from your smartphone — add blocks, change design, view analytics, and manage leads."
+        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit your page from your smartphone."
       },
       "q7": {
         "question": "What blocks are available?",
-        "answer": "20+ block types are available: profile, links, buttons, images, video, carousels, products, price lists, forms, maps, messengers, testimonials, timers, and more. Premium blocks unlock with paid plans."
+        "answer": "20+ block types are available: profile, links, buttons, images, video, carousels, products, price lists, forms, maps, messengers, testimonials, timers, and more."
       },
       "q8": {
         "question": "Is there analytics and CRM?",
-        "answer": "Yes, LinkMAX includes built-in view and click analytics. Pro plan offers mini-CRM for up to 100 leads/month with Telegram notifications, and Business has full CRM without limits."
+        "answer": "Yes, LinkMAX includes built-in view and click analytics. Pro plan offers mini-CRM for up to 100 leads/month, and Business has full CRM without limits."
+      },
+      "q9": {
+        "question": "Can I install Meta, TikTok, Google pixels?",
+        "answer": "Yes, Pro and Business plans allow you to add pixels for retargeting and conversion tracking: Meta Pixel, TikTok Pixel, Google Analytics and more."
+      },
+      "q10": {
+        "question": "What integrations does LinkMAX support?",
+        "answer": "LinkMAX integrates with Telegram for notifications, Stripe and Kaspi Pay for payments, Google Calendar for bookings. All social networks and messengers are supported."
+      },
+      "q11": {
+        "question": "Does LinkMAX take commission from sales?",
+        "answer": "No! We don't take a percentage from your transactions — 0% commission. You only pay for the plan, all sales revenue stays with you."
+      },
+      "q12": {
+        "question": "How secure is data on LinkMAX?",
+        "answer": "We use SSL encryption, secure servers and comply with security standards. Your data and your customers' data is safe."
+      },
+      "q13": {
+        "question": "Can I see examples of pages?",
+        "answer": "Yes! Our gallery features real user pages from different niches: barbers, photographers, trainers, psychologists, shops and more."
+      },
+      "q14": {
+        "question": "How is LinkMAX better than Linktree and Taplink?",
+        "answer": "LinkMAX offers AI content generation, 0% sales commission, built-in CRM, gamification (achievements, quests) and modern design. Plus Russian and Kazakh language support."
       }
+    },
+    "toc": {
+      "title": "Contents",
+      "ariaLabel": "Page contents",
+      "linkInBio": "What is Link-in-Bio",
+      "forWhom": "Who it's for",
+      "features": "Features",
+      "useCases": "Examples",
+      "pricing": "Pricing",
+      "faq": "FAQ"
+    },
+    "linkInBio": {
+      "title": "What is Link-in-Bio and why do you need it?",
+      "subtitle": "A link page is a mini-site that combines all your resources: social media, messengers, portfolio, products and services",
+      "p1": "Link-in-Bio (multi-link, bio link) is a page you place in your Instagram, TikTok, YouTube or Telegram profile. Instead of one link, you get a full mini-landing with buttons, contacts and even a product catalog.",
+      "p2": "LinkMAX is a modern Linktree and Taplink alternative with AI content generation. Choose your niche (barber, photographer, trainer, psychologist), and AI creates a ready page in 2 minutes with profile, blocks and texts.",
+      "p3": "Unlike competitors, we don't take commission from your sales. All money from products and services is yours. Built-in analytics and CRM help understand which links work best.",
+      "benefit1": "All links in one place",
+      "benefit2": "AI creates content",
+      "benefit3": "Click analytics",
+      "benefit4": "No commissions",
+      "benefit5": "Custom domain",
+      "benefit6": "Mobile editor",
+      "keywords": "Keywords: link page, bio link, link in bio, multilink, linktree alternative, taplink alternative, mini-landing"
+    },
+    "niches": {
+      "title": "Who is LinkMAX for?",
+      "subtitle": "We created special templates for each niche. AI knows your audience's pain points and creates a page for your tasks",
+      "cta": "Create page for my niche",
+      "barber": { "title": "Barbers & stylists", "pain": "Clients don't know how to book, confused by messengers", "benefit": "Online booking + price list in one place" },
+      "photographer": { "title": "Photographers", "pain": "Hard to show portfolio and prices together", "benefit": "Gallery + pricing + booking" },
+      "fitness": { "title": "Fitness trainers", "pain": "Selling online programs but nowhere to present them", "benefit": "Program catalog + payment + reviews" },
+      "beauty": { "title": "Beauty masters", "pain": "Clients ask prices in DM — it's slow", "benefit": "Price list + before/after + online booking" },
+      "psychologist": { "title": "Psychologists & coaches", "pain": "Want to show my approach but can't build websites", "benefit": "About + directions + booking" },
+      "tutor": { "title": "Tutors & teachers", "pain": "Nowhere to post schedule and prices", "benefit": "Subjects + schedule + inquiry form" },
+      "clinic": { "title": "Clinics & salons", "pain": "Need quick page for promotions", "benefit": "Services + specialists + contacts" },
+      "musician": { "title": "Musicians & DJs", "pain": "Links to Spotify, Apple Music, booking — scattered", "benefit": "All platforms + events + contact" },
+      "designer": { "title": "Designers & artists", "pain": "Want to show work without complex portfolio site", "benefit": "Gallery + service prices + order" },
+      "cafe": { "title": "Cafes & restaurants", "pain": "PDF menu is inconvenient, need current version", "benefit": "Menu + promos + map + delivery" },
+      "shop": { "title": "Shops & brands", "pain": "No budget for full e-commerce store", "benefit": "Mini-catalog + payment + delivery" },
+      "agency": { "title": "Agencies & studios", "pain": "Need quick page for each project", "benefit": "Cases + services + team contacts" }
     },
     "useCases": {
       "badge": "Use Cases",
@@ -454,6 +531,22 @@
         "link2": "🏷️ Sales",
         "link3": "🚚 Delivery"
       }
+    },
+    "demo": {
+      "badge": "Try it now",
+      "title": "Experience the Magic.",
+      "subtitle": "Play with the editor right here. Add blocks, edit content, and see changes in real-time.",
+      "profile": "Profile",
+      "addBlocks": "Add Blocks",
+      "link": "Link",
+      "text": "Text",
+      "image": "Image",
+      "socials": "Socials",
+      "yourBlocks": "Your Blocks",
+      "dragToReorder": "drag to reorder",
+      "noBlocks": "No blocks yet. Add some above!",
+      "addBlocksHint": "Add blocks to see them here",
+      "livePreview": "Live Preview"
     },
     "capabilities": {
       "noCode": {
@@ -516,14 +609,6 @@
         "desc": "Interactive demo right on the site — no registration needed"
       }
     },
-    "hero": {
-      "usernamePlaceholder": "yourname",
-      "create": "Create",
-      "free": "Free forever",
-      "noCode": "No coding",
-      "aiPowered": "AI-powered",
-      "subtitle2": "One link for all your socials, portfolio and business"
-    },
     "howItWorks": {
       "step4": {
         "title": "Share your link",
@@ -566,7 +651,23 @@
     "passwordUpdatedDesc": "Your password has been successfully updated",
     "goToDashboard": "Go to Dashboard",
     "passwordsDoNotMatch": "Passwords do not match",
-    "updateFailed": "Failed to update password"
+    "updateFailed": "Failed to update password",
+    "telegram": {
+      "invalidChatId": "Enter a valid Telegram Chat ID",
+      "notFound": "Account with this Telegram not found",
+      "sendFailed": "Failed to send message",
+      "codeSendError": "Error sending code",
+      "codeSent": "Code sent to Telegram!",
+      "connectionError": "Connection error",
+      "invalidToken": "Invalid or expired code",
+      "resetError": "Password reset error",
+      "passwordChanged": "Password successfully changed!"
+    },
+    "referral": {
+      "invited": "You have been invited!",
+      "bonus": "Sign up and get +3 days Premium",
+      "success": "🎉 +{{days}} days Premium for referral code!"
+    }
   },
   "editor": {
     "title": "Page Editor",
@@ -665,7 +766,23 @@
     "verifiedBadge": "Verified badge",
     "productName": "Product Name",
     "buyLink": "Buy Link",
-    "optional": "(optional)"
+    "optional": "(optional)",
+    "proofOfHuman": "Proof of Human",
+    "boostTrust": "📈 +Trust",
+    "proofOfHumanDescription": "Add a short video or voice greeting to show visitors you're a real person and boost conversions",
+    "introVideo": "Video Greeting (max 30s)",
+    "introAudio": "Voice Greeting",
+    "proofOfHumanActive": "Your profile now shows a verified human badge with media",
+    "telegramLink": "Telegram Link",
+    "memberCount": "Member Count",
+    "communityStyle": "Style",
+    "serviceType": "Service Type",
+    "duration": "Duration",
+    "priceType": "Price Type",
+    "priceMax": "Max Price",
+    "isBookable": "Bookable",
+    "availableDays": "Available Days",
+    "verificationBadge": "Verification Badge"
   },
   "settings": {
     "pageSettings": "Page Settings",
@@ -705,7 +822,9 @@
     "translateToOthers": "Translate to other languages",
     "noTextToTranslate": "Enter text to translate",
     "translationSuccess": "Translation completed",
-    "translationError": "Translation error"
+    "translationError": "Translation error",
+    "translating": "Translating...",
+    "autoTranslate": "Auto-translate content"
   },
   "freemium": {
     "blockLimitReached": "Block limit reached. Upgrade to Premium for unlimited blocks.",
@@ -1042,9 +1161,188 @@
       "thu": "Thu",
       "fri": "Fri",
       "sat": "Sat"
-    }
+    },
+    "tiers": "Tiers",
+    "tierManagement": "Tier Management",
+    "searchUsers": "Search users",
+    "tierFree": "Free",
+    "tierPro": "Pro",
+    "tierBusiness": "Business",
+    "user": "User",
+    "tier": "Tier",
+    "expiry": "Expiry",
+    "edit": "Edit",
+    "editUserTier": "Edit User Tier",
+    "selectTier": "Select tier",
+    "expiryDate": "Expiry date",
+    "week": "week",
+    "month": "month",
+    "year": "year",
+    "lifetime": "Lifetime",
+    "expiresOn": "expires",
+    "expired": "Expired",
+    "leaveEmptyLifetime": "Leave empty for lifetime access",
+    "cancel": "Cancel",
+    "save": "Save",
+    "tierUpdated": "Tier updated",
+    "tierUpdateError": "Failed to update tier",
+    "loadError": "Failed to load",
+    "adminRole": "Administrator",
+    "adminRoleDesc": "Access to admin panel"
   },
   "dashboard": {
-    "pageRefreshed": "Page refreshed"
+    "pageRefreshed": "Page refreshed",
+    "addFirstBlock": "Click + to add your first block"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "preview": "Preview",
+    "share": "Share",
+    "more": "More",
+    "settings": "Settings",
+    "language": "Language",
+    "noResults": "No results found"
+  },
+  "menu": {
+    "gamification": "Gamification",
+    "community": "Community",
+    "signOut": "Sign Out"
+  },
+  "mobileToolbar": {
+    "save": "Save",
+    "preview": "Preview",
+    "share": "Share",
+    "settings": "Settings",
+    "more": "More",
+    "moreOptions": "More Options",
+    "aiBuilder": "AI Builder",
+    "aiBuilderDesc": "Create page with AI",
+    "templates": "Templates",
+    "templatesDesc": "Ready templates",
+    "achievements": "Achievements",
+    "achievementsDesc": "Your progress",
+    "crm": "CRM",
+    "crmDesc": "Manage leads"
+  },
+  "tokens": {
+    "title": "Tokens",
+    "balance": "Balance",
+    "earn": "Earn",
+    "spend": "Spend"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "progress": "Progress"
+  },
+  "freemium": {
+    "left": "left",
+    "limit": "limit",
+    "blockLimitReached": "Block limit reached. Upgrade to Premium for unlimited blocks.",
+    "blocksRemaining": "Blocks remaining: {{count}} of {{max}}",
+    "upgradeToPremium": "Upgrade to Premium",
+    "aiLimitReached": "AI request limit reached",
+    "aiRequestsRemaining": "AI requests remaining this week: {{count}}",
+    "aiLimitResetsWeekly": "Limit resets every week",
+    "unlimitedAI": "Unlimited AI",
+    "premiumBlockRequired": "This block requires Premium",
+    "viewOnly": "View only",
+    "viewOnlyHint": "Requires {{tier}} to edit",
+    "upgradeToEdit": "Upgrade to {{tier}} to edit",
+    "proRequired": "Requires PRO",
+    "businessRequired": "Requires BUSINESS"
+  },
+  "editor": {
+    "addBlock": "Add Block",
+    "selectBlock": "Select a block",
+    "searchBlocks": "Search blocks..."
+  },
+  "toasts": {
+    "collaboration": {
+      "requestSent": "Collaboration request sent!",
+      "requestError": "Failed to send request",
+      "accepted": "Collaboration accepted!",
+      "rejected": "Request rejected",
+      "deleted": "Collaboration deleted",
+      "error": "Error"
+    },
+    "team": {
+      "created": "Team created!",
+      "createError": "Failed to create team",
+      "memberInvited": "User invited to team!",
+      "inviteError": "Failed to invite",
+      "left": "You left the team",
+      "deleted": "Team deleted",
+      "memberRemoved": "Member removed",
+      "removeError": "Failed to remove",
+      "confirmRemove": "Remove {{name}} from team?"
+    },
+    "shoutout": {
+      "added": "Shoutout added!",
+      "deleted": "Shoutout deleted",
+      "error": "Error"
+    },
+    "social": {
+      "rewardClaimed": "Reward claimed: +{{hours}} hours Premium!",
+      "rewardError": "Failed to claim reward",
+      "giftActivated": "Gift activated: +{{days}} days Premium!",
+      "giftError": "Failed to activate gift"
+    },
+    "leads": {
+      "loadError": "Failed to load leads",
+      "created": "Lead created",
+      "createError": "Failed to create lead",
+      "updated": "Lead updated",
+      "updateError": "Failed to update lead",
+      "deleted": "Lead deleted",
+      "deleteError": "Failed to delete lead",
+      "interactionError": "Failed to add interaction",
+      "noLeadsExport": "No leads to export"
+    },
+    "gallery": {
+      "likeError": "Failed to like page",
+      "unlikeError": "Failed to unlike page",
+      "addedToGallery": "Your page is now in the community gallery!",
+      "removedFromGallery": "Your page has been removed from the gallery",
+      "updateError": "Failed to update gallery status"
+    },
+    "sharing": {
+      "linkCopied": "Link copied to clipboard!",
+      "copyError": "Failed to copy link"
+    },
+    "username": {
+      "authRequired": "User not authenticated",
+      "enterUsername": "Please enter a username",
+      "invalid": "Invalid username",
+      "updated": "Username updated successfully!",
+      "updateError": "Failed to update username"
+    },
+    "page": {
+      "saveError": "Failed to save",
+      "publishError": "Failed to publish page"
+    },
+    "ai": {
+      "enterUrl": "Please enter a URL",
+      "enterProduct": "Please enter product name and price",
+      "describePage": "Please describe your page",
+      "generationError": "Failed to generate content",
+      "generated": "Content generated!"
+    },
+    "upload": {
+      "authRequired": "Please sign in to upload",
+      "fileTooLarge": "File size must be less than 10MB",
+      "error": "Failed to upload image"
+    },
+    "bookings": {
+      "fetchError": "Failed to load bookings",
+      "cancelError": "Failed to cancel booking",
+      "cancelSuccess": "Booking cancelled",
+      "confirmError": "Failed to confirm booking",
+      "confirmSuccess": "Booking confirmed",
+      "completeError": "Failed to complete booking",
+      "completeSuccess": "Booking marked as completed",
+      "noBookingsExport": "No bookings to export"
+    }
   }
 }

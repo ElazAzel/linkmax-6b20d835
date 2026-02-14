@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { 
   getGalleryPages, 
   getNicheCounts,
@@ -12,6 +13,7 @@ import {
 import type { Niche } from '@/lib/niches';
 
 export function useGallery() {
+  const { t } = useTranslation();
   const [pages, setPages] = useState<GalleryPage[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
@@ -46,9 +48,9 @@ export function useGallery() {
         )
       );
     } catch {
-      toast.error('Failed to like page');
+      toast.error(t('toasts.gallery.likeError'));
     }
-  }, []);
+  }, [t]);
 
   const unlikePage = useCallback(async (pageId: string) => {
     try {
@@ -59,9 +61,9 @@ export function useGallery() {
         )
       );
     } catch {
-      toast.error('Failed to unlike page');
+      toast.error(t('toasts.gallery.unlikeError'));
     }
-  }, []);
+  }, [t]);
 
   return { 
     pages, 
@@ -76,6 +78,7 @@ export function useGallery() {
 }
 
 export function useGalleryStatus(userId: string | undefined) {
+  const { t } = useTranslation();
   const [isInGallery, setIsInGallery] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -92,15 +95,15 @@ export function useGalleryStatus(userId: string | undefined) {
       setIsInGallery(newStatus);
       toast.success(
         newStatus 
-          ? 'Your page is now in the community gallery!' 
-          : 'Your page has been removed from the gallery'
+          ? t('toasts.gallery.addedToGallery')
+          : t('toasts.gallery.removedFromGallery')
       );
     } catch {
-      toast.error('Failed to update gallery status');
+      toast.error(t('toasts.gallery.updateError'));
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, [userId, t]);
 
   return { isInGallery, loading, toggle };
 }

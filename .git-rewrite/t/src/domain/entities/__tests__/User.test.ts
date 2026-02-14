@@ -11,7 +11,8 @@ import {
   getUserLimits,
   type UserProfile,
   FREE_TIER_LIMITS,
-  PREMIUM_TIER_LIMITS,
+  PRO_TIER_LIMITS,
+  BUSINESS_TIER_LIMITS,
 } from '@/domain/entities/User';
 
 describe('User Entity', () => {
@@ -140,13 +141,18 @@ describe('User Entity', () => {
   });
 
   describe('getUserLimits', () => {
-    it('should return premium limits for premium users', () => {
-      const limits = getUserLimits({ isPremium: true, inTrial: false, trialEndsAt: null });
-      expect(limits).toEqual(PREMIUM_TIER_LIMITS);
+    it('should return business limits for business users', () => {
+      const limits = getUserLimits({ isPremium: true, inTrial: false, trialEndsAt: null, tier: 'business' });
+      expect(limits).toEqual(BUSINESS_TIER_LIMITS);
+    });
+
+    it('should return pro limits for pro users', () => {
+      const limits = getUserLimits({ isPremium: true, inTrial: false, trialEndsAt: null, tier: 'pro' });
+      expect(limits).toEqual(PRO_TIER_LIMITS);
     });
 
     it('should return free limits for non-premium users', () => {
-      const limits = getUserLimits({ isPremium: false, inTrial: false, trialEndsAt: null });
+      const limits = getUserLimits({ isPremium: false, inTrial: false, trialEndsAt: null, tier: 'free' });
       expect(limits).toEqual(FREE_TIER_LIMITS);
     });
   });

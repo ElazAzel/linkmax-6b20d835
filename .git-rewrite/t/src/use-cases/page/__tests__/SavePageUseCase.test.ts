@@ -17,7 +17,7 @@ describe('SavePageUseCase', () => {
     blocks: [{ id: '1', type: 'profile', name: 'Test', bio: 'Bio' } as any],
     theme: DEFAULT_THEME,
     seo: DEFAULT_SEO,
-    editorMode: 'linear',
+    editorMode: 'grid',
   };
 
   beforeEach(() => {

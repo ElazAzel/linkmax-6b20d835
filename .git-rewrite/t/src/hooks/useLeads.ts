@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
@@ -32,6 +33,7 @@ export interface LeadInteraction {
 
 export function useLeads() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -51,11 +53,11 @@ export function useLeads() {
       setLeads((data as Lead[]) || []);
     } catch (error) {
       console.error('Error fetching leads:', error);
-      toast.error('Failed to load leads');
+      toast.error(t('toasts.leads.loadError'));
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, t]);
 
   useEffect(() => {
     fetchLeads();
@@ -84,11 +86,11 @@ export function useLeads() {
       if (error) throw error;
       
       setLeads(prev => [data as Lead, ...prev]);
-      toast.success('Lead created');
+      toast.success(t('toasts.leads.created'));
       return data as Lead;
     } catch (error) {
       console.error('Error creating lead:', error);
-      toast.error('Failed to create lead');
+      toast.error(t('toasts.leads.createError'));
       return null;
     } finally {
       setSaving(false);
@@ -111,11 +113,11 @@ export function useLeads() {
       setLeads(prev => prev.map(lead => 
         lead.id === id ? { ...lead, ...updates } : lead
       ));
-      toast.success('Lead updated');
+      toast.success(t('toasts.leads.updated'));
       return true;
     } catch (error) {
       console.error('Error updating lead:', error);
-      toast.error('Failed to update lead');
+      toast.error(t('toasts.leads.updateError'));
       return false;
     } finally {
       setSaving(false);
@@ -136,11 +138,11 @@ export function useLeads() {
       if (error) throw error;
       
       setLeads(prev => prev.filter(lead => lead.id !== id));
-      toast.success('Lead deleted');
+      toast.success(t('toasts.leads.deleted'));
       return true;
     } catch (error) {
       console.error('Error deleting lead:', error);
-      toast.error('Failed to delete lead');
+      toast.error(t('toasts.leads.deleteError'));
       return false;
     } finally {
       setSaving(false);
@@ -173,6 +175,7 @@ export function useLeads() {
 
 export function useLeadInteractions(leadId: string | null) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [interactions, setInteractions] = useState<LeadInteraction[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -221,7 +224,7 @@ export function useLeadInteractions(leadId: string | null) {
       return data as LeadInteraction;
     } catch (error) {
       console.error('Error adding interaction:', error);
-      toast.error('Failed to add interaction');
+      toast.error(t('toasts.leads.interactionError'));
       return null;
     }
   };

@@ -1,16 +1,9 @@
 import { memo, useState } from 'react';
-import { Plus, Search, Lock, Crown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Plus, Search, Lock, Crown, Type, Video, Link2, File, Music, ListOrdered, Image, ShoppingBag, Code, MessageCircle, Calendar, Star, Gift, Compass, MapPin, Clock, DollarSign, Megaphone, FormInput, Mail, HelpCircle, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Sheet,
   SheetContent,
@@ -20,89 +13,112 @@ import {
 } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import { FREE_LIMITS } from '@/hooks/useFreemiumLimits';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { FREE_LIMITS, type FreeTier } from '@/hooks/useFreemiumLimits';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 interface BlockInsertButtonProps {
   onInsert: (blockType: string) => void;
   isPremium?: boolean;
   currentBlockCount?: number;
   className?: string;
+  currentTier?: FreeTier;
 }
 
-const ALL_BLOCKS = [
-  // Links & Navigation
-  { type: 'link', label: 'Link', icon: '🔗', category: 'Links', premium: false },
-  { type: 'button', label: 'Button', icon: '🔘', category: 'Links', premium: false },
-  { type: 'socials', label: 'Social Links', icon: '👥', category: 'Links', premium: false },
+type BlockTier = 'free' | 'pro' | 'business';
+
+interface BlockConfig {
+  type: string;
+  label: string;
+  Icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  tier: BlockTier;
+}
+
+// Blocks with colorful icons like competitors
+const ALL_BLOCKS: BlockConfig[] = [
+  // Basic
+  { type: 'text', label: 'Текст', Icon: Type, color: 'bg-slate-500', tier: 'free' },
+  { type: 'link', label: 'Ссылка', Icon: Link2, color: 'bg-blue-500', tier: 'free' },
+  { type: 'button', label: 'Кнопка', Icon: () => <span className="text-lg font-bold">▶</span>, color: 'bg-red-500', tier: 'free' },
+  { type: 'image', label: 'Фото', Icon: Image, color: 'bg-emerald-500', tier: 'free' },
   
-  // Content
-  { type: 'text', label: 'Text', icon: '📝', category: 'Content', premium: false },
-  { type: 'image', label: 'Image', icon: '🖼️', category: 'Content', premium: false },
-  { type: 'video', label: 'Video', icon: '🎬', category: 'Content', premium: true },
-  { type: 'carousel', label: 'Carousel', icon: '📸', category: 'Content', premium: true },
-  { type: 'avatar', label: 'Avatar', icon: '👤', category: 'Content', premium: false },
-  { type: 'separator', label: 'Separator', icon: '➖', category: 'Content', premium: false },
-  { type: 'map', label: 'Map', icon: '🗺️', category: 'Content', premium: false },
-  { type: 'before_after', label: 'Before/After', icon: '🔄', category: 'Content', premium: false },
-  { type: 'faq', label: 'FAQ', icon: '❓', category: 'Content', premium: false },
-  
-  // Shop & Products
-  { type: 'product', label: 'Product', icon: '🛍️', category: 'Shop', premium: false },
-  { type: 'catalog', label: 'Catalog', icon: '📋', category: 'Shop', premium: true },
-  { type: 'pricing', label: 'Pricing', icon: '💰', category: 'Shop', premium: false },
-  { type: 'download', label: 'Download', icon: '📥', category: 'Shop', premium: true },
-  
-  // Forms & Communication
-  { type: 'form', label: 'Form', icon: '📝', category: 'Forms', premium: true },
-  { type: 'newsletter', label: 'Newsletter', icon: '✉️', category: 'Forms', premium: true },
-  { type: 'messenger', label: 'Messengers', icon: '💬', category: 'Forms', premium: true },
-  
-  // Interactive
-  { type: 'testimonial', label: 'Testimonials', icon: '⭐', category: 'Interactive', premium: true },
-  { type: 'scratch', label: 'Scratch Card', icon: '🎁', category: 'Interactive', premium: true },
-  { type: 'search', label: 'AI Search', icon: '🔍', category: 'Interactive', premium: true },
-  { type: 'countdown', label: 'Countdown', icon: '⏰', category: 'Interactive', premium: true },
+  // Media
+  { type: 'video', label: 'Видео', Icon: Video, color: 'bg-rose-500', tier: 'pro' },
+  { type: 'carousel', label: 'Галерея', Icon: Layers, color: 'bg-violet-500', tier: 'pro' },
+  { type: 'avatar', label: 'Аватар', Icon: () => <span className="text-lg">👤</span>, color: 'bg-cyan-500', tier: 'free' },
+  { type: 'separator', label: 'Разделитель', Icon: () => <span className="text-lg">—</span>, color: 'bg-gray-400', tier: 'free' },
   
   // Social
-  { type: 'shoutout', label: 'Shoutout', icon: '📣', category: 'Social', premium: false },
+  { type: 'socials', label: 'Соцсети', Icon: () => <span className="text-lg">@</span>, color: 'bg-pink-500', tier: 'free' },
+  { type: 'messenger', label: 'Мессенджеры', Icon: MessageCircle, color: 'bg-green-500', tier: 'free' },
+  { type: 'shoutout', label: 'Упоминание', Icon: Megaphone, color: 'bg-orange-500', tier: 'pro' },
   
-  // Advanced
-  { type: 'custom_code', label: 'Custom Code', icon: '💻', category: 'Advanced', premium: true },
+  // Business
+  { type: 'product', label: 'Товар', Icon: ShoppingBag, color: 'bg-amber-500', tier: 'pro' },
+  { type: 'catalog', label: 'Каталог', Icon: ListOrdered, color: 'bg-teal-500', tier: 'pro' },
+  { type: 'pricing', label: 'Цены', Icon: DollarSign, color: 'bg-lime-500', tier: 'pro' },
+  { type: 'download', label: 'Файл', Icon: File, color: 'bg-indigo-500', tier: 'business' },
+  
+  // Forms
+  { type: 'form', label: 'Форма', Icon: FormInput, color: 'bg-purple-500', tier: 'business' },
+  { type: 'newsletter', label: 'Рассылка', Icon: Mail, color: 'bg-sky-500', tier: 'pro' },
+  { type: 'booking', label: 'Запись', Icon: Calendar, color: 'bg-fuchsia-500', tier: 'business' },
+  
+  // Interactive
+  { type: 'testimonial', label: 'Отзывы', Icon: Star, color: 'bg-yellow-500', tier: 'pro' },
+  { type: 'scratch', label: 'Скретч', Icon: Gift, color: 'bg-red-400', tier: 'pro' },
+  { type: 'faq', label: 'FAQ', Icon: HelpCircle, color: 'bg-blue-400', tier: 'pro' },
+  { type: 'countdown', label: 'Таймер', Icon: Clock, color: 'bg-orange-400', tier: 'business' },
+  
+  // Other
+  { type: 'map', label: 'Карта', Icon: MapPin, color: 'bg-green-600', tier: 'free' },
+  { type: 'before_after', label: 'До/После', Icon: Compass, color: 'bg-cyan-600', tier: 'pro' },
+  { type: 'search', label: 'AI Поиск', Icon: Search, color: 'bg-violet-600', tier: 'pro' },
+  { type: 'custom_code', label: 'Код', Icon: Code, color: 'bg-slate-600', tier: 'pro' },
 ];
 
 export const BlockInsertButton = memo(function BlockInsertButton({ 
   onInsert, 
   isPremium = false,
   currentBlockCount = 0,
-  className 
+  className,
+  currentTier = 'free'
 }: BlockInsertButtonProps) {
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
   const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
 
-  // Filter blocks based on search
+  const tierLevel = (tier: FreeTier): number => {
+    switch (tier) {
+      case 'business': return 3;
+      case 'pro': return 2;
+      default: return 1;
+    }
+  };
+
+  const canUseBlock = (blockTier: BlockTier): boolean => {
+    return tierLevel(currentTier) >= tierLevel(blockTier);
+  };
+
   const filteredBlocks = ALL_BLOCKS.filter(block => 
-    block.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    block.category.toLowerCase().includes(searchQuery.toLowerCase())
+    block.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Group blocks by category
-  const blocksByCategory = filteredBlocks.reduce((acc, block) => {
-    if (!acc[block.category]) {
-      acc[block.category] = [];
-    }
-    acc[block.category].push(block);
-    return acc;
-  }, {} as Record<string, typeof ALL_BLOCKS>);
-
-  const handleInsert = (blockType: string, premium: boolean) => {
-    if (premium && !isPremium) {
-      toast.error('Этот блок доступен только в Premium');
+  const handleInsert = (blockType: string, blockTier: BlockTier) => {
+    if (!canUseBlock(blockTier)) {
+      const tierName = blockTier === 'business' ? 'BUSINESS' : 'PRO';
+      toast.error(`Этот блок доступен только в ${tierName}`, {
+        action: {
+          label: 'Upgrade',
+          onClick: () => navigate('/pricing'),
+        },
+      });
       return;
     }
     
@@ -116,169 +132,123 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     setSearchQuery('');
   };
 
-  // Mobile Sheet Interface
-  const MobileSheet = () => (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+  // Mobile & Desktop - Clean full-screen sheet like competitors
+  return (
+    <div className={cn("flex items-center justify-center", className)}>
+      {/* FAB Button */}
       <Button
         variant="default"
         size="lg"
         onClick={() => setIsOpen(true)}
-        className="h-14 w-14 rounded-2xl shadow-glass-lg backdrop-blur-xl hover:shadow-glass-xl transition-all active:scale-95 hover:-translate-y-1"
+        className={cn(
+          "shadow-lg transition-all active:scale-95",
+          isMobile 
+            ? "h-16 w-16 rounded-full" 
+            : "h-12 w-12 rounded-2xl"
+        )}
         data-onboarding="add-block"
       >
-        <Plus className="h-6 w-6" />
+        <Plus className={isMobile ? "h-8 w-8" : "h-6 w-6"} />
       </Button>
-      <SheetContent side="bottom" className="h-[85vh] p-0 bg-card/80 backdrop-blur-2xl border-t border-border/30 rounded-t-3xl">
-        <SheetHeader className="p-4 pb-2 border-b border-border/30 sticky top-0 bg-card/60 backdrop-blur-xl z-10">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="text-lg font-semibold">Add Block</SheetTitle>
-            {!isPremium && (
-              <Badge variant={isAtBlockLimit ? 'destructive' : 'secondary'} className="text-xs backdrop-blur-sm">
-                {remainingBlocks > 0 ? `${remainingBlocks} осталось` : 'Лимит'}
-              </Badge>
-            )}
+
+      {/* Clean Sheet with Grid */}
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent 
+          side="bottom" 
+          className="h-[80vh] p-0 bg-background border-t rounded-t-3xl"
+        >
+          {/* Header */}
+          <SheetHeader className="px-6 pt-6 pb-4 border-b">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-xl font-bold">{t('editor.addBlock', 'Добавить элемент')}</SheetTitle>
+              {!isPremium && (
+                <Badge 
+                  variant={isAtBlockLimit ? 'destructive' : 'secondary'} 
+                  className="text-sm px-3 py-1"
+                >
+                  {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                </Badge>
+              )}
+            </div>
+            <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
+          </SheetHeader>
+          
+          {/* Search */}
+          <div className="px-6 py-4 border-b bg-muted/30">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 h-12 text-base rounded-xl bg-background border-border"
+              />
+            </div>
           </div>
-          <SheetDescription className="sr-only">Choose a block to add to your page</SheetDescription>
-          <div className="relative mt-3">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search blocks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-11 rounded-xl bg-background/50 backdrop-blur-sm border-border/30"
-            />
-          </div>
-          {isAtBlockLimit && (
-            <button
-              onClick={openPremiumPurchase}
-              className="mt-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl w-full text-left hover:bg-amber-500/20 transition-colors backdrop-blur-sm"
-            >
-              <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-                <Crown className="h-3.5 w-3.5" />
-                Перейдите на Premium для неограниченных блоков
-              </p>
-            </button>
-          )}
-        </SheetHeader>
-        
-        <div className="overflow-y-auto p-4 space-y-6 pb-safe" style={{ height: 'calc(100% - 130px)' }}>
-          {Object.entries(blocksByCategory).map(([category, blocks]) => (
-            <div key={category}>
-              <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-1">
-                {category}
-              </h3>
-              <div className="grid grid-cols-3 gap-2">
-                {blocks.map((block) => (
+          
+          {/* Grid of blocks - 4 columns like competitor */}
+          <div className="overflow-y-auto p-6" style={{ height: 'calc(100% - 140px)' }}>
+            <div className="grid grid-cols-4 gap-4">
+              {filteredBlocks.map((block) => {
+                const isLocked = !canUseBlock(block.tier);
+                const IconComponent = block.Icon;
+                
+                return (
                   <button
                     key={block.type}
-                    onClick={() => handleInsert(block.type, block.premium)}
-                    disabled={block.premium && !isPremium}
+                    onClick={() => handleInsert(block.type, block.tier)}
+                    disabled={isLocked}
                     className={cn(
-                      "relative flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all active:scale-95",
-                      block.premium && !isPremium
-                        ? "bg-muted/30 border-border/30 cursor-not-allowed opacity-60 backdrop-blur-sm"
-                        : "bg-card/60 backdrop-blur-xl border-border/30 hover:border-primary/50 hover:bg-card/80 hover:shadow-glass cursor-pointer"
+                      "relative flex flex-col items-center gap-2 p-3 rounded-2xl transition-all",
+                      isLocked
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-muted active:scale-95"
                     )}
                   >
-                    {block.premium && !isPremium && (
-                      <Lock className="absolute top-2 right-2 h-3 w-3 text-muted-foreground" />
-                    )}
-                    <span className="text-2xl">{block.icon}</span>
+                    {/* Colorful icon square */}
+                    <div className={cn(
+                      "w-14 h-14 rounded-2xl flex items-center justify-center text-white",
+                      block.color
+                    )}>
+                      <IconComponent className="h-6 w-6" />
+                    </div>
+                    
+                    {/* Label */}
                     <span className="text-xs font-medium text-center leading-tight">
                       {block.label}
                     </span>
+                    
+                    {/* Lock/Crown badge */}
+                    {isLocked && (
+                      <div className="absolute top-1 right-1">
+                        <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
+                    )}
+                    {block.tier === 'pro' && !isLocked && (
+                      <div className="absolute top-1 right-1">
+                        <Crown className="h-3.5 w-3.5 text-amber-500" />
+                      </div>
+                    )}
+                    {block.tier === 'business' && !isLocked && (
+                      <div className="absolute top-1 right-1">
+                        <Badge variant="secondary" className="text-[8px] px-1 py-0 bg-amber-500/20 text-amber-600">
+                          BIZ
+                        </Badge>
+                      </div>
+                    )}
                   </button>
-                ))}
+                );
+              })}
+            </div>
+            
+            {filteredBlocks.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">{t('common.noResults', 'Ничего не найдено')}</p>
               </div>
-            </div>
-          ))}
-          
-          {filteredBlocks.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-sm text-muted-foreground">No blocks found</p>
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-
-  // Desktop Dropdown Interface
-  const DesktopDropdown = () => (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="glass"
-          size="sm"
-          className="h-9 w-9 p-0 rounded-xl border-2 border-dashed border-primary/40 hover:border-primary hover:bg-primary/10 transition-all shadow-glass"
-          data-onboarding="add-block"
-        >
-          <Plus className="h-4 w-4 text-primary" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        align="center" 
-        className="w-72 bg-card/80 backdrop-blur-2xl border border-border/30 z-50 max-h-[75vh] overflow-hidden p-3 rounded-2xl shadow-glass-xl"
-        sideOffset={8}
-      >
-        <div className="sticky top-0 bg-transparent z-10 pb-2">
-          <DropdownMenuLabel className="text-xs text-muted-foreground px-2 font-semibold">
-            Add Block
-          </DropdownMenuLabel>
-          <div className="relative px-1 pt-2">
-            <Search className="absolute left-3.5 top-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 h-9 text-sm rounded-xl bg-background/50 backdrop-blur-sm border-border/30"
-            />
+            )}
           </div>
-        </div>
-        
-        <div className="overflow-y-auto max-h-[60vh] mt-2">
-          {Object.entries(blocksByCategory).map(([category, blocks], idx) => (
-            <div key={category}>
-              {idx > 0 && <DropdownMenuSeparator className="my-2 bg-border/30" />}
-              <DropdownMenuLabel className="text-xs text-muted-foreground px-2 py-1.5 font-medium">
-                {category}
-              </DropdownMenuLabel>
-              {blocks.map((block) => (
-                <DropdownMenuItem
-                  key={block.type}
-                  onClick={() => handleInsert(block.type, block.premium)}
-                  disabled={block.premium && !isPremium}
-                  className={cn(
-                    "cursor-pointer transition-all rounded-xl mx-1 my-0.5 hover:bg-card/80 hover:backdrop-blur-xl",
-                    block.premium && !isPremium && "opacity-60"
-                  )}
-                >
-                  <span className="mr-3 text-lg">{block.icon}</span>
-                  <span className="flex-1 font-medium">{block.label}</span>
-                  {block.premium && !isPremium && (
-                    <Lock className="h-3 w-3 text-muted-foreground ml-2" />
-                  )}
-                </DropdownMenuItem>
-              ))}
-            </div>
-          ))}
-          
-          {filteredBlocks.length === 0 && (
-            <div className="text-center py-8 px-4">
-              <p className="text-xs text-muted-foreground">No blocks found</p>
-            </div>
-          )}
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
-  return (
-    <div className={cn(
-      "flex items-center justify-center transition-opacity duration-200",
-      className
-    )}>
-      {isMobile ? <MobileSheet /> : <DesktopDropdown />}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 });

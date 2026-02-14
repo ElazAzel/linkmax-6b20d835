@@ -255,13 +255,30 @@
 
 ## Roadmap
 
-### В разработке
+### Фаза 1: GEO-подготовка (Q1 2025)
+- [x] Структурированные услуги в PricingBlock
+- [x] Блок закрытого сообщества (Community)
+- [x] Видео/аудио приветствие (Proof of Human)
+- [ ] JSON-LD разметка услуг
+- [ ] Schema.org для LocalBusiness
+
+### Фаза 2: CRM-автоматизации (Q1 2025)
+- [ ] Follow-up напоминания клиентам
+- [ ] Уточнение времени записи
+- [ ] Запрос отзыва после сделки
+- [ ] Напоминание за час до визита
+
+### Фаза 3: Интеграции (Q2 2025)
 - [ ] Stripe/Kaspi Pay интеграция
-- [ ] A/B тестирование блоков
-- [ ] Email-маркетинг интеграции
 - [ ] Meta/TikTok Pixel
+- [ ] Email-маркетинг интеграции
+- [ ] A/B тестирование блоков
+
+### Фаза 4: Агентные сценарии (Q2-Q3 2025)
+- [ ] AI-ассистент для записи
+- [ ] Интеграция с календарями
+- [ ] Голосовой помощник
 - [ ] Multi-page аккаунты
-- [ ] Heatmaps и session recording
 
 ---
 
@@ -291,6 +308,39 @@
 - [Discord сообщество](https://discord.com)
 - Email: support@linkmax.app
 - Telegram: @linkmax_support
+
+---
+
+## 📋 Статус реализации GEO/Agentic Commerce (v2.0)
+
+### Задача 1: Структурированные услуги ✅
+- [x] Расширение PricingItem с полями: serviceType, duration, priceType, priceMax, isBookable, availableDays
+- [x] Обновление PricingBlockEditor с UI для всех полей
+- [ ] Интеграция с AI Builder для генерации услуг
+
+### Задача 2: Мягкий агент (CRM автоматизации) 🔄
+- [ ] Таблица crm_automations в БД
+- [ ] Edge function для автоматических follow-up
+- [ ] UI настроек сценариев в Mini-CRM
+- [ ] Шаблоны сообщений с переменными
+
+### Задача 3: Proof of Human ✅
+- [x] Поля introVideo/introAudio в ProfileBlock
+- [x] UI загрузки видео/аудио в ProfileBlockEditor
+- [ ] Отображение медиа в ProfileBlock на странице
+- [ ] Бейдж "Verified Human" с хинтом
+
+### Задача 4: Community Block ✅
+- [x] Новый тип блока 'community'
+- [x] CommunityBlock компонент
+- [x] CommunityBlockEditor
+- [x] Интеграция в BlockRenderer, BlockEditor, block-factory
+
+### Задача 5: Перепаковка позиционирования
+- [x] Обновление PLATFORM.md
+- [x] Обновление FEATURES.md
+- [ ] Обновление текстов онбординга
+- [ ] Обновление лендинга
 
 ---
 

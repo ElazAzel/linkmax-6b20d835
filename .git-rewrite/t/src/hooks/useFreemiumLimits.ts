@@ -11,35 +11,102 @@ export const PRO_BLOCKS = [
 ] as const;
 
 export const BUSINESS_BLOCKS = [
-  'download', 'form', 'countdown'
+  'download', 'form', 'countdown', 'booking'
 ] as const;
 
 export type FreeTier = 'free' | 'pro' | 'business';
 
-export const FREE_LIMITS = {
+// Feature flags for each tier
+export interface TierFeatures {
+  maxBlocks: number;
+  maxAIRequestsPerWeek: number;
+  showWatermark: boolean;
+  allowedBlocks: string[];
+  premiumBlocks: string[];
+  maxLeadsPerMonth: number;
+  canUseAnalytics: boolean;
+  canUseCRM: boolean;
+  canUseScheduler: boolean;
+  canUsePixels: boolean;
+  canUseCustomDomain: boolean;
+  canUseChatbot: boolean;
+  canUseAutoNotifications: boolean;
+  canUsePayments: boolean;
+  canUseWhiteLabel: boolean;
+  canUseMultiPage: boolean;
+  canUseVerificationBadge: boolean;
+  canUsePremiumFrames: boolean;
+  canUseAdvancedThemes: boolean;
+  canUseCustomPageBackground: boolean;
+}
+
+export const FREE_LIMITS: TierFeatures = {
   maxBlocks: Infinity, // Unlimited links/blocks as per pricing
   maxAIRequestsPerWeek: 3,
   showWatermark: true,
-  allowedBlocks: FREE_BLOCKS as unknown as string[],
+  allowedBlocks: [...FREE_BLOCKS] as string[],
   premiumBlocks: [...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
+  maxLeadsPerMonth: 0,
+  canUseAnalytics: false,
+  canUseCRM: false,
+  canUseScheduler: false,
+  canUsePixels: false,
+  canUseCustomDomain: false,
+  canUseChatbot: false,
+  canUseAutoNotifications: false,
+  canUsePayments: false,
+  canUseWhiteLabel: false,
+  canUseMultiPage: false,
+  canUseVerificationBadge: false,
+  canUsePremiumFrames: false,
+  canUseAdvancedThemes: false,
+  canUseCustomPageBackground: false,
 };
 
-export const PRO_LIMITS = {
+export const PRO_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
   maxAIRequestsPerWeek: Infinity,
   showWatermark: false,
-  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
-  premiumBlocks: [] as string[],
+  allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS] as unknown as string[],
+  premiumBlocks: [...BUSINESS_BLOCKS] as unknown as string[],
   maxLeadsPerMonth: 100,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: false,
+  canUseChatbot: false,
+  canUseAutoNotifications: false,
+  canUsePayments: false,
+  canUseWhiteLabel: false,
+  canUseMultiPage: false,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
+  canUseCustomPageBackground: false,
 };
 
-export const BUSINESS_LIMITS = {
+export const BUSINESS_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
   maxAIRequestsPerWeek: Infinity,
   showWatermark: false,
   allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...BUSINESS_BLOCKS] as unknown as string[],
   premiumBlocks: [] as string[],
   maxLeadsPerMonth: Infinity,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  canUseScheduler: true,
+  canUsePixels: true,
+  canUseCustomDomain: true,
+  canUseChatbot: true,
+  canUseAutoNotifications: true,
+  canUsePayments: true,
+  canUseWhiteLabel: true,
+  canUseMultiPage: true,
+  canUseVerificationBadge: true,
+  canUsePremiumFrames: true,
+  canUseAdvancedThemes: true,
+  canUseCustomPageBackground: true,
 };
 
 // Helper to get block tier
@@ -129,6 +196,29 @@ export function useFreemiumLimits() {
     return Math.max(0, FREE_LIMITS.maxAIRequestsPerWeek - getAIUsageThisWeek());
   };
   
+  // Feature checks
+  const canUseFeature = (feature: keyof TierFeatures): boolean => {
+    const value = limits[feature];
+    return typeof value === 'boolean' ? value : true;
+  };
+  
+  const canUseAnalytics = () => limits.canUseAnalytics;
+  const canUseCRM = () => limits.canUseCRM;
+  const canUseScheduler = () => limits.canUseScheduler;
+  const canUsePixels = () => limits.canUsePixels;
+  const canUseCustomDomain = () => limits.canUseCustomDomain;
+  const canUseChatbot = () => limits.canUseChatbot;
+  const canUseAutoNotifications = () => limits.canUseAutoNotifications;
+  const canUsePayments = () => limits.canUsePayments;
+  const canUseWhiteLabel = () => limits.canUseWhiteLabel;
+  const canUseMultiPage = () => limits.canUseMultiPage;
+  const canUseVerificationBadge = () => limits.canUseVerificationBadge;
+  const canUsePremiumFrames = () => limits.canUsePremiumFrames;
+  const canUseAdvancedThemes = () => limits.canUseAdvancedThemes;
+  const canUseCustomPageBackground = () => limits.canUseCustomPageBackground;
+  
+  const getMaxLeads = () => limits.maxLeadsPerMonth;
+
   return {
     isPremium: currentTier !== 'free',
     currentTier,
@@ -144,6 +234,23 @@ export function useFreemiumLimits() {
     getRemainingAIRequests,
     incrementAIUsage,
     getAIUsageThisWeek,
+    // Feature checks
+    canUseFeature,
+    canUseAnalytics,
+    canUseCRM,
+    canUseScheduler,
+    canUsePixels,
+    canUseCustomDomain,
+    canUseChatbot,
+    canUseAutoNotifications,
+    canUsePayments,
+    canUseWhiteLabel,
+    canUseMultiPage,
+    canUseVerificationBadge,
+    canUsePremiumFrames,
+    canUseAdvancedThemes,
+    canUseCustomPageBackground,
+    getMaxLeads,
   };
 }
 

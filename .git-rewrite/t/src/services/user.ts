@@ -159,7 +159,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
   try {
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('is_premium, trial_ends_at')
+      .select('is_premium, trial_ends_at, premium_tier, premium_expires_at')
       .eq('id', userId)
       .maybeSingle();
 
@@ -169,11 +169,33 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
 
     const now = new Date();
     const trialEndsAt = data.trial_ends_at ? new Date(data.trial_ends_at) : null;
-    const inTrial = trialEndsAt ? trialEndsAt > now : false;
-    const isPremium = data.is_premium || inTrial;
+    const premiumExpiresAt = (data as { premium_expires_at?: string }).premium_expires_at 
+      ? new Date((data as { premium_expires_at?: string }).premium_expires_at!) 
+      : null;
     
-    // For now, derive tier from is_premium (can be extended later with premium_tier column)
-    const tier: 'free' | 'pro' | 'business' = isPremium ? 'pro' : 'free';
+    const inTrial = trialEndsAt ? trialEndsAt > now : false;
+    const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
+    
+    // Determine tier from premium_tier column or fallback to legacy is_premium
+    const dbTier = (data as { premium_tier?: string }).premium_tier as 'free' | 'pro' | 'business' | undefined;
+    
+    let tier: 'free' | 'pro' | 'business' = 'free';
+    let isPremium = false;
+    
+    // Check if user has active premium (either via expiration date or legacy is_premium flag)
+    const hasActivePremium = premiumActive || data.is_premium || inTrial;
+    
+    if (hasActivePremium) {
+      isPremium = true;
+      // Use the db tier if set, otherwise default to 'pro' for legacy premium users
+      if (dbTier === 'business') {
+        tier = 'business';
+      } else if (dbTier === 'pro' || data.is_premium) {
+        tier = 'pro';
+      } else if (inTrial) {
+        tier = 'pro'; // Trial users get pro features
+      }
+    }
 
     return { isPremium, tier, trialEndsAt: data.trial_ends_at, inTrial };
   } catch (error) {

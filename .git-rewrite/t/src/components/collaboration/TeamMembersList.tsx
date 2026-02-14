@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, UserX, Users, Crown } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { removeMemberFromTeam, type TeamMember } from '@/services/collaboration';
 
 interface TeamMembersListProps {
@@ -22,23 +23,24 @@ export function TeamMembersList({
   isOwner, 
   onMemberRemoved 
 }: TeamMembersListProps) {
+  const { t } = useTranslation();
   const [removingId, setRemovingId] = useState<string | null>(null);
 
   const handleRemoveMember = async (memberId: string, memberName: string) => {
-    if (!confirm(`Удалить ${memberName} из команды?`)) return;
+    if (!confirm(t('toasts.team.confirmRemove', { name: memberName }))) return;
 
     setRemovingId(memberId);
     try {
       const result = await removeMemberFromTeam(teamId, memberId);
       if (result.success) {
-        toast.success('Участник удален');
+        toast.success(t('toasts.team.memberRemoved'));
         onMemberRemoved();
       } else {
-        toast.error(result.error || 'Ошибка удаления');
+        toast.error(result.error || t('toasts.team.removeError'));
       }
     } catch (error) {
       console.error('Error removing member:', error);
-      toast.error('Ошибка удаления');
+      toast.error(t('toasts.team.removeError'));
     } finally {
       setRemovingId(null);
     }
@@ -49,7 +51,7 @@ export function TeamMembersList({
       <Card className="bg-card/50">
         <CardContent className="pt-6">
           <p className="text-sm text-muted-foreground text-center">
-            Нет участников
+            {t('collaboration.noMembers', 'Нет участников')}
           </p>
         </CardContent>
       </Card>
@@ -61,13 +63,13 @@ export function TeamMembersList({
       <CardHeader className="pb-3">
         <CardTitle className="text-sm flex items-center gap-2">
           <Users className="h-4 w-4" />
-          Участники ({members.length})
+          {t('collaboration.members', 'Участники')} ({members.length})
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
         {members.map((member) => {
           const isOwnerMember = member.user_id === ownerId;
-          const displayName = member.profile?.display_name || member.profile?.username || 'Пользователь';
+          const displayName = member.profile?.display_name || member.profile?.username || t('collaboration.user', 'Пользователь');
 
           return (
             <div 
@@ -89,7 +91,7 @@ export function TeamMembersList({
                   {isOwnerMember && (
                     <Badge variant="outline" className="text-xs gap-1">
                       <Crown className="h-3 w-3" />
-                      Владелец
+                      {t('collaboration.owner', 'Владелец')}
                     </Badge>
                   )}
                 </div>

@@ -17,6 +17,7 @@ interface InlineEditableBlockProps {
   dragHandleProps?: any;
   isFirst?: boolean;
   isLast?: boolean;
+  isOwnerPremium?: boolean;
 }
 
 export const InlineEditableBlock = memo(function InlineEditableBlock({
@@ -29,6 +30,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
   dragHandleProps,
   isFirst = false,
   isLast = false,
+  isOwnerPremium = false,
 }: InlineEditableBlockProps) {
   const isMobile = useIsMobile();
   const haptic = useHapticFeedback();
@@ -287,7 +289,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
         )}
 
         {/* The actual block */}
-        <BlockRenderer block={block} isPreview={false} />
+        <BlockRenderer block={block} isPreview={false} isOwnerPremium={isOwnerPremium} />
         
         {/* Swipe hint for mobile (shown on first touch) */}
         {isMobile && !isProfileBlock && isTouched && offsetX === 0 && (

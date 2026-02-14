@@ -37,6 +37,7 @@ import {
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import { ReferralPanel } from '@/components/referral/ReferralPanel';
+import { AutomationsPanel } from '@/components/crm/AutomationsPanel';
 import { FriendsPanel } from '@/components/friends/FriendsPanel';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
@@ -181,72 +182,72 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="h-[85vh] p-0 rounded-t-[2rem] bg-card/80 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl">
-        <SheetHeader className="p-5 pb-3 border-b border-border/20 sticky top-0 bg-card/60 backdrop-blur-xl z-10">
+      <SheetContent side="bottom" className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card/90 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl">
+        <SheetHeader className="p-6 pb-4 border-b border-border/20 sticky top-0 bg-card/80 backdrop-blur-xl z-10">
           <div className="flex items-center justify-between">
-            <SheetTitle className="text-lg font-semibold">Settings</SheetTitle>
-            <Button variant="ghost" size="icon" onClick={() => onOpenChange(false)} className="rounded-full hover:bg-card/60">
-              <X className="h-5 w-5" />
+            <SheetTitle className="text-xl font-black">Settings</SheetTitle>
+            <Button variant="ghost" size="lg" onClick={() => onOpenChange(false)} className="rounded-2xl hover:bg-card/60 h-12 w-12">
+              <X className="h-6 w-6" />
             </Button>
           </div>
           <SheetDescription className="sr-only">Page and account settings</SheetDescription>
         </SheetHeader>
         
-        <div className="overflow-y-auto h-full pb-24">
+        <div className="overflow-y-auto h-full pb-28">
           <Tabs defaultValue="link" className="w-full">
-            <TabsList className="w-full sticky top-0 bg-card/60 backdrop-blur-xl z-10 h-14 rounded-none border-b border-border/20 p-1.5 gap-0.5">
-              <TabsTrigger value="link" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
-                <Link2 className="h-4 w-4" />
+            <TabsList className="w-full sticky top-0 bg-card/80 backdrop-blur-xl z-10 h-16 rounded-none border-b border-border/20 p-2 gap-1">
+              <TabsTrigger value="link" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+                <Link2 className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="profile" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
-                <User className="h-4 w-4" />
+              <TabsTrigger value="profile" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+                <User className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="chatbot" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
-                <MessageCircle className="h-4 w-4" />
+              <TabsTrigger value="chatbot" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+                <MessageCircle className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="collabs" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
-                <Users className="h-4 w-4" />
+              <TabsTrigger value="collabs" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+                <Users className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="friends" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
-                <UserPlus className="h-4 w-4" />
+              <TabsTrigger value="friends" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+                <UserPlus className="h-5 w-5" />
               </TabsTrigger>
-              <TabsTrigger value="premium" className="flex-1 gap-1 rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-2">
-                <Crown className="h-4 w-4" />
+              <TabsTrigger value="premium" className="flex-1 gap-1.5 rounded-2xl data-[state=active]:bg-primary/10 data-[state=active]:backdrop-blur-xl px-3 h-12">
+                <Crown className="h-5 w-5" />
               </TabsTrigger>
             </TabsList>
             
-            {/* Link Tab */}
-            <TabsContent value="link" className="p-4 space-y-4 mt-0">
-              <Card className="p-5 bg-card/40 backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">
-                <h3 className="font-semibold mb-4 flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Link2 className="h-4 w-4 text-primary" />
+            {/* Link Tab - BOLD */}
+            <TabsContent value="link" className="p-5 space-y-5 mt-0">
+              <Card className="p-6 bg-card/50 backdrop-blur-xl border border-border/20 rounded-3xl shadow-glass">
+                <h3 className="text-lg font-bold mb-5 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center">
+                    <Link2 className="h-5 w-5 text-primary" />
                   </div>
                   Your Link
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div>
-                    <Label className="text-sm text-muted-foreground">Username</Label>
-                    <div className="flex gap-2 mt-2">
+                    <Label className="text-sm font-medium text-muted-foreground">Username</Label>
+                    <div className="flex gap-3 mt-3">
                       <Input
                         value={usernameInput}
                         onChange={(e) => onUsernameChange(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                         placeholder="username"
                         maxLength={30}
                         disabled={usernameSaving}
-                        className="bg-card/60 backdrop-blur-xl border-border/30 rounded-xl"
+                        className="bg-card/60 backdrop-blur-xl border-border/30 rounded-2xl h-14 text-lg font-medium"
                       />
                       <Button 
-                        size="sm" 
+                        size="lg" 
                         onClick={onUpdateUsername}
                         disabled={usernameSaving || !usernameInput.trim()}
-                        className="rounded-xl shadow-glass"
+                        className="rounded-2xl shadow-glass h-14 px-6 font-bold"
                       >
                         {usernameSaving ? '...' : 'Save'}
                       </Button>
                     </div>
                     {usernameInput && (
-                      <p className="text-xs text-muted-foreground mt-3 break-all bg-muted/30 backdrop-blur-xl p-2 rounded-lg">
+                      <p className="text-sm text-muted-foreground mt-4 break-all bg-muted/30 backdrop-blur-xl p-4 rounded-2xl font-medium">
                         {window.location.origin}/{usernameInput}
                       </p>
                     )}
@@ -580,6 +581,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
               
               {/* Referral Program */}
               <ReferralPanel userId={userId} />
+              
+              {/* CRM Automations - Premium only */}
+              {isPremium && userId && (
+                <AutomationsPanel userId={userId} isPremium={isPremium} />
+              )}
               
               {/* Sign Out */}
               <Card className="p-5 bg-card/40 backdrop-blur-xl border border-border/20 rounded-2xl shadow-glass">

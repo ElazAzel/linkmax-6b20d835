@@ -55,11 +55,17 @@ const FRAME_OPTIONS: { value: FrameStyle; label: string }[] = [
   { value: 'neon-pink', label: 'Неон розовый' },
   { value: 'neon-green', label: 'Неон зелёный' },
   { value: 'rainbow', label: 'Радуга' },
-  { value: 'rainbow-spin', label: 'Радуга (вращение)' },
+  { value: 'rainbow-spin', label: 'Радуга вращение' },
   { value: 'double', label: 'Двойная' },
   { value: 'dashed', label: 'Штрих' },
   { value: 'dotted', label: 'Точки' },
   { value: 'glow-pulse', label: 'Пульсация' },
+  { value: 'fire', label: '🔥 Огонь' },
+  { value: 'electric', label: '⚡ Электро' },
+  { value: 'wave', label: '🌊 Волна' },
+  { value: 'heartbeat', label: '💓 Сердце' },
+  { value: 'sparkle', label: '✨ Сияние' },
+  { value: 'glitch', label: '👾 Глитч' },
 ];
 
 interface FrameGridSelectorProps {

@@ -112,8 +112,6 @@ serve(async (req) => {
       case 'ai-builder':
         systemPrompt = `Ты AI-конструктор профессиональных лендинг-страниц LinkMAX. Создаёшь ПОЛНЫЕ страницы с 8-15 блоками.
 
-На основе описания пользователя создай структуру страницы как у профессионального одностраничника.
-
 ОБЯЗАТЕЛЬНЫЕ СЕКЦИИ:
 1. profile - информация о человеке/бизнесе (name, bio с эмодзи)
 2. Ссылки на соцсети/каналы (несколько link блоков)
@@ -122,36 +120,39 @@ serve(async (req) => {
 5. FAQ - часто задаваемые вопросы (2-3 вопроса)
 6. Контакты (messenger блок)
 
-ТИПЫ БЛОКОВ:
-- profile: { name: "string", bio: "string с эмодзи и переносами строк" }
-- link: { title: "string", url: "https://...", icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill|outline" }
-- text: { content: "string", style: "heading|paragraph|quote", alignment: "center|left" }
-- product: { name: "string", description: "string", price: number, currency: "KZT|RUB|USD", imageUrl?: "string" }
-- testimonial: { testimonials: [{ name: "string", role: "string", text: "string", rating: 5 }] }
-- faq: { items: [{ question: "string", answer: "string" }] }
-- messenger: { messengers: [{ platform: "telegram|whatsapp|email", username: "string" }] }
-- socials: { platforms: [{ platform: "instagram|telegram|youtube|tiktok", url: "string" }] }
-- video: { url: "https://youtube.com/...", title: "string" }
-- countdown: { title: "string", endDate: "ISO date string", style: "modern" }
-- separator: { style: "line|dots|space" }
+РАЗМЕРЫ БЛОКОВ (blockSize):
+- "full" - во всю ширину (1 блок в строке)
+- "half" - половина ширины (2 блока в строке)
 
-ПРИМЕР СТРУКТУРЫ:
+ТИПЫ БЛОКОВ:
+- profile: { name: "string", bio: "string с эмодзи" }
+- link: { title: "string", url: "https://...", icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill", blockSize: "half" }
+- text: { content: "string", style: "heading|paragraph|quote", alignment: "center|left", blockSize: "full" }
+- product: { name: "string", description: "string", price: number, currency: "KZT|RUB|USD", blockSize: "half" }
+- testimonial: { testimonials: [...], blockSize: "full" }
+- faq: { items: [...], blockSize: "full" }
+- messenger: { messengers: [...], blockSize: "half" }
+- socials: { platforms: [...], blockSize: "full" }
+- video: { url: "...", title: "...", blockSize: "full" }
+- countdown: { title: "...", endDate: "ISO date", blockSize: "full" }
+- separator: { style: "line", blockSize: "full" }
+- image: { url: "...", alt: "...", blockSize: "full" или "half" }
+
+ПРИМЕР:
 {
-  "profile": { "name": "Алина Coach", "bio": "💪 Фитнес-тренер • 5 лет опыта\\n🏆 Помогла 500+ клиентам\\n📍 Онлайн и офлайн" },
+  "profile": { "name": "Алина Coach", "bio": "💪 Фитнес-тренер • 5 лет опыта" },
   "blocks": [
-    { "type": "link", "title": "📸 Instagram — тренировки и мотивация", "url": "https://instagram.com/example", "icon": "instagram", "style": "rounded" },
-    { "type": "link", "title": "📱 Telegram-канал — советы бесплатно", "url": "https://t.me/example", "icon": "telegram", "style": "rounded" },
-    { "type": "text", "content": "💰 Мои программы", "style": "heading", "alignment": "center" },
-    { "type": "product", "name": "Программа похудения", "description": "12 недель • План питания • Поддержка", "price": 45000, "currency": "KZT" },
-    { "type": "product", "name": "Персональные тренировки", "description": "Индивидуальный подход • Онлайн", "price": 25000, "currency": "KZT" },
-    { "type": "testimonial", "testimonials": [{ "name": "Анна", "role": "Клиент", "text": "Минус 15 кг за 3 месяца!", "rating": 5 }] },
-    { "type": "faq", "items": [{ "question": "Как проходят тренировки?", "answer": "Онлайн через Zoom или в зале." }] },
-    { "type": "messenger", "messengers": [{ "platform": "whatsapp", "username": "+77001234567" }, { "platform": "telegram", "username": "alina_coach" }] }
+    { "type": "link", "title": "📸 Instagram", "url": "https://instagram.com/", "icon": "instagram", "blockSize": "half" },
+    { "type": "link", "title": "📱 Telegram", "url": "https://t.me/", "icon": "telegram", "blockSize": "half" },
+    { "type": "product", "name": "Программа похудения", "description": "12 недель", "price": 45000, "currency": "KZT", "blockSize": "half" },
+    { "type": "product", "name": "Персональные тренировки", "description": "Онлайн", "price": 25000, "currency": "KZT", "blockSize": "half" },
+    { "type": "testimonial", "testimonials": [{ "name": "Анна", "text": "Минус 15 кг!", "rating": 5 }], "blockSize": "full" },
+    { "type": "faq", "items": [{ "question": "Как записаться?", "answer": "Напишите в Telegram" }], "blockSize": "full" },
+    { "type": "messenger", "messengers": [{ "platform": "whatsapp", "username": "+77001234567" }], "blockSize": "half" }
   ]
 }
 
-Текст на русском, профессиональный и продающий. Цены реалистичные для Казахстана.
-Return ONLY valid JSON, no markdown or code blocks.`;
+Текст на русском. Return ONLY valid JSON, no markdown.`;
         userPrompt = `Создай полную профессиональную страницу для: ${input.description}`;
         break;
 
@@ -202,19 +203,19 @@ Return ONLY valid JSON, no markdown or code blocks.`;
 6. КОНТАКТЫ (messenger):
    - WhatsApp и/или Telegram
 
-ТИПЫ БЛОКОВ:
+ТИПЫ БЛОКОВ (все с blockSize: "full" или "half"):
 - profile: { name, bio }
-- link: { title, url, icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill" }
-- text: { content, style: "heading|paragraph|quote", alignment: "center|left" }
-- product: { name, description, price: number, currency: "KZT" }
-- testimonial: { testimonials: [{ name, role, text, rating: 5 }] }
-- faq: { items: [{ question, answer }] }
-- messenger: { messengers: [{ platform: "telegram|whatsapp", username }] }
-- socials: { platforms: [{ platform, url }] }
-- video: { url, title }
-- countdown: { title, endDate, style: "modern" }
-- separator: { style: "line" }
-- carousel: { images: [{ url, alt }], title }
+- link: { title, url, icon: "globe|instagram|telegram|youtube|tiktok", style: "rounded|pill", blockSize: "half" }
+- text: { content, style: "heading|paragraph|quote", alignment: "center|left", blockSize: "full" }
+- product: { name, description, price: number, currency: "KZT", blockSize: "half" }
+- testimonial: { testimonials: [{ name, role, text, rating: 5 }], blockSize: "full" }
+- faq: { items: [{ question, answer }], blockSize: "full" }
+- messenger: { messengers: [{ platform: "telegram|whatsapp", username }], blockSize: "half" }
+- socials: { platforms: [{ platform, url }], blockSize: "full" }
+- video: { url, title, blockSize: "full" }
+- countdown: { title, endDate, style: "modern", blockSize: "full" }
+- separator: { style: "line", blockSize: "full" }
+- carousel: { images: [{ url, alt }], title, blockSize: "full" }
 
 ОТВЕТ В JSON:
 {

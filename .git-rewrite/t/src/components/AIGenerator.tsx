@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Sparkles, Wand2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
 
 interface AIGeneratorProps {
@@ -18,6 +19,7 @@ interface AIGeneratorProps {
 }
 
 export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AIGeneratorProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     url: '',
@@ -38,7 +40,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
       switch (type) {
         case 'magic-title':
           if (!input.url) {
-            toast.error('Please enter a URL');
+            toast.error(t('toasts.ai.enterUrl'));
             setLoading(false);
             return;
           }
@@ -47,7 +49,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
 
         case 'sales-copy':
           if (!input.productName || !input.price) {
-            toast.error('Please enter product name and price');
+            toast.error(t('toasts.ai.enterProduct'));
             setLoading(false);
             return;
           }
@@ -68,7 +70,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
 
         case 'ai-builder':
           if (!input.description) {
-            toast.error('Please describe your page');
+            toast.error(t('toasts.ai.describePage'));
             setLoading(false);
             return;
           }
@@ -82,16 +84,16 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
 
       if (error) {
         console.error('AI generation error:', error);
-        toast.error('Failed to generate content');
+        toast.error(t('toasts.ai.generationError'));
         return;
       }
 
-      toast.success('Content generated!');
+      toast.success(t('toasts.ai.generated'));
       onResult(data.result);
       onClose();
     } catch (error) {
       console.error('AI generation error:', error);
-      toast.error('Failed to generate content');
+      toast.error(t('toasts.ai.generationError'));
     } finally {
       setLoading(false);
     }

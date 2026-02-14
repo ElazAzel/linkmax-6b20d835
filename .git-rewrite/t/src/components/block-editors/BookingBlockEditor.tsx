@@ -8,11 +8,15 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
-import { Clock, Plus, Trash2, CalendarDays, Wallet } from 'lucide-react';
+import { Clock, Plus, Trash2, CalendarDays, Wallet, Bell, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { BlockEditorWrapper } from './BlockEditorWrapper';
 import type { BookingBlock } from '@/types/page';
-import type { BlockEditorProps } from '@/types/blocks';
+
+interface BookingBlockEditorProps {
+  formData: BookingBlock;
+  onChange: (updates: Partial<BookingBlock>) => void;
+}
 
 interface TimeSlot {
   id: string;
@@ -30,28 +34,33 @@ const DAYS_OF_WEEK = [
   { value: 6, label: 'Суббота' },
 ];
 
-export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: BlockEditorProps<BookingBlock>) {
+export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorProps) {
   const { t } = useTranslation();
+  const block = formData;
 
+  // Merge updates with formData
+  const handleChange = (updates: Partial<BookingBlock>) => {
+    onChange({ ...formData, ...updates } as any);
+  };
   const handleAddSlot = () => {
     const newSlot: TimeSlot = {
       id: `slot-${Date.now()}`,
       startTime: '10:00',
       endTime: '11:00',
     };
-    onChange({
+    handleChange({
       slots: [...(block.slots || []), newSlot],
     });
   };
 
   const handleRemoveSlot = (slotId: string) => {
-    onChange({
+    handleChange({
       slots: (block.slots || []).filter(s => s.id !== slotId),
     });
   };
 
   const handleSlotChange = (slotId: string, field: 'startTime' | 'endTime', value: string) => {
-    onChange({
+    handleChange({
       slots: (block.slots || []).map(s =>
         s.id === slotId ? { ...s, [field]: value } : s
       ),
@@ -61,9 +70,9 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
   const handleToggleDay = (day: number) => {
     const current = block.disabledWeekdays || [];
     if (current.includes(day)) {
-      onChange({ disabledWeekdays: current.filter(d => d !== day) });
+      handleChange({ disabledWeekdays: current.filter(d => d !== day) });
     } else {
-      onChange({ disabledWeekdays: [...current, day] });
+      handleChange({ disabledWeekdays: [...current, day] });
     }
   };
 
@@ -79,7 +88,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             <Label>{t('blocks.booking.blockTitle', 'Заголовок')}</Label>
             <Input
               value={typeof block.title === 'string' ? block.title : ''}
-              onChange={e => onChange({ title: e.target.value })}
+              onChange={e => handleChange({ title: e.target.value })}
               placeholder={t('blocks.booking.titlePlaceholder', 'Записаться на прием')}
             />
           </div>
@@ -88,7 +97,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             <Label>{t('blocks.booking.blockDescription', 'Описание')}</Label>
             <Textarea
               value={typeof block.description === 'string' ? block.description : ''}
-              onChange={e => onChange({ description: e.target.value })}
+              onChange={e => handleChange({ description: e.target.value })}
               placeholder={t('blocks.booking.descriptionPlaceholder', 'Выберите удобное время для записи')}
               rows={2}
             />
@@ -109,7 +118,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
               <Label>{t('blocks.booking.startHour', 'Начало')}</Label>
               <Select
                 value={String(block.workingHoursStart || 9)}
-                onValueChange={v => onChange({ workingHoursStart: Number(v) })}
+                onValueChange={v => handleChange({ workingHoursStart: Number(v) })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -128,7 +137,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
               <Label>{t('blocks.booking.endHour', 'Конец')}</Label>
               <Select
                 value={String(block.workingHoursEnd || 18)}
-                onValueChange={v => onChange({ workingHoursEnd: Number(v) })}
+                onValueChange={v => handleChange({ workingHoursEnd: Number(v) })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -148,7 +157,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             <Label>{t('blocks.booking.slotDuration', 'Длительность слота (минут)')}</Label>
             <Select
               value={String(block.slotDuration || 60)}
-              onValueChange={v => onChange({ slotDuration: Number(v) })}
+              onValueChange={v => handleChange({ slotDuration: Number(v) })}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -256,7 +265,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             <Label>{t('blocks.booking.maxDays', 'Максимум дней для записи')}</Label>
             <Select
               value={String(block.maxBookingDays || 30)}
-              onValueChange={v => onChange({ maxBookingDays: Number(v) })}
+              onValueChange={v => handleChange({ maxBookingDays: Number(v) })}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -280,7 +289,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             </div>
             <Switch
               checked={block.requirePhone || false}
-              onCheckedChange={v => onChange({ requirePhone: v })}
+              onCheckedChange={v => handleChange({ requirePhone: v })}
             />
           </div>
 
@@ -293,7 +302,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             </div>
             <Switch
               checked={block.requireEmail || false}
-              onCheckedChange={v => onChange({ requireEmail: v })}
+              onCheckedChange={v => handleChange({ requireEmail: v })}
             />
           </div>
         </div>
@@ -316,7 +325,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
             </div>
             <Switch
               checked={block.requirePrepayment || false}
-              onCheckedChange={v => onChange({ requirePrepayment: v })}
+              onCheckedChange={v => handleChange({ requirePrepayment: v })}
             />
           </div>
 
@@ -326,7 +335,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
                 <Label>{t('blocks.booking.prepaymentPhone', 'WhatsApp для оплаты')}</Label>
                 <Input
                   value={block.prepaymentPhone || ''}
-                  onChange={e => onChange({ prepaymentPhone: e.target.value })}
+                  onChange={e => handleChange({ prepaymentPhone: e.target.value })}
                   placeholder="+7 777 123 45 67"
                   type="tel"
                 />
@@ -341,7 +350,7 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
                   <Input
                     type="number"
                     value={block.prepaymentAmount || ''}
-                    onChange={e => onChange({ prepaymentAmount: Number(e.target.value) || undefined })}
+                    onChange={e => handleChange({ prepaymentAmount: Number(e.target.value) || undefined })}
                     placeholder="5000"
                   />
                 </div>
@@ -349,12 +358,67 @@ export function BookingBlockEditor({ block, onChange, onDelete, onDuplicate }: B
                   <Label>{t('blocks.booking.currency', 'Валюта')}</Label>
                   <CurrencySelect
                     value={block.prepaymentCurrency || 'KZT'}
-                    onValueChange={v => onChange({ prepaymentCurrency: v as any })}
+                    onValueChange={v => handleChange({ prepaymentCurrency: v as any })}
                   />
                 </div>
               </div>
             </>
           )}
+        </div>
+
+        <Separator />
+
+        {/* Telegram Notifications */}
+        <div className="space-y-4">
+          <h4 className="font-medium flex items-center gap-2">
+            <Bell className="h-4 w-4" />
+            {t('blocks.booking.notifications', 'Уведомления в Telegram')}
+          </h4>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>{t('blocks.booking.dailyReminder', 'Утреннее напоминание')}</Label>
+                <p className="text-xs text-muted-foreground">
+                  {t('blocks.booking.dailyReminderDesc', 'Получите список записей на сегодня')}
+                </p>
+              </div>
+              <Switch
+                checked={block.dailyReminderEnabled || false}
+                onCheckedChange={v => handleChange({ dailyReminderEnabled: v })}
+              />
+            </div>
+
+            {block.dailyReminderEnabled && (
+              <div className="flex items-center gap-2 ml-0">
+                <Label className="text-sm text-muted-foreground whitespace-nowrap">
+                  {t('blocks.booking.reminderTime', 'Время напоминания')}:
+                </Label>
+                <Input
+                  type="time"
+                  value={block.dailyReminderTime || '08:50'}
+                  onChange={e => handleChange({ dailyReminderTime: e.target.value })}
+                  className="w-28"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                {t('blocks.booking.weeklyMotivation', 'Мотивация на неделю')}
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                {t('blocks.booking.weeklyMotivationDesc', 'Понедельник в 9:00 — персональное вдохновение')}
+              </p>
+            </div>
+            <Switch
+              checked={block.weeklyMotivationEnabled || false}
+              onCheckedChange={v => handleChange({ weeklyMotivationEnabled: v })}
+            />
+          </div>
         </div>
       </div>
     </BlockEditorWrapper>

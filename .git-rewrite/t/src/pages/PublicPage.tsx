@@ -1,17 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Share2, QrCode } from 'lucide-react';
-import { BlockRenderer } from '@/components/BlockRenderer';
+import { GridBlocksRenderer } from '@/components/blocks/GridBlocksRenderer';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { FreemiumWatermark } from '@/components/FreemiumWatermark';
+import { SEOHead } from '@/components/SEOHead';
 import { decompressPageData } from '@/lib/compression';
 import { usePublicPage } from '@/hooks/usePageCache';
 import { AnalyticsProvider } from '@/hooks/useAnalyticsTracking';
+import { useHeatmapTracking } from '@/hooks/useHeatmapTracking';
 import { trackShare } from '@/services/analytics';
+import { checkPremiumStatus } from '@/services/user';
 import { toast } from 'sonner';
-import type { PageData } from '@/types/page';
+import type { PageData, PageBackground } from '@/types/page';
 import {
   Dialog,
   DialogContent,
@@ -42,17 +46,31 @@ export default function PublicPage() {
   // Determine which data source to use
   const pageData = slug ? cachedPageData : compressedPageData;
   const loading = slug ? isLoadingCached : false;
+  
+  // Check if page owner is premium (for auto-verification badge)
+  const { data: ownerPremiumStatus } = useQuery({
+    queryKey: ['ownerPremium', pageData?.userId],
+    queryFn: async () => {
+      if (!pageData?.userId) return { isPremium: false, tier: 'free' as const };
+      return checkPremiumStatus(pageData.userId);
+    },
+    enabled: !!pageData?.userId,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+  
+  const isOwnerPremium = ownerPremiumStatus?.isPremium || false;
+  const ownerTier = ownerPremiumStatus?.tier || 'free';
 
-  // Update document metadata when page data loads
-  useEffect(() => {
-    if (pageData) {
-      document.title = pageData.seo.title;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', pageData.seo.description);
-      }
+  // Enable heatmap tracking for published pages
+  useHeatmapTracking(pageData?.id, !!slug && !!pageData?.id);
+
+  // Build canonical URL for SEO
+  const canonicalUrl = useMemo(() => {
+    if (slug) {
+      return `https://lnkmx.my/${slug}`;
     }
-  }, [pageData]);
+    return window.location.href;
+  }, [slug]);
 
   const handleShare = async () => {
     // Track share event
@@ -96,55 +114,57 @@ export default function PublicPage() {
     );
   }
 
+  // Get background style from theme
+  const getPageBackgroundStyle = (background?: PageBackground): React.CSSProperties => {
+    if (!background) return {};
+    
+    switch (background.type) {
+      case 'solid':
+        return { backgroundColor: background.value };
+      case 'gradient':
+        const colors = background.value.split(',').map(c => c.trim());
+        return { 
+          background: `linear-gradient(${background.gradientAngle || 135}deg, ${colors.join(', ')})` 
+        };
+      case 'image':
+        return { 
+          backgroundImage: `url(${background.value})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        };
+      default:
+        return {};
+    }
+  };
+
+  const customBackground = pageData.theme?.customBackground;
+  const backgroundStyle = getPageBackgroundStyle(customBackground);
+
   return (
+    <>
+      {/* Dynamic SEO meta tags */}
+      <SEOHead pageData={pageData} pageUrl={canonicalUrl} />
     <AnalyticsProvider pageId={pageData?.id} enabled={!!slug}>
-      <div className="min-h-screen bg-background">
+      <div 
+        className="min-h-screen bg-background"
+        style={backgroundStyle}
+      >
         {/* Language Switcher - Top Right */}
         <div className="fixed top-4 right-4 z-50">
           <LanguageSwitcher />
         </div>
 
         <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
-          {/* Content - Respects editor mode */}
-          {pageData.editorMode === 'grid' ? (
-            <>
-              <style>{`
-                .public-grid-container {
-                  display: grid;
-                  gap: 0.75rem;
-                  grid-template-columns: repeat(${pageData.gridConfig?.columnsMobile || 2}, 1fr);
-                }
-                @media (min-width: 640px) {
-                  .public-grid-container { gap: 1rem; }
-                }
-                @media (min-width: 768px) {
-                  .public-grid-container {
-                    grid-template-columns: repeat(${pageData.gridConfig?.columnsDesktop || 3}, 1fr);
-                  }
-                }
-              `}</style>
-              <div className="public-grid-container">
-                {pageData.blocks.map(block => {
-                  const gridLayout = block.gridLayout;
-                  const style = gridLayout ? {
-                    gridColumn: `${gridLayout.gridColumn} / span ${gridLayout.gridWidth || 1}`,
-                    gridRow: `${gridLayout.gridRow} / span ${gridLayout.gridHeight || 1}`,
-                  } : {};
-                  return (
-                    <div key={block.id} style={style}>
-                      <BlockRenderer block={block} pageOwnerId={pageData?.userId} />
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          ) : (
-            <div className="space-y-3 sm:space-y-4">
-              {pageData.blocks.map(block => (
-                <BlockRenderer key={block.id} block={block} pageOwnerId={pageData?.userId} />
-              ))}
-            </div>
-          )}
+          {/* Grid Blocks - Same layout as editor */}
+          <GridBlocksRenderer
+            blocks={pageData.blocks}
+            pageOwnerId={pageData?.userId}
+            pageId={pageData?.id}
+            isOwnerPremium={isOwnerPremium}
+            ownerTier={ownerTier}
+            isPreview={false}
+          />
 
           {/* Share Section - Mobile Optimized */}
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 justify-center">
@@ -196,5 +216,6 @@ export default function PublicPage() {
         {slug && <ChatbotWidget pageSlug={slug} />}
       </div>
     </AnalyticsProvider>
+    </>
   );
 }

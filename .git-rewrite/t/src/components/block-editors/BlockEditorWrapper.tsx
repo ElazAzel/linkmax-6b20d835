@@ -7,11 +7,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Crown, Info, Calendar as CalendarIcon, X } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Crown, Info, Calendar as CalendarIcon, X, Maximize2, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { AnimationSettings } from '@/components/editor/AnimationSettings';
-import type { BlockStyle } from '@/types/page';
+import type { BlockStyle, BlockSizePreset } from '@/types/page';
+import { BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 
 export interface BaseBlockEditorProps {
   formData: any;
@@ -103,6 +105,27 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
       handleChange(rest);
     };
 
+    const handleBlockSizeChange = (size: BlockSizePreset) => {
+      handleChange({
+        ...formData,
+        blockSize: size
+      });
+    };
+
+    const handleContentAlignmentChange = (alignment: BlockStyle['contentAlignment']) => {
+      handleChange({
+        ...formData,
+        blockStyle: {
+          ...(formData.blockStyle || {}),
+          contentAlignment: alignment
+        }
+      });
+    };
+
+    const currentSize = formData.blockSize || 'full-medium';
+    const sizeInfo = BLOCK_SIZE_DIMENSIONS[currentSize as BlockSizePreset];
+    const currentContentAlignment = formData.blockStyle?.contentAlignment || 'center';
+
     return (
       <BlockEditorWrapper
         isPremium={options?.isPremium}
@@ -114,6 +137,88 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
             <AlertDescription>{validationError}</AlertDescription>
           </Alert>
         )}
+        
+        {/* Block Size Selector */}
+        <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
+          <div className="flex items-center gap-2">
+            <Maximize2 className="h-4 w-4 text-primary" />
+            <Label className="text-base font-semibold">Размер блока</Label>
+          </div>
+          
+          <Select value={currentSize} onValueChange={(v) => handleBlockSizeChange(v as BlockSizePreset)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Выберите размер" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(BLOCK_SIZE_DIMENSIONS).map(([key, info]) => (
+                <SelectItem key={key} value={key}>
+                  <div className="flex items-center gap-2">
+                    <span className={cn(
+                      "w-4 h-3 rounded border",
+                      info.gridCols === 1 ? "bg-primary/30" : "bg-primary/20"
+                    )} />
+                    {info.label}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          {sizeInfo && (
+            <Alert className="bg-primary/5 border-primary/20">
+              <Info className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-sm">
+                {sizeInfo.gridCols === 1 
+                  ? 'Блок занимает всю ширину строки' 
+                  : 'Блок занимает половину ширины (2 блока в строке)'}
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
+
+        {/* Content Alignment */}
+        <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
+          <div className="flex items-center gap-2">
+            <AlignVerticalJustifyCenter className="h-4 w-4 text-primary" />
+            <Label className="text-base font-semibold">Выравнивание контента</Label>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant={currentContentAlignment === 'top' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleContentAlignmentChange('top')}
+              className="flex-1"
+            >
+              <AlignVerticalJustifyStart className="h-4 w-4 mr-1" />
+              Верх
+            </Button>
+            <Button
+              type="button"
+              variant={currentContentAlignment === 'center' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleContentAlignmentChange('center')}
+              className="flex-1"
+            >
+              <AlignVerticalJustifyCenter className="h-4 w-4 mr-1" />
+              Центр
+            </Button>
+            <Button
+              type="button"
+              variant={currentContentAlignment === 'bottom' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleContentAlignmentChange('bottom')}
+              className="flex-1"
+            >
+              <AlignVerticalJustifyEnd className="h-4 w-4 mr-1" />
+              Низ
+            </Button>
+          </div>
+        </div>
+        
+        <Separator className="my-4" />
+        
         <Component {...props} onChange={handleChange} />
         
         <Separator className="my-6" />

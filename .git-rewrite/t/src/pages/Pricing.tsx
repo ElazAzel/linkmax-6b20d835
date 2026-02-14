@@ -55,8 +55,8 @@ export default function Pricing() {
       icon: Crown,
       color: 'from-violet-500 to-purple-600',
       popular: true,
-      prices: { 3: 5.00, 6: 3.50, 12: 2.50 },
-      totalPrices: { 3: 15, 6: 21, 12: 30 },
+      prices: { 3: 6.25, 6: 4.40, 12: 3.15 },
+      totalPrices: { 3: 18.75, 6: 26.40, 12: 37.80 },
       features: [
         t('pricing.features.allBasic', 'Всё из BASIC'),
         t('pricing.features.proThemes', 'Профессиональные темы и анимации'),
@@ -76,8 +76,8 @@ export default function Pricing() {
       name: 'BUSINESS',
       icon: Sparkles,
       color: 'from-amber-500 to-orange-600',
-      prices: { 3: 9.50, 6: 7.00, 12: 5.00 },
-      totalPrices: { 3: 28.50, 6: 42, 12: 60 },
+      prices: { 3: 14.25, 6: 10.50, 12: 7.50 },
+      totalPrices: { 3: 42.75, 6: 63, 12: 90 },
       features: [
         t('pricing.features.allPro', 'Всё из PRO'),
         t('pricing.features.multiPage', 'Внутренние страницы (мульти-страничный сайт)'),
@@ -141,9 +141,9 @@ export default function Pricing() {
                 </Button>
                 <div className="flex items-center gap-2">
                   <img
-                    src="/pwa-maskable-512x512.png"
+                    src="/logo.png"
                     alt="LinkMAX"
-                    className="h-8 w-8 rounded-xl"
+                    className="h-8 w-8 rounded-xl object-contain"
                   />
                   <h1 className="text-xl font-bold text-primary">
                     {t('pricing.title', 'Тарифы')}

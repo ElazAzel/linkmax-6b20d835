@@ -86,7 +86,19 @@
       "free": "Тегін",
       "noCode": "Кодсыз",
       "aiHelps": "AI көмектеседі",
-      "create": "Жасау"
+      "create": "Жасау",
+      "badges": {
+        "aiReady": "AI дайын",
+        "autoGenerate": "Авто-генерация",
+        "clicks": "Басулар",
+        "verified": "Расталған",
+        "premium": "Премиум"
+      },
+      "mockup": {
+        "name": "Алекс Креатор",
+        "role": "Сандық суретші",
+        "portfolio": "Портфолио"
+      }
     },
     "problems": {
       "title": "Таныс мәселелер ме?",
@@ -376,7 +388,7 @@
       },
       "q4": {
         "question": "Өз доменімді пайдалана аламын ба?",
-        "answer": "Иә, Business тарифінде SSL сертификатымен өз доменіңізді қосуға болады. Тегін және Pro тарифтерінде бетіңіз linkmax.app/сіздің-атыңыз мекенжайында қолжетімді болады."
+        "answer": "Иә, Business тарифінде SSL сертификатымен өз доменіңізді қосуға болады. Тегін және Pro тарифтерінде бетіңіз lnkmx.my/сіздің-атыңыз мекенжайында қолжетімді болады."
       },
       "q5": {
         "question": "Бет арқылы төлемді қалай қабылдаймын?",
@@ -449,6 +461,22 @@
         "link3": "🚚 Жеткізу"
       }
     },
+    "demo": {
+      "badge": "Қазір көріңіз",
+      "title": "Сиқырды сезініңіз.",
+      "subtitle": "Редактормен осында ойнаңыз. Блоктар қосыңыз, контентті өңдеңіз және өзгерістерді нақты уақытта көріңіз.",
+      "profile": "Профиль",
+      "addBlocks": "Блоктар қосу",
+      "link": "Сілтеме",
+      "text": "Мәтін",
+      "image": "Сурет",
+      "socials": "Соцжелілер",
+      "yourBlocks": "Сіздің блоктарыңыз",
+      "dragToReorder": "сұрыптау үшін сүйреңіз",
+      "noBlocks": "Әлі блоктар жоқ. Жоғарыда қосыңыз!",
+      "addBlocksHint": "Блоктарды осында көру үшін қосыңыз",
+      "livePreview": "Тікелей алдын ала қарау"
+    },
     "capabilities": {
       "noCode": {
         "title": "Кодсыз құрастырушы",
@@ -510,14 +538,6 @@
         "desc": "Сайтта тікелей интерактивті демо — тіркелу қажет емес"
       }
     },
-    "hero": {
-      "usernamePlaceholder": "сіздіңатыңыз",
-      "create": "Жасау",
-      "free": "Мәңгіге тегін",
-      "noCode": "Бағдарламалаусыз",
-      "aiPowered": "AI көмегімен",
-      "subtitle2": "Барлық әлеуметтік желілер, портфолио және бизнес үшін бір сілтеме"
-    },
     "howItWorks": {
       "step4": {
         "title": "Сілтемемен бөлісіңіз",
@@ -560,7 +580,23 @@
     "passwordUpdatedDesc": "Құпия сөзіңіз сәтті жаңартылды",
     "goToDashboard": "Редакторға өту",
     "passwordsDoNotMatch": "Құпия сөздер сәйкес келмейді",
-    "updateFailed": "Құпия сөзді жаңарту сәтсіз аяқталды"
+    "updateFailed": "Құпия сөзді жаңарту сәтсіз аяқталды",
+    "telegram": {
+      "invalidChatId": "Дұрыс Telegram Chat ID енгізіңіз",
+      "notFound": "Осы Telegram бар аккаунт табылмады",
+      "sendFailed": "Хабарлама жіберу сәтсіз",
+      "codeSendError": "Код жіберу қатесі",
+      "codeSent": "Код Telegram-ға жіберілді!",
+      "connectionError": "Байланыс қатесі",
+      "invalidToken": "Қате немесе мерзімі өткен код",
+      "resetError": "Құпия сөзді қалпына келтіру қатесі",
+      "passwordChanged": "Құпия сөз сәтті өзгертілді!"
+    },
+    "referral": {
+      "invited": "Сізді шақырды!",
+      "bonus": "Тіркеліңіз және +3 күн Premium алыңыз",
+      "success": "🎉 +{{days}} күн Premium реферал коды үшін!"
+    }
   },
   "editor": {
     "title": "Бет редакторы",
@@ -600,7 +636,15 @@
     "newsletter": "Тарату",
     "testimonial": "Пікір",
     "scratch": "Скретч-карта",
-    "search": "Іздеу"
+    "search": "Іздеу",
+    "pricing": "Баға тізімі",
+    "booking": "Брондау",
+    "community": "Қоғамдастық",
+    "faq": "Жиі қойылатын сұрақтар",
+    "countdown": "Кері санақ",
+    "catalog": "Каталог",
+    "shoutout": "Шаут-аут",
+    "beforeAfter": "Бұрын/Кейін"
   },
   "blockEditor": {
     "profile": "Профильді өңдеу",
@@ -624,6 +668,13 @@
     "avatar": "Аватарды өңдеу",
     "separator": "Бөлгішті өңдеу",
     "catalog": "Каталогты өңдеу",
+    "pricing": "Баға тізімін өңдеу",
+    "booking": "Брондауды өңдеу",
+    "community": "Қоғамдастықты өңдеу",
+    "faq": "FAQ өңдеу",
+    "countdown": "Кері санақты өңдеу",
+    "shoutout": "Шаут-аутты өңдеу",
+    "beforeAfter": "Бұрын/Кейінді өңдеу",
     "description": "Барлық блок параметрлерін баптаңыз. Өзгерістер автоматты түрде сақталады.",
     "notAvailable": "Бұл блок түрі үшін редактор қолжетімді емес."
   },
@@ -699,7 +750,9 @@
     "translateToOthers": "Басқа тілдерге аудару",
     "noTextToTranslate": "Аудару үшін мәтін енгізіңіз",
     "translationSuccess": "Аударма орындалды",
-    "translationError": "Аударма қатесі"
+    "translationError": "Аударма қатесі",
+    "translating": "Аударылуда...",
+    "autoTranslate": "Контентті авто-аудару"
   },
   "freemium": {
     "blockLimitReached": "Блоктар лимитіне жеттіңіз. Premium-ға көшіңіз.",
@@ -767,6 +820,74 @@
       "message": "Хабарлама",
       "meeting": "Кездесу"
     }
+  },
+  "automations": {
+    "title": "Ақылды автоматизациялар",
+    "subtitle": "Telegram арқылы авто-еске салулар",
+    "premiumRequired": "Ақылды автоматизацияларды пайдалану үшін Pro-ға көшіңіз",
+    "unlockPremium": "Pro-да қолжетімді",
+    "saved": "Автоматизация сақталды",
+    "saveError": "Автоматизацияны сақтау сәтсіз",
+    "followUp": {
+      "title": "Follow-up еске салу",
+      "description": "Лид белсенді болмаса еске салу жіберу"
+    },
+    "timeClarification": {
+      "title": "Уақытты нақтылау",
+      "description": "Уақыт слотын таңдауды сұрау"
+    },
+    "reviewRequest": {
+      "title": "Пікір сұрау",
+      "description": "Аяқтағаннан кейін пікір сұрау"
+    },
+    "triggerAfter": "Кейін іске қосу",
+    "hours": "сағат",
+    "messageTemplate": "Хабарлама үлгісі",
+    "variables": "Дербестендіру үшін {lead_name}, {owner_name} қолданыңыз",
+    "saveSettings": "Баптауларды сақтау",
+    "telegramNote": "Еске салулар Telegram-ға жіберіледі"
+  },
+  "community": {
+    "title": "Қоғамдастық",
+    "channelLink": "Арна/топ сілтемесі",
+    "channelLinkPlaceholder": "https://t.me/...",
+    "description": "Сипаттама",
+    "descriptionPlaceholder": "Ішінде не бар, мүшелер не алады",
+    "memberCount": "Мүшелер саны",
+    "memberCountPlaceholder": "мыс. 1500+",
+    "buttonText": "Батырма мәтіні",
+    "buttonTextPlaceholder": "мыс. Қосылу",
+    "isPrivate": "Жеке арна/топ",
+    "join": "Қосылу",
+    "members": "мүше"
+  },
+  "proofOfHuman": {
+    "title": "Адам растауы",
+    "description": "Сенімді арттыру үшін бейне немесе аудио сәлемдеме қосыңыз",
+    "introVideo": "Бейне сәлемдеме",
+    "introVideoHint": "Қысқа бейне сәлемдеме (30 сек-ке дейін)",
+    "introAudio": "Дауыстық хабарлама",
+    "introAudioHint": "Егер бейне жоқ болса, аудио сәлемдеме"
+  },
+  "pricingServices": {
+    "serviceType": "Қызмет түрі",
+    "serviceTypePlaceholder": "мыс. Шаш қию, Консультация...",
+    "duration": "Ұзақтығы (минут)",
+    "durationPlaceholder": "мыс. 60",
+    "priceType": "Баға түрі",
+    "priceTypeFixed": "Бекітілген",
+    "priceTypeRange": "Диапазон",
+    "priceTypeFrom": "Бастап",
+    "priceMax": "Максималды баға",
+    "isBookable": "Брондауға болады",
+    "availableDays": "Қолжетімді күндер",
+    "monday": "Дс",
+    "tuesday": "Сс",
+    "wednesday": "Ср",
+    "thursday": "Бс",
+    "friday": "Жм",
+    "saturday": "Сн",
+    "sunday": "Жс"
   },
   "analytics": {
     "title": "Аналитика",
@@ -1036,9 +1157,188 @@
       "thu": "Бс",
       "fri": "Жм",
       "sat": "Сн"
-    }
+    },
+    "tiers": "Тирлер",
+    "tierManagement": "Тирлерді басқару",
+    "searchUsers": "Пайдаланушыларды іздеу",
+    "tierFree": "Free",
+    "tierPro": "Pro",
+    "tierBusiness": "Business",
+    "user": "Пайдаланушы",
+    "tier": "Тир",
+    "expiry": "Мерзімі",
+    "edit": "Өзгерту",
+    "editUserTier": "Пайдаланушы тирін өзгерту",
+    "selectTier": "Тирді таңдаңыз",
+    "expiryDate": "Аяқталу күні",
+    "week": "апта",
+    "month": "ай",
+    "year": "жыл",
+    "lifetime": "Мәңгілік",
+    "expiresOn": "дейін",
+    "expired": "Аяқталған",
+    "leaveEmptyLifetime": "Шексіз қолжетімділік үшін бос қалдырыңыз",
+    "cancel": "Болдырмау",
+    "save": "Сақтау",
+    "tierUpdated": "Тир жаңартылды",
+    "tierUpdateError": "Тирді жаңарту сәтсіз",
+    "loadError": "Жүктеу сәтсіз",
+    "adminRole": "Әкімші",
+    "adminRoleDesc": "Әкімші панеліне кіру"
   },
   "dashboard": {
-    "pageRefreshed": "Бет жаңартылды"
+    "pageRefreshed": "Бет жаңартылды",
+    "addFirstBlock": "Бірінші блокты қосу үшін + басыңыз"
+  },
+  "common": {
+    "save": "Сақтау",
+    "cancel": "Болдырмау",
+    "close": "Жабу",
+    "preview": "Алдын ала қарау",
+    "share": "Бөлісу",
+    "more": "Тағы",
+    "settings": "Баптаулар",
+    "language": "Тіл",
+    "noResults": "Нәтижелер табылмады"
+  },
+  "menu": {
+    "gamification": "Геймификация",
+    "community": "Қоғамдастық",
+    "signOut": "Шығу"
+  },
+  "mobileToolbar": {
+    "save": "Сақтау",
+    "preview": "Қарау",
+    "share": "Бөлісу",
+    "settings": "Баптаулар",
+    "more": "Тағы",
+    "moreOptions": "Қосымша",
+    "aiBuilder": "AI Құрастырушы",
+    "aiBuilderDesc": "AI арқылы бет жасау",
+    "templates": "Шаблондар",
+    "templatesDesc": "Дайын шаблондар",
+    "achievements": "Жетістіктер",
+    "achievementsDesc": "Сіздің прогресіңіз",
+    "crm": "CRM",
+    "crmDesc": "Лидтерді басқару"
+  },
+  "tokens": {
+    "title": "Токендер",
+    "balance": "Баланс",
+    "earn": "Табу",
+    "spend": "Жұмсау"
+  },
+  "achievements": {
+    "title": "Жетістіктер",
+    "progress": "Прогресс"
+  },
+  "freemium": {
+    "left": "қалды",
+    "limit": "лимит",
+    "blockLimitReached": "Блок лимитіне жетті. Шексіз блоктар үшін Premium-ға көтеріліңіз.",
+    "blocksRemaining": "Қалған блоктар: {{count}} / {{max}}",
+    "upgradeToPremium": "Premium-ға көтерілу",
+    "aiLimitReached": "AI сұрау лимитіне жетті",
+    "aiRequestsRemaining": "Осы аптада қалған AI сұраулары: {{count}}",
+    "aiLimitResetsWeekly": "Лимит апта сайын қалпына келеді",
+    "unlimitedAI": "Шексіз AI",
+    "premiumBlockRequired": "Бұл блок Premium қажет етеді",
+    "viewOnly": "Тек қарау",
+    "viewOnlyHint": "Өңдеу үшін {{tier}} қажет",
+    "upgradeToEdit": "Өңдеу үшін {{tier}}-ға көтеріліңіз",
+    "proRequired": "PRO қажет",
+    "businessRequired": "BUSINESS қажет"
+  },
+  "editor": {
+    "addBlock": "Блок қосу",
+    "selectBlock": "Блокты таңдаңыз",
+    "searchBlocks": "Блоктарды іздеу..."
+  },
+  "toasts": {
+    "collaboration": {
+      "requestSent": "Коллаборация сұрауы жіберілді!",
+      "requestError": "Сұрау жіберу сәтсіз",
+      "accepted": "Коллаборация қабылданды!",
+      "rejected": "Сұрау қабылданбады",
+      "deleted": "Коллаборация жойылды",
+      "error": "Қате"
+    },
+    "team": {
+      "created": "Команда құрылды!",
+      "createError": "Команда құру сәтсіз",
+      "memberInvited": "Пайдаланушы командаға шақырылды!",
+      "inviteError": "Шақыру сәтсіз",
+      "left": "Сіз команданы тастадыңыз",
+      "deleted": "Команда жойылды",
+      "memberRemoved": "Мүше алынып тасталды",
+      "removeError": "Алып тастау сәтсіз",
+      "confirmRemove": "{{name}} командадан алып тастау керек пе?"
+    },
+    "shoutout": {
+      "added": "Шаут-аут қосылды!",
+      "deleted": "Шаут-аут жойылды",
+      "error": "Қате"
+    },
+    "social": {
+      "rewardClaimed": "Сыйлық алынды: +{{hours}} сағат Premium!",
+      "rewardError": "Сыйлықты алу сәтсіз",
+      "giftActivated": "Сыйлық белсендірілді: +{{days}} күн Premium!",
+      "giftError": "Сыйлықты белсендіру сәтсіз"
+    },
+    "leads": {
+      "loadError": "Лидтерді жүктеу сәтсіз",
+      "created": "Лид құрылды",
+      "createError": "Лид құру сәтсіз",
+      "updated": "Лид жаңартылды",
+      "updateError": "Лидті жаңарту сәтсіз",
+      "deleted": "Лид жойылды",
+      "deleteError": "Лидті жою сәтсіз",
+      "interactionError": "Өзара әрекетті қосу сәтсіз",
+      "noLeadsExport": "Экспорттайтын лидтер жоқ"
+    },
+    "gallery": {
+      "likeError": "Лайк қою сәтсіз",
+      "unlikeError": "Лайкті алу сәтсіз",
+      "addedToGallery": "Сіздің бетіңіз қоғамдастық галереясында!",
+      "removedFromGallery": "Сіздің бетіңіз галереядан алынды",
+      "updateError": "Галерея күйін жаңарту сәтсіз"
+    },
+    "sharing": {
+      "linkCopied": "Сілтеме көшірілді!",
+      "copyError": "Сілтемені көшіру сәтсіз"
+    },
+    "username": {
+      "authRequired": "Пайдаланушы аутентификацияланбаған",
+      "enterUsername": "Пайдаланушы атын енгізіңіз",
+      "invalid": "Жарамсыз пайдаланушы аты",
+      "updated": "Пайдаланушы аты жаңартылды!",
+      "updateError": "Пайдаланушы атын жаңарту сәтсіз"
+    },
+    "page": {
+      "saveError": "Сақтау сәтсіз",
+      "publishError": "Бетті жариялау сәтсіз"
+    },
+    "ai": {
+      "enterUrl": "URL енгізіңіз",
+      "enterProduct": "Өнім атауы мен бағасын енгізіңіз",
+      "describePage": "Бетіңізді сипаттаңыз",
+      "generationError": "Мазмұн генерациялау сәтсіз",
+      "generated": "Мазмұн генерацияланды!"
+    },
+    "upload": {
+      "authRequired": "Жүктеу үшін кіріңіз",
+      "fileTooLarge": "Файл өлшемі 10МБ-тан аз болуы керек",
+      "error": "Суретті жүктеу сәтсіз"
+    },
+    "bookings": {
+      "fetchError": "Брондауларды жүктеу сәтсіз",
+      "cancelError": "Брондауды болдырмау сәтсіз",
+      "cancelSuccess": "Брондау болдырылмады",
+      "confirmError": "Брондауды растау сәтсіз",
+      "confirmSuccess": "Брондау расталды",
+      "completeError": "Брондауды аяқтау сәтсіз",
+      "completeSuccess": "Брондау аяқталды деп белгіленді",
+      "noBookingsExport": "Экспорттайтын брондаулар жоқ"
+    }
   }
 }

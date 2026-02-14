@@ -154,7 +154,12 @@ export function LandingGallerySection() {
                   )}
                   
                   <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-2 border-primary/20 shadow-md group-hover:scale-105 transition-transform">
-                    <AvatarImage src={page.avatar_url || ''} alt={page.title || ''} />
+                    <AvatarImage 
+                      src={page.avatar_url || ''} 
+                      alt={page.title || ''} 
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <AvatarFallback className="bg-primary/10 text-primary text-lg font-bold">
                       {(page.title || 'U')[0].toUpperCase()}
                     </AvatarFallback>

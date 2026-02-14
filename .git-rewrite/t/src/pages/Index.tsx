@@ -49,7 +49,7 @@ import {
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import { useEffect, useRef, useState, Suspense, lazy } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { InteractiveDemo } from '@/components/landing/InteractiveDemo';
 import { LandingFeaturedPages } from '@/components/landing/LandingFeaturedPages';
@@ -58,9 +58,11 @@ import { FAQSection } from '@/components/landing/FAQSection';
 import { UseCasesGallery } from '@/components/landing/UseCasesGallery';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
-
-// Lazy load 3D component for better performance
-const Hero3D = lazy(() => import('@/components/landing/Hero3D').then(m => ({ default: m.Hero3D })));
+import { Hero3D } from '@/components/landing/Hero3D';
+import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
+import { TableOfContents } from '@/components/landing/TableOfContents';
+import { LinkInBioSection } from '@/components/landing/LinkInBioSection';
+import { NichesDetailSection } from '@/components/landing/NichesDetailSection';
 
 // Intersection Observer hook for scroll animations
 function useScrollAnimation() {
@@ -89,7 +91,7 @@ function useScrollAnimation() {
 
 export default function Index() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [username, setUsername] = useState('');
   const [showFloatingCta, setShowFloatingCta] = useState(false);
   const isMobile = useIsMobile();
@@ -173,7 +175,7 @@ export default function Index() {
 
   // Stats
   const stats = [
-    { value: '2', suffix: ' мин', label: t('landing.stats.timeLabel', 'На создание страницы') },
+    { value: '2', suffix: t('landing.stats.minutesSuffix', ' мин'), label: t('landing.stats.timeLabel', 'На создание страницы') },
     { value: '20+', suffix: '', label: t('landing.stats.blocksLabel', 'Типов блоков') },
     { value: '0', suffix: '%', label: t('landing.stats.commissionLabel', 'Комиссия платформы') },
   ];
@@ -216,14 +218,14 @@ export default function Index() {
 
   const pricingPlans = {
     pro: {
-      '3': { monthly: 5.00, total: 15 },
-      '6': { monthly: 3.50, total: 21 },
-      '12': { monthly: 2.50, total: 30 },
+      '3': { monthly: 6.25, total: 18.75 },
+      '6': { monthly: 4.40, total: 26.40 },
+      '12': { monthly: 3.15, total: 37.80 },
     },
     business: {
-      '3': { monthly: 9.50, total: 28.50 },
-      '6': { monthly: 7.00, total: 42 },
-      '12': { monthly: 5.00, total: 60 },
+      '3': { monthly: 14.25, total: 42.75 },
+      '6': { monthly: 10.50, total: 63 },
+      '12': { monthly: 7.50, total: 90 },
     }
   };
 
@@ -245,25 +247,40 @@ export default function Index() {
   const ctaSection = useScrollAnimation();
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Korner-style Grid Background */}
+    <>
+      <SEOLandingHead currentLanguage={i18n.language} />
+      <div className="min-h-screen bg-background overflow-x-hidden">
+      {/* Korner-style Grid Background - Simplified on mobile for performance */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Subtle gradient blobs */}
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] sm:w-[1000px] sm:h-[1000px] bg-gradient-to-br from-primary/15 via-violet-500/10 to-transparent rounded-full blur-[120px] sm:blur-[180px]" />
-        <div className="absolute top-1/3 -right-20 w-[400px] h-[400px] sm:w-[800px] sm:h-[800px] bg-gradient-to-bl from-blue-500/12 via-cyan-500/8 to-transparent rounded-full blur-[100px] sm:blur-[150px]" />
-        <div className="absolute -bottom-20 left-1/4 w-[500px] h-[500px] sm:w-[900px] sm:h-[900px] bg-gradient-to-tr from-purple-500/12 via-pink-500/8 to-transparent rounded-full blur-[120px] sm:blur-[160px]" />
+        {/* Subtle gradient blobs - reduced blur on mobile */}
+        <div className="absolute -top-40 -left-40 w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] lg:w-[1000px] lg:h-[1000px] bg-gradient-to-br from-primary/10 sm:from-primary/15 via-violet-500/5 sm:via-violet-500/10 to-transparent rounded-full blur-[60px] sm:blur-[120px] lg:blur-[180px]" />
+        <div className="hidden sm:block absolute top-1/3 -right-20 w-[400px] h-[400px] lg:w-[800px] lg:h-[800px] bg-gradient-to-bl from-blue-500/12 via-cyan-500/8 to-transparent rounded-full blur-[100px] lg:blur-[150px]" />
+        <div className="hidden sm:block absolute -bottom-20 left-1/4 w-[500px] h-[500px] lg:w-[900px] lg:h-[900px] bg-gradient-to-tr from-purple-500/12 via-pink-500/8 to-transparent rounded-full blur-[120px] lg:blur-[160px]" />
         
-        {/* Korner-style thin grid */}
-        <div 
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02]"
-          style={{
-            backgroundImage: `linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px'
-          }}
-        />
+        {/* Multi-layer animated grid with edge fade */}
+        <div className="absolute inset-0 grid-fade-edges">
+          <div 
+            className="absolute inset-0 opacity-[0.025] dark:opacity-[0.015] animate-grid-morph-1"
+            style={{
+              backgroundImage: `linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px)`,
+            }}
+          />
+          <div 
+            className="absolute inset-0 opacity-[0.02] dark:opacity-[0.012] animate-grid-morph-2"
+            style={{
+              backgroundImage: `linear-gradient(to right, hsl(var(--primary)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--primary)) 1px, transparent 1px)`,
+            }}
+          />
+          <div 
+            className="absolute inset-0 opacity-[0.015] dark:opacity-[0.01] animate-grid-morph-3"
+            style={{
+              backgroundImage: `linear-gradient(to right, hsl(var(--foreground)) 0.5px, transparent 0.5px), linear-gradient(to bottom, hsl(var(--foreground)) 0.5px, transparent 0.5px)`,
+            }}
+          />
+        </div>
         
-        {/* Diagonal accent lines like korner */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.02]" xmlns="http://www.w3.org/2000/svg">
+        {/* Diagonal accent lines - hidden on mobile for performance */}
+        <svg className="hidden lg:block absolute inset-0 w-full h-full opacity-[0.02]" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="diagonal-lines" patternUnits="userSpaceOnUse" width="100" height="100" patternTransform="rotate(45)">
               <line x1="0" y1="0" x2="0" y2="100" stroke="hsl(var(--foreground))" strokeWidth="0.5"/>
@@ -278,15 +295,7 @@ export default function Index() {
         <div className="mx-3 sm:mx-6 mt-3 sm:mt-4">
           <div className="backdrop-blur-2xl bg-card/70 border border-border/40 rounded-2xl shadow-glass-lg">
             <div className="container mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-              <div className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                <div className="relative">
-                  <div className="absolute inset-0 bg-primary/30 rounded-xl blur-lg group-hover:blur-xl transition-all duration-500" />
-                  <img 
-                    src="/pwa-maskable-512x512.png" 
-                    alt="LinkMAX" 
-                    className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300" 
-                  />
-                </div>
+              <div className="flex items-center group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 <span className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
                   Link<span className="text-gradient">MAX</span>
                 </span>
@@ -325,11 +334,14 @@ export default function Index() {
 
       {/* Hero Section - Clean and focused */}
       <section ref={heroSection.ref} className="relative pt-32 sm:pt-40 lg:pt-48 pb-16 sm:pb-24 lg:pb-32 px-5 sm:px-6">
-        <div className="hidden lg:block">
-          <Suspense fallback={null}>
-            <Hero3D />
-          </Suspense>
-        </div>
+        {/* Defer Hero3D until visible for better LCP */}
+        {!isMobile && heroSection.isVisible && (
+          <div className="hidden lg:block">
+            <Suspense fallback={null}>
+              <Hero3D />
+            </Suspense>
+          </div>
+        )}
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
             {/* Left - Text content */}
@@ -400,38 +412,38 @@ export default function Index() {
             >
               <div className="relative">
                 {/* Floating badges */}
-                <div className="absolute -top-4 -left-4 p-3 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/50 shadow-glass-lg animate-float z-10">
+                <div className="absolute -top-4 -left-4 p-3 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/50 shadow-glass-lg animate-float z-30">
                   <div className="flex items-center gap-2.5">
                     <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
                       <Wand2 className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <span className="text-sm font-bold">AI Ready</span>
-                      <div className="text-xs text-muted-foreground">Auto-generate</div>
+                      <span className="text-sm font-bold">{t('landing.hero.badges.aiReady', 'AI Ready')}</span>
+                      <div className="text-xs text-muted-foreground">{t('landing.hero.badges.autoGenerate', 'Auto-generate')}</div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="absolute -bottom-4 -left-8 p-3 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/50 shadow-glass-lg animate-float z-10" style={{ animationDelay: '1s' }}>
+                <div className="absolute -bottom-4 -left-8 p-3 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/50 shadow-glass-lg animate-float z-30" style={{ animationDelay: '1s' }}>
                   <div className="flex items-center gap-2.5">
                     <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
                       <TrendingUp className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <span className="text-sm font-bold text-emerald-500">+247%</span>
-                      <div className="text-xs text-muted-foreground">Clicks</div>
+                      <div className="text-xs text-muted-foreground">{t('landing.hero.badges.clicks', 'Clicks')}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="absolute top-1/3 -right-4 p-3 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/50 shadow-glass-lg animate-float z-10" style={{ animationDelay: '2s' }}>
+                <div className="absolute top-1/3 -right-4 p-3 rounded-2xl bg-card/90 backdrop-blur-xl border border-border/50 shadow-glass-lg animate-float z-30" style={{ animationDelay: '2s' }}>
                   <div className="flex items-center gap-2.5">
                     <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
                       <BadgeCheck className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <span className="text-sm font-bold">Verified</span>
-                      <div className="text-xs text-muted-foreground">Premium</div>
+                      <span className="text-sm font-bold">{t('landing.hero.badges.verified', 'Verified')}</span>
+                      <div className="text-xs text-muted-foreground">{t('landing.hero.badges.premium', 'Premium')}</div>
                     </div>
                   </div>
                 </div>
@@ -454,14 +466,14 @@ export default function Index() {
                           </div>
                         </div>
                         <div className="text-center">
-                          <h3 className="font-bold text-lg">Alex Creator</h3>
-                          <p className="text-xs text-muted-foreground">Digital Artist</p>
+                          <h3 className="font-bold text-lg">{t('landing.hero.mockup.name', 'Alex Creator')}</h3>
+                          <p className="text-xs text-muted-foreground">{t('landing.hero.mockup.role', 'Digital Artist')}</p>
                         </div>
                       </div>
 
                       <div className="space-y-2">
                         <div className="p-3 rounded-xl bg-gradient-to-r from-primary to-blue-500 text-white text-center font-semibold text-sm shadow-lg">
-                          🎨 Portfolio
+                          🎨 {t('landing.hero.mockup.portfolio', 'Portfolio')}
                         </div>
                         <div className="p-3 rounded-xl bg-card border border-border/50 text-center font-medium text-sm">
                           📸 Instagram
@@ -608,14 +620,20 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Interactive Demo */}
-      <InteractiveDemo />
+      {/* Interactive Demo - Lazy loaded */}
+      <Suspense fallback={<div className="py-16 sm:py-24 lg:py-32 flex justify-center"><div className="h-8 w-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" /></div>}>
+        <InteractiveDemo />
+      </Suspense>
 
-      {/* Use Cases Gallery */}
-      <UseCasesGallery />
+      {/* Use Cases Gallery - Lazy loaded */}
+      <Suspense fallback={null}>
+        <UseCasesGallery />
+      </Suspense>
 
-      {/* Featured Pages from Gallery */}
-      <LandingGallerySection />
+      {/* Featured Pages from Gallery - Lazy loaded */}
+      <Suspense fallback={null}>
+        <LandingGallerySection />
+      </Suspense>
 
       {/* Pricing */}
       <section ref={pricingSection.ref} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 relative">
@@ -809,8 +827,10 @@ export default function Index() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <FAQSection />
+      {/* FAQ Section - Lazy loaded */}
+      <Suspense fallback={null}>
+        <FAQSection />
+      </Suspense>
 
       {/* CTA Section */}
       <section ref={ctaSection.ref} className="py-12 sm:py-20 lg:py-28 px-4">
@@ -867,12 +887,7 @@ export default function Index() {
       <footer className="border-t border-border/40 py-8 sm:py-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <img 
-                src="/pwa-maskable-512x512.png" 
-                alt="LinkMAX" 
-                className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl" 
-              />
+            <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <span className="text-lg sm:text-xl font-bold">
                 Link<span className="text-gradient">MAX</span>
               </span>
@@ -913,6 +928,7 @@ export default function Index() {
           </Button>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

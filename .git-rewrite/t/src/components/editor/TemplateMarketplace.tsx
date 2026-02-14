@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,14 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { 
   Heart, 
   Download, 
   ShoppingCart, 
@@ -21,7 +29,10 @@ import {
   Clock,
   Star,
   Loader2,
-  Eye
+  Eye,
+  User,
+  Filter,
+  X
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,6 +40,12 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import type { Block } from '@/types/page';
 import { createBlock as createBaseBlock } from '@/lib/block-factory';
+
+interface Author {
+  username: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+}
 
 interface UserTemplate {
   id: string;
@@ -45,11 +62,7 @@ interface UserTemplate {
   downloads_count: number;
   likes_count: number;
   created_at: string;
-  author?: {
-    username: string;
-    display_name: string;
-    avatar_url: string | null;
-  };
+  author?: Author;
 }
 
 interface TemplateMarketplaceProps {
@@ -57,6 +70,19 @@ interface TemplateMarketplaceProps {
   onClose: () => void;
   onApplyTemplate: (blocks: Block[]) => void;
 }
+
+const CATEGORIES = [
+  'all',
+  'Бизнес',
+  'Творчество',
+  'Образование',
+  'Фитнес',
+  'Красота',
+  'Музыка',
+  'Фото',
+  'Блогер',
+  'Другое',
+];
 
 export const TemplateMarketplace = memo(function TemplateMarketplace({
   open,
@@ -68,6 +94,8 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
   const [templates, setTemplates] = useState<UserTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [authorQuery, setAuthorQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [activeTab, setActiveTab] = useState('popular');
   const [purchasedTemplates, setPurchasedTemplates] = useState<string[]>([]);
 
@@ -89,9 +117,36 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
         query = query.eq('is_for_sale', true);
       }
 
-      const { data, error } = await query.limit(50);
+      const { data, error } = await query.limit(100);
       if (error) throw error;
-      setTemplates((data || []) as unknown as UserTemplate[]);
+      
+      const templatesData = (data || []) as unknown as UserTemplate[];
+      
+      // Fetch author profiles for all templates
+      const userIds = [...new Set(templatesData.map(t => t.user_id))];
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('public_user_profiles')
+          .select('id, username, display_name, avatar_url')
+          .in('id', userIds);
+        
+        const profilesMap = new Map(
+          (profiles || []).map(p => [p.id, p])
+        );
+        
+        templatesData.forEach(template => {
+          const profile = profilesMap.get(template.user_id);
+          if (profile) {
+            template.author = {
+              username: profile.username,
+              display_name: profile.display_name,
+              avatar_url: profile.avatar_url,
+            };
+          }
+        });
+      }
+      
+      setTemplates(templatesData);
 
       // Fetch purchased templates
       if (user) {
@@ -186,11 +241,25 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
     }
   };
 
-  const filteredTemplates = templates.filter(t =>
-    t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredTemplates = useMemo(() => {
+    return templates.filter(t => {
+      // Search by name/description
+      const matchesSearch = searchQuery === '' || 
+        t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.description?.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // Filter by category
+      const matchesCategory = selectedCategory === 'all' || 
+        t.category === selectedCategory;
+      
+      // Search by author
+      const matchesAuthor = authorQuery === '' || 
+        t.author?.username?.toLowerCase().includes(authorQuery.toLowerCase()) ||
+        t.author?.display_name?.toLowerCase().includes(authorQuery.toLowerCase());
+      
+      return matchesSearch && matchesCategory && matchesAuthor;
+    });
+  }, [templates, searchQuery, selectedCategory, authorQuery]);
 
   const formatPrice = (price: number, currency: string) => {
     return new Intl.NumberFormat('ru-KZ', {
@@ -198,6 +267,19 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
       currency,
       minimumFractionDigits: 0,
     }).format(price);
+  };
+
+  const hasActiveFilters = selectedCategory !== 'all' || authorQuery !== '';
+
+  const clearFilters = () => {
+    setSelectedCategory('all');
+    setAuthorQuery('');
+    setSearchQuery('');
+  };
+
+  const getAuthorDisplayName = (author?: Author) => {
+    if (!author) return t('templates.unknownAuthor', 'Неизвестный автор');
+    return author.display_name || author.username || t('templates.unknownAuthor', 'Неизвестный автор');
   };
 
   return (
@@ -214,14 +296,63 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder={t('templates.search', 'Поиск шаблонов...')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
+          {/* Search and Filters */}
+          <div className="space-y-3">
+            {/* Main search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder={t('templates.search', 'Поиск шаблонов...')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            
+            {/* Filters row */}
+            <div className="flex flex-wrap gap-2">
+              {/* Category filter */}
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[160px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder={t('templates.category', 'Категория')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">
+                    {t('templates.allCategories', 'Все категории')}
+                  </SelectItem>
+                  {CATEGORIES.filter(c => c !== 'all').map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              {/* Author search */}
+              <div className="relative flex-1 min-w-[180px]">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={t('templates.searchAuthor', 'Поиск по автору...')}
+                  value={authorQuery}
+                  onChange={(e) => setAuthorQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              
+              {/* Clear filters button */}
+              {hasActiveFilters && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={clearFilters}
+                  className="h-10"
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  {t('templates.clearFilters', 'Сбросить')}
+                </Button>
+              )}
+            </div>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -254,6 +385,16 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
               <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
                 <ShoppingCart className="h-12 w-12 mb-2 opacity-20" />
                 <p>{t('templates.noTemplates', 'Шаблоны не найдены')}</p>
+                {hasActiveFilters && (
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    onClick={clearFilters}
+                    className="mt-2"
+                  >
+                    {t('templates.clearFilters', 'Сбросить фильтры')}
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-1">
@@ -300,6 +441,17 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-1 min-h-[2.5em]">
                         {template.description || t('templates.noDescription', 'Без описания')}
                       </p>
+                      
+                      {/* Author info */}
+                      <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                        <Avatar className="h-4 w-4">
+                          <AvatarImage src={template.author?.avatar_url || undefined} />
+                          <AvatarFallback className="text-[8px]">
+                            {getAuthorDisplayName(template.author).charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="truncate">{getAuthorDisplayName(template.author)}</span>
+                      </div>
                       
                       <div className="flex items-center justify-between mt-3">
                         <Badge variant="secondary" className="text-xs">

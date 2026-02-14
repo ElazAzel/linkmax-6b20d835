@@ -8,9 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Crown, Grid3X3, MessageCircle, Sparkles, X, Bell, Send, Tag, Image, ExternalLink, Check, Loader2, Users, UserPlus, Package, Save } from 'lucide-react';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import type { ProfileBlock, GridConfig, EditorMode, Block } from '@/types/page';
+import { Crown, Grid3X3, MessageCircle, Sparkles, X, Bell, Send, Tag, Image, ExternalLink, Check, Loader2, Users, UserPlus, Package, Save, Zap, Bot } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import type { ProfileBlock, GridConfig, EditorMode, Block, PageBackground } from '@/types/page';
 import { GalleryToggle } from '@/components/gallery/GalleryToggle';
 import { StreakDisplay } from '@/components/streak/StreakDisplay';
 import { DailyQuestsPanel } from '@/components/quests/DailyQuestsPanel';
@@ -19,6 +19,8 @@ import { NicheSelector } from '@/components/settings/NicheSelector';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
+import { PageBackgroundSettings } from '@/components/editor/PageBackgroundSettings';
+import { AutomationsPanel } from '@/components/crm/AutomationsPanel';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -35,6 +37,7 @@ interface SettingsSidebarProps {
   profileBlock?: ProfileBlock;
   onUpdateProfile: (updates: Partial<ProfileBlock>) => void;
   isPremium: boolean;
+  premiumTier?: 'free' | 'pro' | 'business';
   premiumLoading: boolean;
   chatbotContext: string;
   onChatbotContextChange: (value: string) => void;
@@ -61,6 +64,9 @@ interface SettingsSidebarProps {
   onOpenFriends?: () => void;
   onOpenSaveTemplate?: () => void;
   onOpenMyTemplates?: () => void;
+  pageBackground?: PageBackground;
+  onPageBackgroundChange?: (background: PageBackground | undefined) => void;
+  canUseCustomPageBackground?: boolean;
 }
 
 export function SettingsSidebar({
@@ -73,6 +79,7 @@ export function SettingsSidebar({
   profileBlock,
   onUpdateProfile,
   isPremium,
+  premiumTier = 'free',
   premiumLoading,
   chatbotContext,
   onChatbotContextChange,
@@ -99,8 +106,12 @@ export function SettingsSidebar({
   onOpenFriends,
   onOpenSaveTemplate,
   onOpenMyTemplates,
+  pageBackground,
+  onPageBackgroundChange,
+  canUseCustomPageBackground = false,
 }: SettingsSidebarProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('settings');
   const [localTelegramChatId, setLocalTelegramChatId] = useState(telegramChatId || '');
   const [telegramValidating, setTelegramValidating] = useState(false);
@@ -324,35 +335,76 @@ export function SettingsSidebar({
           </Card>
         )}
 
+        {/* Page Background Settings (Business only) */}
+        {onPageBackgroundChange && (
+          <PageBackgroundSettings
+            background={pageBackground}
+            onChange={onPageBackgroundChange}
+            canUseFeature={canUseCustomPageBackground}
+          />
+        )}
+
         {/* Premium Status */}
         {!premiumLoading && (
           <Card
             className={`p-4 backdrop-blur-xl border-border/30 ${
-              isPremium ? 'bg-primary/10' : 'bg-card/60'
+              premiumTier === 'business' 
+                ? 'bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30'
+                : premiumTier === 'pro'
+                ? 'bg-gradient-to-br from-violet-500/10 to-purple-500/10 border-violet-500/30'
+                : 'bg-card/60'
             }`}
           >
             <div className="flex items-center gap-2 mb-2">
-              <div className={`p-1.5 rounded-lg ${isPremium ? 'bg-primary/20' : 'bg-muted'}`}>
-                <Crown
-                  className={`h-4 w-4 ${isPremium ? 'text-primary' : 'text-muted-foreground'}`}
-                />
+              <div className={`p-1.5 rounded-lg ${
+                premiumTier === 'business'
+                  ? 'bg-gradient-to-br from-amber-500 to-orange-600'
+                  : premiumTier === 'pro'
+                  ? 'bg-gradient-to-br from-violet-500 to-purple-600'
+                  : 'bg-muted'
+              }`}>
+                {premiumTier === 'business' ? (
+                  <Sparkles className="h-4 w-4 text-white" />
+                ) : premiumTier === 'pro' ? (
+                  <Crown className="h-4 w-4 text-white" />
+                ) : (
+                  <Zap className="h-4 w-4 text-muted-foreground" />
+                )}
               </div>
-              <span className="font-semibold">{isPremium ? 'Premium Active' : 'Free Plan'}</span>
+              <div>
+                <span className="font-semibold">
+                  {premiumTier === 'business' ? 'BUSINESS' : premiumTier === 'pro' ? 'PRO' : 'BASIC'}
+                </span>
+                {premiumTier !== 'free' && (
+                  <span className="text-xs text-muted-foreground ml-2">{t('premium.active', 'Active')}</span>
+                )}
+              </div>
             </div>
-            {!isPremium && (
+            {premiumTier === 'free' && (
               <>
                 <p className="text-xs text-muted-foreground mb-3">
-                  Upgrade to unlock all blocks and features
+                  {t('premium.upgradeDescription', 'Upgrade to unlock all blocks and features')}
                 </p>
                 <Button
                   size="sm"
-                  onClick={openPremiumPurchase}
-                  className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/25"
+                  onClick={() => navigate('/pricing')}
+                  className="w-full bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 shadow-lg shadow-violet-500/25"
                 >
                   <Crown className="h-3.5 w-3.5 mr-1.5" />
-                  Upgrade to Premium
+                  {t('premium.viewPlans', 'View Plans')}
                 </Button>
               </>
+            )}
+            {premiumTier === 'pro' && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/pricing')}
+                className="w-full text-xs"
+              >
+                <Sparkles className="h-3 w-3 mr-1.5" />
+                {t('premium.upgradeToBusiness', 'Upgrade to BUSINESS')}
+              </Button>
             )}
           </Card>
         )}
@@ -484,6 +536,12 @@ export function SettingsSidebar({
             )}
           </div>
         </Card>
+
+        {/* CRM Automations */}
+        {userId && (
+          <AutomationsPanel userId={userId} isPremium={isPremium} />
+        )}
+
         <Card className="p-4 bg-card/60 backdrop-blur-xl border-border/30">
           <div className="flex items-center gap-2 mb-3">
             <div className="p-1.5 rounded-lg bg-blue-500/10">

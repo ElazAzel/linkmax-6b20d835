@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import {
   Collaboration,
   Team,
@@ -22,6 +23,7 @@ import {
 } from '@/services/collaboration';
 
 export function useCollaboration(userId: string | undefined) {
+  const { t } = useTranslation();
   const [collaborations, setCollaborations] = useState<Collaboration[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [shoutouts, setShoutouts] = useState<Shoutout[]>([]);
@@ -59,94 +61,94 @@ export function useCollaboration(userId: string | undefined) {
   const sendRequest = useCallback(async (targetId: string, pageId: string, message?: string) => {
     const result = await sendCollabRequest(targetId, pageId, message);
     if (result.success) {
-      toast.success('Запрос на коллаборацию отправлен!');
+      toast.success(t('toasts.collaboration.requestSent'));
       await loadData();
     } else {
-      toast.error(result.error || 'Ошибка при отправке запроса');
+      toast.error(result.error || t('toasts.collaboration.requestError'));
     }
     return result.success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   const respondRequest = useCallback(async (collabId: string, accept: boolean, pageId?: string) => {
     const result = await respondToCollab(collabId, accept, pageId);
     if (result.success) {
-      toast.success(accept ? 'Коллаборация принята!' : 'Запрос отклонён');
+      toast.success(accept ? t('toasts.collaboration.accepted') : t('toasts.collaboration.rejected'));
       await loadData();
     } else {
-      toast.error(result.error || 'Ошибка');
+      toast.error(result.error || t('toasts.collaboration.error'));
     }
     return result.success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   const removeCollab = useCallback(async (collabId: string) => {
     const success = await deleteCollab(collabId);
     if (success) {
-      toast.success('Коллаборация удалена');
+      toast.success(t('toasts.collaboration.deleted'));
       await loadData();
     }
     return success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   // Team actions
   const createNewTeam = useCallback(async (name: string, slug: string, description?: string, niche?: string) => {
     const result = await createTeam(name, slug, description, niche);
     if (result.success) {
-      toast.success('Команда создана!');
+      toast.success(t('toasts.team.created'));
       await loadData();
     } else {
-      toast.error(result.error || 'Ошибка создания команды');
+      toast.error(result.error || t('toasts.team.createError'));
     }
     return result;
-  }, [loadData]);
+  }, [loadData, t]);
 
-  const inviteMember = useCallback(async (teamId: string, userId: string, role?: string) => {
-    const result = await inviteToTeam(teamId, userId, role);
+  const inviteMember = useCallback(async (teamId: string, usrId: string, role?: string) => {
+    const result = await inviteToTeam(teamId, usrId, role);
     if (result.success) {
-      toast.success('Пользователь приглашён в команду!');
+      toast.success(t('toasts.team.memberInvited'));
     } else {
-      toast.error(result.error || 'Ошибка приглашения');
+      toast.error(result.error || t('toasts.team.inviteError'));
     }
     return result.success;
-  }, []);
+  }, [t]);
 
   const leave = useCallback(async (teamId: string) => {
     const success = await leaveTeam(teamId);
     if (success) {
-      toast.success('Вы покинули команду');
+      toast.success(t('toasts.team.left'));
       await loadData();
     }
     return success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   const removeTeam = useCallback(async (teamId: string) => {
     const success = await deleteTeam(teamId);
     if (success) {
-      toast.success('Команда удалена');
+      toast.success(t('toasts.team.deleted'));
       await loadData();
     }
     return success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   // Shoutout actions
   const addShoutout = useCallback(async (toUserId: string, message?: string) => {
     const result = await createShoutout(toUserId, message);
     if (result.success) {
-      toast.success('Шаут-аут добавлен!');
+      toast.success(t('toasts.shoutout.added'));
       await loadData();
     } else {
-      toast.error(result.error || 'Ошибка');
+      toast.error(result.error || t('toasts.shoutout.error'));
     }
     return result.success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   const removeShoutout = useCallback(async (shoutoutId: string) => {
     const success = await deleteShoutout(shoutoutId);
     if (success) {
-      toast.success('Шаут-аут удалён');
+      toast.success(t('toasts.shoutout.deleted'));
       await loadData();
     }
     return success;
-  }, [loadData]);
+  }, [loadData, t]);
 
   // Search
   const search = useCallback(async (query: string) => {

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { AutoSaveIndicator, SaveStatus } from '@/components/editor/AutoSaveIndicator';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { EditorModeToggle } from '@/components/editor/EditorModeToggle';
 import { StreakDisplay } from '@/components/streak/StreakDisplay';
 import { TokenBalanceDisplay } from '@/components/tokens/TokenBalanceDisplay';
 import {
@@ -14,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
-import type { EditorMode } from '@/types/page';
 import {
   LogOut,
   Save,
@@ -36,8 +34,6 @@ interface DashboardHeaderProps {
   saveStatus: SaveStatus;
   achievementCount: number;
   showSettings: boolean;
-  editorMode: EditorMode;
-  onToggleEditorMode: () => void;
   onToggleSettings: () => void;
   onSave: () => void;
   onPreview: () => void;
@@ -57,8 +53,6 @@ export function DashboardHeader({
   saveStatus,
   achievementCount,
   showSettings,
-  editorMode,
-  onToggleEditorMode,
   onToggleSettings,
   onSave,
   onPreview,
@@ -77,100 +71,96 @@ export function DashboardHeader({
 
   return (
     <header className="sticky top-0 z-50 hidden md:block">
-      <div className="mx-4 mt-3">
-        <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl shadow-glass-lg">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-2">
-            {/* Logo */}
-            <div className="flex items-center gap-3 animate-fade-in">
+      <div className="mx-5 mt-4">
+        <div className="backdrop-blur-2xl bg-card/60 border border-border/30 rounded-3xl shadow-glass-lg">
+          <div className="container mx-auto px-5 h-16 flex items-center justify-between gap-3">
+            {/* Logo - BOLD */}
+            <div className="flex items-center gap-4 animate-fade-in">
               <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg" />
+                <div className="absolute inset-0 bg-primary/30 rounded-2xl blur-xl" />
                 <img
-                  src="/pwa-maskable-512x512.png"
+                  src="/logo.png"
                   alt="LinkMAX"
-                  className="relative h-8 w-8 animate-scale-in hover-scale rounded-xl"
+                  className="relative h-10 w-10 animate-scale-in hover-scale rounded-2xl shadow-glass object-contain"
                 />
               </div>
-              <h1 className="text-xl font-bold text-primary">LinkMAX</h1>
+              <h1 className="text-2xl font-black text-primary tracking-tight">LinkMAX</h1>
               <AutoSaveIndicator status={saveStatus} />
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-1.5">
+            {/* Actions - BOLD */}
+            <div className="flex items-center gap-2">
               {/* Create Group */}
-              <Button variant="ghost" size="sm" onClick={onOpenAIBuilder}>
-                <Wand2 className="h-4 w-4 mr-2" />
+              <Button variant="ghost" size="default" onClick={onOpenAIBuilder} className="h-11 px-4 rounded-2xl font-bold">
+                <Wand2 className="h-5 w-5 mr-2" />
                 AI
               </Button>
 
-              <Button variant="ghost" size="sm" onClick={onOpenTemplates}>
-                <LayoutTemplate className="h-4 w-4 mr-2" />
-                {t('templates.title', 'Templates')}
+              <Button variant="ghost" size="default" onClick={onOpenTemplates} className="h-11 px-4 rounded-2xl font-bold">
+                <LayoutTemplate className="h-5 w-5 mr-2" />
+                {t('templates.title', 'Шаблоны')}
               </Button>
 
-              <EditorModeToggle
-                currentMode={editorMode}
-                onToggle={onToggleEditorMode}
-              />
-
-              <div className="h-6 w-px bg-border/50" />
+              <div className="h-8 w-px bg-border/40" />
 
               {/* Business Group */}
-              <Button variant="ghost" size="sm" onClick={onOpenCRM}>
-                <Users className="h-4 w-4 mr-2" />
+              <Button variant="ghost" size="default" onClick={onOpenCRM} className="h-11 px-4 rounded-2xl font-bold">
+                <Users className="h-5 w-5 mr-2" />
                 CRM
               </Button>
 
               <Button
                 variant={showSettings ? 'default' : 'ghost'}
-                size="sm"
+                size="default"
                 onClick={onToggleSettings}
+                className="h-11 px-4 rounded-2xl font-bold"
               >
-                <Settings className="h-4 w-4 mr-2" />
-                {t('settings.title', 'Settings')}
+                <Settings className="h-5 w-5 mr-2" />
+                {t('common.settings', 'Настройки')}
               </Button>
 
-              <div className="h-6 w-px bg-border/50" />
+              <div className="h-8 w-px bg-border/40" />
 
               {/* Gamification & Community Menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="relative">
-                    <MoreHorizontal className="h-4 w-4 mr-2" />
-                    {t('common.more', 'More')}
+                  <Button variant="ghost" size="default" className="relative h-11 px-4 rounded-2xl font-bold">
+                    <MoreHorizontal className="h-5 w-5 mr-2" />
+                    {t('common.more', 'Ещё')}
                     {achievementCount > 0 && (
-                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-bold flex items-center justify-center text-primary-foreground">
+                      <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-xs font-bold flex items-center justify-center text-primary-foreground shadow-glass">
                         {achievementCount}
                       </span>
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuLabel>{t('menu.gamification', 'Gamification')}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={onOpenAchievements}>
-                    <Trophy className="h-4 w-4 mr-2" />
-                    {t('achievements.title', 'Achievements')}
+                <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2">
+                  <DropdownMenuLabel className="text-sm font-bold">{t('menu.gamification', 'Геймификация')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={onOpenAchievements} className="rounded-xl py-3 font-medium">
+                    <Trophy className="h-5 w-5 mr-3" />
+                    {t('achievements.title', 'Достижения')}
                     {achievementCount > 0 && (
-                      <span className="ml-auto bg-primary text-primary-foreground text-xs px-1.5 rounded">
+                      <span className="ml-auto bg-primary text-primary-foreground text-sm px-2 py-0.5 rounded-lg font-bold">
                         {achievementCount}
                       </span>
                     )}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={onOpenTokens}>
-                    <Coins className="h-4 w-4 mr-2" />
-                    {t('tokens.title', 'Tokens')}
+                  <DropdownMenuItem onClick={onOpenTokens} className="rounded-xl py-3 font-medium">
+                    <Coins className="h-5 w-5 mr-3" />
+                    {t('tokens.title', 'Токены')}
                   </DropdownMenuItem>
                   
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>{t('menu.community', 'Community')}</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={onOpenGallery}>
-                    <ImageIcon className="h-4 w-4 mr-2" />
-                    {t('gallery.title', 'Gallery')}
+                  <DropdownMenuSeparator className="my-2" />
+                  <DropdownMenuLabel className="text-sm font-bold">{t('menu.community', 'Сообщество')}</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={onOpenGallery} className="rounded-xl py-3 font-medium">
+                    <ImageIcon className="h-5 w-5 mr-3" />
+                    {t('gallery.title', 'Галерея')}
                   </DropdownMenuItem>
                   
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/pricing')}>
-                    <Crown className="h-4 w-4 mr-2" />
-                    {t('pricing.title', 'Pricing')}
+                  <DropdownMenuSeparator className="my-2" />
+                  <DropdownMenuItem onClick={() => navigate('/pricing')} className="rounded-xl py-3 font-medium">
+                    <Crown className="h-5 w-5 mr-3" />
+                    {t('pricing.title', 'Тарифы')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -183,33 +173,33 @@ export function DashboardHeader({
 
               <LanguageSwitcher />
 
-              <div className="h-6 w-px bg-border/50" />
+              <div className="h-8 w-px bg-border/40" />
 
               {/* Main Actions */}
-              <Button variant="outline" size="sm" onClick={onSave} disabled={saving}>
-                <Save className="h-4 w-4 mr-2" />
-                {saving ? '...' : t('common.save', 'Save')}
+              <Button variant="outline" size="default" onClick={onSave} disabled={saving} className="h-11 px-5 rounded-2xl font-bold">
+                <Save className="h-5 w-5 mr-2" />
+                {saving ? '...' : t('common.save', 'Сохранить')}
               </Button>
 
-              <Button variant="outline" size="sm" onClick={onPreview}>
-                <Eye className="h-4 w-4 mr-2" />
-                {t('common.preview', 'Preview')}
+              <Button variant="outline" size="default" onClick={onPreview} className="h-11 px-5 rounded-2xl font-bold">
+                <Eye className="h-5 w-5 mr-2" />
+                {t('common.preview', 'Предпросмотр')}
               </Button>
 
-              <Button size="sm" onClick={onShare} data-onboarding="share-button">
-                <Upload className="h-4 w-4 mr-2" />
-                {t('common.share', 'Share')}
+              <Button size="default" onClick={onShare} data-onboarding="share-button" className="h-11 px-5 rounded-2xl font-bold shadow-glass-lg">
+                <Upload className="h-5 w-5 mr-2" />
+                {t('common.share', 'Поделиться')}
               </Button>
 
-              <div className="h-6 w-px bg-border/50" />
+              <div className="h-8 w-px bg-border/40" />
 
               <Button
                 variant="ghost"
-                size="icon"
+                size="lg"
                 onClick={onSignOut}
-                className="hover:bg-destructive/10 hover:text-destructive h-8 w-8"
+                className="hover:bg-destructive/10 hover:text-destructive h-11 w-11 rounded-2xl"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-5 w-5" />
               </Button>
             </div>
           </div>

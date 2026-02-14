@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { updateUsername as updateUsernameService, validateUsername } from '@/services/user';
 
 interface UseDashboardUsernameOptions {
@@ -16,6 +17,7 @@ export function useDashboardUsername({
   initialUsername,
   onSaveSuccess,
 }: UseDashboardUsernameOptions) {
+  const { t } = useTranslation();
   const [usernameInput, setUsernameInput] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -34,20 +36,20 @@ export function useDashboardUsername({
 
   const handleUpdateUsername = useCallback(async () => {
     if (!userId) {
-      toast.error('User not authenticated');
+      toast.error(t('toasts.username.authRequired'));
       return false;
     }
 
     const trimmed = usernameInput.trim();
     if (!trimmed) {
-      toast.error('Please enter a username');
+      toast.error(t('toasts.username.enterUsername'));
       return false;
     }
 
     // Validate before API call
     const validation = validateUsername(trimmed);
     if (!validation.valid) {
-      toast.error(validation.error || 'Invalid username');
+      toast.error(validation.error || t('toasts.username.invalid'));
       return false;
     }
 
@@ -57,21 +59,21 @@ export function useDashboardUsername({
       const result = await updateUsernameService(userId, trimmed);
 
       if (!result.success) {
-        toast.error(result.error || 'Failed to update username');
+        toast.error(result.error || t('toasts.username.updateError'));
         return false;
       }
 
-      toast.success('Username updated successfully!');
+      toast.success(t('toasts.username.updated'));
       await onSaveSuccess();
       return true;
     } catch (error) {
-      toast.error('Failed to update username');
+      toast.error(t('toasts.username.updateError'));
       console.error('Username update error:', error);
       return false;
     } finally {
       setSaving(false);
     }
-  }, [userId, usernameInput, onSaveSuccess]);
+  }, [userId, usernameInput, onSaveSuccess, t]);
 
   return {
     usernameInput,

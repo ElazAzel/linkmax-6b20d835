@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { loadPageBySlug, loadUserPage, savePage, publishPage } from '@/lib/database';
 import type { PageData } from '@/types/page';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 // Query keys for cache management
 export const pageQueryKeys = {
@@ -47,6 +48,7 @@ export function useUserPage(userId: string | undefined) {
 // Hook for saving user's page with cache update (not invalidation)
 export function useSavePageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   
   return useMutation({
     mutationFn: async ({ 
@@ -79,7 +81,7 @@ export function useSavePageMutation(userId: string | undefined) {
     onError: (error: any) => {
       console.error('Error saving page:', error);
       console.error('Error details:', JSON.stringify(error, null, 2));
-      toast.error(`Failed to save: ${error.message || 'Unknown error'}`);
+      toast.error(t('toasts.page.saveError') + `: ${error.message || ''}`);
     },
   });
 }
@@ -87,6 +89,7 @@ export function useSavePageMutation(userId: string | undefined) {
 // Hook for publishing page with cache update
 export function usePublishPageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   
   return useMutation({
     mutationFn: async () => {
@@ -106,7 +109,7 @@ export function usePublishPageMutation(userId: string | undefined) {
     },
     onError: (error) => {
       console.error('Error publishing page:', error);
-      toast.error('Failed to publish page');
+      toast.error(t('toasts.page.publishError'));
     },
   });
 }

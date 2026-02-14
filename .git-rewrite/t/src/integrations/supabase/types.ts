@@ -63,6 +63,51 @@ export type Database = {
           },
         ]
       }
+      automation_logs: {
+        Row: {
+          automation_id: string
+          created_at: string
+          error_message: string | null
+          id: string
+          lead_id: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          automation_id: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          lead_id: string
+          sent_at?: string | null
+          status: string
+        }
+        Update: {
+          automation_id?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          lead_id?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_logs_automation_id_fkey"
+            columns: ["automation_id"]
+            isOneToOne: false
+            referencedRelation: "crm_automations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blocks: {
         Row: {
           click_count: number | null
@@ -358,6 +403,39 @@ export type Database = {
           },
         ]
       }
+      crm_automations: {
+        Row: {
+          automation_type: string
+          created_at: string
+          id: string
+          is_enabled: boolean
+          template_message: string
+          trigger_hours: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          automation_type: string
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          template_message: string
+          trigger_hours?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          automation_type?: string
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          template_message?: string
+          trigger_hours?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_quests_completed: {
         Row: {
           completed_date: string
@@ -473,9 +551,11 @@ export type Database = {
       }
       leads: {
         Row: {
+          automation_sent_count: number | null
           created_at: string
           email: string | null
           id: string
+          last_automation_check: string | null
           metadata: Json | null
           name: string
           notes: string | null
@@ -486,9 +566,11 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          automation_sent_count?: number | null
           created_at?: string
           email?: string | null
           id?: string
+          last_automation_check?: string | null
           metadata?: Json | null
           name: string
           notes?: string | null
@@ -499,9 +581,11 @@ export type Database = {
           user_id: string
         }
         Update: {
+          automation_sent_count?: number | null
           created_at?: string
           email?: string | null
           id?: string
+          last_automation_check?: string | null
           metadata?: Json | null
           name?: string
           notes?: string | null
@@ -1089,6 +1173,8 @@ export type Database = {
           is_premium: boolean | null
           last_active_date: string | null
           longest_streak: number | null
+          premium_expires_at: string | null
+          premium_tier: string | null
           push_notifications_enabled: boolean | null
           push_subscription: Json | null
           streak_bonus_days: number | null
@@ -1111,6 +1197,8 @@ export type Database = {
           is_premium?: boolean | null
           last_active_date?: string | null
           longest_streak?: number | null
+          premium_expires_at?: string | null
+          premium_tier?: string | null
           push_notifications_enabled?: boolean | null
           push_subscription?: Json | null
           streak_bonus_days?: number | null
@@ -1133,6 +1221,8 @@ export type Database = {
           is_premium?: boolean | null
           last_active_date?: string | null
           longest_streak?: number | null
+          premium_expires_at?: string | null
+          premium_tier?: string | null
           push_notifications_enabled?: boolean | null
           push_subscription?: Json | null
           streak_bonus_days?: number | null

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { createBlockClickHandler, getHoverClass } from '@/lib/block-utils';
+import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/block-utils';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
 
 interface ButtonBlockProps {
@@ -18,34 +18,9 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
     : block.alignment === 'right' ? 'justify-end' 
     : 'justify-center';
 
-  // Get background styles
-  const getButtonStyle = (): React.CSSProperties => {
-    if (!block.background || !block.background.value) {
-      return {};
-    }
-    
-    switch (block.background.type) {
-      case 'gradient':
-        return {
-          background: `linear-gradient(${block.background.gradientAngle || 135}deg, ${block.background.value})`,
-        };
-      case 'image':
-        return {
-          backgroundImage: `url(${block.background.value})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        };
-      case 'solid':
-        return {
-          backgroundColor: block.background.value,
-        };
-      default:
-        return {};
-    }
-  };
-
   const hasCustomBackground = block.background && block.background.value;
-  const buttonStyle = getButtonStyle();
+  const isImageBackground = block.background?.type === 'image';
+  const buttonStyle = hasCustomBackground ? getBackgroundStyle(block.background) : {};
 
   const widthClass = block.width === 'full' ? 'w-full' 
     : block.width === 'small' ? 'w-auto min-w-[120px]' 
@@ -58,9 +33,13 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
         className={`${widthClass} relative overflow-hidden rounded-2xl px-8 py-4 text-base font-semibold shadow-glass-lg backdrop-blur-xl ${getHoverClass(block.hoverEffect)} transition-all duration-300 hover:shadow-glass-xl hover:scale-[1.02] active:scale-[0.98] ${hasCustomBackground ? 'text-white drop-shadow-md' : 'bg-primary text-primary-foreground border border-primary/20'}`}
         style={buttonStyle}
       >
+        {/* Overlay for image backgrounds to ensure text readability */}
+        {isImageBackground && (
+          <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+        )}
         <span className="relative z-10">{title}</span>
         {/* Glass reflection overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none z-20" />
       </button>
     </div>
   );

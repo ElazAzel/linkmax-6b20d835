@@ -1,24 +1,82 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle2 } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
-import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS } from '@/lib/avatar-frame-utils';
+import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS, getVerificationPositionClasses, getVerificationColor, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
 import { cn } from '@/lib/utils';
-import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle } from '@/types/page';
+import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle, VerificationIconType } from '@/types/page';
+import type { PremiumTier } from '@/hooks/usePremiumStatus';
 
 interface ProfileBlockProps {
   block: ProfileBlockType;
   isPreview?: boolean;
+  isOwnerPremium?: boolean;
+  ownerTier?: PremiumTier;
 }
 
-export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPreview }: ProfileBlockProps) {
+// Verification badge component with custom icon support
+const VerificationBadge = memo(function VerificationBadgeComponent({ 
+  iconType, 
+  customIcon,
+  color, 
+  position 
+}: { 
+  iconType?: VerificationIconType; 
+  customIcon?: string;
+  color?: string; 
+  position?: string; 
+}) {
+  // If custom icon is provided, use it instead of preset icon
+  if (customIcon) {
+    return (
+      <div 
+        className={cn(
+          "absolute rounded-full shadow-lg z-10 overflow-hidden flex-shrink-0",
+          "w-6 h-6 sm:w-7 sm:h-7",
+          getVerificationPositionClasses(position)
+        )}
+        style={{ 
+          backgroundColor: getVerificationColor(color),
+        }}
+      >
+        <img 
+          src={customIcon} 
+          alt="Verified" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+
+  const iconOption = VERIFICATION_ICON_OPTIONS.find(opt => opt.value === (iconType || 'check-circle'));
+  const iconName = iconOption?.icon || 'CheckCircle2';
+  const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.CheckCircle2;
+  
+  return (
+    <div 
+      className={cn(
+        "absolute rounded-full p-1 sm:p-1.5 shadow-lg z-10 flex-shrink-0",
+        getVerificationPositionClasses(position)
+      )}
+      style={{ backgroundColor: getVerificationColor(color) }}
+    >
+      <IconComponent className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" fill="currentColor" />
+    </div>
+  );
+});
+
+export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPreview, isOwnerPremium, ownerTier }: ProfileBlockProps) {
   const { t, i18n } = useTranslation();
   const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
   const bio = getTranslatedString(block.bio, i18n.language as SupportedLanguage);
+  
+  // Business tier always gets verification badge
+  const isBusinessTier = ownerTier === 'business';
+  
+  // Determine if verified badge should show (manual or auto-premium or business tier)
+  const showVerified = block.verified || (block.autoVerifyPremium && isOwnerPremium) || isBusinessTier;
   
   const initials = name
     .split(' ')
@@ -115,9 +173,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
       )}
       
       <div className={`flex flex-col ${getPositionClass()} gap-4 p-6 ${block.coverImage ? '-mt-16' : ''}`}>
-        {/* Outer container for positioning icon */}
+        {/* Outer container for positioning icon - no animation here */}
         <div className="relative">
-          {/* Frame wrapper - shadow and frame styles apply here only */}
+          {/* Frame wrapper - animations and shadow apply here ONLY */}
           <div 
             className={cn(
               "flex items-center justify-center rounded-full",
@@ -128,7 +186,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
               ...getFrameStyles(frameStyle),
             }}
           >
-            {/* Avatar - NO animation, NO shadow */}
+            {/* Avatar - NO animation, NO shadow - completely static */}
             <Avatar className={cn(getAvatarSize(), "bg-background")}>
               <AvatarImage src={block.avatar} alt={name} className="object-cover" />
               <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
@@ -139,27 +197,75 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
 
           {/* Icon badge */}
           {IconComponent && (
-            <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full p-1.5 shadow-lg">
+            <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full p-1.5 shadow-lg z-10">
               <IconComponent className="h-4 w-4" />
             </div>
+          )}
+          
+          {/* Verification badge on frame - Business gets gold, others use settings */}
+          {showVerified && (
+            <VerificationBadge 
+              iconType={isBusinessTier ? 'badge-check' : block.verifiedIcon}
+              customIcon={isBusinessTier ? undefined : block.verifiedCustomIcon}
+              color={isBusinessTier ? 'gold' : block.verifiedColor}
+              position={block.verifiedPosition || 'top-right'}
+            />
           )}
         </div>
         
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2">
             <h1 className="text-2xl font-bold">{name}</h1>
-            {block.verified && (
-              <Badge variant="secondary" className="gap-1">
-                <CheckCircle2 className="h-3 w-3" />
-                {t('profile.verified', 'Verified')}
-              </Badge>
-            )}
           </div>
           
           {bio && (
             <p className="text-muted-foreground max-w-md whitespace-pre-line">{parseRichText(bio)}</p>
           )}
         </div>
+
+        {/* Proof of Human - Video/Audio Greeting */}
+        {(block.introVideo || block.introAudio) && (
+          <div className="w-full max-w-md mx-auto space-y-3 mt-4">
+            {block.introVideo && (
+              <div className="relative rounded-xl overflow-hidden bg-muted/50 border border-border/50">
+                <video 
+                  src={block.introVideo}
+                  controls
+                  playsInline
+                  className="w-full max-h-48 object-cover"
+                  preload="metadata"
+                >
+                  Your browser does not support video.
+                </video>
+                <div className="absolute top-2 left-2 bg-background/80 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-medium flex items-center gap-1">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  Video Greeting
+                </div>
+              </div>
+            )}
+            
+            {block.introAudio && !block.introVideo && (
+              <div className="relative rounded-xl overflow-hidden bg-muted/50 border border-border/50 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="w-3 h-3 bg-primary rounded-full animate-pulse" />
+                  </div>
+                  <audio 
+                    src={block.introAudio}
+                    controls
+                    className="flex-1 h-10"
+                    preload="metadata"
+                  >
+                    Your browser does not support audio.
+                  </audio>
+                </div>
+                <div className="mt-2 text-xs text-muted-foreground text-center">
+                  🎙️ Voice Greeting
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <style>{FRAME_CSS}</style>
