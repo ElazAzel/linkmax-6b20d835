@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/platform/supabase/client';
+import { session as sessionStorageWrapper } from '@/lib/storage';
 import { success, failure, tryCatchAsync, type Result } from '@/domain/value-objects/Result';
 import type {
   IAnalyticsRepository,
@@ -24,7 +25,7 @@ function getVisitorFingerprint(): string {
     screen.height,
     new Date().getTimezoneOffset(),
   ].join('|');
-  
+
   let hash = 0;
   for (let i = 0; i < data.length; i++) {
     const char = data.charCodeAt(i);
@@ -39,11 +40,11 @@ function getReferrerInfo(): { source: string; medium: string } {
   if (!referrer) {
     return { source: 'direct', medium: 'none' };
   }
-  
+
   try {
     const url = new URL(referrer);
     const hostname = url.hostname.toLowerCase();
-    
+
     if (hostname.includes('instagram')) return { source: 'instagram', medium: 'social' };
     if (hostname.includes('facebook') || hostname.includes('fb.')) return { source: 'facebook', medium: 'social' };
     if (hostname.includes('twitter') || hostname.includes('x.com')) return { source: 'twitter', medium: 'social' };
@@ -56,7 +57,7 @@ function getReferrerInfo(): { source: string; medium: string } {
     if (hostname.includes('google')) return { source: 'google', medium: 'organic' };
     if (hostname.includes('yandex')) return { source: 'yandex', medium: 'organic' };
     if (hostname.includes('bing')) return { source: 'bing', medium: 'organic' };
-    
+
     return { source: hostname, medium: 'referral' };
   } catch {
     return { source: 'unknown', medium: 'unknown' };
@@ -77,12 +78,12 @@ function getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
 function getUtmParams(): Record<string, string> {
   const params = new URLSearchParams(window.location.search);
   const utmParams: Record<string, string> = {};
-  
+
   ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(key => {
     const value = params.get(key);
     if (value) utmParams[key] = value;
   });
-  
+
   return utmParams;
 }
 
@@ -97,29 +98,28 @@ interface Session {
 
 function getOrCreateSession(): Session {
   try {
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = sessionStorageWrapper.get<Session>(SESSION_KEY);
     if (stored) {
-      const session = JSON.parse(stored) as Session;
-      if (Date.now() - session.startedAt < SESSION_DURATION) {
-        return session;
+      if (Date.now() - stored.startedAt < SESSION_DURATION) {
+        return stored;
       }
     }
   } catch {
     // Ignore storage errors
   }
-  
+
   const session: Session = {
     id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
     startedAt: Date.now(),
     visitorId: getVisitorFingerprint(),
   };
-  
+
   try {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    sessionStorageWrapper.set(SESSION_KEY, session);
   } catch {
     // Ignore storage errors
   }
-  
+
   return session;
 }
 
@@ -129,11 +129,11 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
   async trackEvent(dto: TrackEventDTO): Promise<Result<void, Error>> {
     return tryCatchAsync(async () => {
       const { pageId, eventType, blockId, metadata = {} } = dto;
-      
+
       const session = getOrCreateSession();
       const referrer = getReferrerInfo();
       const utmParams = getUtmParams();
-      
+
       const enrichedMetadata = {
         ...metadata,
         ...utmParams,
@@ -166,11 +166,11 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
         .select('slug')
         .eq('id', pageId)
         .maybeSingle();
-      
+
       if (data?.slug) {
         await supabase.rpc('increment_view_count', { page_slug: data.slug });
       }
-      
+
       await this.trackEvent({ pageId, eventType: 'view' });
     });
   }
@@ -183,7 +183,7 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
   ): Promise<Result<void, Error>> {
     return tryCatchAsync(async () => {
       await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
-      
+
       await this.trackEvent({
         pageId,
         eventType: 'click',
@@ -230,7 +230,7 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
 
   async getSummary(dto: FetchAnalyticsDTO): Promise<Result<AnalyticsSummary, Error>> {
     const eventsResult = await this.fetchEvents(dto);
-    
+
     if (!eventsResult.success) {
       return failure((eventsResult as { success: false; error: Error }).error);
     }

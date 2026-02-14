@@ -137,7 +137,7 @@ describe('Block Components', () => {
     it('shows error for invalid URL', () => {
       const invalidBlock = { ...fixtures.mockVideoBlock, url: 'invalid-url' };
       render(<VideoBlock block={invalidBlock} />);
-      expect(screen.getByText('Invalid Video URL')).toBeInTheDocument();
+      expect(screen.getByText('Неверный URL видео')).toBeInTheDocument();
     });
   });
 

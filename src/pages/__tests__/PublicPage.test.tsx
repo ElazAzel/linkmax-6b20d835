@@ -4,7 +4,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock usePublicPage hook
@@ -13,7 +13,9 @@ vi.mock('@/hooks/usePageCache', () => ({
     usePublicPage: (slug: string | undefined) => mockUsePublicPage(slug),
 }));
 
-// Mock language context
+// ... (existing mocks) ...
+
+// Mock LanguageContext
 vi.mock('@/contexts/LanguageContext', () => ({
     useLanguage: () => ({
         currentLanguage: 'ru',
@@ -22,6 +24,8 @@ vi.mock('@/contexts/LanguageContext', () => ({
         autoTranslateEnabled: false,
     }),
 }));
+
+// ... (other mocks) ...
 
 // Mock heatmap tracking
 vi.mock('@/hooks/useHeatmapTracking', () => ({
@@ -102,14 +106,13 @@ const renderPublicPage = async (slug: string) => {
     const queryClient = createTestQueryClient();
     const PublicPage = (await import('../PublicPage')).default;
 
-    window.history.pushState({}, '', `/${slug}`);
     return render(
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <MemoryRouter initialEntries={[`/${slug}`]}>
                 <Routes>
                     <Route path="/:slug" element={<PublicPage />} />
                 </Routes>
-            </BrowserRouter>
+            </MemoryRouter>
         </QueryClientProvider>
     );
 };
@@ -117,11 +120,6 @@ const renderPublicPage = async (slug: string) => {
 describe('PublicPage', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        // Reset window.location for each test
-        Object.defineProperty(window, 'location', {
-            value: { href: 'https://lnkmx.my/testuser' },
-            writable: true,
-        });
     });
 
     describe('loading state', () => {
@@ -132,16 +130,7 @@ describe('PublicPage', () => {
                 error: null,
             });
 
-            const queryClient = createTestQueryClient();
-            const PublicPage = (await import('../PublicPage')).default;
-
-            render(
-                <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <PublicPage />
-                    </BrowserRouter>
-                </QueryClientProvider>
-            );
+            await renderPublicPage('testuser');
 
             expect(screen.getByTestId('skeleton')).toBeInTheDocument();
         });
@@ -155,16 +144,7 @@ describe('PublicPage', () => {
                 error: { message: 'Not found' },
             });
 
-            const queryClient = createTestQueryClient();
-            const PublicPage = (await import('../PublicPage')).default;
-
-            render(
-                <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <PublicPage />
-                    </BrowserRouter>
-                </QueryClientProvider>
-            );
+            await renderPublicPage('testuser');
 
             expect(screen.getByTestId('error')).toBeInTheDocument();
         });
@@ -196,16 +176,7 @@ describe('PublicPage', () => {
                 error: null,
             });
 
-            const queryClient = createTestQueryClient();
-            const PublicPage = (await import('../PublicPage')).default;
-
-            render(
-                <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <PublicPage />
-                    </BrowserRouter>
-                </QueryClientProvider>
-            );
+            await renderPublicPage('testuser');
 
             await waitFor(() => {
                 expect(screen.getByTestId('grid-blocks')).toBeInTheDocument();
@@ -221,16 +192,7 @@ describe('PublicPage', () => {
                 error: null,
             });
 
-            const queryClient = createTestQueryClient();
-            const PublicPage = (await import('../PublicPage')).default;
-
-            render(
-                <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <PublicPage />
-                    </BrowserRouter>
-                </QueryClientProvider>
-            );
+            await renderPublicPage('testuser');
 
             await waitFor(() => {
                 expect(screen.getByRole('button', { name: /поделиться/i })).toBeInTheDocument();
@@ -244,16 +206,7 @@ describe('PublicPage', () => {
                 error: null,
             });
 
-            const queryClient = createTestQueryClient();
-            const PublicPage = (await import('../PublicPage')).default;
-
-            render(
-                <QueryClientProvider client={queryClient}>
-                    <BrowserRouter>
-                        <PublicPage />
-                    </BrowserRouter>
-                </QueryClientProvider>
-            );
+            await renderPublicPage('testuser');
 
             await waitFor(() => {
                 expect(screen.getByRole('button', { name: /qr/i })).toBeInTheDocument();

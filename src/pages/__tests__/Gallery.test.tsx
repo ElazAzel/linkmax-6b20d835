@@ -5,6 +5,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { TooltipProvider } from '@/components/ui/tooltip';
+
+// Mock i18next specific for Gallery
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, options?: any) => {
+      if (key === 'gallery.seoIntro.highlights' && options?.returnObjects) {
+        return ['Highlight 1', 'Highlight 2'];
+      }
+      return key;
+    },
+    i18n: {
+      language: 'ru',
+      changeLanguage: vi.fn(),
+    },
+  }),
+}));
 
 // Mock hooks
 vi.mock('@/hooks/useAuth', () => ({
@@ -59,12 +76,14 @@ const createTestQueryClient = () =>
 const renderGallery = async () => {
   const queryClient = createTestQueryClient();
   const Gallery = (await import('../Gallery')).default;
-  
+
   return render(
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Gallery />
-      </BrowserRouter>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Gallery />
+        </BrowserRouter>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 };

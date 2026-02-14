@@ -156,6 +156,70 @@ export const storage = {
     },
 };
 
+/**
+ * Secure session storage interface
+ */
+export const session = {
+    /**
+     * Get item from sessionStorage
+     */
+    get<T = unknown>(key: string): T | null {
+        try {
+            const item = sessionStorage.getItem(getKey(key));
+            if (item === null) return null;
+            return JSON.parse(item) as T;
+        } catch (error) {
+            logger.error(`Error reading from session storage: ${key}`, error, { context: 'storage' });
+            return null;
+        }
+    },
+
+    /**
+     * Set item in sessionStorage
+     */
+    set<T = unknown>(key: string, value: T): void {
+        try {
+            sessionStorage.setItem(getKey(key), JSON.stringify(value));
+        } catch (error) {
+            logger.error(`Error writing to session storage: ${key}`, error, { context: 'storage' });
+        }
+    },
+
+    /**
+     * Remove item from sessionStorage
+     */
+    remove(key: string): void {
+        try {
+            sessionStorage.removeItem(getKey(key));
+        } catch (error) {
+            logger.error(`Error removing from session storage: ${key}`, error, { context: 'storage' });
+        }
+    },
+
+    /**
+     * Check if key exists in sessionStorage
+     */
+    has(key: string): boolean {
+        return sessionStorage.getItem(getKey(key)) !== null;
+    },
+
+    /**
+     * Clear all inkmax session storage
+     */
+    clear(): void {
+        try {
+            const keys = Object.keys(sessionStorage);
+            keys.forEach((key) => {
+                if (key.startsWith(STORAGE_PREFIX)) {
+                    sessionStorage.removeItem(key);
+                }
+            });
+        } catch (error) {
+            logger.error('Error clearing session storage', error, { context: 'storage' });
+        }
+    },
+};
+
 // Export for backward compatibility
 export default storage;
 

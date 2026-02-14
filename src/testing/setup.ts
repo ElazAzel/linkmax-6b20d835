@@ -26,6 +26,11 @@ vi.mock('@/contexts/LanguageContext', () => ({
     setLanguage: vi.fn(),
     availableLanguages: ['ru', 'en', 'kk'],
   }),
+  useOptionalLanguage: () => ({
+    language: 'ru',
+    setLanguage: vi.fn(),
+    availableLanguages: ['ru', 'en', 'kk'],
+  }),
   LanguageProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
@@ -52,9 +57,18 @@ vi.mock('@/platform/supabase/client', () => ({
   },
 }));
 
-// Mock window.open
+// Mock window.open and location.assign
 Object.defineProperty(window, 'open', {
   value: vi.fn(),
+  writable: true,
+});
+Object.defineProperty(window, 'location', {
+  value: {
+    ...window.location,
+    assign: vi.fn(),
+    reload: vi.fn(),
+    href: 'http://localhost/',
+  },
   writable: true,
 });
 
@@ -70,11 +84,11 @@ class MockIntersectionObserver {
   readonly root: Element | null = null;
   readonly rootMargin: string = '';
   readonly thresholds: ReadonlyArray<number> = [];
-  
+
   constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
     // Store callback if needed for testing
   }
-  
+
   observe = vi.fn();
   unobserve = vi.fn();
   disconnect = vi.fn();
@@ -100,6 +114,11 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock navigator.vibrate (for haptic feedback)
 Object.defineProperty(navigator, 'vibrate', {
+  value: vi.fn(),
+  writable: true,
+});
+// Mock HTMLCanvasElement.prototype.getContext
+Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
   value: vi.fn(),
   writable: true,
 });

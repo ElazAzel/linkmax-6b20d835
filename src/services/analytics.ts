@@ -7,6 +7,7 @@
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/logger';
+import { session } from '@/lib/storage';
 
 // ============================================
 // Types
@@ -136,12 +137,11 @@ interface Session {
 
 function getOrCreateSession(): Session {
   try {
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = session.get<Session>(SESSION_KEY);
     if (stored) {
-      const session = JSON.parse(stored) as Session;
       // Check if session is still valid
-      if (Date.now() - session.startedAt < SESSION_DURATION) {
-        return session;
+      if (Date.now() - stored.startedAt < SESSION_DURATION) {
+        return stored;
       }
     }
   } catch {
@@ -149,19 +149,19 @@ function getOrCreateSession(): Session {
   }
 
   // Create new session
-  const session: Session = {
+  const sessionData: Session = {
     id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
     startedAt: Date.now(),
     visitorId: getVisitorFingerprint(),
   };
 
   try {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    session.set(SESSION_KEY, sessionData);
   } catch {
     // Ignore storage errors
   }
 
-  return session;
+  return sessionData;
 }
 
 // ============================================
