@@ -100,6 +100,23 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           </Select>
         </EditorField>
 
+        <EditorField label={t('fields.imageScale', 'Image Scale')}>
+          <Select
+            value={formData.scale || 'cover'}
+            onValueChange={(value: any) => onChange({ ...formData, scale: value })}
+          >
+            <SelectTrigger className="h-12 rounded-xl">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="cover">{t('imageScales.cover', 'Fill (Cover)')}</SelectItem>
+              <SelectItem value="contain">{t('imageScales.contain', 'Fit (Contain)')}</SelectItem>
+              <SelectItem value="fill">{t('imageScales.fill', 'Stretch')}</SelectItem>
+              <SelectItem value="tile">{t('imageScales.tile', 'Tile')}</SelectItem>
+            </SelectContent>
+          </Select>
+        </EditorField>
+
         <EditorField label={t('fields.alignment', 'Alignment')}>
           <div className="flex gap-2 p-1 bg-muted/30 rounded-xl">
             <AlignmentButton

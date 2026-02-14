@@ -61,20 +61,38 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
         role={hasLink ? 'link' : undefined}
       >
         <div className={cn(
-          "relative overflow-hidden",
+          "relative overflow-hidden h-full w-full",
           getImageClass(),
           hasLink && 'hover:shadow-lg transition-shadow duration-300'
         )}>
-          <img
-            src={block.url}
-            alt={alt || 'Image'}
-            className={cn(
-              "w-full h-auto",
-              block.style === 'circle' && 'aspect-square object-cover',
-              hasLink && 'transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-90'
-            )}
-            loading="lazy"
-          />
+          {block.scale === 'tile' ? (
+            <div
+              className="w-full h-full min-h-[200px]"
+              style={{
+                backgroundImage: `url(${block.url})`,
+                backgroundRepeat: 'repeat',
+                backgroundSize: '150px auto', // Default tile size
+                backgroundPosition: 'center'
+              }}
+              role="img"
+              aria-label={alt || 'Image'}
+            />
+          ) : (
+            <img
+              src={block.url}
+              alt={alt || 'Image'}
+              className={cn(
+                "w-full h-full",
+                // Default to cover if not specified
+                block.scale === 'contain' ? 'object-contain' :
+                  block.scale === 'fill' ? 'object-fill' :
+                    'object-cover', // cover is default
+                block.style === 'circle' && 'aspect-square',
+                hasLink && 'transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-90'
+              )}
+              loading="lazy"
+            />
+          )}
 
           {/* Link indicator overlay */}
           {hasLink && (

@@ -101,6 +101,7 @@ export interface ImageBlock {
     caption?: string | I18nText | MultilingualString;
     link?: string;
     style?: 'polaroid' | 'vignette' | 'circle' | 'default' | 'banner';
+    scale?: 'cover' | 'contain' | 'fill' | 'tile';
     alignment?: 'left' | 'center' | 'right';
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
