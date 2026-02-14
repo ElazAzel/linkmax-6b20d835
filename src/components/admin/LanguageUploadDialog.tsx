@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -135,6 +135,9 @@ export function LanguageUploadDialog({ open, onOpenChange, onSuccess }: Language
                         <Upload className="h-5 w-5" />
                         Загрузка языкового файла
                     </DialogTitle>
+                    <DialogDescription>
+                        Загрузите JSON файл с переводами для добавления или обновления языка.
+                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4">
