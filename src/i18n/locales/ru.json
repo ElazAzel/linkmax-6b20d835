@@ -486,6 +486,7 @@
       "fbPixel": "ID пикселя Facebook",
       "ttPixel": "ID пикселя TikTok",
       "ga4Id": "ID потока GA4",
+      "yandexMetrika": "ID Яндекс Метрики",
       "webhookUrl": "Webhook URL (Pro)",
       "webhookHint": "Мы отправим POST-запрос с данными заявки"
     }

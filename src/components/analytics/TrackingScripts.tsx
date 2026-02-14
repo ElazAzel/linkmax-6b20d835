@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import type { PageIntegrations } from '@/types/page';
+
 interface TrackingScriptsProps {
-    integrations: {
-        fb_pixel?: string;
-        tt_pixel?: string;
-        ga4_id?: string;
-    };
+    integrations: PageIntegrations;
 }
 
 declare global {
@@ -16,6 +14,7 @@ declare global {
         ttq: any;
         gtag: any;
         dataLayer: any[];
+        ym: any;
     }
 }
 
@@ -81,6 +80,36 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
             window.gtag = gtag;
             gtag('js', new Date());
             gtag('config', integrations.ga4_id);
+        }
+        // Yandex Metrika
+        if (integrations.yandex_metrika) {
+            const w = window as any;
+            const d = document;
+            const c = "yandex_metrika_callbacks2";
+            w[c] = w[c] || [];
+            w[c].push(function () {
+                try {
+                    w.ym = w.ym || function (...args: any[]) { (w.ym.a = w.ym.a || []).push(args) };
+                    w.ym.l = 1 * new Date().getTime();
+                    w.ym(integrations.yandex_metrika, "init", {
+                        clickmap: true,
+                        trackLinks: true,
+                        accurateTrackBounce: true,
+                        webvisor: true
+                    });
+                } catch (e) { }
+            });
+
+            const n = d.getElementsByTagName("script")[0];
+            const s = d.createElement("script");
+            const f = function () { n.parentNode?.insertBefore(s, n); };
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "https://mc.yandex.ru/metrika/tag.js";
+
+            if ((w as any).opera == "[object Opera]") {
+                d.addEventListener("DOMContentLoaded", f, false);
+            } else { f(); }
         }
     }, [integrations]);
 

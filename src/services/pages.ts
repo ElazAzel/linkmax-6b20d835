@@ -178,6 +178,7 @@ export async function savePage(
       p_seo_meta: pageData.seo as unknown as Json,
       p_editor_mode: pageData.editorMode || 'linear',
       p_grid_config: (pageData.gridConfig || null) as unknown as Json,
+      p_integrations: (pageData.integrations || null) as unknown as Json,
     });
 
     if (upsertError) {
@@ -283,6 +284,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
       niche: (page as unknown as { niche?: string }).niche || 'other',
       previewUrl: (page as unknown as { preview_url?: string }).preview_url || undefined,
+      integrations: (page as unknown as { integrations?: Record<string, string> }).integrations || undefined,
     };
 
     return { data: pageData, error: null };
@@ -336,6 +338,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
       niche: (page as unknown as { niche?: string }).niche || 'other',
       previewUrl: (page as unknown as { preview_url?: string }).preview_url || undefined,
+      integrations: (page as unknown as { integrations?: Record<string, string> }).integrations || undefined,
     };
 
     // Extract chatbot context

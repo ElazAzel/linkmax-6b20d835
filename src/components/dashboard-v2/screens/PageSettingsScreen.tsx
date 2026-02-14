@@ -317,6 +317,15 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                 className="rounded-xl"
               />
             </div>
+            <div className="space-y-2">
+              <Label>{t('settings.integrations.yandexMetrika', 'Yandex Metrika ID')}</Label>
+              <Input
+                value={integrations?.yandex_metrika || ''}
+                onChange={(e) => onUpdateIntegrations({ ...integrations, yandex_metrika: e.target.value })}
+                placeholder="e.g. 12345678"
+                className="rounded-xl"
+              />
+            </div>
 
             {/* Webhook - Pro Only */}
             <div className="space-y-2">

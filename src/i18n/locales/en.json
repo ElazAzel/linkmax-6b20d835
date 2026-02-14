@@ -486,6 +486,7 @@
       "fbPixel": "Facebook Pixel ID",
       "ttPixel": "TikTok Pixel ID",
       "ga4Id": "GA4 Measurement ID",
+      "yandexMetrika": "Yandex Metrika ID",
       "webhookUrl": "Webhook URL (Pro)",
       "webhookHint": "We'll send a POST request with lead data"
     }

@@ -41,6 +41,7 @@ export interface PageIntegrations {
   fb_pixel?: string;
   tt_pixel?: string;
   ga4_id?: string;
+  yandex_metrika?: string;
   webhook_url?: string;
 }
 
