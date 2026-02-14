@@ -3,20 +3,24 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateVideoBlock } from '@/lib/block-validators';
+import { useTranslation } from 'react-i18next';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <div>
-        <Label>Title</Label>
-        <Input
-          value={formData.title || ''}
-          onChange={(e) => onChange({ ...formData, title: e.target.value })}
-        />
-      </div>
+      <MultilingualInput
+        label={t('fields.title', 'Title')}
+        value={migrateToMultilingual(formData.title)}
+        onChange={(value) => onChange({ ...formData, title: value })}
+        placeholder="My Video"
+      />
       
       <div>
-        <Label>Video URL</Label>
+        <Label>{t('fields.videoUrl', 'Video URL')}</Label>
         <Input
           type="url"
           placeholder="YouTube or Vimeo URL"
@@ -26,7 +30,7 @@ function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
       </div>
       
       <div>
-        <Label>Platform</Label>
+        <Label>{t('fields.platform', 'Platform')}</Label>
         <Select
           value={formData.platform || 'youtube'}
           onValueChange={(value) => onChange({ ...formData, platform: value })}
@@ -42,7 +46,7 @@ function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
       </div>
       
       <div>
-        <Label>Aspect Ratio</Label>
+        <Label>{t('fields.aspectRatio', 'Aspect Ratio')}</Label>
         <Select
           value={formData.aspectRatio || '16:9'}
           onValueChange={(value) => onChange({ ...formData, aspectRatio: value })}

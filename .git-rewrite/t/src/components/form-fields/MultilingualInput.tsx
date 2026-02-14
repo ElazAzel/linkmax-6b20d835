@@ -9,6 +9,7 @@ import { LANGUAGES, type MultilingualString, type SupportedLanguage } from '@/li
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { RichTextEditor } from './RichTextEditor';
 
 interface MultilingualInputProps {
   label: string;
@@ -17,6 +18,7 @@ interface MultilingualInputProps {
   type?: 'input' | 'textarea';
   placeholder?: string;
   required?: boolean;
+  enableRichText?: boolean;
 }
 
 export function MultilingualInput({
@@ -26,6 +28,7 @@ export function MultilingualInput({
   type = 'input',
   placeholder,
   required = false,
+  enableRichText = false,
 }: MultilingualInputProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<SupportedLanguage>('ru');
@@ -108,12 +111,21 @@ export function MultilingualInput({
         </TabsList>
         {LANGUAGES.map((lang) => (
           <TabsContent key={lang.code} value={lang.code} className="mt-2">
-            <InputComponent
-              value={value[lang.code] || ''}
-              onChange={(e) => handleChange(lang.code, e.target.value)}
-              placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
-              className={type === 'textarea' ? 'min-h-[100px]' : ''}
-            />
+            {enableRichText ? (
+              <RichTextEditor
+                value={value[lang.code] || ''}
+                onChange={(text) => handleChange(lang.code, text)}
+                placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
+                type={type}
+              />
+            ) : (
+              <InputComponent
+                value={value[lang.code] || ''}
+                onChange={(e) => handleChange(lang.code, e.target.value)}
+                placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
+                className={type === 'textarea' ? 'min-h-[100px]' : ''}
+              />
+            )}
             {lang.code === 'ru' && required && (
               <p className="text-xs text-muted-foreground mt-1">
                 {t('fields.requiredRussian', 'Обязательное поле для русского языка')}
@@ -122,6 +134,11 @@ export function MultilingualInput({
           </TabsContent>
         ))}
       </Tabs>
+      {enableRichText && (
+        <p className="text-xs text-muted-foreground">
+          {t('hints.richTextVisual', 'Используйте кнопку 🔗 для добавления ссылок. Переносы строк сохраняются.')}
+        </p>
+      )}
     </div>
   );
 }

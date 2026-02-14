@@ -5,8 +5,12 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { validateSocialsBlock } from '@/lib/block-validators';
 import { ArrayFieldList } from '@/components/form-fields/ArrayFieldList';
 import { ArrayFieldItem } from '@/components/form-fields/ArrayFieldItem';
+import { useTranslation } from 'react-i18next';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
+  const { t } = useTranslation();
   const platforms = formData.platforms || [];
 
   const addPlatform = () => {
@@ -23,7 +27,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
     });
   };
 
-  const updatePlatform = (index: number, field: string, value: string) => {
+  const updatePlatform = (index: number, field: string, value: any) => {
     const updated = [...platforms];
     updated[index] = { ...updated[index], [field]: value };
     onChange({ ...formData, platforms: updated });
@@ -31,25 +35,23 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
   return (
     <div className="space-y-4">
-      <div>
-        <Label>Title (optional)</Label>
-        <Input
-          value={formData.title || ''}
-          onChange={(e) => onChange({ ...formData, title: e.target.value })}
-          placeholder="Follow me on"
-        />
-      </div>
+      <MultilingualInput
+        label={`${t('fields.title', 'Title')} (${t('fields.optional', 'optional')})`}
+        value={migrateToMultilingual(formData.title)}
+        onChange={(value) => onChange({ ...formData, title: value })}
+        placeholder={t('fields.followMe', 'Follow me on')}
+      />
 
-      <ArrayFieldList label="Social Platforms" items={platforms} onAdd={addPlatform}>
+      <ArrayFieldList label={t('fields.socialPlatforms', 'Social Platforms')} items={platforms} onAdd={addPlatform}>
         {platforms.map((platform: any, index: number) => (
           <ArrayFieldItem
             key={index}
             index={index}
-            label="Platform"
+            label={t('fields.platform', 'Platform')}
             onRemove={() => removePlatform(index)}
           >
             <div>
-              <Label className="text-xs">Icon</Label>
+              <Label className="text-xs">{t('fields.icon', 'Icon')}</Label>
               <Select
                 value={platform.icon}
                 onValueChange={(value) => updatePlatform(index, 'icon', value)}
@@ -72,14 +74,12 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
               </Select>
             </div>
 
-            <div>
-              <Label className="text-xs">Platform Name</Label>
-              <Input
-                value={platform.name}
-                onChange={(e) => updatePlatform(index, 'name', e.target.value)}
-                placeholder="Instagram"
-              />
-            </div>
+            <MultilingualInput
+              label={t('fields.platformName', 'Platform Name')}
+              value={migrateToMultilingual(platform.name)}
+              onChange={(value) => updatePlatform(index, 'name', value)}
+              placeholder="Instagram"
+            />
 
             <div>
               <Label className="text-xs">URL</Label>
@@ -95,7 +95,7 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       </ArrayFieldList>
 
       <div>
-        <Label>Alignment</Label>
+        <Label>{t('fields.alignment', 'Alignment')}</Label>
         <Select
           value={formData.alignment || 'center'}
           onValueChange={(value) => onChange({ ...formData, alignment: value })}
@@ -104,9 +104,9 @@ function SocialsBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="left">Left</SelectItem>
-            <SelectItem value="center">Center</SelectItem>
-            <SelectItem value="right">Right</SelectItem>
+            <SelectItem value="left">{t('fields.left', 'Left')}</SelectItem>
+            <SelectItem value="center">{t('fields.center', 'Center')}</SelectItem>
+            <SelectItem value="right">{t('fields.right', 'Right')}</SelectItem>
           </SelectContent>
         </Select>
       </div>

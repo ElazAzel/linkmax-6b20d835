@@ -17,6 +17,7 @@ function TextBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         type="textarea"
         placeholder="Enter your text..."
         required
+        enableRichText={true}
       />
       
       <div>

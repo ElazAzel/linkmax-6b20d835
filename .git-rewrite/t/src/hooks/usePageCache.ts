@@ -44,7 +44,7 @@ export function useUserPage(userId: string | undefined) {
   });
 }
 
-// Hook for saving user's page with cache invalidation
+// Hook for saving user's page with cache update (not invalidation)
 export function useSavePageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
   
@@ -59,19 +59,20 @@ export function useSavePageMutation(userId: string | undefined) {
       if (!userId) throw new Error('User ID is required');
       const { data, error } = await savePage(pageData, userId, chatbotContext);
       if (error) throw error;
-      return data;
+      return { dbPage: data, pageData, chatbotContext };
     },
-    onSuccess: (data) => {
-      // Invalidate and refetch user's page cache
+    onSuccess: ({ dbPage, pageData, chatbotContext }) => {
+      // Update cache directly instead of invalidating to preserve local state
       if (userId) {
-        queryClient.invalidateQueries({ 
-          queryKey: pageQueryKeys.userPage(userId) 
-        });
+        queryClient.setQueryData(
+          pageQueryKeys.userPage(userId),
+          { pageData, chatbotContext }
+        );
       }
       // Invalidate public page cache if published
-      if (data?.slug && data?.is_published) {
+      if (dbPage?.slug && dbPage?.is_published) {
         queryClient.invalidateQueries({ 
-          queryKey: pageQueryKeys.publicPage(data.slug) 
+          queryKey: pageQueryKeys.publicPage(dbPage.slug) 
         });
       }
     },
@@ -83,7 +84,7 @@ export function useSavePageMutation(userId: string | undefined) {
   });
 }
 
-// Hook for publishing page with cache invalidation
+// Hook for publishing page with cache update
 export function usePublishPageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
   
@@ -95,18 +96,13 @@ export function usePublishPageMutation(userId: string | undefined) {
       return slug;
     },
     onSuccess: (slug) => {
-      // Invalidate both user and public page caches
-      if (userId) {
-        queryClient.invalidateQueries({ 
-          queryKey: pageQueryKeys.userPage(userId) 
-        });
-      }
+      // Don't invalidate user cache to preserve local state
+      // Only invalidate public page cache
       if (slug) {
         queryClient.invalidateQueries({ 
           queryKey: pageQueryKeys.publicPage(slug) 
         });
       }
-      toast.success('Page published!');
     },
     onError: (error) => {
       console.error('Error publishing page:', error);

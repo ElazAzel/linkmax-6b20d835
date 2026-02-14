@@ -24,6 +24,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { compressImage } from '@/lib/image-compression';
 import { toast } from 'sonner';
+import { ImageCropper } from '@/components/form-fields/ImageCropper';
 import type { ProfileBlock as ProfileBlockType } from '@/types/page';
 
 interface InlineProfileEditorProps {
@@ -48,6 +49,11 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
   const [editedBio, setEditedBio] = useState(bio);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
+  
+  // Image cropper state
+  const [cropperOpen, setCropperOpen] = useState(false);
+  const [cropperImage, setCropperImage] = useState('');
+  const [cropperType, setCropperType] = useState<'avatar' | 'cover'>('avatar');
   
   const nameInputRef = useRef<HTMLInputElement>(null);
   const bioInputRef = useRef<HTMLTextAreaElement>(null);
@@ -130,47 +136,27 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       return;
     }
 
-    setIsUploadingAvatar(true);
+    // For GIFs, upload directly without cropping
+    if (file.type === 'image/gif') {
+      await uploadFile(file, 'avatar');
+      return;
+    }
 
-    try {
-      // Compress the image
-      let processedFile = file;
-      if (file.type.startsWith('image/') && file.type !== 'image/gif') {
-        processedFile = await compressImage(file);
-      }
-
-      const fileExt = processedFile.name.split('.').pop();
-      const fileName = `avatar-${Date.now()}.${fileExt}`;
-      const filePath = `${user.id}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('user-media')
-        .upload(filePath, processedFile);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('user-media')
-        .getPublicUrl(filePath);
-
-      onUpdate({ avatar: publicUrl });
-      toast.success(t('upload.success', 'Avatar updated'));
-    } catch (error) {
-      console.error('Avatar upload error:', error);
-      toast.error(t('upload.error', 'Failed to upload avatar'));
-    } finally {
-      setIsUploadingAvatar(false);
-      if (avatarInputRef.current) {
-        avatarInputRef.current.value = '';
-      }
+    // Open cropper for other images
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setCropperImage(e.target?.result as string);
+      setCropperType('avatar');
+      setCropperOpen(true);
+    };
+    reader.readAsDataURL(file);
+    
+    if (avatarInputRef.current) {
+      avatarInputRef.current.value = '';
     }
   };
 
-  const handleCoverClick = () => {
-    coverInputRef.current?.click();
-  };
-
-  const handleCoverUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverUploadFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -184,16 +170,40 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
       return;
     }
 
-    setIsUploadingCover(true);
+    // For GIFs, upload directly without cropping
+    if (file.type === 'image/gif') {
+      await uploadFile(file, 'cover');
+      return;
+    }
+
+    // Open cropper for other images
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setCropperImage(e.target?.result as string);
+      setCropperType('cover');
+      setCropperOpen(true);
+    };
+    reader.readAsDataURL(file);
+    
+    if (coverInputRef.current) {
+      coverInputRef.current.value = '';
+    }
+  };
+
+  const uploadFile = async (file: File | Blob, type: 'avatar' | 'cover') => {
+    if (!user) return;
+    
+    const setUploading = type === 'avatar' ? setIsUploadingAvatar : setIsUploadingCover;
+    setUploading(true);
 
     try {
       let processedFile = file;
-      if (file.type.startsWith('image/') && file.type !== 'image/gif') {
+      if (file instanceof File && file.type.startsWith('image/') && file.type !== 'image/gif') {
         processedFile = await compressImage(file);
       }
 
-      const fileExt = processedFile.name.split('.').pop();
-      const fileName = `cover-${Date.now()}.${fileExt}`;
+      const fileExt = file instanceof File ? file.name.split('.').pop() : 'jpg';
+      const fileName = `${type}-${Date.now()}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
@@ -206,18 +216,35 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
         .from('user-media')
         .getPublicUrl(filePath);
 
-      onUpdate({ coverImage: publicUrl });
-      toast.success(t('upload.coverSuccess', 'Cover updated'));
-    } catch (error) {
-      console.error('Cover upload error:', error);
-      toast.error(t('upload.error', 'Failed to upload cover'));
-    } finally {
-      setIsUploadingCover(false);
-      if (coverInputRef.current) {
-        coverInputRef.current.value = '';
+      if (type === 'avatar') {
+        onUpdate({ avatar: publicUrl });
+      } else {
+        onUpdate({ coverImage: publicUrl });
       }
+      toast.success(t('upload.success', 'Image updated'));
+    } catch (error) {
+      console.error(`${type} upload error:`, error);
+      toast.error(t('upload.error', 'Failed to upload image'));
+    } finally {
+      setUploading(false);
     }
   };
+
+  const handleCropperSave = async (croppedDataUrl: string) => {
+    setCropperOpen(false);
+    
+    // Convert data URL to blob
+    const response = await fetch(croppedDataUrl);
+    const blob = await response.blob();
+    
+    await uploadFile(blob, cropperType);
+  };
+
+  const handleCoverClick = () => {
+    coverInputRef.current?.click();
+  };
+
+  const handleCoverUpload = handleCoverUploadFile;
 
   const initials = name
     .split(' ')
@@ -627,6 +654,16 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
           )}
         </div>
       </div>
+
+      {/* Image Cropper */}
+      <ImageCropper
+        imageUrl={cropperImage}
+        open={cropperOpen}
+        onClose={() => setCropperOpen(false)}
+        onSave={handleCropperSave}
+        aspectRatio={cropperType === 'avatar' ? 1 : 16 / 9}
+        shape={cropperType === 'avatar' ? 'circle' : 'rectangle'}
+      />
     </div>
   );
 });

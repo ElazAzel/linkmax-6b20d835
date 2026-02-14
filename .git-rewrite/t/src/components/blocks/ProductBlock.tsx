@@ -11,7 +11,7 @@ interface ProductBlockProps {
 }
 
 export const ProductBlock = memo(function ProductBlockComponent({ block }: ProductBlockProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
   const description = getTranslatedString(block.description, i18n.language as SupportedLanguage);
   
@@ -50,7 +50,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block }: Produ
 
   return (
     <div className={`flex ${block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'}`}>
-      <Card className={`${alignmentClass} max-w-sm overflow-hidden hover:shadow-lg transition-shadow`}>
+      <Card className={`${alignmentClass} max-w-sm overflow-hidden bg-card border-border shadow-sm hover:shadow-md transition-shadow`}>
         {block.image && (
           <div className="aspect-square overflow-hidden bg-muted">
             <img
@@ -79,7 +79,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block }: Produ
         <CardFooter>
           <Button className="w-full gap-2" onClick={handleBuy}>
             <ShoppingCart className="h-4 w-4" />
-            Buy Now
+            {t('actions.buyNow', 'Buy Now')}
           </Button>
         </CardFooter>
       </Card>

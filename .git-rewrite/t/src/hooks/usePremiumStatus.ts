@@ -1,62 +1,42 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { checkPremiumStatus as checkPremiumStatusService } from '@/services/user';
 
 export function usePremiumStatus() {
   const { user } = useAuth();
   const [isPremium, setIsPremium] = useState(false);
+  const [inTrial, setInTrial] = useState(false);
+  const [trialEndsAt, setTrialEndsAt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
       setIsPremium(false);
+      setInTrial(false);
+      setTrialEndsAt(null);
       setIsLoading(false);
       return;
     }
 
-    checkPremiumStatus();
+    checkStatus();
   }, [user]);
 
-  const checkPremiumStatus = async () => {
+  const checkStatus = async () => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('is_premium, trial_ends_at')
-        .eq('id', user.id)
-        .single();
-
-      if (error) {
-        console.error('Error checking premium status:', error);
-        setIsPremium(false);
-        setIsLoading(false);
-        return;
-      }
-
-      // Check if user has premium subscription
-      if (data?.is_premium) {
-        setIsPremium(true);
-        setIsLoading(false);
-        return;
-      }
-
-      // Check if trial is still active
-      if (data?.trial_ends_at) {
-        const trialEnd = new Date(data.trial_ends_at);
-        const now = new Date();
-        setIsPremium(trialEnd > now);
-      } else {
-        setIsPremium(false);
-      }
-
-      setIsLoading(false);
+      const status = await checkPremiumStatusService(user.id);
+      setIsPremium(status.isPremium);
+      setInTrial(status.inTrial);
+      setTrialEndsAt(status.trialEndsAt);
     } catch (error) {
-      console.error('Error in premium status check:', error);
+      console.error('Error checking premium status:', error);
       setIsPremium(false);
+      setInTrial(false);
+    } finally {
       setIsLoading(false);
     }
   };
 
-  return { isPremium, isLoading };
+  return { isPremium, inTrial, trialEndsAt, isLoading, refresh: checkStatus };
 }

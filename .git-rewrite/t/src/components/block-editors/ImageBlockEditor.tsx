@@ -1,8 +1,9 @@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateImageBlock } from '@/lib/block-validators';
 import { useTranslation } from 'react-i18next';
@@ -20,23 +21,32 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
       />
 
       <div>
-        <Label>{t('fields.altText', 'Alt Text')}</Label>
+        <Label>{t('fields.link', 'Link URL')} ({t('fields.optional', 'optional')})</Label>
         <Input
-          value={formData.alt || ''}
-          onChange={(e) => onChange({ ...formData, alt: e.target.value })}
-          placeholder={t('fields.altPlaceholder', 'Image description for accessibility')}
+          type="url"
+          value={formData.link || ''}
+          onChange={(e) => onChange({ ...formData, link: e.target.value })}
+          placeholder="https://example.com"
         />
+        <p className="text-xs text-muted-foreground mt-1">
+          {t('fields.linkHint', 'Add a link to make the image clickable')}
+        </p>
       </div>
 
-      <div>
-        <Label>{t('fields.caption', 'Caption')} ({t('fields.optional', 'optional')})</Label>
-        <Textarea
-          value={formData.caption || ''}
-          onChange={(e) => onChange({ ...formData, caption: e.target.value })}
-          placeholder={t('fields.captionPlaceholder', 'Add a caption for your image...')}
-          rows={2}
-        />
-      </div>
+      <MultilingualInput
+        label={t('fields.altText', 'Alt Text')}
+        value={migrateToMultilingual(formData.alt)}
+        onChange={(value) => onChange({ ...formData, alt: value })}
+        placeholder={t('fields.altPlaceholder', 'Image description for accessibility')}
+      />
+
+      <MultilingualInput
+        label={`${t('fields.caption', 'Caption')} (${t('fields.optional', 'optional')})`}
+        value={migrateToMultilingual(formData.caption)}
+        onChange={(value) => onChange({ ...formData, caption: value })}
+        type="textarea"
+        placeholder={t('fields.captionPlaceholder', 'Add a caption for your image...')}
+      />
 
       <div>
         <Label>{t('fields.imageStyle', 'Image Style')}</Label>
@@ -49,6 +59,7 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="default">{t('imageStyles.default', 'Default - Rounded Corners')}</SelectItem>
+            <SelectItem value="banner">{t('imageStyles.banner', 'Banner - Full Width')}</SelectItem>
             <SelectItem value="polaroid">{t('imageStyles.polaroid', 'Polaroid - Vintage Frame')}</SelectItem>
             <SelectItem value="vignette">{t('imageStyles.vignette', 'Vignette - Soft Edges')}</SelectItem>
             <SelectItem value="circle">{t('imageStyles.circle', 'Circle - Round Crop')}</SelectItem>
@@ -77,6 +88,6 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
 }
 
 export const ImageBlockEditor = withBlockEditor(ImageBlockEditorComponent, {
-  hint: 'Add images with different styles: Polaroid, Vignette, Circle, or Default',
+  hint: 'Add images with different styles: Banner (full width), Polaroid, Vignette, Circle, or Default. Add a link to make the image clickable.',
   validate: validateImageBlock,
 });

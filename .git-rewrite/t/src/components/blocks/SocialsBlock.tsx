@@ -47,7 +47,7 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block }: Socia
             <button
               key={index}
               onClick={() => handleClick(platform.url)}
-              className="group relative w-14 h-14 rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-110 hover:shadow-lg flex items-center justify-center"
+              className="group relative w-14 h-14 rounded-2xl bg-card border border-border shadow-sm hover:border-primary/50 transition-all duration-300 hover:scale-110 hover:shadow-md flex items-center justify-center"
               aria-label={platform.name}
             >
               <Icon className="w-6 h-6 text-foreground group-hover:text-primary transition-colors duration-300" />

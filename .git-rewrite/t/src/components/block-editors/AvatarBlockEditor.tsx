@@ -23,6 +23,7 @@ function AvatarBlockEditorComponent({ formData, onChange }: AvatarBlockEditorPro
         value={formData.imageUrl}
         onChange={(imageUrl) => onChange({ imageUrl })}
         accept="image/*"
+        allowGif={true}
       />
 
       <MultilingualInput

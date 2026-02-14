@@ -4,7 +4,7 @@ export const FREE_LIMITS = {
   maxBlocks: 5,
   maxAIRequestsPerDay: 3,
   showWatermark: true,
-  premiumBlocks: ['video', 'carousel', 'download', 'form', 'newsletter', 'messenger', 'testimonial', 'scratch', 'search', 'custom_code'],
+  premiumBlocks: ['video', 'carousel', 'download', 'form', 'newsletter', 'messenger', 'testimonial', 'scratch', 'search', 'custom_code', 'catalog', 'countdown'],
 };
 
 export const PREMIUM_LIMITS = {

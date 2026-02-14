@@ -3,21 +3,40 @@
  * Returns error message if validation fails, null if valid
  */
 
-export function validateUrl(url: string | undefined, fieldName = 'URL'): string | null {
-  if (!url || url.trim() === '') {
+import { isMultilingualString, getTranslatedString } from '@/lib/i18n-helpers';
+
+/**
+ * Normalize value to string - handles MultilingualString objects
+ */
+function normalizeToString(value: unknown): string {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  if (isMultilingualString(value)) {
+    // Get any non-empty translation
+    return getTranslatedString(value, 'en') || 
+           getTranslatedString(value, 'ru') || 
+           getTranslatedString(value, 'kk') || '';
+  }
+  return String(value);
+}
+
+export function validateUrl(url: unknown, fieldName = 'URL'): string | null {
+  const urlStr = normalizeToString(url);
+  if (!urlStr || urlStr.trim() === '') {
     return `${fieldName} is required`;
   }
   
   try {
-    new URL(url);
+    new URL(urlStr);
     return null;
   } catch {
     return `${fieldName} must be a valid URL`;
   }
 }
 
-export function validateRequired(value: string | undefined, fieldName: string): string | null {
-  if (!value || value.trim() === '') {
+export function validateRequired(value: unknown, fieldName: string): string | null {
+  const str = normalizeToString(value);
+  if (!str || str.trim() === '') {
     return `${fieldName} is required`;
   }
   return null;

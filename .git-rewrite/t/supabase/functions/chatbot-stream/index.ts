@@ -89,10 +89,10 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    // Fetch page data
+    // Fetch page data (without chatbot_context - that's private)
     const { data: page, error: pageError } = await supabase
       .from('pages')
-      .select('id, title, description, avatar_url, chatbot_context')
+      .select('id, title, description, avatar_url')
       .eq('slug', pageSlug)
       .eq('is_published', true)
       .single();
@@ -100,6 +100,13 @@ serve(async (req) => {
     if (pageError || !page) {
       throw new Error('Page not found');
     }
+
+    // Fetch private chatbot context from private_page_data table
+    const { data: privateData } = await supabase
+      .from('private_page_data')
+      .select('chatbot_context')
+      .eq('page_id', page.id)
+      .maybeSingle();
 
     // Fetch blocks
     const { data: blocks } = await supabase
@@ -114,8 +121,8 @@ serve(async (req) => {
     context += `- Name: ${page.title || 'Not specified'}\n`;
     context += `- Bio: ${page.description || 'Not specified'}\n\n`;
 
-    if (page.chatbot_context) {
-      context += `Additional Context (private):\n${page.chatbot_context}\n\n`;
+    if (privateData?.chatbot_context) {
+      context += `Additional Context (private):\n${privateData.chatbot_context}\n\n`;
     }
 
     if (blocks && blocks.length > 0) {

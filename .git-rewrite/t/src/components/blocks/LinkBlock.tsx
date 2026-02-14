@@ -38,12 +38,12 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
     <div className={`flex ${block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'}`}>
       <Button
         variant="outline"
-        className={`${alignmentClass} max-w-full sm:max-w-md justify-between h-auto py-4 px-6 hover:scale-[1.02] transition-transform ${getButtonClass(block.style)}`}
+        className={`${alignmentClass} max-w-full sm:max-w-md justify-between h-auto py-4 px-6 hover:scale-[1.02] transition-all bg-card border-border shadow-sm hover:shadow-md hover:bg-accent ${getButtonClass(block.style)}`}
         onClick={handleClick}
       >
         <div className="flex items-center gap-3">
           <Icon className="h-5 w-5 text-primary" />
-          <span className="font-medium">{title}</span>
+          <span className="font-medium text-foreground">{title}</span>
         </div>
         <ExternalLink className="h-4 w-4 text-muted-foreground" />
       </Button>

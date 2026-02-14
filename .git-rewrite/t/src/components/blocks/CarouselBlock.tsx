@@ -32,7 +32,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block }: Car
 
   if (!block.images || block.images.length === 0) {
     return (
-      <Card>
+      <Card className="bg-card border-border shadow-sm">
         <CardContent className="p-6">
           <p className="text-sm text-muted-foreground text-center">
             {t('blocks.carousel.empty', 'No images added to carousel')}
@@ -43,7 +43,7 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block }: Car
   }
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden bg-card border-border shadow-sm">
       {title && (
         <CardHeader>
           <CardTitle>{title}</CardTitle>
@@ -59,20 +59,23 @@ export const CarouselBlock = memo(function CarouselBlockComponent({ block }: Car
           className="w-full"
         >
           <CarouselContent>
-            {block.images.map((image, index) => (
-              <CarouselItem key={index}>
-                <div
-                  className="aspect-video overflow-hidden bg-muted cursor-pointer"
-                  onClick={() => handleImageClick(image.link)}
-                >
-                  <img
-                    src={image.url}
-                    alt={image.alt || `Slide ${index + 1}`}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </CarouselItem>
-            ))}
+          {block.images.map((image, index) => {
+              const alt = getTranslatedString(image.alt, i18n.language as SupportedLanguage) || `Slide ${index + 1}`;
+              return (
+                <CarouselItem key={index}>
+                  <div
+                    className="aspect-video overflow-hidden bg-muted cursor-pointer"
+                    onClick={() => handleImageClick(image.link)}
+                  >
+                    <img
+                      src={image.url}
+                      alt={alt}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
           {block.images.length > 1 && (
             <>

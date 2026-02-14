@@ -68,7 +68,7 @@ export const MessengerBlock = memo(function MessengerBlock({ block, pageOwnerId 
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-card border-border shadow-sm">
       {title && (
         <div className="flex items-center gap-2 mb-4">
           <MessageCircle className="h-5 w-5 text-primary" />

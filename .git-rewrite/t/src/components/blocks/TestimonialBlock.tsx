@@ -12,8 +12,9 @@ interface TestimonialBlockProps {
 
 export const TestimonialBlock = memo(function TestimonialBlock({ block }: TestimonialBlockProps) {
   const { i18n } = useTranslation();
+  const currentLang = i18n.language as SupportedLanguage;
   
-  const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
+  const title = getTranslatedString(block.title, currentLang);
 
   const renderStars = (rating: number = 5) => {
     return (
@@ -39,28 +40,34 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
         </div>
       )}
       <div className="grid gap-4">
-        {block.testimonials.map((testimonial, index) => (
-          <Card key={index} className="p-6">
-            <div className="flex items-start gap-4">
-              <Avatar className="h-12 w-12">
-                <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <div className="font-semibold">{testimonial.name}</div>
-                    {testimonial.role && (
-                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                    )}
+        {block.testimonials.map((testimonial, index) => {
+          const name = getTranslatedString(testimonial.name, currentLang);
+          const text = getTranslatedString(testimonial.text, currentLang);
+          const role = getTranslatedString(testimonial.role, currentLang);
+          
+          return (
+            <Card key={index} className="p-6 bg-card border-border shadow-sm">
+              <div className="flex items-start gap-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage src={testimonial.avatar} alt={name} />
+                  <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <div className="font-semibold">{name}</div>
+                      {role && (
+                        <div className="text-sm text-muted-foreground">{role}</div>
+                      )}
+                    </div>
+                    {testimonial.rating && renderStars(testimonial.rating)}
                   </div>
-                  {testimonial.rating && renderStars(testimonial.rating)}
+                  <p className="text-sm text-muted-foreground italic">"{text}"</p>
                 </div>
-                <p className="text-sm text-muted-foreground italic">"{testimonial.text}"</p>
               </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

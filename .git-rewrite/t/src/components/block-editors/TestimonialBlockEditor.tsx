@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateTestimonialBlock } from '@/lib/block-validators';
 import { ArrayFieldList } from '@/components/form-fields/ArrayFieldList';
@@ -16,7 +15,13 @@ function TestimonialBlockEditorComponent({ formData, onChange }: BaseBlockEditor
   const addTestimonial = () => {
     onChange({
       ...formData,
-      testimonials: [...testimonials, { name: '', role: '', avatar: '', text: '', rating: 5 }],
+      testimonials: [...testimonials, { 
+        name: { ru: '', en: '', kk: '' }, 
+        role: { ru: '', en: '', kk: '' }, 
+        avatar: '', 
+        text: { ru: '', en: '', kk: '' }, 
+        rating: 5 
+      }],
     });
   };
 
@@ -39,7 +44,7 @@ function TestimonialBlockEditorComponent({ formData, onChange }: BaseBlockEditor
         label={t('fields.title', 'Title')}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder="What People Say"
+        placeholder={t('fields.whatPeopleSay', 'What People Say')}
       />
 
       <ArrayFieldList label={t('fields.testimonials', 'Testimonials')} items={testimonials} onAdd={addTestimonial}>
@@ -50,26 +55,22 @@ function TestimonialBlockEditorComponent({ formData, onChange }: BaseBlockEditor
             label={t('fields.testimonial', 'Testimonial')}
             onRemove={() => removeTestimonial(index)}
           >
-            <div>
-              <Label className="text-xs">{t('fields.name', 'Name')}</Label>
-              <Input
-                value={testimonial.name}
-                onChange={(e) => updateTestimonial(index, 'name', e.target.value)}
-                placeholder="John Doe"
-              />
-            </div>
+            <MultilingualInput
+              label={t('fields.name', 'Name')}
+              value={migrateToMultilingual(testimonial.name)}
+              onChange={(value) => updateTestimonial(index, 'name', value)}
+              placeholder="John Doe"
+            />
+
+            <MultilingualInput
+              label={`${t('fields.role', 'Role')} (${t('fields.optional', 'optional')})`}
+              value={migrateToMultilingual(testimonial.role)}
+              onChange={(value) => updateTestimonial(index, 'role', value)}
+              placeholder="CEO, Company"
+            />
 
             <div>
-              <Label className="text-xs">{t('fields.role', 'Role')} {t('fields.optional', '(optional)')}</Label>
-              <Input
-                value={testimonial.role || ''}
-                onChange={(e) => updateTestimonial(index, 'role', e.target.value)}
-                placeholder="CEO, Company"
-              />
-            </div>
-
-            <div>
-              <Label className="text-xs">{t('fields.avatarUrl', 'Avatar URL')} {t('fields.optional', '(optional)')}</Label>
+              <Label className="text-xs">{t('fields.avatarUrl', 'Avatar URL')} ({t('fields.optional', 'optional')})</Label>
               <Input
                 type="url"
                 value={testimonial.avatar || ''}
@@ -78,15 +79,13 @@ function TestimonialBlockEditorComponent({ formData, onChange }: BaseBlockEditor
               />
             </div>
 
-            <div>
-              <Label className="text-xs">{t('fields.testimonialText', 'Testimonial Text')}</Label>
-              <Textarea
-                value={testimonial.text}
-                onChange={(e) => updateTestimonial(index, 'text', e.target.value)}
-                placeholder="This is an amazing product!"
-                rows={3}
-              />
-            </div>
+            <MultilingualInput
+              label={t('fields.testimonialText', 'Testimonial Text')}
+              value={migrateToMultilingual(testimonial.text)}
+              onChange={(value) => updateTestimonial(index, 'text', value)}
+              type="textarea"
+              placeholder={t('fields.testimonialPlaceholder', 'This is an amazing product!')}
+            />
 
             <div>
               <Label className="text-xs">{t('fields.rating', 'Rating')} (1-5)</Label>

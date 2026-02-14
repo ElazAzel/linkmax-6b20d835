@@ -1,0 +1,98 @@
+import { useState, useEffect, useCallback } from 'react';
+import { 
+  getOrCreateReferralCode, 
+  getReferralStats, 
+  applyReferralCode,
+  wasUserReferred,
+  type ReferralStats 
+} from '@/services/referral';
+import { toast } from 'sonner';
+
+export function useReferral(userId: string | undefined) {
+  const [stats, setStats] = useState<ReferralStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [applying, setApplying] = useState(false);
+  const [wasReferred, setWasReferred] = useState(false);
+
+  const loadStats = useCallback(async () => {
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // First ensure user has a referral code
+      await getOrCreateReferralCode(userId);
+      
+      // Then get stats
+      const data = await getReferralStats(userId);
+      setStats(data);
+
+      // Check if user was referred
+      const referred = await wasUserReferred(userId);
+      setWasReferred(referred);
+    } catch (error) {
+      console.error('Error loading referral stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    loadStats();
+  }, [loadStats]);
+
+  const applyCode = useCallback(async (code: string) => {
+    if (!userId || !code.trim()) return false;
+
+    setApplying(true);
+    try {
+      const result = await applyReferralCode(code.trim(), userId);
+
+      if (result.success) {
+        toast.success(`🎉 +${result.bonusDays} дней Premium для вас и друга!`);
+        setWasReferred(true);
+        return true;
+      } else {
+        const errorMessages: Record<string, string> = {
+          'invalid_code': 'Неверный код приглашения',
+          'already_referred': 'Вы уже использовали реферальный код',
+          'self_referral': 'Нельзя использовать свой код'
+        };
+        toast.error(errorMessages[result.error || 'invalid_code']);
+        return false;
+      }
+    } catch (error) {
+      toast.error('Ошибка при применении кода');
+      return false;
+    } finally {
+      setApplying(false);
+    }
+  }, [userId]);
+
+  const copyCode = useCallback(() => {
+    if (stats?.code) {
+      navigator.clipboard.writeText(stats.code);
+      toast.success('Код скопирован!');
+    }
+  }, [stats?.code]);
+
+  const shareLink = useCallback(() => {
+    if (stats?.code) {
+      const url = `${window.location.origin}/auth?ref=${stats.code}`;
+      navigator.clipboard.writeText(url);
+      toast.success('Ссылка скопирована!');
+    }
+  }, [stats?.code]);
+
+  return {
+    stats,
+    loading,
+    applying,
+    wasReferred,
+    applyCode,
+    copyCode,
+    shareLink,
+    refresh: loadStats
+  };
+}

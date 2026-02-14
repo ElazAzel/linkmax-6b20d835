@@ -43,7 +43,7 @@ export const NewsletterBlock = memo(function NewsletterBlock({ block }: Newslett
   };
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5">
+    <Card className="p-6 bg-card border-border shadow-sm">
       <div className="flex items-center gap-2 mb-3">
         <Mail className="h-5 w-5 text-primary" />
         <h3 className="font-semibold text-lg">{title}</h3>

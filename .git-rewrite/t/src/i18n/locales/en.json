@@ -1,4 +1,24 @@
 {
+  "settings": {
+    "niche": "Category",
+    "nicheDescription": "Choose a category for your page",
+    "preview": "Gallery Preview",
+    "previewDesc": "Custom image shown in the gallery",
+    "removePreview": "Remove custom preview",
+    "notifications": "Notifications",
+    "emailDesc": "New leads via email",
+    "telegramDesc": "Instant notifications",
+    "telegramChatId": "Your Chat ID",
+    "telegramHelp": "Get your ID from",
+    "telegramVerify": "Verify",
+    "telegramConnected": "Telegram connected! Check your messages.",
+    "telegramError": "Failed to connect Telegram",
+    "telegramInvalidId": "Invalid Chat ID. Make sure you sent /start to @userinfobot",
+    "telegramCantSend": "Cannot send messages. Start the bot first"
+  },
+  "common": {
+    "save": "Save"
+  },
   "niche": {
     "barber": "Barber",
     "photographer": "Photographer",
@@ -31,46 +51,143 @@
     "generatingDescription": "Generating structure, content, and design...",
     "pleaseWait": "This will take about 30 seconds"
   },
-  "landing": {
+"landing": {
     "nav": {
       "signIn": "Sign In",
-      "getStarted": "Get Started"
+      "getStarted": "Get Started",
+      "gallery": "Gallery"
+    },
+    "featured": {
+      "badge": "Top Creators",
+      "title": "Featured Pages",
+      "subtitle": "Discover the most popular pages created with LinkMAX",
+      "viewAll": "View All Pages"
+    },
+    "gallery": {
+      "badge": "Community",
+      "title": "Page Gallery",
+      "subtitle": "Get inspired by pages created by our community",
+      "viewAll": "Explore All"
     },
     "hero": {
-      "badge": "AI-Powered Link Management",
-      "title1": "One Link,",
-      "title2": "Infinite Possibilities",
-      "subtitle": "Create a stunning bio page that brings together all your content, social media, and products in one beautiful place.",
-      "ctaMain": "Get Started Free",
+      "badge": "AI Platform for Business & Experts",
+      "title1": "Mini-website in 2 minutes",
+      "title2": "no developer needed",
+      "subtitle": "LinkMAX is an AI page builder for experts, freelancers, and businesses. Replace outdated Taplink with a modern AI-powered solution.",
+      "ctaMain": "Create for Free",
       "ctaDemo": "View Demo",
-      "trial": "No credit card required • 7-day premium trial • Cancel anytime"
+      "trial": "No card required • 2 days Premium free • Cancel anytime"
     },
-    "features": {
-      "title": "Everything you need",
-      "subtitle": "Powerful features designed for modern creators",
-      "aiGeneration": {
-        "title": "AI Content Generation",
-        "description": "Generate catchy titles and sales copy for your links and products with AI"
+    "problems": {
+      "title": "Sound Familiar?",
+      "subtitle": "LinkMAX solves problems faced by 90% of experts and entrepreneurs",
+      "noTime": {
+        "title": "No time to build a website",
+        "description": "Development takes weeks, but you need income now"
       },
-      "magicLinks": {
-        "title": "Magic Links",
-        "description": "Your entire page compressed into a single shareable URL"
+      "expensive": {
+        "title": "Developers are expensive",
+        "description": "A simple landing page costs $500+ and up"
       },
-      "fast": {
-        "title": "Lightning Fast",
-        "description": "Optimized performance with instant loading times"
+      "oneLink": {
+        "title": "Only 1 link in Instagram bio",
+        "description": "Cannot fit all your social media and services"
+      },
+      "noLeads": {
+        "title": "Losing potential clients",
+        "description": "People leave because they do not know how to reach you"
+      },
+      "oldDesign": {
+        "title": "Taplink looks outdated",
+        "description": "2018 templates do not inspire trust"
+      },
+      "noAnalytics": {
+        "title": "No idea what works",
+        "description": "No data on clicks and audience behavior"
+      }
+    },
+    "solutions": {
+      "title": "How LinkMAX Solves This",
+      "subtitle": "Modern tools for growing your business",
+      "ai": {
+        "title": "AI writes copy for you",
+        "description": "Headlines, product descriptions, SEO — all generated automatically"
+      },
+      "speed": {
+        "title": "2 minutes to publish",
+        "description": "Choose your niche — AI creates a ready page with content"
+      },
+      "design": {
+        "title": "Premium design",
+        "description": "Modern Apple-style themes, not outdated templates"
+      },
+      "crm": {
+        "title": "Built-in Mini-CRM",
+        "description": "Lead capture forms and client database in one place"
+      },
+      "analytics": {
+        "title": "Click analytics",
+        "description": "See which links work and where clients come from"
       },
       "mobile": {
-        "title": "Mobile First",
-        "description": "Beautiful on every device, optimized for mobile viewing"
+        "title": "Works from phone",
+        "description": "Edit your page directly from your smartphone"
+      }
+    },
+    "audiences": {
+      "title": "Who Is LinkMAX For",
+      "subtitle": "Solutions for any scale — from solo expert to business",
+      "b2c": {
+        "badge": "For Experts",
+        "title": "Freelancers & Specialists",
+        "items": {
+          "barber": "Barbers & Stylists",
+          "photographer": "Photographers & Videographers",
+          "coach": "Coaches & Trainers",
+          "tutor": "Tutors & Teachers",
+          "beauty": "Nail Artists & Cosmetologists",
+          "psychologist": "Psychologists & Consultants"
+        }
+      },
+      "b2b": {
+        "badge": "For Business",
+        "title": "Companies & Entrepreneurs",
+        "items": {
+          "cafe": "Cafes & Restaurants",
+          "shop": "Shops & Showrooms",
+          "agency": "Agencies & Studios",
+          "clinic": "Clinics & Salons",
+          "school": "Schools & Courses",
+          "service": "Service Companies"
+        }
+      }
+    },
+    "features": {
+      "title": "Everything You Need to Succeed",
+      "subtitle": "20+ block types for any task",
+      "aiGeneration": {
+        "title": "AI Content Generation",
+        "description": "Headlines, descriptions, and copy created automatically"
+      },
+      "magicLinks": {
+        "title": "All links in one place",
+        "description": "Social media, messengers, shop — one bio link"
+      },
+      "fast": {
+        "title": "Instant loading",
+        "description": "Pages load in milliseconds"
+      },
+      "mobile": {
+        "title": "Mobile editor",
+        "description": "Create and edit directly from your phone"
       },
       "sharing": {
-        "title": "Easy Sharing",
-        "description": "QR codes, direct links, and social sharing built-in"
+        "title": "QR codes & sharing",
+        "description": "Share your page anywhere with one tap"
       },
       "privacy": {
-        "title": "Privacy First",
-        "description": "Your data stays secure with enterprise-grade protection"
+        "title": "Data security",
+        "description": "Enterprise-grade information protection"
       }
     },
     "stats": {
@@ -80,31 +197,31 @@
       "possibilities": "Possibilities"
     },
     "benefits": {
-      "ai": "AI Content Generation",
+      "ai": "AI Generation",
       "design": "Premium Design",
-      "analytics": "Analytics Dashboard",
+      "analytics": "Analytics",
       "crm": "Mini-CRM"
     },
     "howItWorks": {
       "title": "How It Works",
-      "subtitle": "Create your page in 3 simple steps",
+      "subtitle": "3 steps to a ready page",
       "step1": {
-        "title": "Choose Your Niche",
-        "desc": "Select your profession and AI will generate a perfect page"
+        "title": "Choose your niche",
+        "desc": "Select profession — AI understands what you need"
       },
       "step2": {
-        "title": "Customize",
-        "desc": "Add blocks, edit content, and adjust the design"
+        "title": "AI creates the page",
+        "desc": "Ready design, copy, and blocks in 30 seconds"
       },
       "step3": {
         "title": "Publish & Share",
-        "desc": "Get your unique link and share it everywhere"
+        "desc": "Get your unique link and share everywhere"
       }
     },
     "cta": {
       "badge": "Start for Free",
       "title": "Ready to Build Your Link?",
-      "subtitle": "Join thousands of creators, influencers, and entrepreneurs who trust LinkMAX",
+      "subtitle": "Join thousands of creators and entrepreneurs who trust LinkMAX",
       "button": "Start Creating Now"
     },
     "footer": {
@@ -156,7 +273,10 @@
     "creatingAccount": "Creating account...",
     "backToHome": "← Back to Home",
     "createAccount": "Create Account",
-    "welcomeBack": "Welcome back!"
+    "welcomeBack": "Welcome back!",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "orContinueWith": "or continue with email"
   },
   "editor": {
     "title": "Page Editor",
@@ -219,6 +339,7 @@
     "map": "Edit Map",
     "avatar": "Edit Avatar",
     "separator": "Edit Separator",
+    "catalog": "Edit Catalog",
     "description": "Configure all block settings. Changes are saved automatically.",
     "notAvailable": "Editor for this block type is not available."
   },
@@ -375,5 +496,76 @@
     "activityChart": "Activity",
     "topBlocks": "Top Content",
     "clicksByBlock": "Clicks by Block"
+  },
+  "gallery": {
+    "title": "Community Gallery",
+    "subtitle": "Discover amazing pages created by our community",
+    "shareToGallery": "Share to Gallery",
+    "shareDescription": "Show your page in the community gallery",
+    "empty": "No pages yet",
+    "emptyDescription": "Be the first to share your page!",
+    "noResults": "No pages found matching your search",
+    "searchPlaceholder": "Search pages...",
+    "sortBy": "Sort by",
+    "sortRecent": "Recent",
+    "sortPopular": "Popular",
+    "sortTrending": "Trending",
+    "totalPages": "{{count}} pages in gallery",
+    "searchResults": "Filtering by \"{{search}}\"",
+    "featuredPages": "Featured Pages",
+    "featured": "Featured",
+    "like": "Like",
+    "liked": "Liked!",
+    "alreadyLiked": "You already liked this page",
+    "likeTooltip": "Show some love!",
+    "shareTooltip": "Copy page link",
+    "viewPage": "Open page",
+    "linkCopied": "Link copied!",
+    "copyError": "Failed to copy",
+    "statsPages": "Pages",
+    "statsLikes": "Likes",
+    "statsViews": "Views",
+    "filter": "Filter",
+    "all": "All"
+  },
+  "leaderboard": {
+    "title": "Top Pages",
+    "week": "Week",
+    "month": "Month",
+    "all": "All",
+    "allTime": "All Time",
+    "empty": "No pages yet for this period"
+  },
+  "share": {
+    "published": "Page Published!",
+    "yourPageLink": "Your page link",
+    "linkCopied": "Link copied!",
+    "shareNow": "Share Now",
+    "title": "Check out my LinkMAX page!"
+  },
+  "referral": {
+    "inviteFriend": "Invite a friend",
+    "bothGetBonus": "You both get +3 days Premium!",
+    "shareReferralLink": "Share Referral Link",
+    "friendsInvited": "Friends invited",
+    "bonusEarned": "Bonus days earned",
+    "topReferrers": "Top Referrers"
+  },
+  "niches": {
+    "beauty": "Beauty",
+    "fitness": "Fitness",
+    "food": "Food & Dining",
+    "education": "Education",
+    "art": "Art & Design",
+    "music": "Music",
+    "tech": "Tech & IT",
+    "business": "Business",
+    "health": "Health & Wellness",
+    "fashion": "Fashion",
+    "travel": "Travel",
+    "realestate": "Real Estate",
+    "events": "Events",
+    "services": "Services",
+    "other": "Other"
   }
 }

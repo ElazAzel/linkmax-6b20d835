@@ -1,4 +1,4 @@
-export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator';
+export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout';
 
 // Multilingual string support
 import type { MultilingualString } from '@/lib/i18n-helpers';
@@ -93,7 +93,7 @@ export interface ProductBlock {
 export interface VideoBlock {
   id: string;
   type: 'video';
-  title: string;
+  title: string | MultilingualString;
   url: string;
   platform: 'youtube' | 'vimeo';
   aspectRatio?: '16:9' | '4:3' | '1:1';
@@ -104,10 +104,10 @@ export interface VideoBlock {
 export interface CarouselBlock {
   id: string;
   type: 'carousel';
-  title?: string;
+  title?: string | MultilingualString;
   images: Array<{
     url: string;
-    alt: string;
+    alt: string | MultilingualString;
     link?: string;
   }>;
   autoPlay?: boolean;
@@ -128,6 +128,7 @@ export interface ButtonBlock {
   };
   hoverEffect?: 'glow' | 'scale' | 'shadow' | 'none';
   alignment?: 'left' | 'center' | 'right';
+  width?: 'full' | 'medium' | 'small';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
 }
@@ -152,7 +153,8 @@ export interface ImageBlock {
   url: string;
   alt: string;
   caption?: string;
-  style?: 'polaroid' | 'vignette' | 'circle' | 'default';
+  link?: string;
+  style?: 'polaroid' | 'vignette' | 'circle' | 'default' | 'banner';
   alignment?: 'left' | 'center' | 'right';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -161,8 +163,8 @@ export interface ImageBlock {
 export interface SearchBlock {
   id: string;
   type: 'search';
-  title?: string;
-  placeholder?: string;
+  title?: string | MultilingualString;
+  placeholder?: string | MultilingualString;
   isPremium: true;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -171,7 +173,7 @@ export interface SearchBlock {
 export interface CustomCodeBlock {
   id: string;
   type: 'custom_code';
-  title?: string;
+  title?: string | MultilingualString;
   html: string;
   css?: string;
   isPremium: true;
@@ -182,7 +184,7 @@ export interface CustomCodeBlock {
 export interface MessengerBlock {
   id: string;
   type: 'messenger';
-  title?: string;
+  title?: string | MultilingualString;
   messengers: Array<{
     platform: 'whatsapp' | 'telegram' | 'viber' | 'wechat';
     username: string;
@@ -195,14 +197,15 @@ export interface MessengerBlock {
 export interface FormBlock {
   id: string;
   type: 'form';
-  title: string;
+  title: string | MultilingualString;
   fields: Array<{
-    name: string;
+    name: string | MultilingualString;
     type: 'text' | 'email' | 'phone' | 'textarea';
     required: boolean;
+    placeholder?: string | MultilingualString;
   }>;
   submitEmail: string;
-  buttonText: string;
+  buttonText: string | MultilingualString;
   isPremium: true;
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -211,8 +214,8 @@ export interface FormBlock {
 export interface DownloadBlock {
   id: string;
   type: 'download';
-  title: string;
-  description?: string;
+  title: string | MultilingualString;
+  description?: string | MultilingualString;
   fileUrl: string;
   fileName: string;
   fileSize?: string;
@@ -225,9 +228,9 @@ export interface DownloadBlock {
 export interface NewsletterBlock {
   id: string;
   type: 'newsletter';
-  title: string;
-  description?: string;
-  buttonText: string;
+  title: string | MultilingualString;
+  description?: string | MultilingualString;
+  buttonText: string | MultilingualString;
   apiEndpoint?: string;
   isPremium: true;
   schedule?: BlockSchedule;
@@ -237,13 +240,13 @@ export interface NewsletterBlock {
 export interface TestimonialBlock {
   id: string;
   type: 'testimonial';
-  title?: string;
+  title?: string | MultilingualString;
   testimonials: Array<{
-    name: string;
-    text: string;
+    name: string | MultilingualString;
+    text: string | MultilingualString;
     rating?: number;
     avatar?: string;
-    role?: string;
+    role?: string | MultilingualString;
   }>;
   isPremium: true;
   schedule?: BlockSchedule;
@@ -253,8 +256,8 @@ export interface TestimonialBlock {
 export interface ScratchBlock {
   id: string;
   type: 'scratch';
-  title?: string;
-  revealText: string;
+  title?: string | MultilingualString;
+  revealText: string | MultilingualString;
   scratchImage?: string;
   backgroundColor?: string;
   isPremium: true;
@@ -265,10 +268,10 @@ export interface ScratchBlock {
 export interface MapBlock {
   id: string;
   type: 'map';
-  title?: string;
+  title?: string | MultilingualString;
   provider: 'google' | 'yandex';
   embedUrl: string;
-  address?: string;
+  address?: string | MultilingualString;
   height?: 'small' | 'medium' | 'large';
   schedule?: BlockSchedule;
   blockStyle?: BlockStyle;
@@ -302,7 +305,121 @@ export interface SeparatorBlock {
   blockStyle?: BlockStyle;
 }
 
-export type Block = ProfileBlock | LinkBlock | ButtonBlock | SocialsBlock | TextBlock | ImageBlock | ProductBlock | VideoBlock | CarouselBlock | SearchBlock | CustomCodeBlock | MessengerBlock | FormBlock | DownloadBlock | NewsletterBlock | TestimonialBlock | ScratchBlock | MapBlock | AvatarBlock | SeparatorBlock;
+export interface CatalogCategory {
+  id: string;
+  name: string | MultilingualString;
+}
+
+export interface CatalogItem {
+  id: string;
+  name: string | MultilingualString;
+  description?: string | MultilingualString;
+  price?: number;
+  currency?: Currency;
+  image?: string;
+  categoryId?: string;
+}
+
+export interface CatalogBlock {
+  id: string;
+  type: 'catalog';
+  title?: string | MultilingualString;
+  categories?: CatalogCategory[];
+  items: CatalogItem[];
+  layout?: 'list' | 'grid';
+  showPrices?: boolean;
+  currency?: Currency;
+  isPremium: true;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+// Before/After comparison block
+export interface BeforeAfterBlock {
+  id: string;
+  type: 'before_after';
+  title?: string | MultilingualString;
+  beforeImage: string;
+  afterImage: string;
+  beforeLabel?: string | MultilingualString;
+  afterLabel?: string | MultilingualString;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+// FAQ Block
+export interface FAQItem {
+  id: string;
+  question: string | MultilingualString;
+  answer: string | MultilingualString;
+}
+
+export interface FAQBlock {
+  id: string;
+  type: 'faq';
+  title?: string | MultilingualString;
+  items: FAQItem[];
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+// Countdown Timer Block
+export interface CountdownBlock {
+  id: string;
+  type: 'countdown';
+  title?: string | MultilingualString;
+  targetDate: string; // ISO date string
+  expiredText?: string | MultilingualString;
+  showDays?: boolean;
+  showHours?: boolean;
+  showMinutes?: boolean;
+  showSeconds?: boolean;
+  isPremium: true;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+// Pricing Block
+export interface PricingItem {
+  id: string;
+  name: string | MultilingualString;
+  description?: string | MultilingualString;
+  price: number;
+  currency?: Currency;
+  period?: string | MultilingualString; // e.g., "per hour", "per session"
+  featured?: boolean;
+}
+
+export interface PricingBlock {
+  id: string;
+  type: 'pricing';
+  title?: string | MultilingualString;
+  items: PricingItem[];
+  currency?: Currency;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+// Shoutout Block - recommend other users
+export interface ShoutoutBlock {
+  id: string;
+  type: 'shoutout';
+  userId: string;
+  username?: string;
+  displayName?: string;
+  avatarUrl?: string;
+  message?: string | MultilingualString;
+  schedule?: BlockSchedule;
+  blockStyle?: BlockStyle;
+}
+
+// Base block type with optional grid layout
+interface BlockGridProps {
+  gridLayout?: GridLayoutData;
+  createdAt?: string;
+}
+
+export type Block = (ProfileBlock | LinkBlock | ButtonBlock | SocialsBlock | TextBlock | ImageBlock | ProductBlock | VideoBlock | CarouselBlock | SearchBlock | CustomCodeBlock | MessengerBlock | FormBlock | DownloadBlock | NewsletterBlock | TestimonialBlock | ScratchBlock | MapBlock | AvatarBlock | SeparatorBlock | CatalogBlock | BeforeAfterBlock | FAQBlock | CountdownBlock | PricingBlock | ShoutoutBlock) & BlockGridProps;
 
 export interface PageTheme {
   backgroundColor: string;
@@ -320,6 +437,25 @@ export interface PageMetrics {
   tiktokPixel?: string;
 }
 
+// Grid layout data for blocks
+export interface GridLayoutData {
+  gridColumn?: number;    // starting column (1-based)
+  gridRow?: number;       // starting row (1-based)
+  gridWidth?: number;     // width in cells (1-4)
+  gridHeight?: number;    // height in cells (1-4)
+}
+
+// Grid configuration for pages
+export interface GridConfig {
+  columnsDesktop: number;   // 3-4 for desktop
+  columnsMobile: number;    // 2 for mobile
+  gapSize: number;          // gap between blocks in px
+  cellHeight: number;       // cell height in px
+}
+
+// Editor mode type
+export type EditorMode = 'linear' | 'grid';
+
 export interface PageData {
   id: string;
   userId?: string;
@@ -332,4 +468,8 @@ export interface PageData {
   };
   isPremium?: boolean;
   metrics?: PageMetrics;
+  editorMode?: EditorMode;
+  gridConfig?: GridConfig;
+  niche?: string;
+  previewUrl?: string; // Custom preview image for gallery
 }

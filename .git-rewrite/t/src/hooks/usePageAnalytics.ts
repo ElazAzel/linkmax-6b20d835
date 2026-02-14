@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { startOfDay, startOfWeek, startOfMonth, subDays, subWeeks, subMonths, format, eachDayOfInterval, eachWeekOfInterval, eachMonthOfInterval } from 'date-fns';
+import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { useTranslation } from 'react-i18next';
 
 export interface AnalyticsEvent {
   id: string;
@@ -40,12 +42,27 @@ export interface AnalyticsSummary {
   monthlyData: TimeSeriesData[];
   viewsChange: number; // % change from previous period
   clicksChange: number;
+  trafficSources: TrafficSource[];
+  deviceBreakdown: DeviceBreakdown;
+}
+
+export interface TrafficSource {
+  source: string;
+  count: number;
+  percentage: number;
+}
+
+export interface DeviceBreakdown {
+  mobile: number;
+  tablet: number;
+  desktop: number;
 }
 
 export type TimePeriod = 'day' | 'week' | 'month' | 'all';
 
 export function usePageAnalytics() {
   const { user } = useAuth();
+  const { i18n } = useTranslation();
   const [pageId, setPageId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
@@ -152,12 +169,19 @@ export function usePageAnalytics() {
       const blockStatsMap = new Map<string, BlockStats>();
       
       if (blocks) {
+        const currentLang = i18n.language as SupportedLanguage;
         blocks.forEach(block => {
           const content = block.content as any;
+          // Use getTranslatedString to handle MultilingualString objects
+          const rawTitle = block.title || content?.title || content?.name || block.type;
+          const blockTitle = typeof rawTitle === 'object' 
+            ? getTranslatedString(rawTitle, currentLang) 
+            : rawTitle;
+          
           blockStatsMap.set(block.id, {
             blockId: block.id,
             blockType: block.type,
-            blockTitle: block.title || content?.title || content?.name || block.type,
+            blockTitle,
             clicks: block.click_count || 0,
             views: 0,
             ctr: 0,
@@ -188,6 +212,33 @@ export function usePageAnalytics() {
       const weeklyData = generateWeeklyData(events, subMonths(now, 3), now);
       const monthlyData = generateMonthlyData(events, subMonths(now, 12), now);
 
+      // Calculate traffic sources
+      const sourceMap = new Map<string, number>();
+      events.filter(e => e.event_type === 'view').forEach(e => {
+        const source = e.metadata?.source || 'direct';
+        sourceMap.set(source, (sourceMap.get(source) || 0) + 1);
+      });
+      const trafficSources: TrafficSource[] = Array.from(sourceMap.entries())
+        .map(([source, count]) => ({
+          source,
+          count,
+          percentage: totalViews > 0 ? (count / totalViews) * 100 : 0,
+        }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
+
+      // Calculate device breakdown
+      const deviceCounts = { mobile: 0, tablet: 0, desktop: 0 };
+      events.filter(e => e.event_type === 'view').forEach(e => {
+        const device = e.metadata?.device as 'mobile' | 'tablet' | 'desktop' | undefined;
+        if (device && device in deviceCounts) {
+          deviceCounts[device]++;
+        } else {
+          deviceCounts.desktop++; // Default to desktop if unknown
+        }
+      });
+      const deviceBreakdown: DeviceBreakdown = deviceCounts;
+
       setAnalytics({
         totalViews,
         totalClicks,
@@ -200,13 +251,15 @@ export function usePageAnalytics() {
         monthlyData,
         viewsChange,
         clicksChange,
+        trafficSources,
+        deviceBreakdown,
       });
     } catch (error) {
       console.error('Error fetching analytics:', error);
     } finally {
       setLoading(false);
     }
-  }, [user, pageId, period]);
+  }, [user, pageId, period, i18n.language]);
 
   useEffect(() => {
     if (pageId) {

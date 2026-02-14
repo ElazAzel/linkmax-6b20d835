@@ -98,50 +98,47 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
 
     const tooltipOffset = 12;
     const viewportWidth = window.innerWidth;
-    const isMobile = viewportWidth < 640;
+    const viewportHeight = window.innerHeight;
+    const tooltipWidth = Math.min(320, viewportWidth - 32); // Max 320px or viewport - padding
+    const tooltipHeight = 200; // Approximate height
+    const safeMargin = 16;
 
-    // On mobile, always position below or above with centered horizontal
-    if (isMobile) {
-      const spaceBelow = window.innerHeight - highlightPosition.bottom;
-      const positionBelow = spaceBelow > 200;
-      
-      return {
-        top: positionBelow 
-          ? highlightPosition.bottom + tooltipOffset 
-          : highlightPosition.top - tooltipOffset,
-        left: '50%',
-        transform: positionBelow ? 'translateX(-50%)' : 'translate(-50%, -100%)',
-      };
+    // Calculate safe bounds
+    const safeLeft = safeMargin;
+    const safeRight = viewportWidth - tooltipWidth - safeMargin;
+    const safeTop = safeMargin;
+    const safeBottom = viewportHeight - tooltipHeight - safeMargin;
+
+    // Calculate center position of the target element
+    const targetCenterX = highlightPosition.left + highlightPosition.width / 2;
+    const targetCenterY = highlightPosition.top + highlightPosition.height / 2;
+
+    // Determine best position based on available space
+    const spaceAbove = highlightPosition.top - safeMargin;
+    const spaceBelow = viewportHeight - highlightPosition.bottom - safeMargin;
+    const spaceLeft = highlightPosition.left - safeMargin;
+    const spaceRight = viewportWidth - highlightPosition.right - safeMargin;
+
+    // Default: position below if enough space, otherwise above
+    let top = highlightPosition.bottom + tooltipOffset;
+    let left = Math.max(safeLeft, Math.min(safeRight, targetCenterX - tooltipWidth / 2));
+    let transform = 'none';
+
+    if (spaceBelow < tooltipHeight && spaceAbove > spaceBelow) {
+      // Position above
+      top = Math.max(safeTop, highlightPosition.top - tooltipOffset - tooltipHeight);
+    } else {
+      // Position below
+      top = Math.min(safeBottom, highlightPosition.bottom + tooltipOffset);
     }
 
-    switch (step.position) {
-      case 'top':
-        return {
-          top: highlightPosition.top - tooltipOffset,
-          left: Math.min(Math.max(highlightPosition.left + highlightPosition.width / 2, 180), viewportWidth - 180),
-          transform: 'translate(-50%, -100%)',
-        };
-      case 'bottom':
-        return {
-          top: highlightPosition.bottom + tooltipOffset,
-          left: Math.min(Math.max(highlightPosition.left + highlightPosition.width / 2, 180), viewportWidth - 180),
-          transform: 'translateX(-50%)',
-        };
-      case 'left':
-        return {
-          top: highlightPosition.top + highlightPosition.height / 2,
-          left: highlightPosition.left - tooltipOffset,
-          transform: 'translate(-100%, -50%)',
-        };
-      case 'right':
-        return {
-          top: highlightPosition.top + highlightPosition.height / 2,
-          left: highlightPosition.right + tooltipOffset,
-          transform: 'translateY(-50%)',
-        };
-      default:
-        return {};
-    }
+    // Ensure left is within bounds
+    left = Math.max(safeLeft, Math.min(safeRight, left));
+
+    // Ensure top is within bounds
+    top = Math.max(safeTop, Math.min(safeBottom, top));
+
+    return { top, left };
   };
 
   return (
@@ -165,7 +162,7 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
       {/* Tooltip */}
       <Card
         className={cn(
-          "absolute w-[calc(100vw-2rem)] max-w-sm p-4 sm:p-6 shadow-2xl mx-4 sm:mx-0",
+          "fixed p-4 sm:p-5 shadow-2xl z-[101] max-w-[calc(100vw-2rem)] w-80",
           isCenterStep && "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         )}
         style={!isCenterStep ? getTooltipPosition() : {}}

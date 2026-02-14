@@ -26,7 +26,7 @@ export const DownloadBlock = memo(function DownloadBlock({ block }: DownloadBloc
 
   return (
     <div className={`flex ${block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'}`}>
-      <Card className={`${alignmentClass} max-w-md p-6`}>
+      <Card className={`${alignmentClass} max-w-md p-6 bg-card border-border shadow-sm`}>
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">

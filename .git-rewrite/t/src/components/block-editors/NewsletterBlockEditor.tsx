@@ -1,39 +1,35 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateNewsletterBlock } from '@/lib/block-validators';
+import { useTranslation } from 'react-i18next';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function NewsletterBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <div>
-        <Label>Title</Label>
-        <Input
-          value={formData.title || ''}
-          onChange={(e) => onChange({ ...formData, title: e.target.value })}
-          placeholder="Subscribe to Newsletter"
-        />
-      </div>
+      <MultilingualInput
+        label={t('fields.title', 'Title')}
+        value={migrateToMultilingual(formData.title)}
+        onChange={(value) => onChange({ ...formData, title: value })}
+        placeholder="Subscribe to Newsletter"
+      />
 
-      <div>
-        <Label>Description (optional)</Label>
-        <Textarea
-          value={formData.description || ''}
-          onChange={(e) => onChange({ ...formData, description: e.target.value })}
-          placeholder="Get the latest updates delivered to your inbox"
-          rows={2}
-        />
-      </div>
+      <MultilingualInput
+        label={`${t('fields.description', 'Description')} (${t('fields.optional', 'optional')})`}
+        value={migrateToMultilingual(formData.description)}
+        onChange={(value) => onChange({ ...formData, description: value })}
+        type="textarea"
+        placeholder="Get the latest updates delivered to your inbox"
+      />
 
-      <div>
-        <Label>Button Text</Label>
-        <Input
-          value={formData.buttonText || 'Subscribe'}
-          onChange={(e) => onChange({ ...formData, buttonText: e.target.value })}
-          placeholder="Subscribe"
-        />
-      </div>
+      <MultilingualInput
+        label={t('fields.buttonText', 'Button Text')}
+        value={migrateToMultilingual(formData.buttonText)}
+        onChange={(value) => onChange({ ...formData, buttonText: value })}
+        placeholder="Subscribe"
+      />
     </div>
   );
 }

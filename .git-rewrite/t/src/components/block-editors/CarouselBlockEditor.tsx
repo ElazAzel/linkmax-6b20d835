@@ -6,6 +6,8 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { validateCarouselBlock } from '@/lib/block-validators';
 import { useTranslation } from 'react-i18next';
 import { Trash2 } from 'lucide-react';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
@@ -14,7 +16,7 @@ function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
   const addImage = () => {
     onChange({
       ...formData,
-      images: [...images, { url: '', alt: '', link: '' }],
+      images: [...images, { url: '', alt: { ru: '', en: '', kk: '' }, link: '' }],
     });
   };
 
@@ -25,7 +27,7 @@ function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
     });
   };
 
-  const updateImage = (index: number, field: string, value: string) => {
+  const updateImage = (index: number, field: string, value: any) => {
     const updated = [...images];
     updated[index] = { ...updated[index], [field]: value };
     onChange({ ...formData, images: updated });
@@ -33,13 +35,12 @@ function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
 
   return (
     <div className="space-y-4">
-      <div>
-        <Label>{t('fields.title', 'Title')} ({t('fields.optional', 'optional')})</Label>
-        <Input
-          value={formData.title || ''}
-          onChange={(e) => onChange({ ...formData, title: e.target.value })}
-        />
-      </div>
+      <MultilingualInput
+        label={`${t('fields.title', 'Title')} (${t('fields.optional', 'optional')})`}
+        value={migrateToMultilingual(formData.title)}
+        onChange={(value) => onChange({ ...formData, title: value })}
+        placeholder="Gallery"
+      />
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -50,7 +51,7 @@ function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
         </div>
 
         {images.map((image: any, index: number) => (
-          <div key={index} className="border rounded-lg p-3 space-y-3">
+          <div key={index} className="border border-border rounded-lg p-3 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{t('fields.image', 'Image')} {index + 1}</span>
               <Button
@@ -69,14 +70,12 @@ function CarouselBlockEditorComponent({ formData, onChange }: BaseBlockEditorPro
               accept="image/*"
             />
 
-            <div>
-              <Label className="text-xs">{t('fields.altText', 'Alt Text')}</Label>
-              <Input
-                value={image.alt}
-                onChange={(e) => updateImage(index, 'alt', e.target.value)}
-                placeholder={t('fields.imageDescription', 'Image description')}
-              />
-            </div>
+            <MultilingualInput
+              label={t('fields.altText', 'Alt Text')}
+              value={migrateToMultilingual(image.alt)}
+              onChange={(value) => updateImage(index, 'alt', value)}
+              placeholder={t('fields.imageDescription', 'Image description')}
+            />
 
             <div>
               <Label className="text-xs">{t('fields.link', 'Link')} ({t('fields.optional', 'optional')})</Label>

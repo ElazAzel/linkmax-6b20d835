@@ -1,4 +1,3 @@
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
@@ -14,9 +13,15 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
   const fields = formData.fields || [];
 
   const addField = () => {
+    const newField = { 
+      name: { ru: '', en: '', kk: '' }, 
+      placeholder: { ru: '', en: '', kk: '' },
+      type: 'text' as const, 
+      required: false 
+    };
     onChange({
       ...formData,
-      fields: [...fields, { name: '', type: 'text', required: false }],
+      fields: [...fields, newField],
     });
   };
 
@@ -39,14 +44,14 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         label={t('fields.formTitle', 'Form Title')}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder="Contact Form"
+        placeholder={t('fields.contactForm', 'Contact Form')}
       />
 
       <MultilingualInput
         label={t('fields.buttonText', 'Button Text')}
         value={migrateToMultilingual(formData.buttonText)}
         onChange={(value) => onChange({ ...formData, buttonText: value })}
-        placeholder="Send"
+        placeholder={t('fields.send', 'Send')}
       />
 
       <ArrayFieldList label={t('fields.formFields', 'Form Fields')} items={fields} onAdd={addField}>
@@ -57,14 +62,19 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
             label={t('fields.field', 'Field')}
             onRemove={() => removeField(index)}
           >
-            <div>
-              <Label className="text-xs">{t('fields.fieldName', 'Field Name')}</Label>
-              <Input
-                value={field.name}
-                onChange={(e) => updateField(index, 'name', e.target.value)}
-                placeholder="Name"
-              />
-            </div>
+            <MultilingualInput
+              label={t('fields.fieldName', 'Field Name')}
+              value={migrateToMultilingual(field.name)}
+              onChange={(value) => updateField(index, 'name', value)}
+              placeholder={t('fields.fieldNamePlaceholder', 'Name')}
+            />
+
+            <MultilingualInput
+              label={`${t('fields.placeholder', 'Placeholder')} (${t('fields.optional', 'optional')})`}
+              value={migrateToMultilingual(field.placeholder)}
+              onChange={(value) => updateField(index, 'placeholder', value)}
+              placeholder={t('fields.enterText', 'Enter text...')}
+            />
 
             <div>
               <Label className="text-xs">{t('fields.fieldType', 'Field Type')}</Label>

@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
-import { Upload, X, Loader2, CheckCircle } from 'lucide-react';
+import { Upload, X, Loader2, CheckCircle, Crown, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { compressImage, getCompressionStats } from '@/lib/image-compression';
@@ -16,6 +18,7 @@ interface MediaUploadProps {
   accept?: string;
   label?: string;
   placeholder?: string;
+  allowGif?: boolean; // Enable GIF support for this field
 }
 
 export function MediaUpload({ 
@@ -23,15 +26,28 @@ export function MediaUpload({
   onChange, 
   accept = 'image/*',
   label,
-  placeholder = 'https://example.com/image.jpg'
+  placeholder = 'https://example.com/image.jpg',
+  allowGif = false
 }: MediaUploadProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { isPremium } = usePremiumStatus();
   const [uploading, setUploading] = useState(false);
   const [compressing, setCompressing] = useState(false);
   const [compressionInfo, setCompressionInfo] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>(value ? 'url' : 'upload');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Determine accepted file types based on GIF support and premium status
+  const getAcceptedTypes = () => {
+    if (allowGif && isPremium) {
+      return accept.includes('image') ? 'image/*,.gif' : accept;
+    }
+    return accept;
+  };
+
+  const isGifFile = (file: File) => file.type === 'image/gif';
+  const isGifUrl = (url: string) => url.toLowerCase().endsWith('.gif');
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -42,9 +58,15 @@ export function MediaUpload({
       return;
     }
 
-    // Validate file size (10MB limit before compression)
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error(t('upload.fileTooLarge', 'File size must be less than 10MB'));
+    // Validate file size (15MB limit before compression)
+    if (file.size > 15 * 1024 * 1024) {
+      toast.error(t('upload.fileTooLarge', 'File size must be less than 15MB'));
+      return;
+    }
+
+    // Check if GIF is allowed for non-premium users
+    if (isGifFile(file) && allowGif && !isPremium) {
+      toast.error(t('upload.gifPremiumOnly', 'GIF uploads are available for Premium users only'));
       return;
     }
 
@@ -52,9 +74,9 @@ export function MediaUpload({
     setCompressionInfo(null);
 
     try {
-      // Compress image if it's an image file
+      // Compress image if it's an image file (skip GIFs to preserve animation)
       let processedFile = file;
-      if (file.type.startsWith('image/') && file.type !== 'image/gif') {
+      if (file.type.startsWith('image/') && !isGifFile(file)) {
         const originalSize = file.size;
         processedFile = await compressImage(file);
         
@@ -62,6 +84,8 @@ export function MediaUpload({
           const stats = getCompressionStats(originalSize, processedFile.size);
           setCompressionInfo(`${stats.percentage}% ${t('upload.compressed', 'compressed')}`);
         }
+      } else if (isGifFile(file)) {
+        setCompressionInfo(t('upload.gifPreserved', 'GIF animation preserved'));
       }
 
       setCompressing(false);
@@ -119,7 +143,7 @@ export function MediaUpload({
           <input
             ref={fileInputRef}
             type="file"
-            accept={accept}
+            accept={getAcceptedTypes()}
             onChange={handleFileSelect}
             className="hidden"
           />
@@ -177,9 +201,21 @@ export function MediaUpload({
                 <>
                   <Upload className="h-6 w-6" />
                   <span>{t('upload.click', 'Click to upload')}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {t('upload.autoCompress', 'Auto-compressed, max 10MB')}
-                  </span>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{t('upload.autoCompress', 'Auto-compressed, max 15MB')}</span>
+                    {allowGif && isPremium && (
+                      <Badge variant="secondary" className="gap-1 text-xs">
+                        <Sparkles className="h-3 w-3" />
+                        GIF
+                      </Badge>
+                    )}
+                  </div>
+                  {allowGif && !isPremium && (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Crown className="h-3 w-3 text-primary" />
+                      <span>{t('upload.gifPremium', 'GIF available with Premium')}</span>
+                    </div>
+                  )}
                 </>
               )}
             </Button>

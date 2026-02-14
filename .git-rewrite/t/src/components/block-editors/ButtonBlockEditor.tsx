@@ -6,7 +6,8 @@ import { validateButtonBlock } from '@/lib/block-validators';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
-
+import { MediaUpload } from '@/components/form-fields/MediaUpload';
+import { Maximize2, Square, Minus } from 'lucide-react';
 function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
   
@@ -126,21 +127,50 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
       )}
 
       {formData.background?.type === 'image' && (
-        <div>
-          <Label>{t('fields.backgroundImageUrl', 'Background Image URL')}</Label>
-          <Input
-            type="url"
-            value={formData.background?.value || ''}
-            onChange={(e) =>
-              onChange({
-                ...formData,
-                background: { ...formData.background, value: e.target.value },
-              })
-            }
-            placeholder="https://example.com/image.jpg"
-          />
-        </div>
+        <MediaUpload
+          label={t('fields.backgroundImage', 'Background Image')}
+          value={formData.background?.value || ''}
+          onChange={(value) =>
+            onChange({
+              ...formData,
+              background: { ...formData.background, value },
+            })
+          }
+          accept="image/*"
+        />
       )}
+
+      <div>
+        <Label>{t('fields.width', 'Width')}</Label>
+        <Select
+          value={formData.width || 'medium'}
+          onValueChange={(value) => onChange({ ...formData, width: value })}
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="full">
+              <span className="flex items-center gap-2">
+                <Maximize2 className="h-4 w-4" />
+                {t('fields.fullWidth', 'Full Width')}
+              </span>
+            </SelectItem>
+            <SelectItem value="medium">
+              <span className="flex items-center gap-2">
+                <Square className="h-4 w-4" />
+                {t('fields.mediumWidth', 'Medium')}
+              </span>
+            </SelectItem>
+            <SelectItem value="small">
+              <span className="flex items-center gap-2">
+                <Minus className="h-4 w-4" />
+                {t('fields.smallWidth', 'Small')}
+              </span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       <div>
         <Label>{t('fields.alignment', 'Alignment')}</Label>

@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.send-weekly-digest]
 verify_jwt = false
+
+[functions.send-trial-ending-notification]
+verify_jwt = false
+
+[functions.validate-telegram]
+verify_jwt = false

@@ -1,0 +1,149 @@
+/**
+ * User Entity - Core domain model for users
+ * Pure business logic, no external dependencies
+ */
+
+// ============= Value Objects =============
+
+export interface UserProfile {
+  id: string;
+  username: string | null;
+  displayName: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
+  isPremium: boolean;
+  trialEndsAt: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PremiumStatus {
+  isPremium: boolean;
+  inTrial: boolean;
+  trialEndsAt: string | null;
+  daysRemaining?: number;
+}
+
+// ============= Username Validation =============
+
+const USERNAME_REGEX = /^[a-z0-9_-]+$/;
+const USERNAME_MIN_LENGTH = 3;
+const USERNAME_MAX_LENGTH = 30;
+
+export interface UsernameValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+/**
+ * Validate username format and length
+ */
+export function validateUsername(username: string): UsernameValidationResult {
+  if (!username || username.trim().length === 0) {
+    return { valid: false, error: 'Username is required' };
+  }
+
+  const trimmed = username.trim();
+
+  if (trimmed.length < USERNAME_MIN_LENGTH) {
+    return { valid: false, error: `Username must be at least ${USERNAME_MIN_LENGTH} characters` };
+  }
+
+  if (trimmed.length > USERNAME_MAX_LENGTH) {
+    return { valid: false, error: `Username must be less than ${USERNAME_MAX_LENGTH} characters` };
+  }
+
+  if (!USERNAME_REGEX.test(trimmed)) {
+    return {
+      valid: false,
+      error: 'Username can only contain lowercase letters, numbers, hyphens, and underscores',
+    };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Normalize username to lowercase
+ */
+export function normalizeUsername(username: string): string {
+  return username.toLowerCase().trim();
+}
+
+// ============= Premium Status Logic =============
+
+/**
+ * Calculate premium status from profile data
+ */
+export function calculatePremiumStatus(profile: UserProfile | null): PremiumStatus {
+  if (!profile) {
+    return { isPremium: false, inTrial: false, trialEndsAt: null };
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trialEndsAt ? new Date(profile.trialEndsAt) : null;
+  const inTrial = trialEndsAt ? trialEndsAt > now : false;
+  const isPremium = profile.isPremium || inTrial;
+
+  let daysRemaining: number | undefined;
+  if (trialEndsAt && inTrial) {
+    daysRemaining = Math.ceil((trialEndsAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  return {
+    isPremium,
+    inTrial,
+    trialEndsAt: profile.trialEndsAt,
+    daysRemaining,
+  };
+}
+
+/**
+ * Check if user can access premium features
+ */
+export function canAccessPremiumFeatures(status: PremiumStatus): boolean {
+  return status.isPremium;
+}
+
+/**
+ * Check if trial is about to expire (within 24 hours)
+ */
+export function isTrialExpiringSoon(status: PremiumStatus): boolean {
+  if (!status.inTrial || !status.daysRemaining) {
+    return false;
+  }
+  return status.daysRemaining <= 1;
+}
+
+// ============= Freemium Limits =============
+
+export interface FreemiumLimits {
+  maxBlocks: number;
+  maxAiRequestsPerDay: number;
+  canUseAnalytics: boolean;
+  canUseCRM: boolean;
+  showWatermark: boolean;
+}
+
+export const FREE_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: 5,
+  maxAiRequestsPerDay: 3,
+  canUseAnalytics: false,
+  canUseCRM: false,
+  showWatermark: true,
+};
+
+export const PREMIUM_TIER_LIMITS: FreemiumLimits = {
+  maxBlocks: Infinity,
+  maxAiRequestsPerDay: Infinity,
+  canUseAnalytics: true,
+  canUseCRM: true,
+  showWatermark: false,
+};
+
+/**
+ * Get user's limits based on premium status
+ */
+export function getUserLimits(status: PremiumStatus): FreemiumLimits {
+  return status.isPremium ? PREMIUM_TIER_LIMITS : FREE_TIER_LIMITS;
+}

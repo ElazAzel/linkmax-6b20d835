@@ -4,15 +4,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2 } from 'lucide-react';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { parseRichText } from '@/lib/rich-text-parser';
 import type { ProfileBlock as ProfileBlockType } from '@/types/page';
-
 interface ProfileBlockProps {
   block: ProfileBlockType;
   isPreview?: boolean;
 }
 
 export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPreview }: ProfileBlockProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const name = getTranslatedString(block.name, i18n.language as SupportedLanguage);
   const bio = getTranslatedString(block.bio, i18n.language as SupportedLanguage);
   
@@ -142,13 +142,13 @@ export const ProfileBlock = memo(function ProfileBlockComponent({ block, isPrevi
             {block.verified && (
               <Badge variant="secondary" className="gap-1">
                 <CheckCircle2 className="h-3 w-3" />
-                Verified
+                {t('profile.verified', 'Verified')}
               </Badge>
             )}
           </div>
           
           {bio && (
-            <p className="text-muted-foreground max-w-md">{bio}</p>
+            <p className="text-muted-foreground max-w-md whitespace-pre-line">{parseRichText(bio)}</p>
           )}
         </div>
       </div>

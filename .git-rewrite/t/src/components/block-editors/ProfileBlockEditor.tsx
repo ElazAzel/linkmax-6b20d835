@@ -16,6 +16,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         value={formData.avatar || ''}
         onChange={(avatar) => onChange({ ...formData, avatar })}
         accept="image/*"
+        allowGif={true}
       />
       
       <MultilingualInput
@@ -31,6 +32,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         onChange={(value) => onChange({ ...formData, bio: value })}
         type="textarea"
         placeholder="Tell people about yourself..."
+        enableRichText={true}
       />
       
       <div className="border-t pt-4 space-y-4">
@@ -39,6 +41,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           value={formData.coverImage || ''}
           onChange={(coverImage) => onChange({ ...formData, coverImage })}
           accept="image/*"
+          allowGif={true}
         />
 
         <div>

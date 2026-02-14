@@ -1,7 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useCallback } from 'react';
 import type { Block } from '@/types/page';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
+import { useAnalytics } from '@/hooks/useAnalyticsTracking';
+import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { useTranslation } from 'react-i18next';
 
 // Helper function to check if block should be visible based on schedule
 function isBlockVisible(block: Block): boolean {
@@ -44,6 +47,12 @@ const ScratchBlock = lazy(() => import('./blocks/ScratchBlock').then(m => ({ def
 const MapBlock = lazy(() => import('./blocks/MapBlock').then(m => ({ default: m.MapBlock })));
 const AvatarBlock = lazy(() => import('./blocks/AvatarBlock').then(m => ({ default: m.AvatarBlock })));
 const SeparatorBlock = lazy(() => import('./blocks/SeparatorBlock').then(m => ({ default: m.SeparatorBlock })));
+const CatalogBlock = lazy(() => import('./blocks/CatalogBlock').then(m => ({ default: m.CatalogBlock })));
+const BeforeAfterBlock = lazy(() => import('./blocks/BeforeAfterBlock').then(m => ({ default: m.BeforeAfterBlock })));
+const FAQBlock = lazy(() => import('./blocks/FAQBlock').then(m => ({ default: m.FAQBlock })));
+const CountdownBlock = lazy(() => import('./blocks/CountdownBlock').then(m => ({ default: m.CountdownBlock })));
+const PricingBlock = lazy(() => import('./blocks/PricingBlock').then(m => ({ default: m.PricingBlock })));
+const ShoutoutBlock = lazy(() => import('./blocks/ShoutoutBlock').then(m => ({ default: m.ShoutoutBlock })));
 
 interface BlockRendererProps {
   block: Block;
@@ -58,7 +67,19 @@ const BlockSkeleton = () => (
   </div>
 );
 
+/**
+ * Get block title for analytics
+ */
+function getBlockTitle(block: Block, lang: SupportedLanguage): string {
+  const content = block as any;
+  const rawTitle = content.title || content.name || content.content?.title || content.content?.name || block.type;
+  return typeof rawTitle === 'object' ? getTranslatedString(rawTitle, lang) : String(rawTitle || block.type);
+}
+
 export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererProps) {
+  const { onBlockClick } = useAnalytics();
+  const { i18n } = useTranslation();
+  
   // Check if block should be visible based on schedule
   // In preview mode, always show blocks
   if (!isPreview && !isBlockVisible(block)) {
@@ -67,6 +88,21 @@ export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererPr
 
   const animationClass = getAnimationClass(block.blockStyle);
   const animationStyle = getAnimationStyle(block.blockStyle);
+
+  // Click handler for tracking
+  const handleClick = useCallback(() => {
+    if (!isPreview) {
+      const title = getBlockTitle(block, i18n.language as SupportedLanguage);
+      onBlockClick(block.id, block.type, title);
+    }
+  }, [block, isPreview, onBlockClick, i18n.language]);
+
+  // Wrapper component for clickable blocks
+  const ClickableWrapper = ({ children }: { children: React.ReactNode }) => (
+    <div className={animationClass} style={animationStyle} onClick={handleClick}>
+      {children}
+    </div>
+  );
 
   switch (block.type) {
     case 'profile':
@@ -77,19 +113,19 @@ export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererPr
       );
     case 'link':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <ClickableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <LinkBlock block={block} />
+            <LinkBlock block={block} onClick={handleClick} />
           </Suspense>
-        </div>
+        </ClickableWrapper>
       );
     case 'button':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <ClickableWrapper>
           <Suspense fallback={<BlockSkeleton />}>
-            <ButtonBlock block={block} />
+            <ButtonBlock block={block} onClick={handleClick} />
           </Suspense>
-        </div>
+        </ClickableWrapper>
       );
     case 'socials':
       return (
@@ -224,6 +260,57 @@ export function BlockRenderer({ block, isPreview, pageOwnerId }: BlockRendererPr
         <div className={animationClass} style={animationStyle}>
           <Suspense fallback={<BlockSkeleton />}>
             <SeparatorBlock block={block} />
+          </Suspense>
+        </div>
+      );
+    case 'catalog':
+      return (
+        <div className={animationClass} style={animationStyle}>
+          <Suspense fallback={<BlockSkeleton />}>
+            <CatalogBlock block={block} />
+          </Suspense>
+        </div>
+      );
+    case 'before_after':
+      return (
+        <div className={animationClass} style={animationStyle}>
+          <Suspense fallback={<BlockSkeleton />}>
+            <BeforeAfterBlock block={block} />
+          </Suspense>
+        </div>
+      );
+    case 'faq':
+      return (
+        <div className={animationClass} style={animationStyle}>
+          <Suspense fallback={<BlockSkeleton />}>
+            <FAQBlock block={block} />
+          </Suspense>
+        </div>
+      );
+    case 'countdown':
+      return (
+        <div className={animationClass} style={animationStyle}>
+          <Suspense fallback={<BlockSkeleton />}>
+            <CountdownBlock block={block} />
+          </Suspense>
+        </div>
+      );
+    case 'pricing':
+      return (
+        <div className={animationClass} style={animationStyle}>
+          <Suspense fallback={<BlockSkeleton />}>
+            <PricingBlock block={block} />
+          </Suspense>
+        </div>
+      );
+    case 'shoutout':
+      return (
+        <div className={animationClass} style={animationStyle}>
+          <Suspense fallback={<BlockSkeleton />}>
+            <ShoutoutBlock 
+              userId={(block as any).userId} 
+              message={(block as any).message}
+            />
           </Suspense>
         </div>
       );

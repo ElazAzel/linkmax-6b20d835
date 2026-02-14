@@ -1,33 +1,33 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateScratchBlock } from '@/lib/block-validators';
+import { useTranslation } from 'react-i18next';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function ScratchBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <div>
-        <Label>Title (optional)</Label>
-        <Input
-          value={formData.title || ''}
-          onChange={(e) => onChange({ ...formData, title: e.target.value })}
-          placeholder="Scratch to Reveal"
-        />
-      </div>
+      <MultilingualInput
+        label={`${t('fields.title', 'Title')} (${t('fields.optional', 'optional')})`}
+        value={migrateToMultilingual(formData.title)}
+        onChange={(value) => onChange({ ...formData, title: value })}
+        placeholder="Scratch to Reveal"
+      />
+
+      <MultilingualInput
+        label={t('fields.hiddenText', 'Hidden Text/Prize')}
+        value={migrateToMultilingual(formData.revealText)}
+        onChange={(value) => onChange({ ...formData, revealText: value })}
+        type="textarea"
+        placeholder="🎉 You won 20% discount!"
+      />
 
       <div>
-        <Label>Hidden Text/Prize</Label>
-        <Textarea
-          value={formData.revealText || ''}
-          onChange={(e) => onChange({ ...formData, revealText: e.target.value })}
-          placeholder="🎉 You won 20% discount!"
-          rows={2}
-        />
-      </div>
-
-      <div>
-        <Label>Background Color (optional)</Label>
+        <Label>{t('fields.backgroundColor', 'Background Color')} ({t('fields.optional', 'optional')})</Label>
         <Input
           type="color"
           value={formData.backgroundColor || '#C0C0C0'}

@@ -36,12 +36,35 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
 
   const sanitizedCss = useMemo(() => {
     if (!block.css) return '';
-    return block.css
-      .replace(/@import/gi, '')
-      .replace(/javascript:/gi, '')
-      .replace(/expression\s*\(/gi, '')
-      .replace(/url\s*\(\s*["']?\s*javascript:/gi, '')
-      .replace(/behavior\s*:/gi, '');
+    
+    // Comprehensive CSS sanitization to prevent injection attacks
+    let css = block.css;
+    
+    // Remove dangerous at-rules
+    css = css.replace(/@import\b/gi, '/* blocked */');
+    css = css.replace(/@charset\b/gi, '/* blocked */');
+    css = css.replace(/@namespace\b/gi, '/* blocked */');
+    
+    // Block JavaScript execution vectors
+    css = css.replace(/javascript\s*:/gi, 'blocked:');
+    css = css.replace(/expression\s*\(/gi, 'blocked(');
+    css = css.replace(/behavior\s*:/gi, 'blocked:');
+    
+    // Block url() with dangerous protocols
+    css = css.replace(/url\s*\(\s*["']?\s*(javascript|data|vbscript):/gi, 'url(blocked:');
+    
+    // Block browser-specific dangerous properties
+    css = css.replace(/-moz-binding\s*:/gi, 'blocked:');
+    css = css.replace(/-webkit-binding\s*:/gi, 'blocked:');
+    
+    // Block content property with url() to prevent data exfiltration
+    css = css.replace(/content\s*:\s*url\s*\(/gi, 'content: none; /* blocked */ url(');
+    
+    // Block input-based selectors to prevent CSS keylogger attacks
+    css = css.replace(/input\s*\[.*value.*\]/gi, '/* blocked selector */');
+    css = css.replace(/input\s*:.*-placeholder/gi, 'input');
+    
+    return css;
   }, [block.css]);
 
   useEffect(() => {

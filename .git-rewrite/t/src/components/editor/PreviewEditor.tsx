@@ -14,18 +14,19 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineEditableBlock } from './InlineEditableBlock';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { BlockHint } from '../onboarding/BlockHint';
+import { GridEditor } from './GridEditor';
 import { useIsMobile } from '@/hooks/use-mobile';
-import type { Block, ProfileBlock } from '@/types/page';
+import type { Block, ProfileBlock, EditorMode, GridConfig } from '@/types/page';
 
 interface PreviewEditorProps {
   blocks: Block[];
   isPremium: boolean;
+  editorMode?: EditorMode;
+  gridConfig?: GridConfig;
   onInsertBlock: (blockType: string, position: number) => void;
   onEditBlock: (block: Block) => void;
   onDeleteBlock: (id: string) => void;
@@ -125,6 +126,8 @@ function SortableBlockWrapper({
 export const PreviewEditor = memo(function PreviewEditor({
   blocks,
   isPremium,
+  editorMode = 'linear',
+  gridConfig,
   onInsertBlock,
   onEditBlock,
   onDeleteBlock,
@@ -135,7 +138,21 @@ export const PreviewEditor = memo(function PreviewEditor({
 }: PreviewEditorProps) {
   const sensors = useSensors(useSensor(PointerSensor));
   const isMobile = useIsMobile();
-  const [showMobileFAB, setShowMobileFAB] = useState(false);
+
+  // Use GridEditor for grid mode
+  if (editorMode === 'grid') {
+    return (
+      <GridEditor
+        blocks={blocks}
+        isPremium={isPremium}
+        gridConfig={gridConfig}
+        onInsertBlock={onInsertBlock}
+        onEditBlock={onEditBlock}
+        onDeleteBlock={onDeleteBlock}
+        onUpdateBlock={onUpdateBlock}
+      />
+    );
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -175,7 +192,7 @@ export const PreviewEditor = memo(function PreviewEditor({
 
   return (
     <>
-      <div className="max-w-lg mx-auto px-3 py-2 space-y-3 pb-32 md:pb-24">
+      <div className="max-w-lg mx-auto px-3 py-4 space-y-4 pb-32 md:pb-24">
         {/* Profile block with inline editing */}
         {profileBlock && (
           <div className="relative group" data-onboarding="profile-block">
@@ -187,7 +204,7 @@ export const PreviewEditor = memo(function PreviewEditor({
               onInsert={(type) => onInsertBlock(type, 0)}
               isPremium={isPremium}
               currentBlockCount={blocks.length}
-              className="my-3"
+              className="my-4"
             />
           </div>
         )}
@@ -222,7 +239,7 @@ export const PreviewEditor = memo(function PreviewEditor({
             </SortableContext>
           </DndContext>
         ) : (
-          <div className="text-center py-8 border-2 border-dashed border-border rounded-xl mx-2">
+          <div className="text-center py-10 border-2 border-dashed border-border/50 rounded-2xl mx-2 bg-card/30 backdrop-blur-sm">
             <p className="text-sm text-muted-foreground mb-4 px-4">
               Click the + button to add your first block
             </p>

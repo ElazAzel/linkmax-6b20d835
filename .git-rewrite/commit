@@ -1,11 +1,11 @@
-tree f0980efbe3da3ada92ba346603ef6c739d7fb445
-parent 99b6799feefd2d0db483267393b5d9bc0e9d5e80
-parent 673b814369f78e780b3b249900ed256c1daa2453
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765132269 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765132269 +0000
+tree fc6592c752efc6ac35981308d55b43efbb8b309f
+parent c2d3bb8d0bd2168d1ece4f0e9a624269ff180470
+parent 4b121a477ce3bd9a5f131d4803a1e74cfe8e6911
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765816546 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765816546 +0000
 
-Update premium number and trial period
+Add telegram bind at signup
 
-Update the WhatsApp number for premium purchases to +77051097664 and change the free trial from 7 days to 2 days by updating upgrade utils and migrating the default trial duration.
+Require Telegram binding during registration with chat_id verification, enable inline bio editing in profile block, add image cropper with zoom/position for avatars and covers, and fix responsive onboarding to stay within screen bounds.
 
-X-Lovable-Edit-ID: edt-c6a01d0c-13e7-41b6-a5ba-368f05ed9227
+X-Lovable-Edit-ID: edt-5503ac1b-5941-4cbb-8f80-c756bff93c30

@@ -18,44 +18,75 @@ import {
   Megaphone,
   Heart,
   ChefHat,
+  Plane,
+  Home,
+  PartyPopper,
+  Wrench,
+  MoreHorizontal,
   Loader2,
   ArrowRight,
-  ArrowLeft
+  ArrowLeft,
+  Laptop
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Block } from '@/types/page';
+import { NICHES, type Niche } from '@/lib/niches';
 
 interface NicheOnboardingProps {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: (profile: { name: string; bio: string }, blocks: Block[]) => void;
+  onComplete: (profile: { name: string; bio: string }, blocks: Block[], niche: Niche) => void;
 }
 
-const NICHES = [
-  { id: 'barber', icon: Scissors, label: 'niche.barber', color: 'from-amber-500 to-orange-600' },
-  { id: 'photographer', icon: Camera, label: 'niche.photographer', color: 'from-purple-500 to-pink-600' },
-  { id: 'psychologist', icon: Brain, label: 'niche.psychologist', color: 'from-blue-500 to-cyan-600' },
-  { id: 'fitness', icon: Dumbbell, label: 'niche.fitness', color: 'from-green-500 to-emerald-600' },
-  { id: 'musician', icon: Music, label: 'niche.musician', color: 'from-red-500 to-rose-600' },
-  { id: 'designer', icon: Palette, label: 'niche.designer', color: 'from-indigo-500 to-violet-600' },
-  { id: 'teacher', icon: GraduationCap, label: 'niche.teacher', color: 'from-yellow-500 to-amber-600' },
-  { id: 'shop', icon: Store, label: 'niche.shop', color: 'from-teal-500 to-green-600' },
-  { id: 'marketer', icon: Megaphone, label: 'niche.marketer', color: 'from-orange-500 to-red-600' },
-  { id: 'beauty', icon: Heart, label: 'niche.beauty', color: 'from-pink-500 to-rose-600' },
-  { id: 'chef', icon: ChefHat, label: 'niche.chef', color: 'from-amber-600 to-yellow-500' },
-];
+// Map niches to icons
+const NICHE_ICON_MAP: Record<Niche, React.ComponentType<{ className?: string }>> = {
+  beauty: Heart,
+  fitness: Dumbbell,
+  food: ChefHat,
+  education: GraduationCap,
+  art: Palette,
+  music: Music,
+  tech: Laptop,
+  business: Store,
+  health: Brain,
+  fashion: Heart,
+  travel: Plane,
+  realestate: Home,
+  events: PartyPopper,
+  services: Wrench,
+  other: MoreHorizontal,
+};
+
+// Gradient colors for each niche
+const NICHE_COLORS: Record<Niche, string> = {
+  beauty: 'from-pink-500 to-rose-600',
+  fitness: 'from-green-500 to-emerald-600',
+  food: 'from-amber-600 to-yellow-500',
+  education: 'from-yellow-500 to-amber-600',
+  art: 'from-indigo-500 to-violet-600',
+  music: 'from-red-500 to-rose-600',
+  tech: 'from-blue-500 to-cyan-600',
+  business: 'from-teal-500 to-green-600',
+  health: 'from-purple-500 to-pink-600',
+  fashion: 'from-pink-400 to-fuchsia-600',
+  travel: 'from-sky-500 to-blue-600',
+  realestate: 'from-orange-500 to-red-600',
+  events: 'from-violet-500 to-purple-600',
+  services: 'from-gray-500 to-slate-600',
+  other: 'from-gray-400 to-gray-600',
+};
 
 export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboardingProps) {
   const { t } = useTranslation();
   const [step, setStep] = useState<'niche' | 'details' | 'generating'>('niche');
-  const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
+  const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
   const [name, setName] = useState('');
   const [details, setDetails] = useState('');
   const [generating, setGenerating] = useState(false);
 
-  const handleSelectNiche = (nicheId: string) => {
-    setSelectedNiche(nicheId);
+  const handleSelectNiche = (niche: Niche) => {
+    setSelectedNiche(niche);
     setStep('details');
   };
 
@@ -96,7 +127,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
       }));
 
       toast.success(t('onboarding.pageGenerated'));
-      onComplete(profile, formattedBlocks);
+      onComplete(profile, formattedBlocks, selectedNiche);
       
       // Mark onboarding as completed
       localStorage.setItem('linkmax_niche_onboarding_completed', 'true');
@@ -131,18 +162,22 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
             </DialogHeader>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 py-6">
-              {NICHES.map((niche) => (
-                <Card
-                  key={niche.id}
-                  onClick={() => handleSelectNiche(niche.id)}
-                  className="p-4 cursor-pointer hover:scale-105 transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50"
-                >
-                  <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${niche.color} flex items-center justify-center mb-3 mx-auto`}>
-                    <niche.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <p className="text-sm font-medium text-center">{t(niche.label)}</p>
-                </Card>
-              ))}
+              {NICHES.map((niche) => {
+                const Icon = NICHE_ICON_MAP[niche];
+                const color = NICHE_COLORS[niche];
+                return (
+                  <Card
+                    key={niche}
+                    onClick={() => handleSelectNiche(niche)}
+                    className="p-4 cursor-pointer hover:scale-105 transition-all duration-200 hover:shadow-lg border-2 hover:border-primary/50"
+                  >
+                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-3 mx-auto`}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <p className="text-sm font-medium text-center">{t(`niches.${niche}`, niche)}</p>
+                  </Card>
+                );
+              })}
             </div>
 
             <div className="flex justify-center">

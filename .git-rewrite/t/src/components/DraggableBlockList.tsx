@@ -101,12 +101,24 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
         return `Аватар: ${getTranslatedString(block.name, currentLang)}`;
       case 'separator':
         return `Разделитель`;
+      case 'catalog':
+        return `Каталог: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.items?.length || 0} позиций`}`;
+      case 'before_after':
+        return `До/После: ${block.title ? getTranslatedString(block.title, currentLang) : 'Сравнение'}`;
+      case 'faq':
+        return `FAQ: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.items?.length || 0} вопросов`}`;
+      case 'countdown':
+        return `Таймер: ${block.title ? getTranslatedString(block.title, currentLang) : 'Обратный отсчёт'}`;
+      case 'pricing':
+        return `Прайс: ${block.title ? getTranslatedString(block.title, currentLang) : `${block.items?.length || 0} услуг`}`;
+      case 'shoutout':
+        return `Шаут-аут: ${(block as any).displayName || 'Рекомендация'}`;
       default:
         return 'Неизвестный блок';
     }
   };
 
-  const isPremiumBlock = block.type === 'video' || block.type === 'carousel' || block.type === 'custom_code' || block.type === 'form' || block.type === 'newsletter' || block.type === 'testimonial' || block.type === 'scratch' || block.type === 'search';
+  const isPremiumBlock = block.type === 'video' || block.type === 'carousel' || block.type === 'custom_code' || block.type === 'form' || block.type === 'newsletter' || block.type === 'testimonial' || block.type === 'scratch' || block.type === 'search' || block.type === 'catalog' || block.type === 'countdown';
 
   const isFirst = index === 0;
   const isLast = index === totalCount - 1;

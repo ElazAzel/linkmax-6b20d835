@@ -227,6 +227,68 @@ export function createBlock(type: string): Block {
         spacing: 'md',
       };
     
+    case 'catalog':
+      return {
+        id: `catalog-${timestamp}`,
+        type: 'catalog',
+        title: 'Каталог',
+        items: [],
+        categories: [],
+        layout: 'list',
+        showPrices: true,
+        currency: 'KZT',
+        isPremium: true,
+      };
+    
+    case 'before_after':
+      return {
+        id: `before_after-${timestamp}`,
+        type: 'before_after',
+        title: 'До и После',
+        beforeImage: '',
+        afterImage: '',
+        beforeLabel: 'До',
+        afterLabel: 'После',
+      };
+    
+    case 'faq':
+      return {
+        id: `faq-${timestamp}`,
+        type: 'faq',
+        title: 'Частые вопросы',
+        items: [],
+      };
+    
+    case 'countdown':
+      return {
+        id: `countdown-${timestamp}`,
+        type: 'countdown',
+        title: 'До конца акции',
+        targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        showDays: true,
+        showHours: true,
+        showMinutes: true,
+        showSeconds: true,
+        isPremium: true,
+      };
+    
+    case 'pricing':
+      return {
+        id: `pricing-${timestamp}`,
+        type: 'pricing',
+        title: 'Прайс-лист',
+        items: [],
+        currency: 'KZT',
+      };
+    
+    case 'shoutout':
+      return {
+        id: `shoutout-${timestamp}`,
+        type: 'shoutout',
+        userId: '',
+        message: 'Рекомендую этого специалиста!',
+      };
+    
     default:
       throw new Error(`Unknown block type: ${type}`);
   }

@@ -61,7 +61,7 @@ export const SearchBlock = memo(function SearchBlockComponent({ block }: SearchB
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder={placeholder}
-          className="pr-12 h-14 rounded-2xl bg-background/50 backdrop-blur-xl border-border/50 focus:border-primary/50 transition-colors"
+          className="pr-12 h-14 rounded-2xl bg-card border-border shadow-sm focus:border-primary transition-colors"
         />
         <Button
           onClick={handleSearch}
@@ -78,7 +78,7 @@ export const SearchBlock = memo(function SearchBlockComponent({ block }: SearchB
       </div>
 
       {result && (
-        <Card className="p-6 bg-background/50 backdrop-blur-xl border-border/50 rounded-2xl">
+        <Card className="p-6 bg-card border-border shadow-sm rounded-2xl">
           <p className="text-foreground whitespace-pre-wrap">{result.answer}</p>
           {result.sources && result.sources.length > 0 && (
             <div className="mt-4 pt-4 border-t border-border/50">

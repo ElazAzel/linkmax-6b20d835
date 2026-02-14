@@ -1,28 +1,27 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateSearchBlock } from '@/lib/block-validators';
+import { useTranslation } from 'react-i18next';
+import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
+import { migrateToMultilingual } from '@/lib/i18n-helpers';
 
 function SearchBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <div>
-        <Label>Title (optional)</Label>
-        <Input
-          value={formData.title || ''}
-          onChange={(e) => onChange({ ...formData, title: e.target.value })}
-          placeholder="Ask me anything"
-        />
-      </div>
+      <MultilingualInput
+        label={`${t('fields.title', 'Title')} (${t('fields.optional', 'optional')})`}
+        value={migrateToMultilingual(formData.title)}
+        onChange={(value) => onChange({ ...formData, title: value })}
+        placeholder="Ask me anything"
+      />
 
-      <div>
-        <Label>Placeholder Text</Label>
-        <Input
-          value={formData.placeholder || 'Ask a question...'}
-          onChange={(e) => onChange({ ...formData, placeholder: e.target.value })}
-          placeholder="Ask a question..."
-        />
-      </div>
+      <MultilingualInput
+        label={t('fields.placeholder', 'Placeholder Text')}
+        value={migrateToMultilingual(formData.placeholder)}
+        onChange={(value) => onChange({ ...formData, placeholder: value })}
+        placeholder="Ask a question..."
+      />
     </div>
   );
 }

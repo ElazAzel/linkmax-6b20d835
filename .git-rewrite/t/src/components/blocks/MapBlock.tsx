@@ -48,7 +48,7 @@ export function MapBlock({ block }: MapBlockProps) {
 
       <div 
         className={cn(
-          "w-full rounded-lg overflow-hidden border",
+          "w-full rounded-lg overflow-hidden border border-border",
           height
         )}
       >

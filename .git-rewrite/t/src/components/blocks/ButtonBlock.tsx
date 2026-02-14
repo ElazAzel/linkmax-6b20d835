@@ -1,30 +1,66 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getTranslatedString, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { createBlockClickHandler, getBackgroundStyle, getHoverClass } from '@/lib/block-utils';
+import { createBlockClickHandler, getHoverClass } from '@/lib/block-utils';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
 
 interface ButtonBlockProps {
   block: ButtonBlockType;
+  onClick?: () => void;
 }
 
-export const ButtonBlock = memo(function ButtonBlockComponent({ block }: ButtonBlockProps) {
+export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }: ButtonBlockProps) {
   const { i18n } = useTranslation();
-  const handleClick = createBlockClickHandler(block.url);
+  const handleClick = createBlockClickHandler(block.url, onClick);
   const title = getTranslatedString(block.title, i18n.language as SupportedLanguage);
 
-  const alignmentClass = block.alignment === 'left' ? 'mr-auto' 
-    : block.alignment === 'right' ? 'ml-auto' 
-    : 'mx-auto';
+  const alignmentClass = block.alignment === 'left' ? 'justify-start' 
+    : block.alignment === 'right' ? 'justify-end' 
+    : 'justify-center';
+
+  // Get background styles
+  const getButtonStyle = (): React.CSSProperties => {
+    if (!block.background || !block.background.value) {
+      return {};
+    }
+    
+    switch (block.background.type) {
+      case 'gradient':
+        return {
+          background: `linear-gradient(${block.background.gradientAngle || 135}deg, ${block.background.value})`,
+        };
+      case 'image':
+        return {
+          backgroundImage: `url(${block.background.value})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        };
+      case 'solid':
+        return {
+          backgroundColor: block.background.value,
+        };
+      default:
+        return {};
+    }
+  };
+
+  const hasCustomBackground = block.background && block.background.value;
+  const buttonStyle = getButtonStyle();
+
+  const widthClass = block.width === 'full' ? 'w-full' 
+    : block.width === 'small' ? 'w-auto min-w-[120px]' 
+    : 'w-full sm:w-auto sm:min-w-[280px] sm:max-w-md';
 
   return (
-    <div className={`flex ${block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'}`}>
+    <div className={`flex ${alignmentClass}`}>
       <button
         onClick={handleClick}
-        className={`${alignmentClass} max-w-full sm:max-w-md relative overflow-hidden rounded-2xl px-8 py-6 text-lg font-semibold text-white backdrop-blur-xl ${getHoverClass(block.hoverEffect)}`}
-        style={getBackgroundStyle(block.background)}
+        className={`${widthClass} relative overflow-hidden rounded-2xl px-8 py-4 text-base font-semibold shadow-glass-lg backdrop-blur-xl ${getHoverClass(block.hoverEffect)} transition-all duration-300 hover:shadow-glass-xl hover:scale-[1.02] active:scale-[0.98] ${hasCustomBackground ? 'text-white drop-shadow-md' : 'bg-primary text-primary-foreground border border-primary/20'}`}
+        style={buttonStyle}
       >
         <span className="relative z-10">{title}</span>
+        {/* Glass reflection overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
       </button>
     </div>
   );

@@ -10,7 +10,7 @@ interface ScratchBlockProps {
 }
 
 export const ScratchBlock = memo(function ScratchBlock({ block }: ScratchBlockProps) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isRevealed, setIsRevealed] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScratching, setIsScratching] = useState(false);
@@ -41,7 +41,7 @@ export const ScratchBlock = memo(function ScratchBlock({ block }: ScratchBlockPr
     ctx.fillStyle = '#808080';
     ctx.font = 'bold 16px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('👆 Потрите здесь', canvas.width / 2, canvas.height / 2);
+    ctx.fillText(t('scratch.scratchHere', '👆 Scratch here'), canvas.width / 2, canvas.height / 2);
   }, [block.backgroundColor]);
 
   const scratch = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -82,7 +82,7 @@ export const ScratchBlock = memo(function ScratchBlock({ block }: ScratchBlockPr
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-card border-border shadow-sm">
       {title && (
         <div className="flex items-center gap-2 mb-4">
           <h3 className="font-semibold text-lg">{title}</h3>
@@ -115,7 +115,7 @@ export const ScratchBlock = memo(function ScratchBlock({ block }: ScratchBlockPr
         )}
       </div>
       <p className="text-xs text-center text-muted-foreground mt-2">
-        {isRevealed ? '🎉 Открыто!' : 'Потрите слой, чтобы открыть сюрприз'}
+        {isRevealed ? t('scratch.revealed', '🎉 Revealed!') : t('scratch.hint', 'Scratch the layer to reveal a surprise')}
       </p>
     </Card>
   );

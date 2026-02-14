@@ -6,67 +6,160 @@ LinkMAX is a modern alternative to Linktree, Taplink, and similar services, offe
 
 ## ✨ Key Features
 
-### 🎨 **Visual Editor**
+### 🎨 Visual Editor
 - Intuitive drag-and-drop block system
-- Real-time preview
-- Multiple customizable block types
-- Responsive design for all devices
+- Real-time preview with auto-save
+- 15+ customizable block types
+- Mobile-first responsive design
+- Swipe gestures and haptic feedback
 
-### 🤖 **AI-Powered Tools**
+### 🤖 AI-Powered Tools
 - **Magic Title** - Generate compelling button headlines from URLs
 - **Sales Copy** - Auto-generate product descriptions
 - **SEO Generator** - Create optimized meta tags
-- **AI Builder** - Scaffold entire pages from account descriptions
+- **AI Builder** - Scaffold entire pages from niche selection
 - **AI Chatbot** - Interactive visitor support widget
+- **Auto-Translation** - Translate content across 3 languages (RU, EN, KK)
 
-### 📦 **Block Types**
-- **Links & Socials** - Customizable button blocks with icons
+### 📦 Block Types
+- **Profile** - Avatar, cover, name, bio with inline editing
+- **Links & Buttons** - Customizable with icons and backgrounds
 - **Media** - YouTube/Vimeo videos and image galleries
 - **Carousels** - Image sliders with multiple items
 - **Text** - Headers, paragraphs, quotes
-- **Shop** - Product cards with pricing and cart
+- **Products** - Product cards with pricing and cart
+- **Catalog** - Categorized item listings
 - **Messenger** - WhatsApp, Telegram, Viber integration
-- **Forms** - Contact forms with validation
+- **Forms** - Contact forms with CRM integration
 - **Downloads** - File sharing with counters
 - **Newsletter** - Email subscription forms
 - **Testimonials** - Customer reviews with ratings
-- **Scratch Cards** - Interactive scratch-off layers
-- **Search** - Real-time Google-powered search
+- **FAQ** - Accordion-style Q&A sections
+- **Countdown** - Event/promotion timers
+- **Pricing** - Service/product pricing tables
+- **Before/After** - Image comparison sliders
+- **Map** - Embedded Google/Yandex maps
+- **Custom Code** - HTML/CSS injection (Premium)
 
-### 🎨 **Customization**
-- Gradient backgrounds
-- Glassmorphism effects
-- Neon glows and shadows
-- Animated avatar frames
+### 🎨 Customization
+- Liquid Glass design system
+- Gradient backgrounds with mesh effects
+- Glassmorphism and blur effects
+- Animated avatar frames (Neon, Glitch, Aura)
+- Block entrance animations
 - Custom CSS support (Premium)
 
-### 📊 **Analytics** (Premium)
+### 📊 Analytics & CRM (Premium)
 - Page view tracking
 - Click-through rates per block
 - Traffic source attribution
-- Geographic and device breakdowns
+- Mini-CRM for lead management
+- Automatic lead capture from forms
 
-### 🔐 **Authentication & Security**
+### 🌍 Internationalization
+- Full i18n support (Russian, English, Kazakh)
+- Multilingual block content
+- Auto-detection by browser language
+- AI-powered translation
+
+### 🔐 Authentication & Security
 - Email/password authentication
-- Google & GitHub OAuth
+- Google & Apple OAuth
 - Secure data storage with Supabase
 - Row-level security policies
+- Rate limiting on AI endpoints
 
 ## 🚀 Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite
 - **Styling**: Tailwind CSS, shadcn/ui
 - **Backend**: Supabase (PostgreSQL, Edge Functions)
-- **AI**: Google Gemini 2.5 Flash
+- **AI**: Google Gemini 2.5 Flash via Lovable AI
 - **Drag & Drop**: dnd-kit
 - **Forms**: React Hook Form + Zod
 - **Routing**: React Router v6
+- **i18n**: i18next
+- **PWA**: vite-plugin-pwa
 
-## 📋 Installation
+## 📁 Project Architecture
+
+```
+src/
+├── components/
+│   ├── blocks/           # Block renderers (ProfileBlock, LinkBlock, etc.)
+│   ├── block-editors/    # Block editor components
+│   ├── dashboard/        # Dashboard UI components
+│   ├── ui/               # shadcn/ui components
+│   └── ...
+├── hooks/
+│   ├── useDashboard.ts         # Main dashboard state orchestrator
+│   ├── useBlockEditor.tsx      # Block CRUD operations with undo
+│   ├── useDashboardOnboarding.ts
+│   ├── useDashboardSharing.ts
+│   ├── useDashboardUsername.ts
+│   ├── useDashboardAI.ts
+│   ├── usePremiumStatus.ts
+│   └── ...
+├── services/
+│   ├── pages.ts          # Page data operations
+│   ├── user.ts           # User profile operations
+│   └── index.ts
+├── lib/
+│   ├── constants.ts      # App config and defaults
+│   ├── url-helpers.ts    # URL generation utilities
+│   ├── block-utils.ts    # Block manipulation helpers
+│   └── ...
+├── types/
+│   ├── blocks.ts         # Block editor types
+│   ├── api.ts            # API response types
+│   ├── page.ts           # Page and block types
+│   └── index.ts
+├── pages/
+│   ├── Dashboard.tsx     # Main editor page
+│   ├── PublicPage.tsx    # Public page renderer
+│   ├── Auth.tsx          # Authentication
+│   └── ...
+└── i18n/
+    └── locales/          # Translation files (en, ru, kk)
+
+supabase/
+├── functions/            # Edge Functions
+│   ├── ai-content-generator/
+│   ├── chatbot-stream/
+│   ├── translate-content/
+│   └── ...
+└── migrations/           # Database migrations
+```
+
+## 🎯 Target Audiences
+
+- **Instagram & TikTok Creators** - Overcome single-link bio restrictions
+- **Freelancers & Experts** - Quick portfolio and service pricing
+- **Small Businesses** - Lightweight product showcases
+- **Musicians & Artists** - Aggregate streaming, merch, and ticket links
+
+## 💎 Freemium Model
+
+**Free Tier:**
+- 5 blocks per page
+- Basic block types
+- 3 AI requests per day
+- Watermark on public pages
+
+**Premium Tier:**
+- Unlimited blocks
+- All block types including Catalog, Countdown, FAQ, Pricing
+- Unlimited AI requests
+- Mini-CRM access
+- Custom CSS
+- No watermark
+- 2-day free trial
+
+## 🛠️ Development
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Supabase account (or use Lovable Cloud)
+- Lovable Cloud account (includes Supabase)
 
 ### Setup
 
@@ -81,65 +174,9 @@ cd linkmax
 npm install
 ```
 
-3. Configure environment variables:
-```bash
-# .env file is auto-generated with Lovable Cloud
-# Or manually set:
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_PUBLISHABLE_KEY=your_anon_key
-```
-
-4. Run database migrations:
-```bash
-# Migrations are in supabase/migrations/
-# Apply via Supabase CLI or Lovable Cloud dashboard
-```
-
-5. Start development server:
+3. Start development server:
 ```bash
 npm run dev
-```
-
-## 🎯 Target Audiences
-
-- **Instagram & TikTok Creators** - Overcome single-link bio restrictions
-- **Freelancers & Experts** - Quick portfolio and service pricing
-- **Small Businesses** - Lightweight product showcases
-- **Musicians & Artists** - Aggregate streaming, merch, and ticket links
-
-## 💎 Premium Features
-
-- Image carousels
-- Video embeds (YouTube/Vimeo)
-- Animated avatar frames (Neon, Glitch, Aura)
-- Custom CSS injection
-- Unlimited AI chatbot usage
-- Advanced analytics dashboard
-- Messenger blocks
-- Contact forms
-- File downloads
-- Newsletter integration
-
-**Trial**: 7-day free trial with full premium access
-
-## 🛠️ Development
-
-### Project Structure
-```
-linkmax/
-├── src/
-│   ├── components/       # React components
-│   │   ├── blocks/      # Block type components
-│   │   └── ui/          # shadcn/ui components
-│   ├── hooks/           # Custom React hooks
-│   ├── lib/             # Utility functions
-│   ├── pages/           # Route pages
-│   ├── types/           # TypeScript types
-│   └── integrations/    # Supabase client
-├── supabase/
-│   ├── functions/       # Edge Functions
-│   └── migrations/      # Database migrations
-└── public/              # Static assets
 ```
 
 ### Available Scripts
@@ -149,6 +186,7 @@ npm run dev          # Start dev server
 npm run build        # Build for production
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
+npm run test         # Run tests
 ```
 
 ## 🔒 Security
@@ -158,17 +196,15 @@ npm run lint         # Run ESLint
 - Rate limiting on AI endpoints
 - Zod schema validation
 - Secure authentication flow
+- Private chatbot context storage
 
-## 📱 Deployment
+## 📱 PWA Support
 
-### Via Lovable (Recommended)
-1. Click "Publish" in Lovable editor
-2. Connect custom domain (optional)
-
-### Manual Deployment
-- **Frontend**: Deploy to Vercel, Netlify, or any static host
-- **Backend**: Supabase handles database and edge functions
-- Set environment variables in hosting platform
+LinkMAX is a full Progressive Web App:
+- Installable on mobile and desktop
+- Offline-capable with service worker caching
+- Platform-specific installation guides
+- Push notification ready
 
 ## 🤝 Contributing
 
@@ -182,21 +218,12 @@ Contributions are welcome! Please follow these guidelines:
 
 ## 📄 License
 
-This project is built with [Lovable](https://lovable.dev) and uses:
 - React (MIT License)
 - Tailwind CSS (MIT License)
 - Supabase (Apache 2.0 License)
 
 ## 🔗 Links
 
-- **Lovable Project**: https://lovable.dev/projects/fa95b512-ab1c-4c64-b3f9-74add033a9a4
-- **Documentation**: https://docs.lovable.dev
-- **Support**: Open an issue or contact via Lovable Discord
+- **Live Demo**: https://lnkmx.my
 
-## 📸 Screenshots
 
-_Coming soon - Add screenshots of your deployed LinkMAX pages_
-
----
-
-**Built with ❤️ using [Lovable](https://lovable.dev)**

@@ -45,13 +45,17 @@ const ALL_BLOCKS = [
   { type: 'avatar', label: 'Avatar', icon: '👤', category: 'Content', premium: false },
   { type: 'separator', label: 'Separator', icon: '➖', category: 'Content', premium: false },
   { type: 'map', label: 'Map', icon: '🗺️', category: 'Content', premium: false },
+  { type: 'before_after', label: 'Before/After', icon: '🔄', category: 'Content', premium: false },
+  { type: 'faq', label: 'FAQ', icon: '❓', category: 'Content', premium: false },
   
   // Shop & Products
   { type: 'product', label: 'Product', icon: '🛍️', category: 'Shop', premium: false },
+  { type: 'catalog', label: 'Catalog', icon: '📋', category: 'Shop', premium: true },
+  { type: 'pricing', label: 'Pricing', icon: '💰', category: 'Shop', premium: false },
   { type: 'download', label: 'Download', icon: '📥', category: 'Shop', premium: true },
   
   // Forms & Communication
-  { type: 'form', label: 'Form', icon: '📋', category: 'Forms', premium: true },
+  { type: 'form', label: 'Form', icon: '📝', category: 'Forms', premium: true },
   { type: 'newsletter', label: 'Newsletter', icon: '✉️', category: 'Forms', premium: true },
   { type: 'messenger', label: 'Messengers', icon: '💬', category: 'Forms', premium: true },
   
@@ -59,6 +63,10 @@ const ALL_BLOCKS = [
   { type: 'testimonial', label: 'Testimonials', icon: '⭐', category: 'Interactive', premium: true },
   { type: 'scratch', label: 'Scratch Card', icon: '🎁', category: 'Interactive', premium: true },
   { type: 'search', label: 'AI Search', icon: '🔍', category: 'Interactive', premium: true },
+  { type: 'countdown', label: 'Countdown', icon: '⏰', category: 'Interactive', premium: true },
+  
+  // Social
+  { type: 'shoutout', label: 'Shoutout', icon: '📣', category: 'Social', premium: false },
   
   // Advanced
   { type: 'custom_code', label: 'Custom Code', icon: '💻', category: 'Advanced', premium: true },
@@ -115,17 +123,17 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         variant="default"
         size="lg"
         onClick={() => setIsOpen(true)}
-        className="h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95"
+        className="h-14 w-14 rounded-2xl shadow-glass-lg backdrop-blur-xl hover:shadow-glass-xl transition-all active:scale-95 hover:-translate-y-1"
         data-onboarding="add-block"
       >
         <Plus className="h-6 w-6" />
       </Button>
-      <SheetContent side="bottom" className="h-[85vh] p-0">
-        <SheetHeader className="p-4 pb-2 border-b sticky top-0 bg-background z-10">
+      <SheetContent side="bottom" className="h-[85vh] p-0 bg-card/80 backdrop-blur-2xl border-t border-border/30 rounded-t-3xl">
+        <SheetHeader className="p-4 pb-2 border-b border-border/30 sticky top-0 bg-card/60 backdrop-blur-xl z-10">
           <div className="flex items-center justify-between">
-            <SheetTitle>Add Block</SheetTitle>
+            <SheetTitle className="text-lg font-semibold">Add Block</SheetTitle>
             {!isPremium && (
-              <Badge variant={isAtBlockLimit ? 'destructive' : 'secondary'} className="text-xs">
+              <Badge variant={isAtBlockLimit ? 'destructive' : 'secondary'} className="text-xs backdrop-blur-sm">
                 {remainingBlocks > 0 ? `${remainingBlocks} осталось` : 'Лимит'}
               </Badge>
             )}
@@ -137,13 +145,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               placeholder="Search blocks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10"
+              className="pl-9 h-11 rounded-xl bg-background/50 backdrop-blur-sm border-border/30"
             />
           </div>
           {isAtBlockLimit && (
             <button
               onClick={openPremiumPurchase}
-              className="mt-2 p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg w-full text-left hover:bg-amber-500/20 transition-colors"
+              className="mt-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl w-full text-left hover:bg-amber-500/20 transition-colors backdrop-blur-sm"
             >
               <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
                 <Crown className="h-3.5 w-3.5" />
@@ -166,14 +174,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     onClick={() => handleInsert(block.type, block.premium)}
                     disabled={block.premium && !isPremium}
                     className={cn(
-                      "relative flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all active:scale-95",
+                      "relative flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all active:scale-95",
                       block.premium && !isPremium
-                        ? "bg-muted/50 border-border cursor-not-allowed opacity-60"
-                        : "bg-card border-border hover:border-primary hover:bg-accent cursor-pointer"
+                        ? "bg-muted/30 border-border/30 cursor-not-allowed opacity-60 backdrop-blur-sm"
+                        : "bg-card/60 backdrop-blur-xl border-border/30 hover:border-primary/50 hover:bg-card/80 hover:shadow-glass cursor-pointer"
                     )}
                   >
                     {block.premium && !isPremium && (
-                      <Lock className="absolute top-1.5 right-1.5 h-3 w-3 text-muted-foreground" />
+                      <Lock className="absolute top-2 right-2 h-3 w-3 text-muted-foreground" />
                     )}
                     <span className="text-2xl">{block.icon}</span>
                     <span className="text-xs font-medium text-center leading-tight">
@@ -200,9 +208,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost"
+          variant="glass"
           size="sm"
-          className="h-8 w-8 p-0 rounded-full border-2 border-dashed border-primary/50 hover:border-primary hover:bg-primary/10 transition-all"
+          className="h-9 w-9 p-0 rounded-xl border-2 border-dashed border-primary/40 hover:border-primary hover:bg-primary/10 transition-all shadow-glass"
           data-onboarding="add-block"
         >
           <Plus className="h-4 w-4 text-primary" />
@@ -210,20 +218,20 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="center" 
-        className="w-64 bg-card z-50 max-h-[75vh] overflow-hidden p-2"
-        sideOffset={5}
+        className="w-72 bg-card/80 backdrop-blur-2xl border border-border/30 z-50 max-h-[75vh] overflow-hidden p-3 rounded-2xl shadow-glass-xl"
+        sideOffset={8}
       >
-        <div className="sticky top-0 bg-card z-10 pb-2">
-          <DropdownMenuLabel className="text-xs text-muted-foreground px-2">
+        <div className="sticky top-0 bg-transparent z-10 pb-2">
+          <DropdownMenuLabel className="text-xs text-muted-foreground px-2 font-semibold">
             Add Block
           </DropdownMenuLabel>
-          <div className="relative px-2 pt-2">
-            <Search className="absolute left-4 top-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <div className="relative px-1 pt-2">
+            <Search className="absolute left-3.5 top-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <Input
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 h-8 text-sm"
+              className="pl-8 h-9 text-sm rounded-xl bg-background/50 backdrop-blur-sm border-border/30"
             />
           </div>
         </div>
@@ -231,8 +239,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         <div className="overflow-y-auto max-h-[60vh] mt-2">
           {Object.entries(blocksByCategory).map(([category, blocks], idx) => (
             <div key={category}>
-              {idx > 0 && <DropdownMenuSeparator className="my-2" />}
-              <DropdownMenuLabel className="text-xs text-muted-foreground px-2 py-1">
+              {idx > 0 && <DropdownMenuSeparator className="my-2 bg-border/30" />}
+              <DropdownMenuLabel className="text-xs text-muted-foreground px-2 py-1.5 font-medium">
                 {category}
               </DropdownMenuLabel>
               {blocks.map((block) => (
@@ -241,12 +249,12 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                   onClick={() => handleInsert(block.type, block.premium)}
                   disabled={block.premium && !isPremium}
                   className={cn(
-                    "cursor-pointer transition-colors rounded-lg mx-1 my-0.5",
+                    "cursor-pointer transition-all rounded-xl mx-1 my-0.5 hover:bg-card/80 hover:backdrop-blur-xl",
                     block.premium && !isPremium && "opacity-60"
                   )}
                 >
-                  <span className="mr-2 text-base">{block.icon}</span>
-                  <span className="flex-1">{block.label}</span>
+                  <span className="mr-3 text-lg">{block.icon}</span>
+                  <span className="flex-1 font-medium">{block.label}</span>
                   {block.premium && !isPremium && (
                     <Lock className="h-3 w-3 text-muted-foreground ml-2" />
                   )}
