@@ -332,7 +332,7 @@ export function BlockEditorV2({
             <DialogContent className="sm:max-w-[425px] rounded-2xl">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-2 text-center sm:text-left">
-                        <h3 className="text-lg font-bold">{t('editor.unsavedChanges', 'Несохраненные изменения')}</h3>
+                        <DialogTitle className="text-lg font-bold">{t('editor.unsavedChanges', 'Несохраненные изменения')}</DialogTitle>
                         <p className="text-muted-foreground text-sm">
                             {t('editor.unsavedDescription', 'У вас есть изменения, которые еще не были сохранены. Что вы хотите сделать?')}
                         </p>
