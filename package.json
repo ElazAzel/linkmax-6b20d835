@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "vite",
+    "build": "vite build",
     "build:dev": "vite build --mode development",
-    "start": "next start",
+    "start": "vite preview",
     "lint": "eslint .",
     "lint:i18n": "LINT_I18N=true eslint . --ext .ts,.tsx",
     "analyze:deps": "depcruise --config .dependency-cruiser.cjs --output-type text src",
