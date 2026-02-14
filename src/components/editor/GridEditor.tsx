@@ -112,7 +112,7 @@ function SortableGridBlockItem({
       {!isMobile && (
         <div
           className={cn(
-            "absolute top-2 left-2 z-20 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
+            "absolute top-2 left-2 z-30 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
             isDragging && "opacity-0"
           )}
           {...attributes}
@@ -126,11 +126,10 @@ function SortableGridBlockItem({
 
       {/* Block content */}
       <div
-        className="w-full h-full cursor-pointer"
-        onClickCapture={(e) => {
-          // Capture the click event before it reaches the block content
-          // This prevents links from opening and buttons from firing their actions
-          // when we just want to select/edit the block
+        className="w-full h-full cursor-pointer relative z-0"
+        onClick={(e) => {
+          // Use bubble phase to catch clicks from children (like links)
+          // and prevent them while triggering edit
           e.stopPropagation();
           e.preventDefault();
           onEdit(block);
@@ -141,7 +140,7 @@ function SortableGridBlockItem({
 
       {/* Edit/Delete - visible on hover (desktop) or always (mobile) */}
       <div className={cn(
-        "absolute top-2 right-2 flex gap-1.5 z-10 transition-opacity",
+        "absolute top-2 right-2 flex gap-1.5 z-30 transition-opacity",
         isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
       )}>
         <Button
