@@ -1,14 +1,11 @@
-tree 0d8f92e03dc3a0ac76b54863fb02c92192f5db01
-parent 4087a1573e8b65dccbe22df1e1d3907801e621e2
-parent b64bda8e43902bbec71060ddced4f45e92f11fd3
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1769498298 +0000
+tree b641483efb590307718051e24e140f77e28df17c
+parent 53c79de845b436c5b7df9b487bf4cb241194e46c
+parent a23d2a0cc489fe0c82276a4e54c4fbe044d60cc8
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1764225633 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1764225633 +0000
 
-Enhance SEO with AEO/GEO
+Add ai content edge function
 
-Add advanced AEO/GEO utilities, auto FAQ, GEO schemas, enhanced
-CrawlerFriendlyContent, and Cloudflare Prerender worker integration.
-Includes new answer-block, auto-faq, geo-schemas, key-facts, entity linking,
-SEO index, tests, and extensive TS/JSX updates with multilingual support.
+Implement a new Supabase Edge Function at supabase/functions/ai-content-generator to generate content (magic-title, sales-copy, seo, ai-builder) using Gemini 2.5 Flash via Lovable AI, and integrate with Dashboard UI hooks. Update config.toml for function exposure and prepare frontend components to invoke the new AI endpoints.
 
-X-Lovable-Edit-ID: edt-ebfab774-d60f-4088-9017-a88a2dfd2232
+X-Lovable-Edit-ID: edt-c056bd6a-3c68-4a2b-b367-8ca8315c9dcd
