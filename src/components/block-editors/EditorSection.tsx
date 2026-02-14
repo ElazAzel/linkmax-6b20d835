@@ -129,12 +129,12 @@ export const EditorSection = memo(function EditorSection({
     <motion.div
       initial={false}
       className={cn(
-        "rounded-2xl overflow-hidden transition-shadow duration-200",
-        "bg-card/50 backdrop-blur-sm",
+        "rounded-2xl overflow-hidden transition-all duration-300",
+        "glass-card backdrop-blur-xl",
         hasError
-          ? "border-2 border-destructive/50 shadow-destructive/10"
-          : "border border-border/10",
-        isOpen && "shadow-sm"
+          ? "border-2 border-destructive/50 ring-4 ring-destructive/10"
+          : "border-white/10 shadow-glass",
+        isOpen && "shadow-glass-lg"
       )}
     >
       {/* Header button */}

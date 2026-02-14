@@ -14,10 +14,10 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
   const { i18n } = useTranslation();
   const content = getI18nText(block.content, i18n.language as SupportedLanguage);
   const parsedContent = parseRichText(content);
-  
-  const alignmentClass = block.alignment === 'center' ? 'text-center' 
-    : block.alignment === 'right' ? 'text-right' 
-    : 'text-left';
+
+  const alignmentClass = block.alignment === 'center' ? 'text-center'
+    : block.alignment === 'right' ? 'text-right'
+      : 'text-left';
 
   // Get custom block styles
   const { style: customStyle, textEffectClass } = getBlockStyles(block.blockStyle);
@@ -26,12 +26,12 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
   switch (block.style) {
     case 'heading':
       return (
-        <h2 
+        <h2
           className={cn(
-            "text-xl sm:text-2xl font-bold break-words hyphens-auto leading-tight",
+            "text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight break-words hyphens-auto leading-[1.1]",
+            "text-gradient bg-[length:200%_auto] animate-gradient-x",
             alignmentClass,
-            textEffectClass,
-            !hasBlockStyle && 'text-foreground'
+            textEffectClass
           )}
           style={customStyle}
         >
@@ -40,12 +40,14 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
       );
     case 'quote':
       return (
-        <blockquote 
+        <blockquote
           className={cn(
-            "border-l-4 border-primary pl-3 sm:pl-4 italic whitespace-pre-line break-words hyphens-auto text-sm sm:text-base",
+            "relative p-4 sm:p-6 rounded-2xl",
+            "glass backdrop-blur-md border-l-4 border-primary/50 shadow-glass",
+            "italic whitespace-pre-line break-words hyphens-auto text-sm sm:text-base lg:text-lg font-medium",
             alignmentClass,
             textEffectClass,
-            !hasBlockStyle && 'text-muted-foreground'
+            !hasBlockStyle && 'text-foreground/90'
           )}
           style={customStyle}
         >
@@ -54,7 +56,7 @@ export const TextBlock = memo(function TextBlockComponent({ block }: TextBlockPr
       );
     default:
       return (
-        <p 
+        <p
           className={cn(
             "whitespace-pre-line break-words hyphens-auto text-sm sm:text-base leading-relaxed",
             alignmentClass,

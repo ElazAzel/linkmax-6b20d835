@@ -50,7 +50,7 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
   }
 
   return (
-    <div 
+    <div
       className="w-full space-y-2"
       style={{
         backgroundColor: block.blockStyle?.backgroundColor,
@@ -63,32 +63,32 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
           <h3 className="font-semibold text-sm">{title}</h3>
         </div>
       )}
-      
+
       <div className="space-y-1.5">
         {block.items.map((item) => {
           const name = getI18nText(item.name, currentLang);
-          const description = item.description 
-            ? getI18nText(item.description, currentLang) 
+          const description = item.description
+            ? getI18nText(item.description, currentLang)
             : '';
-          const period = item.period 
-            ? getI18nText(item.period, currentLang) 
+          const period = item.period
+            ? getI18nText(item.period, currentLang)
             : '';
 
           return (
-            <div 
-              key={item.id} 
+            <div
+              key={item.id}
               className={cn(
-                'flex items-center justify-between gap-3 p-4 rounded-xl',
-                'bg-card border border-border shadow-sm',
-                'transition-all active:scale-[0.99]',
-                item.featured && 'ring-2 ring-primary bg-primary/5'
+                'flex items-center justify-between gap-3 p-4 rounded-2xl',
+                'glass-card backdrop-blur-sm border-white/10 shadow-glass',
+                'transition-all duration-300 active:scale-[0.98] hover:shadow-glass-lg hover:border-white/20',
+                item.featured && 'ring-2 ring-primary bg-primary/10 shadow-primary/20'
               )}
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h4 className="font-medium text-sm truncate">{name}</h4>
+                  <h4 className="font-bold text-sm truncate">{name}</h4>
                   {item.featured && (
-                    <Badge variant="default" className="text-[10px] h-5 px-1.5">
+                    <Badge variant="default" className="text-[10px] h-5 px-2 bg-primary animate-pulse shadow-lg shadow-primary/30">
                       <Star className="h-2.5 w-2.5 mr-0.5 fill-current" />
                       {t('blocks.pricing.hit', 'Хит')}
                     </Badge>
@@ -101,11 +101,11 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
                 )}
               </div>
               <div className="text-right flex-shrink-0">
-                <span className="text-base font-bold text-primary whitespace-nowrap">
+                <span className="text-base font-black text-primary whitespace-nowrap">
                   {formatPrice(item.price, item.currency || block.currency || 'KZT')}
                 </span>
                 {period && (
-                  <p className="text-[10px] text-muted-foreground">{period}</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">{period}</p>
                 )}
               </div>
             </div>

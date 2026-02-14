@@ -27,11 +27,11 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   const { i18n } = useTranslation();
   const [faviconError, setFaviconError] = useState(false);
   const [faviconLoaded, setFaviconLoaded] = useState(false);
-  
+
   const iconMode = block.iconMode || 'auto';
   const isManualMode = iconMode === 'manual';
   const domain = extractDomain(block.url || '');
-  
+
   const getFaviconSrc = (): string | null => {
     if (isManualMode) {
       return block.customIconUrl || null;
@@ -42,20 +42,20 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   };
 
   const faviconSrc = getFaviconSrc();
-  
+
   useEffect(() => {
     setFaviconError(false);
     setFaviconLoaded(false);
   }, [block.url, block.faviconUrl, block.customIconUrl]);
-  
-  const FallbackIcon = block.icon && iconMap[block.icon.toLowerCase()] 
-    ? iconMap[block.icon.toLowerCase()] 
+
+  const FallbackIcon = block.icon && iconMap[block.icon.toLowerCase()]
+    ? iconMap[block.icon.toLowerCase()]
     : Link2;
 
   const handleClick = createBlockClickHandler(block.url, onClick);
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const shouldShowFavicon = faviconSrc && !faviconError;
-  
+
   const handleFaviconError = () => {
     if (!faviconError && domain && faviconSrc === getGoogleFaviconUrl(domain)) {
       const directUrl = getDirectFaviconUrl(domain);
@@ -76,7 +76,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
   // Get custom block styles (new system)
   const { style: blockStyleObj, textEffectClass } = getBlockStyles(block.blockStyle);
   const hasBlockStyle = hasCustomBlockStyle(block.blockStyle);
-  
+
   // Combine styles - new blockStyle takes precedence
   const combinedStyle = { ...legacyBackgroundStyle, ...blockStyleObj };
   const hasAnyCustomStyle = hasLegacyBackground || hasBlockStyle;
@@ -87,13 +87,14 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
       block.alignment === 'left' ? 'justify-start' : block.alignment === 'right' ? 'justify-end' : 'justify-center'
     )}>
       <Button
-        variant="outline"
+        variant="ghost"
         className={cn(
           "w-full justify-between h-auto min-h-[56px] py-3 px-4 sm:px-6",
-          "hover:scale-[1.02] transition-all shadow-sm hover:shadow-md rounded-xl",
+          "glass-button backdrop-blur-md",
+          "hover:scale-[1.02] transition-all shadow-glass hover:shadow-glass-lg rounded-xl",
           "active:scale-[0.98]",
           getButtonClass(block.style),
-          hasAnyCustomStyle ? 'border-transparent hover:bg-transparent' : 'bg-card border-border hover:bg-accent',
+          hasAnyCustomStyle ? 'border-transparent hover:bg-transparent' : 'border-white/10',
           isImageBackground && 'relative overflow-hidden'
         )}
         onClick={handleClick}
@@ -108,7 +109,7 @@ export const LinkBlock = memo(function LinkBlockComponent({ block, onClick }: Li
           isImageBackground && 'relative z-10'
         )}>
           {shouldShowFavicon ? (
-            <img 
+            <img
               src={faviconSrc}
               alt=""
               className="h-6 w-6 flex-shrink-0 rounded-md object-contain"

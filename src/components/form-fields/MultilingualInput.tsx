@@ -9,10 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Languages, Loader2, Plus, X } from 'lucide-react';
-import { 
-  LANGUAGES, 
+import {
+  LANGUAGES,
   LANGUAGE_DEFINITIONS,
-  type MultilingualString, 
+  type MultilingualString,
   type I18nText,
   type LocaleCode,
 } from '@/lib/i18n-helpers';
@@ -91,21 +91,21 @@ export function MultilingualInput({
   compact = false,
 }: MultilingualInputProps) {
   const { t } = useTranslation();
-  
+
   // Determine active languages from value + defaults
   // In compact mode, only show languages that have content + primary
   const [activeLanguages, setActiveLanguages] = useState<LocaleCode[]>(() => {
-    const existingLangs = Object.keys(value || {}).filter(k => 
+    const existingLangs = Object.keys(value || {}).filter(k =>
       (value as I18nText)[k]?.trim()
     );
     // Always include primary language (English)
-    const defaultsToShow = compact 
-      ? [primaryLanguage] 
+    const defaultsToShow = compact
+      ? [primaryLanguage]
       : DEFAULT_LANGUAGE_CODES;
     const combined = new Set([...defaultsToShow, ...existingLangs]);
     return Array.from(combined);
   });
-  
+
   const [activeTab, setActiveTab] = useState<LocaleCode>(primaryLanguage);
   const [isTranslating, setIsTranslating] = useState(false);
   const [languagePickerOpen, setLanguagePickerOpen] = useState(false);
@@ -133,13 +133,13 @@ export function MultilingualInput({
   const handleRemoveLanguage = (langCode: LocaleCode) => {
     // Can't remove primary language (English is mandatory)
     if (langCode === primaryLanguage) return;
-    
+
     setActiveLanguages(prev => prev.filter(l => l !== langCode));
-    
+
     const newValue = { ...value } as I18nText;
     delete newValue[langCode];
     onChange(newValue);
-    
+
     if (activeTab === langCode) {
       setActiveTab(primaryLanguage);
     }
@@ -155,7 +155,7 @@ export function MultilingualInput({
     setIsTranslating(true);
     try {
       const targetLanguages = activeLanguages.filter(l => l !== activeTab);
-      
+
       const { data, error } = await supabase.functions.invoke('translate-content', {
         body: {
           text: sourceText,
@@ -182,7 +182,7 @@ export function MultilingualInput({
 
   const InputComponent = type === 'textarea' ? Textarea : Input;
 
-  const getLanguageInfo = (code: LocaleCode) => 
+  const getLanguageInfo = (code: LocaleCode) =>
     ALL_LANGUAGES[code] || { name: code.toUpperCase(), flag: '🏳️' };
 
   // Grid columns based on language count
@@ -218,7 +218,7 @@ export function MultilingualInput({
             )}
             <span className="hidden sm:inline">{t('ai.translate', 'Перевести')}</span>
           </Button>
-          
+
           {allowAddLanguages && availableLanguages.length > 0 && (
             <Popover open={languagePickerOpen} onOpenChange={setLanguagePickerOpen}>
               <PopoverTrigger asChild>
@@ -262,16 +262,16 @@ export function MultilingualInput({
       </div>
 
       <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as LocaleCode)}>
-        <TabsList className={`grid w-full ${getGridCols()}`}>
+        <TabsList className={`grid w-full ${getGridCols()} glass-card backdrop-blur-md bg-muted/20 border-white/5`}>
           {activeLanguages.map((langCode) => {
             const lang = getLanguageInfo(langCode);
             const hasContent = !!(value as I18nText)[langCode]?.trim();
             const isPrimary = langCode === primaryLanguage;
-            
+
             return (
-              <TabsTrigger 
-                key={langCode} 
-                value={langCode} 
+              <TabsTrigger
+                key={langCode}
+                value={langCode}
                 className="gap-1 relative group"
               >
                 <span>{lang.flag}</span>
@@ -301,7 +301,7 @@ export function MultilingualInput({
 
         {activeLanguages.map((langCode) => {
           const lang = getLanguageInfo(langCode);
-          
+
           return (
             <TabsContent key={langCode} value={langCode} className="mt-2">
               {enableRichText ? (
@@ -310,6 +310,7 @@ export function MultilingualInput({
                   onChange={(text) => handleChange(langCode, text)}
                   placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
                   type={type}
+                  variant="glass"
                 />
               ) : (
                 <InputComponent
@@ -317,6 +318,7 @@ export function MultilingualInput({
                   onChange={(e) => handleChange(langCode, e.target.value)}
                   placeholder={placeholder ? `${placeholder} (${lang.name})` : undefined}
                   className={type === 'textarea' ? 'min-h-[100px]' : ''}
+                  variant="glass"
                 />
               )}
               {langCode === primaryLanguage && required && (

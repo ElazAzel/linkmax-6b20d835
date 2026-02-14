@@ -189,7 +189,7 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
               getFrameSize(),
             )}
             style={{
-              ...getShadowStyles(block.shadowStyle || 'soft'),
+              ...getShadowStyles(block.shadowStyle || 'glass'),
               ...getFrameStyles(frameStyle),
             }}
           >
@@ -237,7 +237,9 @@ export const ProfileBlock = memo(function ProfileBlockComponent({
           <style>{NAME_ANIMATION_CSS}</style>
           <div className="flex items-center justify-center gap-2">
             <h1 className={cn(
-              "text-2xl font-bold",
+              "text-2xl font-bold transition-all duration-300",
+              block.nameAnimation === 'none' && "hover:text-primary",
+              (isPremiumUser || block.nameAnimation !== 'none') && "text-gradient bg-[length:200%_auto] animate-gradient-x",
               getNameAnimationClass((block.nameAnimation as NameAnimationType) || 'none')
             )}>
               {name}

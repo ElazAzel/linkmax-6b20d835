@@ -13,6 +13,7 @@ interface RichTextEditorProps {
   placeholder?: string;
   type?: 'input' | 'textarea';
   className?: string;
+  variant?: 'default' | 'glass' | 'minimal';
 }
 
 export function RichTextEditor({
@@ -21,6 +22,7 @@ export function RichTextEditor({
   placeholder,
   type = 'textarea',
   className,
+  variant = 'default',
 }: RichTextEditorProps) {
   const { t } = useTranslation();
   const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
@@ -36,7 +38,7 @@ export function RichTextEditor({
       const end = inputRef.current.selectionEnd || 0;
       setSelectionStart(start);
       setSelectionEnd(end);
-      
+
       // If text is selected, prefill the link text
       if (start !== end) {
         setLinkText(value.substring(start, end));
@@ -132,7 +134,7 @@ export function RichTextEditor({
             </div>
           </PopoverContent>
         </Popover>
-        
+
         {hasLinks && (
           <Button
             type="button"
@@ -153,6 +155,7 @@ export function RichTextEditor({
         onChange={(e) => onChange(e.target.value)}
         onSelect={handleSelect}
         placeholder={placeholder}
+        variant={variant}
         className={type === 'textarea' ? `min-h-[100px] ${className || ''}` : className}
       />
     </div>

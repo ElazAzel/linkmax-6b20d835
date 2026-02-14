@@ -27,15 +27,15 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
       case 'circle':
         return 'rounded-full aspect-square object-cover shadow-sm';
       case 'banner':
-        return 'w-full rounded-xl sm:rounded-2xl shadow-lg';
+        return 'w-full rounded-xl sm:rounded-2xl glass shadow-glass-lg';
       default:
-        return 'rounded-xl sm:rounded-2xl shadow-sm';
+        return 'rounded-xl sm:rounded-2xl shadow-glass transition-all duration-300 hover:shadow-glass-lg';
     }
   };
 
-  const alignmentClass = block.alignment === 'left' ? 'items-start' 
-    : block.alignment === 'right' ? 'items-end' 
-    : 'items-center';
+  const alignmentClass = block.alignment === 'left' ? 'items-start'
+    : block.alignment === 'right' ? 'items-end'
+      : 'items-center';
 
   const handleClick = () => {
     if (block.link) {
@@ -51,7 +51,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
 
   return (
     <div className={cn("w-full flex flex-col", alignmentClass)}>
-      <div 
+      <div
         className={cn(
           "relative group",
           containerClass,
@@ -75,7 +75,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
             )}
             loading="lazy"
           />
-          
+
           {/* Link indicator overlay */}
           {hasLink && (
             <>
@@ -84,7 +84,7 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
                 "absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none",
                 block.style === 'circle' ? 'rounded-full' : 'rounded-xl sm:rounded-2xl'
               )} />
-              
+
               {/* External link icon */}
               <div className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 bg-background/90 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-10">
                 <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-foreground" />

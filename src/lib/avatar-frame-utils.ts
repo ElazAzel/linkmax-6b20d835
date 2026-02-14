@@ -102,6 +102,7 @@ export const getShadowStyles = (shadow: string = 'none'): React.CSSProperties =>
     medium: { boxShadow: '0 8px 24px -4px hsl(var(--primary) / 0.35)' },
     strong: { boxShadow: '0 12px 32px -4px hsl(var(--primary) / 0.45)' },
     glow: { boxShadow: '0 0 30px hsl(var(--primary) / 0.5), 0 0 60px hsl(var(--primary) / 0.3)' },
+    glass: { boxShadow: 'var(--shadow-glass)' },
   };
   return shadowStyles[shadow] || {};
 };
