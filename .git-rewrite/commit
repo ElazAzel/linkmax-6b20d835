@@ -1,16 +1,11 @@
-tree c5784c8220a8b41e35a712df69c8f850423896be
-parent 4daadb27e9799bd65d938714fd93117a7112369f
-parent 937da19ff856d08adece70eefc510b4571be8ace
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765136006 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1765136006 +0000
+tree 71d77ef7a32ddfd975edef1792e116d707979654
+parent 1efeefcaf68caf26d7f564e9d1ed5e0cc1b42292
+parent 71c6238493e235827042293e3799af57fc7e4ac4
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1768532203 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1768532203 +0000
 
-Fix block save on insert
+Revamp landing and drop Search
 
-Ensure page saves after adding new blocks by adjusting useCloudPageState logic:
-- Require pageData presence (and optional user guard improved)
-- Preserve correct insertion logic for blocks
-- Auto-save after addition only when appropriate
-- Adjust update/delete paths to consistently auto-save
-- Improve resilience against missing user/session when adding blocks
+Remove SearchBlock and its editors, prune related types and tests, and implement a complete landing redesign with new positioning, mobile-first layout, and updated translations/assets.
 
-X-Lovable-Edit-ID: edt-ed2b8ad8-47ba-4591-80fc-2ab37df754cb
+X-Lovable-Edit-ID: edt-b75ca106-e505-4c05-8bbf-3b2985eea2b0
