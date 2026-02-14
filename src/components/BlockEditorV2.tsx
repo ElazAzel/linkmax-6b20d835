@@ -8,7 +8,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Dialog,
     DialogContent,
+    DialogTitle,
 } from '@/components/ui/dialog';
+import { VisuallyHidden } from '@/components/ui/visually-hidden';
 import {
     Drawer,
     DrawerContent,
@@ -380,7 +382,10 @@ export function BlockEditorV2({
     return (
         <>
             <Dialog open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
-                <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl">
+                <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl" aria-describedby={undefined}>
+                    <VisuallyHidden>
+                        <DialogTitle>{t('blockEditor.title', 'Edit Block')}</DialogTitle>
+                    </VisuallyHidden>
                     {shellContent}
                 </DialogContent>
             </Dialog>
