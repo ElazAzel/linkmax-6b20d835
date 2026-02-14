@@ -50,6 +50,7 @@ import {
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import { useEffect, useRef, useState, Suspense, lazy } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { InteractiveDemo } from '@/components/landing/InteractiveDemo';
 import { LandingFeaturedPages } from '@/components/landing/LandingFeaturedPages';
 import { LandingGallerySection } from '@/components/landing/LandingGallerySection';
@@ -90,6 +91,19 @@ export default function Index() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
+  const [showFloatingCta, setShowFloatingCta] = useState(false);
+  const isMobile = useIsMobile();
+
+  // Show floating CTA after scrolling past hero section
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setShowFloatingCta(scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleCreatePage = () => {
     if (username.trim()) {
@@ -221,6 +235,7 @@ export default function Index() {
 
   // Animation refs
   const heroSection = useScrollAnimation();
+  const statsSection = useScrollAnimation();
   const uniqueSection = useScrollAnimation();
   const audiencesSection = useScrollAnimation();
   const capabilitiesSection = useScrollAnimation();
@@ -231,18 +246,31 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Liquid Glass Mesh Background */}
+      {/* Korner-style Grid Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-60 -left-60 w-[1000px] h-[1000px] bg-gradient-to-br from-primary/25 via-violet-500/15 to-transparent rounded-full blur-[180px] animate-morph" />
-        <div className="absolute top-1/4 -right-40 w-[800px] h-[800px] bg-gradient-to-bl from-blue-500/20 via-cyan-500/15 to-transparent rounded-full blur-[150px] animate-morph" style={{ animationDelay: '-5s' }} />
-        <div className="absolute -bottom-40 left-1/4 w-[900px] h-[900px] bg-gradient-to-tr from-purple-500/20 via-pink-500/15 to-transparent rounded-full blur-[160px] animate-morph" style={{ animationDelay: '-10s' }} />
+        {/* Subtle gradient blobs */}
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] sm:w-[1000px] sm:h-[1000px] bg-gradient-to-br from-primary/15 via-violet-500/10 to-transparent rounded-full blur-[120px] sm:blur-[180px]" />
+        <div className="absolute top-1/3 -right-20 w-[400px] h-[400px] sm:w-[800px] sm:h-[800px] bg-gradient-to-bl from-blue-500/12 via-cyan-500/8 to-transparent rounded-full blur-[100px] sm:blur-[150px]" />
+        <div className="absolute -bottom-20 left-1/4 w-[500px] h-[500px] sm:w-[900px] sm:h-[900px] bg-gradient-to-tr from-purple-500/12 via-pink-500/8 to-transparent rounded-full blur-[120px] sm:blur-[160px]" />
+        
+        {/* Korner-style thin grid */}
         <div 
-          className="absolute inset-0 opacity-[0.015]"
+          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02]"
           style={{
             backgroundImage: `linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px)`,
-            backgroundSize: '80px 80px'
+            backgroundSize: '60px 60px'
           }}
         />
+        
+        {/* Diagonal accent lines like korner */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.02]" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="diagonal-lines" patternUnits="userSpaceOnUse" width="100" height="100" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="100" stroke="hsl(var(--foreground))" strokeWidth="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#diagonal-lines)" />
+        </svg>
       </div>
 
       {/* Navigation */}
@@ -296,7 +324,7 @@ export default function Index() {
       </nav>
 
       {/* Hero Section - Clean and focused */}
-      <section ref={heroSection.ref} className="relative pt-28 sm:pt-36 lg:pt-44 pb-20 sm:pb-32 px-4">
+      <section ref={heroSection.ref} className="relative pt-32 sm:pt-40 lg:pt-48 pb-16 sm:pb-24 lg:pb-32 px-5 sm:px-6">
         <div className="hidden lg:block">
           <Suspense fallback={null}>
             <Hero3D />
@@ -312,15 +340,15 @@ export default function Index() {
                   <span className="text-primary">{t('landing.hero.badge', 'AI-powered link-in-bio')}</span>
                 </div>
                 
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1]">
+                <h1 className="text-[2.5rem] sm:text-[3.5rem] lg:text-[4.5rem] font-extrabold tracking-[-0.02em] leading-[1.05]">
                   {t('landing.hero.title', 'Страница, которая')}
                   <br />
                   <span className="text-gradient bg-[length:200%_auto] animate-gradient-x">
-                    {t('landing.hero.titleHighlight', 'продаёт за вас')}
+                    {t('landing.hero.titleHighlight', 'продаёт за вас.')}
                   </span>
                 </h1>
                 
-                <p className="text-lg sm:text-xl text-muted-foreground/90 max-w-lg leading-relaxed">
+                <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-md leading-relaxed font-normal">
                   {t('landing.hero.description', 'Создайте профессиональную страницу за 2 минуты с помощью AI. Все ссылки, услуги и контакты — в одном месте.')}
                 </p>
               </div>
@@ -330,9 +358,9 @@ export default function Index() {
                 className={`opacity-0 ${heroSection.isVisible ? 'animate-fade-in-up' : ''}`}
                 style={{ animationDelay: '200ms' }}
               >
-                <div className="relative flex items-center gap-2 p-2 rounded-2xl bg-card/80 backdrop-blur-2xl border border-border/50 shadow-glass-lg max-w-md">
-                  <div className="flex-shrink-0 pl-4 text-muted-foreground font-medium text-sm">
-                    linkmax.app/
+                <div className="relative flex items-center gap-2 p-1.5 sm:p-2 rounded-2xl bg-card/80 backdrop-blur-2xl border border-border/50 shadow-glass-lg max-w-md">
+                  <div className="flex-shrink-0 pl-2 sm:pl-4 text-muted-foreground font-medium text-xs sm:text-sm">
+                    lnkmx.my/
                   </div>
                   <Input
                     value={username}
@@ -343,22 +371,22 @@ export default function Index() {
                   />
                   <Button 
                     onClick={handleCreatePage}
-                    className="rounded-xl font-bold shadow-lg shadow-primary/30 hover:shadow-xl transition-all duration-300 px-6 py-5"
+                    className="rounded-xl font-bold shadow-lg shadow-primary/30 hover:shadow-xl transition-all duration-300 px-4 sm:px-6 py-4 sm:py-5"
                   >
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </div>
-                <p className="text-sm text-muted-foreground mt-3 flex flex-wrap items-center gap-4">
-                  <span className="flex items-center gap-1.5">
-                    <Check className="h-4 w-4 text-primary" />
+                <p className="text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-3 flex flex-wrap items-center gap-2 sm:gap-4">
+                  <span className="flex items-center gap-1">
+                    <Check className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                     {t('landing.hero.free', 'Бесплатно')}
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Zap className="h-4 w-4 text-primary" />
+                  <span className="flex items-center gap-1">
+                    <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                     {t('landing.hero.noCode', 'Без кода')}
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Bot className="h-4 w-4 text-primary" />
+                  <span className="flex items-center gap-1">
+                    <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                     {t('landing.hero.aiHelps', 'AI помогает')}
                   </span>
                 </p>
@@ -459,15 +487,19 @@ export default function Index() {
       </section>
 
       {/* Stats Bar */}
-      <section className="py-12 px-4 border-y border-border/30 bg-muted/20 backdrop-blur-sm">
+      <section ref={statsSection.ref} className="py-10 sm:py-14 px-5 sm:px-6 border-y border-border/30 bg-muted/20 backdrop-blur-sm">
         <div className="container mx-auto max-w-4xl">
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-3 sm:gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-gradient">
+              <div 
+                key={index} 
+                className={`text-center opacity-0 ${statsSection.isVisible ? 'animate-stagger-in' : ''}`}
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gradient">
                   {stat.value}{stat.suffix}
                 </div>
-                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1 sm:mt-2">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -475,40 +507,40 @@ export default function Index() {
       </section>
 
       {/* What makes LinkMAX unique */}
-      <section ref={uniqueSection.ref} className="py-20 sm:py-28 px-4">
+      <section ref={uniqueSection.ref} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12 sm:mb-16 space-y-4">
+          <div className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
             <h2 
-              className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight opacity-0 ${uniqueSection.isVisible ? 'animate-blur-in' : ''}`}
+              className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${uniqueSection.isVisible ? 'animate-blur-in' : ''}`}
             >
-              {t('landing.unique.title', 'Почему выбирают LinkMAX')}
+              {t('landing.unique.title', 'Почему выбирают LinkMAX.')}
             </h2>
             <p 
-              className={`text-lg text-muted-foreground max-w-2xl mx-auto opacity-0 ${uniqueSection.isVisible ? 'animate-fade-in-up' : ''}`}
+              className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 font-normal ${uniqueSection.isVisible ? 'animate-fade-in-up' : ''}`}
               style={{ animationDelay: '200ms' }}
             >
               {t('landing.unique.subtitle', 'Не просто конструктор — умный помощник для вашего бизнеса')}
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {uniqueAdvantages.map((advantage, index) => (
               <div 
                 key={index}
-                className={`group relative p-6 rounded-3xl bg-card/60 backdrop-blur-2xl border border-border/40 hover:border-primary/50 transition-all duration-500 hover:shadow-glass-xl hover:-translate-y-2 opacity-0 ${uniqueSection.isVisible ? 'animate-fade-in-up' : ''}`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`group relative p-5 sm:p-6 lg:p-8 rounded-2xl sm:rounded-3xl bg-card/60 backdrop-blur-2xl border border-border/40 hover:border-primary/50 transition-all duration-500 hover:shadow-glass-xl hover:-translate-y-1 sm:hover:-translate-y-2 opacity-0 ${uniqueSection.isVisible ? 'animate-slide-in-up' : ''}`}
+                style={{ animationDelay: `${index * 120}ms` }}
               >
-                <div className={`absolute -inset-px rounded-3xl bg-gradient-to-br ${advantage.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                <div className={`absolute -inset-px rounded-2xl sm:rounded-3xl bg-gradient-to-br ${advantage.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
                 
-                <div className="absolute top-4 right-4 text-2xl font-bold text-muted-foreground/20">
+                <div className={`absolute top-2 sm:top-4 right-2 sm:right-4 text-lg sm:text-2xl font-bold text-muted-foreground/20 opacity-0 ${uniqueSection.isVisible ? 'animate-fade-in' : ''}`} style={{ animationDelay: `${300 + index * 120}ms` }}>
                   {advantage.stat}
                 </div>
                 
-                <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${advantage.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-                  <advantage.icon className="h-6 w-6 text-white" />
+                <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br ${advantage.gradient} flex items-center justify-center mb-3 sm:mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                  <advantage.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
                 
-                <h3 className="text-lg font-bold mb-2">{advantage.title}</h3>
+                <h3 className="text-base sm:text-lg font-bold mb-2">{advantage.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{advantage.description}</p>
               </div>
             ))}
@@ -517,32 +549,30 @@ export default function Index() {
       </section>
 
       {/* Target audiences carousel */}
-      <section ref={audiencesSection.ref} className="py-16 sm:py-20 px-4 bg-muted/20">
+      <section ref={audiencesSection.ref} className="py-14 sm:py-20 lg:py-24 px-5 sm:px-6 bg-muted/20">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-10 space-y-3">
+          <div className="text-center mb-8 sm:mb-12 space-y-3 sm:space-y-4">
             <h2 
-              className={`text-2xl sm:text-3xl lg:text-4xl font-bold opacity-0 ${audiencesSection.isVisible ? 'animate-blur-in' : ''}`}
+              className={`text-xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${audiencesSection.isVisible ? 'animate-blur-in' : ''}`}
             >
               {t('landing.audiences.title', 'Для кого LinkMAX?')}
             </h2>
-            <p className={`text-muted-foreground opacity-0 ${audiencesSection.isVisible ? 'animate-fade-in-up' : ''}`} style={{ animationDelay: '150ms' }}>
+            <p className={`text-xs sm:text-sm lg:text-base text-muted-foreground opacity-0 font-normal ${audiencesSection.isVisible ? 'animate-fade-in-up' : ''}`} style={{ animationDelay: '150ms' }}>
               {t('landing.audiences.subtitle', 'Идеально подходит для экспертов, фрилансеров и малого бизнеса')}
             </p>
           </div>
 
-          <div 
-            className={`flex flex-wrap justify-center gap-3 opacity-0 ${audiencesSection.isVisible ? 'animate-fade-in-up' : ''}`}
-            style={{ animationDelay: '300ms' }}
-          >
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             {targetAudiences.map((audience, index) => (
               <div 
                 key={index}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-card/80 backdrop-blur-sm border border-border/40 hover:border-primary/50 hover:shadow-glass transition-all duration-300 cursor-default group"
+                className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-card/80 backdrop-blur-sm border border-border/40 hover:border-primary/50 hover:shadow-glass transition-all duration-300 cursor-default group opacity-0 ${audiencesSection.isVisible ? 'animate-stagger-in' : ''}`}
+                style={{ animationDelay: `${200 + index * 50}ms` }}
               >
-                <div className={`h-8 w-8 rounded-lg bg-gradient-to-br ${audience.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <audience.icon className="h-4 w-4 text-white" />
+                <div className={`h-6 w-6 sm:h-8 sm:w-8 rounded-md sm:rounded-lg bg-gradient-to-br ${audience.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                  <audience.icon className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                 </div>
-                <span className="text-sm font-medium">{audience.label}</span>
+                <span className="text-xs sm:text-sm font-medium">{audience.label}</span>
               </div>
             ))}
           </div>
@@ -550,28 +580,28 @@ export default function Index() {
       </section>
 
       {/* Capabilities */}
-      <section ref={capabilitiesSection.ref} className="py-20 sm:py-28 px-4">
+      <section ref={capabilitiesSection.ref} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12 sm:mb-16 space-y-4">
+          <div className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
             <h2 
-              className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight opacity-0 ${capabilitiesSection.isVisible ? 'animate-blur-in' : ''}`}
+              className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${capabilitiesSection.isVisible ? 'animate-blur-in' : ''}`}
             >
-              {t('landing.capabilities.title', 'Всё для вашей страницы')}
+              {t('landing.capabilities.title', 'Всё для вашей страницы.')}
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {capabilities.map((cap, index) => (
               <div 
                 key={index}
-                className={`group p-6 rounded-2xl bg-card/50 backdrop-blur-xl border border-border/30 hover:border-primary/40 transition-all duration-300 hover:shadow-glass-lg opacity-0 ${capabilitiesSection.isVisible ? 'animate-fade-in-up' : ''}`}
-                style={{ animationDelay: `${index * 80}ms` }}
+                className={`group p-5 sm:p-6 lg:p-8 rounded-2xl bg-card/50 backdrop-blur-xl border border-border/30 hover:border-primary/40 transition-all duration-300 hover:shadow-glass-lg hover:-translate-y-1 opacity-0 ${capabilitiesSection.isVisible ? 'animate-slide-in-up' : ''}`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <cap.icon className="h-6 w-6 text-primary" />
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                  <cap.icon className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{cap.title}</h3>
-                <p className="text-muted-foreground text-sm">{cap.description}</p>
+                <h3 className="text-base sm:text-lg font-semibold mb-2">{cap.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{cap.description}</p>
               </div>
             ))}
           </div>
@@ -588,12 +618,12 @@ export default function Index() {
       <LandingGallerySection />
 
       {/* Pricing */}
-      <section ref={pricingSection.ref} className="py-20 sm:py-28 px-4 relative">
+      <section ref={pricingSection.ref} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 relative">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-gradient-to-r from-primary/10 via-transparent to-transparent rounded-full blur-[120px]" />
+          <div className="absolute top-1/4 left-0 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-gradient-to-r from-primary/8 via-transparent to-transparent rounded-full blur-[100px] sm:blur-[120px]" />
         </div>
         <div className="container mx-auto max-w-6xl relative z-10">
-          <div className="text-center mb-12 sm:mb-16 space-y-4">
+          <div className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
             <div 
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${pricingSection.isVisible ? 'animate-fade-in' : ''}`}
             >
@@ -601,7 +631,7 @@ export default function Index() {
               <span className="text-primary">{t('landing.pricing.badge')}</span>
             </div>
             <h2 
-              className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight opacity-0 ${pricingSection.isVisible ? 'animate-blur-in' : ''}`}
+              className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${pricingSection.isVisible ? 'animate-blur-in' : ''}`}
               style={{ animationDelay: '150ms' }}
             >
               {t('landing.pricing.title')}
@@ -609,15 +639,15 @@ export default function Index() {
 
             {/* Billing Period Selector */}
             <div 
-              className={`flex items-center justify-center gap-2 pt-4 opacity-0 ${pricingSection.isVisible ? 'animate-fade-in-up' : ''}`}
+              className={`flex items-center justify-center gap-2 pt-3 sm:pt-4 opacity-0 ${pricingSection.isVisible ? 'animate-fade-in-up' : ''}`}
               style={{ animationDelay: '300ms' }}
             >
-              <div className="inline-flex p-1 rounded-2xl bg-muted/50 border border-border/30">
+              <div className="inline-flex p-1 rounded-xl sm:rounded-2xl bg-muted/50 border border-border/30">
                 {(['3', '6', '12'] as const).map((period) => (
                   <button
                     key={period}
                     onClick={() => setBillingPeriod(period)}
-                    className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    className={`relative px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
                       billingPeriod === period 
                         ? 'bg-primary text-primary-foreground shadow-lg' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -625,7 +655,7 @@ export default function Index() {
                   >
                     {t(`landing.pricing.months${period}`)}
                     {period === '12' && (
-                      <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
+                      <span className="absolute -top-2 -right-2 px-1 sm:px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[8px] sm:text-[10px] font-bold">
                         -50%
                       </span>
                     )}
@@ -635,37 +665,37 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
             {/* Free */}
             <div 
-              className={`relative p-6 rounded-3xl bg-card/50 backdrop-blur-xl border border-border/30 opacity-0 ${pricingSection.isVisible ? 'animate-slide-in-left' : ''}`}
+              className={`relative p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-card/50 backdrop-blur-xl border border-border/30 opacity-0 ${pricingSection.isVisible ? 'animate-slide-in-left' : ''}`}
               style={{ animationDelay: '400ms' }}
             >
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 <div>
-                  <h3 className="text-xl font-bold">{t('landing.pricing.free.title')}</h3>
-                  <p className="text-muted-foreground text-sm mt-1">{t('landing.pricing.free.description')}</p>
+                  <h3 className="text-lg sm:text-xl font-bold">{t('landing.pricing.free.title')}</h3>
+                  <p className="text-muted-foreground text-xs sm:text-sm mt-1">{t('landing.pricing.free.description')}</p>
                 </div>
                 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">$0</span>
-                  <span className="text-muted-foreground text-sm">/{t('landing.pricing.month')}</span>
+                  <span className="text-3xl sm:text-4xl font-bold">$0</span>
+                  <span className="text-muted-foreground text-xs sm:text-sm">/{t('landing.pricing.month')}</span>
                 </div>
 
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="w-full rounded-2xl py-5"
+                  className="w-full rounded-xl sm:rounded-2xl py-4 sm:py-5"
                   onClick={() => navigate('/auth')}
                 >
                   {t('landing.pricing.free.cta')}
                 </Button>
 
-                <div className="space-y-2 pt-3">
+                <div className="space-y-1.5 sm:space-y-2 pt-2 sm:pt-3">
                   {freeFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-xs text-foreground">{feature}</span>
+                    <div key={index} className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary flex-shrink-0 mt-0.5" />
+                      <span className="text-[10px] sm:text-xs text-foreground">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -674,48 +704,48 @@ export default function Index() {
 
             {/* Pro */}
             <div 
-              className={`relative p-6 rounded-3xl bg-card/50 backdrop-blur-xl border-2 border-primary/30 opacity-0 ${pricingSection.isVisible ? 'animate-fade-in-up' : ''}`}
+              className={`relative p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-card/50 backdrop-blur-xl border-2 border-primary/30 opacity-0 order-first sm:order-none ${pricingSection.isVisible ? 'animate-fade-in-up' : ''}`}
               style={{ animationDelay: '450ms' }}
             >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+              <div className="absolute -top-2.5 sm:-top-3 left-1/2 -translate-x-1/2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-primary text-primary-foreground text-[10px] sm:text-xs font-medium">
                 {t('landing.pricing.popular')}
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 <div>
-                  <h3 className="text-xl font-bold flex items-center gap-2">
+                  <h3 className="text-lg sm:text-xl font-bold flex items-center gap-2">
                     {t('landing.pricing.pro.title')}
                     <Crown className="h-4 w-4 text-primary" />
                   </h3>
-                  <p className="text-muted-foreground text-sm mt-1">{t('landing.pricing.pro.description')}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm mt-1">{t('landing.pricing.pro.description')}</p>
                 </div>
                 
-                <div className="space-y-1">
+                <div className="space-y-0.5 sm:space-y-1">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold">
+                    <span className="text-3xl sm:text-4xl font-bold">
                       ${pricingPlans.pro[billingPeriod].monthly.toFixed(2)}
                     </span>
-                    <span className="text-muted-foreground text-sm">/{t('landing.pricing.month')}</span>
+                    <span className="text-muted-foreground text-xs sm:text-sm">/{t('landing.pricing.month')}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">
                     {t('landing.pricing.total')}: ${pricingPlans.pro[billingPeriod].total}
                   </p>
                 </div>
 
                 <Button 
                   size="lg" 
-                  className="w-full rounded-2xl py-5 shadow-lg shadow-primary/25"
+                  className="w-full rounded-xl sm:rounded-2xl py-4 sm:py-5 shadow-lg shadow-primary/25"
                   onClick={openPremiumPurchase}
                 >
                   {t('landing.pricing.pro.cta')}
                   <Sparkles className="ml-2 h-4 w-4" />
                 </Button>
 
-                <div className="space-y-2 pt-3">
+                <div className="space-y-1.5 sm:space-y-2 pt-2 sm:pt-3">
                   {proFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-xs text-foreground">{feature}</span>
+                    <div key={index} className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary flex-shrink-0 mt-0.5" />
+                      <span className="text-[10px] sm:text-xs text-foreground">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -724,26 +754,26 @@ export default function Index() {
 
             {/* Business */}
             <div 
-              className={`relative p-6 rounded-3xl bg-card/50 backdrop-blur-xl border border-border/30 opacity-0 ${pricingSection.isVisible ? 'animate-slide-in-right' : ''}`}
+              className={`relative p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-card/50 backdrop-blur-xl border border-border/30 opacity-0 ${pricingSection.isVisible ? 'animate-slide-in-right' : ''}`}
               style={{ animationDelay: '500ms' }}
             >
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 <div>
-                  <h3 className="text-xl font-bold flex items-center gap-2">
+                  <h3 className="text-lg sm:text-xl font-bold flex items-center gap-2">
                     {t('landing.pricing.business.title')}
                     <Briefcase className="h-4 w-4 text-emerald-500" />
                   </h3>
-                  <p className="text-muted-foreground text-sm mt-1">{t('landing.pricing.business.description')}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm mt-1">{t('landing.pricing.business.description')}</p>
                 </div>
                 
-                <div className="space-y-1">
+                <div className="space-y-0.5 sm:space-y-1">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold">
+                    <span className="text-3xl sm:text-4xl font-bold">
                       ${pricingPlans.business[billingPeriod].monthly.toFixed(2)}
                     </span>
-                    <span className="text-muted-foreground text-sm">/{t('landing.pricing.month')}</span>
+                    <span className="text-muted-foreground text-xs sm:text-sm">/{t('landing.pricing.month')}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">
                     {t('landing.pricing.total')}: ${pricingPlans.business[billingPeriod].total}
                   </p>
                 </div>
@@ -751,18 +781,18 @@ export default function Index() {
                 <Button 
                   variant="outline"
                   size="lg" 
-                  className="w-full rounded-2xl py-5 border-emerald-500/30 hover:bg-emerald-500/10"
+                  className="w-full rounded-xl sm:rounded-2xl py-4 sm:py-5 border-emerald-500/30 hover:bg-emerald-500/10"
                   onClick={openPremiumPurchase}
                 >
                   {t('landing.pricing.business.cta')}
                   <Briefcase className="ml-2 h-4 w-4 text-emerald-500" />
                 </Button>
 
-                <div className="space-y-2 pt-3">
+                <div className="space-y-1.5 sm:space-y-2 pt-2 sm:pt-3">
                   {businessFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-xs text-foreground">{feature}</span>
+                    <div key={index} className="flex items-start gap-2">
+                      <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-[10px] sm:text-xs text-foreground">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -783,10 +813,10 @@ export default function Index() {
       <FAQSection />
 
       {/* CTA Section */}
-      <section ref={ctaSection.ref} className="py-20 sm:py-28 px-4">
+      <section ref={ctaSection.ref} className="py-12 sm:py-20 lg:py-28 px-4">
         <div className="container mx-auto max-w-4xl">
           <div 
-            className={`relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary via-blue-500 to-violet-600 p-10 sm:p-16 text-center opacity-0 ${ctaSection.isVisible ? 'animate-scale-in' : ''}`}
+            className={`relative overflow-hidden rounded-2xl sm:rounded-[2.5rem] bg-gradient-to-br from-primary via-blue-500 to-violet-600 p-6 sm:p-10 lg:p-16 text-center opacity-0 ${ctaSection.isVisible ? 'animate-scale-in' : ''}`}
           >
             <div className="absolute inset-0 opacity-10">
               <div className="absolute inset-0" style={{
@@ -795,34 +825,34 @@ export default function Index() {
               }} />
             </div>
             
-            <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-white/10 rounded-full blur-[80px] animate-morph" />
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-400/20 rounded-full blur-[100px] animate-morph" style={{ animationDelay: '-4s' }} />
+            <div className="absolute top-0 left-0 w-[200px] sm:w-[400px] h-[200px] sm:h-[400px] bg-white/10 rounded-full blur-[60px] sm:blur-[80px] animate-morph" />
+            <div className="absolute bottom-0 right-0 w-[200px] sm:w-[400px] h-[200px] sm:h-[400px] bg-blue-400/20 rounded-full blur-[60px] sm:blur-[100px] animate-morph" style={{ animationDelay: '-4s' }} />
             
-            <div className="relative z-10 space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 text-sm font-semibold text-white">
-                <Rocket className="h-4 w-4" />
+            <div className="relative z-10 space-y-4 sm:space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/20 text-xs sm:text-sm font-semibold text-white">
+                <Rocket className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 <span>{t('landing.cta.badge', 'Готовы начать?')}</span>
               </div>
               
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-                {t('landing.cta.title', 'Создайте страницу прямо сейчас')}
+              <h2 className="text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold text-white tracking-[-0.02em] leading-tight">
+                {t('landing.cta.title', 'Создайте страницу прямо сейчас.')}
               </h2>
               
-              <div className="max-w-md mx-auto pt-4">
-                <div className="relative flex items-center gap-2 p-2 rounded-2xl bg-white/20 backdrop-blur-xl border border-white/30">
-                  <div className="flex-shrink-0 pl-4 text-white/80 font-medium text-sm">
-                    linkmax.app/
+              <div className="max-w-md mx-auto pt-2 sm:pt-4">
+                <div className="relative flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-xl border border-white/30">
+                  <div className="flex-shrink-0 pl-2 sm:pl-4 text-white/80 font-medium text-xs sm:text-sm">
+                    lnkmx.my/
                   </div>
                   <Input
                     value={username}
                     onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                     placeholder="yourname"
-                    className="flex-1 border-0 bg-transparent focus-visible:ring-0 text-white placeholder:text-white/50 font-medium"
+                    className="flex-1 border-0 bg-transparent focus-visible:ring-0 text-white placeholder:text-white/50 font-medium text-sm sm:text-base"
                     onKeyDown={(e) => e.key === 'Enter' && handleCreatePage()}
                   />
                   <Button 
                     onClick={handleCreatePage}
-                    className="rounded-xl font-bold bg-white text-primary hover:bg-white/95 shadow-lg px-6 py-5"
+                    className="rounded-lg sm:rounded-xl font-bold bg-white text-primary hover:bg-white/95 shadow-lg px-4 sm:px-6 py-3 sm:py-5 text-sm sm:text-base"
                   >
                     {t('landing.hero.create', 'Создать')}
                   </Button>
@@ -834,21 +864,21 @@ export default function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 py-12 px-4">
+      <footer className="border-t border-border/40 py-8 sm:py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <img 
                 src="/pwa-maskable-512x512.png" 
                 alt="LinkMAX" 
-                className="h-9 w-9 rounded-xl" 
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl" 
               />
-              <span className="text-xl font-bold">
+              <span className="text-lg sm:text-xl font-bold">
                 Link<span className="text-gradient">MAX</span>
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                 <TermsLink className="hover:text-foreground transition-colors cursor-pointer">
                   {t('legal.termsOfService')}
                 </TermsLink>
@@ -857,13 +887,32 @@ export default function Index() {
                   {t('legal.privacyPolicy')}
                 </PrivacyLink>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {t('landing.footer.copyright')}
               </p>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Floating CTA Button for Mobile */}
+      {isMobile && (
+        <div 
+          className={`fixed bottom-6 left-4 right-4 z-50 transition-all duration-300 ${
+            showFloatingCta 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-10 pointer-events-none'
+          }`}
+        >
+          <Button 
+            onClick={() => navigate('/auth')}
+            className="w-full rounded-2xl py-6 font-bold text-base shadow-2xl shadow-primary/40 bg-gradient-to-r from-primary via-blue-500 to-violet-600 hover:shadow-primary/50 active:scale-[0.98] transition-all"
+          >
+            <Sparkles className="h-5 w-5 mr-2" />
+            {t('landing.floatingCta', 'Создать страницу бесплатно')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

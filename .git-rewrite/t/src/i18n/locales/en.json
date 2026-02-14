@@ -70,6 +70,7 @@
       "getStarted": "Get Started",
       "gallery": "Gallery"
     },
+    "floatingCta": "Create page for free",
     "featured": {
       "badge": "Top Creators",
       "title": "Featured Pages",
@@ -83,13 +84,15 @@
       "viewAll": "Explore All"
     },
     "hero": {
-      "badge": "AI Platform for Business & Experts",
-      "title1": "Mini-website in 2 minutes",
-      "title2": "no developer needed",
-      "subtitle": "LinkMAX is an AI page builder for experts, freelancers, and businesses. Replace outdated Taplink with a modern AI-powered solution.",
-      "ctaMain": "Create for Free",
-      "ctaDemo": "View Demo",
-      "trial": "No card required • 2 days Premium free • Cancel anytime"
+      "badge": "AI-powered link-in-bio",
+      "title": "A page that",
+      "titleHighlight": "sells for you",
+      "description": "Create a professional page in 2 minutes with AI. All links, services, and contacts — in one place.",
+      "usernamePlaceholder": "yourname",
+      "free": "Free",
+      "noCode": "No code",
+      "aiHelps": "AI helps",
+      "create": "Create"
     },
     "problems": {
       "title": "Sound Familiar?",
@@ -148,31 +151,21 @@
       }
     },
     "audiences": {
-      "title": "Who Is LinkMAX For",
-      "subtitle": "Solutions for any scale — from solo expert to business",
-      "b2c": {
-        "badge": "For Experts",
-        "title": "Freelancers & Specialists",
-        "items": {
-          "barber": "Barbers & Stylists",
-          "photographer": "Photographers & Videographers",
-          "coach": "Coaches & Trainers",
-          "tutor": "Tutors & Teachers",
-          "beauty": "Nail Artists & Cosmetologists",
-          "psychologist": "Psychologists & Consultants"
-        }
-      },
-      "b2b": {
-        "badge": "For Business",
-        "title": "Companies & Entrepreneurs",
-        "items": {
-          "cafe": "Cafes & Restaurants",
-          "shop": "Shops & Showrooms",
-          "agency": "Agencies & Studios",
-          "clinic": "Clinics & Salons",
-          "school": "Schools & Courses",
-          "service": "Service Companies"
-        }
+      "title": "Who Is LinkMAX For?",
+      "subtitle": "Perfect for experts, freelancers, and small businesses",
+      "items": {
+        "barber": "Barbers",
+        "photographer": "Photographers",
+        "coach": "Coaches",
+        "tutor": "Tutors",
+        "beauty": "Beauty Masters",
+        "psychologist": "Psychologists",
+        "cafe": "Cafes",
+        "shop": "Shops",
+        "agency": "Agencies",
+        "clinic": "Clinics",
+        "school": "Schools",
+        "service": "Services"
       }
     },
     "features": {
@@ -207,13 +200,67 @@
       "minutes": "Minutes",
       "minutesSuffix": " min",
       "blocks": "Block Types",
-      "possibilities": "Possibilities"
+      "possibilities": "Possibilities",
+      "timeLabel": "To create a page",
+      "blocksLabel": "Block types",
+      "commissionLabel": "Platform commission"
     },
     "benefits": {
       "ai": "AI Generation",
       "design": "Premium Design",
       "analytics": "Analytics",
       "crm": "Mini-CRM"
+    },
+    "unique": {
+      "title": "Why Choose LinkMAX",
+      "subtitle": "Not just a builder — a smart assistant for your business",
+      "ai": {
+        "title": "AI does everything for you",
+        "desc": "Describe your business — get a ready page in 2 minutes. No manual construction."
+      },
+      "price": {
+        "title": "0% commission",
+        "desc": "All sales revenue is yours. We don't take a cut from transactions."
+      },
+      "gamification": {
+        "title": "Gamification",
+        "desc": "Achievements, daily quests, streaks and rewards. Page management becomes a game."
+      },
+      "community": {
+        "title": "Community",
+        "desc": "Page gallery, collaborations, teams, shoutouts. Grow together with others."
+      }
+    },
+    "capabilities": {
+      "title": "Everything for your page",
+      "links": {
+        "title": "All links in one place",
+        "desc": "Social media, messengers, portfolio — one link for everything"
+      },
+      "sell": {
+        "title": "Sell your services",
+        "desc": "Product catalog, price lists, online booking and payment"
+      },
+      "analytics": {
+        "title": "Click analytics",
+        "desc": "Find out which links perform best"
+      },
+      "crm": {
+        "title": "Mini-CRM",
+        "desc": "Manage leads and requests right in the platform"
+      },
+      "teams": {
+        "title": "Teams",
+        "desc": "Create team pages with your colleagues"
+      },
+      "aiGen": {
+        "title": "AI generation",
+        "desc": "Content, copy, structure — all created automatically"
+      }
+    },
+    "cta": {
+      "badge": "Ready to start?",
+      "title": "Create your page right now"
     },
     "howItWorks": {
       "title": "How It Works",

@@ -1,11 +1,6 @@
-tree 24f05f9c38433919ea9832007b195d66ed5be4bd
-parent 31da1dcdea435ffe5c2aeb09f1ca2a0b35bf6e33
-parent 8a9230e9c923fa00b3c3cd1411fbc57df1e4ba47
-author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766772074 +0000
-committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766772074 +0000
+tree db59533667c31dc9ba5bb35500061d57021fc283
+parent 92c003ac55291c0a50c67cdd70d3f81e7e024a78
+author gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766774786 +0000
+committer gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com> 1766774786 +0000
 
-Integrate FAQ and UseCases
-
-Integrate FAQSection and UseCasesGallery into landing between pricing and footer; restructure landing to emphasize LinkMAX strengths, with unique layout and messaging that differentiates from competitors. Added enhanced sections and updated translations and UI to highlight advantages.
-
-X-Lovable-Edit-ID: edt-a014a93d-8ed6-4cee-b113-3bfcb8f177d0
+Changes

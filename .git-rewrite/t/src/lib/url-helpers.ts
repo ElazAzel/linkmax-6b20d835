@@ -13,7 +13,7 @@ export function getBaseUrl(): string {
  * Generate a public page URL from a slug
  */
 export function getPublicPageUrl(slug: string): string {
-  return `${getBaseUrl()}/${slug}`;
+  return `https://lnkmx.my/${slug}`;
 }
 
 /**

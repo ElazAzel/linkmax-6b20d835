@@ -48,25 +48,25 @@ export function FAQSection() {
   ];
 
   return (
-    <section ref={sectionAnimation.ref} className="py-20 sm:py-28 px-4 relative">
+    <section ref={sectionAnimation.ref} className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background pointer-events-none" />
       
       <div className="container mx-auto max-w-4xl relative z-10">
-        <div className="text-center mb-12 sm:mb-16 space-y-4">
+        <div className="text-center mb-10 sm:mb-14 lg:mb-20 space-y-4 sm:space-y-5">
           <div 
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in' : ''}`}
+            className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 text-xs sm:text-sm font-medium opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in' : ''}`}
           >
-            <HelpCircle className="h-4 w-4 text-primary" />
+            <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
             <span className="text-primary">{t('landing.faq.badge', 'Вопросы и ответы')}</span>
           </div>
           <h2 
-            className={`text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
+            className={`text-2xl sm:text-4xl lg:text-[3.5rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${sectionAnimation.isVisible ? 'animate-blur-in' : ''}`}
             style={{ animationDelay: '150ms' }}
           >
-            {t('landing.faq.title', 'Часто задаваемые вопросы')}
+            {t('landing.faq.title', 'Часто задаваемые вопросы.')}
           </h2>
           <p 
-            className={`text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
+            className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 font-normal ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
             style={{ animationDelay: '300ms' }}
           >
             {t('landing.faq.subtitle', 'Ответы на популярные вопросы о LinkMAX')}
@@ -77,19 +77,19 @@ export function FAQSection() {
           className={`opacity-0 ${sectionAnimation.isVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '400ms' }}
         >
-          <Accordion type="single" collapsible className="w-full space-y-3">
+          <Accordion type="single" collapsible className="w-full space-y-3 sm:space-y-4">
             {faqItems.map((item, index) => (
               <AccordionItem 
                 key={index} 
                 value={`item-${index}`}
-                className="rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-6 overflow-hidden hover:border-primary/30 transition-colors"
+                className="rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-5 sm:px-6 overflow-hidden hover:border-primary/30 transition-colors"
               >
-                <AccordionTrigger className="text-left py-5 hover:no-underline group">
-                  <span className="font-semibold text-base sm:text-lg group-hover:text-primary transition-colors">
+                <AccordionTrigger className="text-left py-5 sm:py-6 hover:no-underline group">
+                  <span className="font-semibold text-base sm:text-lg group-hover:text-primary transition-colors pr-2">
                     {item.question}
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                <AccordionContent className="text-muted-foreground pb-5 sm:pb-6 leading-relaxed text-sm sm:text-base">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>
