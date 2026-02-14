@@ -1,51 +1,88 @@
-# Contributing Guide
+# Contributing to lnkmx
 
-Thanks for contributing! This guide keeps changes consistent and easy to review.
+First off, thank you for considering contributing to lnkmx! It's people like you that make us the best platform for micro-businesses.
 
-## Project Structure
+## 📜 Code of Conduct
 
-- `src/pages/` — route-level screens.
-- `src/components/` — reusable UI, blocks, and page sections.
-- `src/hooks/` — UI orchestration and async state.
-- `src/use-cases/` — application workflows.
-- `src/services/` — business logic that spans multiple modules.
-- `src/repositories/` — data access (Supabase-backed implementations).
-- `src/platform/` — external integrations (e.g., Supabase client + types).
-- `src/lib/` — shared utilities.
-- `src/testing/` — test setup and fixtures.
+We are committed to providing a friendly, safe, and welcoming environment for all using our platform and contributing to our code. Please be respectful and considerate in all interactions.
 
-## Naming & Organization
+## 🛠 Development Workflow
 
-- Prefer clear, descriptive names (`UserProfile`, `useUserProfile`, `SavePageUseCase`).
-- Keep React components in `PascalCase.tsx` and hooks in `useX.ts`.
-- Avoid deeply nested relative imports—use the `@/` alias when possible.
+### 1. Branching Strategy
+We use a simplified feature-branch workflow.
+- **`main`**: The production-ready branch. Do not push directly here.
+- **Feature Branches**: Create branches from `main` for new features or fixes.
 
-## Adding a Feature
+**Naming Convention:**
+- `feat/description`: New features (e.g., `feat/add-video-block`)
+- `fix/description`: Bug fixes (e.g., `fix/auth-redirect`)
+- `chore/description`: Maintenance, docs, configs (e.g., `chore/update-readme`)
+- `refactor/description`: Code restructuring without behavior change
 
-1. Add UI pieces in `components/` or `pages/`.
-2. Put orchestration in a hook (`hooks/`).
-3. Add workflow logic in `use-cases/` if the flow spans multiple steps.
-4. Use services for shared business logic that spans repositories.
-5. Create or extend repositories for new data access needs.
+### 2. Commits
+We follow the **Conventional Commits** specification.
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, etc)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools
 
-## Code Style
+**Example:**
+```bash
+git commit -m "feat: add instagram integration to social block"
+```
 
-- Follow the existing ESLint + Prettier configuration.
-- Keep functions focused; prefer small helpers over long inlined logic.
-- Add comments only when the **why** is not obvious.
+### 3. Pull Requests
+1. Push your branch to the repository.
+2. Open a Pull Request against `main`.
+3. Provide a clear title and description of your changes.
+4. Link any relevant issues (e.g., `Closes #123`).
+5. Wait for a code review from a team member.
 
-## Scripts
+## 📐 Coding Standards
+
+### TypeScript & React
+- **Strict Mode**: We use strict TypeScript. No `any` unless absolutely necessary.
+- **Functional Components**: Use React Functional Components with Hooks.
+- **Naming**:
+    - Components: `PascalCase.tsx`
+    - Hooks: `camelCase.ts` (prefix with `use`)
+    - Utilities: `kebab-case.ts`
+- **Imports**: Use absolute imports where possible (e.g., `@/components/ui/button` instead of `../../components/ui/button`).
+
+### Styling
+- We use **Tailwind CSS**.
+- Avoid inline styles.
+- Use `cn()` utility for conditional class merging.
+
+### Linting & Formatting
+Run these commands before committing to ensure your code meets our standards:
 
 ```bash
-npm run dev
-npm run build
+# Check for linting errors
 npm run lint
-npm run analyze:deps
-npm run analyze:cycles
-npm run analyze:layers
-npm run analyze:unused
-npm run quality:gate
-npm run i18n:check
-npm run lint:i18n
+
+# Check for type errors
+npm run typecheck
+```
+
+## 🧪 Testing
+
+We value stability. Please add tests for significant logic changes.
+
+```bash
+# Run unit tests
+npm run test
+
+# Run E2E tests
 npm run e2e
 ```
+
+## 📝 Documentation
+If you change a feature or API, please update the corresponding documentation in `docs/` and the logic in `README.md`.
+
+---
+Happy Coding! 🚀

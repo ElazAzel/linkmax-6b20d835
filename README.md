@@ -1,151 +1,131 @@
-# lnkmx - AI Bio Page Builder
+# lnkmx — The Micro-Business OS
 
-AI-powered link-in-bio platform that creates professional bio pages in 2 minutes.
+![Version](https://img.shields.io/badge/version-0.0.0-blue.svg)
+![Node](https://img.shields.io/badge/node-v18+-green.svg)
+![License](https://img.shields.io/badge/license-Proprietary-orange.svg)
+![Status](https://img.shields.io/badge/status-Active-success.svg)
 
-**Live:** [lnkmx.my](https://lnkmx.my)
+> **Create professional bio pages, manage leads, and track analytics — all in 2 minutes.**
 
-## What is lnkmx?
+**lnkmx** is a comprehensive SaaS platform built for creators, freelancers, and small businesses in the CIS region. It combines a powerful page builder, a mini-CRM, and advanced analytics into one unified system.
 
-lnkmx is a SaaS platform for creating AI-powered personal mini-websites (link-in-bio pages). Target users: beauty masters, experts, freelancers, small businesses, and content creators in the CIS region.
-
-## Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run lint
-npm run lint
-
-# Run i18n checks
-npm run i18n:check
-npm run lint:i18n
-
-# Run E2E tests
-npm run e2e
-```
-
-## Architecture
-
-The project follows Clean Architecture principles with separation of concerns.
-
-1. **Domain** - Business entities with validation logic
-2. **Repositories** - Data access abstraction (IPageRepository, IUserRepository)
-3. **Use Cases** - Application workflows (SavePageUseCase, LoadUserProfileUseCase)
-4. **Services** - External integrations (analytics, AI, collaboration)
-5. **Hooks** - UI state coordination (50+ specialized hooks)
-6. **Components** - Presentation layer
-
-## Key Features
-
-### Page Builder
-
-- **28 block types** (profile, links, products, forms, booking, events, etc.)
-- Drag-and-drop reordering
-- AI-powered content generation
-- Theme customization
-- SEO optimization
-
-### CRM & Analytics
-
-- Lead capture and management
-- Telegram notifications
-- Page analytics (views, clicks, conversions)
-- Real-time dashboard with filters
-- Device & source breakdown
-
-### Social Features
-
-- Gallery showcase
-- Template marketplace (50+ templates)
-- Collaboration (shoutouts)
-- Community (Telegram channels)
-- Friends & activity feed
-
-### Monetization
-
-- Free/Pro/Business/Enterprise tiers
-- Linkkon token economy
-- Template sales
-- Paid content gates
-
-## Documentation
-
-- [📚 **Documentation Index**](./docs/INDEX.md) - **Start Here** for all documentation.
-- [📖 PLATFORM_SNAPSHOT.md](./docs/PLATFORM_SNAPSHOT.md) - **Single Source of Truth** (Architecture, Status, Flows)
-- [📜 CHANGELOG.md](./docs/CHANGELOG.md) - Version history and changes
-- [🏃 RUNBOOKS](./docs/RUNBOOKS/) - Operational guides (Local Dev, Deployment)
-
-**Component & Feature Refs:**
-
-- [blocks-reference](./docs/BLOCKS-REFERENCE.md)
-- [architecture](./docs/architecture.md)
-- [security](./docs/SECURITY.md)
-
-## Database & Infrastructure
-
-See `docs/PLATFORM_SNAPSHOT.md` for the complete schema and infrastructure details.
-
-## Edge Functions
-
-Key functions (hosted on Supabase):
-
-- `ai-content-generator`
-- `process-crm-automations`
-- `telegram-bot-webhook`
-
-(See `supabase/functions/` for full list)
-
-## Security
-
-- **RLS:** Enabled on all public tables.
-- **Auth:** Supabase Auth + JWT.
-- **Rate Limits:** Applied via Edge Functions.
-
-## Development
-
-### Setup
-
-```bash
-npm install
-npm run dev
-```
-
-### Testing & Quality
-
-```bash
-npm run lint        # Code style
-npm typecheck       # TS Validation (custom script)
-npm test            # Unit tests
-npm run e2e         # Playwright
-```
-
-### Localization
-
-- Add strings in `src/i18n/locales/`
-- Run `npm run i18n:check` to validate
-
-### Deployment
-
-Auto-deploys via Lovable Cloud on push to `main`.
-
-### Deployment
-
-Automatic deployment via Lovable Cloud:
-
-- Push to main → auto-deploy
-- Edge functions deploy with code changes
-
-## Legal
-
-- **Company**: ИП BEEGIN (БИН: 971207300019)
-- **Location**: Almaty, Kazakhstan
-- **Contact**: <admin@lnkmx.my>
+**[Live Demo](https://lnkmx.my)**
 
 ---
+
+## ✨ Features
+
+### 🎨 **AI-Powered Page Builder**
+- **28+ Block Types**: Profile, links, products, forms, bookings, events, and more.
+- **Drag & Drop**: Intuitive mobile-first editor.
+- **AI Generation**: Create entire pages or write copy with one click.
+- **Customization**: Themes, fonts, and animations.
+
+### 📈 **Business Intelligence**
+- **Deep Analytics**: Views, clicks, CTR, and geographic data.
+- **Mini-CRM**: Track leads, manage status (New, Contacted, Won), and add notes.
+- **Notifications**: Instant alerts via Telegram for new leads and bookings.
+
+### 🔗 **Social & Growth**
+- **Smart Links**: Messenger shortcuts (WhatsApp, Telegram), social icons.
+- **Monetization**: Sell products, tickets, and digital goods directly.
+- **Community**: Collaboration tools, shoutouts, and friend feeds.
+
+---
+
+## 🛠 Tech Stack
+
+**Core**
+- **Framework**: [React 18](https://react.dev/)
+- **Build Tool**: [Vite 5](https://vitejs.dev/)
+- **Language**: [TypeScript 5](https://www.typescriptlang.org/)
+
+**Styling & UI**
+- **CSS**: [TailwindCSS 3](https://tailwindcss.com/)
+- **Components**: [shadcn/ui](https://ui.shadcn.com/) (Radix UI)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+
+**Backend & Infra**
+- **Platform**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage)
+- **Compute**: Supabase Edge Functions (Deno)
+- **AI**: Google Gemini API
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js v18+
+- npm v9+
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ElazAzel/inkmax.git
+   cd inkmax
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment**
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+   ```
+   *(Ask the team lead for these credentials if you don't have them)*
+
+4. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 📂 Project Structure
+
+```
+lnkmx/
+├── src/
+│   ├── components/      # Reusable UI & Business Components
+│   │   ├── blocks/      # Public view block renderers
+│   │   ├── block-editors/ # Dashboard block editors
+│   │   └── ui/          # Base design system (shadcn)
+│   ├── pages/           # Route-level components
+│   ├── hooks/           # Custom React Hooks (50+)
+│   ├── services/        # Business Logic & API calls
+│   ├── domain/          # Core Domain Entities
+│   └── lib/             # Utilities & Helpers
+├── supabase/
+│   ├── functions/       # Edge Functions
+│   └── migrations/      # Database Schema
+└── docs/                # Documentation
+```
+
+## 📖 Documentation
+
+- **[Platform Snapshot](docs/PLATFORM_SNAPSHOT.md)**: The single source of truth for architecture and features.
+- **[Architecture](docs/ARCHITECTURE.md)**: High-level system design diagrams.
+- **[Testing Strategy](docs/TESTING.md)**: Guide to running and writing tests.
+- **[Contributing](CONTRIBUTING.md)**: Guidelines for contributing code.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and development process.
+
+1. Create a branch (`feat/amazing-feature`)
+2. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+3. Push to the branch (`git push origin feat/amazing-feature`)
+4. Open a Pull Request
+
+---
+
+## 📄 License
+
+Copyright © 2026 ИП BEEGIN. All rights reserved.
