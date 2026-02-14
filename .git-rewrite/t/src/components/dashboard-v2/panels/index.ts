@@ -1,1 +1,0 @@
-export { ThemePanel } from './ThemePanel';
