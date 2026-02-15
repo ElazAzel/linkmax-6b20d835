@@ -47,7 +47,8 @@ export const ImageBlock = memo(function ImageBlockComponent({ block, onClick }: 
     }
   };
 
-  const containerClass = isBanner ? 'w-full' : 'w-full max-w-md';
+  const isFullWidth = isBanner || block.scale === 'fill' || block.scale === 'cover';
+  const containerClass = isFullWidth ? 'w-full' : 'w-full max-w-md';
 
   return (
     <div className={cn("w-full flex flex-col", alignmentClass)}>

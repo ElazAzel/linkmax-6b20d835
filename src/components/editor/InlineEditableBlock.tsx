@@ -239,7 +239,8 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
         {/* Main content wrapper */}
         <div
           className={cn(
-            "relative group bg-card/70 backdrop-blur-xl rounded-3xl border border-border/20 shadow-glass",
+            "relative group",
+            block.type !== 'separator' && "bg-card/70 backdrop-blur-xl rounded-3xl border border-border/20 shadow-glass",
             isDragging && "opacity-50 scale-95 shadow-glass-lg",
             isTransitioning && "transition-transform duration-300 ease-out"
           )}
