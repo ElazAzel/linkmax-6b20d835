@@ -1037,6 +1037,7 @@ export type Database = {
           gallery_likes: number | null
           grid_config: Json | null
           id: string
+          integrations: Json | null
           is_in_gallery: boolean | null
           is_indexable: boolean | null
           is_paid: boolean | null
@@ -1065,6 +1066,7 @@ export type Database = {
           gallery_likes?: number | null
           grid_config?: Json | null
           id?: string
+          integrations?: Json | null
           is_in_gallery?: boolean | null
           is_indexable?: boolean | null
           is_paid?: boolean | null
@@ -1093,6 +1095,7 @@ export type Database = {
           gallery_likes?: number | null
           grid_config?: Json | null
           id?: string
+          integrations?: Json | null
           is_in_gallery?: boolean | null
           is_indexable?: boolean | null
           is_paid?: boolean | null
@@ -1498,6 +1501,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      templates: {
+        Row: {
+          blocks: Json
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_premium: boolean | null
+          is_public: boolean | null
+          name: string
+          preview_image: string | null
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          blocks?: Json
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_premium?: boolean | null
+          is_public?: boolean | null
+          name: string
+          preview_image?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          blocks?: Json
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_premium?: boolean | null
+          is_public?: boolean | null
+          name?: string
+          preview_image?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       token_transactions: {
         Row: {
@@ -2142,6 +2187,22 @@ export type Database = {
               p_description: string
               p_editor_mode?: string
               p_grid_config?: Json
+              p_seo_meta: Json
+              p_slug: string
+              p_theme_settings: Json
+              p_title: string
+              p_user_id: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_avatar_style: Json
+              p_avatar_url: string
+              p_description: string
+              p_editor_mode?: string
+              p_grid_config?: Json
+              p_integrations?: Json
               p_seo_meta: Json
               p_slug: string
               p_theme_settings: Json
