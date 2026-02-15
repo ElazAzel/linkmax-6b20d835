@@ -376,74 +376,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
               )}
             </div>
 
-            {/* Block Size Selector */}
-            <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
-              <div className="flex items-center gap-2">
-                <Maximize2 className="h-4 w-4 text-primary" />
-                <Label className="text-base font-semibold">{t('blockEditor.blockSize', 'Размер блока')}</Label>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant={currentSize === 'full' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => handleBlockSizeChange('full')}
-                  className="flex-1"
-                >
-                  <span className="w-5 h-3 rounded border bg-primary/30 mr-2" />
-                  {t('blockEditor.sizeFull', 'Полная')}
-                </Button>
-                <Button
-                  type="button"
-                  variant={currentSize === 'half' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => handleBlockSizeChange('half')}
-                  className="flex-1"
-                >
-                  <span className="w-3 h-3 rounded border bg-primary/20 mr-2" />
-                  {t('blockEditor.sizeHalf', 'Половина')}
-                </Button>
-              </div>
-            </div>
-
-            {/* Content Alignment - simplified to buttons */}
-            <div className="space-y-3 p-4 rounded-xl bg-muted/30 border border-border/50">
-              <div className="flex items-center gap-2">
-                <AlignVerticalJustifyCenter className="h-4 w-4 text-primary" />
-                <Label className="text-base font-semibold">{t('blockEditor.alignment', 'Выравнивание')}</Label>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant={currentContentAlignment === 'top' ? 'default' : 'outline'}
-                  size="icon"
-                  onClick={() => handleContentAlignmentChange('top')}
-                  className="flex-1 h-10"
-                >
-                  <AlignVerticalJustifyStart className="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  variant={currentContentAlignment === 'center' ? 'default' : 'outline'}
-                  size="icon"
-                  onClick={() => handleContentAlignmentChange('center')}
-                  className="flex-1 h-10"
-                >
-                  <AlignVerticalJustifyCenter className="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  variant={currentContentAlignment === 'bottom' ? 'default' : 'outline'}
-                  size="icon"
-                  onClick={() => handleContentAlignmentChange('bottom')}
-                  className="flex-1 h-10"
-                >
-                  <AlignVerticalJustifyEnd className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+            {/* Block size is controlled in BlockEditorShell header */}
 
             {/* Paid Content Settings */}
             <PaidContentSettings

@@ -86,6 +86,7 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           <Select
             value={formData.style || 'default'}
             onValueChange={(value: string) => onChange({ ...formData, style: value })}
+            modal={false}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
@@ -104,6 +105,7 @@ function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           <Select
             value={formData.scale || 'cover'}
             onValueChange={(value: any) => onChange({ ...formData, scale: value })}
+            modal={false}
           >
             <SelectTrigger className="h-12 rounded-xl">
               <SelectValue />
