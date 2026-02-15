@@ -1,7 +1,6 @@
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Coins } from 'lucide-react';
 import type { BlockStyle } from '@/types/page';
@@ -21,7 +20,7 @@ export function PaidContentSettings({ blockStyle, onChange }: PaidContentSetting
     onChange({
       ...blockStyle,
       isPaidContent: checked,
-      paidContentCurrency: 'KZT', // Always tokens (1 token = 1 KZT)
+      paidContentCurrency: 'KZT',
     });
   };
 
@@ -33,12 +32,12 @@ export function PaidContentSettings({ blockStyle, onChange }: PaidContentSetting
   };
 
   return (
-    <div className="space-y-4 p-4 rounded-xl bg-muted/30 border border-border/50">
-      <div className="flex items-center justify-between">
+    <div className="rounded-2xl border border-border/30 overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 bg-muted/20">
         <div className="flex items-center gap-2">
           <Lock className="h-4 w-4 text-primary" />
-          <Label className="text-base font-semibold">{t('paidContent.title', 'Платный контент')}</Label>
-          <Badge variant="secondary" className="gap-1 text-xs bg-amber-500/10 text-amber-600">
+          <span className="text-sm font-semibold">{t('paidContent.title', 'Платный контент')}</span>
+          <Badge variant="secondary" className="gap-1 text-[10px] h-5 rounded-full bg-amber-500/10 text-amber-600 border-0">
             <Coins className="h-3 w-3" />
             Linkkon
           </Badge>
@@ -49,36 +48,33 @@ export function PaidContentSettings({ blockStyle, onChange }: PaidContentSetting
         />
       </div>
 
-      <Alert className="bg-primary/5 border-primary/20">
-        <Coins className="h-4 w-4 text-primary" />
-        <AlertDescription className="text-sm">
+      <div className="p-4 space-y-3">
+        <p className="text-xs text-muted-foreground">
           {t('paidContent.settingsDescription', 'Ограничьте доступ к контенту блока. Посетители смогут разблокировать его за Linkkon токены (1 токен = 1 ₸).')}
-        </AlertDescription>
-      </Alert>
+        </p>
 
-      {isPaidContent && (
-        <div className="space-y-3">
-          <div>
-            <Label>{t('paidContent.priceLabel', 'Цена (в Linkkon токенах)')}</Label>
-            <div className="flex items-center gap-2 mt-1">
+        {isPaidContent && (
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground font-medium">{t('paidContent.priceLabel', 'Цена (в Linkkon токенах)')}</Label>
+            <div className="flex items-center gap-2">
               <Input
                 type="number"
                 value={price}
                 onChange={(e) => handlePriceChange(e.target.value)}
                 placeholder={t('paidContent.pricePlaceholder', '100')}
                 min={1}
-                className="flex-1"
+                className="flex-1 h-10 rounded-xl bg-muted/30 border-border/30"
               />
-              <Badge variant="outline" className="shrink-0">
+              <Badge variant="outline" className="shrink-0 h-8 rounded-lg">
                 = {price || 0} ₸
               </Badge>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-[11px] text-muted-foreground">
               {t('paidContent.priceHint', 'Минимум: 1 токен. Рекомендуется: 50-500 токенов.')}
             </p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

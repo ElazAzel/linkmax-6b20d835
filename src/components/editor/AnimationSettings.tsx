@@ -1,6 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { Zap } from 'lucide-react';
 import type { BlockStyle } from '@/types/page';
 import { useTranslation } from 'react-i18next';
 
@@ -23,21 +24,24 @@ export function AnimationSettings({ style = {}, onChange }: AnimationSettingsPro
     onChange({ ...style, animationDelay: value[0] });
   };
 
+  const hasAnimation = style.animation && style.animation !== 'none';
+
   return (
-    <div className="space-y-4 p-4 border border-border rounded-lg bg-card/50">
-      <div className="flex items-center gap-2">
-        <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-        <h3 className="font-medium">{t('animationSettings.title', 'Анимация появления')}</h3>
+    <div className="rounded-2xl border border-border/30 overflow-hidden">
+      <div className="flex items-center gap-2 px-4 py-3 bg-muted/20">
+        <Zap className="h-4 w-4 text-primary" />
+        <span className="text-sm font-semibold">{t('animationSettings.title', 'Анимация появления')}</span>
       </div>
 
-      <div className="space-y-4">
-        <div>
-          <Label>{t('animationSettings.type', 'Тип анимации')}</Label>
+      <div className="p-4 space-y-4">
+        <div className="space-y-1.5">
+          <Label className="text-xs text-muted-foreground font-medium">{t('animationSettings.type', 'Тип анимации')}</Label>
           <Select
             value={style.animation || 'none'}
             onValueChange={handleAnimationChange}
+            modal={false}
           >
-            <SelectTrigger>
+            <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -50,15 +54,16 @@ export function AnimationSettings({ style = {}, onChange }: AnimationSettingsPro
           </Select>
         </div>
 
-        {style.animation && style.animation !== 'none' && (
-          <>
-            <div>
-              <Label>{t('animationSettings.speed', 'Скорость анимации')}</Label>
+        {hasAnimation && (
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground font-medium">{t('animationSettings.speed', 'Скорость')}</Label>
               <Select
                 value={style.animationSpeed || 'normal'}
                 onValueChange={handleSpeedChange}
+                modal={false}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -69,8 +74,8 @@ export function AnimationSettings({ style = {}, onChange }: AnimationSettingsPro
               </Select>
             </div>
 
-            <div>
-              <Label>
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground font-medium">
                 {t('animationSettings.delay', 'Задержка: {{value}}мс', { value: style.animationDelay || 0 })}
               </Label>
               <Slider
@@ -79,13 +84,10 @@ export function AnimationSettings({ style = {}, onChange }: AnimationSettingsPro
                 min={0}
                 max={2000}
                 step={100}
-                className="mt-2"
+                className="mt-1"
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                {t('animationSettings.delayHint', 'Время до начала анимации (0-2000мс)')}
-              </p>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

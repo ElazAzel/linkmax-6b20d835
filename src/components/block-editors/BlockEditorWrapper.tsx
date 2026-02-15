@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,10 +8,8 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Info, Calendar as CalendarIcon, X, Maximize2, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd, ChevronDown, Settings2, Palette, Type, Sparkles } from 'lucide-react';
+import { Crown, Info, Calendar as CalendarIcon, X, ChevronDown, Settings2, Palette, Sparkles, Wand2, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { AnimationSettings } from '@/components/editor/AnimationSettings';
@@ -50,9 +49,16 @@ const getFontClass = (font: BlockFontFamily): string => {
   }
 };
 
+// Preset color swatches
+const COLOR_SWATCHES = [
+  '', // no color / reset
+  '#ffffff', '#000000', '#f43f5e', '#ec4899',
+  '#a855f7', '#6366f1', '#3b82f6', '#06b6d4',
+  '#10b981', '#84cc16', '#f59e0b', '#f97316',
+];
+
 /**
  * Wrapper component for block editors
- * Provides consistent styling, premium badges, and helpful hints
  */
 export function BlockEditorWrapper({
   children,
@@ -65,28 +71,69 @@ export function BlockEditorWrapper({
   return (
     <div className="space-y-4">
       {isPremium && (
-        <Alert>
-          <Crown className="h-4 w-4" />
-          <AlertDescription>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="gap-1">
-                <Crown className="h-3 w-3" />
-                Premium
-              </Badge>
-              <span>{description || t('blockEditor.premiumFeature', 'This is a Premium feature.')}</span>
-            </div>
-          </AlertDescription>
-        </Alert>
+        <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
+          <Crown className="h-4 w-4 text-amber-500 shrink-0" />
+          <span className="text-sm text-amber-600 font-medium">
+            {description || t('blockEditor.premiumFeature', 'Premium')}
+          </span>
+        </div>
       )}
 
       {hint && !isPremium && (
-        <Alert>
-          <Info className="h-4 w-4" />
-          <AlertDescription className="text-sm">{hint}</AlertDescription>
-        </Alert>
+        <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-primary/5 border border-primary/10">
+          <Info className="h-4 w-4 text-primary shrink-0" />
+          <span className="text-xs text-muted-foreground">{hint}</span>
+        </div>
       )}
 
       {children}
+    </div>
+  );
+}
+
+/**
+ * Color swatch picker component
+ */
+function ColorSwatchPicker({
+  value,
+  onChange,
+  label,
+}: {
+  value: string;
+  onChange: (color: string) => void;
+  label: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label className="text-xs text-muted-foreground font-medium">{label}</Label>
+      <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-1.5">
+          {COLOR_SWATCHES.map((color, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => onChange(color)}
+              className={cn(
+                "h-7 w-7 rounded-lg border-2 transition-all duration-150 hover:scale-110 active:scale-95",
+                value === color
+                  ? "border-primary ring-2 ring-primary/20 scale-110"
+                  : "border-border/30 hover:border-border",
+                !color && "bg-[repeating-conic-gradient(hsl(var(--muted))_0%_25%,transparent_0%_50%)] bg-[length:8px_8px]"
+              )}
+              style={color ? { backgroundColor: color } : undefined}
+              title={color || 'Без цвета'}
+            />
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 ml-auto">
+          <Input
+            type="color"
+            value={value || '#ffffff'}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-8 h-8 p-0.5 cursor-pointer rounded-lg border-border/30"
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -111,7 +158,6 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
     // Validation logic
     const validationError = options?.validate?.(formData);
 
-    // Enhanced onChange with validation
     const handleChange = (updates: any) => {
       onChange(updates);
     };
@@ -130,23 +176,6 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
     const handleRemoveSchedule = () => {
       const { schedule, ...rest } = formData;
       handleChange(rest);
-    };
-
-    const handleBlockSizeChange = (size: BlockSizePreset) => {
-      handleChange({
-        ...formData,
-        blockSize: size
-      });
-    };
-
-    const handleContentAlignmentChange = (alignment: BlockStyle['contentAlignment']) => {
-      handleChange({
-        ...formData,
-        blockStyle: {
-          ...(formData.blockStyle || {}),
-          contentAlignment: alignment
-        }
-      });
     };
 
     // Block styling handlers
@@ -199,13 +228,20 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
       });
     };
 
-    const currentSize = formData.blockSize || 'full';
-    const currentContentAlignment = formData.blockStyle?.contentAlignment || 'center';
     const currentBgColor = formData.blockStyle?.backgroundColor || '';
     const currentTextColor = formData.blockStyle?.textColor || '';
     const currentFontFamily = formData.blockStyle?.fontFamily || 'sans';
     const currentTextEffect = formData.blockStyle?.textEffect || 'none';
     const hasBlockStyles = currentBgColor || currentTextColor || formData.blockStyle?.fontFamily || formData.blockStyle?.textEffect;
+    const hasSchedule = formData.schedule?.startDate || formData.schedule?.endDate;
+
+    // Count of active advanced features
+    const advancedCount = [
+      hasBlockStyles,
+      formData.blockStyle?.isPaidContent,
+      formData.blockStyle?.animation && formData.blockStyle.animation !== 'none',
+      hasSchedule,
+    ].filter(Boolean).length;
 
     return (
       <BlockEditorWrapper
@@ -214,7 +250,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
         hint={options?.hint}
       >
         {validationError && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="rounded-xl">
             <AlertDescription>{validationError}</AlertDescription>
           </Alert>
         )}
@@ -222,219 +258,219 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
         {/* Main block content editor */}
         <Component {...props} onChange={handleChange} />
 
-        <Separator className="my-4" />
+        {/* Advanced Settings Toggle */}
+        <button
+          type="button"
+          onClick={() => setAdvancedOpen(!advancedOpen)}
+          className={cn(
+            "w-full flex items-center gap-3 p-3.5 rounded-2xl transition-all duration-200",
+            "border border-border/30 hover:border-border/50",
+            advancedOpen
+              ? "bg-primary/5 border-primary/20"
+              : "bg-muted/20 hover:bg-muted/40"
+          )}
+        >
+          <div className={cn(
+            "h-8 w-8 rounded-xl flex items-center justify-center shrink-0 transition-colors",
+            advancedOpen ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+          )}>
+            <Settings2 className="h-4 w-4" />
+          </div>
+          <div className="flex-1 text-left">
+            <span className="text-sm font-semibold">{t('blockEditor.advancedSettings', 'Дополнительные настройки')}</span>
+            {advancedCount > 0 && (
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px] rounded-full bg-primary/10 text-primary border-0">
+                {advancedCount}
+              </Badge>
+            )}
+          </div>
+          <motion.div
+            animate={{ rotate: advancedOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          </motion.div>
+        </button>
 
-        {/* Collapsible Advanced Settings */}
-        <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
-          <CollapsibleTrigger asChild>
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-4 h-auto rounded-xl bg-muted/30 border border-border/50 hover:bg-muted/50"
+        <AnimatePresence initial={false}>
+          {advancedOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              className="overflow-hidden"
             >
-              <div className="flex items-center gap-2">
-                <Settings2 className="h-4 w-4 text-primary" />
-                <span className="font-semibold">{t('blockEditor.advancedSettings', 'Дополнительные настройки')}</span>
-              </div>
-              <ChevronDown className={cn(
-                "h-4 w-4 transition-transform",
-                advancedOpen && "rotate-180"
-              )} />
-            </Button>
-          </CollapsibleTrigger>
+              <div className="space-y-3 pt-1">
+                {/* Block Style Card */}
+                <div className="rounded-2xl border border-border/30 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-muted/20">
+                    <div className="flex items-center gap-2">
+                      <Palette className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-semibold">{t('blockEditor.blockStyle', 'Цвет и шрифт')}</span>
+                    </div>
+                    {hasBlockStyles && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleClearBlockStyle}
+                        className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="h-3 w-3 mr-1" />
+                        {t('common.reset', 'Сбросить')}
+                      </Button>
+                    )}
+                  </div>
 
-          <CollapsibleContent className="space-y-4 mt-4">
-            {/* Block Color & Font Settings */}
-            <div className="space-y-4 p-4 rounded-xl bg-muted/30 border border-border/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Palette className="h-4 w-4 text-primary" />
-                  <Label className="text-base font-semibold">{t('blockEditor.blockStyle', 'Цвет и шрифт блока')}</Label>
-                </div>
-                {hasBlockStyles && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleClearBlockStyle}
-                    className="h-7 text-xs"
-                  >
-                    <X className="h-3 w-3 mr-1" />
-                    {t('common.reset', 'Сбросить')}
-                  </Button>
-                )}
-              </div>
+                  <div className="p-4 space-y-4">
+                    {/* Background Color */}
+                    <ColorSwatchPicker
+                      value={currentBgColor}
+                      onChange={handleBackgroundColorChange}
+                      label={t('blockEditor.backgroundColor', 'Цвет фона')}
+                    />
 
-              {/* Background Color */}
-              <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">{t('blockEditor.backgroundColor', 'Цвет фона')}</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="color"
-                    value={currentBgColor || '#ffffff'}
-                    onChange={(e) => handleBackgroundColorChange(e.target.value)}
-                    className="w-12 h-10 p-1 cursor-pointer rounded-lg"
-                  />
-                  <Input
-                    type="text"
-                    value={currentBgColor}
-                    onChange={(e) => handleBackgroundColorChange(e.target.value)}
-                    placeholder={t('blockEditor.noColor', 'Без цвета')}
-                    className="flex-1 bg-background/50"
-                  />
-                </div>
-              </div>
+                    {/* Text Color */}
+                    <ColorSwatchPicker
+                      value={currentTextColor}
+                      onChange={handleTextColorChange}
+                      label={t('blockEditor.textColor', 'Цвет текста')}
+                    />
 
-              {/* Text Color */}
-              <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">{t('blockEditor.textColor', 'Цвет текста')}</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="color"
-                    value={currentTextColor || '#000000'}
-                    onChange={(e) => handleTextColorChange(e.target.value)}
-                    className="w-12 h-10 p-1 cursor-pointer rounded-lg"
-                  />
-                  <Input
-                    type="text"
-                    value={currentTextColor}
-                    onChange={(e) => handleTextColorChange(e.target.value)}
-                    placeholder={t('blockEditor.noColor', 'Без цвета')}
-                    className="flex-1 bg-background/50"
-                  />
-                </div>
-              </div>
+                    {/* Font Family */}
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground font-medium">{t('blockEditor.fontFamily', 'Шрифт')}</Label>
+                      <div className="grid grid-cols-5 gap-1.5">
+                        {FONT_FAMILIES.map((font) => (
+                          <button
+                            key={font.value}
+                            type="button"
+                            onClick={() => handleFontFamilyChange(font.value)}
+                            className={cn(
+                              "flex flex-col items-center gap-1 py-2.5 px-1 rounded-xl transition-all duration-150",
+                              "hover:bg-muted/60 active:scale-95",
+                              currentFontFamily === font.value
+                                ? "bg-primary/10 ring-2 ring-primary/20 text-primary"
+                                : "bg-muted/30 text-muted-foreground"
+                            )}
+                          >
+                            <span className={cn("text-lg leading-none", getFontClass(font.value))}>{font.preview}</span>
+                            <span className="text-[10px] font-medium truncate w-full text-center">{font.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-              {/* Font Family */}
-              <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">{t('blockEditor.fontFamily', 'Шрифт')}</Label>
-                {/* @ts-ignore - modal prop exists in Radix Select but might be missing in local types */}
-                <Select
-                  value={currentFontFamily}
-                  onValueChange={(v: string) => handleFontFamilyChange(v as BlockFontFamily)}
-                  modal={false}
-                >
-                  <SelectTrigger className="bg-background/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {FONT_FAMILIES.map((font) => (
-                      <SelectItem key={font.value} value={font.value}>
-                        <div className="flex items-center gap-3">
-                          <span className={cn("text-lg w-8", getFontClass(font.value))}>{font.preview}</span>
-                          <span>{font.label}</span>
+                    {/* Text Effect */}
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground font-medium flex items-center gap-1.5">
+                        <Sparkles className="h-3 w-3" />
+                        {t('blockEditor.textEffect', 'Эффект текста')}
+                      </Label>
+                      <Select
+                        value={currentTextEffect}
+                        onValueChange={(v: string) => handleTextEffectChange(v as BlockStyle['textEffect'])}
+                        modal={false}
+                      >
+                        <SelectTrigger className="h-10 rounded-xl bg-muted/30 border-border/30">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">{t('textEffects.none', 'Без эффекта')}</SelectItem>
+                          <SelectItem value="shimmer">{t('textEffects.shimmer', '✨ Переливание')}</SelectItem>
+                          <SelectItem value="glow">{t('textEffects.glow', '💡 Свечение')}</SelectItem>
+                          <SelectItem value="pulse">{t('textEffects.pulse', '💓 Пульсация')}</SelectItem>
+                          <SelectItem value="blink">{t('textEffects.blink', '👁 Мигание')}</SelectItem>
+                          <SelectItem value="rainbow">{t('textEffects.rainbow', '🌈 Радуга')}</SelectItem>
+                          <SelectItem value="neon">{t('textEffects.neon', '🔮 Неон')}</SelectItem>
+                          <SelectItem value="typewriter">{t('textEffects.typewriter', '⌨️ Печатная машинка')}</SelectItem>
+                          <SelectItem value="gradient-flow">{t('textEffects.gradientFlow', '🌊 Текучий градиент')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Preview */}
+                    {hasBlockStyles && (
+                      <div className="space-y-2">
+                        <Label className="text-xs text-muted-foreground font-medium">{t('blockEditor.preview', 'Превью')}</Label>
+                        <div
+                          className={cn("p-4 rounded-xl border border-border/20", getFontClass(currentFontFamily))}
+                          style={{
+                            backgroundColor: currentBgColor || 'var(--card)',
+                            color: currentTextColor || 'var(--foreground)',
+                          }}
+                        >
+                          <p className={cn("text-sm", getTextEffectClass(currentTextEffect as BlockStyle['textEffect']))}>
+                            {t('blockEditor.previewText', 'Пример текста блока')}
+                          </p>
                         </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-              {/* Text Effect */}
-              <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground flex items-center gap-2">
-                  <Sparkles className="h-3 w-3" />
-                  {t('blockEditor.textEffect', 'Эффект текста')}
-                </Label>
-                {/* @ts-ignore - modal prop exists in Radix Select but might be missing in local types */}
-                <Select
-                  value={currentTextEffect}
-                  onValueChange={(v: string) => handleTextEffectChange(v as BlockStyle['textEffect'])}
-                  modal={false}
-                >
-                  <SelectTrigger className="bg-background/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">{t('textEffects.none', 'Без эффекта')}</SelectItem>
-                    <SelectItem value="shimmer">{t('textEffects.shimmer', '✨ Переливание')}</SelectItem>
-                    <SelectItem value="glow">{t('textEffects.glow', '💡 Свечение')}</SelectItem>
-                    <SelectItem value="pulse">{t('textEffects.pulse', '💓 Пульсация')}</SelectItem>
-                    <SelectItem value="blink">{t('textEffects.blink', '👁 Мигание')}</SelectItem>
-                    <SelectItem value="rainbow">{t('textEffects.rainbow', '🌈 Радуга')}</SelectItem>
-                    <SelectItem value="neon">{t('textEffects.neon', '🔮 Неон')}</SelectItem>
-                    <SelectItem value="typewriter">{t('textEffects.typewriter', '⌨️ Печатная машинка')}</SelectItem>
-                    <SelectItem value="gradient-flow">{t('textEffects.gradientFlow', '🌊 Текучий градиент')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                {/* Paid Content Settings */}
+                <PaidContentSettings
+                  blockStyle={formData.blockStyle}
+                  onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
+                />
 
-              {/* Preview */}
-              {hasBlockStyles && (
-                <div className="space-y-2">
-                  <Label className="text-xs text-muted-foreground">{t('blockEditor.preview', 'Превью')}</Label>
-                  <div
-                    className={cn("p-4 rounded-lg border border-border/30", getFontClass(currentFontFamily))}
-                    style={{
-                      backgroundColor: currentBgColor || 'var(--card)',
-                      color: currentTextColor || 'var(--foreground)',
-                    }}
-                  >
-                    <p className={cn("text-sm", getTextEffectClass(currentTextEffect as BlockStyle['textEffect']))}>
-                      {t('blockEditor.previewText', 'Пример текста блока')}
+                {/* Animation Settings */}
+                <AnimationSettings
+                  style={formData.blockStyle}
+                  onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
+                />
+
+                {/* Schedule Settings */}
+                <div className="rounded-2xl border border-border/30 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 bg-muted/20">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-semibold">{t('blockEditor.schedule', 'Расписание')}</span>
+                    </div>
+                    {hasSchedule && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleRemoveSchedule}
+                        className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="h-3 w-3 mr-1" />
+                        {t('blockEditor.clearSchedule', 'Очистить')}
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="p-4 space-y-3">
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-muted-foreground font-medium">{t('blockEditor.appearDate', 'Появление')}</Label>
+                        <DateTimePicker
+                          value={formData.schedule?.startDate}
+                          onChange={(value) => handleScheduleChange('startDate', value)}
+                          placeholder={t('blockEditor.selectDate', 'Выберите дату')}
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-muted-foreground font-medium">{t('blockEditor.disappearDate', 'Исчезновение')}</Label>
+                        <DateTimePicker
+                          value={formData.schedule?.endDate}
+                          onChange={(value) => handleScheduleChange('endDate', value)}
+                          placeholder={t('blockEditor.selectDate', 'Выберите дату')}
+                        />
+                      </div>
+                    </div>
+
+                    <p className="text-[11px] text-muted-foreground">
+                      {t('blockEditor.scheduleHint', 'Блок будет виден только в указанный период')}
                     </p>
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* Block size is controlled in BlockEditorShell header */}
-
-            {/* Paid Content Settings */}
-            <PaidContentSettings
-              blockStyle={formData.blockStyle}
-              onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
-            />
-
-            {/* Animation Settings */}
-            <AnimationSettings
-              style={formData.blockStyle}
-              onChange={(style: BlockStyle) => handleChange({ ...formData, blockStyle: style })}
-            />
-
-            <Separator className="my-4" />
-
-            {/* Schedule Settings */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label className="text-base font-semibold">{t('blockEditor.schedule', 'Расписание показа')}</Label>
-                {formData.schedule && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleRemoveSchedule}
-                    className="h-8"
-                  >
-                    <X className="h-4 w-4 mr-1" />
-                    {t('blockEditor.clearSchedule', 'Очистить')}
-                  </Button>
-                )}
               </div>
-
-              <div className="grid grid-cols-1 gap-3">
-                <div className="space-y-2">
-                  <Label className="text-sm">{t('blockEditor.appearDate', 'Появление')}</Label>
-                  <DateTimePicker
-                    value={formData.schedule?.startDate}
-                    onChange={(value) => handleScheduleChange('startDate', value)}
-                    placeholder={t('blockEditor.selectDate', 'Выберите дату')}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm">{t('blockEditor.disappearDate', 'Исчезновение')}</Label>
-                  <DateTimePicker
-                    value={formData.schedule?.endDate}
-                    onChange={(value) => handleScheduleChange('endDate', value)}
-                    placeholder={t('blockEditor.selectDate', 'Выберите дату')}
-                  />
-                </div>
-              </div>
-
-              <p className="text-xs text-muted-foreground">
-                {t('blockEditor.scheduleHint', 'Блок будет виден только в указанный период')}
-              </p>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </BlockEditorWrapper>
     );
   };
@@ -478,7 +514,7 @@ function DateTimePicker({ value, onChange, placeholder }: DateTimePickerProps) {
           <Button
             variant="outline"
             className={cn(
-              'flex-1 justify-start text-left font-normal h-10',
+              'flex-1 justify-start text-left font-normal h-10 rounded-xl border-border/30',
               !date && 'text-muted-foreground'
             )}
           >
@@ -500,7 +536,7 @@ function DateTimePicker({ value, onChange, placeholder }: DateTimePickerProps) {
         type="time"
         value={time}
         onChange={(e) => handleTimeChange(e.target.value)}
-        className="w-24"
+        className="w-24 rounded-xl border-border/30"
       />
     </div>
   );
