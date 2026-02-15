@@ -17,11 +17,16 @@ import {
     Loader2,
     Save,
     Clock,
+    Grid2x2,
+    RectangleHorizontal,
+    RectangleVertical,
+    Square,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { Block } from '@/types/page';
@@ -96,7 +101,7 @@ const AutosaveIndicator = memo(function AutosaveIndicator({
     if (hasUnsavedChanges) {
         return (
             <div className="flex items-center gap-1.5 text-xs text-amber-500">
-                <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                <div className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                 <span>{t('editor.unsaved', 'Не сохранено')}</span>
             </div>
         );
@@ -104,8 +109,8 @@ const AutosaveIndicator = memo(function AutosaveIndicator({
 
     if (lastSaved) {
         return (
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Check className="h-3 w-3 text-green-500" />
+            <div className="flex items-center gap-1.5 text-xs text-emerald-500">
+                <Check className="h-3 w-3" />
                 <span>{t('editor.saved', 'Сохранено')}</span>
             </div>
         );
@@ -143,6 +148,59 @@ const PreviewToggle = memo(function PreviewToggle({
                 {t('editor.preview', 'Превью')}
             </span>
         </Button>
+    );
+});
+
+// Block size selector component
+const BlockSizeSelector = memo(function BlockSizeSelector({
+    block,
+    onBlockUpdate,
+}: {
+    block: Block;
+    onBlockUpdate: (updates: Partial<Block>) => void;
+}) {
+    const { t } = useTranslation();
+    const sizes = [
+        { value: 'small', icon: <Square className="h-3.5 w-3.5" />, label: '1×1' },
+        { value: 'wide', icon: <RectangleHorizontal className="h-3.5 w-3.5" />, label: '2×1' },
+        { value: 'tall', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: '1×2' },
+        { value: 'large', icon: <Grid2x2 className="h-3.5 w-3.5" />, label: '2×2' },
+    ];
+
+    const currentSize = block.blockSize || 'small';
+    const isActive = (value: string) => {
+        if (value === 'small') return !block.blockSize || block.blockSize === 'small' || block.blockSize === 'half';
+        if (value === 'wide') return block.blockSize === 'wide' || block.blockSize === 'full';
+        return block.blockSize === value;
+    };
+
+    return (
+        <TooltipProvider delayDuration={300}>
+            <div className="flex items-center gap-0.5 p-1 rounded-xl bg-muted/50 border border-border/30">
+                {sizes.map((size) => (
+                    <Tooltip key={size.value}>
+                        <TooltipTrigger asChild>
+                            <button
+                                type="button"
+                                onClick={() => onBlockUpdate({ blockSize: size.value as any })}
+                                className={cn(
+                                    "relative h-8 w-8 rounded-lg flex items-center justify-center transition-all duration-200",
+                                    "hover:bg-muted active:scale-95",
+                                    isActive(size.value)
+                                        ? "bg-primary text-primary-foreground shadow-sm"
+                                        : "text-muted-foreground"
+                                )}
+                            >
+                                {size.icon}
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="text-xs">
+                            {size.label}
+                        </TooltipContent>
+                    </Tooltip>
+                ))}
+            </div>
+        </TooltipProvider>
     );
 });
 
@@ -236,86 +294,39 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     }, [activeTab, shouldShowTabs, children, contentTab, styleTab, advancedTab]);
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full bg-background">
             {/* Header */}
-            <div className="shrink-0 border-b border-border/10 bg-background/50 backdrop-blur-xl">
+            <div className="shrink-0 bg-background/80 backdrop-blur-2xl border-b border-border/10">
                 {/* Title row */}
-                <div className="flex items-center gap-3 px-5 py-4">
+                <div className="flex items-center gap-3 px-4 py-3">
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={onClose}
-                        className="h-10 w-10 rounded-xl hover:bg-muted/50 active:scale-95 transition-all shrink-0"
+                        className="h-9 w-9 rounded-xl hover:bg-muted/60 active:scale-95 transition-all shrink-0"
                     >
                         <ChevronLeft className="h-5 w-5" />
                     </Button>
 
                     {blockIcon && (
-                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                        <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                             {blockIcon}
                         </div>
                     )}
 
                     <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                            <h2 className="text-lg font-bold truncate">{blockTypeName}</h2>
-                        </div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                            <AutosaveIndicator
-                                isSaving={isSaving}
-                                lastSaved={lastSaved}
-                                hasUnsavedChanges={hasUnsavedChanges}
-                            />
-                        </div>
+                        <h2 className="text-base font-bold truncate leading-tight">{blockTypeName}</h2>
+                        <AutosaveIndicator
+                            isSaving={isSaving}
+                            lastSaved={lastSaved}
+                            hasUnsavedChanges={hasUnsavedChanges}
+                        />
                     </div>
 
                     {/* Block Size Selector */}
                     {onBlockUpdate && block && (
-                        <div className="flex items-center gap-1 bg-muted/40 p-1 rounded-lg">
-                            {/* 1x1 (Small) */}
-                            <Button
-                                variant={(!block.blockSize || block.blockSize === 'small' || block.blockSize === 'half') ? 'secondary' : 'ghost'}
-                                size="icon"
-                                className="h-7 w-7 rounded-md"
-                                title="1x1"
-                                onClick={() => onBlockUpdate({ blockSize: 'small' })}
-                            >
-                                <div className="w-2 h-2 border border-current" />
-                            </Button>
-                            {/* 2x1 (Wide) */}
-                            <Button
-                                variant={(block.blockSize === 'wide' || block.blockSize === 'full') ? 'secondary' : 'ghost'}
-                                size="icon"
-                                className="h-7 w-7 rounded-md"
-                                title="2x1"
-                                onClick={() => onBlockUpdate({ blockSize: 'wide' })}
-                            >
-                                <div className="w-4 h-2 border border-current" />
-                            </Button>
-                            {/* 1x2 (Tall) */}
-                            <Button
-                                variant={(block.blockSize === 'tall') ? 'secondary' : 'ghost'}
-                                size="icon"
-                                className="h-7 w-7 rounded-md"
-                                title="1x2"
-                                onClick={() => onBlockUpdate({ blockSize: 'tall' })}
-                            >
-                                <div className="h-4 w-2 border border-current" />
-                            </Button>
-                            {/* 2x2 (Large) */}
-                            <Button
-                                variant={(block.blockSize === 'large') ? 'secondary' : 'ghost'}
-                                size="icon"
-                                className="h-7 w-7 rounded-md"
-                                title="2x2"
-                                onClick={() => onBlockUpdate({ blockSize: 'large' })}
-                            >
-                                <div className="w-4 h-4 border border-current" />
-                            </Button>
-                        </div>
+                        <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
                     )}
-
-
 
                     {/* Preview toggle (desktop only) */}
                     {enablePreview && !isMobile && previewComponent && (
@@ -328,22 +339,23 @@ export const BlockEditorShell = memo(function BlockEditorShell({
 
                 {/* Tabs */}
                 {shouldShowTabs && (
-                    <div className="px-5 pb-2">
+                    <div className="px-4 pb-2">
                         <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as EditorTab)}>
-                            <TabsList className="w-full h-11 p-1 bg-muted/50 rounded-xl">
+                            <TabsList className="w-full h-10 p-0.5 bg-muted/40 rounded-xl gap-0.5">
                                 {tabs.map((tab) => (
                                     <TabsTrigger
                                         key={tab.id}
                                         value={tab.id}
                                         className={cn(
-                                            "flex-1 h-9 gap-2 rounded-lg font-medium transition-all",
-                                            "data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                                            "flex-1 h-9 gap-1.5 rounded-[10px] font-semibold text-sm transition-all",
+                                            "data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-foreground",
+                                            "data-[state=inactive]:text-muted-foreground"
                                         )}
                                     >
                                         {tab.icon}
-                                        <span className="hidden sm:inline">{tab.label}</span>
+                                        <span>{tab.label}</span>
                                         {tab.badge !== undefined && tab.badge > 0 && (
-                                            <Badge variant="secondary" className="h-5 px-1.5 text-xs">
+                                            <Badge variant="secondary" className="h-4 px-1 text-[10px] rounded-full">
                                                 {tab.badge}
                                             </Badge>
                                         )}
@@ -365,10 +377,10 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                     <ScrollArea className="h-full">
                         <motion.div
                             key={activeTab}
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="px-5 py-6 space-y-5"
+                            transition={{ duration: 0.15, ease: 'easeOut' }}
+                            className="px-4 py-5 space-y-4"
                         >
                             {renderTabContent()}
                         </motion.div>
@@ -383,10 +395,10 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                             animate={{ width: '40%', opacity: 1 }}
                             exit={{ width: 0, opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="overflow-hidden bg-muted/30"
+                            className="overflow-hidden bg-muted/20"
                         >
                             <div className="h-full p-4 overflow-auto">
-                                <div className="text-xs text-muted-foreground mb-2 font-medium">
+                                <div className="text-xs text-muted-foreground mb-3 font-semibold uppercase tracking-wider">
                                     {t('editor.livePreview', 'Live Preview')}
                                 </div>
                                 <div className="bg-background rounded-2xl p-4 shadow-sm border border-border/10">
@@ -399,21 +411,20 @@ export const BlockEditorShell = memo(function BlockEditorShell({
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 border-t border-border/10 bg-background/98 backdrop-blur-xl px-5 py-4 pb-safe">
+            <div className="shrink-0 border-t border-border/10 bg-background/95 backdrop-blur-2xl px-4 py-3 pb-safe">
                 {footerActions || (
-                    <div className="flex gap-3">
+                    <div className="flex gap-2.5">
                         <Button
                             variant="outline"
                             onClick={onClose}
-                            className="flex-1 h-12 rounded-xl text-base font-semibold border-2 active:scale-[0.98] transition-all"
+                            className="flex-1 h-11 rounded-xl font-semibold border-border/50 active:scale-[0.98] transition-all"
                         >
-                            <X className="h-4 w-4 mr-2" />
                             {t('editor.cancel', 'Отмена')}
                         </Button>
                         <Button
                             onClick={onSave}
                             disabled={isSaving}
-                            className="flex-[2] h-12 rounded-xl text-base font-semibold shadow-lg shadow-primary/25 active:scale-[0.98] transition-all"
+                            className="flex-[2] h-11 rounded-xl font-semibold shadow-lg shadow-primary/20 active:scale-[0.98] transition-all"
                         >
                             {isSaving ? (
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
