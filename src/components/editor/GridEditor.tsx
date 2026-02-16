@@ -107,6 +107,8 @@ function SortableGridBlockItem({
         'min-h-[140px]',
         dimensions.gridRows === 2 && 'min-h-[296px]' // 140*2 + 16gap
       )}
+      // On mobile, we attach listeners to the whole card to allow drag (with delay from TouchSensor)
+      {...(isMobile ? { ...attributes, ...listeners } : {})}
     >
       {/* Drag handle (Desktop) */}
       {!isMobile && (
@@ -131,7 +133,7 @@ function SortableGridBlockItem({
           // Use bubble phase to catch clicks from children (like links)
           // and prevent them while triggering edit
           e.stopPropagation();
-          e.preventDefault();
+          // e.preventDefault(); // Removed to allow interaction with block content if needed
           onEdit(block);
         }}
       >

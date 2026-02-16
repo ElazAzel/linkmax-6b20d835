@@ -122,14 +122,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGoogle = async () => {
     const result = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}/auth/callback`,
     });
     return { error: result.error };
   };
 
   const signInWithApple = async () => {
     const result = await lovable.auth.signInWithOAuth('apple', {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}/auth/callback`,
     });
     return { error: result.error };
   };

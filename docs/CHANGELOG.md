@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Block Editor Improvements**:
+    - Enabled drag-and-drop on mobile devices by attaching listeners to the entire block card (with long-press support).
+    - Improved click-to-edit reliability on Desktop by removing restrictive event prevention.
 - Unit test files for `ai-content-generator` and `create-lead` edge functions.
 - `PLATFORM_SNAPSHOT.md`, `RUNBOOKS`, `ADRs` (initial overhaul).
 - **Liquid Glass Design Overhaul**: Comprehensive platform-wide refactor to adopt a premium, modern aesthetic.
@@ -37,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Content Security Policy (CSP)**: Updated `index.html` to allow analytics (FB, TikTok, GA4, Yandex) and localization (Locize) scripts while maintaining security.
 
 ### Fixed
+- **Authentication**: Resolved infinite redirect loop during Google/Apple sign-in by correcting the `redirect_uri` to point to `/auth/callback`.
+- **Block Editor**: Fixed "Editor not opening" on PC and intermittent issues on mobile by optimizing event handling and drag sensors.
 - Type errors and missing Deno namespace references in `ai-content-generator` and `create-lead` edge functions.
 - "Screen lock" glitch in Block Editor by disabling modal behavior on style selectors.
 - Missing `cn` import in `Pricing.tsx`.
