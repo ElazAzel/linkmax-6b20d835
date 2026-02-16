@@ -41,6 +41,7 @@ import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSecti
 import { cn } from '@/lib/utils';
 import type { ProfileBlock } from '@/types/page';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import { motion } from 'framer-motion';
 
 interface AccountSettingsScreenProps {
   usernameInput: string;
@@ -111,6 +112,21 @@ function SettingsItem({
   );
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0 }
+};
+
 export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: AccountSettingsScreenProps) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -125,56 +141,63 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
         onBack={props.onBack}
       />
 
-      <div className="px-5 py-6 space-y-6">
+      <motion.div
+        className="px-5 py-6 space-y-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {/* Profile Card */}
-        <Card className="p-5">
-          <div className="flex items-center gap-4 mb-5">
-            <Avatar className="h-16 w-16 rounded-2xl border-2 border-border">
-              <AvatarImage src={props.avatarUrl || ''} alt={props.displayName || ''} />
-              <AvatarFallback className="rounded-2xl text-xl font-bold bg-primary/10 text-primary">
-                {(props.displayName || 'U').charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold truncate">{props.displayName || t('dashboard.accountSettings.user', 'User')}</h2>
-                {props.isPremium && (
-                  <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
-                    <Crown className="h-3 w-3 mr-1" />
-                    PRO
-                  </Badge>
-                )}
+        <motion.div variants={itemVariants}>
+          <Card className="p-5">
+            <div className="flex items-center gap-4 mb-5">
+              <Avatar className="h-16 w-16 rounded-2xl border-2 border-border">
+                <AvatarImage src={props.avatarUrl || ''} alt={props.displayName || ''} />
+                <AvatarFallback className="rounded-2xl text-xl font-bold bg-primary/10 text-primary">
+                  {(props.displayName || 'U').charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-bold truncate">{props.displayName || t('dashboard.accountSettings.user', 'User')}</h2>
+                  {props.isPremium && (
+                    <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+                      <Crown className="h-3 w-3 mr-1" />
+                      PRO
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-sm text-muted-foreground">@{props.usernameInput}</p>
               </div>
-              <p className="text-sm text-muted-foreground">@{props.usernameInput}</p>
             </div>
-          </div>
 
-          {/* Username Input */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium flex items-center gap-2">
-              <Link2 className="h-4 w-4" />
-              {t('dashboard.accountSettings.username', 'Username')}
-            </label>
-            <div className="flex gap-2">
-              <Input
-                value={props.usernameInput}
-                onChange={(e) => props.onUsernameChange(e.target.value)}
-                placeholder="username"
-                className="h-12 rounded-xl"
-              />
-              <Button
-                onClick={props.onUpdateUsername}
-                disabled={props.usernameSaving}
-                className="h-12 px-5 rounded-xl"
-              >
-                {props.usernameSaving ? '...' : <Check className="h-5 w-5" />}
-              </Button>
+            {/* Username Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Link2 className="h-4 w-4" />
+                {t('dashboard.accountSettings.username', 'Username')}
+              </label>
+              <div className="flex gap-2">
+                <Input
+                  value={props.usernameInput}
+                  onChange={(e) => props.onUsernameChange(e.target.value)}
+                  placeholder="username"
+                  className="h-12 rounded-xl"
+                />
+                <Button
+                  onClick={props.onUpdateUsername}
+                  disabled={props.usernameSaving}
+                  className="h-12 px-5 rounded-xl"
+                >
+                  {props.usernameSaving ? '...' : <Check className="h-5 w-5" />}
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </motion.div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
+        <motion.div variants={itemVariants} className="grid grid-cols-2 gap-3">
           <button
             onClick={props.onOpenTokens}
             className="p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-violet-500/10 border border-primary/20 text-left transition-all active:scale-[0.98]"
@@ -192,10 +215,10 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
             <div className="font-bold">{t('dashboard.accountSettings.achievements', 'Achievements')}</div>
             <div className="text-xs text-muted-foreground">{t('dashboard.accountSettings.achievementsDesc', 'Your progress')}</div>
           </button>
-        </div>
+        </motion.div>
 
         {/* Account Section */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.accountSettings.account', 'Account')}
           </h3>
@@ -229,10 +252,10 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               onClick={() => setShowVerification(true)}
             />
           </Card>
-        </div>
+        </motion.div>
 
         {/* Notifications Section */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.accountSettings.notifications', 'Notifications')}
           </h3>
@@ -281,10 +304,10 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               )}
             </div>
           </Card>
-        </div>
+        </motion.div>
 
         {/* Appearance Section */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.accountSettings.appearance', 'Appearance')}
           </h3>
@@ -297,10 +320,10 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               rightElement={<LanguageSwitcher />}
             />
           </Card>
-        </div>
+        </motion.div>
 
         {/* Plan & Billing */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.accountSettings.planBilling', 'Plan & Billing')}
           </h3>
@@ -323,13 +346,15 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               />
             )}
           </Card>
-        </div>
+        </motion.div>
 
         {/* Linked Accounts Section */}
-        <LinkedAccountsSection userEmail={props.displayName} />
+        <motion.div variants={itemVariants}>
+          <LinkedAccountsSection userEmail={props.displayName} />
+        </motion.div>
 
         {/* Security */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.accountSettings.security', 'Security')}
           </h3>
@@ -342,18 +367,20 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               onClick={() => {/* TODO: Open password change */ }}
             />
           </Card>
-        </div>
+        </motion.div>
 
         {/* Logout */}
-        <Button
-          variant="outline"
-          className="w-full h-14 rounded-2xl text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
-          onClick={props.onSignOut}
-        >
-          <LogOut className="h-5 w-5 mr-2" />
-          {t('dashboard.accountSettings.signOut', 'Sign Out')}
-        </Button>
-      </div>
+        <motion.div variants={itemVariants}>
+          <Button
+            variant="outline"
+            className="w-full h-14 rounded-2xl text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
+            onClick={props.onSignOut}
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            {t('dashboard.accountSettings.signOut', 'Sign Out')}
+          </Button>
+        </motion.div>
+      </motion.div>
 
       {/* Verification Panel */}
       {showVerification && (

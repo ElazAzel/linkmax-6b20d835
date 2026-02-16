@@ -37,6 +37,7 @@ import {
 } from '../analytics';
 import { cn } from '@/lib/utils';
 import type { Block } from '@/types/page';
+import { motion } from 'framer-motion';
 
 interface InsightsScreenProps {
   pageId: string;
@@ -47,6 +48,21 @@ interface InsightsScreenProps {
 
 type Period = '7d' | '14d' | '30d';
 type Tab = 'overview' | 'traffic' | 'blocks' | 'funnel';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
 
 export const InsightsScreen = memo(function InsightsScreen({
   pageId,
@@ -239,8 +255,8 @@ export const InsightsScreen = memo(function InsightsScreen({
               className={cn(
                 "flex-1 py-2.5 rounded-xl text-sm font-bold transition-all",
                 period === p
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                  : "bg-muted/50 text-muted-foreground"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-[1.02]"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted"
               )}
             >
               {t(`dashboard.insights.period.${p}`, p === '7d' ? '7 дней' : p === '14d' ? '14 дней' : '30 дней')}
@@ -280,238 +296,283 @@ export const InsightsScreen = memo(function InsightsScreen({
               </TabsList>
 
               {/* Overview Tab */}
-              <TabsContent value="overview" className="mt-4 space-y-4">
-                {/* Main Stats */}
-                <div className="grid grid-cols-2 gap-3">
-                  <StatCard
-                    icon={Eye}
-                    iconBg="bg-blue-500/15"
-                    iconColor="text-blue-500"
-                    value={stats.views}
-                    label={t('dashboard.insights.views', 'Просмотры')}
-                    change={stats.viewsChange}
-                  />
-                  <StatCard
-                    icon={MousePointerClick}
-                    iconBg="bg-emerald-500/15"
-                    iconColor="text-emerald-500"
-                    value={stats.clicks}
-                    label={t('dashboard.insights.clicks', 'Клики')}
-                    change={stats.clicksChange}
-                  />
-                </div>
+              <TabsContent value="overview" className="mt-4">
+                <motion.div
+                  className="space-y-4"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {/* Main Stats */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <motion.div variants={itemVariants}>
+                      <StatCard
+                        icon={Eye}
+                        iconBg="bg-blue-500/15"
+                        iconColor="text-blue-500"
+                        value={stats.views}
+                        label={t('dashboard.insights.views', 'Просмотры')}
+                        change={stats.viewsChange}
+                      />
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                      <StatCard
+                        icon={MousePointerClick}
+                        iconBg="bg-emerald-500/15"
+                        iconColor="text-emerald-500"
+                        value={stats.clicks}
+                        label={t('dashboard.insights.clicks', 'Клики')}
+                        change={stats.clicksChange}
+                      />
+                    </motion.div>
+                  </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <StatCard
-                    icon={Users}
-                    iconBg="bg-violet-500/15"
-                    iconColor="text-violet-500"
-                    value={stats.uniqueVisitors}
-                    label={t('dashboard.insights.uniqueVisitors', 'Уникальные')}
-                    change={stats.visitorsChange}
-                  />
-                  <StatCard
-                    icon={Target}
-                    iconBg="bg-amber-500/15"
-                    iconColor="text-amber-500"
-                    value={`${stats.ctr.toFixed(1)}%`}
-                    label={t('dashboard.insights.ctr', 'CTR')}
-                  />
-                </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <motion.div variants={itemVariants}>
+                      <StatCard
+                        icon={Users}
+                        iconBg="bg-violet-500/15"
+                        iconColor="text-violet-500"
+                        value={stats.uniqueVisitors}
+                        label={t('dashboard.insights.uniqueVisitors', 'Уникальные')}
+                        change={stats.visitorsChange}
+                      />
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                      <StatCard
+                        icon={Target}
+                        iconBg="bg-amber-500/15"
+                        iconColor="text-amber-500"
+                        value={`${stats.ctr.toFixed(1)}%`}
+                        label={t('dashboard.insights.ctr', 'CTR')}
+                      />
+                    </motion.div>
+                  </div>
 
-                {/* Chart */}
-                {stats.dailyData.length > 0 && (
-                  <AnalyticsChart
-                    data={stats.dailyData}
-                    title={t('analytics.chart.title', 'Динамика за период')}
-                    showClicks={true}
-                  />
-                )}
+                  {/* Chart */}
+                  {stats.dailyData.length > 0 && (
+                    <motion.div variants={itemVariants}>
+                      <AnalyticsChart
+                        data={stats.dailyData}
+                        title={t('analytics.chart.title', 'Динамика за период')}
+                        showClicks={true}
+                      />
+                    </motion.div>
+                  )}
 
-                {/* AI Insights */}
-                {insights.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 px-1">
-                      <Sparkles className="h-5 w-5 text-primary" />
-                      <h2 className="font-bold">{t('dashboard.insights.aiInsights', 'AI Рекомендации')}</h2>
-                    </div>
+                  {/* AI Insights */}
+                  {insights.length > 0 && (
+                    <motion.div variants={itemVariants} className="space-y-3">
+                      <div className="flex items-center gap-2 px-1">
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        <h2 className="font-bold">{t('dashboard.insights.aiInsights', 'AI Рекомендации')}</h2>
+                      </div>
 
-                    {insights.map((insight) => (
-                      <Card
-                        key={insight.id}
-                        className={cn(
-                          "p-4 border-l-4",
-                          insight.impact === 'high'
-                            ? "border-l-emerald-500 bg-emerald-500/5"
-                            : insight.impact === 'medium'
-                              ? "border-l-amber-500 bg-amber-500/5"
-                              : "border-l-blue-500 bg-blue-500/5"
-                        )}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div
+                      {insights.map((insight, i) => (
+                        <motion.div key={insight.id} variants={itemVariants} custom={i}>
+                          <Card
                             className={cn(
-                              "h-9 w-9 rounded-xl flex items-center justify-center shrink-0",
+                              "p-4 border-l-4 transition-all hover:scale-[1.01]",
                               insight.impact === 'high'
-                                ? "bg-emerald-500/20"
+                                ? "border-l-emerald-500 bg-emerald-500/5"
                                 : insight.impact === 'medium'
-                                  ? "bg-amber-500/20"
-                                  : "bg-blue-500/20"
+                                  ? "border-l-amber-500 bg-amber-500/5"
+                                  : "border-l-blue-500 bg-blue-500/5"
                             )}
                           >
-                            <Sparkles
-                              className={cn(
-                                "h-4 w-4",
-                                insight.impact === 'high'
-                                  ? "text-emerald-600"
-                                  : insight.impact === 'medium'
-                                    ? "text-amber-600"
-                                    : "text-blue-600"
-                              )}
-                            />
-                          </div>
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={cn(
+                                  "h-9 w-9 rounded-xl flex items-center justify-center shrink-0",
+                                  insight.impact === 'high'
+                                    ? "bg-emerald-500/20"
+                                    : insight.impact === 'medium'
+                                      ? "bg-amber-500/20"
+                                      : "bg-blue-500/20"
+                                )}
+                              >
+                                <Sparkles
+                                  className={cn(
+                                    "h-4 w-4",
+                                    insight.impact === 'high'
+                                      ? "text-emerald-600"
+                                      : insight.impact === 'medium'
+                                        ? "text-amber-600"
+                                        : "text-blue-600"
+                                  )}
+                                />
+                              </div>
 
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-sm mb-0.5">{insight.title}</h3>
-                            <p className="text-xs text-muted-foreground mb-2">{insight.description}</p>
-                            {insight.action && (
-                              <Button size="sm" variant="outline" className="h-7 text-xs rounded-lg" onClick={insight.action}>
-                                {t('dashboard.insights.apply', 'Применить')}
-                                <ArrowRight className="h-3 w-3 ml-1" />
-                              </Button>
-                            )}
-                          </div>
-                        </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-bold text-sm mb-0.5">{insight.title}</h3>
+                                <p className="text-xs text-muted-foreground mb-2">{insight.description}</p>
+                                {insight.action && (
+                                  <Button size="sm" variant="outline" className="h-7 text-xs rounded-lg" onClick={insight.action}>
+                                    {t('dashboard.insights.apply', 'Применить')}
+                                    <ArrowRight className="h-3 w-3 ml-1" />
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+
+                  {/* Devices */}
+                  <motion.div variants={itemVariants} className="space-y-3">
+                    <h2 className="font-bold px-1">{t('dashboard.insights.devices', 'Устройства')}</h2>
+                    <div className="grid grid-cols-3 gap-3">
+                      <Card className="p-3 text-center">
+                        <Smartphone className="h-5 w-5 mx-auto mb-1.5 text-blue-500" />
+                        <div className="text-xl font-black">{devicePercentages.mobile}%</div>
+                        <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
                       </Card>
-                    ))}
-                  </div>
-                )}
-
-                {/* Devices */}
-                <div className="space-y-3">
-                  <h2 className="font-bold px-1">{t('dashboard.insights.devices', 'Устройства')}</h2>
-                  <div className="grid grid-cols-3 gap-3">
-                    <Card className="p-3 text-center">
-                      <Smartphone className="h-5 w-5 mx-auto mb-1.5 text-blue-500" />
-                      <div className="text-xl font-black">{devicePercentages.mobile}%</div>
-                      <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
-                    </Card>
-                    <Card className="p-3 text-center">
-                      <Monitor className="h-5 w-5 mx-auto mb-1.5 text-emerald-500" />
-                      <div className="text-xl font-black">{devicePercentages.desktop}%</div>
-                      <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.desktop', 'Компьютер')}</div>
-                    </Card>
-                    <Card className="p-3 text-center">
-                      <Globe className="h-5 w-5 mx-auto mb-1.5 text-violet-500" />
-                      <div className="text-xl font-black">{devicePercentages.tablet}%</div>
-                      <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
-                    </Card>
-                  </div>
-                </div>
+                      <Card className="p-3 text-center">
+                        <Monitor className="h-5 w-5 mx-auto mb-1.5 text-emerald-500" />
+                        <div className="text-xl font-black">{devicePercentages.desktop}%</div>
+                        <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.desktop', 'Компьютер')}</div>
+                      </Card>
+                      <Card className="p-3 text-center">
+                        <Globe className="h-5 w-5 mx-auto mb-1.5 text-violet-500" />
+                        <div className="text-xl font-black">{devicePercentages.tablet}%</div>
+                        <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
+                      </Card>
+                    </div>
+                  </motion.div>
+                </motion.div>
               </TabsContent>
 
               {/* Traffic Tab */}
-              <TabsContent value="traffic" className="mt-4 space-y-4">
-                <EngagementMetrics
-                  avgSessionDuration={stats.avgSessionDuration}
-                  bounceRate={stats.bounceRate}
-                  returningVisitors={stats.returningVisitors}
-                  ctr={stats.ctr}
-                  totalViews={stats.views}
-                  uniqueVisitors={stats.uniqueVisitors}
-                />
+              <TabsContent value="traffic" className="mt-4">
+                <motion.div
+                  className="space-y-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <EngagementMetrics
+                    avgSessionDuration={stats.avgSessionDuration}
+                    bounceRate={stats.bounceRate}
+                    returningVisitors={stats.returningVisitors}
+                    ctr={stats.ctr}
+                    totalViews={stats.views}
+                    uniqueVisitors={stats.uniqueVisitors}
+                  />
 
-                <TrafficSourcesChart sources={stats.sources} variant="bar" />
+                  <TrafficSourcesChart sources={stats.sources} variant="bar" />
 
-                <GeographyChart data={stats.geoData} totalVisitors={stats.uniqueVisitors} />
+                  <GeographyChart data={stats.geoData} totalVisitors={stats.uniqueVisitors} />
+                </motion.div>
               </TabsContent>
 
               {/* Blocks Tab */}
-              <TabsContent value="blocks" className="mt-4 space-y-4">
-                <BlockPerformance
-                  blocks={stats.topBlocks}
-                  totalViews={stats.views}
-                  showChart={true}
-                />
+              <TabsContent value="blocks" className="mt-4">
+                <motion.div
+                  className="space-y-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <BlockPerformance
+                    blocks={stats.topBlocks}
+                    totalViews={stats.views}
+                    showChart={true}
+                  />
 
-                {/* Top Blocks List */}
-                {stats.topBlocks.length > 0 && (
-                  <div className="space-y-3">
-                    <h2 className="font-bold px-1">{t('dashboard.insights.topBlocks', 'Детали по блокам')}</h2>
-                    <Card className="divide-y divide-border/50">
-                      {stats.topBlocks.slice(0, 5).map((block, index) => (
-                        <div key={block.blockId} className="p-4 flex items-center gap-4">
-                          <div className="h-10 w-10 rounded-xl bg-muted flex items-center justify-center font-bold text-muted-foreground">
-                            {index + 1}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-medium truncate">{block.blockTitle}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {block.ctr.toFixed(1)}%
+                  {/* Top Blocks List */}
+                  {stats.topBlocks.length > 0 && (
+                    <div className="space-y-3">
+                      <h2 className="font-bold px-1">{t('dashboard.insights.topBlocks', 'Детали по блокам')}</h2>
+                      <Card className="divide-y divide-border/50">
+                        {stats.topBlocks.slice(0, 5).map((block, index) => (
+                          <motion.div
+                            key={block.blockId}
+                            className="p-4 flex items-center gap-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            <div className="h-10 w-10 rounded-xl bg-muted flex items-center justify-center font-bold text-muted-foreground">
+                              {index + 1}
                             </div>
-                          </div>
-                          <div className="w-20">
-                            <Progress value={Math.min(100, block.ctr * 5)} className="h-2" />
-                          </div>
-                        </div>
-                      ))}
-                    </Card>
-                  </div>
-                )}
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium truncate">{block.blockTitle}</div>
+                              <div className="text-sm text-muted-foreground">
+                                {block.clicks} {t('dashboard.insights.clicksCount', 'кликов')} • CTR: {block.ctr.toFixed(1)}%
+                              </div>
+                            </div>
+                            <div className="w-20">
+                              <Progress value={Math.min(100, block.ctr * 5)} className="h-2" />
+                            </div>
+                          </motion.div>
+                        ))}
+                      </Card>
+                    </div>
+                  )}
+                </motion.div>
               </TabsContent>
 
               {/* Funnel Tab */}
-              <TabsContent value="funnel" className="mt-4 space-y-4">
-                <ConversionFunnel
-                  views={stats.views}
-                  clicks={stats.clicks}
-                  shares={stats.shares}
-                  conversions={stats.conversions}
-                />
+              <TabsContent value="funnel" className="mt-4">
+                <motion.div
+                  className="space-y-4"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ConversionFunnel
+                    views={stats.views}
+                    clicks={stats.clicks}
+                    shares={stats.shares}
+                    conversions={stats.conversions}
+                  />
 
-                {/* Conversion insights */}
-                <Card className="p-4">
-                  <h3 className="font-bold mb-3">{t('analytics.funnel.insights', 'Анализ конверсии')}</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between py-2 border-b border-border/50">
-                      <span className="text-sm text-muted-foreground">
-                        {t('analytics.funnel.clickRate', 'Клики / Просмотры')}
-                      </span>
-                      <span className="font-bold">{stats.ctr.toFixed(1)}%</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2 border-b border-border/50">
-                      <span className="text-sm text-muted-foreground">
-                        {t('analytics.funnel.conversionRate', 'Конверсии / Просмотры')}
-                      </span>
-                      <span className="font-bold">
-                        {stats.views > 0 ? ((stats.conversions / stats.views) * 100).toFixed(2) : 0}%
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between py-2">
-                      <span className="text-sm text-muted-foreground">
-                        {t('analytics.funnel.avgPerDay', 'Среднее в день')}
-                      </span>
-                      <span className="font-bold">{stats.avgViewsPerDay} просмотров</span>
-                    </div>
-                  </div>
-                </Card>
-
-                {/* Premium gate for advanced funnel */}
-                {!isPremium && (
-                  <Card className="p-4 bg-gradient-to-r from-primary/5 to-violet-500/5 border-primary/20">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                        <TrendingUp className="h-5 w-5 text-primary" />
+                  {/* Conversion insights */}
+                  <Card className="p-4">
+                    <h3 className="font-bold mb-3">{t('analytics.funnel.insights', 'Анализ конверсии')}</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between py-2 border-b border-border/50">
+                        <span className="text-sm text-muted-foreground">
+                          {t('analytics.funnel.clickRate', 'Клики / Просмотры')}
+                        </span>
+                        <span className="font-bold">{stats.ctr.toFixed(1)}%</span>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-sm">{t('analytics.premium.title', 'Расширенная воронка')}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {t('analytics.premium.desc', 'A/B тесты, heatmaps и детальная аналитика в Pro')}
-                        </p>
+                      <div className="flex items-center justify-between py-2 border-b border-border/50">
+                        <span className="text-sm text-muted-foreground">
+                          {t('analytics.funnel.conversionRate', 'Конверсии / Просмотры')}
+                        </span>
+                        <span className="font-bold">
+                          {stats.views > 0 ? ((stats.conversions / stats.views) * 100).toFixed(2) : 0}%
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between py-2">
+                        <span className="text-sm text-muted-foreground">
+                          {t('analytics.funnel.avgPerDay', 'Среднее в день')}
+                        </span>
+                        <span className="font-bold">{stats.avgViewsPerDay} просмотров</span>
                       </div>
                     </div>
                   </Card>
-                )}
+
+                  {/* Premium gate for advanced funnel */}
+                  {!isPremium && (
+                    <Card className="p-4 bg-gradient-to-r from-primary/5 to-violet-500/5 border-primary/20">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                          <TrendingUp className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-bold text-sm">{t('analytics.premium.title', 'Расширенная воронка')}</h3>
+                          <p className="text-xs text-muted-foreground">
+                            {t('analytics.premium.desc', 'A/B тесты, heatmaps и детальная аналитика в Pro')}
+                          </p>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+                </motion.div>
               </TabsContent>
             </Tabs>
           </>

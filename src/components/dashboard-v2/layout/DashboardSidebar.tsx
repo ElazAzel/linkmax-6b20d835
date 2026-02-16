@@ -1,8 +1,8 @@
 /**
  * DashboardSidebar - Desktop sidebar navigation
- * Collapsible with section groups
+ * Collapsible with section groups, powered by Framer Motion
  */
-import { memo, useState } from 'react';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import {
@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface SidebarItem {
   id: string;
@@ -106,69 +107,106 @@ export const DashboardSidebar = memo(function DashboardSidebar({
     }
   };
 
-  const renderItem = (item: SidebarItem, isMain = false) => {
+  const renderItem = (item: SidebarItem) => {
     const isActive = activeTab === item.id;
     const Icon = item.icon;
     const badge = item.id === 'activity' ? activityBadge : item.badge;
 
     return (
-      <button
+      <motion.button
         key={item.id}
         onClick={() => handleItemClick(item.id)}
         className={cn(
-          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all",
-          "hover:bg-muted/50 active:bg-muted",
+          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative group",
+          "hover:bg-muted/50",
           isActive && "bg-primary/10 text-primary font-semibold",
-          collapsed && "justify-center px-2"
+          collapsed && "justify-center px-0.5" // Tighter padding when collapsed
         )}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        layout // animate layout changes
       >
-        <Icon className={cn("h-5 w-5 shrink-0", isActive && "text-primary")} />
-        {!collapsed && (
-          <>
-            <span className="flex-1 text-left text-sm">{t(item.labelKey, item.defaultLabel)}</span>
-            {badge !== undefined && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  "text-xs h-5 px-1.5",
-                  item.badgeVariant === 'premium'
-                    ? "bg-amber-500/20 text-amber-600 border-amber-500/30"
-                    : "bg-primary/20 text-primary border-primary/30"
-                )}
-              >
-                {badge}
-              </Badge>
-            )}
-          </>
+        {isActive && (
+          <motion.div
+            layoutId="activeTabIndicator"
+            className="absolute left-0 w-1 h-6 bg-primary rounded-r-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          />
         )}
-      </button>
+
+        <Icon className={cn("h-5 w-5 shrink-0 z-10 relative", isActive && "text-primary")} />
+
+        <AnimatePresence mode="wait">
+          {!collapsed && (
+            <motion.div
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: 'auto' }}
+              exit={{ opacity: 0, width: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex-1 text-left flex items-center justify-between overflow-hidden whitespace-nowrap z-10 relative"
+            >
+              <span className="text-sm truncate">{t(item.labelKey, item.defaultLabel)}</span>
+              {badge !== undefined && (
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "text-[10px] h-5 px-1.5 ml-2 shrink-0",
+                    item.badgeVariant === 'premium'
+                      ? "bg-amber-500/20 text-amber-600 border-amber-500/30"
+                      : "bg-primary/20 text-primary border-primary/30"
+                  )}
+                >
+                  {badge}
+                </Badge>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Tooltip for collapsed state could go here if using Tooltip component */}
+      </motion.button>
     );
   };
 
   return (
-    <aside
+    <motion.aside
       className={cn(
-        "hidden md:flex flex-col h-screen sticky top-0 bg-card/50 backdrop-blur-xl border-r border-border/30 transition-all duration-300 shrink-0",
-        collapsed ? "w-16" : "w-64"
+        "hidden md:flex flex-col h-screen sticky top-0 bg-card/50 backdrop-blur-xl border-r border-border/30 z-50",
       )}
+      initial={false}
+      animate={{ width: collapsed ? 80 : 256 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       {/* Header */}
-      <div className={cn("p-4 flex items-center", collapsed ? "justify-center" : "justify-between")}>
-        {!collapsed && (
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-black">lnkmx</span>
-            {isPremium && (
-              <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs">
-                <Crown className="h-3 w-3 mr-1" />
-                PRO
-              </Badge>
-            )}
-          </div>
-        )}
+      <div className={cn("p-4 flex items-center h-16", collapsed ? "justify-center" : "justify-between")}>
+        <AnimatePresence mode="wait">
+          {!collapsed && (
+            <motion.div
+              className="flex items-center gap-2 overflow-hidden whitespace-nowrap"
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: 'auto' }}
+              exit={{ opacity: 0, width: 0 }}
+            >
+              <span className="text-lg font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-violet-500">
+                lnkmx
+              </span>
+              {isPremium && (
+                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-[10px] px-1.5 py-0 h-5">
+                  <Crown className="h-3 w-3 mr-1" />
+                  PRO
+                </Badge>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 rounded-lg"
+          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
           onClick={() => onCollapsedChange?.(!collapsed)}
         >
           {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
@@ -178,44 +216,83 @@ export const DashboardSidebar = memo(function DashboardSidebar({
       {/* Navigation */}
       <ScrollArea className="flex-1 px-3">
         {/* Main navigation */}
-        <div className="space-y-1 mb-6">
-          {MAIN_ITEMS.map((item) => renderItem(item, true))}
+        <div className="space-y-1 mb-6 mt-2">
+          {MAIN_ITEMS.map((item) => renderItem(item))}
         </div>
 
         {/* Sections */}
-        {!collapsed &&
-          SECTIONS.map((section) => (
-            <div key={section.id} className="mb-6">
-              <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider px-3 mb-2">
-                {t(section.titleKey, section.defaultTitle)}
-              </div>
-              <div className="space-y-1">{section.items.map((item) => renderItem(item))}</div>
+        {SECTIONS.map((section) => (
+          <div key={section.id} className="mb-6">
+            <AnimatePresence>
+              {!collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2">
+                    {t(section.titleKey, section.defaultTitle)}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="space-y-1">
+              {section.items.map((item) => renderItem(item))}
             </div>
-          ))}
+
+            {/* Divider when collapsed to separate sections visually */}
+            {collapsed && <div className="my-2 h-px bg-border/40 mx-2" />}
+          </div>
+        ))}
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-3 border-t border-border/30">
-        {!isPremium && !collapsed && (
-          <Button
-            className="w-full mb-3 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-lg shadow-amber-500/25"
-            onClick={() => router.push('/pricing')}
-          >
-            <Crown className="h-4 w-4 mr-2" />
-            {t('dashboard.sidebar.upgrade', 'Upgrade')}
-          </Button>
-        )}
-        <button
+      <div className="p-3 border-t border-border/30 bg-card/30">
+        <AnimatePresence>
+          {!isPremium && !collapsed && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, height: 'auto', marginBottom: 12 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              className="overflow-hidden"
+            >
+              <Button
+                className="w-full h-10 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                onClick={() => router.push('/pricing')}
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                {t('dashboard.sidebar.upgrade', 'Upgrade')}
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <motion.button
           onClick={onSignOut}
           className={cn(
             "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all",
-            collapsed && "justify-center px-2"
+            collapsed && "justify-center px-0.5"
           )}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
           <LogOut className="h-5 w-5 shrink-0" />
-          {!collapsed && <span className="text-sm">{t('dashboard.sidebar.signOut', 'Выйти')}</span>}
-        </button>
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.span
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                className="text-sm overflow-hidden whitespace-nowrap"
+              >
+                {t('dashboard.sidebar.signOut', 'Выйти')}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
-    </aside>
+    </motion.aside>
   );
 });

@@ -27,6 +27,7 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { cn } from '@/lib/utils';
 import type { Niche } from '@/lib/niches';
+import { motion } from 'framer-motion';
 
 interface PageSettingsScreenProps {
   pageId: string;
@@ -51,6 +52,21 @@ interface PageSettingsScreenProps {
   onOpenTheme?: () => void;
   integrations?: any;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  show: { opacity: 1, y: 0 }
+};
 
 export const PageSettingsScreen = memo(function PageSettingsScreen({
   pageId,
@@ -145,32 +161,39 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
         onBack={onBack}
       />
 
-      <div className="px-5 py-6 space-y-6">
+      <motion.div
+        className="px-5 py-6 space-y-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {/* Current Page Info */}
-        <Card className="p-5">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-bold">{pageTitle || t('dashboard.pageSettings.untitled', 'Untitled Page')}</h2>
-              <p className="text-sm text-muted-foreground">lnkmx.my/{pageSlug}</p>
+        <motion.div variants={itemVariants}>
+          <Card className="p-5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="text-lg font-bold">{pageTitle || t('dashboard.pageSettings.untitled', 'Untitled Page')}</h2>
+                <p className="text-sm text-muted-foreground">lnkmx.my/{pageSlug}</p>
+              </div>
+              {getPageTypeBadge()}
             </div>
-            {getPageTypeBadge()}
-          </div>
 
-          {/* Upgrade to Paid Option for Free Pages */}
-          {!isPaid && isPremium && onUpgradePage && (
-            <Button
-              variant="outline"
-              className="w-full rounded-xl border-primary/30 text-primary hover:bg-primary/10"
-              onClick={onUpgradePage}
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              {t('dashboard.pageSettings.upgradeToPaid', 'Upgrade to Paid (70% off)')}
-            </Button>
-          )}
-        </Card>
+            {/* Upgrade to Paid Option for Free Pages */}
+            {!isPaid && isPremium && onUpgradePage && (
+              <Button
+                variant="outline"
+                className="w-full rounded-xl border-primary/30 text-primary hover:bg-primary/10"
+                onClick={onUpgradePage}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                {t('dashboard.pageSettings.upgradeToPaid', 'Upgrade to Paid (70% off)')}
+              </Button>
+            )}
+          </Card>
+        </motion.div>
 
         {/* Domain / Slug */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.pageSettings.domain', 'Domain')}
           </h3>
@@ -214,10 +237,10 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
               </p>
             </div>
           </Card>
-        </div>
+        </motion.div>
 
         {/* SEO Settings */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.pageSettings.seo', 'SEO')}
           </h3>
@@ -272,20 +295,20 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
               />
             </div>
           </Card>
-        </div>
+        </motion.div>
 
         {/* Niche / Category */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.pageSettings.category', 'Category')}
           </h3>
           <Card className="p-4">
             <NicheSelector value={niche} onChange={onUpdateNiche} />
           </Card>
-        </div>
+        </motion.div>
 
         {/* Integrations (Facebook, TikTok, GA4, Webhooks) */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('settings.integrations.title', 'Integrations & Tracking')}
           </h3>
@@ -345,10 +368,10 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
               </p>
             </div>
           </Card>
-        </div>
+        </motion.div>
 
         {/* Branding (Premium) */}
-        <div className="space-y-2">
+        <motion.div variants={itemVariants} className="space-y-2">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('dashboard.pageSettings.branding', 'Branding')}
           </h3>
@@ -374,8 +397,8 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </button>
           </Card>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 });

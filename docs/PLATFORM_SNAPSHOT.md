@@ -583,6 +583,7 @@ Located in `src/components/dashboard-v2/`:
 - Layout components (header, sidebar, navigation)
 - Screen components (editor, analytics, CRM, settings)
 - Common utilities and dialogs
+- **Motion System**: Centralized `framer-motion` variants for staggered entry (`containerVariants`, `itemVariants`) and `AnimatePresence` for smooth layout transitions.
 
 ---
 

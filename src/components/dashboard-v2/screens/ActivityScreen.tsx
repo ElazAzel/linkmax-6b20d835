@@ -36,6 +36,7 @@ import { BookingsPanel } from '@/components/crm/BookingsPanel';
 import { cn } from '@/lib/utils';
 import { openPremiumPurchase } from '@/lib/upgrade-utils';
 import type { Lead } from '@/hooks/useLeads';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ActivityScreenProps {
   isPremium: boolean;
@@ -60,6 +61,21 @@ const SOURCE_ICONS: Record<string, { emoji: string; label: string }> = {
   manual: { emoji: '✏️', label: 'Вручную' },
   page_view: { emoji: '👁️', label: 'Просмотр' },
   other: { emoji: '📌', label: 'Другое' },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0 }
 };
 
 export const ActivityScreen = memo(function ActivityScreen({ isPremium }: ActivityScreenProps) {
@@ -174,93 +190,119 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
         </div>
       </div>
 
-      {activeTab === 'leads' && (
-        <>
-          {/* Status Pills */}
-          <div className="px-5 py-3 overflow-x-auto scrollbar-hide">
-            <div className="flex gap-2 min-w-max">
-              <button
-                onClick={() => setStatusFilter('all')}
-                className={cn(
-                  "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
-                  statusFilter === 'all'
-                    ? "bg-foreground text-background shadow-lg"
-                    : "bg-muted/60 text-muted-foreground"
-                )}
-              >
-                {t('dashboard.activity.all', 'Все')}
-                <span className="text-xs opacity-70">({stats.total})</span>
-              </button>
-              {Object.entries(STATUS_CONFIG).map(([status, config]) => {
-                const count = stats[status as LeadStatus];
-                if (count === 0) return null;
-                const StatusIcon = config.icon;
-                return (
-                  <button
-                    key={status}
-                    onClick={() => setStatusFilter(status as LeadStatus)}
-                    className={cn(
-                      "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
-                      statusFilter === status
-                        ? `${config.bg} ${config.text} shadow-lg`
-                        : "bg-muted/60 text-muted-foreground"
-                    )}
+      <AnimatePresence mode='wait'>
+        {activeTab === 'leads' && (
+          <motion.div
+            key="leads-tab"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Status Pills */}
+            <div className="px-5 py-3 overflow-x-auto scrollbar-hide">
+              <div className="flex gap-2 min-w-max">
+                <button
+                  onClick={() => setStatusFilter('all')}
+                  className={cn(
+                    "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
+                    statusFilter === 'all'
+                      ? "bg-foreground text-background shadow-lg scale-105"
+                      : "bg-muted/60 text-muted-foreground hover:bg-muted"
+                  )}
+                >
+                  {t('dashboard.activity.all', 'Все')}
+                  <span className="text-xs opacity-70">({stats.total})</span>
+                </button>
+                {Object.entries(STATUS_CONFIG).map(([status, config]) => {
+                  const count = stats[status as LeadStatus];
+                  if (count === 0) return null;
+                  const StatusIcon = config.icon;
+                  return (
+                    <button
+                      key={status}
+                      onClick={() => setStatusFilter(status as LeadStatus)}
+                      className={cn(
+                        "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
+                        statusFilter === status
+                          ? `${config.bg} ${config.text} shadow-lg scale-105`
+                          : "bg-muted/60 text-muted-foreground hover:bg-muted"
+                      )}
+                    >
+                      <StatusIcon className="h-3.5 w-3.5" />
+                      {config.label}
+                      <span className="text-xs opacity-70">({count})</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Search */}
+            <div className="px-5 pb-3">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  placeholder={t('dashboard.activity.searchPlaceholder', 'Поиск по имени, телефону...')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-11 pl-12 rounded-xl bg-muted/50 border-0 text-base"
+                />
+              </div>
+            </div>
+
+            {/* Leads List */}
+            <ScrollArea className="h-[calc(100vh-340px)]">
+              {loading ? (
+                <div className="px-5">
+                  <LoadingSkeleton variant="list" />
+                </div>
+              ) : filteredLeads.length === 0 ? (
+                <EmptyState
+                  icon={Inbox}
+                  title={searchQuery ? t('dashboard.activity.noResults', 'Ничего не найдено') : t('dashboard.activity.noLeads', 'Пока нет заявок')}
+                  description={t('dashboard.activity.noLeadsHint', 'Заявки появятся здесь, когда посетители заполнят формы на вашей странице')}
+                />
+              ) : (
+                <div className="px-5 pb-20">
+                  <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
                   >
-                    <StatusIcon className="h-3.5 w-3.5" />
-                    {config.label}
-                    <span className="text-xs opacity-70">({count})</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+                    {Object.entries(groupedLeads).map(([date, dateLeads]) => (
+                      <div key={date} className="mb-6">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-1 sticky top-0 bg-background/95 backdrop-blur-sm py-2 z-10">
+                          {date}
+                        </div>
+                        <div className="space-y-2">
+                          {dateLeads.map((lead) => (
+                            <motion.div key={lead.id} variants={itemVariants}>
+                              <LeadCard lead={lead} onClick={() => setSelectedLead(lead)} />
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              )}
+            </ScrollArea>
+          </motion.div>
+        )}
 
-          {/* Search */}
-          <div className="px-5 pb-3">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                placeholder={t('dashboard.activity.searchPlaceholder', 'Поиск по имени, телефону...')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-11 pl-12 rounded-xl bg-muted/50 border-0 text-base"
-              />
-            </div>
-          </div>
-
-          {/* Leads List */}
-          <ScrollArea className="h-[calc(100vh-340px)]">
-            {loading ? (
-              <div className="px-5">
-                <LoadingSkeleton variant="list" />
-              </div>
-            ) : filteredLeads.length === 0 ? (
-              <EmptyState
-                icon={Inbox}
-                title={searchQuery ? t('dashboard.activity.noResults', 'Ничего не найдено') : t('dashboard.activity.noLeads', 'Пока нет заявок')}
-                description={t('dashboard.activity.noLeadsHint', 'Заявки появятся здесь, когда посетители заполнят формы на вашей странице')}
-              />
-            ) : (
-              <div className="px-5">
-                {Object.entries(groupedLeads).map(([date, dateLeads]) => (
-                  <div key={date} className="mb-6">
-                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-1">
-                      {date}
-                    </div>
-                    <div className="space-y-2">
-                      {dateLeads.map((lead) => (
-                        <LeadCard key={lead.id} lead={lead} onClick={() => setSelectedLead(lead)} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
-        </>
-      )}
-
-      {activeTab === 'bookings' && <BookingsPanel />}
+        {activeTab === 'bookings' && (
+          <motion.div
+            key="bookings-tab"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <BookingsPanel />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Dialogs */}
       <AddLeadDialog
