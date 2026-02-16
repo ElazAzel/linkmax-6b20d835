@@ -254,6 +254,7 @@ new -> contacted -> qualified -> won/lost
 ### Backend
 
 - Supabase (Postgres, Auth, Storage)
+- **Native Auth Implementation**: Direct integration with Supabase Auth (Google/Apple OAuth) without third-party wrappers.
 - 24 Edge Functions for AI and notifications
 - Row Level Security for data isolation
 

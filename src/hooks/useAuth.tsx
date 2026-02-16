@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
-import { lovable } from '@/integrations/lovable/index';
+
 
 import { logger } from '@/lib/logger';
 
@@ -11,8 +11,8 @@ interface AuthContextType {
   loading: boolean;
   signUp: (email: string, password: string) => Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }>;
   signIn: (email: string, password: string) => Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }>;
-  signInWithGoogle: () => Promise<{ error: Error | null }>;
-  signInWithApple: () => Promise<{ error: Error | null }>;
+  signInWithGoogle: (returnTo?: string) => Promise<{ error: Error | null }>;
+  signInWithApple: (returnTo?: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -120,18 +120,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { data, error };
   };
 
-  const signInWithGoogle = async () => {
-    const result = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: `${window.location.origin}/auth/callback`,
+  const signInWithGoogle = async (returnTo?: string) => {
+    const redirectTo = new URL(`${window.location.origin}/auth/callback`);
+    if (returnTo) {
+      redirectTo.searchParams.set('returnTo', returnTo);
+    }
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectTo.toString(),
+      },
     });
-    return { error: result.error };
+    return { error };
   };
 
-  const signInWithApple = async () => {
-    const result = await lovable.auth.signInWithOAuth('apple', {
-      redirect_uri: `${window.location.origin}/auth/callback`,
+  const signInWithApple = async (returnTo?: string) => {
+    const redirectTo = new URL(`${window.location.origin}/auth/callback`);
+    if (returnTo) {
+      redirectTo.searchParams.set('returnTo', returnTo);
+    }
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        redirectTo: redirectTo.toString(),
+      },
     });
-    return { error: result.error };
+    return { error };
   };
 
   const signOut = async () => {

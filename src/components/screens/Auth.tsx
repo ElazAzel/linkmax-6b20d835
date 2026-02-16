@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,8 +40,8 @@ type AuthMode = 'signin' | 'signup' | 'reset' | 'reset-telegram' | 'update-passw
 type TelegramResetStep = 'request' | 'verify';
 
 export default function Auth() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
   const canonical = 'https://lnkmx.my/auth';
   const seoTitle = t('auth.seo.title', 'Sign in to lnkmx');
@@ -67,7 +67,7 @@ export default function Auth() {
   const refCode = searchParams.get('ref');
   const urlMode = searchParams.get('mode');
   const returnTo = searchParams.get('returnTo');
-  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : null;
+  const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
 
   // Check for password update mode from URL or hash params (from email link)
   useEffect(() => {
@@ -77,9 +77,10 @@ export default function Auth() {
     }
 
     // Check hash params for recovery token (from Supabase email link)
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    const type = hashParams.get('type');
+    const hashParams = new URL(window.location.href).hash.substring(1);
+    const searchParams = new URLSearchParams(hashParams);
+    const accessToken = searchParams.get('access_token');
+    const type = searchParams.get('type');
 
     if (accessToken && type === 'recovery') {
       logger.debug('Recovery token detected, setting up password update mode');
@@ -103,9 +104,9 @@ export default function Auth() {
           }
         });
       }
-      router.push(safeReturnTo || '/dashboard');
+      navigate(safeReturnTo || '/dashboard');
     }
-  }, [user, router.push, refCode, authMode, safeReturnTo]);
+  }, [user, navigate, refCode, authMode, safeReturnTo]);
 
   // Simplified signup - no Telegram required for free users
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -326,7 +327,7 @@ export default function Auth() {
 
   const handleGoogleSignIn = async () => {
     setIsOAuthLoading('google');
-    const { error } = await signInWithGoogle();
+    const { error } = await signInWithGoogle(safeReturnTo);
     if (error) {
       toast.error(error.message || t('messages.failedToSignIn'));
       playError();
@@ -336,7 +337,7 @@ export default function Auth() {
 
   const handleAppleSignIn = async () => {
     setIsOAuthLoading('apple');
-    const { error } = await signInWithApple();
+    const { error } = await signInWithApple(safeReturnTo);
     if (error) {
       toast.error(error.message || t('messages.failedToSignIn'));
       playError();
@@ -424,7 +425,7 @@ export default function Auth() {
                     </p>
                     <Button
                       className="w-full h-12 rounded-xl"
-                      onClick={() => router.push('/dashboard')}
+                      onClick={() => navigate('/dashboard')}
                     >
                       {t('auth.goToDashboard', 'Go to Dashboard')}
                     </Button>
@@ -759,7 +760,7 @@ export default function Auth() {
 
           {/* Back to home */}
           <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button variant="ghost" onClick={() => router.push('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
+            <Button variant="ghost" onClick={() => navigate('/')} className="rounded-xl hover:bg-card/40 backdrop-blur-xl">
               {t('auth.backToHome')}
             </Button>
           </div>

@@ -61,6 +61,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Changed
+- **Auth Refactoring**:
+    - Removed fragile `next/navigation` shim usage in Auth components in favor of standard `react-router-dom` hooks (`useNavigate`, `useSearchParams`).
+    - Migrated from `@lovable.dev/cloud-auth-js` wrapper to native `supabase.auth.signInWithOAuth` for better control and stability.
+    - Implemented authentic `returnTo` redirection support for Google and Apple sign-ins.
+    - Standardized `Auth.tsx` and `AuthCallback.tsx` implementation.
 - Standardized local development instructions to use `npm` instead of `bun`.
 - Overhauled Pricing page to unify plans into a single Pro card with "Try for free" option.
 - **Next.js Migration**:
