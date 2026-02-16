@@ -1,12 +1,16 @@
 /**
  * Cache clearing utilities for LinkMAX
+ * 
+ * Cache version is stored in the database (app_settings.cache_version).
+ * Admin can bump it from the admin panel to force all users to clear cache.
  */
 
 import { storage } from './storage';
+import { supabase } from '@/integrations/supabase/client';
 
 // Version key for cache invalidation
 const CACHE_VERSION_KEY = 'cache_version';
-const CURRENT_CACHE_VERSION = '4'; // Force cache clear for ImageBlock/VideoBlock fixes
+const FALLBACK_CACHE_VERSION = '4'; // Fallback if DB is unreachable
 
 /**
  * Clear all local storage items related to LinkMAX
@@ -14,13 +18,12 @@ const CURRENT_CACHE_VERSION = '4'; // Force cache clear for ImageBlock/VideoBloc
 export function clearLocalStorageCache(): void {
   const keysToRemove: string[] = [];
 
-  // Direct localStorage access for legacy key clearing
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && (
       key.startsWith('linkmax_') ||
       key.startsWith('lnkmx_') ||
-      key.startsWith('sb-') || // Supabase cache
+      key.startsWith('sb-') ||
       key.includes('react-query')
     )) {
       keysToRemove.push(key);
@@ -28,8 +31,6 @@ export function clearLocalStorageCache(): void {
   }
 
   keysToRemove.forEach(key => localStorage.removeItem(key));
-
-  // Also clear our namespaced storage
   storage.clear();
 }
 
@@ -53,17 +54,35 @@ export function clearSessionStorageCache(): void {
 }
 
 /**
- * Check if cache needs to be invalidated based on version
+ * Fetch current cache version from the database
  */
-export function checkCacheVersion(): boolean {
+async function fetchRemoteCacheVersion(): Promise<string> {
+  try {
+    const { data, error } = await (supabase as any)
+      .from('app_settings')
+      .select('value')
+      .eq('key', 'cache_version')
+      .single();
+
+    if (error || !data) return FALLBACK_CACHE_VERSION;
+    return (data as any).value;
+  } catch {
+    return FALLBACK_CACHE_VERSION;
+  }
+}
+
+/**
+ * Check if cache needs to be invalidated based on remote version
+ */
+export async function checkCacheVersion(): Promise<boolean> {
+  const remoteVersion = await fetchRemoteCacheVersion();
   const storedVersion = storage.get<string>(CACHE_VERSION_KEY);
 
-  if (storedVersion !== CURRENT_CACHE_VERSION) {
-    // Clear old cache and set new version
+  if (storedVersion !== remoteVersion) {
     clearLocalStorageCache();
     clearSessionStorageCache();
-    storage.set(CACHE_VERSION_KEY, CURRENT_CACHE_VERSION);
-    return true; // Cache was cleared
+    storage.set(CACHE_VERSION_KEY, remoteVersion);
+    return true;
   }
 
   return false;
@@ -75,9 +94,7 @@ export function checkCacheVersion(): boolean {
 export function forceClearAllCaches(): void {
   clearLocalStorageCache();
   clearSessionStorageCache();
-  storage.set(CACHE_VERSION_KEY, CURRENT_CACHE_VERSION);
 
-  // Also clear service worker caches if available
   if ('caches' in window) {
     caches.keys().then(names => {
       names.forEach(name => {
@@ -87,4 +104,25 @@ export function forceClearAllCaches(): void {
       });
     });
   }
+}
+
+/**
+ * Admin: Bump cache version in the database to force all users to clear cache
+ */
+export async function bumpCacheVersion(): Promise<{ success: boolean; newVersion: string }> {
+  const currentVersion = await fetchRemoteCacheVersion();
+  const newVersion = String(parseInt(currentVersion, 10) + 1);
+
+  const { error } = await (supabase as any)
+    .from('app_settings')
+    .update({ value: newVersion, updated_at: new Date().toISOString() })
+    .eq('key', 'cache_version');
+
+  if (error) {
+    return { success: false, newVersion: currentVersion };
+  }
+
+  // Update local cache version too
+  storage.set(CACHE_VERSION_KEY, newVersion);
+  return { success: true, newVersion };
 }

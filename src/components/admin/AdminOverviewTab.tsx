@@ -1,14 +1,18 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAdminStats, PlatformStats } from '@/hooks/useAdminStats';
 import { useAdminEvents, AdminAnalyticsEvent } from '@/hooks/useAdminEvents';
+import { bumpCacheVersion } from '@/lib/cache-utils';
+import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 import {
   Users, FileText, Eye, MousePointer, Share2, TrendingUp, Calendar,
   Star, Trophy, Flame, MessageSquare, Link2, UserPlus, Handshake,
-  Users2, Target, Blocks, Globe
+  Users2, Target, Blocks, Globe, RefreshCw, Loader2
 } from 'lucide-react';
 
 interface StatCardProps {
@@ -70,12 +74,29 @@ export function AdminOverviewTab() {
   const { t, i18n } = useTranslation();
   const { data: stats, isLoading: statsLoading } = useAdminStats();
   const { data: recentEvents, isLoading: eventsLoading } = useAdminEvents();
+  const [isBumpingCache, setIsBumpingCache] = useState(false);
 
   const getDateLocale = () => {
     switch (i18n.language) {
       case 'ru': return ru;
       case 'kk': return kk;
       default: return enUS;
+    }
+  };
+
+  const handleBumpCache = async () => {
+    setIsBumpingCache(true);
+    try {
+      const result = await bumpCacheVersion();
+      if (result.success) {
+        toast.success(t('admin.cacheBumped', 'Кэш сброшен! Новая версия: {{version}}', { version: result.newVersion }));
+      } else {
+        toast.error(t('admin.cacheBumpFailed', 'Не удалось сбросить кэш'));
+      }
+    } catch {
+      toast.error(t('admin.cacheBumpFailed', 'Не удалось сбросить кэш'));
+    } finally {
+      setIsBumpingCache(false);
     }
   };
 
@@ -89,6 +110,38 @@ export function AdminOverviewTab() {
 
   return (
     <div className="space-y-6">
+      {/* System Actions */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <RefreshCw className="h-4 w-4 text-primary" />
+            {t('admin.systemActions', 'Системные действия')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4">
+            <div className="flex-1">
+              <p className="text-sm font-medium">{t('admin.clearUserCache', 'Сбросить кэш у всех пользователей')}</p>
+              <p className="text-xs text-muted-foreground">{t('admin.clearUserCacheDesc', 'При следующей загрузке приложения кэш каждого пользователя будет очищен')}</p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleBumpCache}
+              disabled={isBumpingCache}
+              className="shrink-0"
+            >
+              {isBumpingCache ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4 mr-2" />
+              )}
+              {t('admin.bumpCache', 'Сбросить кэш')}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* User Stats */}
       <StatsSection title={t('admin.users')} icon={<Users className="h-5 w-5" />}>
         <StatCard
