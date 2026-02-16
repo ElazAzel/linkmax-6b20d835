@@ -123,7 +123,7 @@ function SortableGridBlockItem({
       {/* Block content - Click to edit */}
       <div
         className="w-full h-full cursor-pointer relative z-0"
-        onPointerDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => !isMobile && e.stopPropagation()}
         onClick={(e) => {
           e.stopPropagation();
           onEdit(block);
@@ -148,7 +148,7 @@ function SortableGridBlockItem({
           size="sm"
           variant="secondary"
           className="h-8 w-8 p-0 rounded-lg shadow-sm"
-          onPointerDown={(e) => e.stopPropagation()}
+          onPointerDown={(e) => !isMobile && e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();
             onEdit(block);
@@ -160,7 +160,7 @@ function SortableGridBlockItem({
           size="sm"
           variant="destructive"
           className="h-8 w-8 p-0 rounded-lg shadow-sm"
-          onPointerDown={(e) => e.stopPropagation()}
+          onPointerDown={(e) => !isMobile && e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();
             onDelete(block.id);

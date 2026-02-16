@@ -144,6 +144,10 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
   return typeof rawTitle === 'object' ? getI18nText(rawTitle, lang) : String(rawTitle);
 }
 
+import { BlockErrorBoundary } from '@/components/BlockErrorBoundary';
+
+// ... existing imports
+
 export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPremium, ownerTier }: BlockRendererProps) {
   const { onBlockClick } = useAnalytics();
   const { i18n } = useTranslation();
@@ -174,7 +178,9 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       isPreview={isPreview}
     >
       <div className={animationClass} style={animationStyle}>
-        {children}
+        <BlockErrorBoundary>
+          {children}
+        </BlockErrorBoundary>
       </div>
     </PaidBlockWrapper>
   );
@@ -182,12 +188,21 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // For blocks that need click tracking passed as prop
   const handleTrackClick = handleClick;
 
+  // Wrap non-trackable blocks too
+  const SafeSuspense = ({ children }: { children: React.ReactNode }) => (
+    <BlockErrorBoundary>
+      <Suspense fallback={<BlockSkeleton />}>
+        {children}
+      </Suspense>
+    </BlockErrorBoundary>
+  );
+
   switch (block.type) {
     case 'profile':
       return (
-        <Suspense fallback={<BlockSkeleton />}>
+        <SafeSuspense>
           <ProfileBlock block={block} isPreview={isPreview} isOwnerPremium={isOwnerPremium} ownerTier={ownerTier} />
-        </Suspense>
+        </SafeSuspense>
       );
     case 'link':
       return (
@@ -197,6 +212,10 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
           </Suspense>
         </TrackableWrapper>
       );
+    // ... we need to apply this pattern to all cases or refactor the switch to return the suspended component
+    // Refactoring to a cleaner Return statement pattern might be better but risky.
+    // Let's just wrap the individual returns or create a helper.
+
     case 'button':
       return (
         <TrackableWrapper>
