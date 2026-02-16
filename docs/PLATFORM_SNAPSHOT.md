@@ -193,7 +193,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 | Screen | Component | Purpose |
 |--------|-----------|---------|
-| Editor | `screens/EditorScreen.tsx` | Block management, inline editing |
+| Editor | `screens/EditorScreen.tsx` | Block management, inline editing, **mobile-optimized drag-and-drop** |
 | Analytics | `screens/InsightsScreen.tsx` | Views, clicks, conversion metrics |
 | CRM | `screens/ActivityScreen.tsx` | Leads, bookings, event registrations |
 | Page Settings | `screens/PageSettingsScreen.tsx` | Slug, SEO, branding, **pixel analytics** |

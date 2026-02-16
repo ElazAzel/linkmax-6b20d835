@@ -1,6 +1,6 @@
 import { memo, useCallback, useState, useMemo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Edit2, Trash2, GripVertical, Plus } from 'lucide-react';
+import { Edit2, Trash2, GripVertical, Plus, GripHorizontal } from 'lucide-react';
 import {
   DndContext,
   DragOverlay,
@@ -31,6 +31,7 @@ import type { Block, ProfileBlock, GridConfig } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import type { FreeTier } from '@/hooks/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface GridEditorProps {
   blocks: Block[];
@@ -82,11 +83,7 @@ function SortableGridBlockItem({
   const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
 
   // Map dimensions to Tailwind classes
-  // Columns
   const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
-  // Rows - we can use row-span if we want true masonry/dense grid, but for now standard grid is safer
-  // unless we use grid-auto-flow: dense. 
-  // Let's use standard classes for now and see if we need row spans.
   const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
 
   return (
@@ -101,10 +98,22 @@ function SortableGridBlockItem({
         'min-h-[140px]',
         dimensions.gridRows === 2 && 'min-h-[296px]'
       )}
-      // Mobile: Drag whole card. Desktop: Drag handle only.
-      {...(isMobile ? { ...attributes, ...listeners } : {})}
+    // Removed listeners from main container to separate drag and click
     >
-      {/* Drag handle (Desktop only) */}
+      {/* Mobile Drag Handle - Always visible overlay */}
+      {isMobile && (
+        <div
+          className="absolute top-0 right-0 z-40 p-3 touch-none"
+          {...attributes}
+          {...listeners}
+        >
+          <div className="bg-background/80 backdrop-blur-md p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Drag Handle - Hover only */}
       {!isMobile && (
         <div
           className={cn(
@@ -120,36 +129,35 @@ function SortableGridBlockItem({
         </div>
       )}
 
-      {/* Block content - Click to edit */}
+      {/* Block Content - Click to Edit */}
       <div
         className="w-full h-full cursor-pointer relative z-0"
-        onPointerDown={(e) => !isMobile && e.stopPropagation()}
         onClick={(e) => {
+          // Verify we aren't clicking a button or link inside the block preview
+          // In editor, we want the whole block to be an "Edit" button
           e.stopPropagation();
           onEdit(block);
         }}
       >
-        <div className="pointer-events-none">
-          {/* Disable pointer events on children to ensure the parent div catches the click 
-               BUT interactive blocks (like buttons) inside might need them? 
-               Actually, for an editor, we usually want to disable interaction with the block CONTENT 
-               so that clicking a button doesn't navigate, but opens the editor.
-           */}
+        <div className="pointer-events-none w-full h-full">
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
       </div>
 
-      {/* Edit/Delete - visible on hover (desktop) or always (mobile) */}
+      {/* Edit/Delete Controls */}
       <div className={cn(
         "absolute top-2 right-2 flex gap-1.5 z-30 transition-opacity",
-        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        // On mobile, positioned slightly differently to avoid conflict with drag handle if needed
+        // But with dedicated handle, we can position them nicely.
+        // Let's hide them on Mobile because tapping the block opens the editor anyway
+        // or keep them but ensure no overlap.
+        // Current design: Mobile handles separate.
+        isMobile ? "hidden" : "opacity-0 group-hover:opacity-100"
       )}>
         <Button
           size="sm"
           variant="secondary"
           className="h-8 w-8 p-0 rounded-lg shadow-sm"
-          onPointerDown={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();
             onEdit(block);
@@ -161,8 +169,6 @@ function SortableGridBlockItem({
           size="sm"
           variant="destructive"
           className="h-8 w-8 p-0 rounded-lg shadow-sm"
-          onPointerDown={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();
             onDelete(block.id);
@@ -171,6 +177,10 @@ function SortableGridBlockItem({
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* Mobile Actions Hint (Since we hid buttons) 
+          Actually, let's just let the tap open the editor.
+      */}
     </div>
   );
 }
@@ -179,23 +189,24 @@ function SortableGridBlockItem({
 function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block; isPremium?: boolean; premiumTier?: PremiumTier }) {
   const blockSize = block.blockSize || 'small';
   const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
-
   const widthClass = dimensions.gridCols === 2 ? 'w-full' : 'w-1/2';
-  // Note: width is slightly tricky in overlay because it's detached. 
-  // We'll trust the w-1/2 relative to the viewport/container width if relevant, 
-  // but usually it's better to force a pixel width or similar. 
-  // For simplicity, we'll use same classes but might need inline styles for exactness.
 
   return (
     <div
       className={cn(
-        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-hidden',
+        'relative bg-card rounded-2xl border-2 border-primary shadow-xl overflow-hidden cursor-grabbing',
         widthClass,
         dimensions.gridRows === 2 ? 'h-[296px]' : 'h-[140px]'
       )}
     >
       <div className="w-full h-full overflow-hidden opacity-80">
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
+      </div>
+      {/* Show handle in overlay to indicate dragging state */}
+      <div className="absolute top-0 right-0 z-40 p-3 pt-3 pr-3">
+        <div className="bg-primary/20 backdrop-blur-md p-2 rounded-xl">
+          <GripVertical className="h-5 w-5 text-primary" />
+        </div>
       </div>
     </div>
   );
@@ -220,14 +231,22 @@ export const GridEditor = memo(function GridEditor({
   const dndContextId = useId();
 
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
-  // contentBlocks are the ones in the grid
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
 
   const blockIdsKey = useMemo(() => contentBlocks.map(b => b.id).join(','), [contentBlocks]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5 // Minimal distance to detect drag vs click on the handle
+      }
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 0, // No delay needed since we have a dedicated handle!
+        tolerance: 5
+      }
+    }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
@@ -254,7 +273,6 @@ export const GridEditor = memo(function GridEditor({
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
   const handleInsertBlock = useCallback((blockType: string) => {
-    // Always insert at end for now, or we can add a specific drop zone later
     const position = blocks.length;
     onInsertBlock(blockType, position);
   }, [onInsertBlock, blocks.length]);
@@ -283,29 +301,24 @@ export const GridEditor = memo(function GridEditor({
           items={contentBlocks.map(b => b.id)}
           strategy={rectSortingStrategy}
         >
-          {/* 
-            The Grid:
-            - grid-cols-2: 2 columns fixed (as per user request "two blocks in one line on mobile")
-            - auto-rows-max: let rows grow or use fixed height? 
-              User wants 1x2 support. 
-              grid-auto-flow: dense is important to fill holes if small blocks are moved around.
-          */}
           <div className="grid grid-cols-2 gap-4 grid-flow-row-dense">
-            {contentBlocks.map((block) => (
-              <SortableGridBlockItem
-                key={block.id}
-                block={block}
-                onEdit={onEditBlock}
-                onDelete={onDeleteBlock}
-                isPremium={isPremium}
-                premiumTier={premiumTier}
-                isMobile={isMobile}
-              />
-            ))}
+            <AnimatePresence>
+              {contentBlocks.map((block) => (
+                <SortableGridBlockItem
+                  key={block.id}
+                  block={block}
+                  onEdit={onEditBlock}
+                  onDelete={onDeleteBlock}
+                  isPremium={isPremium}
+                  premiumTier={premiumTier}
+                  isMobile={isMobile}
+                />
+              ))}
+            </AnimatePresence>
           </div>
         </SortableContext>
 
-        <DragOverlay>
+        <DragOverlay adjustScale={true}>
           {activeBlock && (
             <DragOverlayBlockItem block={activeBlock} isPremium={isPremium} premiumTier={premiumTier} />
           )}
@@ -314,14 +327,19 @@ export const GridEditor = memo(function GridEditor({
 
       {/* Bottom Add Button */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8">
+        <motion.div
+          className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <BlockInsertButton
             onInsert={handleInsertBlock}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
           />
-        </div>
+        </motion.div>
       </div>
 
       {/* Empty state */}
@@ -341,14 +359,19 @@ export const GridEditor = memo(function GridEditor({
 
       {/* Fixed FAB on mobile */}
       {isMobile && (
-        <div className="fixed bottom-20 right-4 z-40">
+        <motion.div
+          className="fixed bottom-24 right-4 z-40"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        >
           <BlockInsertButton
             onInsert={handleInsertBlock}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
           />
-        </div>
+        </motion.div>
       )}
     </div>
   );
