@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Screen lock" glitch in Block Editor by disabling modal behavior on style selectors.
 - Missing `cn` import in `Pricing.tsx`.
 - **Build System**: Restored `vite build` command in `package.json` as the project uses Vite, resolving a mismatch where scripts referenced `next build`.
+- **Token System**: Fixed `406 Not Acceptable` error when fetching token balance for new users (caused by `single()` on empty result).
 - **Advanced Grid Layout**:
   - Implemented flexible block sizing: 1x1, 2x1, 1x2, 2x2.
   - Added Block Size Selector to the editor interface.

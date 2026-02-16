@@ -60,16 +60,15 @@ export async function getTokenBalance(userId: string): Promise<TokenBalance | nu
     .from('user_tokens')
     .select('balance, total_earned, total_spent')
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
   if (error) {
-    // If wallet doesn't exist, return 0 balance (it will be created by server on first transaction)
-    if (error.code === 'PGRST116') {
-      return { balance: 0, totalEarned: 0, totalSpent: 0 };
-    }
-
     logger.error('Error getting token balance', error, { context: 'tokens', data: { userId } });
     return null;
+  }
+
+  if (!data) {
+    return { balance: 0, totalEarned: 0, totalSpent: 0 };
   }
 
   return {
