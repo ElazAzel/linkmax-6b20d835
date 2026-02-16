@@ -129,19 +129,21 @@ function SortableGridBlockItem({
         </div>
       )}
 
-      {/* Block Content - Click to Edit */}
-      <div
-        className="w-full h-full cursor-pointer relative z-0"
-        onClick={(e) => {
-          // Verify we aren't clicking a button or link inside the block preview
-          // In editor, we want the whole block to be an "Edit" button
-          e.stopPropagation();
-          onEdit(block);
-        }}
-      >
+      {/* Block Content */}
+      <div className="w-full h-full relative z-0">
         <div className="pointer-events-none w-full h-full">
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
+
+        {/* Click Overlay - High z-index to capture all taps/clicks */}
+        <div
+          className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(block);
+          }}
+          aria-label={`Edit ${block.type} block`}
+        />
       </div>
 
       {/* Edit/Delete Controls */}

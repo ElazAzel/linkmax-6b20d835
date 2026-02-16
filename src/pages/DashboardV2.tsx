@@ -547,6 +547,7 @@ export default function DashboardV2() {
               onClose={dashboard.blockEditor.closeEditor}
               onSave={dashboard.blockEditor.handleSaveBlock}
               enableAutosave={true}
+              onDelete={dashboard.blockEditor.handleDeleteBlock}
             />
           )}
 
