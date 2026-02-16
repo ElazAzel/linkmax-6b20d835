@@ -12,21 +12,21 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Sparkles, 
-  ArrowRight, 
-  ArrowLeft, 
+import {
+  Sparkles,
+  ArrowRight,
+  ArrowLeft,
   Loader2,
   Check,
   Wand2,
   Layout,
   User,
-  Scissors, 
-  Camera, 
-  Brain, 
-  Dumbbell, 
-  Music, 
-  Palette, 
+  Scissors,
+  Camera,
+  Brain,
+  Dumbbell,
+  Music,
+  Palette,
   GraduationCap,
   Store,
   Heart,
@@ -139,7 +139,7 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
       if (error) throw error;
 
       const { profile, blocks } = data.result;
-      
+
       // Transform blocks to proper Block format
       const formattedBlocks: Block[] = blocks.map((block: any, index: number) => ({
         id: `${block.type}-${Date.now()}-${index}`,
@@ -147,7 +147,7 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
       }));
 
       setStep('complete');
-      
+
       // Brief delay for animation
       setTimeout(() => {
         toast.success(t('onboarding.pageGenerated', 'Страница создана!'));
@@ -173,6 +173,10 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[95vh] overflow-hidden p-0 gap-0 rounded-[32px] border-0 bg-card/98 backdrop-blur-3xl">
+        <DialogTitle className="sr-only">{t('onboarding.wizardTitle', 'Onboarding Wizard')}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {t('onboarding.wizardDescription', 'Step-by-step wizard to set up your profile and page.')}
+        </DialogDescription>
         {/* Progress bar */}
         <div className="px-6 pt-6">
           <Progress value={progress} className="h-1.5 rounded-full" />
@@ -231,9 +235,9 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
         {step === 'details' && selectedNiche && (
           <div className="p-6 pt-8 animate-fade-in">
             <div className="flex items-center gap-3 mb-8">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleBack}
                 className="h-12 w-12 rounded-2xl shrink-0"
               >
@@ -282,15 +286,15 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
             </div>
 
             <div className="pt-8 flex gap-4">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handleSkip}
                 className="flex-1 h-14 rounded-2xl text-base font-bold"
               >
                 {t('onboarding.skip', 'Пропустить')}
               </Button>
-              <Button 
-                onClick={handleGenerate} 
+              <Button
+                onClick={handleGenerate}
                 disabled={!name.trim()}
                 className="flex-[2] h-14 rounded-2xl text-base font-bold shadow-xl shadow-primary/30"
               >

@@ -9,8 +9,8 @@ import { Label } from '@/components/ui/label';
 import { useTokens } from '@/hooks/useTokens';
 import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import { TOKEN_REWARDS, PLATFORM_FEE_PERCENT, TOKEN_TO_TENGE_RATE } from '@/services/tokens';
-import { 
-  Coins, Crown, ArrowRight, Sparkles, TrendingUp, Gift, 
+import {
+  Coins, Crown, ArrowRight, Sparkles, TrendingUp, Gift,
   Wallet, ShoppingBag, LayoutTemplate, Lock, Loader2,
   ArrowDownToLine, CheckCircle2, Clock, XCircle
 } from 'lucide-react';
@@ -23,8 +23,8 @@ interface TokensPanelProps {
 
 export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
   const { t } = useTranslation();
-  const { 
-    balance, loading, converting, canAffordPremium, premiumCost, 
+  const {
+    balance, loading, converting, canAffordPremium, premiumCost,
     buyPremiumDay, loadTransactions, transactions, loadWithdrawals,
     withdrawals, submitWithdrawal
   } = useTokens();
@@ -49,11 +49,11 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
     if (!withdrawAmount || !withdrawCard) return;
     const amount = parseFloat(withdrawAmount);
     if (isNaN(amount) || amount <= 0) return;
-    
+
     setWithdrawing(true);
     const success = await submitWithdrawal(amount, 'card', { cardNumber: withdrawCard });
     setWithdrawing(false);
-    
+
     if (success) {
       setWithdrawAmount('');
       setWithdrawCard('');
@@ -102,6 +102,9 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
             <Coins className="h-5 w-5 text-yellow-500" />
             Linkkon Токены
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Управляйте своими токенами, покупайте премиум и выводите средства
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -118,7 +121,7 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
               <p className="text-xs text-muted-foreground/70 mt-1">
                 1 Linkkon = {TOKEN_TO_TENGE_RATE} ₸
               </p>
-              
+
               {balance && (
                 <div className="flex justify-center gap-4 mt-3 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
@@ -170,7 +173,7 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
                 {!converting && <ArrowRight className="h-3 w-3" />}
               </Button>
             </div>
-            
+
             {!canAffordPremium && (
               <p className="text-xs text-muted-foreground mt-2">
                 Не хватает {(premiumCost - (balance?.balance || 0)).toFixed(1)} токенов
@@ -259,7 +262,7 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
                   Premium
                 </Badge>
               </h4>
-              
+
               {!showWithdraw ? (
                 <Button
                   variant="outline"

@@ -294,6 +294,12 @@ export function AdminPartnersTab() {
                                 : t('admin.partners.create', 'Добавить партнёра')
                             }
                         </DialogTitle>
+                        <DialogDescription className="text-sm text-muted-foreground">
+                            {editingPartner
+                                ? t('admin.partners.editDescription', 'Измените данные партнёра ниже')
+                                : t('admin.partners.createDescription', 'Заполните форму для добавления нового партнёра')
+                            }
+                        </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
@@ -370,10 +376,10 @@ export function AdminPartnersTab() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t('admin.partners.deleteConfirm', 'Удалить партнёра?')}</DialogTitle>
+                        <DialogDescription>
+                            {t('admin.partners.deleteWarning', 'Это действие нельзя отменить.')}
+                        </DialogDescription>
                     </DialogHeader>
-                    <p className="text-muted-foreground">
-                        {t('admin.partners.deleteWarning', 'Это действие нельзя отменить.')}
-                    </p>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
                             {t('common.cancel', 'Отмена')}

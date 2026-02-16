@@ -29,7 +29,7 @@ interface AddLeadDialogProps {
 export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
   const { t } = useTranslation();
   const { createLead, saving } = useLeads();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,9 +41,9 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) return;
-    
+
     const result = await createLead(formData);
     if (result) {
       setFormData({
@@ -69,8 +69,11 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
             <UserPlus className="h-5 w-5" />
             {t('crm.addLead', 'Add Lead')}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('crm.addLeadDescription', 'Fill in the form to add a new lead to your CRM')}
+          </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label>{t('fields.name', 'Name')} *</Label>

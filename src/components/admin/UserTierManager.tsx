@@ -311,6 +311,9 @@ export function UserTierManager() {
                               <Crown className="h-5 w-5 text-yellow-500" />
                               {t('admin.editUserTier')}
                             </DialogTitle>
+                            <DialogDescription className="sr-only">
+                              {t('admin.editUserTierDescription', 'Изменить уровень доступа пользователя')}
+                            </DialogDescription>
                           </DialogHeader>
 
                           {editingUser?.id === user.id && (

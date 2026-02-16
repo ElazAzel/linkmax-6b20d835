@@ -22,8 +22,8 @@ export function StreakDisplay({ userId, compact = false }: StreakDisplayProps) {
   }
 
   const nextMilestone = getNextMilestone(streakData.currentStreak);
-  const progress = nextMilestone 
-    ? (streakData.currentStreak / nextMilestone.days) * 100 
+  const progress = nextMilestone
+    ? (streakData.currentStreak / nextMilestone.days) * 100
     : 100;
 
   if (compact) {
@@ -61,7 +61,7 @@ export function StreakDisplay({ userId, compact = false }: StreakDisplayProps) {
               <div className="flex justify-between text-xs">
                 <span className="text-muted-foreground">{t('streak.nextMilestone', 'Next milestone')}</span>
                 <span className="font-medium">
-                  {nextMilestone.days} {t('streak.days', 'days')} 
+                  {nextMilestone.days} {t('streak.days', 'days')}
                   <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5 py-0">
                     +{nextMilestone.bonus} {t('streak.bonusDays', 'bonus days')}
                   </Badge>
@@ -90,6 +90,9 @@ export function StreakDisplay({ userId, compact = false }: StreakDisplayProps) {
         <DialogContent className="sm:max-w-md text-center">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl">🎉 {t('streak.milestoneReached', 'Milestone Reached!')}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('streak.milestoneDescription', 'Congratulations on reaching a new streak milestone!')}
+            </DialogDescription>
           </DialogHeader>
           <div className="py-6 space-y-4">
             <div className="relative mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-2xl shadow-orange-500/50 animate-bounce">
