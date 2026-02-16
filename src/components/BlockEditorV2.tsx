@@ -317,8 +317,8 @@ export function BlockEditorV2({
             hasUnsavedChanges={hasUnsavedChanges}
             onSave={handleSave}
             onClose={handleCloseAttempt}
-            // Pass block update handler for size changes
-            onBlockUpdate={handleFormChange}
+            // Pass block update handler for size changes (merge partial updates into formData)
+            onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
             enablePreview={block.type !== 'profile'} // Profile often has its own preview or is complex
             previewComponent={previewComponent}
         >
