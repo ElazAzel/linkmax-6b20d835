@@ -161,14 +161,15 @@ const BlockSizeSelector = memo(function BlockSizeSelector({
 }) {
     const { t } = useTranslation();
     const sizes = [
-        { value: 'small', icon: <Square className="h-3.5 w-3.5" />, label: '1×1' },
-        { value: 'wide', icon: <RectangleHorizontal className="h-3.5 w-3.5" />, label: '2×1' },
-        { value: 'tall', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: '1×2' },
-        { value: 'large', icon: <Grid2x2 className="h-3.5 w-3.5" />, label: '2×2' },
+        { value: 'small', icon: <Square className="h-3.5 w-3.5" />, label: t('blockSize.small', '1×1') },
+        { value: 'wide', icon: <RectangleHorizontal className="h-3.5 w-3.5" />, label: t('blockSize.wide', '2×1') },
+        { value: 'tall', icon: <RectangleVertical className="h-3.5 w-3.5" />, label: t('blockSize.tall', '1×2') },
+        { value: 'large', icon: <Grid2x2 className="h-3.5 w-3.5" />, label: t('blockSize.large', '2×2') },
     ];
 
     const currentSize = block.blockSize || 'small';
     const isActive = (value: string) => {
+        // Handle legacy values
         if (value === 'small') return !block.blockSize || block.blockSize === 'small' || block.blockSize === 'half';
         if (value === 'wide') return block.blockSize === 'wide' || block.blockSize === 'full';
         return block.blockSize === value;
