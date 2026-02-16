@@ -63,16 +63,11 @@ export async function getTokenBalance(userId: string): Promise<TokenBalance | nu
     .single();
 
   if (error) {
-    // Create token record if doesn't exist
+    // If wallet doesn't exist, return 0 balance (it will be created by server on first transaction)
     if (error.code === 'PGRST116') {
-      const { error: insertError } = await supabase
-        .from('user_tokens')
-        .insert({ user_id: userId, balance: 0, total_earned: 0, total_spent: 0 });
-
-      if (!insertError) {
-        return { balance: 0, totalEarned: 0, totalSpent: 0 };
-      }
+      return { balance: 0, totalEarned: 0, totalSpent: 0 };
     }
+
     logger.error('Error getting token balance', error, { context: 'tokens', data: { userId } });
     return null;
   }
