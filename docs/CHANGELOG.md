@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Restricted `bookings` table RLS to owner (page owner) and user (client) only.
   - Added input validation (email regex, length limits) to `create-lead` and `send-booking-notification` edge functions.
   - Fixed admin check in `language-upload` edge function to use `has_role` RPC.
+- **Content Security Policy (CSP)**: Updated `index.html` to allow analytics (FB, TikTok, GA4, Yandex) and localization (Locize) scripts while maintaining security.
 
 ### Fixed
 - Type errors and missing Deno namespace references in `ai-content-generator` and `create-lead` edge functions.
