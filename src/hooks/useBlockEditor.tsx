@@ -118,7 +118,7 @@ export function useBlockEditor({
     (updates: Partial<Block>) => {
       if (editingBlock) {
         updateBlock(editingBlock.id, updates);
-        setEditorOpen(false);
+        // Don't close here - BlockEditorV2.performSave calls onClose() separately
       }
     },
     [editingBlock, updateBlock]
@@ -129,7 +129,11 @@ export function useBlockEditor({
    */
   const closeEditor = useCallback(() => {
     setEditorOpen(false);
-    setEditingBlock(null);
+    // Delay clearing editingBlock so Drawer/Dialog can animate closed
+    // before the component unmounts
+    setTimeout(() => {
+      setEditingBlock(null);
+    }, 350);
   }, []);
 
   /**
