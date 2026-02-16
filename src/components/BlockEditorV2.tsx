@@ -102,7 +102,7 @@ interface BlockEditorV2Props {
 
 // Loading fallback
 const EditorFallback = () => (
-    <div className="space-y-5 p-5">
+    <div className="space-y-5 p-5 outline-none" tabIndex={-1} autoFocus>
         <Skeleton className="h-14 w-full rounded-2xl" />
         <Skeleton className="h-14 w-full rounded-2xl" />
         <Skeleton className="h-32 w-full rounded-2xl" />
