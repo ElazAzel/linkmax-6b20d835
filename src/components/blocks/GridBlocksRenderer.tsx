@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { motion } from 'framer-motion';
 import { BlockRenderer } from '@/components/BlockRenderer';
 import { cn } from '@/lib/utils';
 import { Block, BLOCK_SIZE_DIMENSIONS } from '@/types/page';
@@ -37,8 +38,14 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
   return (
     <div className={cn('space-y-4', className)}>
       {/* Profile Block (Always full width, outside grid) */}
+      {/* Profile Block (Always full width, outside grid) */}
       {profileBlock && (
-        <div className="w-full">
+        <motion.div
+          className="w-full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "out" }}
+        >
           <BlockRenderer
             block={profileBlock}
             isPreview={isPreview}
@@ -47,12 +54,27 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
             isOwnerPremium={isOwnerPremium}
             ownerTier={ownerTier}
           />
-        </div>
+        </motion.div>
       )}
 
       {/* Main Grid Content */}
+      {/* Main Grid Content */}
       {contentBlocks.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense">
+        <motion.div
+          className="grid grid-cols-2 gap-3 sm:gap-4 grid-flow-row-dense"
+          initial="hidden"
+          animate="show"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+        >
           {contentBlocks.map((block) => {
             // Determine grid span based on block size
             const blockSize = block.blockSize || 'small';
@@ -72,10 +94,10 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 : 'items-center';
 
             return (
-              <div
+              <motion.div
                 key={block.id}
                 className={cn(
-                  'rounded-xl overflow-hidden flex bg-card border border-border/50 shadow-sm transition-all',
+                  'rounded-xl overflow-hidden flex bg-card border border-border/50 shadow-sm transition-all hover:shadow-md hover:scale-[1.01] duration-300',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
@@ -83,6 +105,10 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                   'min-h-[140px]',
                   dimensions.gridRows === 2 && 'min-h-[296px]' // 140*2 + 16gap (approx)
                 )}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } }
+                }}
               >
                 <div className="w-full h-full">
                   <BlockRenderer
@@ -94,10 +120,10 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                     ownerTier={ownerTier}
                   />
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       )}
     </div>
   );

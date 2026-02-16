@@ -70,7 +70,7 @@ export const VideoBlock = memo(function VideoBlockComponent({ block, onClick }: 
           <iframe
             src={embedUrl}
             className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" // compute-pressure is not yet supported in React iframe allow list but safe to ignore or add if custom props allowed. Adding web-share is standard.
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
 
             allowFullScreen
             title={title || 'Video'}

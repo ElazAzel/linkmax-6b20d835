@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -125,17 +126,6 @@ export default function PublicPage() {
     }
   };
 
-  // Show skeleton while loading
-  if (loading || isTranslating) {
-    return <PublicPageSkeleton />;
-  }
-
-  // Show error state if no page data
-  if (!pageData) {
-    return <PublicPageError type="not-found" />;
-  }
-
-  // Get background style from theme
   const getPageBackgroundStyle = (background?: PageBackground): React.CSSProperties => {
     if (!background) return {};
 
@@ -160,137 +150,150 @@ export default function PublicPage() {
     }
   };
 
-  const customBackground = pageData.theme?.customBackground;
+  const customBackground = pageData?.theme?.customBackground;
   const backgroundStyle = getPageBackgroundStyle(customBackground);
 
   return (
-    <>
-      {/* Enhanced Auto-SEO with Schema.org and Quality Gate */}
-      <EnhancedSEOHead
-        pageData={pageData}
-        pageUrl={canonicalUrl}
-        updatedAt={new Date().toISOString()}
-        isNewAccount={false}
-      />
-      <SEOMetaEnhancer
-        pageUrl={canonicalUrl}
-        pageTitle={pageData.seo?.title || pageData.slug || 'Profile'}
-        pageDescription={pageData.seo?.description || t('publicPage.defaultDescription', 'View my profile')}
-        imageUrl={'https://lnkmx.my/og-default.png'}
-        imageAlt={pageData.seo?.title || pageData.slug}
-        type="profile"
-      />
-      <AISearchOptimizer
-        pageType="profile"
-        primaryQuestion={`Who is ${pageData.seo?.title || pageData.slug}?`}
-        primaryAnswer={pageData.seo?.description || `Professional profile of ${pageData.seo?.title || pageData.slug} created with lnkmx`}
-        entityName={pageData.seo?.title || pageData.slug || 'User Profile'}
-        entityCategory="Personal Profile, Professional Page, Portfolio"
-        useCases={[
-          'View professional profile',
-          'Contact for services',
-          'Browse portfolio',
-          'Connect on social media',
-        ]}
-        targetAudience={[
-          'Potential clients',
-          'Collaborators',
-          'Social media followers',
-          'Business contacts',
-        ]}
-        problemStatement="Need a simple professional landing page to showcase work and accept leads"
-        solutionStatement="lnkmx profile page with custom blocks, CTAs, and lead capture forms"
-      />
-
-      {/* Crawler-friendly content for no-JS fallback */}
-      <CrawlerFriendlyContent
-        blocks={displayBlocks}
-        slug={slug || ''}
-        updatedAt={new Date().toISOString()}
-      />
-
-      {/* GEO Enhanced Content - visible to crawlers even with JS enabled */}
-      <GEOEnhancedContent
-        blocks={displayBlocks}
-        slug={slug || ''}
-      />
-
-      <AnalyticsProvider pageId={pageData?.id} enabled={!!slug}>
-        <div
+    <AnimatePresence mode="wait">
+      {(loading || isTranslating) ? (
+        <PublicPageSkeleton key="skeleton" />
+      ) : !pageData ? (
+        <PublicPageError key="error" type="not-found" />
+      ) : (
+        <motion.div
+          key="content"
           className="min-h-screen bg-background"
           style={backgroundStyle}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          {/* Language Switcher - Top Right */}
-          <div className="fixed top-4 right-4 z-50">
-            <LanguageSwitcher />
-          </div>
+          {/* Enhanced Auto-SEO with Schema.org and Quality Gate */}
+          <EnhancedSEOHead
+            pageData={pageData}
+            pageUrl={canonicalUrl}
+            updatedAt={new Date().toISOString()}
+            isNewAccount={false}
+          />
+          <SEOMetaEnhancer
+            pageUrl={canonicalUrl}
+            pageTitle={pageData.seo?.title || pageData.slug || 'Profile'}
+            pageDescription={pageData.seo?.description || t('publicPage.defaultDescription', 'View my profile')}
+            imageUrl={'https://lnkmx.my/og-default.png'}
+            imageAlt={pageData.seo?.title || pageData.slug}
+            type="profile"
+          />
+          <AISearchOptimizer
+            pageType="profile"
+            primaryQuestion={`Who is ${pageData.seo?.title || pageData.slug}?`}
+            primaryAnswer={pageData.seo?.description || `Professional profile of ${pageData.seo?.title || pageData.slug} created with lnkmx`}
+            entityName={pageData.seo?.title || pageData.slug || 'User Profile'}
+            entityCategory="Personal Profile, Professional Page, Portfolio"
+            useCases={[
+              'View professional profile',
+              'Contact for services',
+              'Browse portfolio',
+              'Connect on social media',
+            ]}
+            targetAudience={[
+              'Potential clients',
+              'Collaborators',
+              'Social media followers',
+              'Business contacts',
+            ]}
+            problemStatement="Need a simple professional landing page to showcase work and accept leads"
+            solutionStatement="lnkmx profile page with custom blocks, CTAs, and lead capture forms"
+          />
 
-          <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
-            {/* Grid Blocks - Same layout as editor */}
-            <GridBlocksRenderer
-              blocks={displayBlocks}
-              pageOwnerId={pageData?.userId}
-              pageId={pageData?.id}
-              isOwnerPremium={isOwnerPremium}
-              ownerTier={ownerTier}
-              isPreview={false}
-            />
+          {/* Crawler-friendly content for no-JS fallback */}
+          <CrawlerFriendlyContent
+            blocks={displayBlocks}
+            slug={slug || ''}
+            updatedAt={new Date().toISOString()}
+          />
 
-            {/* Share Section - Mobile Optimized */}
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 justify-center">
-              <Button variant="outline" onClick={handleShare} className="w-full sm:w-auto">
-                <Share2 className="h-4 w-4 mr-2" />
-                {t('share.shareLink', 'Поделиться')}
-              </Button>
-              <Button variant="outline" onClick={() => setShowQR(true)} className="w-full sm:w-auto">
-                <QrCode className="h-4 w-4 mr-2" />
-                {t('share.qrCode', 'QR-код')}
-              </Button>
+          {/* GEO Enhanced Content - visible to crawlers even with JS enabled */}
+          <GEOEnhancedContent
+            blocks={displayBlocks}
+            slug={slug || ''}
+          />
+
+          <AnalyticsProvider pageId={pageData?.id} enabled={!!slug}>
+            <div>
+              {/* Language Switcher - Top Right */}
+              <div className="fixed top-4 right-4 z-50">
+                <LanguageSwitcher />
+              </div>
+
+              <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+                {/* Grid Blocks - Same layout as editor */}
+                <GridBlocksRenderer
+                  blocks={displayBlocks}
+                  pageOwnerId={pageData?.userId}
+                  pageId={pageData?.id}
+                  isOwnerPremium={isOwnerPremium}
+                  ownerTier={ownerTier}
+                  isPreview={false}
+                />
+
+                {/* Share Section - Mobile Optimized */}
+                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-2 justify-center">
+                  <Button variant="outline" onClick={handleShare} className="w-full sm:w-auto">
+                    <Share2 className="h-4 w-4 mr-2" />
+                    {t('share.shareLink', 'Поделиться')}
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowQR(true)} className="w-full sm:w-auto">
+                    <QrCode className="h-4 w-4 mr-2" />
+                    {t('share.qrCode', 'QR-код')}
+                  </Button>
+                </div>
+
+                {/* Branding - hidden when watermark is shown */}
+                {!showWatermark && (
+                  <div className="mt-8 sm:mt-12 text-center pb-4">
+                    <a
+                      href="/"
+                      className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      lnkmx.my
+                    </a>
+                  </div>
+                )}
+
+                {/* Extra padding for watermark */}
+                {showWatermark && <div className="h-16" />}
+              </div>
+
+              {/* Freemium Watermark */}
+              <FreemiumWatermark show={showWatermark && !pageData?.isPremium} />
+
+              {/* QR Dialog */}
+              <Dialog open={showQR} onOpenChange={setShowQR}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{t('share.qrDialogTitle', 'QR Code')}</DialogTitle>
+                    <DialogDescription>
+                      {t('share.qrDialogDescription', 'Scan this code to share your page')}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex justify-center p-6">
+                    <QRCodeSVG value={currentUrl} size={256} level="H" />
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              {/* AI Chatbot Widget */}
+              {slug && <ChatbotWidget pageSlug={slug} />}
+
+              {/* Analytics Tracking Scripts */}
+              {pageData.integrations && (
+                <TrackingScripts integrations={pageData.integrations} />
+              )}
             </div>
-
-            {/* Branding - hidden when watermark is shown */}
-            {!showWatermark && (
-              <div className="mt-8 sm:mt-12 text-center pb-4">
-                <a
-                  href="/"
-                  className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  lnkmx.my
-                </a>
-              </div>
-            )}
-
-            {/* Extra padding for watermark */}
-            {showWatermark && <div className="h-16" />}
-          </div>
-
-          {/* Freemium Watermark */}
-          <FreemiumWatermark show={showWatermark && !pageData?.isPremium} />
-
-          {/* QR Dialog */}
-          <Dialog open={showQR} onOpenChange={setShowQR}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{t('share.qrDialogTitle', 'QR Code')}</DialogTitle>
-                <DialogDescription>
-                  {t('share.qrDialogDescription', 'Scan this code to share your page')}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-center p-6">
-                <QRCodeSVG value={currentUrl} size={256} level="H" />
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          {/* AI Chatbot Widget */}
-          {slug && <ChatbotWidget pageSlug={slug} />}
-
-          {/* Analytics Tracking Scripts */}
-          {pageData.integrations && (
-            <TrackingScripts integrations={pageData.integrations} />
-          )}
-        </div>
-      </AnalyticsProvider>
-    </>
+          </AnalyticsProvider>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -226,6 +226,9 @@ export function TeamsTab({
                         <DialogContent className="max-h-[80vh] overflow-y-auto">
                           <DialogHeader>
                             <DialogTitle>{t('teams.settings', 'Настройки команды')}</DialogTitle>
+                            <DialogDescription className="sr-only">
+                              {t('teams.settingsDesc', 'Manage team settings and members')}
+                            </DialogDescription>
                           </DialogHeader>
                           {selectedTeam && selectedTeam.id === team.id && (
                             <div className="space-y-4">

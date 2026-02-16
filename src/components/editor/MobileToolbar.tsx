@@ -75,6 +75,15 @@ export const MobileToolbar = memo(function MobileToolbar({
   const router = useRouter();
   const [moreOpen, setMoreOpen] = useState(false);
 
+  // Helper to handle actions that close the sheet and open another dialog
+  // Uses a timeout to prevent aria-hidden focus issues (Radix UI race condition)
+  const handleAction = (action: () => void) => {
+    setMoreOpen(false);
+    setTimeout(() => {
+      action();
+    }, 100);
+  };
+
   // Main actions for bottom bar - simplified to 4 main actions
   const mainActions = [
     {
@@ -113,8 +122,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('mobileToolbar.marketplace', 'Маркетплейс'),
       description: t('mobileToolbar.marketplaceDesc', 'Шаблоны от сообщества'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenMarketplace();
+        handleAction(onOpenMarketplace);
       },
       highlight: true,
       color: 'from-violet-500/20 to-purple-500/20',
@@ -125,8 +133,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('mobileToolbar.aiBuilder', 'AI Конструктор'),
       description: t('mobileToolbar.aiBuilderDesc', 'Создать страницу с AI'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenAIBuilder();
+        handleAction(onOpenAIBuilder);
       },
       color: 'from-blue-500/20 to-cyan-500/20',
       iconColor: 'text-blue-500',
@@ -136,8 +143,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('mobileToolbar.templates', 'Шаблоны'),
       description: t('mobileToolbar.templatesDesc', 'Готовые шаблоны'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenTemplates();
+        handleAction(onOpenTemplates);
       },
       color: 'from-emerald-500/20 to-green-500/20',
       iconColor: 'text-emerald-500',
@@ -147,8 +153,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('mobileToolbar.achievements', 'Достижения'),
       description: t('mobileToolbar.achievementsDesc', 'Ваш прогресс'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenAchievements();
+        handleAction(onOpenAchievements);
       },
       badge: achievementCount > 0 ? achievementCount : undefined,
       color: 'from-amber-500/20 to-yellow-500/20',
@@ -159,8 +164,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('tokens.title', 'Токены'),
       description: t('mobileToolbar.tokensDesc', 'Ваш баланс и транзакции'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenTokens();
+        handleAction(onOpenTokens);
       },
       color: 'from-primary/20 to-violet-500/20',
       iconColor: 'text-primary',
@@ -170,8 +174,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('mobileToolbar.crm', 'CRM'),
       description: t('mobileToolbar.crmDesc', 'Управление лидами'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenCRM();
+        handleAction(onOpenCRM);
       },
       color: 'from-pink-500/20 to-rose-500/20',
       iconColor: 'text-pink-500',
@@ -181,8 +184,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('gallery.title', 'Галерея'),
       description: t('mobileToolbar.galleryDesc', 'Работы сообщества'),
       onClick: () => {
-        setMoreOpen(false);
-        onOpenGallery();
+        handleAction(onOpenGallery);
       },
       color: 'from-cyan-500/20 to-teal-500/20',
       iconColor: 'text-cyan-500',
@@ -192,8 +194,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('pricing.title', 'Тарифы'),
       description: t('mobileToolbar.pricingDesc', 'Премиум возможности'),
       onClick: () => {
-        setMoreOpen(false);
-        router.push('/pricing');
+        handleAction(() => router.push('/pricing'));
       },
       color: 'from-amber-500/20 to-orange-500/20',
       iconColor: 'text-amber-500',
@@ -319,7 +320,7 @@ export const MobileToolbar = memo(function MobileToolbar({
                   </div>
                   <span className="text-lg font-bold">{t('tokens.title', 'Токены')}</span>
                 </div>
-                <TokenBalanceDisplay onClick={() => { setMoreOpen(false); onOpenTokens(); }} compact />
+                <TokenBalanceDisplay onClick={() => handleAction(onOpenTokens)} compact />
               </div>
 
               {/* Language Switcher */}

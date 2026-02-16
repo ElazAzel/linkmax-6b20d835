@@ -58,6 +58,7 @@ export function MapBlock({ block }: MapBlockProps) {
               className="filter contrast-[1.1] grayscale-[0.2] brightness-[0.9] invert-[0.05]"
               title="Map"
               loading="lazy"
+              allow="geolocation; fullscreen; clipboard-write"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-white/5 backdrop-blur-sm text-sm text-muted-foreground font-medium italic">

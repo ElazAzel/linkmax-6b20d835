@@ -61,16 +61,16 @@ export function UserSearchResults({ users, mode, onCollabRequest, onShoutout }: 
             </div>
           </div>
           <div className="flex gap-1">
-            <Button 
-              size="sm" 
-              variant="ghost" 
+            <Button
+              size="sm"
+              variant="ghost"
               onClick={() => handleViewPage(user.id)}
               className="h-8 w-8 p-0"
               title={t('friends.viewPage', 'Посмотреть страницу')}
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
-            
+
             {mode === 'collab' ? (
               <Button size="sm" onClick={() => onCollabRequest?.(user.id)} className="h-8 gap-1">
                 <UserPlus className="h-3 w-3" />
@@ -89,6 +89,9 @@ export function UserSearchResults({ users, mode, onCollabRequest, onShoutout }: 
                     <DialogTitle>
                       {t('collab.shoutoutRecommendTitle', 'Рекомендовать {{name}}', { name: user.display_name || user.username })}
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                      {t('collab.shoutoutRecommendDesc', 'Send a shoutout recommendation for this user')}
+                    </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <Textarea
@@ -100,7 +103,7 @@ export function UserSearchResults({ users, mode, onCollabRequest, onShoutout }: 
                     />
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-muted-foreground">{shoutoutMessage.length}/200</span>
-                      <Button 
+                      <Button
                         onClick={() => {
                           onShoutout?.(user.id, shoutoutMessage);
                           setShoutoutMessage('');

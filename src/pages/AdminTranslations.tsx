@@ -611,6 +611,9 @@ export default function AdminTranslations() {
                   <DialogContent className="max-w-2xl max-h-[80vh]">
                     <DialogHeader>
                       <DialogTitle>Добавить язык</DialogTitle>
+                      <DialogDescription>
+                        Выберите язык из списка для добавления в проект
+                      </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div className="relative">
@@ -739,6 +742,9 @@ export default function AdminTranslations() {
               <DialogContent className="max-w-lg">
                 <DialogHeader>
                   <DialogTitle>Добавить новый ключ</DialogTitle>
+                  <DialogDescription>
+                    Создайте новый ключ перевода и задайте значения для основных языков
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>

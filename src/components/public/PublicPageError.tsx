@@ -5,6 +5,7 @@
  * Shown when page not found or failed to load
  */
 import { memo } from 'react';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,12 @@ export const PublicPageError = memo(function PublicPageError({
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="text-center max-w-sm">
+      <motion.div
+        className="text-center max-w-sm"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="h-20 w-20 rounded-[24px] bg-muted/50 flex items-center justify-center mx-auto mb-6">
           <FileQuestion className="h-10 w-10 text-muted-foreground" />
         </div>
@@ -71,7 +77,7 @@ export const PublicPageError = memo(function PublicPageError({
             {t('common.signUp', 'Регистрация')}
           </Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 });
