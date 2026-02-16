@@ -9,8 +9,8 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
+    DialogDescription,
 } from '@/components/ui/dialog';
-import { VisuallyHidden } from '@/components/ui/visually-hidden';
 import {
     Drawer,
     DrawerContent,
@@ -333,9 +333,9 @@ export function BlockEditorV2({
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-2 text-center sm:text-left">
                         <DialogTitle className="text-lg font-bold">{t('editor.unsavedChanges', 'Несохраненные изменения')}</DialogTitle>
-                        <p className="text-muted-foreground text-sm">
+                        <DialogDescription className="text-muted-foreground text-sm">
                             {t('editor.unsavedDescription', 'У вас есть изменения, которые еще не были сохранены. Что вы хотите сделать?')}
-                        </p>
+                        </DialogDescription>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 mt-2">
                         <Button
@@ -383,9 +383,7 @@ export function BlockEditorV2({
         <>
             <Dialog open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
                 <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl" aria-describedby={undefined}>
-                    <VisuallyHidden>
-                        <DialogTitle>{t('blockEditor.title', 'Edit Block')}</DialogTitle>
-                    </VisuallyHidden>
+                    <DialogTitle className="sr-only">{t('blockEditor.title', 'Edit Block')}</DialogTitle>
                     {shellContent}
                 </DialogContent>
             </Dialog>
