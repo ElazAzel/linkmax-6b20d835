@@ -360,6 +360,8 @@ export default function DashboardV2() {
                 onOpenMarketplace={() => setShowMarketplace(true)}
                 pageSwitcher={pageSwitcherElement}
                 onOpenVersions={() => setShowVersions(true)}
+                onOpenInsights={() => handleTabChange('insights')}
+                onOpenActivity={() => handleTabChange('activity')}
               />
             )}
 

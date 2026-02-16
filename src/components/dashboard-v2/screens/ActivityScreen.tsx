@@ -146,7 +146,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   }, {} as Record<string, Lead[]>);
 
   return (
-    <div className="min-h-screen safe-area-top">
+    <div className="h-[calc(100vh-64px)] md:h-screen safe-area-top flex flex-col">
       <DashboardHeader
         title={t('dashboard.activity.title', 'Входящие')}
         subtitle={`${stats.total} ${t('dashboard.activity.totalLeads', 'заявок')}`}
@@ -251,10 +251,10 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
               </div>
             </div>
 
-            {/* Leads List */}
-            <ScrollArea className="h-[calc(100vh-340px)]">
+            {/* Leads List - Flex Layout for Scroll */}
+            <div className="flex-1 min-h-0 overflow-y-auto">
               {loading ? (
-                <div className="px-5">
+                <div className="px-5 pt-2">
                   <LoadingSkeleton variant="list" />
                 </div>
               ) : filteredLeads.length === 0 ? (
@@ -264,7 +264,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   description={t('dashboard.activity.noLeadsHint', 'Заявки появятся здесь, когда посетители заполнят формы на вашей странице')}
                 />
               ) : (
-                <div className="px-5 pb-20">
+                <div className="px-5 pb-24 pt-2">
                   <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -272,7 +272,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   >
                     {Object.entries(groupedLeads).map(([date, dateLeads]) => (
                       <div key={date} className="mb-6">
-                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-1 sticky top-0 bg-background/95 backdrop-blur-sm py-2 z-10">
+                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-1 sticky top-0 bg-background/95 backdrop-blur-sm py-2 z-10 shadow-sm">
                           {date}
                         </div>
                         <div className="space-y-2">
@@ -287,7 +287,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   </motion.div>
                 </div>
               )}
-            </ScrollArea>
+            </div>
           </motion.div>
         )}
 

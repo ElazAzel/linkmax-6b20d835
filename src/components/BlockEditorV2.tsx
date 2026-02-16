@@ -98,6 +98,8 @@ interface BlockEditorV2Props {
     enableAutosave?: boolean;
     /** Autosave delay in ms (default: 2000) */
     autosaveDelay?: number;
+    /** Delete handler */
+    onDelete?: (id: string) => void;
 }
 
 // Loading fallback
@@ -116,6 +118,7 @@ export function BlockEditorV2({
     onSave,
     enableAutosave = true,
     autosaveDelay = 2000,
+    onDelete,
 }: BlockEditorV2Props) {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
@@ -321,6 +324,12 @@ export function BlockEditorV2({
             onBlockUpdate={(updates) => handleFormChange({ ...formData, ...updates })}
             enablePreview={block.type !== 'profile'} // Profile often has its own preview or is complex
             previewComponent={previewComponent}
+            onDelete={onDelete ? () => {
+                if (window.confirm(t('common.deleteConfirm', 'Вы уверены, что хотите удалить этот блок?'))) {
+                    onDelete(block.id);
+                    onClose();
+                }
+            } : undefined}
         >
 
             {renderEditor()}

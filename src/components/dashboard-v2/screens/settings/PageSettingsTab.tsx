@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import {
     Link2,
     Check,
@@ -97,6 +98,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
         if (!result.success) {
             setSlugError(t(`dashboard.pageSettings.errors.${result.error}`, 'Failed to update slug'));
+        } else {
+            toast.success(t('common.saved', 'Сохранено'));
         }
 
         setSlugSaving(false);
@@ -108,7 +111,18 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 title: seoTitleInput || undefined,
                 description: seoDescInput || undefined,
             });
+            toast.success(t('common.saved', 'Сохранено'));
         }
+    };
+
+    const handleToggleIndexable = (checked: boolean) => {
+        onToggleIndexable?.(checked);
+        toast.success(t('common.saved', 'Сохранено'));
+    };
+
+    const handleNicheChange = (newNiche: Niche) => {
+        onNicheChange(newNiche);
+        toast.success(t('common.saved', 'Сохранено'));
     };
 
     const getPageTypeBadge = () => {
@@ -267,7 +281,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         </div>
                         <Switch
                             checked={isIndexable ?? true}
-                            onCheckedChange={(checked) => onToggleIndexable?.(checked)}
+                            onCheckedChange={handleToggleIndexable}
                         />
                     </div>
                 </Card>
@@ -279,7 +293,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     {t('dashboard.pageSettings.category', 'Category')}
                 </h3>
                 <Card className="p-4">
-                    <NicheSelector value={niche} onChange={onNicheChange} />
+                    <NicheSelector value={niche} onChange={handleNicheChange} />
                 </Card>
             </div>
 

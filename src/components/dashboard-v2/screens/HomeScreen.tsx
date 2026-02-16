@@ -42,6 +42,8 @@ interface HomeScreenProps {
   onOpenMarketplace: () => void;
   pageSwitcher?: ReactNode;
   onOpenVersions?: () => void;
+  onOpenInsights?: () => void;
+  onOpenActivity?: () => void;
 }
 
 export const HomeScreen = memo(function HomeScreen({
@@ -55,6 +57,8 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenMarketplace,
   pageSwitcher,
   onOpenVersions,
+  onOpenInsights,
+  onOpenActivity,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
@@ -125,24 +129,33 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="p-4 rounded-2xl bg-muted/50 text-center">
+            <button
+              onClick={onOpenEditor}
+              className="p-4 rounded-2xl bg-muted/50 text-center transition-transform active:scale-95 hover:bg-muted"
+            >
               <div className="text-2xl font-black text-primary">{blockCount}</div>
               <div className="text-xs text-muted-foreground font-medium">
                 {t('dashboard.home.blocks', 'блоков')}
               </div>
-            </div>
-            <div className="p-4 rounded-2xl bg-muted/50 text-center">
+            </button>
+            <button
+              onClick={onOpenInsights}
+              className="p-4 rounded-2xl bg-muted/50 text-center transition-transform active:scale-95 hover:bg-muted"
+            >
               <div className="text-2xl font-black text-emerald-500">{viewCount}</div>
               <div className="text-xs text-muted-foreground font-medium">
                 {t('dashboard.home.views', 'просмотров')}
               </div>
-            </div>
-            <div className="p-4 rounded-2xl bg-muted/50 text-center">
+            </button>
+            <button
+              onClick={onOpenActivity}
+              className="p-4 rounded-2xl bg-muted/50 text-center transition-transform active:scale-95 hover:bg-muted"
+            >
               <div className="text-2xl font-black text-violet-500">{weeklyStats.leads}</div>
               <div className="text-xs text-muted-foreground font-medium">
                 {t('dashboard.home.leads', 'заявок')}
               </div>
-            </div>
+            </button>
           </div>
 
           {/* Primary Actions */}

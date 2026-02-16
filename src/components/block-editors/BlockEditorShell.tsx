@@ -21,6 +21,7 @@ import {
     RectangleHorizontal,
     RectangleVertical,
     Square,
+    Trash2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -71,6 +72,8 @@ interface BlockEditorShellProps {
     onBlockUpdate?: (updates: Partial<Block>) => void;
     /** Optional: custom footer actions */
     footerActions?: ReactNode;
+    /** Optional: delete handler */
+    onDelete?: () => void;
 }
 
 // Autosave indicator component
@@ -223,6 +226,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
     onClose,
     onBlockUpdate,
     footerActions,
+    onDelete,
 }: BlockEditorShellProps) {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
@@ -327,6 +331,19 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                     {/* Block Size Selector */}
                     {onBlockUpdate && block && (
                         <BlockSizeSelector block={block} onBlockUpdate={onBlockUpdate} />
+                    )}
+
+                    {/* Delete Block (Desktop/Mobile) - Dangerous action */}
+                    {onDelete && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={onDelete}
+                            className="h-9 w-9 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-95 transition-all shrink-0 mr-1"
+                            title={t('common.delete', 'Удалить')}
+                        >
+                            <Trash2 className="h-5 w-5" />
+                        </Button>
                     )}
 
                     {/* Preview toggle (desktop only) */}
