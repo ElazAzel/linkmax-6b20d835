@@ -24,6 +24,7 @@ import type {
   MapBlockData,
   AvatarBlockData,
   SeparatorBlockData,
+  CatalogBlockData,
 } from '@/types/block-forms';
 
 /**
@@ -34,9 +35,9 @@ function normalizeToString(value: unknown): string {
   if (typeof value === 'string') return value;
   if (isMultilingualString(value)) {
     // Get any non-empty translation
-    return getI18nText(value, 'en') || 
-           getI18nText(value, 'ru') || 
-           getI18nText(value, 'kk') || '';
+    return getI18nText(value, 'en') ||
+      getI18nText(value, 'ru') ||
+      getI18nText(value, 'kk') || '';
   }
   return String(value);
 }
@@ -46,7 +47,7 @@ export function validateUrl(url: unknown, fieldName = 'URL'): string | null {
   if (!urlStr || urlStr.trim() === '') {
     return `${fieldName} is required`;
   }
-  
+
   try {
     new URL(urlStr);
     return null;
@@ -71,15 +72,15 @@ export function validateNumber(
   if (value === undefined || isNaN(value)) {
     return `${fieldName} must be a number`;
   }
-  
+
   if (options?.min !== undefined && value < options.min) {
     return `${fieldName} must be at least ${options.min}`;
   }
-  
+
   if (options?.max !== undefined && value > options.max) {
     return `${fieldName} must be at most ${options.max}`;
   }
-  
+
   return null;
 }
 
@@ -117,28 +118,28 @@ export function validateImageBlock(formData: ImageBlockData): string | null {
 export function validateCarouselBlock(formData: CarouselBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.images, 'Images');
   if (arrayError) return arrayError;
-  
+
   // Validate each image
   for (let i = 0; i < formData.images.length; i++) {
     const image = formData.images[i];
     const urlError = validateUrl(image.url, `Image ${i + 1} URL`);
     if (urlError) return urlError;
   }
-  
+
   return null;
 }
 
 export function validateSocialsBlock(formData: SocialsBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.platforms, 'Platforms');
   if (arrayError) return arrayError;
-  
+
   // Validate each platform
   for (let i = 0; i < formData.platforms.length; i++) {
     const platform = formData.platforms[i];
     const urlError = validateUrl(platform.url, `Platform ${i + 1} URL`);
     if (urlError) return urlError;
   }
-  
+
   return null;
 }
 
@@ -149,29 +150,29 @@ export function validateCustomCodeBlock(formData: CustomCodeBlockData): string |
 export function validateMessengerBlock(formData: MessengerBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.messengers, 'Messengers');
   if (arrayError) return arrayError;
-  
+
   for (let i = 0; i < formData.messengers.length; i++) {
     const messenger = formData.messengers[i];
     const usernameError = validateRequired(messenger.username, `Messenger ${i + 1} username`);
     if (usernameError) return usernameError;
   }
-  
+
   return null;
 }
 
 export function validateFormBlock(formData: FormBlockData): string | null {
   const titleError = validateRequired(formData.title, 'Form title');
   if (titleError) return titleError;
-  
+
   const arrayError = validateArrayNotEmpty(formData.fields, 'Form fields');
   if (arrayError) return arrayError;
-  
+
   for (let i = 0; i < formData.fields.length; i++) {
     const field = formData.fields[i];
     const nameError = validateRequired(field.name, `Field ${i + 1} name`);
     if (nameError) return nameError;
   }
-  
+
   return null;
 }
 
@@ -204,7 +205,7 @@ export function validateNewsletterBlock(formData: NewsletterBlockData): string |
 export function validateTestimonialBlock(formData: TestimonialBlockData): string | null {
   const arrayError = validateArrayNotEmpty(formData.testimonials, 'Testimonials');
   if (arrayError) return arrayError;
-  
+
   for (let i = 0; i < formData.testimonials.length; i++) {
     const testimonial = formData.testimonials[i];
     const nameError = validateRequired(testimonial.name, `Testimonial ${i + 1} name`);
@@ -212,7 +213,7 @@ export function validateTestimonialBlock(formData: TestimonialBlockData): string
     const textError = validateRequired(testimonial.text, `Testimonial ${i + 1} text`);
     if (textError) return textError;
   }
-  
+
   return null;
 }
 
@@ -233,5 +234,16 @@ export function validateAvatarBlock(formData: AvatarBlockData): string | null {
 
 export function validateSeparatorBlock(formData: SeparatorBlockData): string | null {
   // Separator block has no required fields
+  return null;
+}
+
+export function validateCatalogBlock(formData: CatalogBlockData): string | null {
+  if (formData.items && formData.items.length > 0) {
+    for (let i = 0; i < formData.items.length; i++) {
+      const item = formData.items[i];
+      const nameError = validateRequired(item.name, `Item ${i + 1} name`);
+      if (nameError) return nameError;
+    }
+  }
   return null;
 }

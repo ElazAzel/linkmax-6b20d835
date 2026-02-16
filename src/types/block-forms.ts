@@ -121,6 +121,18 @@ export interface SeparatorBlockData extends BlockFormData {
   [key: string]: unknown;
 }
 
+export interface CatalogItemData {
+  id: string;
+  name: string | { [key: string]: string }; // MultilingualString
+  price?: number;
+  [key: string]: unknown;
+}
+
+export interface CatalogBlockData extends BlockFormData {
+  title?: string;
+  items: CatalogItemData[];
+}
+
 // Type guard helpers
 export const isArrayItem = (item: unknown): item is { [key: string]: unknown } => {
   return typeof item === 'object' && item !== null;

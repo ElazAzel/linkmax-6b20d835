@@ -15,12 +15,10 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
 import { createMultilingualString, isMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils';
 
-interface CatalogBlockEditorProps {
-  formData: Partial<CatalogBlock>;
-  onChange: (data: Partial<CatalogBlock>) => void;
-}
+import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
+import { validateCatalogBlock } from '@/lib/block-validators';
 
-export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorProps) {
+function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'items' | 'categories'>('items');
@@ -383,3 +381,9 @@ export function CatalogBlockEditor({ formData, onChange }: CatalogBlockEditorPro
     </div>
   );
 }
+
+export const CatalogBlockEditor = withBlockEditor(CatalogBlockEditorComponent, {
+  hint: 'Создайте каталог товаров или услуг с категориями и ценами.',
+  validate: validateCatalogBlock,
+  isPremium: true,
+});
