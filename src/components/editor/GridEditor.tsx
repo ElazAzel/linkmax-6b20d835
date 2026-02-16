@@ -98,23 +98,17 @@ function SortableGridBlockItem({
         colSpanClass,
         rowSpanClass,
         isDragging && 'opacity-50 ring-2 ring-primary z-50',
-        // Height handling: 
-        // 1x1 = standard height (e.g. aspect square or fixed height)
-        // 2x1 = standard height
-        // 1x2 = double height
-        // 2x2 = double height
-        // For BlockRenderer, we usually let content dictate height, but for grid, we might want minimums.
         'min-h-[140px]',
-        dimensions.gridRows === 2 && 'min-h-[296px]' // 140*2 + 16gap
+        dimensions.gridRows === 2 && 'min-h-[296px]'
       )}
-      // On mobile, we attach listeners to the whole card to allow drag (with delay from TouchSensor)
+      // Mobile: Drag whole card. Desktop: Drag handle only.
       {...(isMobile ? { ...attributes, ...listeners } : {})}
     >
-      {/* Drag handle (Desktop) */}
+      {/* Drag handle (Desktop only) */}
       {!isMobile && (
         <div
           className={cn(
-            "absolute top-2 left-2 z-30 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
+            "absolute top-2 left-2 z-30 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity touch-none",
             isDragging && "opacity-0"
           )}
           {...attributes}
@@ -126,18 +120,23 @@ function SortableGridBlockItem({
         </div>
       )}
 
-      {/* Block content */}
+      {/* Block content - Click to edit */}
       <div
         className="w-full h-full cursor-pointer relative z-0"
         onClick={(e) => {
-          // Use bubble phase to catch clicks from children (like links)
-          // and prevent them while triggering edit
+          // Explicitly stop propagation to prevent bubbling to dnd-kit listeners if they somehow got attached
           e.stopPropagation();
-          // e.preventDefault(); // Removed to allow interaction with block content if needed
           onEdit(block);
         }}
       >
-        <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
+        <div className="pointer-events-none">
+          {/* Disable pointer events on children to ensure the parent div catches the click 
+               BUT interactive blocks (like buttons) inside might need them? 
+               Actually, for an editor, we usually want to disable interaction with the block CONTENT 
+               so that clicking a button doesn't navigate, but opens the editor.
+           */}
+          <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
+        </div>
       </div>
 
       {/* Edit/Delete - visible on hover (desktop) or always (mobile) */}
