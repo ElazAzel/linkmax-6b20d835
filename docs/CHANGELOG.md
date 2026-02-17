@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Block Editor Improvements**:
     - Enabled drag-and-drop on mobile devices by attaching listeners to the entire block card (with long-press support).
     - Improved click-to-edit reliability on Desktop by removing restrictive event prevention.
+    - Fixed "Editor not opening" on PC by memoizing block icons to prevent re-render loops and suspension issues.
+    - Added missing `DialogDescription` to desktop editor for accessibility compliance.
 - Unit test files for `ai-content-generator` and `create-lead` edge functions.
 - `PLATFORM_SNAPSHOT.md`, `RUNBOOKS`, `ADRs` (initial overhaul).
 - **Liquid Glass Design Overhaul**: Comprehensive platform-wide refactor to adopt a premium, modern aesthetic.

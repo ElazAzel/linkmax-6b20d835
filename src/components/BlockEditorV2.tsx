@@ -2,7 +2,7 @@
  * BlockEditorV2 - Enhanced block editor with new shell, autosave, and preview
  * Mobile-first design with improved UX
  */
-import { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
+import { useState, useEffect, lazy, Suspense, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -220,7 +220,7 @@ export function BlockEditorV2({
         onChange: handleFormChange,
     };
 
-    const BlockIcon = getLucideIcon(BLOCK_ICONS[block.type] || 'Box');
+    const BlockIcon = useMemo(() => getLucideIcon(BLOCK_ICONS[block.type] || 'Box'), [block.type]);
     const blockTypeName = t(`blockEditor.${block.type}`, block.type);
 
     const renderEditor = () => {
@@ -313,7 +313,11 @@ export function BlockEditorV2({
         <BlockEditorShell
             block={block}
             blockTypeName={blockTypeName}
-            blockIcon={<BlockIcon className="h-5 w-5 text-primary" />}
+            blockIcon={
+                <Suspense fallback={<div className="h-5 w-5 bg-muted rounded-full" />}>
+                    <BlockIcon className="h-5 w-5 text-primary" />
+                </Suspense>
+            }
             useTabs={false}
             isSaving={isSaving}
             lastSaved={lastSaved}
@@ -393,6 +397,9 @@ export function BlockEditorV2({
             <Dialog open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
                 <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl" aria-describedby={undefined}>
                     <DialogTitle className="sr-only">{t('blockEditor.title', 'Edit Block')}</DialogTitle>
+                    <DialogDescription className="sr-only">
+                        {t('blockEditor.description', 'Редактируйте параметры и контент блока')}
+                    </DialogDescription>
                     {shellContent}
                 </DialogContent>
             </Dialog>
