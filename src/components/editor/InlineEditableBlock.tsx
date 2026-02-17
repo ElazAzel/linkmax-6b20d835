@@ -306,7 +306,9 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
                 variant="glass"
                 size="sm"
                 className="h-9 w-9 p-0 shadow-glass hover:bg-primary/20 rounded-xl"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   haptic.lightTap();
                   onEdit(block);
                 }}
@@ -337,9 +339,14 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
                 variant="default"
                 size="lg"
                 className="h-14 w-14 p-0 rounded-2xl shadow-xl shadow-primary/30"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   haptic.mediumTap();
                   onEdit(block);
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
                 }}
               >
                 <Pencil className="h-6 w-6" />
