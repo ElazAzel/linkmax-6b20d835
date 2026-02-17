@@ -10,7 +10,7 @@
 import { logger } from './logger';
 
 const STORAGE_PREFIX = 'inkmax_';
-const STORAGE_VERSION = 'v1_';
+const STORAGE_VERSION = 'v2_';
 
 /**
  * Get namespaced key

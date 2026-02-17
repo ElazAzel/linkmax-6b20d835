@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { useWebVitals } from "@/hooks/useWebVitals";
+import { storage } from '@/lib/storage';
 
 const queryClient = new QueryClient();
 
@@ -26,9 +27,15 @@ const PageLoader = () => (
   </div>
 );
 
+
 const App = () => {
   // Initialize Web Vitals monitoring in development
   useWebVitals();
+
+  // Clear old storage versions on app load
+  useEffect(() => {
+    storage.clearOldVersions();
+  }, []);
 
   // Listen for OAuth errors in URL
   useEffect(() => {
