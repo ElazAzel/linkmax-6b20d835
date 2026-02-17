@@ -139,9 +139,19 @@ function SortableGridBlockItem({
         <div
           className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10"
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             onEdit(block);
           }}
+          onPointerDown={(e) => {
+            // Don't interfere with drag handles
+            if ((e.target as HTMLElement).closest('[data-drag-handle]')) return;
+          }}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+          }}
+          role="button"
+          tabIndex={0}
           aria-label={`Edit ${block.type} block`}
         />
       </div>
