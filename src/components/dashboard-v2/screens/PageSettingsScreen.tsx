@@ -3,6 +3,7 @@
  * SEO, branding, domain/slug, visibility
  */
 import { memo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Globe,
@@ -15,6 +16,9 @@ import {
   AlertTriangle,
   Crown,
   Sparkles,
+  CreditCard,
+  Lock,
+  Info,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -26,6 +30,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { NicheSelector } from '@/components/settings/NicheSelector';
 import { cn } from '@/lib/utils';
+import { usePremiumStatus, type PremiumTier } from '@/hooks/usePremiumStatus';
 import type { Niche } from '@/lib/niches';
 import { motion } from 'framer-motion';
 
@@ -33,6 +38,7 @@ interface PageSettingsScreenProps {
   pageId: string;
   pageTitle: string;
   pageSlug: string;
+  customDomain?: string | null;
   isPaid: boolean;
   isPrimaryPaid: boolean;
   isPublished: boolean;
@@ -41,9 +47,10 @@ interface PageSettingsScreenProps {
   seoDescription?: string;
   seoKeywords?: string[];
   isIndexable?: boolean;
-  isPremium: boolean;
+  premiumTier?: PremiumTier;
   onBack: () => void;
   onUpdateSlug: (slug: string) => Promise<{ success: boolean; error?: string }>;
+  onUpdateCustomDomain: (domain: string | null) => Promise<{ success: boolean; error?: string }>;
   onUpdateSeo: (seo: { title?: string; description?: string; keywords?: string[] }) => void;
   onUpdateNiche: (niche: Niche) => void;
   onUpdateIntegrations: (integrations: any) => void;
@@ -72,6 +79,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   pageId,
   pageTitle,
   pageSlug,
+  customDomain,
   isPaid,
   isPrimaryPaid,
   isPublished,
@@ -80,10 +88,11 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   seoDescription,
   seoKeywords,
   isIndexable,
-  isPremium,
+  premiumTier,
   onBack,
   onUpdateSlug,
-  onUpdateSeo,
+  onUpdateCustomDomain,
+  onUpdateSeo, // Removed duplicate 'onUpdateSeo, CustomDomain,'
   onUpdateNiche,
   onToggleIndexable,
   onUpgradePage,
@@ -92,10 +101,15 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   integrations,
 }: PageSettingsScreenProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate(); // Added useNavigate hook
+  const { isPro: isPremium } = usePremiumStatus(premiumTier);
 
   const [slugInput, setSlugInput] = useState(pageSlug);
   const [slugSaving, setSlugSaving] = useState(false);
   const [slugError, setSlugError] = useState<string | null>(null);
+
+  const [customDomainInput, setCustomDomainInput] = useState(customDomain || '');
+  const [customDomainSaving, setCustomDomainSaving] = useState(false);
 
   const [seoTitleInput, setSeoTitleInput] = useState(seoTitle || '');
   const [seoDescInput, setSeoDescInput] = useState(seoDescription || '');
@@ -117,9 +131,43 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
 
     if (!result.success) {
       setSlugError(t(`dashboard.pageSettings.errors.${result.error}`, 'Failed to update slug'));
+    } else {
+      toast.success(t('common.saved', 'Saved'));
     }
 
     setSlugSaving(false);
+  };
+
+  const handleSaveCustomDomain = async () => {
+    if (!isPremium) return;
+    if (customDomainInput === (customDomain || '')) {
+      if (customDomainInput === '') return;
+      return;
+    }
+
+    // Basic domain validation
+    const domainRegex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i;
+    if (customDomainInput && !domainRegex.test(customDomainInput)) {
+      toast.error(t('dashboard.pageSettings.invalidDomain', 'Invalid domain format'));
+      return;
+    }
+
+    setCustomDomainSaving(true);
+
+    // Pass null if empty string to clear the domain
+    const result = await onUpdateCustomDomain(customDomainInput || null);
+
+    if (!result.success) {
+      if (result.error === '23505' || result.error === 'domain_taken') {
+        toast.error(t('dashboard.pageSettings.domainTaken', 'This domain is already connected to another page'));
+      } else {
+        toast.error(t('common.error', 'Failed to save'));
+        console.error(`Failed to update custom domain: ${result.error}`);
+      }
+    } else {
+      toast.success(t('common.saved', 'Saved'));
+    }
+    setCustomDomainSaving(false);
   };
 
   const handleSaveSeo = () => {
@@ -189,6 +237,72 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                 {t('dashboard.pageSettings.upgradeToPaid', 'Upgrade to Paid (70% off)')}
               </Button>
             )}
+          </Card>
+        </motion.div>
+
+
+        {/* Custom Domain Section */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <div className="flex items-center gap-2 px-1">
+            <Globe className="h-4 w-4 text-muted-foreground" />
+            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+              {t('dashboard.pageSettings.customDomain', 'Custom Domain')}
+            </h3>
+            {!isPremium && (
+              <Badge variant="outline" className="ml-auto text-xs bg-amber-500/10 text-amber-600 border-amber-500/30">
+                PRO
+              </Badge>
+            )}
+          </div>
+
+          <Card className="p-5 space-y-4">
+            <p className="text-sm text-muted-foreground">
+              {t('dashboard.pageSettings.customDomainDesc', 'Connect your own domain (e.g., user.com) to this page.')}
+            </p>
+
+            <div className="space-y-3">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="yourdomain.com"
+                  value={customDomainInput}
+                  onChange={(e) => setCustomDomainInput(e.target.value)}
+                  disabled={!isPremium || customDomainSaving}
+                  className={cn(
+                    "h-11",
+                    !isPremium && "opacity-50 cursor-not-allowed"
+                  )}
+                  onBlur={handleSaveCustomDomain}
+                />
+                <Button
+                  onClick={handleSaveCustomDomain}
+                  disabled={!isPremium || customDomainInput === customDomain || customDomainSaving}
+                  className="h-11 px-4"
+                >
+                  {customDomainSaving ? '...' : t('common.save', 'Save')}
+                </Button>
+              </div>
+
+              {!isPremium ? (
+                <Button variant="outline" className="w-full text-amber-600 border-amber-500/30 bg-amber-500/5" onClick={() => navigate('/pricing')}>
+                  {t('dashboard.pageSettings.upgradeToConnect', 'Upgrade to Connect Domain')}
+                </Button>
+              ) : (
+                <div className="bg-muted/50 p-3 rounded-xl space-y-2 text-xs text-muted-foreground border border-border/50">
+                  <div className="font-medium text-foreground flex items-center gap-2">
+                    <Info className="h-3 w-3" />
+                    {t('dashboard.pageSettings.dnsSetup', 'DNS Configuration')}
+                  </div>
+                  <p>
+                    {t('dashboard.pageSettings.dnsInstructions', 'Add a CNAME record to your domain provider:')}
+                  </p>
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center font-mono bg-background p-2 rounded border border-border/50">
+                    <span>@</span>
+                    <span className="text-muted-foreground">CNAME</span>
+                    <span>lnkmx.my</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </Card>
         </motion.div>
 

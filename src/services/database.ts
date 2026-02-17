@@ -7,6 +7,7 @@
 export {
   savePage,
   loadPageBySlug,
+  loadPageByCustomDomain,
   loadUserPage,
   publishPage,
 } from '@/services/pages';

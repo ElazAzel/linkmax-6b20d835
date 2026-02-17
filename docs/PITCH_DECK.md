@@ -8,8 +8,8 @@
 
 ## Slide 1: Title & Hook
 **Title**: lnkmx
-**Subtitle**: The Operating System for the Creator Economy.
-**One-Liner**: We replace the fragmented toolchain of micro-businesses with a single, mobile-first ecosystem.
+**Subtitle**: The Micro-Business Operating System.
+**One-Liner**: Build. Manage. Grow. All in one link.
 **Presenter**: [Your Name/Team]
 
 ---
@@ -29,19 +29,19 @@ To run a simple service business online, they currently need:
 
 ## Slide 3: The Solution (Vertical Integration)
 **lnkmx is the All-In-One "Micro-OS".**
-We consolidated the essential stack into one frictionless mobile app.
+We replace disjointed tools with a unified, mobile-first dashboard.
 
-*   **Build**: AI-powered website builder. Ready in 15 minutes.
-*   **Manage**: Built-in CRM for leads and bookings.
-*   **Grow**: Native tools (Newsletter, Analytics, SEO).
+*   **Build**: AI-powered website builder (28+ block types). Ready in 15 minutes.
+*   **Manage**: Mini-CRM for leads, bookings, and event registrations.
+*   **Grow**: Advanced analytics (Cookie-less, Heatmaps) and SEO tools.
 
-**Value Prop**: "Stop pasting links. Start running a business."
+**Value Prop**: "Complete business infrastructure in 15 minutes."
 
 ---
 
 ## Slide 4: The Product (Unfair Advantage)
 **Why we win on Product:**
-1.  **"Liquid Glass" UX**: A premium, mobile-first design system that makes every page look expensive by default.
+1.  **"Liquid Glass" Aesthetic**: A premium, motion-rich design system that makes every page look expensive by default (Glassmorphism, depth, micro-animations).
 2.  **AI Core**: Generates copy, translations (RU/EN/KK), and layout instantly. No writer's block.
 3.  **Real Business Tools**: Unlike competitors who just "link out", we capture data.
     -   *Native Bookings* (vs Calendly link)
@@ -75,10 +75,10 @@ We consolidated the essential stack into one frictionless mobile app.
 
 ## Slide 7: Technical Moat & Scalability
 **Built for scale from Day 1.**
-*   **Architecture**: Serverless (Supabase + Cloudflare Edge). Zero dev-ops overhead.
-*   **Performance**: Core Web Vitals optimized. 99/100 Mobile Speed score (Google).
-*   **Security**: Enterprise-grade RLS (Row Level Security). GDPR compliant architecture.
-*   **Scalability**: Database structure supports millions of users without re-architecture.
+*   **Architecture**: Serverless (Supabase + Deno Edge Functions + Cloudflare Workers). Zero dev-ops overhead.
+*   **Performance**: Static-first architecture (PWA) with optimistic UI. 99/100 Mobile Speed score.
+*   **Security**: Enterprise-grade RLS (Row Level Security). GDPR/CCPA compliant.
+*   **Scalability**: Database structure supports millions of users via RLS sharding.
 
 ---
 
@@ -107,9 +107,11 @@ We consolidated the essential stack into one frictionless mobile app.
 
 ## Slide 10: Roadmap & Vision
 **Phase 1 (Now)**: Product Parity & Stability. (Achieved)
-**Phase 2 (Next 6 Mo)**: 
-*   **Mobile App**: Push notifications for leads (High retention feature).
-*   **White Label**: Solution for agencies.
+**Phase 2 (Next 6-12 Mo)**: 
+*   **Mobile App**: Native iOS/Android wrappers for push notifications.
+*   **Advanced Bookings**: Calendar sync (Google/Outlook) and deposit payments.
+*   **White Label**: Enterprise solution for agencies.
+*   **API Access**: Zapier/Make integrations for advanced workflows.
 *   **Custom Domains**: SEO dominance.
 **Phase 3 (Long Term)**:
 *   **Fintech**: Native wallet & payments.

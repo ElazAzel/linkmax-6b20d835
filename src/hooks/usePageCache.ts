@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { loadPageBySlug, loadUserPage, savePage, publishPage } from '@/services/database';
+import { loadPageBySlug, loadPageByCustomDomain, loadUserPage, savePage, publishPage } from '@/services/database';
 import type { PageData } from '@/types/page';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -8,11 +8,12 @@ import { logger } from '@/lib/logger';
 // Query keys for cache management
 export const pageQueryKeys = {
   publicPage: (slug: string) => ['page', 'public', slug] as const,
+  publicPageByDomain: (domain: string) => ['page', 'public', 'domain', domain] as const,
   userPage: (userId: string) => ['page', 'user', userId] as const,
   allPages: ['page'] as const,
 };
 
-// Hook for loading public pages with caching
+// Hook for loading public pages by slug with caching
 export function usePublicPage(slug: string | undefined) {
   return useQuery({
     queryKey: pageQueryKeys.publicPage(slug || ''),
@@ -25,6 +26,23 @@ export function usePublicPage(slug: string | undefined) {
     enabled: !!slug,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+    retry: 2,
+  });
+}
+
+// Hook for loading public pages by custom domain with caching
+export function usePublicPageByDomain(domain: string | undefined) {
+  return useQuery({
+    queryKey: pageQueryKeys.publicPageByDomain(domain || ''),
+    queryFn: async () => {
+      if (!domain) return null;
+      const { data, error } = await loadPageByCustomDomain(domain);
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!domain,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,
   });
 }

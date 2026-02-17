@@ -18,7 +18,7 @@ import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
 import { TrackingScripts } from '@/components/analytics/TrackingScripts';
 import { decompressPageData } from '@/lib/compression';
-import { usePublicPage } from '@/hooks/usePageCache';
+import { usePublicPage, usePublicPageByDomain } from '@/hooks/usePageCache';
 import { AnalyticsProvider } from '@/hooks/useAnalyticsTracking';
 import { useHeatmapTracking } from '@/hooks/useHeatmapTracking';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -48,8 +48,33 @@ export default function PublicPage() {
   // Language context for auto-translation
   const { currentLanguage, translateBlocksToLanguage, isTranslating, autoTranslateEnabled } = useLanguage();
 
+  // Perform custom domain check
+  const [customDomain, setCustomDomain] = useState<string | null>(null);
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    // Check if hostname is not a platform domain
+    // TODO: Add env var or config for platform domains
+    const isPlatformDomain =
+      hostname.endsWith('lnkmx.my') ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.endsWith('.vercel.app'); // Preview deployments
+
+    if (!isPlatformDomain) {
+      setCustomDomain(hostname);
+    }
+  }, []);
+
   // Use React Query for slug-based pages (with caching)
-  const { data: cachedPageData, isLoading: isLoadingCached, error } = usePublicPage(slug);
+  const { data: slugPageData, isLoading: isLoadingSlug, error: slugError } = usePublicPage(slug);
+
+  // Use React Query for custom domain based pages
+  const { data: domainPageData, isLoading: isLoadingDomain, error: domainError } = usePublicPageByDomain(customDomain || undefined);
+
+  const cachedPageData = customDomain ? domainPageData : slugPageData;
+  const isLoadingCached = customDomain ? isLoadingDomain : isLoadingSlug;
+  const error = customDomain ? domainError : slugError;
 
   // Handle compressed format (old format, no caching)
   useEffect(() => {

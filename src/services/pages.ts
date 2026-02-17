@@ -294,6 +294,55 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
 }
 
 /**
+ * Load public page by custom domain
+ */
+export async function loadPageByCustomDomain(domain: string): Promise<LoadPageResult> {
+  try {
+    const { data: page, error: pageError } = await supabase
+      .from('pages')
+      .select('*, blocks(*)')
+      .eq('custom_domain', domain)
+      .eq('is_published', true)
+      .maybeSingle();
+
+    if (pageError) {
+      return { data: null, error: wrapError(pageError) };
+    }
+
+    if (!page) {
+      return { data: null, error: new Error('Page not found') };
+    }
+
+    // Increment view count (fire and forget)
+    // Note: increment_view_count takes page_slug, we can use the slug from the found page
+    void supabase.rpc('increment_view_count', { page_slug: page.slug });
+
+    const blocks = page.blocks as unknown as DbBlock[];
+    const pageData: PageData = {
+      id: page.id,
+      userId: page.user_id,
+      slug: page.slug,
+      custom_domain: (page as any).custom_domain || undefined,
+      blocks: convertDbBlocksToBlocks(blocks),
+      theme: page.theme_settings as unknown as PageTheme,
+      seo: page.seo_meta as unknown as PageData['seo'],
+      isPremium: blocks.some((b) => b.is_premium),
+      isPublished: page.is_published || false,
+      viewCount: page.view_count || 0,
+      editorMode: 'grid',
+      gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
+      niche: (page as unknown as { niche?: string }).niche || 'other',
+      previewUrl: (page as unknown as { preview_url?: string }).preview_url || undefined,
+      integrations: (page as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+    };
+
+    return { data: pageData, error: null };
+  } catch (error) {
+    return { data: null, error: wrapError(error) };
+  }
+}
+
+/**
  * Load user's own page
  */
 export async function loadUserPage(userId: string): Promise<LoadUserPageResult> {

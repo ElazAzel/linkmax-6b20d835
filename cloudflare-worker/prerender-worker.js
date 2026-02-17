@@ -183,6 +183,81 @@ async function handleRequest(request, env) {
   const pathname = url.pathname;
   const userAgent = request.headers.get('User-Agent') || '';
   const queryString = url.search || '';
+  const hostname = url.hostname;
+
+  // 0. Custom Domain Check
+  // If hostname is NOT main platform domain (lnkmx.my, localhost, etc)
+  const isPlatformDomain = hostname.includes('lnkmx.my') || hostname.includes('localhost') || hostname.includes('127.0.0.1') || hostname.includes('workers.dev');
+
+  if (!isPlatformDomain) {
+    // It's a custom domain (e.g. user.com)
+    // We need to resolve it to a slug
+    // We'll call a dedicated Edge Function or existing API to resolve
+    // optimize: Use Cache API to store domain->slug mapping
+
+    const resolveUrl = `${FUNCTION_URL}/resolve-domain?domain=${hostname}`;
+    let slug = null;
+
+    try {
+      // Check cache first (todo)
+      const resolveRes = await fetch(resolveUrl, {
+        headers: { 'Authorization': `Bearer ${env.SUPABASE_ANON_KEY}` }
+      });
+
+      if (resolveRes.ok) {
+        const data = await resolveRes.json();
+        slug = data.slug;
+      }
+    } catch (e) {
+      console.error('[Worker] Domain resolution error:', e);
+    }
+
+    if (slug) {
+      // Rewrites the request to the platform's handle logic
+      // But we need to be careful not to loop.
+      // Easiest is to pretend the URL is lnkmx.my/[slug]
+      // But let's just use the slug logic below
+
+      // Force treating this as a bot/user visit to a specific slug
+      // If it's a bot, we SSR. If it's a user, we serve index.html but maybe need to inject config
+
+      // CRITICAL: For SPA to work, it needs to know it's on a custom domain 
+      // or we serve the root index.html and let client fetching handle it?
+      // Client needs to fetch page by domain, NOT by slug from URL.
+
+      // For now, let's implement the Bot SSR part which is critical for SEO.
+      // Human users will just get the index.html (fallback) and the App.tsx needs to handle "window.location.hostname" lookup.
+    }
+
+    // For now, if it's a bot on a custom domain, we proxy the SSR
+    if (slug && isBot(userAgent)) {
+      const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${encodeURIComponent(slug)}${queryString}`;
+      try {
+        const ssrResponse = await fetch(ssrUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'text/html',
+            'User-Agent': userAgent,
+          },
+        });
+        const responseHeaders = new Headers(ssrResponse.headers);
+        responseHeaders.set('X-SSR-Rendered', 'true');
+        responseHeaders.set('X-Custom-Domain', hostname);
+        responseHeaders.delete('set-cookie');
+        return new Response(ssrResponse.body, {
+          status: ssrResponse.status,
+          headers: responseHeaders
+        });
+      } catch (e) {
+        console.error('[Worker] Custom domain SSR error:', e);
+      }
+    }
+
+    // If not a bot, or resolution failed, we just fall through to serve index.html (origin)
+    // The React app MUST handle "if domain != lnkmx.my, fetch page by domain"
+  }
+
+  // 1. Skip static files - always origin
 
   // 1. Skip static files - always origin
   if (isStaticFile(pathname)) {

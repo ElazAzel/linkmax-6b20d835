@@ -215,6 +215,22 @@ export default function DashboardV2() {
     return { success: result.success, error: result.error };
   }, [multiPage, t]);
 
+  const handleUpdateSlug = useCallback(async (pageId: string, newSlug: string) => {
+    const result = await multiPage.updatePageSlug(pageId, newSlug);
+    if (!result.success) {
+      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to update slug'));
+    }
+    return result;
+  }, [multiPage, t]);
+
+  const handleUpdateCustomDomain = useCallback(async (pageId: string, newDomain: string | null) => {
+    const result = await multiPage.updatePageCustomDomain(pageId, newDomain);
+    if (!result.success) {
+      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to update custom domain'));
+    }
+    return result;
+  }, [multiPage, t]);
+
   // Handle edit page (navigate to editor)
   const handleEditPage = useCallback((pageId: string) => {
     multiPage.switchPage(pageId);

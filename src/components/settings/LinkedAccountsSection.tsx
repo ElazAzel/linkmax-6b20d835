@@ -74,6 +74,12 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
         provider: provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
+          ...(provider === 'google' ? {
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent',
+            },
+          } : {}),
         },
       });
 

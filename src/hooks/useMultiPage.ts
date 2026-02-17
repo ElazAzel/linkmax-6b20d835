@@ -384,6 +384,44 @@ export function useMultiPage() {
     }
   }, [user?.id, loadPages]);
 
+  // Update custom domain
+  const updatePageCustomDomain = useCallback(async (pageId: string, customDomain: string | null): Promise<{ success: boolean; error?: string }> => {
+    if (!user?.id) {
+      return { success: false, error: 'not_authenticated' };
+    }
+
+    // Basic format check if not null
+    if (customDomain) {
+      const domainRegex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i;
+      if (!domainRegex.test(customDomain)) {
+        return { success: false, error: 'invalid_domain_format' };
+      }
+    }
+
+    try {
+      const { error: updateError } = await supabase
+        .from('pages')
+        .update({ custom_domain: customDomain } as any)
+        .eq('id', pageId)
+        .eq('user_id', user.id);
+
+      if (updateError) {
+        if (updateError.code === '23505') return { success: false, error: 'domain_taken' };
+        throw updateError;
+      }
+
+      await loadPages();
+
+      return { success: true };
+    } catch (err) {
+      logger.error('Error updating custom domain', err, { context: 'useMultiPage', data: { pageId, customDomain } });
+      return {
+        success: false,
+        error: err instanceof Error ? err.message : 'Failed to update custom domain',
+      };
+    }
+  }, [user?.id, loadPages]);
+
   return {
     // State
     pages,
@@ -402,5 +440,6 @@ export function useMultiPage() {
     deletePage,
     updatePageSlug,
     setPrimaryPaidPage,
+    updatePageCustomDomain,
   };
 }

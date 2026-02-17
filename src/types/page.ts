@@ -49,6 +49,7 @@ export interface PageData {
   id: string;
   userId?: string;
   slug?: string;
+  custom_domain?: string;
   blocks: Block[];
   theme: PageTheme;
   seo: {

@@ -369,6 +369,10 @@ new -> contacted -> qualified -> won/lost
 - `blocks`: structured blocks for each page (28 types).
 - `user_profiles`: plan, limits, and profile data.
 - `subscriptions`: plan status and billing metadata.
+- **Multi-Page**: Users can create up to 6 pages (Pro) or 1 page (Free).
+- **Custom Domains**: Pro users can connect custom domains via CNAME record.
+- **SSR/SEO**: Next.js-like SSR via Cloudflare Workers + Supabase Edge Functions for bots.
+- **Analytics**: Built-in simple analytics + Pixel integrations (FB, TT, GA4, Yandex).
 
 **Leads and CRM:**
 - `leads`: lead records collected from forms.
