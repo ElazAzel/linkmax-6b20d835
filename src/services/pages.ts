@@ -299,7 +299,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
  */
 export async function loadPageByCustomDomain(domain: string): Promise<LoadPageResult> {
   try {
-    const { data: page, error: pageError } = await supabase
+    const { data: page, error: pageError }: any = await (supabase as any)
       .from('pages')
       .select('*, blocks(*)')
       .eq('custom_domain', domain)

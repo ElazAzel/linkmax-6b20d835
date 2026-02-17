@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 import { usePremiumStatus, type PremiumTier } from '@/hooks/usePremiumStatus';
 import type { Niche } from '@/lib/niches';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface PageSettingsScreenProps {
   pageId: string;
@@ -102,7 +103,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
 }: PageSettingsScreenProps) {
   const { t } = useTranslation();
   const navigate = useNavigate(); // Added useNavigate hook
-  const { isPro: isPremium } = usePremiumStatus(premiumTier);
+  const { isPremium } = usePremiumStatus();
 
   const [slugInput, setSlugInput] = useState(pageSlug);
   const [slugSaving, setSlugSaving] = useState(false);
