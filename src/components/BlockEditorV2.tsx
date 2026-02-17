@@ -395,12 +395,14 @@ export function BlockEditorV2({
     return (
         <>
             <Dialog open={isOpen} onOpenChange={(open) => !open && handleCloseAttempt()}>
-                <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl" aria-describedby={undefined}>
+                <DialogContent className="max-w-3xl h-[85vh] p-0 flex flex-col overflow-hidden bg-card/95 backdrop-blur-2xl border border-border/20 shadow-2xl rounded-3xl" aria-describedby={undefined}>
                     <DialogTitle className="sr-only">{t('blockEditor.title', 'Edit Block')}</DialogTitle>
                     <DialogDescription className="sr-only">
                         {t('blockEditor.description', 'Редактируйте параметры и контент блока')}
                     </DialogDescription>
-                    {shellContent}
+                    <div className="flex-1 h-full min-h-0">
+                        {shellContent}
+                    </div>
                 </DialogContent>
             </Dialog>
             {unsavedDialog}
