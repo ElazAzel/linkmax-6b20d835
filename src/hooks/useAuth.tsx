@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 
 
 import { logger } from '@/lib/logger';
@@ -121,31 +122,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signInWithGoogle = async (returnTo?: string) => {
-    const redirectTo = new URL(`${window.location.origin}/auth/callback`);
-    if (returnTo) {
-      redirectTo.searchParams.set('returnTo', returnTo);
-    }
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: redirectTo.toString(),
-      },
+    const { error } = await lovable.auth.signInWithOAuth('google', {
+      redirect_uri: window.location.origin,
     });
     return { error };
   };
 
   const signInWithApple = async (returnTo?: string) => {
-    const redirectTo = new URL(`${window.location.origin}/auth/callback`);
-    if (returnTo) {
-      redirectTo.searchParams.set('returnTo', returnTo);
-    }
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'apple',
-      options: {
-        redirectTo: redirectTo.toString(),
-      },
+    const { error } = await lovable.auth.signInWithOAuth('apple', {
+      redirect_uri: window.location.origin,
     });
     return { error };
   };
