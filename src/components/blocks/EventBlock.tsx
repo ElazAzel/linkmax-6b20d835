@@ -15,6 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
+import { useAnalytics } from '@/hooks/useAnalyticsTracking';
 import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
@@ -86,11 +87,13 @@ export const EventBlock = memo(function EventBlock({
     }
   }, [block.eventId]);
 
+  const { onBlockClick } = useAnalytics();
   const handleOpen = useCallback(() => {
+    onBlockClick(block.id, block.type, title + ' (Open)');
     setIsOpen(true);
     setShowPrompt(!user);
     setEventError(null);
-  }, [user]);
+  }, [user, block.id, block.type, title, onBlockClick]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);

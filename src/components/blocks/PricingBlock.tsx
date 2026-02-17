@@ -30,8 +30,11 @@ const currencySymbols: Record<string, string> = {
   AUD: 'A$',
 };
 
+import { useAnalytics } from '@/hooks/useAnalyticsTracking';
+
 export const PricingBlock = React.memo(function PricingBlock({ block }: PricingBlockProps) {
   const { t, i18n } = useTranslation();
+  const { onBlockClick } = useAnalytics();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
   const title = block.title ? getI18nText(block.title, currentLang) : '';
@@ -77,8 +80,9 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
           return (
             <div
               key={item.id}
+              onClick={() => onBlockClick(block.id, block.type, `${title} - ${name}`)}
               className={cn(
-                'flex items-center justify-between gap-3 p-4 rounded-2xl',
+                'flex items-center justify-between gap-3 p-4 rounded-2xl cursor-pointer',
                 'glass-card backdrop-blur-sm border-white/10 shadow-glass',
                 'transition-all duration-300 active:scale-[0.98] hover:shadow-glass-lg hover:border-white/20',
                 item.featured && 'ring-2 ring-primary bg-primary/10 shadow-primary/20'

@@ -29,8 +29,11 @@ const currencySymbols: Record<string, string> = {
   AUD: 'A$',
 };
 
+import { useAnalytics } from '@/hooks/useAnalyticsTracking';
+
 export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogBlockProps) {
   const { t, i18n } = useTranslation();
+  const { onBlockClick } = useAnalytics();
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
 
   const title = block.title ? getI18nText(block.title, currentLang) : '';
@@ -45,9 +48,9 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
   const groupedItems = useMemo(() => {
     const categories = block.categories || [];
     const items = block.items || [];
-    
+
     const groups: { categoryId: string | null; categoryName: string; items: CatalogItem[] }[] = [];
-    
+
     // Add categorized items
     categories.forEach(category => {
       const categoryItems = items.filter(item => item.categoryId === category.id);
@@ -59,7 +62,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
         });
       }
     });
-    
+
     // Add uncategorized items
     const uncategorizedItems = items.filter(item => !item.categoryId || !categories.find(c => c.id === item.categoryId));
     if (uncategorizedItems.length > 0) {
@@ -69,7 +72,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
         items: uncategorizedItems,
       });
     }
-    
+
     return groups;
   }, [block.categories, block.items, currentLang, t]);
 
@@ -85,12 +88,16 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
 
   const renderItem = (item: CatalogItem) => {
     const itemName = getI18nText(item.name, currentLang);
-    const itemDescription = item.description 
-      ? getI18nText(item.description, currentLang) 
+    const itemDescription = item.description
+      ? getI18nText(item.description, currentLang)
       : '';
 
     return (
-      <Card key={item.id} className="overflow-hidden bg-card border-border shadow-sm">
+      <Card
+        key={item.id}
+        onClick={() => onBlockClick(block.id, block.type, `${title} - ${itemName}`)}
+        className="overflow-hidden bg-card border-border shadow-sm cursor-pointer hover:shadow-md transition-all active:scale-[0.99]"
+      >
         {item.image && (
           <div className={cn(
             'overflow-hidden',
@@ -141,7 +148,7 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
       {title && (
         <h3 className="text-xl font-semibold text-center">{title}</h3>
       )}
-      
+
       {groupedItems.map((group, groupIndex) => (
         <div key={group.categoryId || `uncategorized-${groupIndex}`} className="space-y-3">
           {group.categoryName && (
@@ -150,8 +157,8 @@ export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogB
             </h4>
           )}
           <div className={cn(
-            isGrid 
-              ? 'grid grid-cols-2 gap-3' 
+            isGrid
+              ? 'grid grid-cols-2 gap-3'
               : 'flex flex-col gap-3'
           )}>
             {group.items.map(renderItem)}

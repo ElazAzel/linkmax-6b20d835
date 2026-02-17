@@ -201,7 +201,8 @@ export async function savePage(
       p_page_id: pageId,
       p_blocks: JSON.parse(JSON.stringify(blocksData)) as Json,
       p_is_premium: pageData.isPremium || false,
-    });
+      p_user_id: userId,
+    } as any);
 
     if (blocksError) {
       logger.error('Error saving blocks', blocksError, { context: 'pages', data: { pageId } });

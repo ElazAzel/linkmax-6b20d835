@@ -199,7 +199,7 @@ export function usePageAnalytics() {
             blockId: block.id,
             blockType: block.type,
             blockTitle,
-            clicks: block.click_count || 0,
+            clicks: 0, // Initialize to 0 to only count clicks from the selected period
             views: 0,
             ctr: 0,
           });
@@ -298,7 +298,7 @@ export function usePageAnalytics() {
       const returningCount = Array.from(visitorCounts.values()).filter(c => c > 1).length;
       const returningVisitorsPercent = uniqueVisitors > 0 ? (returningCount / uniqueVisitors) * 100 : 0;
 
-      // Fetch conversions (leads + bookings)
+      // Fetch conversions (leads + bookings + event_registrations)
       const { data: leads } = await supabase
         .from('leads')
         .select('id')
@@ -311,7 +311,13 @@ export function usePageAnalytics() {
         .eq('owner_id', user.id)
         .gte('created_at', startDate.toISOString());
 
-      const totalConversions = (leads?.length || 0) + (bookings?.length || 0);
+      const { data: eventRegistrations } = await supabase
+        .from('event_registrations')
+        .select('id')
+        .eq('owner_id', user.id)
+        .gte('created_at', startDate.toISOString());
+
+      const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);
 
       setAnalytics({
         totalViews,
