@@ -1,61 +1,122 @@
 # API & Backend Documentation
 
-This document serves as a reference for the backend logic of the lnkmx platform, which is built primarily on Supabase (PostgreSQL + Edge Functions).
+This document serves as a reference for the backend logic of the lnkmx platform, built on Supabase (PostgreSQL + Edge Functions).
 
-## 1. Edge Functions
+## 1. Edge Functions (28 total)
 
-These server-side functions (Deno) handle complex logic, third-party integrations, and secure operations.
+Stateless server-side functions running on **Deno runtime**. Located in `supabase/functions/`.
 
-**Location**: `supabase/functions/`
+### AI & Content
 
-| Function Name | Trigger | Description |
-| :--- | :--- | :--- |
-| `ai-content-generator` | Manual (App) | Generates page content and copy using Google Gemini. |
-| `chatbot-stream` | Web Widget | Streams AI responses for the public page chatbot. |
-| `create-lead` | Form Submit | Validates and inserts lead data from public forms. |
-| `generate-sitemap` | Cron / Manual | Generates `sitemap.xml` for SEO. |
-| `google-forms-parser` | Manual | Import logic for converting Google Forms to lnkmx blocks. |
-| `process-crm-automations` | Cron (Hourly) | Checks for and executes CRM automation rules. |
-| `public-experts` | Public API | Returns a directory of expert profiles. |
-| `send-contact-email` | Event | Sends contact form submissions via Email. |
-| `send-lead-notification` | DB Trigger | Notifies users of new leads via Telegram/Email. |
-| `send-booking-notification` | DB Trigger | Notifies users of new bookings. |
-| `send-event-confirmation` | DB Trigger | Sends ticket/confirmation to event attendees. |
-| `telegram-bot-webhook` | Webhook | Handles incoming Telegram messages for the bot. |
-| `translate-content` | Manual (App) | Translates block content between RU/EN/KK. |
-| `validate-telegram` | Auth flow | Verifies Telegram login widgets. |
+| Function | Auth | Description |
+|---|---|---|
+| `ai-content-generator` | No JWT | Generates page content and copy using Google Gemini |
+| `chatbot-stream` | No JWT | Streams AI chatbot responses for public page widget |
+| `translate-content` | No JWT | Translates block content between RU/EN/KK |
 
-*(Note: List may not be exhaustive. See `supabase/functions` directory for all sources.)*
+### Lead & CRM
+
+| Function | Auth | Description |
+|---|---|---|
+| `create-lead` | No JWT | Validates and inserts leads from public forms. Rate limited (15/min). Turnstile CAPTCHA |
+| `send-lead-notification` | No JWT | Notifies page owner of new leads via Telegram/Email |
+| `process-crm-automations` | No JWT | Cron (hourly) — executes CRM automation rules |
+| `google-forms-parser` | No JWT | Imports Google Forms as lnkmx blocks |
+
+### Booking & Events
+
+| Function | Auth | Description |
+|---|---|---|
+| `send-booking-notification` | No JWT | Notifies of new bookings via Telegram/Email |
+| `send-booking-reminder` | No JWT | Sends booking reminders (scheduled) |
+| `send-event-confirmation` | No JWT | Sends ticket/confirmation to event attendees |
+| `send-attendee-email` | No JWT | Sends follow-up emails to event attendees |
+
+### Telegram Integration
+
+| Function | Auth | Description |
+|---|---|---|
+| `telegram-bot-webhook` | No JWT | Handles incoming Telegram messages. Warm-up: `?warmup=true` |
+| `validate-telegram` | No JWT | Verifies Telegram login widgets |
+| `telegram-password-reset` | No JWT | Handles password reset via Telegram |
+
+### Notifications (Social/Team)
+
+| Function | Auth | Description |
+|---|---|---|
+| `send-collab-notification` | No JWT | Collaboration request notifications |
+| `send-friend-notification` | No JWT | Friend invitation notifications |
+| `send-social-notification` | No JWT | Social interaction notifications |
+| `send-team-notification` | No JWT | Team membership notifications |
+| `send-weekly-digest` | No JWT | Weekly activity digest emails |
+| `send-weekly-motivation` | No JWT | Weekly motivational notifications |
+| `send-trial-ending-notification` | No JWT | Pro trial expiry reminders |
+
+### SEO & Analytics
+
+| Function | Auth | Description |
+|---|---|---|
+| `seo-ssr` | No JWT | Server-side rendered HTML for bots/crawlers. Rate limited (60/min). Warm-up support |
+| `generate-sitemap` | No JWT | Generates `sitemap.xml` for SEO |
+| `pixel-proxy` | No JWT | **Server-side pixel forwarding** — FB CAPI, TikTok Events, GA4 MP. Rate limited (100/min) |
+
+### Other
+
+| Function | Auth | Description |
+|---|---|---|
+| `public-experts` | No JWT | Returns public expert directory |
+| `resolve-domain` | No JWT | Resolves custom domains to pages |
+| `seed-demo-accounts` | No JWT | Seeds demo accounts (admin-only check inside) |
+| `language-upload` | No JWT | Uploads language translation files |
+
+> **Note**: All functions use `verify_jwt = false` in `config.toml` but implement their own auth checks where needed (e.g., `seed-demo-accounts` verifies admin role).
 
 ---
 
 ## 2. Database RPCs (Remote Procedure Calls)
 
-We use PostgreSQL functions for atomic operations and logic that needs to run close to the data.
+PostgreSQL functions for atomic operations and secure logic.
 
 | Function | Params | Purpose |
-| :--- | :--- | :--- |
-| `check_page_limits` | `user_id` | Verifies if a user can create more pages based on their tier. |
-| `save_page_blocks` | `page_id`, `blocks_json` | Atomically replaces blocks for a page, handling versioning. |
-| `increment_view_count` | `page_id` | Efficiently increments page views +1 without locking. |
-| `claim_daily_token_reward` | `user_id` | Awards Linkkon tokens for daily login quest. |
-| `upgrade_page_to_paid` | `page_id` | Marks a specific page as premium (Pro feature). |
+|---|---|---|
+| `check_page_limits` | `user_id` | Verifies if user can create more pages based on tier |
+| `save_page_blocks` | `page_id`, `blocks_json` | Atomically replaces blocks for a page with versioning |
+| `increment_view_count` | `page_id` | Efficiently increments page views +1 |
+| `claim_daily_token_reward` | `user_id` | Awards Linkkon tokens for daily login (**auth.uid() check**) |
+| `upgrade_page_to_paid` | `page_id` | Marks a page as premium |
+| `get_token_analytics` | — | Returns token economy stats (**admin-only**) |
+| `process_marketplace_purchase` | `buyer_id`, `template_id` | Handles template purchases (**auth.uid() check, self-purchase prevention**) |
+| `export_user_data` | `user_id` | **GDPR**: Returns all user data as JSONB |
+| `delete_user_account` | `user_id` | **GDPR**: Cascading delete across 15+ tables |
+| `warmup_edge_functions` | — | Pings critical edge functions (called by pg_cron) |
 
 ---
 
 ## 3. Row Level Security (RLS)
 
-Security is enforced at the database level using Postgres RLS.
+Security enforced at the database level using Postgres RLS on **all tables**.
 
-### General Policies
+### Policy Categories
 - **`public`**: Can view published pages, user profiles, and blocks.
-- **`owner`**: Can view, edit, and delete their own data (`auth.uid() = user_id`).
-- **`anon`**: Can insert leads, bookings, and analytics events (requires `public` role).
+- **`owner`**: Can view, edit, and delete own data (`auth.uid() = user_id`).
+- **`anon`**: Can insert leads, bookings, and analytics events.
+- **`admin`**: Full access via `has_role(auth.uid(), 'admin')`.
 
 ### Critical Tables
-- **`user_profiles`**: Public read (sanitized), Owner write.
-- **`pages`**: Public read (if `is_published`), Owner write.
-- **`leads`**: Owner read, Public insert (via `create-lead` function or direct policy).
-- **`analytics`**: Owner read, Public insert.
 
-> **Security Note**: Never disable RLS on public tables. Always use `security definer` functions carefully.
+| Table | RLS | Policies |
+|---|---|---|
+| `pages` | ✅ | Public read (if `is_published`), Owner write |
+| `blocks` | ✅ | Access through page ownership |
+| `user_profiles` | ✅ | Public read (sanitized), Owner write |
+| `leads` | ✅ | Owner read, Public insert (via edge function) |
+| `bookings` | ✅ | Owner + customer access only |
+| `analytics` | ✅ | Page owner read, Public insert |
+| `token_transactions` | ✅ | User/seller/buyer access |
+| `rate_limits` | ✅ | Edge function service-role access |
+
+> **Security Note**: Never disable RLS. Use `SECURITY DEFINER` functions carefully and always validate `auth.uid()`.
+
+---
+
+*Last updated: 2026-02-18*

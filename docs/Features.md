@@ -1,66 +1,111 @@
 # lnkmx Features
 
 ## Status legend
-- Implemented: shipped and usable in production.
-- In progress: partially shipped or under active development.
-- Planned: on roadmap, not shipped yet.
+- **Implemented**: shipped and usable in production.
+- **In progress**: partially shipped or under active development.
+- **Planned**: on roadmap, not shipped yet.
 
-## Core blocks (Free)
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| Profile, text, buttons, links | Implemented | Basic identity and CTA blocks. | UI |
-| Images, separators, socials | Implemented | Visual structure and social links. | UI |
-| Lead form (basic) | Implemented | Collect inquiries into leads. | UI, API, DB |
-| Messenger shortcuts | Implemented | Quick contact blocks. | UI |
-| Map block | Implemented | Location display. | UI |
+---
 
-## Pro blocks
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| Pricing and catalog blocks | Implemented | Service packages and product listings. | UI |
-| Video and carousel blocks | Implemented | Rich media blocks. | UI |
-| Testimonials and FAQ | Implemented | Social proof and objections. | UI |
-| Booking block | In progress | Depends on schedule data and notifications. | UI, API, DB |
-| Custom code block | Implemented | Embed widgets and custom HTML. | UI |
+## Core Blocks (Free Tier)
+
+| Feature | Status | Notes |
+|---|---|---|
+| Profile, text, buttons, links | Implemented | Basic identity and CTA blocks |
+| Images, separators, socials | Implemented | Visual structure and social links |
+| Lead form (basic) | Implemented | Collect inquiries into leads |
+| Messenger shortcuts | Implemented | Quick contact blocks |
+| Map block | Implemented | Location display |
+
+## Pro Blocks
+
+| Feature | Status | Notes |
+|---|---|---|
+| Pricing block | Implemented | Service packages with locale-aware formatting |
+| Catalog block | Implemented | Product listings with cart |
+| Video and carousel blocks | Implemented | Rich media blocks |
+| Testimonials and FAQ | Implemented | Social proof and objections |
+| Booking block | Implemented | Schedule appointments with time slots, timezone support |
+| Event block | Implemented | Event registration with ticket confirmation |
+| Custom code block | Implemented | Embed widgets (sandboxed `allow-scripts` only) |
+| Countdown block | Implemented | Timer for events/offers |
+| Scratch card block | Implemented | Gamified promotions |
 
 ## AI
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| AI page draft generation | Implemented | Drafts structure and copy. | UI, API |
-| AI copy refinements | In progress | Short copy tweaks and rephrasing. | UI, API |
-| Auto-translation | Implemented | RU/EN/KK content variants. | UI, API |
 
-## CRM and leads
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| Lead capture | Implemented | Create lead records from forms. | UI, API, DB |
-| Lead status tracking | Implemented | Pipeline stages and notes. | UI, DB |
-| Telegram notifications | Implemented | Lead alerts via Telegram. | API |
-| Quick replies | In progress | Templates for faster responses. | UI, DB |
+| Feature | Status | Notes |
+|---|---|---|
+| AI page draft generation | Implemented | Drafts structure and copy via Gemini |
+| AI copy refinements | In progress | Short copy tweaks and rephrasing |
+| Auto-translation | Implemented | RU/EN/KK content variants |
+| AI chatbot | Implemented | Public page chatbot with streaming |
 
-## Analytics
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| Page views and clicks | Implemented | Core events stored in analytics. | API, DB |
-| Block level analytics | Implemented | Clicks per block. | UI, DB |
-| Funnel analytics | Planned | Signup to publish to Pro. | UI, API, DB |
+## CRM & Leads
 
-## Payments and subscriptions
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| RoboKassa checkout | In progress | Subscription purchase flow. | UI, API |
-| Subscription status sync | Implemented | Access control based on plan. | API, DB |
-| Local pricing in KZT | Implemented | Pricing display by locale. | UI |
+| Feature | Status | Notes |
+|---|---|---|
+| Lead capture | Implemented | Create lead records from forms (Turnstile CAPTCHA) |
+| Lead status tracking | Implemented | Pipeline stages and notes |
+| Telegram notifications | Implemented | Lead alerts via Telegram bot |
+| CRM automations | Implemented | Hourly cron processes automation rules |
+| Quick replies | In progress | Templates for faster responses |
 
-## Collaboration and growth
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| Gallery and templates | Implemented | Public examples and inspirations. | UI, DB |
-| Teams and collaborations | In progress | Shared access to pages. | UI, DB |
-| Referral program | Planned | Incentivized sharing. | UI, DB |
+## Analytics & Tracking
+
+| Feature | Status | Notes |
+|---|---|---|
+| Page views and clicks | Implemented | Core events stored in analytics |
+| Block-level analytics | Implemented | Clicks per block with conversion rates |
+| Pixel integrations | Implemented | Facebook Pixel, TikTok Pixel, GA4, Yandex Metrika |
+| Server-side pixel proxy | Implemented | FB CAPI, TikTok Events API, GA4 MP (bypasses ad-blockers) |
+| Cookie consent gating | Implemented | Analytics requires explicit consent |
+| Funnel analytics | Planned | Signup to publish to Pro |
+
+## Payments & Subscriptions
+
+| Feature | Status | Notes |
+|---|---|---|
+| RoboKassa checkout | In progress | Subscription purchase flow |
+| Subscription status sync | Implemented | Access control based on plan |
+| Local pricing in KZT | Implemented | Pricing display by locale |
+| Linkkon token economy | Implemented | Virtual currency with daily quests |
+
+## Collaboration & Growth
+
+| Feature | Status | Notes |
+|---|---|---|
+| Gallery and templates | Implemented | Public examples and inspirations |
+| Teams and collaborations | In progress | Shared access to pages |
+| Referral program | Planned | Incentivized sharing |
+| Expert directory | Implemented | Public expert profiles API |
 
 ## Localization
-| Feature | Status | Notes | Needs (UI / API / DB) |
-| --- | --- | --- | --- |
-| RU/EN/KK UI | Implemented | Full product UI localization. | UI |
-| Content localization | Implemented | Block content in multiple languages. | UI, API |
+
+| Feature | Status | Notes |
+|---|---|---|
+| RU/EN/KK UI | Implemented | Full product UI localization |
+| Content localization | Implemented | Block content in multiple languages |
+| Locale-aware formatting | Implemented | Dates, currency via centralized `format.ts` |
+
+## Security & Compliance
+
+| Feature | Status | Notes |
+|---|---|---|
+| GDPR data export/delete | Implemented | SQL functions for full compliance |
+| Cookie consent banner | Implemented | Accept/reject with localStorage |
+| Cloudflare Turnstile | Implemented | Anti-spam on public forms |
+| CSP headers | Implemented | Strict Content Security Policy |
+| XSS sandbox | Implemented | Custom code iframe sandboxed |
+
+## Infrastructure
+
+| Feature | Status | Notes |
+|---|---|---|
+| SSR for SEO bots | Implemented | `seo-ssr` edge function with hreflang |
+| Cold start warm-up | Implemented | pg_cron pings every 4 min |
+| Rate limiting | Implemented | In-memory on critical edge functions |
+| Error reporting | Implemented | Sentry-compatible logger |
+
+---
+
+*Last updated: 2026-02-18*

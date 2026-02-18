@@ -243,20 +243,22 @@ new -> contacted -> qualified -> won/lost
 
 ### Frontend
 
-- **Vite (React)** - Single Page Application (SPA)
-- [Legacy/Migration content removed] Next.js references are currently inactive as the build system is Vite.
+- **Next.js 14** (App Router) with Vite compatibility layer
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
 - i18next for RU/EN/KK
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
 
+> **Note**: `vite.config.ts` exists for `import.meta.env.VITE_*` compatibility. `next.config.mjs` maps these to `NEXT_PUBLIC_*`.
+
 ### Backend
 
 - Supabase (Postgres, Auth, Storage)
 - **Native Auth Implementation**: Direct integration with Supabase Auth (Google/Apple OAuth) without third-party wrappers.
-- 24 Edge Functions for AI and notifications
+- 28 Edge Functions for AI, notifications, SEO, and analytics
 - Row Level Security for data isolation
+- pg_cron for scheduled jobs (warm-up, digests, reminders)
 
 ### Edge Infrastructure
 - **Cloudflare Workers** - Handles incoming requests for SEO/bot detection and pre-rendering
@@ -428,6 +430,11 @@ new -> contacted -> qualified -> won/lost
 | `seed-demo-accounts` | Admin | Demo data seeding |
 | `google-forms-parser` | Integration | Google Forms parsing |
 | `public-experts` | Public | Expert directory API |
+| `seo-ssr` | Bot request | SSR HTML for crawlers (rate limited, warm-up) |
+| `pixel-proxy` | Analytics | Server-side FB CAPI / TikTok / GA4 forwarding |
+| `resolve-domain` | Domain | Custom domain resolution |
+| `language-upload` | Admin | Language file uploads |
+| `send-contact-email` | Form | Contact form email via Resend |
 
 ### Key RPC Functions
 
@@ -440,7 +447,12 @@ new -> contacted -> qualified -> won/lost
 | `increment_block_clicks` | Track block clicks |
 | `add_linkkon_tokens` | Credit token balance |
 | `spend_linkkon_tokens` | Debit token balance |
-| `claim_daily_token_reward` | Daily quest rewards |
+| `claim_daily_token_reward` | Daily quest rewards (auth.uid check) |
+| `get_token_analytics` | Token economy stats (admin-only) |
+| `process_marketplace_purchase` | Template purchases (auth check) |
+| `export_user_data` | GDPR data export |
+| `delete_user_account` | GDPR cascading delete |
+| `warmup_edge_functions` | pg_cron warm-up pinger |
 
 ---
 
@@ -542,7 +554,7 @@ lnkmx/
 │   └── index.css                 # Global styles + design tokens
 │
 ├── supabase/
-│   ├── functions/                # 24 Edge Functions
+│   ├── functions/                # 28 Edge Functions
 │   │   ├── ai-content-generator/
 │   │   ├── create-lead/
 │   │   ├── send-event-confirmation/

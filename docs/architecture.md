@@ -1,6 +1,6 @@
 # System Architecture
 
-lnkmx follows a **serverless, client-heavy architecture** typical of modern SaaS applications. The frontend handles UI and state, while Supabase provides the backend-as-a-service (BaaS) layer.
+lnkmx follows a **serverless, client-heavy architecture** built on Next.js and Supabase (BaaS). The frontend handles UI, routing, and state, while Supabase provides auth, database, storage, and edge functions.
 
 ## High-Level Overview
 
@@ -9,84 +9,119 @@ graph TD
     User[End User / Creator]
     Visitor[Public Visitor]
     
-    subgraph Client [Client Side]
-        PWA[React PWA (Vite)]
+    subgraph Client ["Client (Next.js App)"]
+        App[Next.js 14 App Router]
         PublicPage[Public Page Renderer]
+        SSR[SSR / SEO Pages]
     end
     
-    subgraph Backend [Supabase PaaS]
+    subgraph Backend ["Supabase PaaS"]
         Auth[GoTrue Auth]
-        DB[(PostgreSQL DB)]
-        Storage[File Storage]
-        Edge[Edge Functions (Deno)]
+        DB["PostgreSQL DB (RLS)"]
+        Storage[File Storage / CDN]
+        Edge[28 Edge Functions - Deno]
+        Cron[pg_cron Jobs]
     end
     
     subgraph External
         Telegram[Telegram API]
         Gemini[Google Gemini AI]
         Email[Resend API]
+        Pixels["Pixel APIs (FB CAPI, TT, GA4)"]
     end
 
-    User -->|Manages| PWA
+    User -->|Manages| App
     Visitor -->|Views| PublicPage
     
-    PWA -->|Auth| Auth
-    PWA -->|Data| DB
-    PWA -->|Uploads| Storage
-    PWA -->|AI/Complex Logic| Edge
+    App -->|Auth| Auth
+    App -->|Data| DB
+    App -->|Uploads| Storage
+    App -->|AI/Complex Logic| Edge
     
     PublicPage -->|Reads Content| DB
     PublicPage -->|Submits Forms| Edge
+    PublicPage -->|Server Pixels| Edge
+    
+    SSR -->|Bot Detection| Edge
     
     Edge -->|Notify| Telegram
     Edge -->|Generate| Gemini
     Edge -->|Send| Email
+    Edge -->|Forward| Pixels
+    
+    Cron -->|Warm-up| Edge
 ```
 
 ## Core Components
 
 ### 1. Frontend Application (`src/`)
-Built with **React 18** and **Vite**, utilizing **TypeScript** for safety.
-- **Architecture**: Modular Monolith.
-- **State Management**: React Query (Server state) + React Context (Client state).
-- **Routing**: React Router DOM (Client-side routing).
+Built with **Next.js 14** (App Router) + **TypeScript**.
+- **Architecture**: Modular Monolith with domain-driven structure.
+- **State Management**: React Query (server state) + React Context (client state).
+- **Routing**: Next.js file-system routing (App Router with `app/` directory).
 - **Styling**: Tailwind CSS + shadcn/ui.
+- **i18n**: `react-i18next` with RU/EN/KK support.
+
+> **Note**: `vite.config.ts` still exists for compatibility (`import.meta.env.VITE_*` vars). `next.config.mjs` maps these to `NEXT_PUBLIC_*`.
 
 **Key Directories:**
 - `domain/`: Business entities and logic (Clean Architecture/DDD approach).
 - `services/`: API clients and externals.
 - `hooks/`: React integration layers.
-- `components/`: UI implementation.
+- `components/`: UI implementation (blocks, dashboard, editor, analytics).
+- `lib/`: Shared utilities (formatting, logging, block registry).
 
 ### 2. Backend / Database
-Hosted on **Supabase**.
-- **PostgreSQL**: Primary data store. Contains all business data.
-- **RLS (Row Level Security)**: "Firewall" for the database. Ensures users only access their own data.
-- **Realtime**: Used for immediate updates on the dashboard (e.g., new lead alerts).
+Hosted on **Supabase** (Project ID: `pphdcfxucfndmwulpfwv`).
+- **PostgreSQL**: Primary data store with 20+ tables.
+- **RLS (Row Level Security)**: Enforced on all tables — users only access their own data.
+- **Realtime**: Used for immediate updates on the dashboard (new lead alerts).
+- **pg_cron**: Scheduled jobs (edge function warm-up every 4 min, weekly digests, booking reminders).
+- **pg_net**: Async HTTP calls from SQL (used by warm-up cron).
 
-### 3. Edge Functions
-Stateless server-side logic running on Deno.
-- **Why?** To handle secret keys (AI, Telegram) and complex validation that shouldn't be trusted to the client.
-- **Triggers**: HTTP requests (from Client) or Database Webhooks.
+### 3. Edge Functions (28 total)
+Stateless server-side logic running on **Deno** runtime.
+- **Why?** Handle secret keys (AI, Telegram, Pixel APIs) and complex validation.
+- **Triggers**: HTTP requests (from client), database webhooks, cron schedules.
+- **Warm-up**: `?warmup=true` parameter on critical functions returns 200 OK immediately.
+
+Categories:
+- **AI**: `ai-content-generator`, `chatbot-stream`, `translate-content`
+- **Notifications**: `send-lead-notification`, `send-booking-notification`, `send-event-confirmation`, `send-booking-reminder`, `send-weekly-digest`, `send-weekly-motivation`, `send-trial-ending-notification`
+- **Telegram**: `telegram-bot-webhook`, `validate-telegram`, `telegram-password-reset`
+- **Social**: `send-collab-notification`, `send-friend-notification`, `send-social-notification`, `send-team-notification`, `send-attendee-email`
+- **Analytics**: `pixel-proxy` (server-side FB CAPI / TikTok / GA4)
+- **Other**: `create-lead`, `generate-sitemap`, `seo-ssr`, `google-forms-parser`, `public-experts`, `process-crm-automations`, `resolve-domain`, `seed-demo-accounts`, `language-upload`
 
 ## Data Flow: Page Rendering
 
 1. **Request**: Visitor loads `lnkmx.my/username`.
-2. **Fetch**: Frontend calls `rpc/get_page_by_slug('username')`.
-3. **Security**: DB verifies page is `published`.
-4. **Response**: Returns Page JSON + Blocks JSON.
-5. **Render**: Frontend `BlockRenderer` iterates through blocks and renders components.
+2. **Bot Detection**: If bot/crawler → `seo-ssr` edge function returns full HTML with meta tags.
+3. **SPA Load**: If human → Next.js app loads, calls `rpc/get_page_by_slug('username')`.
+4. **Security**: DB verifies page is `published` via RLS.
+5. **Response**: Returns Page JSON + Blocks JSON.
+6. **Render**: `BlockRenderer` iterates through blocks and renders components.
+7. **Analytics**: Client-side pixels fire + server-side `pixel-proxy` via `sendBeacon`.
 
 ## Security Model
 
-- **Authentication**: JWT tokens managed by Supabase Auth.
+- **Authentication**: JWT tokens managed by Supabase Auth (Google, Apple, Email, Telegram).
 - **Authorization**:
-    - **Frontend**: UX-level hiding of buttons/routes.
+    - **Frontend**: UX-level route guards and button hiding.
     - **Backend (Critical)**: RLS policies enforced on every SQL query.
-    - **Edge Functions**: Validate JWT signature before execution.
+    - **Edge Functions**: Service role key for server-side ops, CORS + rate limiting.
+- **Anti-Spam**: Cloudflare Turnstile CAPTCHA on public forms.
+- **GDPR**: `export_user_data()` and `delete_user_account()` SQL functions.
+- **Cookie Consent**: Analytics gated behind explicit user consent.
+- **CSP**: Content Security Policy headers with strict `script-src`.
 
 ## Scalability Considerations
 
-- **Read Heavy**: The system is designed for high read volume (public pages) vs lower write volume (editors).
-- **Caching**: React Query caches data on the client. Public pages rely on Supabase CDN and optimized DB indices.
-- **Storage**: Media is served via CDN-backed Supabase Storage.
+- **Read Heavy**: Optimized for high read volume (public pages) vs lower write volume (editors).
+- **Caching**: React Query caches data client-side. Public pages leverage Supabase CDN.
+- **Cold Start Mitigation**: pg_cron pings critical edge functions every 4 min.
+- **Storage**: Media served via CDN-backed Supabase Storage.
+
+---
+
+*Last updated: 2026-02-18*

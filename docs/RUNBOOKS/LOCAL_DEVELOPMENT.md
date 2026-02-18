@@ -7,6 +7,7 @@
 - Node.js (v18 or later)
 - npm (v9 or later)
 - Git
+- Supabase CLI (optional, for edge function testing)
 
 ## Initial Setup
 
@@ -26,9 +27,11 @@
      ```bash
      cp .env.example .env
      ```
-   - Fill in the required values in `.env`:
+   - Fill in the required values:
      - `VITE_SUPABASE_URL`: Your Supabase project URL
      - `VITE_SUPABASE_PUBLISHABLE_KEY`: Your Supabase anon key
+
+   > **Note**: `next.config.mjs` maps `VITE_*` vars to `NEXT_PUBLIC_*` automatically.
 
 ## Running the App
 
@@ -36,13 +39,23 @@
    ```bash
    npm run dev
    ```
-   - The app should be running at `http://localhost:8080` (or similar).
+   - The app should be running at `http://localhost:3000`.
+
+## Edge Functions (Local)
+
+```bash
+# Start Supabase local dev server
+supabase start
+
+# Serve individual edge function
+supabase functions serve <function-name> --env-file supabase/functions/.env
+```
 
 ## Common Tasks
 
 ### Type Checking
 ```bash
-npm run typecheck
+npx tsc --noEmit
 ```
 
 ### Linting
@@ -55,11 +68,22 @@ npm run lint
 npm run test
 ```
 
+### Build
+```bash
+npm run build
+```
+
 ## Troubleshooting
 
-- **Dependency Issues**: Try deleting `node_modules` and `package-lock.json` and reinstalling.
+- **Dependency Issues**: Delete `node_modules` and reinstall:
   ```bash
   rm -rf node_modules package-lock.json
   npm install
   ```
-- **Supabase Issues**: Ensure your `.env` variables are correct and match your Supabase project configuration.
+- **Supabase Issues**: Ensure your `.env` variables match your Supabase project.
+- **Port Conflicts**: Next.js defaults to `3000`. Use `npm run dev -- -p 3001` for a different port.
+- **Edge Functions**: Deno lint errors in IDE are expected — edge functions run on Deno runtime, not Node.
+
+---
+
+*Last updated: 2026-02-18*

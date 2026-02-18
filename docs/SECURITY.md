@@ -1,8 +1,8 @@
-# Security Checklist - lnkmx Platform
+# Security Checklist — lnkmx Platform
 
 ## Overview
 
-This document outlines the security measures implemented in the lnkmx platform and serves as a checklist for security audits.
+This document outlines the security measures implemented in the lnkmx platform. Last fully audited: **2026-02-18** (Phases 1–5).
 
 ---
 
@@ -11,23 +11,19 @@ This document outlines the security measures implemented in the lnkmx platform a
 ### ✅ Implemented
 
 - [x] **Email/Password Authentication** via Supabase Auth
-- [x] **JWT Token Management** with 1-hour expiry
-- [x] **Auto-confirm Email** enabled for better UX
-- [x] **Telegram Verification** for notifications
+- [x] **Google OAuth** with `returnTo` parameter support
+- [x] **Apple Sign-In** with `returnTo` parameter support
+- [x] **JWT Token Management** with 1-hour expiry, auto-refresh
+- [x] **Telegram Verification** for notifications + login
 - [x] **Role-Based Access Control (RBAC)** with `app_role` enum (admin/moderator/user)
+- [x] **Auth bypass prevention** — `auth.uid()` checks on `claim_daily_token_reward`, `process_marketplace_purchase`, `get_token_analytics`
 
 ### 🔐 Security Measures
 
 - JWT tokens stored securely in httpOnly cookies (Supabase default)
 - Session refresh handled automatically by Supabase
-- No anonymous signups - all users must register
-
-### ⚠️ Recommendations
-
-- [ ] Enable Leaked Password Protection in Supabase Auth settings
-- [ ] Implement rate limiting on auth endpoints
-- [ ] Add 2FA option for premium users
-- [ ] Add password complexity requirements
+- OAuth `returnTo` parameter properly forwarded in redirect URLs
+- Admin-only functions guarded by `has_role(auth.uid(), 'admin')`
 
 ---
 
@@ -41,7 +37,7 @@ This document outlines the security measures implemented in the lnkmx platform a
 | `blocks` | ✅ | Access through page ownership |
 | `user_profiles` | ✅ | Users can view all, update own |
 | `leads` | ✅ | Users can only access their own leads |
-| `bookings` | ✅ | Owner/customer access only |
+| `bookings` | ✅ | Owner/customer access only (fixed: overly permissive policy removed) |
 | `analytics` | ✅ | Page owner access for viewing |
 | `token_transactions` | ✅ | User/seller/buyer access |
 | `token_withdrawals` | ✅ | User can only view/create own |
@@ -50,26 +46,11 @@ This document outlines the security measures implemented in the lnkmx platform a
 | `template_purchases` | ✅ | Buyer/seller access |
 | `teams` | ✅ | Owner/member access |
 | `languages` | ✅ | Admin management, public read active |
-| `language_upload_history` | ✅ | Admin only |
+| `rate_limits` | ✅ | Service role access only |
 
-### RLS Policy Examples
+### Double-Booking Prevention
 
-```sql
--- Users can only view their own leads
-CREATE POLICY "Users can view own leads"
-ON public.leads FOR SELECT
-USING (auth.uid() = user_id);
-
--- Admin role bypass
-CREATE POLICY "Admin full access"
-ON public.pages FOR ALL
-USING (has_role(auth.uid(), 'admin'));
-```
-
-### ⚠️ Known Considerations
-
-- `WITH CHECK (true)` on some INSERT policies for public bookings/analytics (intentional)
-- `is_published = true` allows public read access to pages (by design)
+Partial unique index `bookings_no_double_booking` on `(page_id, block_id, slot_date, slot_time) WHERE status != 'cancelled'`. Timezone column added.
 
 ---
 
@@ -77,42 +58,39 @@ USING (has_role(auth.uid(), 'admin'));
 
 ### Rate Limiting
 
-| Endpoint | Limit |
-|----------|-------|
-| API endpoints | 60 requests/minute per IP |
-| AI generation | 5 requests/day (free), unlimited (pro) |
-| Form submissions | 10 requests/minute per page |
+| Endpoint | Limit | Implementation |
+|----------|-------|----------------|
+| `seo-ssr` | 60 req/min per IP | In-memory (Deno) |
+| `pixel-proxy` | 100 req/min per IP | In-memory (Deno) |
+| `create-lead` | 15 req/min per IP | DB-backed (`rate_limits` table) |
+| AI generation | 5 req/day (free) | Application-level |
 
-### Implementation
+### Anti-Spam: Cloudflare Turnstile
 
-```sql
--- Rate limit table
-CREATE TABLE rate_limits (
-  id UUID PRIMARY KEY,
-  ip_address TEXT NOT NULL,
-  endpoint TEXT NOT NULL,
-  request_count INTEGER DEFAULT 1,
-  window_start TIMESTAMPTZ DEFAULT now()
-);
-```
+- **Frontend**: `TurnstileWidget.tsx` renders invisible CAPTCHA on forms
+- **Backend**: `create-lead` verifies token via Cloudflare `siteverify` API
+- Graceful degradation if `TURNSTILE_SECRET_KEY` not configured
 
 ### Edge Function Security
 
-- All edge functions validate auth tokens
+- All edge functions validate inputs (regex, length limits)
 - CORS headers properly configured
-- Input validation on all endpoints
+- Service role keys used only server-side
 - No secrets exposed in client code
 
 ---
 
-## 4. Data Protection
+## 4. Data Protection & GDPR
 
 ### ✅ Implemented
 
-- [x] **Sensitive Data Encryption** - Passwords hashed by Supabase Auth
-- [x] **HTTPS Only** - All traffic encrypted
-- [x] **Environment Variables** - Secrets in Edge Functions only
-- [x] **No PII in Logs** - Logging sanitized
+- [x] **GDPR Data Export**: `export_user_data(p_user_id)` — returns all user data as JSONB
+- [x] **GDPR Data Deletion**: `delete_user_account(p_user_id)` — cascading delete across 15+ tables
+- [x] **Cookie Consent**: `CookieConsent.tsx` banner with accept/reject, gating analytics
+- [x] **Analytics Consent Gating**: All tracking calls (`trackPageView`, `trackBlockClick`, `trackShare`) require explicit consent
+- [x] **PII Hashing**: Pixel proxy hashes emails/phones with SHA-256 before forwarding to FB CAPI / TikTok
+- [x] **HTTPS Only** — all traffic encrypted
+- [x] **Environment Variables** — secrets in Edge Functions only
 
 ### Data Categories
 
@@ -121,33 +99,19 @@ CREATE TABLE rate_limits (
 | User credentials | Supabase Auth (hashed) | Auth system only |
 | Personal info | `user_profiles` | User + Admin |
 | Payment info | NOT stored locally | External processors |
-| Analytics | `analytics` table | Page owner only |
+| Analytics | `analytics` table | Page owner only (consent gated) |
 
 ---
 
-## 5. Input Validation
+## 5. XSS & Content Security
 
 ### ✅ Implemented
 
-- [x] **Form Validation** with Zod schemas
-- [x] **Edge Function Validation** - Regex checks for emails, length limits for text inputs
-- [x] **XSS Prevention** with DOMPurify
-- [x] **SQL Injection** prevented by Supabase parameterized queries
-- [x] **File Upload Validation** - type and size checks
-
-### Validation Example
-
-```typescript
-import { z } from 'zod';
-import DOMPurify from 'dompurify';
-
-const blockSchema = z.object({
-  type: z.enum(['text', 'link', 'image', ...]),
-  content: z.object({
-    text: z.string().max(5000).transform(s => DOMPurify.sanitize(s))
-  })
-});
-```
+- [x] **CSP Headers**: Strict Content Security Policy in `index.html`
+- [x] **CustomCodeBlock Sandbox**: `sandbox="allow-scripts"` only (removed `allow-forms`, `allow-popups`, `allow-modals`)
+- [x] **DOMPurify**: HTML sanitization on user-generated content
+- [x] **Input Validation**: Zod schemas, regex checks, length limits
+- [x] **SQL Injection**: Prevented by Supabase parameterized queries
 
 ---
 
@@ -161,18 +125,6 @@ const blockSchema = z.object({
 | `documents` | ❌ | User-specific folders |
 | `templates` | ✅ | Read all, write own |
 
-### Storage Policies
-
-```sql
--- Users can only upload to their own folder
-CREATE POLICY "Users can upload own files"
-ON storage.objects FOR INSERT
-WITH CHECK (
-  bucket_id = 'avatars' AND 
-  auth.uid()::text = (storage.foldername(name))[1]
-);
-```
-
 ---
 
 ## 7. Infrastructure Security
@@ -181,17 +133,18 @@ WITH CHECK (
 
 | Variable | Location | Security |
 |----------|----------|----------|
-| `VITE_SUPABASE_URL` | Public (.env) | ✅ Safe - publishable |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public (.env) | ✅ Safe - anon key |
+| `VITE_SUPABASE_URL` | Public (.env) | ✅ Safe — publishable |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Public (.env) | ✅ Safe — anon key |
 | `GEMINI_API_KEY` | Edge Functions | 🔐 Server only |
 | `TELEGRAM_BOT_TOKEN` | Edge Functions | 🔐 Server only |
+| `TURNSTILE_SECRET_KEY` | Edge Functions | 🔐 Server only |
+| `FB_CAPI_ACCESS_TOKEN` | Edge Functions | 🔐 Server only |
+| `TT_EVENTS_ACCESS_TOKEN` | Edge Functions | 🔐 Server only |
+| `GA4_MP_API_SECRET` | Edge Functions | 🔐 Server only |
 
-### File Protection
+### Cold Start Mitigation
 
-Files that should NOT be in version control:
-- `.env.local` (if exists)
-- `supabase/functions/.env`
-- Any private keys
+`pg_cron` job `warmup-edge-functions` pings `seo-ssr`, `telegram-bot-webhook`, `pixel-proxy` every 4 minutes via `pg_net`.
 
 ---
 
@@ -207,46 +160,26 @@ Files that should NOT be in version control:
 
 ### Data Retention
 
-- User data retained until account deletion
+- User data retained until account deletion (GDPR delete available)
 - Analytics data: 2 years
 - Logs: 90 days
 
 ---
 
-## 9. Monitoring & Incident Response
+## 9. Monitoring & Observability
 
-### Logging
-
-- Supabase Analytics for DB logs
-- Edge Function logs via Supabase
-- Client-side error tracking
-
-### Incident Response
-
-1. Identify breach via monitoring
-2. Isolate affected systems
-3. Notify affected users within 72 hours
-4. Document and remediate
-5. Post-mortem review
+- **Sentry**: `logger.ts` sends structured error reports to `VITE_SENTRY_DSN` via `sendBeacon`
+- **Supabase Analytics**: DB logs and Edge Function logs
+- **pg_cron monitoring**: `SELECT * FROM cron.job_run_details ORDER BY start_time DESC LIMIT 10`
 
 ---
 
-## 10. Security Testing Checklist
+## 10. Repository Security & IP Protection
 
-### Pre-deployment
-
-- [ ] Run `supabase--linter` for RLS issues
-- [ ] Check for exposed secrets in code
-- [ ] Validate all input schemas
-- [ ] Test authentication flows
-- [ ] Verify rate limiting works
-
-### Regular Audits
-
-- [ ] Monthly RLS policy review
-- [ ] Quarterly penetration testing
-- [ ] Annual security assessment
-- [ ] Dependency vulnerability scanning
+### ✅ Implemented
+- [x] **Private Repository**: Codebase access restricted to authorized personnel only
+- [x] **History Sanitization**: Git history audited and purged of credentials (Feb 2026)
+- [x] **Unified Gitignore**: Standardized tracking, strictly excluding secrets
 
 ---
 
@@ -256,32 +189,19 @@ Files that should NOT be in version control:
 # Check for exposed secrets
 git log --all --full-history -- "*.env"
 
-# Run security linter
-npm run lint
+# Run type checking
+npx tsc --noEmit
 
 # Check dependencies
 npm audit
 
-# Supabase security scan
-# Use supabase--linter tool
+# Verify cron jobs
+# SQL: SELECT * FROM cron.job;
+# SQL: SELECT * FROM cron.job_run_details ORDER BY start_time DESC;
 ```
 
 ---
 
-## Contact
+**Security contact**: admin@lnkmx.my
 
-Security issues: admin@lnkmx.my
-
----
-
-*Last updated: 2026-01-15*
-## 11. Repository Security & IP Protection
-
-### ? Implemented
-- [x] **Private Repository**: Codebase access restricted to authorized personnel only.
-- [x] **History Sanitization**: Git history periodically audited and purged of sensitive credentials.
-- [x] **Unified Gitignore**: Standardized tracking of internal documentation while strictly excluding secrets.
-
-### ?? Measures
-Commit hashes were reset in February 2026 following a full history cleanup of accidentally committed environment variables.
-
+*Last updated: 2026-02-18*

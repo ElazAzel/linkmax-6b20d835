@@ -2,32 +2,67 @@
 
 > **Purpose:** Track competitor features, market trends, and adoption proposals to keep the platform competitive.
 
-## Trend Radar (Weekly/Monthly)
+---
 
-### [Date: 2026-02-14]
+## Trend Radar
 
-1. **AEO & GEO Optimization**: Growing importance of Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO). Search engines like Perplexity, ChatGPT, and Gemini prefer structured, semantic data.
-2. **Bot-Specific SEO Landing Pages**: Providing clean, text-heavy, JSON-LD rich pages for crawlers while maintaining sleek UI for users.
-3. **Hyper-Personalization**: Using AI to tailor bio pages based on visitor geography or referral source.
-4. **Mini-CRM Integration**: Competitors (like Taplink) are moving beyond just links into full business management.
-5. **Multi-Page Bio**: Allowing users to have multiple "sub-pages" within their link-in-bio (e.g., /about, /services, /portfolio).
+### [2026-02-18]
+
+1. **AEO & GEO Optimization**: Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO) are critical. AI search engines (Perplexity, ChatGPT, Gemini) prefer structured, semantic data.
+   - **lnkmx status**: ✅ Implemented — `seo-ssr` edge function serves JSON-LD rich pages for bots.
+
+2. **Server-Side Pixel Tracking**: With ad-blockers blocking 30-40% of client-side pixels, server-side event forwarding is now standard.
+   - **lnkmx status**: ✅ Implemented — `pixel-proxy` edge function forwards to FB CAPI, TikTok Events API, GA4 MP.
+
+3. **Mini-CRM Integration**: Competitors (Taplink, Linktree) are moving beyond links into business management.
+   - **lnkmx status**: ✅ Advantage — full CRM with lead pipeline, Telegram notifications, automated follow-ups.
+
+4. **Multi-Page Bio**: Users want sub-pages within their bio (e.g., /about, /services, /portfolio).
+   - **lnkmx status**: ✅ Implemented — up to 6 pages per account (1 free + 5 Pro).
+
+5. **AI Chatbot on Bio Pages**: Emerging trend of conversational AI on personal/business pages.
+   - **lnkmx status**: ✅ Implemented — `chatbot-stream` with Gemini AI.
+
+---
 
 ## Competitor Teardown
 
-### Competitor A (e.g., Linktree, Bento.me)
+### Taplink (CIS market leader)
 
-- **Best Practice 1**: ...
-    - *Applicability*: High/Medium/Low
-    - *Plan*: ...
-- **Best Practice 2**: ...
-- **Best Practice 3**: ...
+| Best Practice | Applicability | Our Status |
+|---|---|---|
+| Deep payment integration with local processors (Kaspi, Robokassa) | High — essential for KZ market | In progress (RoboKassa) |
+| Booking/appointment scheduling built-in | High — core use case for services | ✅ Shipped with time slots + reminders |
+| Mini-store with cart and checkout | High — monetization for creators | ✅ Catalog + Pricing blocks |
 
-### Competitor B (e.g., Taplink)
+### Linktree (global market leader)
 
-- **Best Practice 1**: ...
+| Best Practice | Applicability | Our Status |
+|---|---|---|
+| Extremely simple onboarding (<60 seconds) | High — reduces friction | ✅ AI-powered 3-step onboarding |
+| Analytics dashboard with detailed click tracking | Medium — already have | ✅ Block-level analytics + device/geo breakdown |
+| Marketplace / template gallery | Medium — drives network effects | ✅ Template gallery + Linkkon token marketplace |
+
+### Bento.me (design-focused)
+
+| Best Practice | Applicability | Our Status |
+|---|---|---|
+| Grid-based visual layouts (Bento grid) | Medium — differentiation | Planned (custom layouts in roadmap) |
+| Beautiful default themes | High — first impression matters | Partial — strong theme system, room for premium templates |
+| Mobile-first editing experience | High — most creators use mobile | ✅ PWA + responsive editor |
+
+---
 
 ## Adoption Proposals
 
-| Feature/Trend | Status | Rationale |
-|---------------|--------|-----------|
-| Example Feature | Proposed | Improves user retention by X% |
+| Feature/Trend | Priority | Status | Rationale |
+|---|---|---|---|
+| Kaspi payment integration | High | Planned | Essential for KZ market; Taplink has it |
+| Custom domain support | High | Planned | Pro differentiator; Linktree charges for this |
+| Bento grid layouts | Medium | Planned | Visual differentiation from competitors |
+| Video testimonials | Low | Planned | Niche feature; standard testimonials work |
+| AI personalization (visitor-based) | Low | Research | Complex; requires visitor data tracking |
+
+---
+
+*Last updated: 2026-02-18*
