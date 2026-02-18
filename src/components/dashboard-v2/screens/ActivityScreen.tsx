@@ -4,6 +4,7 @@
 import { memo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLeads, LeadStatus } from '@/hooks/useLeads';
+import { formatDateShort, getLocale } from '@/lib/format';
 import {
   Search,
   Plus,
@@ -79,7 +80,7 @@ const itemVariants = {
 };
 
 export const ActivityScreen = memo(function ActivityScreen({ isPremium }: ActivityScreenProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { leads, loading, getLeadStats, refreshLeads } = useLeads();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -137,7 +138,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
     } else if (date.toDateString() === yesterday.toDateString()) {
       key = t('dashboard.activity.yesterday', 'Вчера');
     } else {
-      key = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+      key = formatDateShort(date, i18n.language);
     }
 
     if (!groups[key]) groups[key] = [];
@@ -336,12 +337,13 @@ interface LeadCardProps {
 }
 
 function LeadCard({ lead, onClick }: LeadCardProps) {
+  const { i18n } = useTranslation();
   const statusConfig = STATUS_CONFIG[lead.status];
   const sourceInfo = SOURCE_ICONS[lead.source] || SOURCE_ICONS.other;
 
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString(getLocale(i18n.language), { hour: '2-digit', minute: '2-digit' });
   };
 
   return (

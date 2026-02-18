@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **GDPR Compliance**: Added `export_user_data` and `delete_user_account` SQL functions with full cascading delete.
 - **Cookie Consent**: Added consent banner with accept/reject, gating all analytics tracking behind explicit consent.
 
+### Anti-Spam & Observability (2026-02-18)
+- **Cloudflare Turnstile CAPTCHA**: Added invisible CAPTCHA to `FormBlock` with server-side verification in `create-lead` edge function.
+- **Error Reporting**: Replaced Sentry TODO stubs in `logger.ts` with working production error reporter (structured errors via `sendBeacon` to `VITE_SENTRY_DSN`).
+- **CSP Hardened**: Added `challenges.cloudflare.com` to script-src, connect-src, frame-src for Turnstile support.
+
 ### Added
 - `manifest.json` for PWA support (fixed broken `/manifest.webmanifest` link in `index.html`).
 - `search` block type added to `block-registry.ts` `PREMIUM_BLOCK_TYPES` (was only in `useFreemiumLimits`).

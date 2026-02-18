@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatDateTime } from '@/lib/format';
 import { useLeads, useLeadInteractions, LeadStatus, InteractionType } from '@/hooks/useLeads';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,12 +33,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  Calendar, 
-  Trash2, 
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  Trash2,
   MessageSquare,
   PhoneCall,
   Video,
@@ -86,10 +87,10 @@ const sourceIcons: Record<string, string> = {
 };
 
 export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { updateLead, deleteLead, saving } = useLeads();
   const { interactions, loading: interactionsLoading, addInteraction } = useLeadInteractions(lead.id);
-  
+
   const [status, setStatus] = useState<LeadStatus>(lead.status);
   const [notes, setNotes] = useState(lead.notes || '');
   const [newInteractionType, setNewInteractionType] = useState<InteractionType>('note');
@@ -108,7 +109,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
 
   const handleAddInteraction = async () => {
     if (!newInteractionContent.trim()) return;
-    
+
     await addInteraction(newInteractionType, newInteractionContent);
     setNewInteractionContent('');
   };
@@ -118,24 +119,9 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
     onOpenChange(false);
   };
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const formatDate = (dateStr: string) => formatDateTime(dateStr, i18n.language);
 
-  const formatShortDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const formatShortDate = (dateStr: string) => formatDateTime(dateStr, i18n.language);
 
   const statuses: LeadStatus[] = ['new', 'contacted', 'qualified', 'converted', 'lost'];
   const interactionTypes: InteractionType[] = ['note', 'call', 'email', 'message', 'meeting'];
@@ -158,7 +144,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
                 {t('crm.contactInfo', 'Contact Information')}
               </h4>
               {lead.email && (
-                <a 
+                <a
                   href={`mailto:${lead.email}`}
                   className="flex items-center gap-2 text-xs sm:text-sm hover:text-primary transition-colors"
                 >
@@ -167,7 +153,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
                 </a>
               )}
               {lead.phone && (
-                <a 
+                <a
                   href={`tel:${lead.phone}`}
                   className="flex items-center gap-2 text-xs sm:text-sm hover:text-primary transition-colors"
                 >

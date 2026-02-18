@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatDateTime } from '@/lib/format';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -22,7 +23,7 @@ interface TokensPanelProps {
 }
 
 export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     balance, loading, converting, canAffordPremium, premiumCost,
     buyPremiumDay, loadTransactions, transactions, loadWithdrawals,
@@ -62,12 +63,7 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    return formatDateTime(dateStr, i18n.language);
   };
 
   const getWithdrawalStatusBadge = (status: string) => {
@@ -87,12 +83,7 @@ export function TokensPanel({ open, onOpenChange }: TokensPanelProps) {
     );
   };
 
-  const premiumEndsDate = trialEndsAt ? new Date(trialEndsAt).toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    hour: '2-digit',
-    minute: '2-digit',
-  }) : null;
+  const premiumEndsDate = trialEndsAt ? formatDateTime(trialEndsAt, i18n.language) : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

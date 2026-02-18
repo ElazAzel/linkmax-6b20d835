@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { formatDateShort } from '@/lib/format';
 import { useLeads, LeadStatus } from '@/hooks/useLeads';
 import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import { Button } from '@/components/ui/button';
@@ -67,7 +68,7 @@ const sourceIcons: Record<string, string> = {
 };
 
 export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isPremium } = usePremiumStatus();
   const { leads, loading, getLeadStats, refreshLeads } = useLeads();
   const [searchQuery, setSearchQuery] = useState('');
@@ -116,10 +117,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'short',
-    });
+    return formatDateShort(dateStr, i18n.language);
   };
 
   const exportToCSV = () => {
