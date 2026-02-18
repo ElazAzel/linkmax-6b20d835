@@ -14,7 +14,7 @@ interface OnboardingStep {
 const steps: OnboardingStep[] = [
   {
     target: 'welcome',
-    title: 'Добро пожаловать в LinkMAX! 👋',
+    title: 'Добро пожаловать в lnkmx.my! 👋',
     description: 'Сейчас мы покажем вам основы работы с редактором. Это займет всего минуту.',
     position: 'center',
   },

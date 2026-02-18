@@ -133,7 +133,7 @@ export default function JoinTeam() {
 
   useEffect(() => {
     if (team) {
-      document.title = `${t('teams.joinTitle', 'Присоединиться к')} ${team.name} | LinkMAX`;
+      document.title = `${t('teams.joinTitle', 'Присоединиться к')} ${team.name} | lnkmx.my`;
     }
   }, [team, t]);
 

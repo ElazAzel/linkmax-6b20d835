@@ -230,7 +230,7 @@ export function BookingsPanel() {
 
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//LinkMAX//Booking//EN
+PRODID:-//lnkmx.my//Booking//EN
 BEGIN:VEVENT
 UID:${booking.id}@linkmax
 DTSTAMP:${formatICSDate(new Date())}

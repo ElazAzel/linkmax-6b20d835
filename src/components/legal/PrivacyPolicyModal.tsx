@@ -24,11 +24,11 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
     if (lang === 'en') {
       return (
         <>
-          <h2 className="text-lg font-semibold mb-4">LinkMAX Platform Privacy Policy</h2>
+          <h2 className="text-lg font-semibold mb-4">lnkmx.my Platform Privacy Policy</h2>
           <p className="mb-4 text-sm text-muted-foreground">Version: 1.0</p>
           
           <h3 className="font-semibold mt-6 mb-2">1. General Provisions</h3>
-          <p className="text-sm text-muted-foreground mb-2">1.1. This Privacy Policy (hereinafter - "Policy") defines the procedure for processing and protecting personal data when using the LinkMAX platform (hereinafter - "Platform", "LinkMAX").</p>
+          <p className="text-sm text-muted-foreground mb-2">1.1. This Privacy Policy (hereinafter - "Policy") defines the procedure for processing and protecting personal data when using the lnkmx.my platform (hereinafter - "Platform", "lnkmx.my").</p>
           <p className="text-sm text-muted-foreground mb-2">1.2. The Policy applies to data of Platform Users, as well as data of third parties (leads/clients) that the User collects through pages, forms, and mini CRM (hereinafter - "Client Data/Leads").</p>
           <p className="text-sm text-muted-foreground mb-2">1.3. By using the Platform, the User confirms familiarity and agreement with the Policy (to the extent required by law and product settings).</p>
 
@@ -87,11 +87,11 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
     if (lang === 'kk') {
       return (
         <>
-          <h2 className="text-lg font-semibold mb-4">LinkMAX платформасының құпиялылық саясаты</h2>
+          <h2 className="text-lg font-semibold mb-4">lnkmx.my платформасының құпиялылық саясаты</h2>
           <p className="mb-4 text-sm text-muted-foreground">Нұсқа: 1.0</p>
           
           <h3 className="font-semibold mt-6 mb-2">1. Жалпы ережелер</h3>
-          <p className="text-sm text-muted-foreground mb-2">1.1. Осы Құпиялылық саясаты (бұдан әрі - «Саясат») LinkMAX платформасын (бұдан әрі - «Платформа», «LinkMAX») пайдалану кезінде дербес деректерді өңдеу және қорғау тәртібін анықтайды.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.1. Осы Құпиялылық саясаты (бұдан әрі - «Саясат») lnkmx.my платформасын (бұдан әрі - «Платформа», «lnkmx.my») пайдалану кезінде дербес деректерді өңдеу және қорғау тәртібін анықтайды.</p>
           <p className="text-sm text-muted-foreground mb-2">1.2. Саясат Платформа Пайдаланушыларының деректеріне, сондай-ақ Пайдаланушы беттер, нысандар және mini CRM арқылы жинайтын үшінші тараптардың (лидтердің/клиенттердің) деректеріне (бұдан әрі - «Клиенттік деректер/Лидтер») қолданылады.</p>
           <p className="text-sm text-muted-foreground mb-2">1.3. Платформаны пайдалана отырып, Пайдаланушы Саясатпен танысқанын және келіскенін растайды (заң талап ететін және өнім параметрлері көлемінде).</p>
 
@@ -150,11 +150,11 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
     // Default: Russian
     return (
       <>
-        <h2 className="text-lg font-semibold mb-4">Политика конфиденциальности платформы LinkMAX</h2>
+        <h2 className="text-lg font-semibold mb-4">Политика конфиденциальности платформы lnkmx.my</h2>
         <p className="mb-4 text-sm text-muted-foreground">Версия: 1.0</p>
         
         <h3 className="font-semibold mt-6 mb-2">1. Общие положения</h3>
-        <p className="text-sm text-muted-foreground mb-2">1.1. Настоящая Политика конфиденциальности (далее - «Политика») определяет порядок обработки и защиты персональных данных при использовании платформы LinkMAX (далее - «Платформа», «LinkMAX»).</p>
+        <p className="text-sm text-muted-foreground mb-2">1.1. Настоящая Политика конфиденциальности (далее - «Политика») определяет порядок обработки и защиты персональных данных при использовании платформы lnkmx.my (далее - «Платформа», «lnkmx.my»).</p>
         <p className="text-sm text-muted-foreground mb-2">1.2. Политика действует в отношении данных Пользователей Платформы, а также данных третьих лиц (лидов/клиентов), которые Пользователь собирает через страницы, формы и mini CRM (далее - «Клиентские данные/Лиды»).</p>
         <p className="text-sm text-muted-foreground mb-2">1.3. Используя Платформу, Пользователь подтверждает ознакомление и согласие с Политикой (в части, требуемой законом и настройками продукта).</p>
 

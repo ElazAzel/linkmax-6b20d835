@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Experts from '@/components/screens/Experts';
 
 export const metadata: Metadata = {
-    title: 'Experts - LinkMAX',
+    title: 'Experts - lnkmx.my',
     description: 'Find experts to help you build your page.',
     alternates: {
         canonical: 'https://lnkmx.my/experts',

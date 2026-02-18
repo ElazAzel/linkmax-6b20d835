@@ -159,7 +159,7 @@ export default function CollabPage() {
         collabData.requester?.display_name || collabData.requester?.username,
         collabData.target?.display_name || collabData.target?.username,
       ].filter(Boolean);
-      document.title = `${names.join(' × ')} | LinkMAX Collab`;
+      document.title = `${names.join(' × ')} | lnkmx.my Collab`;
     }
   }, [collabData]);
 

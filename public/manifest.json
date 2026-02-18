@@ -1,6 +1,6 @@
 {
-    "name": "LinkMAX",
-    "short_name": "LinkMAX",
+    "name": "lnkmx.my",
+    "short_name": "lnkmx.my",
     "description": "Создайте мультиссылку с CRM, аналитикой и AI - бесплатно",
     "start_url": "/",
     "display": "standalone",

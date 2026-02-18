@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Terms from '@/components/screens/Terms';
 
 export const metadata: Metadata = {
-    title: 'Terms of Service - LinkMAX',
+    title: 'Terms of Service - lnkmx.my',
     description: 'Read our terms of service.',
     alternates: {
         canonical: 'https://lnkmx.my/terms',

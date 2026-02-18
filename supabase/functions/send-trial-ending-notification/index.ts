@@ -16,7 +16,7 @@ async function sendEmail(to: string, subject: string, html: string) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "LinkMAX <onboarding@resend.dev>",
+      from: "lnkmx.my <onboarding@resend.dev>",
       to: [to],
       subject,
       html,
@@ -116,7 +116,7 @@ serve(async (req: Request): Promise<Response> => {
                 </ul>
                 
                 <div style="text-align: center; margin-top: 32px;">
-                  <a href="https://wa.me/77051097664?text=${encodeURIComponent('Hi, I want to purchase a premium LinkMax')}" 
+                  <a href="https://wa.me/77051097664?text=${encodeURIComponent('Hi, I want to purchase a premium lnkmx.my')}" 
                      style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; padding: 16px 32px; border-radius: 12px; font-weight: 600; font-size: 16px;">
                     Получить Premium 🚀
                   </a>

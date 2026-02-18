@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import PaymentTerms from '@/components/screens/PaymentTerms';
 
 export const metadata: Metadata = {
-    title: 'Payment Terms - LinkMAX',
+    title: 'Payment Terms - lnkmx.my',
     description: 'Read our payment terms.',
     alternates: {
         canonical: 'https://lnkmx.my/payment-terms',

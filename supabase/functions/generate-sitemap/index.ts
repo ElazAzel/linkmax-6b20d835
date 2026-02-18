@@ -422,7 +422,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   <meta property="og:description" content="${metaDesc}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${avatar}">
-  <meta property="og:site_name" content="LinkMAX">
+  <meta property="og:site_name" content="lnkmx.my">
   <meta property="og:site_name" content="lnkmx">
   <meta property="og:locale" content="${getOgLocale(lang)}">
   

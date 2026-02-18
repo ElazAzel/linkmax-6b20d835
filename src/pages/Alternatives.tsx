@@ -127,7 +127,7 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
     });
 
     return () => {
-      document.title = t('alternatives.seo.defaultTitle', 'LinkMAX - AI-Powered Link-in-Bio Platform');
+      document.title = t('alternatives.seo.defaultTitle', 'lnkmx.my - AI-Powered Link-in-Bio Platform');
       const schemaToRemove = document.querySelectorAll('script.alternatives-schema');
       schemaToRemove.forEach((schema) => schema.remove());
     };
@@ -343,7 +343,7 @@ export default function Alternatives() {
                   </Button>
                   <Link to="/" className="flex items-center gap-2">
                     <span className="text-xl font-bold">
-                      Link<span className="text-gradient">MAX</span>
+                      lnkmx<span className="text-gradient">.my</span>
                     </span>
                   </Link>
                 </div>
@@ -581,7 +581,7 @@ export default function Alternatives() {
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <Link to="/" className="flex items-center">
                   <span className="text-lg font-bold">
-                    Link<span className="text-gradient">MAX</span>
+                    lnkmx<span className="text-gradient">.my</span>
                   </span>
                 </Link>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -613,7 +613,7 @@ export default function Alternatives() {
               </div>
 
               <p className="text-xs text-muted-foreground text-center">
-                © 2025 LinkMAX
+                © 2025 lnkmx.my
               </p>
             </div>
           </div>

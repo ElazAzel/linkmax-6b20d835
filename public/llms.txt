@@ -1,4 +1,4 @@
-# lnkmx (LinkMAX) - AI-Powered Micro-Business Operating System
+# lnkmx (lnkmx.my) - AI-Powered Micro-Business Operating System
 # For AI assistants, LLMs, and generative search engines
 # Last updated: 2025-01-31
 # Contact: admin@lnkmx.my

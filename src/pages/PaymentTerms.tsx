@@ -25,16 +25,16 @@ const PaymentTerms = () => {
     if (lang === 'en') {
       return (
         <>
-          <h1 className="text-3xl font-bold mb-6">Payment Terms for LinkMAX Users</h1>
+          <h1 className="text-3xl font-bold mb-6">Payment Terms for lnkmx.my Users</h1>
           <p className="mb-6 text-muted-foreground">Version: 1.0 | Effective: January 5, 2026</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. General Provisions</h2>
-          <p className="mb-2">1.1. These Payment Terms (hereinafter - "Payment Terms") govern the payment procedure for LinkMAX platform services (hereinafter - "Platform", "LinkMAX") by individuals and representatives of legal entities.</p>
-          <p className="mb-2">1.2. Payment Terms are an integral part of the User Agreement and apply to all paid services and plans of LinkMAX.</p>
-          <p className="mb-4">1.3. By paying for LinkMAX services, the User confirms that they have read and agree to the User Agreement, Privacy Policy, and these Payment Terms.</p>
+          <p className="mb-2">1.1. These Payment Terms (hereinafter - "Payment Terms") govern the payment procedure for lnkmx.my platform services (hereinafter - "Platform", "lnkmx.my") by individuals and representatives of legal entities.</p>
+          <p className="mb-2">1.2. Payment Terms are an integral part of the User Agreement and apply to all paid services and plans of lnkmx.my.</p>
+          <p className="mb-4">1.3. By paying for lnkmx.my services, the User confirms that they have read and agree to the User Agreement, Privacy Policy, and these Payment Terms.</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Plans and Pricing</h2>
-          <p className="mb-2">2.1. LinkMAX services are provided on a subscription model for plans (e.g., PRO, BUSINESS).</p>
+          <p className="mb-2">2.1. lnkmx.my services are provided on a subscription model for plans (e.g., PRO, BUSINESS).</p>
           <p className="mb-2">2.2. Base rates for PRO subscription at the time of publication:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>3 months - 4,350 ₸ per month (total 13,050 ₸ for the period);</li>
@@ -61,7 +61,7 @@ const PaymentTerms = () => {
           <p className="mb-4">5.3. If payment is made in a currency other than tenge, conversion is performed at the rate of the User's bank or payment system.</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">6. Refund and Cancellation Policy</h2>
-          <p className="mb-2">6.1. Refunds for LinkMAX digital services are made in cases and in the manner established by the current legislation of the Republic of Kazakhstan and described in the User Agreement.</p>
+          <p className="mb-2">6.1. Refunds for lnkmx.my digital services are made in cases and in the manner established by the current legislation of the Republic of Kazakhstan and described in the User Agreement.</p>
           <p className="mb-2">6.2. General principles:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>Refund may be possible if the service was not used or there was a technical impossibility of its provision due to Administration's fault;</li>
@@ -92,11 +92,11 @@ const PaymentTerms = () => {
     if (lang === 'kk') {
       return (
         <>
-          <h1 className="text-3xl font-bold mb-6">LinkMAX пайдаланушылары үшін төлем шарттары</h1>
+          <h1 className="text-3xl font-bold mb-6">lnkmx.my пайдаланушылары үшін төлем шарттары</h1>
           <p className="mb-6 text-muted-foreground">Нұсқа: 1.0 | Күшіне енеді: 2026 жылғы 5 қаңтар</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Жалпы ережелер</h2>
-          <p className="mb-4">Осы Төлем шарттары LinkMAX платформасы қызметтеріне төлем тәртібін реттейді.</p>
+          <p className="mb-4">Осы Төлем шарттары lnkmx.my платформасы қызметтеріне төлем тәртібін реттейді.</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Тарифтер</h2>
           <ul className="list-disc pl-6 mb-4">
@@ -114,16 +114,16 @@ const PaymentTerms = () => {
     // Default: Russian
     return (
       <>
-        <h1 className="text-3xl font-bold mb-6">Условия оплаты для пользователей LinkMAX</h1>
+        <h1 className="text-3xl font-bold mb-6">Условия оплаты для пользователей lnkmx.my</h1>
         <p className="mb-6 text-muted-foreground">Версия: 1.0 | Дата вступления в силу: 05.01.2026</p>
         
         <h2 className="text-2xl font-semibold mt-8 mb-4">1. Общие положения</h2>
-        <p className="mb-2">1.1. Настоящие Условия оплаты (далее - «Условия оплаты») регулируют порядок оплаты услуг платформы LinkMAX (далее - «Платформа», «LinkMAX») физическими лицами и представителями юридических лиц.</p>
-        <p className="mb-2">1.2. Условия оплаты являются неотъемлемой частью Пользовательского соглашения и применяются ко всем платным сервисам и тарифам LinkMAX.</p>
-        <p className="mb-4">1.3. Осуществляя оплату услуг LinkMAX, Пользователь подтверждает, что ознакомился и согласен с Пользовательским соглашением, Политикой конфиденциальности и настоящими Условиями оплаты.</p>
+        <p className="mb-2">1.1. Настоящие Условия оплаты (далее - «Условия оплаты») регулируют порядок оплаты услуг платформы lnkmx.my (далее - «Платформа», «lnkmx.my») физическими лицами и представителями юридических лиц.</p>
+        <p className="mb-2">1.2. Условия оплаты являются неотъемлемой частью Пользовательского соглашения и применяются ко всем платным сервисам и тарифам lnkmx.my.</p>
+        <p className="mb-4">1.3. Осуществляя оплату услуг lnkmx.my, Пользователь подтверждает, что ознакомился и согласен с Пользовательским соглашением, Политикой конфиденциальности и настоящими Условиями оплаты.</p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">2. Тарифы и стоимость услуг</h2>
-        <p className="mb-2">2.1. Услуги LinkMAX предоставляются по модели подписки на тарифные планы (например, PRO, BUSINESS).</p>
+        <p className="mb-2">2.1. Услуги lnkmx.my предоставляются по модели подписки на тарифные планы (например, PRO, BUSINESS).</p>
         <p className="mb-2">2.2. Базовые тарифы для PRO подписки на момент публикации настоящих Условий оплаты:</p>
         <ul className="list-disc pl-6 mb-4">
           <li>3 месяца - 4 350 ₸ в месяц (итого 13 050 ₸ за период);</li>
@@ -150,7 +150,7 @@ const PaymentTerms = () => {
         <p className="mb-4">5.3. В случае оплаты в валюте, отличной от тенге, конвертация осуществляется по курсу банка или платёжной системы Пользователя.</p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">6. Политика возвратов и отмены</h2>
-        <p className="mb-2">6.1. Возврат денежных средств за цифровые услуги LinkMAX осуществляется в случаях и порядке, установленных действующим законодательством Республики Казахстан и описанных в Пользовательском соглашении.</p>
+        <p className="mb-2">6.1. Возврат денежных средств за цифровые услуги lnkmx.my осуществляется в случаях и порядке, установленных действующим законодательством Республики Казахстан и описанных в Пользовательском соглашении.</p>
         <p className="mb-2">6.2. Общие принципы:</p>
         <ul className="list-disc pl-6 mb-4">
           <li>возврат может быть возможен, если услуга не была использована либо существовала техническая невозможность её предоставления по вине Администрации;</li>

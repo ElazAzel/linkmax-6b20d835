@@ -548,7 +548,7 @@
         },
         "cardLead": {
           "title": "New Client!",
-          "subtitle": "Just now via LinkMAX"
+          "subtitle": "Just now via lnkmx.my"
         }
       },
       "features": {
@@ -792,7 +792,7 @@
       }
     },
     "niches": {
-      "title": "Who is LinkMAX for?",
+      "title": "Who is lnkmx.my for?",
       "subtitle": "We created special templates for each niche. AI knows your audience's pain points and creates a page for your tasks",
       "cta": "Create a page for my niche",
       "barber": {
@@ -860,7 +860,7 @@
       "title": "What is Link-in-Bio and why do you need it?",
       "subtitle": "A link page is a mini-site that combines all your resources: social media, messengers, portfolio, products and services",
       "p1": "Link-in-Bio (multi-link page) is a page you place in your Instagram, TikTok, YouTube or Telegram profile description. Instead of one link, you get a full mini-landing with buttons, contacts, and even a product catalog.",
-      "p2": "LinkMAX is a modern Linktree and Taplink alternative with AI content generation. Pick a niche (barber, photographer, trainer, psychologist) and AI creates a ready page in 2 minutes: with profile, needed blocks and copy.",
+      "p2": "lnkmx.my is a modern Linktree and Taplink alternative with AI content generation. Pick a niche (barber, photographer, trainer, psychologist) and AI creates a ready page in 2 minutes: with profile, needed blocks and copy.",
       "p3": "Unlike competitors, we don't take commission on your sales. All money from products and services is yours. Built-in analytics and CRM help understand which links work best.",
       "benefit1": "All links in one place",
       "benefit2": "AI creates content",
@@ -873,13 +873,13 @@
     "faq": {
       "badge": "Questions and Answers",
       "title": "Frequently Asked Questions.",
-      "subtitle": "Answers to popular questions about LinkMAX",
+      "subtitle": "Answers to popular questions about lnkmx.my",
       "q1": {
-        "question": "What is LinkMAX and what is it for?",
+        "question": "What is lnkmx.my and what is it for?",
         "answer": "lnkmx is an AI link in bio and mini-site builder that helps create one clear page for links, services, booking, and inquiries."
       },
       "q2": {
-        "question": "How much does LinkMAX cost?",
+        "question": "How much does lnkmx.my cost?",
         "answer": "Basic plan is free forever. Pro: 3 mo - 4,350 ₸/mo, 6 mo - 3,698 ₸/mo (-15%), 12 mo - 3,045 ₸/mo (-30%). Online payment, 14-day refund."
       },
       "q3": {
@@ -896,14 +896,14 @@
       },
       "q6": {
         "question": "Is mobile editor supported?",
-        "answer": "Yes! LinkMAX is built mobile-first. You can fully edit pages from your smartphone."
+        "answer": "Yes! lnkmx.my is built mobile-first. You can fully edit pages from your smartphone."
       },
       "q7": {
-        "question": "What integrations does LinkMAX support?",
+        "question": "What integrations does lnkmx.my support?",
         "answer": "Telegram for lead notifications and Google Calendar for scheduling. Social media and messengers are available as blocks."
       },
       "q8": {
-        "question": "Does LinkMAX take commission on sales?",
+        "question": "Does lnkmx.my take commission on sales?",
         "answer": "No. 0% commission on your sales - you only pay for subscription."
       },
       "q9": {
@@ -919,7 +919,7 @@
         "answer": "Yes. The gallery has real pages from different niches: specialists, shops, services, and creators."
       },
       "q12": {
-        "question": "Why is LinkMAX better than Linktree and Taplink?",
+        "question": "Why is lnkmx.my better than Linktree and Taplink?",
         "answer": "lnkmx has AI page building, CRM, and notifications without extra cost. Plus flexible blocks, clear pricing, and local languages."
       },
       "q13": {
@@ -3234,7 +3234,7 @@
     },
     "title": "Тарифы",
     "choosePlan": "Выберите подходящий тариф",
-    "description": "Разблокируйте все возможности LinkMAX для вашего бизнеса",
+    "description": "Разблокируйте все возможности lnkmx.my для вашего бизнеса",
     "months": "мес",
     "savingsText": "Экономия",
     "popular": "Популярный",
@@ -3290,7 +3290,7 @@
       "aiMonthlyPro": "5 AI-генераций в месяц"
     },
     "limitations": {
-      "watermark": "Водяной знак LinkMAX",
+      "watermark": "Водяной знак lnkmx.my",
       "limitedBlocks": "10 блоков максимум"
     }
   }

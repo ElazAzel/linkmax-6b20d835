@@ -194,7 +194,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       }
       
-      const signOff = lang === 'en' ? '— Your LinkMAX' : (lang === 'kk' ? '— Сіздің LinkMAX' : '— Ваш LinkMAX');
+      const signOff = lang === 'en' ? '— Your lnkmx.my' : (lang === 'kk' ? '— Сіздің lnkmx.my' : '— Ваш lnkmx.my');
       message += `_${signOff}_`;
 
       try {

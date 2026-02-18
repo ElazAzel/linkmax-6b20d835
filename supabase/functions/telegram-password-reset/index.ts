@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
       }
 
       // Send token via Telegram
-      const message = `🔐 <b>Сброс пароля LinkMAX</b>\n\nВаш код для сброса пароля:\n\n<code>${resetToken}</code>\n\nКод действителен 15 минут.\n\n⚠️ Если вы не запрашивали сброс пароля, проигнорируйте это сообщение.`;
+      const message = `🔐 <b>Сброс пароля lnkmx.my</b>\n\nВаш код для сброса пароля:\n\n<code>${resetToken}</code>\n\nКод действителен 15 минут.\n\n⚠️ Если вы не запрашивали сброс пароля, проигнорируйте это сообщение.`;
       
       const sent = await sendTelegramMessage(telegram_chat_id, message);
       if (!sent) {

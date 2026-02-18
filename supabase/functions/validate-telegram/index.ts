@@ -83,7 +83,7 @@ serve(async (req: Request) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: chatId,
-            text: '✅ LinkMAX подключен! Теперь вы будете получать уведомления о новых заявках.\n\n✅ LinkMAX connected! You will now receive notifications about new leads.',
+            text: '✅ lnkmx.my подключен! Теперь вы будете получать уведомления о новых заявках.\n\n✅ lnkmx.my connected! You will now receive notifications about new leads.',
             parse_mode: 'HTML',
           }),
         }

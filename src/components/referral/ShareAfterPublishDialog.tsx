@@ -48,7 +48,7 @@ export function ShareAfterPublishDialog({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: t('share.title', 'Check out my LinkMAX page!'),
+          title: t('share.title', 'Check out my lnkmx.my page!'),
           url: publishedUrl,
         });
       } catch (e) {

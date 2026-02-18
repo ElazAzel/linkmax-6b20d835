@@ -68,7 +68,7 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
           <h2
             className={`text-2xl sm:text-3xl lg:text-[2.75rem] font-extrabold tracking-[-0.02em] leading-tight opacity-0 ${isVisible ? 'animate-blur-in' : ''}`}
           >
-            {t('landing.targetAudience.title', 'Для кого создан LinkMAX')}
+            {t('landing.targetAudience.title', 'Для кого создан lnkmx.my')}
           </h2>
           <p
             className={`text-sm sm:text-base lg:text-lg text-muted-foreground max-w-xl mx-auto opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}

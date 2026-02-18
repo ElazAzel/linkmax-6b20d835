@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const title = page.seo?.title || 'Shared Page';
-    const description = page.seo?.description || 'Check out this page on LinkMAX';
+    const description = page.seo?.description || 'Check out this page on lnkmx.my';
     const image = (page.seo as any)?.image || 'https://lnkmx.my/og-image.png';
 
     return {

@@ -7,7 +7,7 @@
         },
         "title": "Pricing",
         "choosePlan": "Choose the right plan",
-        "description": "Unlock all LinkMAX features for your business",
+        "description": "Unlock all lnkmx.my features for your business",
         "months": "mo",
         "savingsText": "Save",
         "popular": "Popular",
@@ -63,7 +63,7 @@
             "aiMonthlyPro": "5 AI generations/month"
         },
         "limitations": {
-            "watermark": "LinkMAX watermark",
+            "watermark": "lnkmx.my watermark",
             "limitedBlocks": "10 blocks maximum"
         }
     }

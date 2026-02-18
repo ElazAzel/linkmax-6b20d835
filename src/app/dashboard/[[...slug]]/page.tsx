@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import DashboardClient from '../DashboardClient';
 
 export const metadata: Metadata = {
-    title: 'LinkMAX Dashboard',
+    title: 'lnkmx.my Dashboard',
     robots: {
         index: false,
         follow: false,

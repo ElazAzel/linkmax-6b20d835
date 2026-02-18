@@ -73,10 +73,10 @@ Deno.serve(async (req) => {
     let message = '';
     switch (type) {
       case 'request':
-        message = `👋 <b>Новый запрос в друзья!</b>\n\n${senderName} хочет добавить вас в друзья.\n\nОткройте LinkMAX, чтобы принять или отклонить запрос.`;
+        message = `👋 <b>Новый запрос в друзья!</b>\n\n${senderName} хочет добавить вас в друзья.\n\nОткройте lnkmx.my, чтобы принять или отклонить запрос.`;
         break;
       case 'accepted':
-        message = `🎉 <b>Запрос принят!</b>\n\n${senderName} принял(а) ваш запрос в друзья.\n\nТеперь вы друзья в LinkMAX!`;
+        message = `🎉 <b>Запрос принят!</b>\n\n${senderName} принял(а) ваш запрос в друзья.\n\nТеперь вы друзья в lnkmx.my!`;
         break;
     }
 

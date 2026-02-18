@@ -63,16 +63,16 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Download className="h-5 w-5 text-primary" />
-            {t('install.title', 'Install LinkMAX')}
+            {t('install.title', 'Install lnkmx.my')}
           </DialogTitle>
           <DialogDescription className="sr-only">
-            {t('install.description', 'Install LinkMAX on your device for quick access')}
+            {t('install.description', 'Install lnkmx.my on your device for quick access')}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            {t('install.subtitle', 'Your page is published! Install LinkMAX for quick access and offline editing.')}
+            {t('install.subtitle', 'Your page is published! Install lnkmx.my for quick access and offline editing.')}
           </p>
 
           <div className="p-3 bg-muted rounded-lg">
@@ -165,7 +165,7 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
                   <div>
                     <p className="font-medium">{t('install.android.step3', 'Confirm installation')}</p>
                     <p className="text-sm text-muted-foreground">
-                      {t('install.android.step3desc', 'Tap "Install" to add LinkMAX to your home screen')}
+                      {t('install.android.step3desc', 'Tap "Install" to add lnkmx.my to your home screen')}
                     </p>
                   </div>
                 </div>
@@ -176,7 +176,7 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
               {deferredPrompt ? (
                 <div className="text-center space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    {t('install.desktop.ready', 'LinkMAX is ready to be installed!')}
+                    {t('install.desktop.ready', 'lnkmx.my is ready to be installed!')}
                   </p>
                   <Button onClick={handleInstallPWA} className="w-full">
                     <Download className="h-4 w-4 mr-2" />
@@ -203,7 +203,7 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
                     <div>
                       <p className="font-medium">{t('install.desktop.step2', 'Click "Install"')}</p>
                       <p className="text-sm text-muted-foreground">
-                        {t('install.desktop.step2desc', 'Confirm the installation to add LinkMAX to your desktop')}
+                        {t('install.desktop.step2desc', 'Confirm the installation to add lnkmx.my to your desktop')}
                       </p>
                     </div>
                   </div>

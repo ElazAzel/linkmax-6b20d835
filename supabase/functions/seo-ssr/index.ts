@@ -133,7 +133,7 @@ serve(async (req: Request) => {
 <html lang="${lang}">
 <head>
   <meta charset="UTF-8">
-  <title>Not Found - LinkMAX</title>
+  <title>Not Found - lnkmx.my</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Page not found">
 </head>
@@ -226,12 +226,12 @@ serve(async (req: Request) => {
           "@type": "WebPage",
           "@id": canonical,
           "url": canonical,
-          "name": `${page.title || '@' + slug} - LinkMAX`,
+          "name": `${page.title || '@' + slug} - lnkmx.my`,
           "description": cleanDesc.slice(0, 160),
           "inLanguage": lang,
           "isPartOf": {
             "@type": "WebSite",
-            "name": "LinkMAX",
+            "name": "lnkmx.my",
             "url": DOMAIN
           }
         },
@@ -268,7 +268,7 @@ serve(async (req: Request) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${displayName} - LinkMAX</title>
+  <title>${displayName} - lnkmx.my</title>
   <meta name="description" content="${metaDesc}">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="${canonical}">
@@ -285,7 +285,7 @@ serve(async (req: Request) => {
   <meta property="og:description" content="${metaDesc}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${avatar}">
-  <meta property="og:site_name" content="LinkMAX">
+  <meta property="og:site_name" content="lnkmx.my">
   <meta property="og:locale" content="${lang === 'ru' ? 'ru_RU' : lang === 'kk' ? 'kk_KZ' : 'en_US'}">
   
   <!-- Twitter Card -->
@@ -321,7 +321,7 @@ serve(async (req: Request) => {
   </main>
   
   <footer>
-    <p>Created with <a href="${DOMAIN}/">LinkMAX</a></p>
+    <p>Created with <a href="${DOMAIN}/">lnkmx.my</a></p>
   </footer>
 </body>
 </html>`;

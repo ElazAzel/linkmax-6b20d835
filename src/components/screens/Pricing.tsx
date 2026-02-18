@@ -71,7 +71,7 @@ export default function Pricing() {
         12: 0
       },
       features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
-      limitations: [t('pricing.limitations.watermark', 'Водяной знак LinkMAX'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
+      limitations: [t('pricing.limitations.watermark', 'Водяной знак lnkmx.my'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
     },
     pro: {
       name: 'PRO',
@@ -212,7 +212,7 @@ export default function Pricing() {
             {t('pricing.choosePlan', 'Выберите подходящий тариф')}
           </h2>
           <p data-testid="pricing-description" className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t('pricing.description', 'Разблокируйте все возможности LinkMAX для вашего бизнеса')}
+            {t('pricing.description', 'Разблокируйте все возможности lnkmx.my для вашего бизнеса')}
           </p>
         </div>
 

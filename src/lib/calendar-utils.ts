@@ -39,7 +39,7 @@ export function generateICS(event: CalendarEvent): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//LinkMAX//Event//EN',
+    'PRODID:-//lnkmx.my//Event//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',

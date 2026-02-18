@@ -178,7 +178,7 @@ serve(async (req) => {
                             </div>
                             
                             <p style="color: #52525b; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
-                              Great news! A new lead has been captured from your LinkMAX page.
+                              Great news! A new lead has been captured from your lnkmx.my page.
                             </p>
                             
                             <table role="presentation" style="width: 100%; background-color: #f4f4f5; border-radius: 8px; margin-bottom: 24px;">
@@ -223,14 +223,14 @@ serve(async (req) => {
                             </table>
                             
                             <p style="color: #71717a; font-size: 14px; line-height: 1.5; margin: 0;">
-                              View and manage this lead in your LinkMAX dashboard.
+                              View and manage this lead in your lnkmx.my dashboard.
                             </p>
                           </td>
                         </tr>
                         <tr>
                           <td style="padding: 20px 40px; background-color: #f4f4f5; border-radius: 0 0 12px 12px;">
                             <p style="margin: 0; color: #a1a1aa; font-size: 12px; text-align: center;">
-                              © ${new Date().getFullYear()} LinkMAX. All rights reserved.
+                              © ${new Date().getFullYear()} lnkmx.my. All rights reserved.
                             </p>
                           </td>
                         </tr>
@@ -249,7 +249,7 @@ serve(async (req) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: "LinkMAX <onboarding@resend.dev>",
+              from: "lnkmx.my <onboarding@resend.dev>",
               to: [ownerEmail],
               subject: `🎉 New Lead: ${safeName}`,
               html: emailHtml,

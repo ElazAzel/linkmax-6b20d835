@@ -93,10 +93,10 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
       return (
         <>
           <h3 className="font-semibold mt-6 mb-2">11. Service Delivery Terms</h3>
-          <p className="text-sm text-muted-foreground mb-2">11.1. <strong>Service Description:</strong> LinkMAX provides digital services for creating and hosting personal mini-sites (link-in-bio pages), analytics, CRM functionality, and AI-powered content generation. All services are provided remotely via the Internet.</p>
+          <p className="text-sm text-muted-foreground mb-2">11.1. <strong>Service Description:</strong> lnkmx.my provides digital services for creating and hosting personal mini-sites (link-in-bio pages), analytics, CRM functionality, and AI-powered content generation. All services are provided remotely via the Internet.</p>
           <p className="text-sm text-muted-foreground mb-2">11.2. <strong>Service Activation:</strong> Access to paid services is activated automatically within 15 minutes after successful payment confirmation. The User receives access to all features of the selected tariff plan immediately.</p>
           <p className="text-sm text-muted-foreground mb-2">11.3. <strong>Service Period:</strong> The subscription period starts from the moment of successful payment and continues for the selected duration (3, 6, or 12 months).</p>
-          <p className="text-sm text-muted-foreground mb-2">11.4. <strong>No Physical Delivery:</strong> As LinkMAX provides exclusively digital services, no physical delivery of goods is performed.</p>
+          <p className="text-sm text-muted-foreground mb-2">11.4. <strong>No Physical Delivery:</strong> As lnkmx.my provides exclusively digital services, no physical delivery of goods is performed.</p>
           
           <h3 className="font-semibold mt-6 mb-2">12. Refund and Cancellation Policy</h3>
           <p className="text-sm text-muted-foreground mb-2">12.1. <strong>Refund Eligibility:</strong> In accordance with Article 30 of the Law of the Republic of Kazakhstan "On Protection of Consumer Rights", refunds for digital services may be requested under the following conditions:</p>
@@ -119,10 +119,10 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
       return (
         <>
           <h3 className="font-semibold mt-6 mb-2">11. Қызметтерді көрсету шарттары</h3>
-          <p className="text-sm text-muted-foreground mb-2">11.1. <strong>Қызметтің сипаттамасы:</strong> LinkMAX жеке мини-сайттар (link-in-bio беттері), аналитика, CRM функционалы және AI мазмұнын генерациялау үшін цифрлық қызметтер көрсетеді. Барлық қызметтер интернет арқылы қашықтан көрсетіледі.</p>
+          <p className="text-sm text-muted-foreground mb-2">11.1. <strong>Қызметтің сипаттамасы:</strong> lnkmx.my жеке мини-сайттар (link-in-bio беттері), аналитика, CRM функционалы және AI мазмұнын генерациялау үшін цифрлық қызметтер көрсетеді. Барлық қызметтер интернет арқылы қашықтан көрсетіледі.</p>
           <p className="text-sm text-muted-foreground mb-2">11.2. <strong>Қызметті іске қосу:</strong> Ақылы қызметтерге қол жеткізу төлемді сәтті растағаннан кейін 15 минут ішінде автоматты түрде іске қосылады.</p>
           <p className="text-sm text-muted-foreground mb-2">11.3. <strong>Қызмет мерзімі:</strong> Жазылым мерзімі сәтті төлем сәтінен басталады және таңдалған ұзақтыққа (3, 6 немесе 12 ай) жалғасады.</p>
-          <p className="text-sm text-muted-foreground mb-2">11.4. <strong>Физикалық жеткізу жоқ:</strong> LinkMAX тек цифрлық қызметтер көрсететіндіктен, тауарларды физикалық жеткізу жүзеге асырылмайды.</p>
+          <p className="text-sm text-muted-foreground mb-2">11.4. <strong>Физикалық жеткізу жоқ:</strong> lnkmx.my тек цифрлық қызметтер көрсететіндіктен, тауарларды физикалық жеткізу жүзеге асырылмайды.</p>
           
           <h3 className="font-semibold mt-6 mb-2">12. Ақшаны қайтару және бас тарту саясаты</h3>
           <p className="text-sm text-muted-foreground mb-2">12.1. <strong>Қайтару құқығы:</strong> Қазақстан Республикасының «Тұтынушылардың құқықтарын қорғау туралы» Заңының 30-бабына сәйкес, цифрлық қызметтер үшін ақшаны қайтару мынадай жағдайларда сұралуы мүмкін:</p>
@@ -142,10 +142,10 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
     return (
       <>
         <h3 className="font-semibold mt-6 mb-2">11. Условия предоставления услуг</h3>
-        <p className="text-sm text-muted-foreground mb-2">11.1. <strong>Описание услуг:</strong> LinkMAX предоставляет цифровые услуги по созданию и размещению персональных мини-сайтов (link-in-bio страниц), аналитике, CRM-функционалу и генерации контента с использованием искусственного интеллекта. Все услуги оказываются дистанционно через сеть Интернет.</p>
+        <p className="text-sm text-muted-foreground mb-2">11.1. <strong>Описание услуг:</strong> lnkmx.my предоставляет цифровые услуги по созданию и размещению персональных мини-сайтов (link-in-bio страниц), аналитике, CRM-функционалу и генерации контента с использованием искусственного интеллекта. Все услуги оказываются дистанционно через сеть Интернет.</p>
         <p className="text-sm text-muted-foreground mb-2">11.2. <strong>Активация услуг:</strong> Доступ к платным услугам активируется автоматически в течение 15 минут после успешного подтверждения оплаты. Пользователь получает доступ ко всем функциям выбранного тарифного плана незамедлительно.</p>
         <p className="text-sm text-muted-foreground mb-2">11.3. <strong>Период действия услуги:</strong> Период подписки начинается с момента успешной оплаты и продолжается в течение выбранного срока (3, 6 или 12 месяцев).</p>
-        <p className="text-sm text-muted-foreground mb-2">11.4. <strong>Отсутствие физической доставки:</strong> Поскольку LinkMAX предоставляет исключительно цифровые услуги, физическая доставка товаров не осуществляется.</p>
+        <p className="text-sm text-muted-foreground mb-2">11.4. <strong>Отсутствие физической доставки:</strong> Поскольку lnkmx.my предоставляет исключительно цифровые услуги, физическая доставка товаров не осуществляется.</p>
         
         <h3 className="font-semibold mt-6 mb-2">12. Политика возврата и отказа от услуг</h3>
         <p className="text-sm text-muted-foreground mb-2">12.1. <strong>Право на возврат:</strong> В соответствии со статьёй 30 Закона Республики Казахстан «О защите прав потребителей», возврат денежных средств за цифровые услуги может быть запрошен при следующих условиях:</p>
@@ -169,9 +169,9 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
     if (lang === 'en') {
       return (
         <>
-          <h2 className="text-lg font-semibold mb-4">LinkMAX Platform User Agreement</h2>
+          <h2 className="text-lg font-semibold mb-4">lnkmx.my Platform User Agreement</h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            This User Agreement (hereinafter referred to as the "Agreement") defines the terms of access to and use of the LinkMAX web platform and related services (hereinafter referred to as the "Platform") for individuals and representatives of legal entities (hereinafter referred to as the "User").
+            This User Agreement (hereinafter referred to as the "Agreement") defines the terms of access to and use of the lnkmx.my web platform and related services (hereinafter referred to as the "Platform") for individuals and representatives of legal entities (hereinafter referred to as the "User").
           </p>
           <p className="mb-4 text-sm text-muted-foreground">
             By using the Platform, the User confirms that they have carefully read the terms of the Agreement and the Privacy Policy and fully accept them.
@@ -180,7 +180,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
           {getCompanyDetailsSection('en')}
           
           <h3 className="font-semibold mt-6 mb-2">1. Terms</h3>
-          <p className="text-sm text-muted-foreground mb-2">1.1. LinkMAX - an online platform and services for creating personal mini-sites (link-in-bio pages and micro-landings), analytics, and lead management using artificial intelligence.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.1. lnkmx.my - an online platform and services for creating personal mini-sites (link-in-bio pages and micro-landings), analytics, and lead management using artificial intelligence.</p>
           <p className="text-sm text-muted-foreground mb-2">1.2. Platform - the website at https://lnkmx.my, related subdomains, API, and the progressive web application (PWA) providing access to page creation and management, analytics, CRM, and other services.</p>
           <p className="text-sm text-muted-foreground mb-2">1.3. Agreement - this document and all appendices to it governing the procedure for access to and use of the Platform.</p>
           <p className="text-sm text-muted-foreground mb-2">1.4. Privacy Policy - a document defining the procedure for processing and protecting Users' personal data, posted at https://lnkmx.my/privacy.</p>
@@ -196,7 +196,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
           <h3 className="font-semibold mt-6 mb-2">3. Registration and Account Access</h3>
           <p className="text-sm text-muted-foreground mb-2">3.1. Registration is done through the web interface at https://lnkmx.my using: email and password and/or; login via third-party services (Google, Apple) and/or; verification via Telegram bot.</p>
           <p className="text-sm text-muted-foreground mb-2">3.2. The User is obliged to provide accurate information during registration and maintain its accuracy.</p>
-          <p className="text-sm text-muted-foreground mb-2">3.3. Activation of notification and Mini-CRM features may require mandatory linking of a Telegram account via the official LinkMAX bot.</p>
+          <p className="text-sm text-muted-foreground mb-2">3.3. Activation of notification and Mini-CRM features may require mandatory linking of a Telegram account via the official lnkmx.my bot.</p>
           <p className="text-sm text-muted-foreground mb-2">3.4. The User is fully responsible for the safety of their login, password, and access to their Telegram account. All actions performed through their account are considered actions of the User.</p>
           
           <h3 className="font-semibold mt-6 mb-2">4. Platform Usage Terms and User Responsibility</h3>
@@ -239,9 +239,9 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
     if (lang === 'kk') {
       return (
         <>
-          <h2 className="text-lg font-semibold mb-4">LinkMAX платформасының пайдаланушы келісімі</h2>
+          <h2 className="text-lg font-semibold mb-4">lnkmx.my платформасының пайдаланушы келісімі</h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            Осы Пайдаланушы келісімі (бұдан әрі - «Келісім») LinkMAX веб-платформасы мен онымен байланысты қызметтерге (бұдан әрі - «Платформа») жеке тұлғалар мен заңды тұлғалардың өкілдеріне (бұдан әрі - «Пайдаланушы») қол жеткізу және пайдалану шарттарын анықтайды.
+            Осы Пайдаланушы келісімі (бұдан әрі - «Келісім») lnkmx.my веб-платформасы мен онымен байланысты қызметтерге (бұдан әрі - «Платформа») жеке тұлғалар мен заңды тұлғалардың өкілдеріне (бұдан әрі - «Пайдаланушы») қол жеткізу және пайдалану шарттарын анықтайды.
           </p>
           <p className="mb-4 text-sm text-muted-foreground">
             Платформаны пайдалана отырып, Пайдаланушы Келісім мен Құпиялылық саясатының шарттарымен мұқият танысқанын және оларды толық қабылдайтынын растайды.
@@ -250,7 +250,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
           {getCompanyDetailsSection('kk')}
           
           <h3 className="font-semibold mt-6 mb-2">1. Терминдер</h3>
-          <p className="text-sm text-muted-foreground mb-2">1.1. LinkMAX - жасанды интеллект көмегімен жеке мини-сайттар (link-in-bio беттері мен микролендингтер), аналитика және лидтерді басқару үшін онлайн-платформа және қызметтер.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.1. lnkmx.my - жасанды интеллект көмегімен жеке мини-сайттар (link-in-bio беттері мен микролендингтер), аналитика және лидтерді басқару үшін онлайн-платформа және қызметтер.</p>
           <p className="text-sm text-muted-foreground mb-2">1.2. Платформа - https://lnkmx.my мекенжайындағы веб-сайт, байланысты субдомендер, API, сондай-ақ беттерді жасау мен басқаруға, аналитикаға, CRM-ге және басқа қызметтерге қол жеткізуді қамтамасыз ететін прогрессивті веб-қосымша (PWA).</p>
           <p className="text-sm text-muted-foreground mb-2">1.3. Келісім - осы құжат және оған қосымшалар, Платформаға қол жеткізу мен пайдалану тәртібін реттейді.</p>
           <p className="text-sm text-muted-foreground mb-2">1.4. Құпиялылық саясаты - Пайдаланушылардың жеке деректерін өңдеу мен қорғау тәртібін анықтайтын құжат.</p>
@@ -297,9 +297,9 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
     // Default: Russian
     return (
       <>
-        <h2 className="text-lg font-semibold mb-4">Пользовательское соглашение платформы LinkMAX</h2>
+        <h2 className="text-lg font-semibold mb-4">Пользовательское соглашение платформы lnkmx.my</h2>
         <p className="mb-4 text-sm text-muted-foreground">
-          Настоящее Пользовательское соглашение (далее - «Соглашение») определяет условия доступа и использования веб-платформы LinkMAX и связанных с ней сервисов (далее - «Платформа») для физических лиц и представителей юридических лиц (далее - «Пользователь»).
+          Настоящее Пользовательское соглашение (далее - «Соглашение») определяет условия доступа и использования веб-платформы lnkmx.my и связанных с ней сервисов (далее - «Платформа») для физических лиц и представителей юридических лиц (далее - «Пользователь»).
         </p>
         <p className="mb-4 text-sm text-muted-foreground">
           Используя Платформу, Пользователь подтверждает, что внимательно ознакомился с условиями Соглашения и Политики конфиденциальности и полностью их принимает.
@@ -308,7 +308,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
         {getCompanyDetailsSection('ru')}
         
         <h3 className="font-semibold mt-6 mb-2">1. Термины</h3>
-        <p className="text-sm text-muted-foreground mb-2">1.1. LinkMAX - онлайн-платформа и сервисы для создания персональных мини-сайтов (link-in-bio страниц и микролендингов), аналитики и управления лидами с использованием искусственного интеллекта.</p>
+        <p className="text-sm text-muted-foreground mb-2">1.1. lnkmx.my - онлайн-платформа и сервисы для создания персональных мини-сайтов (link-in-bio страниц и микролендингов), аналитики и управления лидами с использованием искусственного интеллекта.</p>
         <p className="text-sm text-muted-foreground mb-2">1.2. Платформа - веб-сайт по адресу https://lnkmx.my, связанные поддомены, API, а также прогрессивное веб-приложение (PWA), предоставляющие доступ к функционалу по созданию и управлению страницами, аналитике, CRM и другим сервисам.</p>
         <p className="text-sm text-muted-foreground mb-2">1.3. Соглашение - настоящий документ и все приложения к нему, регламентирующие порядок доступа и использования Платформы.</p>
         <p className="text-sm text-muted-foreground mb-2">1.4. Политика конфиденциальности - документ, определяющий порядок обработки и защиты персональных данных Пользователей, размещённый по адресу https://lnkmx.my/privacy.</p>
@@ -319,7 +319,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
         <p className="text-sm text-muted-foreground mb-2">1.9. Контент Пользователя - любые материалы, размещаемые Пользователем на Платформе: тексты, изображения, видео, ссылки, товары, формы, файлы и др.</p>
         <p className="text-sm text-muted-foreground mb-2">1.10. Сервисы - платные и бесплатные функции Платформы (создание страниц, аналитика, Mini-CRM, AI-генерация, интеграции и др.).</p>
         <p className="text-sm text-muted-foreground mb-2">1.11. Тарифы - комплексы функционала (BASIC, PRO, BUSINESS), предоставляемые Пользователю на условиях подписки.</p>
-        <p className="text-sm text-muted-foreground mb-2">1.12. Администрация Платформы (Администрация) - правообладатель LinkMAX и уполномоченные им лица, управляющие работой Платформы.</p>
+        <p className="text-sm text-muted-foreground mb-2">1.12. Администрация Платформы (Администрация) - правообладатель lnkmx.my и уполномоченные им лица, управляющие работой Платформы.</p>
         
         <h3 className="font-semibold mt-6 mb-2">2. Общие положения</h3>
         <p className="text-sm text-muted-foreground mb-2">2.1. Настоящее Соглашение распространяется на все текущие и будущие функции Платформы, включая обновления и новые сервисы.</p>
@@ -330,7 +330,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
         <h3 className="font-semibold mt-6 mb-2">3. Регистрация и доступ к аккаунту</h3>
         <p className="text-sm text-muted-foreground mb-2">3.1. Регистрация осуществляется через веб-интерфейс по адресу https://lnkmx.my с использованием: email и пароля и/или; входа через сторонние сервисы (Google, Apple) и/или; верификации через Telegram-бота.</p>
         <p className="text-sm text-muted-foreground mb-2">3.2. Пользователь обязан указывать достоверные данные при регистрации и поддерживать их актуальность.</p>
-        <p className="text-sm text-muted-foreground mb-2">3.3. Для активации функций уведомлений и Mini-CRM может требоваться обязательная привязка Telegram-аккаунта через официального бота LinkMAX.</p>
+        <p className="text-sm text-muted-foreground mb-2">3.3. Для активации функций уведомлений и Mini-CRM может требоваться обязательная привязка Telegram-аккаунта через официального бота lnkmx.my.</p>
         <p className="text-sm text-muted-foreground mb-2">3.4. Пользователь несёт полную ответственность за сохранность логина, пароля и доступа к Telegram-аккаунту. Все действия, совершенные через его аккаунт, считаются действиями Пользователя.</p>
         
         <h3 className="font-semibold mt-6 mb-2">4. Условия использования Платформы и ответственность Пользователя</h3>
@@ -358,7 +358,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
         <p className="text-sm text-muted-foreground mb-2">8.2. В случае нарушения условий Соглашения Администрация вправе без предварительного уведомления: удалить или скрыть отдельные материалы; ограничить функционал аккаунта; временно или постоянно заблокировать доступ к Платформе.</p>
         
         <h3 className="font-semibold mt-6 mb-2">9. B2B-оферта для агентств и партнёров</h3>
-        <p className="text-sm text-muted-foreground mb-2">9.1. B2B-партнёром считается юридическое лицо или индивидуальный предприниматель (агентство, студия, интегратор, реселлер), заключивший с Администрацией отдельный договор и/или принявший условия B2B-оферты LinkMAX.</p>
+        <p className="text-sm text-muted-foreground mb-2">9.1. B2B-партнёром считается юридическое лицо или индивидуальный предприниматель (агентство, студия, интегратор, реселлер), заключивший с Администрацией отдельный договор и/или принявший условия B2B-оферты lnkmx.my.</p>
         
         <h3 className="font-semibold mt-6 mb-2">10. Заключительные положения</h3>
         <p className="text-sm text-muted-foreground mb-2">10.1. К настоящему Соглашению и отношениям между Пользователем и Администрацией применяется действующее законодательство Республики Казахстан.</p>
@@ -377,7 +377,7 @@ export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalP
         <DialogHeader className="p-6 pb-0">
           <DialogTitle>{t('legal.termsOfService', 'Пользовательское соглашение')}</DialogTitle>
           <DialogDescription>
-            {t('legal.termsDescription', 'Ознакомьтесь с условиями использования платформы LinkMAX')}
+            {t('legal.termsDescription', 'Ознакомьтесь с условиями использования платформы lnkmx.my')}
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[60vh] px-6 pb-6">

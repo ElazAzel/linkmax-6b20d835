@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Privacy from '@/components/screens/Privacy';
 
 export const metadata: Metadata = {
-    title: 'Privacy Policy - LinkMAX',
+    title: 'Privacy Policy - lnkmx.my',
     description: 'Read our privacy policy.',
     alternates: {
         canonical: 'https://lnkmx.my/privacy',

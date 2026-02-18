@@ -9,13 +9,13 @@ const corsHeaders = {
 // Multilingual messages
 const messages = {
   ru: {
-    welcome: "🌐 Добро пожаловать в LinkMAX!\n\nВыберите язык:",
+    welcome: "🌐 Добро пожаловать в lnkmx.my!\n\nВыберите язык:",
     language_changed: "✅ Язык изменён на русский",
     greeting: (name: string, chatId: number) =>
-      `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в LinkMAX и вставьте его в поле регистрации.`,
+      `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в lnkmx.my и вставьте его в поле регистрации.`,
     help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID`,
     help_full: (chatId: number) =>
-      `ℹ️ <b>Как подключить Telegram к LinkMAX:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
+      `ℹ️ <b>Как подключить Telegram к lnkmx.my:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
     chat_id: (chatId: number) =>
       `📋 <b>Ваш Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Нажмите чтобы скопировать`,
     copy_btn: '📋 Скопировать Chat ID',
@@ -25,13 +25,13 @@ const messages = {
     copied: 'Chat ID скопирован!',
   },
   en: {
-    welcome: "🌐 Welcome to LinkMAX!\n\nChoose your language:",
+    welcome: "🌐 Welcome to lnkmx.my!\n\nChoose your language:",
     language_changed: "✅ Language changed to English",
     greeting: (name: string, chatId: number) =>
-      `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to LinkMAX and paste it into the registration field.`,
+      `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to lnkmx.my and paste it into the registration field.`,
     help: `📚 <b>Commands:</b>\n\n/start - Get started\n/help - Help\n/language - Change language\n/id - Show Chat ID`,
     help_full: (chatId: number) =>
-      `ℹ️ <b>How to connect Telegram to LinkMAX:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
+      `ℹ️ <b>How to connect Telegram to lnkmx.my:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
     chat_id: (chatId: number) =>
       `📋 <b>Your Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Tap to copy`,
     copy_btn: '📋 Copy Chat ID',
@@ -41,13 +41,13 @@ const messages = {
     copied: 'Chat ID copied!',
   },
   kk: {
-    welcome: "🌐 LinkMAX-қа қош келдіңіз!\n\nТілді таңдаңыз:",
+    welcome: "🌐 lnkmx.my-қа қош келдіңіз!\n\nТілді таңдаңыз:",
     language_changed: "✅ Тіл қазақшаға өзгертілді",
     greeting: (name: string, chatId: number) =>
-      `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін LinkMAX-қа оралып, тіркеу өрісіне қойыңыз.`,
+      `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін lnkmx.my-қа оралып, тіркеу өрісіне қойыңыз.`,
     help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету`,
     help_full: (chatId: number) =>
-      `ℹ️ <b>Telegram-ды LinkMAX-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
+      `ℹ️ <b>Telegram-ды lnkmx.my-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
     chat_id: (chatId: number) =>
       `📋 <b>Сіздің Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Көшіру үшін басыңыз`,
     copy_btn: '📋 Chat ID көшіру',
@@ -375,7 +375,7 @@ serve(async (req: Request) => {
 
         if (isFirstTime && !userData) {
           // First time - show language selection
-          responseText = '🌐 Добро пожаловать в LinkMAX!\nWelcome to LinkMAX!\nLinkMAX-қа қош келдіңіз!\n\nВыберите язык / Choose language / Тілді таңдаңыз:';
+          responseText = '🌐 Добро пожаловать в lnkmx.my!\nWelcome to lnkmx.my!\nLinkMAX-қа қош келдіңіз!\n\nВыберите язык / Choose language / Тілді таңдаңыз:';
           replyMarkup = getLanguageKeyboard();
         } else {
           // Return user - use their language

@@ -1,5 +1,5 @@
 /**
- * Cache clearing utilities for LinkMAX
+ * Cache clearing utilities for lnkmx.my
  * 
  * Cache version is stored in the database (app_settings.cache_version).
  * Admin can bump it from the admin panel to force all users to clear cache.
@@ -13,7 +13,7 @@ const CACHE_VERSION_KEY = 'cache_version';
 const FALLBACK_CACHE_VERSION = '4'; // Fallback if DB is unreachable
 
 /**
- * Clear all local storage items related to LinkMAX
+ * Clear all local storage items related to lnkmx.my
  */
 export function clearLocalStorageCache(): void {
   const keysToRemove: string[] = [];

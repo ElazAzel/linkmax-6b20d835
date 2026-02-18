@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const title = page.seo?.title || page.slug || 'User Page';
-    const description = page.seo?.description || `Check out ${page.slug || 'this'}'s page on LinkMAX`;
+    const description = page.seo?.description || `Check out ${page.slug || 'this'}'s page on lnkmx.my`;
     const image = page.seo?.image || 'https://lnkmx.my/og-image.png';
 
     return {

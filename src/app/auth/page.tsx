@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Auth from '@/components/screens/Auth';
 
 export const metadata: Metadata = {
-    title: 'Sign In - LinkMAX',
+    title: 'Sign In - lnkmx.my',
     description: 'Sign in to access your dashboard.',
 };
 

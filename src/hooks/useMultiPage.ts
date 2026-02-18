@@ -211,7 +211,7 @@ export function useMultiPage() {
             fontFamily: 'sans',
           },
           seo_meta: {
-            title: title || 'My LinkMAX Page',
+            title: title || 'My lnkmx.my Page',
             description: 'Check out my links',
             keywords: [],
           },

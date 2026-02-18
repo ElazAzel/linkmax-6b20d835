@@ -69,7 +69,7 @@ serve(async (req: Request) => {
         if (data?.message) {
           message += `\n\n💬 Сообщение: "${data.message}"`;
         }
-        message += '\n\n👉 Откройте LinkMAX, чтобы активировать подарок!';
+        message += '\n\n👉 Откройте lnkmx.my, чтобы активировать подарок!';
         break;
 
       case 'gift_claimed':
@@ -85,7 +85,7 @@ serve(async (req: Request) => {
         break;
 
       default:
-        message = '📬 У вас новое уведомление в LinkMAX!';
+        message = '📬 У вас новое уведомление в lnkmx.my!';
     }
 
     console.log(`Sending ${type} notification to ${profile.telegram_chat_id}`);

@@ -52,7 +52,7 @@ export function LandingFeaturedPages() {
             {t('landing.featured.title', 'Featured Pages')}
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t('landing.featured.subtitle', 'Discover the most popular pages created with LinkMAX')}
+            {t('landing.featured.subtitle', 'Discover the most popular pages created with lnkmx.my')}
           </p>
         </div>
 

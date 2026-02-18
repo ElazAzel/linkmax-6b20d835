@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Pricing from '@/components/screens/Pricing';
 
 export const metadata: Metadata = {
-    title: 'Pricing - LinkMAX',
+    title: 'Pricing - lnkmx.my',
     description: 'Choose the plan that fits your needs.',
     alternates: {
         canonical: 'https://lnkmx.my/pricing',

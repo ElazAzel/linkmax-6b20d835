@@ -7,7 +7,7 @@
         },
         "title": "Тарифы",
         "choosePlan": "Выберите подходящий тариф",
-        "description": "Разблокируйте все возможности LinkMAX для вашего бизнеса",
+        "description": "Разблокируйте все возможности lnkmx.my для вашего бизнеса",
         "months": "мес",
         "savingsText": "Экономия",
         "popular": "Популярный",
@@ -63,7 +63,7 @@
             "aiMonthlyPro": "5 AI-генераций в месяц"
         },
         "limitations": {
-            "watermark": "Водяной знак LinkMAX",
+            "watermark": "Водяной знак lnkmx.my",
             "limitedBlocks": "10 блоков максимум"
         }
     }

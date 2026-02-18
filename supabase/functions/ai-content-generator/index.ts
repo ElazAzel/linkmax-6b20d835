@@ -133,7 +133,7 @@ serve(async (req: Request) => {
         break;
 
       case 'template-filler':
-        systemPrompt = `You are a content filler for LinkMAX templates.
+        systemPrompt = `You are a content filler for lnkmx.my templates.
 Your task is to take a JSON structure of a website template and fill it with highly relevant, engaging content based on the user's description.
 
 CRITICAL RULES:
@@ -155,7 +155,7 @@ Return ONLY the items array with 'overrides' populated. Keep technical fields (i
         break;
 
       case 'ai-builder':
-        systemPrompt = `Ты AI-дизайнер профессиональных landing-страниц LinkMAX. Создаёшь ИДЕАЛЬНЫЕ страницы с качественным визуальным оформлением.
+        systemPrompt = `Ты AI-дизайнер профессиональных landing-страниц lnkmx.my. Создаёшь ИДЕАЛЬНЫЕ страницы с качественным визуальным оформлением.
 
 КРИТИЧЕСКИ ВАЖНО - ОБЯЗАТЕЛЬНЫЕ ПРАВИЛА:
 1. КАЖДЫЙ блок должен иметь "blockStyle" с анимацией и стилизацией
@@ -350,7 +350,7 @@ Return ONLY the items array with 'overrides' populated. Keep technical fields (i
 
         const nicheDescription = nichePrompts[input.niche] || 'специалиста с услугами и контактами';
 
-        systemPrompt = `Ты AI-конструктор профессиональных страниц LinkMAX. Создай полную страницу для ${nicheDescription}
+        systemPrompt = `Ты AI-конструктор профессиональных страниц lnkmx.my. Создай полную страницу для ${nicheDescription}
 
 ИНФОРМАЦИЯ:
 - Имя: "${input.name}"

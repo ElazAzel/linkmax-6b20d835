@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import Gallery from '@/components/screens/Gallery';
 
 export const metadata: Metadata = {
-    title: 'Gallery - LinkMAX',
-    description: 'Explore what others are building with LinkMAX.',
+    title: 'Gallery - lnkmx.my',
+    description: 'Explore what others are building with lnkmx.my.',
     alternates: {
         canonical: 'https://lnkmx.my/gallery',
     },

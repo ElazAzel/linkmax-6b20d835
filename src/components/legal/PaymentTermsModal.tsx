@@ -23,16 +23,16 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
     if (lang === 'en') {
       return (
         <>
-          <h2 className="text-lg font-semibold mb-4">Payment Terms for LinkMAX Users</h2>
+          <h2 className="text-lg font-semibold mb-4">Payment Terms for lnkmx.my Users</h2>
           <p className="mb-4 text-sm text-muted-foreground">Version: 1.0 | Effective: January 5, 2026</p>
           
           <h3 className="font-semibold mt-6 mb-2">1. General Provisions</h3>
-          <p className="text-sm text-muted-foreground mb-2">1.1. These Payment Terms (hereinafter - "Payment Terms") govern the payment procedure for LinkMAX platform services (hereinafter - "Platform", "LinkMAX") by individuals and representatives of legal entities.</p>
-          <p className="text-sm text-muted-foreground mb-2">1.2. Payment Terms are an integral part of the User Agreement and apply to all paid services and plans of LinkMAX.</p>
-          <p className="text-sm text-muted-foreground mb-2">1.3. By paying for LinkMAX services, the User confirms that they have read and agree to the User Agreement, Privacy Policy, and these Payment Terms.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.1. These Payment Terms (hereinafter - "Payment Terms") govern the payment procedure for lnkmx.my platform services (hereinafter - "Platform", "lnkmx.my") by individuals and representatives of legal entities.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.2. Payment Terms are an integral part of the User Agreement and apply to all paid services and plans of lnkmx.my.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.3. By paying for lnkmx.my services, the User confirms that they have read and agree to the User Agreement, Privacy Policy, and these Payment Terms.</p>
 
           <h3 className="font-semibold mt-6 mb-2">2. Plans and Pricing</h3>
-          <p className="text-sm text-muted-foreground mb-2">2.1. LinkMAX services are provided on a subscription model for plans (e.g., PRO, BUSINESS).</p>
+          <p className="text-sm text-muted-foreground mb-2">2.1. lnkmx.my services are provided on a subscription model for plans (e.g., PRO, BUSINESS).</p>
           <p className="text-sm text-muted-foreground mb-2">2.2. Base rates for PRO subscription at the time of publication:</p>
           <p className="text-sm text-muted-foreground mb-2">• 3 months - 4,350 ₸ per month (total 13,050 ₸ for the period);</p>
           <p className="text-sm text-muted-foreground mb-2">• 6 months - 3,698 ₸ per month (total 22,185 ₸ for the period) - 15% discount;</p>
@@ -57,7 +57,7 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
           <p className="text-sm text-muted-foreground mb-2">5.3. If payment is made in a currency other than tenge, conversion is performed at the rate of the User's bank or payment system.</p>
 
           <h3 className="font-semibold mt-6 mb-2">6. Refund and Cancellation Policy</h3>
-          <p className="text-sm text-muted-foreground mb-2">6.1. Refunds for LinkMAX digital services are made in cases and in the manner established by the current legislation of the Republic of Kazakhstan and described in the User Agreement and/or a separate "Refund Policy" section.</p>
+          <p className="text-sm text-muted-foreground mb-2">6.1. Refunds for lnkmx.my digital services are made in cases and in the manner established by the current legislation of the Republic of Kazakhstan and described in the User Agreement and/or a separate "Refund Policy" section.</p>
           <p className="text-sm text-muted-foreground mb-2">6.2. General principles: refund may be possible if the service was not used or there was a technical impossibility of its provision due to Administration's fault; refund is generally not provided for active use of paid functionality and after the established period (e.g., 14 calendar days) from payment; for partial use of the service, a partial refund may be considered, calculated proportionally to the unused subscription period (if provided by the refund policy).</p>
           <p className="text-sm text-muted-foreground mb-2">6.3. To request a refund, the User sends an inquiry to the Administration's email address with their full name, account email, payment date and amount, and reason for refund request.</p>
           <p className="text-sm text-muted-foreground mb-2">6.4. The refund request is reviewed within established deadlines, and the User is notified of the result at their contact address.</p>
@@ -83,16 +83,16 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
     if (lang === 'kk') {
       return (
         <>
-          <h2 className="text-lg font-semibold mb-4">LinkMAX пайдаланушылары үшін төлем шарттары</h2>
+          <h2 className="text-lg font-semibold mb-4">lnkmx.my пайдаланушылары үшін төлем шарттары</h2>
           <p className="mb-4 text-sm text-muted-foreground">Нұсқа: 1.0 | Күшіне енеді: 2026 жылғы 5 қаңтар</p>
           
           <h3 className="font-semibold mt-6 mb-2">1. Жалпы ережелер</h3>
-          <p className="text-sm text-muted-foreground mb-2">1.1. Осы Төлем шарттары (бұдан әрі - «Төлем шарттары») жеке тұлғалар мен заңды тұлғалар өкілдерінің LinkMAX платформасы (бұдан әрі - «Платформа», «LinkMAX») қызметтеріне төлем тәртібін реттейді.</p>
-          <p className="text-sm text-muted-foreground mb-2">1.2. Төлем шарттары Пайдаланушы келісімінің ажырамас бөлігі болып табылады және LinkMAX-тің барлық ақылы қызметтері мен тарифтеріне қолданылады.</p>
-          <p className="text-sm text-muted-foreground mb-2">1.3. LinkMAX қызметтеріне төлем жасай отырып, Пайдаланушы Пайдаланушы келісімін, Құпиялылық саясатын және осы Төлем шарттарын оқығанын және келіскенін растайды.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.1. Осы Төлем шарттары (бұдан әрі - «Төлем шарттары») жеке тұлғалар мен заңды тұлғалар өкілдерінің lnkmx.my платформасы (бұдан әрі - «Платформа», «lnkmx.my») қызметтеріне төлем тәртібін реттейді.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.2. Төлем шарттары Пайдаланушы келісімінің ажырамас бөлігі болып табылады және lnkmx.my-тің барлық ақылы қызметтері мен тарифтеріне қолданылады.</p>
+          <p className="text-sm text-muted-foreground mb-2">1.3. lnkmx.my қызметтеріне төлем жасай отырып, Пайдаланушы Пайдаланушы келісімін, Құпиялылық саясатын және осы Төлем шарттарын оқығанын және келіскенін растайды.</p>
 
           <h3 className="font-semibold mt-6 mb-2">2. Тарифтер мен бағалар</h3>
-          <p className="text-sm text-muted-foreground mb-2">2.1. LinkMAX қызметтері тарифтік жоспарларға (мысалы, PRO, BUSINESS) жазылым моделі бойынша ұсынылады.</p>
+          <p className="text-sm text-muted-foreground mb-2">2.1. lnkmx.my қызметтері тарифтік жоспарларға (мысалы, PRO, BUSINESS) жазылым моделі бойынша ұсынылады.</p>
           <p className="text-sm text-muted-foreground mb-2">2.2. Осы Төлем шарттарын жариялау сәтіндегі PRO жазылымының базалық тарифтері:</p>
           <p className="text-sm text-muted-foreground mb-2">• 3 ай - айына 4 350 ₸ (кезең үшін барлығы 13 050 ₸);</p>
           <p className="text-sm text-muted-foreground mb-2">• 6 ай - айына 3 500 ₸ (кезең үшін барлығы 21 000 ₸);</p>
@@ -117,7 +117,7 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
           <p className="text-sm text-muted-foreground mb-2">5.3. Теңгеден басқа валютамен төлеген жағдайда, конвертация Пайдаланушының банкі немесе төлем жүйесі бағамы бойынша жүргізіледі.</p>
 
           <h3 className="font-semibold mt-6 mb-2">6. Қайтару және бас тарту саясаты</h3>
-          <p className="text-sm text-muted-foreground mb-2">6.1. LinkMAX цифрлық қызметтері үшін ақшаны қайтару Қазақстан Республикасының қолданыстағы заңнамасында белгіленген жағдайларда және тәртіпте, сондай-ақ Пайдаланушы келісімінде және/немесе «Қайтару саясаты» бөлек бөлімінде сипатталған тәртіпте жүзеге асырылады.</p>
+          <p className="text-sm text-muted-foreground mb-2">6.1. lnkmx.my цифрлық қызметтері үшін ақшаны қайтару Қазақстан Республикасының қолданыстағы заңнамасында белгіленген жағдайларда және тәртіпте, сондай-ақ Пайдаланушы келісімінде және/немесе «Қайтару саясаты» бөлек бөлімінде сипатталған тәртіпте жүзеге асырылады.</p>
           <p className="text-sm text-muted-foreground mb-2">6.2. Жалпы принциптер: қызмет пайдаланылмаған немесе Әкімшіліктің кінәсінен оны ұсынудың техникалық мүмкіндігі болмаған жағдайда қайтару мүмкін болуы мүмкін; ақылы функционалды белсенді пайдалану кезінде және төлемнен кейін белгіленген мерзім өткеннен кейін (мысалы, 14 күнтізбелік күн) қайтару, әдетте, ұсынылмайды; қызметті ішінара пайдаланған кезде жазылымның пайдаланылмаған кезеңіне пропорционалды есептелген ішінара қайтару қарастырылуы мүмкін (қайтару саясатында көзделген болса).</p>
           <p className="text-sm text-muted-foreground mb-2">6.3. Қайтаруды сұрау үшін Пайдаланушы Әкімшіліктің электрондық мекенжайына Т.А.Ә., аккаунт email-ін, төлем күні мен сомасын, қайтаруды сұрау себебін көрсете отырып өтініш жібереді.</p>
           <p className="text-sm text-muted-foreground mb-2">6.4. Қайтару туралы өтініш белгіленген мерзімде қаралады, нәтижесі туралы Пайдаланушыға байланыс мекенжайы бойынша хабарланады.</p>
@@ -143,16 +143,16 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
     // Default: Russian
     return (
       <>
-        <h2 className="text-lg font-semibold mb-4">Условия оплаты для пользователей LinkMAX</h2>
+        <h2 className="text-lg font-semibold mb-4">Условия оплаты для пользователей lnkmx.my</h2>
         <p className="mb-4 text-sm text-muted-foreground">Версия: 1.0 | Дата вступления в силу: 05.01.2026</p>
         
         <h3 className="font-semibold mt-6 mb-2">1. Общие положения</h3>
-        <p className="text-sm text-muted-foreground mb-2">1.1. Настоящие Условия оплаты (далее - «Условия оплаты») регулируют порядок оплаты услуг платформы LinkMAX (далее - «Платформа», «LinkMAX») физическими лицами и представителями юридических лиц.</p>
-        <p className="text-sm text-muted-foreground mb-2">1.2. Условия оплаты являются неотъемлемой частью Пользовательского соглашения и применяются ко всем платным сервисам и тарифам LinkMAX.</p>
-        <p className="text-sm text-muted-foreground mb-2">1.3. Осуществляя оплату услуг LinkMAX, Пользователь подтверждает, что ознакомился и согласен с Пользовательским соглашением, Политикой конфиденциальности и настоящими Условиями оплаты.</p>
+        <p className="text-sm text-muted-foreground mb-2">1.1. Настоящие Условия оплаты (далее - «Условия оплаты») регулируют порядок оплаты услуг платформы lnkmx.my (далее - «Платформа», «lnkmx.my») физическими лицами и представителями юридических лиц.</p>
+        <p className="text-sm text-muted-foreground mb-2">1.2. Условия оплаты являются неотъемлемой частью Пользовательского соглашения и применяются ко всем платным сервисам и тарифам lnkmx.my.</p>
+        <p className="text-sm text-muted-foreground mb-2">1.3. Осуществляя оплату услуг lnkmx.my, Пользователь подтверждает, что ознакомился и согласен с Пользовательским соглашением, Политикой конфиденциальности и настоящими Условиями оплаты.</p>
 
         <h3 className="font-semibold mt-6 mb-2">2. Тарифы и стоимость услуг</h3>
-        <p className="text-sm text-muted-foreground mb-2">2.1. Услуги LinkMAX предоставляются по модели подписки на тарифные планы (например, PRO, BUSINESS).</p>
+        <p className="text-sm text-muted-foreground mb-2">2.1. Услуги lnkmx.my предоставляются по модели подписки на тарифные планы (например, PRO, BUSINESS).</p>
         <p className="text-sm text-muted-foreground mb-2">2.2. Базовые тарифы для PRO подписки на момент публикации настоящих Условий оплаты:</p>
         <p className="text-sm text-muted-foreground mb-2">• 3 месяца - 4 350 ₸ в месяц (итого 13 050 ₸ за период);</p>
         <p className="text-sm text-muted-foreground mb-2">• 6 месяцев - 3 500 ₸ в месяц (итого 21 000 ₸ за период);</p>
@@ -177,7 +177,7 @@ export function PaymentTermsModal({ open, onOpenChange }: PaymentTermsModalProps
         <p className="text-sm text-muted-foreground mb-2">5.3. В случае оплаты в валюте, отличной от тенге, конвертация осуществляется по курсу банка или платёжной системы Пользователя.</p>
 
         <h3 className="font-semibold mt-6 mb-2">6. Политика возвратов и отмены</h3>
-        <p className="text-sm text-muted-foreground mb-2">6.1. Возврат денежных средств за цифровые услуги LinkMAX осуществляется в случаях и порядке, установленных действующим законодательством Республики Казахстан и описанных в Пользовательском соглашении и/или отдельном разделе «Политика возвратов».</p>
+        <p className="text-sm text-muted-foreground mb-2">6.1. Возврат денежных средств за цифровые услуги lnkmx.my осуществляется в случаях и порядке, установленных действующим законодательством Республики Казахстан и описанных в Пользовательском соглашении и/или отдельном разделе «Политика возвратов».</p>
         <p className="text-sm text-muted-foreground mb-2">6.2. Общие принципы: возврат может быть возможен, если услуга не была использована либо существовала техническая невозможность её предоставления по вине Администрации; возврат, как правило, не предоставляется при активном использовании платного функционала и по истечении установленного периода (например, 14 календарных дней) с момента оплаты; при частичном использовании услуги может рассматриваться частичный возврат, рассчитанный пропорционально неиспользованному периоду подписки (если это предусмотрено политикой возвратов).</p>
         <p className="text-sm text-muted-foreground mb-2">6.3. Для запроса возврата Пользователь направляет обращение на электронный адрес Администрации с указанием Ф.И.О., email аккаунта, даты и суммы платежа, причины запроса возврата.</p>
         <p className="text-sm text-muted-foreground mb-2">6.4. Заявка на возврат рассматривается в установленные сроки, о результате Пользователь уведомляется по контактному адресу.</p>

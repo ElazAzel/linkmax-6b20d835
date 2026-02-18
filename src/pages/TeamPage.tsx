@@ -73,7 +73,7 @@ export default function TeamPage() {
 
   useEffect(() => {
     if (team) {
-      document.title = `${team.name} | LinkMAX Team`;
+      document.title = `${team.name} | lnkmx.my Team`;
     }
   }, [team]);
 

@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
     let message = '';
     switch (type) {
       case 'invited':
-        message = `🎉 Приглашение в команду!\n\n${inviterName || 'Кто-то'} приглашает вас в команду "${teamName}".\n\nВойдите в LinkMAX чтобы присоединиться!`;
+        message = `🎉 Приглашение в команду!\n\n${inviterName || 'Кто-то'} приглашает вас в команду "${teamName}".\n\nВойдите в lnkmx.my чтобы присоединиться!`;
         break;
       case 'joined':
         message = `👋 Новый участник!\n\n${inviterName || 'Кто-то'} присоединился к вашей команде "${teamName}".`;

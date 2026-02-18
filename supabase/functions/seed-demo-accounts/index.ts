@@ -10,7 +10,7 @@ const corsHeaders = {
 async function generateAIContent(description: string, niche: string, apiKey: string): Promise<any> {
   console.log(`Generating AI content for: ${description}`)
   
-  const systemPrompt = `Ты AI-конструктор профессиональных страниц LinkMAX для Казахстана. 
+  const systemPrompt = `Ты AI-конструктор профессиональных страниц lnkmx.my для Казахстана. 
 Создаёшь ПОЛНЫЕ реалистичные страницы с 8-12 блоками.
 
 НИША: ${niche}

@@ -82,7 +82,7 @@ export const DEFAULT_THEME: PageTheme = {
 };
 
 export const DEFAULT_SEO: PageSeo = {
-  title: 'My LinkMAX Page',
+  title: 'My lnkmx.my Page',
   description: 'Check out my links',
   keywords: [],
 };

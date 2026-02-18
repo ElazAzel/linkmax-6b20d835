@@ -14,8 +14,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
     title: {
-        default: 'LinkMAX - AI-Powered Link-in-Bio',
-        template: '%s | LinkMAX',
+        default: 'lnkmx.my - AI-Powered Link-in-Bio',
+        template: '%s | lnkmx.my',
     },
     description: 'The Micro-Business Operating System. Create your perfect link-in-bio page with AI.',
     metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://lnkmx.my'),
@@ -23,21 +23,21 @@ export const metadata: Metadata = {
         type: 'website',
         locale: 'en_US',
         url: 'https://lnkmx.my',
-        siteName: 'LinkMAX',
-        title: 'LinkMAX - AI-Powered Link-in-Bio',
+        siteName: 'lnkmx.my',
+        title: 'lnkmx.my - AI-Powered Link-in-Bio',
         description: 'The Micro-Business Operating System. Create your perfect link-in-bio page with AI.',
         images: [
             {
                 url: '/og-image.png',
                 width: 1200,
                 height: 630,
-                alt: 'LinkMAX Platform',
+                alt: 'lnkmx.my Platform',
             },
         ],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'LinkMAX - AI-Powered Link-in-Bio',
+        title: 'lnkmx.my - AI-Powered Link-in-Bio',
         description: 'The Micro-Business Operating System. Create your perfect link-in-bio page with AI.',
         images: ['/og-image.png'],
         creator: '@lnkmx_app',
