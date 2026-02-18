@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
+import { TurnstileWidget } from '@/components/TurnstileWidget';
 
 import { trackLead } from '@/components/analytics/TrackingScripts';
 
@@ -23,6 +24,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
   const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
   const buttonText = getI18nText(block.buttonText, i18n.language as SupportedLanguage) || t('actions.send', 'Send');
@@ -65,6 +67,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
             source: 'form',
             notes: title ? `Form: ${title}` : 'Form submission',
             metadata: formData,
+            turnstileToken: turnstileToken || undefined,
           },
         });
 
@@ -145,6 +148,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
           <Send className="h-4 w-4 mr-2" />
           {isSubmitting ? t('form.submitting', 'Submitting...') : buttonText}
         </Button>
+        <TurnstileWidget onToken={setTurnstileToken} className="mt-2" />
       </form>
     </Card>
   );

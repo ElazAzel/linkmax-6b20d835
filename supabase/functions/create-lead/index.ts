@@ -80,7 +80,25 @@ serve(async (req: Request) => {
       );
     }
 
-    const { pageOwnerId, pageId, name, email, phone, source, notes, metadata } = await req.json();
+    const { pageOwnerId, pageId, name, email, phone, source, notes, metadata, turnstileToken } = await req.json();
+
+    // Verify Turnstile CAPTCHA token (if configured)
+    const turnstileSecret = Deno.env.get('TURNSTILE_SECRET_KEY');
+    if (turnstileSecret && turnstileToken) {
+      const verifyResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(turnstileToken)}&remoteip=${encodeURIComponent(ipAddress)}`,
+      });
+      const verifyResult = await verifyResponse.json();
+      if (!verifyResult.success) {
+        console.log(`Turnstile verification failed for IP: ${ipAddress}`, verifyResult);
+        return new Response(
+          JSON.stringify({ error: 'CAPTCHA verification failed. Please try again.' }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
 
     if (!pageOwnerId || !name) {
       return new Response(
