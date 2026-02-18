@@ -10,7 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 // Version key for cache invalidation
 const CACHE_VERSION_KEY = 'cache_version';
-const FALLBACK_CACHE_VERSION = '4'; // Fallback if DB is unreachable
+const FALLBACK_CACHE_VERSION = '5'; // Fallback if DB is unreachable
 
 /**
  * Clear all local storage items related to lnkmx.my
