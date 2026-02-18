@@ -103,8 +103,10 @@ export function useDashboard(options?: UseDashboardOptions) {
   const handleNicheComplete = useCallback(
     (profile: { name: string; bio: string }, blocks: Block[], niche: Niche) => {
       handleUpdateProfile(profile);
-      // Replace content blocks with AI-generated ones
-      cloudState.replaceBlocks(blocks);
+      // APPEND new blocks to existing ones (don't replace)
+      blocks.forEach((block) => {
+        cloudState.addBlock(block);
+      });
       cloudState.updateNiche(niche);
     },
     [handleUpdateProfile, cloudState]

@@ -66,7 +66,7 @@ const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarke
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
 const AIGenerator = lazy(() => import('@/components/AIGenerator').then(m => ({ default: m.AIGenerator })));
 const QuickStartFlow = lazy(() => import('@/components/onboarding/QuickStartFlow').then(m => ({ default: m.QuickStartFlow })));
-const NicheOnboarding = lazy(() => import('@/components/onboarding/NicheOnboarding').then(m => ({ default: m.NicheOnboarding })));
+const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
 const InstallPromptDialog = lazy(() => import('@/components/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
 const ShareAfterPublishDialog = lazy(() => import('@/components/referral/ShareAfterPublishDialog').then(m => ({ default: m.ShareAfterPublishDialog })));
@@ -602,20 +602,12 @@ export default function DashboardV2() {
             />
           )}
 
-          {/* Quick Start Flow */}
-          <QuickStartFlow
-            open={showQuickStart}
-            onClose={() => setShowQuickStart(false)}
-            onComplete={(data) => {
-              dashboard.onboardingState.handleNicheOnboardingComplete(data.profile, data.blocks, data.niche);
-              setShowQuickStart(false);
-            }}
-          />
-
-          <NicheOnboarding
-            isOpen={dashboard.onboardingState.showNicheOnboarding}
-            onClose={dashboard.onboardingState.handleNicheOnboardingClose}
-            onComplete={dashboard.onboardingState.handleNicheOnboardingComplete}
+          {/* AI Builder Wizard (onboarding + settings) */}
+          <AIBuilderWizard
+            open={dashboard.onboardingState.showAIBuilderWizard}
+            onClose={dashboard.onboardingState.handleAIBuilderClose}
+            onComplete={dashboard.onboardingState.handleAIBuilderComplete}
+            isOnboarding={true}
           />
 
           {/* Panels & Dialogs */}
