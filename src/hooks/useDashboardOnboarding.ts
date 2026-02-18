@@ -7,11 +7,12 @@ import type { Niche } from '@/lib/niches';
 import { storage } from '@/lib/storage';
 
 const STORAGE_KEYS = {
+  AI_BUILDER_USED: 'ai_builder_used',
   NICHE_COMPLETED: 'niche_onboarding_completed',
   ONBOARDING_COMPLETED: 'onboarding_completed',
 } as const;
 
-/** Minimum block count to skip AI onboarding (user already has content) */
+/** Minimum block count to skip onboarding (user already has content) */
 const MIN_BLOCKS_TO_SKIP_ONBOARDING = 2;
 
 interface OnboardingProfile {
@@ -34,68 +35,56 @@ export function useDashboardOnboarding({
   onNicheComplete,
 }: UseDashboardOnboardingOptions) {
   const { t } = useTranslation();
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showNicheOnboarding, setShowNicheOnboarding] = useState(false);
+  const [showAIBuilderWizard, setShowAIBuilderWizard] = useState(false);
 
-  // Check onboarding status on mount
+  // Check onboarding status on mount — show wizard ONLY for brand-new users
   useEffect(() => {
     if (!isUserReady || !isPageReady) return;
 
+    const hasUsedAIBuilder = storage.get<string>(STORAGE_KEYS.AI_BUILDER_USED);
     const hasCompletedNiche = storage.get<string>(STORAGE_KEYS.NICHE_COMPLETED);
     const hasCompletedOnboarding = storage.get<string>(STORAGE_KEYS.ONBOARDING_COMPLETED);
 
-    // Skip AI builder onboarding if user already has content (more than 2 blocks)
+    // Skip if user already has content (more than 2 blocks)
     const hasExistingContent = blockCount > MIN_BLOCKS_TO_SKIP_ONBOARDING;
 
-    if (hasExistingContent) {
-      // Auto-mark as completed if user has content
-      if (!hasCompletedNiche) {
-        storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
-      }
-      if (!hasCompletedOnboarding) {
-        storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
-      }
+    if (hasExistingContent || hasUsedAIBuilder || hasCompletedNiche || hasCompletedOnboarding) {
+      // Auto-mark as completed
+      if (!hasCompletedNiche) storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
+      if (!hasCompletedOnboarding) storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
       return;
     }
 
-    if (!hasCompletedNiche) {
-      setTimeout(() => setShowNicheOnboarding(true), 500);
-    } else if (!hasCompletedOnboarding) {
-      setTimeout(() => setShowOnboarding(true), 1000);
-    }
+    // New user with no content — show AI Builder wizard
+    setTimeout(() => setShowAIBuilderWizard(true), 500);
   }, [isUserReady, isPageReady, blockCount]);
 
-  const handleOnboardingComplete = useCallback(() => {
-    storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
-    setShowOnboarding(false);
-    toast.success(t('dashboard.onboardingComplete', 'Добро пожаловать! Начните создавать свою страницу.'));
-  }, [t]);
-
-  const handleOnboardingSkip = useCallback(() => {
-    storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
-    setShowOnboarding(false);
-  }, []);
-
-  const handleNicheOnboardingClose = useCallback(() => {
+  const handleAIBuilderClose = useCallback(() => {
     storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
-    setShowNicheOnboarding(false);
+    storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    setShowAIBuilderWizard(false);
   }, []);
 
-  const handleNicheOnboardingComplete = useCallback(
+  const handleAIBuilderComplete = useCallback(
     (profile: OnboardingProfile, blocks: Block[], niche: Niche) => {
       onNicheComplete(profile, blocks, niche);
-      setShowNicheOnboarding(false);
-      setTimeout(() => setShowOnboarding(true), 500);
+      storage.set(STORAGE_KEYS.AI_BUILDER_USED, 'true');
+      storage.set(STORAGE_KEYS.NICHE_COMPLETED, 'true');
+      storage.set(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+      setShowAIBuilderWizard(false);
     },
     [onNicheComplete]
   );
 
+  // Manual open from settings (for existing users)
+  const openAIBuilderFromSettings = useCallback(() => {
+    setShowAIBuilderWizard(true);
+  }, []);
+
   return {
-    showOnboarding,
-    showNicheOnboarding,
-    handleOnboardingComplete,
-    handleOnboardingSkip,
-    handleNicheOnboardingClose,
-    handleNicheOnboardingComplete,
+    showAIBuilderWizard,
+    handleAIBuilderClose,
+    handleAIBuilderComplete,
+    openAIBuilderFromSettings,
   };
 }
