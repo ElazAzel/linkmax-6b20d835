@@ -51,6 +51,7 @@ interface PageSettingsTabProps {
     onOpenTheme?: () => void;
     onOpenTemplates?: () => void;
     onOpenMarketplace?: () => void;
+    onOpenAIBuilder?: () => void;
 }
 
 export const PageSettingsTab = memo(function PageSettingsTab({
@@ -73,6 +74,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     onOpenTheme,
     onOpenTemplates,
     onOpenMarketplace,
+    onOpenAIBuilder,
 }: PageSettingsTabProps) {
     const { t } = useTranslation();
 
@@ -294,6 +296,30 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 </h3>
                 <Card className="p-4">
                     <NicheSelector value={niche} onChange={handleNicheChange} />
+                </Card>
+            </div>
+
+            {/* AI Builder */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    {t('dashboard.pageSettings.aiBuilder', 'AI Builder')}
+                </h3>
+                <Card className="p-4">
+                    <button
+                        className="w-full flex items-center gap-4 text-left"
+                        onClick={onOpenAIBuilder}
+                    >
+                        <div className="h-11 w-11 rounded-2xl bg-primary/15 flex items-center justify-center">
+                            <Sparkles className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                            <span className="font-medium">{t('dashboard.pageSettings.aiBuilderBtn', 'Заполнить страницу с AI')}</span>
+                            <p className="text-sm text-muted-foreground">
+                                {t('dashboard.pageSettings.aiBuilderDesc', 'AI создаст контент на основе шаблона и вашей информации')}
+                            </p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                    </button>
                 </Card>
             </div>
 

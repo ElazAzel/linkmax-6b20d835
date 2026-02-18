@@ -68,6 +68,7 @@ interface SettingsScreenProps {
   onOpenTheme?: () => void;
   onOpenMarketplace?: () => void;
   onOpenTemplates?: () => void;
+  onOpenAIBuilder?: () => void;
 }
 
 export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreenProps) {
@@ -127,6 +128,7 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               onOpenTheme={props.onOpenTheme}
               onOpenTemplates={props.onOpenTemplates}
               onOpenMarketplace={props.onOpenMarketplace}
+              onOpenAIBuilder={props.onOpenAIBuilder}
             />
           </TabsContent>
 

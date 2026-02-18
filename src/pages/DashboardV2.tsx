@@ -506,6 +506,7 @@ export default function DashboardV2() {
                 onOpenTheme={() => setShowTheme(true)}
                 onOpenMarketplace={() => setShowMarketplace(true)}
                 onOpenTemplates={() => setTemplateGalleryOpen(true)}
+                onOpenAIBuilder={() => dashboard.onboardingState.openAIBuilderFromSettings()}
                 // Page settings props
                 pageTitle={multiPage.activePage?.title}
                 pageSlug={multiPage.activePage?.slug}
