@@ -24,7 +24,7 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<string>(HEIGHT_MAP[block.height || 'medium']);
-  
+
   const title = getI18nText(block.title, i18n.language as SupportedLanguage);
 
   // Build complete HTML document for iframe
@@ -32,28 +32,28 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
     const html = block.html || '';
     const css = block.css || '';
     const js = block.javascript || '';
-    
+
     // Extract content from full HTML document if provided
     let bodyContent = html;
     let headContent = '';
-    
+
     // Check if it's a full HTML document
     const hasDoctype = html.toLowerCase().includes('<!doctype');
     const hasHtmlTag = html.toLowerCase().includes('<html');
-    
+
     if (hasDoctype || hasHtmlTag) {
       // Extract head content (styles, meta tags)
       const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
       if (headMatch) {
         headContent = headMatch[1];
       }
-      
+
       // Extract body content
       const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
       if (bodyMatch) {
         bodyContent = bodyMatch[1];
       }
-      
+
       // Extract inline scripts from the original HTML
       const scriptMatches = html.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
       if (scriptMatches) {
@@ -69,14 +69,14 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
             return contentMatch ? contentMatch[1] : '';
           })
           .filter(Boolean);
-        
+
         // Add extracted scripts to js
         if (inlineScripts.length > 0 && !js) {
           bodyContent += `<script>${inlineScripts.join('\n')}</script>`;
         }
       }
     }
-    
+
     // Build the complete document
     return `
 <!DOCTYPE html>
@@ -151,12 +151,12 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
   }, [block.height, iframeSrc]);
 
   const showHeader = title && title.trim() !== '';
-  
+
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
 
-  const containerClass = isFullscreen 
+  const containerClass = isFullscreen
     ? 'fixed inset-0 z-50 bg-background p-4 overflow-auto'
     : '';
 
@@ -194,20 +194,20 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
             src={iframeSrc}
             title={title || 'Custom Content'}
             className="w-full border-0"
-            style={{ 
+            style={{
               height: isFullscreen ? 'calc(100vh - 120px)' : iframeHeight,
               minHeight: '100px'
             }}
             sandbox={
               block.enableInteraction !== false
-                ? 'allow-scripts allow-forms allow-popups allow-modals'
+                ? 'allow-scripts'
                 : ''
             }
             loading="lazy"
           />
         </CardContent>
       </Card>
-      
+
       {isFullscreen && (
         <div className="fixed top-4 right-4 z-50">
           <Button

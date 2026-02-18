@@ -45,6 +45,7 @@ export const PREMIUM_BLOCK_TYPES = [
   'community',
   'booking',
   'event',
+  'search',
 ] as const;
 
 /**

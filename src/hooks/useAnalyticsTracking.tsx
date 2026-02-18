@@ -4,11 +4,12 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
-import { 
-  trackPageView, 
-  trackBlockClick, 
-  trackShare 
+import {
+  trackPageView,
+  trackBlockClick,
+  trackShare
 } from '@/services/analytics';
+import { hasAnalyticsConsent } from '@/components/CookieConsent';
 
 interface UseAnalyticsTrackingOptions {
   pageId: string | undefined;
@@ -21,6 +22,9 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   // Track page view on mount (only once per session per page)
   useEffect(() => {
     if (!pageId || !enabled || hasTrackedView.current) return;
+
+    // GDPR: Check analytics consent before tracking
+    if (!hasAnalyticsConsent()) return;
 
     // Check if we've already tracked this page in this session
     const sessionKey = `linkmax_viewed_${pageId}`;
@@ -36,7 +40,7 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   // Track block click
   const onBlockClick = useCallback(
     (blockId: string, blockType?: string, blockTitle?: string) => {
-      if (!pageId || !enabled) return;
+      if (!pageId || !enabled || !hasAnalyticsConsent()) return;
       trackBlockClick(pageId, blockId, blockType, blockTitle);
     },
     [pageId, enabled]
@@ -45,7 +49,7 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   // Track share
   const onShare = useCallback(
     (method?: string) => {
-      if (!pageId || !enabled) return;
+      if (!pageId || !enabled || !hasAnalyticsConsent()) return;
       trackShare(pageId, method);
     },
     [pageId, enabled]
@@ -92,8 +96,8 @@ export function useAnalytics() {
     // Return no-op functions if not in provider
     return {
       pageId: undefined,
-      onBlockClick: () => {},
-      onShare: () => {},
+      onBlockClick: () => { },
+      onShare: () => { },
     };
   }
   return context;

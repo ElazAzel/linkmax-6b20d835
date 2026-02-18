@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security (Deep Audit Fixes — 2026-02-18)
+- **Critical Auth Bypass**: Added `auth.uid()` checks to `get_token_analytics` (admin-only), `claim_daily_token_reward`, and `process_marketplace_purchase`.
+- **Rate Limiting**: Added in-memory rate limiting (60 req/min/IP) to `seo-ssr` edge function to prevent DDoS.
+- **Booking Data Leak**: Ensured overly permissive RLS policy dropped, replaced with owner/user-only policies.
+- **Double-Booking Prevention**: Added partial unique index on `(page_id, block_id, slot_date, slot_time)` for active bookings.
+- **Timezone Support**: Added `timezone` column to bookings table.
+- **XSS Hardening**: Removed `allow-forms`, `allow-popups`, `allow-modals` from CustomCodeBlock iframe sandbox.
+- **OAuth returnTo**: Fixed `signInWithGoogle`/`signInWithApple` to actually pass `returnTo` parameter in redirect URL.
+- **GDPR Compliance**: Added `export_user_data` and `delete_user_account` SQL functions with full cascading delete.
+- **Cookie Consent**: Added consent banner with accept/reject, gating all analytics tracking behind explicit consent.
+
+### Added
+- `manifest.json` for PWA support (fixed broken `/manifest.webmanifest` link in `index.html`).
+- `search` block type added to `block-registry.ts` `PREMIUM_BLOCK_TYPES` (was only in `useFreemiumLimits`).
+- Hreflang tags (`ru`, `en`, `kk`, `x-default`) in SSR output for international SEO.
+
 ### Added
 - **Block Editor Improvements**:
     - Enabled drag-and-drop on mobile devices by attaching listeners to the entire block card (with long-press support).

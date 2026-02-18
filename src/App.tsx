@@ -10,6 +10,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
+import { CookieConsent } from "@/components/CookieConsent";
 import { useWebVitals } from "@/hooks/useWebVitals";
 import { storage } from '@/lib/storage';
 
@@ -66,6 +67,7 @@ const App = () => {
               </Suspense>
               <PWAInstallPrompt />
               <PWAUpdatePrompt />
+              <CookieConsent />
             </TooltipProvider>
           </LanguageProvider>
         </AuthProvider>

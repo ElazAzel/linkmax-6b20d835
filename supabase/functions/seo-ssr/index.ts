@@ -8,6 +8,39 @@ const corsHeaders = {
 
 const DOMAIN = 'https://lnkmx.my';
 
+// ==============================================
+// Rate limiting — in-memory (resets on cold start, acceptable for DDoS mitigation)
+// ==============================================
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 60;  // 60 req/min per IP
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
+    return false;
+  }
+  return true;
+}
+
+// Clean up stale entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateLimitMap) {
+    if (now > entry.resetAt) {
+      rateLimitMap.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000);
+
 function escapeHtml(text: string): string {
   if (!text) return '';
   return text
@@ -32,9 +65,26 @@ function truncate(text: string, maxLength: number): string {
 
 serve(async (req: Request) => {
   console.log('[render-page] Request:', req.url);
-  
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // Rate limiting
+  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || req.headers.get('cf-connecting-ip')
+    || 'unknown';
+
+  if (!checkRateLimit(clientIp)) {
+    console.warn(`[render-page] Rate limit exceeded for IP: ${clientIp}`);
+    return new Response('Too Many Requests', {
+      status: 429,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/plain',
+        'Retry-After': '60'
+      }
+    });
   }
 
   try {
@@ -45,9 +95,9 @@ serve(async (req: Request) => {
     console.log('[render-page] slug=', slug, 'lang=', lang);
 
     if (!slug) {
-      return new Response('Slug required', { 
-        status: 400, 
-        headers: { ...corsHeaders, 'Content-Type': 'text/plain' } 
+      return new Response('Slug required', {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'text/plain' }
       });
     }
 
@@ -87,13 +137,13 @@ serve(async (req: Request) => {
   <a href="${DOMAIN}/">Go to homepage</a>
 </body>
 </html>`;
-      return new Response(html404, { 
-        status: 404, 
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'text/html; charset=utf-8', 
-          'X-Robots-Tag': 'noindex, nofollow' 
-        } 
+      return new Response(html404, {
+        status: 404,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'text/html; charset=utf-8',
+          'X-Robots-Tag': 'noindex, nofollow'
+        }
       });
     }
 
@@ -116,12 +166,12 @@ serve(async (req: Request) => {
     // Build body content from blocks
     let bodyContent = '';
     const links: { url: string; title: string }[] = [];
-    
+
     if (blocks && blocks.length > 0) {
       for (const b of blocks.slice(0, 15)) {
         const blockTitle = b.title ? escapeHtml(b.title) : '';
         const content = b.content as Record<string, unknown> | null;
-        
+
         if (b.type === 'text' && content?.text) {
           bodyContent += `<section><p>${escapeHtml(String(content.text))}</p></section>\n`;
         } else if (b.type === 'link' && content?.url) {
@@ -206,7 +256,7 @@ serve(async (req: Request) => {
       ]
     };
 
-    // Build full HTML document
+    // Build full HTML document with hreflang tags (critical for SSR SEO)
     const html = `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -216,6 +266,12 @@ serve(async (req: Request) => {
   <meta name="description" content="${metaDesc}">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="${canonical}">
+  
+  <!-- Hreflang for international SEO (critical — SPA version is not seen by all crawlers) -->
+  <link rel="alternate" hreflang="ru" href="${canonical}?lang=ru">
+  <link rel="alternate" hreflang="en" href="${canonical}?lang=en">
+  <link rel="alternate" hreflang="kk" href="${canonical}?lang=kk">
+  <link rel="alternate" hreflang="x-default" href="${canonical}">
   
   <!-- Open Graph -->
   <meta property="og:type" content="profile">
@@ -268,8 +324,8 @@ serve(async (req: Request) => {
 
     return new Response(html, {
       status: 200,
-      headers: { 
-        ...corsHeaders, 
+      headers: {
+        ...corsHeaders,
         'Content-Type': 'text/html; charset=utf-8',
         'X-Robots-Tag': 'index, follow',
         'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
@@ -277,9 +333,9 @@ serve(async (req: Request) => {
     });
   } catch (error) {
     console.error('[render-page] Error:', error);
-    return new Response('Internal Server Error', { 
-      status: 500, 
-      headers: { ...corsHeaders, 'Content-Type': 'text/plain' } 
+    return new Response('Internal Server Error', {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'text/plain' }
     });
   }
 });
