@@ -4,13 +4,13 @@ declare module 'next' {
     title?: string | { default?: string; template?: string };
     description?: string;
     metadataBase?: URL;
-    openGraph?: Record<string, any>;
-    twitter?: Record<string, any>;
-    robots?: Record<string, any>;
-    verification?: Record<string, any>;
-    alternates?: Record<string, any>;
+    openGraph?: Record<string, unknown>;
+    twitter?: Record<string, unknown>;
+    robots?: Record<string, unknown>;
+    verification?: Record<string, unknown>;
+    alternates?: Record<string, unknown>;
     other?: Record<string, string>;
-    [key: string]: any;
+    [key: string]: unknown;
   }
   export interface Viewport {
     width?: string;
@@ -42,7 +42,7 @@ declare module 'next/link' {
     children?: React.ReactNode;
     className?: string | ((props: { isActive: boolean }) => string);
     prefetch?: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
   }
   const Link: ComponentType<LinkProps>;
   export default Link;

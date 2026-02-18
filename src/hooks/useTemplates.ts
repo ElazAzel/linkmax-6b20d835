@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import type { Block } from '@/types/page';
+import type { Database } from '@/integrations/supabase/types';
 import type { TemplateCategoryKey } from '@/lib/templateCategories';
 
 export interface Template {
@@ -17,7 +17,7 @@ export function useTemplates() {
     return useQuery({
         queryKey: ['templates', 'public'],
         queryFn: async () => {
-            const { data, error } = await (supabase as any)
+            const { data, error } = await supabase
                 .from('templates')
                 .select('*')
                 .eq('is_public', true)
@@ -25,14 +25,18 @@ export function useTemplates() {
 
             if (error) throw error;
 
-            return (data || []).map((t: any) => ({
+            if (error) throw error;
+
+            const templates = (data || []) as unknown as Database['public']['Tables']['templates']['Row'][];
+
+            return templates.map((t) => ({
                 id: t.id,
                 name: t.name,
-                description: t.description,
+                description: t.description || '',
                 category: t.category as TemplateCategoryKey,
                 preview: t.preview_image || '📄', // Default icon if no image
-                isPremium: t.is_premium,
-                blocks: t.blocks as Array<{ type: string; overrides?: Record<string, unknown> }>,
+                isPremium: t.is_premium || false,
+                blocks: (t.blocks as unknown as Array<{ type: string; overrides?: Record<string, unknown> }>) || [],
             })) as Template[];
         },
         staleTime: 1000 * 60 * 5, // 5 minutes

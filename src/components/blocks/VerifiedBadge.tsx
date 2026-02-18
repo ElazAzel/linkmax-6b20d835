@@ -32,11 +32,7 @@ export const VerifiedBadge = memo(function VerifiedBadge({
   // Don't render if neither verified nor premium
   if (!isVerified && !isPremium) return null;
 
-  const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-5 w-5',
-    lg: 'h-6 w-6',
-  };
+
 
   const containerSizes = {
     sm: 'h-[18px] w-[18px]',

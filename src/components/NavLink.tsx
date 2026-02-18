@@ -25,7 +25,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
         ref={ref}
         href={href}
         className={computedClassName}
-        {...props}
+        {...(props as any)}
       />
     );
   },
