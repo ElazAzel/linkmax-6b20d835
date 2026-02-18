@@ -29,14 +29,14 @@ interface EditorToolbarProps {
   historyLength: number;
   onUndo: () => void;
   onRedo: () => void;
-  
+
   // Actions
   onAddBlock: () => void;
   onOpenStructure: () => void;
   onOpenReorder: () => void;
   onPreview: () => void;
   onSave: () => void;
-  
+
   // State
   saving?: boolean;
   hasUnsavedChanges?: boolean;
@@ -69,6 +69,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               size="icon"
               onClick={onUndo}
               disabled={!canUndo}
+              aria-label={t('editor.undo', 'Отменить')}
               className={cn(
                 "h-12 w-12 rounded-2xl transition-all",
                 canUndo && "hover:bg-primary/10 active:scale-95"
@@ -97,6 +98,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               size="icon"
               onClick={onRedo}
               disabled={!canRedo}
+              aria-label={t('editor.redo', 'Повторить')}
               className={cn(
                 "h-12 w-12 rounded-2xl transition-all",
                 canRedo && "hover:bg-primary/10 active:scale-95"
@@ -118,6 +120,7 @@ export const EditorToolbar = memo(function EditorToolbar({
           <TooltipTrigger asChild>
             <Button
               onClick={onAddBlock}
+              aria-label={t('editor.addBlock', 'Добавить блок')}
               className="h-12 w-12 rounded-2xl bg-primary shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 active:scale-95 transition-all"
             >
               <Plus className="h-6 w-6" />
@@ -138,6 +141,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               variant="ghost"
               size="icon"
               onClick={onOpenStructure}
+              aria-label={t('editor.structure', 'Структура')}
               className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
             >
               <Layers className="h-5 w-5" />
@@ -155,6 +159,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               variant="ghost"
               size="icon"
               onClick={onOpenReorder}
+              aria-label={t('editor.reorder', 'Упорядочить')}
               className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
             >
               <ArrowUpDown className="h-5 w-5" />
@@ -172,6 +177,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               variant="ghost"
               size="icon"
               onClick={onPreview}
+              aria-label={t('editor.preview', 'Предпросмотр')}
               className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
             >
               <Eye className="h-5 w-5" />

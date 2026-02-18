@@ -97,7 +97,7 @@ export const BlockManager = memo(function BlockManager({
 }: BlockManagerProps) {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as SupportedLanguage;
-  
+
   // Local state for reordering
   const [localBlocks, setLocalBlocks] = useState<Block[]>(blocks);
   const [hasChanges, setHasChanges] = useState(false);
@@ -114,7 +114,7 @@ export const BlockManager = memo(function BlockManager({
   const getBlockTitle = useCallback((block: Block): string => {
     const content = block as any;
     const rawTitle = content.title || content.name || content.text || content.content;
-    
+
     if (rawTitle && typeof rawTitle === 'object') {
       if ('ru' in rawTitle || 'en' in rawTitle || 'kk' in rawTitle) {
         const translated = getI18nText(rawTitle, currentLang);
@@ -122,11 +122,11 @@ export const BlockManager = memo(function BlockManager({
       }
       return t(`blocks.${block.type}`, block.type);
     }
-    
+
     if (typeof rawTitle === 'string' && rawTitle.trim()) {
       return rawTitle.substring(0, 25);
     }
-    
+
     return t(`blocks.${block.type}`, block.type);
   }, [currentLang, t]);
 
@@ -145,7 +145,7 @@ export const BlockManager = memo(function BlockManager({
 
     const newContentBlocks = [...contentBlocks];
     [newContentBlocks[index], newContentBlocks[newIndex]] = [newContentBlocks[newIndex], newContentBlocks[index]];
-    
+
     const newBlocks = profileBlock ? [profileBlock, ...newContentBlocks] : newContentBlocks;
     setLocalBlocks(newBlocks);
     setHasChanges(true);
@@ -173,8 +173,8 @@ export const BlockManager = memo(function BlockManager({
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetContent 
-        side="bottom" 
+      <SheetContent
+        side="bottom"
         className="h-[85vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl [&>button]:hidden"
       >
         {/* Handle */}
@@ -197,10 +197,11 @@ export const BlockManager = memo(function BlockManager({
                 </SheetDescription>
               </div>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={handleCancel}
+              aria-label={t('common.close', 'Закрыть')}
               className="h-10 w-10 rounded-xl"
             >
               <X className="h-5 w-5" />
@@ -227,8 +228,8 @@ export const BlockManager = memo(function BlockManager({
                   onHide={onBlockHide}
                   onDuplicate={onBlockDuplicate}
                   onDelete={onBlockDelete}
-                  onMoveUp={() => {}}
-                  onMoveDown={() => {}}
+                  onMoveUp={() => { }}
+                  onMoveDown={() => { }}
                   canMoveUp={false}
                   canMoveDown={false}
                   t={t}
@@ -240,7 +241,7 @@ export const BlockManager = memo(function BlockManager({
             <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest px-2 mb-1.5">
               {t('blockManager.content', 'Контент')}
             </div>
-            
+
             {contentBlocks.length === 0 ? (
               <div className="p-6 text-center text-muted-foreground text-sm">
                 {t('blockManager.empty', 'Нет блоков')}
@@ -275,7 +276,7 @@ export const BlockManager = memo(function BlockManager({
         {/* Footer with save (only show when changes exist) */}
         {hasChanges && (
           <SheetFooter className="p-3 pb-safe border-t border-border/10 bg-background/95">
-            <Button 
+            <Button
               onClick={handleSave}
               className="w-full h-12 rounded-2xl text-base font-bold shadow-lg shadow-primary/25"
             >
@@ -329,7 +330,7 @@ function BlockItem({
   const title = getBlockTitle(block);
 
   return (
-    <div 
+    <div
       className={cn(
         "flex items-center gap-2 p-3 rounded-2xl transition-all active:scale-[0.98]",
         "bg-muted/40 border border-border/10",
@@ -377,6 +378,7 @@ function BlockItem({
             className="h-10 w-8 rounded-l-xl rounded-r-none"
             disabled={!canMoveUp}
             onClick={onMoveUp}
+            aria-label={t('blockManager.moveUp', 'Переместить вверх')}
           >
             <ChevronUp className="h-4 w-4" />
           </Button>
@@ -386,6 +388,7 @@ function BlockItem({
             className="h-10 w-8 rounded-r-xl rounded-l-none border-l border-border/10"
             disabled={!canMoveDown}
             onClick={onMoveDown}
+            aria-label={t('blockManager.moveDown', 'Переместить вниз')}
           >
             <ChevronDown className="h-4 w-4" />
           </Button>
@@ -395,20 +398,20 @@ function BlockItem({
       {/* Actions menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl shrink-0">
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl shrink-0" aria-label={t('blockManager.moreActions', 'Ещё')}>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="rounded-2xl p-1.5 min-w-[160px]">
-          <DropdownMenuItem 
+          <DropdownMenuItem
             onClick={() => onSelect(block.id)}
             className="rounded-xl py-2.5 px-3"
           >
             <Edit2 className="h-4 w-4 mr-2.5" />
             {t('blockManager.edit', 'Редактировать')}
           </DropdownMenuItem>
-          
-          <DropdownMenuItem 
+
+          <DropdownMenuItem
             onClick={() => onHide?.(block.id)}
             className="rounded-xl py-2.5 px-3"
           >
@@ -424,9 +427,9 @@ function BlockItem({
               </>
             )}
           </DropdownMenuItem>
-          
+
           {!isProfile && (
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => onDuplicate?.(block.id)}
               className="rounded-xl py-2.5 px-3"
             >
@@ -434,11 +437,11 @@ function BlockItem({
               {t('blockManager.duplicate', 'Дублировать')}
             </DropdownMenuItem>
           )}
-          
+
           {!isProfile && (
             <>
               <DropdownMenuSeparator className="my-1" />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={() => onDelete?.(block.id)}
                 className="rounded-xl py-2.5 px-3 text-destructive focus:text-destructive"
               >

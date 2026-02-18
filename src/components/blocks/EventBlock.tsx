@@ -6,7 +6,7 @@ import { ru, kk } from 'date-fns/locale';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -480,6 +480,9 @@ export const EventBlock = memo(function EventBlock({
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {description || t('event.registrationForm', 'Форма регистрации на событие')}
+            </DialogDescription>
           </DialogHeader>
 
           <ScrollArea className="h-[70vh] pr-4">

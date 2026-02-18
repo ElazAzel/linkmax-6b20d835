@@ -23,6 +23,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Error Reporting**: Replaced Sentry TODO stubs in `logger.ts` with working production error reporter (structured errors via `sendBeacon` to `VITE_SENTRY_DSN`).
 - **CSP Hardened**: Added `challenges.cloudflare.com` to script-src, connect-src, frame-src for Turnstile support.
 
+### i18n / Locale Formatting (2026-02-18)
+- **Centralized formatters**: New `src/lib/format.ts` with `formatDate`, `formatDateTime`, `formatDateShort`, `formatCurrency`, `formatRelativeTime` using correct BCP 47 locale (ru→ru-RU, en→en-US, kk→kk-KZ).
+- **Fixed hardcoded locales**: Replaced 11 `toLocaleDateString('ru-RU', ...)` calls in `TokensPanel`, `LeadsPanel`, `LeadDetails`, `ActivityScreen` with centralized formatters.
+- **Fixed hardcoded locales (prices)**: Replaced `toLocaleString('ru-RU')` in `PricingBlock` and `ProductBlock` with `getLocale(i18n.language)`.
+
+### Accessibility (2026-02-18)
+- **aria-labels**: Added `aria-label` to 11 icon-only buttons in `EditorToolbar` and `BlockManager`.
+- **DialogDescription**: Added missing `DialogDescription` to dialogs in `EventBlock`, `ProductBlock`.
+
+### Bug Fixes (2026-02-18)
+- **ProductBlock**: Removed duplicate `redirectToTokenPurchase()` call causing double redirect.
+
 ### Added
 - `manifest.json` for PWA support (fixed broken `/manifest.webmanifest` link in `index.html`).
 - `search` block type added to `block-registry.ts` `PREMIUM_BLOCK_TYPES` (was only in `useFreemiumLimits`).

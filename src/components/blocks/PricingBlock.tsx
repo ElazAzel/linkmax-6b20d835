@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { PricingBlock as PricingBlockType } from '@/types/page';
 import { Badge } from '@/components/ui/badge';
 import { getI18nText } from '@/lib/i18n-helpers';
+import { getLocale } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { Star, Tag } from 'lucide-react';
 
@@ -41,7 +42,7 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
 
   const formatPrice = (price: number, currency: string = 'KZT') => {
     const symbol = currencySymbols[currency] || currency;
-    return `${price.toLocaleString('ru-RU')} ${symbol}`;
+    return `${price.toLocaleString(getLocale(i18n.language))} ${symbol}`;
   };
 
   if (!block.items || block.items.length === 0) {

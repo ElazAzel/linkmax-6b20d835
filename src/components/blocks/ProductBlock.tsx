@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ExternalLink, Coins, MessageCircle, Loader2 } from 'lucide-react';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { getLocale } from '@/lib/format';
 import type { ProductBlock as ProductBlockType } from '@/types/page';
 import { cn } from '@/lib/utils';
 import {
@@ -10,6 +11,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import {
   Drawer,
@@ -67,7 +69,6 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
         const deficit = tokenPrice - (tokens.balance?.balance || 0);
         toast.info(t('product.notEnoughTokens', { count: Math.ceil(deficit), defaultValue: `Недостаточно токенов. Нужно еще ${Math.ceil(deficit)} Linkkon.` }));
         redirectToTokenPurchase(deficit, name);
-        redirectToTokenPurchase(deficit, name);
         return;
       }
 
@@ -123,7 +124,7 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
   };
 
   const formatPrice = (price: number) => {
-    return price.toLocaleString('ru-RU');
+    return price.toLocaleString(getLocale(i18n.language));
   };
 
   const ProductDetailContent = () => (
@@ -273,6 +274,9 @@ export const ProductBlock = memo(function ProductBlockComponent({ block, onClick
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold">{name}</DialogTitle>
+              <DialogDescription className="sr-only">
+                {description || name}
+              </DialogDescription>
             </DialogHeader>
             <ProductDetailContent />
           </DialogContent>
