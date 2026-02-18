@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Infrastructure — 2026-02-18)
+- **Pixel Proxy**: New `pixel-proxy` edge function forwarding events server-side to Facebook CAPI, TikTok Events API, and GA4 Measurement Protocol — bypasses ad-blockers for ~30-40% event recapture.
+- **Dual Pixel Firing**: `TrackingScripts.tsx` now fires both client-side pixel + server-side `sendBeacon` to `/functions/v1/pixel-proxy` for all events (PageView, Lead, Purchase, InitiateCheckout).
+- **Edge Function Warm-up**: `pg_cron` job pings `seo-ssr`, `telegram-bot-webhook`, and `pixel-proxy` every 4 minutes via `pg_net` to prevent cold start latency.
+- **Warm-up Endpoints**: `?warmup=true` early return added to `seo-ssr`, `telegram-bot-webhook`, and `pixel-proxy`.
+
 ### Security (Deep Audit Fixes — 2026-02-18)
 - **Critical Auth Bypass**: Added `auth.uid()` checks to `get_token_analytics` (admin-only), `claim_daily_token_reward`, and `process_marketplace_purchase`.
 - **Rate Limiting**: Added in-memory rate limiting (60 req/min/IP) to `seo-ssr` edge function to prevent DDoS.

@@ -77,3 +77,6 @@ verify_jwt = false
 
 [functions.public-experts]
 verify_jwt = false
+
+[functions.pixel-proxy]
+verify_jwt = false

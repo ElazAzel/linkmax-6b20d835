@@ -11,12 +11,12 @@ const messages = {
   ru: {
     welcome: "🌐 Добро пожаловать в LinkMAX!\n\nВыберите язык:",
     language_changed: "✅ Язык изменён на русский",
-    greeting: (name: string, chatId: number) => 
+    greeting: (name: string, chatId: number) =>
       `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в LinkMAX и вставьте его в поле регистрации.`,
     help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Как подключить Telegram к LinkMAX:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
-    chat_id: (chatId: number) => 
+    chat_id: (chatId: number) =>
       `📋 <b>Ваш Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Нажмите чтобы скопировать`,
     copy_btn: '📋 Скопировать Chat ID',
     continue_btn: '✅ Продолжить регистрацию',
@@ -27,12 +27,12 @@ const messages = {
   en: {
     welcome: "🌐 Welcome to LinkMAX!\n\nChoose your language:",
     language_changed: "✅ Language changed to English",
-    greeting: (name: string, chatId: number) => 
+    greeting: (name: string, chatId: number) =>
       `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to LinkMAX and paste it into the registration field.`,
     help: `📚 <b>Commands:</b>\n\n/start - Get started\n/help - Help\n/language - Change language\n/id - Show Chat ID`,
     help_full: (chatId: number) =>
       `ℹ️ <b>How to connect Telegram to LinkMAX:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
-    chat_id: (chatId: number) => 
+    chat_id: (chatId: number) =>
       `📋 <b>Your Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Tap to copy`,
     copy_btn: '📋 Copy Chat ID',
     continue_btn: '✅ Continue registration',
@@ -43,12 +43,12 @@ const messages = {
   kk: {
     welcome: "🌐 LinkMAX-қа қош келдіңіз!\n\nТілді таңдаңыз:",
     language_changed: "✅ Тіл қазақшаға өзгертілді",
-    greeting: (name: string, chatId: number) => 
+    greeting: (name: string, chatId: number) =>
       `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін LinkMAX-қа оралып, тіркеу өрісіне қойыңыз.`,
     help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Telegram-ды LinkMAX-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
-    chat_id: (chatId: number) => 
+    chat_id: (chatId: number) =>
       `📋 <b>Сіздің Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Көшіру үшін басыңыз`,
     copy_btn: '📋 Chat ID көшіру',
     continue_btn: '✅ Тіркелуді жалғастыру',
@@ -106,16 +106,16 @@ async function getUserLanguage(supabase: any, chatId: string): Promise<Language>
       .select('telegram_language')
       .eq('telegram_chat_id', chatId)
       .single();
-    
+
     if (!error && data?.telegram_language) {
       return data.telegram_language as Language;
     }
-    
+
     // Check temp store for unlinked users
     if (tempLanguageStore[chatId]) {
       return tempLanguageStore[chatId];
     }
-    
+
     return 'ru';
   } catch (e) {
     console.error('Error getting language:', e);
@@ -131,14 +131,14 @@ async function setUserLanguage(supabase: any, chatId: string, language: Language
       .select('id')
       .eq('telegram_chat_id', chatId)
       .single();
-    
+
     if (existingUser) {
       await supabase
         .from('user_profiles')
         .update({ telegram_language: language })
         .eq('telegram_chat_id', chatId);
     }
-    
+
     // Always store in temp (in case user links later)
     tempLanguageStore[chatId] = language;
     console.log(`Language set to ${language} for chat ${chatId}`);
@@ -189,11 +189,17 @@ serve(async (req: Request) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Warm-up ping — return immediately to prevent cold start
+  const reqUrl = new URL(req.url);
+  if (reqUrl.searchParams.get('warmup') === 'true') {
+    return new Response('OK', { status: 200, headers: corsHeaders });
+  }
+
   try {
     const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    
+
     if (!telegramBotToken) {
       console.error('TELEGRAM_BOT_TOKEN not configured');
       return new Response('Bot not configured', { status: 500 });
@@ -222,7 +228,7 @@ serve(async (req: Request) => {
       if (data?.startsWith('lang_')) {
         const newLang = data.replace('lang_', '') as Language;
         await setUserLanguage(supabase, chatIdStr, newLang);
-        
+
         // Answer callback
         await fetch(
           `https://api.telegram.org/bot${telegramBotToken}/answerCallbackQuery`,
@@ -232,7 +238,7 @@ serve(async (req: Request) => {
             body: JSON.stringify({ callback_query_id: callbackQuery.id }),
           }
         );
-        
+
         // Send confirmation and greeting
         const newM = messages[newLang];
         await fetch(
@@ -247,7 +253,7 @@ serve(async (req: Request) => {
             }),
           }
         );
-        
+
         // Send greeting with ID
         await fetch(
           `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
@@ -262,10 +268,10 @@ serve(async (req: Request) => {
             }),
           }
         );
-        
+
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
-      
+
       // Handle change language button
       if (data === 'change_lang') {
         await fetch(
@@ -276,7 +282,7 @@ serve(async (req: Request) => {
             body: JSON.stringify({ callback_query_id: callbackQuery.id }),
           }
         );
-        
+
         await fetch(
           `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
           {
@@ -290,7 +296,7 @@ serve(async (req: Request) => {
             }),
           }
         );
-        
+
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
 
@@ -312,7 +318,7 @@ serve(async (req: Request) => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             callback_query_id: callbackQuery.id,
             text: m.copied,
             show_alert: false
@@ -359,14 +365,14 @@ serve(async (req: Request) => {
       if (text === '/start' || text.startsWith('/start ')) {
         // Check if first time user - show language selection
         const isFirstTime = !tempLanguageStore[chatIdStr];
-        
+
         // Check database for existing preference
         const { data: userData } = await supabase
           .from('user_profiles')
           .select('telegram_language')
           .eq('telegram_chat_id', chatIdStr)
           .single();
-        
+
         if (isFirstTime && !userData) {
           // First time - show language selection
           responseText = '🌐 Добро пожаловать в LinkMAX!\nWelcome to LinkMAX!\nLinkMAX-қа қош келдіңіз!\n\nВыберите язык / Choose language / Тілді таңдаңыз:';
@@ -403,7 +409,7 @@ serve(async (req: Request) => {
         parse_mode: 'HTML',
         disable_web_page_preview: true,
       };
-      
+
       if (replyMarkup) {
         messageBody.reply_markup = replyMarkup;
       }
@@ -425,9 +431,9 @@ serve(async (req: Request) => {
       }
     }
 
-    return new Response('OK', { 
-      status: 200, 
-      headers: { ...corsHeaders, 'Content-Type': 'text/plain' } 
+    return new Response('OK', {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'text/plain' }
     });
 
   } catch (error) {

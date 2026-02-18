@@ -70,6 +70,12 @@ serve(async (req: Request) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  // Warm-up ping — return immediately to prevent cold start
+  const reqUrl = new URL(req.url);
+  if (reqUrl.searchParams.get('warmup') === 'true') {
+    return new Response('OK', { status: 200, headers: corsHeaders });
+  }
+
   // Rate limiting
   const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
     || req.headers.get('cf-connecting-ip')

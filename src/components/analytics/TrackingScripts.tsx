@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
 import type { PageIntegrations } from '@/types/page';
 
 interface TrackingScriptsProps {
     integrations: PageIntegrations;
+    pageId?: string;
 }
 
 declare global {
@@ -20,8 +21,64 @@ declare global {
     }
 }
 
-export function TrackingScripts({ integrations }: TrackingScriptsProps) {
+// ─── Server-Side Pixel Proxy ─────────────────────────────────────
+const PIXEL_PROXY_URL = `${import.meta.env.VITE_SUPABASE_URL || ''}/functions/v1/pixel-proxy`;
+
+function sendServerEvent(
+    pageId: string,
+    event: string,
+    eventData: Record<string, unknown> = {},
+    userData: Record<string, string> = {},
+    eventId?: string,
+) {
+    if (!pageId || typeof navigator === 'undefined') return eventId;
+
+    const id = eventId || crypto.randomUUID();
+    const payload = JSON.stringify({
+        pageId,
+        event,
+        eventData,
+        userData,
+        sourceUrl: window.location.href,
+        clientId: getOrCreateClientId(),
+        eventId: id,
+    });
+
+    // Use sendBeacon for reliable delivery (survives page navigation)
+    if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(PIXEL_PROXY_URL, blob);
+    } else {
+        fetch(PIXEL_PROXY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true,
+        }).catch(() => { }); // fire-and-forget
+    }
+
+    return id;
+}
+
+// Stable client ID for GA4 MP
+function getOrCreateClientId(): string {
+    const key = '_lnkmx_cid';
+    let cid = localStorage.getItem(key);
+    if (!cid) {
+        cid = crypto.randomUUID();
+        localStorage.setItem(key, cid);
+    }
+    return cid;
+}
+
+// Store current pageId for helper functions
+let _currentPageId: string | undefined;
+
+export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) {
     const pathname = usePathname();
+    const pageIdRef = useRef(pageId);
+    pageIdRef.current = pageId;
+    _currentPageId = pageId;
 
     useEffect(() => {
         // Facebook Pixel
@@ -113,6 +170,11 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
                 d.addEventListener("DOMContentLoaded", f, false);
             } else { f(); }
         }
+
+        // Server-side PageView (deduplicated with client pixel)
+        if (pageIdRef.current) {
+            sendServerEvent(pageIdRef.current, 'PageView');
+        }
     }, [integrations]);
 
     // Track PageView on route change (SPA support)
@@ -129,17 +191,22 @@ export function TrackingScripts({ integrations }: TrackingScriptsProps) {
                 page_path: pathname
             });
         }
+        // Server-side PageView on SPA navigation
+        if (pageIdRef.current) {
+            sendServerEvent(pageIdRef.current, 'PageView');
+        }
     }, [pathname, integrations]);
 
     return null;
 }
 
-// Helper functions for tracking events
-export const trackLead = () => {
+// Helper functions for tracking events — now with dual client+server firing
+export const trackLead = (userData?: Record<string, string>) => {
     if (typeof window === 'undefined') return;
     if (window.fbq) window.fbq('track', 'Lead');
     if (window.ttq) window.ttq.track('SubmitForm');
     if (window.gtag) window.gtag('event', 'generate_lead');
+    if (_currentPageId) sendServerEvent(_currentPageId, 'Lead', {}, userData);
 };
 
 export const trackPurchase = (value: number, currency: string = 'USD') => {
@@ -147,6 +214,7 @@ export const trackPurchase = (value: number, currency: string = 'USD') => {
     if (window.fbq) window.fbq('track', 'Purchase', { value, currency });
     if (window.ttq) window.ttq.track('CompletePayment', { value, currency });
     if (window.gtag) window.gtag('event', 'purchase', { value, currency });
+    if (_currentPageId) sendServerEvent(_currentPageId, 'Purchase', { value, currency });
 };
 
 export const trackInitiateCheckout = () => {
@@ -154,4 +222,6 @@ export const trackInitiateCheckout = () => {
     if (window.fbq) window.fbq('track', 'InitiateCheckout');
     if (window.ttq) window.ttq.track('InitiateCheckout');
     if (window.gtag) window.gtag('event', 'begin_checkout');
+    if (_currentPageId) sendServerEvent(_currentPageId, 'InitiateCheckout');
 };
+
