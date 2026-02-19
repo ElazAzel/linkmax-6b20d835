@@ -14,7 +14,7 @@ import {
   Palette,
   Sparkles
 } from 'lucide-react';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface PremiumValueSectionProps {
   isVisible: boolean;

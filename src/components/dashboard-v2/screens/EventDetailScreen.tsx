@@ -10,8 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { useAuth } from '@/hooks/user/useAuth';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -52,10 +52,10 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import { cn } from '@/lib/utils';
-import { exportToExcel, exportToCSV } from '@/lib/excel-export';
-import { exportEventToPDF, calculateEventAnalytics } from '@/lib/pdf-export';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { cn } from '@/lib/utils/utils';
+import { exportToExcel, exportToCSV } from '@/lib/export/excel-export';
+import { exportEventToPDF, calculateEventAnalytics } from '@/lib/export/pdf-export';
 import type { SupportedLanguage } from '@/lib/i18n-helpers';
 import type { EventFormField } from '@/types/page';
 

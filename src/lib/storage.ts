@@ -7,7 +7,7 @@
  * - Prevents XSS attacks through key isolation
  */
 
-import { logger } from './logger';
+import { logger } from '@/lib/utils/logger';
 
 const STORAGE_PREFIX = 'inkmax_';
 const STORAGE_VERSION = 'v2_';

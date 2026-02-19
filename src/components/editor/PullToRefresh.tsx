@@ -1,9 +1,9 @@
 import { memo, ReactNode } from 'react';
 import { Loader2, ArrowDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { usePullToRefresh } from '@/hooks/usePullToRefresh';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils/utils';
+import { usePullToRefresh } from '@/hooks/ui/usePullToRefresh';
+import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
 
 interface PullToRefreshProps {
   children: ReactNode;

@@ -15,7 +15,7 @@ import {
   AreaChart,
 } from 'recharts';
 import { Card } from '@/components/ui/card';
-import type { TimeSeriesData } from '@/hooks/usePageAnalytics';
+import type { TimeSeriesData } from '@/hooks/analytics/usePageAnalytics';
 
 interface AnalyticsChartProps {
   data: TimeSeriesData[];

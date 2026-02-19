@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
-import { useLandingAnalytics, useSectionObserver } from '@/hooks/useLandingAnalytics';
-import { useMarketingAnalytics } from '@/hooks/useMarketingAnalytics';
+import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLandingAnalytics';
+import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';

@@ -10,10 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { GridEditor } from '@/components/editor/GridEditor';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
-import type { FreeTier } from '@/hooks/useFreemiumLimits';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 interface EditorScreenProps {
   pageData: PageData | null;

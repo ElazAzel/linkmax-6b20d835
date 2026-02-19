@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -18,7 +18,7 @@ import {
   Globe, ChevronDown, ChevronRight, Trash2, FileJson, Check
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
 

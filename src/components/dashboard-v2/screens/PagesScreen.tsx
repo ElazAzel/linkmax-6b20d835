@@ -23,7 +23,7 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatusBadge } from '../common/StatusBadge';
 import { EmptyState } from '../common/EmptyState';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface PageItem {
   id: string;

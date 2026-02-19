@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDateShort } from '@/lib/format';
-import { useLeads, LeadStatus } from '@/hooks/useLeads';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { formatDateShort } from '@/lib/utils/format';
+import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -35,8 +35,8 @@ import { AnalyticsPanel } from './AnalyticsPanel';
 import { BookingsPanel } from './BookingsPanel';
 import { FunnelAnalysis } from './FunnelAnalysis';
 import { HeatmapVisualization } from './HeatmapVisualization';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import type { Lead } from '@/hooks/useLeads';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import type { Lead } from '@/hooks/crm/useLeads';
 
 interface LeadsPanelProps {
   open: boolean;

@@ -40,7 +40,7 @@ import {
   Palette,
 } from 'lucide-react';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { ReferralPanel } from '@/components/referral/ReferralPanel';
 import { AutomationsPanel } from '@/components/crm/AutomationsPanel';
 import { LeadsPanel } from '@/components/crm/LeadsPanel';

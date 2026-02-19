@@ -42,7 +42,7 @@ import {
   TokenTransaction,
   WithdrawalRequest,
 } from '@/services/tokens';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/user/useAuth';
 import i18n from '@/i18n/config';
 
 function StatCard({ 

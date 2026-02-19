@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDateTime } from '@/lib/format';
+import { formatDateTime } from '@/lib/utils/format';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTokens } from '@/hooks/useTokens';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { useTokens } from '@/hooks/user/useTokens';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { TOKEN_REWARDS, PLATFORM_FEE_PERCENT, TOKEN_TO_TENGE_RATE } from '@/services/tokens';
 import {
   Coins, Crown, ArrowRight, Sparkles, TrendingUp, Gift,
   Wallet, ShoppingBag, LayoutTemplate, Lock, Loader2,
   ArrowDownToLine, CheckCircle2, Clock, XCircle
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface TokensPanelProps {
   open: boolean;

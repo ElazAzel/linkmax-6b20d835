@@ -17,15 +17,15 @@ import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
 import { TrackingScripts } from '@/components/analytics/TrackingScripts';
-import { decompressPageData } from '@/lib/compression';
-import { usePublicPage, usePublicPageByDomain } from '@/hooks/usePageCache';
-import { AnalyticsProvider } from '@/hooks/useAnalyticsTracking';
-import { useHeatmapTracking } from '@/hooks/useHeatmapTracking';
+import { decompressPageData } from '@/lib/utils/compression';
+import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
+import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
+import { useHeatmapTracking } from '@/hooks/analytics/useHeatmapTracking';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { trackShare } from '@/services/analytics';
 import { checkPremiumStatus } from '@/services/user';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { PageData, PageBackground, Block } from '@/types/page';
 import {
   Dialog,

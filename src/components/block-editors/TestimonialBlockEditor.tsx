@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateTestimonialBlock } from '@/lib/block-validators';
+import { validateTestimonialBlock } from '@/lib/blocks/block-validators';
 import { ArrayFieldList } from '@/components/form-fields/ArrayFieldList';
 import { ArrayFieldItem } from '@/components/form-fields/ArrayFieldItem';
 import { useTranslation } from 'react-i18next';

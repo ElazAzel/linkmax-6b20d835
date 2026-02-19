@@ -4,7 +4,7 @@ import { MessageCircle, Send, ExternalLink, Phone } from 'lucide-react';
 import type { MessengerBlock as MessengerBlockType } from '@/types/page';
 import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface MessengerBlockProps {
   block: MessengerBlockType;

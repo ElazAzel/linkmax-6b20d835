@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Crown, Sparkles, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { useFreemiumLimits, type FreeTier } from '@/hooks/useFreemiumLimits';
+import { useFreemiumLimits, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 
 interface PremiumFeatureGateProps {
   requiredTier: FreeTier;

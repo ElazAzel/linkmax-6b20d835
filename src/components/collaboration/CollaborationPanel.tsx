@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { Users, Heart, Megaphone, UserPlus, Loader2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useCollaboration } from '@/hooks/useCollaboration';
+import { useCollaboration } from '@/hooks/social/useCollaboration';
 import { CollabsTab } from './CollabsTab';
 import { PromoTab } from './PromoTab';
 import { ShoutoutsTab } from './ShoutoutsTab';

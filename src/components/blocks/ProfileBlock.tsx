@@ -4,12 +4,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { parseRichText } from '@/lib/rich-text-parser';
 import { getFrameStyles, getShadowStyles, isGradientFrame, FRAME_CSS, getVerificationPositionClasses, getVerificationColor, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
-import { getLucideIcon, CheckCircle2 } from '@/lib/icon-utils';
-import { cn } from '@/lib/utils';
+import { getLucideIcon, CheckCircle2 } from '@/lib/utils/icon-utils';
+import { cn } from '@/lib/utils/utils';
 import { VerifiedBadge } from './VerifiedBadge';
 import { NAME_ANIMATION_CSS, getNameAnimationClass, type NameAnimationType } from '@/lib/profile-frame-system';
 import type { ProfileBlock as ProfileBlockType, ProfileFrameStyle, VerificationIconType } from '@/types/page';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 interface ProfileBlockProps {
   block: ProfileBlockType;

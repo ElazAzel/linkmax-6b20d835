@@ -41,7 +41,7 @@ export const createDefaultPageData = (id: string): PageData => ({
 });
 
 // Premium block types - re-export from registry for backward compatibility
-export { PREMIUM_BLOCK_TYPES } from './block-registry';
+export { PREMIUM_BLOCK_TYPES } from '@/lib/blocks/block-registry';
 
 // App config
 export const APP_CONFIG = {

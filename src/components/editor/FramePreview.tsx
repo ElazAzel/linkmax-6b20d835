@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getFrameStyles, isGradientFrame, isAnimatedFrame, type FrameStyle, FRAME_CSS } from '@/lib/avatar-frame-utils';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface FramePreviewProps {
   frameStyle: FrameStyle;

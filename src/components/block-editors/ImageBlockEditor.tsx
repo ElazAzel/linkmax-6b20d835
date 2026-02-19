@@ -4,7 +4,7 @@ import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateImageBlock } from '@/lib/block-validators';
+import { validateImageBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { EditorSection, EditorField } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';

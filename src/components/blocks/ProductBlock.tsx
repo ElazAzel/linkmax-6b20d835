@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ExternalLink, Coins, MessageCircle, Loader2 } from 'lucide-react';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { getLocale } from '@/lib/format';
+import { getLocale } from '@/lib/utils/format';
 import type { ProductBlock as ProductBlockType } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import {
   Dialog,
   DialogContent,
@@ -19,9 +19,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useAuth } from '@/hooks/useAuth';
-import { useTokens } from '@/hooks/useTokens';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { useAuth } from '@/hooks/user/useAuth';
+import { useTokens } from '@/hooks/user/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
 import { trackPurchase } from '@/components/analytics/TrackingScripts';

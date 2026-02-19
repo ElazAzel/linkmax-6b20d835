@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import type { PageLimits } from '@/hooks/useMultiPage';
+import type { PageLimits } from '@/hooks/page/useMultiPage';
 
 interface CreatePageDialogProps {
   open: boolean;

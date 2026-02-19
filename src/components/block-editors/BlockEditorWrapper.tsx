@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Crown, Info, Calendar as CalendarIcon, X, ChevronDown, Settings2, Palette, Sparkles, Wand2, Clock } from 'lucide-react';
 import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { AnimationSettings } from '@/components/editor/AnimationSettings';
 import { PaidContentSettings } from './PaidContentSettings';
-import { getTextEffectClass } from '@/lib/block-styling';
+import { getTextEffectClass } from '@/lib/blocks/block-styling';
 import type { Block, BlockStyle, BlockSizePreset, BlockFontFamily } from '@/types/page';
 
 export interface BaseBlockEditorProps {

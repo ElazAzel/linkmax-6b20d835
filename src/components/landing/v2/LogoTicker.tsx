@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { Briefcase, Crown, Gem, Hexagon, Layers, Shield } from "lucide-react";
 
 const companies = [

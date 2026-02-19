@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AnalyticsFilterPanel } from './AnalyticsFilterPanel';
-import { useAdminAnalytics, COLORS } from '@/hooks/useAdminAnalytics';
+import { useAdminAnalytics, COLORS } from '@/hooks/admin/useAdminAnalytics';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ComposedChart

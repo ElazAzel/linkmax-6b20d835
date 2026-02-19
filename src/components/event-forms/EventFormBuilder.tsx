@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { createEmptyI18nText, getI18nText, type SupportedLanguage, type I18nText } from '@/lib/i18n-helpers';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import {
   Plus,
   GripVertical,

@@ -8,8 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Check, Crown, Sparkles, Zap, Star, Clock, Shield, Coins, MessageCircle } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
-import { useTokens } from '@/hooks/useTokens';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
+import { useTokens } from '@/hooks/user/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
 import { useRobokassa } from '@/hooks/useRobokassa';
@@ -17,7 +17,7 @@ import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 type BillingPeriod = 3 | 6 | 12;
 
 export default function Pricing() {

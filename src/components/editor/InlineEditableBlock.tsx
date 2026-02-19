@@ -3,9 +3,9 @@ import { Pencil, Trash2, GripVertical, ChevronUp, ChevronDown, MoreVertical } fr
 import { Button } from '@/components/ui/button';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { MobileBlockActions } from './MobileBlockActions';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { cn } from '@/lib/utils/utils';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import type { Block } from '@/types/page';
 
 interface InlineEditableBlockProps {

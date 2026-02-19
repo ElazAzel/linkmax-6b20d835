@@ -26,7 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { LocaleCode } from '@/lib/i18n-helpers';
 
 // All supported languages for translation

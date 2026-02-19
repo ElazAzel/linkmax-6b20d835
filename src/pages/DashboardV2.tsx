@@ -8,11 +8,11 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 // State hooks
-import { useDashboard } from '@/hooks/useDashboard';
-import { useMultiPage } from '@/hooks/useMultiPage';
-import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
-import { useEditorHistory } from '@/hooks/useEditorHistory';
-import { usePageVersions } from '@/hooks/usePageVersions';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { useMultiPage } from '@/hooks/page/useMultiPage';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
+import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
+import { usePageVersions } from '@/hooks/page/usePageVersions';
 
 // SEO
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';

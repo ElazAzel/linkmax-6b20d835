@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { TestimonialBlock as TestimonialBlockType } from '@/types/page';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface TestimonialBlockProps {
   block: TestimonialBlockType;

@@ -1,4 +1,4 @@
-import { createBlock as createBaseBlock } from '@/lib/block-factory';
+import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import type { Block } from '@/types/page';
 import { TemplateCategoryKey } from '@/lib/templateCategories';
 

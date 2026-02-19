@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getI18nText } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Users, Crown, Star, Heart, Zap, Lock, ExternalLink } from 'lucide-react';
 
 interface CommunityBlockProps {

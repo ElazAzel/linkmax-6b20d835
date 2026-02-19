@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { supabase } from '@/platform/supabase/client';
 
 interface NewsletterBlockProps {

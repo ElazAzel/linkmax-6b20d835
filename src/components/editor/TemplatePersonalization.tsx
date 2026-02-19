@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import type { Block } from '@/types/page';
-import { createBlock as createBaseBlock } from '@/lib/block-factory';
+import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 
 interface TemplatePersonalizationProps {
   open: boolean;

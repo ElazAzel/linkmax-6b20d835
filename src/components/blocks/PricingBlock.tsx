@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import type { PricingBlock as PricingBlockType } from '@/types/page';
 import { Badge } from '@/components/ui/badge';
 import { getI18nText } from '@/lib/i18n-helpers';
-import { getLocale } from '@/lib/format';
-import { cn } from '@/lib/utils';
+import { getLocale } from '@/lib/utils/format';
+import { cn } from '@/lib/utils/utils';
 import { Star, Tag } from 'lucide-react';
 
 interface PricingBlockProps {
@@ -31,7 +31,7 @@ const currencySymbols: Record<string, string> = {
   AUD: 'A$',
 };
 
-import { useAnalytics } from '@/hooks/useAnalyticsTracking';
+import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 
 export const PricingBlock = React.memo(function PricingBlock({ block }: PricingBlockProps) {
   const { t, i18n } = useTranslation();

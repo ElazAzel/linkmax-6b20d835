@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface SocialsBlockProps {
   block: SocialsBlockType;

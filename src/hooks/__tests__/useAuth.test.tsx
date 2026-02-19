@@ -4,7 +4,7 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { AuthProvider, useAuth } from '../useAuth';
+import { AuthProvider, useAuth } from '@/hooks/user/useAuth';
 
 // Mock supabase
 const mockSignUp = vi.fn();
@@ -45,7 +45,7 @@ vi.mock('@/integrations/lovable/index', () => ({
 }));
 
 // Mock logger
-vi.mock('@/lib/logger', () => ({
+vi.mock('@/lib/utils/logger', () => ({
     logger: {
         debug: vi.fn(),
         error: vi.fn(),

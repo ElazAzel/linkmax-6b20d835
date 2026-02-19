@@ -36,8 +36,8 @@ import {
   Check,
   GripVertical,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { getLucideIcon } from '@/lib/icon-utils';
+import { cn } from '@/lib/utils/utils';
+import { getLucideIcon } from '@/lib/utils/icon-utils';
 import type { Block } from '@/types/page';
 
 interface BlockManagerProps {

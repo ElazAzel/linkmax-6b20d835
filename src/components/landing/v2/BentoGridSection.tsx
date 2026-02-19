@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
 import { Copy, BarChart3, Smartphone, Users, Send } from "lucide-react";
 import { motion } from "framer-motion";

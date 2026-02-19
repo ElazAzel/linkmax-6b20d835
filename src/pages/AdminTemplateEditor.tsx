@@ -15,7 +15,7 @@ import { BlockEditorV2 } from '@/components/editor/BlockEditorV2';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import type { Block } from '@/types/page';
 import { TEMPLATE_CATEGORY_KEYS, type TemplateCategoryKey, getTemplateCategoryLabel } from '@/lib/templateCategories';
-import { createBlock } from '@/lib/block-factory';
+import { createBlock } from '@/lib/blocks/block-factory';
 
 interface TemplateData {
     id?: string;

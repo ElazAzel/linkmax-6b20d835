@@ -33,9 +33,9 @@ import {
 } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
-import type { UserPage, PageLimits } from '@/hooks/useMultiPage';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { cn } from '@/lib/utils/utils';
+import type { UserPage, PageLimits } from '@/hooks/page/useMultiPage';
 
 interface PageSwitcherProps {
   pages: UserPage[];

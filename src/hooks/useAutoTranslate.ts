@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { SupportedLanguage, MultilingualString } from '@/lib/i18n-helpers';

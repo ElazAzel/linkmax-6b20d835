@@ -19,12 +19,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
-import { FREE_LIMITS, type FreeTier } from '@/hooks/useFreemiumLimits';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { cn } from '@/lib/utils/utils';
+import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { getRecommendedBlocks, type BlockRecommendation } from '@/lib/block-recommendations';
+import { getRecommendedBlocks, type BlockRecommendation } from '@/lib/blocks/block-recommendations';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
 

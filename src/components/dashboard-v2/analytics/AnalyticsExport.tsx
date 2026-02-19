@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Download, FileText, Table } from 'lucide-react';
 import { format } from 'date-fns';
-import type { AnalyticsSummary } from '@/hooks/usePageAnalytics';
+import type { AnalyticsSummary } from '@/hooks/analytics/usePageAnalytics';
 
 interface AnalyticsExportProps {
   analytics: AnalyticsSummary | null;

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { AvatarBlock as AvatarBlockType, AvatarFrameStyle } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';

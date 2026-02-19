@@ -496,15 +496,24 @@ lnkmx/
 │   │   ├── Auth.tsx              # Login/signup
 │   │   └── ...                   # Other pages
 │   │
-│   ├── hooks/                    # React hooks (50+)
-│   │   ├── useAuth.tsx           # Authentication state
-│   │   ├── useCloudPageState.ts  # Page autosave logic
-│   │   ├── usePremiumStatus.ts   # Subscription checking
-│   │   ├── useFreemiumLimits.ts  # Feature gating
-│   │   ├── useBlockEditor.tsx    # Block editing state
-│   │   ├── useLeads.ts           # Lead management
-│   │   ├── useAnalyticsTracking.tsx # Event tracking
-│   │   └── ...                   # Other hooks
+│   ├── hooks/                    # React hooks (60+)
+│   │   ├── admin/                # Admin panel hooks
+│   │   ├── analytics/            # Event and tracking hooks
+│   │   ├── crm/                  # Lead management hooks
+│   │   ├── dashboard/            # Dashboard flow hooks
+│   │   ├── editor/               # Block editor hooks
+│   │   ├── page/                 # Page state and versions
+│   │   ├── social/               # Collab, community, friends
+│   │   ├── ui/                   # Gesture, sound, toast
+│   │   └── user/                 # Auth, profile, billing
+│   │   
+│   ├── lib/                      # Core utilities
+│   │   ├── blocks/               # Block factories and validators
+│   │   ├── export/               # PDF, Excel generators
+│   │   ├── utils/                # Compress, format, helpers
+│   │   ├── page-templates.ts     # Pre-made templates
+│   │   ├── widget-templates.ts   # Pre-made widgets
+│   │   └── ...                   # Other utils
 │   │
 │   ├── services/                 # Business logic services
 │   │   ├── pages.ts              # Page CRUD operations

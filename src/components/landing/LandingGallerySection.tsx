@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { useGallery } from '@/hooks/useGallery';
+import { useGallery } from '@/hooks/social/useGallery';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
 import { toast } from 'sonner';
 

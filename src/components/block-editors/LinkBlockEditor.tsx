@@ -14,7 +14,7 @@ import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { generateMagicTitle } from '@/lib/ai-helpers';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
-import { validateLinkBlock } from '@/lib/block-validators';
+import { validateLinkBlock } from '@/lib/blocks/block-validators';
 import { getBestFaviconUrl } from '@/lib/favicon-utils';
 import {
   Link2,
@@ -26,7 +26,7 @@ import {
   AlignCenter,
   AlignRight,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 // Alignment button component
 function AlignmentButton({

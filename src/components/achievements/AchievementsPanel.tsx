@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Trophy, Lock, X, ChevronRight, Sparkles } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useAchievements } from '@/hooks/useAchievements';
+import { cn } from '@/lib/utils/utils';
+import { useAchievements } from '@/hooks/user/useAchievements';
 import type { Achievement } from '@/types/achievements';
 import { useTranslation } from 'react-i18next';
 

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useLeaderboard } from '@/hooks/useLeaderboard';
+import { useLeaderboard } from '@/hooks/social/useLeaderboard';
 import type { LeaderboardPeriod } from '@/services/gallery';
 
 const RANK_STYLES = [

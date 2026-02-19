@@ -24,7 +24,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock hooks
-vi.mock('@/hooks/useAuth', () => ({
+vi.mock('@/hooks/user/useAuth', () => ({
   useAuth: () => ({
     user: null,
     session: null,
@@ -32,7 +32,7 @@ vi.mock('@/hooks/useAuth', () => ({
   }),
 }));
 
-vi.mock('@/hooks/useGallery', () => ({
+vi.mock('@/hooks/social/useGallery', () => ({
   useGallery: () => ({
     pages: [
       {
@@ -52,14 +52,14 @@ vi.mock('@/hooks/useGallery', () => ({
   }),
 }));
 
-vi.mock('@/hooks/useGalleryFilters', () => ({
+vi.mock('@/hooks/social/useGalleryFilters', () => ({
   useGalleryFilters: () => ({
     filters: { niche: null, search: '', sort: 'popular' },
     setFilters: vi.fn(),
   }),
 }));
 
-vi.mock('@/hooks/useLeaderboard', () => ({
+vi.mock('@/hooks/social/useLeaderboard', () => ({
   useLeaderboard: () => ({
     leaderboard: [],
     loading: false,

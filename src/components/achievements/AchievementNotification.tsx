@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Trophy } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { cn } from '@/lib/utils/utils';
+import { useSoundEffects } from '@/hooks/ui/useSoundEffects';
 import { useTranslation } from 'react-i18next';
 import type { Achievement } from '@/types/achievements';
 

@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateScratchBlock } from '@/lib/block-validators';
+import { validateScratchBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';

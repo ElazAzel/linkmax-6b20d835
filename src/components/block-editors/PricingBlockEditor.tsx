@@ -12,7 +12,7 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import type { PricingBlock, PricingItem, Currency, ServiceType } from '@/types/page';
 import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface PricingBlockEditorProps {
   formData: Partial<PricingBlock>;

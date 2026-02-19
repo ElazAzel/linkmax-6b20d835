@@ -12,9 +12,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ChevronDown, Crown, Lock } from 'lucide-react';
 import { useState } from 'react';
 import { AVATAR_ICON_OPTIONS, VERIFICATION_COLOR_OPTIONS, VERIFICATION_POSITION_OPTIONS, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
-import { getLucideIcon } from '@/lib/icon-utils';
+import { getLucideIcon } from '@/lib/utils/icon-utils';
 import type { ProfileFrameStyle } from '@/types/page';
-import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
 

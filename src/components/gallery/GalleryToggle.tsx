@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Users, Loader2 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { useGalleryStatus } from '@/hooks/useGallery';
+import { useGalleryStatus } from '@/hooks/social/useGallery';
 
 interface GalleryToggleProps {
   userId: string | undefined;

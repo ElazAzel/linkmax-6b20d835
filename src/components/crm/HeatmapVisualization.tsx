@@ -17,7 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useHeatmapData, ClickPoint } from '@/hooks/useHeatmapData';
+import { useHeatmapData, ClickPoint } from '@/hooks/analytics/useHeatmapData';
 
 export function HeatmapVisualization() {
   const { t } = useTranslation();

@@ -35,11 +35,11 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-import { createBlock as createBaseBlock } from '@/lib/block-factory';
+import { cn } from '@/lib/utils/utils';
+import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
-import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { storage } from '@/lib/storage';
 
 interface AIBuilderWizardProps {

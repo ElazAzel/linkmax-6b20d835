@@ -6,8 +6,8 @@ import {
   Users, Blocks, Eye, Heart, Share2,
   CheckCircle2, Sparkles
 } from 'lucide-react';
-import { useSocialFeatures } from '@/hooks/useSocialFeatures';
-import { cn } from '@/lib/utils';
+import { useSocialFeatures } from '@/hooks/social/useSocialFeatures';
+import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';
 
 interface WeeklyChallengesPanelProps {

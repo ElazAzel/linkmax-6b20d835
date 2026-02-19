@@ -9,8 +9,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { FREE_LIMITS } from '@/hooks/useFreemiumLimits';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { FREE_LIMITS } from '@/hooks/user/useFreemiumLimits';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface FreemiumAILimitProps {
   remainingGenerations: number;

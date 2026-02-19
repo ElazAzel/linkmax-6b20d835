@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface PlanLimits {
   pagesUsed: number;

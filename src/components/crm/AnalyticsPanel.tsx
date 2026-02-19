@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { usePageAnalytics, TimePeriod } from '@/hooks/usePageAnalytics';
+import { usePageAnalytics, TimePeriod } from '@/hooks/analytics/usePageAnalytics';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';

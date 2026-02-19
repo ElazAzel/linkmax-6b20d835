@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
 import type { Block } from '@/types/page';
 

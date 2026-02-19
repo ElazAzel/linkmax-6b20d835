@@ -4,7 +4,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 export type StatusType = 'draft' | 'published' | 'new' | 'error' | 'saving' | 'success';
 

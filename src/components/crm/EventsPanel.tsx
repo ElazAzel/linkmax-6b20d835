@@ -8,7 +8,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/user/useAuth';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +35,7 @@ import { format, isPast } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { EventRegistrationsList } from './EventRegistrationsList';
-import { exportToExcel, exportToCSV } from '@/lib/excel-export';
+import { exportToExcel, exportToCSV } from '@/lib/export/excel-export';
 import type { EventFormField } from '@/types/page';
 
 interface Event {

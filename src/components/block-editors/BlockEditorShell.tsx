@@ -28,8 +28,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils/utils';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
 import type { Block } from '@/types/page';
 
 // Tab configuration

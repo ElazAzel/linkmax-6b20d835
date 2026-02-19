@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { CountdownBlock as CountdownBlockType } from '@/types/page';
 import { Card, CardContent } from '@/components/ui/card';
 import { getI18nText } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface CountdownBlockProps {
   block: CountdownBlockType;

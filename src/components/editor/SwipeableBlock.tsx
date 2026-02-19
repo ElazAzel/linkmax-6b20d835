@@ -1,7 +1,7 @@
 import { memo, useState, useRef, useCallback, TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil, Trash2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface SwipeableBlockProps {
   children: React.ReactNode;

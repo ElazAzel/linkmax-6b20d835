@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface Partner {
     id: string;

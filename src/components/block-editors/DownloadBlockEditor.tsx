@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateDownloadBlock } from '@/lib/block-validators';
+import { validateDownloadBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { FileUpload } from '@/components/form-fields/FileUpload';

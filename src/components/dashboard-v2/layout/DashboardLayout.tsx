@@ -6,10 +6,10 @@
  * Adds page transition animations
  */
 import { memo, useState, ReactNode } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { DashboardSidebar } from './DashboardSidebar';
 import { DashboardBottomNav } from './DashboardBottomNav';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DashboardLayoutProps {

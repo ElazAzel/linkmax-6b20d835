@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { Crown, Lock, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import {
   FREE_BLOCK_TYPES,
   PREMIUM_BLOCK_TYPES,
@@ -18,7 +18,7 @@ import {
   isPremiumBlock,
   type FreeBlockType,
   type PremiumBlockType
-} from '@/lib/block-registry';
+} from '@/lib/blocks/block-registry';
 
 // Re-export from registry for backward compatibility
 export { FREE_BLOCK_TYPES, PREMIUM_BLOCK_TYPES, isFreeBlock, isPremiumBlock };

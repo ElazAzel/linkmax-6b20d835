@@ -20,7 +20,7 @@ import { ImageBlock } from '../ImageBlock';
 import * as fixtures from '@/testing/block-fixtures';
 
 // Mock useAuth for ProductBlock
-vi.mock('@/hooks/useAuth', () => ({
+vi.mock('@/hooks/user/useAuth', () => ({
   useAuth: () => ({
     user: null,
     session: null,
@@ -29,7 +29,7 @@ vi.mock('@/hooks/useAuth', () => ({
 }));
 
 // Mock useTokens for ProductBlock
-vi.mock('@/hooks/useTokens', () => ({
+vi.mock('@/hooks/user/useTokens', () => ({
   useTokens: () => ({
     balance: { balance: 0 },
     purchaseMarketplaceItem: vi.fn(),

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDateTime } from '@/lib/format';
-import { useLeads, useLeadInteractions, LeadStatus, InteractionType } from '@/hooks/useLeads';
+import { formatDateTime } from '@/lib/utils/format';
+import { useLeads, useLeadInteractions, LeadStatus, InteractionType } from '@/hooks/crm/useLeads';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -46,7 +46,7 @@ import {
   Send,
   Tag
 } from 'lucide-react';
-import type { Lead } from '@/hooks/useLeads';
+import type { Lead } from '@/hooks/crm/useLeads';
 
 interface LeadDetailsProps {
   lead: Lead;

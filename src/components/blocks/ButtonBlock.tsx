@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/block-utils';
-import { getBlockStyles, hasCustomBlockStyle } from '@/lib/block-styling';
+import { createBlockClickHandler, getHoverClass, getBackgroundStyle } from '@/lib/blocks/block-utils';
+import { getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
 import type { ButtonBlock as ButtonBlockType } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface ButtonBlockProps {
   block: ButtonBlockType;

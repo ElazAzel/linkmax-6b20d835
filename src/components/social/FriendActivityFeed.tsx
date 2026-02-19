@@ -5,7 +5,7 @@ import {
   Activity, Globe, Blocks, Trophy, Flame, 
   Target, Gift, Rocket, Users, Heart 
 } from 'lucide-react';
-import { useSocialFeatures } from '@/hooks/useSocialFeatures';
+import { useSocialFeatures } from '@/hooks/social/useSocialFeatures';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, kk, ru } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';

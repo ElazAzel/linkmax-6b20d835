@@ -13,7 +13,7 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { LocaleCode } from '@/lib/i18n-helpers';
 import { useOptionalLanguage } from '@/contexts/LanguageContext';
 import { TranslationLanguageSelector, getLanguageInfo } from '@/components/translation/TranslationLanguageSelector';

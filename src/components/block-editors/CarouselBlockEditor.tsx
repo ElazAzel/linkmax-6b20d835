@@ -3,7 +3,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateCarouselBlock } from '@/lib/block-validators';
+import { validateCarouselBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { Trash2 } from 'lucide-react';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { X, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface BlockHintProps {
   blockType: string;

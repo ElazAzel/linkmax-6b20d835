@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useReferral } from '@/hooks/useReferral';
+import { useReferral } from '@/hooks/user/useReferral';
 import { toast } from 'sonner';
 
 interface ShareAfterPublishDialogProps {

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Check, Crown } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';
 
 interface VerifiedBadgeProps {

@@ -1,5 +1,5 @@
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateNewsletterBlock } from '@/lib/block-validators';
+import { validateNewsletterBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';

@@ -38,9 +38,9 @@ import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { TelegramVerification } from '@/components/auth/TelegramVerification';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { ProfileBlock } from '@/types/page';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion } from 'framer-motion';
 
 interface AccountSettingsScreenProps {

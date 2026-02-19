@@ -34,10 +34,10 @@ import {
   Trash2,
   Edit2,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/platform/supabase/client';
-import type { AnalyticsSummary } from '@/hooks/usePageAnalytics';
+import type { AnalyticsSummary } from '@/hooks/analytics/usePageAnalytics';
 
 interface AIInsight {
   id: string;

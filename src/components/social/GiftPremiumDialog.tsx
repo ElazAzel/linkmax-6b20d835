@@ -15,7 +15,7 @@ import {
 import { Gift, Crown, Sparkles, Send, Heart } from 'lucide-react';
 import { sendPremiumGift } from '@/services/social';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface GiftPremiumDialogProps {
   open: boolean;

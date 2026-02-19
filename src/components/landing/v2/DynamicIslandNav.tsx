@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';

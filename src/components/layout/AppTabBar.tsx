@@ -16,8 +16,8 @@ import {
   ImageIcon,
   Settings
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { cn } from '@/lib/utils/utils';
+import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 
 interface TabItem {
   id: string;

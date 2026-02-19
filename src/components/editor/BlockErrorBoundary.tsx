@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle } from 'lucide-react';
-import { Sentry, isSentryEnabled } from '@/lib/sentry';
+import { Sentry, isSentryEnabled } from '@/lib/utils/sentry';
 
 interface Props {
     children: ReactNode;

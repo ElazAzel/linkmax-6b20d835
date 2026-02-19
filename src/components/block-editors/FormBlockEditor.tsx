@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateFormBlock } from '@/lib/block-validators';
+import { validateFormBlock } from '@/lib/blocks/block-validators';
 import { ArrayFieldList } from '@/components/form-fields/ArrayFieldList';
 import { ArrayFieldItem } from '@/components/form-fields/ArrayFieldItem';
 import { useTranslation } from 'react-i18next';

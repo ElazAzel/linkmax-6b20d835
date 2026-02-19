@@ -1,7 +1,7 @@
 import React from 'react';
 import { Crown, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import type { FreeTier } from '@/hooks/useFreemiumLimits';
+import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 
 interface TierBadgeProps {
   tier: FreeTier;

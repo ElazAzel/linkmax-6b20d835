@@ -4,8 +4,8 @@ import { AlertTriangle, Crown, Lock } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { FREE_LIMITS } from '@/hooks/useFreemiumLimits';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { FREE_LIMITS } from '@/hooks/user/useFreemiumLimits';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface FreemiumBlockLimitProps {
   currentBlocks: number;

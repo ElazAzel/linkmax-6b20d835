@@ -3,8 +3,8 @@
  */
 import { memo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLeads, LeadStatus } from '@/hooks/useLeads';
-import { formatDateShort, getLocale } from '@/lib/format';
+import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
+import { formatDateShort, getLocale } from '@/lib/utils/format';
 import {
   Search,
   Plus,
@@ -34,9 +34,9 @@ import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { AddLeadDialog } from '@/components/crm/AddLeadDialog';
 import { LeadDetails } from '@/components/crm/LeadDetails';
 import { BookingsPanel } from '@/components/crm/BookingsPanel';
-import { cn } from '@/lib/utils';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import type { Lead } from '@/hooks/useLeads';
+import { cn } from '@/lib/utils/utils';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ActivityScreenProps {

@@ -22,11 +22,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { migrateToMultilingual, getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { compressImage } from '@/lib/image-compression';
+import { compressImage } from '@/lib/utils/image-compression';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/user/useAuth';
 import { toast } from 'sonner';
 import { ImageCropper } from '@/components/form-fields/ImageCropper';
 import type { ProfileBlock } from '@/types/page';
@@ -181,7 +181,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
 
   const handleCropperSave = async (croppedDataUrl: string) => {
     setCropperOpen(false);
-    const { dataUrlToBlob } = await import('@/lib/data-url-to-blob');
+    const { dataUrlToBlob } = await import('@/lib/utils/data-url-to-blob');
     const blob = dataUrlToBlob(croppedDataUrl);
     await uploadFile(blob, cropperType);
   };

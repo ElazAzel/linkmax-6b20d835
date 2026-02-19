@@ -12,7 +12,7 @@ import { Mail, Link2, Unlink, Loader2 } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface LinkedAccount {
   provider: 'email' | 'google' | 'apple';

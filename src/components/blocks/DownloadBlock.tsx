@@ -5,7 +5,7 @@ import type { DownloadBlock as DownloadBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface DownloadBlockProps {
   block: DownloadBlockType;

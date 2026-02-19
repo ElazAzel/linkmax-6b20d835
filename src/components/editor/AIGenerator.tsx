@@ -8,8 +8,8 @@ import { Loader2, Sparkles, Wand2, Crown, Lock } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import type { Block } from '@/types/page';
 
 interface AIGeneratorProps {

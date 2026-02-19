@@ -1,5 +1,5 @@
 import type { SeparatorBlock as SeparatorBlockType } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Separator } from '@/components/ui/separator';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 

@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { History, RotateCcw, Loader2, Clock } from 'lucide-react';
-import type { PageVersion } from '@/hooks/usePageVersions';
+import type { PageVersion } from '@/hooks/page/usePageVersions';
 
 interface PageVersionsDialogProps {
   open: boolean;

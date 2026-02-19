@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Check, Sparkles, Store, Wand2, Loader2, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { createBlock as createBaseBlock } from '@/lib/block-factory';
+import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import type { Block } from '@/types/page';
 import { TemplatePersonalization } from './TemplatePersonalization';
 import { TemplateMarketplace } from './TemplateMarketplace';

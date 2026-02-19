@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink } from 'lucide-react';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { ImageBlock as ImageBlockType } from '@/types/page';
 
 interface ImageBlockProps {

@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock usePublicPage hook
 const mockUsePublicPage = vi.fn();
-vi.mock('@/hooks/usePageCache', () => ({
+vi.mock('@/hooks/page/usePageCache', () => ({
     usePublicPage: (slug: string | undefined) => mockUsePublicPage(slug),
 }));
 
@@ -28,12 +28,12 @@ vi.mock('@/contexts/LanguageContext', () => ({
 // ... (other mocks) ...
 
 // Mock heatmap tracking
-vi.mock('@/hooks/useHeatmapTracking', () => ({
+vi.mock('@/hooks/analytics/useHeatmapTracking', () => ({
     useHeatmapTracking: vi.fn(),
 }));
 
 // Mock analytics tracking
-vi.mock('@/hooks/useAnalyticsTracking', () => ({
+vi.mock('@/hooks/analytics/useAnalyticsTracking', () => ({
     AnalyticsProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 

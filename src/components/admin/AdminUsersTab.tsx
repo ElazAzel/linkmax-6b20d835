@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAdminUsers, useTogglePremium, useExtendTrial, AdminUserData } from '@/hooks/useAdminUsers';
+import { useAdminUsers, useTogglePremium, useExtendTrial, AdminUserData } from '@/hooks/admin/useAdminUsers';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 import { Search, Loader2, RefreshCw, Flame } from 'lucide-react';

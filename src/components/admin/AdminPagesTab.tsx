@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useAdminPages } from '@/hooks/useAdminPages';
+import { useAdminPages } from '@/hooks/admin/useAdminPages';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 import { Search, RefreshCw, Eye, ExternalLink } from 'lucide-react';

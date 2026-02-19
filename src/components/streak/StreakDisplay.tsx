@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { useStreak } from '@/hooks/useStreak';
+import { useStreak } from '@/hooks/user/useStreak';
 import { getNextMilestone, STREAK_MILESTONES } from '@/services/streak';
 
 interface StreakDisplayProps {

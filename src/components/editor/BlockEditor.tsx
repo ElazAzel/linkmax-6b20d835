@@ -18,7 +18,7 @@ import {
   DrawerFooter,
 } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { X, Check, ChevronLeft } from 'lucide-react';
 import type { Block } from '@/types/page';
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, Link } from 'react-router-dom';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 import { useTranslation } from 'react-i18next';
 
 const NotFound = () => {

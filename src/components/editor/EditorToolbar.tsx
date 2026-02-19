@@ -15,7 +15,7 @@ import {
   Save,
   Loader2,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import {
   Tooltip,
   TooltipContent,

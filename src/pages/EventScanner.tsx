@@ -6,8 +6,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { useAuth } from '@/hooks/user/useAuth';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -32,8 +32,8 @@ import {
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import { logger } from '@/lib/logger';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { logger } from '@/lib/utils/logger';
 import { BrowserMultiFormatReader, IScannerControls } from '@zxing/browser';
 
 interface ScanResult {

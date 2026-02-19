@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 
 export interface ValidationError {
     key: string;

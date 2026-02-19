@@ -2,11 +2,11 @@ import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Instagram, Twitter, Youtube, Facebook, Linkedin, Globe, Link2 } from 'lucide-react';
-import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/block-utils';
+import { getButtonClass, createBlockClickHandler, getBackgroundStyle } from '@/lib/blocks/block-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { extractDomain, getGoogleFaviconUrl, getDirectFaviconUrl } from '@/lib/favicon-utils';
-import { getBlockStyles, hasCustomBlockStyle } from '@/lib/block-styling';
-import { cn } from '@/lib/utils';
+import { getBlockStyles, hasCustomBlockStyle } from '@/lib/blocks/block-styling';
+import { cn } from '@/lib/utils/utils';
 import type { LinkBlock as LinkBlockType } from '@/types/page';
 
 interface LinkBlockProps {

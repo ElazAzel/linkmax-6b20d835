@@ -6,7 +6,7 @@
 
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 import { session } from '@/lib/storage';
 
 // ============================================

@@ -40,13 +40,13 @@ import {
   Trash2,
   Sparkles,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
+import { cn } from '@/lib/utils/utils';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { getI18nText, createMultilingualString, isMultilingualString, type SupportedLanguage, type MultilingualString } from '@/lib/i18n-helpers';
-import { compressImage } from '@/lib/image-compression';
+import { compressImage } from '@/lib/utils/image-compression';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/user/useAuth';
 import { toast } from 'sonner';
 import { ImageCropper } from '@/components/form-fields/ImageCropper';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
@@ -211,7 +211,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
 
   const handleCropperSave = async (croppedDataUrl: string) => {
     setCropperOpen(false);
-    const { dataUrlToBlob } = await import('@/lib/data-url-to-blob');
+    const { dataUrlToBlob } = await import('@/lib/utils/data-url-to-blob');
     const blob = dataUrlToBlob(croppedDataUrl);
     await uploadFile(blob, uploadType);
   };

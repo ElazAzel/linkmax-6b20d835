@@ -10,7 +10,7 @@ import {
   Sparkles,
   X
 } from 'lucide-react';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface SimplePricingSectionProps {
   isVisible: boolean;

@@ -3,7 +3,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertTriangle, Code, Palette, Zap, Eye, EyeOff, Sparkles, Gamepad2, Calculator, Timer, Heart, Briefcase, Users } from 'lucide-react';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateCustomCodeBlock } from '@/lib/block-validators';
+import { validateCustomCodeBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';

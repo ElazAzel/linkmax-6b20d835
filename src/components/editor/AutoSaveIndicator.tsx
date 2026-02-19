@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Cloud, CloudOff, Check, Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';
 
 export type SaveStatus = 'idle' | 'pending' | 'saving' | 'saved' | 'error';

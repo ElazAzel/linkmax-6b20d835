@@ -17,7 +17,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
-import { useMarketingAnalytics } from '@/hooks/useMarketingAnalytics';
+import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';

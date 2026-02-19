@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import type { TrafficSource } from '@/hooks/usePageAnalytics';
+import type { TrafficSource } from '@/hooks/analytics/usePageAnalytics';
 
 interface TrafficSourcesChartProps {
   sources: TrafficSource[];

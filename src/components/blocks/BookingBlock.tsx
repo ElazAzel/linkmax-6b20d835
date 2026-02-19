@@ -12,7 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Clock, CalendarDays, User, Phone, Mail, Check, Loader2, MessageCircle, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { ru, kk } from 'date-fns/locale';

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Clock, Repeat, Target, TrendingUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface EngagementMetricsProps {
   avgSessionDuration: number; // in seconds

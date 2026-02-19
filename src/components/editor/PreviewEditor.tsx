@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { GridEditor } from './GridEditor';
 import type { Block, GridConfig } from '@/types/page';
-import type { FreeTier } from '@/hooks/useFreemiumLimits';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 interface PreviewEditorProps {
   blocks: Block[];

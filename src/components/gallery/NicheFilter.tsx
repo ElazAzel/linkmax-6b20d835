@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface NicheFilterProps {
   selectedNiche: Niche | null;

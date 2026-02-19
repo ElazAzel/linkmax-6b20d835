@@ -15,7 +15,7 @@ import { AccountSettingsTab } from './settings/AccountSettingsTab';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { ProfileBlock, PageIntegrations } from '@/types/page';
 import type { Niche } from '@/lib/niches';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 interface SettingsScreenProps {
   // Username (user-scoped)

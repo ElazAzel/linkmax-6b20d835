@@ -25,12 +25,12 @@ import { Button } from '@/components/ui/button';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { cn } from '@/lib/utils/utils';
 import type { Block, ProfileBlock, GridConfig } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
-import type { FreeTier } from '@/hooks/useFreemiumLimits';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Insert-Between Divider ────────────────────────────────────────

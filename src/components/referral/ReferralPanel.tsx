@@ -12,7 +12,7 @@ import {
   ChevronRight,
   Check
 } from 'lucide-react';
-import { useReferral } from '@/hooks/useReferral';
+import { useReferral } from '@/hooks/user/useReferral';
 
 interface ReferralPanelProps {
   userId: string | undefined;

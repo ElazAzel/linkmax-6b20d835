@@ -15,7 +15,7 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { Star, Crown } from 'lucide-react';
 import { EventFileUpload } from './EventFileUpload';
 import type { EventFormField } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 type FormValue = string | string[] | boolean | number | Record<string, string> | Record<string, string[]>;
 

@@ -4,7 +4,7 @@ import { EventBlock } from '../EventBlock';
 import type { EventBlock as EventBlockType } from '@/types/page';
 
 // Mock dependencies
-vi.mock('@/hooks/useAuth', () => ({
+vi.mock('@/hooks/user/useAuth', () => ({
   useAuth: () => ({ user: null }),
 }));
 

@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { LANGUAGE_DEFINITIONS, type LocaleCode } from '@/lib/i18n-helpers';
 
 // UI languages supported by the app

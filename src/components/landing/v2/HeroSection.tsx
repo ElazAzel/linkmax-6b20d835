@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowRight, Sparkles, Zap, Smartphone, BarChart3, Globe, Play } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button'; // Import standard button for non-magnetic uses if needed
 
 interface HeroProp {

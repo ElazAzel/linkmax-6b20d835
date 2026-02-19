@@ -34,7 +34,7 @@ import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { AutoSaveIndicator, type SaveStatus } from './AutoSaveIndicator';
 import { StreakDisplay } from '@/components/streak/StreakDisplay';
 import { TokenBalanceDisplay } from '@/components/tokens/TokenBalanceDisplay';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface MobileToolbarProps {
   saving: boolean;

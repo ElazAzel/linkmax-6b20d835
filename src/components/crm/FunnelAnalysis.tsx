@@ -16,7 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useFunnelAnalytics, FunnelStep } from '@/hooks/useFunnelAnalytics';
+import { useFunnelAnalytics, FunnelStep } from '@/hooks/analytics/useFunnelAnalytics';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function FunnelAnalysis() {

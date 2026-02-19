@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { CatalogBlock as CatalogBlockType, CatalogItem } from '@/types/page';
 import { Card, CardContent } from '@/components/ui/card';
 import { getI18nText } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface CatalogBlockProps {
   block: CatalogBlockType;
@@ -29,7 +29,7 @@ const currencySymbols: Record<string, string> = {
   AUD: 'A$',
 };
 
-import { useAnalytics } from '@/hooks/useAnalyticsTracking';
+import { useAnalytics } from '@/hooks/analytics/useAnalyticsTracking';
 
 export const CatalogBlock = React.memo(function CatalogBlock({ block }: CatalogBlockProps) {
   const { t, i18n } = useTranslation();

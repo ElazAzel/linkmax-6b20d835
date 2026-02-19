@@ -5,7 +5,7 @@
 
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
-import { logger } from './logger';
+import { logger } from '@/lib/utils/logger';
 
 export interface MagicTitleInput {
   url: string;

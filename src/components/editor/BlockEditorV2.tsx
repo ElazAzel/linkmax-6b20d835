@@ -18,9 +18,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { getLucideIcon } from '@/lib/icon-utils';
-import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { getLucideIcon } from '@/lib/utils/icon-utils';
+import { cn } from '@/lib/utils/utils';
 import { BlockEditorShell } from '../block-editors/BlockEditorShell';
 import type { Block } from '@/types/page';
 

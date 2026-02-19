@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Gift, Crown, Sparkles, X } from 'lucide-react';
-import { useSocialFeatures } from '@/hooks/useSocialFeatures';
+import { useSocialFeatures } from '@/hooks/social/useSocialFeatures';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, kk, ru } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';

@@ -25,9 +25,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getI18nText, isI18nText, ensureI18nText, type SupportedLanguage, type I18nText } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { useFreemiumLimits } from '@/hooks/useFreemiumLimits';
-import { compressImage } from '@/lib/image-compression';
+import { useAuth } from '@/hooks/user/useAuth';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
+import { compressImage } from '@/lib/utils/image-compression';
 import { toast } from 'sonner';
 import { ImageCropper } from '@/components/form-fields/ImageCropper';
 import { RichTextEditor } from '@/components/form-fields/RichTextEditor';
@@ -35,7 +35,7 @@ import { FrameSelector } from '@/components/profile/FrameSelector';
 import { NameAnimationSelector } from '@/components/profile/NameAnimationSelector';
 import { NAME_ANIMATION_CSS, getNameAnimationClass } from '@/lib/profile-frame-system';
 import type { ProfileBlock as ProfileBlockType, NameAnimationType } from '@/types/page';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 // Lazy load full editor
 const ProfileFullEditor = lazy(() => import('./ProfileFullEditor'));
@@ -271,7 +271,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
     setCropperOpen(false);
 
     // Convert data URL to blob without fetch (avoids CSP violations)
-    const { dataUrlToBlob } = await import('@/lib/data-url-to-blob');
+    const { dataUrlToBlob } = await import('@/lib/utils/data-url-to-blob');
     const blob = dataUrlToBlob(croppedDataUrl);
 
     await uploadFile(blob, cropperType);

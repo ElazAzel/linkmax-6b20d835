@@ -10,8 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { useAuth } from '@/hooks/user/useAuth';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -35,8 +35,8 @@ import {
   Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { openPremiumPurchase } from '@/lib/upgrade-utils';
-import { cn } from '@/lib/utils';
+import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { cn } from '@/lib/utils/utils';
 
 interface EventData {
   id: string;

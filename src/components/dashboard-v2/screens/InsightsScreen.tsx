@@ -3,7 +3,7 @@
  */
 import { memo, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePageAnalytics } from '@/hooks/usePageAnalytics';
+import { usePageAnalytics } from '@/hooks/analytics/usePageAnalytics';
 import {
   Eye,
   MousePointerClick,
@@ -35,7 +35,7 @@ import {
   BlockPerformance,
   AnalyticsExport,
 } from '../analytics';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
 import { motion } from 'framer-motion';
 

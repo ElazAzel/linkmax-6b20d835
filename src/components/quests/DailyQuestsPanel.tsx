@@ -1,7 +1,7 @@
 import { Check, Gift, Clock, Coins } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { type Quest } from '@/services/quests';
 
 interface DailyQuestsPanelProps {

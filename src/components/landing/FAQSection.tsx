@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/accordion';
 import { HelpCircle } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
-import { useMarketingAnalytics } from '@/hooks/useMarketingAnalytics';
+import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 
 export function FAQSection() {
   const { t } = useTranslation();

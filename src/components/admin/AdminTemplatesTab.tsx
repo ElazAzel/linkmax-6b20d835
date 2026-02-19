@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
-import { useAdminTemplates } from '@/hooks/useAdminTemplates';
+import { useAdminTemplates } from '@/hooks/admin/useAdminTemplates';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 import { Search, RefreshCw, Plus, Edit, Trash2 } from 'lucide-react';

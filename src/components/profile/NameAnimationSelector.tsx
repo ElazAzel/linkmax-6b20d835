@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Crown, Lock, Sparkles } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { 
   NAME_ANIMATION_OPTIONS, 
   NAME_ANIMATION_CSS,

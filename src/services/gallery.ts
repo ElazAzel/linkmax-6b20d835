@@ -1,5 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 import { incrementChallengeProgress } from '@/services/social';
 import type { Niche } from '@/lib/niches';
 

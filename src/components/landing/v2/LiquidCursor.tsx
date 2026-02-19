@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 export const LiquidCursor = () => {
     const cursorX = useMotionValue(-100);

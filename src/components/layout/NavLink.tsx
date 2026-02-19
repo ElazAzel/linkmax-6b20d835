@@ -3,7 +3,7 @@
 import Link, { LinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
 import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 interface NavLinkCompatProps extends LinkProps {
   className?: string | ((props: { isActive: boolean }) => string);

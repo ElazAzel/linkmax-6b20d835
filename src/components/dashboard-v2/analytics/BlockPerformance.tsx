@@ -8,8 +8,8 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Minus, ExternalLink, Target } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { BlockStats } from '@/hooks/usePageAnalytics';
+import { cn } from '@/lib/utils/utils';
+import type { BlockStats } from '@/hooks/analytics/usePageAnalytics';
 
 interface BlockPerformanceProps {
   blocks: BlockStats[];

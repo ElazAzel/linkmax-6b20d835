@@ -31,8 +31,8 @@ import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { TelegramVerification } from '@/components/auth/TelegramVerification';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';
-import { cn } from '@/lib/utils';
-import type { PremiumTier } from '@/hooks/usePremiumStatus';
+import { cn } from '@/lib/utils/utils';
+import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
 
 interface AccountSettingsTabProps {
     // Username

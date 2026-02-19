@@ -1,5 +1,5 @@
 import { supabase } from '@/platform/supabase/client';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 import type { EventBlock } from '@/types/page';
 import type { Json } from '@/integrations/supabase/types';
 

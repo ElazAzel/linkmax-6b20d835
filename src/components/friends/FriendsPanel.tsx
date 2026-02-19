@@ -10,7 +10,7 @@ import {
   X as XIcon, UserMinus, Trophy,
   Sparkles, Clock, ExternalLink, Heart, Gift, Activity
 } from 'lucide-react';
-import { useFriends } from '@/hooks/useFriends';
+import { useFriends } from '@/hooks/user/useFriends';
 import { getUserPageSlug } from '@/services/friends';
 import { getPageByUserId, likeGalleryPage, unlikeGalleryPage } from '@/services/gallery';
 import { toast } from 'sonner';

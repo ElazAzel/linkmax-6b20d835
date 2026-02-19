@@ -13,10 +13,10 @@ import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/types/page';
 import { createMultilingualString, isMultilingualString, getI18nText } from '@/lib/i18n-helpers';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
-import { validateCatalogBlock } from '@/lib/block-validators';
+import { validateCatalogBlock } from '@/lib/blocks/block-validators';
 
 function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();

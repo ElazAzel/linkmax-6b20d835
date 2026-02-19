@@ -5,13 +5,13 @@ import { Toaster as Sonner, toast } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
+import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
 import { PWAUpdatePrompt } from "@/components/pwa/PWAUpdatePrompt";
 import { CookieConsent } from "@/components/legal/CookieConsent";
-import { useWebVitals } from "@/hooks/useWebVitals";
+import { useWebVitals } from "@/hooks/analytics/useWebVitals";
 import { storage } from '@/lib/storage';
 
 const queryClient = new QueryClient();

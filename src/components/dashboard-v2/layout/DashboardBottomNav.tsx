@@ -5,8 +5,8 @@
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Home, PenTool, Inbox, Calendar, Settings } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { cn } from '@/lib/utils/utils';
+import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 
 interface NavTab {
   id: string;

@@ -1,6 +1,6 @@
 import { Coins } from 'lucide-react';
-import { useTokens } from '@/hooks/useTokens';
-import { cn } from '@/lib/utils';
+import { useTokens } from '@/hooks/user/useTokens';
+import { cn } from '@/lib/utils/utils';
 
 interface TokenBalanceDisplayProps {
   onClick?: () => void;

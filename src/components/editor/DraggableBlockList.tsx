@@ -22,7 +22,7 @@ import { GripVertical, Trash2, Crown, ChevronUp, ChevronDown, Lock, Eye } from '
 import type { Block } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { useTranslation } from 'react-i18next';
-import { useFreemiumLimits, getBlockTier } from '@/hooks/useFreemiumLimits';
+import { useFreemiumLimits, getBlockTier } from '@/hooks/user/useFreemiumLimits';
 import {
   Tooltip,
   TooltipContent,

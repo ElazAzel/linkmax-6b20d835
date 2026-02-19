@@ -38,11 +38,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
-import { useAuth } from '@/hooks/useAuth';
-import { useTokens } from '@/hooks/useTokens';
+import { useAuth } from '@/hooks/user/useAuth';
+import { useTokens } from '@/hooks/user/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import type { Block } from '@/types/page';
-import { createBlock as createBaseBlock } from '@/lib/block-factory';
+import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import { TemplatePreviewCard } from '@/components/templates/TemplatePreviewCard';
 import {
   TEMPLATE_CATEGORY_KEYS,

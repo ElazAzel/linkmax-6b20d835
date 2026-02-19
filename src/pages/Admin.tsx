@@ -1,7 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
 import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import type { PageTheme, PageBackground } from '@/types/page';
 
 interface ThemePanelProps {

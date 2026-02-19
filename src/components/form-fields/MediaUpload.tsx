@@ -6,11 +6,11 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/platform/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { useAuth } from '@/hooks/user/useAuth';
+import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { compressImage, getCompressionStats } from '@/lib/image-compression';
+import { compressImage, getCompressionStats } from '@/lib/utils/image-compression';
 
 interface MediaUploadProps {
   value: string;

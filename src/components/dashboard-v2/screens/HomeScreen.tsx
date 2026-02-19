@@ -27,7 +27,7 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatusBadge } from '../common/StatusBadge';
 import { ActionCard } from '../common/ActionCard';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
 

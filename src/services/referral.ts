@@ -2,7 +2,7 @@
  * Referral service - handles referral code generation and application
  */
 import { supabase } from '@/platform/supabase/client';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 
 export interface ReferralStats {
   code: string;

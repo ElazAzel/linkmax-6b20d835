@@ -6,7 +6,7 @@ import type { PageData, Block, ProfileBlock, PageTheme, EditorMode, GridConfig }
 import { createDefaultPageData } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { Json } from '@/platform/supabase/types';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 
 // ============= Types (exported for backward compatibility) =============
 export interface DbPage {

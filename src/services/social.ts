@@ -3,7 +3,7 @@
  */
 import { supabase } from '@/platform/supabase/client';
 import i18n from '@/i18n/config';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/utils/logger';
 
 // ==================== TYPES ====================
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/user/useAuth';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import {
