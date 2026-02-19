@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { hasThirdPartyConsent } from '@/components/CookieConsent';
 
 import type { PageIntegrations } from '@/types/page';
 
@@ -82,6 +83,9 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
     _currentPageId = pageId;
 
     useEffect(() => {
+        // Only load third-party scripts if user hasn't explicitly rejected
+        if (!hasThirdPartyConsent()) return;
+
         // Facebook Pixel
         if (integrations.fb_pixel) {
             const f = window as any;
