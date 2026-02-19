@@ -147,17 +147,23 @@ function SortableGridBlockItem({
   const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
   const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
 
+  // Blocks that render without card frame
+  const isFrameless = block.type === 'separator' || block.type === 'socials';
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       className={cn(
-        'relative group bg-card rounded-2xl border border-border shadow-sm overflow-hidden transition-all',
+        'relative group overflow-hidden transition-all',
+        isFrameless
+          ? 'rounded-xl'
+          : 'bg-card rounded-2xl border border-border shadow-sm',
         colSpanClass,
         rowSpanClass,
         isDragging && 'opacity-50 ring-2 ring-primary z-50',
-        'min-h-[140px]',
-        dimensions.gridRows === 2 && 'min-h-[296px]'
+        !isFrameless && 'min-h-[140px]',
+        !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]'
       )}
     // Removed listeners from main container to separate drag and click
     >

@@ -62,7 +62,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
       setIsTouched(true);
       return;
     }
-    
+
     startXRef.current = e.touches[0].clientX;
     startYRef.current = e.touches[0].clientY;
     startTimeRef.current = Date.now();
@@ -70,7 +70,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
     isVerticalScrollRef.current = false;
     setIsTransitioning(false);
     setHasTriggeredHaptic(false);
-    
+
     // Long press detection
     longPressTimerRef.current = setTimeout(() => {
       if (!isSwipingRef.current && !isVerticalScrollRef.current) {
@@ -82,16 +82,16 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (isProfileBlock) return;
-    
+
     // Cancel long press on move
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
     }
-    
+
     const diffX = e.touches[0].clientX - startXRef.current;
     const diffY = e.touches[0].clientY - startYRef.current;
-    
+
     // Determine if this is a vertical scroll or horizontal swipe
     if (!isSwipingRef.current && !isVerticalScrollRef.current) {
       if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 10) {
@@ -103,14 +103,14 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
         haptic.lightTap();
       }
     }
-    
+
     if (isVerticalScrollRef.current) return;
-    
+
     if (isSwipingRef.current && isMobile) {
       const resistance = Math.abs(diffX) > threshold ? 0.5 : 1;
       const clampedDiff = Math.max(-maxSwipe, Math.min(maxSwipe, diffX * resistance));
       setOffsetX(clampedDiff);
-      
+
       if (!hasTriggeredHaptic && Math.abs(clampedDiff) >= threshold) {
         haptic.mediumTap();
         setHasTriggeredHaptic(true);
@@ -125,26 +125,26 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
     }
-    
+
     if (isProfileBlock) {
       setTimeout(() => setIsTouched(false), 3000);
       return;
     }
-    
+
     const touchDuration = Date.now() - startTimeRef.current;
     if (!isSwipingRef.current && !isVerticalScrollRef.current && touchDuration < 200) {
       setIsTouched(true);
       setTimeout(() => setIsTouched(false), 3000);
       return;
     }
-    
+
     if (!isSwipingRef.current || !isMobile) {
       setOffsetX(0);
       return;
     }
-    
+
     setIsTransitioning(true);
-    
+
     if (offsetX < -threshold) {
       haptic.warning();
       setOffsetX(-maxSwipe - 20);
@@ -165,12 +165,12 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
       setOffsetX(0);
       setTimeout(() => setIsTransitioning(false), 300);
     }
-    
+
     isSwipingRef.current = false;
   }, [isProfileBlock, isMobile, offsetX, threshold, maxSwipe, block, onDelete, onEdit, haptic]);
 
   const showControls = isHovered || isTouched;
-  
+
   const showDeleteAction = offsetX < -30 && isMobile && !isProfileBlock;
   const showEditAction = offsetX > 30 && isMobile && !isProfileBlock;
   const actionOpacity = Math.min(1, Math.abs(offsetX) / threshold);
@@ -182,18 +182,18 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
       <div className="relative overflow-visible rounded-3xl">
         {/* Delete action background (swipe left) */}
         {isMobile && !isProfileBlock && (
-          <div 
+          <div
             className={cn(
               "absolute inset-y-0 right-0 flex items-center justify-end px-6 transition-all duration-200 rounded-3xl",
               showDeleteAction ? "opacity-100" : "opacity-0 pointer-events-none",
               isAtThreshold && offsetX < 0 ? "bg-destructive" : "bg-destructive/75"
             )}
-            style={{ 
-              opacity: showDeleteAction ? actionOpacity : 0, 
+            style={{
+              opacity: showDeleteAction ? actionOpacity : 0,
               width: maxSwipe + 40,
             }}
           >
-            <div 
+            <div
               className="flex flex-col items-center gap-2 text-destructive-foreground transition-all duration-200"
               style={{ transform: `scale(${offsetX < 0 ? actionScale : 0.85})` }}
             >
@@ -207,21 +207,21 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
             </div>
           </div>
         )}
-        
+
         {/* Edit action background (swipe right) */}
         {isMobile && !isProfileBlock && (
-          <div 
+          <div
             className={cn(
               "absolute inset-y-0 left-0 flex items-center justify-start px-6 transition-all duration-200 rounded-3xl",
               showEditAction ? "opacity-100" : "opacity-0 pointer-events-none",
               isAtThreshold && offsetX > 0 ? "bg-primary" : "bg-primary/75"
             )}
-            style={{ 
-              opacity: showEditAction ? actionOpacity : 0, 
+            style={{
+              opacity: showEditAction ? actionOpacity : 0,
               width: maxSwipe + 40,
             }}
           >
-            <div 
+            <div
               className="flex flex-col items-center gap-2 text-primary-foreground transition-all duration-200"
               style={{ transform: `scale(${offsetX > 0 ? actionScale : 0.85})` }}
             >
@@ -235,16 +235,16 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
             </div>
           </div>
         )}
-        
+
         {/* Main content wrapper */}
         <div
           className={cn(
             "relative group",
-            block.type !== 'separator' && "bg-card/70 backdrop-blur-xl rounded-3xl border border-border/20 shadow-glass",
+            block.type !== 'separator' && block.type !== 'socials' && "bg-card/70 backdrop-blur-xl rounded-3xl border border-border/20 shadow-glass",
             isDragging && "opacity-50 scale-95 shadow-glass-lg",
             isTransitioning && "transition-transform duration-300 ease-out"
           )}
-          style={{ 
+          style={{
             transform: isMobile && !isProfileBlock ? `translateX(${offsetX}px)` : undefined,
           }}
           onMouseEnter={() => setIsHovered(true)}
@@ -290,7 +290,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
                   </Button>
                 </div>
               )}
-              
+
               {!isProfileBlock && (
                 <Button
                   variant="glass"
@@ -301,7 +301,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
                   <GripVertical className="h-5 w-5" />
                 </Button>
               )}
-              
+
               <Button
                 variant="glass"
                 size="sm"
@@ -315,7 +315,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
               >
                 <Pencil className="h-4 w-4" />
               </Button>
-              
+
               {!isProfileBlock && (
                 <Button
                   variant="destructive"
@@ -367,7 +367,7 @@ export const InlineEditableBlock = memo(function InlineEditableBlock({
 
           {/* The actual block */}
           <BlockRenderer block={block} isPreview={false} isOwnerPremium={isOwnerPremium} />
-          
+
           {/* Mobile swipe hint */}
           {isMobile && !isProfileBlock && isTouched && offsetX === 0 && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-2.5 bg-card/95 backdrop-blur-xl rounded-full text-sm text-muted-foreground shadow-glass border border-border/30 flex items-center gap-3 animate-fade-in font-medium">
