@@ -243,14 +243,12 @@ new -> contacted -> qualified -> won/lost
 
 ### Frontend
 
-- **Next.js 14** (App Router) with Vite compatibility layer
+- **Vite React SPA** (Migrated purely to Vite, no Next.js)
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
 - i18next for RU/EN/KK
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
-
-> **Note**: `vite.config.ts` exists for `import.meta.env.VITE_*` compatibility. `next.config.mjs` maps these to `NEXT_PUBLIC_*`.
 
 ### Backend
 
@@ -273,17 +271,17 @@ new -> contacted -> qualified -> won/lost
 
 ## 7) Public Pages and SEO
 
-### Public Routes (Next.js App Router)
+### Public Routes (Vite SPA / React Router)
 
 | Route | Component | Purpose | Rendering |
 |-------|-----------|---------|-----------|
-| `/` | `src/app/page.tsx` | Marketing landing page | SSR |
-| `/pricing` | `src/app/pricing/page.tsx` | Plans and pricing | SSR |
-| `/gallery` | `src/app/gallery/page.tsx` | Community showcase | SSR |
-| `/auth` | `src/app/auth/page.tsx` | Login/signup | SSR |
-| `/[slug]` | `src/app/[slug]/page.tsx` | User public page | SSR (Critical) |
+| `/` | `src/pages/LandingV5.tsx` | Marketing landing page | Client-Side |
+| `/pricing` | `src/pages/Pricing.tsx` | Plans and pricing | Client-Side |
+| `/gallery` | `src/pages/Gallery.tsx` | Community showcase | Client-Side |
+| `/auth` | `src/pages/Auth.tsx` | Login/signup | Client-Side |
+| `/[slug]` | `src/pages/PublicPage.tsx` | User public page | Client-Side |
 | `/seo-landing` | `src/pages/SeoLanding.tsx` | SEO/AEO optimized page for bots | Client-side Bot Detection |
-| `/dashboard` | `src/app/dashboard/...` | All dashboard routes | Client-Side |
+| `/dashboard` | `src/pages/DashboardV2.tsx` | All dashboard routes | Client-Side |
 
 ### SEO Implementation
 
@@ -472,16 +470,6 @@ lnkmx/
 ├── public/                        # Static assets (images, icons)
 │
 ├── src/
-│   ├── app/                      # Next.js App Router (NEW)
-│   │   ├── layout.tsx            # Root layout
-│   │   ├── page.tsx              # Landing page
-│   │   ├── [slug]/               # Public user page
-│   │   ├── dashboard/            # Dashboard routes
-│   │   ├── auth/                 # Auth routes
-│   │   ├── pricing/              # Pricing page
-│   │   ├── sitemap.ts            # Dynamic sitemap
-│   │   └── robots.ts             # Robots.txt
-│   │
 │   ├── components/
 │   │   ├── blocks/               # 28 block renderers (public view)
 │   │   ├── block-editors/        # 28 block editors (dashboard)
