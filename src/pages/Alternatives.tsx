@@ -16,7 +16,7 @@ import {
   Layers,
   MessageSquare,
 } from 'lucide-react';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useMarketingAnalytics } from '@/hooks/useMarketingAnalytics';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';

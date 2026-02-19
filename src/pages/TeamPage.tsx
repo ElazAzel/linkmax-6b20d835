@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Users, ExternalLink, Crown, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { getNicheLabel } from '@/lib/niches';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import type { Team, TeamMember } from '@/services/collaboration';
 import type { Niche } from '@/lib/niches';
 

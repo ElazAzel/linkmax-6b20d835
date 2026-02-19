@@ -60,21 +60,21 @@ const BackgroundEffects = () => null;
 import { storage } from '@/lib/storage';
 
 // Lazy load heavy components for better bundle splitting
-const BlockEditorV2 = lazy(() => import('@/components/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
+const BlockEditorV2 = lazy(() => import('@/components/editor/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
 const TemplateGallery = lazy(() => import('@/components/editor/TemplateGallery').then(m => ({ default: m.TemplateGallery })));
 const TemplateMarketplace = lazy(() => import('@/components/editor/TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
 const SaveTemplateDialog = lazy(() => import('@/components/editor/SaveTemplateDialog').then(m => ({ default: m.SaveTemplateDialog })));
-const AIGenerator = lazy(() => import('@/components/AIGenerator').then(m => ({ default: m.AIGenerator })));
+const AIGenerator = lazy(() => import('@/components/editor/AIGenerator').then(m => ({ default: m.AIGenerator })));
 const QuickStartFlow = lazy(() => import('@/components/onboarding/QuickStartFlow').then(m => ({ default: m.QuickStartFlow })));
 const AIBuilderWizard = lazy(() => import('@/components/onboarding/AIBuilderWizard').then(m => ({ default: m.AIBuilderWizard })));
 const AchievementNotification = lazy(() => import('@/components/achievements/AchievementNotification').then(m => ({ default: m.AchievementNotification })));
-const InstallPromptDialog = lazy(() => import('@/components/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
+const InstallPromptDialog = lazy(() => import('@/components/pwa/InstallPromptDialog').then(m => ({ default: m.InstallPromptDialog })));
 const ShareAfterPublishDialog = lazy(() => import('@/components/referral/ShareAfterPublishDialog').then(m => ({ default: m.ShareAfterPublishDialog })));
 const TokensPanel = lazy(() => import('@/components/tokens/TokensPanel').then(m => ({ default: m.TokensPanel })));
 const FriendsPanel = lazy(() => import('@/components/friends/FriendsPanel').then(m => ({ default: m.FriendsPanel })));
 const MyTemplatesPanel = lazy(() => import('@/components/templates/MyTemplatesPanel').then(m => ({ default: m.MyTemplatesPanel })));
 const AchievementsPanel = lazy(() => import('@/components/achievements/AchievementsPanel').then(m => ({ default: m.AchievementsPanel })));
-const LocalStorageMigration = lazy(() => import('@/components/LocalStorageMigration').then(m => ({ default: m.LocalStorageMigration })));
+const LocalStorageMigration = lazy(() => import('@/components/layout/LocalStorageMigration').then(m => ({ default: m.LocalStorageMigration })));
 const ThemePanel = lazy(() => import('@/components/dashboard-v2/panels').then(m => ({ default: m.ThemePanel })));
 const CreatePageDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.CreatePageDialog })));
 const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dialogs').then(m => ({ default: m.PageVersionsDialog })));

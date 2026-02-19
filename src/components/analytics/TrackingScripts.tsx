@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { hasThirdPartyConsent } from '@/components/CookieConsent';
+import { hasThirdPartyConsent } from '@/components/legal/CookieConsent';
 
 import type { PageIntegrations } from '@/types/page';
 

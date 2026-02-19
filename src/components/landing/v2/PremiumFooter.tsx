@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Heart, Mail, MapPin } from 'lucide-react';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 
 export const PremiumFooter = () => {
     const { t } = useTranslation();

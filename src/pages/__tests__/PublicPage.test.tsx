@@ -83,15 +83,15 @@ vi.mock('@/components/seo/GEOEnhancedContent', () => ({
     GEOEnhancedContent: () => null,
 }));
 
-vi.mock('@/components/LanguageSwitcher', () => ({
+vi.mock('@/components/translation/LanguageSwitcher', () => ({
     LanguageSwitcher: () => null,
 }));
 
-vi.mock('@/components/FreemiumWatermark', () => ({
+vi.mock('@/components/billing/FreemiumWatermark', () => ({
     FreemiumWatermark: () => null,
 }));
 
-vi.mock('@/components/ChatbotWidget', () => ({
+vi.mock('@/components/chat/ChatbotWidget', () => ({
     ChatbotWidget: () => null,
 }));
 

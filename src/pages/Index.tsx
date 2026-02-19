@@ -21,7 +21,7 @@ import { GrainOverlay } from '@/components/landing/v2/GrainOverlay';
 import { DynamicIslandNav } from '@/components/landing/v2/DynamicIslandNav';
 import { LiquidCursor } from '@/components/landing/v2/LiquidCursor';
 import { Button } from '@/components/ui/button';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 
 export default function Index() {
   const navigate = useNavigate();

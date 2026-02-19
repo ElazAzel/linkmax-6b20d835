@@ -34,7 +34,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DashboardHeader } from '../layout/DashboardHeader';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { TelegramVerification } from '@/components/auth/TelegramVerification';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';

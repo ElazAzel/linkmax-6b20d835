@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
-import { BlockRenderer } from '@/components/BlockRenderer';
+import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import type { Block } from '@/types/page';
 import { useTranslation } from 'react-i18next';
 

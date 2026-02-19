@@ -1,7 +1,7 @@
 import { memo, useState, useRef, useCallback, TouchEvent } from 'react';
 import { Pencil, Trash2, GripVertical, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { BlockRenderer } from '@/components/BlockRenderer';
+import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { MobileBlockActions } from './MobileBlockActions';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';

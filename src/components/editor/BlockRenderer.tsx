@@ -29,34 +29,34 @@ function isBlockVisible(block: Block): boolean {
 }
 
 // Lazy load all block components for optimal code splitting
-const ProfileBlock = lazy(() => import('./blocks/ProfileBlock').then(m => ({ default: m.ProfileBlock })));
-const LinkBlock = lazy(() => import('./blocks/LinkBlock').then(m => ({ default: m.LinkBlock })));
-const ButtonBlock = lazy(() => import('./blocks/ButtonBlock').then(m => ({ default: m.ButtonBlock })));
-const SocialsBlock = lazy(() => import('./blocks/SocialsBlock').then(m => ({ default: m.SocialsBlock })));
-const TextBlock = lazy(() => import('./blocks/TextBlock').then(m => ({ default: m.TextBlock })));
-const ImageBlock = lazy(() => import('./blocks/ImageBlock').then(m => ({ default: m.ImageBlock })));
-const ProductBlock = lazy(() => import('./blocks/ProductBlock').then(m => ({ default: m.ProductBlock })));
-const VideoBlock = lazy(() => import('./blocks/VideoBlock').then(m => ({ default: m.VideoBlock })));
-const CarouselBlock = lazy(() => import('./blocks/CarouselBlock').then(m => ({ default: m.CarouselBlock })));
-const CustomCodeBlock = lazy(() => import('./blocks/CustomCodeBlock').then(m => ({ default: m.CustomCodeBlock })));
-const MessengerBlock = lazy(() => import('./blocks/MessengerBlock').then(m => ({ default: m.MessengerBlock })));
-const FormBlock = lazy(() => import('./blocks/FormBlock').then(m => ({ default: m.FormBlock })));
-const DownloadBlock = lazy(() => import('./blocks/DownloadBlock').then(m => ({ default: m.DownloadBlock })));
-const NewsletterBlock = lazy(() => import('./blocks/NewsletterBlock').then(m => ({ default: m.NewsletterBlock })));
-const TestimonialBlock = lazy(() => import('./blocks/TestimonialBlock').then(m => ({ default: m.TestimonialBlock })));
-const ScratchBlock = lazy(() => import('./blocks/ScratchBlock').then(m => ({ default: m.ScratchBlock })));
-const MapBlock = lazy(() => import('./blocks/MapBlock').then(m => ({ default: m.MapBlock })));
-const AvatarBlock = lazy(() => import('./blocks/AvatarBlock').then(m => ({ default: m.AvatarBlock })));
-const SeparatorBlock = lazy(() => import('./blocks/SeparatorBlock').then(m => ({ default: m.SeparatorBlock })));
-const CatalogBlock = lazy(() => import('./blocks/CatalogBlock').then(m => ({ default: m.CatalogBlock })));
-const BeforeAfterBlock = lazy(() => import('./blocks/BeforeAfterBlock').then(m => ({ default: m.BeforeAfterBlock })));
-const FAQBlock = lazy(() => import('./blocks/FAQBlock').then(m => ({ default: m.FAQBlock })));
-const CountdownBlock = lazy(() => import('./blocks/CountdownBlock').then(m => ({ default: m.CountdownBlock })));
-const PricingBlock = lazy(() => import('./blocks/PricingBlock').then(m => ({ default: m.PricingBlock })));
-const ShoutoutBlock = lazy(() => import('./blocks/ShoutoutBlock').then(m => ({ default: m.ShoutoutBlock })));
-const BookingBlock = lazy(() => import('./blocks/BookingBlock').then(m => ({ default: m.BookingBlock })));
-const CommunityBlock = lazy(() => import('./blocks/CommunityBlock').then(m => ({ default: m.CommunityBlock })));
-const EventBlock = lazy(() => import('./blocks/EventBlock').then(m => ({ default: m.EventBlock })));
+const ProfileBlock = lazy(() => import('../blocks/ProfileBlock').then(m => ({ default: m.ProfileBlock })));
+const LinkBlock = lazy(() => import('../blocks/LinkBlock').then(m => ({ default: m.LinkBlock })));
+const ButtonBlock = lazy(() => import('../blocks/ButtonBlock').then(m => ({ default: m.ButtonBlock })));
+const SocialsBlock = lazy(() => import('../blocks/SocialsBlock').then(m => ({ default: m.SocialsBlock })));
+const TextBlock = lazy(() => import('../blocks/TextBlock').then(m => ({ default: m.TextBlock })));
+const ImageBlock = lazy(() => import('../blocks/ImageBlock').then(m => ({ default: m.ImageBlock })));
+const ProductBlock = lazy(() => import('../blocks/ProductBlock').then(m => ({ default: m.ProductBlock })));
+const VideoBlock = lazy(() => import('../blocks/VideoBlock').then(m => ({ default: m.VideoBlock })));
+const CarouselBlock = lazy(() => import('../blocks/CarouselBlock').then(m => ({ default: m.CarouselBlock })));
+const CustomCodeBlock = lazy(() => import('../blocks/CustomCodeBlock').then(m => ({ default: m.CustomCodeBlock })));
+const MessengerBlock = lazy(() => import('../blocks/MessengerBlock').then(m => ({ default: m.MessengerBlock })));
+const FormBlock = lazy(() => import('../blocks/FormBlock').then(m => ({ default: m.FormBlock })));
+const DownloadBlock = lazy(() => import('../blocks/DownloadBlock').then(m => ({ default: m.DownloadBlock })));
+const NewsletterBlock = lazy(() => import('../blocks/NewsletterBlock').then(m => ({ default: m.NewsletterBlock })));
+const TestimonialBlock = lazy(() => import('../blocks/TestimonialBlock').then(m => ({ default: m.TestimonialBlock })));
+const ScratchBlock = lazy(() => import('../blocks/ScratchBlock').then(m => ({ default: m.ScratchBlock })));
+const MapBlock = lazy(() => import('../blocks/MapBlock').then(m => ({ default: m.MapBlock })));
+const AvatarBlock = lazy(() => import('../blocks/AvatarBlock').then(m => ({ default: m.AvatarBlock })));
+const SeparatorBlock = lazy(() => import('../blocks/SeparatorBlock').then(m => ({ default: m.SeparatorBlock })));
+const CatalogBlock = lazy(() => import('../blocks/CatalogBlock').then(m => ({ default: m.CatalogBlock })));
+const BeforeAfterBlock = lazy(() => import('../blocks/BeforeAfterBlock').then(m => ({ default: m.BeforeAfterBlock })));
+const FAQBlock = lazy(() => import('../blocks/FAQBlock').then(m => ({ default: m.FAQBlock })));
+const CountdownBlock = lazy(() => import('../blocks/CountdownBlock').then(m => ({ default: m.CountdownBlock })));
+const PricingBlock = lazy(() => import('../blocks/PricingBlock').then(m => ({ default: m.PricingBlock })));
+const ShoutoutBlock = lazy(() => import('../blocks/ShoutoutBlock').then(m => ({ default: m.ShoutoutBlock })));
+const BookingBlock = lazy(() => import('../blocks/BookingBlock').then(m => ({ default: m.BookingBlock })));
+const CommunityBlock = lazy(() => import('../blocks/CommunityBlock').then(m => ({ default: m.CommunityBlock })));
+const EventBlock = lazy(() => import('../blocks/EventBlock').then(m => ({ default: m.EventBlock })));
 
 interface BlockRendererProps {
   block: Block;
@@ -144,7 +144,7 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
   return typeof rawTitle === 'object' ? getI18nText(rawTitle, lang) : String(rawTitle);
 }
 
-import { BlockErrorBoundary } from '@/components/BlockErrorBoundary';
+import { BlockErrorBoundary } from '@/components/editor/BlockErrorBoundary';
 
 // ... existing imports
 

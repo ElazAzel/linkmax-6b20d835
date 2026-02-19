@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Users, ArrowLeft, Sparkles } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
-import { BlockRenderer } from '@/components/BlockRenderer';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { BlockRenderer } from '@/components/editor/BlockRenderer';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import type { Block, PageTheme } from '@/types/page';
 
 interface BlockSettings {

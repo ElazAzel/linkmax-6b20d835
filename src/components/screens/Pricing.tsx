@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Check, Crown, Sparkles, Zap, Star, Clock, Shield, Coins, MessageCircle } from 'lucide-react';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import { useTokens } from '@/hooks/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';

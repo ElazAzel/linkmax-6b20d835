@@ -11,7 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { GridEditor } from '@/components/editor/GridEditor';
-import { BlockEditorV2 } from '@/components/BlockEditorV2';
+import { BlockEditorV2 } from '@/components/editor/BlockEditorV2';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import type { Block } from '@/types/page';
 import { TEMPLATE_CATEGORY_KEYS, type TemplateCategoryKey, getTemplateCategoryLabel } from '@/lib/templateCategories';

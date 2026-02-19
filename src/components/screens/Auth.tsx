@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { Gift, Mail, Check } from 'lucide-react';
 import { z } from 'zod';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { applyReferralCode } from '@/services/referral';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/logger';

@@ -22,7 +22,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
-import { BlockRenderer } from '@/components/BlockRenderer';
+import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { useIsMobile } from '@/hooks/use-mobile';

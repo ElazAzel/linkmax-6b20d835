@@ -32,7 +32,7 @@ import { SkeletonCard, SkeletonGalleryGrid, SkeletonStats } from '@/components/u
 import { CommunityGallery } from '@/components/gallery/CommunityGallery';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useGallery } from '@/hooks/useGallery';
 import { FeaturedPageCard } from '@/components/gallery/FeaturedPageCard';
 import { GalleryPageCard } from '@/components/gallery/GalleryPageCard';

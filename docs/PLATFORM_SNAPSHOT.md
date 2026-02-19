@@ -473,13 +473,18 @@ lnkmx/
 │   ├── components/
 │   │   ├── blocks/               # 28 block renderers (public view)
 │   │   ├── block-editors/        # 28 block editors (dashboard)
+│   │   ├── editor/               # Editor core logics (BlockRenderer, etc)
 │   │   ├── dashboard-v2/         # Dashboard components
 │   │   ├── landing-v5/           # Landing page sections
 │   │   ├── admin/                # Admin panel components
 │   │   ├── auth/                 # Auth forms
+│   │   ├── billing/              # Subscription and premium limits
+│   │   ├── pwa/                  # Progressive Web App features
 │   │   ├── crm/                  # CRM/lead components
-│   │   ├── analytics/            # Analytics visualizations
-│   │   ├── motion/               # Animation system (Reveal, Stagger)
+│   │   ├── seo/                  # SEO adjustments and metadata
+│   │   ├── translation/          # Internationalization tools
+│   │   ├── legal/                # Cookie consents, antispam
+│   │   ├── layout/               # General Layout components
 │   │   ├── ui/                   # shadcn/ui base components
 │   │   └── ...                   # Other feature components
 │   │

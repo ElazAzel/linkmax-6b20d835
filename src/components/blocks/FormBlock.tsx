@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
-import { TurnstileWidget } from '@/components/TurnstileWidget';
+import { TurnstileWidget } from '@/components/legal/TurnstileWidget';
 
 import { trackLead } from '@/components/analytics/TrackingScripts';
 

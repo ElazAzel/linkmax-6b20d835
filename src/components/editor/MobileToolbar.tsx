@@ -30,7 +30,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { AutoSaveIndicator, type SaveStatus } from './AutoSaveIndicator';
 import { StreakDisplay } from '@/components/streak/StreakDisplay';
 import { TokenBalanceDisplay } from '@/components/tokens/TokenBalanceDisplay';

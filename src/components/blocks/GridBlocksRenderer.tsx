@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { BlockRenderer } from '@/components/BlockRenderer';
+import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { cn } from '@/lib/utils';
 import { Block, BLOCK_SIZE_DIMENSIONS } from '@/types/page';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';

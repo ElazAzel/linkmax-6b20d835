@@ -8,9 +8,9 @@ import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
-import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
-import { CookieConsent } from "@/components/CookieConsent";
+import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
+import { PWAUpdatePrompt } from "@/components/pwa/PWAUpdatePrompt";
+import { CookieConsent } from "@/components/legal/CookieConsent";
 import { useWebVitals } from "@/hooks/useWebVitals";
 import { storage } from '@/lib/storage';
 
