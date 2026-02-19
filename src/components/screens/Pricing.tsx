@@ -12,6 +12,7 @@ import { usePremiumStatus } from '@/hooks/usePremiumStatus';
 import { useTokens } from '@/hooks/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
+import { useRobokassa } from '@/hooks/useRobokassa';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
@@ -106,13 +107,19 @@ export default function Pricing() {
     if (period === 6) return 15;
     return 0;
   };
-  const handleSelectPlan = (planKey: string) => {
+  // Payment hook
+  const { buySubscription, isLoading: isPaymentLoading } = useRobokassa();
+
+  const handleSelectPlan = async (planKey: string) => {
     if (planKey === 'basic') {
       toast.info(t('pricing.alreadyFree', 'Бесплатный тариф уже активен'));
       return;
     }
-    setSelectedPlan(planKey);
-    toast.info(t('pricing.comingSoon', 'Оплата скоро будет доступна! Следите за обновлениями.'));
+
+    // Initiate RoboKassa payment
+    if (planKey === 'pro') {
+      await buySubscription('pro', billingPeriod);
+    }
   };
   const getCurrentPlanBadge = (planKey: string) => {
     if (tier === planKey || tier === 'free' && planKey === 'basic') {
