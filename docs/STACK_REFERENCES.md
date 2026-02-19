@@ -52,13 +52,48 @@
 | **Playwright** | [playwright.dev](https://playwright.dev/) | E2E Testing. |
 | **Vitest** | [vitest.dev](https://vitest.dev/) | Unit Testing. |
 
-## Best Practices
+---
 
-### Supabase + React Query
-- Always use `useQuery` for fetching data.
-- Key format: `['entity', id, { filter }]`.
-- Use Supabase Realtime for *critical* live updates, but rely on `invalidateQueries` for general CRUD Sync.
+## 🏗️ Advanced Resources & Best Practices
 
-### shadcn/ui
-- **Do not edit** `components/ui` files directly unless customizing the *design system*.
-- Copy/paste components via CLI: `npx shadcn-ui@latest add [component]`.
+### Supabase & RLS
+- **[Awesome Supabase](https://github.com/supabase-community/awesome-supabase)**: Curated list of libraries, tools, and examples.
+- **Security Guide**:
+  - Always enable RLS on new tables.
+  - Use `auth.uid()` in policies.
+  - Index columns used in RLS policies for 10x performance.
+  - *Never* expose `service_role` keys on the client.
+
+### TanStack Query (React Query)
+- **[TkDodo's Blog](https://tkdodo.eu/blog/practical-react-query)**: The "unofficial bible" of React Query patterns.
+- **Best Practices**:
+  - **Dependencies**: Include all variables in the Query Key: `['todos', { status, page }]`.
+  - **Staleness**: Set `staleTime: 5 * 60 * 1000` (5 mins) for data that rarely changes to avoid over-fetching.
+  - **Optimistic Updates**: Use for immediate UI feedback on mutations (like "Like" buttons or drag-and-drop).
+
+### Tailwind CSS Architecture
+- **[Tailwind Best Practices](https://tailwindcss.com/docs/reusing-styles)**: Official guide on avoiding "class soup".
+- **Design System**: Use `tailwind.config.ts` for colors/spacing tokens rather than hardcoding hex values.
+- **Sorting**: We use `prettier-plugin-tailwindcss` to enforce consistent class ordering.
+
+### shadcn/ui Patterns
+- **Architecture**:
+  - Treat `components/ui` as specific source code you own, not a node_module.
+  - Use `class-variance-authority` (CVA) for complex component variants (e.g., Button sizes/colors).
+- **Extending**: Compose primitives (e.g., `Dialog`) into larger business components (e.g., `EditProfileDialog`) rather than modifying the primitive itself.
+
+### Performance (Framer Motion)
+- **[Layout Animations](https://www.framer.com/motion/layout-animations/)**: Use `layout` prop for smooth FLIP animations during reordering.
+- **Optimization**:
+  - Prefer animating `transform` and `opacity` (GPU accelerated).
+  - Avoid animating `width/height` (triggers layout thrashing) unless necessary.
+  - Use `WillChange` component or prop if animation is stuttering.
+
+### Forms (React Hook Form + Zod)
+- **Schema Validation**: Define schema *outside* the component to prevent re-creation on render.
+- **Complex Validation**: Use `zod.superRefine()` for cross-field validation (e.g., checking if `confirmPassword` matches `password`).
+- **Async Validation**: Check unique usernames/emails against Supabase asynchronously within the resolver or `onBlur`.
+
+### Accessibility (dnd-kit)
+- **Keyboard Support**: `dnd-kit` has great defaults, but ensure your sortables are focusable.
+- **Screen Readers**: It uses Live Regions to announce movements. Test this flow if modifying core sensor logic.
