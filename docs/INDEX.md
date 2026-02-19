@@ -12,9 +12,15 @@ Welcome to the **lnkmx** developer & stakeholder portal.
 
 ## 🏗️ Architecture & Technical
 
-- **[Architecture](./architecture.md)**: System design, data flow, and component diagram.
+- **[Architecture (Overview)](./architecture.md)**: System design, data flow, and component diagram.
+- **[Architecture Patterns](./ARCHITECTURE_PATTERNS.md)**: *NEW* State management and improved component patterns.
+- **[Stack References](./STACK_REFERENCES.md)**: *NEW* Libraries, tools, and best practices.
+- **[Performance Guide](./PERFORMANCE_GUIDE.md)**: *NEW* Optimization strategies for Frontend/Backend.
+- **[Database Schema](./DATABASE_SCHEMA_GUIDE.md)**: *NEW* ERD and JSON field structures.
+- **[Security & Ops](./SECURITY_OPS.md)**: *NEW* Incident response and security protocols.
+- **[Accessibility Checklist](./A11Y_CHECKLIST.md)**: *NEW* A11y standards.
 - **[API & Backend](./API.md)**: 28 edge functions, RPCs, and RLS documentation.
-- **[Security](./SECURITY.md)**: Security checklist, GDPR, rate limiting, and compliance.
+- **[Security (General)](./SECURITY.md)**: Security checklist, GDPR, rate limiting, and compliance.
 - **[UI Components](./UI-COMPONENTS.md)**: Guide to shared UI components.
 - **[Dependency Map](./DEPENDENCY_MAP.md)**: Module dependency graph.
 - **[Testing](./TESTING.md)**: Testing strategies and tools.
