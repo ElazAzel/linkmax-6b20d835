@@ -52,6 +52,7 @@ Additional:
 
 ## 🌐 Feature-Specific Docs
 
+- **[Future Stack](./FUTURE_STACK.md)**: *NEW* Gap analysis — tools & services to integrate next.
 - **[i18n Operations](./i18n_ops.md)**: Internationalization workflows.
 - **[Translation Playbook](./translation_playbook.md)**: Content translation guide.
 - **[Demo Accounts](./demo-accounts.md)**: Demo/seed account setup.
