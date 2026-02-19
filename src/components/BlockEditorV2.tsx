@@ -127,13 +127,11 @@ export function BlockEditorV2({
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const originalDataRef = useRef<any>(null);
 
     // Update formData when block changes
     useEffect(() => {
         if (block) {
             setFormData({ ...block });
-            originalDataRef.current = JSON.stringify(block);
             setHasUnsavedChanges(false);
             setLastSaved(null);
         }
@@ -142,11 +140,10 @@ export function BlockEditorV2({
     // Check for unsaved changes
     const handleFormChange = useCallback((updates: any) => {
         setFormData(updates);
-        const hasChanges = JSON.stringify(updates) !== originalDataRef.current;
-        setHasUnsavedChanges(hasChanges);
+        setHasUnsavedChanges(true);
 
         // Autosave if enabled
-        if (enableAutosave && hasChanges) {
+        if (enableAutosave) {
             if (autosaveTimerRef.current) {
                 clearTimeout(autosaveTimerRef.current);
             }
@@ -163,7 +160,6 @@ export function BlockEditorV2({
             await onSave(data);
             setLastSaved(new Date());
             setHasUnsavedChanges(false);
-            originalDataRef.current = JSON.stringify(data);
             if (closeAfter) {
                 onClose();
             }

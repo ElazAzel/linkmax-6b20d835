@@ -245,7 +245,8 @@ export const GridEditor = memo(function GridEditor({
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
 
-  const blockIdsKey = useMemo(() => contentBlocks.map(b => b.id).join(','), [contentBlocks]);
+  // Note: blockIdsKey removed from DndContext key to prevent full remounts on block changes
+  // SortableContext items prop handles reconciliation naturally
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -255,8 +256,8 @@ export const GridEditor = memo(function GridEditor({
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 0, // No delay needed since we have a dedicated handle!
-        tolerance: 5
+        delay: 200, // Give onClick time to fire before drag activates
+        tolerance: 8
       }
     }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -303,7 +304,7 @@ export const GridEditor = memo(function GridEditor({
 
       {/* Grid container */}
       <DndContext
-        key={`${dndContextId}-${blockIdsKey}`}
+        key={dndContextId}
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
