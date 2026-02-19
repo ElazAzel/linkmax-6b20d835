@@ -6,6 +6,8 @@ import { useState, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
+import { usePageAnalytics } from '@/hooks/analytics/usePageAnalytics';
+import { useLeads } from '@/hooks/crm/useLeads';
 
 export type DashboardTab = 'home' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings';
 
@@ -14,6 +16,8 @@ export function useDashboardV2() {
   const [searchParams, setSearchParams] = useSearchParams();
   const dashboard = useDashboard();
   const { isPremium, tier, inTrial, trialEndsAt, isLoading: premiumLoading } = usePremiumStatus();
+  const { analytics, loading: analyticsLoading } = usePageAnalytics();
+  const { leads, loading: leadsLoading, getLeadStats } = useLeads();
 
   // Current active tab from URL
   const activeTab = useMemo<DashboardTab>(() => {
@@ -32,14 +36,13 @@ export function useDashboardV2() {
 
   // Activity badge count (leads + registrations)
   const activityBadge = useMemo(() => {
-    // TODO: Fetch real data from leads/registrations
-    return 0;
-  }, []);
+    return leads.filter(l => l.status === 'new').length;
+  }, [leads]);
 
   // Page list for PagesScreen
   const pages = useMemo(() => {
     if (!dashboard.pageData) return [];
-    
+
     // Currently single page, but structure supports multiple
     return [{
       id: dashboard.pageData.id,
@@ -47,19 +50,19 @@ export function useDashboardV2() {
       slug: dashboard.pageData.slug,
       isPublished: dashboard.pageData.isPublished,
       updatedAt: new Date().toISOString(),
-      viewCount: undefined, // TODO: fetch from analytics
+      viewCount: analytics?.totalViews || 0,
       coverUrl: undefined,
     }];
-  }, [dashboard.pageData, dashboard.profileBlock]);
+  }, [dashboard.pageData, dashboard.profileBlock, analytics]);
 
   // Quick stats for HomeScreen
   const quickStats = useMemo(() => {
     return {
-      views: 0, // TODO: fetch from analytics
-      leads: 0,
-      conversions: 0,
+      views: analytics?.totalViews || 0,
+      leads: leads.length || 0,
+      conversions: analytics?.totalConversions || 0,
     };
-  }, []);
+  }, [analytics, leads]);
 
   // Handle navigation to editor
   const openEditor = useCallback(() => {
