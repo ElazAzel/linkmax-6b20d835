@@ -33,6 +33,67 @@ import type { FreeTier } from '@/hooks/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/usePremiumStatus';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// ─── Insert-Between Divider ────────────────────────────────────────
+// Shows a "+" button between blocks to insert at a specific position
+function InsertBetweenDivider({
+  position,
+  onInsert,
+  isPremium,
+  currentTier,
+  currentBlockCount,
+  isMobile,
+}: {
+  position: number;
+  onInsert: (blockType: string, position: number) => void;
+  isPremium: boolean;
+  currentTier: FreeTier;
+  currentBlockCount: number;
+  isMobile: boolean;
+}) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const handleInsert = useCallback((blockType: string) => {
+    onInsert(blockType, position);
+  }, [onInsert, position]);
+
+  return (
+    <div className="relative group/divider py-1">
+      {/* Line + button */}
+      <div className={cn(
+        "flex items-center gap-2 transition-all duration-200",
+        isMobile ? "opacity-60" : "opacity-0 group-hover/divider:opacity-100"
+      )}>
+        <div className="flex-1 h-px bg-border/40" />
+        <button
+          type="button"
+          onClick={() => setSheetOpen(true)}
+          className={cn(
+            "shrink-0 flex items-center justify-center rounded-full transition-all",
+            "bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 hover:border-primary/40",
+            "active:scale-90",
+            isMobile ? "h-7 w-7" : "h-6 w-6"
+          )}
+          aria-label="Insert block here"
+        >
+          <Plus className={isMobile ? "h-4 w-4" : "h-3.5 w-3.5"} strokeWidth={2.5} />
+        </button>
+        <div className="flex-1 h-px bg-border/40" />
+      </div>
+
+      {/* Block picker sheet (externally controlled) */}
+      <BlockInsertButton
+        onInsert={handleInsert}
+        isPremium={isPremium}
+        currentTier={currentTier}
+        currentBlockCount={currentBlockCount}
+        isOpen={sheetOpen}
+        onOpenChange={setSheetOpen}
+        hideTrigger
+      />
+    </div>
+  );
+}
+
 interface GridEditorProps {
   blocks: Block[];
   isPremium: boolean;
@@ -285,13 +346,13 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
-  const handleInsertBlock = useCallback((blockType: string) => {
-    const position = blocks.length;
-    onInsertBlock(blockType, position);
+  const handleInsertBlock = useCallback((blockType: string, position?: number) => {
+    const pos = typeof position === 'number' ? position : blocks.length;
+    onInsertBlock(blockType, pos);
   }, [onInsertBlock, blocks.length]);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-4 space-y-4 pb-32 md:pb-24">
+    <div className="max-w-2xl mx-auto px-4 py-4 space-y-2 pb-32 md:pb-24">
       {/* Profile block */}
       {profileBlock && (
         <div className="relative" data-onboarding="profile-block">
@@ -302,7 +363,19 @@ export const GridEditor = memo(function GridEditor({
         </div>
       )}
 
-      {/* Grid container */}
+      {/* Insert after profile / before first content block */}
+      {contentBlocks.length > 0 && (
+        <InsertBetweenDivider
+          position={0}
+          onInsert={handleInsertBlock}
+          isPremium={isPremium}
+          currentTier={currentTier}
+          currentBlockCount={blocks.length}
+          isMobile={isMobile}
+        />
+      )}
+
+      {/* Grid container with interleaved insert dividers */}
       <DndContext
         key={dndContextId}
         sensors={sensors}
@@ -314,11 +387,10 @@ export const GridEditor = memo(function GridEditor({
           items={contentBlocks.map(b => b.id)}
           strategy={rectSortingStrategy}
         >
-          <div className="grid grid-cols-2 gap-4 grid-flow-row-dense">
-            <AnimatePresence>
-              {contentBlocks.map((block) => (
+          {contentBlocks.map((block, index) => (
+            <div key={block.id}>
+              <div className="grid grid-cols-2 gap-4 grid-flow-row-dense">
                 <SortableGridBlockItem
-                  key={block.id}
                   block={block}
                   onEdit={onEditBlock}
                   onDelete={onDeleteBlock}
@@ -326,9 +398,21 @@ export const GridEditor = memo(function GridEditor({
                   premiumTier={premiumTier}
                   isMobile={isMobile}
                 />
-              ))}
-            </AnimatePresence>
-          </div>
+              </div>
+
+              {/* Insert divider after each block */}
+              {index < contentBlocks.length - 1 && (
+                <InsertBetweenDivider
+                  position={index + 1}
+                  onInsert={handleInsertBlock}
+                  isPremium={isPremium}
+                  currentTier={currentTier}
+                  currentBlockCount={blocks.length}
+                  isMobile={isMobile}
+                />
+              )}
+            </div>
+          ))}
         </SortableContext>
 
         <DragOverlay adjustScale={true}>
@@ -339,7 +423,7 @@ export const GridEditor = memo(function GridEditor({
       </DndContext>
 
       {/* Bottom Add Button */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <motion.div
           className="col-span-1 md:col-span-2 border-2 border-dashed border-border rounded-2xl flex items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors py-8"
           initial={{ opacity: 0, y: 20 }}
@@ -347,7 +431,7 @@ export const GridEditor = memo(function GridEditor({
           transition={{ delay: 0.2 }}
         >
           <BlockInsertButton
-            onInsert={handleInsertBlock}
+            onInsert={(blockType) => handleInsertBlock(blockType)}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
@@ -362,7 +446,7 @@ export const GridEditor = memo(function GridEditor({
             {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
           </p>
           <BlockInsertButton
-            onInsert={handleInsertBlock}
+            onInsert={(blockType) => handleInsertBlock(blockType)}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
@@ -379,7 +463,7 @@ export const GridEditor = memo(function GridEditor({
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
           <BlockInsertButton
-            onInsert={handleInsertBlock}
+            onInsert={(blockType) => handleInsertBlock(blockType)}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
