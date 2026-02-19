@@ -227,10 +227,10 @@ onINP(metric => trackEvent('web_vital', { name: 'INP', value: metric.value }));
 | **Sentry** | 🔴 Critical | Now | ✅ Implemented | 2-3 hours |
 | **Upstash Redis** | 🔴 Critical | Now | 📝 Documented | 4-6 hours |
 | **Web Vitals** | 🔴 Critical | Now | ✅ Implemented | 1 hour |
-| **Capacitor.js** | 🟡 High | Q2 2026 | Not started | 2-3 days |
+| **Capacitor.js** | 🟡 High | Q2 2026 | ✅ Initialized | 2-3 days |
 | **FCM + APNs** | 🟡 High | Q2 2026 | Not started | 1-2 days |
 | **RoboKassa** | 🟡 High | Q1-Q2 2026 | ✅ Implemented | 3-5 days |
-| **React Email** | 🟡 High | Q2 2026 | Not started | 2-3 days |
+| **React Email** | 🟡 High | Q2 2026 | ✅ Implemented | 2-3 days |
 | **Cloudflare SaaS** | 🟢 Planned | Q3 2026 | Not started | 3-5 days |
 | **Zapier/Make** | 🟢 Planned | Q3 2026 | Not started | 3-5 days |
 | **Stripe** | 🟢 Planned | Q3-Q4 2026 | Not started | 5-7 days |

@@ -22,9 +22,16 @@
     "i18n:export": "node scripts/i18n-export.mjs",
     "i18n:import": "node scripts/i18n-import.mjs",
     "typecheck": "tsc --noEmit",
-    "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit"
+    "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit",
+    "mobile:sync": "npm run build && npx cap sync",
+    "mobile:open:android": "npx cap open android",
+    "mobile:open:ios": "npx cap open ios"
   },
   "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@hookform/resolvers": "^3.10.0",
