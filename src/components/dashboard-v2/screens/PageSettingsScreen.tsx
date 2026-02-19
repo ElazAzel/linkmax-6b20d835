@@ -429,42 +429,73 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
             {t('settings.integrations.title', 'Integrations & Tracking')}
           </h3>
-          <Card className="p-4 space-y-4">
-            <div className="space-y-2">
-              <Label>{t('settings.integrations.fbPixel', 'Facebook Pixel ID')}</Label>
+          <Card className="p-4 space-y-5">
+            <p className="text-xs text-muted-foreground">
+              {t('settings.integrations.description', 'Подключите пиксели для отслеживания конверсий. События PageView, Lead, Purchase и клики по блокам отправляются автоматически.')}
+            </p>
+
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-2">
+                <span>Meta Pixel ID</span>
+                {integrations?.fb_pixel && <span className="h-2 w-2 rounded-full bg-green-500" />}
+              </Label>
               <Input
                 value={integrations?.fb_pixel || ''}
-                onChange={(e) => onUpdateIntegrations({ ...integrations, fb_pixel: e.target.value })}
-                placeholder="e.g. 1234567890"
-                className="rounded-xl"
+                onChange={(e) => onUpdateIntegrations({ ...integrations, fb_pixel: e.target.value.replace(/\D/g, '') })}
+                placeholder="1234567890"
+                className="rounded-xl font-mono text-sm"
               />
+              <p className="text-[11px] text-muted-foreground">
+                Events Manager → Источники данных → Pixel ID
+              </p>
             </div>
-            <div className="space-y-2">
-              <Label>{t('settings.integrations.ttPixel', 'TikTok Pixel ID')}</Label>
+
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-2">
+                <span>TikTok Pixel ID</span>
+                {integrations?.tt_pixel && <span className="h-2 w-2 rounded-full bg-green-500" />}
+              </Label>
               <Input
                 value={integrations?.tt_pixel || ''}
-                onChange={(e) => onUpdateIntegrations({ ...integrations, tt_pixel: e.target.value })}
-                placeholder="e.g. C1234567890"
-                className="rounded-xl"
+                onChange={(e) => onUpdateIntegrations({ ...integrations, tt_pixel: e.target.value.trim() })}
+                placeholder="C1234567890"
+                className="rounded-xl font-mono text-sm"
               />
+              <p className="text-[11px] text-muted-foreground">
+                TikTok Ads → Assets → Events → Pixel Code
+              </p>
             </div>
-            <div className="space-y-2">
-              <Label>{t('settings.integrations.ga4Id', 'GA4 Measurement ID')}</Label>
+
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-2">
+                <span>Google Analytics 4</span>
+                {integrations?.ga4_id && <span className="h-2 w-2 rounded-full bg-green-500" />}
+              </Label>
               <Input
                 value={integrations?.ga4_id || ''}
-                onChange={(e) => onUpdateIntegrations({ ...integrations, ga4_id: e.target.value })}
-                placeholder="e.g. G-XXXXXXXXXX"
-                className="rounded-xl"
+                onChange={(e) => onUpdateIntegrations({ ...integrations, ga4_id: e.target.value.trim() })}
+                placeholder="G-XXXXXXXXXX"
+                className="rounded-xl font-mono text-sm"
               />
+              <p className="text-[11px] text-muted-foreground">
+                GA4 → Admin → Data Streams → Measurement ID
+              </p>
             </div>
-            <div className="space-y-2">
-              <Label>{t('settings.integrations.yandexMetrika', 'Yandex Metrika ID')}</Label>
+
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-2">
+                <span>Яндекс.Метрика</span>
+                {integrations?.yandex_metrika && <span className="h-2 w-2 rounded-full bg-green-500" />}
+              </Label>
               <Input
                 value={integrations?.yandex_metrika || ''}
-                onChange={(e) => onUpdateIntegrations({ ...integrations, yandex_metrika: e.target.value })}
-                placeholder="e.g. 12345678"
-                className="rounded-xl"
+                onChange={(e) => onUpdateIntegrations({ ...integrations, yandex_metrika: e.target.value.replace(/\D/g, '') })}
+                placeholder="12345678"
+                className="rounded-xl font-mono text-sm"
               />
+              <p className="text-[11px] text-muted-foreground">
+                Метрика → Настройки → Номер счётчика
+              </p>
             </div>
 
             {/* Webhook - Pro Only */}

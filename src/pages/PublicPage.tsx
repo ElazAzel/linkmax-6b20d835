@@ -313,7 +313,7 @@ export default function PublicPage() {
 
               {/* Analytics Tracking Scripts */}
               {pageData.integrations && (
-                <TrackingScripts integrations={pageData.integrations} />
+                <TrackingScripts integrations={pageData.integrations} pageId={pageData.id} />
               )}
             </div>
           </AnalyticsProvider>

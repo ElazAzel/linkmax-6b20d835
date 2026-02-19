@@ -292,7 +292,7 @@ export default function PublicPageClient({ initialPageData }: Props) {
 
                     {/* Analytics Tracking Scripts */}
                     {pageData.integrations && (
-                        <TrackingScripts integrations={pageData.integrations} />
+                        <TrackingScripts integrations={pageData.integrations} pageId={pageData.id} />
                     )}
                 </div>
             </AnalyticsProvider>
