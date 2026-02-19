@@ -24,10 +24,20 @@ function setConsent(status: 'accepted' | 'rejected') {
 
 /**
  * Check if user has consented to analytics tracking.
- * Used by analytics hooks to gate tracking calls.
+ * First-party analytics (our own DB) always allowed — it's anonymous, no cookies.
+ * Third-party pixels (FB, TikTok, GA4, Yandex) require explicit consent.
  */
 export function hasAnalyticsConsent(): boolean {
-    return getConsent() === 'accepted';
+    // First-party analytics: always allowed (anonymous, no PII)
+    return true;
+}
+
+/**
+ * Check if user consented to third-party tracking pixels.
+ * Used to gate loading of external scripts (FB Pixel, TikTok, GA4, Yandex).
+ */
+export function hasThirdPartyConsent(): boolean {
+    return getConsent() !== 'rejected';
 }
 
 /**

@@ -1,6 +1,7 @@
 /**
  * Hook for tracking analytics on public pages
  * Automatically tracks page views and provides methods for click/share tracking
+ * Sends events to both internal DB and marketing pixels
  */
 
 import { useEffect, useCallback, useRef } from 'react';
@@ -9,7 +10,7 @@ import {
   trackBlockClick,
   trackShare
 } from '@/services/analytics';
-import { hasAnalyticsConsent } from '@/components/CookieConsent';
+import { trackClickLink, trackViewContent } from '@/components/analytics/TrackingScripts';
 
 interface UseAnalyticsTrackingOptions {
   pageId: string | undefined;
@@ -23,9 +24,6 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   useEffect(() => {
     if (!pageId || !enabled || hasTrackedView.current) return;
 
-    // GDPR: Check analytics consent before tracking
-    if (!hasAnalyticsConsent()) return;
-
     // Check if we've already tracked this page in this session
     const sessionKey = `linkmax_viewed_${pageId}`;
     const alreadyViewed = sessionStorage.getItem(sessionKey);
@@ -37,11 +35,14 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
     }
   }, [pageId, enabled]);
 
-  // Track block click
+  // Track block click — sends to internal DB + marketing pixels
   const onBlockClick = useCallback(
     (blockId: string, blockType?: string, blockTitle?: string) => {
-      if (!pageId || !enabled || !hasAnalyticsConsent()) return;
+      if (!pageId || !enabled) return;
+      // Internal analytics (DB)
       trackBlockClick(pageId, blockId, blockType, blockTitle);
+      // Marketing pixels (FB, TikTok, GA4)
+      trackClickLink(blockTitle, undefined);
     },
     [pageId, enabled]
   );
@@ -49,7 +50,7 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   // Track share
   const onShare = useCallback(
     (method?: string) => {
-      if (!pageId || !enabled || !hasAnalyticsConsent()) return;
+      if (!pageId || !enabled) return;
       trackShare(pageId, method);
     },
     [pageId, enabled]
