@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { useLocation } from 'react-router-dom';
 
 import type { PageIntegrations } from '@/types/page';
 
@@ -75,7 +75,8 @@ function getOrCreateClientId(): string {
 let _currentPageId: string | undefined;
 
 export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) {
-    const pathname = usePathname();
+    const location = useLocation();
+    const pathname = location.pathname;
     const pageIdRef = useRef(pageId);
     pageIdRef.current = pageId;
     _currentPageId = pageId;
@@ -191,6 +192,9 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
                 page_path: pathname
             });
         }
+        if (integrations.yandex_metrika && window.ym) {
+            window.ym(integrations.yandex_metrika, 'hit', window.location.href);
+        }
         // Server-side PageView on SPA navigation
         if (pageIdRef.current) {
             sendServerEvent(pageIdRef.current, 'PageView');
@@ -200,12 +204,14 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
     return null;
 }
 
-// Helper functions for tracking events — now with dual client+server firing
+// ─── Helper functions for tracking events — dual client+server ───
+
 export const trackLead = (userData?: Record<string, string>) => {
     if (typeof window === 'undefined') return;
     if (window.fbq) window.fbq('track', 'Lead');
     if (window.ttq) window.ttq.track('SubmitForm');
     if (window.gtag) window.gtag('event', 'generate_lead');
+    if (window.ym) window.ym('reachGoal', 'lead');
     if (_currentPageId) sendServerEvent(_currentPageId, 'Lead', {}, userData);
 };
 
@@ -225,3 +231,27 @@ export const trackInitiateCheckout = () => {
     if (_currentPageId) sendServerEvent(_currentPageId, 'InitiateCheckout');
 };
 
+export const trackViewContent = (contentName?: string, contentType?: string) => {
+    if (typeof window === 'undefined') return;
+    const data = { content_name: contentName, content_type: contentType };
+    if (window.fbq) window.fbq('track', 'ViewContent', data);
+    if (window.ttq) window.ttq.track('ViewContent', data);
+    if (window.gtag) window.gtag('event', 'view_item', data);
+    if (_currentPageId) sendServerEvent(_currentPageId, 'ViewContent', data);
+};
+
+export const trackClickLink = (blockTitle?: string, url?: string) => {
+    if (typeof window === 'undefined') return;
+    const data = { content_name: blockTitle, link_url: url };
+    if (window.fbq) window.fbq('trackCustom', 'ClickLink', data);
+    if (window.ttq) window.ttq.track('ClickButton', data);
+    if (window.gtag) window.gtag('event', 'click', { event_category: 'link', event_label: blockTitle, link_url: url });
+};
+
+export const trackSubscribe = (userData?: Record<string, string>) => {
+    if (typeof window === 'undefined') return;
+    if (window.fbq) window.fbq('track', 'Subscribe');
+    if (window.ttq) window.ttq.track('Subscribe');
+    if (window.gtag) window.gtag('event', 'subscribe');
+    if (_currentPageId) sendServerEvent(_currentPageId, 'Subscribe', {}, userData);
+};
