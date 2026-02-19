@@ -128,8 +128,8 @@ export const SocialsBlock = memo(function SocialsBlockComponent({ block, onPlatf
               onClick={() => handleClick(url)}
               className={cn(
                 "group relative w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300",
-                "glass-card backdrop-blur-md border-white/10 shadow-glass",
-                "hover:shadow-glass-lg hover:border-white/20 active:scale-90"
+                "glass-card backdrop-blur-md shadow-glass",
+                "hover:shadow-glass-lg active:scale-90"
               )}
               aria-label={platform.name || iconKey}
             >

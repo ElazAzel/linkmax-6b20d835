@@ -19,3 +19,5 @@
 5.  **Testing**:
     -   Use `vitest` + `react-testing-library` for unit tests.
     -   Test user interactions, not implementation details.
+6.  **Design Rules**:
+    -   **Divider & Social Blocks**: Must NOT have borders/frames. Ensure they are clean and borderless.
