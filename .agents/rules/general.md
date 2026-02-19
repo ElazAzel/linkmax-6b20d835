@@ -13,3 +13,7 @@
 6.  **Error Handling**:
     -   Frontend: Use `toast.error()` for user feedback. Report to Sentry in production.
     -   Backend: Return proper HTTP status codes. Log errors.
+7.  **UI & Styling**:
+    -   Use **Shadcn UI** components whenever possible.
+    -   Use **Tailwind CSS** for styling.
+    -   **No raw CSS** unless strictly required for complex animations or overrides not feasible in Tailwind.

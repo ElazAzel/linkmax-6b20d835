@@ -20,3 +20,12 @@ Expertise in modern React development using Vite, TypeScript, Tailwind CSS, and 
 -   `npm run dev`: Start dev server.
 -   `npm run build`: Production build.
 -   `npm run test`: Run unit tests.
+
+## Workflows
+
+### Creating a New Component
+1.  Check if a similar Shadcn UI component already exists (`src/components/ui`) or can be added via `npx shadcn-ui@latest add <component>`.
+2.  If not, create it in `src/components/` (or a feature-specific subfolder).
+3.  Name the file `PascalCase.tsx`.
+4.  Use `export const ComponentName = () => { ... }` (named exports preferred).
+5.  Use Tailwind CSS for styling. Do not use raw CSS or inline styles unnecessarily.
