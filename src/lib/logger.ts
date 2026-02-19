@@ -3,8 +3,9 @@
  * - Suppresses debug/info logs in production
  * - Provides consistent error tracking
  * - Performance monitoring support
- * - Sentry integration for production error tracking
+ * - Sentry integration for production error tracking via @sentry/react
  */
+import { Sentry, isSentryEnabled } from './sentry';
 
 const isDev = import.meta.env?.DEV ?? (typeof process !== 'undefined' && process.env?.NODE_ENV === 'development');
 const isProd = !isDev;
@@ -35,82 +36,6 @@ function formatMessage(level: LogLevel, message: string, options?: LogOptions): 
   return parts.join(' ');
 }
 
-// ====== Sentry-like lightweight error reporter ======
-// Sends errors to a configurable endpoint (Sentry DSN or custom collector)
-// Set VITE_SENTRY_DSN in .env to enable
-
-const SENTRY_DSN = import.meta.env?.VITE_SENTRY_DSN as string | undefined;
-
-interface ErrorReport {
-  message: string;
-  level: 'warning' | 'error' | 'fatal';
-  timestamp: string;
-  context?: string;
-  data?: unknown;
-  error?: {
-    name: string;
-    message: string;
-    stack?: string;
-  };
-  environment: string;
-  url: string;
-  userAgent: string;
-}
-
-/**
- * Send error report to Sentry-compatible endpoint.
- * Uses sendBeacon for reliability (fires even during page unload).
- * Falls back to fetch if sendBeacon unavailable.
- */
-function reportToSentry(report: ErrorReport): void {
-  if (!SENTRY_DSN) return;
-
-  const payload = JSON.stringify({
-    exception: report.error ? {
-      values: [{
-        type: report.error.name,
-        value: report.error.message,
-        stacktrace: report.error.stack ? {
-          frames: report.error.stack.split('\n').slice(1, 10).map(line => ({
-            filename: line.trim(),
-          })),
-        } : undefined,
-      }],
-    } : undefined,
-    message: report.message,
-    level: report.level,
-    timestamp: report.timestamp,
-    tags: { context: report.context },
-    extra: report.data ? { data: report.data } : undefined,
-    environment: report.environment,
-    request: {
-      url: report.url,
-      headers: { 'User-Agent': report.userAgent },
-    },
-  });
-
-  // Prefer sendBeacon for reliability
-  if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-    const blob = new Blob([payload], { type: 'application/json' });
-    navigator.sendBeacon(SENTRY_DSN, blob);
-  } else if (typeof fetch !== 'undefined') {
-    fetch(SENTRY_DSN, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: payload,
-      keepalive: true,
-    }).catch(() => { /* silent fail — don't recurse into logger */ });
-  }
-}
-
-function buildErrorInfo(error: unknown): ErrorReport['error'] | undefined {
-  if (!error) return undefined;
-  if (error instanceof Error) {
-    return { name: error.name, message: error.message, stack: error.stack };
-  }
-  return { name: 'Unknown', message: String(error) };
-}
-
 // Performance timing utilities
 const timers = new Map<string, number>();
 
@@ -139,16 +64,11 @@ export const logger = {
   warn(message: string, options?: LogOptions): void {
     console.warn(formatMessage('warn', message, options), options?.data ?? '');
 
-    if (isProd) {
-      reportToSentry({
-        message,
-        level: 'warning',
-        timestamp: new Date().toISOString(),
-        context: options?.context,
-        data: options?.data,
-        environment: 'production',
-        url: typeof window !== 'undefined' ? window.location.href : '',
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+    if (isProd && isSentryEnabled) {
+      Sentry.withScope((scope) => {
+        if (options?.context) scope.setTag('context', options.context);
+        if (options?.data) scope.setExtra('data', options.data);
+        Sentry.captureMessage(message, 'warning');
       });
     }
   },
@@ -159,17 +79,17 @@ export const logger = {
   error(message: string, error?: unknown, options?: LogOptions): void {
     console.error(formatMessage('error', message, options), error ?? '');
 
-    if (isProd) {
-      reportToSentry({
-        message,
-        level: 'error',
-        timestamp: new Date().toISOString(),
-        context: options?.context,
-        data: options?.data,
-        error: buildErrorInfo(error),
-        environment: 'production',
-        url: typeof window !== 'undefined' ? window.location.href : '',
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+    if (isProd && isSentryEnabled) {
+      Sentry.withScope((scope) => {
+        if (options?.context) scope.setTag('context', options.context);
+        if (options?.data) scope.setExtra('data', options.data);
+        scope.setExtra('message', message);
+
+        if (error instanceof Error) {
+          Sentry.captureException(error);
+        } else {
+          Sentry.captureMessage(message, 'error');
+        }
       });
     }
   },

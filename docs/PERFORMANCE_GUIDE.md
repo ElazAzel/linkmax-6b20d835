@@ -113,7 +113,39 @@ Deno functions can take 1-2s to boot effectively.
 ### 3.2 Global Distribution
 Enable "Smart Routing" in Supabase Dashboard to route requests to the nearest edge node.
 
----
+### 3.3 Rate Limiting (Upstash Redis)
+Protect edge functions from abuse using `@upstash/ratelimit`.
+
+**Pattern:**
+```ts
+import { Redis } from 'https://deno.land/x/upstash_redis/mod.ts'
+import { Ratelimit } from 'https://cdn.skypack.dev/@upstash/ratelimit'
+
+const redis = new Redis({
+  url: Deno.env.get('UPSTASH_REDIS_REST_URL')!,
+  token: Deno.env.get('UPSTASH_REDIS_REST_TOKEN')!,
+})
+
+const ratelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.slidingWindow(10, '60 s'), // 10 requests per 60s
+  analytics: true,
+})
+
+// In your handler:
+const ip = req.headers.get('x-forwarded-for') ?? '127.0.0.1'
+const { success } = await ratelimit.limit(`limit:${ip}`)
+
+if (!success) {
+  return new Response('Too Many Requests', { status: 429 })
+}
+```
+
+**Recommended Limits:**
+- **Public Forms (Lead Gen):** 5 req/min per IP
+- **Auth/Login:** 10 req/min per IP
+- **AI Chatbot:** 3 req/min per User ID
+
 
 ## 4. Monitoring (Core Web Vitals)
 

@@ -1,3 +1,6 @@
+// CRITICAL: Sentry must be initialized FIRST to capture all errors from boot
+import "./lib/sentry";
+
 // CRITICAL: i18n must be imported FIRST, before any React components
 import "./i18n/config";
 

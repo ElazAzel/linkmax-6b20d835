@@ -224,9 +224,9 @@ onINP(metric => trackEvent('web_vital', { name: 'INP', value: metric.value }));
 
 | Tool | Priority | Roadmap | Status | Effort |
 |---|---|---|---|---|
-| **Sentry** | 🔴 Critical | Now | Not integrated | 2-3 hours |
-| **Upstash Redis** | 🔴 Critical | Now | Not integrated | 4-6 hours |
-| **Web Vitals** | 🔴 Critical | Now | Not integrated | 1 hour |
+| **Sentry** | 🔴 Critical | Now | ✅ Implemented | 2-3 hours |
+| **Upstash Redis** | 🔴 Critical | Now | 📝 Documented | 4-6 hours |
+| **Web Vitals** | 🔴 Critical | Now | ✅ Implemented | 1 hour |
 | **Capacitor.js** | 🟡 High | Q2 2026 | Not started | 2-3 days |
 | **FCM + APNs** | 🟡 High | Q2 2026 | Not started | 1-2 days |
 | **RoboKassa** | 🟡 High | Q1-Q2 2026 | In progress | 3-5 days |
