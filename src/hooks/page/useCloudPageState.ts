@@ -212,84 +212,84 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   }, [user, pageData, chatbotContext, savePageMutation, publishPageMutation, options]);
 
   const addBlock = useCallback((block: Block, position?: number) => {
-    if (!pageData) return;
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      let newBlocks: Block[];
+      if (typeof position === 'number') {
+        const profileIndex = prevData.blocks.findIndex(b => b.type === 'profile');
+        const insertIndex = profileIndex >= 0 ? profileIndex + 1 + position : position;
+        newBlocks = [
+          ...prevData.blocks.slice(0, insertIndex),
+          block,
+          ...prevData.blocks.slice(insertIndex),
+        ];
+      } else {
+        newBlocks = [...prevData.blocks, block];
+      }
 
-    let newBlocks: Block[];
-    if (typeof position === 'number') {
-      // Find the profile block index (always at position 0)
-      const profileIndex = pageData.blocks.findIndex(b => b.type === 'profile');
-      // Calculate actual insertion index (after profile + position in content blocks)
-      const insertIndex = profileIndex >= 0 ? profileIndex + 1 + position : position;
-      newBlocks = [
-        ...pageData.blocks.slice(0, insertIndex),
-        block,
-        ...pageData.blocks.slice(insertIndex),
-      ];
-    } else {
-      newBlocks = [...pageData.blocks, block];
-    }
+      const newPageData = {
+        ...prevData,
+        blocks: newBlocks,
+      };
 
-    const newPageData = {
-      ...pageData,
-      blocks: newBlocks,
-    };
-    setPageData(newPageData);
+      if (block.type === 'event') {
+        void syncEventBlock(block, prevData.id, user?.id);
+      }
 
-    if (block.type === 'event') {
-      void syncEventBlock(block, pageData.id, user?.id);
-    }
-
-    // Auto-save and publish
-    autoSaveAndPublish(newPageData, chatbotContext);
-  }, [pageData, chatbotContext, autoSaveAndPublish, user]);
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish, user]);
 
   const updateBlock = useCallback((id: string, updates: Partial<Block>) => {
-    if (!pageData) return;
-    const newPageData = {
-      ...pageData,
-      blocks: pageData.blocks.map(block =>
-        block.id === id ? ({ ...block, ...updates } as Block) : block
-      ),
-    };
-    setPageData(newPageData);
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      const newPageData = {
+        ...prevData,
+        blocks: prevData.blocks.map(block =>
+          block.id === id ? ({ ...block, ...updates } as Block) : block
+        ),
+      };
 
-    const updatedBlock = newPageData.blocks.find(b => b.id === id);
-    if (updatedBlock?.type === 'event') {
-      void syncEventBlock(updatedBlock, pageData.id, user?.id);
-    }
+      const updatedBlock = newPageData.blocks.find(b => b.id === id);
+      if (updatedBlock?.type === 'event') {
+        void syncEventBlock(updatedBlock, prevData.id, user?.id);
+      }
 
-    // Auto-save and publish
-    autoSaveAndPublish(newPageData, chatbotContext);
-  }, [pageData, chatbotContext, autoSaveAndPublish, user]);
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish, user]);
 
   const deleteBlock = useCallback((id: string) => {
-    if (!pageData) return;
-    const blockToDelete = pageData.blocks.find((block) => block.id === id);
-    const newPageData = {
-      ...pageData,
-      blocks: pageData.blocks.filter(block => block.id !== id),
-    };
-    setPageData(newPageData);
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      const blockToDelete = prevData.blocks.find((block) => block.id === id);
+      const newPageData = {
+        ...prevData,
+        blocks: prevData.blocks.filter(block => block.id !== id),
+      };
 
-    if (blockToDelete?.type === 'event') {
-      void deleteEventBlock(blockToDelete.eventId, user?.id);
-    }
+      if (blockToDelete?.type === 'event') {
+        void deleteEventBlock(blockToDelete.eventId, user?.id);
+      }
 
-    // Auto-save and publish
-    autoSaveAndPublish(newPageData, chatbotContext);
-  }, [pageData, chatbotContext, autoSaveAndPublish, user]);
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish, user]);
 
   const reorderBlocks = useCallback((blocks: Block[]) => {
-    if (!pageData) return;
-    const newPageData = {
-      ...pageData,
-      blocks,
-    };
-    setPageData(newPageData);
-
-    // Auto-save and publish
-    autoSaveAndPublish(newPageData, chatbotContext);
-  }, [pageData, chatbotContext, autoSaveAndPublish]);
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      const newPageData = {
+        ...prevData,
+        blocks,
+      };
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish]);
 
   // Replace all content blocks (keep profile block)
   const replaceBlocks = useCallback((newBlocks: Block[]) => {
@@ -337,16 +337,16 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   }, [pageData, chatbotContext, autoSaveAndPublish]);
 
   const updatePageDataPartial = useCallback((updates: Partial<PageData>) => {
-    if (!pageData) return;
-    const newPageData: PageData = {
-      ...pageData,
-      ...updates,
-    };
-    setPageData(newPageData);
-
-    // Auto-save and publish
-    autoSaveAndPublish(newPageData, chatbotContext);
-  }, [pageData, chatbotContext, autoSaveAndPublish]);
+    setPageData((prevData) => {
+      if (!prevData) return prevData;
+      const newPageData: PageData = {
+        ...prevData,
+        ...updates,
+      };
+      autoSaveAndPublish(newPageData, chatbotContext);
+      return newPageData;
+    });
+  }, [chatbotContext, autoSaveAndPublish]);
 
   const updateNiche = useCallback(async (niche: Niche) => {
     if (!user || !pageData) return;

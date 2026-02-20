@@ -2,7 +2,7 @@
  * BlockEditorV2 - Enhanced block editor with new shell, autosave, and preview
  * Mobile-first design with improved UX
  */
-import { useState, useEffect, lazy, Suspense, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, lazy, Suspense, useCallback, useRef, useMemo, useDeferredValue } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -127,11 +127,14 @@ export function BlockEditorV2({
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const deferredFormData = useDeferredValue(formData);
+    const currentBlockIdRef = useRef<string | null>(block ? block.id : null);
 
-    // Update formData when block changes
+    // Update formData when block changes (only if it's a completely new block)
     useEffect(() => {
-        if (block) {
+        if (block && block.id !== currentBlockIdRef.current) {
             setFormData({ ...block });
+            currentBlockIdRef.current = block.id;
             setHasUnsavedChanges(false);
             setLastSaved(null);
         }
@@ -301,7 +304,7 @@ export function BlockEditorV2({
                     <div className="p-4">
                         <Suspense fallback={<div className="h-20 bg-muted animate-pulse rounded-xl" />}>
                             <BlockRenderer
-                                block={formData}
+                                block={deferredFormData}
                                 isPreview={true}
                             />
                         </Suspense>

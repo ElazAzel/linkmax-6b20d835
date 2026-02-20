@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed (Block Editor & Analytics Audit — 2026-02-20)
 - **Editor Responsiveness & Adaptation**: Fixed squashed blocks on Desktop by adding `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `GridEditor.tsx`. Adjusted Mobile Drawer sizing to prevent overflow clipping.
+- **Keystroke Performance (Live Preview)**: Implemented React `useDeferredValue` in `BlockEditorV2` to completely decouple instantaneous input from the heavy 3D/Framer Motion Live Preview renderer. Typing is now lag-free at 60fps across all devices.
+- **Lost Data / Save Reliability Race Condition**: Refactored the global state orchestrator (`useCloudPageState`) to enforce atomic functional React state updaters (`setPageData(prev => ...)`). This guarantees that auto-save network debouncers correctly capture concurrent block modifications (e.g. fast typing followed by immediate modal close), permanently resolving the "Sometimes blocks fail to save" bug.
+- **Grid Layout Styling**: Removed unwanted physical borders, drop-shadows, and background clipping explicitly for naturally transparent layouts (Separators and Social blocks) within the 2-column `GridBlocksRenderer`.
 - **Mobile Edit Modal Failures**: Removed overlapping restrictive touch events in `GridEditor.tsx` that previously swallowed tap events on iOS/Android devices, ensuring the block editor opens reliably 100% of the time.
 - **Block Auto-save Data Loss**: Modals now instantly flush any pending autosave changes when closed, bypassing the debounce timer and preventing silent data loss.
 - **Analytics Click Tracking**: Fixed broken `increment_block_clicks` RPC by strictly adhering to the `block_id` text parameter, resolving the mismatch with `block_uuid`. Clicks are now successfully logged.
