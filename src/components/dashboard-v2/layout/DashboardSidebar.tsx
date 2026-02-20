@@ -118,9 +118,9 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         key={item.id}
         onClick={() => handleItemClick(item.id)}
         className={cn(
-          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative group",
-          "hover:bg-muted/50",
-          isActive && "bg-primary/10 text-primary font-semibold",
+          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all relative group",
+          "hover:bg-primary/5 hover:translate-x-1",
+          isActive && "bg-primary/10 text-primary font-bold shadow-sm border-l-2 border-primary min-h-[44px]",
           collapsed && "justify-center px-0.5" // Tighter padding when collapsed
         )}
         whileHover={{ scale: 1.02 }}
@@ -130,7 +130,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         {isActive && (
           <motion.div
             layoutId="activeTabIndicator"
-            className="absolute left-0 w-1 h-6 bg-primary rounded-r-full"
+            className="absolute inset-0 bg-primary/10 rounded-xl -z-1"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -191,7 +191,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
               animate={{ opacity: 1, width: 'auto' }}
               exit={{ opacity: 0, width: 0 }}
             >
-              <span className="text-lg font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-violet-500">
+              <span className="text-xl font-black text-gradient">
                 lnkmx
               </span>
               {isPremium && (

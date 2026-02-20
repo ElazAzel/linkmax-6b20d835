@@ -37,7 +37,7 @@ export const StatCard = memo(function StatCard({
     if (change === undefined) return null;
     const isPositive = change > 0;
     const displayChange = Math.abs(change) > 100 ? '>100' : Math.round(change);
-    
+
     return (
       <Badge
         variant="outline"
@@ -46,8 +46,8 @@ export const StatCard = memo(function StatCard({
           isPositive
             ? "bg-emerald-500/15 text-emerald-600"
             : change < 0
-            ? "bg-red-500/15 text-red-600"
-            : "bg-muted text-muted-foreground"
+              ? "bg-red-500/15 text-red-600"
+              : "bg-muted text-muted-foreground"
         )}
       >
         {isPositive && '+'}
@@ -57,18 +57,19 @@ export const StatCard = memo(function StatCard({
   };
 
   return (
-    <Card className={cn("p-5", className)}>
+    <Card className={cn("p-5 glass-card border-white/20 shadow-glass-lg relative overflow-hidden group", className)}>
+      <div className="absolute inset-0 bg-liquid-mesh opacity-5 group-hover:opacity-10 transition-opacity -z-1" />
       <div className="flex items-center justify-between mb-3">
         <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center", iconBg)}>
           <Icon className={cn("h-5 w-5", iconColor)} />
         </div>
         {renderTrendIcon()}
       </div>
-      <div className="text-3xl font-black mb-1">
+      <div className="text-3xl font-black mb-1 text-gradient">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
         {renderTrendBadge()}
       </div>
     </Card>

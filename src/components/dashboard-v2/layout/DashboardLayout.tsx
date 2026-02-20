@@ -33,7 +33,7 @@ export const DashboardLayout = memo(function DashboardLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background flex overflow-hidden">
+    <div className="min-h-screen bg-background bg-liquid-mesh flex overflow-hidden lg:animate-grid-morph-1">
       {/* Desktop Sidebar - sticky to stay fixed while content scrolls */}
       {!isMobile && (
         <DashboardSidebar

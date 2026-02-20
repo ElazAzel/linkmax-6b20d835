@@ -253,10 +253,10 @@ export const InsightsScreen = memo(function InsightsScreen({
               key={p}
               onClick={() => handlePeriodChange(p)}
               className={cn(
-                "flex-1 py-2.5 rounded-xl text-sm font-bold transition-all",
+                "flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
                 period === p
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-[1.02]"
-                  : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-[1.05]"
+                  : "glass-subtle text-muted-foreground/60 hover:bg-muted"
               )}
             >
               {t(`dashboard.insights.period.${p}`, p === '7d' ? '7 дней' : p === '14d' ? '14 дней' : '30 дней')}

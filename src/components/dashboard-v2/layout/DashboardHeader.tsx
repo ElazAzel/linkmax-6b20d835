@@ -56,9 +56,9 @@ export const DashboardHeader = memo(function DashboardHeader({
           {leftElement}
           {!leftElement && (
             <div className="min-w-0">
-              <h1 className="text-2xl font-black truncate">{title}</h1>
+              <h1 className="text-2xl font-black tracking-tight text-gradient truncate">{title}</h1>
               {subtitle && (
-                <p className="text-sm text-muted-foreground truncate">{subtitle}</p>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest truncate">{subtitle}</p>
               )}
             </div>
           )}

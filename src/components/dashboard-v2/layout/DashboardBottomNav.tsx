@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Home, PenTool, Inbox, Calendar, Settings, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
+import { motion } from 'framer-motion';
 
 interface NavTab {
   id: string;
@@ -89,8 +90,8 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
   }, [onTabChange, haptic]);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom md:hidden">
-      <div className="mx-2 mb-2 bg-card/90 backdrop-blur-2xl border border-border/20 rounded-2xl shadow-2xl shadow-black/15 overflow-hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 pb-2 safe-area-bottom md:hidden bg-gradient-to-t from-background via-background/80 to-transparent pt-6 pointer-events-none">
+      <div className="bg-liquid-mesh glass-strong border border-white/20 rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden pointer-events-auto">
         <div className="grid grid-cols-5 h-16">
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
@@ -102,20 +103,23 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                 key={tab.id}
                 onClick={() => handleTabClick(tab)}
                 className={cn(
-                  "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-200 active:scale-95 min-w-0",
-                  isActive ? "text-primary" : "text-muted-foreground"
+                  "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 active:scale-90 min-w-0 h-full",
+                  isActive ? "text-primary scale-110" : "text-muted-foreground/60"
                 )}
               >
-                {/* Active indicator */}
+                {/* Active indicator - Liquid drop style */}
                 {isActive && (
-                  <div className="absolute top-1 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-primary" />
+                  <motion.div
+                    layoutId="bottomNavIndicator"
+                    className="absolute -top-1 w-8 h-1 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                  />
                 )}
 
                 {/* Icon with badge */}
                 <div className="relative">
-                  <Icon className="h-5 w-5 shrink-0" />
+                  <Icon className={cn("h-5 w-5 shrink-0 transition-transform", isActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
                   {badge && badge > 0 && (
-                    <span className="absolute -top-1 -right-1 min-w-4 h-4 px-0.5 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold">
+                    <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[8px] font-black border-2 border-background">
                       {badge > 99 ? '99+' : badge}
                     </span>
                   )}
@@ -124,8 +128,8 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                 {/* Label */}
                 <span
                   className={cn(
-                    "text-[9px] font-medium leading-none truncate max-w-full px-0.5",
-                    isActive && "font-semibold"
+                    "text-[8px] font-black leading-none truncate max-w-full px-0.5 tracking-tighter uppercase",
+                    isActive && "text-primary"
                   )}
                 >
                   {t(tab.labelKey, tab.defaultLabel)}

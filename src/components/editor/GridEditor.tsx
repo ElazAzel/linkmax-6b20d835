@@ -60,24 +60,24 @@ function InsertBetweenDivider({
     <div className="relative group/divider py-1">
       {/* Line + button */}
       <div className={cn(
-        "flex items-center gap-2 transition-all duration-200",
-        isMobile ? "opacity-60" : "opacity-0 group-hover/divider:opacity-100"
+        "flex items-center gap-2 transition-all duration-300",
+        isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
       )}>
-        <div className="flex-1 h-px bg-border/40" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
           className={cn(
-            "shrink-0 flex items-center justify-center rounded-full transition-all",
-            "bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 hover:border-primary/40",
-            "active:scale-90",
-            isMobile ? "h-7 w-7" : "h-6 w-6"
+            "shrink-0 flex items-center justify-center rounded-full transition-all duration-300",
+            "glass-subtle bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
+            "active:scale-95 hover:scale-110",
+            isMobile ? "h-8 w-8" : "h-7 w-7"
           )}
           aria-label="Insert block here"
         >
-          <Plus className={isMobile ? "h-4 w-4" : "h-3.5 w-3.5"} strokeWidth={2.5} />
+          <Plus className={isMobile ? "h-5 w-5" : "h-4 w-4"} strokeWidth={3} />
         </button>
-        <div className="flex-1 h-px bg-border/40" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
 
       {/* Block picker sheet (externally controlled) */}
@@ -155,13 +155,13 @@ function SortableGridBlockItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'relative group overflow-hidden transition-all',
+        'relative group overflow-hidden transition-all duration-300',
         isFrameless
           ? 'rounded-xl'
-          : 'bg-card rounded-2xl border border-border shadow-sm',
+          : 'glass-card rounded-2xl border-white/10 shadow-glass hover:shadow-glass-lg hover:border-white/20 hover:scale-[1.01]',
         colSpanClass,
         rowSpanClass,
-        isDragging && 'opacity-50 ring-2 ring-primary z-50',
+        isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]'
       )}

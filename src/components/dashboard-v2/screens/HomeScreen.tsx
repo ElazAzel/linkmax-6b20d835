@@ -101,7 +101,8 @@ export const HomeScreen = memo(function HomeScreen({
 
       <div className="px-5 py-6 space-y-6">
         {/* Primary Page Card */}
-        <Card className="p-6 space-y-5">
+        <Card className="p-6 space-y-5 glass-card border-white/20 shadow-glass-lg relative overflow-hidden group">
+          <div className="absolute inset-0 bg-liquid-mesh opacity-10 -z-1" />
           {/* Page Header */}
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16 rounded-2xl border-2 border-border">
@@ -131,28 +132,28 @@ export const HomeScreen = memo(function HomeScreen({
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={onOpenEditor}
-              className="p-4 rounded-2xl bg-muted/50 text-center transition-transform active:scale-95 hover:bg-muted"
+              className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-primary/5 hover:translate-y-[-2px] border-white/20"
             >
-              <div className="text-2xl font-black text-primary">{blockCount}</div>
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-2xl font-black text-gradient">{blockCount}</div>
+              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 {t('dashboard.home.blocks', 'блоков')}
               </div>
             </button>
             <button
               onClick={onOpenInsights}
-              className="p-4 rounded-2xl bg-muted/50 text-center transition-transform active:scale-95 hover:bg-muted"
+              className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-emerald-500/5 hover:translate-y-[-2px] border-white/20"
             >
-              <div className="text-2xl font-black text-emerald-500">{viewCount}</div>
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-2xl font-black text-gradient-blue">{viewCount}</div>
+              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 {t('dashboard.home.views', 'просмотров')}
               </div>
             </button>
             <button
               onClick={onOpenActivity}
-              className="p-4 rounded-2xl bg-muted/50 text-center transition-transform active:scale-95 hover:bg-muted"
+              className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-violet-500/5 hover:translate-y-[-2px] border-white/20"
             >
-              <div className="text-2xl font-black text-violet-500">{weeklyStats.leads}</div>
-              <div className="text-xs text-muted-foreground font-medium">
+              <div className="text-2xl font-black text-gradient-purple">{weeklyStats.leads}</div>
+              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 {t('dashboard.home.leads', 'заявок')}
               </div>
             </button>

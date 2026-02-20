@@ -82,17 +82,20 @@ export const EditorScreen = memo(function EditorScreen({
   return (
     <div className="min-h-screen safe-area-top">
       {/* Header with actions */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/10">
+      <div className="sticky top-0 z-40 glass-nav border-b border-white/10">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             {/* Left: Title */}
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg font-bold truncate">
+              <h1 className="text-xl font-black text-gradient truncate">
                 {t('dashboard.editor.title', 'Редактор')}
               </h1>
-              <p className="text-xs text-muted-foreground">
-                {blockCount} {t('dashboard.editor.blocks', 'блоков')}
-              </p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+                  {blockCount} {t('dashboard.editor.blocks', 'блоков')}
+                </p>
+              </div>
             </div>
 
             {/* Center: Undo/Redo */}

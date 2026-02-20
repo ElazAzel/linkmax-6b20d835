@@ -91,22 +91,22 @@ function SettingsItem({
     return (
         <Wrapper
             className={cn(
-                "w-full flex items-center gap-4 p-4 text-left",
-                onClick && "hover:bg-muted/50 active:bg-muted transition-colors"
+                "w-full flex items-center gap-4 p-4 text-left group transition-all duration-300",
+                onClick && "hover:bg-primary/5 active:scale-[0.98]"
             )}
             onClick={onClick}
         >
-            <div className={cn("h-11 w-11 rounded-2xl flex items-center justify-center shrink-0", iconBg)}>
+            <div className={cn("h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110", iconBg)}>
                 <Icon className={cn("h-5 w-5", iconColor)} />
             </div>
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                    <span className="font-medium">{label}</span>
-                    {badge && <Badge className="text-xs">{badge}</Badge>}
+                    <span className="font-bold tracking-tight">{label}</span>
+                    {badge && <Badge className="text-[10px] font-black uppercase bg-primary text-primary-foreground">{badge}</Badge>}
                 </div>
-                {description && <p className="text-sm text-muted-foreground truncate">{description}</p>}
+                {description && <p className="text-xs font-medium text-muted-foreground/70 truncate">{description}</p>}
             </div>
-            {rightElement || (onClick && <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />)}
+            {rightElement || (onClick && <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0 group-hover:translate-x-1 transition-transform" />)}
         </Wrapper>
     );
 }
@@ -143,9 +143,10 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
     return (
         <div className="space-y-6">
             {/* Profile Card */}
-            <Card className="p-5">
+            <Card className="p-5 glass-card border-white/20 shadow-glass relative overflow-hidden group">
+                <div className="absolute inset-0 bg-liquid-mesh opacity-5 transition-opacity group-hover:opacity-10 -z-1" />
                 <div className="flex items-center gap-4 mb-5">
-                    <Avatar className="h-16 w-16 rounded-2xl border-2 border-border">
+                    <Avatar className="h-16 w-16 rounded-2xl border-2 border-white/20 shadow-lg">
                         <AvatarImage src={avatarUrl || ''} alt={displayName} />
                         <AvatarFallback className="rounded-2xl text-xl font-bold bg-primary/10 text-primary">
                             {displayName.charAt(0)}
@@ -153,22 +154,22 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                     </Avatar>
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                            <h2 className="text-lg font-bold truncate">{displayName}</h2>
+                            <h2 className="text-lg font-black tracking-tight text-gradient truncate">{displayName}</h2>
                             {isPremium && (
-                                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+                                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shadow-sm animate-pulse-subtle">
                                     <Crown className="h-3 w-3 mr-1" />
                                     PRO
                                 </Badge>
                             )}
                         </div>
-                        <p className="text-sm text-muted-foreground">@{usernameInput}</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">@{usernameInput}</p>
                     </div>
                 </div>
 
                 {/* Username Input */}
                 <div className="space-y-2">
-                    <label className="text-sm font-medium flex items-center gap-2">
-                        <Link2 className="h-4 w-4" />
+                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 flex items-center gap-2 px-1">
+                        <Link2 className="h-3 w-3" />
                         {t('dashboard.accountSettings.username', 'Username')}
                     </label>
                     <div className="flex gap-2">
@@ -176,12 +177,12 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
                             value={usernameInput}
                             onChange={(e) => onUsernameChange(e.target.value)}
                             placeholder="username"
-                            className="h-12 rounded-xl"
+                            className="h-12 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 transition-all font-medium"
                         />
                         <Button
                             onClick={onUpdateUsername}
                             disabled={usernameSaving}
-                            className="h-12 px-5 rounded-xl"
+                            className="h-12 px-6 rounded-xl bg-primary shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
                         >
                             {usernameSaving ? '...' : <Check className="h-5 w-5" />}
                         </Button>

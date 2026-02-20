@@ -164,7 +164,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     const getPageTypeBadge = () => {
         if (isPrimaryPaid) {
             return (
-                <Badge className="bg-primary/20 text-primary border-primary/30">
+                <Badge className="bg-primary/20 text-primary border-primary/30 shadow-sm">
                     <Crown className="w-3 h-3 mr-1" />
                     {t('dashboard.pageSettings.primaryPaid', 'Primary Paid')}
                 </Badge>
@@ -172,14 +172,14 @@ export const PageSettingsTab = memo(function PageSettingsTab({
         }
         if (isPaid) {
             return (
-                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30">
+                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shadow-sm">
                     <Sparkles className="w-3 h-3 mr-1" />
                     {t('dashboard.pageSettings.paidAddon', 'Paid Add-on')}
                 </Badge>
             );
         }
         return (
-            <Badge variant="secondary">
+            <Badge variant="secondary" className="glass-subtle border-white/10">
                 {t('dashboard.pageSettings.freePage', 'Free')}
             </Badge>
         );
@@ -188,18 +188,19 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     return (
         <div className="space-y-6">
             {/* Current Page Info */}
-            <Card className="p-5">
+            <Card className="p-5 glass-card border-white/20 shadow-glass relative overflow-hidden group">
+                <div className="absolute inset-0 bg-liquid-mesh opacity-5 transition-opacity group-hover:opacity-10 -z-1" />
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12 rounded-xl">
+                        <Avatar className="h-14 w-14 rounded-2xl border-2 border-white/20 shadow-lg">
                             <AvatarImage src={avatarUrl} alt={displayName} />
-                            <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-bold">
+                            <AvatarFallback className="rounded-2xl bg-primary/10 text-primary font-bold text-lg">
                                 {displayName.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <h2 className="font-bold">{pageTitle || displayName}</h2>
-                            <p className="text-sm text-muted-foreground">lnkmx.my/{pageSlug}</p>
+                            <h2 className="text-lg font-black tracking-tight text-gradient">{pageTitle || displayName}</h2>
+                            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">lnkmx.my/{pageSlug}</p>
                         </div>
                     </div>
                     {getPageTypeBadge()}
@@ -209,7 +210,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 {!isPaid && isPremium && onUpgradePage && (
                     <Button
                         variant="outline"
-                        className="w-full rounded-xl border-primary/30 text-primary hover:bg-primary/10"
+                        className="w-full h-12 rounded-xl border-primary/30 text-primary bg-primary/5 hover:bg-primary hover:text-white transition-all duration-300 font-bold"
                         onClick={onUpgradePage}
                     >
                         <Sparkles className="w-4 h-4 mr-2" />
@@ -223,15 +224,15 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
                     {t('dashboard.pageSettings.domain', 'Domain')}
                 </h3>
-                <Card className="p-4 space-y-4">
+                <Card className="p-4 space-y-4 glass-card border-white/10 shadow-glass">
                     <div className="space-y-2">
-                        <Label className="flex items-center gap-2">
-                            <Link2 className="w-4 h-4" />
+                        <Label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-muted-foreground/80">
+                            <Link2 className="w-4 h-4 text-primary" />
                             {t('dashboard.pageSettings.slug', 'Page URL')}
                         </Label>
                         <div className="flex gap-2">
-                            <div className="flex-1 relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                            <div className="flex-1 relative group">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold opacity-60">
                                     lnkmx.my/
                                 </span>
                                 <Input
@@ -240,26 +241,24 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                                         setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
                                         setSlugError(null);
                                     }}
-                                    className="pl-[85px] h-12 rounded-xl"
+                                    className="pl-[85px] h-12 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 transition-all font-medium"
                                     placeholder="your-page"
                                 />
                             </div>
                             <Button
                                 onClick={handleSaveSlug}
                                 disabled={slugSaving || slugInput === pageSlug || !onUpdateSlug}
-                                className="h-12 px-5 rounded-xl"
+                                className="h-12 px-6 rounded-xl bg-primary shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
                             >
                                 {slugSaving ? '...' : <Check className="w-5 h-5" />}
                             </Button>
                         </div>
                         {slugError && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
+                            <p className="text-sm text-destructive flex items-center gap-1 font-medium bg-destructive/5 p-2 rounded-lg border border-destructive/10">
                                 <AlertTriangle className="w-4 h-4" />
                                 {slugError}
                             </p>
                         )}
-                        <p className="text-xs text-muted-foreground">
-                        </p>
                     </div>
                 </Card>
             </div>

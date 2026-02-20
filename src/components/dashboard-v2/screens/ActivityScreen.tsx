@@ -92,29 +92,26 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const stats = getLeadStats();
 
   // Premium gate
-  if (!isPremium) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-6 safe-area-top">
-        <div className="text-center max-w-sm">
-          <div className="h-24 w-24 rounded-[32px] bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/30">
-            <Crown className="h-12 w-12 text-white" />
-          </div>
-          <h2 className="text-2xl font-black mb-3">{t('dashboard.activity.premiumRequired', 'Для Premium')}</h2>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
-            {t('dashboard.activity.premiumDescription', 'Управляйте заявками как в мессенджере. Telegram-уведомления, статусы и история.')}
-          </p>
-          <Button
-            size="lg"
-            className="h-14 px-8 rounded-2xl text-base font-bold shadow-xl shadow-primary/30"
-            onClick={openPremiumPurchase}
-          >
-            <Crown className="h-5 w-5 mr-2" />
-            {t('dashboard.activity.upgradeToPremium', 'Получить Premium')}
-          </Button>
-        </div>
+  <div className="min-h-screen flex items-center justify-center p-6 safe-area-top bg-liquid-mesh">
+    <div className="text-center max-w-sm glass-card p-8 border-white/20 shadow-glass-xl relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent -z-1" />
+      <div className="h-24 w-24 rounded-[32px] bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/30 animate-float">
+        <Crown className="h-12 w-12 text-white" />
       </div>
-    );
-  }
+      <h2 className="text-2xl font-black mb-3 text-gradient-amber">{t('dashboard.activity.premiumRequired', 'Для Premium')}</h2>
+      <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+        {t('dashboard.activity.premiumDescription', 'Управляйте заявками как в мессенджере. Telegram-уведомления, статусы и история.')}
+      </p>
+      <Button
+        size="lg"
+        className="w-full h-14 px-8 rounded-2xl text-base font-bold shadow-xl shadow-amber-500/25 bg-gradient-to-r from-amber-500 to-orange-500 hover:scale-[1.02] active:scale-[0.98] transition-all"
+        onClick={openPremiumPurchase}
+      >
+        <Crown className="h-5 w-5 mr-2" />
+        {t('dashboard.activity.upgradeToPremium', 'Получить Premium')}
+      </Button>
+    </div>
+  </div>
 
   const filteredLeads = leads.filter((lead) => {
     const matchesSearch =
@@ -350,11 +347,15 @@ function LeadCard({ lead, onClick }: LeadCardProps) {
     <button
       onClick={onClick}
       className={cn(
-        "w-full p-4 rounded-2xl bg-card border border-border/30 transition-all",
-        "hover:bg-muted/30 hover:border-border/50 active:scale-[0.98]",
-        lead.status === 'new' && "border-blue-500/30 bg-blue-500/5"
+        "w-full p-4 rounded-2xl glass-card transition-all duration-300 relative overflow-hidden group",
+        "hover:bg-primary/5 hover:translate-x-1 active:scale-[0.98] border-white/10",
+        lead.status === 'new' && "border-blue-500/30 ring-1 ring-blue-500/20"
       )}
     >
+      <div className={cn(
+        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-primary/5 to-transparent -z-1",
+        lead.status === 'new' && "opacity-10"
+      )} />
       <div className="flex items-start gap-3">
         <Avatar className="h-12 w-12 rounded-xl shrink-0">
           <AvatarFallback className={cn("rounded-xl text-base font-bold", statusConfig.bg, statusConfig.text)}>

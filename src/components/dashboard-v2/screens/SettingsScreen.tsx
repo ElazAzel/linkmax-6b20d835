@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { PageSettingsTab } from './settings/PageSettingsTab';
 import { AccountSettingsTab } from './settings/AccountSettingsTab';
+import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { ProfileBlock, PageIntegrations } from '@/types/page';
 import type { Niche } from '@/lib/niches';
@@ -113,17 +114,25 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
       <div className="px-5 py-4">
         {/* Tab Switcher */}
         <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'page' | 'account')} className="w-full">
-          <TabsList className="w-full h-12 p-1 bg-muted/50 rounded-2xl mb-6">
+          <TabsList className="w-full h-14 p-1.5 glass-nav rounded-[24px] mb-8 border-white/10 shadow-glass">
             <TabsTrigger
               value="page"
-              className="flex-1 h-10 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              className={cn(
+                "flex-1 h-11 rounded-[18px] transition-all duration-300 font-bold",
+                "data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]",
+                "data-[state=inactive]:text-muted-foreground/60 data-[state=inactive]:hover:text-muted-foreground"
+              )}
             >
               <FileText className="w-4 h-4 mr-2" />
               {t('dashboard.settingsTabs.page', 'Страница')}
             </TabsTrigger>
             <TabsTrigger
               value="account"
-              className="flex-1 h-10 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              className={cn(
+                "flex-1 h-11 rounded-[18px] transition-all duration-300 font-bold",
+                "data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-lg data-[state=active]:scale-[1.02]",
+                "data-[state=inactive]:text-muted-foreground/60 data-[state=inactive]:hover:text-muted-foreground"
+              )}
             >
               <User className="w-4 h-4 mr-2" />
               {t('dashboard.settingsTabs.account', 'Аккаунт')}
