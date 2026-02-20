@@ -71,9 +71,9 @@ interface UserInfo {
   mediaLinks: string;
 }
 
-type Step = 'info' | 'niche' | 'template' | 'generating' | 'complete';
+type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
 
-const STEPS: Step[] = ['info', 'niche', 'template', 'generating', 'complete'];
+const STEPS: Step[] = ['niche', 'template', 'dynamic_form', 'generating', 'complete'];
 
 function getStepProgress(step: Step): number {
   const idx = STEPS.indexOf(step);
@@ -84,7 +84,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   const { t } = useTranslation();
   const { canUseAIPageGeneration, incrementAIPageGeneration } = useFreemiumLimits();
 
-  const [step, setStep] = useState<Step>('info');
+  const [step, setStep] = useState<Step>('niche');
   const [userInfo, setUserInfo] = useState<UserInfo>({
     name: '',
     bio: '',
@@ -102,13 +102,31 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   // Reset state when dialog opens
   useEffect(() => {
     if (open) {
-      setStep('info');
+      setStep('niche');
       setSelectedNiche(null);
       setSelectedTemplate(null);
       setTemplates([]);
       setCarouselIndex(0);
     }
   }, [open]);
+
+  // Determine which fields to ask based on template blocks
+  const formFields = useMemo(() => {
+    let needsServices = false;
+    let needsContacts = false;
+    let needsSocials = false;
+    let needsMedia = false;
+
+    if (selectedTemplate && Array.isArray(selectedTemplate.blocks)) {
+      for (const b of selectedTemplate.blocks) {
+        if (b.type === 'catalog' || b.type === 'pricing') needsServices = true;
+        if (b.type === 'messenger' || b.type === 'form') needsContacts = true;
+        if (b.type === 'socials') needsSocials = true;
+        if (b.type === 'video' || b.type === 'link') needsMedia = true;
+      }
+    }
+    return { needsServices, needsContacts, needsSocials, needsMedia };
+  }, [selectedTemplate]);
 
   // Filtered templates for selected niche
   const nicheTemplates = useMemo(() => {
@@ -146,28 +164,25 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   }, []);
 
   // Step handlers
-  const handleInfoNext = () => {
-    if (!userInfo.name.trim()) {
-      toast.error(t('aiBuilder.enterName', 'Введите ваше имя или название'));
-      return;
-    }
-    setStep('niche');
-  };
-
   const handleSelectNiche = async (niche: Niche) => {
     setSelectedNiche(niche);
     await loadTemplates(niche);
     setStep('template');
   };
 
-  const handleBackToInfo = () => {
-    setStep('info');
+  const handleSelectTemplateContinue = () => {
+    if (!selectedTemplate) return;
+    setStep('dynamic_form');
   };
 
   const handleBackToNiche = () => {
     setStep('niche');
     setSelectedNiche(null);
     setSelectedTemplate(null);
+  };
+
+  const handleBackToTemplate = () => {
+    setStep('template');
   };
 
   const handleGenerate = useCallback(async () => {
@@ -256,113 +271,12 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         </div>
 
-        {/* Step 1: User Info */}
-        {step === 'info' && (
-          <div className="p-6 pt-4 animate-fade-in">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-primary/10 mb-3">
-                <User className="h-7 w-7 text-primary" />
-              </div>
-              <h2 className="text-xl font-black mb-1">
-                {t('aiBuilder.infoTitle', 'Расскажите о себе')}
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                {t('aiBuilder.infoDesc', 'AI использует эту информацию для персонализации вашей страницы')}
-              </p>
-            </div>
 
-            <ScrollArea className="max-h-[50vh] pr-2">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.name', 'Имя / Название')} *</Label>
-                  <Input
-                    value={userInfo.name}
-                    onChange={(e) => setUserInfo(p => ({ ...p, name: e.target.value }))}
-                    placeholder={t('aiBuilder.namePlaceholder', 'Ваше имя или название бизнеса')}
-                    className="h-12 rounded-xl"
-                    autoFocus
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.bio', 'О себе / Описание')}</Label>
-                  <Textarea
-                    value={userInfo.bio}
-                    onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
-                    placeholder={t('aiBuilder.bioPlaceholder', 'Краткое описание вашей деятельности')}
-                    className="rounded-xl resize-none"
-                    rows={2}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.services', 'Услуги / Товары')}</Label>
-                  <Textarea
-                    value={userInfo.services}
-                    onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
-                    placeholder={t('aiBuilder.servicesPlaceholder', 'Перечислите ваши основные услуги или товары с ценами')}
-                    className="rounded-xl resize-none"
-                    rows={2}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.contacts', 'Контакты')}</Label>
-                  <Input
-                    value={userInfo.contacts}
-                    onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
-                    placeholder={t('aiBuilder.contactsPlaceholder', 'Телефон, email, адрес...')}
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.socials', 'Ссылки на соцсети')}</Label>
-                  <Input
-                    value={userInfo.socials}
-                    onChange={(e) => setUserInfo(p => ({ ...p, socials: e.target.value }))}
-                    placeholder={t('aiBuilder.socialsPlaceholder', 'Instagram, Telegram, YouTube...')}
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.mediaLinks', 'Фото / Видео материалы')}</Label>
-                  <Input
-                    value={userInfo.mediaLinks}
-                    onChange={(e) => setUserInfo(p => ({ ...p, mediaLinks: e.target.value }))}
-                    placeholder={t('aiBuilder.mediaPlaceholder', 'Ссылки на фото, видео, статьи...')}
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-              </div>
-            </ScrollArea>
-
-            <div className="pt-4 flex gap-3">
-              {isOnboarding && (
-                <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground">
-                  {t('common.skip', 'Пропустить')}
-                </Button>
-              )}
-              <Button
-                onClick={handleInfoNext}
-                disabled={!userInfo.name.trim()}
-                className="flex-1 h-12 rounded-xl font-bold"
-              >
-                {t('common.next', 'Далее')}
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        )}
 
         {/* Step 2: Niche Selection */}
         {step === 'niche' && (
           <div className="p-6 pt-4 animate-fade-in">
             <div className="flex items-center gap-3 mb-6">
-              <Button variant="ghost" size="icon" onClick={handleBackToInfo} className="h-10 w-10 rounded-xl shrink-0">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
               <div>
                 <h2 className="text-xl font-black">
                   {t('aiBuilder.nicheTitle', 'Выберите сферу')}
@@ -532,12 +446,11 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
                 <div className="pt-6 flex gap-3">
                   <Button
-                    onClick={handleGenerate}
+                    onClick={handleSelectTemplateContinue}
                     disabled={!selectedTemplate}
-                    className="flex-1 h-12 rounded-xl font-bold shadow-lg shadow-primary/20"
+                    className="flex-1 h-12 rounded-xl font-bold"
                   >
-                    <Wand2 className="h-5 w-5 mr-2" />
-                    {t('aiBuilder.generate', 'Создать страницу')}
+                    {t('common.next', 'Далее')}
                     <ArrowRight className="h-5 w-5 ml-2" />
                   </Button>
                 </div>
@@ -546,23 +459,145 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         )}
 
-        {/* Step 4: Generating */}
-        {step === 'generating' && (
-          <div className="p-6 py-20 text-center animate-fade-in">
-            <div className="relative mx-auto w-28 h-28 mb-8">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-violet-500 to-pink-500 animate-spin" style={{ animationDuration: '2s' }} />
-              <div className="absolute inset-2 rounded-full bg-background flex items-center justify-center">
-                <Wand2 className="h-10 w-10 text-primary animate-pulse" />
+        {/* Step 3: Dynamic Form */}
+        {step === 'dynamic_form' && (
+          <div className="p-6 pt-4 animate-fade-in">
+            <div className="flex items-center gap-3 mb-6">
+              <Button variant="ghost" size="icon" onClick={handleBackToTemplate} className="h-10 w-10 rounded-xl shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h2 className="text-xl font-black mb-1">
+                  {t('aiBuilder.infoTitle', 'Расскажите о себе')}
+                </h2>
+                <p className="text-muted-foreground text-sm">
+                  {t('aiBuilder.dynamicFormDesc', 'Заполните данные для выбранного шаблона')}
+                </p>
               </div>
             </div>
+
+            <ScrollArea className="max-h-[50vh] pr-2">
+              <div className="space-y-4">
+                {/* Always needed */}
+                <div className="space-y-2">
+                  <Label>{t('aiBuilder.name', 'Имя / Название')} *</Label>
+                  <Input
+                    value={userInfo.name}
+                    onChange={(e) => setUserInfo(p => ({ ...p, name: e.target.value }))}
+                    placeholder={t('aiBuilder.namePlaceholder', 'Ваше имя или название бизнеса')}
+                    className="h-12 rounded-xl"
+                    autoFocus
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>{t('aiBuilder.bio', 'О себе / Описание')}</Label>
+                  <Textarea
+                    value={userInfo.bio}
+                    onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
+                    placeholder={t('aiBuilder.bioPlaceholder', 'Краткое описание вашей деятельности')}
+                    className="rounded-xl resize-none"
+                    rows={2}
+                  />
+                </div>
+
+                {/* Dynamic Fields */}
+                {formFields.needsServices && (
+                  <div className="space-y-2 animate-fade-in">
+                    <Label>{t('aiBuilder.services', 'Услуги')} (Для прайса и каталога)</Label>
+                    <Textarea
+                      value={userInfo.services}
+                      onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
+                      placeholder={t('aiBuilder.servicesPlaceholder', 'Кратко опишите ваши основные услуги')}
+                      className="rounded-xl resize-none"
+                      rows={2}
+                    />
+                  </div>
+                )}
+
+                {formFields.needsContacts && (
+                  <div className="space-y-2 animate-fade-in">
+                    <Label>{t('aiBuilder.contacts', 'Контакты')} (Для формы связи)</Label>
+                    <Input
+                      value={userInfo.contacts}
+                      onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
+                      placeholder={t('aiBuilder.contactsPlaceholder', 'Телефон, email или адрес...')}
+                      className="h-12 rounded-xl"
+                    />
+                  </div>
+                )}
+
+                {formFields.needsSocials && (
+                  <div className="space-y-2 animate-fade-in">
+                    <Label>{t('aiBuilder.socials', 'Соцсети')} (Для блока соцсетей)</Label>
+                    <Input
+                      value={userInfo.socials}
+                      onChange={(e) => setUserInfo(p => ({ ...p, socials: e.target.value }))}
+                      placeholder={t('aiBuilder.socialsPlaceholder', 'Instagram, Telegram, YouTube...')}
+                      className="h-12 rounded-xl"
+                    />
+                  </div>
+                )}
+
+                {formFields.needsMedia && (
+                  <div className="space-y-2 animate-fade-in">
+                    <Label>{t('aiBuilder.mediaLinks', 'Медиа')} (Для кнопок и ссылок)</Label>
+                    <Input
+                      value={userInfo.mediaLinks}
+                      onChange={(e) => setUserInfo(p => ({ ...p, mediaLinks: e.target.value }))}
+                      placeholder={t('aiBuilder.mediaPlaceholder', 'Ссылки на фото, видео, статьи...')}
+                      className="h-12 rounded-xl"
+                    />
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+
+            <div className="pt-6 flex gap-3">
+              <Button
+                onClick={handleGenerate}
+                disabled={!userInfo.name.trim()}
+                className="flex-1 h-12 rounded-xl font-bold shadow-lg shadow-primary/20"
+              >
+                <Wand2 className="h-5 w-5 mr-2" />
+                {t('aiBuilder.generate', 'Собрать страницу')}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Generating */}
+        {step === 'generating' && (
+          <div className="p-6 py-12 text-center animate-fade-in flex flex-col items-center">
+            {/* Animation Container */}
+            <div className="relative w-full max-w-sm h-48 mx-auto mb-8 bg-muted/30 rounded-2xl border-2 border-dashed border-primary/20 overflow-hidden flex items-end justify-center pb-4">
+              {/* Magic Wand hovering */}
+              <div className="absolute top-4 inset-x-0 flex justify-center animate-bounce">
+                <Wand2 className="h-8 w-8 text-primary shadow-primary/50 drop-shadow-lg" />
+              </div>
+
+              {/* Simulated blocks building up */}
+              <div className="flex flex-col-reverse items-center gap-3 w-full px-8">
+                <div className="h-8 w-full bg-primary/20 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-300 flex items-center justify-center text-xs text-primary/70 overflow-hidden px-2 whitespace-nowrap">
+                  {userInfo.socials ? 'Подключение соцсетей...' : 'Сборка футера...'}
+                </div>
+                <div className="h-12 w-full bg-primary/40 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-200 flex items-center justify-center text-xs text-primary/80 font-medium overflow-hidden px-2 whitespace-nowrap">
+                  {userInfo.services ? `Услуги: ${userInfo.services.slice(0, 15)}...` : 'Настройка блоков...'}
+                </div>
+                <div className="h-16 w-full bg-primary/60 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-100 flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md overflow-hidden px-2 whitespace-nowrap">
+                  {userInfo.name ? userInfo.name : 'Профиль...'}
+                </div>
+              </div>
+            </div>
+
             <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.generatingTitle', 'AI заполняет шаблон')}
+              {t('aiBuilder.generatingTitle', 'Алгоритм собирает страницу')}
             </h3>
             <p className="text-muted-foreground mb-6">
-              {t('aiBuilder.generatingDesc', 'Персонализируем контент под ваш бизнес')}
+              {t('aiBuilder.generatingDesc', 'Интегрируем ваши данные в структуру шаблона')}
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
               {t('common.pleaseWait', 'Пожалуйста, подождите...')}
             </div>
           </div>
