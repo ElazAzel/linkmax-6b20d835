@@ -37,6 +37,7 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
+import { generateBlocksFromTemplate } from '@/lib/blocks/internal-builder';
 import type { Block } from '@/types/page';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
@@ -193,34 +194,14 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
         userInfo.mediaLinks && `Медиа: ${userInfo.mediaLinks}`,
       ].filter(Boolean).join('\n');
 
-      // TEMPORARY: Decoupling AI generation for replacement with internal algorithm.
-      // Currently bypassing Gemini and directly returning the structural template blocks.
-      // AI generation disabled per Phase 1 audit.
+      // Generate structural layout and inject user data synchronously
+      const finalBlocks: Block[] = generateBlocksFromTemplate(
+        Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
+        userInfo
+      );
 
-      const filledBlocks: any[] = Array.isArray(selectedTemplate.blocks)
-        ? selectedTemplate.blocks
-        : [];
-
-      // Delay to simulate generation and keep UX smooth
+      // Brief delay to simulate generation and keep UX smooth
       await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Convert to proper Block objects
-      const finalBlocks: Block[] = filledBlocks.map((blockData: any, index: number) => {
-        try {
-          const blockType = blockData.type || 'text';
-          const baseBlock = createBaseBlock(blockType);
-          // Merge overrides if they exist (template format)
-          const overrides = blockData.overrides || {};
-          return {
-            ...baseBlock,
-            ...overrides,
-            ...blockData,
-            id: `${blockType}-${Date.now()}-${index}`,
-          } as Block;
-        } catch {
-          return null;
-        }
-      }).filter(Boolean) as Block[];
 
       incrementAIPageGeneration();
 
