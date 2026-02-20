@@ -1,4 +1,7 @@
 {
+  "2": {
+    "5 MB": "5 MB"
+  },
   "translation": {
     "selectLanguages": "Select languages",
     "targetLanguages": "Translation languages",
@@ -61,7 +64,9 @@
     "privacyPolicy": "Privacy Policy",
     "privacyDescription": "Read the personal data processing policy",
     "privacyLink": "Privacy Policy",
-    "andThe": "and"
+    "andThe": "and",
+    "paymentTerms": "PaymentTerms",
+    "paymentTermsDescription": "PaymentTermsDescription"
   },
   "common": {
     "close": "Close",
@@ -110,7 +115,18 @@
     "goHome": "Go home",
     "signUp": "Sign up",
     "pleaseWait": "Please wait...",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "undo": "Отменить",
+    "pasteFailed": "Не удалось вставить",
+    "creating": "Creating...",
+    "upgrade": "Upgrade to PRO",
+    "none": "Нет",
+    "saved": "Saved",
+    "deleteConfirm": "Вы уверены, что хотите удалить этот блок?",
+    "noResults": "Ничего не найдено",
+    "saving": "Сохранение...",
+    "optional": "опционально",
+    "toHome": "На главную"
   },
   "fields": {
     "name": "Name",
@@ -121,7 +137,130 @@
     "buttonText": "Button Text",
     "requiredRussian": "Required field for Russian language",
     "requiredPrimary": "Required field for primary language",
-    "requiredEnglish": "Required field (English is mandatory)"
+    "requiredEnglish": "Required field (English is mandatory)",
+    "imageUrl": "URL изображения",
+    "subtitle": "Подзаголовок",
+    "optional": "необязательно",
+    "size": "Размер",
+    "shape": "Форма",
+    "shadow": "Тень",
+    "frameStyle": "Стиль рамки",
+    "alignment": "Выравнивание",
+    "title": "Заголовок",
+    "backgroundType": "Тип фона",
+    "solidColor": "Сплошной цвет",
+    "gradient": "Градиент",
+    "image": "Изображение",
+    "backgroundColor": "Цвет фона",
+    "gradientColors": "Цвета градиента",
+    "gradientAngle": "Угол градиента",
+    "backgroundImage": "Фоновое изображение",
+    "width": "Ширина",
+    "fullWidth": "Полная ширина",
+    "mediumWidth": "Средняя",
+    "smallWidth": "Узкая",
+    "hoverEffect": "Эффект при наведении",
+    "none": "Нет",
+    "glow": "Свечение",
+    "scale": "Масштабирование",
+    "images": "Изображения",
+    "altText": "Alt-текст",
+    "imageDescription": "Описание изображения",
+    "link": "Ссылка",
+    "autoPlay": "Автовоспроизведение",
+    "interval": "Интервал",
+    "formTitle": "Заголовок формы",
+    "contactForm": "Форма обратной связи",
+    "send": "Отправить",
+    "formFields": "Поля формы",
+    "field": "Поле",
+    "fieldName": "Название поля",
+    "fieldNamePlaceholder": "Имя",
+    "placeholder": "Плейсхолдер",
+    "enterText": "Введите текст...",
+    "fieldType": "Тип поля",
+    "text": "Текст",
+    "email": "Email",
+    "phone": "Телефон",
+    "textarea": "Текстовое поле",
+    "requiredField": "Обязательное поле",
+    "caption": "Подпись",
+    "captionPlaceholder": "Добавьте подпись к изображению...",
+    "linkHint": "Сделать изображение кликабельным",
+    "imageStyle": "Стиль изображения",
+    "imageScale": "Масштаб изображения",
+    "altPlaceholder": "Описание изображения для доступности (Alt)",
+    "url": "URL",
+    "titleHint": "Текст на кнопке",
+    "style": "Стиль",
+    "contactMe": "Связаться со мной",
+    "messengers": "Мессенджеры",
+    "messenger": "Мессенджер",
+    "platform": "Платформа",
+    "usernamePhone": "Никнейм/Телефон",
+    "usernameOrPhone": "никнейм или номер телефона",
+    "prefilledMessage": "Текст сообщения",
+    "prefilledMessagePlaceholder": "Привет! У меня есть вопрос...",
+    "productName": "Название товара",
+    "price": "Цена",
+    "currency": "Валюта",
+    "productImage": "Фото товара",
+    "buyLink": "Ссылка на покупку",
+    "avatarUrl": "Аватар",
+    "coverImage": "Обложка",
+    "coverGradient": "Градиент поверх обложки",
+    "coverHeight": "Высота обложки",
+    "avatarSize": "Размер аватара",
+    "avatarPosition": "Позиция аватара",
+    "avatarFrame": "Стиль рамки аватара",
+    "avatarIcon": "Иконка аватара",
+    "selectIcon": "Выбрать иконку",
+    "shadowStyle": "Стиль тени",
+    "verificationBadge": "Значок верификации",
+    "autoVerifyPremium": "Авто-верификация для Premium",
+    "verified": "Ручная верификация",
+    "verifiedCustomIcon": "Своя иконка (PNG/SVG/GIF)",
+    "verifiedIcon": "Встроенная иконка",
+    "verifiedColor": "Фон значка",
+    "verifiedPosition": "Позиция значка",
+    "proofOfHuman": "Доказательство личности",
+    "boostTrust": "📈 +Доверие",
+    "proofOfHumanDescription": "Добавьте короткое видео или аудио приветствие",
+    "introVideo": "Видео-приветствие (макс 30с)",
+    "introAudio": "Аудио-приветствие",
+    "proofOfHumanActive": "Ваш профиль теперь показывает значок верификации",
+    "hiddenText": "Секретный текст/приз",
+    "socialsTitle": "Социальные сети",
+    "height": "Высота блока",
+    "description": "Description",
+    "file": "Файл",
+    "fileName": "File Name",
+    "fileSize": "File Size",
+    "iconPreview": "Превью иконки",
+    "noUrl": "Введите URL",
+    "iconMode": "Источник иконки",
+    "iconAuto": "🌐 Авто (favicon сайта)",
+    "iconManual": "🖼️ Загрузить свою",
+    "refreshIcon": "Обновить иконку",
+    "customIcon": "Своя иконка",
+    "enterCommaSeparatedColors": "Введите цвета через запятую",
+    "platforms": "Platforms",
+    "layout": "Layout",
+    "iconStyle": "Icon Style",
+    "whatPeopleSay": "What People Say",
+    "testimonials": "Testimonials",
+    "testimonial": "Testimonial",
+    "role": "Role",
+    "testimonialText": "Testimonial Text",
+    "testimonialPlaceholder": "This is an amazing product!",
+    "rating": "Rating",
+    "content": "Content",
+    "heading": "Heading",
+    "paragraph": "Paragraph",
+    "quote": "Quote",
+    "videoUrl": "Video URL",
+    "aspectRatio": "Aspect Ratio",
+    "niche": "Ниша"
   },
   "hints": {
     "bioLinks": "Tip: Add links with [text](url) format",
@@ -153,7 +292,9 @@
     "generatingTitle": "AI is creating your page",
     "generatingDescription": "Selecting blocks and content just for you",
     "completeTitle": "Done! 🎉",
-    "completeDescription": "Your page is ready for editing"
+    "completeDescription": "Your page is ready for editing",
+    "title": "Быстрый старт",
+    "description": "Быстро создайте страницу с помощью AI-ассистента"
   },
   "wizard": {
     "back": "Back",
@@ -197,14 +338,31 @@
   "newsletter": {
     "alreadySubscribed": "You are already subscribed!",
     "thankYou": "Thank you!",
-    "subscriptionConfirmed": "Your subscription has been confirmed."
+    "subscriptionConfirmed": "Your subscription has been confirmed.",
+    "title": "Подпишитесь",
+    "emailPlaceholder": "Ваш email",
+    "subscribe": "Подписаться",
+    "success": "Спасибо за подписку!",
+    "error": "Ошибка. Попробуйте снова."
   },
   "success": {
     "subscribed": "Successfully subscribed!"
   },
   "actions": {
     "subscribe": "Subscribe",
-    "sending": "Sending..."
+    "sending": "Sending...",
+    "addImage": "Add Image",
+    "download": "Download",
+    "buy": "Buy",
+    "removeCustomIcon": "Remove custom icon",
+    "addPlatform": "Add Platform",
+    "send": "Send",
+    "buyTokens": "Купить токены",
+    "buyForTokens": "Купить за",
+    "tapToView": "Подробнее →",
+    "save": "Сохранить",
+    "upgrade": "Upgrade",
+    "cancel": "Отмена"
   },
   "profile": {
     "nameSaved": "Name saved",
@@ -251,7 +409,30 @@
     "premiumBadge": "Premium account",
     "verifiedPremium": "Verified + Premium",
     "verified": "Verified",
-    "notVerified": "Not verified"
+    "notVerified": "Not verified",
+    "submitted": "Заявка на верификацию отправлена",
+    "error": "Ошибка при отправке заявки",
+    "approved": "Верифицирован",
+    "pending": "На рассмотрении",
+    "rejected": "Отклонено",
+    "title": "Верификация",
+    "verifiedDesc": "Ваша личность подтверждена. Значок верификации отображается на вашей странице.",
+    "pendingDesc": "Ваша заявка находится на рассмотрении. Обычно это занимает 1-3 рабочих дня.",
+    "description": "Подтвердите свою личность, чтобы получить значок верификации на странице",
+    "rejectedReason": "Причина отклонения:",
+    "type": "Тип верификации",
+    "individual": "Физ. лицо",
+    "individualDesc": "Эксперт, блогер",
+    "business": "Юр. лицо",
+    "businessDesc": "Компания, магазин",
+    "facePhoto": "Фото лица с документом",
+    "facePhotoHint": "Селфи с удостоверением личности в руках",
+    "idDocument": "Удостоверение личности",
+    "businessDoc": "Справка о регистрации юр. лица",
+    "notes": "Дополнительная информация",
+    "notesPlaceholder": "Любая дополнительная информация...",
+    "uploading": "Загрузка...",
+    "submit": "Отправить на верификацию"
   },
   "frames": {
     "default": "Default",
@@ -489,7 +670,22 @@
       "yandexMetrika": "Yandex Metrika ID",
       "webhookUrl": "Webhook URL (Pro)",
       "webhookHint": "We'll send a POST request with lead data"
-    }
+    },
+    "pageBackground": "Фон страницы",
+    "backgroundType": "Тип фона",
+    "solidColor": "Сплошной цвет",
+    "gradient": "Градиент",
+    "imageOrGif": "Изображение / GIF",
+    "backgroundColor": "Цвет фона",
+    "gradientColors": "Цвета градиента (через запятую)",
+    "gradientHint": "Укажите 2-3 цвета через запятую",
+    "gradientAngle": "Угол градиента",
+    "backgroundImage": "Изображение или GIF",
+    "templates": "Шаблоны",
+    "saveAsTemplate": "Сохранить как шаблон",
+    "myTemplates": "Мои шаблоны",
+    "openVerification": "Пройти верификацию",
+    "pageBackgroundLocked": "Пользовательский фон страницы доступен только на тарифе Business. Установите цвет, градиент, изображение или GIF в качестве фона вашей страницы."
   },
   "niche": {
     "barber": "Barber",
@@ -543,7 +739,11 @@
     "generationFailed": "Failed to create page",
     "generatingTitle": "AI is Creating Your Page",
     "generatingDescription": "Generating structure, content, and design...",
-    "pleaseWait": "This will take about 30 seconds"
+    "pleaseWait": "This will take about 30 seconds",
+    "wizardTitle": "Мастер настройки",
+    "wizardDescription": "Пошаговая настройка вашего профиля и страницы.",
+    "completeTitle": "Готово!",
+    "completeDescription": "Ваша страница создана и готова к редактированию"
   },
   "landing": {
     "v6": {
@@ -551,8 +751,8 @@
         "badge": "V6.0 Live",
         "titlePrefix": "Everything you do —",
         "titleHighlight": "in one link.",
-        "titleSuffix": "",
-        "titleBrand": "",
+        "titleSuffix": "для бизнеса",
+        "titleBrand": "lnkmx.my",
         "description": "Combine content, products, and services into a beautiful page. No designers or coding required. Accept orders and grow.",
         "ctaPrimary": "Create Page for Free",
         "ctaSecondary": "View Examples",
@@ -897,6 +1097,231 @@
       "benefit6": "Mobile editor",
       "keywords": "Keywords: link page, link in bio, multi-link, linktree alternative, taplink analog, mini-landing"
     },
+    "nav": {
+      "signIn": "Sign In",
+      "getStarted": "Create",
+      "gallery": "Gallery",
+      "examples": "Examples"
+    },
+    "floatingCta": {
+      "create": "Create"
+    },
+    "hero": {
+      "badge": "AI Mini-Site Builder",
+      "mainTitle": "A mini-site that brings leads in 2 minutes",
+      "mainHighlight": "One link - a clear path to booking",
+      "valueProposition": "AI builder for experts, freelancers, and small businesses. Create offer, pricing, forms, and contacts without designers or code.",
+      "benefit1": "AI drafts the structure and first screen copy",
+      "benefit2": "Leads land in mini-CRM and Telegram",
+      "benefit3": "Analytics show which blocks drive leads",
+      "primaryCta": "Create page for free",
+      "secondaryCta": "View examples",
+      "microNote": "Free start. Mobile editor. Publish in one click.",
+      "pricingCta": "Compare plans",
+      "title": "AI-страница за минуту,",
+      "titleHighlight": "которая собирает заявки",
+      "description": "Для бьюти-мастеров, экспертов и малого бизнеса. AI-дизайнер + AI-копирайтер + Mini-CRM + Telegram-уведомления о новых клиентах.",
+      "usernamePlaceholder": "yourname",
+      "createPage": "Создать страницу",
+      "free": "Бесплатно",
+      "noCode": "Без кода",
+      "aiHelps": "AI помогает",
+      "viewExamples": "Посмотреть примеры"
+    },
+    "forWhom": {
+      "title": "Who lnkmx is for",
+      "expert": {
+        "title": "Experts & coaches",
+        "desc": "Services, cases, clear offer"
+      },
+      "freelancer": {
+        "title": "Freelancers",
+        "desc": "Portfolio, brief, inquiries"
+      },
+      "beauty": {
+        "title": "Beauty & services",
+        "desc": "Booking, reviews, map"
+      },
+      "business": {
+        "title": "Small business",
+        "desc": "Catalog, leads, analytics"
+      }
+    },
+    "problem": {
+      "title": "Why leads are lost today",
+      "item1": "Bio is chaos: pricing, booking, and cases scattered across posts and links",
+      "item2": "People ask the same questions, you answer manually and lose time",
+      "item3": "A page becomes a menu of links, not a path to booking",
+      "item4": "No understanding: what actually gets clicked and where attention is lost",
+      "solution": "lnkmx creates one clear page where visitors quickly understand who you are, how you help, how much it costs, and where to click to book. And you see leads and analytics in one place."
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "cta": "Try now",
+      "step1": {
+        "title": "Tell us about your work",
+        "description": "Niche, services, and links - AI understands the context"
+      },
+      "step2": {
+        "title": "AI builds the page",
+        "description": "Ready blocks, copy, and CTAs you can edit"
+      },
+      "step3": {
+        "title": "Publish and collect leads",
+        "description": "Your link is ready for socials, leads go to CRM"
+      },
+      "badge": "1 минута до результата"
+    },
+    "features": {
+      "title": "What you get in the first version",
+      "ai": {
+        "title": "A page with a clear offer",
+        "item1": "First screen with a result promise and CTA",
+        "item2": "Pricing or service packages without manual layout",
+        "item3": "Lead form and contacts on one page"
+      },
+      "crm": {
+        "title": "Leads and order",
+        "item1": "Mini-CRM: leads, statuses, notes",
+        "item2": "Lead notifications in Telegram",
+        "item3": "Quick replies and conversation history"
+      },
+      "analytics": {
+        "title": "Understand what works",
+        "item1": "Views and clicks by block",
+        "item2": "Traffic sources, devices",
+        "item3": "Hints on what to improve next"
+      }
+    },
+    "useCases": {
+      "title": "Ready scenarios for your tasks",
+      "subtitle": "Pick a scenario, tweak a few blocks, and publish.",
+      "expert": {
+        "title": "Expert or consulting",
+        "bullet1": "Offer and outcome on the first screen",
+        "bullet2": "Pricing and service packages",
+        "bullet3": "Lead form and messengers"
+      },
+      "service": {
+        "title": "Services and appointments",
+        "bullet1": "Booking and schedule",
+        "bullet2": "Address, map, and reviews",
+        "bullet3": "Contacts and quick replies"
+      },
+      "creator": {
+        "title": "Creator and portfolio",
+        "bullet1": "Top projects and cases",
+        "bullet2": "Socials and subscriptions",
+        "bullet3": "Inquiries and brief"
+      },
+      "shop": {
+        "title": "Shop or catalog",
+        "bullet1": "Products and prices",
+        "bullet2": "FAQ and delivery terms",
+        "bullet3": "Fast contact for orders",
+        "name": "Бутик Мода",
+        "role": "Магазин одежды",
+        "desc": "Каталог, доставка, акции",
+        "link1": "👗 Каталог",
+        "link2": "🏷️ Акции",
+        "link3": "🚚 Доставка"
+      },
+      "primaryCta": "Create page",
+      "secondaryCta": "View examples",
+      "photographer": {
+        "name": "Алексей Фото",
+        "role": "Фотограф",
+        "desc": "Портфолио, цены на съёмки, бронирование",
+        "link1": "🎨 Портфолио",
+        "link2": "💰 Прайс-лист",
+        "link3": "📅 Записаться"
+      },
+      "barber": {
+        "name": "BarberShop MAX",
+        "role": "Барбершоп",
+        "desc": "Услуги, цены, онлайн-запись",
+        "link1": "✂️ Услуги",
+        "link2": "📍 Адрес",
+        "link3": "📱 WhatsApp"
+      },
+      "fitness": {
+        "name": "Мария Фитнес",
+        "role": "Фитнес-тренер",
+        "desc": "Программы тренировок, онлайн-курсы",
+        "link1": "🏋️ Программы",
+        "link2": "📹 Онлайн-курс",
+        "link3": "✉️ Telegram"
+      },
+      "psychologist": {
+        "name": "Анна Психолог",
+        "role": "Психолог",
+        "desc": "Консультации, направления работы",
+        "link1": "💬 О терапии",
+        "link2": "📋 Записаться",
+        "link3": "📚 Блог"
+      },
+      "musician": {
+        "name": "DJ Max",
+        "role": "Музыкант",
+        "desc": "Музыка, мероприятия, букинг",
+        "link1": "🎧 Spotify",
+        "link2": "🎟️ Мероприятия",
+        "link3": "📞 Букинг"
+      },
+      "badge": "Примеры использования",
+      "cta": "Смотреть все страницы в галерее"
+    },
+    "comparison": {
+      "title": "Why a mini-site beats a link list",
+      "feature": "Feature",
+      "others": "Others",
+      "ai": "AI page building",
+      "crm": "Mini-CRM for leads",
+      "telegram": "Telegram notifications",
+      "mobile": "Mobile editor",
+      "blockAnalytics": "Block analytics"
+    },
+    "socialProof": {
+      "title": "Example pages"
+    },
+    "pricing": {
+      "title": "Pricing",
+      "subtitle": "Start free and upgrade to Pro when you need more",
+      "forever": "Forever",
+      "bestValue": "Best value",
+      "freeAction": "Start free",
+      "viewPlans": "Choose Pro",
+      "otherPlans": "Other options:",
+      "annualPriceKzt": "36,540 ₸ for 12 months",
+      "annualPriceUsd": "$71/year",
+      "otherPlansSix": "6 months: 3,698 ₸/mo (-15%)",
+      "otherPlansThree": "3 months: 4,350 ₸/mo",
+      "free": {
+        "item1": "6 basic blocks",
+        "item2": "1 AI generation/month",
+        "item3": "Basic analytics"
+      },
+      "pro": {
+        "item1": "Unlimited blocks and templates",
+        "item2": "5 AI generations/month",
+        "item3": "CRM + Telegram notifications",
+        "item4": "Advanced analytics",
+        "item5": "No watermark"
+      },
+      "month": "мес",
+      "total": "Итого",
+      "billedOnce": "единоразово"
+    },
+    "finalCta": {
+      "title": "Build a page that leads to a booking in 2 minutes",
+      "description": "Don't lose clients in chats. Give them a clear path: who you are - how you help - how much - book.",
+      "primaryCta": "Create page for free",
+      "secondaryCta": "View examples"
+    },
+    "footer": {
+      "copyright": "© 2025 lnkmx",
+      "alternatives": "Comparison"
+    },
     "faq": {
       "badge": "Questions and Answers",
       "title": "Frequently Asked Questions.",
@@ -958,169 +1383,157 @@
         "answer": "Yes, Pro includes custom domains and page branding."
       }
     },
-    "nav": {
-      "signIn": "Sign In",
-      "getStarted": "Create",
-      "gallery": "Gallery",
-      "examples": "Examples"
+    "demo": {
+      "badge": "Попробуйте сейчас",
+      "title": "Почувствуйте магию.",
+      "subtitle": "Поиграйте с редактором прямо здесь. Добавляйте блоки, меняйте контент и видите изменения в реальном времени.",
+      "profile": "Профиль",
+      "addBlocks": "Добавить блоки",
+      "link": "Ссылка",
+      "text": "Текст",
+      "image": "Изображение",
+      "socials": "Соцсети",
+      "yourBlocks": "Ваши блоки",
+      "dragToReorder": "перетащите для сортировки",
+      "noBlocks": "Пока нет блоков. Добавьте выше!",
+      "livePreview": "Предпросмотр",
+      "addBlocksHint": "Добавьте блоки, чтобы увидеть их здесь"
     },
-    "floatingCta": {
-      "create": "Create"
+    "featured": {
+      "badge": "Топ создателей",
+      "title": "Рекомендуемые страницы",
+      "subtitle": "Откройте для себя самые популярные страницы, созданные с помощью lnkmx.my",
+      "viewAll": "Посмотреть все страницы"
     },
-    "hero": {
-      "badge": "AI Mini-Site Builder",
-      "mainTitle": "A mini-site that brings leads in 2 minutes",
-      "mainHighlight": "One link - a clear path to booking",
-      "valueProposition": "AI builder for experts, freelancers, and small businesses. Create offer, pricing, forms, and contacts without designers or code.",
-      "benefit1": "AI drafts the structure and first screen copy",
-      "benefit2": "Leads land in mini-CRM and Telegram",
-      "benefit3": "Analytics show which blocks drive leads",
-      "primaryCta": "Create page for free",
-      "secondaryCta": "View examples",
-      "microNote": "Free start. Mobile editor. Publish in one click.",
-      "pricingCta": "Compare plans"
-    },
-    "forWhom": {
-      "title": "Who lnkmx is for",
-      "expert": {
-        "title": "Experts & coaches",
-        "desc": "Services, cases, clear offer"
-      },
-      "freelancer": {
-        "title": "Freelancers",
-        "desc": "Portfolio, brief, inquiries"
-      },
-      "beauty": {
-        "title": "Beauty & services",
-        "desc": "Booking, reviews, map"
-      },
-      "business": {
-        "title": "Small business",
-        "desc": "Catalog, leads, analytics"
-      }
-    },
-    "problem": {
-      "title": "Why leads are lost today",
-      "item1": "Bio is chaos: pricing, booking, and cases scattered across posts and links",
-      "item2": "People ask the same questions, you answer manually and lose time",
-      "item3": "A page becomes a menu of links, not a path to booking",
-      "item4": "No understanding: what actually gets clicked and where attention is lost",
-      "solution": "lnkmx creates one clear page where visitors quickly understand who you are, how you help, how much it costs, and where to click to book. And you see leads and analytics in one place."
-    },
-    "howItWorks": {
-      "title": "How it works",
-      "cta": "Try now",
-      "step1": {
-        "title": "Tell us about your work",
-        "description": "Niche, services, and links - AI understands the context"
-      },
-      "step2": {
-        "title": "AI builds the page",
-        "description": "Ready blocks, copy, and CTAs you can edit"
-      },
-      "step3": {
-        "title": "Publish and collect leads",
-        "description": "Your link is ready for socials, leads go to CRM"
-      }
-    },
-    "features": {
-      "title": "What you get in the first version",
-      "ai": {
-        "title": "A page with a clear offer",
-        "item1": "First screen with a result promise and CTA",
-        "item2": "Pricing or service packages without manual layout",
-        "item3": "Lead form and contacts on one page"
-      },
+    "premiumValue": {
       "crm": {
-        "title": "Leads and order",
-        "item1": "Mini-CRM: leads, statuses, notes",
-        "item2": "Lead notifications in Telegram",
-        "item3": "Quick replies and conversation history"
+        "title": "Mini-CRM",
+        "description": "Все заявки с формы автоматически попадают в CRM. Статусы: новый → в работе → завершён. Больше никакого Excel."
+      },
+      "telegram": {
+        "title": "Telegram-уведомления",
+        "description": "Мгновенное сообщение в Telegram, когда клиент оставляет заявку. Не пропустите ни одного лида."
+      },
+      "ai": {
+        "title": "Безлимитный AI",
+        "description": "Генерация текстов, заголовков, описаний товаров - без ограничений. AI копирайтер работает на вас."
       },
       "analytics": {
-        "title": "Understand what works",
-        "item1": "Views and clicks by block",
-        "item2": "Traffic sources, devices",
-        "item3": "Hints on what to improve next"
-      }
-    },
-    "useCases": {
-      "title": "Ready scenarios for your tasks",
-      "subtitle": "Pick a scenario, tweak a few blocks, and publish.",
-      "expert": {
-        "title": "Expert or consulting",
-        "bullet1": "Offer and outcome on the first screen",
-        "bullet2": "Pricing and service packages",
-        "bullet3": "Lead form and messengers"
+        "title": "Расширенная аналитика",
+        "description": "Какие ссылки кликают чаще, откуда приходят клиенты, в какое время активность выше."
       },
-      "service": {
-        "title": "Services and appointments",
-        "bullet1": "Booking and schedule",
-        "bullet2": "Address, map, and reviews",
-        "bullet3": "Contacts and quick replies"
+      "bonus": {
+        "themes": "Премиум-темы и анимации",
+        "scheduler": "Планировщик блоков",
+        "video": "Видео и медиа-блоки"
       },
-      "creator": {
-        "title": "Creator and portfolio",
-        "bullet1": "Top projects and cases",
-        "bullet2": "Socials and subscriptions",
-        "bullet3": "Inquiries and brief"
-      },
-      "shop": {
-        "title": "Shop or catalog",
-        "bullet1": "Products and prices",
-        "bullet2": "FAQ and delivery terms",
-        "bullet3": "Fast contact for orders"
-      },
-      "primaryCta": "Create page",
-      "secondaryCta": "View examples"
+      "badge": "Premium - больше денег",
+      "title": "Зачем платить за Premium",
+      "subtitle": "Не визуальные украшения, а инструменты для заработка",
+      "bonusTitle": "А также приятные бонусы:",
+      "cta": "Попробовать Premium",
+      "price": "От 3 045 ₸/месяц при оплате за год (~$6)"
     },
-    "comparison": {
-      "title": "Why a mini-site beats a link list",
-      "feature": "Feature",
-      "others": "Others",
-      "ai": "AI page building",
-      "crm": "Mini-CRM for leads",
-      "telegram": "Telegram notifications",
-      "mobile": "Mobile editor",
-      "blockAnalytics": "Block analytics"
-    },
-    "socialProof": {
-      "title": "Example pages"
-    },
-    "pricing": {
-      "title": "Pricing",
-      "subtitle": "Start free and upgrade to Pro when you need more",
-      "forever": "Forever",
-      "bestValue": "Best value",
-      "freeAction": "Start free",
-      "viewPlans": "Choose Pro",
-      "otherPlans": "Other options:",
-      "annualPriceKzt": "36,540 ₸ for 12 months",
-      "annualPriceUsd": "$71/year",
-      "otherPlansSix": "6 months: 3,698 ₸/mo (-15%)",
-      "otherPlansThree": "3 months: 4,350 ₸/mo",
+    "simplePricing": {
       "free": {
-        "item1": "6 basic blocks",
-        "item2": "1 AI generation/month",
-        "item3": "Basic analytics"
+        "f1_v2": "Базовые блоки (ссылки, текст, фото)",
+        "f2_v2": "AI-генерация (1 раз/месяц)",
+        "f3_v2": "Базовая статистика просмотров",
+        "f4_v2": "QR-код страницы",
+        "f5_v2": "Mini-CRM и Telegram-уведомления",
+        "f6_v2": "Расширенная аналитика",
+        "f7_v2": "AI-генерация (5 раз/месяц)",
+        "title": "Бесплатно",
+        "subtitle": "Навсегда, без скрытых платежей",
+        "cta": "Начать бесплатно"
       },
-      "pro": {
-        "item1": "Unlimited blocks and templates",
-        "item2": "5 AI generations/month",
-        "item3": "CRM + Telegram notifications",
-        "item4": "Advanced analytics",
-        "item5": "No watermark"
+      "premium": {
+        "f1_v2": "Все 25+ типов блоков",
+        "f2_v2": "Mini-CRM - все заявки в одном месте",
+        "f3_v2": "Telegram-уведомления о лидах",
+        "f4_v2": "AI-генерация (5 раз/месяц)",
+        "f5_v2": "Расширенная аналитика кликов",
+        "f6_v2": "Премиум-темы и анимации",
+        "f7_v2": "Планировщик блоков",
+        "badge": "Рекомендуем",
+        "title": "Premium",
+        "subtitle": "Всё для роста бизнеса",
+        "cta": "Получить Premium"
+      },
+      "badge": "Простые тарифы",
+      "title": "Бесплатно или Premium"
+    },
+    "toc": {
+      "linkInBio": "Что такое Link-in-Bio",
+      "forWhom": "Для кого",
+      "features": "Возможности",
+      "useCases": "Примеры",
+      "pricing": "Тарифы",
+      "faq": "FAQ",
+      "ariaLabel": "Содержание страницы",
+      "title": "Содержание"
+    },
+    "targetAudience": {
+      "beauty": {
+        "title": "Бьюти-мастера",
+        "subtitle": "Маникюр, брови, ресницы, волосы",
+        "result1": "Все услуги и цены - в одной ссылке",
+        "result2": "Клиенты записываются через форму",
+        "result3": "Уведомление в Telegram о записи"
+      },
+      "expert": {
+        "title": "Эксперты и коучи",
+        "subtitle": "Психологи, репетиторы, консультанты",
+        "result1": "Портфолио и отзывы в красивом виде",
+        "result2": "Лиды автоматически в Mini-CRM",
+        "result3": "Статусы клиентов: новый → в работе → готово"
+      },
+      "business": {
+        "title": "Малый бизнес",
+        "subtitle": "Барберы, фотографы, кофейни",
+        "result1": "Каталог товаров и услуг",
+        "result2": "Аналитика: откуда пришли клиенты",
+        "result3": "Контроль заявок без Excel"
+      },
+      "title": "Для кого создан lnkmx.my",
+      "subtitle": "Конкретные результаты для вашей ниши",
+      "cta": "Создать страницу"
+    },
+    "v2": {
+      "pricing": {
+        "title": "Простые тарифы,",
+        "titleHighlight": "Экспоненциальный рост",
+        "subtitle": "Начните бесплатно. Переходите на новый уровень, когда будете готовы.",
+        "monthly": "Месяц",
+        "yearly": "Год",
+        "save": "-30%",
+        "free": {
+          "name": "Starter",
+          "desc": "Идеально для тестирования платформы.",
+          "f1": "Базовые блоки",
+          "f2": "1 AI-генерация/мес",
+          "f3": "Базовая аналитика",
+          "f4": "Без своего домена",
+          "cta": "Начать бесплатно"
+        },
+        "forever": "навсегда",
+        "popular": "ПОПУЛЯРНО",
+        "perMonth": "мес",
+        "billedYearly": "Оплата {{price}} в год",
+        "pro": {
+          "f1": "Всё из тарифа Free",
+          "f2": "5 AI-генераций/мес",
+          "f3": "Лиды в Telegram",
+          "f4": "Расширенная аналитика",
+          "f5": "Удаление брендинга",
+          "cta": "Начать Pro триал"
+        }
+      },
+      "testimonials": {
+        "title": "Любимо",
+        "count": "2,000+",
+        "suffix": "создателями"
       }
-    },
-    "finalCta": {
-      "title": "Build a page that leads to a booking in 2 minutes",
-      "description": "Don't lose clients in chats. Give them a clear path: who you are - how you help - how much - book.",
-      "primaryCta": "Create page for free",
-      "secondaryCta": "View examples"
-    },
-    "footer": {
-      "copyright": "© 2025 lnkmx",
-      "alternatives": "Comparison"
     }
   },
   "dashboard": {
@@ -1182,7 +1595,9 @@
       "premium": "Premium",
       "premiumDesc": "More features",
       "tip": "Tip",
-      "tipContent": "Add a pricing block to increase conversions by 40%"
+      "tipContent": "Add a pricing block to increase conversions by 40%",
+      "versions": "История",
+      "versionsDesc": "Версии страницы"
     },
     "activity": {
       "title": "Inbox",
@@ -1229,7 +1644,16 @@
       "mobile": "Mobile",
       "desktop": "Desktop",
       "tablet": "Tablet",
-      "sources": "Traffic sources"
+      "sources": "Traffic sources",
+      "lowCtrDesc": "Некоторые блоки имеют низкую кликабельность. Попробуйте изменить их заголовки или цвета.",
+      "highBounceDesc": "Пользователи быстро покидают страницу. Проверьте первый экран и скорость загрузки.",
+      "mobileFirstDesc": "Большинство ваших посетителей используют мобильные устройства. Убедитесь, что страница идеально выглядит на телефонах.",
+      "lowCtr": "Низкий CTR",
+      "highBounce": "Высокий показатель отказов",
+      "addForm": "Добавьте форму захвата",
+      "addFormDesc": "Есть трафик, но нет конверсий. Добавьте форму обратной связи",
+      "mobileFirst": "Mobile-first аудитория",
+      "ctr": "CTR"
     },
     "settings": {
       "title": "Settings",
@@ -1336,7 +1760,21 @@
       "errors": {
         "slug_taken": "This URL is taken",
         "invalid_slug": "Invalid URL"
-      }
+      },
+      "invalidDomain": "Неверный формат домена",
+      "domainTaken": "Этот домен уже привязан к другой странице",
+      "customDomain": "Свой домен",
+      "customDomainDesc": "Подключите свой домен (например, user.com) к этой странице.",
+      "upgradeToConnect": "Подключить домен в Pro",
+      "dnsSetup": "Настройка DNS",
+      "dnsInstructions": "Добавьте CNAME-запись у вашего регистратора домена:",
+      "domainInvalid": "Введите правильный домен (например, yourdomain.com)",
+      "yourDomain": "Ваш домен",
+      "domainHint": "Добавьте CNAME-запись, указывающую на lnkmx.my",
+      "dnsConfig": "Настройте эту DNS-запись:",
+      "aiBuilder": "AI Builder",
+      "aiBuilderBtn": "Заполнить страницу с AI",
+      "aiBuilderDesc": "AI создаст контент на основе шаблона и вашей информации"
     },
     "accountSettings": {
       "title": "Account Settings",
@@ -1425,7 +1863,41 @@
         "feature6": "No watermark",
         "feature7": "Priority support"
       }
-    }
+    },
+    "createPage": {
+      "titleRequired": "Введите название страницы",
+      "limitExceeded": "Превышен лимит страниц. Перейдите на Pro для создания большего количества страниц.",
+      "slugTaken": "Этот URL уже занят",
+      "invalidSlug": "URL должен содержать 3-30 символов: только строчные латинские буквы, цифры и дефис",
+      "error": "Не удалось создать страницу",
+      "upgradeTitle": "Перейти на Pro",
+      "upgradeDescription": "Тариф Free включает 1 страницу. Перейдите на Pro, чтобы создавать до 6 страниц.",
+      "currentPlan": "Текущий тариф",
+      "pagesUsed": "Использовано страниц",
+      "upgradeCta": "Получить Pro",
+      "title": "Создать новую страницу",
+      "description": "Дайте вашей странице название и выберите URL (поддомен).",
+      "titleLabel": "Название страницы",
+      "titlePlaceholder": "Моя визитка",
+      "slugLabel": "Ваш URL (необязательно)",
+      "slugPlaceholder": "my-page",
+      "slugHint": "3-30 символов: латиница, цифры, дефис",
+      "remaining": "Вы можете создать еще {{count}} стр.",
+      "create": "Создать страницу"
+    },
+    "common": {
+      "error": "Произошла ошибка",
+      "errorDescription": "Не удалось загрузить данные. Попробуйте ещё раз.",
+      "retry": "Повторить"
+    },
+    "leads": {
+      "title": "Лиды (CRM)",
+      "search": "Поиск по лидам...",
+      "emptyTitle": "Пока нет лидов",
+      "emptyDesc": "Здесь появятся заявки от ваших клиентов через формы и квизы на странице."
+    },
+    "addFirstBlock": "Нажмите + чтобы добавить первый блок",
+    "templateApplied": "Template applied!"
   },
   "blocks": {
     "profile": "Profile",
@@ -1439,11 +1911,44 @@
     "product": "Product",
     "catalog": {
       "empty": "Add products to catalog",
-      "uncategorized": "Uncategorized"
+      "uncategorized": "Uncategorized",
+      "newCategory": "Новая категория",
+      "noName": "Без названия",
+      "title": "Заголовок каталога",
+      "titlePlaceholder": "Наше меню",
+      "layout": "Отображение",
+      "layoutList": "Список",
+      "layoutGrid": "Сетка",
+      "showPrices": "Показывать цены",
+      "defaultCurrency": "Валюта по умолчанию",
+      "items": "Позиции",
+      "categories": "Категории",
+      "categoriesHint": "Создайте категории для группировки позиций",
+      "addCategory": "Добавить",
+      "categoryNamePlaceholder": "Название категории",
+      "itemsCount": "позиций",
+      "noCategoriesHint": "Категории помогут организовать ваш каталог",
+      "itemsHint": "Добавьте позиции в каталог",
+      "addItem": "Добавить",
+      "position": "Позиция",
+      "itemCategory": "Категория",
+      "selectCategory": "Выберите категорию",
+      "noCategory": "Без категории",
+      "itemImage": "Фото",
+      "itemName": "Название",
+      "itemNamePlaceholder": "Название позиции",
+      "itemDescription": "Описание",
+      "itemDescriptionPlaceholder": "Описание позиции",
+      "itemPrice": "Цена",
+      "itemCurrency": "Валюта",
+      "emptyHint": "Нажмите "
     },
     "pricing": {
       "empty": "Add services",
-      "hit": "Popular"
+      "hit": "Popular",
+      "newItem": "Новая услуга",
+      "title": "Заголовок",
+      "titlePlaceholder": "Мои услуги"
     },
     "form": "Form",
     "booking": "Booking",
@@ -1451,7 +1956,17 @@
       "noAddress": "Specify address"
     },
     "faq": {
-      "empty": "Add questions and answers"
+      "empty": "Add questions and answers",
+      "newQuestion": "Новый вопрос",
+      "title": "Заголовок",
+      "titlePlaceholder": "Частые вопросы",
+      "items": "Вопросы и ответы",
+      "addItem": "Добавить",
+      "question": "Вопрос",
+      "questionPlaceholder": "Введите вопрос",
+      "answer": "Ответ",
+      "answerPlaceholder": "Введите ответ",
+      "emptyHint": "Добавьте вопросы и ответы"
     },
     "testimonial": "Testimonials",
     "countdown": {
@@ -1460,7 +1975,17 @@
       "days": "days",
       "hours": "hours",
       "minutes": "minutes",
-      "seconds": "seconds"
+      "seconds": "seconds",
+      "title": "Заголовок",
+      "titlePlaceholder": "До конца акции",
+      "targetDate": "Дата и время",
+      "expiredText": "Текст после окончания",
+      "expiredTextPlaceholder": "Время вышло!",
+      "displayOptions": "Отображение",
+      "showDays": "Показывать дни",
+      "showHours": "Показывать часы",
+      "showMinutes": "Показывать минуты",
+      "showSeconds": "Показывать секунды"
     },
     "carousel": {
       "empty": "No images added to carousel"
@@ -1493,12 +2018,23 @@
       "stylePremium": "Premium",
       "stylePremiumDesc": "Golden gradient",
       "styleExclusive": "Exclusive",
-      "styleExclusiveDesc": "Purple gradient"
+      "styleExclusiveDesc": "Purple gradient",
+      "hint": "Добавьте ссылку на закрытый Telegram-канал или группу. Это повышает удержание клиентов и создаёт сообщество вокруг вашего бизнеса.",
+      "join": "Вступить",
+      "defaultTitle": "Мой закрытый клуб"
     },
     "beforeAfter": {
       "before": "Before",
       "after": "After",
-      "noImages": "Add images"
+      "noImages": "Add images",
+      "title": "Заголовок",
+      "titlePlaceholder": "Результат работы",
+      "beforeImage": "Фото ",
+      "afterImage": "Фото ",
+      "beforeLabel": "Подпись ",
+      "beforeLabelPlaceholder": "До",
+      "afterLabel": "Подпись ",
+      "afterLabelPlaceholder": "После"
     },
     "customCode": "Code",
     "scratch": "Scratch",
@@ -1511,7 +2047,8 @@
     "restored": "Block restored",
     "addFailed": "Failed to add block",
     "premiumRequired": "This block is PRO only",
-    "limitReached": "Block limit reached. Upgrade to Premium."
+    "limitReached": "Block limit reached. Upgrade to Premium.",
+    "proOnly": "Этот блок доступен только в PRO"
   },
   "auth": {
     "signIn": "Sign In",
@@ -1582,7 +2119,11 @@
     "seo": {
       "title": "Sign in to lnkmx",
       "description": "Sign in to create and publish your link in bio page."
-    }
+    },
+    "required": "Please sign in",
+    "loginRequired": "Войдите в аккаунт",
+    "signupEmailSent": "We sent a confirmation link to your email",
+    "login": "Войти"
   },
   "gallery": {
     "title": "Page Gallery",
@@ -1610,7 +2151,8 @@
       "title": "lnkmx Gallery - link in bio examples & templates",
       "description": "Real lnkmx pages from creators and businesses. Browse niches, templates, and inspiration.",
       "nicheTitle": "lnkmx Gallery — {{niche}}",
-      "nicheDescription": "Explore lnkmx pages in the {{niche}} niche: templates, ideas, and structure."
+      "nicheDescription": "Explore lnkmx pages in the {{niche}} niche: templates, ideas, and structure.",
+      "imageAlt": "lnkmx Gallery - Link in Bio Examples"
     },
     "seoIntro": {
       "title": "How to use the gallery",
@@ -1622,21 +2164,41 @@
       ],
       "locationTitle": "Local relevance",
       "locationBody": "Find examples from your city or country and adapt them for your business."
-    }
+    },
+    "featuredPages": "Featured Pages",
+    "searchPlaceholder": "Search pages...",
+    "sortBy": "Sort by",
+    "totalPages": "{{count}} pages in gallery",
+    "searchResults": "Filtering by ",
+    "shareToGallery": "Share to Gallery",
+    "shareDescription": "Show your page in the community gallery",
+    "allNiches": "All",
+    "pages": "страниц",
+    "create": "Создать",
+    "statsPages": "Страниц",
+    "statsLikes": "Лайков",
+    "statsViews": "Просмотров",
+    "tabGallery": "Галерея",
+    "tabLeaderboard": "Рейтинг",
+    "allPages": "Все страницы",
+    "noPages": "Страниц не найдено",
+    "tryAnotherFilter": "Попробуйте другой фильтр"
   },
   "errors": {
     "general": "An error occurred",
     "notFound": "Page not found",
     "pageNotFound": "Page not found",
     "invalidLink": "Invalid or corrupted link",
-    "unauthorized": "Authorization required",
-    "forbidden": "Access denied",
-    "networkError": "Network error",
     "loadError": "Failed to load",
     "tryAgain": "Try again",
     "createYourPage": "Create your page",
     "invalidEmail": "Invalid email",
-    "subscription": "Subscription"
+    "subscription": "Subscription",
+    "unauthorized": "Authorization required",
+    "forbidden": "Access denied",
+    "networkError": "Network error",
+    "updateFailed": "Ошибка обновления",
+    "deleteFailed": "Ошибка удаления"
   },
   "language": {
     "autoTranslate": "Auto-translate",
@@ -1663,7 +2225,12 @@
     "scanQR": "Scan to open the page",
     "defaultTitle": "Check out my page",
     "qrDialogTitle": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page"
+    "qrDialogDescription": "Scan this code to share your page",
+    "title": "Check out my lnkmx.my page!",
+    "published": "Page Published!",
+    "publishedDesc": "Share your published page with others",
+    "yourPageLink": "Your page link",
+    "shareNow": "Share Now"
   },
   "toasts": {
     "sharing": {
@@ -1677,6 +2244,76 @@
     "publish": {
       "success": "Page published!",
       "error": "Failed to publish"
+    },
+    "team": {
+      "confirmRemove": "Удалить участника?",
+      "memberRemoved": "Участник удален",
+      "removeError": "Ошибка удаления участника",
+      "created": "Команда создана",
+      "createError": "Ошибка создания команды",
+      "memberInvited": "Приглашение отправлено",
+      "inviteError": "Ошибка отправки приглашения",
+      "left": "Вы покинули команду",
+      "deleted": "Команда удалена",
+      "joined": "Вы присоединились к команде!",
+      "invalidCode": "Неверный код приглашения",
+      "alreadyMember": "Вы уже участник этой команды",
+      "notAuth": "Необходима авторизация",
+      "joinError": "Ошибка при присоединении"
+    },
+    "ai": {
+      "enterUrl": "Введите URL",
+      "enterProduct": "Введите название продукта",
+      "describePage": "Опишите страницу",
+      "generationError": "Ошибка генерации",
+      "generated": "Успешно сгенерировано"
+    },
+    "leads": {
+      "loadError": "Ошибка загрузки лидов",
+      "created": "Лид создан",
+      "createError": "Ошибка создания лида",
+      "updated": "Лид обновлен",
+      "updateError": "Ошибка обновления лида",
+      "deleted": "Лид удален",
+      "deleteError": "Ошибка удаления лида",
+      "interactionError": "Ошибка взаимодействия"
+    },
+    "username": {
+      "authRequired": "Требуется авторизация",
+      "enterUsername": "Введите имя пользователя",
+      "invalid": "Недопустимое имя пользователя",
+      "updateError": "Ошибка обновления имени",
+      "updated": "Имя пользователя обновлено"
+    },
+    "page": {
+      "saveError": "Ошибка сохранения страницы",
+      "publishError": "Ошибка публикации страницы"
+    },
+    "collaboration": {
+      "requestSent": "Запрос на сотрудничество отправлен",
+      "requestError": "Ошибка отправки запроса",
+      "accepted": "Запрос принят",
+      "rejected": "Запрос отклонен",
+      "error": "Произошла ошибка",
+      "deleted": "Сотрудничество удалено"
+    },
+    "shoutout": {
+      "added": "Рекомендация добавлена",
+      "error": "Ошибка добавления рекомендации",
+      "deleted": "Рекомендация удалена"
+    },
+    "gallery": {
+      "likeError": "Ошибка при лайке",
+      "unlikeError": "Ошибка при удалении лайка",
+      "addedToGallery": "Добавлено в галерею",
+      "removedFromGallery": "Удалено из галереи",
+      "updateError": "Ошибка обновления в галерее"
+    },
+    "social": {
+      "rewardClaimed": "Награда получена",
+      "rewardError": "Ошибка при получении награды",
+      "giftActivated": "Подарок активирован",
+      "giftError": "Ошибка активации подарка"
     }
   },
   "admin": {
@@ -1743,7 +2380,106 @@
     "seo": {
       "title": "lnkmx Admin",
       "description": "Internal admin tools for lnkmx."
-    }
+    },
+    "analyticsTitle": "Аналитика платформы",
+    "analyticsSubtitle": "Обзор активности и ключевых метрик",
+    "selectPeriod": "Выбрать период",
+    "periods": {
+      "7d": "7 дней",
+      "14d": "14 дней",
+      "30d": "30 дней",
+      "90d": "90 дней"
+    },
+    "totalViews": "Всего просмотров",
+    "vsPrevPeriod": "против прошл. периода",
+    "totalClicks": "Всего кликов",
+    "uniqueVisitors": "Уникальные посетители",
+    "sessions": "сессий",
+    "conversionRate": "Конверсия",
+    "tabs": {
+      "overview": "Обзор",
+      "engagement": "Вовлеченность",
+      "topContent": "Топ контента"
+    },
+    "activityOverview": "Обзор активности",
+    "devices": "Устройства",
+    "sources": "Источники",
+    "byHours": "По часам",
+    "activityDuringDay": "Активность в течение дня",
+    "events": "События",
+    "byDaysOfWeek": "По дням недели",
+    "activityDistribution": "Распределение активности",
+    "topPages": "Популярные страницы",
+    "byViews": "По просмотрам",
+    "viewsShort": "просм.",
+    "clicksShort": "клик.",
+    "topBlocks": "Популярные блоки",
+    "byClicks": "По кликам",
+    "teams": "Команды",
+    "members": "Участники",
+    "shoutouts": "Рекомендации",
+    "gamificationSection": "Геймификация",
+    "referrals": "Рефералы",
+    "leads": "Лиды",
+    "page": "Страница",
+    "recentEvents": "Недавние события",
+    "searchPages": "Поиск страниц...",
+    "owner": "Владелец",
+    "draft": "Черновик",
+    "open": "Открыть",
+    "noPagesFound": "Страницы не найдены",
+    "user": "Пользователь",
+    "trialUntil": "Триал до",
+    "streak": "Серия",
+    "registered": "Регистрация",
+    "noUsersFound": "Пользователи не найдены",
+    "tier": "Тариф",
+    "expiry": "Истечение",
+    "edit": "Редактировать",
+    "editUserTier": "Изменить тариф пользователя",
+    "selectTier": "Выберите тариф",
+    "adminRole": "Роль администратора",
+    "adminRoleDesc": "Дает полный доступ к панели управления",
+    "expiryDate": "Дата окончания",
+    "week": "Неделя",
+    "month": "Месяц",
+    "year": "Год",
+    "leaveEmptyLifetime": "Оставьте пустым для бессрочного доступа",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "templates": "Шаблоны",
+    "errorFetchingTemplate": "Ошибка при загрузке шаблона",
+    "nameRequired": "Имя обязательно",
+    "templateUpdated": "Шаблон обновлен",
+    "templateCreated": "Шаблон создан",
+    "errorSavingTemplate": "Ошибка при сохранении шаблона",
+    "newTemplate": "Новый шаблон",
+    "editTemplate": "Редактировать шаблон",
+    "description": "Описание",
+    "previewImage": "URL превью",
+    "cacheBumped": "Кэш сброшен! Новая версия: {{version}}",
+    "cacheBumpFailed": "Не удалось сбросить кэш",
+    "systemActions": "Системные действия",
+    "clearUserCache": "Сбросить кэш у всех пользователей",
+    "clearUserCacheDesc": "При следующей загрузке приложения кэш каждого пользователя будет очищен",
+    "bumpCache": "Сбросить кэш",
+    "refresh": "Refresh",
+    "status": "Status",
+    "created": "Created",
+    "actions": "Действия",
+    "partners": "Партнёры",
+    "confirmDeleteTemplate": "Are you sure you want to delete template ",
+    "templateDeleted": "Template deleted",
+    "errorDeletingTemplate": "Error deleting template",
+    "errorUpdatingStatus": "Error updating status",
+    "searchTemplates": "Search templates...",
+    "createTemplate": "Create Template",
+    "templateName": "Name",
+    "niches": "Niches",
+    "public": "Public",
+    "hidden": "Hidden",
+    "noTemplatesFound": "No templates found",
+    "editUserTierDescription": "Изменить уровень доступа пользователя"
   },
   "adminCharts": {
     "userGrowth": "User growth",
@@ -1951,7 +2687,76 @@
       "experts": "Experts",
       "premium": "Premium",
       "other": "Other"
-    }
+    },
+    "generated": "Шаблон успешно сгенерирован!",
+    "error": "Ошибка при генерации",
+    "smartMatch": {
+      "title": "Умное автозаполнение AI",
+      "placeholder": "Например: Я фитнес-тренер в Алматы...",
+      "button": "Сгенерировать",
+      "hint": "Опишите ваш бизнес, и мы сами подберем и заполним лучший шаблон."
+    },
+    "captureError": "Не удалось найти превью",
+    "captured": "Превью захвачено!",
+    "enterName": "Введите название шаблона",
+    "noBlocks": "Добавьте хотя бы один блок",
+    "saved": "Шаблон сохранён!",
+    "saveError": "Ошибка сохранения",
+    "saveTemplate": "Сохранить как шаблон",
+    "saveDesc": "Сохраните страницу как шаблон для повторного использования",
+    "preview": "Превью шаблона",
+    "capturing": "Захват...",
+    "capturePreview": "Сделать скриншот",
+    "name": "Название",
+    "namePlaceholder": "Мой крутой шаблон",
+    "description": "Описание",
+    "descPlaceholder": "Опишите для чего подходит этот шаблон...",
+    "makePublic": "Сделать публичным",
+    "publicDesc": "Шаблон будет виден в маркетплейсе",
+    "sellTemplate": "Продавать шаблон",
+    "sellDesc": "Установите цену для покупки",
+    "price": "Цена (KZT)",
+    "blocks": "блоков",
+    "applied": "Шаблон применён!",
+    "unknownAuthor": "Неизвестный автор",
+    "marketplaceDesc": "Шаблоны от сообщества — готовые к использованию",
+    "search": "Поиск шаблонов...",
+    "searchAuthor": "По автору...",
+    "clearFilters": "Сбросить",
+    "popular": "Популярные",
+    "new": "Новые",
+    "free": "Бесплатные",
+    "premium": "Платные",
+    "noTemplates": "Шаблоны не найдены",
+    "noDescription": "Без описания",
+    "enterBusinessName": "Введите название бизнеса",
+    "personalized": "Шаблон персонализирован!",
+    "personalizationError": "Ошибка персонализации",
+    "personalize": "Персонализация шаблона",
+    "personalizeDesc": "AI адаптирует шаблон под ваш бизнес",
+    "businessName": "Название бизнеса",
+    "businessNamePlaceholder": "Например: Салон красоты ",
+    "businessDescription": "Описание",
+    "businessDescPlaceholder": "Расскажите о вашем бизнесе: услуги, цены, локация, особенности...",
+    "generating": "Генерируем...",
+    "generateWithAI": "Сгенерировать с AI",
+    "useAsIs": "Использовать как есть",
+    "updated": "Шаблон обновлён!",
+    "updateError": "Ошибка обновления",
+    "editTemplate": "Редактировать шаблон",
+    "editDesc": "Измените настройки шаблона",
+    "updateBlocks": "Обновить блоки",
+    "updateBlocksDesc": "Заменить блоки текущей страницей",
+    "update": "Обновить",
+    "loadError": "Ошибка загрузки шаблонов",
+    "confirmDelete": "Удалить этот шаблон?",
+    "deleted": "Шаблон удалён",
+    "deleteError": "Ошибка удаления",
+    "created": "Созданные",
+    "purchased": "Купленные",
+    "saveFirst": "Сохраните страницу как шаблон в настройках",
+    "noPurchased": "Нет купленных шаблонов",
+    "browseMk": "Загляните в маркетплейс шаблонов"
   },
   "alternatives": {
     "seo": {
@@ -1963,7 +2768,8 @@
       "defaultTitle": "lnkmx - AI link-in-bio builder",
       "ogTitle": "lnkmx vs Linktree vs Taplink — comparison & alternative",
       "ogDescription": "Compare lnkmx, Linktree, and Taplink by features, pricing, and usability. See why lnkmx is a strong alternative.",
-      "breadcrumb": "Alternatives"
+      "breadcrumb": "Alternatives",
+      "imageAlt": "lnkmx vs Alternatives Comparison"
     },
     "header": {
       "cta": "Get Started"
@@ -2102,7 +2908,8 @@
     "purchaseError": "Purchase error",
     "withdrawalCreated": "Withdrawal request created!",
     "withdrawalPremiumRequired": "Withdrawals are available only for Premium users",
-    "withdrawalError": "Withdrawal request error"
+    "withdrawalError": "Withdrawal request error",
+    "title": "Токены"
   },
   "quests": {
     "dailyVisit": {
@@ -2144,7 +2951,13 @@
       "alreadyReferred": "You already used a referral code",
       "selfReferral": "You can't use your own code",
       "applyFailed": "Failed to apply code"
-    }
+    },
+    "topReferrers": "Top Referrers",
+    "inviteFriend": "Invite a friend",
+    "bothGetBonus": "You both get +3 days Premium!",
+    "shareReferralLink": "Share Referral Link",
+    "friendsInvited": "Friends invited",
+    "bonusEarned": "Bonus days earned"
   },
   "social": {
     "weeklyChallenge": "Weekly challenge",
@@ -2168,7 +2981,8 @@
       "events_one": "{{count}} event",
       "events_few": "{{count}} events",
       "events_many": "{{count}} events",
-      "events_other": "{{count}} events"
+      "events_other": "{{count}} events",
+      "events": "{{count}} событий"
     },
     "metadata": {
       "achievement": "🏆 {{title}}",
@@ -2190,7 +3004,9 @@
       "days_few": "+{{count}} days",
       "days_many": "+{{count}} days",
       "days_other": "+{{count}} days",
-      "activate": "Activate"
+      "activate": "Activate",
+      "count": "Count",
+      "days": "Days"
     },
     "weeklyChallenges": {
       "title": "Weekly challenges",
@@ -2211,7 +3027,15 @@
     "upgrade": "Upgrade to Pro",
     "features": "Pro features",
     "trial": "Trial period",
-    "active": "Pro active"
+    "active": "Pro active",
+    "requiresTier": "Требуется {{tier}}",
+    "featureRequires": "{{feature}} доступно в {{tier}}",
+    "premiumFramesLocked": "Premium frames require PRO subscription",
+    "verificationRequiresPro": "Verification badge is available for PRO users",
+    "upgradeToPro": "Upgrade to PRO →",
+    "blockLocked": "Блок Premium",
+    "unlockWith": "Разблокируйте этот блок с подпиской Pro",
+    "upgradeToBusiness": "Перейти на Business"
   },
   "pwa": {
     "install": "Install app",
@@ -2226,7 +3050,10 @@
     "uniqueVisitors": "Unique visitors",
     "topBlocks": "Top Blocks",
     "devices": "Devices",
-    "sources": "Sources",
+    "sources": {
+      "title": "Источники трафика",
+      "noData": "Нет данных об источниках"
+    },
     "noData": "No data for selected period",
     "aiInsights": "AI Recommendations",
     "apply": "Apply",
@@ -2237,6 +3064,75 @@
       "addTestimonialsDesc": "Testimonials increase trust and conversion by 25%",
       "duplicateTop": "Duplicate popular link",
       "duplicateTopDesc": "receives clicks"
+    },
+    "mobile": "Мобильные",
+    "tablet": "Планшеты",
+    "desktop": "Компьютеры",
+    "today": "Сегодня",
+    "week": "Неделя",
+    "month": "Месяц",
+    "all": "Весь период",
+    "visitors": "Посетители",
+    "avgPerDay": "В среднем за день",
+    "viewsPerDay": "просмотров / день",
+    "activityChart": "Активность",
+    "clicksByBlock": "Клики по блокам",
+    "trafficSources": "Источники трафика",
+    "refresh": "Обновить",
+    "shares": "Репосты",
+    "export": {
+      "button": "Экспорт",
+      "summary": "Сводка (CSV)",
+      "daily": "По дням (CSV)"
+    },
+    "blocks": {
+      "title": "Эффективность блоков",
+      "noData": "Нет данных о кликах",
+      "avgCtr": "Ср. CTR",
+      "clicks": "кликов",
+      "andMore": "и ещё {{count}} блоков"
+    },
+    "funnel": {
+      "views": "Просмотры",
+      "clicks": "Клики",
+      "engagement": "Вовлечение",
+      "conversions": "Конверсии",
+      "title": "Воронка конверсии",
+      "overallConversion": "Общая конверсия",
+      "insights": "Анализ конверсии",
+      "clickRate": "Клики / Просмотры",
+      "conversionRate": "Конверсии / Просмотры",
+      "avgPerDay": "Среднее в день"
+    },
+    "engagement": {
+      "ctr": "CTR",
+      "ctrDesc": "Кликов на просмотр",
+      "avgSession": "Среднее время",
+      "sessionDesc": "На странице",
+      "bounceRate": "Отказы",
+      "bounceDesc": "Без взаимодействия",
+      "returning": "Возвраты",
+      "returningDesc": "Повторные визиты",
+      "title": "Вовлечённость",
+      "viewsPerVisitor": "Просмотров на посетителя"
+    },
+    "geography": {
+      "title": "География",
+      "noData": "Нет данных о географии",
+      "andMore": "и ещё {{count}} стран"
+    },
+    "tabs": {
+      "overview": "Обзор",
+      "traffic": "Трафик",
+      "blocks": "Блоки",
+      "funnel": "Воронка"
+    },
+    "chart": {
+      "title": "Динамика за период"
+    },
+    "premium": {
+      "title": "Расширенная воронка",
+      "desc": "A/B тесты, heatmaps и детальная аналитика в Pro"
     }
   },
   "editor": {
@@ -2257,7 +3153,38 @@
       "blockDeleted": "Block deleted: {{type}}",
       "blockUpdated": "Block updated: {{type}}",
       "blocksReordered": "Blocks reordered"
-    }
+    },
+    "livePreview": "Предпросмотр",
+    "sections": {
+      "content": "Контент",
+      "appearance": "Внешний вид",
+      "effects": "Эффекты",
+      "image": "Изображение",
+      "link": "Взаимодействие",
+      "style": "Стиль и SEO",
+      "icon": "Иконка",
+      "iconDesc": "Настройте иконку ссылки",
+      "settings": "Settings"
+    },
+    "saving": "Сохранение...",
+    "unsaved": "Не сохранено",
+    "saved": "Сохранено",
+    "tabs": {
+      "content": "Контент",
+      "style": "Стиль",
+      "advanced": "Доп."
+    },
+    "close_or_cancel": "Закрыть",
+    "share": "Поделиться",
+    "publish": "Опубликовать",
+    "templates": "Шаблоны",
+    "versions": "История",
+    "unsavedChanges": "Несохраненные изменения",
+    "unsavedDescription": "У вас есть изменения, которые еще не были сохранены. Что вы хотите сделать?",
+    "discard": "Сбросить",
+    "saveAndClose": "Сохранить",
+    "selectBlock": "Выберите блок для добавления",
+    "searchBlocks": "Поиск блоков..."
   },
   "crm": {
     "title": "CRM",
@@ -2285,13 +3212,21 @@
       "converted": "Converted",
       "lost": "Lost"
     },
-    "source": {
-      "form": "Form",
-      "messenger": "Messenger",
-      "manual": "Manual",
-      "page_view": "Page View",
-      "other": "Other"
-    }
+    "source": "Source",
+    "addLeadDescription": "Fill in the form to add a new lead to your CRM",
+    "namePlaceholder": "Client name",
+    "phone": "Phone",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional notes about this lead...",
+    "addInteraction": "Add Interaction",
+    "interactionPlaceholder": "What happened?",
+    "history": "History",
+    "noInteractions": "No interactions yet",
+    "deleteLead": "Delete Lead",
+    "confirmDelete": "Delete this lead?",
+    "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
+    "openPanel": "Open CRM",
+    "upgradeToPremium": "Получить Premium"
   },
   "pagination": {
     "previous": "Previous",
@@ -2304,7 +3239,8 @@
     "invalidLink": "Invalid or corrupted link",
     "shareLink": "Share Link",
     "qrCode": "QR Code",
-    "scanToShare": "Scan this code to share your page"
+    "scanToShare": "Scan this code to share your page",
+    "defaultDescription": "View my profile"
   },
   "teams": {
     "title": "Teams",
@@ -2366,7 +3302,16 @@
     "inviteCodePlaceholder": "Invite code (team-xxxxx)",
     "joinButton": "Join",
     "createTeamDesc": "Bring together like-minded people for collaboration",
-    "invite": "Invite"
+    "invite": "Invite",
+    "onlyOwnerCanEdit": "Только владелец команды может редактировать настройки",
+    "namePlaceholder": "Название команды",
+    "descriptionPlaceholder": "Описание команды...",
+    "publicTeam": "Публичная команда",
+    "publicTeamHint": "Публичные команды видны всем",
+    "shareLinkHint": "Поделитесь этой ссылкой, чтобы пригласить людей в команду",
+    "createLinkHint": "Создайте ссылку-приглашение для добавления участников",
+    "settingsDesc": "Manage team settings and members",
+    "joinTitle": "Присоединиться к"
   },
   "friends": {
     "title": "Friends",
@@ -2443,7 +3388,15 @@
     "errorStart": "First tap START in @linkmaxmy_bot",
     "errorInvalid": "Invalid Chat ID",
     "errorCheck": "Verification error. Try again",
-    "pasteError": "Failed to paste"
+    "pasteError": "Failed to paste",
+    "clickStartFirst": "Сначала нажмите START в боте @linkmaxmy_bot",
+    "clickStart": "Нажмите START в боте @linkmaxmy_bot",
+    "invalidChatId": "Неверный Chat ID",
+    "verificationError": "Ошибка проверки. Попробуйте снова",
+    "connectTitle": "Подключите Telegram",
+    "connectSubtitle": "Для уведомлений о заявках",
+    "verifying": "Проверяем Chat ID...",
+    "infoHint": "Telegram нужен для мгновенных уведомлений о новых заявках с вашей страницы"
   },
   "product": {
     "authRequired": "Login required to purchase",
@@ -2454,7 +3407,9 @@
     "buyTokens": "Buy tokens",
     "buyFor": "Buy for",
     "buy": "Buy",
-    "tapToView": "Details →"
+    "tapToView": "Details →",
+    "purchaseDescription": "Покупка товара: {{name}}",
+    "purchasing": "Покупка..."
   },
   "paidContent": {
     "title": "Paid Content",
@@ -2467,7 +3422,11 @@
     "unlocking": "Unlocking...",
     "yourBalance": "Your balance",
     "loginRequired": "Log in to purchase",
-    "unlockContent": "Unlock paid content"
+    "unlockContent": "Unlock paid content",
+    "notEnoughTokens": "NotEnoughTokens",
+    "content": "контент",
+    "unlockDescription": "Разблокировка платного контента",
+    "unlockWithTokens": "Разблокируйте этот контент за Linkkon токены"
   },
   "adminVerification": {
     "totalRequests": "Total requests",
@@ -2526,7 +3485,12 @@
     "title": "Collaboration",
     "notFoundTitle": "Collaboration not found",
     "notFoundDesc": "This page does not exist or the collaboration has not been accepted yet.",
-    "pageNoBlocks": "No blocks have been added yet"
+    "pageNoBlocks": "No blocks have been added yet",
+    "recommend": "Рекомендовать",
+    "shoutoutPlaceholder": "Напишите рекомендацию...",
+    "sendShoutout": "Отправить",
+    "noUsersFound": "Пользователи не найдены",
+    "shoutoutRecommendDesc": "Send a shoutout recommendation for this user"
   },
   "collaboration": {
     "tabs": {
@@ -2547,7 +3511,8 @@
     "noMembers": "No members",
     "members": "Members",
     "user": "User",
-    "owner": "Owner"
+    "owner": "Owner",
+    "authRequired": "Войдите, чтобы управлять коллаборациями"
   },
   "shoutout": {
     "selectedUser": "Selected user",
@@ -2581,7 +3546,11 @@
     "noColor": "No color",
     "preview": "Preview",
     "previewText": "Sample block text",
-    "textEffect": "Text effect"
+    "textEffect": "Text effect",
+    "notAvailable": "NotAvailable",
+    "mobileHint": "Отредактируйте содержимое",
+    "description": "Редактируйте параметры и контент блока",
+    "title": "Edit Block"
   },
   "currency": {
     "names": {
@@ -2666,7 +3635,9 @@
     "hours1_5": "1.5 hours",
     "hours2": "2 hours",
     "featured": "Featured",
-    "emptyHint": "Tell us what services you provide"
+    "emptyHint": "Tell us what services you provide",
+    "min": "мин",
+    "namePlaceholder": "Стрижка мужская"
   },
   "bookingBlock": {
     "description": "Booking block with calendar and time slots",
@@ -2761,6 +3732,10 @@
       "title": "lnkmx - mini-site and leads from one link",
       "description": "AI mini-site builder for experts, freelancers, and small businesses. Create offer, pricing, and lead forms in 2 minutes.",
       "keywords": "link in bio, link page, mini-site, linktree alternative, taplink alternative"
+    },
+    "organization": {
+      "description": "AI-powered link in bio and mini-landing page builder",
+      "street": "Sholokhov St., 20/7"
     }
   },
   "adminTranslations": {
@@ -2773,7 +3748,30 @@
     "seo": {
       "title": "Install lnkmx",
       "description": "Install lnkmx as a PWA for faster access."
-    }
+    },
+    "title": "Установить lnkmx.my",
+    "description": "Установите приложение lnkmx.my на устройство для быстрого доступа",
+    "subtitle": "Страница опубликована! Установите приложение для быстрого доступа и оффлайн-редактирования.",
+    "yourLink": "Ваша ссылка:",
+    "desktop": "Desktop",
+    "ios": {
+      "step1": "Открыть в Safari",
+      "step1desc": "Убедитесь, что вы открыли сайт именно в Safari",
+      "step2": "Нажмите «Поделиться»",
+      "step2desc": "Кнопка со стрелкой в нижней панели Safari",
+      "step3": "На экран «Домой»",
+      "step3desc": "Прокрутите вниз и выберите «На экран Домой»"
+    },
+    "android": {
+      "step1": "Открыть меню браузера",
+      "step1desc": "Нажмите на три точки в углу",
+      "step2": "Установить приложение",
+      "step2desc": "Выберите пункт «Установить» или «На главный экран»",
+      "step3": "Подтвердите установку",
+      "step3desc": "Нажмите «Установить» во всплывающем окне"
+    },
+    "later": "Позже",
+    "copyLink": "Скопировать ссылку"
   },
   "event": {
     "register": "Register",
@@ -2819,7 +3817,10 @@
     "calendar": "Calendar",
     "downloadICS": "Download .ics",
     "googleCalendar": "Google Calendar",
-    "outlook": "Outlook"
+    "outlook": "Outlook",
+    "phone": "Телефон",
+    "registrationForm": "Форма регистрации на событие",
+    "formProgress": "Заполнено"
   },
   "eventBuilder": {
     "emailRequired": "Email field is always added automatically and is required.",
@@ -2882,7 +3883,8 @@
     "scaleMin": "From",
     "scaleMax": "To",
     "buttonText": "Button text",
-    "buttonTextPlaceholder": "Register"
+    "buttonTextPlaceholder": "Register",
+    "option1": "Option 1"
   },
   "eventFields": {
     "shortText": "Short text",
@@ -3258,7 +4260,13 @@
     "ctaButton": "Create page"
   },
   "footer": {
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "product": "Product",
+    "alternatives": "Alternatives",
+    "legal": "Legal",
+    "paymentTerms": "Payment Terms",
+    "contacts": "Contacts",
+    "companyInfo": "ИП «lnkmx» / БИН 123456789012 / Казахстан, г. Алматы"
   },
   "themes": {
     "pageTheme": "Theme & Colors",
@@ -3355,5 +4363,704 @@
       "watermark": "lnkmx.my watermark",
       "limitedBlocks": "10 blocks maximum"
     }
+  },
+  "sizes": {
+    "small": "Маленький",
+    "medium": "Средний",
+    "large": "Большой",
+    "xlarge": "Очень большой"
+  },
+  "shapes": {
+    "circle": "Круг",
+    "rounded": "Закругленный",
+    "square": "Квадрат"
+  },
+  "shadows": {
+    "none": "Без тени",
+    "soft": "Мягкая",
+    "medium": "Средняя",
+    "strong": "Сильная",
+    "glow": "Свечение"
+  },
+  "placeholders": {
+    "buttonText": "Текст кнопки",
+    "yourName": "Ваше имя",
+    "tellAboutYourself": "Расскажите о себе...",
+    "enterText": "Enter your text..."
+  },
+  "automations": {
+    "saved": "Автоматизация сохранена",
+    "saveError": "Не удалось сохранить автоматизацию",
+    "followUp": {
+      "title": "Напоминание (Follow-up)",
+      "description": "Отправить напоминание, если клиент не активен"
+    },
+    "timeClarification": {
+      "title": "Уточнение времени",
+      "description": "Предложить выбрать временной слот"
+    },
+    "reviewRequest": {
+      "title": "Запрос отзыва",
+      "description": "Попросить отзыв после завершения сделки"
+    },
+    "title": "Умные автоматизации",
+    "premiumRequired": "Перейдите на Pro для использования автоматизаций",
+    "unlockPremium": "Доступно в Pro",
+    "subtitle": "Авто-напоминания через Telegram",
+    "triggerAfter": "Запуск через",
+    "hours": "часов",
+    "messageTemplate": "Шаблон сообщения",
+    "variables": "Используйте {lead_name}, {owner_name} для персонализации",
+    "saveSettings": "Сохранить настройки",
+    "telegramNote": "Напоминания приходят в ваш Telegram"
+  },
+  "aiBuilder": {
+    "description": "Создайте страницу с помощью AI",
+    "selectTemplate": "Выберите шаблон",
+    "success": "✨ Страница создана!",
+    "error": "Ошибка генерации. Попробуйте ещё раз.",
+    "title": "AI Builder",
+    "step": "Шаг",
+    "nicheTitle": "Выберите сферу",
+    "nicheDesc": "Подберём шаблон для вашей ниши",
+    "templateTitle": "Выберите шаблон",
+    "templateDesc": "AI заполнит шаблон вашим контентом",
+    "noTemplates": "Шаблонов пока нет",
+    "noTemplatesDesc": "Для этой ниши ещё не добавлены шаблоны. Попробуйте другую нишу.",
+    "changeNiche": "Выбрать другую нишу",
+    "blocks": "блоков",
+    "selected": "Выбрано",
+    "infoTitle": "Расскажите о себе",
+    "dynamicFormDesc": "Заполните данные для выбранного шаблона",
+    "name": "Имя / Название",
+    "namePlaceholder": "Ваше имя или название бизнеса",
+    "bio": "О себе / Описание",
+    "bioPlaceholder": "Краткое описание вашей деятельности",
+    "services": "Услуги",
+    "servicesPlaceholder": "Кратко опишите ваши основные услуги",
+    "contacts": "Контакты",
+    "contactsPlaceholder": "Телефон, email или адрес...",
+    "socials": "Соцсети",
+    "socialsPlaceholder": "Instagram, Telegram, YouTube...",
+    "mediaLinks": "Медиа",
+    "mediaPlaceholder": "Ссылки на фото, видео, статьи...",
+    "generate": "Собрать страницу",
+    "generatingTitle": "Алгоритм собирает страницу",
+    "generatingDesc": "Интегрируем ваши данные в структуру шаблона",
+    "completeTitle": "Готово!",
+    "completeDesc": "Блоки добавлены на вашу страницу"
+  },
+  "funnel": {
+    "short": "Воронка",
+    "noData": "Недостаточно данных",
+    "noDataDesc": "Данные появятся после посещений вашей страницы",
+    "title": "Воронка конверсий",
+    "description": "Показывает путь пользователей от просмотра страницы до целевого действия",
+    "overallConversion": "Общая конверсия",
+    "totalVisitors": "Всего посетителей",
+    "insights": "Рекомендации",
+    "stepView": "Просмотры",
+    "stepClick": "Клики",
+    "stepEngage": "Вовлечение",
+    "stepConvert": "Конверсии",
+    "dropOff": "отток",
+    "viewDesc": "Пользователи посетили вашу страницу",
+    "clickDesc": "Кликнули на блоки или ссылки",
+    "engageDesc": "Совершили действия (клики, шеры)",
+    "convertDesc": "Оставили заявку или забронировали",
+    "insightLowCtr": "Низкий CTR ({{rate}}%). Попробуйте добавить более заметные кнопки.",
+    "insightHighCtr": "Отличный CTR ({{rate}}%)! Контент вовлекает пользователей.",
+    "insightNoConversions": "Есть вовлечение, но нет конверсий. Добавьте форму или бронирование.",
+    "insightGoodConversion": "Хорошая конверсия {{rate}}%!",
+    "insightLowConversion": "Конверсия {{rate}}%. Оптимизируйте CTA и формы.",
+    "insightLowTraffic": "Мало данных для анализа. Поделитесь ссылкой на страницу."
+  },
+  "heatmap": {
+    "short": "Карта",
+    "noData": "Недостаточно данных",
+    "noDataDesc": "Данные появятся после посещений",
+    "title": "Тепловая карта",
+    "description": "Визуализация кликов и глубины прокрутки",
+    "sessions": "сессий",
+    "clickZones": "Зон кликов",
+    "avgScroll": "Ср. скролл",
+    "maxScroll": "Макс. скролл",
+    "clickMap": "Карта кликов",
+    "cold": "Холодно",
+    "hot": "Горячо",
+    "topClickAreas": "Топ зоны кликов:",
+    "position": "Позиция",
+    "fromTop": "сверху",
+    "clicks": "клик",
+    "scrollDepth": "Глубина прокрутки",
+    "reached": "дошли",
+    "insightLowScroll": "Пользователи не доходят до середины страницы. Переместите важный контент выше.",
+    "insightGoodScroll": "Отличная вовлечённость! Пользователи просматривают большую часть контента.",
+    "insightMedScroll": "Средняя глубина прокрутки. Рассмотрите добавление якорей или CTA."
+  },
+  "events": {
+    "fetchError": "Не удалось загрузить регистрации",
+    "updateError": "Ошибка обновления",
+    "registrations": "регистраций",
+    "total": "Всего",
+    "confirmed": "Подтв.",
+    "pending": "Ожидают",
+    "checkedIn": "Отмечены",
+    "searchRegistrations": "Поиск по имени, email, билету...",
+    "export": "Экспорт",
+    "scanner": "QR-сканер",
+    "noRegistrations": "Нет регистраций",
+    "registrationDetails": "Детали регистрации",
+    "checkedInAt": "Отмечен",
+    "utmAttribution": "Источник трафика",
+    "confirm": "Подтвердить",
+    "reject": "Отклонить",
+    "exportSuccess": "Экспорт в Excel завершен",
+    "exportError": "Ошибка экспорта",
+    "scannerProOnly": "QR-сканер доступен в Pro",
+    "published": "Опубликован",
+    "draft": "Черновик",
+    "closed": "Закрыт",
+    "active": "Активных",
+    "drafts": "Черновики",
+    "all": "Все",
+    "searchPlaceholder": "Поиск по названию...",
+    "noEvents": "У вас пока нет событий",
+    "createHint": "Создайте событие через редактор страницы",
+    "past": "Прошел",
+    "refresh": "Обновить",
+    "notFound": "Событие не найдено",
+    "approved": "Регистрация подтверждена",
+    "approveError": "Ошибка подтверждения",
+    "rejected": "Регистрация отклонена",
+    "rejectError": "Ошибка отклонения",
+    "checkInError": "Ошибка отметки",
+    "noDataToExport": "Нет данных для экспорта",
+    "online": "Онлайн",
+    "offline": "Офлайн",
+    "pendingApproval": "Ожидает",
+    "cancelled": "Отменён",
+    "checkedInLabel": "Отмечен",
+    "approve": "Подтвердить",
+    "manualCheckIn": "Отметить вручную",
+    "copyEmail": "Копировать email",
+    "pendingShort": "Ожид.",
+    "checkedInShort": "Чекин",
+    "exportPdfWithCharts": "PDF + Аналитика",
+    "confirmedTab": "Подтв.",
+    "pendingTab": "Ожид.",
+    "checkedTab": "Чекин",
+    "noSearchResults": "Ничего не найдено",
+    "untitled": "Без названия",
+    "title": "События",
+    "eventsCount": "событий",
+    "search": "Поиск событий...",
+    "noEventsDesc": "Добавьте блок ",
+    "addEventBlock": "Добавить блок",
+    "upcoming": "Предстоящие",
+    "scanError": "Ошибка сканирования",
+    "ticketNotFound": "Билет не найден",
+    "wrongEvent": "Билет для другого события",
+    "notAuthorized": "Нет доступа",
+    "alreadyUsed": "Билет уже использован",
+    "ticketCancelled": "Билет отменен",
+    "checkInSuccess": "Успешно отмечен!",
+    "cameraError": "Не удалось запустить камеру",
+    "cameraPermissionDenied": "Разрешите доступ к камере в настройках браузера",
+    "noCameraFound": "Камера не найдена на устройстве",
+    "cameraInUse": "Камера используется другим приложением",
+    "torchError": "Фонарик не поддерживается",
+    "scannerProDescription": "Отмечайте гостей по QR-кодам на входе",
+    "startingCamera": "Запуск камеры...",
+    "manualEntry": "Ручной ввод",
+    "enterTicketCode": "Введите код билета",
+    "useCamera": "Камера",
+    "manual": "Вручную",
+    "recentScans": "Последние сканы",
+    "noScansYet": "Отсканированные билеты появятся здесь"
+  },
+  "insights": {
+    "lowViews": {
+      "title": "Добавьте соцсети",
+      "description": "Страницы с соцсетями получают на 40% больше переходов"
+    },
+    "lowCTR": {
+      "title": "Добавьте CTA-кнопку",
+      "description": "Яркая кнопка с призывом к действию увеличит конверсию"
+    },
+    "noProducts": {
+      "title": "Добавьте товар или услугу",
+      "description": "Страницы с товарами монетизируются лучше"
+    },
+    "lowPerforming": {
+      "title": "Неэффективный блок",
+      "description": "Description"
+    },
+    "mobileOpt": {
+      "title": "Оптимизируйте для мобильных",
+      "description": "80%+ вашей аудитории используют телефоны"
+    },
+    "noInsights": "Ваша страница отлично оптимизирована!",
+    "error": "Ошибка анализа",
+    "applied": "Инсайт применён",
+    "undone": "Действие отменено",
+    "title": "AI Инсайты",
+    "description": "Рекомендации для улучшения",
+    "analyze": "Анализ",
+    "empty": "Нажмите ",
+    "priority": {
+      "high": "Важно",
+      "medium": "Средне",
+      "low": "Низко"
+    },
+    "apply": "Применить"
+  },
+  "freemium": {
+    "aiLimitReached": "Лимит AI генераций исчерпан",
+    "aiGenerationsRemaining": "Осталось AI генераций в этом месяце: {{count}}",
+    "aiLimitResetsMonthly": "Лимит обновляется каждый месяц",
+    "moreAIGenerations": "5 генераций в месяц",
+    "blockLimitReached": "Достигнут лимит блоков. Перейдите на Premium для неограниченного количества.",
+    "blocksRemaining": "Осталось блоков: {{count}} из {{max}}",
+    "upgradeToPremium": "Перейти на Premium",
+    "aiLimitResetMonthlyPro": "Лимит обновится в следующем месяце",
+    "upgradeForMoreGenerations": "Обновите до Premium для 5 генераций в месяц",
+    "getPremium": "Получить Premium",
+    "left": "осталось",
+    "limit": "Лимит",
+    "viewOnly": "Просмотр",
+    "viewOnlyHint": "Требуется {{tier}} для редактирования",
+    "upgradeToEdit": "Обновите до {{tier}} для редактирования"
+  },
+  "blockSize": {
+    "small": "1×1",
+    "wide": "2×1",
+    "tall": "1×2",
+    "large": "2×2"
+  },
+  "warnings": {
+    "customCodeSecurity": "Warning: Only use trusted code. Custom code runs with full JavaScript capabilities."
+  },
+  "imageStyles": {
+    "default": "Default - Rounded Corners",
+    "banner": "Banner - Full Width",
+    "polaroid": "Polaroid - Vintage Frame",
+    "vignette": "Vignette - Soft Edges",
+    "circle": "Circle - Round Crop"
+  },
+  "imageScales": {
+    "cover": "Fill (Cover)",
+    "contain": "Fit (Contain)",
+    "fill": "Stretch",
+    "tile": "Tile"
+  },
+  "ai": {
+    "generateWithAI": "Сгенерировать с AI",
+    "generateDescription": "Generate with AI",
+    "noTextToTranslate": "Введите текст для перевода",
+    "translationSuccess": "Перевод выполнен",
+    "translationError": "Ошибка перевода",
+    "translateToOthers": "Перевести на другие языки",
+    "translate": "Перевести",
+    "translating": "Перевод...",
+    "translateNow": "Перевести сейчас"
+  },
+  "styles": {
+    "default": "Стандартный",
+    "rounded": "Скруглённый",
+    "pill": "Капсула",
+    "brandColors": "Brand Colors",
+    "black": "Black",
+    "white": "White",
+    "outline": "Outline"
+  },
+  "gradients": {
+    "none": "No Gradient",
+    "dark": "Dark Overlay",
+    "light": "Light Overlay",
+    "primary": "Primary Color",
+    "sunset": "Sunset Gradient",
+    "ocean": "Ocean Gradient",
+    "purple": "Purple Dream"
+  },
+  "heights": {
+    "small": "Small - 120px",
+    "medium": "Medium - 200px",
+    "large": "Large - 320px"
+  },
+  "avatarSizes": {
+    "small": "Small - 64px",
+    "medium": "Medium - 96px",
+    "large": "Large - 128px",
+    "xlarge": "Extra Large - 160px"
+  },
+  "upload": {
+    "fileTooLarge": "File too large (max 10MB)",
+    "success": "Uploaded!",
+    "error": "Upload failed",
+    "uploading": "Загрузка...",
+    "dragOrClick": "Перетащите или нажмите",
+    "maxSize": "MaxSize",
+    "platform": "На платформу",
+    "storedOnPlatform": "Хранится на платформе",
+    "signInRequired": "Войдите чтобы загружать файлы",
+    "externalNote": "Файл будет загружаться напрямую по ссылке",
+    "gifPremiumOnly": "GIF uploads are available for Premium users only",
+    "compressed": "compressed",
+    "gifPreserved": "GIF animation preserved",
+    "tab": "Upload",
+    "compressing": "Compressing...",
+    "click": "Click to upload",
+    "autoCompress": "Auto-compressed, max 15MB",
+    "gifPremium": "GIF available with Premium"
+  },
+  "/block-editors/ProfileBlockEditor": "/block-editors/ProfileBlockEditor",
+  "/block-editors/TextBlockEditor": "/block-editors/TextBlockEditor",
+  "/block-editors/LinkBlockEditor": "/block-editors/LinkBlockEditor",
+  "/block-editors/ProductBlockEditor": "/block-editors/ProductBlockEditor",
+  "/block-editors/VideoBlockEditor": "/block-editors/VideoBlockEditor",
+  "/block-editors/CarouselBlockEditor": "/block-editors/CarouselBlockEditor",
+  "/block-editors/ButtonBlockEditor": "/block-editors/ButtonBlockEditor",
+  "/block-editors/SocialsBlockEditor": "/block-editors/SocialsBlockEditor",
+  "/block-editors/ImageBlockEditor": "/block-editors/ImageBlockEditor",
+  "/block-editors/CustomCodeBlockEditor": "/block-editors/CustomCodeBlockEditor",
+  "/block-editors/MessengerBlockEditor": "/block-editors/MessengerBlockEditor",
+  "/block-editors/FormBlockEditor": "/block-editors/FormBlockEditor",
+  "/block-editors/DownloadBlockEditor": "/block-editors/DownloadBlockEditor",
+  "/block-editors/NewsletterBlockEditor": "/block-editors/NewsletterBlockEditor",
+  "/block-editors/TestimonialBlockEditor": "/block-editors/TestimonialBlockEditor",
+  "/block-editors/ScratchBlockEditor": "/block-editors/ScratchBlockEditor",
+  "/block-editors/MapBlockEditor": "/block-editors/MapBlockEditor",
+  "/block-editors/AvatarBlockEditor": "/block-editors/AvatarBlockEditor",
+  "/block-editors/SeparatorBlockEditor": "/block-editors/SeparatorBlockEditor",
+  "/block-editors/CatalogBlockEditor": "/block-editors/CatalogBlockEditor",
+  "/block-editors/BeforeAfterBlockEditor": "/block-editors/BeforeAfterBlockEditor",
+  "/block-editors/FAQBlockEditor": "/block-editors/FAQBlockEditor",
+  "/block-editors/CountdownBlockEditor": "/block-editors/CountdownBlockEditor",
+  "/block-editors/PricingBlockEditor": "/block-editors/PricingBlockEditor",
+  "/block-editors/ShoutoutBlockEditor": "/block-editors/ShoutoutBlockEditor",
+  "/block-editors/BookingBlockEditor": "/block-editors/BookingBlockEditor",
+  "/block-editors/CommunityBlockEditor": "/block-editors/CommunityBlockEditor",
+  "/block-editors/EventBlockEditor": "/block-editors/EventBlockEditor",
+  "/block-editors/ProfileEditorWizard": "/block-editors/ProfileEditorWizard",
+  "/blocks/ProfileBlock": "/blocks/ProfileBlock",
+  "/blocks/LinkBlock": "/blocks/LinkBlock",
+  "/blocks/ButtonBlock": "/blocks/ButtonBlock",
+  "/blocks/SocialsBlock": "/blocks/SocialsBlock",
+  "/blocks/TextBlock": "/blocks/TextBlock",
+  "/blocks/ImageBlock": "/blocks/ImageBlock",
+  "/blocks/ProductBlock": "/blocks/ProductBlock",
+  "/blocks/VideoBlock": "/blocks/VideoBlock",
+  "/blocks/CarouselBlock": "/blocks/CarouselBlock",
+  "/blocks/CustomCodeBlock": "/blocks/CustomCodeBlock",
+  "/blocks/MessengerBlock": "/blocks/MessengerBlock",
+  "/blocks/FormBlock": "/blocks/FormBlock",
+  "/blocks/DownloadBlock": "/blocks/DownloadBlock",
+  "/blocks/NewsletterBlock": "/blocks/NewsletterBlock",
+  "/blocks/TestimonialBlock": "/blocks/TestimonialBlock",
+  "/blocks/ScratchBlock": "/blocks/ScratchBlock",
+  "/blocks/MapBlock": "/blocks/MapBlock",
+  "/blocks/AvatarBlock": "/blocks/AvatarBlock",
+  "/blocks/SeparatorBlock": "/blocks/SeparatorBlock",
+  "/blocks/CatalogBlock": "/blocks/CatalogBlock",
+  "/blocks/BeforeAfterBlock": "/blocks/BeforeAfterBlock",
+  "/blocks/FAQBlock": "/blocks/FAQBlock",
+  "/blocks/CountdownBlock": "/blocks/CountdownBlock",
+  "/blocks/PricingBlock": "/blocks/PricingBlock",
+  "/blocks/ShoutoutBlock": "/blocks/ShoutoutBlock",
+  "/blocks/BookingBlock": "/blocks/BookingBlock",
+  "/blocks/CommunityBlock": "/blocks/CommunityBlock",
+  "/blocks/EventBlock": "/blocks/EventBlock",
+  "/Gallery": "/Gallery",
+  "/PublicPage": "/PublicPage",
+  "/ProfileFullEditor": "/ProfileFullEditor",
+  "/BlockRenderer": "/BlockRenderer",
+  "/pages/Index": "/pages/Index",
+  "/pages/Auth": "/pages/Auth",
+  "/pages/AuthCallback": "/pages/AuthCallback",
+  "/pages/DashboardV2": "/pages/DashboardV2",
+  "/pages/PublicPage": "/pages/PublicPage",
+  "/pages/NotFound": "/pages/NotFound",
+  "/pages/Install": "/pages/Install",
+  "/pages/Gallery": "/pages/Gallery",
+  "/pages/Pricing": "/pages/Pricing",
+  "/pages/Alternatives": "/pages/Alternatives",
+  "/pages/Admin": "/pages/Admin",
+  "/pages/AdminTranslations": "/pages/AdminTranslations",
+  "/pages/AdminTemplateEditor": "/pages/AdminTemplateEditor",
+  "/pages/TeamPage": "/pages/TeamPage",
+  "/pages/CollabPage": "/pages/CollabPage",
+  "/pages/JoinTeam": "/pages/JoinTeam",
+  "/pages/Terms": "/pages/Terms",
+  "/pages/Privacy": "/pages/Privacy",
+  "/pages/PaymentTerms": "/pages/PaymentTerms",
+  "/pages/Experts": "/pages/Experts",
+  "/pages/EventScanner": "/pages/EventScanner",
+  "/pages/SeoLanding": "/pages/SeoLanding",
+  "layouts": {
+    "list": "List",
+    "grid": "Grid"
+  },
+  "tier": {
+    "free": "Free"
+  },
+  "scratch": {
+    "scratchHere": "👆 Scratch here",
+    "revealed": "🎉 Revealed!",
+    "hint": "Scratch the layer to reveal a surprise"
+  },
+  "guide": {
+    "pdf": "Pdf"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "failedToSignUp": "FailedToSignUp",
+    "accountCreated": "AccountCreated",
+    "failedToSignIn": "FailedToSignIn"
+  },
+  "bookings": {
+    "fetchError": "Failed to load bookings",
+    "cancelError": "Failed to cancel booking",
+    "cancelSuccess": "Booking cancelled",
+    "confirmError": "Failed to confirm booking",
+    "confirmSuccess": "Booking confirmed",
+    "completeError": "Failed to complete booking",
+    "completeSuccess": "Booking marked as completed",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "noBookingsToExport": "No bookings to export",
+    "exportSuccess": "Bookings exported successfully",
+    "appointmentWith": "Appointment with",
+    "calendarExported": "Added to calendar",
+    "total": "Total",
+    "upcoming": "Upcoming",
+    "confirmed": "Confirmed",
+    "past": "Past",
+    "all": "All",
+    "noBookings": "No bookings yet",
+    "addToCalendar": "Add to Calendar",
+    "exportCSV": "CSV",
+    "refresh": "Refresh",
+    "cancelTitle": "Cancel Booking?",
+    "cancelDescription": "Are you sure you want to cancel this booking? The client will be notified.",
+    "confirmCancel": "Yes, Cancel Booking"
+  },
+  "versions": {
+    "title": "История версий",
+    "description": "Последние 5 сохранённых версий страницы",
+    "empty": "История пуста",
+    "emptyHint": "Версии создаются при публикации страницы",
+    "version": "Версия",
+    "current": "Текущая",
+    "blocks": "блоков",
+    "restore": "Восстановить"
+  },
+  "autosave": {
+    "pending": "Pending...",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "error": "Error"
+  },
+  "blockManager": {
+    "title": "Блоки",
+    "description": "{{count}} блоков · Перетащите для сортировки",
+    "profile": "Профиль",
+    "content": "Контент",
+    "empty": "Нет блоков",
+    "moveUp": "Переместить вверх",
+    "moveDown": "Переместить вниз",
+    "moreActions": "Ещё",
+    "edit": "Редактировать",
+    "show": "Показать",
+    "hide": "Скрыть",
+    "duplicate": "Дублировать",
+    "delete": "Удалить"
+  },
+  "blockActions": {
+    "moveToTop": "В начало",
+    "moveUp": "Вверх",
+    "moveDown": "Вниз",
+    "moveToBottom": "В конец",
+    "duplicate": "Дублировать",
+    "hide": "Скрыть",
+    "description": "Действия с блоком",
+    "edit": "Редактировать",
+    "confirmDelete": "Подтвердить удаление",
+    "delete": "Удалить блок"
+  },
+  "mobileToolbar": {
+    "settings": "Настройки",
+    "preview": "Смотреть",
+    "share": "Опубликовать",
+    "more": "Меню",
+    "marketplace": "Маркетплейс",
+    "marketplaceDesc": "Шаблоны от сообщества",
+    "aiBuilder": "AI Конструктор",
+    "aiBuilderDesc": "Создать страницу с AI",
+    "templates": "Шаблоны",
+    "templatesDesc": "Готовые шаблоны",
+    "achievements": "Достижения",
+    "achievementsDesc": "Ваш прогресс",
+    "tokensDesc": "Ваш баланс и транзакции",
+    "crm": "CRM",
+    "crmDesc": "Управление лидами",
+    "galleryDesc": "Работы сообщества",
+    "pricingDesc": "Премиум возможности",
+    "moreOptions": "Меню",
+    "status": "Статус"
+  },
+  "streak": {
+    "title": "Streak",
+    "keepGoing": "Keep it going!",
+    "days": "days",
+    "nextMilestone": "Next milestone",
+    "bonusDays": "bonus days",
+    "best": "Best",
+    "earned": "Earned",
+    "milestoneReached": "Milestone Reached!",
+    "milestoneDescription": "Congratulations on reaching a new streak milestone!",
+    "bonusEarned": "You",
+    "bonusTrialDays": "bonus trial days!",
+    "awesome": "Awesome!",
+    "milestones": "Streak Milestones"
+  },
+  "structure": {
+    "title": "Структура",
+    "description": "{{count}} блоков",
+    "profileSection": "Профиль",
+    "contentSection": "Контент",
+    "noBlocks": "Пока нет блоков",
+    "edit": "Редактировать",
+    "show": "Показать",
+    "hide": "Скрыть",
+    "duplicate": "Дублировать",
+    "delete": "Удалить"
+  },
+  "url": {
+    "external": "Внешняя ссылка",
+    "tab": "URL"
+  },
+  "imageCropper": {
+    "title": "Настройка изображения",
+    "description": "Перетащите и масштабируйте изображение",
+    "zoom": "Масштаб",
+    "hint": "Перетащите изображение для позиционирования",
+    "reset": "Сбросить"
+  },
+  "leaderboard": {
+    "week": "This Week",
+    "month": "This Month",
+    "allTime": "All Time",
+    "title": "Top Pages",
+    "all": "All",
+    "empty": "No pages yet for this period"
+  },
+  "tabbar": {
+    "projects": "Проекты",
+    "editor": "Редактор",
+    "crm": "CRM",
+    "analytics": "Аналитика",
+    "gallery": "Галерея",
+    "settings": "Настройки"
+  },
+  "cookies": {
+    "title": "Cookie consent",
+    "privacy": "Политика конфиденциальности",
+    "reject": "Отклонить",
+    "accept": "Принять"
+  },
+  "notFound": {
+    "message": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  },
+  "functions should check auth": {
+    "uid()": "Uid()"
+  },
+  "": {
+    "": {
+      "/block-editors/ProfileBlockEditor": "",
+      "/block-editors/TextBlockEditor": "",
+      "/block-editors/LinkBlockEditor": "",
+      "/block-editors/ProductBlockEditor": "",
+      "/block-editors/VideoBlockEditor": "",
+      "/block-editors/CarouselBlockEditor": "",
+      "/block-editors/ButtonBlockEditor": "",
+      "/block-editors/SocialsBlockEditor": "",
+      "/block-editors/ImageBlockEditor": "",
+      "/block-editors/CustomCodeBlockEditor": "",
+      "/block-editors/MessengerBlockEditor": "",
+      "/block-editors/FormBlockEditor": "",
+      "/block-editors/DownloadBlockEditor": "",
+      "/block-editors/NewsletterBlockEditor": "",
+      "/block-editors/TestimonialBlockEditor": "",
+      "/block-editors/ScratchBlockEditor": "",
+      "/block-editors/MapBlockEditor": "",
+      "/block-editors/AvatarBlockEditor": "",
+      "/block-editors/SeparatorBlockEditor": "",
+      "/block-editors/CatalogBlockEditor": "",
+      "/block-editors/BeforeAfterBlockEditor": "",
+      "/block-editors/FAQBlockEditor": "",
+      "/block-editors/CountdownBlockEditor": "",
+      "/block-editors/PricingBlockEditor": "",
+      "/block-editors/ShoutoutBlockEditor": "",
+      "/block-editors/BookingBlockEditor": "",
+      "/block-editors/CommunityBlockEditor": "",
+      "/block-editors/EventBlockEditor": "",
+      "/block-editors/ProfileEditorWizard": "",
+      "/blocks/ProfileBlock": "",
+      "/blocks/LinkBlock": "",
+      "/blocks/ButtonBlock": "",
+      "/blocks/SocialsBlock": "",
+      "/blocks/TextBlock": "",
+      "/blocks/ImageBlock": "",
+      "/blocks/ProductBlock": "",
+      "/blocks/VideoBlock": "",
+      "/blocks/CarouselBlock": "",
+      "/blocks/CustomCodeBlock": "",
+      "/blocks/MessengerBlock": "",
+      "/blocks/FormBlock": "",
+      "/blocks/DownloadBlock": "",
+      "/blocks/NewsletterBlock": "",
+      "/blocks/TestimonialBlock": "",
+      "/blocks/ScratchBlock": "",
+      "/blocks/MapBlock": "",
+      "/blocks/AvatarBlock": "",
+      "/blocks/SeparatorBlock": "",
+      "/blocks/CatalogBlock": "",
+      "/blocks/BeforeAfterBlock": "",
+      "/blocks/FAQBlock": "",
+      "/blocks/CountdownBlock": "",
+      "/blocks/PricingBlock": "",
+      "/blocks/ShoutoutBlock": "",
+      "/blocks/BookingBlock": "",
+      "/blocks/CommunityBlock": "",
+      "/blocks/EventBlock": "",
+      "/Gallery": "",
+      "/PublicPage": ""
+    },
+    "/ProfileFullEditor": "",
+    "/BlockRenderer": "",
+    "/pages/Index": "",
+    "/pages/Auth": "",
+    "/pages/AuthCallback": "",
+    "/pages/DashboardV2": "",
+    "/pages/PublicPage": "",
+    "/pages/NotFound": "",
+    "/pages/Install": "",
+    "/pages/Gallery": "",
+    "/pages/Pricing": "",
+    "/pages/Alternatives": "",
+    "/pages/Admin": "",
+    "/pages/AdminTranslations": "",
+    "/pages/AdminTemplateEditor": "",
+    "/pages/TeamPage": "",
+    "/pages/CollabPage": "",
+    "/pages/JoinTeam": "",
+    "/pages/Terms": "",
+    "/pages/Privacy": "",
+    "/pages/PaymentTerms": "",
+    "/pages/Experts": "",
+    "/pages/EventScanner": "",
+    "/pages/SeoLanding": ""
   }
 }

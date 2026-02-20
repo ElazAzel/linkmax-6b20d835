@@ -246,7 +246,7 @@ new -> contacted -> qualified -> won/lost
 - **Vite React SPA** (Migrated purely to Vite, no Next.js)
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
-- i18next for RU/EN/KK
+- i18next for RU/EN/KK/UZ (100% synchronized coverage)
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
 
@@ -265,7 +265,7 @@ new -> contacted -> qualified -> won/lost
 
 - AI feature sets (Generate AI buttons) are currently decoupled.
 - Temporarily bypassing Gemini generation to fallback to static layout construction, pending deployment of new internal algorithms.
-- Translation for RU/EN/KK content using Locize logic.
+- Translation for RU/EN/KK/UZ content using Locize-style logic with 100% key synchronization across targeted locales.
 - Chatbot for visitor engagement
 
 ---

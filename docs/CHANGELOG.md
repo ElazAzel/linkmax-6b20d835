@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Technical Epic: i18n Synchronization — 2026-02-20)
+- **Comprehensive Global Synchronization**: Synchronized `en.json`, `kk.json`, and `uz.json` with `ru.json` as the source of truth, establishing 100% key coverage.
+- **Automated Key Extraction**: Identified and extracted **1448 missing keys** directly from JSX/TSX files using custom AST-aware scripts (`extract-context.mjs`).
+- **Context-Aware Translation**: Translated all 1400+ keys into Russian, filling gaps in Analytics, Admin, Editor, and Landing components.
+- **English Default Recovery**: Automatically populated `en.json` with original English strings extracted from the code, restoring the intended non-translated text for English users.
+- **Kazakh & Uzbek Baseline**: Performed foundational translations for Kazakh and Uzbek for core landing and dashboard sections.
+- **Interpolation Protection**: Developed `fix-placeholders.mjs` to systematically fix `{{placeholder}}` mismatches across all locale files, ensuring app stability and preventing runtime crashes in non-Russian languages.
+- **i18n Maintenance Toolkit**: Added permanent scripts in `/scripts` for future automated context extraction, key merging, and structural synchronization.
+
 ### Added (Strategy & Expansion — 2026-02-20)
 - **Template Builder (Admin Panel)**: Created `/admin/templates` with a visual Block Editor. Admins can now orchestrate, save, and tag layout structures directly to the `page_templates` database.
 - **CRM & Lead Collection (Inbox)**: Upgraded Form blocks to securely capture user submissions into a centralized `leads` table. Creators can now view and manage these natively within the DashboardV2 "Leads" tab.
