@@ -31,7 +31,7 @@ for (const lang of languages) {
   }
 }
 
-const baseLanguage = 'en';
+const baseLanguage = 'ru';
 const langKeys = {};
 const langValues = {};
 for (const lang of languages) {
