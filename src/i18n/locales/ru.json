@@ -3212,13 +3212,7 @@
       "converted": "Конвертирован",
       "lost": "Потерян"
     },
-    "source": {
-      "form": "Форма",
-      "messenger": "Мессенджер",
-      "manual": "Вручную",
-      "page_view": "Просмотр",
-      "other": "Другое"
-    },
+    "source": "Source",
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Client name",
     "phone": "Phone",
@@ -3760,12 +3754,12 @@
     "subtitle": "Страница опубликована! Установите приложение для быстрого доступа и оффлайн-редактирования.",
     "yourLink": "Ваша ссылка:",
     "desktop": {
-      "ready": "Приложение lnkmx.my готово к установке!",
-      "installNow": "Установить сейчас",
-      "step1": "Найдите значок установки",
-      "step1desc": "Значок в адресной строке (Chrome, Edge)",
-      "step2": "Нажмите «Установить»",
-      "step2desc": "Подтвердите установку, чтобы добавить lnkmx.my на рабочий стол"
+      "ready": "lnkmx.my is ready to be installed!",
+      "installNow": "Install Now",
+      "step1": "Look for install icon",
+      "step1desc": "Find the install icon in the address bar (Chrome, Edge)",
+      "step2": "Click ",
+      "step2desc": "Confirm the installation to add lnkmx.my to your desktop"
     },
     "ios": {
       "step1": "Открыть в Safari",

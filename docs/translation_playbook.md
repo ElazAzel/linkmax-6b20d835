@@ -72,33 +72,54 @@
   3) Keep old keys for one release cycle, then remove after analytics confirms no usage.
   4) Update the i18n export CSV to include both old and new keys during migration.
 
-## Workflow (export and import)
+## Workflow (Unified AI-powered UX)
 
-- Export command: `npm run i18n:export`
-  - Output: `i18n/exports/locales.csv`
-  - Columns: key, namespace, en, ru, kk, usage
-  - usage field contains the first source file that references the key.
-- Import command: `npm run i18n:import [path/to/locales.csv]`
-  - Validations: all keys present, no unknown keys, placeholder sets match across languages.
-  - Output: overwrites `src/i18n/locales/{en,ru,kk}.json` in place.
+The platform uses a unified manager for internationalization located in `scripts/i18n-manager.mjs`.
 
-## PR Review Checklist (i18n)
+### 1. Unified Sync & Extraction
+When you add new `t('key', 'default')` strings in code or add new keys to `ru.json`, run:
+```bash
+npm run i18n:sync
+```
+This will:
+- Scan `src/` for new strings.
+- Add missing keys to `ru.json`.
+- Align the JSON structure of all other languages (en, kk, uz, etc.).
 
-1) New UI strings use `t('...')` and no hardcoded JSX strings.
-2) New keys follow namespace convention.
-3) RU and KK keys are added for every EN key.
-4) Placeholders match across languages.
-5) CTA labels stay under 3 words and start with a verb.
-6) Error messages include action guidance.
-7) Plan names use Free and Pro as product names.
-8) Mini-CRM casing is "Мини-CRM" in RU and KK.
-9) Pricing copy uses correct currency formats.
-10) E2E or smoke tests cover language switch if UI text changed.
+### 2. Preparing for AI Translation
+To identify what needs translation and prepare a queue for Antigravity (or another AI):
+```bash
+npm run i18n:prep
+```
+This generates `i18n-queue.json`. 
+
+### 3. AI Translation Scenario
+1. Open `i18n-queue.json`.
+2. Ask Antigravity: *"Translate the missing values in this queue for EN, KK, UZ based on the source text. Keep variables like {{count}} exactly as they are."*
+3. The AI will populate the empty strings in the queue.
+
+### 4. Merging Translations
+After the queue is populated, run:
+```bash
+npm run i18n:merge
+```
+This will:
+- Distribute translations to `en.json`, `kk.json`, `uz.json`.
+- Automatically fix missing `{{placeholders}}` in all target languages.
+- Delete the `i18n-queue.json` file.
+
+### 5. Verification
+Check the coverage status at any time:
+```bash
+npm run i18n:status
+# OR run validation
+npm run i18n:check
+```
 
 ## Definition of Done (DoD)
 
-- All new keys added to en, ru, kk with matching placeholders.
-- `npm run i18n:check` passes.
-- `npm run lint:i18n` passes for changed UI components.
-- `npm run i18n:export` and `npm run i18n:import` complete without errors for updated files.
-- No hardcoded JSX strings introduced in user-facing UI.
+- All new UI strings use `t('...')` with proper namespaces.
+- `npm run i18n:status` shows 0 missing keys for primary targets.
+- `npm run i18n:check` passes without interpolation mismatches.
+- `translation_playbook.md` glossary is followed for core business terms (Page, Lead, Mini-CRM).
+- No hardcoded JSX strings in user-facing components.

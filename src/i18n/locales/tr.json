@@ -1,4 +1,7 @@
 {
+  "2": {
+    "5 MB": ""
+  },
   "translation": {
     "selectLanguages": "Select languages",
     "targetLanguages": "Translation languages",
@@ -61,7 +64,9 @@
     "privacyPolicy": "Privacy Policy",
     "privacyDescription": "Read the personal data processing policy",
     "privacyLink": "Privacy Policy",
-    "andThe": "and"
+    "andThe": "and",
+    "paymentTerms": "",
+    "paymentTermsDescription": ""
   },
   "common": {
     "close": "Close",
@@ -110,7 +115,18 @@
     "goHome": "Go home",
     "signUp": "Sign up",
     "pleaseWait": "Please wait...",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "undo": "",
+    "pasteFailed": "",
+    "creating": "",
+    "upgrade": "",
+    "none": "",
+    "saved": "",
+    "deleteConfirm": "",
+    "noResults": "",
+    "saving": "",
+    "optional": "",
+    "toHome": ""
   },
   "fields": {
     "name": "Name",
@@ -120,7 +136,131 @@
     "right": "Right",
     "buttonText": "Button Text",
     "requiredRussian": "Required field for Russian language",
-    "requiredPrimary": "Required field for primary language"
+    "requiredPrimary": "Required field for primary language",
+    "requiredEnglish": "",
+    "imageUrl": "",
+    "subtitle": "",
+    "optional": "",
+    "size": "",
+    "shape": "",
+    "shadow": "",
+    "frameStyle": "",
+    "alignment": "",
+    "title": "",
+    "backgroundType": "",
+    "solidColor": "",
+    "gradient": "",
+    "image": "",
+    "backgroundColor": "",
+    "gradientColors": "",
+    "gradientAngle": "",
+    "backgroundImage": "",
+    "width": "",
+    "fullWidth": "",
+    "mediumWidth": "",
+    "smallWidth": "",
+    "hoverEffect": "",
+    "none": "",
+    "glow": "",
+    "scale": "",
+    "images": "",
+    "altText": "",
+    "imageDescription": "",
+    "link": "",
+    "autoPlay": "",
+    "interval": "",
+    "formTitle": "",
+    "contactForm": "",
+    "send": "",
+    "formFields": "",
+    "field": "",
+    "fieldName": "",
+    "fieldNamePlaceholder": "",
+    "placeholder": "",
+    "enterText": "",
+    "fieldType": "",
+    "text": "",
+    "email": "",
+    "phone": "",
+    "textarea": "",
+    "requiredField": "",
+    "caption": "",
+    "captionPlaceholder": "",
+    "linkHint": "",
+    "imageStyle": "",
+    "imageScale": "",
+    "altPlaceholder": "",
+    "url": "",
+    "titleHint": "",
+    "style": "",
+    "contactMe": "",
+    "messengers": "",
+    "messenger": "",
+    "platform": "",
+    "usernamePhone": "",
+    "usernameOrPhone": "",
+    "prefilledMessage": "",
+    "prefilledMessagePlaceholder": "",
+    "productName": "",
+    "price": "",
+    "currency": "",
+    "productImage": "",
+    "buyLink": "",
+    "avatarUrl": "",
+    "coverImage": "",
+    "coverGradient": "",
+    "coverHeight": "",
+    "avatarSize": "",
+    "avatarPosition": "",
+    "avatarFrame": "",
+    "avatarIcon": "",
+    "selectIcon": "",
+    "shadowStyle": "",
+    "verificationBadge": "",
+    "autoVerifyPremium": "",
+    "verified": "",
+    "verifiedCustomIcon": "",
+    "verifiedIcon": "",
+    "verifiedColor": "",
+    "verifiedPosition": "",
+    "proofOfHuman": "",
+    "boostTrust": "",
+    "proofOfHumanDescription": "",
+    "introVideo": "",
+    "introAudio": "",
+    "proofOfHumanActive": "",
+    "hiddenText": "",
+    "socialsTitle": "",
+    "height": "",
+    "description": "",
+    "file": "",
+    "fileName": "",
+    "fileSize": "",
+    "iconPreview": "",
+    "noUrl": "",
+    "iconMode": "",
+    "iconAuto": "",
+    "iconManual": "",
+    "refreshIcon": "",
+    "customIcon": "",
+    "enterCommaSeparatedColors": "",
+    "platforms": "",
+    "layout": "",
+    "iconStyle": "",
+    "whatPeopleSay": "",
+    "testimonials": "",
+    "testimonial": "",
+    "role": "",
+    "testimonialText": "",
+    "testimonialPlaceholder": "",
+    "rating": "",
+    "content": "",
+    "heading": "",
+    "paragraph": "",
+    "quote": "",
+    "videoUrl": "",
+    "aspectRatio": "",
+    "niche": ""
   },
   "hints": {
     "bioLinks": "Tip: Add links with [text](url) format",
@@ -152,7 +292,9 @@
     "generatingTitle": "AI is creating your page",
     "generatingDescription": "Selecting blocks and content just for you",
     "completeTitle": "Done! 🎉",
-    "completeDescription": "Your page is ready for editing"
+    "completeDescription": "Your page is ready for editing",
+    "title": "",
+    "description": ""
   },
   "wizard": {
     "back": "Back",
@@ -186,20 +328,6 @@
       "bio": "About you"
     }
   },
-  "errors": {
-    "pageNotFound": "Page not found",
-    "invalidLink": "Check the link or the page may have been deleted",
-    "loadError": "Loading error",
-    "tryAgain": "Try refreshing the page",
-    "createYourPage": "Want to create your own page?",
-    "invalidEmail": "Enter a valid email",
-    "subscription": "Subscription error",
-    "general": "An error occurred",
-    "notFound": "Page not found",
-    "unauthorized": "Authorization required",
-    "forbidden": "Access denied",
-    "networkError": "Network error"
-  },
   "form": {
     "fillRequired": "Please fill required fields",
     "success": "Form submitted successfully!",
@@ -210,14 +338,31 @@
   "newsletter": {
     "alreadySubscribed": "You are already subscribed!",
     "thankYou": "Thank you!",
-    "subscriptionConfirmed": "Your subscription has been confirmed."
+    "subscriptionConfirmed": "Your subscription has been confirmed.",
+    "title": "",
+    "emailPlaceholder": "",
+    "subscribe": "",
+    "success": "",
+    "error": ""
   },
   "success": {
     "subscribed": "Successfully subscribed!"
   },
   "actions": {
     "subscribe": "Subscribe",
-    "sending": "Sending..."
+    "sending": "Sending...",
+    "addImage": "",
+    "download": "",
+    "buy": "",
+    "removeCustomIcon": "",
+    "addPlatform": "",
+    "send": "",
+    "buyTokens": "",
+    "buyForTokens": "",
+    "tapToView": "",
+    "save": "",
+    "upgrade": "",
+    "cancel": ""
   },
   "profile": {
     "nameSaved": "Name saved",
@@ -264,7 +409,30 @@
     "premiumBadge": "Premium account",
     "verifiedPremium": "Verified + Premium",
     "verified": "Verified",
-    "notVerified": "Not verified"
+    "notVerified": "Not verified",
+    "submitted": "",
+    "error": "",
+    "approved": "",
+    "pending": "",
+    "rejected": "",
+    "title": "",
+    "verifiedDesc": "",
+    "pendingDesc": "",
+    "description": "",
+    "rejectedReason": "",
+    "type": "",
+    "individual": "",
+    "individualDesc": "",
+    "business": "",
+    "businessDesc": "",
+    "facePhoto": "",
+    "facePhotoHint": "",
+    "idDocument": "",
+    "businessDoc": "",
+    "notes": "",
+    "notesPlaceholder": "",
+    "uploading": "",
+    "submit": ""
   },
   "frames": {
     "default": "Default",
@@ -481,7 +649,43 @@
     "verificationDesc": "Verify your identity to get a badge",
     "verificationPending": "Verification pending",
     "verificationApproved": "Account verified",
-    "verificationRejected": "Verification rejected"
+    "verificationRejected": "Verification rejected",
+    "linkedAccounts": {
+      "title": "",
+      "email": "",
+      "connected": "",
+      "link": "",
+      "unlink": "",
+      "linkFailed": "",
+      "unlinkFailed": "",
+      "unlinkSuccess": "",
+      "cannotUnlinkLast": ""
+    },
+    "integrations": {
+      "title": "",
+      "description": "",
+      "fbPixel": "",
+      "ttPixel": "",
+      "ga4Id": "",
+      "yandexMetrika": "",
+      "webhookUrl": "",
+      "webhookHint": ""
+    },
+    "pageBackground": "",
+    "backgroundType": "",
+    "solidColor": "",
+    "gradient": "",
+    "imageOrGif": "",
+    "backgroundColor": "",
+    "gradientColors": "",
+    "gradientHint": "",
+    "gradientAngle": "",
+    "backgroundImage": "",
+    "templates": "",
+    "saveAsTemplate": "",
+    "myTemplates": "",
+    "openVerification": "",
+    "pageBackgroundLocked": ""
   },
   "niche": {
     "barber": "Barber",
@@ -535,19 +739,127 @@
     "generationFailed": "Failed to create page",
     "generatingTitle": "AI is Creating Your Page",
     "generatingDescription": "Generating structure, content, and design...",
-    "pleaseWait": "This will take about 30 seconds"
+    "pleaseWait": "This will take about 30 seconds",
+    "wizardTitle": "",
+    "wizardDescription": "",
+    "completeTitle": "",
+    "completeDescription": ""
   },
   "landing": {
+    "v6": {
+      "hero": {
+        "badge": "",
+        "titlePrefix": "",
+        "titleHighlight": "",
+        "titleSuffix": "",
+        "titleBrand": "",
+        "description": "",
+        "ctaPrimary": "",
+        "ctaSecondary": "",
+        "noCard": "",
+        "cancelAnytime": "",
+        "cardRevenue": {
+          "label": "",
+          "value": ""
+        },
+        "cardLead": {
+          "title": "",
+          "subtitle": ""
+        }
+      },
+      "features": {
+        "title": "",
+        "subtitle": "",
+        "description": "",
+        "mobileBuilder": {
+          "title": "",
+          "desc": ""
+        },
+        "analytics": {
+          "title": "",
+          "desc": ""
+        },
+        "domain": {
+          "title": "",
+          "desc": ""
+        },
+        "seo": {
+          "title": "",
+          "desc": ""
+        },
+        "blocks": {
+          "title": "",
+          "desc": ""
+        },
+        "payments": {
+          "title": "",
+          "desc": ""
+        }
+      },
+      "pricing": {
+        "title": "",
+        "subtitle": "",
+        "perMonth": "",
+        "free": {
+          "title": "",
+          "desc": "",
+          "cta": "",
+          "features": ""
+        },
+        "pro": {
+          "title": "",
+          "desc": "",
+          "badge": "",
+          "cta": "",
+          "features": ""
+        }
+      },
+      "steps": {
+        "title": "",
+        "subtitle": "",
+        "step1": {
+          "title": "",
+          "desc": ""
+        },
+        "step2": {
+          "title": "",
+          "desc": ""
+        },
+        "step3": {
+          "title": "",
+          "desc": ""
+        }
+      },
+      "faq": {
+        "title": "",
+        "subtitle": "",
+        "items": ""
+      },
+      "cta": {
+        "badge": "",
+        "titlePrefix": "",
+        "titleSuffix": "",
+        "description": "",
+        "primary": "",
+        "secondary": "",
+        "note": ""
+      }
+    },
     "gallery": {
       "badge": "Community",
       "title": "Explore Community Pages",
       "subtitle": "Get inspired by amazing pages created by our community",
       "viewAll": "View all"
     },
+    "partners": {
+      "title": ""
+    },
     "v4": {
       "hero": {
         "badge": "The Micro-Business OS",
         "title": "Site, CRM & Analytics - All in One",
+        "titleStart": "",
+        "titleEnd": "",
         "subtitle": "Page builder, lead management, click analytics. Everything a small business needs - no code required.",
         "cta": "Create for Free",
         "secondary": "See examples",
@@ -771,7 +1083,16 @@
       "primaryCta": "Create page for free",
       "secondaryCta": "View examples",
       "microNote": "Free start. Mobile editor. Publish in one click.",
-      "pricingCta": "Compare plans"
+      "pricingCta": "Compare plans",
+      "title": "",
+      "titleHighlight": "",
+      "description": "",
+      "usernamePlaceholder": "",
+      "createPage": "",
+      "free": "",
+      "noCode": "",
+      "aiHelps": "",
+      "viewExamples": ""
     },
     "forWhom": {
       "title": "Who lnkmx is for",
@@ -814,7 +1135,8 @@
       "step3": {
         "title": "Publish and collect leads",
         "description": "Your link is ready for socials, leads go to CRM"
-      }
+      },
+      "badge": ""
     },
     "features": {
       "title": "What you get in the first version",
@@ -862,10 +1184,58 @@
         "title": "Shop or catalog",
         "bullet1": "Products and prices",
         "bullet2": "FAQ and delivery terms",
-        "bullet3": "Fast contact for orders"
+        "bullet3": "Fast contact for orders",
+        "name": "",
+        "role": "",
+        "desc": "",
+        "link1": "",
+        "link2": "",
+        "link3": ""
       },
       "primaryCta": "Create page",
-      "secondaryCta": "View examples"
+      "secondaryCta": "View examples",
+      "photographer": {
+        "name": "",
+        "role": "",
+        "desc": "",
+        "link1": "",
+        "link2": "",
+        "link3": ""
+      },
+      "barber": {
+        "name": "",
+        "role": "",
+        "desc": "",
+        "link1": "",
+        "link2": "",
+        "link3": ""
+      },
+      "fitness": {
+        "name": "",
+        "role": "",
+        "desc": "",
+        "link1": "",
+        "link2": "",
+        "link3": ""
+      },
+      "psychologist": {
+        "name": "",
+        "role": "",
+        "desc": "",
+        "link1": "",
+        "link2": "",
+        "link3": ""
+      },
+      "musician": {
+        "name": "",
+        "role": "",
+        "desc": "",
+        "link1": "",
+        "link2": "",
+        "link3": ""
+      },
+      "badge": "",
+      "cta": ""
     },
     "comparison": {
       "title": "Why a mini-site beats a link list",
@@ -903,7 +1273,10 @@
         "item3": "CRM + Telegram notifications",
         "item4": "Advanced analytics",
         "item5": "No watermark"
-      }
+      },
+      "month": "",
+      "total": "",
+      "billedOnce": ""
     },
     "finalCta": {
       "title": "Build a page that leads to a booking in 2 minutes",
@@ -975,6 +1348,158 @@
         "question": "Can I connect my own domain?",
         "answer": "Yes, Pro includes custom domains and branding."
       }
+    },
+    "demo": {
+      "badge": "",
+      "title": "",
+      "subtitle": "",
+      "profile": "",
+      "addBlocks": "",
+      "link": "",
+      "text": "",
+      "image": "",
+      "socials": "",
+      "yourBlocks": "",
+      "dragToReorder": "",
+      "noBlocks": "",
+      "livePreview": "",
+      "addBlocksHint": ""
+    },
+    "featured": {
+      "badge": "",
+      "title": "",
+      "subtitle": "",
+      "viewAll": ""
+    },
+    "premiumValue": {
+      "crm": {
+        "title": "",
+        "description": ""
+      },
+      "telegram": {
+        "title": "",
+        "description": ""
+      },
+      "ai": {
+        "title": "",
+        "description": ""
+      },
+      "analytics": {
+        "title": "",
+        "description": ""
+      },
+      "bonus": {
+        "themes": "",
+        "scheduler": "",
+        "video": ""
+      },
+      "badge": "",
+      "title": "",
+      "subtitle": "",
+      "bonusTitle": "",
+      "cta": "",
+      "price": ""
+    },
+    "simplePricing": {
+      "free": {
+        "f1_v2": "",
+        "f2_v2": "",
+        "f3_v2": "",
+        "f4_v2": "",
+        "f5_v2": "",
+        "f6_v2": "",
+        "f7_v2": "",
+        "title": "",
+        "subtitle": "",
+        "cta": ""
+      },
+      "premium": {
+        "f1_v2": "",
+        "f2_v2": "",
+        "f3_v2": "",
+        "f4_v2": "",
+        "f5_v2": "",
+        "f6_v2": "",
+        "f7_v2": "",
+        "badge": "",
+        "title": "",
+        "subtitle": "",
+        "cta": ""
+      },
+      "badge": "",
+      "title": ""
+    },
+    "toc": {
+      "linkInBio": "",
+      "forWhom": "",
+      "features": "",
+      "useCases": "",
+      "pricing": "",
+      "faq": "",
+      "ariaLabel": "",
+      "title": ""
+    },
+    "targetAudience": {
+      "beauty": {
+        "title": "",
+        "subtitle": "",
+        "result1": "",
+        "result2": "",
+        "result3": ""
+      },
+      "expert": {
+        "title": "",
+        "subtitle": "",
+        "result1": "",
+        "result2": "",
+        "result3": ""
+      },
+      "business": {
+        "title": "",
+        "subtitle": "",
+        "result1": "",
+        "result2": "",
+        "result3": ""
+      },
+      "title": "",
+      "subtitle": "",
+      "cta": ""
+    },
+    "v2": {
+      "pricing": {
+        "title": "",
+        "titleHighlight": "",
+        "subtitle": "",
+        "monthly": "",
+        "yearly": "",
+        "save": "",
+        "free": {
+          "name": "",
+          "desc": "",
+          "f1": "",
+          "f2": "",
+          "f3": "",
+          "f4": "",
+          "cta": ""
+        },
+        "forever": "",
+        "popular": "",
+        "perMonth": "",
+        "billedYearly": "Оплата {{price}} в год",
+        "pro": {
+          "f1": "",
+          "f2": "",
+          "f3": "",
+          "f4": "",
+          "f5": "",
+          "cta": ""
+        }
+      },
+      "testimonials": {
+        "title": "",
+        "count": "",
+        "suffix": ""
+      }
     }
   },
   "dashboard": {
@@ -1036,7 +1561,9 @@
       "premium": "Premium",
       "premiumDesc": "More features",
       "tip": "Tip",
-      "tipContent": "Add a pricing block to increase conversions by 40%"
+      "tipContent": "Add a pricing block to increase conversions by 40%",
+      "versions": "",
+      "versionsDesc": ""
     },
     "activity": {
       "title": "Inbox",
@@ -1083,7 +1610,16 @@
       "mobile": "Mobile",
       "desktop": "Desktop",
       "tablet": "Tablet",
-      "sources": "Traffic sources"
+      "sources": "Traffic sources",
+      "lowCtrDesc": "",
+      "highBounceDesc": "",
+      "mobileFirstDesc": "",
+      "lowCtr": "",
+      "highBounce": "",
+      "addForm": "",
+      "addFormDesc": "",
+      "mobileFirst": "",
+      "ctr": ""
     },
     "settings": {
       "title": "Settings",
@@ -1190,7 +1726,21 @@
       "errors": {
         "slug_taken": "This URL is taken",
         "invalid_slug": "Invalid URL"
-      }
+      },
+      "invalidDomain": "",
+      "domainTaken": "",
+      "customDomain": "",
+      "customDomainDesc": "",
+      "upgradeToConnect": "",
+      "dnsSetup": "",
+      "dnsInstructions": "",
+      "domainInvalid": "",
+      "yourDomain": "",
+      "domainHint": "",
+      "dnsConfig": "",
+      "aiBuilder": "",
+      "aiBuilderBtn": "",
+      "aiBuilderDesc": ""
     },
     "accountSettings": {
       "title": "Account Settings",
@@ -1279,7 +1829,41 @@
         "feature6": "No watermark",
         "feature7": "Priority support"
       }
-    }
+    },
+    "createPage": {
+      "titleRequired": "",
+      "limitExceeded": "",
+      "slugTaken": "",
+      "invalidSlug": "",
+      "error": "",
+      "upgradeTitle": "",
+      "upgradeDescription": "",
+      "currentPlan": "",
+      "pagesUsed": "",
+      "upgradeCta": "",
+      "title": "",
+      "description": "",
+      "titleLabel": "",
+      "titlePlaceholder": "",
+      "slugLabel": "",
+      "slugPlaceholder": "",
+      "slugHint": "",
+      "remaining": "Вы можете создать еще {{count}} стр.",
+      "create": ""
+    },
+    "common": {
+      "error": "",
+      "errorDescription": "",
+      "retry": ""
+    },
+    "leads": {
+      "title": "",
+      "search": "",
+      "emptyTitle": "",
+      "emptyDesc": ""
+    },
+    "addFirstBlock": "",
+    "templateApplied": ""
   },
   "blocks": {
     "profile": "Profile",
@@ -1287,18 +1871,50 @@
     "button": "Button",
     "text": "Text",
     "image": "Image",
-    "video": "Video",
     "socials": "Socials",
     "messenger": "Messenger",
     "separator": "Separator",
     "product": "Product",
     "catalog": {
       "empty": "Add products to catalog",
-      "uncategorized": "Uncategorized"
+      "uncategorized": "Uncategorized",
+      "newCategory": "",
+      "noName": "",
+      "title": "",
+      "titlePlaceholder": "",
+      "layout": "",
+      "layoutList": "",
+      "layoutGrid": "",
+      "showPrices": "",
+      "defaultCurrency": "",
+      "items": "",
+      "categories": "",
+      "categoriesHint": "",
+      "addCategory": "",
+      "categoryNamePlaceholder": "",
+      "itemsCount": "",
+      "noCategoriesHint": "",
+      "itemsHint": "",
+      "addItem": "",
+      "position": "",
+      "itemCategory": "",
+      "selectCategory": "",
+      "noCategory": "",
+      "itemImage": "",
+      "itemName": "",
+      "itemNamePlaceholder": "",
+      "itemDescription": "",
+      "itemDescriptionPlaceholder": "",
+      "itemPrice": "",
+      "itemCurrency": "",
+      "emptyHint": ""
     },
     "pricing": {
       "empty": "Add services",
-      "hit": "Popular"
+      "hit": "Popular",
+      "newItem": "",
+      "title": "",
+      "titlePlaceholder": ""
     },
     "form": "Form",
     "booking": "Booking",
@@ -1306,7 +1922,17 @@
       "noAddress": "Specify address"
     },
     "faq": {
-      "empty": "Add questions and answers"
+      "empty": "Add questions and answers",
+      "newQuestion": "",
+      "title": "",
+      "titlePlaceholder": "",
+      "items": "",
+      "addItem": "",
+      "question": "",
+      "questionPlaceholder": "",
+      "answer": "",
+      "answerPlaceholder": "",
+      "emptyHint": ""
     },
     "testimonial": "Testimonials",
     "countdown": {
@@ -1315,13 +1941,28 @@
       "days": "days",
       "hours": "hours",
       "minutes": "minutes",
-      "seconds": "seconds"
+      "seconds": "seconds",
+      "title": "",
+      "titlePlaceholder": "",
+      "targetDate": "",
+      "expiredText": "",
+      "expiredTextPlaceholder": "",
+      "displayOptions": "",
+      "showDays": "",
+      "showHours": "",
+      "showMinutes": "",
+      "showSeconds": ""
     },
-    "carousel": "Gallery",
+    "carousel": {
+      "empty": ""
+    },
+    "video": {
+      "invalidUrl": "",
+      "checkUrl": ""
+    },
     "newsletter": "Newsletter",
     "avatar": "Avatar",
     "download": "File",
-    "shoutout": "Shoutout",
     "community": {
       "title": "Title",
       "titlePlaceholder": "My Private Club",
@@ -1343,21 +1984,37 @@
       "stylePremium": "Premium",
       "stylePremiumDesc": "Golden gradient",
       "styleExclusive": "Exclusive",
-      "styleExclusiveDesc": "Purple gradient"
+      "styleExclusiveDesc": "Purple gradient",
+      "hint": "",
+      "join": "",
+      "defaultTitle": ""
     },
     "beforeAfter": {
       "before": "Before",
       "after": "After",
-      "noImages": "Add images"
+      "noImages": "Add images",
+      "title": "",
+      "titlePlaceholder": "",
+      "beforeImage": "",
+      "afterImage": "",
+      "beforeLabel": "",
+      "beforeLabelPlaceholder": "",
+      "afterLabel": "",
+      "afterLabelPlaceholder": ""
     },
     "customCode": "Code",
     "scratch": "Scratch",
+    "shoutout": {
+      "recommend": "",
+      "userNotFound": ""
+    },
     "added": "Block added",
     "deleted": "Block deleted",
     "restored": "Block restored",
     "addFailed": "Failed to add block",
     "premiumRequired": "This block is PRO only",
-    "limitReached": "Block limit reached. Upgrade to Premium."
+    "limitReached": "Block limit reached. Upgrade to Premium.",
+    "proOnly": ""
   },
   "auth": {
     "signIn": "Sign In",
@@ -1428,7 +2085,11 @@
     "seo": {
       "title": "Sign in to lnkmx",
       "description": "Sign in to create and publish your link in bio page."
-    }
+    },
+    "required": "",
+    "loginRequired": "",
+    "signupEmailSent": "",
+    "login": ""
   },
   "gallery": {
     "title": "Page Gallery",
@@ -1439,17 +2100,25 @@
     "latest": "Latest",
     "popular": "Popular",
     "viewPage": "View",
+    "openEditor": "",
+    "goToEditor": "",
+    "templateCopied": "",
     "like": "Like",
+    "unlike": "",
     "liked": "Page liked!",
     "alreadyLiked": "You already liked this page",
     "views": "views",
     "untitled": "Untitled",
+    "createPage": "",
     "empty": "No pages found",
+    "emptyDescription": "",
+    "noResults": "",
     "seo": {
       "title": "lnkmx Gallery - link in bio examples & templates",
       "description": "Real lnkmx pages from creators and businesses. Browse niches, templates, and inspiration.",
       "nicheTitle": "lnkmx Gallery — {{niche}}",
-      "nicheDescription": "Explore lnkmx pages in the {{niche}} niche: templates, ideas, and structure."
+      "nicheDescription": "Explore lnkmx pages in the {{niche}} niche: templates, ideas, and structure.",
+      "imageAlt": ""
     },
     "seoIntro": {
       "title": "How to use the gallery",
@@ -1461,7 +2130,41 @@
       ],
       "locationTitle": "Local relevance",
       "locationBody": "Find examples from your city or country and adapt them for your business."
-    }
+    },
+    "featuredPages": "",
+    "searchPlaceholder": "",
+    "sortBy": "",
+    "totalPages": "{{count}} pages in gallery",
+    "searchResults": "",
+    "shareToGallery": "",
+    "shareDescription": "",
+    "allNiches": "",
+    "pages": "",
+    "create": "",
+    "statsPages": "",
+    "statsLikes": "",
+    "statsViews": "",
+    "tabGallery": "",
+    "tabLeaderboard": "",
+    "allPages": "",
+    "noPages": "",
+    "tryAnotherFilter": ""
+  },
+  "errors": {
+    "general": "An error occurred",
+    "notFound": "Page not found",
+    "pageNotFound": "Page not found",
+    "invalidLink": "Check the link or the page may have been deleted",
+    "loadError": "Loading error",
+    "tryAgain": "Try refreshing the page",
+    "createYourPage": "Want to create your own page?",
+    "invalidEmail": "Enter a valid email",
+    "subscription": "Subscription error",
+    "unauthorized": "Authorization required",
+    "forbidden": "Access denied",
+    "networkError": "Network error",
+    "updateFailed": "",
+    "deleteFailed": ""
   },
   "language": {
     "autoTranslate": "Auto-translate",
@@ -1488,7 +2191,12 @@
     "scanQR": "Scan to open the page",
     "defaultTitle": "Check out my page",
     "qrDialogTitle": "QR Code",
-    "qrDialogDescription": "Scan this code to share your page"
+    "qrDialogDescription": "Scan this code to share your page",
+    "title": "",
+    "published": "",
+    "publishedDesc": "",
+    "yourPageLink": "",
+    "shareNow": ""
   },
   "toasts": {
     "sharing": {
@@ -1502,6 +2210,76 @@
     "publish": {
       "success": "Page published!",
       "error": "Failed to publish"
+    },
+    "team": {
+      "confirmRemove": "",
+      "memberRemoved": "",
+      "removeError": "",
+      "created": "",
+      "createError": "",
+      "memberInvited": "",
+      "inviteError": "",
+      "left": "",
+      "deleted": "",
+      "joined": "",
+      "invalidCode": "",
+      "alreadyMember": "",
+      "notAuth": "",
+      "joinError": ""
+    },
+    "ai": {
+      "enterUrl": "",
+      "enterProduct": "",
+      "describePage": "",
+      "generationError": "",
+      "generated": ""
+    },
+    "leads": {
+      "loadError": "",
+      "created": "",
+      "createError": "",
+      "updated": "",
+      "updateError": "",
+      "deleted": "",
+      "deleteError": "",
+      "interactionError": ""
+    },
+    "username": {
+      "authRequired": "",
+      "enterUsername": "",
+      "invalid": "",
+      "updateError": "",
+      "updated": ""
+    },
+    "page": {
+      "saveError": "",
+      "publishError": ""
+    },
+    "collaboration": {
+      "requestSent": "",
+      "requestError": "",
+      "accepted": "",
+      "rejected": "",
+      "error": "",
+      "deleted": ""
+    },
+    "shoutout": {
+      "added": "",
+      "error": "",
+      "deleted": ""
+    },
+    "gallery": {
+      "likeError": "",
+      "unlikeError": "",
+      "addedToGallery": "",
+      "removedFromGallery": "",
+      "updateError": ""
+    },
+    "social": {
+      "rewardClaimed": "",
+      "rewardError": "",
+      "giftActivated": "",
+      "giftError": ""
     }
   },
   "admin": {
@@ -1568,7 +2346,106 @@
     "seo": {
       "title": "lnkmx Admin",
       "description": "Internal admin tools for lnkmx."
-    }
+    },
+    "analyticsTitle": "",
+    "analyticsSubtitle": "",
+    "selectPeriod": "",
+    "periods": {
+      "7d": "",
+      "14d": "",
+      "30d": "",
+      "90d": ""
+    },
+    "totalViews": "",
+    "vsPrevPeriod": "",
+    "totalClicks": "",
+    "uniqueVisitors": "",
+    "sessions": "",
+    "conversionRate": "",
+    "tabs": {
+      "overview": "",
+      "engagement": "",
+      "topContent": ""
+    },
+    "activityOverview": "",
+    "devices": "",
+    "sources": "",
+    "byHours": "",
+    "activityDuringDay": "",
+    "events": "",
+    "byDaysOfWeek": "",
+    "activityDistribution": "",
+    "topPages": "",
+    "byViews": "",
+    "viewsShort": "",
+    "clicksShort": "",
+    "topBlocks": "",
+    "byClicks": "",
+    "teams": "",
+    "members": "",
+    "shoutouts": "",
+    "gamificationSection": "",
+    "referrals": "",
+    "leads": "",
+    "page": "",
+    "recentEvents": "",
+    "searchPages": "",
+    "owner": "",
+    "draft": "",
+    "open": "",
+    "noPagesFound": "",
+    "user": "",
+    "trialUntil": "",
+    "streak": "",
+    "registered": "",
+    "noUsersFound": "",
+    "tier": "",
+    "expiry": "",
+    "edit": "",
+    "editUserTier": "",
+    "selectTier": "",
+    "adminRole": "",
+    "adminRoleDesc": "",
+    "expiryDate": "",
+    "week": "",
+    "month": "",
+    "year": "",
+    "leaveEmptyLifetime": "",
+    "cancel": "",
+    "save": "",
+    "templates": "",
+    "errorFetchingTemplate": "",
+    "nameRequired": "",
+    "templateUpdated": "",
+    "templateCreated": "",
+    "errorSavingTemplate": "",
+    "newTemplate": "",
+    "editTemplate": "",
+    "description": "",
+    "previewImage": "",
+    "cacheBumped": "Кэш сброшен! Новая версия: {{version}}",
+    "cacheBumpFailed": "",
+    "systemActions": "",
+    "clearUserCache": "",
+    "clearUserCacheDesc": "",
+    "bumpCache": "",
+    "refresh": "",
+    "status": "",
+    "created": "",
+    "actions": "",
+    "partners": "",
+    "confirmDeleteTemplate": "",
+    "templateDeleted": "",
+    "errorDeletingTemplate": "",
+    "errorUpdatingStatus": "",
+    "searchTemplates": "",
+    "createTemplate": "",
+    "templateName": "",
+    "niches": "",
+    "public": "",
+    "hidden": "",
+    "noTemplatesFound": "",
+    "editUserTierDescription": ""
   },
   "adminCharts": {
     "userGrowth": "User growth",
@@ -1776,7 +2653,76 @@
       "experts": "Experts",
       "premium": "Premium",
       "other": "Other"
-    }
+    },
+    "generated": "",
+    "error": "",
+    "smartMatch": {
+      "title": "",
+      "placeholder": "",
+      "button": "",
+      "hint": ""
+    },
+    "captureError": "",
+    "captured": "",
+    "enterName": "",
+    "noBlocks": "",
+    "saved": "",
+    "saveError": "",
+    "saveTemplate": "",
+    "saveDesc": "",
+    "preview": "",
+    "capturing": "",
+    "capturePreview": "",
+    "name": "",
+    "namePlaceholder": "",
+    "description": "",
+    "descPlaceholder": "",
+    "makePublic": "",
+    "publicDesc": "",
+    "sellTemplate": "",
+    "sellDesc": "",
+    "price": "",
+    "blocks": "",
+    "applied": "",
+    "unknownAuthor": "",
+    "marketplaceDesc": "",
+    "search": "",
+    "searchAuthor": "",
+    "clearFilters": "",
+    "popular": "",
+    "new": "",
+    "free": "",
+    "premium": "",
+    "noTemplates": "",
+    "noDescription": "",
+    "enterBusinessName": "",
+    "personalized": "",
+    "personalizationError": "",
+    "personalize": "",
+    "personalizeDesc": "",
+    "businessName": "",
+    "businessNamePlaceholder": "",
+    "businessDescription": "",
+    "businessDescPlaceholder": "",
+    "generating": "",
+    "generateWithAI": "",
+    "useAsIs": "",
+    "updated": "",
+    "updateError": "",
+    "editTemplate": "",
+    "editDesc": "",
+    "updateBlocks": "",
+    "updateBlocksDesc": "",
+    "update": "",
+    "loadError": "",
+    "confirmDelete": "",
+    "deleted": "",
+    "deleteError": "",
+    "created": "",
+    "purchased": "",
+    "saveFirst": "",
+    "noPurchased": "",
+    "browseMk": ""
   },
   "alternatives": {
     "seo": {
@@ -1788,7 +2734,8 @@
       "defaultTitle": "lnkmx - AI link-in-bio builder",
       "ogTitle": "lnkmx vs Linktree vs Taplink — comparison & alternative",
       "ogDescription": "Compare lnkmx, Linktree, and Taplink by features, pricing, and usability. See why lnkmx is a strong alternative.",
-      "breadcrumb": "Alternatives"
+      "breadcrumb": "Alternatives",
+      "imageAlt": ""
     },
     "header": {
       "cta": "Get Started"
@@ -1927,7 +2874,8 @@
     "purchaseError": "Purchase error",
     "withdrawalCreated": "Withdrawal request created!",
     "withdrawalPremiumRequired": "Withdrawals are available only for Premium users",
-    "withdrawalError": "Withdrawal request error"
+    "withdrawalError": "Withdrawal request error",
+    "title": ""
   },
   "quests": {
     "dailyVisit": {
@@ -1969,7 +2917,13 @@
       "alreadyReferred": "You already used a referral code",
       "selfReferral": "You can't use your own code",
       "applyFailed": "Failed to apply code"
-    }
+    },
+    "topReferrers": "",
+    "inviteFriend": "",
+    "bothGetBonus": "",
+    "shareReferralLink": "",
+    "friendsInvited": "",
+    "bonusEarned": ""
   },
   "social": {
     "weeklyChallenge": "Weekly challenge",
@@ -1993,7 +2947,8 @@
       "events_one": "{{count}} event",
       "events_few": "{{count}} events",
       "events_many": "{{count}} events",
-      "events_other": "{{count}} events"
+      "events_other": "{{count}} events",
+      "events": "{{count}} событий"
     },
     "metadata": {
       "achievement": "🏆 {{title}}",
@@ -2015,7 +2970,9 @@
       "days_few": "+{{count}} days",
       "days_many": "+{{count}} days",
       "days_other": "+{{count}} days",
-      "activate": "Activate"
+      "activate": "Activate",
+      "count": "",
+      "days": ""
     },
     "weeklyChallenges": {
       "title": "Weekly challenges",
@@ -2036,7 +2993,15 @@
     "upgrade": "Upgrade to Pro",
     "features": "Pro features",
     "trial": "Trial period",
-    "active": "Pro active"
+    "active": "Pro active",
+    "requiresTier": "Требуется {{tier}}",
+    "featureRequires": "{{feature}} доступно в {{tier}}",
+    "premiumFramesLocked": "",
+    "verificationRequiresPro": "",
+    "upgradeToPro": "",
+    "blockLocked": "",
+    "unlockWith": "",
+    "upgradeToBusiness": ""
   },
   "pwa": {
     "install": "Install app",
@@ -2051,7 +3016,10 @@
     "uniqueVisitors": "Unique visitors",
     "topBlocks": "Top Blocks",
     "devices": "Devices",
-    "sources": "Sources",
+    "sources": {
+      "title": "",
+      "noData": ""
+    },
     "noData": "No data for selected period",
     "aiInsights": "AI Recommendations",
     "apply": "Apply",
@@ -2062,6 +3030,75 @@
       "addTestimonialsDesc": "Testimonials increase trust and conversion by 25%",
       "duplicateTop": "Duplicate popular link",
       "duplicateTopDesc": "receives clicks"
+    },
+    "mobile": "",
+    "tablet": "",
+    "desktop": "",
+    "today": "",
+    "week": "",
+    "month": "",
+    "all": "",
+    "visitors": "",
+    "avgPerDay": "",
+    "viewsPerDay": "",
+    "activityChart": "",
+    "clicksByBlock": "",
+    "trafficSources": "",
+    "refresh": "",
+    "shares": "",
+    "export": {
+      "button": "",
+      "summary": "",
+      "daily": ""
+    },
+    "blocks": {
+      "title": "",
+      "noData": "",
+      "avgCtr": "",
+      "clicks": "",
+      "andMore": "и ещё {{count}} блоков"
+    },
+    "funnel": {
+      "views": "",
+      "clicks": "",
+      "engagement": "",
+      "conversions": "",
+      "title": "",
+      "overallConversion": "",
+      "insights": "",
+      "clickRate": "",
+      "conversionRate": "",
+      "avgPerDay": ""
+    },
+    "engagement": {
+      "ctr": "",
+      "ctrDesc": "",
+      "avgSession": "",
+      "sessionDesc": "",
+      "bounceRate": "",
+      "bounceDesc": "",
+      "returning": "",
+      "returningDesc": "",
+      "title": "",
+      "viewsPerVisitor": ""
+    },
+    "geography": {
+      "title": "",
+      "noData": "",
+      "andMore": "и ещё {{count}} стран"
+    },
+    "tabs": {
+      "overview": "",
+      "traffic": "",
+      "blocks": "",
+      "funnel": ""
+    },
+    "chart": {
+      "title": ""
+    },
+    "premium": {
+      "title": "",
+      "desc": ""
     }
   },
   "editor": {
@@ -2082,7 +3119,38 @@
       "blockDeleted": "Block deleted: {{type}}",
       "blockUpdated": "Block updated: {{type}}",
       "blocksReordered": "Blocks reordered"
-    }
+    },
+    "livePreview": "",
+    "sections": {
+      "content": "",
+      "appearance": "",
+      "effects": "",
+      "image": "",
+      "link": "",
+      "style": "",
+      "icon": "",
+      "iconDesc": "",
+      "settings": ""
+    },
+    "saving": "",
+    "unsaved": "",
+    "saved": "",
+    "tabs": {
+      "content": "",
+      "style": "",
+      "advanced": ""
+    },
+    "close_or_cancel": "",
+    "share": "",
+    "publish": "",
+    "templates": "",
+    "versions": "",
+    "unsavedChanges": "",
+    "unsavedDescription": "",
+    "discard": "",
+    "saveAndClose": "",
+    "selectBlock": "",
+    "searchBlocks": ""
   },
   "crm": {
     "title": "CRM",
@@ -2110,13 +3178,21 @@
       "converted": "Converted",
       "lost": "Lost"
     },
-    "source": {
-      "form": "Form",
-      "messenger": "Messenger",
-      "manual": "Manual",
-      "page_view": "Page View",
-      "other": "Other"
-    }
+    "source": "",
+    "addLeadDescription": "",
+    "namePlaceholder": "",
+    "phone": "",
+    "notes": "",
+    "notesPlaceholder": "",
+    "addInteraction": "",
+    "interactionPlaceholder": "",
+    "history": "",
+    "noInteractions": "",
+    "deleteLead": "",
+    "confirmDelete": "",
+    "deleteWarning": "",
+    "openPanel": "",
+    "upgradeToPremium": ""
   },
   "pagination": {
     "previous": "Previous",
@@ -2129,7 +3205,8 @@
     "invalidLink": "Invalid or corrupted link",
     "shareLink": "Share Link",
     "qrCode": "QR Code",
-    "scanToShare": "Scan this code to share your page"
+    "scanToShare": "Scan this code to share your page",
+    "defaultDescription": ""
   },
   "teams": {
     "title": "Teams",
@@ -2178,7 +3255,29 @@
     "error": "Error",
     "updateError": "Update failed",
     "deleteError": "Delete failed",
-    "enterName": "Enter team name"
+    "enterName": "Enter team name",
+    "total": "",
+    "owned": "",
+    "member": "",
+    "owner": "",
+    "noTeamsHint": "",
+    "joinByCode": "",
+    "createNew": "",
+    "joinTeam": "",
+    "joinTeamDesc": "",
+    "inviteCodePlaceholder": "",
+    "joinButton": "",
+    "createTeamDesc": "",
+    "invite": "",
+    "onlyOwnerCanEdit": "",
+    "namePlaceholder": "",
+    "descriptionPlaceholder": "",
+    "publicTeam": "",
+    "publicTeamHint": "",
+    "shareLinkHint": "",
+    "createLinkHint": "",
+    "settingsDesc": "",
+    "joinTitle": ""
   },
   "friends": {
     "title": "Friends",
@@ -2255,7 +3354,15 @@
     "errorStart": "First tap START in @linkmaxmy_bot",
     "errorInvalid": "Invalid Chat ID",
     "errorCheck": "Verification error. Try again",
-    "pasteError": "Failed to paste"
+    "pasteError": "Failed to paste",
+    "clickStartFirst": "",
+    "clickStart": "",
+    "invalidChatId": "",
+    "verificationError": "",
+    "connectTitle": "",
+    "connectSubtitle": "",
+    "verifying": "",
+    "infoHint": ""
   },
   "product": {
     "authRequired": "Login required to purchase",
@@ -2266,7 +3373,9 @@
     "buyTokens": "Buy tokens",
     "buyFor": "Buy for",
     "buy": "Buy",
-    "tapToView": "Details →"
+    "tapToView": "Details →",
+    "purchaseDescription": "Покупка товара: {{name}}",
+    "purchasing": ""
   },
   "paidContent": {
     "title": "Paid Content",
@@ -2279,7 +3388,11 @@
     "unlocking": "Unlocking...",
     "yourBalance": "Your balance",
     "loginRequired": "Log in to purchase",
-    "unlockContent": "Unlock paid content"
+    "unlockContent": "Unlock paid content",
+    "notEnoughTokens": "",
+    "content": "",
+    "unlockDescription": "",
+    "unlockWithTokens": ""
   },
   "adminVerification": {
     "totalRequests": "Total requests",
@@ -2338,7 +3451,12 @@
     "title": "Collaboration",
     "notFoundTitle": "Collaboration not found",
     "notFoundDesc": "This page does not exist or the collaboration has not been accepted yet.",
-    "pageNoBlocks": "No blocks have been added yet"
+    "pageNoBlocks": "No blocks have been added yet",
+    "recommend": "",
+    "shoutoutPlaceholder": "",
+    "sendShoutout": "",
+    "noUsersFound": "",
+    "shoutoutRecommendDesc": ""
   },
   "collaboration": {
     "tabs": {
@@ -2359,7 +3477,8 @@
     "noMembers": "No members",
     "members": "Members",
     "user": "User",
-    "owner": "Owner"
+    "owner": "Owner",
+    "authRequired": ""
   },
   "shoutout": {
     "selectedUser": "Selected user",
@@ -2393,7 +3512,11 @@
     "noColor": "No color",
     "preview": "Preview",
     "previewText": "Sample block text",
-    "textEffect": "Text effect"
+    "textEffect": "Text effect",
+    "notAvailable": "",
+    "mobileHint": "",
+    "description": "",
+    "title": ""
   },
   "currency": {
     "names": {
@@ -2478,7 +3601,9 @@
     "hours1_5": "1.5 hours",
     "hours2": "2 hours",
     "featured": "Featured",
-    "emptyHint": "Tell us what services you provide"
+    "emptyHint": "Tell us what services you provide",
+    "min": "",
+    "namePlaceholder": ""
   },
   "bookingBlock": {
     "description": "Booking block with calendar and time slots",
@@ -2573,6 +3698,10 @@
       "title": "lnkmx - mini-site and leads from one link",
       "description": "AI mini-site builder for experts, freelancers, and small businesses. Create offer, pricing, and lead forms in 2 minutes.",
       "keywords": "link in bio, link page, mini-site, linktree alternative, taplink alternative"
+    },
+    "organization": {
+      "description": "",
+      "street": ""
     }
   },
   "adminTranslations": {
@@ -2585,7 +3714,37 @@
     "seo": {
       "title": "Install lnkmx",
       "description": "Install lnkmx as a PWA for faster access."
-    }
+    },
+    "title": "",
+    "description": "",
+    "subtitle": "",
+    "yourLink": "",
+    "desktop": {
+      "ready": "",
+      "installNow": "",
+      "step1": "",
+      "step1desc": "",
+      "step2": "",
+      "step2desc": ""
+    },
+    "ios": {
+      "step1": "",
+      "step1desc": "",
+      "step2": "",
+      "step2desc": "",
+      "step3": "",
+      "step3desc": ""
+    },
+    "android": {
+      "step1": "",
+      "step1desc": "",
+      "step2": "",
+      "step2desc": "",
+      "step3": "",
+      "step3desc": ""
+    },
+    "later": "",
+    "copyLink": ""
   },
   "event": {
     "register": "Register",
@@ -2599,6 +3758,8 @@
     "emailHelp": "Your ticket and confirmation will be sent to this email.",
     "emailRequired": "Email is required",
     "fillRequired": "Please fill required fields",
+    "invalidEmail": "",
+    "invalidPhone": "",
     "urlInvalid": "URL must start with https://",
     "selectOption": "Select an option",
     "mediaSection": "Media section is available in Pro",
@@ -2629,7 +3790,10 @@
     "calendar": "Calendar",
     "downloadICS": "Download .ics",
     "googleCalendar": "Google Calendar",
-    "outlook": "Outlook"
+    "outlook": "Outlook",
+    "phone": "",
+    "registrationForm": "",
+    "formProgress": ""
   },
   "eventBuilder": {
     "emailRequired": "Email field is always added automatically and is required.",
@@ -2692,7 +3856,8 @@
     "scaleMin": "From",
     "scaleMax": "To",
     "buttonText": "Button text",
-    "buttonTextPlaceholder": "Register"
+    "buttonTextPlaceholder": "Register",
+    "option1": ""
   },
   "eventFields": {
     "shortText": "Short text",
@@ -3068,7 +4233,13 @@
     "ctaButton": "Create page"
   },
   "footer": {
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "product": "",
+    "alternatives": "",
+    "legal": "",
+    "paymentTerms": "",
+    "contacts": "",
+    "companyInfo": ""
   },
   "themes": {
     "pageTheme": "Theme & Colors",
@@ -3165,5 +4336,704 @@
       "watermark": "lnkmx.my watermark",
       "limitedBlocks": "10 blocks maximum"
     }
+  },
+  "sizes": {
+    "small": "",
+    "medium": "",
+    "large": "",
+    "xlarge": ""
+  },
+  "shapes": {
+    "circle": "",
+    "rounded": "",
+    "square": ""
+  },
+  "shadows": {
+    "none": "",
+    "soft": "",
+    "medium": "",
+    "strong": "",
+    "glow": ""
+  },
+  "placeholders": {
+    "buttonText": "",
+    "yourName": "",
+    "tellAboutYourself": "",
+    "enterText": ""
+  },
+  "automations": {
+    "saved": "",
+    "saveError": "",
+    "followUp": {
+      "title": "",
+      "description": ""
+    },
+    "timeClarification": {
+      "title": "",
+      "description": ""
+    },
+    "reviewRequest": {
+      "title": "",
+      "description": ""
+    },
+    "title": "",
+    "premiumRequired": "",
+    "unlockPremium": "",
+    "subtitle": "",
+    "triggerAfter": "",
+    "hours": "",
+    "messageTemplate": "",
+    "variables": "",
+    "saveSettings": "",
+    "telegramNote": ""
+  },
+  "aiBuilder": {
+    "description": "",
+    "selectTemplate": "",
+    "success": "",
+    "error": "",
+    "title": "",
+    "step": "",
+    "nicheTitle": "",
+    "nicheDesc": "",
+    "templateTitle": "",
+    "templateDesc": "",
+    "noTemplates": "",
+    "noTemplatesDesc": "",
+    "changeNiche": "",
+    "blocks": "",
+    "selected": "",
+    "infoTitle": "",
+    "dynamicFormDesc": "",
+    "name": "",
+    "namePlaceholder": "",
+    "bio": "",
+    "bioPlaceholder": "",
+    "services": "",
+    "servicesPlaceholder": "",
+    "contacts": "",
+    "contactsPlaceholder": "",
+    "socials": "",
+    "socialsPlaceholder": "",
+    "mediaLinks": "",
+    "mediaPlaceholder": "",
+    "generate": "",
+    "generatingTitle": "",
+    "generatingDesc": "",
+    "completeTitle": "",
+    "completeDesc": ""
+  },
+  "funnel": {
+    "short": "",
+    "noData": "",
+    "noDataDesc": "",
+    "title": "",
+    "description": "",
+    "overallConversion": "",
+    "totalVisitors": "",
+    "insights": "",
+    "stepView": "",
+    "stepClick": "",
+    "stepEngage": "",
+    "stepConvert": "",
+    "dropOff": "",
+    "viewDesc": "",
+    "clickDesc": "",
+    "engageDesc": "",
+    "convertDesc": "",
+    "insightLowCtr": "Низкий CTR ({{rate}}%). Попробуйте добавить более заметные кнопки.",
+    "insightHighCtr": "Отличный CTR ({{rate}}%)! Контент вовлекает пользователей.",
+    "insightNoConversions": "",
+    "insightGoodConversion": "Хорошая конверсия {{rate}}%!",
+    "insightLowConversion": "Конверсия {{rate}}%. Оптимизируйте CTA и формы.",
+    "insightLowTraffic": ""
+  },
+  "heatmap": {
+    "short": "",
+    "noData": "",
+    "noDataDesc": "",
+    "title": "",
+    "description": "",
+    "sessions": "",
+    "clickZones": "",
+    "avgScroll": "",
+    "maxScroll": "",
+    "clickMap": "",
+    "cold": "",
+    "hot": "",
+    "topClickAreas": "",
+    "position": "",
+    "fromTop": "",
+    "clicks": "",
+    "scrollDepth": "",
+    "reached": "",
+    "insightLowScroll": "",
+    "insightGoodScroll": "",
+    "insightMedScroll": ""
+  },
+  "events": {
+    "fetchError": "",
+    "updateError": "",
+    "registrations": "",
+    "total": "",
+    "confirmed": "",
+    "pending": "",
+    "checkedIn": "",
+    "searchRegistrations": "",
+    "export": "",
+    "scanner": "",
+    "noRegistrations": "",
+    "registrationDetails": "",
+    "checkedInAt": "",
+    "utmAttribution": "",
+    "confirm": "",
+    "reject": "",
+    "exportSuccess": "",
+    "exportError": "",
+    "scannerProOnly": "",
+    "published": "",
+    "draft": "",
+    "closed": "",
+    "active": "",
+    "drafts": "",
+    "all": "",
+    "searchPlaceholder": "",
+    "noEvents": "",
+    "createHint": "",
+    "past": "",
+    "refresh": "",
+    "notFound": "",
+    "approved": "",
+    "approveError": "",
+    "rejected": "",
+    "rejectError": "",
+    "checkInError": "",
+    "noDataToExport": "",
+    "online": "",
+    "offline": "",
+    "pendingApproval": "",
+    "cancelled": "",
+    "checkedInLabel": "",
+    "approve": "",
+    "manualCheckIn": "",
+    "copyEmail": "",
+    "pendingShort": "",
+    "checkedInShort": "",
+    "exportPdfWithCharts": "",
+    "confirmedTab": "",
+    "pendingTab": "",
+    "checkedTab": "",
+    "noSearchResults": "",
+    "untitled": "",
+    "title": "",
+    "eventsCount": "",
+    "search": "",
+    "noEventsDesc": "",
+    "addEventBlock": "",
+    "upcoming": "",
+    "scanError": "",
+    "ticketNotFound": "",
+    "wrongEvent": "",
+    "notAuthorized": "",
+    "alreadyUsed": "",
+    "ticketCancelled": "",
+    "checkInSuccess": "",
+    "cameraError": "",
+    "cameraPermissionDenied": "",
+    "noCameraFound": "",
+    "cameraInUse": "",
+    "torchError": "",
+    "scannerProDescription": "",
+    "startingCamera": "",
+    "manualEntry": "",
+    "enterTicketCode": "",
+    "useCamera": "",
+    "manual": "",
+    "recentScans": "",
+    "noScansYet": ""
+  },
+  "insights": {
+    "lowViews": {
+      "title": "",
+      "description": ""
+    },
+    "lowCTR": {
+      "title": "",
+      "description": ""
+    },
+    "noProducts": {
+      "title": "",
+      "description": ""
+    },
+    "lowPerforming": {
+      "title": "",
+      "description": ""
+    },
+    "mobileOpt": {
+      "title": "",
+      "description": ""
+    },
+    "noInsights": "",
+    "error": "",
+    "applied": "",
+    "undone": "",
+    "title": "",
+    "description": "",
+    "analyze": "",
+    "empty": "",
+    "priority": {
+      "high": "",
+      "medium": "",
+      "low": ""
+    },
+    "apply": ""
+  },
+  "freemium": {
+    "aiLimitReached": "",
+    "aiGenerationsRemaining": "Осталось AI генераций в этом месяце: {{count}}",
+    "aiLimitResetsMonthly": "",
+    "moreAIGenerations": "",
+    "blockLimitReached": "",
+    "blocksRemaining": "Осталось блоков: {{count}} из {{max}}",
+    "upgradeToPremium": "",
+    "aiLimitResetMonthlyPro": "",
+    "upgradeForMoreGenerations": "",
+    "getPremium": "",
+    "left": "",
+    "limit": "",
+    "viewOnly": "",
+    "viewOnlyHint": "Требуется {{tier}} для редактирования",
+    "upgradeToEdit": "Обновите до {{tier}} для редактирования"
+  },
+  "blockSize": {
+    "small": "",
+    "wide": "",
+    "tall": "",
+    "large": ""
+  },
+  "warnings": {
+    "customCodeSecurity": ""
+  },
+  "imageStyles": {
+    "default": "",
+    "banner": "",
+    "polaroid": "",
+    "vignette": "",
+    "circle": ""
+  },
+  "imageScales": {
+    "cover": "",
+    "contain": "",
+    "fill": "",
+    "tile": ""
+  },
+  "ai": {
+    "generateWithAI": "",
+    "generateDescription": "",
+    "noTextToTranslate": "",
+    "translationSuccess": "",
+    "translationError": "",
+    "translateToOthers": "",
+    "translate": "",
+    "translating": "",
+    "translateNow": ""
+  },
+  "styles": {
+    "default": "",
+    "rounded": "",
+    "pill": "",
+    "brandColors": "",
+    "black": "",
+    "white": "",
+    "outline": ""
+  },
+  "gradients": {
+    "none": "",
+    "dark": "",
+    "light": "",
+    "primary": "",
+    "sunset": "",
+    "ocean": "",
+    "purple": ""
+  },
+  "heights": {
+    "small": "",
+    "medium": "",
+    "large": ""
+  },
+  "avatarSizes": {
+    "small": "",
+    "medium": "",
+    "large": "",
+    "xlarge": ""
+  },
+  "upload": {
+    "fileTooLarge": "",
+    "success": "",
+    "error": "",
+    "uploading": "",
+    "dragOrClick": "",
+    "maxSize": "",
+    "platform": "",
+    "storedOnPlatform": "",
+    "signInRequired": "",
+    "externalNote": "",
+    "gifPremiumOnly": "",
+    "compressed": "",
+    "gifPreserved": "",
+    "tab": "",
+    "compressing": "",
+    "click": "",
+    "autoCompress": "",
+    "gifPremium": ""
+  },
+  "/block-editors/ProfileBlockEditor": "",
+  "/block-editors/TextBlockEditor": "",
+  "/block-editors/LinkBlockEditor": "",
+  "/block-editors/ProductBlockEditor": "",
+  "/block-editors/VideoBlockEditor": "",
+  "/block-editors/CarouselBlockEditor": "",
+  "/block-editors/ButtonBlockEditor": "",
+  "/block-editors/SocialsBlockEditor": "",
+  "/block-editors/ImageBlockEditor": "",
+  "/block-editors/CustomCodeBlockEditor": "",
+  "/block-editors/MessengerBlockEditor": "",
+  "/block-editors/FormBlockEditor": "",
+  "/block-editors/DownloadBlockEditor": "",
+  "/block-editors/NewsletterBlockEditor": "",
+  "/block-editors/TestimonialBlockEditor": "",
+  "/block-editors/ScratchBlockEditor": "",
+  "/block-editors/MapBlockEditor": "",
+  "/block-editors/AvatarBlockEditor": "",
+  "/block-editors/SeparatorBlockEditor": "",
+  "/block-editors/CatalogBlockEditor": "",
+  "/block-editors/BeforeAfterBlockEditor": "",
+  "/block-editors/FAQBlockEditor": "",
+  "/block-editors/CountdownBlockEditor": "",
+  "/block-editors/PricingBlockEditor": "",
+  "/block-editors/ShoutoutBlockEditor": "",
+  "/block-editors/BookingBlockEditor": "",
+  "/block-editors/CommunityBlockEditor": "",
+  "/block-editors/EventBlockEditor": "",
+  "/block-editors/ProfileEditorWizard": "",
+  "/blocks/ProfileBlock": "",
+  "/blocks/LinkBlock": "",
+  "/blocks/ButtonBlock": "",
+  "/blocks/SocialsBlock": "",
+  "/blocks/TextBlock": "",
+  "/blocks/ImageBlock": "",
+  "/blocks/ProductBlock": "",
+  "/blocks/VideoBlock": "",
+  "/blocks/CarouselBlock": "",
+  "/blocks/CustomCodeBlock": "",
+  "/blocks/MessengerBlock": "",
+  "/blocks/FormBlock": "",
+  "/blocks/DownloadBlock": "",
+  "/blocks/NewsletterBlock": "",
+  "/blocks/TestimonialBlock": "",
+  "/blocks/ScratchBlock": "",
+  "/blocks/MapBlock": "",
+  "/blocks/AvatarBlock": "",
+  "/blocks/SeparatorBlock": "",
+  "/blocks/CatalogBlock": "",
+  "/blocks/BeforeAfterBlock": "",
+  "/blocks/FAQBlock": "",
+  "/blocks/CountdownBlock": "",
+  "/blocks/PricingBlock": "",
+  "/blocks/ShoutoutBlock": "",
+  "/blocks/BookingBlock": "",
+  "/blocks/CommunityBlock": "",
+  "/blocks/EventBlock": "",
+  "/Gallery": "",
+  "/PublicPage": "",
+  "/ProfileFullEditor": "",
+  "/BlockRenderer": "",
+  "/pages/Index": "",
+  "/pages/Auth": "",
+  "/pages/AuthCallback": "",
+  "/pages/DashboardV2": "",
+  "/pages/PublicPage": "",
+  "/pages/NotFound": "",
+  "/pages/Install": "",
+  "/pages/Gallery": "",
+  "/pages/Pricing": "",
+  "/pages/Alternatives": "",
+  "/pages/Admin": "",
+  "/pages/AdminTranslations": "",
+  "/pages/AdminTemplateEditor": "",
+  "/pages/TeamPage": "",
+  "/pages/CollabPage": "",
+  "/pages/JoinTeam": "",
+  "/pages/Terms": "",
+  "/pages/Privacy": "",
+  "/pages/PaymentTerms": "",
+  "/pages/Experts": "",
+  "/pages/EventScanner": "",
+  "/pages/SeoLanding": "",
+  "layouts": {
+    "list": "",
+    "grid": ""
+  },
+  "tier": {
+    "free": ""
+  },
+  "scratch": {
+    "scratchHere": "",
+    "revealed": "",
+    "hint": ""
+  },
+  "guide": {
+    "pdf": ""
+  },
+  "messages": {
+    "loading": "",
+    "failedToSignUp": "",
+    "accountCreated": "",
+    "failedToSignIn": ""
+  },
+  "bookings": {
+    "fetchError": "",
+    "cancelError": "",
+    "cancelSuccess": "",
+    "confirmError": "",
+    "confirmSuccess": "",
+    "completeError": "",
+    "completeSuccess": "",
+    "today": "",
+    "tomorrow": "",
+    "noBookingsToExport": "",
+    "exportSuccess": "",
+    "appointmentWith": "",
+    "calendarExported": "",
+    "total": "",
+    "upcoming": "",
+    "confirmed": "",
+    "past": "",
+    "all": "",
+    "noBookings": "",
+    "addToCalendar": "",
+    "exportCSV": "",
+    "refresh": "",
+    "cancelTitle": "",
+    "cancelDescription": "",
+    "confirmCancel": ""
+  },
+  "versions": {
+    "title": "",
+    "description": "",
+    "empty": "",
+    "emptyHint": "",
+    "version": "",
+    "current": "",
+    "blocks": "",
+    "restore": ""
+  },
+  "autosave": {
+    "pending": "",
+    "saving": "",
+    "saved": "",
+    "error": ""
+  },
+  "blockManager": {
+    "title": "",
+    "description": "{{count}} блоков · Перетащите для сортировки",
+    "profile": "",
+    "content": "",
+    "empty": "",
+    "moveUp": "",
+    "moveDown": "",
+    "moreActions": "",
+    "edit": "",
+    "show": "",
+    "hide": "",
+    "duplicate": "",
+    "delete": ""
+  },
+  "blockActions": {
+    "moveToTop": "",
+    "moveUp": "",
+    "moveDown": "",
+    "moveToBottom": "",
+    "duplicate": "",
+    "hide": "",
+    "description": "",
+    "edit": "",
+    "confirmDelete": "",
+    "delete": ""
+  },
+  "mobileToolbar": {
+    "settings": "",
+    "preview": "",
+    "share": "",
+    "more": "",
+    "marketplace": "",
+    "marketplaceDesc": "",
+    "aiBuilder": "",
+    "aiBuilderDesc": "",
+    "templates": "",
+    "templatesDesc": "",
+    "achievements": "",
+    "achievementsDesc": "",
+    "tokensDesc": "",
+    "crm": "",
+    "crmDesc": "",
+    "galleryDesc": "",
+    "pricingDesc": "",
+    "moreOptions": "",
+    "status": ""
+  },
+  "streak": {
+    "title": "",
+    "keepGoing": "",
+    "days": "",
+    "nextMilestone": "",
+    "bonusDays": "",
+    "best": "",
+    "earned": "",
+    "milestoneReached": "",
+    "milestoneDescription": "",
+    "bonusEarned": "",
+    "bonusTrialDays": "",
+    "awesome": "",
+    "milestones": ""
+  },
+  "structure": {
+    "title": "",
+    "description": "{{count}} блоков",
+    "profileSection": "",
+    "contentSection": "",
+    "noBlocks": "",
+    "edit": "",
+    "show": "",
+    "hide": "",
+    "duplicate": "",
+    "delete": ""
+  },
+  "url": {
+    "external": "",
+    "tab": ""
+  },
+  "imageCropper": {
+    "title": "",
+    "description": "",
+    "zoom": "",
+    "hint": "",
+    "reset": ""
+  },
+  "leaderboard": {
+    "week": "",
+    "month": "",
+    "allTime": "",
+    "title": "",
+    "all": "",
+    "empty": ""
+  },
+  "tabbar": {
+    "projects": "",
+    "editor": "",
+    "crm": "",
+    "analytics": "",
+    "gallery": "",
+    "settings": ""
+  },
+  "cookies": {
+    "title": "",
+    "privacy": "",
+    "reject": "",
+    "accept": ""
+  },
+  "notFound": {
+    "message": "",
+    "returnHome": ""
+  },
+  "functions should check auth": {
+    "uid()": ""
+  },
+  "": {
+    "": {
+      "/block-editors/ProfileBlockEditor": "",
+      "/block-editors/TextBlockEditor": "",
+      "/block-editors/LinkBlockEditor": "",
+      "/block-editors/ProductBlockEditor": "",
+      "/block-editors/VideoBlockEditor": "",
+      "/block-editors/CarouselBlockEditor": "",
+      "/block-editors/ButtonBlockEditor": "",
+      "/block-editors/SocialsBlockEditor": "",
+      "/block-editors/ImageBlockEditor": "",
+      "/block-editors/CustomCodeBlockEditor": "",
+      "/block-editors/MessengerBlockEditor": "",
+      "/block-editors/FormBlockEditor": "",
+      "/block-editors/DownloadBlockEditor": "",
+      "/block-editors/NewsletterBlockEditor": "",
+      "/block-editors/TestimonialBlockEditor": "",
+      "/block-editors/ScratchBlockEditor": "",
+      "/block-editors/MapBlockEditor": "",
+      "/block-editors/AvatarBlockEditor": "",
+      "/block-editors/SeparatorBlockEditor": "",
+      "/block-editors/CatalogBlockEditor": "",
+      "/block-editors/BeforeAfterBlockEditor": "",
+      "/block-editors/FAQBlockEditor": "",
+      "/block-editors/CountdownBlockEditor": "",
+      "/block-editors/PricingBlockEditor": "",
+      "/block-editors/ShoutoutBlockEditor": "",
+      "/block-editors/BookingBlockEditor": "",
+      "/block-editors/CommunityBlockEditor": "",
+      "/block-editors/EventBlockEditor": "",
+      "/block-editors/ProfileEditorWizard": "",
+      "/blocks/ProfileBlock": "",
+      "/blocks/LinkBlock": "",
+      "/blocks/ButtonBlock": "",
+      "/blocks/SocialsBlock": "",
+      "/blocks/TextBlock": "",
+      "/blocks/ImageBlock": "",
+      "/blocks/ProductBlock": "",
+      "/blocks/VideoBlock": "",
+      "/blocks/CarouselBlock": "",
+      "/blocks/CustomCodeBlock": "",
+      "/blocks/MessengerBlock": "",
+      "/blocks/FormBlock": "",
+      "/blocks/DownloadBlock": "",
+      "/blocks/NewsletterBlock": "",
+      "/blocks/TestimonialBlock": "",
+      "/blocks/ScratchBlock": "",
+      "/blocks/MapBlock": "",
+      "/blocks/AvatarBlock": "",
+      "/blocks/SeparatorBlock": "",
+      "/blocks/CatalogBlock": "",
+      "/blocks/BeforeAfterBlock": "",
+      "/blocks/FAQBlock": "",
+      "/blocks/CountdownBlock": "",
+      "/blocks/PricingBlock": "",
+      "/blocks/ShoutoutBlock": "",
+      "/blocks/BookingBlock": "",
+      "/blocks/CommunityBlock": "",
+      "/blocks/EventBlock": "",
+      "/Gallery": "",
+      "/PublicPage": ""
+    },
+    "/ProfileFullEditor": "",
+    "/BlockRenderer": "",
+    "/pages/Index": "",
+    "/pages/Auth": "",
+    "/pages/AuthCallback": "",
+    "/pages/DashboardV2": "",
+    "/pages/PublicPage": "",
+    "/pages/NotFound": "",
+    "/pages/Install": "",
+    "/pages/Gallery": "",
+    "/pages/Pricing": "",
+    "/pages/Alternatives": "",
+    "/pages/Admin": "",
+    "/pages/AdminTranslations": "",
+    "/pages/AdminTemplateEditor": "",
+    "/pages/TeamPage": "",
+    "/pages/CollabPage": "",
+    "/pages/JoinTeam": "",
+    "/pages/Terms": "",
+    "/pages/Privacy": "",
+    "/pages/PaymentTerms": "",
+    "/pages/Experts": "",
+    "/pages/EventScanner": "",
+    "/pages/SeoLanding": ""
   }
 }
