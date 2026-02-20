@@ -250,7 +250,6 @@ switch (arg) {
     case 'fix': fixPlaceholders(); break;
     case 'status': status(); break;
     case 'check':
-        // Reuse existing check logic or just run status+fix
         status();
         fixPlaceholders();
         break;
