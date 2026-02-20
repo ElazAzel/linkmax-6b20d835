@@ -6,7 +6,7 @@
  */
 import { memo, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import {
   Eye,
   Share2,
@@ -61,7 +61,7 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenActivity,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
@@ -253,7 +253,7 @@ export const HomeScreen = memo(function HomeScreen({
               iconColor="text-pink-600"
               title={t('dashboard.home.gallery', 'Галерея')}
               description={t('dashboard.home.galleryDesc', 'Вдохновение')}
-              onClick={() => router.push('/gallery')}
+              onClick={() => navigate('/gallery')}
               gradient="from-pink-500/15 to-rose-500/15"
               border="border-pink-500/20"
             />
@@ -265,7 +265,7 @@ export const HomeScreen = memo(function HomeScreen({
                 iconColor="text-amber-600"
                 title={t('dashboard.home.premium', 'Premium')}
                 description={t('dashboard.home.premiumDesc', 'Больше возможностей')}
-                onClick={() => router.push('/pricing')}
+                onClick={() => navigate('/pricing')}
                 gradient="from-amber-500/15 to-orange-500/15"
                 border="border-amber-500/20"
               />
