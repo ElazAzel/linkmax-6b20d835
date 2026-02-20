@@ -25,10 +25,10 @@ This project uses Antigravity to automate development workflows and ensure code 
 
 ## Rules
 
-See `.agents/rules/` for detailed coding standards, including `general.md`, `cursor.md`, and `windsurf.md`.
+See `.agent/rules/` for detailed coding standards, including `general.md`, `cursor.md`, and `windsurf.md`.
 
 ## Skills
 
-See `.agents/skills/` for specific workflow skills:
-- **React**: Component creation and modern React patterns (`.agents/skills/react/SKILL.md`).
-- **Supabase**: Edge Function and Database workflows (`.agents/skills/supabase/SKILL.md`).
+See `.agent/rules/skills/` for specific workflow skills:
+- **React**: Component creation and modern React patterns (`.agent/rules/skills/react/SKILL.md`).
+- **Supabase**: Edge Function and Database workflows (`.agent/rules/skills/supabase/SKILL.md`).

@@ -1,6 +1,7 @@
 ---
-trigger: pre-push
+trigger: always_on
 ---
+
 # Pre-Push Hook
 
 This hook runs before pushing code to the repository.

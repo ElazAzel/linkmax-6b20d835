@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Internal Optimization (Agent Rules — 2026-02-20)
+- **Agent Roles and Skills Structure**: Relocated the `.agents` directory items into `.agent/rules` to streamline agent context and maintain explicit localization.
+- **Config Re-alignment**: Re-aligned `ANTIGRAVITY_CONFIG.md` to refer directly to `.agent/rules` over deprecated paths, safely deleting `.agents`.
+
 ### Added (Infrastructure — 2026-02-18)
 - **Pixel Proxy**: New `pixel-proxy` edge function forwarding events server-side to Facebook CAPI, TikTok Events API, and GA4 Measurement Protocol — bypasses ad-blockers for ~30-40% event recapture.
 - **Dual Pixel Firing**: `TrackingScripts.tsx` now fires both client-side pixel + server-side `sendBeacon` to `/functions/v1/pixel-proxy` for all events (PageView, Lead, Purchase, InitiateCheckout).
