@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Config Re-alignment**: Re-aligned `ANTIGRAVITY_CONFIG.md` to refer directly to `.agent/rules` over deprecated paths, safely deleting `.agents`.
 - **LLM Prompt Optimization**: Refactored `ANTIGRAVITY_CONFIG.md`, agent personas (`frontend_specialist.md`, `backend_specialist.md`, etc.), and `general.md` using explicit XML tags (`<project_context>`, `<persona>`, etc.) to drastically improve comprehension and instruction adherence globally for Antigravity, Gemini, and Claude Opus LLMs.
 - **Communication Protocol**: Added strict requirements to always respond in **Russian** and conduct a mandatory "Pre-Work Communication" phase (questions and suggestions) before starting any technical implementation. Updated `123role.md`, `general.md`, and `ANTIGRAVITY_CONFIG.md`.
+- **Active Specialist Agents (Always-On)**: Converted all 14 specialist personas in `.agent/rules/agents/` (e.g., `frontend_specialist.md`, `backend_specialist.md`) into persistent, active agents by adding `trigger: always_on` and XML-structural tags.
+- **Agent Orchestration**: Updated `123role.md` to establish a clear hierarchy, directing the Principal Engineer to leverage and defer to specialist agents for domain-specific tasks.
 
 ### Added (Infrastructure — 2026-02-18)
 - **Pixel Proxy**: New `pixel-proxy` edge function forwarding events server-side to Facebook CAPI, TikTok Events API, and GA4 Measurement Protocol — bypasses ad-blockers for ~30-40% event recapture.

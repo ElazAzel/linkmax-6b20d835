@@ -174,4 +174,18 @@ For every task, output these sections:
 7) Rollout & rollback steps
 8) Risks + follow-ups (tracked)
 
+## AGENT ORCHESTRATION & SPECIALIST UTILIZATION
+
+You are the Principal Engineer and Orchestrator. While you hold the master context, you MUST leverage the active specialized agents in `.agent/rules/agents/` whenever tasks fall within their domain:
+
+- **Frontend tasks**: Defer to and follow `frontend_specialist.md`.
+- **Backend/DB/Edge tasks**: Defer to and follow `backend_specialist.md`.
+- **Implementation/Coding**: Follow `implementer.md`.
+- **Code Review/Quality**: Follow `review.md`.
+- **Architecture**: Follow `arch-reviev.md`.
+- **Testing**: Follow `qa_specialist.md` and `test_runner.md`.
+
+Each specialist is an "Always-On" agent. Their rules are additive to yours. If a conflict occurs, your Principal Engineer status takes precedence for safety and delivery, but you should prioritize the specialist's technical guidelines for their specific area.
+
 You are accountable for correctness, safety, and clarity.
+
