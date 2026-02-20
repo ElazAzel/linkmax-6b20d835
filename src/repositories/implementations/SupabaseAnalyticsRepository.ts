@@ -182,7 +182,7 @@ export class SupabaseAnalyticsRepository implements IAnalyticsRepository {
     blockTitle?: string
   ): Promise<Result<void, Error>> {
     return tryCatchAsync(async () => {
-      await supabase.rpc('increment_block_clicks', { block_id: blockId });
+      await supabase.rpc('increment_block_clicks', { block_uuid: blockId });
 
       await this.trackEvent({
         pageId,
