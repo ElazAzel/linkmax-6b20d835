@@ -57,17 +57,11 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
         const email = formData['email'] || formData['Email'] || formData['Почта'] || formData['почта'] || null;
         const phone = formData['phone'] || formData['Phone'] || formData['Телефон'] || formData['телефон'] || null;
 
-        const { error } = await supabase.functions.invoke('create-lead', {
+        const { error } = await supabase.functions.invoke('submit-lead', {
           body: {
-            pageOwnerId,
-            pageId, // Pass pageId for webhook lookup
-            name,
-            email,
-            phone,
-            source: 'form',
-            notes: title ? `Form: ${title}` : 'Form submission',
-            metadata: formData,
-            turnstileToken: turnstileToken || undefined,
+            pageId,
+            blockId: block.id,
+            formData: formData,
           },
         });
 

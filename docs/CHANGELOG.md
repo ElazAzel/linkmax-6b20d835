@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (Strategy & Expansion — 2026-02-20)
+- **Template Builder (Admin Panel)**: Created `/admin/templates` with a visual Block Editor. Admins can now orchestrate, save, and tag layout structures directly to the `page_templates` database.
+- **CRM & Lead Collection (Inbox)**: Upgraded Form blocks to securely capture user submissions into a centralized `leads` table. Creators can now view and manage these natively within the DashboardV2 "Leads" tab.
+- **Advanced Analytics**: Enhanced the Insights tab to calculate and display Click-Through-Rates (CTR = clicks / views * 100) dynamically per block, handling edge cases to prevent NaN errors.
+- **Custom Domains (Pro Feature)**: Rolled out foundational database schema (`custom_domain` column) and UI inside PageSettingsTab for Pro users to configure their own domains.
+- **Telegram Webhook Stability**: Resolved persistent webhook crashes on non-existent users by migrating from `.single()` to `.maybeSingle()`.
+
 ### Fixed (Block Editor & Analytics Audit — 2026-02-20)
 - **Editor Responsiveness & Adaptation**: Fixed squashed blocks on Desktop by adding `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `GridEditor.tsx`. Adjusted Mobile Drawer sizing to prevent overflow clipping.
 - **Mobile Edit Modal Failures**: Removed overlapping restrictive touch events in `GridEditor.tsx` that previously swallowed tap events on iOS/Android devices, ensuring the block editor opens reliably 100% of the time.

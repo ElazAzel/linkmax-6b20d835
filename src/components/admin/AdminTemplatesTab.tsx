@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 
 export function AdminTemplatesTab() {
     const { t, i18n } = useTranslation();
-    const router = useRouter();
+    const navigate = useNavigate();
     const { data: templates, isLoading, isFetching, refetch, deleteTemplate, updateTemplateStatus } = useAdminTemplates();
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -34,7 +34,7 @@ export function AdminTemplatesTab() {
         if (!templates) return [];
         return templates.filter(t =>
             t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            t.category.toLowerCase().includes(searchQuery.toLowerCase())
+            (t.niches && t.niches.join(', ').toLowerCase().includes(searchQuery.toLowerCase()))
         );
     }, [templates, searchQuery]);
 
@@ -88,7 +88,7 @@ export function AdminTemplatesTab() {
                         <RefreshCw className={`h-4 w-4 mr-2 ${isFetching ? 'animate-spin' : ''}`} />
                         {t('admin.refresh', 'Refresh')}
                     </Button>
-                    <Button onClick={() => router.push('/admin/templates/new')}>
+                    <Button onClick={() => navigate('/admin/templates/new')}>
                         <Plus className="h-4 w-4 mr-2" />
                         {t('admin.createTemplate', 'Create Template')}
                     </Button>
@@ -101,7 +101,7 @@ export function AdminTemplatesTab() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>{t('admin.templateName', 'Name')}</TableHead>
-                                <TableHead>{t('admin.category', 'Category')}</TableHead>
+                                <TableHead>{t('admin.niches', 'Niches')}</TableHead>
                                 <TableHead>{t('admin.status', 'Status')}</TableHead>
                                 <TableHead>{t('admin.created', 'Created')}</TableHead>
                                 <TableHead>{t('admin.actions', 'Actions')}</TableHead>
@@ -130,7 +130,14 @@ export function AdminTemplatesTab() {
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant="outline">{template.category}</Badge>
+                                        <div className="flex gap-1 flex-wrap">
+                                            {template.niches?.map((niche: string) => (
+                                                <Badge key={niche} variant="outline">{niche}</Badge>
+                                            ))}
+                                            {(!template.niches || template.niches.length === 0) && (
+                                                <span className="text-xs text-muted-foreground">--</span>
+                                            )}
+                                        </div>
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
@@ -151,7 +158,7 @@ export function AdminTemplatesTab() {
                                             <Button
                                                 size="sm"
                                                 variant="ghost"
-                                                onClick={() => router.push(`/admin/templates/${template.id}`)}
+                                                onClick={() => navigate(`/admin/templates/${template.id}`)}
                                             >
                                                 <Edit className="h-4 w-4" />
                                             </Button>

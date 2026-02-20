@@ -216,8 +216,9 @@ export function usePageAnalytics() {
 
       // Calculate CTR (clicks / total page views)
       blockStatsMap.forEach(stats => {
-        stats.views = totalViews;
+        stats.views = totalViews || 0;
         stats.ctr = totalViews > 0 ? (stats.clicks / totalViews) * 100 : 0;
+        if (isNaN(stats.ctr)) stats.ctr = 0;
       });
 
       const topBlocks = Array.from(blockStatsMap.values())

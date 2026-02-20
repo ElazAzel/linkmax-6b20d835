@@ -76,14 +76,14 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | Analytics | Basic (7 days) | Full (30 days + heatmaps) |
 | CRM/Leads | View only | Full management |
 | Remove watermark | No | Yes |
-| Custom domain | Planned | Planned |
+| Custom domain | No | Yes |
 
 **Dashboard sections (DashboardV2):**
 - **Editor** — Block management, drag-drop reordering, inline editing
-- **Analytics (Insights)** — Views, clicks, conversions, period comparison
-- **CRM (Inbox)** — Leads, bookings, event registrations
-- **Settings** — Page settings (slug, SEO) and Account settings (profile, billing)
-- **Templates** — Apply pre-made designs (empty pages only)
+- **Analytics (Insights)** — Views, clicks, conversions, advanced block CTR
+- **CRM (Leads)** — Centralized inbox for form leads, bookings, and registrations
+- **Settings** — Page settings (slug, SEO, domains) and Account settings (profile, billing)
+- **Templates** — Apply pre-made designs created by admins in `page_templates`
 - **History** — Version rollback (pages with content)
 
 **Multi-page management:**

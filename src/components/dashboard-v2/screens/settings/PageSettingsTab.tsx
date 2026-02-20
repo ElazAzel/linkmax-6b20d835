@@ -11,9 +11,11 @@ import {
     LayoutTemplate,
     Store,
     ChevronRight,
+    Globe,
     Crown,
     Sparkles,
 } from 'lucide-react';
+import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -30,6 +32,7 @@ interface PageSettingsTabProps {
     // Page info
     pageTitle?: string;
     pageSlug?: string;
+    customDomain?: string;
     isPaid?: boolean;
     isPrimaryPaid?: boolean;
     isPremium: boolean;
@@ -44,6 +47,7 @@ interface PageSettingsTabProps {
 
     // Actions
     onUpdateSlug?: (slug: string) => Promise<{ success: boolean; error?: string }>;
+    onUpdateCustomDomain?: (domain: string) => Promise<{ success: boolean; error?: string }>;
     onUpdateSeo?: (seo: { title?: string; description?: string }) => void;
     onToggleIndexable?: (indexable: boolean) => void;
     onNicheChange: (niche: Niche) => void;
@@ -57,6 +61,7 @@ interface PageSettingsTabProps {
 export const PageSettingsTab = memo(function PageSettingsTab({
     pageTitle,
     pageSlug,
+    customDomain,
     isPaid,
     isPrimaryPaid,
     isPremium,
@@ -67,6 +72,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     avatarUrl,
     displayName,
     onUpdateSlug,
+    onUpdateCustomDomain,
     onUpdateSeo,
     onToggleIndexable,
     onNicheChange,
@@ -81,6 +87,10 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     const [slugInput, setSlugInput] = useState(pageSlug || '');
     const [slugSaving, setSlugSaving] = useState(false);
     const [slugError, setSlugError] = useState<string | null>(null);
+
+    const [domainInput, setDomainInput] = useState(customDomain || '');
+    const [domainSaving, setDomainSaving] = useState(false);
+    const [domainError, setDomainError] = useState<string | null>(null);
     const [seoTitleInput, setSeoTitleInput] = useState(seoTitle || '');
     const [seoDescInput, setSeoDescInput] = useState(seoDescription || '');
 
@@ -105,6 +115,30 @@ export const PageSettingsTab = memo(function PageSettingsTab({
         }
 
         setSlugSaving(false);
+    };
+
+    const handleSaveDomain = async () => {
+        if (!onUpdateCustomDomain || domainInput === customDomain) return;
+
+        // Basic domain validation (e.g., example.com, sub.example.co.uk)
+        const domainRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i;
+        if (domainInput && !domainRegex.test(domainInput)) {
+            setDomainError(t('dashboard.pageSettings.domainInvalid', 'Please enter a valid domain (e.g. yourdomain.com)'));
+            return;
+        }
+
+        setDomainSaving(true);
+        setDomainError(null);
+
+        const result = await onUpdateCustomDomain(domainInput);
+
+        if (!result.success) {
+            setDomainError(t(`dashboard.pageSettings.errors.${result.error}`, 'Failed to update domain'));
+        } else {
+            toast.success(t('common.saved', 'Сохранено'));
+        }
+
+        setDomainSaving(false);
     };
 
     const handleSaveSeo = () => {
@@ -225,8 +259,75 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             </p>
                         )}
                         <p className="text-xs text-muted-foreground">
-                            {t('dashboard.pageSettings.slugHint', 'Changing this will update your public URL')}
                         </p>
+                    </div>
+                </Card>
+            </div>
+
+            {/* Custom Domain (PRO) */}
+            <div className="space-y-2">
+                <div className="flex items-center gap-2 px-1">
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                        {t('dashboard.pageSettings.customDomain', 'Custom Domain')}
+                    </h3>
+                    {!isPremium && <Badge variant="secondary" className="text-[10px] uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                </div>
+
+                <Card className={cn("p-4 space-y-4", !isPremium && "opacity-60 cursor-not-allowed relative")}>
+                    {!isPremium && (
+                        <div className="absolute inset-0 z-10" onClick={onUpgradePage} />
+                    )}
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                            <Globe className="w-4 h-4" />
+                            {t('dashboard.pageSettings.yourDomain', 'Your Domain')}
+                        </Label>
+                        <div className="flex gap-2">
+                            <Input
+                                value={domainInput}
+                                onChange={(e) => {
+                                    setDomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9.-]/g, ''));
+                                    setDomainError(null);
+                                }}
+                                className="h-12 rounded-xl"
+                                placeholder="ivan.ru"
+                                disabled={!isPremium}
+                            />
+                            <Button
+                                onClick={handleSaveDomain}
+                                disabled={domainSaving || domainInput === customDomain || !onUpdateCustomDomain || !isPremium}
+                                className="h-12 px-5 rounded-xl"
+                            >
+                                {domainSaving ? '...' : <Check className="w-5 h-5" />}
+                            </Button>
+                        </div>
+                        {domainError && (
+                            <p className="text-sm text-destructive flex items-center gap-1">
+                                <AlertTriangle className="w-4 h-4" />
+                                {domainError}
+                            </p>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-2">
+                            {t('dashboard.pageSettings.domainHint', 'Add a CNAME record in your DNS provider pointing to lnkmx.my')}
+                        </p>
+
+                        {/* CNAME instructions box */}
+                        {isPremium && domainInput && domainInput !== '' && (
+                            <div className="mt-3 bg-muted/50 rounded-lg p-3 border border-border">
+                                <p className="text-xs font-medium mb-2">{t('dashboard.pageSettings.dnsConfig', 'Set this DNS Record:')}</p>
+                                <div className="grid grid-cols-3 gap-2 text-xs">
+                                    <div className="text-muted-foreground">Type</div>
+                                    <div className="text-muted-foreground">Name</div>
+                                    <div className="text-muted-foreground">Value</div>
+
+                                    <div className="font-mono bg-background px-2 py-1 rounded">CNAME</div>
+                                    <div className="font-mono bg-background px-2 py-1 rounded truncate">
+                                        {domainInput.split('.').length > 2 ? domainInput.split('.')[0] : '@'}
+                                    </div>
+                                    <div className="font-mono bg-background px-2 py-1 rounded">lnkmx.my</div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </Card>
             </div>

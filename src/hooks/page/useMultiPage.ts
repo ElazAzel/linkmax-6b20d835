@@ -22,6 +22,7 @@ export interface UserPage {
   updatedAt: string;
   createdAt: string;
   previewUrl?: string;
+  custom_domain?: string | null;
 }
 
 export interface PageLimits {
@@ -53,6 +54,7 @@ interface PageRow {
   updated_at: string | null;
   created_at: string | null;
   preview_url: string | null;
+  custom_domain?: string | null;
 }
 
 // ============= Constants =============
@@ -114,6 +116,7 @@ export function useMultiPage() {
         updatedAt: p.updated_at || '',
         createdAt: p.created_at || '',
         previewUrl: p.preview_url ?? undefined,
+        custom_domain: p.custom_domain,
       }));
 
       setPages(userPages);

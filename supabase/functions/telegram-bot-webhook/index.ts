@@ -105,7 +105,7 @@ async function getUserLanguage(supabase: any, chatId: string): Promise<Language>
       .from('user_profiles')
       .select('telegram_language')
       .eq('telegram_chat_id', chatId)
-      .single();
+      .maybeSingle();
 
     if (!error && data?.telegram_language) {
       return data.telegram_language as Language;
@@ -130,7 +130,7 @@ async function setUserLanguage(supabase: any, chatId: string, language: Language
       .from('user_profiles')
       .select('id')
       .eq('telegram_chat_id', chatId)
-      .single();
+      .maybeSingle();
 
     if (existingUser) {
       await supabase

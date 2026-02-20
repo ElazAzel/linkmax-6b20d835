@@ -46,16 +46,18 @@ interface SettingsScreenProps {
   // Page info (for page settings)
   pageTitle?: string;
   pageSlug?: string;
+  customDomain?: string;
   isPaid?: boolean;
   isPrimaryPaid?: boolean;
   seoTitle?: string;
   seoDescription?: string;
   isIndexable?: boolean;
   onUpdateSlug?: (slug: string) => Promise<{ success: boolean; error?: string }>;
+  onUpdateCustomDomain?: (domain: string) => Promise<{ success: boolean; error?: string }>;
   onUpdateSeo?: (seo: { title?: string; description?: string }) => void;
   onUpdateIntegrations?: (integrations: PageIntegrations) => void;
   integrations?: PageIntegrations;
-  onToggleIndexable?: (indexable: boolean) => void;
+  onToggleIndexable?: (index: boolean) => void;
   onUpgradePage?: () => void;
 
   // Actions
@@ -74,6 +76,28 @@ interface SettingsScreenProps {
 export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreenProps) {
   const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState<'page' | 'account'>('page');
+
+  const {
+    pageTitle,
+    pageSlug,
+    customDomain,
+    isPaid,
+    isPrimaryPaid,
+    seoTitle,
+    seoDescription,
+    isIndexable,
+    onUpdateSlug,
+    onUpdateCustomDomain,
+    onUpdateSeo,
+    onToggleIndexable,
+    niche,
+    onNicheChange,
+    onUpgradePage,
+    onOpenTheme,
+    onOpenTemplates,
+    onOpenMarketplace,
+    onOpenAIBuilder,
+  } = props;
 
   const avatarUrl = props.profileBlock?.avatar;
   const rawName = props.profileBlock?.name;
@@ -109,26 +133,28 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
           {/* Page Settings Tab */}
           <TabsContent value="page" className="mt-0 space-y-6">
             <PageSettingsTab
-              pageTitle={props.pageTitle}
-              pageSlug={props.pageSlug}
-              isPaid={props.isPaid}
-              isPrimaryPaid={props.isPrimaryPaid}
+              pageTitle={pageTitle}
+              pageSlug={pageSlug}
+              customDomain={customDomain}
+              isPaid={isPaid}
+              isPrimaryPaid={isPrimaryPaid}
               isPremium={props.isPremium}
-              seoTitle={props.seoTitle}
-              seoDescription={props.seoDescription}
-              isIndexable={props.isIndexable}
-              niche={props.niche}
+              seoTitle={seoTitle}
+              seoDescription={seoDescription}
+              isIndexable={isIndexable}
+              niche={niche}
               avatarUrl={avatarUrl}
               displayName={displayName}
-              onUpdateSlug={props.onUpdateSlug}
-              onUpdateSeo={props.onUpdateSeo}
-              onToggleIndexable={props.onToggleIndexable}
-              onNicheChange={props.onNicheChange}
-              onUpgradePage={props.onUpgradePage}
-              onOpenTheme={props.onOpenTheme}
-              onOpenTemplates={props.onOpenTemplates}
-              onOpenMarketplace={props.onOpenMarketplace}
-              onOpenAIBuilder={props.onOpenAIBuilder}
+              onUpdateSlug={onUpdateSlug}
+              onUpdateCustomDomain={onUpdateCustomDomain}
+              onUpdateSeo={onUpdateSeo}
+              onToggleIndexable={onToggleIndexable}
+              onNicheChange={onNicheChange}
+              onUpgradePage={onUpgradePage}
+              onOpenTheme={onOpenTheme}
+              onOpenTemplates={onOpenTemplates}
+              onOpenMarketplace={onOpenMarketplace}
+              onOpenAIBuilder={onOpenAIBuilder}
             />
           </TabsContent>
 

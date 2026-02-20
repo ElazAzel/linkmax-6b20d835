@@ -21,7 +21,7 @@ interface TemplateData {
     id?: string;
     name: string;
     description: string;
-    category: TemplateCategoryKey;
+    niches: string[];
     is_premium: boolean;
     is_public: boolean;
     preview_image: string;
@@ -32,7 +32,7 @@ interface TemplateData {
 const DEFAULT_TEMPLATE: TemplateData = {
     name: '',
     description: '',
-    category: 'other',
+    niches: [],
     is_premium: false,
     is_public: false,
     preview_image: '',
@@ -59,7 +59,7 @@ export default function AdminTemplateEditor() {
     async function fetchTemplate(templateId: string) {
         try {
             const { data, error } = await (supabase as any)
-                .from('templates')
+                .from('page_templates')
                 .select('*')
                 .eq('id', templateId)
                 .single();
@@ -71,7 +71,7 @@ export default function AdminTemplateEditor() {
                     id: d.id,
                     name: d.name,
                     description: d.description || '',
-                    category: d.category as TemplateCategoryKey,
+                    niches: d.niches || [],
                     is_premium: d.is_premium,
                     is_public: d.is_public,
                     preview_image: d.preview_image || '',
@@ -99,7 +99,7 @@ export default function AdminTemplateEditor() {
             const payload = {
                 name: data.name,
                 description: data.description,
-                category: data.category,
+                niches: data.niches,
                 is_premium: data.is_premium,
                 is_public: data.is_public,
                 preview_image: data.preview_image,
@@ -110,14 +110,14 @@ export default function AdminTemplateEditor() {
 
             if (id && id !== 'new') {
                 const { error } = await (supabase as any)
-                    .from('templates')
+                    .from('page_templates')
                     .update(payload)
                     .eq('id', id);
                 if (error) throw error;
                 toast.success(t('admin.templateUpdated', 'Template updated'));
             } else {
                 const { error } = await (supabase as any)
-                    .from('templates')
+                    .from('page_templates')
                     .insert(payload);
                 if (error) throw error;
                 toast.success(t('admin.templateCreated', 'Template created'));
@@ -211,22 +211,12 @@ export default function AdminTemplateEditor() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label>{t('admin.category', 'Category')}</Label>
-                                <Select
-                                    value={data.category}
-                                    onValueChange={(val: TemplateCategoryKey) => setData(prev => ({ ...prev, category: val }))}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {TEMPLATE_CATEGORY_KEYS.map((key) => (
-                                            <SelectItem key={key} value={key}>
-                                                {getTemplateCategoryLabel(t, key)}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                <Label>{t('admin.niches', 'Niches')}</Label>
+                                <Input
+                                    value={data.niches.join(', ')}
+                                    onChange={e => setData(prev => ({ ...prev, niches: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))}
+                                    placeholder="e.g. fitness, beauty, creator"
+                                />
                             </div>
 
                             <div className="space-y-2">

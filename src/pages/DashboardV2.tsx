@@ -15,6 +15,7 @@ import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
 
 // SEO
+import { supabase } from '@/platform/supabase/client';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 
 // Dashboard v2 components
@@ -34,6 +35,7 @@ const MonetizeScreen = lazy(() => import('@/components/dashboard-v2/screens/Mone
 const SettingsScreen = lazy(() => import('@/components/dashboard-v2/screens/SettingsScreen').then(m => ({ default: m.SettingsScreen })));
 const EventsScreen = lazy(() => import('@/components/dashboard-v2/screens/EventsScreen').then(m => ({ default: m.EventsScreen })));
 const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/EventDetailScreen').then(m => ({ default: m.EventDetailScreen })));
+const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -81,7 +83,7 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads';
 
 export default function DashboardV2() {
   const navigate = useNavigate();
@@ -127,13 +129,13 @@ export default function DashboardV2() {
     }
     // First check query params
     const tabParam = searchParams.get('tab') as TabId;
-    if (tabParam && ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events'].includes(tabParam)) {
+    if (tabParam && ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads'].includes(tabParam)) {
       return tabParam;
     }
     // Fall back to pathname
     const pathParts = location.pathname.split('/');
     const lastPart = pathParts[pathParts.length - 1];
-    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events'].includes(lastPart)) {
+    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads'].includes(lastPart)) {
       return lastPart as TabId;
     }
     return 'home';
@@ -510,12 +512,24 @@ export default function DashboardV2() {
                 // Page settings props
                 pageTitle={multiPage.activePage?.title}
                 pageSlug={multiPage.activePage?.slug}
+                customDomain={(multiPage.activePage as any)?.custom_domain}
                 isPaid={multiPage.activePage?.isPaid}
                 isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
                 seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
                 seoDescription={(dashboard.pageData?.seo as { description?: string })?.description}
                 isIndexable={dashboard.pageData?.isIndexable}
                 onUpdateSlug={async (slug) => multiPage.updatePageSlug(multiPage.activePageId || '', slug)}
+                onUpdateCustomDomain={async (domain) => {
+                  const result = await multiPage.updatePageCustomDomain(multiPage.activePageId || '', domain);
+                  if (result.success) {
+                    try {
+                      await multiPage.loadPages();
+                    } catch (e) {
+                      console.error(e)
+                    }
+                  }
+                  return result;
+                }}
                 onUpdateSeo={(seo) => {
                   dashboard.updatePageDataPartial({
                     seo: { ...dashboard.pageData?.seo, ...seo },
@@ -541,6 +555,11 @@ export default function DashboardV2() {
               ) : (
                 <EventsScreen />
               )
+            )}
+
+            {/* Leads Screen */}
+            {currentTab === 'leads' && (
+              <LeadsScreen />
             )}
           </Suspense>
         </DashboardLayout>

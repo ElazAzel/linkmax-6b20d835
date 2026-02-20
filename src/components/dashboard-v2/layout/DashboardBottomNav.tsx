@@ -4,7 +4,7 @@
  */
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Home, PenTool, Inbox, Calendar, Settings } from 'lucide-react';
+import { Home, PenTool, Inbox, Calendar, Settings, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 
@@ -51,6 +51,20 @@ const TABS: NavTab[] = [
     labelKey: 'dashboard.nav.events',
     defaultLabel: 'События',
     path: '/dashboard/events',
+  },
+  {
+    id: 'insights',
+    icon: BarChart3,
+    labelKey: 'dashboard.nav.insights',
+    defaultLabel: 'Аналитика',
+    path: '/dashboard/insights',
+  },
+  {
+    id: 'leads',
+    icon: Inbox,
+    labelKey: 'dashboard.nav.leads',
+    defaultLabel: 'Лиды',
+    path: '/dashboard/leads',
   },
   {
     id: 'settings',
