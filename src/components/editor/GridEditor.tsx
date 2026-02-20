@@ -18,7 +18,7 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
-  rectSortingStrategy,
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
@@ -165,36 +165,23 @@ function SortableGridBlockItem({
         !isFrameless && 'min-h-[140px]',
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]'
       )}
-    // Removed listeners from main container to separate drag and click
     >
-      {/* Mobile Drag Handle - Always visible overlay */}
-      {isMobile && (
-        <div
-          className="absolute top-0 right-0 z-40 p-3 touch-none"
-          {...attributes}
-          {...listeners}
-        >
-          <div className="bg-background/80 backdrop-blur-md p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
-            <GripVertical className="h-5 w-5 text-muted-foreground" />
-          </div>
+      {/* Drag Handle - top-left on mobile, visible; top-left on desktop, hover */}
+      <div
+        className={cn(
+          "absolute top-2 left-2 z-40 touch-none",
+          isMobile
+            ? "opacity-100"
+            : "cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity",
+          isDragging && "opacity-0"
+        )}
+        {...attributes}
+        {...listeners}
+      >
+        <div className="bg-background/80 backdrop-blur-md p-2 rounded-xl border border-border/10 shadow-sm active:scale-95 transition-transform">
+          <GripVertical className="h-5 w-5 text-muted-foreground" />
         </div>
-      )}
-
-      {/* Desktop Drag Handle - Hover only */}
-      {!isMobile && (
-        <div
-          className={cn(
-            "absolute top-2 left-2 z-30 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity touch-none",
-            isDragging && "opacity-0"
-          )}
-          {...attributes}
-          {...listeners}
-        >
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-1.5 shadow-sm border border-border/10">
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* Block Content */}
       <div className="w-full h-full relative z-0">
@@ -202,7 +189,7 @@ function SortableGridBlockItem({
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay - High z-index to capture all taps/clicks */}
+        {/* Click Overlay - captures taps/clicks to open editor */}
         <div
           className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10"
           onClick={(e) => {
@@ -210,21 +197,20 @@ function SortableGridBlockItem({
             e.stopPropagation();
             onEdit(block);
           }}
+          onTouchEnd={(e) => {
+            // Ensure tap works on mobile even with DnD sensors
+            e.stopPropagation();
+          }}
           role="button"
           tabIndex={0}
           aria-label={`Edit ${block.type} block`}
         />
       </div>
 
-      {/* Edit/Delete Controls */}
+      {/* Edit/Delete Controls - top-right, visible on mobile too */}
       <div className={cn(
         "absolute top-2 right-2 flex gap-1.5 z-30 transition-opacity",
-        // On mobile, positioned slightly differently to avoid conflict with drag handle if needed
-        // But with dedicated handle, we can position them nicely.
-        // Let's hide them on Mobile because tapping the block opens the editor anyway
-        // or keep them but ensure no overlap.
-        // Current design: Mobile handles separate.
-        isMobile ? "hidden" : "opacity-0 group-hover:opacity-100"
+        isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
       )}>
         <Button
           size="sm"
@@ -232,7 +218,11 @@ function SortableGridBlockItem({
           className="h-8 w-8 p-0 rounded-lg shadow-sm"
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
             onEdit(block);
+          }}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
           }}
         >
           <Edit2 className="h-4 w-4" />
@@ -243,16 +233,16 @@ function SortableGridBlockItem({
           className="h-8 w-8 p-0 rounded-lg shadow-sm"
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
             onDelete(block.id);
+          }}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
           }}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
-
-      {/* Mobile Actions Hint (Since we hid buttons) 
-          Actually, let's just let the tap open the editor.
-      */}
     </div>
   );
 }
@@ -384,11 +374,11 @@ export const GridEditor = memo(function GridEditor({
       >
         <SortableContext
           items={contentBlocks.map(b => b.id)}
-          strategy={rectSortingStrategy}
+          strategy={verticalListSortingStrategy}
         >
-          {contentBlocks.map((block, index) => (
-            <div key={block.id}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grid-flow-row-dense">
+          <div className="space-y-2">
+            {contentBlocks.map((block, index) => (
+              <div key={block.id}>
                 <SortableGridBlockItem
                   block={block}
                   onEdit={onEditBlock}
@@ -397,21 +387,21 @@ export const GridEditor = memo(function GridEditor({
                   premiumTier={premiumTier}
                   isMobile={isMobile}
                 />
-              </div>
 
-              {/* Insert divider after each block */}
-              {index < contentBlocks.length - 1 && (
-                <InsertBetweenDivider
-                  position={index + 1}
-                  onInsert={handleInsertBlock}
-                  isPremium={isPremium}
-                  currentTier={currentTier}
-                  currentBlockCount={blocks.length}
-                  isMobile={isMobile}
-                />
-              )}
-            </div>
-          ))}
+                {/* Insert divider after each block */}
+                {index < contentBlocks.length - 1 && (
+                  <InsertBetweenDivider
+                    position={index + 1}
+                    onInsert={handleInsertBlock}
+                    isPremium={isPremium}
+                    currentTier={currentTier}
+                    currentBlockCount={blocks.length}
+                    isMobile={isMobile}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </SortableContext>
 
         <DragOverlay adjustScale={true}>
