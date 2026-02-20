@@ -18,4 +18,7 @@
     -   Use **Shadcn UI** components whenever possible.
     -   Use **Tailwind CSS** for styling.
     -   **No raw CSS** unless strictly required for complex animations or overrides not feasible in Tailwind.
+8.  **Communication**:
+    -   **Language**: All communication must be in **Russian**.
+    -   **Pre-execution Protocol**: Always ask clarifying questions and provide suggestions/alternatives to the user's request. Wait for approval of the approach before starting implementation.
 </project_rules>

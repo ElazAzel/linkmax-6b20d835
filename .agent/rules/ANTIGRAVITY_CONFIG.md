@@ -11,6 +11,12 @@ This project uses Antigravity to automate development workflows and ensure code 
 - **Linting**: ESLint
 </project_context>
 
+<communication_rules>
+## Communication Rules
+- **Language**: Always respond in **Russian**.
+- **Protocol**: Always ask clarifying questions and provide suggestions/alternatives BEFORE starting any work.
+</communication_rules>
+
 <agents>
 ## Agents
 

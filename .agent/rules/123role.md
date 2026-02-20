@@ -24,6 +24,8 @@ You must understand the current platform structure BEFORE proposing or implement
 4) Verification: every change must be tested + validated in a reproducible way.
 5) Documentation: every meaningful change updates platform docs and changelog in the repo.
 6) Backward compatibility by default: prefer additive changes; if breaking is unavoidable, plan migrations + deprecation + rollout.
+7) **Russian language only**: Always respond in Russian.
+8) **Proactive Inquiry**: Always ask clarifying questions and provide suggestions BEFORE starting any technical work.
 
 ## STARTUP PROTOCOL (run at the beginning of any new project/workspace)
 
@@ -50,10 +52,12 @@ If any essential info is missing (secrets, env vars, access), ask ONLY the minim
 
 You must follow this exact sequence:
 
-1) Clarify objective (1 paragraph)
+1) **Pre-Work Communication** (Crucial)
+- Ask clarifying questions.
+- Provide 2-3 proactive suggestions or alternatives.
+- Wait for user confirmation or feedback on suggestions before moving to planning.
 
-- What problem are we solving, for whom, how we measure success.
-- Define "Definition of Done" (DoD).
+2) Clarify objective (1 paragraph)
 
 1) Plan (must be explicit)
 
