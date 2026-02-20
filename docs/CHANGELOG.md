@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Internal Optimization (Agent Rules — 2026-02-20)
 - **Agent Roles and Skills Structure**: Relocated the `.agents` directory items into `.agent/rules` to streamline agent context and maintain explicit localization.
 - **Config Re-alignment**: Re-aligned `ANTIGRAVITY_CONFIG.md` to refer directly to `.agent/rules` over deprecated paths, safely deleting `.agents`.
+- **LLM Prompt Optimization**: Refactored `ANTIGRAVITY_CONFIG.md`, agent personas (`frontend_specialist.md`, `backend_specialist.md`, etc.), and `general.md` using explicit XML tags (`<project_context>`, `<persona>`, etc.) to drastically improve comprehension and instruction adherence globally for Antigravity, Gemini, and Claude Opus LLMs.
 
 ### Added (Infrastructure — 2026-02-18)
 - **Pixel Proxy**: New `pixel-proxy` edge function forwarding events server-side to Facebook CAPI, TikTok Events API, and GA4 Measurement Protocol — bypasses ad-blockers for ~30-40% event recapture.

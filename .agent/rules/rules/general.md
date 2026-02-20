@@ -1,3 +1,4 @@
+<project_rules>
 # General Project Rules
 
 1.  **TypeScript Strict Mode**: Always use strict typing. Avoid `any` unless absolutely necessary.
@@ -17,3 +18,4 @@
     -   Use **Shadcn UI** components whenever possible.
     -   Use **Tailwind CSS** for styling.
     -   **No raw CSS** unless strictly required for complex animations or overrides not feasible in Tailwind.
+</project_rules>
