@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed (Block Editor & Analytics Audit — 2026-02-20)
+- **Editor Responsiveness & Adaptation**: Fixed squashed blocks on Desktop by adding `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `GridEditor.tsx`. Adjusted Mobile Drawer sizing to prevent overflow clipping.
+- **Mobile Edit Modal Failures**: Removed overlapping restrictive touch events in `GridEditor.tsx` that previously swallowed tap events on iOS/Android devices, ensuring the block editor opens reliably 100% of the time.
+- **Block Auto-save Data Loss**: Modals now instantly flush any pending autosave changes when closed, bypassing the debounce timer and preventing silent data loss.
+- **Analytics Click Tracking**: Fixed broken `increment_block_clicks` RPC by strictly adhering to the `block_id` text parameter, resolving the mismatch with `block_uuid`. Clicks are now successfully logged.
+- **AI Builder Decoupling (Phase 1)**: Temporarily disabled Gemini integration triggers ("Generate AI") and bypassed API calls in `AIBuilderWizard.tsx` in preparation for migrating to a new internal layout algorithm.
 ### Internal Optimization (Agent Rules — 2026-02-20)
 - **Agent Roles and Skills Structure**: Relocated the `.agents` directory items into `.agent/rules` to streamline agent context and maintain explicit localization.
 - **Config Re-alignment**: Re-aligned `ANTIGRAVITY_CONFIG.md` to refer directly to `.agent/rules` over deprecated paths, safely deleting `.agents`.

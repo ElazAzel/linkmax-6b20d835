@@ -1895,7 +1895,7 @@ export type Database = {
         Returns: boolean
       }
       increment_block_clicks: {
-        Args: { block_uuid: string }
+        Args: { block_id: string }
         Returns: undefined
       }
       increment_challenge_progress: {

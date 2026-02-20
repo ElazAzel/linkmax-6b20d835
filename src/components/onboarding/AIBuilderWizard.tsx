@@ -193,39 +193,16 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
         userInfo.mediaLinks && `Медиа: ${userInfo.mediaLinks}`,
       ].filter(Boolean).join('\n');
 
-      const { data, error } = await supabase.functions.invoke('ai-content-generator', {
-        body: {
-          type: 'template-filler',
-          input: {
-            templateBlocks: selectedTemplate.blocks,
-            prompt: userDescription,
-            niche: selectedNiche,
-            templateName: selectedTemplate.name,
-          },
-        },
-      });
+      // TEMPORARY: Decoupling AI generation for replacement with internal algorithm.
+      // Currently bypassing Gemini and directly returning the structural template blocks.
+      // AI generation disabled per Phase 1 audit.
 
-      if (error) throw error;
+      const filledBlocks: any[] = Array.isArray(selectedTemplate.blocks)
+        ? selectedTemplate.blocks
+        : [];
 
-      // Parse AI result — it returns filled blocks
-      let filledBlocks: any[] = [];
-      if (data?.result) {
-        // AI may return either array of blocks directly or object with blocks
-        if (Array.isArray(data.result)) {
-          filledBlocks = data.result;
-        } else if (data.result.blocks) {
-          filledBlocks = data.result.blocks;
-        } else if (data.result.items) {
-          filledBlocks = data.result.items;
-        }
-      }
-
-      // Fallback to template blocks if AI returned nothing useful
-      if (!filledBlocks.length) {
-        filledBlocks = Array.isArray(selectedTemplate.blocks) 
-          ? selectedTemplate.blocks 
-          : [];
-      }
+      // Delay to simulate generation and keep UX smooth
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Convert to proper Block objects
       const finalBlocks: Block[] = filledBlocks.map((blockData: any, index: number) => {

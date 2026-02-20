@@ -189,12 +189,19 @@ export function BlockEditorV2({
     const [showUnsavedDialog, setShowUnsavedDialog] = useState(false);
 
     const handleCloseAttempt = useCallback(() => {
-        if (hasUnsavedChanges) {
+        if (isSaving) return; // Prevent closing while a save is in progress
+
+        if (hasUnsavedChanges && enableAutosave) {
+            if (autosaveTimerRef.current) {
+                clearTimeout(autosaveTimerRef.current);
+            }
+            performSave(formData, true);
+        } else if (hasUnsavedChanges) {
             setShowUnsavedDialog(true);
         } else {
             onClose();
         }
-    }, [hasUnsavedChanges, onClose]);
+    }, [hasUnsavedChanges, enableAutosave, performSave, formData, onClose, isSaving]);
 
     const handleDiscard = useCallback(() => {
         setShowUnsavedDialog(false);

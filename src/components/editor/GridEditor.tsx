@@ -210,13 +210,6 @@ function SortableGridBlockItem({
             e.stopPropagation();
             onEdit(block);
           }}
-          onPointerDown={(e) => {
-            // Don't interfere with drag handles
-            if ((e.target as HTMLElement).closest('[data-drag-handle]')) return;
-          }}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
-          }}
           role="button"
           tabIndex={0}
           aria-label={`Edit ${block.type} block`}
@@ -268,7 +261,7 @@ function SortableGridBlockItem({
 function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block; isPremium?: boolean; premiumTier?: PremiumTier }) {
   const blockSize = block.blockSize || 'small';
   const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
-  const widthClass = dimensions.gridCols === 2 ? 'w-full' : 'w-1/2';
+  const widthClass = dimensions.gridCols === 2 ? 'w-full md:w-[600px]' : 'w-full md:w-[300px]';
 
   return (
     <div
@@ -395,7 +388,7 @@ export const GridEditor = memo(function GridEditor({
         >
           {contentBlocks.map((block, index) => (
             <div key={block.id}>
-              <div className="grid grid-cols-2 gap-4 grid-flow-row-dense">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grid-flow-row-dense">
                 <SortableGridBlockItem
                   block={block}
                   onEdit={onEditBlock}

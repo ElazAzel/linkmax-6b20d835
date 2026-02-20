@@ -261,10 +261,11 @@ new -> contacted -> qualified -> won/lost
 ### Edge Infrastructure
 - **Cloudflare Workers** - Handles incoming requests for SEO/bot detection and pre-rendering
 
-### AI integration
+### AI integration (Decoupling in Progress)
 
-- AI draft generation for initial page structure and copy
-- Translation for RU/EN/KK content
+- AI feature sets (Generate AI buttons) are currently decoupled.
+- Temporarily bypassing Gemini generation to fallback to static layout construction, pending deployment of new internal algorithms.
+- Translation for RU/EN/KK content using Locize logic.
 - Chatbot for visitor engagement
 
 ---
@@ -728,5 +729,5 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: February 16, 2026*
+*Last updated: February 20, 2026*
 *Maintained by: lnkmx Platform Team*

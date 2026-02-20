@@ -435,14 +435,15 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                         <Button
                             variant="outline"
                             onClick={onClose}
-                            className="flex-1 h-11 rounded-xl font-semibold border-border/50 active:scale-[0.98] transition-all"
+                            disabled={isSaving}
+                            className="flex-1 h-11 rounded-xl font-semibold border-border/50 active:scale-[0.98] transition-all disabled:opacity-50"
                         >
-                            {t('editor.cancel', 'Отмена')}
+                            {t('editor.close_or_cancel', 'Закрыть')}
                         </Button>
                         <Button
                             onClick={onSave}
                             disabled={isSaving}
-                            className="flex-[2] h-11 rounded-xl font-semibold shadow-lg shadow-primary/20 active:scale-[0.98] transition-all"
+                            className="flex-[2] h-11 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all disabled:opacity-50"
                         >
                             {isSaving ? (
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

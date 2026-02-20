@@ -68,14 +68,14 @@ export const EditorScreen = memo(function EditorScreen({
 
   const isPublished = pageData.isPublished || false;
   const blockCount = pageData.blocks.length;
-  
+
   // Count non-profile blocks to determine if user is experienced
   const contentBlockCount = pageData.blocks.filter(b => b.type !== 'profile').length;
-  
+
   // Page has content if it has more than just a profile block
-  const hasContent = pageData.blocks.length > 1 || 
+  const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
-  
+
   // Show AI builder only for new users (less than 2 content blocks)
   const showAIBuilder = contentBlockCount < 2;
 
@@ -156,7 +156,7 @@ export const EditorScreen = memo(function EditorScreen({
               {t('editor.templates', 'Шаблоны')}
             </Button>
           )}
-          
+
           {/* Show version history for pages with content */}
           {hasContent && onOpenVersions && (
             <Button
@@ -169,19 +169,7 @@ export const EditorScreen = memo(function EditorScreen({
               {t('editor.versions', 'История')}
             </Button>
           )}
-          
-          {/* Show AI builder only for new users with less than 2 content blocks */}
-          {showAIBuilder && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 rounded-xl shrink-0 gap-1.5"
-              onClick={onOpenAI}
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              {t('editor.aiGenerate', 'AI')}
-            </Button>
-          )}
+
         </div>
       </div>
 
