@@ -92,7 +92,7 @@ export function InstallPromptDialog({ open, onClose, pageUrl }: InstallPromptPro
               </TabsTrigger>
               <TabsTrigger value="desktop" className="flex items-center gap-1">
                 <Monitor className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('install.desktop', 'Desktop')}</span>
+                <span className="hidden sm:inline">{t('install.desktop.title', 'Desktop')}</span>
               </TabsTrigger>
             </TabsList>
 

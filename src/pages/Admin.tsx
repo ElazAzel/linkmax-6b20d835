@@ -80,7 +80,7 @@ export default function Admin() {
     { value: 'detailed', label: t('admin.detailed'), icon: TrendingUp },
     { value: 'tiers', label: t('admin.tiers'), icon: Crown },
     { value: 'verification', label: t('admin.verification', 'Верификация'), icon: ShieldCheck },
-    { value: 'partners', label: t('admin.partners', 'Партнёры'), icon: Handshake },
+    { value: 'partners', label: t('admin.partners.title', 'Партнёры'), icon: Handshake },
     { value: 'templates', label: t('admin.templates', 'Templates'), icon: FileText },
   ];
 

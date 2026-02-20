@@ -56,8 +56,8 @@ function extractFromCode() {
     const files = walk(path.resolve(__dirname, '../src'));
     const extracted = {};
     const patterns = [
-        /t\(['"]([^'"]+)['"](?:\s*,\s*['"]([^'"]+)['"])?/g,
-        /t\(['"]([^'"]+)['"]\s*,\s*\{\s*defaultValue:\s*['"]([^'"]+)['"]/g
+        /\bt\(['"]([^'"]+)['"](?:\s*,\s*['"]([^'"]+)['"])?/g,
+        /\bt\(['"]([^'"]+)['"]\s*,\s*\{\s*defaultValue:\s*['"]([^'"]+)['"]/g
     ];
 
     for (const f of files) {
@@ -229,9 +229,15 @@ function status() {
     for (const lang of TARGET_LANGS) {
         if (lang === BASE_LANG) continue;
         const langFlat = getFlatKeys(locales[lang]);
-        const missing = Object.keys(baseFlat).filter(k => !langFlat[k] || langFlat[k] === '').length;
+        const missingKeys = Object.keys(baseFlat).filter(k => !langFlat[k] || String(langFlat[k]).trim() === '');
+        const missing = missingKeys.length;
         const color = missing > 0 ? '\x1b[31m' : '\x1b[32m';
         console.log(`${color}${lang.toUpperCase()}: ${missing} missing${missing > 0 ? ' (run prep)' : ''}\x1b[0m`);
+        if (missing > 0 && missing < 10) {
+            console.log('   Missing samples:', missingKeys.join(', '));
+        } else if (missing >= 10) {
+            console.log('   Missing keys found (first 10):', missingKeys.slice(0, 10).join(', '));
+        }
     }
 }
 
