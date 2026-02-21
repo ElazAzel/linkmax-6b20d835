@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added (UX & i18n Finalization — 2026-02-21)
+- **Deep Translation via AI**: Wrote a custom concurrent Google Translate script to automatically translate over 3,600 Russian placeholder strings left in `en.json`, `kk.json`, and `uz.json`. The entire app is now genuinely, fully translated with zero cyrillic text showing up under non-Russian language selections.
 - **Complete Localization Coverage**: Wrapped remaining hardcoded Russian strings in the `BookingBlock`, `CustomCodeBlock`, `EventBlock`, `FreePremiumBlockGate`, and `TemplateMarketplace` components with `t()` translation calls.
 - **Queue Synchronization**: Extracted new translation keys and processed them through the `i18n-queue.json` system.
 - **Multilingual Support**: Fully translated the newly extracted UI strings into English (`en`), Kazakh (`kk`), and Uzbek (`uz`), achieving 0 missing keys across all supported languages according to the `i18n:status` check.
