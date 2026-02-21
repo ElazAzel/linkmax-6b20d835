@@ -88,13 +88,28 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                 )}
                             </div>
 
-                            <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center gap-3 text-sm font-medium"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f1', 'Everything in Free')}</span></li>
-                                <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f2', '5 AI Generations/mo')}</span></li>
-                                <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f3', 'Telegram Leads')}</span></li>
-                                <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f4', 'Advanced Analytics')}</span></li>
-                                <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f5', 'Remove Branding')}</span></li>
-                            </ul>
+                            <motion.ul
+                                className="space-y-4 mb-8 flex-1"
+                                initial="hidden"
+                                animate="visible"
+                                variants={{
+                                    hidden: { opacity: 0 },
+                                    visible: {
+                                        opacity: 1,
+                                        transition: {
+                                            staggerChildren: 0.1
+                                        }
+                                    }
+                                }}
+                            >
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.free.f1', 'Basic Blocks')}</span></motion.li>
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.free.f3', 'Basic Analytics')}</span></motion.li>
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm font-medium"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f2', '5 AI Generations/mo')}</span></motion.li>
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f3', 'Telegram Leads')}</span></motion.li>
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f4', 'Advanced Analytics')}</span></motion.li>
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f5', 'Remove Branding')}</span></motion.li>
+                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f6', 'Свой домен')}</span></motion.li>
+                            </motion.ul>
 
                             <MagneticButton className="w-full rounded-xl mb-3" onClick={() => onPlanSelect('pro')}>
                                 {t('landing.v2.pricing.pro.cta', 'Start Pro Trial')}
