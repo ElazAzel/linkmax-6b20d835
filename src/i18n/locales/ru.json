@@ -1,6 +1,6 @@
 {
   "2": {
-    "5 MB": "5 MB"
+    "5 MB": "5 МБ"
   },
   "translation": {
     "selectLanguages": "Выбрать языки",
@@ -128,8 +128,8 @@
     "optional": "опционально",
     "toHome": "На главную",
     "collapse": "Свернуть",
-    "generating": "Generating...",
-    "generate": "Generate"
+    "generating": "Создание...",
+    "generate": "Генерировать"
   },
   "fields": {
     "name": "Имя",
@@ -183,7 +183,7 @@
     "enterText": "Введите текст...",
     "fieldType": "Тип поля",
     "text": "Текст",
-    "email": "Email",
+    "email": "Электронная почта",
     "phone": "Телефон",
     "textarea": "Текстовое поле",
     "requiredField": "Обязательное поле",
@@ -264,18 +264,18 @@
     "videoUrl": "URL-адрес видео",
     "aspectRatio": "Соотношение сторон",
     "niche": "Ниша",
-    "subscribeToNewsletterPlaceholder": "Subscribe to Newsletter",
-    "newsletterDescPlaceholder": "Get the latest updates delivered to your inbox",
-    "productNamePlaceholder": "Product Name",
-    "productDescPlaceholder": "Product description...",
-    "scratchRevealPlaceholder": "Scratch to Reveal",
-    "scratchPrizePlaceholder": "🎉 You won 20% discount!",
-    "myVideoPlaceholder": "My Video",
-    "videoUrlHint": "Supports YouTube and Vimeo URLs",
-    "aspectRatio169": "16:9 (Widescreen)",
-    "aspectRatio43": "4:3 (Standard)",
-    "aspectRatio11": "1:1 (Square)",
-    "aspectRatio916": "9:16 (Vertical/Shorts)"
+    "subscribeToNewsletterPlaceholder": "Подписаться на рассылку",
+    "newsletterDescPlaceholder": "Получайте последние обновления на свой почтовый ящик",
+    "productNamePlaceholder": "Название продукта",
+    "productDescPlaceholder": "Описание продукта...",
+    "scratchRevealPlaceholder": "Царапины, чтобы раскрыть",
+    "scratchPrizePlaceholder": "🎉Вы выиграли скидку 20%!",
+    "myVideoPlaceholder": "Мое видео",
+    "videoUrlHint": "Поддерживает URL-адреса YouTube и Vimeo.",
+    "aspectRatio169": "16:9 (широкоэкранный)",
+    "aspectRatio43": "4:3 (Стандартный)",
+    "aspectRatio11": "1:1 (Квадрат)",
+    "aspectRatio916": "9:16 (Вертикаль/Шорты)"
   },
   "hints": {
     "bioLinks": "Совет: добавляйте ссылки в формате [текст](url)",
@@ -620,7 +620,7 @@
     "previewDesc": "Картинка которая показывается в галерее",
     "removePreview": "Убрать своё превью",
     "notifications": "Уведомления",
-    "emailLabel": "Email",
+    "emailLabel": "Электронная почта",
     "emailDesc": "Новые заявки на email",
     "telegramLabel": "Телеграмма",
     "telegramDesc": "Мгновенные уведомления",
@@ -686,8 +686,8 @@
       "webhookUrl": "URL-адрес веб-перехватчика (версия Pro)",
       "webhookHint": "Мы отправим POST-запрос с данными заявки",
       "fbHint": "Events Manager → Источники данных → Pixel ID",
-      "ttHint": "TikTok Ads → Assets → Events → Pixel Code",
-      "ga4Hint": "GA4 → Admin → Data Streams → Measurement ID",
+      "ttHint": "Объявления TikTok → Активы → События → Пиксельный код",
+      "ga4Hint": "GA4 → Администрирование → Потоки данных → Идентификатор измерения",
       "yandexHint": "Метрика → Настройки → Номер счётчика"
     },
     "pageBackground": "Фон страницы",
@@ -919,10 +919,10 @@
         "trust1": "Конструктор страниц",
         "trust2": "Мини-CRM",
         "trust3": "Аналитика",
-        "mobileFirst": "Mobile First",
-        "analytics": "Analytics",
-        "seoReady": "SEO Ready",
-        "scroll": "Scroll"
+        "mobileFirst": "Мобильный прежде всего",
+        "analytics": "Аналитика",
+        "seoReady": "SEO готов",
+        "scroll": "Прокрутка"
       },
       "forWhom": {
         "label": "Для тех, кому нужна простая бизнес-система:",
@@ -1041,10 +1041,10 @@
         "secondary": "Или посмотри примеры"
       },
       "seo": {
-        "howToName": "How to build a landing page with AI",
-        "howToDesc": "Create a professional page in 2 minutes",
-        "question": "What is lnkmx?",
-        "answer": "lnkmx is an AI-powered page builder for creators."
+        "howToName": "Как создать целевую страницу с помощью ИИ",
+        "howToDesc": "Создайте профессиональную страницу за 2 минуты",
+        "question": "Что такое lnkmx?",
+        "answer": "Lnkmx — это конструктор страниц для авторов на базе искусственного интеллекта."
       }
     },
     "niches": {
@@ -1552,69 +1552,69 @@
           "f6_new": "Продвинутая статистика",
           "name": "Pro"
         },
-        "aiPowered": "AI Powered"
+        "aiPowered": "Работает на искусственном интеллекте"
       },
       "testimonials": {
         "title": "Любимо",
         "count": "2000+",
         "suffix": "создателями",
         "roles": {
-          "coach": "Fitness Coach",
-          "artist": "Digital Artist",
-          "crypto": "Crypto Analyst",
-          "salon": "Beauty Salon Owner"
+          "coach": "Фитнес-тренер",
+          "artist": "Цифровой художник",
+          "crypto": "Криптоаналитик",
+          "salon": "Владелец салона красоты"
         },
         "reviews": {
-          "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it.",
-          "artist": "The aesthetics are on another level. It doesn",
-          "crypto": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
-          "salon": "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."
+          "coach": "Я настроил свою страницу за 3 минуты, находясь в спортзале. Через час появился мой первый клиент. ИИ просто это понимает.",
+          "artist": "Эстетика на другом уровне. Это не",
+          "crypto": "Прямые лиды в Telegram изменили мой рабочий процесс. Больше не нужно проверять электронную почту. Сделки закрываю в чате.",
+          "salon": "Моим клиентам нравится, насколько легко забронировать. А мне нравится аналитика. Наконец-то я знаю, откуда приходит мой трафик."
         }
       },
       "nav": {
-        "features": "Features",
-        "howItWorks": "How it Works",
-        "pricing": "Pricing",
-        "login": "Log in",
-        "getStarted": "Get Started",
-        "start": "Start",
-        "startFree": "Start for Free"
+        "features": "Функции",
+        "howItWorks": "Как это работает",
+        "pricing": "Цены",
+        "login": "Авторизоваться",
+        "getStarted": "Начать",
+        "start": "Начинать",
+        "startFree": "Начни бесплатно"
       },
       "logoTicker": {
-        "title": "Trusted by creators worldwide"
+        "title": "Нам доверяют создатели по всему миру"
       }
     },
-    "aiPowered": "AI Powered",
-    "newLead1": "New lead: Sarah K.",
-    "newLead2": "New lead: Alex M.",
-    "newLeadsToday": "+12 today",
-    "aiBuilderTitle": "AI Page Builder",
-    "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
-    "deepAnalyticsTitle": "Deep Analytics",
-    "deepAnalyticsDesc": "Track every click, view, and conversion with privacy-focused, real-time analytics.",
-    "mobileEditorTitle": "Mobile First Editor",
-    "mobileEditorDesc": "Edit your page from your phone. Full power in your pocket.",
-    "instantLeadsTitle": "Instant Leads",
-    "instantLeadsDesc": "Get leads delivered straight to Telegram. No more missing customers.",
-    "growTitle": "Everything you need to grow",
-    "growDesc": "Powerful features wrapped in a beautiful, easy-to-use interface.",
-    "chooseNiche": "Choose your niche",
-    "chooseNicheDesc": "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
-    "iAmA": "I am a...",
-    "nicheCreator": "Digital Creator",
-    "nicheFitness": "Fitness Coach",
-    "nicheCrypto": "Crypto Expert",
-    "nicheBeauty": "Beauty Blogger",
-    "nicheMusic": "Music Producer",
-    "nicheTutor": "Online Tutor",
-    "aiBuilds": "AI builds everything",
-    "aiBuildsDesc": "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
-    "aiGenerating": "AI Generating...",
-    "getLeads": "Get leads in Telegram",
-    "getLeadsDesc": "Your page is live. Leads come straight to your DM. Close them instantly.",
-    "leadMsg1": "Hey, I want to book a consultation!",
-    "leadMsg2": "Awesome! Let",
-    "newLeadCaptured": "New Lead Captured"
+    "aiPowered": "Работает на искусственном интеллекте",
+    "newLead1": "Новый ведущий: Сара К.",
+    "newLead2": "Новый ведущий: Алекс М.",
+    "newLeadsToday": "+12 сегодня",
+    "aiBuilderTitle": "Конструктор страниц с искусственным интеллектом",
+    "aiBuilderDesc": "Опишите свой бизнес, и наш ИИ создаст идеальную структуру, текст и макет за считанные секунды.",
+    "deepAnalyticsTitle": "Глубокая аналитика",
+    "deepAnalyticsDesc": "Отслеживайте каждый клик, просмотр и конверсию с помощью аналитики в реальном времени, ориентированной на конфиденциальность.",
+    "mobileEditorTitle": "Первый мобильный редактор",
+    "mobileEditorDesc": "Редактируйте свою страницу с телефона. Полная мощность в вашем кармане.",
+    "instantLeadsTitle": "Мгновенные лиды",
+    "instantLeadsDesc": "Получайте потенциальных клиентов прямо в Telegram. Больше никаких пропавших клиентов.",
+    "growTitle": "Все, что вам нужно для роста",
+    "growDesc": "Мощные функции, заключенные в красивый и простой в использовании интерфейс.",
+    "chooseNiche": "Выберите свою нишу",
+    "chooseNicheDesc": "Расскажите ИИ, что вы делаете. Красота, криптография, коучинг — мы говорим на вашем языке.",
+    "iAmA": "Я...",
+    "nicheCreator": "Цифровой создатель",
+    "nicheFitness": "Фитнес-тренер",
+    "nicheCrypto": "Криптоэксперт",
+    "nicheBeauty": "Бьюти-блогер",
+    "nicheMusic": "Музыкальный продюсер",
+    "nicheTutor": "Онлайн репетитор",
+    "aiBuilds": "ИИ строит всё",
+    "aiBuildsDesc": "Структура, текст и дизайн создаются за секунды. Никакого ада перетаскивания.",
+    "aiGenerating": "Генерация ИИ...",
+    "getLeads": "Получайте лиды в Telegram",
+    "getLeadsDesc": "Ваша страница активна. Лиды приходят прямо в вашу личку. Закройте их немедленно.",
+    "leadMsg1": "Привет, хочу записаться на консультацию!",
+    "leadMsg2": "Потрясающий! Позволять",
+    "newLeadCaptured": "Новый лидер захвачен"
   },
   "dashboard": {
     "loadError": "Ошибка загрузки",
@@ -1855,12 +1855,12 @@
       "aiBuilder": "ИИ-строитель",
       "aiBuilderBtn": "Заполнить страницу с AI",
       "aiBuilderDesc": "AI создаст контент на основе шаблона и вашей информации",
-      "yourDomainPlaceholder": "yourdomain.com",
-      "yourPagePlaceholder": "your-page",
-      "yourDomainExample": "ivan.ru",
-      "dnsType": "Type",
-      "dnsName": "Name",
-      "dnsValue": "Value"
+      "yourDomainPlaceholder": "вашдомен.com",
+      "yourPagePlaceholder": "ваша страница",
+      "yourDomainExample": "Иван.ру",
+      "dnsType": "Тип",
+      "dnsName": "Имя",
+      "dnsValue": "Ценить"
     },
     "accountSettings": {
       "title": "Настройки аккаунта",
@@ -1970,7 +1970,7 @@
       "slugHint": "3-30 символов: латиница, цифры, дефис",
       "remaining": "Вы можете создать еще {{count}} стр.",
       "create": "Создать страницу",
-      "freePlan": "Free"
+      "freePlan": "Бесплатно"
     },
     "common": {
       "error": "Произошла ошибка",
@@ -2142,7 +2142,7 @@
     "signUp": "Регистрация",
     "signOut": "Выйти",
     "signingIn": "Вход...",
-    "email": "Email",
+    "email": "Электронная почта",
     "password": "Пароль",
     "forgotPassword": "Забыли пароль?",
     "resetPassword": "Сбросить пароль",
@@ -2241,23 +2241,23 @@
       "nicheDescription": "Примеры страниц lnkmx в нише {{niche}}: шаблоны, идеи и структура.",
       "imageAlt": "Галерея lnkmx — ссылка в примерах биографии",
       "opt": {
-        "question": "Where can I see examples of lnkmx pages?",
-        "answer": "The lnkmx Gallery showcases real examples of pages created by users across different industries including freelancers, businesses, beauty professionals, fitness coaches, and content creators.",
+        "question": "Где я могу увидеть примеры страниц lnkmx?",
+        "answer": "В галерее lnkmx представлены реальные примеры страниц, созданных пользователями из разных отраслей, включая фрилансеров, бизнесменов, профессионалов в области красоты, тренеров по фитнесу и создателей контента.",
         "uses": {
-          "1": "Browse professional page examples",
-          "2": "Find inspiration for your industry",
-          "3": "See real user implementations",
-          "4": "Discover design ideas",
-          "5": "Learn from successful pages"
+          "1": "Просмотрите примеры профессиональных страниц",
+          "2": "Найдите вдохновение для своей отрасли",
+          "3": "Посмотрите реальные пользовательские реализации",
+          "4": "Откройте для себя дизайнерские идеи",
+          "5": "Учитесь на успешных страницах"
         },
         "audience": {
-          "1": "New users seeking inspiration",
-          "2": "Businesses looking for examples",
-          "3": "Designers researching layouts",
-          "4": "Marketers studying conversions"
+          "1": "Новые пользователи в поисках вдохновения",
+          "2": "Компании ищут примеры",
+          "3": "Дизайнеры изучают макеты",
+          "4": "Маркетологи изучают конверсии"
         },
-        "problem": "Users need inspiration and examples to understand how to build effective pages",
-        "solution": "The Gallery provides real-world examples across multiple industries showing successful page implementations"
+        "problem": "Пользователям нужно вдохновение и примеры, чтобы понять, как создавать эффективные страницы.",
+        "solution": "В галерее представлены реальные примеры из разных отраслей, демонстрирующие успешную реализацию страниц."
       }
     },
     "seoIntro": {
@@ -2612,7 +2612,7 @@
     "hidden": "Скрытый",
     "noTemplatesFound": "Шаблоны не найдены",
     "editUserTierDescription": "Изменить уровень доступа пользователя",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Админ"
   },
   "adminCharts": {
     "userGrowth": "Рост пользователей",
@@ -2906,30 +2906,30 @@
       "breadcrumb": "Альтернативы",
       "imageAlt": "Сравнение lnkmx и альтернатив",
       "opt": {
-        "question": "What are the best alternatives to Linktree?",
-        "answer": "Top Linktree alternatives include lnkmx (AI-powered, built-in CRM), Beacons (creator-focused), Koji (interactive), Taplink (analytics), and Stan Store (e-commerce). lnkmx stands out with its AI page builder, lead management, and affordable pricing.",
-        "entity": "lnkmx vs Competitors",
+        "question": "Каковы лучшие альтернативы Linktree?",
+        "answer": "Лучшие альтернативы Linktree включают lnkmx (встроенная CRM на базе искусственного интеллекта), Beacons (ориентированный на авторов), Koji (интерактивный), Taplink (аналитика) и Stan Store (электронная коммерция). Lnkmx выделяется своим конструктором страниц с искусственным интеллектом, управлением потенциальными клиентами и доступными ценами.",
+        "entity": "lnkmx против конкурентов",
         "uses": {
-          "1": "Compare link-in-bio tools",
-          "2": "Find Linktree alternatives",
-          "3": "Choose best page builder",
-          "4": "Evaluate CRM features",
-          "5": "Compare pricing plans"
+          "1": "Сравните инструменты со ссылкой в ​​биографии",
+          "2": "Найдите альтернативы Linktree",
+          "3": "Выберите лучший конструктор страниц",
+          "4": "Оцените возможности CRM",
+          "5": "Сравнить тарифные планы"
         },
         "audience": {
-          "1": "Users researching alternatives",
-          "2": "Businesses switching from Linktree",
-          "3": "Freelancers comparing options",
-          "4": "Content creators choosing tools"
+          "1": "Пользователи, изучающие альтернативы",
+          "2": "Компании, переходящие с Linktree",
+          "3": "Фрилансеры сравнивают варианты",
+          "4": "Создатели контента выбирают инструменты"
         },
-        "problem": "Users need unbiased comparisons to choose the right link-in-bio tool for their needs",
-        "solution": "lnkmx provides transparent comparison showing unique features like AI page builder and built-in CRM that competitors lack",
+        "problem": "Пользователям нужны объективные сравнения, чтобы выбрать правильный инструмент «Ссылка в биографии», соответствующий их потребностям.",
+        "solution": "Lnkmx обеспечивает прозрачное сравнение, демонстрирующее уникальные функции, такие как конструктор страниц с искусственным интеллектом и встроенную CRM, которых нет у конкурентов.",
         "features": {
-          "1": "Feature-by-feature comparison table",
-          "2": "Honest pros and cons",
-          "3": "Pricing comparison",
-          "4": "Use case recommendations",
-          "5": "Migration guidance"
+          "1": "Таблица сравнения функций по функциям",
+          "2": "Честные плюсы и минусы",
+          "3": "Сравнение цен",
+          "4": "Рекомендации по использованию",
+          "5": "Руководство по миграции"
         }
       }
     },
@@ -3871,7 +3871,7 @@
     "name": "Ваше имя",
     "namePlaceholder": "Введите имя",
     "phone": "Телефон",
-    "email": "Email",
+    "email": "Электронная почта",
     "notes": "Комментарий",
     "notesPlaceholder": "Дополнительная информация...",
     "confirm": "Записаться",
@@ -3957,7 +3957,7 @@
     "full": "мест нет",
     "noSpots": "Мест нет",
     "registrationClosed": "Регистрация закрыта",
-    "emailLabel": "Email",
+    "emailLabel": "Электронная почта",
     "emailPlaceholder": "ваш@email.com",
     "emailHelp": "Билет и подтверждение придут на эту почту.",
     "emailRequired": "Email обязателен",
@@ -4066,7 +4066,7 @@
   "eventFields": {
     "shortText": "Короткий текст",
     "longText": "Длинный текст",
-    "email": "Email",
+    "email": "Электронная почта",
     "phone": "Телефон",
     "number": "Число",
     "dropdown": "Выпадающий список",
@@ -4479,28 +4479,28 @@
       "description": "Сравните тарифы lnkmx: бесплатный конструктор, Pro с AI, CRM, аналитикой и своим доменом. Прозрачные цены.",
       "imageAlt": "Тарифные планы lnkmx",
       "opt": {
-        "question": "How much does lnkmx cost?",
-        "answer": "lnkmx offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.",
+        "question": "Сколько стоит lnkmx?",
+        "answer": "Lnkmx предлагает бесплатный базовый план и план Pro по цене от 3045 тенге (приблизительно 6 долларов США) на 12 месяцев. Функции Pro включают неограниченное количество страниц, собственные домены, аналитику и приоритетную поддержку.",
         "uses": {
-          "1": "Start free with Basic plan",
-          "2": "Upgrade to Pro for advanced features",
-          "3": "Pay for 3, 6, or 12 months",
-          "4": "Use tokens for flexible premium access"
+          "1": "Начните бесплатно с базового плана",
+          "2": "Обновите до Pro, чтобы получить расширенные функции",
+          "3": "Оплата за 3, 6 или 12 месяцев.",
+          "4": "Используйте токены для гибкого премиум-доступа"
         },
         "audience": {
-          "1": "Budget-conscious small businesses",
-          "2": "Freelancers looking for affordable tools",
-          "3": "Growing businesses needing more features"
+          "1": "Бюджетный малый бизнес",
+          "2": "Фрилансеры ищут доступные инструменты",
+          "3": "Растущий бизнес нуждается в большем количестве функций"
         },
-        "problem": "Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers",
-        "solution": "lnkmx offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months",
+        "problem": "Большинство инструментов для создания ссылок в биографии и создания страниц слишком дороги для микробизнеса и фрилансеров.",
+        "solution": "Lnkmx предлагает бесплатный план для основных нужд и доступную цену Pro от 6 долларов США на 12 месяцев.",
         "features": {
-          "1": "Free Basic plan available",
-          "2": "Pro plan: 3,045 KZT/mo (Annual)",
-          "3": "Volume discounts: up to 30% off for 12 months",
-          "4": "Multi-currency support (KZT, USD)",
-          "5": "Flexible token system",
-          "6": "No credit card required for free plan"
+          "1": "Доступен бесплатный базовый план",
+          "2": "План «Про»: 3 045 тенге/мес (годовой).",
+          "3": "Скидки за объем: скидка до 30% в течение 12 месяцев.",
+          "4": "Мультивалютная поддержка (тенге, доллар США)",
+          "5": "Гибкая система токенов",
+          "6": "Для бесплатного плана кредитная карта не требуется"
         }
       }
     },
@@ -4866,29 +4866,29 @@
     "translate": "Перевести",
     "translating": "Перевод...",
     "translateNow": "Перевести сейчас",
-    "enterUrlHint": "Enter the URL to generate a catchy title",
-    "productName": "Product Name",
-    "productNamePlaceholder": "My Amazing Product",
-    "price": "Price",
-    "currency": "Currency",
-    "pageName": "Page Name",
-    "pageNamePlaceholder": "My Page",
-    "bio": "Bio",
-    "bioPlaceholder": "Page description...",
-    "links": "Links (comma-separated)",
-    "linksPlaceholder": "Instagram, YouTube, Shop",
-    "emptyHint": "Leave empty to use current page data",
-    "describePage": "Describe Your Page",
-    "describePagePlaceholder": "I",
-    "describePageHint": "Describe your page and AI will create a complete layout with suggested blocks",
-    "titleMagic": "Generate Magic Title",
-    "titleSales": "Generate Sales Copy",
-    "titleSeo": "Generate SEO Meta Tags",
-    "titleBuilder": "AI Page Builder",
-    "descMagic": "Let AI create a catchy, clickable title for your link",
-    "descSales": "Generate compelling product descriptions that drive sales",
-    "descSeo": "Optimize your page for search engines with AI-generated meta tags",
-    "descBuilder": "Build your entire page layout with AI assistance"
+    "enterUrlHint": "Введите URL, чтобы создать запоминающийся заголовок.",
+    "productName": "Название продукта",
+    "productNamePlaceholder": "Мой удивительный продукт",
+    "price": "Цена",
+    "currency": "Валюта",
+    "pageName": "Название страницы",
+    "pageNamePlaceholder": "Моя страница",
+    "bio": "Био",
+    "bioPlaceholder": "Описание страницы...",
+    "links": "Ссылки (через запятую)",
+    "linksPlaceholder": "Инстаграм, Ютуб, Магазин",
+    "emptyHint": "Оставьте пустым, чтобы использовать данные текущей страницы.",
+    "describePage": "Опишите свою страницу",
+    "describePagePlaceholder": "я",
+    "describePageHint": "Опишите свою страницу, и ИИ создаст полный макет с предложенными блоками.",
+    "titleMagic": "Создать магический заголовок",
+    "titleSales": "Создать копию для продажи",
+    "titleSeo": "Генерация мета-тегов SEO",
+    "titleBuilder": "Конструктор страниц с искусственным интеллектом",
+    "descMagic": "Позвольте ИИ создать запоминающийся кликабельный заголовок для вашей ссылки.",
+    "descSales": "Создавайте убедительные описания продуктов, которые стимулируют продажи.",
+    "descSeo": "Оптимизируйте свою страницу для поисковых систем с помощью метатегов, созданных ИИ.",
+    "descBuilder": "Создайте макет всей страницы с помощью искусственного интеллекта."
   },
   "styles": {
     "default": "Стандартный",
