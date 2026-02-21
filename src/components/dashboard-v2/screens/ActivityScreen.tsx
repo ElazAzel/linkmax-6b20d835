@@ -5,6 +5,7 @@ import { memo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
 import { formatDateShort, getLocale } from '@/lib/utils/format';
+import { toast } from 'sonner';
 import {
   Search,
   Plus,
@@ -36,6 +37,7 @@ import { LeadDetails } from '@/components/crm/LeadDetails';
 import { BookingsPanel } from '@/components/crm/BookingsPanel';
 import { cn } from '@/lib/utils/utils';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
+import { exportLeadsToExcel } from '@/lib/export/excel-export-leads';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -149,13 +151,35 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
         title={t('dashboard.activity.title', 'Входящие')}
         subtitle={`${stats.total} ${t('dashboard.activity.totalLeads', 'заявок')}`}
         actions={
-          <Button
-            size="icon"
-            className="h-12 w-12 rounded-2xl shadow-lg shadow-primary/25"
-            onClick={() => setShowAddDialog(true)}
-          >
-            <Plus className="h-6 w-6" />
-          </Button>
+          <div className="flex items-center gap-2">
+            {isPremium && leads.length > 0 && activeTab === 'leads' && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-12 w-12 rounded-2xl md:h-9 md:w-auto md:px-4 md:rounded-xl"
+                onClick={() => {
+                  toast.promise(
+                    exportLeadsToExcel({ leads }),
+                    {
+                      loading: t('dashboard.activity.exporting', 'Экспорт лидов...'),
+                      success: t('dashboard.activity.exportSuccess', 'Экспорт завершен'),
+                      error: t('dashboard.activity.exportError', 'Ошибка экспорта')
+                    }
+                  );
+                }}
+              >
+                <span className="hidden md:inline">{t('dashboard.activity.export', 'Экспорт')}</span>
+                <span className="md:hidden font-bold">EX</span>
+              </Button>
+            )}
+            <Button
+              size="icon"
+              className="h-12 w-12 rounded-2xl md:h-9 md:w-9 md:rounded-xl shadow-lg shadow-primary/25"
+              onClick={() => setShowAddDialog(true)}
+            >
+              <Plus className="h-6 w-6 md:h-5 md:w-5" />
+            </Button>
+          </div>
         }
       />
 
