@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (UX & i18n Finalization — 2026-02-21)
+- **Complete Localization Coverage**: Wrapped remaining hardcoded Russian strings in the `BookingBlock`, `CustomCodeBlock`, `EventBlock`, `FreePremiumBlockGate`, and `TemplateMarketplace` components with `t()` translation calls.
+- **Queue Synchronization**: Extracted new translation keys and processed them through the `i18n-queue.json` system.
+- **Multilingual Support**: Fully translated the newly extracted UI strings into English (`en`), Kazakh (`kk`), and Uzbek (`uz`), achieving 0 missing keys across all supported languages according to the `i18n:status` check.
+
 ### Added (Technical Epic: i18n Synchronization — 2026-02-20)
 - **Comprehensive Global Synchronization**: Synchronized `en.json`, `kk.json`, and `uz.json` with `ru.json` as the source of truth, establishing 100% key coverage.
 - **Automated Key Extraction**: Identified and extracted **1448 missing keys** directly from JSX/TSX files using custom AST-aware scripts (`extract-context.mjs`).

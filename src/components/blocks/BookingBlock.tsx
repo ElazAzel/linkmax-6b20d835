@@ -220,9 +220,14 @@ export const BookingBlock = memo(function BookingBlockComponent({
         const amount = block.prepaymentAmount || 0;
         const currency = getCurrencySymbol(block.prepaymentCurrency || 'KZT');
         const message = encodeURIComponent(
-          `Здравствуйте! Я записался(ась) на ${format(selectedDate, 'd MMMM', { locale })} в ${selectedSlot.time.substring(0, 5)}.\n` +
-          `Имя: ${formData.name}\n` +
-          `${amount > 0 ? `Сумма предоплаты: ${amount} ${currency}` : 'Хочу оплатить запись.'}`
+          t('booking.whatsapp.greeting', 'Здравствуйте! Я записался(ась) на {{date}} в {{time}}.\n', {
+            date: format(selectedDate, 'd MMMM', { locale }),
+            time: selectedSlot.time.substring(0, 5)
+          }) +
+          t('booking.whatsapp.name', 'Имя: {{name}}\n', { name: formData.name }) +
+          (amount > 0
+            ? t('booking.whatsapp.prepayment', 'Сумма предоплаты: {{amount}} {{currency}}', { amount, currency })
+            : t('booking.whatsapp.pay', 'Хочу оплатить запись.'))
         );
         window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
       }
@@ -454,7 +459,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                       <Check className="h-6 w-6" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold text-primary uppercase tracking-wider">Выбрано время</p>
+                      <p className="text-[10px] font-bold text-primary uppercase tracking-wider">{t('booking.selectedTime', 'Выбрано время')}</p>
                       <p className="text-sm font-bold truncate">
                         {formatTime(selectedSlot.time)}
                         {selectedSlot.endTime && ` – ${formatTime(selectedSlot.endTime)}`}

@@ -126,7 +126,8 @@
     "noResults": "Ничего не найдено",
     "saving": "Сохранение...",
     "optional": "опционально",
-    "toHome": "На главную"
+    "toHome": "На главную",
+    "collapse": "Yig'ish"
   },
   "fields": {
     "name": "Name",
@@ -1526,7 +1527,13 @@
           "f3": "Лиды в Telegram",
           "f4": "Расширенная аналитика",
           "f5": "Удаление брендинга",
-          "cta": "Начать Pro триал"
+          "cta": "Начать Pro триал",
+          "f1_new": "Barcha bloklar cheklovlarsiz",
+          "f2_new": "Onlayn yozilish va shaxsiy mini-CRM",
+          "f3_new": "Telegramga tezkor arizalar",
+          "f4_new": "Tovarlar va chiptalar savdosi",
+          "f5_new": "O'rnatilgan QR-skaner",
+          "f6_new": "Kengaytirilgan statistika"
         }
       },
       "testimonials": {
@@ -2782,7 +2789,9 @@
     "purchased": "Купленные",
     "saveFirst": "Сохраните страницу как шаблон в настройках",
     "noPurchased": "Нет купленных шаблонов",
-    "browseMk": "Загляните в маркетплейс шаблонов"
+    "browseMk": "Загляните в маркетплейс шаблонов",
+    "notEnoughTokens": "Tokenlar yetarli emas. Yana {{amount}} Linkkon kerak.",
+    "purchaseTemplate": "Shablonni sotib olish: {{name}}"
   },
   "alternatives": {
     "seo": {
@@ -3742,7 +3751,14 @@
     "confirmAndPay": "Book and Pay",
     "prepaymentNote": "After booking you will be redirected to WhatsApp for payment",
     "success": "You have successfully booked!",
-    "error": "Booking error. Please try again."
+    "error": "Booking error. Please try again.",
+    "whatsapp": {
+      "greeting": "Salom! Men {{date}} kuni soat {{time}} ga yozildim.\\n",
+      "name": "Ism: {{name}}\\n",
+      "prepayment": "Oldindan to'lov summasi: {{amount}} {{currency}}",
+      "pay": "Yozilish uchun to'lov qilmoqchiman."
+    },
+    "selectedTime": "Tanlangan vaqt"
   },
   "days": {
     "sunday": "Sun",
@@ -4753,7 +4769,8 @@
     "grid": "Grid"
   },
   "tier": {
-    "free": "Free"
+    "free": "Free",
+    "blocksCount": "blok"
   },
   "scratch": {
     "scratchHere": "👆 Scratch here",

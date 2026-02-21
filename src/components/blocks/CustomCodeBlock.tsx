@@ -20,7 +20,7 @@ const HEIGHT_MAP = {
 };
 
 export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }: CustomCodeBlockProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<string>(HEIGHT_MAP[block.height || 'medium']);
@@ -217,7 +217,7 @@ export const CustomCodeBlock = memo(function CustomCodeBlockComponent({ block }:
             className="gap-2"
           >
             <Minimize2 className="h-4 w-4" />
-            Свернуть
+            {t('common.collapse', 'Свернуть')}
           </Button>
         </div>
       )}

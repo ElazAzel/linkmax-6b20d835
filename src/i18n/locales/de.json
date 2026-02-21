@@ -126,7 +126,8 @@
     "noResults": "",
     "saving": "",
     "optional": "",
-    "toHome": ""
+    "toHome": "",
+    "collapse": ""
   },
   "fields": {
     "name": "Name",
@@ -1526,7 +1527,13 @@
           "f3": "",
           "f4": "",
           "f5": "",
-          "cta": ""
+          "cta": "",
+          "f1_new": "",
+          "f2_new": "",
+          "f3_new": "",
+          "f4_new": "",
+          "f5_new": "",
+          "f6_new": ""
         }
       },
       "testimonials": {
@@ -2782,7 +2789,9 @@
     "purchased": "",
     "saveFirst": "",
     "noPurchased": "",
-    "browseMk": ""
+    "browseMk": "",
+    "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
+    "purchaseTemplate": "Покупка шаблона: {{name}}"
   },
   "alternatives": {
     "seo": {
@@ -3742,7 +3751,14 @@
     "confirmAndPay": "Записаться и оплатить",
     "prepaymentNote": "После записи вы будете перенаправлены в WhatsApp для оплаты",
     "success": "Вы успешно записались!",
-    "error": "Ошибка при записи. Попробуйте снова."
+    "error": "Ошибка при записи. Попробуйте снова.",
+    "whatsapp": {
+      "greeting": "Здравствуйте! Я записался(ась) на {{date}} в {{time}}.\\n",
+      "name": "Имя: {{name}}\\n",
+      "prepayment": "Сумма предоплаты: {{amount}} {{currency}}",
+      "pay": ""
+    },
+    "selectedTime": ""
   },
   "days": {
     "sunday": "Вс",
@@ -4753,7 +4769,8 @@
     "grid": ""
   },
   "tier": {
-    "free": ""
+    "free": "",
+    "blocksCount": ""
   },
   "scratch": {
     "scratchHere": "",

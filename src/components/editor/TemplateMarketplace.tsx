@@ -199,7 +199,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
     // Check if user has enough tokens
     if (currentBalance < price) {
       const deficit = price - currentBalance;
-      toast.info(`Недостаточно токенов. Нужно еще ${deficit.toFixed(0)} Linkkon.`);
+      toast.info(t('templates.notEnoughTokens', 'Недостаточно токенов. Нужно еще {{amount}} Linkkon.', { amount: deficit.toFixed(0) }));
       redirectToTokenPurchase(deficit, template.name);
       return;
     }
@@ -211,7 +211,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
         'template',
         template.id,
         price,
-        `Покупка шаблона: ${template.name}`
+        t('templates.purchaseTemplate', 'Покупка шаблона: {{name}}', { name: template.name })
       );
 
       if (success) {

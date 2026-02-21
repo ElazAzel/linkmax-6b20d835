@@ -546,7 +546,7 @@ lnkmx/
 │   │   └── ...                   # Other types
 │   │
 │   ├── i18n/                     # Internationalization
-│   │   └── locales/              # RU, EN, KK translations
+│   │   └── locales/              # RU, EN, KK, UZ translations (100% synced)
 │   │
 │   ├── contexts/                 # React contexts
 │   │

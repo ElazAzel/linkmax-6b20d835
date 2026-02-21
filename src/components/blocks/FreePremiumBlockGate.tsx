@@ -123,6 +123,7 @@ export const BlockCategoryHeader = memo(function BlockCategoryHeader({
   tier,
   blockCount,
 }: BlockCategoryHeaderProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between px-1 mb-3">
       <div className="flex items-center gap-2">
@@ -130,7 +131,7 @@ export const BlockCategoryHeader = memo(function BlockCategoryHeader({
         <BlockTierBadge tier={tier} />
       </div>
       {blockCount !== undefined && (
-        <span className="text-xs text-muted-foreground">{blockCount} блоков</span>
+        <span className="text-xs text-muted-foreground">{blockCount} {t('tier.blocksCount', 'блоков')}</span>
       )}
     </div>
   );
