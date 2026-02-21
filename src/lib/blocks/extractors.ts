@@ -318,3 +318,39 @@ export function extractLocation(text: string): { location: string; remainder: st
 
     return { location: '', remainder: text };
 }
+
+/**
+ * Gamification Heuristics: extracts discounts, promos, or bonuses
+ * Looks for words indicating a special offer.
+ */
+export function extractDiscount(text: string): { discountText: string; remainder: string } {
+    if (!text) return { discountText: '', remainder: '' };
+
+    // Regex to find "скидка", "акция", "промокод", "подарок" + context around it (like "Скидка 10% на первый сеанс")
+    const discountRegex = /(?:скидка|акция|промокод|подарок|бонус|discount|promo|sale)[\s:]*([^\n.;]{2,40})/i;
+    const match = text.match(discountRegex);
+
+    if (match) {
+        // Find the whole sentence/line containing the promo
+        const lines = text.split(/[\n;]/);
+        let foundLine = '';
+        const remainderLines = [];
+
+        for (const line of lines) {
+            if (line.match(discountRegex)) {
+                foundLine = line.trim();
+            } else {
+                remainderLines.push(line);
+            }
+        }
+
+        if (foundLine) {
+            return {
+                discountText: foundLine,
+                remainder: remainderLines.join('\n').trim()
+            };
+        }
+    }
+
+    return { discountText: '', remainder: text };
+}

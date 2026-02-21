@@ -461,106 +461,134 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
         {/* Step 3: Dynamic Form */}
         {step === 'dynamic_form' && (
-          <div className="p-6 pt-4 animate-fade-in">
-            <div className="flex items-center gap-3 mb-6">
+          <div className="p-6 pt-4 animate-fade-in flex flex-col h-[75vh]">
+            <div className="flex items-center gap-3 mb-4 shrink-0">
               <Button variant="ghost" size="icon" onClick={handleBackToTemplate} className="h-10 w-10 rounded-xl shrink-0">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h2 className="text-xl font-black mb-1">
-                  {t('aiBuilder.infoTitle', 'Расскажите о себе')}
-                </h2>
+                <h2 className="text-xl font-black mb-0.5" dangerouslySetInnerHTML={{ __html: t('aiBuilder.nicheQuestions.title', 'Расскажите о себе ✨') }}></h2>
                 <p className="text-muted-foreground text-sm">
-                  {t('aiBuilder.dynamicFormDesc', 'Заполните данные для выбранного шаблона')}
+                  {t('aiBuilder.nicheQuestions.desc', 'Эти данные нужны для заполнения блоков. Вы можете пропустить любой шаг.')}
                 </p>
               </div>
             </div>
 
-            <ScrollArea className="max-h-[50vh] pr-2">
-              <div className="space-y-4">
-                {/* Always needed */}
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.name', 'Имя / Название')} *</Label>
+            <ScrollArea className="flex-1 pr-4 -mr-4">
+              <div className="space-y-6 pb-6">
+                {/* 1. NAME (Always Required) */}
+                <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50">
+                  <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.nameLabel', 'Как вас зовут или как называется ваш проект?')} <span className="text-destructive">*</span></Label>
+                  <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.nameHint', 'Это будет заголовок вашего профиля')}</p>
                   <Input
                     value={userInfo.name}
                     onChange={(e) => setUserInfo(p => ({ ...p, name: e.target.value }))}
-                    placeholder={t('aiBuilder.namePlaceholder', 'Ваше имя или название бизнеса')}
-                    className="h-12 rounded-xl"
+                    placeholder={t('aiBuilder.nicheQuestions.namePlaceholder', 'Например: Иван Иванов или Студия "Красота"')}
+                    className="h-12 rounded-xl bg-background"
                     autoFocus
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label>{t('aiBuilder.bio', 'О себе / Описание')}</Label>
+                {/* 2. BIO (Depends on niche) */}
+                <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-semibold">
+                      {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.bioBeauty', 'Кратко о вашем опыте (Бьюти)') :
+                        (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :
+                          selectedNiche === 'business' ? t('aiBuilder.nicheQuestions.bioBusiness', 'Опишите ваш бизнес в 2-х словах') :
+                            t('aiBuilder.nicheQuestions.bioGeneric', 'О себе / Описание')}
+                    </Label>
+                    <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                  </div>
                   <Textarea
                     value={userInfo.bio}
                     onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
-                    placeholder={t('aiBuilder.bioPlaceholder', 'Краткое описание вашей деятельности')}
-                    className="rounded-xl resize-none"
-                    rows={2}
+                    placeholder={t('aiBuilder.nicheQuestions.bioPlaceholder', 'Напишите пару предложений... Можно добавить ссылку, алгоритм сам сделает из неё красивую кнопку.')}
+                    className="rounded-xl flex-1 min-h-[80px] bg-background resize-none"
                   />
                 </div>
 
-                {/* Dynamic Fields */}
+                {/* 3. SERVICES (If required by template) */}
                 {formFields.needsServices && (
-                  <div className="space-y-2 animate-fade-in">
-                    <Label>{t('aiBuilder.services', 'Услуги')} (Для прайса и каталога)</Label>
+                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-75">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-semibold">
+                        {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.srvBeauty', 'Какие услуги вы оказываете? (С ценами)') :
+                          (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.srvFreelance', 'Навыки или Тарифы') :
+                            t('aiBuilder.nicheQuestions.srvGeneric', 'Услуги или Навыки')}
+                      </Label>
+                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.srvHint', 'Алгоритм сам раскидает их по карточкам. Если указать слово "скидка" или "подарок" — будет создан бонусный блок!')}</p>
                     <Textarea
                       value={userInfo.services}
                       onChange={(e) => setUserInfo(p => ({ ...p, services: e.target.value }))}
-                      placeholder={t('aiBuilder.servicesPlaceholder', 'Кратко опишите ваши основные услуги')}
-                      className="rounded-xl resize-none"
-                      rows={2}
+                      placeholder={t('aiBuilder.nicheQuestions.srvPlaceholder', 'Маникюр - 5000 тг\nПедикюр - 7000 тг\nСкидка 10% на первый визит')}
+                      className="rounded-xl min-h-[100px] bg-background resize-none"
                     />
                   </div>
                 )}
 
+                {/* 4. CONTACTS & LOCATION */}
                 {formFields.needsContacts && (
-                  <div className="space-y-2 animate-fade-in">
-                    <Label>{t('aiBuilder.contacts', 'Контакты')} (Для формы связи)</Label>
-                    <Input
+                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-100">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.contactsLabel', 'Где вас найти? (Контакты и Адрес)')}</Label>
+                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.contactsHint', 'Укажите номер телефона, почту или физический адрес (начиная с "г." или "ул." — для карты)')}</p>
+                    <Textarea
                       value={userInfo.contacts}
                       onChange={(e) => setUserInfo(p => ({ ...p, contacts: e.target.value }))}
-                      placeholder={t('aiBuilder.contactsPlaceholder', 'Телефон, email или адрес...')}
-                      className="h-12 rounded-xl"
+                      placeholder={t('aiBuilder.nicheQuestions.contactsPlaceholder', '+7 777 123 45 67\nг. Алматы, пр. Абая 10')}
+                      className="rounded-xl min-h-[80px] bg-background resize-none"
                     />
                   </div>
                 )}
 
+                {/* 5. SOCIALS */}
                 {formFields.needsSocials && (
-                  <div className="space-y-2 animate-fade-in">
-                    <Label>{t('aiBuilder.socials', 'Соцсети')} (Для блока соцсетей)</Label>
+                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-150">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.socialsLabel', 'Ваши соцсети')}</Label>
+                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                    </div>
                     <Input
                       value={userInfo.socials}
                       onChange={(e) => setUserInfo(p => ({ ...p, socials: e.target.value }))}
-                      placeholder={t('aiBuilder.socialsPlaceholder', 'Instagram, Telegram, YouTube...')}
-                      className="h-12 rounded-xl"
+                      placeholder={t('aiBuilder.nicheQuestions.socialsPlaceholder', 'inst: @nickname, t.me/username, youtube.com/...')}
+                      className="h-12 rounded-xl bg-background"
                     />
                   </div>
                 )}
 
+                {/* 6. MEDIA */}
                 {formFields.needsMedia && (
-                  <div className="space-y-2 animate-fade-in">
-                    <Label>{t('aiBuilder.mediaLinks', 'Медиа')} (Для кнопок и ссылок)</Label>
-                    <Input
+                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-200">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.mediaLabel', 'Ссылки на полезные материалы (Медиа)')}</Label>
+                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2">{t('aiBuilder.nicheQuestions.mediaHint', 'Ссылки на YouTube, портфолио или картинки (через запятую)')}</p>
+                    <Textarea
                       value={userInfo.mediaLinks}
                       onChange={(e) => setUserInfo(p => ({ ...p, mediaLinks: e.target.value }))}
-                      placeholder={t('aiBuilder.mediaPlaceholder', 'Ссылки на фото, видео, статьи...')}
-                      className="h-12 rounded-xl"
+                      placeholder={t('aiBuilder.nicheQuestions.mediaPlaceholder', 'https://youtube.com/watch?v=..., https://my-portfolio.com')}
+                      className="rounded-xl min-h-[80px] bg-background resize-none"
                     />
                   </div>
                 )}
               </div>
             </ScrollArea>
 
-            <div className="pt-6 flex gap-3">
+            <div className="pt-4 shrink-0 mt-auto bg-card">
               <Button
                 onClick={handleGenerate}
                 disabled={!userInfo.name.trim()}
-                className="flex-1 h-12 rounded-xl font-bold shadow-lg shadow-primary/20"
+                className="w-full h-14 rounded-2xl font-black text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95"
               >
-                <Wand2 className="h-5 w-5 mr-2" />
-                {t('aiBuilder.generate', 'Собрать страницу')}
+                <Sparkles className="h-5 w-5 mr-2" />
+                {t('aiBuilder.nicheQuestions.generateBtn', 'Сгенерировать магию ✨')}
               </Button>
             </div>
           </div>
@@ -579,22 +607,22 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               {/* Simulated blocks building up */}
               <div className="flex flex-col-reverse items-center gap-3 w-full px-8">
                 <div className="h-8 w-full bg-primary/20 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-300 flex items-center justify-center text-xs text-primary/70 overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.socials ? 'Подключение соцсетей...' : 'Сборка футера...'}
+                  {userInfo.socials ? t('aiBuilder.gen.socials', 'Подключение соцсетей...') : t('aiBuilder.gen.footer', 'Сборка футера...')}
                 </div>
                 <div className="h-12 w-full bg-primary/40 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-200 flex items-center justify-center text-xs text-primary/80 font-medium overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.services ? `Услуги: ${userInfo.services.slice(0, 15)}...` : 'Настройка блоков...'}
+                  {userInfo.services ? `${t('aiBuilder.gen.services', 'Парсинг услуг:')} ${userInfo.services.slice(0, 15)}...` : t('aiBuilder.gen.blocks', 'Настройка блоков...')}
                 </div>
                 <div className="h-16 w-full bg-primary/60 rounded-lg animate-in fade-in slide-in-from-bottom duration-500 delay-100 flex items-center justify-center text-sm text-primary-foreground font-bold shadow-md overflow-hidden px-2 whitespace-nowrap">
-                  {userInfo.name ? userInfo.name : 'Профиль...'}
+                  {userInfo.name ? userInfo.name : t('aiBuilder.gen.profile', 'Гидратация профиля...')}
                 </div>
               </div>
             </div>
 
             <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.generatingTitle', 'Алгоритм собирает страницу')}
+              {t('aiBuilder.generatingTitle', 'Нейро-алгоритм собирает страницу')}
             </h3>
             <p className="text-muted-foreground mb-6">
-              {t('aiBuilder.generatingDesc', 'Интегрируем ваши данные в структуру шаблона')}
+              {t('aiBuilder.generatingDesc', 'Умные эвристики размещают ваш контент по сетке шаблона')}
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
@@ -603,18 +631,38 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
           </div>
         )}
 
-        {/* Step 5: Complete */}
+        {/* Step 5: Complete (Gamified Certificate) */}
         {step === 'complete' && (
-          <div className="p-6 py-20 text-center animate-scale-in">
-            <div className="mx-auto w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center mb-8">
-              <Check className="h-12 w-12 text-emerald-500" />
+          <div className="p-6 py-12 text-center relative overflow-hidden flex flex-col items-center justify-center min-h-[400px]">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-amber-500/10 pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 blur-[80px] rounded-full pointer-events-none" />
+
+            {/* Certificate Container */}
+            <div className="relative z-10 animate-in zoom-in duration-700 spring-bounce border-[6px] border-double border-primary/20 bg-card p-8 rounded-2xl shadow-2xl max-w-sm w-full outline outline-1 outline-primary/10">
+
+              <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 ring-4 ring-primary/20 animate-pulse">
+                <Sparkles className="h-8 w-8 text-primary" />
+              </div>
+
+              <h3 className="text-sm font-bold tracking-widest text-primary/60 uppercase mb-2">
+                {t('aiBuilder.cert.subtitle', 'Официальный Сертификат')}
+              </h3>
+              <h2 className="text-2xl font-black mb-4 leading-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+                {t('aiBuilder.cert.title', 'Страница Успешно Создана!')}
+              </h2>
+
+              <div className="py-4 border-y border-border/50 mb-6">
+                <p className="text-sm text-muted-foreground mb-1">{t('aiBuilder.cert.owner', 'Владелец:')}</p>
+                <p className="text-xl font-bold font-serif text-primary italic">
+                  {userInfo.name}
+                </p>
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                {t('aiBuilder.cert.desc', 'Теперь вы можете редактировать цвета, шрифты и блоки в панели управления.')}
+              </p>
             </div>
-            <h3 className="text-2xl font-black mb-3">
-              {t('aiBuilder.completeTitle', 'Готово!')}
-            </h3>
-            <p className="text-muted-foreground">
-              {t('aiBuilder.completeDesc', 'Блоки добавлены на вашу страницу')}
-            </p>
           </div>
         )}
       </DialogContent>

@@ -1150,11 +1150,7 @@
       "item4": "No understanding: what actually gets clicked and where attention is lost",
       "solution": "lnkmx creates one clear page where visitors quickly understand who you are, how you help, how much it costs, and where to click to book. And you see leads and analytics in one place."
     },
-    "howItWorks": {
-      "badge": "",
-      "title": "",
-      "cta": ""
-    },
+    "howItWorks": "",
     "features": {
       "title": "What you get in the first version",
       "ai": {
@@ -4616,7 +4612,46 @@
     "generatingTitle": "",
     "generatingDesc": "",
     "completeTitle": "",
-    "completeDesc": ""
+    "completeDesc": "",
+    "nicheQuestions": {
+      "title": "",
+      "desc": "",
+      "nameLabel": "",
+      "nameHint": "",
+      "namePlaceholder": "",
+      "bioBeauty": "",
+      "bioFreelance": "",
+      "bioBusiness": "",
+      "bioGeneric": "",
+      "bioPlaceholder": "",
+      "srvBeauty": "",
+      "srvFreelance": "",
+      "srvGeneric": "",
+      "srvHint": "",
+      "srvPlaceholder": "",
+      "contactsLabel": "",
+      "contactsHint": "",
+      "contactsPlaceholder": "",
+      "socialsLabel": "",
+      "socialsPlaceholder": "",
+      "mediaLabel": "",
+      "mediaHint": "",
+      "mediaPlaceholder": "",
+      "generateBtn": ""
+    },
+    "gen": {
+      "socials": "",
+      "footer": "",
+      "services": "",
+      "blocks": "",
+      "profile": ""
+    },
+    "cert": {
+      "subtitle": "",
+      "title": "",
+      "owner": "",
+      "desc": ""
+    }
   },
   "funnel": {
     "short": "",

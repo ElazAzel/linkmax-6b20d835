@@ -1184,11 +1184,7 @@
       "item4": "Ні понимания: що реально кликают і где теряется внимание",
       "solution": "lnkmx робить одну зрозумілу сторінку, де відвідувач швидко розуміє, хто ви, чим корисні, скільки коштує, і куди натиснути для заявки. А ви бачите ліди та аналітику в одному місці."
     },
-    "howItWorks": {
-      "badge": "",
-      "title": "",
-      "cta": ""
-    },
+    "howItWorks": "",
     "features": {
       "title": "Що ви получите в первой версии",
       "ai": {
@@ -4650,7 +4646,46 @@
     "generatingTitle": "",
     "generatingDesc": "",
     "completeTitle": "",
-    "completeDesc": ""
+    "completeDesc": "",
+    "nicheQuestions": {
+      "title": "",
+      "desc": "",
+      "nameLabel": "",
+      "nameHint": "",
+      "namePlaceholder": "",
+      "bioBeauty": "",
+      "bioFreelance": "",
+      "bioBusiness": "",
+      "bioGeneric": "",
+      "bioPlaceholder": "",
+      "srvBeauty": "",
+      "srvFreelance": "",
+      "srvGeneric": "",
+      "srvHint": "",
+      "srvPlaceholder": "",
+      "contactsLabel": "",
+      "contactsHint": "",
+      "contactsPlaceholder": "",
+      "socialsLabel": "",
+      "socialsPlaceholder": "",
+      "mediaLabel": "",
+      "mediaHint": "",
+      "mediaPlaceholder": "",
+      "generateBtn": ""
+    },
+    "gen": {
+      "socials": "",
+      "footer": "",
+      "services": "",
+      "blocks": "",
+      "profile": ""
+    },
+    "cert": {
+      "subtitle": "",
+      "title": "",
+      "owner": "",
+      "desc": ""
+    }
   },
   "funnel": {
     "short": "",

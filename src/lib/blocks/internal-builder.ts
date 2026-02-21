@@ -19,7 +19,8 @@ import {
     extractContactsPipeline,
     extractSocialsPipeline,
     extractUrlFromText,
-    extractLocation
+    extractLocation,
+    extractDiscount
 } from './extractors';
 
 interface UserInfo {
@@ -40,6 +41,13 @@ function hydrateProfileBlock(block: any, userInfo: UserInfo) {
     if (remainder) block.bio = remainder;
     // Store extracted CTA inside block temp data so pipeline can process it later
     if (url) block.__extractedCta = url;
+
+    // Advanced Animation Heuristic for Creatives
+    const creativeKeywords = /(дизайн|арт|фото|видео|креатив|маркетинг|seo|копирайт|художник|design|art|photo|video|creator|marketing)/i;
+    if (remainder.match(creativeKeywords)) {
+        block.nameAnimation = 'typing';
+        block.avatarFrame = 'gradient';
+    }
 }
 
 function hydrateCatalogOrPricingBlock(block: any, parsedServices: any[]) {
@@ -164,9 +172,21 @@ export function generateBlocksFromTemplate(
         injectedContacts: parsedContacts.length === 0 && !userInfo.contacts,
         injectedSocials: parsedSocials.length === 0 && !userInfo.socials,
         injectedAddress: !extractedAddress, // if no address found, treat as done
+        injectedDiscount: false
     };
 
     let ctaUrlToInject: string | null = null;
+    let discountToInject: string | null = null;
+
+    // Check for Gamification Discounts in Services
+    const { discountText, remainder: remainderServices } = extractDiscount(userInfo.services);
+    if (discountText) {
+        discountToInject = discountText;
+    } else {
+        // Search bio as fallback
+        const { discountText: discountBio } = extractDiscount(userInfo.bio);
+        if (discountBio) discountToInject = discountBio;
+    }
 
     // 2. Base Block Generation
     let blocks: Block[] = templateBlocks.map((blockData: any, index: number) => {
@@ -237,6 +257,7 @@ export function generateBlocksFromTemplate(
 
         // Advanced Profile styling
         (profileBlock as any).blockStyle = { padding: 'md', animation: 'fade-in' };
+        (profileBlock as any).blockSize = 'wide';
 
         blocks.unshift({ ...profileBlock, id: `profile-fallback-${Date.now()}` } as Block);
     }
@@ -248,6 +269,7 @@ export function generateBlocksFromTemplate(
         ctaBlock.url = ctaUrlToInject;
         ctaBlock.width = 'full';
         ctaBlock.blockStyle = { padding: 'md', animation: 'scale-in', hoverEffect: 'glow' };
+        (ctaBlock as any).blockSize = 'wide';
 
         // Find profile index to insert right after
         const profileIndex = blocks.findIndex(b => b.type === 'profile' || b.type === 'avatar');
@@ -258,6 +280,19 @@ export function generateBlocksFromTemplate(
         }
     }
 
+    // Gamification (Scratch Block)
+    if (discountToInject && !state.injectedDiscount) {
+        const scratchBlock = createBlock('scratch') as any; // Type may need to be loose if scratch isn't universally typed yet
+        scratchBlock.type = 'scratch';
+        scratchBlock.title = 'Ваш бонус';
+        scratchBlock.content = discountToInject;
+        scratchBlock.blockStyle = { animation: 'scale-in', padding: 'md' };
+        scratchBlock.blockSize = 'wide';
+        // Add right after CTA or Profile
+        blocks.push({ ...scratchBlock, id: `scratch-fallback-${Date.now()}` } as Block);
+        state.injectedDiscount = true;
+    }
+
     // Services fallback
     if (!state.injectedServices && parsedServices.length > 0) {
         if (hasPrices) {
@@ -265,25 +300,30 @@ export function generateBlocksFromTemplate(
             catalogBlock.title = 'Каталог услуг';
             hydrateCatalogOrPricingBlock(catalogBlock, parsedServices);
             catalogBlock.blockStyle = { animation: 'fade-in', padding: 'md' };
+            (catalogBlock as any).blockSize = 'wide';
             blocks.push({ ...catalogBlock, id: `catalog-fallback-${Date.now()}` } as Block);
         } else {
-            blocks.push({ ...createFeatureListBlock(parsedServices), id: `features-fallback-${Date.now()}` });
+            const featureList = createFeatureListBlock(parsedServices) as any;
+            featureList.blockSize = 'wide';
+            blocks.push({ ...featureList, id: `features-fallback-${Date.now()}` });
         }
     }
 
-    // Contacts fallback
+    // Contacts fallback (Small Grid Pair 1)
     if (!state.injectedContacts && (parsedContacts.length > 0 || remainderContacts)) {
         const messengerBlock = createBlock('messenger') as MessengerBlock;
         hydrateMessengerBlock(messengerBlock, parsedContacts, remainderContacts || userInfo.contacts);
-        messengerBlock.blockStyle = { animation: 'fade-in', padding: 'md' };
+        messengerBlock.blockStyle = { animation: 'fade-in', padding: 'md', shadow: 'sm', hoverEffect: 'lift' };
+        (messengerBlock as any).blockSize = 'small'; // Responsive grid
         blocks.push({ ...messengerBlock, id: `messenger-fallback-${Date.now()}` } as Block);
     }
 
-    // Map fallback
+    // Map fallback (Small Grid Pair 2)
     if (extractedAddress && !state.injectedAddress) {
         const mapBlock = createBlock('map') as MapBlock;
         mapBlock.address = extractedAddress;
-        mapBlock.blockStyle = { animation: 'fade-in', padding: 'md', borderRadius: 'lg' };
+        mapBlock.blockStyle = { animation: 'fade-in', padding: 'md', borderRadius: 'lg', shadow: 'sm', hoverEffect: 'lift' };
+        (mapBlock as any).blockSize = 'small'; // Responsive grid paired with messenger naturally
         blocks.push({ ...mapBlock, id: `map-fallback-${Date.now()}` } as Block);
     }
 
@@ -292,7 +332,8 @@ export function generateBlocksFromTemplate(
         const socialsBlock = createBlock('socials') as SocialsBlock;
         socialsBlock.title = 'Мои соцсети';
         hydrateSocialsBlock(socialsBlock, parsedSocials, userInfo.socials);
-        socialsBlock.blockStyle = { animation: 'fade-in', padding: 'md' };
+        socialsBlock.blockStyle = { animation: 'fade-in', padding: 'md', shadow: 'sm', hoverEffect: 'lift' };
+        (socialsBlock as any).blockSize = 'small'; // Leaves room for other small blocks in row
         blocks.push({ ...socialsBlock, id: `socials-fallback-${Date.now()}` } as Block);
     }
 
@@ -302,6 +343,11 @@ export function generateBlocksFromTemplate(
         const urls = userInfo.mediaLinks.split(',').map(s => s.trim()).filter(Boolean);
         urls.forEach((url, i) => {
             const mediaBlock = createSmartMediaBlock(url, urls.length > 1 ? `Материал ${i + 1}` : 'Мои материалы');
+            if (mediaBlock.type !== 'video' && mediaBlock.type !== 'image') {
+                (mediaBlock as any).blockSize = 'small';
+            } else {
+                (mediaBlock as any).blockSize = 'wide';
+            }
             blocks.push({ ...mediaBlock, id: `media-fallback-${Date.now()}-${i}` });
         });
     }
