@@ -98,7 +98,7 @@ export const CreatePageDialog = memo(function CreatePageDialog({
             <div className="rounded-xl bg-muted/50 p-4 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">{t('dashboard.createPage.currentPlan', 'Current plan')}</span>
-                <span className="text-sm font-medium">Free</span>
+                <span className="text-sm font-medium">{t('dashboard.createPage.freePlan', 'Free')}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">{t('dashboard.createPage.pagesUsed', 'Pages used')}</span>

@@ -242,7 +242,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                                         setSlugError(null);
                                     }}
                                     className="pl-[85px] h-12 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 transition-all font-medium"
-                                    placeholder="your-page"
+                                    placeholder={t('dashboard.pageSettings.yourPagePlaceholder', 'your-page')}
                                 />
                             </div>
                             <Button
@@ -289,7 +289,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                                     setDomainError(null);
                                 }}
                                 className="h-12 rounded-xl"
-                                placeholder="ivan.ru"
+                                placeholder={t('dashboard.pageSettings.yourDomainExample', 'ivan.ru')}
                                 disabled={!isPremium}
                             />
                             <Button
@@ -315,9 +315,9 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             <div className="mt-3 bg-muted/50 rounded-lg p-3 border border-border">
                                 <p className="text-xs font-medium mb-2">{t('dashboard.pageSettings.dnsConfig', 'Set this DNS Record:')}</p>
                                 <div className="grid grid-cols-3 gap-2 text-xs">
-                                    <div className="text-muted-foreground">Type</div>
-                                    <div className="text-muted-foreground">Name</div>
-                                    <div className="text-muted-foreground">Value</div>
+                                    <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsType', 'Type')}</div>
+                                    <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsName', 'Name')}</div>
+                                    <div className="text-muted-foreground">{t('dashboard.pageSettings.dnsValue', 'Value')}</div>
 
                                     <div className="font-mono bg-background px-2 py-1 rounded">CNAME</div>
                                     <div className="font-mono bg-background px-2 py-1 rounded truncate">

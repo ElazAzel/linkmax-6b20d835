@@ -48,7 +48,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         label={t('fields.productName', 'Product Name')}
         value={migrateToMultilingual(formData.name)}
         onChange={(value) => onChange({ ...formData, name: value })}
-        placeholder="Product Name"
+        placeholder={t('fields.productNamePlaceholder', 'Product Name')}
         required
       />
 
@@ -76,7 +76,7 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           value={migrateToMultilingual(formData.description)}
           onChange={(value) => onChange({ ...formData, description: value })}
           type="textarea"
-          placeholder="Product description..."
+          placeholder={t('fields.productDescPlaceholder', 'Product description...')}
         />
         <div className="mt-2">
           <AIButton

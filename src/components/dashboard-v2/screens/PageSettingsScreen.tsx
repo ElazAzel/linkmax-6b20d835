@@ -266,7 +266,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
             <div className="space-y-3">
               <div className="flex gap-2">
                 <Input
-                  placeholder="yourdomain.com"
+                  placeholder={t('dashboard.pageSettings.yourDomainPlaceholder', 'yourdomain.com')}
                   value={customDomainInput}
                   onChange={(e) => setCustomDomainInput(e.target.value)}
                   disabled={!isPremium || customDomainSaving}
@@ -332,7 +332,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                       setSlugError(null);
                     }}
                     className="pl-[85px] h-12 rounded-xl"
-                    placeholder="your-page"
+                    placeholder={t('dashboard.pageSettings.yourPagePlaceholder', 'your-page')}
                   />
                 </div>
                 <Button
@@ -446,7 +446,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                 className="rounded-xl font-mono text-sm"
               />
               <p className="text-[11px] text-muted-foreground">
-                Events Manager → Источники данных → Pixel ID
+                {t('settings.integrations.fbHint', 'Events Manager → Источники данных → Pixel ID')}
               </p>
             </div>
 
@@ -462,7 +462,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                 className="rounded-xl font-mono text-sm"
               />
               <p className="text-[11px] text-muted-foreground">
-                TikTok Ads → Assets → Events → Pixel Code
+                {t('settings.integrations.ttHint', 'TikTok Ads → Assets → Events → Pixel Code')}
               </p>
             </div>
 
@@ -478,7 +478,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                 className="rounded-xl font-mono text-sm"
               />
               <p className="text-[11px] text-muted-foreground">
-                GA4 → Admin → Data Streams → Measurement ID
+                {t('settings.integrations.ga4Hint', 'GA4 → Admin → Data Streams → Measurement ID')}
               </p>
             </div>
 
@@ -494,7 +494,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                 className="rounded-xl font-mono text-sm"
               />
               <p className="text-[11px] text-muted-foreground">
-                Метрика → Настройки → Номер счётчика
+                {t('settings.integrations.yandexHint', 'Метрика → Настройки → Номер счётчика')}
               </p>
             </div>
 

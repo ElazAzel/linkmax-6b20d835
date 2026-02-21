@@ -15,7 +15,7 @@ function ScratchBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         label={`${t('fields.title', 'Title')} (${t('fields.optional', 'optional')})`}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder="Scratch to Reveal"
+        placeholder={t('fields.scratchRevealPlaceholder', 'Scratch to Reveal')}
       />
 
       <MultilingualInput
@@ -23,7 +23,7 @@ function ScratchBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         value={migrateToMultilingual(formData.revealText)}
         onChange={(value) => onChange({ ...formData, revealText: value })}
         type="textarea"
-        placeholder="🎉 You won 20% discount!"
+        placeholder={t('fields.scratchPrizePlaceholder', '🎉 You won 20% discount!')}
       />
 
       <div>

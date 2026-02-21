@@ -127,7 +127,9 @@
     "saving": "Saving...",
     "optional": "optional",
     "toHome": "Home",
-    "collapse": "Collapse"
+    "collapse": "Collapse",
+    "generating": "Generating...",
+    "generate": "Generate"
   },
   "fields": {
     "name": "Name",
@@ -261,7 +263,19 @@
     "quote": "Quote",
     "videoUrl": "Video URL",
     "aspectRatio": "Aspect Ratio",
-    "niche": "Niche"
+    "niche": "Niche",
+    "subscribeToNewsletterPlaceholder": "Subscribe to Newsletter",
+    "newsletterDescPlaceholder": "Get the latest updates delivered to your inbox",
+    "productNamePlaceholder": "Product Name",
+    "productDescPlaceholder": "Product description...",
+    "scratchRevealPlaceholder": "Scratch to Reveal",
+    "scratchPrizePlaceholder": "🎉 You won't get 20% discount!",
+    "myVideoPlaceholder": "My Video",
+    "videoUrlHint": "Supports YouTube and Vimeo URLs",
+    "aspectRatio169": "16:9 (Widescreen)",
+    "aspectRatio43": "4:3 (Standard)",
+    "aspectRatio11": "1:1 (Square)",
+    "aspectRatio916": "9:16 (Vertical/Shorts)"
   },
   "hints": {
     "bioLinks": "Tip: add links in [text](url) format",
@@ -670,7 +684,11 @@
       "ga4Id": "GA4 thread ID",
       "yandexMetrika": "ID Yandex Metrics",
       "webhookUrl": "Webhook URL (Pro)",
-      "webhookHint": "We will send a POST request with application data"
+      "webhookHint": "We will send a POST request with application data",
+      "fbHint": "Events Manager → Data Sources → Pixel ID",
+      "ttHint": "TikTok Ads → Assets → Events → Pixel Code",
+      "ga4Hint": "GA4 → Admin → Data Streams → Measurement ID",
+      "yandexHint": "Metrica → Settings → Counter number"
     },
     "pageBackground": "Page background",
     "backgroundType": "Background type",
@@ -1781,7 +1799,13 @@
       "dnsConfig": "Set up this DNS entry:",
       "aiBuilder": "AI Builder",
       "aiBuilderBtn": "Fill page with AI",
-      "aiBuilderDesc": "AI will create content based on the template and your information"
+      "aiBuilderDesc": "AI will create content based on the template and your information",
+      "yourDomainPlaceholder": "yourdomain.com",
+      "yourPagePlaceholder": "your-page",
+      "yourDomainExample": "ivan.ru",
+      "dnsType": "Type",
+      "dnsName": "Name",
+      "dnsValue": "Value"
     },
     "accountSettings": {
       "title": "Account Settings",
@@ -1890,7 +1914,8 @@
       "slugPlaceholder": "my-page",
       "slugHint": "3-30 characters: Latin, numbers, hyphen",
       "remaining": "You can create another {{count}} pages.",
-      "create": "Create a page"
+      "create": "Create a page",
+      "freePlan": "Free"
     },
     "common": {
       "error": "An error has occurred",
@@ -2512,7 +2537,8 @@
     "public": "Public",
     "hidden": "Hidden",
     "noTemplatesFound": "No templates found",
-    "editUserTierDescription": "Change user access level"
+    "editUserTierDescription": "Change user access level",
+    "roleAdmin": "Admin"
   },
   "adminCharts": {
     "userGrowth": "User growth",
@@ -4713,7 +4739,30 @@
     "translateToOthers": "Translate into other languages",
     "translate": "Translate",
     "translating": "Translation...",
-    "translateNow": "Translate now"
+    "translateNow": "Translate now",
+    "enterUrlHint": "Enter the URL to generate a catchy title",
+    "productName": "Product Name",
+    "productNamePlaceholder": "My Amazing Product",
+    "price": "Price",
+    "currency": "Currency",
+    "pageName": "Page Name",
+    "pageNamePlaceholder": "My Page",
+    "bio": "Bio",
+    "bioPlaceholder": "Page description...",
+    "links": "Links (comma-separated)",
+    "linksPlaceholder": "Instagram, YouTube, Shop",
+    "emptyHint": "Leave empty to use current page data",
+    "describePage": "Describe Your Page",
+    "describePagePlaceholder": "I",
+    "describePageHint": "Describe your page and AI will create a complete layout with suggested blocks",
+    "titleMagic": "Generate Magic Title",
+    "titleSales": "Generate Sales Copy",
+    "titleSeo": "Generate SEO Meta Tags",
+    "titleBuilder": "AI Page Builder",
+    "descMagic": "Let AI create a catchy, clickable title for your link",
+    "descSales": "Generate compelling product descriptions that drive sales",
+    "descSeo": "Optimize your page for search engines with AI-generated meta tags",
+    "descBuilder": "Build your entire page layout with AI assistance"
   },
   "styles": {
     "default": "Standard",

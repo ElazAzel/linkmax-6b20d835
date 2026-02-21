@@ -127,7 +127,9 @@
     "saving": "Saqlanmoqda...",
     "optional": "ixtiyoriy",
     "toHome": "Uy",
-    "collapse": "Yiqilish"
+    "collapse": "Yiqilish",
+    "generating": "Yaratilmoqda...",
+    "generate": "Yaratish"
   },
   "fields": {
     "name": "Ism",
@@ -261,7 +263,19 @@
     "quote": "Quote",
     "videoUrl": "Video URL",
     "aspectRatio": "Aspect Ratio",
-    "niche": "Niche"
+    "niche": "Niche",
+    "subscribeToNewsletterPlaceholder": "Axborot byulleteniga obuna bo'ling",
+    "newsletterDescPlaceholder": "Kirish qutingizga eng so'nggi yangilanishlarni oling",
+    "productNamePlaceholder": "Mahsulot nomi",
+    "productDescPlaceholder": "Mahsulot tavsifi...",
+    "scratchRevealPlaceholder": "Ochish uchun tirnash",
+    "scratchPrizePlaceholder": "🎉 Siz 20% chegirmaga ega bo'lmaysiz!",
+    "myVideoPlaceholder": "Mening Videom",
+    "videoUrlHint": "YouTube va Vimeo URL manzillarini qo'llab-quvvatlaydi",
+    "aspectRatio169": "16:9 (keng ekran)",
+    "aspectRatio43": "4:3 (standart)",
+    "aspectRatio11": "1:1 (kvadrat)",
+    "aspectRatio916": "9:16 (Vertikal/Shorts)"
   },
   "hints": {
     "bioLinks": "Maslahat: havolalarni [text](url) formatida qo‘shing",
@@ -670,7 +684,11 @@
       "ga4Id": "GA4 ip identifikatori",
       "yandexMetrika": "ID Yandex ko'rsatkichlari",
       "webhookUrl": "Webhook URL (Pro)",
-      "webhookHint": "Ilova ma'lumotlari bilan POST so'rovini yuboramiz"
+      "webhookHint": "Ilova ma'lumotlari bilan POST so'rovini yuboramiz",
+      "fbHint": "Voqealar menejeri → Ma'lumotlar manbalari → Pixel ID",
+      "ttHint": "TikTok reklamalari → Aktivlar → Voqealar → Piksel kodi",
+      "ga4Hint": "GA4 → Admin → Maʼlumotlar oqimi → Oʻlchov identifikatori",
+      "yandexHint": "Metrika → Parametrlar → Hisoblagich raqami"
     },
     "pageBackground": "Sahifa foni",
     "backgroundType": "Fon turi",
@@ -1781,7 +1799,13 @@
       "dnsConfig": "Ushbu DNS yozuvini sozlang:",
       "aiBuilder": "AI Builder",
       "aiBuilderBtn": "Sahifani AI bilan to'ldiring",
-      "aiBuilderDesc": "AI shablon va ma'lumotlaringiz asosida tarkib yaratadi"
+      "aiBuilderDesc": "AI shablon va ma'lumotlaringiz asosida tarkib yaratadi",
+      "yourDomainPlaceholder": "yourdomain.com",
+      "yourPagePlaceholder": "sizning sahifangiz",
+      "yourDomainExample": "ivan.ru",
+      "dnsType": "Turi",
+      "dnsName": "Ism",
+      "dnsValue": "Qiymat"
     },
     "accountSettings": {
       "title": "Hisob sozlamalari",
@@ -1890,7 +1914,8 @@
       "slugPlaceholder": "my-page",
       "slugHint": "3-30 belgi: lotin, raqamlar, defis",
       "remaining": "Yana {{count}} ta sahifa yaratishingiz mumkin.",
-      "create": "Sahifa yarating"
+      "create": "Sahifa yarating",
+      "freePlan": "Bepul"
     },
     "common": {
       "error": "Xatolik yuz berdi",
@@ -2512,7 +2537,8 @@
     "public": "Public",
     "hidden": "Hidden",
     "noTemplatesFound": "No templates found",
-    "editUserTierDescription": "Foydalanuvchiga kirish darajasini o'zgartirish"
+    "editUserTierDescription": "Foydalanuvchiga kirish darajasini o'zgartirish",
+    "roleAdmin": "Admin"
   },
   "adminCharts": {
     "userGrowth": "Foydalanuvchilarning o'sishi",
@@ -4713,7 +4739,30 @@
     "translateToOthers": "Boshqa tillarga tarjima qiling",
     "translate": "Tarjima",
     "translating": "Tarjima...",
-    "translateNow": "Hozir tarjima qiling"
+    "translateNow": "Hozir tarjima qiling",
+    "enterUrlHint": "Jozibali sarlavha yaratish uchun URL manzilini kiriting",
+    "productName": "Mahsulot nomi",
+    "productNamePlaceholder": "Mening ajoyib mahsulotim",
+    "price": "Narxi",
+    "currency": "Valyuta",
+    "pageName": "Sahifa nomi",
+    "pageNamePlaceholder": "Mening sahifam",
+    "bio": "Bio",
+    "bioPlaceholder": "Sahifaning tavsifi...",
+    "links": "Havolalar (vergul bilan ajratilgan)",
+    "linksPlaceholder": "Instagram, YouTube, do'kon",
+    "emptyHint": "Joriy sahifa maʼlumotlaridan foydalanish uchun boʻsh qoldiring",
+    "describePage": "O'z sahifangizni tavsiflang",
+    "describePagePlaceholder": "I",
+    "describePageHint": "O'z sahifangizni tavsiflang va AI tavsiya etilgan bloklar bilan to'liq tartibni yaratadi",
+    "titleMagic": "Sehrli sarlavha yarating",
+    "titleSales": "Savdo nusxasini yarating",
+    "titleSeo": "SEO meta teglarini yarating",
+    "titleBuilder": "AI sahifa yaratuvchisi",
+    "descMagic": "AIga havolangiz uchun jozibali, bosiladigan sarlavha yaratishga ruxsat bering",
+    "descSales": "Sotishni rag'batlantiradigan jozibali mahsulot tavsiflarini yarating",
+    "descSeo": "AI tomonidan yaratilgan meta teglar bilan qidiruv tizimlari uchun sahifangizni optimallashtiring",
+    "descBuilder": "AI yordamida butun sahifa tartibini yarating"
   },
   "styles": {
     "default": "Standart",

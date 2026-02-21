@@ -127,7 +127,9 @@
     "saving": "Сақталуда...",
     "optional": "міндетті емес",
     "toHome": "Үй",
-    "collapse": "Жыйрату"
+    "collapse": "Жыйрату",
+    "generating": "Жасалуда...",
+    "generate": "Жасау"
   },
   "fields": {
     "name": "Аты",
@@ -261,7 +263,19 @@
     "quote": "Quote",
     "videoUrl": "Video URL",
     "aspectRatio": "Aspect Ratio",
-    "niche": "Ниша"
+    "niche": "Ниша",
+    "subscribeToNewsletterPlaceholder": "Ақпараттық бюллетеньге жазылу",
+    "newsletterDescPlaceholder": "Кіріс жәшігіне жеткізілген соңғы жаңартуларды алыңыз",
+    "productNamePlaceholder": "Өнім атауы",
+    "productDescPlaceholder": "Өнім сипаттамасы...",
+    "scratchRevealPlaceholder": "Ашу үшін сызыңыз",
+    "scratchPrizePlaceholder": "🎉 Сіз 20% жеңілдік ала алмайсыз!",
+    "myVideoPlaceholder": "Менің бейнем",
+    "videoUrlHint": "YouTube және Vimeo URL мекенжайларын қолдайды",
+    "aspectRatio169": "16:9 (кең экран)",
+    "aspectRatio43": "4:3 (стандартты)",
+    "aspectRatio11": "1:1 (шаршы)",
+    "aspectRatio916": "9:16 (тік/қысқа)"
   },
   "hints": {
     "bioLinks": "Кеңес: сілтемелерді [text](url) пішімінде қосыңыз",
@@ -670,7 +684,11 @@
       "ga4Id": "GA4 ағынының идентификаторы",
       "yandexMetrika": "Яндекс метрикасының идентификаторы",
       "webhookUrl": "Webhook URL (Pro)",
-      "webhookHint": "Біз қолданба деректерімен POST сұрауын жібереміз"
+      "webhookHint": "Біз қолданба деректерімен POST сұрауын жібереміз",
+      "fbHint": "Events Manager → Деректер көздері → Pixel ID",
+      "ttHint": "TikTok жарнамалары → Активтер → Оқиғалар → Пиксель коды",
+      "ga4Hint": "GA4 → Әкімші → Деректер ағындары → Өлшем идентификаторы",
+      "yandexHint": "Метрика → Параметрлер → Есептегіш нөмірі"
     },
     "pageBackground": "Бет фоны",
     "backgroundType": "Фон түрі",
@@ -1781,7 +1799,13 @@
       "dnsConfig": "Осы DNS жазбасын орнатыңыз:",
       "aiBuilder": "AI Builder",
       "aiBuilderBtn": "Бетті AI-мен толтырыңыз",
-      "aiBuilderDesc": "AI үлгіге және сіздің ақпаратыңызға негізделген мазмұнды жасайды"
+      "aiBuilderDesc": "AI үлгіге және сіздің ақпаратыңызға негізделген мазмұнды жасайды",
+      "yourDomainPlaceholder": "yourdomain.com",
+      "yourPagePlaceholder": "сіздің парақшаңыз",
+      "yourDomainExample": "ivan.ru",
+      "dnsType": "Түр",
+      "dnsName": "Аты",
+      "dnsValue": "Мән"
     },
     "accountSettings": {
       "title": "Есеп жазбасын түзету",
@@ -1890,7 +1914,8 @@
       "slugPlaceholder": "my-page",
       "slugHint": "3-30 таңба: латын, сандар, сызықша",
       "remaining": "Басқа {{count}} бет жасауға болады.",
-      "create": "Бет жасау"
+      "create": "Бет жасау",
+      "freePlan": "Тегін"
     },
     "common": {
       "error": "Қате орын алды",
@@ -2512,7 +2537,8 @@
     "public": "Public",
     "hidden": "Hidden",
     "noTemplatesFound": "No templates found",
-    "editUserTierDescription": "Пайдаланушыға кіру деңгейін өзгерту"
+    "editUserTierDescription": "Пайдаланушыға кіру деңгейін өзгерту",
+    "roleAdmin": "Админ"
   },
   "adminCharts": {
     "userGrowth": "Пайдаланушының өсуі",
@@ -4713,7 +4739,30 @@
     "translateToOthers": "Басқа тілдерге аударыңыз",
     "translate": "Аудару",
     "translating": "Аударма...",
-    "translateNow": "Қазір аударыңыз"
+    "translateNow": "Қазір аударыңыз",
+    "enterUrlHint": "Қызықты тақырып жасау үшін URL мекенжайын енгізіңіз",
+    "productName": "Өнім атауы",
+    "productNamePlaceholder": "Менің керемет өнімім",
+    "price": "Бағасы",
+    "currency": "Валюта",
+    "pageName": "Бет аты",
+    "pageNamePlaceholder": "Менің парақшам",
+    "bio": "Био",
+    "bioPlaceholder": "Бет сипаттамасы...",
+    "links": "Сілтемелер (үтірмен бөлінген)",
+    "linksPlaceholder": "Instagram, YouTube, дүкен",
+    "emptyHint": "Ағымдағы бет деректерін пайдалану үшін бос қалдырыңыз",
+    "describePage": "Өз парақшаңызды сипаттаңыз",
+    "describePagePlaceholder": "I",
+    "describePageHint": "Бетіңізді сипаттаңыз және AI ұсынылған блоктармен толық макет жасайды",
+    "titleMagic": "Сиқырлы тақырып жасаңыз",
+    "titleSales": "Сатылым көшірмесін жасаңыз",
+    "titleSeo": "SEO мета тегтерін жасаңыз",
+    "titleBuilder": "AI бет құрастырушы",
+    "descMagic": "AI-ге сілтемеңіз үшін тартымды, басылатын тақырып жасауға мүмкіндік беріңіз",
+    "descSales": "Сатуды ынталандыратын әсерлі өнім сипаттамаларын жасаңыз",
+    "descSeo": "AI жасаған мета тегтері бар іздеу жүйелері үшін бетіңізді оңтайландырыңыз",
+    "descBuilder": "AI көмегімен бүкіл бет макетін жасаңыз"
   },
   "styles": {
     "default": "Стандартты",

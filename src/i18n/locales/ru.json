@@ -127,7 +127,9 @@
     "saving": "Сохранение...",
     "optional": "опционально",
     "toHome": "На главную",
-    "collapse": "Свернуть"
+    "collapse": "Свернуть",
+    "generating": "Generating...",
+    "generate": "Generate"
   },
   "fields": {
     "name": "Имя",
@@ -261,7 +263,19 @@
     "quote": "Цитировать",
     "videoUrl": "URL-адрес видео",
     "aspectRatio": "Соотношение сторон",
-    "niche": "Ниша"
+    "niche": "Ниша",
+    "subscribeToNewsletterPlaceholder": "Subscribe to Newsletter",
+    "newsletterDescPlaceholder": "Get the latest updates delivered to your inbox",
+    "productNamePlaceholder": "Product Name",
+    "productDescPlaceholder": "Product description...",
+    "scratchRevealPlaceholder": "Scratch to Reveal",
+    "scratchPrizePlaceholder": "🎉 You won 20% discount!",
+    "myVideoPlaceholder": "My Video",
+    "videoUrlHint": "Supports YouTube and Vimeo URLs",
+    "aspectRatio169": "16:9 (Widescreen)",
+    "aspectRatio43": "4:3 (Standard)",
+    "aspectRatio11": "1:1 (Square)",
+    "aspectRatio916": "9:16 (Vertical/Shorts)"
   },
   "hints": {
     "bioLinks": "Совет: добавляйте ссылки в формате [текст](url)",
@@ -670,7 +684,11 @@
       "ga4Id": "ID потока GA4",
       "yandexMetrika": "ID Яндекс Метрики",
       "webhookUrl": "URL-адрес веб-перехватчика (версия Pro)",
-      "webhookHint": "Мы отправим POST-запрос с данными заявки"
+      "webhookHint": "Мы отправим POST-запрос с данными заявки",
+      "fbHint": "Events Manager → Источники данных → Pixel ID",
+      "ttHint": "TikTok Ads → Assets → Events → Pixel Code",
+      "ga4Hint": "GA4 → Admin → Data Streams → Measurement ID",
+      "yandexHint": "Метрика → Настройки → Номер счётчика"
     },
     "pageBackground": "Фон страницы",
     "backgroundType": "Тип фона",
@@ -1781,7 +1799,13 @@
       "dnsConfig": "Настройте эту DNS-запись:",
       "aiBuilder": "ИИ-строитель",
       "aiBuilderBtn": "Заполнить страницу с AI",
-      "aiBuilderDesc": "AI создаст контент на основе шаблона и вашей информации"
+      "aiBuilderDesc": "AI создаст контент на основе шаблона и вашей информации",
+      "yourDomainPlaceholder": "yourdomain.com",
+      "yourPagePlaceholder": "your-page",
+      "yourDomainExample": "ivan.ru",
+      "dnsType": "Type",
+      "dnsName": "Name",
+      "dnsValue": "Value"
     },
     "accountSettings": {
       "title": "Настройки аккаунта",
@@ -1890,7 +1914,8 @@
       "slugPlaceholder": "моя страница",
       "slugHint": "3-30 символов: латиница, цифры, дефис",
       "remaining": "Вы можете создать еще {{count}} стр.",
-      "create": "Создать страницу"
+      "create": "Создать страницу",
+      "freePlan": "Free"
     },
     "common": {
       "error": "Произошла ошибка",
@@ -2512,7 +2537,8 @@
     "public": "Общественный",
     "hidden": "Скрытый",
     "noTemplatesFound": "Шаблоны не найдены",
-    "editUserTierDescription": "Изменить уровень доступа пользователя"
+    "editUserTierDescription": "Изменить уровень доступа пользователя",
+    "roleAdmin": "Admin"
   },
   "adminCharts": {
     "userGrowth": "Рост пользователей",
@@ -4713,7 +4739,30 @@
     "translateToOthers": "Перевести на другие языки",
     "translate": "Перевести",
     "translating": "Перевод...",
-    "translateNow": "Перевести сейчас"
+    "translateNow": "Перевести сейчас",
+    "enterUrlHint": "Enter the URL to generate a catchy title",
+    "productName": "Product Name",
+    "productNamePlaceholder": "My Amazing Product",
+    "price": "Price",
+    "currency": "Currency",
+    "pageName": "Page Name",
+    "pageNamePlaceholder": "My Page",
+    "bio": "Bio",
+    "bioPlaceholder": "Page description...",
+    "links": "Links (comma-separated)",
+    "linksPlaceholder": "Instagram, YouTube, Shop",
+    "emptyHint": "Leave empty to use current page data",
+    "describePage": "Describe Your Page",
+    "describePagePlaceholder": "I",
+    "describePageHint": "Describe your page and AI will create a complete layout with suggested blocks",
+    "titleMagic": "Generate Magic Title",
+    "titleSales": "Generate Sales Copy",
+    "titleSeo": "Generate SEO Meta Tags",
+    "titleBuilder": "AI Page Builder",
+    "descMagic": "Let AI create a catchy, clickable title for your link",
+    "descSales": "Generate compelling product descriptions that drive sales",
+    "descSeo": "Optimize your page for search engines with AI-generated meta tags",
+    "descBuilder": "Build your entire page layout with AI assistance"
   },
   "styles": {
     "default": "Стандартный",

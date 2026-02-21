@@ -127,7 +127,9 @@
     "saving": "",
     "optional": "",
     "toHome": "",
-    "collapse": ""
+    "collapse": "",
+    "generating": "",
+    "generate": ""
   },
   "fields": {
     "name": "Ім’я",
@@ -261,7 +263,19 @@
     "quote": "",
     "videoUrl": "",
     "aspectRatio": "",
-    "niche": ""
+    "niche": "",
+    "subscribeToNewsletterPlaceholder": "",
+    "newsletterDescPlaceholder": "",
+    "productNamePlaceholder": "",
+    "productDescPlaceholder": "",
+    "scratchRevealPlaceholder": "",
+    "scratchPrizePlaceholder": "",
+    "myVideoPlaceholder": "",
+    "videoUrlHint": "",
+    "aspectRatio169": "",
+    "aspectRatio43": "",
+    "aspectRatio11": "",
+    "aspectRatio916": ""
   },
   "hints": {
     "bioLinks": "Порада: добавляйте посилання в формате [текст](url)",
@@ -670,7 +684,11 @@
       "ga4Id": "",
       "yandexMetrika": "",
       "webhookUrl": "",
-      "webhookHint": ""
+      "webhookHint": "",
+      "fbHint": "",
+      "ttHint": "",
+      "ga4Hint": "",
+      "yandexHint": ""
     },
     "pageBackground": "",
     "backgroundType": "",
@@ -1781,7 +1799,13 @@
       "dnsConfig": "",
       "aiBuilder": "",
       "aiBuilderBtn": "",
-      "aiBuilderDesc": ""
+      "aiBuilderDesc": "",
+      "yourDomainPlaceholder": "",
+      "yourPagePlaceholder": "",
+      "yourDomainExample": "",
+      "dnsType": "",
+      "dnsName": "",
+      "dnsValue": ""
     },
     "accountSettings": {
       "title": "Налаштування аккаунта",
@@ -1890,7 +1914,8 @@
       "slugPlaceholder": "",
       "slugHint": "",
       "remaining": "Вы можете создать еще {{count}} стр.",
-      "create": ""
+      "create": "",
+      "freePlan": ""
     },
     "common": {
       "error": "",
@@ -2512,7 +2537,8 @@
     "public": "",
     "hidden": "",
     "noTemplatesFound": "",
-    "editUserTierDescription": ""
+    "editUserTierDescription": "",
+    "roleAdmin": ""
   },
   "adminCharts": {
     "userGrowth": "Рост користувачів",
@@ -4713,7 +4739,30 @@
     "translateToOthers": "",
     "translate": "",
     "translating": "",
-    "translateNow": ""
+    "translateNow": "",
+    "enterUrlHint": "",
+    "productName": "",
+    "productNamePlaceholder": "",
+    "price": "",
+    "currency": "",
+    "pageName": "",
+    "pageNamePlaceholder": "",
+    "bio": "",
+    "bioPlaceholder": "",
+    "links": "",
+    "linksPlaceholder": "",
+    "emptyHint": "",
+    "describePage": "",
+    "describePagePlaceholder": "",
+    "describePageHint": "",
+    "titleMagic": "",
+    "titleSales": "",
+    "titleSeo": "",
+    "titleBuilder": "",
+    "descMagic": "",
+    "descSales": "",
+    "descSeo": "",
+    "descBuilder": ""
   },
   "styles": {
     "default": "",

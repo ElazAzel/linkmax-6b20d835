@@ -68,7 +68,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
 
   const getBlockTitle = (block: Block): string => {
     const currentLang = i18n.language as 'ru' | 'en' | 'kk';
-    
+
     switch (block.type) {
       case 'profile':
         return `Профиль: ${getI18nText(block.name, currentLang)}`;
@@ -145,11 +145,10 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
       <Card
         ref={setNodeRef}
         style={style}
-        className={`p-3 hover:shadow-lg transition-all duration-200 border-l-4 ${
-          isViewOnly 
-            ? 'border-l-amber-500/50 bg-amber-50/30 dark:bg-amber-900/10' 
+        className={`p-3 hover:shadow-lg transition-all duration-200 border-l-4 ${isViewOnly
+            ? 'border-l-amber-500/50 bg-amber-50/30 dark:bg-amber-900/10'
             : 'border-l-primary/20 hover:border-l-primary'
-        }`}
+          }`}
       >
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Position indicator */}
@@ -165,7 +164,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
           >
             <GripVertical className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
           </button>
-          
+
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <span className="font-medium text-sm truncate">
@@ -228,7 +227,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
                       disabled
                     >
                       <Lock className="h-3 w-3 mr-1" />
-                      Edit
+                      {t('common.edit', 'Edit')}
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -242,7 +241,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
                   className="h-7 sm:h-8 text-xs"
                   onClick={() => onEdit(block.id)}
                 >
-                  Edit
+                  {t('common.edit', 'Edit')}
                 </Button>
               )
             )}
@@ -270,7 +269,7 @@ export function DraggableBlockList({
   onEdit,
 }: DraggableBlockListProps) {
   const { isBlockViewOnly, getRequiredTier } = useFreemiumLimits();
-  
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {

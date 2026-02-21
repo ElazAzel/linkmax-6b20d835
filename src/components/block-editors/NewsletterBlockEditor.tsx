@@ -13,7 +13,7 @@ function NewsletterBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
         label={t('fields.title', 'Title')}
         value={migrateToMultilingual(formData.title)}
         onChange={(value) => onChange({ ...formData, title: value })}
-        placeholder="Subscribe to Newsletter"
+        placeholder={t('fields.subscribeToNewsletterPlaceholder', 'Subscribe to Newsletter')}
       />
 
       <MultilingualInput
@@ -21,14 +21,14 @@ function NewsletterBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
         value={migrateToMultilingual(formData.description)}
         onChange={(value) => onChange({ ...formData, description: value })}
         type="textarea"
-        placeholder="Get the latest updates delivered to your inbox"
+        placeholder={t('fields.newsletterDescPlaceholder', 'Get the latest updates delivered to your inbox')}
       />
 
       <MultilingualInput
         label={t('fields.buttonText', 'Button Text')}
         value={migrateToMultilingual(formData.buttonText)}
         onChange={(value) => onChange({ ...formData, buttonText: value })}
-        placeholder="Subscribe"
+        placeholder={t('actions.subscribe', 'Subscribe')}
       />
     </div>
   );

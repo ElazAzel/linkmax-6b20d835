@@ -30,13 +30,13 @@ function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
           label={t('fields.title', 'Title')}
           value={migrateToMultilingual(formData.title)}
           onChange={(value) => onChange({ ...formData, title: value })}
-          placeholder="My Video"
+          placeholder={t('fields.myVideoPlaceholder', 'My Video')}
         />
 
         <EditorField
           label={t('fields.videoUrl', 'Video URL')}
           required
-          hint="Supports YouTube and Vimeo URLs"
+          hint={t('fields.videoUrlHint', 'Supports YouTube and Vimeo URLs')}
         >
           <Input
             type="url"
@@ -82,10 +82,10 @@ function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps)
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="16:9">16:9 (Widescreen)</SelectItem>
-              <SelectItem value="4:3">4:3 (Standard)</SelectItem>
-              <SelectItem value="1:1">1:1 (Square)</SelectItem>
-              <SelectItem value="9:16">9:16 (Vertical/Shorts)</SelectItem>
+              <SelectItem value="16:9">{t('fields.aspectRatio169', '16:9 (Widescreen)')}</SelectItem>
+              <SelectItem value="4:3">{t('fields.aspectRatio43', '4:3 (Standard)')}</SelectItem>
+              <SelectItem value="1:1">{t('fields.aspectRatio11', '1:1 (Square)')}</SelectItem>
+              <SelectItem value="9:16">{t('fields.aspectRatio916', '9:16 (Vertical/Shorts)')}</SelectItem>
             </SelectContent>
           </Select>
         </EditorField>

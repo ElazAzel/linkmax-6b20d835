@@ -131,7 +131,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
               onChange={(e) => setInput({ ...input, url: e.target.value })}
             />
             <p className="text-xs text-muted-foreground">
-              Enter the URL to generate a catchy title
+              {t('ai.enterUrlHint', 'Enter the URL to generate a catchy title')}
             </p>
           </div>
         );
@@ -140,17 +140,17 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="productName">Product Name</Label>
+              <Label htmlFor="productName">{t('ai.productName', 'Product Name')}</Label>
               <Input
                 id="productName"
-                placeholder="My Amazing Product"
+                placeholder={t('ai.productNamePlaceholder', 'My Amazing Product')}
                 value={input.productName}
                 onChange={(e) => setInput({ ...input, productName: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-2">
-                <Label htmlFor="price">Price</Label>
+                <Label htmlFor="price">{t('ai.price', 'Price')}</Label>
                 <Input
                   id="price"
                   type="number"
@@ -160,7 +160,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="currency">Currency</Label>
+                <Label htmlFor="currency">{t('ai.currency', 'Currency')}</Label>
                 <Input
                   id="currency"
                   placeholder="$"
@@ -176,34 +176,34 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Page Name</Label>
+              <Label htmlFor="name">{t('ai.pageName', 'Page Name')}</Label>
               <Input
                 id="name"
-                placeholder="My Page"
+                placeholder={t('ai.pageNamePlaceholder', 'My Page')}
                 value={input.name}
                 onChange={(e) => setInput({ ...input, name: e.target.value })}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">{t('ai.bio', 'Bio')}</Label>
               <Textarea
                 id="bio"
-                placeholder="Page description..."
+                placeholder={t('ai.bioPlaceholder', 'Page description...')}
                 value={input.bio}
                 onChange={(e) => setInput({ ...input, bio: e.target.value })}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="links">Links (comma-separated)</Label>
+              <Label htmlFor="links">{t('ai.links', 'Links (comma-separated)')}</Label>
               <Input
                 id="links"
-                placeholder="Instagram, YouTube, Shop"
+                placeholder={t('ai.linksPlaceholder', 'Instagram, YouTube, Shop')}
                 value={input.links}
                 onChange={(e) => setInput({ ...input, links: e.target.value })}
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Leave empty to use current page data
+              {t('ai.emptyHint', 'Leave empty to use current page data')}
             </p>
           </div>
         );
@@ -218,7 +218,7 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
                   {t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')}
                 </div>
                 <p className="text-muted-foreground text-xs mb-2">
-                  {isPremium 
+                  {isPremium
                     ? t('freemium.aiLimitResetMonthlyPro', 'Лимит обновится в следующем месяце')
                     : t('freemium.upgradeForMoreGenerations', 'Обновите до Premium для 5 генераций в месяц')
                   }
@@ -234,24 +234,24 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
             {canGenerate && !isPremium && (
               <div className="p-2 rounded-lg bg-muted/50 text-xs text-muted-foreground flex items-center gap-2">
                 <Sparkles className="h-3 w-3" />
-                {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', { 
-                  count: remainingGenerations, 
-                  total: limits.maxAIPageGenerationsPerMonth 
+                {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', {
+                  count: remainingGenerations,
+                  total: limits.maxAIPageGenerationsPerMonth
                 })}
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="description">Describe Your Page</Label>
+              <Label htmlFor="description">{t('ai.describePage', 'Describe Your Page')}</Label>
               <Textarea
                 id="description"
-                placeholder="I'm a fitness coach offering online training programs, workout plans, and nutrition guides. I want to showcase my services and link to my social media."
+                placeholder={t('ai.describePagePlaceholder', "I'm a fitness coach offering online training programs, workout plans, and nutrition guides. I want to showcase my services and link to my social media.")}
                 value={input.description}
                 rows={5}
                 onChange={(e) => setInput({ ...input, description: e.target.value })}
                 disabled={!canGenerate}
               />
               <p className="text-xs text-muted-foreground">
-                Describe your page and AI will create a complete layout with suggested blocks
+                {t('ai.describePageHint', 'Describe your page and AI will create a complete layout with suggested blocks')}
               </p>
             </div>
           </div>
@@ -261,19 +261,19 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
 
   const getTitle = () => {
     switch (type) {
-      case 'magic-title': return 'Generate Magic Title';
-      case 'sales-copy': return 'Generate Sales Copy';
-      case 'seo': return 'Generate SEO Meta Tags';
-      case 'ai-builder': return 'AI Page Builder';
+      case 'magic-title': return t('ai.titleMagic', 'Generate Magic Title');
+      case 'sales-copy': return t('ai.titleSales', 'Generate Sales Copy');
+      case 'seo': return t('ai.titleSeo', 'Generate SEO Meta Tags');
+      case 'ai-builder': return t('ai.titleBuilder', 'AI Page Builder');
     }
   };
 
   const getDescription = () => {
     switch (type) {
-      case 'magic-title': return 'Let AI create a catchy, clickable title for your link';
-      case 'sales-copy': return 'Generate compelling product descriptions that drive sales';
-      case 'seo': return 'Optimize your page for search engines with AI-generated meta tags';
-      case 'ai-builder': return 'Build your entire page layout with AI assistance';
+      case 'magic-title': return t('ai.descMagic', 'Let AI create a catchy, clickable title for your link');
+      case 'sales-copy': return t('ai.descSales', 'Generate compelling product descriptions that drive sales');
+      case 'seo': return t('ai.descSeo', 'Optimize your page for search engines with AI-generated meta tags');
+      case 'ai-builder': return t('ai.descBuilder', 'Build your entire page layout with AI assistance');
     }
   };
 
@@ -293,28 +293,28 @@ export function AIGenerator({ type, isOpen, onClose, onResult, currentData }: AI
         </div>
 
         <DialogFooter className="flex-col-reverse sm:flex-row gap-2 pt-2">
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
-            disabled={loading} 
+          <Button
+            variant="outline"
+            onClick={onClose}
+            disabled={loading}
             className="w-full sm:w-auto"
           >
-            Cancel
+            {t('common.cancel', 'Cancel')}
           </Button>
-          <Button 
-            onClick={handleGenerate} 
-            disabled={loading || (isPageGeneration && !canGenerate)} 
+          <Button
+            onClick={handleGenerate}
+            disabled={loading || (isPageGeneration && !canGenerate)}
             className="w-full sm:w-auto"
           >
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Generating...
+                {t('common.generating', 'Generating...')}
               </>
             ) : (
               <>
                 <Wand2 className="h-4 w-4 mr-2" />
-                Generate
+                {t('common.generate', 'Generate')}
               </>
             )}
           </Button>
