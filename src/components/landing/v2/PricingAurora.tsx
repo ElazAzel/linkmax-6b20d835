@@ -52,35 +52,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    {/* Free Plan */}
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="bg-card border border-border/60 rounded-2xl p-8 flex flex-col relative"
-                    >
-                        <div className="mb-6">
-                            <h3 className="text-xl font-bold mb-2">{t('landing.v2.pricing.free.name', 'Starter')}</h3>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-4xl font-black">{prices.free}</span>
-                                <span className="text-muted-foreground">/ {t('landing.v2.pricing.forever', 'forever')}</span>
-                            </div>
-                            <p className="text-sm text-muted-foreground mt-2">
-                                {t('landing.v2.pricing.free.desc', 'Perfect for trying out the platform.')}
-                            </p>
-                        </div>
-
-                        <ul className="space-y-4 mb-8 flex-1">
-                            <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.free.f1', 'Basic Blocks')}</span></li>
-                            <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.free.f2', '1 AI Generation/mo')}</span></li>
-                            <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.free.f3', 'Basic Analytics')}</span></li>
-                            <li className="flex items-center gap-3 text-sm text-muted-foreground"><X className="w-5 h-5 text-muted-foreground/50 shrink-0" /> <span>{t('landing.v2.pricing.free.f4', 'No Custom Domain')}</span></li>
-                        </ul>
-
-                        <Button variant="outline" className="w-full rounded-xl" onClick={() => onPlanSelect('free')}>
-                            {t('landing.v2.pricing.free.cta', 'Get Started Free')}
-                        </Button>
-                    </motion.div>
-
+                <div className="max-w-md mx-auto">
                     {/* Pro Plan */}
                     <motion.div
                         whileHover={{ y: -5 }}
@@ -124,9 +96,17 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                 <li className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f5', 'Remove Branding')}</span></li>
                             </ul>
 
-                            <MagneticButton className="w-full rounded-xl" onClick={() => onPlanSelect('pro')}>
+                            <MagneticButton className="w-full rounded-xl mb-3" onClick={() => onPlanSelect('pro')}>
                                 {t('landing.v2.pricing.pro.cta', 'Start Pro Trial')}
                             </MagneticButton>
+
+                            <Button
+                                variant="ghost"
+                                className="w-full rounded-xl text-muted-foreground hover:text-primary transition-colors text-sm h-auto py-2"
+                                onClick={() => onPlanSelect('free')}
+                            >
+                                {t('landing.v2.pricing.free.cta', 'Начать бесплатно')}
+                            </Button>
                         </div>
                     </motion.div>
                 </div>
