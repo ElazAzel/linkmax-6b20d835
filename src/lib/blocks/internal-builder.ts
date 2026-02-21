@@ -1,5 +1,6 @@
 import { createBlock } from './block-factory';
-import type { Block } from '@/types/page';
+import type { Block, CatalogItem, CatalogBlock, PricingItem, PricingBlock, MessengerBlock, SocialsBlock } from '@/types/page';
+import { extractServicesPipeline, extractContactsPipeline, extractSocialsPipeline } from './extractors';
 
 interface UserInfo {
     name: string;
@@ -10,17 +11,75 @@ interface UserInfo {
     mediaLinks: string;
 }
 
+// ============== HYDRATION STRATEGIES ==============
+
+function hydrateProfileBlock(block: any, userInfo: UserInfo) {
+    if (userInfo.name) block.name = userInfo.name;
+    if (userInfo.bio) block.bio = userInfo.bio;
+}
+
+function hydrateCatalogOrPricingBlock(block: any, parsedServices: any[]) {
+    block.title = 'Мои услуги';
+    const items = parsedServices.map((srv, i) => ({
+        id: `item-${Date.now()}-${i}`,
+        name: srv.title,
+        description: srv.description,
+        price: srv.price,
+    })) as any[];
+    block.items = items;
+}
+
+function hydrateMessengerBlock(block: any, parsedContacts: any[], rawContacts: string) {
+    block.title = 'Связаться со мной';
+    if (parsedContacts.length > 0) {
+        block.messengers = parsedContacts.map((c: any) => ({
+            platform: c.platform,
+            username: c.username,
+        }));
+    } else if (rawContacts) {
+        // Fallback string if regex failed
+        block.messengers = [{ platform: 'whatsapp', username: rawContacts }];
+    }
+}
+
+function hydrateSocialsBlock(block: any, parsedSocials: any[], rawSocials: string) {
+    if (parsedSocials.length > 0) {
+        block.platforms = parsedSocials.map((s: any, i: number) => ({
+            id: `soc-${Date.now()}-${i}`,
+            platform: s.platform,
+            url: s.url
+        }));
+    } else if (rawSocials) {
+        // Fallback guess
+        block.platforms = [{ id: 'soc-1', platform: 'instagram', url: rawSocials }];
+    }
+}
+
+// ============== ALGORITHM PIPELINE ==============
+
 /**
- * Deterministically hydration algorithm that replaces the LLM generation.
- * It takes a database template and user input, injecting the input into appropriate
- * blocks, or appending new blocks if the template lacks suitable targets.
+ * Advanced deterministic hydration algorithm.
+ * Uses strategy patterns and data extraction pipelines to build a rich page layout
+ * from raw user input, gracefully degrading or falling back when data is missing.
  */
 export function generateBlocksFromTemplate(
     templateBlocks: any[],
     userInfo: UserInfo
 ): Block[] {
-    // 1. Start with raw template blocks, converting them to properly formatted Blocks.
-    //    (Assuming they just need to be cast, or run through block-factory if missing IDs)
+    // 1. Data Normalization Pipeline
+    const parsedServices = extractServicesPipeline(userInfo.services);
+    const parsedContacts = extractContactsPipeline(userInfo.contacts);
+    const parsedSocials = extractSocialsPipeline(userInfo.socials);
+
+    // Track state to avoid duplicate injections
+    const state = {
+        injectedProfile: false,
+        injectedServices: parsedServices.length === 0 && !userInfo.services,
+        injectedContacts: parsedContacts.length === 0 && !userInfo.contacts,
+        injectedSocials: parsedSocials.length === 0 && !userInfo.socials,
+    };
+
+    // 2. Base Block Generation
     const blocks: Block[] = templateBlocks.map((blockData: any, index: number) => {
         const blockType = blockData.type || 'text';
         const baseBlock = createBlock(blockType);
@@ -33,84 +92,67 @@ export function generateBlocksFromTemplate(
         } as Block;
     });
 
-    // Keep track of what we've injected to avoid duplicates or miss injections
-    let injectedServices = false;
-    let injectedContacts = false;
-    let injectedSocials = false;
-
-    // 2. Iterate through existing blocks to inject data where it makes sense
+    // 3. Hydration Loop (Strategy Pattern)
     for (const block of blocks) {
-        // Inject Services
-        if (userInfo.services && !injectedServices) {
-            if (block.type === 'pricing' || block.type === 'catalog') {
-                const anyBlock = block as any;
-                anyBlock.title = 'Мои услуги';
-                if (anyBlock.items && anyBlock.items.length > 0) {
-                    anyBlock.items[0].description = userInfo.services.slice(0, 100); // Simplistic injection
-                }
-                injectedServices = true;
-            } else if (block.type === 'text' && !injectedServices) {
-                // Find the first text block to inject services if no generic pricing exists
-                (block as any).content = `**Услуги:**\n${userInfo.services}`;
-                injectedServices = true;
-            }
+        if (!state.injectedProfile && (block.type === 'profile' || block.type === 'avatar')) {
+            hydrateProfileBlock(block, userInfo);
+            state.injectedProfile = true;
+        } else if (!state.injectedProfile && block.type === 'text' && (block as any).content === '') {
+            (block as any).content = `# ${userInfo.name}\n${userInfo.bio}`;
+            state.injectedProfile = true;
         }
 
-        // Inject Contacts
-        if (userInfo.contacts && !injectedContacts) {
-            if (block.type === 'messenger') {
-                const msgBlock = block as any;
-                msgBlock.title = 'Связаться со мной';
-                // Assume user provided a phone number or handle in contacts.
-                if (msgBlock.messengers && msgBlock.messengers.length > 0) {
-                    msgBlock.messengers[0].username = userInfo.contacts;
-                }
-                injectedContacts = true;
-            } else if (block.type === 'form') {
-                (block as any).title = 'Оставить заявку';
-                injectedContacts = true; // Just mapping intent to a form
-            }
+        if (!state.injectedServices && (block.type === 'catalog' || block.type === 'pricing')) {
+            hydrateCatalogOrPricingBlock(block, parsedServices);
+            state.injectedServices = true;
         }
 
-        // Inject Socials
-        if (userInfo.socials && !injectedSocials) {
-            if (block.type === 'socials') {
-                const socBlock = block as any;
-                if (socBlock.platforms && socBlock.platforms.length > 0) {
-                    socBlock.platforms[0].url = userInfo.socials; // Basic injection into first slot
-                }
-                injectedSocials = true;
-            }
+        if (!state.injectedContacts && block.type === 'messenger') {
+            hydrateMessengerBlock(block, parsedContacts, userInfo.contacts);
+            state.injectedContacts = true;
+        } else if (!state.injectedContacts && block.type === 'form') {
+            (block as any).title = 'Оставить заявку';
+            state.injectedContacts = true;
+        }
+
+        if (!state.injectedSocials && block.type === 'socials') {
+            hydrateSocialsBlock(block, parsedSocials, userInfo.socials);
+            state.injectedSocials = true;
         }
     }
 
-    // 3. Append Fallback Blocks if template was missing necessary structures
-    if (userInfo.services && !injectedServices) {
+    // 4. Smart Fallbacks (Appending missing crucial blocks)
+    if ((userInfo.name || userInfo.bio) && !state.injectedProfile) {
+        const profileBlock = createBlock('profile');
+        hydrateProfileBlock(profileBlock, userInfo);
+        blocks.unshift({ ...profileBlock, id: `profile-fallback-${Date.now()}` } as Block);
+    }
+
+    if (!state.injectedServices && parsedServices.length > 0) {
+        const catalogBlock = createBlock('catalog') as CatalogBlock;
+        catalogBlock.title = 'Каталог услуг';
+        hydrateCatalogOrPricingBlock(catalogBlock, parsedServices);
+        blocks.push({ ...catalogBlock, id: `catalog-fallback-${Date.now()}` } as Block);
+    } else if (!state.injectedServices && userInfo.services) {
         const textBlock = createBlock('text');
         (textBlock as any).content = `**Услуги:**\n${userInfo.services}`;
         blocks.push({ ...textBlock, id: `text-services-${Date.now()}` } as Block);
     }
 
-    if (userInfo.contacts && !injectedContacts) {
-        const messengerBlock = createBlock('messenger');
-        (messengerBlock as any).title = 'Связаться со мной';
-        if ((messengerBlock as any).messengers && (messengerBlock as any).messengers.length > 0) {
-            (messengerBlock as any).messengers[0].username = userInfo.contacts;
-        }
-        blocks.push({ ...messengerBlock, id: `messenger-contacts-${Date.now()}` } as Block);
+    if (!state.injectedContacts && (parsedContacts.length > 0 || userInfo.contacts)) {
+        const messengerBlock = createBlock('messenger') as MessengerBlock;
+        hydrateMessengerBlock(messengerBlock, parsedContacts, userInfo.contacts);
+        blocks.push({ ...messengerBlock, id: `messenger-fallback-${Date.now()}` } as Block);
     }
 
-    if (userInfo.socials && !injectedSocials) {
-        const socialsBlock = createBlock('socials');
-        (socialsBlock as any).title = 'Мои соцсети';
-        if ((socialsBlock as any).platforms && (socialsBlock as any).platforms.length > 0) {
-            (socialsBlock as any).platforms[0].url = userInfo.socials;
-        }
+    if (!state.injectedSocials && (parsedSocials.length > 0 || userInfo.socials)) {
+        const socialsBlock = createBlock('socials') as SocialsBlock;
+        socialsBlock.title = 'Мои соцсети';
+        hydrateSocialsBlock(socialsBlock, parsedSocials, userInfo.socials);
         blocks.push({ ...socialsBlock, id: `socials-fallback-${Date.now()}` } as Block);
     }
 
     if (userInfo.mediaLinks) {
-        // Just append a link block
         const linkBlock = createBlock('link');
         (linkBlock as any).title = 'Мои материалы';
         (linkBlock as any).url = userInfo.mediaLinks;
