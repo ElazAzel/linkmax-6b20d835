@@ -297,31 +297,31 @@ export default function Alternatives() {
       <GEOTagging includeOrganization={false} />
       <AISearchOptimizer
         pageType="article"
-        primaryQuestion="What are the best alternatives to Linktree?"
-        primaryAnswer="Top Linktree alternatives include lnkmx (AI-powered, built-in CRM), Beacons (creator-focused), Koji (interactive), Taplink (analytics), and Stan Store (e-commerce). lnkmx stands out with its AI page builder, lead management, and affordable pricing."
-        entityName="lnkmx vs Competitors"
+        primaryQuestion={t('alternatives.seo.opt.question', 'What are the best alternatives to Linktree?')}
+        primaryAnswer={t('alternatives.seo.opt.answer', 'Top Linktree alternatives include lnkmx (AI-powered, built-in CRM), Beacons (creator-focused), Koji (interactive), Taplink (analytics), and Stan Store (e-commerce). lnkmx stands out with its AI page builder, lead management, and affordable pricing.')}
+        entityName={t('alternatives.seo.opt.entity', 'lnkmx vs Competitors')}
         entityCategory="Comparison, Link in Bio Tools, Linktree Alternative"
         useCases={[
-          'Compare link-in-bio tools',
-          'Find Linktree alternatives',
-          'Choose best page builder',
-          'Evaluate CRM features',
-          'Compare pricing plans',
+          t('alternatives.seo.opt.uses.1', 'Compare link-in-bio tools'),
+          t('alternatives.seo.opt.uses.2', 'Find Linktree alternatives'),
+          t('alternatives.seo.opt.uses.3', 'Choose best page builder'),
+          t('alternatives.seo.opt.uses.4', 'Evaluate CRM features'),
+          t('alternatives.seo.opt.uses.5', 'Compare pricing plans'),
         ]}
         targetAudience={[
-          'Users researching alternatives',
-          'Businesses switching from Linktree',
-          'Freelancers comparing options',
-          'Content creators choosing tools',
+          t('alternatives.seo.opt.audience.1', 'Users researching alternatives'),
+          t('alternatives.seo.opt.audience.2', 'Businesses switching from Linktree'),
+          t('alternatives.seo.opt.audience.3', 'Freelancers comparing options'),
+          t('alternatives.seo.opt.audience.4', 'Content creators choosing tools'),
         ]}
-        problemStatement="Users need unbiased comparisons to choose the right link-in-bio tool for their needs"
-        solutionStatement="lnkmx provides transparent comparison showing unique features like AI page builder and built-in CRM that competitors lack"
+        problemStatement={t('alternatives.seo.opt.problem', 'Users need unbiased comparisons to choose the right link-in-bio tool for their needs')}
+        solutionStatement={t('alternatives.seo.opt.solution', 'lnkmx provides transparent comparison showing unique features like AI page builder and built-in CRM that competitors lack')}
         keyFeatures={[
-          'Feature-by-feature comparison table',
-          'Honest pros and cons',
-          'Pricing comparison',
-          'Use case recommendations',
-          'Migration guidance',
+          t('alternatives.seo.opt.features.1', 'Feature-by-feature comparison table'),
+          t('alternatives.seo.opt.features.2', 'Honest pros and cons'),
+          t('alternatives.seo.opt.features.3', 'Pricing comparison'),
+          t('alternatives.seo.opt.features.4', 'Use case recommendations'),
+          t('alternatives.seo.opt.features.5', 'Migration guidance'),
         ]}
       />
 
@@ -613,7 +613,7 @@ export default function Alternatives() {
               </div>
 
               <p className="text-xs text-muted-foreground text-center">
-                © 2025 lnkmx.my
+                {t('landingV5.footer.copyright', { year: new Date().getFullYear(), defaultValue: `© ${new Date().getFullYear()} lnkmx.my` })}
               </p>
             </div>
           </div>

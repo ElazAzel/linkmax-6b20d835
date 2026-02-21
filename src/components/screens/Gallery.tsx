@@ -168,25 +168,25 @@ export default function Gallery() {
       <GEOTagging includeOrganization={false} />
       <AISearchOptimizer
         pageType="gallery"
-        primaryQuestion="Where can I see examples of lnkmx pages?"
-        primaryAnswer="The lnkmx Gallery showcases real examples of pages created by users across different industries including freelancers, businesses, beauty professionals, fitness coaches, and content creators."
+        primaryQuestion={t('gallery.seo.opt.question', 'Where can I see examples of lnkmx pages?')}
+        primaryAnswer={t('gallery.seo.opt.answer', 'The lnkmx Gallery showcases real examples of pages created by users across different industries including freelancers, businesses, beauty professionals, fitness coaches, and content creators.')}
         entityName="lnkmx Gallery"
         entityCategory="Page Examples, Templates, Portfolio, Showcase"
         useCases={[
-          'Browse professional page examples',
-          'Find inspiration for your industry',
-          'See real user implementations',
-          'Discover design ideas',
-          'Learn from successful pages',
+          t('gallery.seo.opt.uses.1', 'Browse professional page examples'),
+          t('gallery.seo.opt.uses.2', 'Find inspiration for your industry'),
+          t('gallery.seo.opt.uses.3', 'See real user implementations'),
+          t('gallery.seo.opt.uses.4', 'Discover design ideas'),
+          t('gallery.seo.opt.uses.5', 'Learn from successful pages'),
         ]}
         targetAudience={[
-          'New users seeking inspiration',
-          'Businesses looking for examples',
-          'Designers researching layouts',
-          'Marketers studying conversions',
+          t('gallery.seo.opt.audience.1', 'New users seeking inspiration'),
+          t('gallery.seo.opt.audience.2', 'Businesses looking for examples'),
+          t('gallery.seo.opt.audience.3', 'Designers researching layouts'),
+          t('gallery.seo.opt.audience.4', 'Marketers studying conversions'),
         ]}
-        problemStatement="Users need inspiration and examples to understand how to build effective pages"
-        solutionStatement="The Gallery provides real-world examples across multiple industries showing successful page implementations"
+        problemStatement={t('gallery.seo.opt.problem', 'Users need inspiration and examples to understand how to build effective pages')}
+        solutionStatement={t('gallery.seo.opt.solution', 'The Gallery provides real-world examples across multiple industries showing successful page implementations')}
       />
       <StructuredData id="gallery-schema" data={gallerySchema} />
       <div className="min-h-screen bg-background pb-20">

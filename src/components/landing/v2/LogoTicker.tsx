@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils/utils";
+import { useTranslation } from "react-i18next";
 import { Briefcase, Crown, Gem, Hexagon, Layers, Shield } from "lucide-react";
 
 const companies = [
@@ -34,10 +35,11 @@ function GlobeIcon(props: any) {
 }
 
 export const LogoTicker = () => {
+    const { t } = useTranslation();
     return (
         <div className="py-10 bg-background/50 border-y border-white/5 backdrop-blur-sm overflow-hidden">
             <div className="container mx-auto px-4 mb-4 text-center">
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">Trusted by creators worldwide</p>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">{t('landing.v2.logoTicker.title', 'Trusted by creators worldwide')}</p>
             </div>
             <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black,transparent)]">
                 <motion.div

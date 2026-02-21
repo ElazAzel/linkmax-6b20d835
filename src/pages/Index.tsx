@@ -71,14 +71,14 @@ export default function Index() {
       <AEOOptimizer
         pageUrl="https://lnkmx.my/"
         type="howto"
-        howToName="How to build a landing page with AI"
-        howToDescription="Create a professional page in 2 minutes"
+        howToName={t('landing.v4.seo.howToName', 'How to build a landing page with AI')}
+        howToDescription={t('landing.v4.seo.howToDesc', 'Create a professional page in 2 minutes')}
         howToSteps={[]}
       />
       <AISearchOptimizer
         pageType="homepage"
-        primaryQuestion="What is lnkmx?"
-        primaryAnswer="lnkmx is an AI-powered page builder for creators."
+        primaryQuestion={t('landing.v4.seo.question', 'What is lnkmx?')}
+        primaryAnswer={t('landing.v4.seo.answer', 'lnkmx is an AI-powered page builder for creators.')}
         entityName="lnkmx"
         entityCategory="SaaS"
       />

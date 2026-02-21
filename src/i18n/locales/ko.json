@@ -884,7 +884,11 @@
         "secondary": "See examples",
         "trust1": "Page Builder",
         "trust2": "Mini-CRM",
-        "trust3": "Analytics"
+        "trust3": "Analytics",
+        "mobileFirst": "",
+        "analytics": "",
+        "seoReady": "",
+        "scroll": ""
       },
       "forWhom": {
         "label": "For those who need a simple business system:",
@@ -1001,6 +1005,12 @@
         "subtitle": "Site + CRM + analytics. Free. No code.",
         "cta": "Create for Free",
         "secondary": "Or see examples"
+      },
+      "seo": {
+        "howToName": "",
+        "howToDesc": "",
+        "question": "",
+        "answer": ""
       }
     },
     "niches": {
@@ -1505,13 +1515,39 @@
           "f3_new": "",
           "f4_new": "",
           "f5_new": "",
-          "f6_new": ""
-        }
+          "f6_new": "",
+          "name": ""
+        },
+        "aiPowered": ""
       },
       "testimonials": {
         "title": "",
         "count": "",
-        "suffix": ""
+        "suffix": "",
+        "roles": {
+          "coach": "",
+          "artist": "",
+          "crypto": "",
+          "salon": ""
+        },
+        "reviews": {
+          "coach": "",
+          "artist": "",
+          "crypto": "",
+          "salon": ""
+        }
+      },
+      "nav": {
+        "features": "",
+        "howItWorks": "",
+        "pricing": "",
+        "login": "",
+        "getStarted": "",
+        "start": "",
+        "startFree": ""
+      },
+      "logoTicker": {
+        "title": ""
       }
     },
     "aiPowered": "",
@@ -2169,7 +2205,26 @@
       "description": "Real lnkmx pages from creators and businesses. Browse niches, templates, and inspiration.",
       "nicheTitle": "lnkmx Gallery — {{niche}}",
       "nicheDescription": "Explore lnkmx pages in the {{niche}} niche: templates, ideas, and structure.",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "problem": "",
+        "solution": ""
+      }
     },
     "seoIntro": {
       "title": "How to use the gallery",
@@ -2815,7 +2870,34 @@
       "ogTitle": "lnkmx vs Linktree vs Taplink — comparison & alternative",
       "ogDescription": "Compare lnkmx, Linktree, and Taplink by features, pricing, and usability. See why lnkmx is a strong alternative.",
       "breadcrumb": "Alternatives",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "entity": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "problem": "",
+        "solution": "",
+        "features": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        }
+      }
     },
     "header": {
       "cta": "Get Started"
@@ -4361,7 +4443,32 @@
     "seo": {
       "title": "lnkmx Pricing — Plans for Link in Bio & Mini-Sites",
       "description": "Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.",
-      "imageAlt": "lnkmx Pricing Plans"
+      "imageAlt": "lnkmx Pricing Plans",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": ""
+        },
+        "problem": "",
+        "solution": "",
+        "features": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": ""
+        }
+      }
     },
     "title": "Pricing",
     "choosePlan": "Choose the right plan",

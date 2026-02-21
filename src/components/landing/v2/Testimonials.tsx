@@ -3,35 +3,37 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const testimonials = [
-    {
-        name: "Alex R.",
-        role: "Fitness Coach",
-        content: "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it.",
-        avatar: "AR"
-    },
-    {
-        name: "Sarah C.",
-        role: "Digital Artist",
-        content: "The aesthetics are on another level. It doesn't look like a generic link-in-bio. It looks like a custom website.",
-        avatar: "SC"
-    },
-    {
-        name: "Marcus J.",
-        role: "Crypto Analyst",
-        content: "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
-        avatar: "MJ"
-    },
-    {
-        name: "Elena V.",
-        role: "Beauty Salon Owner",
-        content: "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from.",
-        avatar: "EV"
-    }
-];
+
 
 export const Testimonials = () => {
     const { t } = useTranslation();
+
+    const testimonials = [
+        {
+            name: "Alex R.",
+            role: t('landing.v2.testimonials.roles.coach', 'Fitness Coach'),
+            content: t('landing.v2.testimonials.reviews.coach', "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI just gets it."),
+            avatar: "AR"
+        },
+        {
+            name: "Sarah C.",
+            role: t('landing.v2.testimonials.roles.artist', 'Digital Artist'),
+            content: t('landing.v2.testimonials.reviews.artist', "The aesthetics are on another level. It doesn't look like a generic link-in-bio. It looks like a custom website."),
+            avatar: "SC"
+        },
+        {
+            name: "Marcus J.",
+            role: t('landing.v2.testimonials.roles.crypto', 'Crypto Analyst'),
+            content: t('landing.v2.testimonials.reviews.crypto', "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat."),
+            avatar: "MJ"
+        },
+        {
+            name: "Elena V.",
+            role: t('landing.v2.testimonials.roles.salon', 'Beauty Salon Owner'),
+            content: t('landing.v2.testimonials.reviews.salon', "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."),
+            avatar: "EV"
+        }
+    ];
 
     return (
         <section className="py-20 relative overflow-hidden z-10 bg-background">

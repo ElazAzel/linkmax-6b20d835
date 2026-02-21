@@ -918,7 +918,11 @@
         "secondary": "Подивитися приклади",
         "trust1": "Конструктор сторінок",
         "trust2": "Мини-CRM",
-        "trust3": "Аналітика"
+        "trust3": "Аналітика",
+        "mobileFirst": "",
+        "analytics": "",
+        "seoReady": "",
+        "scroll": ""
       },
       "forWhom": {
         "label": "Для тех, кому нужна простая бізнес-система:",
@@ -1035,6 +1039,12 @@
         "subtitle": "Сайт + CRM + аналітика. Безкоштовно. Без коду.",
         "cta": "Створити бесплатно",
         "secondary": "Або посмотри приклади"
+      },
+      "seo": {
+        "howToName": "",
+        "howToDesc": "",
+        "question": "",
+        "answer": ""
       }
     },
     "niches": {
@@ -1539,13 +1549,39 @@
           "f3_new": "",
           "f4_new": "",
           "f5_new": "",
-          "f6_new": ""
-        }
+          "f6_new": "",
+          "name": ""
+        },
+        "aiPowered": ""
       },
       "testimonials": {
         "title": "",
         "count": "",
-        "suffix": ""
+        "suffix": "",
+        "roles": {
+          "coach": "",
+          "artist": "",
+          "crypto": "",
+          "salon": ""
+        },
+        "reviews": {
+          "coach": "",
+          "artist": "",
+          "crypto": "",
+          "salon": ""
+        }
+      },
+      "nav": {
+        "features": "",
+        "howItWorks": "",
+        "pricing": "",
+        "login": "",
+        "getStarted": "",
+        "start": "",
+        "startFree": ""
+      },
+      "logoTicker": {
+        "title": ""
       }
     },
     "aiPowered": "",
@@ -2203,7 +2239,26 @@
       "description": "Реальні сторінки користувачів: шаблони, ніші, ідеї для вашого link in bio.",
       "nicheTitle": "Галерея lnkmx — {{niche}}",
       "nicheDescription": "Приклади сторінок lnkmx у ніші {{niche}}: шаблони, ідеї та структура.",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "problem": "",
+        "solution": ""
+      }
     },
     "seoIntro": {
       "title": "Як використовувати галерею",
@@ -2849,7 +2904,34 @@
       "ogTitle": "lnkmx vs Linktree vs Taplink — порівняння і альтернатива",
       "ogDescription": "Порівняння lnkmx, Linktree і Taplink за функціями, ціною та зручністю. Чому lnkmx — вигідна альтернатива.",
       "breadcrumb": "Альтернативи",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "entity": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "problem": "",
+        "solution": "",
+        "features": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        }
+      }
     },
     "header": {
       "cta": "Почати"
@@ -4395,7 +4477,32 @@
     "seo": {
       "title": "lnkmx Тарифи — Плани для Link in Bio та Мінісайтів",
       "description": "Порівняйте тарифи lnkmx: безкоштовний конструктор, Pro з AI, CRM, аналітикою та своїм доменом. Прозорі ціни.",
-      "imageAlt": "Тарифні плани lnkmx"
+      "imageAlt": "Тарифні плани lnkmx",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": ""
+        },
+        "problem": "",
+        "solution": "",
+        "features": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": ""
+        }
+      }
     },
     "title": "Тарифи",
     "choosePlan": "Оберіть відповідний тариф",

@@ -117,9 +117,9 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 >
                     <div className="flex justify-between items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                         {/* Simple logos or text for trust */}
-                        <div className="flex items-center gap-2"><Smartphone className="w-5 h-5" /> <span className="text-xs font-semibold">Mobile First</span></div>
-                        <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5" /> <span className="text-xs font-semibold">Analytics</span></div>
-                        <div className="flex items-center gap-2"><Globe className="w-5 h-5" /> <span className="text-xs font-semibold">SEO Ready</span></div>
+                        <div className="flex items-center gap-2"><Smartphone className="w-5 h-5" /> <span className="text-xs font-semibold">{t('landing.v4.hero.mobileFirst', 'Mobile First')}</span></div>
+                        <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5" /> <span className="text-xs font-semibold">{t('landing.v4.hero.analytics', 'Analytics')}</span></div>
+                        <div className="flex items-center gap-2"><Globe className="w-5 h-5" /> <span className="text-xs font-semibold">{t('landing.v4.hero.seoReady', 'SEO Ready')}</span></div>
                     </div>
                 </motion.div>
             </div>
@@ -129,7 +129,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 style={{ opacity }}
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground/50">Scroll</span>
+                <span className="text-[10px] uppercase tracking-widest text-muted-foreground/50">{t('landing.v4.hero.scroll', 'Scroll')}</span>
                 <div className="w-[1px] h-12 bg-gradient-to-b from-primary/50 to-transparent" />
             </motion.div>
         </section>

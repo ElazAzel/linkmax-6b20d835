@@ -918,7 +918,11 @@
         "secondary": "Misollarni ko'rish",
         "trust1": "Sahifa yaratuvchisi",
         "trust2": "Mini CRM",
-        "trust3": "Analitika"
+        "trust3": "Analitika",
+        "mobileFirst": "Mobil birinchi",
+        "analytics": "Analitika",
+        "seoReady": "SEO tayyor",
+        "scroll": "aylantiring"
       },
       "forWhom": {
         "label": "Oddiy biznes tizimiga muhtoj bo'lganlar uchun:",
@@ -1035,6 +1039,12 @@
         "subtitle": "Veb-sayt + CRM + tahlil. Bepul. Kod yo'q.",
         "cta": "Bepul yaratish",
         "secondary": "Yoki misollarga qarang"
+      },
+      "seo": {
+        "howToName": "AI yordamida ochilish sahifasini qanday qurish mumkin",
+        "howToDesc": "2 daqiqada professional sahifa yarating",
+        "question": "lnkmx nima?",
+        "answer": "lnkmx - yaratuvchilar uchun sun'iy intellekt asosidagi sahifa yaratuvchisi."
       }
     },
     "niches": {
@@ -1539,13 +1549,39 @@
           "f3_new": "Telegramda tezkor ilovalar",
           "f4_new": "Tovarlar va chiptalarni sotish",
           "f5_new": "O'rnatilgan QR skaneri",
-          "f6_new": "Kengaytirilgan statistika"
-        }
+          "f6_new": "Kengaytirilgan statistika",
+          "name": "Pro"
+        },
+        "aiPowered": "AI quvvatlanadi"
       },
       "testimonials": {
         "title": "Sevimli",
         "count": "2,000+",
-        "suffix": "ijodkorlar"
+        "suffix": "ijodkorlar",
+        "roles": {
+          "coach": "Fitnes murabbiyi",
+          "artist": "Raqamli rassom",
+          "crypto": "Kripto tahlilchisi",
+          "salon": "Go'zallik saloni egasi"
+        },
+        "reviews": {
+          "coach": "Sport zalida 3 daqiqada sahifamni o'rnatdim. Bir soatdan keyin birinchi mijozimni oldim. AI shunchaki tushunadi.",
+          "artist": "Estetika boshqa darajada. Unday emas",
+          "crypto": "To'g'ridan-to'g'ri Telegram mijozlari mening ish jarayonimni o'zgartirdi. Endi elektron pochta xabarlarini tekshirib bo'lmaydi. Men chatda bitimlarni yopaman.",
+          "salon": "Mening mijozlarim bron qilish qanchalik osonligini yaxshi ko'radilar. Va men tahlilni yaxshi ko'raman. Nihoyat, mening trafikim qayerdan kelganini bilaman."
+        }
+      },
+      "nav": {
+        "features": "Xususiyatlari",
+        "howItWorks": "Bu qanday ishlaydi",
+        "pricing": "Narxlash",
+        "login": "Tizimga kirish",
+        "getStarted": "Boshlash",
+        "start": "Boshlash",
+        "startFree": "Bepul boshlang"
+      },
+      "logoTicker": {
+        "title": "Butun dunyodagi ijodkorlar tomonidan ishonchli"
       }
     },
     "aiPowered": "AI quvvatlanadi",
@@ -2203,7 +2239,26 @@
       "description": "Haqiqiy foydalanuvchi sahifalari: andozalar, bo'shliqlar, bio-dagi havolangiz uchun g'oyalar.",
       "nicheTitle": "Galereya lnkmx — {{niche}}",
       "nicheDescription": "{{niche}} joydagi lnkmx sahifalariga misollar: andozalar, g'oyalar va tuzilma.",
-      "imageAlt": "lnkmx Gallery - Link in Bio Examples"
+      "imageAlt": "lnkmx Gallery - Link in Bio Examples",
+      "opt": {
+        "question": "lnkmx sahifalarining misollarini qayerda ko'rishim mumkin?",
+        "answer": "Lnkmx galereyasi turli sohalarda foydalanuvchilar tomonidan yaratilgan sahifalarning haqiqiy namunalarini namoyish etadi, shu jumladan frilanserlar, bizneslar, go'zallik bo'yicha mutaxassislar, fitnes murabbiylari va kontent yaratuvchilari.",
+        "uses": {
+          "1": "Professional sahifa misollarini ko'rib chiqing",
+          "2": "O'z sohangiz uchun ilhom toping",
+          "3": "Haqiqiy foydalanuvchi ilovalarini ko'ring",
+          "4": "Dizayn g'oyalarini kashf qiling",
+          "5": "Muvaffaqiyatli sahifalardan o'rganing"
+        },
+        "audience": {
+          "1": "Ilhom izlayotgan yangi foydalanuvchilar",
+          "2": "Misollar qidirayotgan korxonalar",
+          "3": "Dizaynerlar maketlarni tadqiq qilmoqdalar",
+          "4": "Konversiyalarni o'rganayotgan marketologlar"
+        },
+        "problem": "Qanday qilib samarali sahifalar yaratishni tushunish uchun foydalanuvchilarga ilhom va misollar kerak",
+        "solution": "Galereya sahifalarni muvaffaqiyatli amalga oshirishni ko'rsatadigan bir nechta sohalarda haqiqiy misollarni taqdim etadi"
+      }
     },
     "seoIntro": {
       "title": "Galereyadan qanday foydalanish kerak",
@@ -2849,7 +2904,34 @@
       "ogTitle": "lnkmx vs Linktree va Taplink - taqqoslash va muqobil",
       "ogDescription": "Lnkmx, Linktree va Taplink-ni xususiyatlari, narxi va qulayligi bo'yicha solishtiring. Nima uchun lnkmx foydali alternativ hisoblanadi.",
       "breadcrumb": "Alternativlar",
-      "imageAlt": "lnkmx vs Alternatives Comparison"
+      "imageAlt": "lnkmx vs Alternatives Comparison",
+      "opt": {
+        "question": "Linktree-ga eng yaxshi alternativalar qanday?",
+        "answer": "Eng yaxshi Linktree alternativalariga lnkmx (AI-ga asoslangan, o'rnatilgan CRM), Beacons (ijodkorga yo'naltirilgan), Koji (interaktiv), Taplink (tahlil) va Stan Store (elektron tijorat) kiradi. lnkmx o'zining AI sahifa yaratuvchisi, etakchi boshqaruvi va arzon narxlari bilan ajralib turadi.",
+        "entity": "lnkmx raqobatchilarga qarshi",
+        "uses": {
+          "1": "Link-in-bio vositalarini solishtiring",
+          "2": "Linktree muqobillarini toping",
+          "3": "Eng yaxshi sahifa yaratuvchisini tanlang",
+          "4": "CRM xususiyatlarini baholang",
+          "5": "Narxlar rejalarini solishtiring"
+        },
+        "audience": {
+          "1": "Muqobil variantlarni o'rganayotgan foydalanuvchilar",
+          "2": "Linktree-dan o'tayotgan korxonalar",
+          "3": "Frilanserlar variantlarni taqqoslaydi",
+          "4": "Kontent yaratuvchilari vositalarni tanlashadi"
+        },
+        "problem": "Foydalanuvchilar o'z ehtiyojlari uchun to'g'ri link-in-bio vositasini tanlash uchun xolis taqqoslashlari kerak",
+        "solution": "lnkmx AI sahifa yaratuvchisi va raqobatchilarda etishmayotgan o'rnatilgan CRM kabi noyob xususiyatlarni ko'rsatadigan shaffof taqqoslashni ta'minlaydi.",
+        "features": {
+          "1": "Xususiyatlar bo'yicha taqqoslash jadvali",
+          "2": "Halol ijobiy va salbiy tomonlari",
+          "3": "Narxlarni taqqoslash",
+          "4": "Tavsiyalardan foydalaning",
+          "5": "Migratsiya bo'yicha ko'rsatma"
+        }
+      }
     },
     "header": {
       "cta": "Boshlanishi"
@@ -4395,7 +4477,32 @@
     "seo": {
       "title": "lnkmx tariflari - Bio va mini-saytlardagi havolalar uchun rejalar",
       "description": "lnkmx rejalarini solishtiring: bepul quruvchi, AIga ega Pro, CRM, analitik va shaxsiy domeningiz. Shaffof narxlar.",
-      "imageAlt": "Tarif rejalari lnkmx"
+      "imageAlt": "Tarif rejalari lnkmx",
+      "opt": {
+        "question": "lnkmx qancha turadi?",
+        "answer": "lnkmx 12 oyga 3045 KZT (taxminan $6 USD) dan boshlanadigan bepul Asosiy reja va Pro rejasini taklif etadi. Pro xususiyatlariga cheksiz sahifalar, maxsus domenlar, tahlillar va ustuvor yordam kiradi.",
+        "uses": {
+          "1": "Asosiy tarif rejasi bilan bepul boshlang",
+          "2": "Kengaytirilgan funksiyalar uchun Pro-ga yangilang",
+          "3": "3, 6 yoki 12 oyga to'lang",
+          "4": "Moslashuvchan premium kirish uchun tokenlardan foydalaning"
+        },
+        "audience": {
+          "1": "Byudjetni hisobga oladigan kichik korxonalar",
+          "2": "Frilanserlar arzon vositalarni qidirmoqda",
+          "3": "Rivojlanayotgan korxonalar ko'proq xususiyatlarga muhtoj"
+        },
+        "problem": "Bio-in-bio va sahifa yaratish vositalarining aksariyati mikro-biznes va frilanserlar uchun juda qimmat",
+        "solution": "lnkmx asosiy ehtiyojlar uchun bepul reja va 12 oy davomida atigi 6 dollardan boshlanadigan arzon Pro narxlarini taklif etadi.",
+        "features": {
+          "1": "Bepul asosiy reja mavjud",
+          "2": "Pro rejasi: oyiga 3,045 KZT (yillik)",
+          "3": "Hajmi bo'yicha chegirmalar: 12 oy davomida 30% gacha chegirma",
+          "4": "Ko'p valyutali yordam (KZT, USD)",
+          "5": "Moslashuvchan token tizimi",
+          "6": "Bepul reja uchun kredit karta talab qilinmaydi"
+        }
+      }
     },
     "title": "Tariflar",
     "choosePlan": "To'g'ri tarifni tanlang",

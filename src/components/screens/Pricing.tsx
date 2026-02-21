@@ -154,30 +154,30 @@ export default function Pricing() {
     <GEOTagging includeOrganization={false} />
     <AISearchOptimizer
       pageType="pricing"
-      primaryQuestion="How much does lnkmx cost?"
-      primaryAnswer="lnkmx offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support."
+      primaryQuestion={t('pricing.seo.opt.question', 'How much does lnkmx cost?')}
+      primaryAnswer={t('pricing.seo.opt.answer', 'lnkmx offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.')}
       entityName="lnkmx Pricing"
       entityCategory="SaaS Pricing, Subscription Plans, Link in Bio Pricing"
       useCases={[
-        'Start free with Basic plan',
-        'Upgrade to Pro for advanced features',
-        'Pay for 3, 6, or 12 months',
-        'Use tokens for flexible premium access',
+        t('pricing.seo.opt.uses.1', 'Start free with Basic plan'),
+        t('pricing.seo.opt.uses.2', 'Upgrade to Pro for advanced features'),
+        t('pricing.seo.opt.uses.3', 'Pay for 3, 6, or 12 months'),
+        t('pricing.seo.opt.uses.4', 'Use tokens for flexible premium access'),
       ]}
       targetAudience={[
-        'Budget-conscious small businesses',
-        'Freelancers looking for affordable tools',
-        'Growing businesses needing more features',
+        t('pricing.seo.opt.audience.1', 'Budget-conscious small businesses'),
+        t('pricing.seo.opt.audience.2', 'Freelancers looking for affordable tools'),
+        t('pricing.seo.opt.audience.3', 'Growing businesses needing more features'),
       ]}
-      problemStatement="Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers"
-      solutionStatement="lnkmx offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months"
+      problemStatement={t('pricing.seo.opt.problem', 'Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers')}
+      solutionStatement={t('pricing.seo.opt.solution', 'lnkmx offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months')}
       keyFeatures={[
-        'Free Basic plan available',
-        'Pro plan: 3,045 KZT/mo (Annual)',
-        'Volume discounts: up to 30% off for 12 months',
-        'Multi-currency support (KZT, USD)',
-        'Flexible token system',
-        'No credit card required for free plan',
+        t('pricing.seo.opt.features.1', 'Free Basic plan available'),
+        t('pricing.seo.opt.features.2', 'Pro plan: 3,045 KZT/mo (Annual)'),
+        t('pricing.seo.opt.features.3', 'Volume discounts: up to 30% off for 12 months'),
+        t('pricing.seo.opt.features.4', 'Multi-currency support (KZT, USD)'),
+        t('pricing.seo.opt.features.5', 'Flexible token system'),
+        t('pricing.seo.opt.features.6', 'No credit card required for free plan'),
       ]}
     />
     <div className="min-h-screen bg-background relative overflow-x-hidden pb-safe">

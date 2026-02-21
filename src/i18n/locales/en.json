@@ -918,7 +918,11 @@
         "secondary": "View examples",
         "trust1": "Page builder",
         "trust2": "Mini CRM",
-        "trust3": "Analytics"
+        "trust3": "Analytics",
+        "mobileFirst": "Mobile First",
+        "analytics": "Analytics",
+        "seoReady": "SEO Ready",
+        "scroll": "Scroll"
       },
       "forWhom": {
         "label": "For those who need a simple business system:",
@@ -1035,6 +1039,12 @@
         "subtitle": "Website + CRM + analytics. For free. No code.",
         "cta": "Create for free",
         "secondary": "Or look at examples"
+      },
+      "seo": {
+        "howToName": "How to build a landing page with AI",
+        "howToDesc": "Create a professional page in 2 minutes",
+        "question": "What is lnkmx?",
+        "answer": "lnkmx is an AI-powered page builder for creators."
       }
     },
     "niches": {
@@ -1539,13 +1549,39 @@
           "f3_new": "Instant applications in Telegram",
           "f4_new": "Sale of goods and tickets",
           "f5_new": "Built-in QR scanner",
-          "f6_new": "Advanced Statistics"
-        }
+          "f6_new": "Advanced Statistics",
+          "name": "Pro"
+        },
+        "aiPowered": "AI Powered"
       },
       "testimonials": {
         "title": "Loved",
         "count": "2,000+",
-        "suffix": "creators"
+        "suffix": "creators",
+        "roles": {
+          "coach": "Fitness Coach",
+          "artist": "Digital Artist",
+          "crypto": "Crypto Analyst",
+          "salon": "Beauty Salon Owner"
+        },
+        "reviews": {
+          "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI ​​just gets it.",
+          "artist": "The aesthetics are on another level. It doesn't",
+          "crypto": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
+          "salon": "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."
+        }
+      },
+      "nav": {
+        "features": "Features",
+        "howItWorks": "How it works",
+        "pricing": "Pricing",
+        "login": "Log in",
+        "getStarted": "Get Started",
+        "start": "Start",
+        "startFree": "Start for Free"
+      },
+      "logoTicker": {
+        "title": "Trusted by creators worldwide"
       }
     },
     "aiPowered": "AI Powered",
@@ -2203,7 +2239,26 @@
       "description": "Real user pages: templates, niches, ideas for your link in bio.",
       "nicheTitle": "Gallery lnkmx — {{niche}}",
       "nicheDescription": "Examples of lnkmx pages in the {{niche}} niche: templates, ideas and structure.",
-      "imageAlt": "lnkmx Gallery - Link in Bio Examples"
+      "imageAlt": "lnkmx Gallery - Link in Bio Examples",
+      "opt": {
+        "question": "Where can I see examples of lnkmx pages?",
+        "answer": "The lnkmx Gallery showcases real examples of pages created by users across different industries including freelancers, businesses, beauty professionals, fitness coaches, and content creators.",
+        "uses": {
+          "1": "Browse professional page examples",
+          "2": "Find inspiration for your industry",
+          "3": "See real user implementations",
+          "4": "Discover design ideas",
+          "5": "Learn from successful pages"
+        },
+        "audience": {
+          "1": "New users seeking inspiration",
+          "2": "Businesses looking for examples",
+          "3": "Designers researching layouts",
+          "4": "Marketers studying conversions"
+        },
+        "problem": "Users need inspiration and examples to understand how to build effective pages",
+        "solution": "The Gallery provides real-world examples across multiple industries showing successful page implementations"
+      }
     },
     "seoIntro": {
       "title": "How to use the gallery",
@@ -2849,7 +2904,34 @@
       "ogTitle": "lnkmx vs Linktree vs Taplink - comparison and alternative",
       "ogDescription": "Compare lnkmx, Linktree and Taplink by features, price and convenience. Why lnkmx is a profitable alternative.",
       "breadcrumb": "Alternatives",
-      "imageAlt": "lnkmx vs Alternatives Comparison"
+      "imageAlt": "lnkmx vs Alternatives Comparison",
+      "opt": {
+        "question": "What are the best alternatives to Linktree?",
+        "answer": "Top Linktree alternatives include lnkmx (AI-powered, built-in CRM), Beacons (creator-focused), Koji (interactive), Taplink (analytics), and Stan Store (e-commerce). lnkmx stands out with its AI page builder, lead management, and affordable pricing.",
+        "entity": "lnkmx vs Competitors",
+        "uses": {
+          "1": "Compare link-in-bio tools",
+          "2": "Find Linktree alternatives",
+          "3": "Choose best page builder",
+          "4": "Evaluate CRM features",
+          "5": "Compare pricing plans"
+        },
+        "audience": {
+          "1": "Users researching alternatives",
+          "2": "Businesses switching from Linktree",
+          "3": "Freelancers comparing options",
+          "4": "Content creators choosing tools"
+        },
+        "problem": "Users need unbiased comparisons to choose the right link-in-bio tool for their needs",
+        "solution": "lnkmx provides transparent comparison showing unique features like AI page builder and built-in CRM that competitors lack",
+        "features": {
+          "1": "Feature-by-feature comparison table",
+          "2": "Honest pros and cons",
+          "3": "Pricing comparison",
+          "4": "Use case recommendations",
+          "5": "Migration guidance"
+        }
+      }
     },
     "header": {
       "cta": "Begin"
@@ -4395,7 +4477,32 @@
     "seo": {
       "title": "lnkmx Tariffs - Plans for Link in Bio and Mini Sites",
       "description": "Compare lnkmx plans: free builder, Pro with AI, CRM, analytics and your own domain. Transparent prices.",
-      "imageAlt": "Tariff plans lnkmx"
+      "imageAlt": "Tariff plans lnkmx",
+      "opt": {
+        "question": "How much does lnkmx cost?",
+        "answer": "lnkmx offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.",
+        "uses": {
+          "1": "Start free with Basic plan",
+          "2": "Upgrade to Pro for advanced features",
+          "3": "Pay for 3, 6, or 12 months",
+          "4": "Use tokens for flexible premium access"
+        },
+        "audience": {
+          "1": "Budget-conscious small businesses",
+          "2": "Freelancers looking for affordable tools",
+          "3": "Growing businesses needing more features"
+        },
+        "problem": "Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers",
+        "solution": "lnkmx offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months",
+        "features": {
+          "1": "Free Basic plan available",
+          "2": "Pro plan: 3,045 KZT/mo (Annual)",
+          "3": "Volume discounts: up to 30% off for 12 months",
+          "4": "Multi-currency support (KZT, USD)",
+          "5": "Flexible token system",
+          "6": "No credit card required for free plan"
+        }
+      }
     },
     "title": "Tariffs",
     "choosePlan": "Choose the right tariff",

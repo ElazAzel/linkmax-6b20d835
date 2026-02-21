@@ -918,7 +918,11 @@
         "secondary": "Beispiele ansehen",
         "trust1": "Seitenbaukasten",
         "trust2": "Mini-CRM",
-        "trust3": "Analytics"
+        "trust3": "Analytics",
+        "mobileFirst": "",
+        "analytics": "",
+        "seoReady": "",
+        "scroll": ""
       },
       "forWhom": {
         "label": "Für alle, die ein einfaches Business-System brauchen:",
@@ -1035,6 +1039,12 @@
         "subtitle": "Website + CRM + Analytics. Kostenlos. Ohne Code.",
         "cta": "Kostenlos erstellen",
         "secondary": "Oder Beispiele ansehen"
+      },
+      "seo": {
+        "howToName": "",
+        "howToDesc": "",
+        "question": "",
+        "answer": ""
       }
     },
     "niches": {
@@ -1539,13 +1549,39 @@
           "f3_new": "",
           "f4_new": "",
           "f5_new": "",
-          "f6_new": ""
-        }
+          "f6_new": "",
+          "name": ""
+        },
+        "aiPowered": ""
       },
       "testimonials": {
         "title": "",
         "count": "",
-        "suffix": ""
+        "suffix": "",
+        "roles": {
+          "coach": "",
+          "artist": "",
+          "crypto": "",
+          "salon": ""
+        },
+        "reviews": {
+          "coach": "",
+          "artist": "",
+          "crypto": "",
+          "salon": ""
+        }
+      },
+      "nav": {
+        "features": "",
+        "howItWorks": "",
+        "pricing": "",
+        "login": "",
+        "getStarted": "",
+        "start": "",
+        "startFree": ""
+      },
+      "logoTicker": {
+        "title": ""
       }
     },
     "aiPowered": "",
@@ -2203,7 +2239,26 @@
       "description": "Echte Nutzerseiten: Vorlagen, Nischen und Ideen für Ihr Link-in-Bio.",
       "nicheTitle": "lnkmx-Galerie — {{niche}}",
       "nicheDescription": "lnkmx-Beispiele in der Nische {{niche}}: Vorlagen, Ideen und Struktur.",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "problem": "",
+        "solution": ""
+      }
     },
     "seoIntro": {
       "title": "So nutzen Sie die Galerie",
@@ -2849,7 +2904,34 @@
       "ogTitle": "lnkmx vs Linktree vs Taplink – Vergleich & Alternative",
       "ogDescription": "Vergleich von lnkmx, Linktree und Taplink nach Funktionen, Preis und Bedienbarkeit. Warum lnkmx eine starke Alternative ist.",
       "breadcrumb": "Alternativen",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "entity": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "problem": "",
+        "solution": "",
+        "features": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": ""
+        }
+      }
     },
     "header": {
       "cta": "Starten"
@@ -4395,7 +4477,32 @@
     "seo": {
       "title": "lnkmx-Tarife – Link-in-Bio und Mini-Websites",
       "description": "Vergleichen Sie Free und Pro bei lnkmx: KI-Generierung, CRM, Analytics und Branding.",
-      "imageAlt": ""
+      "imageAlt": "",
+      "opt": {
+        "question": "",
+        "answer": "",
+        "uses": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": ""
+        },
+        "audience": {
+          "1": "",
+          "2": "",
+          "3": ""
+        },
+        "problem": "",
+        "solution": "",
+        "features": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": ""
+        }
+      }
     },
     "title": "Tarife",
     "choosePlan": "Plan wählen",

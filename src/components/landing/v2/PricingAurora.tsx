@@ -65,7 +65,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
 
                             <div className="mb-6">
                                 <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                                    Pro <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">AI Powered</span>
+                                    {t('landing.v2.pricing.pro.name', 'Pro')} <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t('landing.v2.pricing.aiPowered', 'AI Powered')}</span>
                                 </h3>
                                 <div className="flex items-baseline gap-1">
                                     <AnimatePresence mode="wait">
