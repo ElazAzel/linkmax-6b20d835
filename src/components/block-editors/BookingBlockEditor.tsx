@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CurrencySelect } from '@/components/form-fields/CurrencySelect';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
-import { Clock, Plus, Trash2, CalendarDays, Wallet, Bell, Sparkles } from 'lucide-react';
+import { Clock, Plus, Trash2, CalendarDays, Wallet, Bell, Sparkles, CalendarSync } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { BlockEditorWrapper } from './BlockEditorWrapper';
 import type { BookingBlock } from '@/types/page';
@@ -277,7 +277,23 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
         <div className="space-y-4">
           <h4 className="font-medium">{t('bookingBlock.advanced', 'Дополнительно')}</h4>
 
-          <div className="space-y-2">
+          <div className="flex items-center justify-between p-3 border rounded-xl bg-primary/5">
+            <div className="space-y-0.5">
+              <Label className="flex items-center gap-1.5 font-bold">
+                <CalendarSync className="h-4 w-4 text-primary" />
+                {t('bookingBlock.gcalSync', 'Синхронизация Google Календаря')}
+              </Label>
+              <p className="text-xs text-muted-foreground mr-4">
+                {t('bookingBlock.gcalSyncDesc', 'Использовать Google Календарь для проверки доступности и создания событий. (Доступно в профиле)')}
+              </p>
+            </div>
+            <Switch
+              checked={block.gcalSyncEnabled || false}
+              onCheckedChange={v => handleChange({ gcalSyncEnabled: v })}
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label>{t('bookingBlock.maxDays', 'Максимум дней для записи')}</Label>
             <Select
               value={String(block.maxBookingDays || 30)}

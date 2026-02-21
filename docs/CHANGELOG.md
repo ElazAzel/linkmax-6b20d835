@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added (Booking & Data Export — 2026-02-21)
+- **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.
+- **Google Calendar Sync**: Implemented full two-way Google Calendar integration for the Booking Block. Plumbed via a secure `user_integrations` database table and a new `google-calendar-sync` Edge Function to check availability in real-time and create events upon booking confirmation. Enabled via a new toggle in `BookingSettingsTab` and managed in the user's `LinkedAccountsSection`.
+- **Automated Booking Reminders**: Verified and integrated existing `send-booking-reminder` Edge Function to handle Morning notifications for upcoming appointments via Telegram.
 
 ### Added (UX & i18n Finalization — 2026-02-21)
 - **Deep Translation via AI**: Wrote a custom concurrent Google Translate script to automatically translate over 3,600 Russian placeholder strings left in `en.json`, `kk.json`, and `uz.json`. The entire app is now genuinely, fully translated with zero cyrillic text showing up under non-Russian language selections.

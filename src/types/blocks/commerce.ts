@@ -109,6 +109,8 @@ export interface BookingBlock {
     dailyReminderEnabled?: boolean; // Send daily reminder about today's bookings
     dailyReminderTime?: string; // Time for daily reminder in HH:MM format (default: 08:50)
     weeklyMotivationEnabled?: boolean; // Send weekly motivation on Mondays at 9:00
+    // Google Calendar Sync
+    gcalSyncEnabled?: boolean; // Connect and sync with Google Calendar
     buttonText?: string | I18nText | MultilingualString; // Custom button text
     isPremium: true;
     schedule?: BlockSchedule;

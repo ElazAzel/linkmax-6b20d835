@@ -90,28 +90,48 @@ export const BookingBlock = memo(function BookingBlockComponent({
       // Generate slots from templates
       const generatedSlots: TimeSlot[] = [];
 
+      // Call Edge Function to check Google Calendar availability if enabled
+      let gcalBlockedSlots: string[] = [];
+      if (block.gcalSyncEnabled && pageOwnerId) {
+        try {
+          const { data, error } = await supabase.functions.invoke('google-calendar-sync', {
+            body: {
+              action: 'check_availability',
+              owner_id: pageOwnerId,
+              date: dateStr
+            }
+          });
+
+          if (!error && data?.blocked_slots) {
+            gcalBlockedSlots = data.blocked_slots;
+          }
+        } catch (err) {
+          console.error('Failed to sync with Google Calendar:', err);
+        }
+      }
+
       // If block has custom slots defined
       if (block.slots && block.slots.length > 0) {
         block.slots.forEach(slot => {
-          const isBooked = bookings?.some(b =>
-            b.slot_time === slot.startTime
-          );
+          const isBookedLocally = bookings?.some(b => b.slot_time === slot.startTime);
+          const isBookedGcal = gcalBlockedSlots.includes(slot.startTime);
+
           generatedSlots.push({
             time: slot.startTime,
             endTime: slot.endTime,
-            available: !isBooked,
+            available: !isBookedLocally && !isBookedGcal,
             bookingId: bookings?.find(b => b.slot_time === slot.startTime)?.id
           });
         });
       } else if (slotTemplates && slotTemplates.length > 0) {
         slotTemplates.forEach(template => {
-          const isBooked = bookings?.some(b =>
-            b.slot_time === template.start_time
-          );
+          const isBookedLocally = bookings?.some(b => b.slot_time === template.start_time);
+          const isBookedGcal = gcalBlockedSlots.includes(template.start_time);
+
           generatedSlots.push({
             time: template.start_time,
             endTime: template.end_time,
-            available: !isBooked,
+            available: !isBookedLocally && !isBookedGcal,
             bookingId: bookings?.find(b => b.slot_time === template.start_time)?.id
           });
         });
@@ -137,12 +157,13 @@ export const BookingBlock = memo(function BookingBlockComponent({
           const timeStr = `${startHr.toString().padStart(2, '0')}:${startMin.toString().padStart(2, '0')}:00`;
           const endTimeStr = `${endHr.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}:00`;
 
-          const isBooked = bookings?.some(b => b.slot_time === timeStr);
+          const isBookedLocally = bookings?.some(b => b.slot_time === timeStr);
+          const isBookedGcal = gcalBlockedSlots.includes(timeStr);
 
           generatedSlots.push({
             time: timeStr,
             endTime: endTimeStr,
-            available: !isBooked,
+            available: !isBookedLocally && !isBookedGcal,
             bookingId: bookings?.find(b => b.slot_time === timeStr)?.id
           });
         }
@@ -208,6 +229,28 @@ export const BookingBlock = memo(function BookingBlockComponent({
         });
       } catch {
         // Notification failed but booking succeeded
+      }
+
+      // Add event to Google Calendar if sync is enabled
+      if (block.gcalSyncEnabled && pageOwnerId) {
+        try {
+          await supabase.functions.invoke('google-calendar-sync', {
+            body: {
+              action: 'create_event',
+              owner_id: pageOwnerId,
+              date: format(selectedDate, 'yyyy-MM-dd'),
+              start_time: selectedSlot.time,
+              end_time: selectedSlot.endTime || null,
+              client_name: formData.name,
+              client_phone: formData.phone || '',
+              client_email: formData.email || '',
+              client_notes: formData.notes || '',
+              block_title: blockTitle
+            }
+          });
+        } catch (err) {
+          console.error('Failed to create event in Google Calendar:', err);
+        }
       }
 
       toast.success(t('booking.success', 'Вы успешно записались!'));

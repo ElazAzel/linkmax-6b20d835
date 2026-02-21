@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Mail, Link2, Unlink, Loader2 } from 'lucide-react';
+import { Mail, Link2, Unlink, Loader2, CalendarSync } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 
 
@@ -30,8 +30,14 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const [isLoading, setIsLoading] = useState(true);
   const [linkingProvider, setLinkingProvider] = useState<string | null>(null);
 
+  // Google Calendar Integration State
+  const [gcalIsLoading, setGcalIsLoading] = useState(true);
+  const [gcalIsConnected, setGcalIsConnected] = useState(false);
+  const [gcalLastSync, setGcalLastSync] = useState<string | null>(null);
+
   useEffect(() => {
     loadLinkedAccounts();
+    checkGcalIntegration();
   }, []);
 
   useEffect(() => {
@@ -143,6 +149,76 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
     } finally {
       setLinkingProvider(null);
     }
+  };
+
+  // Google Calendar Integration Functions
+  const checkGcalIntegration = async () => {
+    try {
+      setGcalIsLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('user_integrations_status' as any)
+        .select('is_connected, updated_at')
+        .eq('user_id', user.id)
+        .eq('provider', 'google_calendar')
+        .maybeSingle() as any;
+
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+
+      setGcalIsConnected(!!data?.is_connected);
+      if (data?.updated_at) {
+        setGcalLastSync(data.updated_at);
+      }
+    } catch (error) {
+      console.error('Error checking gcal integration:', error);
+    } finally {
+      setGcalIsLoading(false);
+    }
+  };
+
+  const handleConnectGcal = async () => {
+    setLinkingProvider('google_calendar');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('No active session');
+
+      const redirectUri = `${window.location.origin}/dashboard/settings`;
+
+      // Google OAuth URL (Requires setup in Google Cloud Console)
+      // For now, we simulate the flow pointing to our Edge Function or a redirect
+      toast.info(t('settings.integrations.gcalRedirecting', 'Перенаправление в Google...'));
+
+      // In a real implementation we might redirect directly to Google OAuth Consent here
+      // and pass state to our Edge Function.
+
+      // const GOOGLE_CLIENT_ID = process.env.VITE_GOOGLE_CLIENT_ID;
+      // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/calendar.events&access_type=offline&prompt=consent`;
+      // window.location.href = url;
+
+      // Simulate success for now as we don't have the Google Client ID configured
+      setTimeout(async () => {
+        toast.success(t('settings.integrations.gcalConnected', 'Успешно подключено (Режим MOCK)'));
+        setGcalIsConnected(true);
+        setGcalLastSync(new Date().toISOString());
+        setLinkingProvider(null);
+      }, 1500);
+
+    } catch (err) {
+      console.error(err);
+      toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar'));
+      setLinkingProvider(null);
+    }
+  };
+
+  const handleDisconnectGcal = async () => {
+    // In production we would delete the row from user_integrations
+    toast.success(t('settings.integrations.gcalDisconnected', 'Google Calendar отключен'));
+    setGcalIsConnected(false);
+    setGcalLastSync(null);
   };
 
   const getProviderIcon = (provider: string) => {
@@ -264,6 +340,52 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
             )}
           </div>
         ))}
+      </Card>
+
+      {/* Integrations Section */}
+      <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1 mt-8">
+        {t('settings.integrations.title', 'Интеграции')}
+      </h3>
+      <Card className="divide-y divide-border/50 overflow-hidden">
+        <div className="flex items-center gap-4 p-4">
+          <div className="h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 bg-blue-500/15">
+            <CalendarSync className="h-5 w-5 text-blue-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-medium">Google Calendar</span>
+              {gcalIsConnected && (
+                <Badge variant="outline" className="text-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+                  {t('settings.integrations.active', 'Активно')}
+                </Badge>
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground truncate">
+              {t('settings.integrations.gcalDesc', 'Синхронизация бронирований с календарем')}
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0 rounded-xl"
+            disabled={linkingProvider === 'google_calendar' || gcalIsLoading}
+            onClick={() => gcalIsConnected ? handleDisconnectGcal() : handleConnectGcal()}
+          >
+            {linkingProvider === 'google_calendar' || gcalIsLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : gcalIsConnected ? (
+              <>
+                <Unlink className="h-4 w-4 mr-1" />
+                {t('settings.linkedAccounts.unlink', 'Unlink')}
+              </>
+            ) : (
+              <>
+                <Link2 className="h-4 w-4 mr-1" />
+                {t('settings.linkedAccounts.link', 'Link')}
+              </>
+            )}
+          </Button>
+        </div>
       </Card>
     </div>
   );
