@@ -256,3 +256,65 @@ export function extractSocialsPipeline(text: string): ParsedSocial[] {
 
     return results;
 }
+
+// ----------------------------------------------------------------------
+// CTA & LOCATION EXTRACTION
+// ----------------------------------------------------------------------
+
+/**
+ * Extracts a single primary CTA URL from a text block, and returns the modified text
+ * Useful for pulling a "Book here" link out of a Bio.
+ */
+export function extractUrlFromText(text: string): { url: string; remainder: string } {
+    if (!text) return { url: '', remainder: '' };
+
+    // Matches first HTTP/HTTPS link that isn't just a generic domain mention
+    const ctaRegex = /(https?:\/\/[^\s]+)/i;
+    const match = text.match(ctaRegex);
+
+    if (match) {
+        const url = match[1];
+        // Remove the URL, and clean up any trailing colons or "по ссылке:" phrases loosely
+        let remainder = text.replace(url, '').trim();
+        remainder = remainder.replace(/(?:по ссылке|link|тут)[:\s-]*$/i, '').trim();
+        return { url, remainder };
+    }
+
+    return { url: '', remainder: text };
+}
+
+/**
+ * Heuristics to extract physical addresses/locations
+ * Looks for common Russian/International address markers
+ */
+export function extractLocation(text: string): { location: string; remainder: string } {
+    if (!text) return { location: '', remainder: '' };
+
+    // Simple heuristic regex: looks for "г. ", "ул. ", "проспект", "street", "city" followed by words
+    const locationRegex = /(?:г\.|ул\.|пр-т\.|город|улица|проспект|street|city|region)[:\s]+([^,\n]{2,50})(?:[,.\n]|$)/i;
+    const match = text.match(locationRegex);
+
+    if (match) {
+        // Find the whole line or segment containing the match to pull out a decent address string
+        const lines = text.split(/[\n;]/);
+        let foundLine = '';
+        const remainderLines = [];
+
+        for (const line of lines) {
+            if (line.match(locationRegex)) {
+                foundLine = line.trim();
+            } else {
+                remainderLines.push(line);
+            }
+        }
+
+        if (foundLine) {
+            return {
+                location: foundLine.replace(/^(?:Адрес|Локация|Место)[:\s-]*/i, '').trim(),
+                remainder: remainderLines.join('\n').trim()
+            };
+        }
+    }
+
+    return { location: '', remainder: text };
+}
