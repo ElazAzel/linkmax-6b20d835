@@ -34,6 +34,23 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
     loadLinkedAccounts();
   }, []);
 
+  useEffect(() => {
+    const searchParams = new URL(window.location.href).searchParams;
+    const authError = searchParams.get('auth_error');
+    const authErrorDescription = searchParams.get('auth_error_description');
+
+    if (authError) {
+      toast.error(t('settings.linkedAccounts.linkFailedReason', 'Failed to link account: {{reason}}', {
+        reason: authErrorDescription || authError
+      }));
+      // Clean up URL
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('auth_error');
+      newUrl.searchParams.delete('auth_error_description');
+      window.history.replaceState(null, '', newUrl.toString());
+    }
+  }, [t]);
+
   const loadLinkedAccounts = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();

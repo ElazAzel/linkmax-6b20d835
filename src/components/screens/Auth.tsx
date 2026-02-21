@@ -69,6 +69,21 @@ export default function Auth() {
   const returnTo = searchParams.get('returnTo');
   const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
 
+  // Check for auth errors returned from OAuth redirect
+  const authError = searchParams.get('auth_error');
+  const authErrorDescription = searchParams.get('auth_error_description');
+
+  useEffect(() => {
+    if (authError) {
+      toast.error(t('auth.oauthError', 'Authentication Error: {{error}}', { error: authErrorDescription || authError }));
+      // Clean up URL without triggering re-renders
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('auth_error');
+      newUrl.searchParams.delete('auth_error_description');
+      window.history.replaceState(null, '', newUrl.toString());
+    }
+  }, [authError, authErrorDescription, t]);
+
   // Check for password update mode from URL or hash params (from email link)
   useEffect(() => {
     if (urlMode === 'update-password') {
