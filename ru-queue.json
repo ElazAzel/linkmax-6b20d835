@@ -1,0 +1,1090 @@
+{
+  "legal.paymentTerms": {
+    "source": "PaymentTerms",
+    "ru": ""
+  },
+  "legal.paymentTermsDescription": {
+    "source": "PaymentTermsDescription",
+    "ru": ""
+  },
+  "common.creating": {
+    "source": "Creating...",
+    "ru": ""
+  },
+  "common.upgrade": {
+    "source": "Upgrade to PRO",
+    "ru": ""
+  },
+  "common.saved": {
+    "source": "Saved",
+    "ru": ""
+  },
+  "fields.description": {
+    "source": "Description",
+    "ru": ""
+  },
+  "fields.fileName": {
+    "source": "File Name",
+    "ru": ""
+  },
+  "fields.fileSize": {
+    "source": "File Size",
+    "ru": ""
+  },
+  "fields.platforms": {
+    "source": "Platforms",
+    "ru": ""
+  },
+  "fields.layout": {
+    "source": "Layout",
+    "ru": ""
+  },
+  "fields.iconStyle": {
+    "source": "Icon Style",
+    "ru": ""
+  },
+  "fields.whatPeopleSay": {
+    "source": "What People Say",
+    "ru": ""
+  },
+  "fields.testimonials": {
+    "source": "Testimonials",
+    "ru": ""
+  },
+  "fields.testimonial": {
+    "source": "Testimonial",
+    "ru": ""
+  },
+  "fields.role": {
+    "source": "Role",
+    "ru": ""
+  },
+  "fields.testimonialText": {
+    "source": "Testimonial Text",
+    "ru": ""
+  },
+  "fields.testimonialPlaceholder": {
+    "source": "This is an amazing product!",
+    "ru": ""
+  },
+  "fields.rating": {
+    "source": "Rating",
+    "ru": ""
+  },
+  "fields.content": {
+    "source": "Content",
+    "ru": ""
+  },
+  "fields.heading": {
+    "source": "Heading",
+    "ru": ""
+  },
+  "fields.paragraph": {
+    "source": "Paragraph",
+    "ru": ""
+  },
+  "fields.quote": {
+    "source": "Quote",
+    "ru": ""
+  },
+  "fields.videoUrl": {
+    "source": "Video URL",
+    "ru": ""
+  },
+  "fields.aspectRatio": {
+    "source": "Aspect Ratio",
+    "ru": ""
+  },
+  "actions.addImage": {
+    "source": "Add Image",
+    "ru": ""
+  },
+  "actions.download": {
+    "source": "Download",
+    "ru": ""
+  },
+  "actions.buy": {
+    "source": "Buy",
+    "ru": ""
+  },
+  "actions.removeCustomIcon": {
+    "source": "Remove custom icon",
+    "ru": ""
+  },
+  "actions.addPlatform": {
+    "source": "Add Platform",
+    "ru": ""
+  },
+  "actions.send": {
+    "source": "Send",
+    "ru": ""
+  },
+  "actions.upgrade": {
+    "source": "Upgrade",
+    "ru": ""
+  },
+  "blockTypes.faq": {
+    "source": "FAQ",
+    "ru": ""
+  },
+  "settings.telegramLabel": {
+    "source": "Telegram",
+    "ru": ""
+  },
+  "settings.integrations.webhookUrl": {
+    "source": "Webhook URL (Pro)",
+    "ru": ""
+  },
+  "landing.v6.hero.badge": {
+    "source": "V6.0 Live",
+    "ru": ""
+  },
+  "landing.v6.hero.titleBrand": {
+    "source": "lnkmx.my",
+    "ru": ""
+  },
+  "landing.v6.hero.cardRevenue.value": {
+    "source": "₸12,450",
+    "ru": ""
+  },
+  "landing.v6.pricing.pro.title": {
+    "source": "Pro",
+    "ru": ""
+  },
+  "landing.v4.hero.badge": {
+    "source": "The Micro-Business OS",
+    "ru": ""
+  },
+  "landing.hero.usernamePlaceholder": {
+    "source": "yourname",
+    "ru": ""
+  },
+  "landing.useCases.barber.name": {
+    "source": "BarberShop MAX",
+    "ru": ""
+  },
+  "landing.useCases.barber.link3": {
+    "source": "📱 WhatsApp",
+    "ru": ""
+  },
+  "landing.useCases.fitness.link3": {
+    "source": "✉️ Telegram",
+    "ru": ""
+  },
+  "landing.useCases.musician.name": {
+    "source": "DJ Max",
+    "ru": ""
+  },
+  "landing.useCases.musician.link1": {
+    "source": "🎧 Spotify",
+    "ru": ""
+  },
+  "landing.pricing.annualPriceUsd": {
+    "source": "$71/year",
+    "ru": ""
+  },
+  "landing.footer.copyright": {
+    "source": "© 2025 lnkmx",
+    "ru": ""
+  },
+  "landing.premiumValue.crm.title": {
+    "source": "Mini-CRM",
+    "ru": ""
+  },
+  "landing.simplePricing.premium.title": {
+    "source": "Premium",
+    "ru": ""
+  },
+  "landing.toc.faq": {
+    "source": "FAQ",
+    "ru": ""
+  },
+  "landing.v2.pricing.save": {
+    "source": "-30%",
+    "ru": ""
+  },
+  "landing.v2.pricing.free.name": {
+    "source": "Starter",
+    "ru": ""
+  },
+  "landing.v2.testimonials.count": {
+    "source": "2,000+",
+    "ru": ""
+  },
+  "dashboard.home.premium": {
+    "source": "Premium",
+    "ru": ""
+  },
+  "dashboard.insights.ctr": {
+    "source": "CTR",
+    "ru": ""
+  },
+  "dashboard.settings.telegramNotifications": {
+    "source": "Telegram",
+    "ru": ""
+  },
+  "dashboard.pageSettings.seo": {
+    "source": "SEO",
+    "ru": ""
+  },
+  "dashboard.pageSettings.seoTitle": {
+    "source": "Meta Title",
+    "ru": ""
+  },
+  "dashboard.pageSettings.seoDescription": {
+    "source": "Meta Description",
+    "ru": ""
+  },
+  "dashboard.pageSettings.aiBuilder": {
+    "source": "AI Builder",
+    "ru": ""
+  },
+  "dashboard.accountSettings.telegram": {
+    "source": "Telegram",
+    "ru": ""
+  },
+  "dashboard.monetize.pro.feature4": {
+    "source": "Mini-CRM + Telegram",
+    "ru": ""
+  },
+  "dashboard.createPage.slugPlaceholder": {
+    "source": "my-page",
+    "ru": ""
+  },
+  "dashboard.templateApplied": {
+    "source": "Template applied!",
+    "ru": ""
+  },
+  "blocks.community.stylePremium": {
+    "source": "Premium",
+    "ru": ""
+  },
+  "blocks.community.styleExclusive": {
+    "source": "Exclusive",
+    "ru": ""
+  },
+  "auth.title": {
+    "source": "lnkmx",
+    "ru": ""
+  },
+  "auth.required": {
+    "source": "Please sign in",
+    "ru": ""
+  },
+  "auth.signupEmailSent": {
+    "source": "We sent a confirmation link to your email",
+    "ru": ""
+  },
+  "gallery.seo.imageAlt": {
+    "source": "lnkmx Gallery - Link in Bio Examples",
+    "ru": ""
+  },
+  "gallery.featuredPages": {
+    "source": "Featured Pages",
+    "ru": ""
+  },
+  "gallery.searchPlaceholder": {
+    "source": "Search pages...",
+    "ru": ""
+  },
+  "gallery.sortBy": {
+    "source": "Sort by",
+    "ru": ""
+  },
+  "gallery.totalPages": {
+    "source": "{{count}} pages in gallery",
+    "ru": ""
+  },
+  "gallery.searchResults": {
+    "source": "Filtering by",
+    "ru": ""
+  },
+  "gallery.shareToGallery": {
+    "source": "Share to Gallery",
+    "ru": ""
+  },
+  "gallery.shareDescription": {
+    "source": "Show your page in the community gallery",
+    "ru": ""
+  },
+  "gallery.allNiches": {
+    "source": "All",
+    "ru": ""
+  },
+  "share.title": {
+    "source": "Check out my lnkmx.my page!",
+    "ru": ""
+  },
+  "share.published": {
+    "source": "Page Published!",
+    "ru": ""
+  },
+  "share.publishedDesc": {
+    "source": "Share your published page with others",
+    "ru": ""
+  },
+  "share.yourPageLink": {
+    "source": "Your page link",
+    "ru": ""
+  },
+  "share.shareNow": {
+    "source": "Share Now",
+    "ru": ""
+  },
+  "admin.tierBusiness": {
+    "source": "Business",
+    "ru": ""
+  },
+  "admin.tierPro": {
+    "source": "Pro",
+    "ru": ""
+  },
+  "admin.tierFree": {
+    "source": "Free",
+    "ru": ""
+  },
+  "admin.refresh": {
+    "source": "Refresh",
+    "ru": ""
+  },
+  "admin.status": {
+    "source": "Status",
+    "ru": ""
+  },
+  "admin.created": {
+    "source": "Created",
+    "ru": ""
+  },
+  "admin.confirmDeleteTemplate": {
+    "source": "Are you sure you want to delete template",
+    "ru": ""
+  },
+  "admin.templateDeleted": {
+    "source": "Template deleted",
+    "ru": ""
+  },
+  "admin.errorDeletingTemplate": {
+    "source": "Error deleting template",
+    "ru": ""
+  },
+  "admin.errorUpdatingStatus": {
+    "source": "Error updating status",
+    "ru": ""
+  },
+  "admin.searchTemplates": {
+    "source": "Search templates...",
+    "ru": ""
+  },
+  "admin.createTemplate": {
+    "source": "Create Template",
+    "ru": ""
+  },
+  "admin.templateName": {
+    "source": "Name",
+    "ru": ""
+  },
+  "admin.niches": {
+    "source": "Niches",
+    "ru": ""
+  },
+  "admin.public": {
+    "source": "Public",
+    "ru": ""
+  },
+  "admin.hidden": {
+    "source": "Hidden",
+    "ru": ""
+  },
+  "admin.noTemplatesFound": {
+    "source": "No templates found",
+    "ru": ""
+  },
+  "adminTokens.filter.premium": {
+    "source": "Premium",
+    "ru": ""
+  },
+  "alternatives.seo.imageAlt": {
+    "source": "lnkmx vs Alternatives Comparison",
+    "ru": ""
+  },
+  "alternatives.hero.title": {
+    "source": "lnkmx vs Linktree, Taplink, Carrd, Beacons",
+    "ru": ""
+  },
+  "referral.topReferrers": {
+    "source": "Top Referrers",
+    "ru": ""
+  },
+  "referral.inviteFriend": {
+    "source": "Invite a friend",
+    "ru": ""
+  },
+  "referral.bothGetBonus": {
+    "source": "You both get +3 days Premium!",
+    "ru": ""
+  },
+  "referral.shareReferralLink": {
+    "source": "Share Referral Link",
+    "ru": ""
+  },
+  "referral.friendsInvited": {
+    "source": "Friends invited",
+    "ru": ""
+  },
+  "referral.bonusEarned": {
+    "source": "Bonus days earned",
+    "ru": ""
+  },
+  "social.metadata.achievement": {
+    "source": "🏆 {{title}}",
+    "ru": ""
+  },
+  "social.metadata.challenge": {
+    "source": "✅ {{title}}",
+    "ru": ""
+  },
+  "social.metadata.boostFallback": {
+    "source": "standard",
+    "ru": ""
+  },
+  "social.pendingGifts.count": {
+    "source": "Count",
+    "ru": ""
+  },
+  "social.pendingGifts.days": {
+    "source": "Days",
+    "ru": ""
+  },
+  "premium.premiumFramesLocked": {
+    "source": "Premium frames require PRO subscription",
+    "ru": ""
+  },
+  "premium.verificationRequiresPro": {
+    "source": "Verification badge is available for PRO users",
+    "ru": ""
+  },
+  "premium.upgradeToPro": {
+    "source": "Upgrade to PRO →",
+    "ru": ""
+  },
+  "analytics.engagement.ctr": {
+    "source": "CTR",
+    "ru": ""
+  },
+  "editor.sections.settings": {
+    "source": "Settings",
+    "ru": ""
+  },
+  "crm.title": {
+    "source": "CRM",
+    "ru": ""
+  },
+  "crm.source": {
+    "source": "Source",
+    "ru": ""
+  },
+  "crm.addLeadDescription": {
+    "source": "Fill in the form to add a new lead to your CRM",
+    "ru": ""
+  },
+  "crm.namePlaceholder": {
+    "source": "Client name",
+    "ru": ""
+  },
+  "crm.phone": {
+    "source": "Phone",
+    "ru": ""
+  },
+  "crm.notes": {
+    "source": "Notes",
+    "ru": ""
+  },
+  "crm.notesPlaceholder": {
+    "source": "Additional notes about this lead...",
+    "ru": ""
+  },
+  "crm.addInteraction": {
+    "source": "Add Interaction",
+    "ru": ""
+  },
+  "crm.interactionPlaceholder": {
+    "source": "What happened?",
+    "ru": ""
+  },
+  "crm.history": {
+    "source": "History",
+    "ru": ""
+  },
+  "crm.noInteractions": {
+    "source": "No interactions yet",
+    "ru": ""
+  },
+  "crm.deleteLead": {
+    "source": "Delete Lead",
+    "ru": ""
+  },
+  "crm.confirmDelete": {
+    "source": "Delete this lead?",
+    "ru": ""
+  },
+  "crm.deleteWarning": {
+    "source": "This action cannot be undone. All interactions will also be deleted.",
+    "ru": ""
+  },
+  "crm.openPanel": {
+    "source": "Open CRM",
+    "ru": ""
+  },
+  "publicPage.defaultDescription": {
+    "source": "View my profile",
+    "ru": ""
+  },
+  "teams.settingsDesc": {
+    "source": "Manage team settings and members",
+    "ru": ""
+  },
+  "paidContent.notEnoughTokens": {
+    "source": "NotEnoughTokens",
+    "ru": ""
+  },
+  "collab.shoutoutRecommendDesc": {
+    "source": "Send a shoutout recommendation for this user",
+    "ru": ""
+  },
+  "blockEditor.notAvailable": {
+    "source": "NotAvailable",
+    "ru": ""
+  },
+  "blockEditor.title": {
+    "source": "Edit Block",
+    "ru": ""
+  },
+  "seo.organization.description": {
+    "source": "AI-powered link in bio and mini-landing page builder",
+    "ru": ""
+  },
+  "seo.organization.street": {
+    "source": "Sholokhov St., 20/7",
+    "ru": ""
+  },
+  "install.desktop.title": {
+    "source": "Desktop",
+    "ru": ""
+  },
+  "event.emailPlaceholder": {
+    "source": "your@email.com",
+    "ru": ""
+  },
+  "event.googleCalendar": {
+    "source": "Google Calendar",
+    "ru": ""
+  },
+  "event.outlook": {
+    "source": "Outlook",
+    "ru": ""
+  },
+  "eventBuilder.fieldPlaceholder": {
+    "source": "Placeholder",
+    "ru": ""
+  },
+  "eventBuilder.option1": {
+    "source": "Option 1",
+    "ru": ""
+  },
+  "landingV5.hero.badge": {
+    "source": "Micro-Business OS",
+    "ru": ""
+  },
+  "landingV5.blocks.faq": {
+    "source": "FAQ",
+    "ru": ""
+  },
+  "landingV5.blocks.proLabel": {
+    "source": "Pro",
+    "ru": ""
+  },
+  "landingV5.pricing.free.price": {
+    "source": "0 ₸",
+    "ru": ""
+  },
+  "landingV5.pricing.pro.title": {
+    "source": "Pro",
+    "ru": ""
+  },
+  "landingV5.aeo.badge": {
+    "source": "AEO + GEO",
+    "ru": ""
+  },
+  "footer.product": {
+    "source": "Product",
+    "ru": ""
+  },
+  "footer.alternatives": {
+    "source": "Alternatives",
+    "ru": ""
+  },
+  "footer.legal": {
+    "source": "Legal",
+    "ru": ""
+  },
+  "footer.paymentTerms": {
+    "source": "Payment Terms",
+    "ru": ""
+  },
+  "footer.contacts": {
+    "source": "Contacts",
+    "ru": ""
+  },
+  "placeholders.enterText": {
+    "source": "Enter your text...",
+    "ru": ""
+  },
+  "aiBuilder.title": {
+    "source": "AI Builder",
+    "ru": ""
+  },
+  "aiBuilder.socialsPlaceholder": {
+    "source": "Instagram, Telegram, YouTube...",
+    "ru": ""
+  },
+  "insights.lowPerforming.description": {
+    "source": "Description",
+    "ru": ""
+  },
+  "blockSize.small": {
+    "source": "1×1",
+    "ru": ""
+  },
+  "blockSize.wide": {
+    "source": "2×1",
+    "ru": ""
+  },
+  "blockSize.tall": {
+    "source": "1×2",
+    "ru": ""
+  },
+  "blockSize.large": {
+    "source": "2×2",
+    "ru": ""
+  },
+  "warnings.customCodeSecurity": {
+    "source": "Warning: Only use trusted code. Custom code runs with full JavaScript capabilities.",
+    "ru": ""
+  },
+  "imageStyles.default": {
+    "source": "Default - Rounded Corners",
+    "ru": ""
+  },
+  "imageStyles.banner": {
+    "source": "Banner - Full Width",
+    "ru": ""
+  },
+  "imageStyles.polaroid": {
+    "source": "Polaroid - Vintage Frame",
+    "ru": ""
+  },
+  "imageStyles.vignette": {
+    "source": "Vignette - Soft Edges",
+    "ru": ""
+  },
+  "imageStyles.circle": {
+    "source": "Circle - Round Crop",
+    "ru": ""
+  },
+  "imageScales.cover": {
+    "source": "Fill (Cover)",
+    "ru": ""
+  },
+  "imageScales.contain": {
+    "source": "Fit (Contain)",
+    "ru": ""
+  },
+  "imageScales.fill": {
+    "source": "Stretch",
+    "ru": ""
+  },
+  "imageScales.tile": {
+    "source": "Tile",
+    "ru": ""
+  },
+  "ai.generateDescription": {
+    "source": "Generate with AI",
+    "ru": ""
+  },
+  "styles.brandColors": {
+    "source": "Brand Colors",
+    "ru": ""
+  },
+  "styles.black": {
+    "source": "Black",
+    "ru": ""
+  },
+  "styles.white": {
+    "source": "White",
+    "ru": ""
+  },
+  "styles.outline": {
+    "source": "Outline",
+    "ru": ""
+  },
+  "gradients.none": {
+    "source": "No Gradient",
+    "ru": ""
+  },
+  "gradients.dark": {
+    "source": "Dark Overlay",
+    "ru": ""
+  },
+  "gradients.light": {
+    "source": "Light Overlay",
+    "ru": ""
+  },
+  "gradients.primary": {
+    "source": "Primary Color",
+    "ru": ""
+  },
+  "gradients.sunset": {
+    "source": "Sunset Gradient",
+    "ru": ""
+  },
+  "gradients.ocean": {
+    "source": "Ocean Gradient",
+    "ru": ""
+  },
+  "gradients.purple": {
+    "source": "Purple Dream",
+    "ru": ""
+  },
+  "heights.small": {
+    "source": "Small - 120px",
+    "ru": ""
+  },
+  "heights.medium": {
+    "source": "Medium - 200px",
+    "ru": ""
+  },
+  "heights.large": {
+    "source": "Large - 320px",
+    "ru": ""
+  },
+  "avatarSizes.small": {
+    "source": "Small - 64px",
+    "ru": ""
+  },
+  "avatarSizes.medium": {
+    "source": "Medium - 96px",
+    "ru": ""
+  },
+  "avatarSizes.large": {
+    "source": "Large - 128px",
+    "ru": ""
+  },
+  "avatarSizes.xlarge": {
+    "source": "Extra Large - 160px",
+    "ru": ""
+  },
+  "upload.fileTooLarge": {
+    "source": "File too large (max 10MB)",
+    "ru": ""
+  },
+  "upload.success": {
+    "source": "Uploaded!",
+    "ru": ""
+  },
+  "upload.error": {
+    "source": "Upload failed",
+    "ru": ""
+  },
+  "upload.maxSize": {
+    "source": "MaxSize",
+    "ru": ""
+  },
+  "upload.gifPremiumOnly": {
+    "source": "GIF uploads are available for Premium users only",
+    "ru": ""
+  },
+  "upload.compressed": {
+    "source": "compressed",
+    "ru": ""
+  },
+  "upload.gifPreserved": {
+    "source": "GIF animation preserved",
+    "ru": ""
+  },
+  "upload.tab": {
+    "source": "Upload",
+    "ru": ""
+  },
+  "upload.compressing": {
+    "source": "Compressing...",
+    "ru": ""
+  },
+  "upload.click": {
+    "source": "Click to upload",
+    "ru": ""
+  },
+  "upload.autoCompress": {
+    "source": "Auto-compressed, max 15MB",
+    "ru": ""
+  },
+  "upload.gifPremium": {
+    "source": "GIF available with Premium",
+    "ru": ""
+  },
+  "layouts.list": {
+    "source": "List",
+    "ru": ""
+  },
+  "layouts.grid": {
+    "source": "Grid",
+    "ru": ""
+  },
+  "tier.free": {
+    "source": "Free",
+    "ru": ""
+  },
+  "scratch.scratchHere": {
+    "source": "👆 Scratch here",
+    "ru": ""
+  },
+  "scratch.revealed": {
+    "source": "🎉 Revealed!",
+    "ru": ""
+  },
+  "scratch.hint": {
+    "source": "Scratch the layer to reveal a surprise",
+    "ru": ""
+  },
+  "guide.pdf": {
+    "source": "Pdf",
+    "ru": ""
+  },
+  "messages.loading": {
+    "source": "Loading...",
+    "ru": ""
+  },
+  "messages.failedToSignUp": {
+    "source": "FailedToSignUp",
+    "ru": ""
+  },
+  "messages.accountCreated": {
+    "source": "AccountCreated",
+    "ru": ""
+  },
+  "messages.failedToSignIn": {
+    "source": "FailedToSignIn",
+    "ru": ""
+  },
+  "bookings.fetchError": {
+    "source": "Failed to load bookings",
+    "ru": ""
+  },
+  "bookings.cancelError": {
+    "source": "Failed to cancel booking",
+    "ru": ""
+  },
+  "bookings.cancelSuccess": {
+    "source": "Booking cancelled",
+    "ru": ""
+  },
+  "bookings.confirmError": {
+    "source": "Failed to confirm booking",
+    "ru": ""
+  },
+  "bookings.confirmSuccess": {
+    "source": "Booking confirmed",
+    "ru": ""
+  },
+  "bookings.completeError": {
+    "source": "Failed to complete booking",
+    "ru": ""
+  },
+  "bookings.completeSuccess": {
+    "source": "Booking marked as completed",
+    "ru": ""
+  },
+  "bookings.today": {
+    "source": "Today",
+    "ru": ""
+  },
+  "bookings.tomorrow": {
+    "source": "Tomorrow",
+    "ru": ""
+  },
+  "bookings.noBookingsToExport": {
+    "source": "No bookings to export",
+    "ru": ""
+  },
+  "bookings.exportSuccess": {
+    "source": "Bookings exported successfully",
+    "ru": ""
+  },
+  "bookings.appointmentWith": {
+    "source": "Appointment with",
+    "ru": ""
+  },
+  "bookings.calendarExported": {
+    "source": "Added to calendar",
+    "ru": ""
+  },
+  "bookings.total": {
+    "source": "Total",
+    "ru": ""
+  },
+  "bookings.upcoming": {
+    "source": "Upcoming",
+    "ru": ""
+  },
+  "bookings.confirmed": {
+    "source": "Confirmed",
+    "ru": ""
+  },
+  "bookings.past": {
+    "source": "Past",
+    "ru": ""
+  },
+  "bookings.all": {
+    "source": "All",
+    "ru": ""
+  },
+  "bookings.noBookings": {
+    "source": "No bookings yet",
+    "ru": ""
+  },
+  "bookings.addToCalendar": {
+    "source": "Add to Calendar",
+    "ru": ""
+  },
+  "bookings.exportCSV": {
+    "source": "CSV",
+    "ru": ""
+  },
+  "bookings.refresh": {
+    "source": "Refresh",
+    "ru": ""
+  },
+  "bookings.cancelTitle": {
+    "source": "Cancel Booking?",
+    "ru": ""
+  },
+  "bookings.cancelDescription": {
+    "source": "Are you sure you want to cancel this booking? The client will be notified.",
+    "ru": ""
+  },
+  "bookings.confirmCancel": {
+    "source": "Yes, Cancel Booking",
+    "ru": ""
+  },
+  "autosave.pending": {
+    "source": "Pending...",
+    "ru": ""
+  },
+  "autosave.saving": {
+    "source": "Saving...",
+    "ru": ""
+  },
+  "autosave.saved": {
+    "source": "Saved",
+    "ru": ""
+  },
+  "autosave.error": {
+    "source": "Error",
+    "ru": ""
+  },
+  "mobileToolbar.crm": {
+    "source": "CRM",
+    "ru": ""
+  },
+  "streak.title": {
+    "source": "Streak",
+    "ru": ""
+  },
+  "streak.keepGoing": {
+    "source": "Keep it going!",
+    "ru": ""
+  },
+  "streak.days": {
+    "source": "days",
+    "ru": ""
+  },
+  "streak.nextMilestone": {
+    "source": "Next milestone",
+    "ru": ""
+  },
+  "streak.bonusDays": {
+    "source": "bonus days",
+    "ru": ""
+  },
+  "streak.best": {
+    "source": "Best",
+    "ru": ""
+  },
+  "streak.earned": {
+    "source": "Earned",
+    "ru": ""
+  },
+  "streak.milestoneReached": {
+    "source": "Milestone Reached!",
+    "ru": ""
+  },
+  "streak.milestoneDescription": {
+    "source": "Congratulations on reaching a new streak milestone!",
+    "ru": ""
+  },
+  "streak.bonusEarned": {
+    "source": "You",
+    "ru": ""
+  },
+  "streak.bonusTrialDays": {
+    "source": "bonus trial days!",
+    "ru": ""
+  },
+  "streak.awesome": {
+    "source": "Awesome!",
+    "ru": ""
+  },
+  "streak.milestones": {
+    "source": "Streak Milestones",
+    "ru": ""
+  },
+  "leaderboard.week": {
+    "source": "This Week",
+    "ru": ""
+  },
+  "leaderboard.month": {
+    "source": "This Month",
+    "ru": ""
+  },
+  "leaderboard.allTime": {
+    "source": "All Time",
+    "ru": ""
+  },
+  "leaderboard.title": {
+    "source": "Top Pages",
+    "ru": ""
+  },
+  "leaderboard.all": {
+    "source": "All",
+    "ru": ""
+  },
+  "leaderboard.empty": {
+    "source": "No pages yet for this period",
+    "ru": ""
+  },
+  "tabbar.crm": {
+    "source": "CRM",
+    "ru": ""
+  },
+  "cookies.title": {
+    "source": "Cookie consent",
+    "ru": ""
+  },
+  "notFound.message": {
+    "source": "Oops! Page not found",
+    "ru": ""
+  },
+  "notFound.returnHome": {
+    "source": "Return to Home",
+    "ru": ""
+  }
+}
