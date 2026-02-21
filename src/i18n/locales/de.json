@@ -1175,21 +1175,9 @@
       "solution": "lnkmx macht eine klare Seite, auf der Besucher schnell verstehen, wer Sie sind, wie Sie helfen, was es kostet und wohin man klicken muss. Und Sie sehen Leads und Analytics an einem Ort."
     },
     "howItWorks": {
-      "title": "So funktioniert’s",
-      "cta": "Jetzt ausprobieren",
-      "step1": {
-        "title": "Erzählen Sie von sich",
-        "description": "Nische, Leistungen und Links, KI versteht den Kontext"
-      },
-      "step2": {
-        "title": "KI erstellt die Seite",
-        "description": "Fertige Blöcke, Texte und CTAs sind editierbar"
-      },
-      "step3": {
-        "title": "Veröffentlichen und Anfragen erhalten",
-        "description": "Link ist für Social Media bereit, Leads gehen ins CRM"
-      },
-      "badge": ""
+      "badge": "",
+      "title": "",
+      "cta": ""
     },
     "features": {
       "title": "Was Sie in der ersten Version bekommen",
@@ -1559,7 +1547,38 @@
         "count": "",
         "suffix": ""
       }
-    }
+    },
+    "aiPowered": "",
+    "newLead1": "",
+    "newLead2": "",
+    "newLeadsToday": "",
+    "aiBuilderTitle": "",
+    "aiBuilderDesc": "",
+    "deepAnalyticsTitle": "",
+    "deepAnalyticsDesc": "",
+    "mobileEditorTitle": "",
+    "mobileEditorDesc": "",
+    "instantLeadsTitle": "",
+    "instantLeadsDesc": "",
+    "growTitle": "",
+    "growDesc": "",
+    "chooseNiche": "",
+    "chooseNicheDesc": "",
+    "iAmA": "",
+    "nicheCreator": "",
+    "nicheFitness": "",
+    "nicheCrypto": "",
+    "nicheBeauty": "",
+    "nicheMusic": "",
+    "nicheTutor": "",
+    "aiBuilds": "",
+    "aiBuildsDesc": "",
+    "aiGenerating": "",
+    "getLeads": "",
+    "getLeadsDesc": "",
+    "leadMsg1": "",
+    "leadMsg2": "",
+    "newLeadCaptured": ""
   },
   "dashboard": {
     "loadError": "Ladefehler",

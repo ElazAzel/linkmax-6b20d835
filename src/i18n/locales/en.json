@@ -1175,21 +1175,9 @@
       "solution": "lnkmx makes one clear page where the visitor quickly understands who you are, how you are useful, how much it costs, and where to click to apply. And you see leads and analytics in one place."
     },
     "howItWorks": {
+      "badge": "1 minute until result",
       "title": "How does this work",
-      "cta": "Try now",
-      "step1": {
-        "title": "Tell us about yourself",
-        "description": "Niche, services and links - AI will understand the context"
-      },
-      "step2": {
-        "title": "AI assembles the page",
-        "description": "Ready-made blocks, texts and CTAs can be edited"
-      },
-      "step3": {
-        "title": "Publish and accept applications",
-        "description": "The link is ready for social networks, leads go to CRM"
-      },
-      "badge": "1 minute until result"
+      "cta": "Try for free"
     },
     "features": {
       "title": "What will you get in the first version",
@@ -1559,7 +1547,38 @@
         "count": "2,000+",
         "suffix": "creators"
       }
-    }
+    },
+    "aiPowered": "AI Powered",
+    "newLead1": "New lead: Sarah K.",
+    "newLead2": "New lead: Alex M.",
+    "newLeadsToday": "+12 today",
+    "aiBuilderTitle": "AI Page Builder",
+    "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
+    "deepAnalyticsTitle": "Deep Analytics",
+    "deepAnalyticsDesc": "Track every click, view, and conversion with privacy-focused, real-time analytics.",
+    "mobileEditorTitle": "Mobile First Editor",
+    "mobileEditorDesc": "Edit your page from your phone. Full power in your pocket.",
+    "instantLeadsTitle": "Instant Leads",
+    "instantLeadsDesc": "Get leads delivered straight to Telegram. No more missing customers.",
+    "growTitle": "Everything you need to grow",
+    "growDesc": "Powerful features wrapped in a beautiful, easy-to-use interface.",
+    "chooseNiche": "Choose your niche",
+    "chooseNicheDesc": "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
+    "iAmA": "I am a...",
+    "nicheCreator": "Digital Creator",
+    "nicheFitness": "Fitness Coach",
+    "nicheCrypto": "Crypto Expert",
+    "nicheBeauty": "Beauty Blogger",
+    "nicheMusic": "Music Producer",
+    "nicheTutor": "Online Tutor",
+    "aiBuilds": "AI builds everything",
+    "aiBuildsDesc": "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
+    "aiGenerating": "AI Generating...",
+    "getLeads": "Get leads in Telegram",
+    "getLeadsDesc": "Your page is live. Leads come straight to your DM. Close them instantly.",
+    "leadMsg1": "Hey, I want to book a consultation!",
+    "leadMsg2": "Awesome! Let's",
+    "newLeadCaptured": "New Lead Captured"
   },
   "dashboard": {
     "loadError": "Loading error",

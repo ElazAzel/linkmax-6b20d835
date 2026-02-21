@@ -1175,21 +1175,9 @@
       "solution": "lnkmx tashrif buyuruvchi sizning kimligingizni, qanchalik foydali ekanligingizni, qancha turadi va qayerga murojaat qilish kerakligini tezda tushunadigan aniq sahifa yaratadi. Siz yetakchilar va tahlillarni bir joyda ko‘rasiz."
     },
     "howItWorks": {
+      "badge": "Natijaga 1 daqiqa qoldi",
       "title": "U qanday ishlaydi",
-      "cta": "Hozir urinib koʻring",
-      "step1": {
-        "title": "O'zingiz haqingizda gapirib bering",
-        "description": "Niche, xizmatlar va havolalar - AI kontekstni tushunadi"
-      },
-      "step2": {
-        "title": "AI sahifani yig'adi",
-        "description": "Tayyor bloklar, matnlar va CTAlarni tahrirlash mumkin"
-      },
-      "step3": {
-        "title": "Ilovalarni nashr qilish va qabul qilish",
-        "description": "Havola ijtimoiy tarmoqlar uchun tayyor, CRM-ga olib boradi"
-      },
-      "badge": "Natijaga 1 daqiqa qoldi"
+      "cta": "Bepul sinab ko'ring"
     },
     "features": {
       "title": "Birinchi versiyada nima olasiz",
@@ -1559,7 +1547,38 @@
         "count": "2,000+",
         "suffix": "ijodkorlar"
       }
-    }
+    },
+    "aiPowered": "AI quvvatlanadi",
+    "newLead1": "Yangi rahbar: Sara K.",
+    "newLead2": "Yangi rahbar: Aleks M.",
+    "newLeadsToday": "Bugun +12",
+    "aiBuilderTitle": "AI sahifa yaratuvchisi",
+    "aiBuilderDesc": "Biznesingizni tavsiflang va bizning AI bir necha soniya ichida mukammal tuzilma, nusxa ko'chirish va tartibni yaratadi.",
+    "deepAnalyticsTitle": "Chuqur tahlil",
+    "deepAnalyticsDesc": "Maxfiylikka yo'naltirilgan real vaqt tahlili yordamida har bir bosish, ko'rish va konvertatsiyani kuzatib boring.",
+    "mobileEditorTitle": "Mobil birinchi muharriri",
+    "mobileEditorDesc": "Telefoningizdan sahifangizni tahrirlang. To'liq quvvat cho'ntagingizda.",
+    "instantLeadsTitle": "Instant Lids",
+    "instantLeadsDesc": "Etakchi takliflarni to'g'ridan-to'g'ri Telegramga yetkazing. Yo'qolgan mijozlar yo'q.",
+    "growTitle": "O'sish uchun kerak bo'lgan hamma narsa",
+    "growDesc": "Chiroyli, ishlatish uchun qulay interfeys bilan o'ralgan kuchli xususiyatlar.",
+    "chooseNiche": "Joyingizni tanlang",
+    "chooseNicheDesc": "AIga nima qilayotganingizni ayting. Go'zallik, kripto, murabbiylik - biz sizning tilingizda gaplashamiz.",
+    "iAmA": "men...",
+    "nicheCreator": "Raqamli yaratuvchi",
+    "nicheFitness": "Fitnes murabbiyi",
+    "nicheCrypto": "Kriptomatik mutaxassis",
+    "nicheBeauty": "Go'zallik bloggeri",
+    "nicheMusic": "Musiqa prodyuseri",
+    "nicheTutor": "Onlayn o'qituvchi",
+    "aiBuilds": "AI hamma narsani quradi",
+    "aiBuildsDesc": "Tuzilishi, nusxasi va dizayni soniyalarda yaratilgan. Drag-and-drop do'zax yo'q.",
+    "aiGenerating": "AI yaratilmoqda...",
+    "getLeads": "Telegramda yetakchilarni oling",
+    "getLeadsDesc": "Sizning sahifangiz jonli. Etakchilar to'g'ridan-to'g'ri DM ga keladi. Ularni darhol yoping.",
+    "leadMsg1": "Hey, men konsultatsiyani bron qilmoqchiman!",
+    "leadMsg2": "Ajoyib! Keling",
+    "newLeadCaptured": "Yangi rahbar qo'lga olindi"
   },
   "dashboard": {
     "loadError": "Yuklashda xato",

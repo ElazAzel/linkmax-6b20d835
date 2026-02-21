@@ -1175,21 +1175,9 @@
       "solution": "lnkmx робить одну зрозумілу сторінку, де відвідувач швидко розуміє, хто ви, чим корисні, скільки коштує, і куди натиснути для заявки. А ви бачите ліди та аналітику в одному місці."
     },
     "howItWorks": {
-      "title": "Як це працює",
-      "cta": "Спробувати зараз",
-      "step1": {
-        "title": "Розкажіть про себе",
-        "description": "Ниша, послуги і посилання - AI поймет контекст"
-      },
-      "step2": {
-        "title": "AI собирает сторінку",
-        "description": "Готові блоки, тексти і CTA можно отредактировать"
-      },
-      "step3": {
-        "title": "Публикуйте і принимайте заявки",
-        "description": "Посилання готова для соцсетей, ліди идут в CRM"
-      },
-      "badge": ""
+      "badge": "",
+      "title": "",
+      "cta": ""
     },
     "features": {
       "title": "Що ви получите в первой версии",
@@ -1559,7 +1547,38 @@
         "count": "",
         "suffix": ""
       }
-    }
+    },
+    "aiPowered": "",
+    "newLead1": "",
+    "newLead2": "",
+    "newLeadsToday": "",
+    "aiBuilderTitle": "",
+    "aiBuilderDesc": "",
+    "deepAnalyticsTitle": "",
+    "deepAnalyticsDesc": "",
+    "mobileEditorTitle": "",
+    "mobileEditorDesc": "",
+    "instantLeadsTitle": "",
+    "instantLeadsDesc": "",
+    "growTitle": "",
+    "growDesc": "",
+    "chooseNiche": "",
+    "chooseNicheDesc": "",
+    "iAmA": "",
+    "nicheCreator": "",
+    "nicheFitness": "",
+    "nicheCrypto": "",
+    "nicheBeauty": "",
+    "nicheMusic": "",
+    "nicheTutor": "",
+    "aiBuilds": "",
+    "aiBuildsDesc": "",
+    "aiGenerating": "",
+    "getLeads": "",
+    "getLeadsDesc": "",
+    "leadMsg1": "",
+    "leadMsg2": "",
+    "newLeadCaptured": ""
   },
   "dashboard": {
     "loadError": "Помилка загрузки",

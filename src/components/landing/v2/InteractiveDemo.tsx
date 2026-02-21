@@ -3,78 +3,81 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
 import { Check, User, MessageSquare, Zap } from 'lucide-react';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-
-const steps = [
-    {
-        title: "Choose your niche",
-        description: "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
-        icon: <User className="w-5 h-5" />,
-        mockContent: (
-            <div className="flex flex-col gap-2 p-4 max-h-[260px] overflow-y-auto scrollbar-hide">
-                <div className="text-sm font-bold opacity-50 mb-2">I am a...</div>
-                <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium">Digital Creator</div>
-                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Fitness Coach</div>
-                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Crypto Expert</div>
-                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Beauty Blogger</div>
-                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Music Producer</div>
-                <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">Online Tutor</div>
-            </div>
-        )
-    },
-    {
-        title: "AI builds everything",
-        description: "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
-        icon: <Zap className="w-5 h-5" />,
-        mockContent: (
-            <div className="flex flex-col gap-2 p-4">
-                <div className="flex gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    <div className="text-xs opacity-50">AI Generating...</div>
-                </div>
-                <div className="h-20 rounded-lg bg-muted animate-pulse" />
-                <div className="h-8 rounded-lg bg-muted animate-pulse w-2/3" />
-                <div className="h-24 rounded-lg bg-muted animate-pulse" />
-            </div>
-        )
-    },
-    {
-        title: "Get leads in Telegram",
-        description: "Your page is live. Leads come straight to your DM. Close them instantly.",
-        icon: <MessageSquare className="w-5 h-5" />,
-        mockContent: (
-            <div className="flex flex-col gap-2 p-4">
-                <div className="p-3 rounded-xl bg-primary text-primary-foreground rounded-br-none self-end max-w-[80%] text-sm">
-                    Hey, I want to book a consultation!
-                </div>
-                <div className="p-3 rounded-xl bg-muted rounded-bl-none self-start max-w-[80%] text-sm">
-                    Awesome! Let's schedule it.
-                </div>
-                <div className="mt-4 flex items-center gap-2 p-2 bg-primary/10 border border-primary/20 rounded-lg">
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                        <Check className="w-4 h-4 text-primary-foreground" />
-                    </div>
-                    <div className="text-xs font-semibold text-primary">New Lead Captured</div>
-                </div>
-            </div>
-        )
-    }
-];
+import { useTranslation, Trans } from 'react-i18next';
 
 export const InteractiveDemo = () => {
     const isMobile = useIsMobile();
+    const { t } = useTranslation();
+
+    const steps = [
+        {
+            title: t('landing.chooseNiche', 'Choose your niche'),
+            description: t('landing.chooseNicheDesc', 'Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.'),
+            icon: <User className="w-5 h-5" />,
+            mockContent: (
+                <div className="flex flex-col gap-2 p-4 max-h-[260px] overflow-y-auto scrollbar-hide">
+                    <div className="text-sm font-bold opacity-50 mb-2">{t('landing.iAmA', 'I am a...')}</div>
+                    <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-primary font-medium">{t('landing.nicheCreator', 'Digital Creator')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.nicheFitness', 'Fitness Coach')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.nicheCrypto', 'Crypto Expert')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.nicheBeauty', 'Beauty Blogger')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.nicheMusic', 'Music Producer')}</div>
+                    <div className="p-3 rounded-lg bg-muted border border-transparent opacity-50">{t('landing.nicheTutor', 'Online Tutor')}</div>
+                </div>
+            )
+        },
+        {
+            title: t('landing.aiBuilds', 'AI builds everything'),
+            description: t('landing.aiBuildsDesc', 'Structure, copy, and design generated in seconds. No drag-and-drop hell.'),
+            icon: <Zap className="w-5 h-5" />,
+            mockContent: (
+                <div className="flex flex-col gap-2 p-4">
+                    <div className="flex gap-2 mb-2">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                        <div className="text-xs opacity-50">{t('landing.aiGenerating', 'AI Generating...')}</div>
+                    </div>
+                    <div className="h-20 rounded-lg bg-muted animate-pulse" />
+                    <div className="h-8 rounded-lg bg-muted animate-pulse w-2/3" />
+                    <div className="h-24 rounded-lg bg-muted animate-pulse" />
+                </div>
+            )
+        },
+        {
+            title: t('landing.getLeads', 'Get leads in Telegram'),
+            description: t('landing.getLeadsDesc', 'Your page is live. Leads come straight to your DM. Close them instantly.'),
+            icon: <MessageSquare className="w-5 h-5" />,
+            mockContent: (
+                <div className="flex flex-col gap-2 p-4">
+                    <div className="p-3 rounded-xl bg-primary text-primary-foreground rounded-br-none self-end max-w-[80%] text-sm">
+                        {t('landing.leadMsg1', 'Hey, I want to book a consultation!')}
+                    </div>
+                    <div className="p-3 rounded-xl bg-muted rounded-bl-none self-start max-w-[80%] text-sm">
+                        {t('landing.leadMsg2', "Awesome! Let's schedule it.")}
+                    </div>
+                    <div className="mt-4 flex items-center gap-2 p-2 bg-primary/10 border border-primary/20 rounded-lg">
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                            <Check className="w-4 h-4 text-primary-foreground" />
+                        </div>
+                        <div className="text-xs font-semibold text-primary">{t('landing.newLeadCaptured', 'New Lead Captured')}</div>
+                    </div>
+                </div>
+            )
+        }
+    ];
 
     if (isMobile) {
-        return <MobileDemo />;
+        return <MobileDemo steps={steps} />;
     }
 
-    return <DesktopDemo />;
+    return <DesktopDemo steps={steps} />;
 };
 
-function MobileDemo() {
+function MobileDemo({ steps }: { steps: any[] }) {
+    const { t } = useTranslation();
     return (
         <section className="py-16 bg-background">
             <div className="container px-4">
-                <h2 className="text-2xl font-bold text-center mb-10">How it works</h2>
+                <h2 className="text-2xl font-bold text-center mb-10">{t('landing.howItWorks', 'How it works')}</h2>
                 <div className="space-y-8">
                     {steps.map((step, i) => (
                         <motion.div
@@ -110,7 +113,7 @@ function MobileDemo() {
     );
 }
 
-function DesktopDemo() {
+function DesktopDemo({ steps }: { steps: any[] }) {
     const [activeStep, setActiveStep] = useState(0);
     const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 

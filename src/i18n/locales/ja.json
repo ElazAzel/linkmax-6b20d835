@@ -1141,21 +1141,9 @@
       "solution": "lnkmx creates one clear page where visitors quickly understand who you are, how you help, how much it costs, and where to click to book. And you see leads and analytics in one place."
     },
     "howItWorks": {
-      "title": "How it works",
-      "cta": "Try now",
-      "step1": {
-        "title": "Tell us about your work",
-        "description": "Niche, services, and links - AI understands the context"
-      },
-      "step2": {
-        "title": "AI builds the page",
-        "description": "Ready blocks, copy, and CTAs you can edit"
-      },
-      "step3": {
-        "title": "Publish and collect leads",
-        "description": "Your link is ready for socials, leads go to CRM"
-      },
-      "badge": ""
+      "badge": "",
+      "title": "",
+      "cta": ""
     },
     "features": {
       "title": "What you get in the first version",
@@ -1525,7 +1513,38 @@
         "count": "",
         "suffix": ""
       }
-    }
+    },
+    "aiPowered": "",
+    "newLead1": "",
+    "newLead2": "",
+    "newLeadsToday": "",
+    "aiBuilderTitle": "",
+    "aiBuilderDesc": "",
+    "deepAnalyticsTitle": "",
+    "deepAnalyticsDesc": "",
+    "mobileEditorTitle": "",
+    "mobileEditorDesc": "",
+    "instantLeadsTitle": "",
+    "instantLeadsDesc": "",
+    "growTitle": "",
+    "growDesc": "",
+    "chooseNiche": "",
+    "chooseNicheDesc": "",
+    "iAmA": "",
+    "nicheCreator": "",
+    "nicheFitness": "",
+    "nicheCrypto": "",
+    "nicheBeauty": "",
+    "nicheMusic": "",
+    "nicheTutor": "",
+    "aiBuilds": "",
+    "aiBuildsDesc": "",
+    "aiGenerating": "",
+    "getLeads": "",
+    "getLeadsDesc": "",
+    "leadMsg1": "",
+    "leadMsg2": "",
+    "newLeadCaptured": ""
   },
   "dashboard": {
     "loadError": "Load Error",

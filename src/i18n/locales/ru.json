@@ -1175,21 +1175,9 @@
       "solution": "lnkmx делает одну понятную страницу, где посетитель быстро понимает, кто вы, чем полезны, сколько стоит, и куда нажать для заявки. А вы видите лиды и аналитику в одном месте."
     },
     "howItWorks": {
+      "badge": "1 минута до результата",
       "title": "Как это работает",
-      "cta": "Попробовать сейчас",
-      "step1": {
-        "title": "Расскажите о себе",
-        "description": "Ниша, услуги и ссылки - AI поймет контекст"
-      },
-      "step2": {
-        "title": "AI собирает страницу",
-        "description": "Готовые блоки, тексты и CTA можно отредактировать"
-      },
-      "step3": {
-        "title": "Публикуйте и принимайте заявки",
-        "description": "Ссылка готова для соцсетей, лиды идут в CRM"
-      },
-      "badge": "1 минута до результата"
+      "cta": "Попробовать бесплатно"
     },
     "features": {
       "title": "Что вы получите в первой версии",
@@ -1559,7 +1547,38 @@
         "count": "2000+",
         "suffix": "создателями"
       }
-    }
+    },
+    "aiPowered": "AI Powered",
+    "newLead1": "New lead: Sarah K.",
+    "newLead2": "New lead: Alex M.",
+    "newLeadsToday": "+12 today",
+    "aiBuilderTitle": "AI Page Builder",
+    "aiBuilderDesc": "Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.",
+    "deepAnalyticsTitle": "Deep Analytics",
+    "deepAnalyticsDesc": "Track every click, view, and conversion with privacy-focused, real-time analytics.",
+    "mobileEditorTitle": "Mobile First Editor",
+    "mobileEditorDesc": "Edit your page from your phone. Full power in your pocket.",
+    "instantLeadsTitle": "Instant Leads",
+    "instantLeadsDesc": "Get leads delivered straight to Telegram. No more missing customers.",
+    "growTitle": "Everything you need to grow",
+    "growDesc": "Powerful features wrapped in a beautiful, easy-to-use interface.",
+    "chooseNiche": "Choose your niche",
+    "chooseNicheDesc": "Tell AI what you do. Beauty, Crypto, Coaching - we speak your language.",
+    "iAmA": "I am a...",
+    "nicheCreator": "Digital Creator",
+    "nicheFitness": "Fitness Coach",
+    "nicheCrypto": "Crypto Expert",
+    "nicheBeauty": "Beauty Blogger",
+    "nicheMusic": "Music Producer",
+    "nicheTutor": "Online Tutor",
+    "aiBuilds": "AI builds everything",
+    "aiBuildsDesc": "Structure, copy, and design generated in seconds. No drag-and-drop hell.",
+    "aiGenerating": "AI Generating...",
+    "getLeads": "Get leads in Telegram",
+    "getLeadsDesc": "Your page is live. Leads come straight to your DM. Close them instantly.",
+    "leadMsg1": "Hey, I want to book a consultation!",
+    "leadMsg2": "Awesome! Let",
+    "newLeadCaptured": "New Lead Captured"
   },
   "dashboard": {
     "loadError": "Ошибка загрузки",
