@@ -148,11 +148,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Implemented dedicated drag handles (`::` icon) for block reordering on mobile to prevent conflict with "Tap to Edit".
     - Removed artificial delays on mobile interactions for instant responsiveness.
     - Added `framer-motion` animations for smoother UI transitions in the editor.
-- **Auth Refactoring**:
+- **Auth Refactoring & Error Handling UX**:
     - Removed fragile `next/navigation` shim usage in Auth components in favor of standard `react-router-dom` hooks (`useNavigate`, `useSearchParams`).
-    - Migrated from `@lovable.dev/cloud-auth-js` wrapper to native `supabase.auth.signInWithOAuth` for better control and stability.
+    - Removed residual `@lovable.dev/cloud-auth-js` wrapper logic from `useAuth.tsx`, fully transitioning to native `supabase.auth.signInWithOAuth` for better control and stability.
     - Implemented authentic `returnTo` redirection support for Google and Apple sign-ins.
-    - Standardized `Auth.tsx` and `AuthCallback.tsx` implementation.
+    - Enhanced `AuthCallback.tsx` to intelligently catch OAuth provider errors (e.g., account already linked to another profile).
+    - Added smart error redirect logic: routes existing active sessions back to Settings with localized `toast` notifications, ensuring users are never unexpectedly logged out during failed linking attempts.
 - Standardized local development instructions to use `npm` instead of `bun`.
 - Overhauled Pricing page to unify plans into a single Pro card with "Try for free" option.
 - **Next.js Migration**:
