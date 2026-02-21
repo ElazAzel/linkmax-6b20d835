@@ -9,7 +9,6 @@ import { AuthProvider, useAuth } from '@/hooks/user/useAuth';
 // Mock supabase
 const mockSignUp = vi.fn();
 const mockSignInWithPassword = vi.fn();
-const mockSignInWithOAuth = vi.fn();
 const mockSignOut = vi.fn();
 const mockGetSession = vi.fn();
 const mockOnAuthStateChange = vi.fn();
@@ -19,7 +18,6 @@ vi.mock('@/platform/supabase/client', () => ({
         auth: {
             signUp: (...args: unknown[]) => mockSignUp(...args),
             signInWithPassword: (...args: unknown[]) => mockSignInWithPassword(...args),
-            signInWithOAuth: (...args: unknown[]) => mockSignInWithOAuth(...args),
             signOut: () => mockSignOut(),
             getSession: () => mockGetSession(),
             onAuthStateChange: (callback: (event: string, session: unknown) => void) => {
