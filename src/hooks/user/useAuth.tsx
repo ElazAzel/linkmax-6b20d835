@@ -1,9 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
-import { lovable } from '@/integrations/lovable/index';
-
-
 import { logger } from '@/lib/utils/logger';
 
 interface AuthContextType {
@@ -125,9 +122,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const redirectUrl = returnTo
       ? `${window.location.origin}/auth/callback?returnTo=${encodeURIComponent(returnTo)}`
       : `${window.location.origin}/auth/callback`;
-    const { error } = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: redirectUrl,
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      }
     });
+
     return { error };
   };
 
@@ -135,9 +141,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const redirectUrl = returnTo
       ? `${window.location.origin}/auth/callback?returnTo=${encodeURIComponent(returnTo)}`
       : `${window.location.origin}/auth/callback`;
-    const { error } = await lovable.auth.signInWithOAuth('apple', {
-      redirect_uri: redirectUrl,
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        redirectTo: redirectUrl,
+      }
     });
+
     return { error };
   };
 
