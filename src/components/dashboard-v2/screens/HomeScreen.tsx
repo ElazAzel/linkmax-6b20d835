@@ -163,7 +163,7 @@ export const HomeScreen = memo(function HomeScreen({
           <div className="flex gap-3">
             <Button
               size="lg"
-              className="h-14 flex-1 min-w-0 rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-primary/25"
+              className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold shadow-lg shadow-primary/25"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -171,13 +171,13 @@ export const HomeScreen = memo(function HomeScreen({
               }}
             >
               <PenTool className="h-5 w-5 mr-2 shrink-0" />
-              <span className="truncate">{t('dashboard.home.edit', 'Редактировать')}</span>
+              {t('dashboard.home.edit', 'Редактировать')}
             </Button>
             <Button
               size="lg"
               variant={isPublished ? 'secondary' : 'default'}
               className={cn(
-                "h-14 flex-1 min-w-0 rounded-2xl text-sm sm:text-base font-bold",
+                "h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold",
                 !isPublished && "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25"
               )}
               onClick={(e) => {
@@ -187,7 +187,7 @@ export const HomeScreen = memo(function HomeScreen({
               }}
             >
               <Share2 className="h-5 w-5 mr-2 shrink-0" />
-              <span className="truncate">{isPublished ? t('dashboard.home.share', 'Поделиться') : t('dashboard.home.publish', 'Опубликовать')}</span>
+              {isPublished ? t('dashboard.home.share', 'Поделиться') : t('dashboard.home.publish', 'Опубликовать')}
             </Button>
           </div>
 
