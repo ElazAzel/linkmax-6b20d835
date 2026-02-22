@@ -23,6 +23,7 @@ const AdminVerificationPanel = lazy(() => import('@/components/admin/AdminVerifi
 const AdminTokensTab = lazy(() => import('@/components/admin/AdminTokensTab').then(m => ({ default: m.AdminTokensTab })));
 const AdminPartnersTab = lazy(() => import('@/components/admin/AdminPartnersTab').then(m => ({ default: m.AdminPartnersTab })));
 const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTab').then(m => ({ default: m.AdminTemplatesTab })));
+const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
 
 function TabLoader() {
   return (
@@ -82,6 +83,7 @@ export default function Admin() {
     { value: 'verification', label: t('admin.verification', 'Верификация'), icon: ShieldCheck },
     { value: 'partners', label: t('admin.partners.title', 'Партнёры'), icon: Handshake },
     { value: 'templates', label: t('admin.templates', 'Templates'), icon: FileText },
+    { value: 'fintech', label: t('admin.fintech', 'Финансы'), icon: Banknote },
   ];
 
   return (
@@ -190,6 +192,10 @@ export default function Admin() {
 
               <TabsContent value="templates">
                 <AdminTemplatesTab />
+              </TabsContent>
+
+              <TabsContent value="fintech">
+                <AdminFintechTab />
               </TabsContent>
             </Suspense>
           </Tabs>

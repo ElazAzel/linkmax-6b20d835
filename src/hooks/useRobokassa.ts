@@ -20,10 +20,9 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
                 return;
             }
 
-            console.log('Initiating RoboKassa payment:', { plan, period, userId: user.id });
-
             const { data, error } = await supabase.functions.invoke('robokassa', {
                 body: {
+                    type: 'subscription',
                     plan,
                     period,
                     userId: user.id,
@@ -33,9 +32,41 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
             if (error) throw error;
             if (!data?.url) throw new Error("No payment URL returned");
 
-            console.log('Redirecting to:', data.url);
             window.location.href = data.url;
+            onSuccess?.();
+        } catch (error: any) {
+            console.error('Payment init error:', error);
+            toast.error("Ошибка при создании платежа: " + error.message);
+            onError?.(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
+    const initiatePayment = async (amount: number, description: string, relatedId?: string) => {
+        try {
+            setIsLoading(true);
+
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                toast.error("Пожалуйста, войдите в систему");
+                return;
+            }
+
+            const { data, error } = await supabase.functions.invoke('robokassa', {
+                body: {
+                    type: 'payment',
+                    amount,
+                    description,
+                    userId: user.id,
+                    relatedId
+                },
+            });
+
+            if (error) throw error;
+            if (!data?.url) throw new Error("No payment URL returned");
+
+            window.location.href = data.url;
             onSuccess?.();
         } catch (error: any) {
             console.error('Payment init error:', error);
@@ -48,6 +79,7 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
 
     return {
         buySubscription,
+        initiatePayment,
         isLoading
     };
 }

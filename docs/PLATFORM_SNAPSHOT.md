@@ -715,7 +715,7 @@ Based on codebase analysis, these are logical next improvements:
 
 3. **A/B testing for blocks** — Test different block configurations to optimize conversions
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
-5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees (Completed 2026-02-22)
+5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees, unit tests (Completed 2026-02-22)
 6. **Team collaboration** — Multi-user editing for business pages
 6. **API access** — Public API for integrations (Zapier, Make, custom apps)
 7. **Email sequences** — Automated email drip campaigns for leads

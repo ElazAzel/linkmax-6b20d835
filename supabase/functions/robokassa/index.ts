@@ -8,9 +8,13 @@ const corsHeaders = {
 };
 
 interface PaymentRequest {
-    plan: 'pro';
-    period: 3 | 6 | 12; // months
+    type?: 'subscription' | 'payment';
+    plan?: 'pro';
+    period?: 3 | 6 | 12; // months
     userId: string;
+    amount?: number;
+    description?: string;
+    relatedId?: string;
 }
 
 serve(async (req: Request) => {
@@ -19,25 +23,38 @@ serve(async (req: Request) => {
     }
 
     try {
-        const { plan, period, userId } = await req.json() as PaymentRequest;
+        const payload = await req.json() as PaymentRequest;
+        const { type = 'subscription', userId, plan, period, amount, description: customDescription, relatedId } = payload;
 
-        if (!userId || plan !== 'pro' || ![3, 6, 12].includes(period)) {
-            throw new Error("Invalid payment request parameters");
+        if (!userId) {
+            throw new Error("userId is required");
         }
 
-        // Pricing logic (must match frontend)
-        // 3mo = 13050 KZT
-        // 6mo = 22185 KZT
-        // 12mo = 36540 KZT
-        const pricesKzt: Record<number, number> = {
-            3: 13050,
-            6: 22185,
-            12: 36540
-        };
+        let outSum = 0;
+        let description = "";
+        const shp_user = userId;
+        const shp_type = type;
+        const shp_plan = plan || "";
+        const shp_period = period?.toString() || "";
+        const shp_related_id = relatedId || "";
 
-        const outSum = pricesKzt[period];
-        if (!outSum) {
-            throw new Error("Invalid billing period");
+        if (type === 'subscription') {
+            if (plan !== 'pro' || !period || ![3, 6, 12].includes(period)) {
+                throw new Error("Invalid subscription parameters");
+            }
+            const pricesKzt: Record<number, number> = {
+                3: 13050,
+                6: 22185,
+                12: 36540
+            };
+            outSum = pricesKzt[period];
+            description = `lnkmx.my PRO (${period} мес)`;
+        } else {
+            if (!amount || amount <= 0) {
+                throw new Error("Invalid amount for payment");
+            }
+            outSum = amount;
+            description = customDescription || `Payment on lnkmx.my`;
         }
 
         const mrhLogin = Deno.env.get("ROBOKASSA_LOGIN");
@@ -49,25 +66,19 @@ serve(async (req: Request) => {
             throw new Error("Server configuration error");
         }
 
-        // Generate Invoice ID (using timestamp for simplicity, in prod ideally distinct sequence)
-        const invId = Date.now().toString().slice(-9); // fit in int if needed, but string is fine for Description
-        const description = `lnkmx.my PRO (${period} мес)`;
+        const invId = Date.now().toString().slice(-9);
         const culture = "ru";
 
-        // Custom params to track user and plan in webhook
-        const shp_user = userId;
-        const shp_plan = plan;
-        const shp_period = period.toString();
-
         // Signature: login:outSum:invId:pass1:shp_... sorted alphabetically
-        // String to sign: login:outSum:invId:pass1:shp_period=...:shp_plan=...:shp_user=...
         const signatureString = [
             mrhLogin,
-            outSum,
+            outSum.toString(),
             invId,
             mrhPass1,
-            `shp_period=${shp_period}`,
             `shp_plan=${shp_plan}`,
+            `shp_period=${shp_period}`,
+            `shp_related_id=${shp_related_id}`,
+            `shp_type=${shp_type}`,
             `shp_user=${shp_user}`
         ].join(":");
 
@@ -86,11 +97,11 @@ serve(async (req: Request) => {
             SignatureValue: signatureValue,
             Culture: culture,
             IsTest: isTest,
-            // Custom params must be passed in query
             shp_user: shp_user,
+            shp_type: shp_type,
             shp_plan: shp_plan,
             shp_period: shp_period,
-            Email: "" // Optional: can pass user email if available
+            shp_related_id: shp_related_id
         });
 
         return new Response(

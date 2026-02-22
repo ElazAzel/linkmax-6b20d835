@@ -5,19 +5,35 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
     Wallet, TrendingUp, Clock, ArrowUpRight, ArrowDownLeft,
-    AlertCircle, ChevronRight, Loader2, DollarSign
+    AlertCircle, ChevronRight, Loader2, DollarSign, Banknote
 } from 'lucide-react';
 import { useAuth } from '@/hooks/user/useAuth';
 import { fintechService } from '@/services/fintech';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogFooter
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 export const WalletWidget = () => {
     const { user } = useAuth();
     const { t } = useTranslation();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [isPayoutOpen, setIsPayoutOpen] = useState(false);
+    const [payoutAmount, setPayoutAmount] = useState('');
+    const [payoutMethod, setPayoutMethod] = useState('');
+    const [submittingPayout, setSubmittingPayout] = useState(false);
 
     const loadData = async () => {
         if (!user) return;
@@ -35,6 +51,35 @@ export const WalletWidget = () => {
     useEffect(() => {
         loadData();
     }, [user]);
+
+    const handlePayoutRequest = async () => {
+        if (!user || !payoutAmount || isNaN(Number(payoutAmount))) return;
+
+        const amount = Number(payoutAmount);
+        if (amount > (data?.wallet?.balance || 0)) {
+            toast.error("Недостаточно средств на балансе");
+            return;
+        }
+
+        try {
+            setSubmittingPayout(true);
+            await fintechService.requestPayout({
+                userId: user.id,
+                amount,
+                method: { type: 'card', value: payoutMethod },
+                notes: `Запрос выплаты из CRM`
+            });
+            toast.success("Запрос на выплату успешно отправлен");
+            setIsPayoutOpen(false);
+            setPayoutAmount('');
+            setPayoutMethod('');
+            loadData();
+        } catch (err: any) {
+            toast.error("Ошибка при создании запроса: " + err.message);
+        } finally {
+            setSubmittingPayout(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -134,9 +179,57 @@ export const WalletWidget = () => {
                     </ScrollArea>
                 </div>
 
-                <Button className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
-                    Вывести средства
-                </Button>
+                <Dialog open={isPayoutOpen} onOpenChange={setIsPayoutOpen}>
+                    <DialogTrigger asChild>
+                        <Button className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                            Вывести средства
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="glass-card border-white/10 sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl">Запрос выплаты</DialogTitle>
+                            <DialogDescription>
+                                Укажите сумму и реквизиты для вывода. Мы обработаем запрос в течение 24 часов.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="amount">Сумма (₸)</Label>
+                                <Input
+                                    id="amount"
+                                    type="number"
+                                    value={payoutAmount}
+                                    onChange={(e) => setPayoutAmount(e.target.value)}
+                                    placeholder="Например: 5000"
+                                    className="bg-white/5 border-white/10"
+                                />
+                                <p className="text-[10px] text-muted-foreground">
+                                    Доступно: <span className="text-primary font-bold">{(data?.wallet?.balance || 0).toLocaleString()} ₸</span>
+                                </p>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="method">Реквизиты (Номер карты / Kaspi)</Label>
+                                <Input
+                                    id="method"
+                                    value={payoutMethod}
+                                    onChange={(e) => setPayoutMethod(e.target.value)}
+                                    placeholder="4400 ...."
+                                    className="bg-white/5 border-white/10"
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                onClick={handlePayoutRequest}
+                                disabled={submittingPayout || !payoutAmount || !payoutMethod}
+                                className="w-full"
+                            >
+                                {submittingPayout ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Banknote className="h-4 w-4 mr-2" />}
+                                Отправить запрос
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </CardContent>
         </Card>
     );

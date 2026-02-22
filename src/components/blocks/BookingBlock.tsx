@@ -12,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Clock, CalendarDays, User, Phone, Mail, Check, Loader2, MessageCircle, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { fintechService } from '@/services/fintech';
+import { useRobokassa } from '@/hooks/useRobokassa';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
@@ -58,6 +59,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
     email: '',
     notes: ''
   });
+
+  const { initiatePayment } = useRobokassa();
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
@@ -273,26 +276,21 @@ export const BookingBlock = memo(function BookingBlockComponent({
         }
       }
 
-      toast.success(t('booking.success', 'Вы успешно записались!'));
-      setShowForm(false);
-      setSelectedSlot(null);
+      // If prepayment is required, redirect to Robokassa
+      if (block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0) {
+        const amount = block.prepaymentAmount;
+        const description = t('booking.payment_desc', 'Запись на {{date}} {{time}}', {
+          date: format(selectedDate, 'dd.MM.yyyy'),
+          time: selectedSlot.time.substring(0, 5)
+        });
 
-      // If prepayment is required, redirect to WhatsApp
-      if (block.requirePrepayment && block.prepaymentPhone) {
-        const phone = block.prepaymentPhone.replace(/[^0-9]/g, '');
-        const amount = block.prepaymentAmount || 0;
-        const currency = getCurrencySymbol(block.prepaymentCurrency || 'KZT');
-        const message = encodeURIComponent(
-          t('booking.whatsapp.greeting', 'Здравствуйте! Я записался(ась) на {{date}} в {{time}}.\n', {
-            date: format(selectedDate, 'd MMMM', { locale }),
-            time: selectedSlot.time.substring(0, 5)
-          }) +
-          t('booking.whatsapp.name', 'Имя: {{name}}\n', { name: formData.name }) +
-          (amount > 0
-            ? t('booking.whatsapp.prepayment', 'Сумма предоплаты: {{amount}} {{currency}}', { amount, currency })
-            : t('booking.whatsapp.pay', 'Хочу оплатить запись.'))
-        );
-        window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        // initiatePayment will redirect to Robokassa
+        await initiatePayment(amount, description, block.id);
+      } else {
+        toast.success(t('booking.success', 'Вы успешно записались!'));
+        setShowForm(false);
+        setSelectedSlot(null);
+        setFormData({ name: '', phone: '', email: '', notes: '' });
       }
 
       setFormData({ name: '', phone: '', email: '', notes: '' });

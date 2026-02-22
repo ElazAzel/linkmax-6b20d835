@@ -132,5 +132,38 @@ export const fintechService = {
             logger.error('Failed to get wallet overview', err);
             throw err;
         }
+    },
+
+    async requestPayout(params: { userId: string; amount: number; method: any; notes?: string }) {
+        const { userId, amount, method, notes } = params;
+
+        // 1. Get wallet
+        const { data: wallet } = await supabase
+            .from('user_wallets')
+            .select('id, balance')
+            .eq('user_id', userId)
+            .single();
+
+        if (!wallet || wallet.balance < amount) {
+            throw new Error('Insufficient funds');
+        }
+
+        // 2. Create payout request
+        const { data: request, error: requestError } = await supabase
+            .from('payout_requests')
+            .insert({
+                user_id: userId,
+                wallet_id: wallet.id,
+                amount,
+                payout_method: method,
+                notes,
+                status: 'requested'
+            })
+            .select()
+            .single();
+
+        if (requestError) throw requestError;
+
+        return request;
     }
 };
