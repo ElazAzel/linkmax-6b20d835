@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added (Optimizations & Custom Domains — 2026-02-22)
+- **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.
+- **Custom Domains Foundation**: Implemented full database infrastructure (`custom_domains` table with RLS) and an Edge Function (`resolve-domain`) to map external hostnames to internal page slugs.
+- **Enhanced Analytics**: Redesigned the `ConversionFunnel` component with `framer-motion` animations, premium gradients, and automatic drop-off rate calculations. This provides a high-end visual experience for business users tracking their sales pipeline.
+
 ### Added (Booking & Data Export — 2026-02-21)
 - **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.
 - **Google Calendar Sync**: Implemented full two-way Google Calendar integration for the Booking Block. Plumbed via a secure `user_integrations` database table and a new `google-calendar-sync` Edge Function to check availability in real-time and create events upon booking confirmation. Enabled via a new toggle in `BookingSettingsTab` and managed in the user's `LinkedAccountsSection`.

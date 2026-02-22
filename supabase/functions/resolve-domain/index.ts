@@ -1,61 +1,74 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+}
 
 serve(async (req) => {
     if (req.method === 'OPTIONS') {
-        return new Response('ok', { headers: corsHeaders });
+        return new Response('ok', { headers: corsHeaders })
     }
 
     try {
         const supabaseClient = createClient(
             Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-            {
-                global: { headers: { Authorization: req.headers.get('Authorization')! } },
-            }
-        );
+            Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+        )
 
-        const { domain } = await req.json();
+        const { hostname } = await req.json()
 
-        if (!domain) {
+        if (!hostname) {
             return new Response(
-                JSON.stringify({ error: 'Domain is required' }),
+                JSON.stringify({ error: 'Hostname is required' }),
                 { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
-            );
+            )
         }
 
-        // Query pages for the custom domain
-        const { data, error } = await supabaseClient
-            .from('pages')
-            .select('slug')
-            .eq('custom_domain', domain)
-            .maybeSingle();
+        // Check custom_domains table
+        const { data: domainData, error: domainError } = await supabaseClient
+            .from('custom_domains')
+            .select('page_id, hostname, status')
+            .eq('hostname', hostname)
+            .eq('status', 'active')
+            .single()
 
-        if (error) {
-            throw error;
-        }
-
-        if (!data) {
+        if (domainError || !domainData) {
+            console.log(`No active custom domain found for ${hostname}`);
             return new Response(
-                JSON.stringify({ error: 'Page not found' }),
+                JSON.stringify({ found: false }),
                 { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
-            );
+            )
+        }
+
+        // Get page slug
+        const { data: pageData, error: pageError } = await supabaseClient
+            .from('pages')
+            .select('slug, id')
+            .eq('id', domainData.page_id)
+            .single()
+
+        if (pageError || !pageData) {
+            return new Response(
+                JSON.stringify({ error: 'Linked page not found' }),
+                { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 404 }
+            )
         }
 
         return new Response(
-            JSON.stringify({ slug: data.slug }),
+            JSON.stringify({
+                found: true,
+                slug: pageData.slug,
+                page_id: pageData.id
+            }),
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-        );
+        )
 
     } catch (error) {
         return new Response(
             JSON.stringify({ error: error.message }),
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-        );
+        )
     }
-});
+})

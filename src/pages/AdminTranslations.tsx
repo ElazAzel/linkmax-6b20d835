@@ -157,13 +157,13 @@ export default function AdminTranslations() {
   const {
     translations,
     activeLanguages,
-    setActiveLanguages,
     allKeys,
     loading: dbLoading,
     saving,
-    setSaving,
     updateTranslation,
-    setTranslations
+    upsertFullTranslations,
+    deleteKey,
+    addLanguage
   } = useAdminTranslations(isAdmin);
 
   // UI state
@@ -235,21 +235,17 @@ export default function AdminTranslations() {
   // Save inline edit
   const handleSaveEdit = async () => {
     if (editingKey) {
-      await updateTranslation(selectedLang, editingKey, editValue);
+      await updateTranslation({ lang: selectedLang, key: editingKey, value: editValue });
       setEditingKey(null);
       setEditValue('');
     }
   };
 
   // Add new language
-  const handleAddLanguage = (langCode: string) => {
+  const handleAddLanguage = async (langCode: string) => {
     if (!activeLanguages.includes(langCode)) {
-      setActiveLanguages([...activeLanguages, langCode]);
-      if (!translations[langCode]) {
-        const emptyLang = copyStructureEmpty(translations['en'] || {});
-        setTranslations({ ...translations, [langCode]: emptyLang });
-      }
-      toast.success(`Добавлен язык: ${langCode.toUpperCase()}`);
+      const emptyLang = copyStructureEmpty(translations['en'] || {});
+      await addLanguage(langCode, emptyLang);
     }
     setAddLanguageOpen(false);
     setLanguageSearch('');
@@ -261,13 +257,11 @@ export default function AdminTranslations() {
       toast.error('Основные языки нельзя удалить');
       return;
     }
-    setActiveLanguages(activeLanguages.filter(l => l !== langCode));
-    if (selectedLang === langCode) setSelectedLang('en');
-    toast.success(`Язык ${langCode.toUpperCase()} удалён`);
+    toast.info('Функционал удаления языка из БД в разработке. Язык останется в списке.');
   };
 
   // Add new key
-  const handleAddKey = () => {
+  const handleAddKey = async () => {
     const trimmedKey = newKeyName.trim();
     if (!trimmedKey) {
       toast.error('Введите ключ');
@@ -278,39 +272,24 @@ export default function AdminTranslations() {
       return;
     }
 
-    setTranslations(prev => {
-      const updated = { ...prev };
-      for (const lang of activeLanguages) {
-        updated[lang] = JSON.parse(JSON.stringify(prev[lang] || {}));
-        setNestedValue(updated[lang], trimmedKey, newKeyValues[lang]?.trim() || '');
-      }
-      return updated;
+    const payload = activeLanguages.map(lang => {
+      const updated = JSON.parse(JSON.stringify(translations[lang] || {}));
+      setNestedValue(updated, trimmedKey, newKeyValues[lang]?.trim() || '');
+      return { lang, data: updated };
     });
+
+    await upsertFullTranslations(payload);
 
     setNewKeyName('');
     setNewKeyValues({});
     setAddKeyOpen(false);
-    toast.success('Ключ добавлен');
   };
 
   // Delete key
-  const handleDeleteKey = (key: string) => {
-    const parts = key.split('.');
-    const updated = { ...translations };
-
-    for (const lang of activeLanguages) {
-      const langObj = JSON.parse(JSON.stringify(updated[lang] || {}));
-      let current: TranslationData = langObj;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (!current[parts[i]]) break;
-        current = current[parts[i]] as TranslationData;
-      }
-      delete current[parts[parts.length - 1]];
-      updated[lang] = langObj;
+  const handleDeleteKey = async (key: string) => {
+    if (confirm(`Вы уверены, что хотите удалить ключ "${key}" изо всех языков?`)) {
+      await deleteKey(key);
     }
-
-    setTranslations(updated);
-    toast.success('Ключ удалён');
   };
 
   // Export
@@ -354,17 +333,12 @@ export default function AdminTranslations() {
     try {
       const text = await file.text();
       const importedData = JSON.parse(text) as TranslationData;
+      const mergedData = mergeDeep(translations[selectedLang] || {}, importedData);
 
-      setTranslations(prev => {
-        const updated = { ...prev };
-        updated[selectedLang] = mergeDeep(prev[selectedLang] || {}, importedData);
-        return updated;
-      });
-
-      toast.success(`JSON для ${selectedLang.toUpperCase()} импортирован`);
+      await upsertFullTranslations([{ lang: selectedLang, data: mergedData }]);
     } catch (error) {
       toast.error('Failed to import translations');
-      logger.error('Import error:', error, { context: 'AdminTranslations' });
+      logger.error('Import error:', error);
     } finally {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -374,32 +348,17 @@ export default function AdminTranslations() {
 
   // Reset
   const resetToOriginal = () => {
-    if (confirm('Это сбросит только локальное состояние. Хотите продолжить?')) {
-      setTranslations({
-        ru: JSON.parse(JSON.stringify(ru)),
-        en: JSON.parse(JSON.stringify(en)),
-        kk: JSON.parse(JSON.stringify(kk)),
-      });
-      setActiveLanguages(['en', 'ru', 'kk']);
-      setSelectedLang('en');
-      toast.success('Переводы сброшены (локально)');
-    }
+    toast.info('Сброс к локальным файлам не рекомендуется при использовании БД-бэкэнда.');
   };
 
   const syncAllToDB = async () => {
     if (!confirm('Отправить все текущие переводы в базу данных? Существующие в БД данные будут перезаписаны.')) return;
 
-    setSaving(true);
-    try {
-      for (const lang of activeLanguages) {
-        await upsertToDB(lang, translations[lang]);
-      }
-      toast.success('Все переводы синхронизированы с БД');
-    } catch (err) {
-      toast.error('Ошибка при массовой синхронизации');
-    } finally {
-      setSaving(false);
-    }
+    const payload = activeLanguages.map(lang => ({
+      lang,
+      data: translations[lang]
+    }));
+    await upsertFullTranslations(payload);
   };
 
   // Toggle namespace
@@ -853,7 +812,7 @@ export default function AdminTranslations() {
                                     className="h-6 w-6"
                                     title="Скопировать с EN"
                                     onClick={() => {
-                                      updateTranslation(selectedLang, key, enValue);
+                                      updateTranslation({ lang: selectedLang, key, value: enValue });
                                     }}
                                   >
                                     <Copy className="h-3 w-3" />

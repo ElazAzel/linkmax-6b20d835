@@ -363,6 +363,8 @@ new -> contacted -> qualified -> won/lost
 | `user_tokens` | Linkkon balance | Owner only |
 | `page_snapshots` | Version history | Owner only |
 | `languages` | Translations | Admin management, public read |
+| `i18n_translations` | JSONB store for DB-driven translations | Admin only |
+| `custom_domains` | Mapping of domains to pages | Owner + Admins |
 | `language_upload_history` | Translation upload logs | Admin only |
 
 ### Data model (high level)

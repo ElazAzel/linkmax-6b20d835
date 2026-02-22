@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { upsertToDB } from '@/lib/i18n-db-backend';
 import { toast } from 'sonner';
@@ -11,9 +12,13 @@ import kk from '@/i18n/locales/kk.json';
 
 type TranslationData = Record<string, unknown>;
 
+const TRANSLATIONS_QUERY_KEY = ['admin_translations'];
+
 // Flatten nested JSON object to dot notation keys
 export function flattenObject(obj: TranslationData, prefix = ''): Record<string, string> {
     const result: Record<string, string> = {};
+    if (!obj) return result;
+
     for (const [key, value] of Object.entries(obj)) {
         const newKey = prefix ? `${prefix}.${key}` : key;
         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
@@ -37,40 +42,103 @@ export function setNestedValue(obj: TranslationData, key: string, value: string)
 }
 
 export function useAdminTranslations(isAdmin: boolean) {
-    const [translations, setTranslations] = useState<Record<string, TranslationData>>({
-        ru: JSON.parse(JSON.stringify(ru)),
-        en: JSON.parse(JSON.stringify(en)),
-        kk: JSON.parse(JSON.stringify(kk)),
+    const queryClient = useQueryClient();
+
+    const { data: dbTranslations, isLoading: loading } = useQuery({
+        queryKey: TRANSLATIONS_QUERY_KEY,
+        queryFn: async () => {
+            // Use explicit casting as any to bypass lint errors for custom table not yet in generated types
+            const { data, error } = await (supabase.from('i18n_translations' as any) as any)
+                .select('lang_code, data');
+
+            if (error) throw error;
+
+            const result: Record<string, TranslationData> = {};
+            (data as any[])?.forEach(item => {
+                result[item.lang_code] = item.data;
+            });
+            return result;
+        },
+        enabled: isAdmin,
+        staleTime: 1000 * 60 * 5, // 5 minutes
     });
-    const [activeLanguages, setActiveLanguages] = useState<string[]>(['en', 'ru', 'kk']);
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
 
-    useEffect(() => {
-        if (!isAdmin) return;
+    const translations = useMemo(() => {
+        return {
+            ru: JSON.parse(JSON.stringify(ru)),
+            en: JSON.parse(JSON.stringify(en)),
+            kk: JSON.parse(JSON.stringify(kk)),
+            ...(dbTranslations || {})
+        } as Record<string, TranslationData>;
+    }, [dbTranslations]);
 
-        const loadFromDB = async () => {
-            try {
-                const { data, error } = await supabase.from('i18n_translations').select('lang_code, data');
-                if (error) throw error;
+    const activeLanguages = useMemo(() => {
+        const baseLangs = ['en', 'ru', 'kk'];
+        const dbLangs = dbTranslations ? Object.keys(dbTranslations) : [];
+        return Array.from(new Set([...baseLangs, ...dbLangs]));
+    }, [dbTranslations]);
 
-                if (data && data.length > 0) {
-                    const dbTranslations: Record<string, TranslationData> = {};
-                    data.forEach(item => {
-                        dbTranslations[item.lang_code] = item.data;
-                    });
-                    setTranslations(prev => ({ ...prev, ...dbTranslations }));
-                    setActiveLanguages(prev => Array.from(new Set([...prev, ...data.map(d => d.lang_code)])));
-                }
-            } catch (err) {
-                logger.error('Failed to load translations from DB', err);
-            } finally {
-                setLoading(false);
+    const updateMutation = useMutation({
+        mutationFn: async ({ lang, key, value }: { lang: string; key: string; value: string }) => {
+            const updatedLangData = JSON.parse(JSON.stringify(translations[lang] || {}));
+            setNestedValue(updatedLangData, key, value);
+            await upsertToDB(lang, updatedLangData);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
+            toast.success('Сохранено в БД');
+        },
+        onError: (error) => {
+            logger.error('Failed to update translation', error);
+            toast.error('Ошибка сохранения');
+        }
+    });
+
+    const multiUpsertMutation = useMutation({
+        mutationFn: async (payload: { lang: string; data: TranslationData }[]) => {
+            for (const item of payload) {
+                await upsertToDB(item.lang, item.data);
             }
-        };
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
+            toast.success('Данные успешно синхронизированы');
+        },
+        onError: (error) => {
+            logger.error('Failed multi upsert', error);
+            toast.error('Ошибка синхронизации');
+        }
+    });
 
-        loadFromDB();
-    }, [isAdmin]);
+    const deleteKeyMutation = useMutation({
+        mutationFn: async (key: string) => {
+            const parts = key.split('.');
+            for (const lang of activeLanguages) {
+                const langObj = JSON.parse(JSON.stringify(translations[lang] || {}));
+                let current: any = langObj;
+                let found = true;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (!current[parts[i]]) {
+                        found = false;
+                        break;
+                    }
+                    current = current[parts[i]];
+                }
+                if (found && current[parts[parts.length - 1]] !== undefined) {
+                    delete current[parts[parts.length - 1]];
+                    await upsertToDB(lang, langObj);
+                }
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: TRANSLATIONS_QUERY_KEY });
+            toast.success('Ключ удалён отовсюду');
+        },
+        onError: (error) => {
+            logger.error('Failed to delete key', error);
+            toast.error('Ошибка при удалении ключа');
+        }
+    });
 
     const allKeys = useMemo(() => {
         const keySet = new Set<string>();
@@ -96,31 +164,17 @@ export function useAdminTranslations(isAdmin: boolean) {
         return { all: [...missingKeys, ...fullKeys], missingCount: missingKeys.length };
     }, [translations, activeLanguages]);
 
-    const updateTranslation = async (lang: string, key: string, value: string) => {
-        try {
-            setSaving(true);
-            const updatedLangData = JSON.parse(JSON.stringify(translations[lang] || {}));
-            setNestedValue(updatedLangData, key, value);
-
-            setTranslations(prev => ({ ...prev, [lang]: updatedLangData }));
-            await upsertToDB(lang, updatedLangData);
-            toast.success('Сохранено в БД');
-        } catch (err) {
-            toast.error('Ошибка сохранения');
-        } finally {
-            setSaving(false);
-        }
-    };
-
     return {
         translations,
         activeLanguages,
-        setActiveLanguages,
         allKeys,
         loading,
-        saving,
-        setSaving,
-        updateTranslation,
-        setTranslations
+        saving: updateMutation.isPending || multiUpsertMutation.isPending || deleteKeyMutation.isPending,
+        updateTranslation: updateMutation.mutateAsync,
+        upsertFullTranslations: multiUpsertMutation.mutateAsync,
+        deleteKey: deleteKeyMutation.mutateAsync,
+        addLanguage: async (langCode: string, initialData: TranslationData) => {
+            await multiUpsertMutation.mutateAsync([{ lang: langCode, data: initialData }]);
+        }
     };
 }
