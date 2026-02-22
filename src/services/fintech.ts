@@ -25,9 +25,6 @@ const DEFAULT_TAKE_RATE = 0.05; // 5% commission
  * This is the foundation for the "Fintech Pivot" strategy.
  */
 export const fintechService = {
-    /**
-     * Records a pending income transaction (e.g., from a booking or lead form).
-     */
     async recordPendingIncome(params: {
         userId: string;
         amount: number;
@@ -37,9 +34,8 @@ export const fintechService = {
         metadata?: Record<string, any>;
     }) {
         try {
-            // 1. Get or ensure wallet exists
-            const { data: wallet, error: walletError } = await supabase
-                .from('user_wallets')
+            const { data: wallet, error: walletError } = await (supabase
+                .from('user_wallets' as any) as any)
                 .select('id')
                 .eq('user_id', params.userId)
                 .single();
@@ -49,9 +45,8 @@ export const fintechService = {
                 throw new Error('Wallet not found');
             }
 
-            // 2. Create pending transaction record
-            const { data: transaction, error: txError } = await supabase
-                .from('wallet_transactions')
+            const { data: transaction, error: txError } = await (supabase
+                .from('wallet_transactions' as any) as any)
                 .insert({
                     wallet_id: wallet.id,
                     user_id: params.userId,
@@ -68,10 +63,9 @@ export const fintechService = {
 
             if (txError) throw txError;
 
-            // 3. Record platform fee (transactional/ledger only for now)
             const feeAmount = params.amount * DEFAULT_TAKE_RATE;
-            await supabase
-                .from('wallet_transactions')
+            await (supabase
+                .from('wallet_transactions' as any) as any)
                 .insert({
                     wallet_id: wallet.id,
                     user_id: params.userId,
@@ -91,21 +85,18 @@ export const fintechService = {
         }
     },
 
-    /**
-     * Fetches the current wallet balance and recent transactions.
-     */
     async getWalletOverview(userId: string) {
         try {
-            const { data: wallet, error: walletError } = await supabase
-                .from('user_wallets')
+            const { data: wallet, error: walletError } = await (supabase
+                .from('user_wallets' as any) as any)
                 .select('*')
                 .eq('user_id', userId)
                 .single();
 
             if (walletError) throw walletError;
 
-            const { data: transactions, error: txError } = await supabase
-                .from('wallet_transactions')
+            const { data: transactions, error: txError } = await (supabase
+                .from('wallet_transactions' as any) as any)
                 .select('*')
                 .eq('user_id', userId)
                 .order('created_at', { ascending: false })
@@ -113,15 +104,14 @@ export const fintechService = {
 
             if (txError) throw txError;
 
-            // Calculate pending GMV (sum of all pending income)
-            const { data: pendingData } = await supabase
-                .from('wallet_transactions')
+            const { data: pendingData } = await (supabase
+                .from('wallet_transactions' as any) as any)
                 .select('amount')
                 .eq('user_id', userId)
                 .eq('type', 'income')
                 .eq('status', 'pending');
 
-            const pendingGMV = (pendingData || []).reduce((acc, curr) => acc + Number(curr.amount), 0);
+            const pendingGMV = (pendingData || []).reduce((acc: number, curr: any) => acc + Number(curr.amount), 0);
 
             return {
                 wallet,
@@ -137,9 +127,8 @@ export const fintechService = {
     async requestPayout(params: { userId: string; amount: number; method: any; notes?: string }) {
         const { userId, amount, method, notes } = params;
 
-        // 1. Get wallet
-        const { data: wallet } = await supabase
-            .from('user_wallets')
+        const { data: wallet } = await (supabase
+            .from('user_wallets' as any) as any)
             .select('id, balance')
             .eq('user_id', userId)
             .single();
@@ -148,9 +137,8 @@ export const fintechService = {
             throw new Error('Insufficient funds');
         }
 
-        // 2. Create payout request
-        const { data: request, error: requestError } = await supabase
-            .from('payout_requests')
+        const { data: request, error: requestError } = await (supabase
+            .from('payout_requests' as any) as any)
             .insert({
                 user_id: userId,
                 wallet_id: wallet.id,

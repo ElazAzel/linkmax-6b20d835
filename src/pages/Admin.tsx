@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import {
   Shield, LogOut, BarChart3, Users, FileText, Activity,
-  PieChart, TrendingUp, Crown, ShieldCheck, Loader2, Coins, Languages, Handshake
+  PieChart, TrendingUp, Crown, ShieldCheck, Loader2, Coins, Languages, Handshake, Banknote
 } from 'lucide-react';
 
 // Lazy load heavy tab components

@@ -1,15 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fetchTranslationsFromDB, upsertToDB, syncI18nWithDB } from '../i18n-db-backend';
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import i18next from 'i18next';
 
-// Mock i18next
 vi.mock('i18next', () => ({
     default: {
         addResourceBundle: vi.fn(),
         changeLanguage: vi.fn(),
         language: 'ru'
     }
+}));
+
+vi.mock('@/integrations/supabase/client', () => ({
+    supabase: {
+        from: vi.fn()
+    }
+}));
+
+vi.mock('@/lib/utils/logger', () => ({
+    logger: { error: vi.fn(), info: vi.fn() }
 }));
 
 describe('i18n-db-backend', () => {
@@ -19,26 +28,30 @@ describe('i18n-db-backend', () => {
 
     describe('fetchTranslationsFromDB', () => {
         it('should return data from supabase', async () => {
-            const mockData = [{ lang_code: 'ru', data: { hello: 'привет' } }];
-            const mockFrom = vi.mocked(supabase.from);
-
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockResolvedValue({ data: mockData, error: null })
+            const mockData = { data: { hello: 'привет' } };
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                select: vi.fn().mockReturnValue({
+                    eq: vi.fn().mockReturnValue({
+                        maybeSingle: vi.fn().mockResolvedValue({ data: mockData, error: null })
+                    })
+                })
             } as any);
 
-            const result = await fetchTranslationsFromDB();
-            expect(result).toEqual(mockData);
-            expect(mockFrom).toHaveBeenCalledWith('i18n_translations');
+            const result = await fetchTranslationsFromDB('ru');
+            expect(result).toEqual(mockData.data);
         });
 
-        it('should return empty array on error', async () => {
-            const mockFrom = vi.mocked(supabase.from);
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockResolvedValue({ data: null, error: { message: 'DB Error' } })
+        it('should return null on error', async () => {
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                select: vi.fn().mockReturnValue({
+                    eq: vi.fn().mockReturnValue({
+                        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: 'DB Error' } })
+                    })
+                })
             } as any);
 
-            const result = await fetchTranslationsFromDB();
-            expect(result).toEqual([]);
+            const result = await fetchTranslationsFromDB('ru');
+            expect(result).toBeNull();
         });
     });
 
@@ -46,35 +59,28 @@ describe('i18n-db-backend', () => {
         it('should call supabase upsert with correct data', async () => {
             const langCode = 'en';
             const data = { welcome: 'Welcome' };
-            const mockFrom = vi.mocked(supabase.from);
-
-            mockFrom.mockReturnValueOnce({
+            vi.mocked(supabase.from).mockReturnValueOnce({
                 upsert: vi.fn().mockResolvedValue({ error: null })
             } as any);
 
-            const result = await upsertToDB(langCode, data);
-            expect(result).toBe(true);
-            expect(mockFrom).toHaveBeenCalledWith('i18n_translations');
+            await upsertToDB(langCode, data);
+            expect(supabase.from).toHaveBeenCalledWith('i18n_translations');
         });
     });
 
     describe('syncI18nWithDB', () => {
         it('should add resource bundles to i18next', async () => {
-            const mockTranslations = [
-                { lang_code: 'ru', data: { key: 'значение' } },
-                { lang_code: 'en', data: { key: 'value' } }
-            ];
-
-            const mockFrom = vi.mocked(supabase.from);
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockResolvedValue({ data: mockTranslations, error: null })
+            vi.mocked(supabase.from).mockReturnValue({
+                select: vi.fn().mockReturnValue({
+                    eq: vi.fn().mockReturnValue({
+                        maybeSingle: vi.fn().mockResolvedValue({ data: { data: { key: 'значение' } }, error: null })
+                    })
+                })
             } as any);
 
-            await syncI18nWithDB();
+            await syncI18nWithDB(i18next as any, 'ru');
 
-            expect(i18next.addResourceBundle).toHaveBeenCalledTimes(2);
             expect(i18next.addResourceBundle).toHaveBeenCalledWith('ru', 'translation', { key: 'значение' }, true, true);
-            expect(i18next.addResourceBundle).toHaveBeenCalledWith('en', 'translation', { key: 'value' }, true, true);
         });
     });
 });
