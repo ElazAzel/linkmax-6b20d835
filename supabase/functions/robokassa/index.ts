@@ -70,16 +70,24 @@ serve(async (req: Request) => {
         const culture = "ru";
 
         // Signature: login:outSum:invId:pass1:shp_... sorted alphabetically
+        const shpParams = {
+            shp_plan,
+            shp_period,
+            shp_related_id,
+            shp_type,
+            shp_user
+        };
+
+        const shpSorted = Object.entries(shpParams)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([key, value]) => `${key}=${value}`);
+
         const signatureString = [
             mrhLogin,
             outSum.toString(),
             invId,
             mrhPass1,
-            `shp_plan=${shp_plan}`,
-            `shp_period=${shp_period}`,
-            `shp_related_id=${shp_related_id}`,
-            `shp_type=${shp_type}`,
-            `shp_user=${shp_user}`
+            ...shpSorted
         ].join(":");
 
         const encoder = new TextEncoder();

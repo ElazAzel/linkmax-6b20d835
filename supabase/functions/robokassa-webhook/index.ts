@@ -34,15 +34,23 @@ serve(async (req: Request) => {
         }
 
         // Signature: outSum:invId:pass2:shp_... sorted alphabetically
+        const shpParams = {
+            shp_plan,
+            shp_period,
+            shp_related_id,
+            shp_type,
+            shp_user
+        };
+
+        const shpSorted = Object.entries(shpParams)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([key, value]) => `${key}=${value}`);
+
         const signatureString = [
             outSum,
             invId,
             mrhPass2,
-            `shp_plan=${shp_plan}`,
-            `shp_period=${shp_period}`,
-            `shp_related_id=${shp_related_id}`,
-            `shp_type=${shp_type}`,
-            `shp_user=${shp_user}`
+            ...shpSorted
         ].join(":");
 
         const encoder = new TextEncoder();

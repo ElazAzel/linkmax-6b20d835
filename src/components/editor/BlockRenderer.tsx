@@ -177,7 +177,11 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       pageOwnerId={pageOwnerId}
       isPreview={isPreview}
     >
-      <div className={animationClass} style={animationStyle}>
+      <div
+        className={animationClass}
+        style={animationStyle}
+        data-testid="block-renderer-wrapper"
+      >
         <BlockErrorBoundary>
           {children}
         </BlockErrorBoundary>
@@ -191,9 +195,11 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   // Wrap non-trackable blocks too
   const SafeSuspense = ({ children }: { children: React.ReactNode }) => (
     <BlockErrorBoundary>
-      <Suspense fallback={<BlockSkeleton />}>
-        {children}
-      </Suspense>
+      <div data-testid="block-renderer-wrapper">
+        <Suspense fallback={<BlockSkeleton />}>
+          {children}
+        </Suspense>
+      </div>
     </BlockErrorBoundary>
   );
 
@@ -234,7 +240,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'text':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <TextBlock block={block} />
           </Suspense>
@@ -274,7 +280,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'custom_code':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <CustomCodeBlock block={block} />
           </Suspense>
@@ -306,7 +312,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'newsletter':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <NewsletterBlock block={block} pageOwnerId={pageOwnerId} pageId={pageId} />
           </Suspense>
@@ -314,7 +320,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'testimonial':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <TestimonialBlock block={block} />
           </Suspense>
@@ -322,7 +328,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'scratch':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <ScratchBlock block={block} />
           </Suspense>
@@ -330,7 +336,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'map':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <MapBlock block={block} />
           </Suspense>
@@ -338,7 +344,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'avatar':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <AvatarBlock block={block} />
           </Suspense>
@@ -346,7 +352,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
       );
     case 'separator':
       return (
-        <div className={animationClass} style={animationStyle}>
+        <div className={animationClass} style={animationStyle} data-testid="block-renderer-wrapper">
           <Suspense fallback={<BlockSkeleton />}>
             <SeparatorBlock block={block} />
           </Suspense>
