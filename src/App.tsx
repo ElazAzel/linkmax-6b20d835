@@ -33,9 +33,16 @@ const App = () => {
   // Initialize Web Vitals monitoring in development
   useWebVitals();
 
-  // Clear old storage versions on app load
+  // Clear old storage versions and sync i18n on app load
   useEffect(() => {
     storage.clearOldVersions();
+
+    // Sync translations from DB
+    import('./i18n/config').then(({ default: i18n }) => {
+      import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
+        syncI18nWithDB(i18n);
+      });
+    });
   }, []);
 
   // Listen for OAuth errors in URL

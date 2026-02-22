@@ -21,10 +21,15 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
+import { supabase } from '@/integrations/supabase/client';
+import { pushLocalToDB } from '@/lib/i18n-db-backend';
 
+// Static fallbacks for initial load and development
 import ru from '@/i18n/locales/ru.json';
 import en from '@/i18n/locales/en.json';
 import kk from '@/i18n/locales/kk.json';
+// ... rest will be loaded from DB or static imports as fallback
+
 import de from '@/i18n/locales/de.json';
 import uk from '@/i18n/locales/uk.json';
 import uz from '@/i18n/locales/uz.json';
@@ -199,20 +204,10 @@ export default function AdminTranslations() {
     ru: JSON.parse(JSON.stringify(ru)),
     en: JSON.parse(JSON.stringify(en)),
     kk: JSON.parse(JSON.stringify(kk)),
-    de: JSON.parse(JSON.stringify(de)),
-    uk: JSON.parse(JSON.stringify(uk)),
-    uz: JSON.parse(JSON.stringify(uz)),
-    be: JSON.parse(JSON.stringify(be)),
-    es: JSON.parse(JSON.stringify(es)),
-    fr: JSON.parse(JSON.stringify(fr)),
-    it: JSON.parse(JSON.stringify(it)),
-    pt: JSON.parse(JSON.stringify(pt)),
-    zh: JSON.parse(JSON.stringify(zh)),
-    tr: JSON.parse(JSON.stringify(tr)),
-    ja: JSON.parse(JSON.stringify(ja)),
-    ko: JSON.parse(JSON.stringify(ko)),
-    ar: JSON.parse(JSON.stringify(ar)),
   });
+  const [isDBLoaded, setIsDBLoaded] = useState(false);
+  const [saving, setSaving] = useState(false);
+
 
   // State: active languages (can add more)
   const [activeLanguages, setActiveLanguages] = useState<string[]>(['en', 'ru', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar']);
@@ -238,6 +233,33 @@ export default function AdminTranslations() {
   useEffect(() => {
     if (!loading && !isAdmin) {
       navigate('/auth');
+      return;
+    }
+
+    // Load from DB if possible
+    const loadFromDB = async () => {
+      try {
+        const { data, error } = await supabase.from('i18n_translations').select('lang_code, data');
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const dbTranslations: Record<string, TranslationData> = {};
+          data.forEach(item => {
+            dbTranslations[item.lang_code] = item.data;
+          });
+
+          setTranslations(prev => ({ ...prev, ...dbTranslations }));
+          setActiveLanguages(prev => Array.from(new Set([...prev, ...data.map(d => d.lang_code)])));
+        }
+      } catch (err) {
+        logger.error('Failed to load translations from DB', err);
+      } finally {
+        setIsDBLoaded(true);
+      }
+    };
+
+    if (isAdmin) {
+      loadFromDB();
     }
   }, [loading, isAdmin, navigate]);
 
@@ -249,7 +271,27 @@ export default function AdminTranslations() {
         Object.keys(flattenObject(translations[lang])).forEach(k => keySet.add(k));
       }
     }
-    return Array.from(keySet).sort();
+
+    const sortedKeys = Array.from(keySet).sort();
+
+    // Priority sorting: Untranslated keys FIRST
+    const missingKeys: string[] = [];
+    const fullKeys: string[] = [];
+
+    sortedKeys.forEach(key => {
+      const isMissingSomewhere = activeLanguages.some(lang => {
+        const flat = flattenObject(translations[lang] || {});
+        return !flat[key]?.trim();
+      });
+
+      if (isMissingSomewhere) {
+        missingKeys.push(key);
+      } else {
+        fullKeys.push(key);
+      }
+    });
+
+    return [...missingKeys, ...fullKeys];
   }, [translations, activeLanguages]);
 
   // Filter keys
@@ -313,12 +355,28 @@ export default function AdminTranslations() {
   };
 
   // Save inline edit
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (editingKey) {
-      handleValueChange(selectedLang, editingKey, editValue);
+      const updatedValue = editValue;
+      handleValueChange(selectedLang, editingKey, updatedValue);
       setEditingKey(null);
       setEditValue('');
-      toast.success('Перевод сохранён');
+
+      // Auto-save to DB if possible
+      try {
+        setSaving(true);
+        // We need the latest state, but since setTranslations is async, 
+        // we construct the data to send for this specific language
+        const updatedLangData = JSON.parse(JSON.stringify(translations[selectedLang] || {}));
+        setNestedValue(updatedLangData, editingKey, updatedValue);
+
+        await pushLocalToDB(selectedLang, updatedLangData);
+        toast.success('Сохранено в БД');
+      } catch (err) {
+        toast.error('Ошибка сохранения в БД');
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
@@ -460,14 +518,32 @@ export default function AdminTranslations() {
 
   // Reset
   const resetToOriginal = () => {
-    setTranslations({
-      ru: JSON.parse(JSON.stringify(ru)),
-      en: JSON.parse(JSON.stringify(en)),
-      kk: JSON.parse(JSON.stringify(kk)),
-    });
-    setActiveLanguages(['en', 'ru', 'kk']);
-    setSelectedLang('en');
-    toast.success('Переводы сброшены');
+    if (confirm('Это сбросит только локальное состояние. Хотите продолжить?')) {
+      setTranslations({
+        ru: JSON.parse(JSON.stringify(ru)),
+        en: JSON.parse(JSON.stringify(en)),
+        kk: JSON.parse(JSON.stringify(kk)),
+      });
+      setActiveLanguages(['en', 'ru', 'kk']);
+      setSelectedLang('en');
+      toast.success('Переводы сброшены (локально)');
+    }
+  };
+
+  const syncAllToDB = async () => {
+    if (!confirm('Отправить все текущие переводы в базу данных? Существующие в БД данные будут перезаписаны.')) return;
+
+    setSaving(true);
+    try {
+      for (const lang of activeLanguages) {
+        await pushLocalToDB(lang, translations[lang]);
+      }
+      toast.success('Все переводы синхронизированы с БД');
+    } catch (err) {
+      toast.error('Ошибка при массовой синхронизации');
+    } finally {
+      setSaving(false);
+    }
   };
 
   // Toggle namespace
@@ -539,7 +615,16 @@ export default function AdminTranslations() {
               </h1>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={resetToOriginal}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={syncAllToDB}
+                disabled={saving}
+              >
+                {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Upload className="h-4 w-4 mr-1" />}
+                Синхронизировать с БД
+              </Button>
+              <Button variant="outline" size="sm" onClick={resetToOriginal} disabled={saving}>
                 <RefreshCw className="h-4 w-4 mr-1" />
                 Сброс
               </Button>
@@ -955,10 +1040,11 @@ export default function AdminTranslations() {
             <CardContent className="text-sm text-muted-foreground space-y-2">
               <p><strong>1. Добавьте языки:</strong> Кнопка "Добавить язык" → выберите из списка</p>
               <p><strong>2. Выберите язык:</strong> Кликните на карточку языка для редактирования</p>
-              <p><strong>3. Редактируйте:</strong> Кликните на любой перевод для изменения</p>
-              <p><strong>4. Экспортируйте:</strong> Скачайте JSON и замените в <code className="bg-muted px-1 rounded">src/i18n/locales/</code></p>
-              <p className="text-amber-600 dark:text-amber-400 pt-2">
-                ⚠️ Изменения хранятся в памяти браузера — не забудьте экспортировать!
+              <p><strong>3. Редактируйте:</strong> Кликните на любой перевод для изменения. Он сохранится в БД автоматически.</p>
+              <p><strong>4. Синхронизация:</strong> Если в БД нет данных, используйте кнопку "Синхронизировать с БД" для загрузки локальных файлов в базу.</p>
+              <p className="text-green-600 dark:text-green-400 pt-2 font-medium flex items-center gap-2">
+                <CheckCircle className="h-4 w-4" />
+                Изменения сохраняются в реальном времени в базу данных Supabase.
               </p>
             </CardContent>
           </Card>
