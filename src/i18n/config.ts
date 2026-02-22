@@ -18,6 +18,7 @@ import ja from './locales/ja.json';
 import ko from './locales/ko.json';
 import ar from './locales/ar.json';
 import { validateTranslations } from './validation';
+import { storage } from '@/lib/storage';
 
 // Merge all top-level keys into translation namespace
 // This handles JSON files with structure: { translation: {...}, landingV5: {...}, ... }
@@ -34,9 +35,9 @@ const mergeNamespaces = (json: Record<string, unknown>) => {
 // Migrate 'kz' to 'kk' if stored in localStorage
 const migrateKzToKk = () => {
   if (typeof window === 'undefined') return;
-  const stored = localStorage.getItem('i18nextLng');
+  const stored = storage.getRaw('i18nextLng');
   if (stored === 'kz') {
-    localStorage.setItem('i18nextLng', 'kk');
+    storage.setRaw('i18nextLng', 'kk');
     if (process.env.NODE_ENV === 'development') {
       console.warn('[i18n] Migrated language from "kz" to "kk"');
     }
@@ -47,7 +48,9 @@ const migrateKzToKk = () => {
 migrateKzToKk();
 
 // All supported UI languages
-const SUPPORTED_LANGUAGES = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
+export const SUPPORTED_LANGUAGES = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'] as const;
+
+export type LocaleCode = typeof SUPPORTED_LANGUAGES[number] | (string & {});
 
 // Normalize language code to supported codes
 const normalizeLanguage = (lng: string): string => {
@@ -60,7 +63,7 @@ const normalizeLanguage = (lng: string): string => {
   if (langCode === 'kz') return 'kk';
 
   // If it's a supported language, return it
-  if (SUPPORTED_LANGUAGES.includes(langCode)) return langCode;
+  if (SUPPORTED_LANGUAGES.includes(langCode as any)) return langCode as LocaleCode;
 
   // Default to English for unsupported languages
   return 'en';
@@ -76,22 +79,22 @@ const customLanguageDetector = {
     const urlLang = params.get('lang') || params.get('lng');
     if (urlLang) {
       const normalizedUrlLang = normalizeLanguage(urlLang);
-      // Save to localStorage when set via URL
-      localStorage.setItem('i18nextLng', normalizedUrlLang);
+      // Save to storage when set via URL
+      storage.setRaw('i18nextLng', normalizedUrlLang);
       return normalizedUrlLang;
     }
 
-    // 2. Check localStorage for user preference
-    let stored = localStorage.getItem('i18nextLng');
+    // 2. Check storage for user preference
+    let stored = storage.getRaw('i18nextLng');
 
     // Migrate 'kz' to 'kk' on read
     if (stored === 'kz') {
       stored = 'kk';
-      localStorage.setItem('i18nextLng', 'kk');
+      storage.setRaw('i18nextLng', 'kk');
     }
 
-    if (stored && SUPPORTED_LANGUAGES.includes(stored)) {
-      return stored;
+    if (stored && SUPPORTED_LANGUAGES.includes(stored as any)) {
+      return stored as LocaleCode;
     }
 
     // 3. Auto-detect from browser language
@@ -102,7 +105,7 @@ const customLanguageDetector = {
     if (typeof window === 'undefined') return;
     // Normalize before caching
     const normalizedLng = normalizeLanguage(lng);
-    localStorage.setItem('i18nextLng', normalizedLng);
+    storage.setRaw('i18nextLng', normalizedLng);
   }
 };
 
@@ -177,8 +180,8 @@ if (process.env.NODE_ENV === 'development') {
 i18n.on('languageChanged', (lng) => {
   // Normalize on change
   const normalized = normalizeLanguage(lng);
-  if (normalized !== lng && SUPPORTED_LANGUAGES.includes(normalized)) {
-    i18n.changeLanguage(normalized);
+  if (normalized !== lng && SUPPORTED_LANGUAGES.includes(normalized as any)) {
+    i18n.changeLanguage(normalized as LocaleCode);
     return;
   }
 

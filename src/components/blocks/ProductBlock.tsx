@@ -24,7 +24,7 @@ import { useAuth } from '@/hooks/user/useAuth';
 import { useTokens } from '@/hooks/user/useTokens';
 import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
-import { trackPurchase } from '@/components/analytics/TrackingScripts';
+import { trackPurchase } from '@/lib/analytics';
 
 interface ProductBlockProps {
   block: ProductBlockType;

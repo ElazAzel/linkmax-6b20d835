@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Download, X } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
+import { storage } from '@/lib/storage';
+
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -22,12 +24,12 @@ export function PWAInstallPrompt() {
     }
 
     // Check if user dismissed the prompt before
-    const dismissed = localStorage.getItem('pwa-prompt-dismissed');
+    const dismissed = storage.getRaw('pwa-prompt-dismissed');
     if (dismissed) {
       const dismissedDate = new Date(dismissed);
       const now = new Date();
       const daysSinceDismissed = Math.floor((now.getTime() - dismissedDate.getTime()) / (1000 * 60 * 60 * 24));
-      
+
       // Show again after 7 days
       if (daysSinceDismissed < 7) {
         return;
@@ -37,7 +39,7 @@ export function PWAInstallPrompt() {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Show prompt after 10 seconds
       setTimeout(() => {
         setShowPrompt(true);
@@ -72,7 +74,7 @@ export function PWAInstallPrompt() {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem('pwa-prompt-dismissed', new Date().toISOString());
+    storage.setRaw('pwa-prompt-dismissed', new Date().toISOString());
   };
 
   if (isInstalled || !showPrompt || !deferredPrompt) {
@@ -90,13 +92,13 @@ export function PWAInstallPrompt() {
         <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
           <Download className="h-6 w-6 text-primary" />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-sm mb-1">Установить lnkmx.my</h3>
           <p className="text-xs text-muted-foreground mb-3">
             Добавьте приложение на главный экран для быстрого доступа и работы оффлайн
           </p>
-          
+
           <div className="flex gap-2">
             <Button size="sm" onClick={handleInstall} className="flex-1">
               Установить

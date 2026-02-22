@@ -2,7 +2,7 @@
  * PageSettingsScreen - Settings for the current page (page-scoped)
  * SEO, branding, domain/slug, visibility
  */
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {

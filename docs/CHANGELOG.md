@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Pitch Deck Update**: Обновлен инвестиционный меморандум, интегрированы данные о новых технических преимуществах: финтех-ядре, профессиональной аналитике и масштабируемой i18n архитектуре.
 
 ### Fixed (Platform Stabilization — 2026-02-22)
+- **Technical Audit & Cleanup**: Resolved 100+ critical linting and TypeScript errors across the codebase.
+- **Supabase Integration**: Synchronized `src/integrations/supabase/types.ts` with the actual database schema for tables: `partners`, `payout_requests`, `i18n_translations`, `user_wallets`, and `payout_requests`.
+- **i18n Stability**: Restored missing exports and imports in `i18n/config.ts` and `LanguageContext.tsx`, ensuring proper translation handling during build.
+- **Rules of Hooks**: Fixed a critical violation in `BlockEditorV2.tsx` where a `useMemo` was called conditionally.
+- **Admin Panel Quality**: Completely refactored `AdminTranslations.tsx` to eliminate unused variables, redundant logic, and type mismatches.
+- **Type Guarding**: Systematic migration from `@ts-ignore` to `@ts-expect-error` to improve error traceability.
 - **SEO & Sitemap**: Resolved priority conflict in Cloudflare Worker that prevented dynamic sitemap generation by the Edge Function.
 - **PWA Support**: Implemented a core service worker (`sw.js`) and registration logic, enabling the mobile-first "Install App" capability.
 - **OAuth Redirects**: Fully integrated `returnTo` parameter support for Google and Apple sign-in flows, ensuring users return to their specific editor state after authentication.

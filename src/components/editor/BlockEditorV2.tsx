@@ -219,6 +219,11 @@ export function BlockEditorV2({
         setShowUnsavedDialog(false);
     }, [performSave, formData]);
 
+    const BlockIcon = useMemo(() => {
+        if (!block) return getLucideIcon('Box');
+        return getLucideIcon(BLOCK_ICONS[block.type] || 'Box');
+    }, [block?.type]);
+
     if (!block) return null;
 
     const commonProps = {
@@ -226,7 +231,6 @@ export function BlockEditorV2({
         onChange: handleFormChange,
     };
 
-    const BlockIcon = useMemo(() => getLucideIcon(BLOCK_ICONS[block.type] || 'Box'), [block.type]);
     const blockTypeName = t(`blockEditor.${block.type}`, block.type);
 
     const renderEditor = () => {

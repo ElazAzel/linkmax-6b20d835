@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
 import { lovable } from '@/integrations/lovable/index';
+import { storage } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
 
 interface AuthContextType {
@@ -56,9 +57,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Check for pending Telegram chat ID after signup
         if (_event === 'SIGNED_IN' && session?.user) {
-          const pendingChatId = localStorage.getItem('pending_telegram_chat_id');
+          const pendingChatId = storage.get<string>('pending_telegram_chat_id');
           if (pendingChatId) {
-            localStorage.removeItem('pending_telegram_chat_id');
+            storage.remove('pending_telegram_chat_id');
             // Use setTimeout to avoid deadlock with Supabase auth
             setTimeout(async () => {
               const { error: err } = await supabase

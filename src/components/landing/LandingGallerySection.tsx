@@ -11,6 +11,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useGallery } from '@/hooks/social/useGallery';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
 import { toast } from 'sonner';
+import { storage } from '@/lib/storage';
 
 export function LandingGallerySection() {
   const { t } = useTranslation();
@@ -25,9 +26,8 @@ export function LandingGallerySection() {
   const handleLike = useCallback(async (e: React.MouseEvent, pageId: string) => {
     e.stopPropagation();
 
-    // Check localStorage for liked pages
-    const storedLikes = localStorage.getItem('linkmax_liked_pages');
-    const likedSet = new Set<string>(storedLikes ? JSON.parse(storedLikes) : []);
+    // Check storage for liked pages
+    const likedSet = new Set<string>(storage.get<string[]>('linkmax_liked_pages') || []);
 
     if (likedSet.has(pageId)) {
       toast.info(t('gallery.alreadyLiked'));
@@ -37,19 +37,15 @@ export function LandingGallerySection() {
     await likePage(pageId);
     likedSet.add(pageId);
     setLikedPages(new Set(likedSet));
-    localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(likedSet)));
+    storage.set('linkmax_liked_pages', Array.from(likedSet));
     toast.success(t('gallery.liked'));
   }, [likePage, t]);
 
-  // Load liked pages from localStorage on mount
+  // Load liked pages from storage on mount
   useEffect(() => {
-    const storedLikes = localStorage.getItem('linkmax_liked_pages');
+    const storedLikes = storage.get<string[]>('linkmax_liked_pages');
     if (storedLikes) {
-      try {
-        setLikedPages(new Set(JSON.parse(storedLikes)));
-      } catch (e) {
-        console.error('Failed to parse liked pages:', e);
-      }
+      setLikedPages(new Set(storedLikes));
     }
   }, []);
 

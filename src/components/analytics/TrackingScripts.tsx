@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { hasThirdPartyConsent } from '@/components/legal/CookieConsent';
+import { setCurrentPageId } from '@/lib/analytics';
 
 import type { PageIntegrations } from '@/types/page';
 
@@ -22,65 +23,12 @@ declare global {
     }
 }
 
-// ─── Server-Side Pixel Proxy ─────────────────────────────────────
-const PIXEL_PROXY_URL = `${import.meta.env.VITE_SUPABASE_URL || ''}/functions/v1/pixel-proxy`;
-
-function sendServerEvent(
-    pageId: string,
-    event: string,
-    eventData: Record<string, unknown> = {},
-    userData: Record<string, string> = {},
-    eventId?: string,
-) {
-    if (!pageId || typeof navigator === 'undefined') return eventId;
-
-    const id = eventId || crypto.randomUUID();
-    const payload = JSON.stringify({
-        pageId,
-        event,
-        eventData,
-        userData,
-        sourceUrl: window.location.href,
-        clientId: getOrCreateClientId(),
-        eventId: id,
-    });
-
-    // Use sendBeacon for reliable delivery (survives page navigation)
-    if (navigator.sendBeacon) {
-        const blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon(PIXEL_PROXY_URL, blob);
-    } else {
-        fetch(PIXEL_PROXY_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: payload,
-            keepalive: true,
-        }).catch(() => { }); // fire-and-forget
-    }
-
-    return id;
-}
-
-// Stable client ID for GA4 MP
-function getOrCreateClientId(): string {
-    const key = '_lnkmx_cid';
-    let cid = localStorage.getItem(key);
-    if (!cid) {
-        cid = crypto.randomUUID();
-        localStorage.setItem(key, cid);
-    }
-    return cid;
-}
-
-// Store current pageId for helper functions
-let _currentPageId: string | undefined;
-
 export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) {
     const location = useLocation();
     const pathname = location.pathname;
     const pageIdRef = useRef(pageId);
     pageIdRef.current = pageId;
-    _currentPageId = pageId;
+    setCurrentPageId(pageId);
 
     useEffect(() => {
         // Only load third-party scripts if user hasn't explicitly rejected
@@ -91,12 +39,20 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             const f = window as any;
             const b = document;
             if (!f.fbq) {
-                const n: any = f.fbq = function () {
-                    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+                const n: any = f.fbq = function (...args: any[]) {
+                    if (n.callMethod) {
+                        n.callMethod(...args);
+                    } else {
+                        n.queue.push(args);
+                    }
                 };
                 if (!f._fbq) f._fbq = n;
-                n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
-                const t = b.createElement('script'); t.async = true;
+                n.push = n;
+                n.loaded = true;
+                n.version = '2.0';
+                n.queue = [];
+                const t = b.createElement('script');
+                t.async = true;
                 t.src = 'https://connect.facebook.net/en_US/fbevents.js';
                 const s = b.getElementsByTagName('script')[0];
                 s.parentNode?.insertBefore(t, s);
@@ -111,9 +67,9 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             w.ttq = w.ttq || [];
             w.ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
             w.ttq.setAndDefer = function (t: any, e: any) {
-                t[e] = function () {
+                t[e] = function (...args: any[]) {
                     t._i[e] = t._i[e] || [];
-                    t._i[e].push(arguments);
+                    t._i[e].push(args);
                 };
             };
             w.ttq.load = function (e: string) {
@@ -161,7 +117,9 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
                         accurateTrackBounce: true,
                         webvisor: true
                     });
-                } catch (e) { }
+                } catch (err) {
+                    console.error('Yandex Metrika error:', err);
+                }
             });
 
             const n = d.getElementsByTagName("script")[0];
@@ -174,11 +132,6 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             if ((w as any).opera == "[object Opera]") {
                 d.addEventListener("DOMContentLoaded", f, false);
             } else { f(); }
-        }
-
-        // Server-side PageView (deduplicated with client pixel)
-        if (pageIdRef.current) {
-            sendServerEvent(pageIdRef.current, 'PageView');
         }
     }, [integrations]);
 
@@ -199,63 +152,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
         if (integrations.yandex_metrika && window.ym) {
             window.ym(integrations.yandex_metrika, 'hit', window.location.href);
         }
-        // Server-side PageView on SPA navigation
-        if (pageIdRef.current) {
-            sendServerEvent(pageIdRef.current, 'PageView');
-        }
     }, [pathname, integrations]);
 
     return null;
 }
-
-// ─── Helper functions for tracking events — dual client+server ───
-
-export const trackLead = (userData?: Record<string, string>) => {
-    if (typeof window === 'undefined') return;
-    if (window.fbq) window.fbq('track', 'Lead');
-    if (window.ttq) window.ttq.track('SubmitForm');
-    if (window.gtag) window.gtag('event', 'generate_lead');
-    if (window.ym) window.ym('reachGoal', 'lead');
-    if (_currentPageId) sendServerEvent(_currentPageId, 'Lead', {}, userData);
-};
-
-export const trackPurchase = (value: number, currency: string = 'USD') => {
-    if (typeof window === 'undefined') return;
-    if (window.fbq) window.fbq('track', 'Purchase', { value, currency });
-    if (window.ttq) window.ttq.track('CompletePayment', { value, currency });
-    if (window.gtag) window.gtag('event', 'purchase', { value, currency });
-    if (_currentPageId) sendServerEvent(_currentPageId, 'Purchase', { value, currency });
-};
-
-export const trackInitiateCheckout = () => {
-    if (typeof window === 'undefined') return;
-    if (window.fbq) window.fbq('track', 'InitiateCheckout');
-    if (window.ttq) window.ttq.track('InitiateCheckout');
-    if (window.gtag) window.gtag('event', 'begin_checkout');
-    if (_currentPageId) sendServerEvent(_currentPageId, 'InitiateCheckout');
-};
-
-export const trackViewContent = (contentName?: string, contentType?: string) => {
-    if (typeof window === 'undefined') return;
-    const data = { content_name: contentName, content_type: contentType };
-    if (window.fbq) window.fbq('track', 'ViewContent', data);
-    if (window.ttq) window.ttq.track('ViewContent', data);
-    if (window.gtag) window.gtag('event', 'view_item', data);
-    if (_currentPageId) sendServerEvent(_currentPageId, 'ViewContent', data);
-};
-
-export const trackClickLink = (blockTitle?: string, url?: string) => {
-    if (typeof window === 'undefined') return;
-    const data = { content_name: blockTitle, link_url: url };
-    if (window.fbq) window.fbq('trackCustom', 'ClickLink', data);
-    if (window.ttq) window.ttq.track('ClickButton', data);
-    if (window.gtag) window.gtag('event', 'click', { event_category: 'link', event_label: blockTitle, link_url: url });
-};
-
-export const trackSubscribe = (userData?: Record<string, string>) => {
-    if (typeof window === 'undefined') return;
-    if (window.fbq) window.fbq('track', 'Subscribe');
-    if (window.ttq) window.ttq.track('Subscribe');
-    if (window.gtag) window.gtag('event', 'subscribe');
-    if (_currentPageId) sendServerEvent(_currentPageId, 'Subscribe', {}, userData);
-};

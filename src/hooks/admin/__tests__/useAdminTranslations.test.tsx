@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAdminTranslations } from '../useAdminTranslations';
 import { fetchTranslationsFromDB, upsertToDB } from '@/lib/i18n-db-backend';
+import { supabase } from '@/integrations/supabase/client';
 
 // Mock backend
 vi.mock('@/lib/i18n-db-backend', () => ({
@@ -19,18 +20,23 @@ vi.mock('@/lib/utils/logger', () => ({
 }));
 
 describe('useAdminTranslations', () => {
-    const mockTranslations = {
-        'key1': 'value1',
-        'key2': ''
-    };
+    const mockDbData = [
+        { lang_code: 'en', data: { 'key1': 'value1' } },
+        { lang_code: 'ru', data: { 'key1': 'значение1', 'key2': '' } }
+    ];
 
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.mocked(fetchTranslationsFromDB).mockResolvedValue(mockTranslations);
+        // Mock supabase response
+        const mockSupabase = {
+            from: vi.fn().mockReturnThis(),
+            select: vi.fn().mockResolvedValue({ data: mockDbData, error: null })
+        };
+        vi.mocked(supabase.from).mockImplementation(mockSupabase.from as any);
     });
 
     it('should load translations on mount', async () => {
-        const { result } = renderHook(() => useAdminTranslations());
+        const { result } = renderHook(() => useAdminTranslations(true));
 
         expect(result.current.loading).toBe(true);
 
@@ -38,46 +44,31 @@ describe('useAdminTranslations', () => {
             expect(result.current.loading).toBe(false);
         });
 
-        expect(result.current.translations).toEqual(mockTranslations);
+        expect(result.current.activeLanguages).toContain('en');
+        expect(result.current.activeLanguages).toContain('ru');
+        expect(result.current.translations['ru']).toEqual(expect.objectContaining({ 'key1': 'значение1' }));
     });
 
-    it('should filter translations by search query', async () => {
-        const { result } = renderHook(() => useAdminTranslations());
+    it('should calculate all keys correctly', async () => {
+        const { result } = renderHook(() => useAdminTranslations(true));
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
-        act(() => {
-            result.current.setSearchQuery('key1');
-        });
-
-        expect(result.current.allKeys).toContain('key1');
-        expect(result.current.allKeys).not.toContain('key2');
+        expect(result.current.allKeys.all).toContain('key1');
+        expect(result.current.allKeys.all).toContain('key2');
+        expect(result.current.allKeys.missingCount).toBe(1); // key2 is empty for 'ru'
     });
 
     it('should update translation and save to DB', async () => {
         vi.mocked(upsertToDB).mockResolvedValue(undefined as any);
-        const { result } = renderHook(() => useAdminTranslations());
+        const { result } = renderHook(() => useAdminTranslations(true));
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
         await act(async () => {
-            await result.current.updateTranslation('key2', 'new value');
+            await result.current.updateTranslation({ lang: 'ru', key: 'key2', value: 'new value' });
         });
 
-        expect(result.current.translations['key2']).toBe('new value');
         expect(upsertToDB).toHaveBeenCalledWith('ru', expect.objectContaining({ 'key2': 'new value' }));
-    });
-
-    it('should show missing only when filter is active', async () => {
-        const { result } = renderHook(() => useAdminTranslations());
-
-        await waitFor(() => expect(result.current.loading).toBe(false));
-
-        act(() => {
-            result.current.setShowMissingOnly(true);
-        });
-
-        expect(result.current.allKeys).toContain('key2'); // key2 is empty
-        expect(result.current.allKeys).not.toContain('key1'); // key1 is filled
     });
 });

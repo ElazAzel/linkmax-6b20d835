@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/platform/supabase/client';
+import { LocaleCode } from '@/i18n/config';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import type { LocaleCode, I18nText } from '@/lib/i18n-helpers';
-import type { TranslatedBlock } from "@/types/language-context";
 import { isI18nText, isMultilingualString } from '@/lib/i18n-helpers';
+import { storage } from '@/lib/storage';
+import { TranslatedBlock } from '@/types/language-context';
 
 // Extended language names for translation
 const LANGUAGE_NAMES: Record<string, string> = {
@@ -49,7 +51,7 @@ function detectBrowserLanguage(): LocaleCode {
   const langCode = browserLang.split('-')[0].toLowerCase();
 
   // Check if it's a known language
-  if (LANGUAGE_NAMES[langCode]) return langCode;
+  if (LANGUAGE_NAMES[langCode]) return langCode as LocaleCode;
 
   // Fallback to English
   return 'en';
@@ -60,7 +62,7 @@ const normalizeLanguageCode = (lng: string): LocaleCode => {
   if (!lng) return 'ru';
   const code = lng.substring(0, 2).toLowerCase();
   if (code === 'kz') return 'kk';
-  return code;
+  return code as LocaleCode;
 };
 
 export { LanguageContext };
@@ -73,9 +75,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const [currentLanguage, setCurrentLanguageState] = useState<LocaleCode>(() => {
     if (typeof window === 'undefined') return 'en';
-    const stored = localStorage.getItem('i18nextLng');
+    const stored = storage.getRaw('i18nextLng');
     if (stored === 'kz') {
-      localStorage.setItem('i18nextLng', 'kk');
+      storage.setRaw('i18nextLng', 'kk');
     }
     return normalizeLanguageCode(stored || browserLanguage);
   });
@@ -84,32 +86,23 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const [autoTranslateEnabled, setAutoTranslateEnabled] = useState(() => {
     if (typeof window === 'undefined') return true;
-    const stored = localStorage.getItem('autoTranslateEnabled');
-    return stored !== 'false'; // Default to true
+    const stored = storage.get<boolean>('autoTranslateEnabled');
+    return stored !== false; // Default to true if null or true
   });
 
-  // Target languages for translation (stored in localStorage)
+  // Target languages for translation (stored in storage)
   const [targetTranslationLanguages, setTargetTranslationLanguagesState] = useState<LocaleCode[]>(() => {
     if (typeof window === 'undefined') return ['en', 'ru'];
-    const stored = localStorage.getItem('targetTranslationLanguages');
+    const stored = storage.get<LocaleCode[]>('targetTranslationLanguages');
     if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        // Ensure English is always included
-        if (!parsed.includes('en')) {
-          return ['en', ...parsed];
-        }
-        return parsed;
-      } catch {
-        // Default: browser language + English + Russian
-        const defaults = ['en'];
-        if (browserLanguage !== 'en') defaults.push(browserLanguage);
-        if (!defaults.includes('ru')) defaults.push('ru');
-        return defaults;
+      // Ensure English is always included
+      if (!stored.includes('en')) {
+        return ['en', ...stored];
       }
+      return stored;
     }
     // Default: English + browser language + Russian
-    const defaults = ['en'];
+    const defaults: LocaleCode[] = ['en'];
     if (browserLanguage !== 'en') defaults.push(browserLanguage);
     if (!defaults.includes('ru')) defaults.push('ru');
     return defaults;
@@ -122,23 +115,23 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [i18n.language]);
 
   const setCurrentLanguage = useCallback((lang: LocaleCode) => {
-    const normalizedLang = lang === "kz" ? 'kk' : lang;
+    const normalizedLang = (lang as string) === "kz" ? ('kk' as LocaleCode) : lang;
     setCurrentLanguageState(normalizedLang);
     i18n.changeLanguage(normalizedLang);
-    localStorage.setItem('i18nextLng', normalizedLang);
+    storage.setRaw('i18nextLng', normalizedLang);
   }, [i18n]);
 
   // Save auto-translate preference
   useEffect(() => {
-    localStorage.setItem('autoTranslateEnabled', String(autoTranslateEnabled));
+    storage.set('autoTranslateEnabled', autoTranslateEnabled);
   }, [autoTranslateEnabled]);
 
   // Save target languages
   const setTargetTranslationLanguages = useCallback((languages: LocaleCode[]) => {
     // Ensure English is always included
     const ensured = languages.includes('en') ? languages : ['en', ...languages];
-    setTargetTranslationLanguagesState(ensured);
-    localStorage.setItem('targetTranslationLanguages', JSON.stringify(ensured));
+    setTargetTranslationLanguagesState(ensured as LocaleCode[]);
+    storage.set('targetTranslationLanguages', ensured);
   }, []);
 
   // Translate a single text to multiple languages

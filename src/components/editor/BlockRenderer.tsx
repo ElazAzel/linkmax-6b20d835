@@ -112,15 +112,15 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
     case 'booking':
     case 'community':
     case 'socials':
-      // @ts-ignore - safe access for mixed block types
+      // @ts-expect-error - safe access for mixed block types
       rawTitle = block?.title;
       break;
     case 'text':
-      // @ts-ignore - safe access for mixed block types
+      // @ts-expect-error - safe access for mixed block types
       rawTitle = block?.content;
       break;
     case 'event':
-      // @ts-ignore - safe access for mixed block types
+      // @ts-expect-error - safe access for mixed block types
       rawTitle = block?.title;
       break;
     case 'shoutout':

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
+import { Tables } from '@/integrations/supabase/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -101,7 +102,7 @@ export function UserTierManager() {
     setSaving(true);
     try {
       // Update user profile
-      const updateData: Record<string, any> = {
+      const updateData: Partial<Tables<'user_profiles'>> = {
         premium_tier: newTier,
         premium_expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
         is_premium: newTier !== 'free'

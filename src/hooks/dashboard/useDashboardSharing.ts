@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { getPublicPageUrl, copyToClipboard } from '@/lib/utils/url-helpers';
 import { incrementChallengeProgress, recordActivity } from '@/services/social';
 
+import { storage } from '@/lib/storage';
+
 const STORAGE_KEYS = {
-  INSTALL_PROMPT_SHOWN: 'linkmax_install_prompt_shown',
-  SHARE_DIALOG_COUNT: 'linkmax_share_dialog_count',
+  INSTALL_PROMPT_SHOWN: 'install_prompt_shown',
+  SHARE_DIALOG_COUNT: 'share_dialog_count',
+  PUBLISHED: 'published'
 } as const;
 
 interface UseDashboardSharingOptions {
@@ -33,11 +36,11 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete, onSave
     await onSaveVersion?.();
 
     // Mark page as published for achievements
-    localStorage.setItem('linkmax_published', 'true');
+    storage.set(STORAGE_KEYS.PUBLISHED, true);
 
     const url = getPublicPageUrl(slug);
     setPublishedUrl(url);
-    
+
     const copied = await copyToClipboard(url);
 
     if (copied) {
@@ -53,20 +56,20 @@ export function useDashboardSharing({ onPublish, onSave, onQuestComplete, onSave
     }
 
     // Show share/referral dialog periodically (every 3 publishes)
-    const shareCount = parseInt(localStorage.getItem(STORAGE_KEYS.SHARE_DIALOG_COUNT) || '0', 10);
+    const shareCount = storage.get<number>(STORAGE_KEYS.SHARE_DIALOG_COUNT) || 0;
     const newCount = shareCount + 1;
-    localStorage.setItem(STORAGE_KEYS.SHARE_DIALOG_COUNT, newCount.toString());
-    
+    storage.set(STORAGE_KEYS.SHARE_DIALOG_COUNT, newCount);
+
     // Show on first publish and every 3rd publish
     if (newCount === 1 || newCount % 3 === 0) {
       setTimeout(() => setShowShareDialog(true), 500);
     }
 
     // Show install prompt for first-time publishers
-    const hasSeenInstallPrompt = localStorage.getItem(STORAGE_KEYS.INSTALL_PROMPT_SHOWN);
+    const hasSeenInstallPrompt = storage.get<boolean>(STORAGE_KEYS.INSTALL_PROMPT_SHOWN);
     if (!hasSeenInstallPrompt && newCount === 1) {
       setTimeout(() => setShowInstallPrompt(true), 2000);
-      localStorage.setItem(STORAGE_KEYS.INSTALL_PROMPT_SHOWN, 'true');
+      storage.set(STORAGE_KEYS.INSTALL_PROMPT_SHOWN, true);
     }
   }, [onPublish, onQuestComplete, onSaveVersion, t]);
 

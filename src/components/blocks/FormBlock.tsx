@@ -13,7 +13,7 @@ import { supabase } from '@/platform/supabase/client';
 import { fintechService } from '@/services/fintech';
 import { TurnstileWidget } from '@/components/legal/TurnstileWidget';
 
-import { trackLead } from '@/components/analytics/TrackingScripts';
+import { trackLead } from '@/lib/analytics';
 
 interface FormBlockProps {
   block: FormBlockType;

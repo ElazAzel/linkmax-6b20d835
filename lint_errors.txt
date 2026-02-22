@@ -1,0 +1,1322 @@
+﻿
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AdminAnalyticsDashboard.tsx
+  108:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AdminCharts.tsx
+   76:6   warning  React Hook useCallback has missing dependencies: 'loadEventTypes' and 'loadSocialStats'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  110:37  warning  Unexpected any. Specify a different type                                                                                                     @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AdminFintechTab.tsx
+   40:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   41:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   67:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  130:72  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:72  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AdminTemplatesTab.tsx
+  57:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AdminTokensTab.tsx
+    1:20  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   32:3   warning  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   43:3   warning  'WithdrawalRequest' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  109:77  warning  'refetchTransactions' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AdminVerificationPanel.tsx
+  3:20  warning  'useMutation' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\AnalyticsFilterPanel.tsx
+  47:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\LanguageUploadDialog.tsx
+   10:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u                                           @typescript-eslint/no-unused-vars
+  110:8   warning  React Hook useCallback has a missing dependency: 'handleClose'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\admin\UserTierManager.tsx
+   5:29  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u                                  @typescript-eslint/no-unused-vars
+   5:41  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u                                   @typescript-eslint/no-unused-vars
+  54:6   warning  React Hook useEffect has a missing dependency: 'loadUsers'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\analytics\AIInsightsPanel.tsx
+  22:3   warning  'TrendingDown' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  24:3   warning  'ArrowRight' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  26:3   warning  'X' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  39:10  warning  'supabase' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\analytics\TrackingScripts.tsx
+   17:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   18:15  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   19:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   20:15  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   21:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   22:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   39:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   42:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   42:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   66:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   69:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   69:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   70:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   99:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  112:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\auth\TelegramVerification.tsx
+  52:6   warning  React Hook useEffect has missing dependencies: 'handleVerify', 'isVerified', and 'isVerifying'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  87:19  warning  Unexpected any. Specify a different type                                                                                                            @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\billing\PremiumFeatureGate.tsx
+    6:17  warning  'Sparkles' is defined but never used. Allowed unused vars must match /^_/u                                                      @typescript-eslint/no-unused-vars
+  104:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\BlockEditorShell.tsx
+   11:5   warning  'X' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+   18:5   warning  'Save' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   19:5   warning  'Clock' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   27:39  warning  'TabsContent' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  173:11  warning  'currentSize' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  189:89  warning  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\BlockEditorWrapper.tsx
+   12:95  warning  'Wand2' is defined but never used. Allowed unused vars must match /^_/u                                                         @typescript-eslint/no-unused-vars
+   18:15  warning  'Block' is defined but never used. Allowed unused vars must match /^_/u                                                         @typescript-eslint/no-unused-vars
+   18:34  warning  'BlockSizePreset' is defined but never used. Allowed unused vars must match /^_/u                                               @typescript-eslint/no-unused-vars
+   21:13  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+   22:23  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  144:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  150:27  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  161:36  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+  177:15  warning  'schedule' is assigned a value but never used. Allowed unused vars must match /^_/u                                             @typescript-eslint/no-unused-vars
+  224:15  warning  'backgroundColor' is assigned a value but never used. Allowed unused vars must match /^_/u                                      @typescript-eslint/no-unused-vars
+  224:32  warning  'textColor' is assigned a value but never used. Allowed unused vars must match /^_/u                                            @typescript-eslint/no-unused-vars
+  224:43  warning  'fontFamily' is assigned a value but never used. Allowed unused vars must match /^_/u                                           @typescript-eslint/no-unused-vars
+  224:55  warning  'textEffect' is assigned a value but never used. Allowed unused vars must match /^_/u                                           @typescript-eslint/no-unused-vars
+  546:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\BookingBlockEditor.tsx
+   53:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  393:81  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\ButtonBlockEditor.tsx
+  21:3   warning  'Move' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  26:28  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  27:34  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\CarouselBlockEditor.tsx
+  16:8   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:74  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\CatalogBlockEditor.tsx
+   14:15  warning  'CatalogBlock' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   15:36  warning  'isMultilingualString' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  173:40  warning  'index' is defined but never used. Allowed unused args must match /^_/u                 @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\CustomCodeBlockEditor.tsx
+  22:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\EditorSection.tsx
+  6:45  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\EventBlockEditor.tsx
+  20:48  warning  'ImageIcon' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\FAQBlockEditor.tsx
+  74:29  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\FormBlockEditor.tsx
+  58:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\ImageBlockEditor.tsx
+   18:3   warning  'Type' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  107:36  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\MessengerBlockEditor.tsx
+  46:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\ProfileBlockEditor.tsx
+  25:57  warning  'canUseAdvancedThemes' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  25:79  warning  'currentTier' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\ProfileEditorWizard.tsx
+  142:6   warning  React Hook useCallback has a missing dependency: 'uploadFile'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  268:89  warning  Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+  352:80  warning  Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+  467:77  warning  Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\block-editors\TestimonialBlockEditor.tsx
+  51:41  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\AvatarBlock.tsx
+  2:47  warning  'AvatarFrameStyle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:54  warning  'isAnimatedFrame' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\BeforeAfterBlock.tsx
+  6:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\BookingBlock.tsx
+    8:10  warning  'Card' is defined but never used. Allowed unused vars must match /^_/u                                                                          @typescript-eslint/no-unused-vars
+    8:16  warning  'CardContent' is defined but never used. Allowed unused vars must match /^_/u                                                                   @typescript-eslint/no-unused-vars
+    8:29  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u                                                                    @typescript-eslint/no-unused-vars
+    8:41  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u                                                                     @typescript-eslint/no-unused-vars
+    9:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u                                                                         @typescript-eslint/no-unused-vars
+   11:10  warning  'ScrollArea' is defined but never used. Allowed unused vars must match /^_/u                                                                    @typescript-eslint/no-unused-vars
+  182:6   warning  React Hook useCallback has missing dependencies: 'block.gcalSyncEnabled' and 'pageOwnerId'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\ButtonBlock.tsx
+  34:9  warning  'hasAnyCustomStyle' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\CarouselBlock.tsx
+  3:29  warning  'CardHeader' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  3:41  warning  'CardTitle' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\CountdownBlock.tsx
+  6:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\FormBlock.tsx
+   28:10  warning  'turnstileToken' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   58:15  warning  'email' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   59:15  warning  'phone' is assigned a value but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  117:21  warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\FreePremiumBlockGate.tsx
+   24:49  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   24:62  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   28:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   36:3   warning  'blockType' is defined but never used. Allowed unused args must match /^_/u                                                     @typescript-eslint/no-unused-vars
+  149:3   warning  'blockType' is defined but never used. Allowed unused args must match /^_/u                                                     @typescript-eslint/no-unused-vars
+  155:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u                                                    @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\InlineProfileEditor.tsx
+   10:10  warning  'Textarea' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   26:23  warning  'isI18nText' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  144:9   warning  'handleNameKeyDown' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  152:9   warning  'handleBioKeyDown' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  332:9   warning  'hasGradientFrame' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\LinkBlock.tsx
+  29:10  warning  'faviconLoaded' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\MessengerBlock.tsx
+  19:9  warning  'getMessengerIcon' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  80:9  warning  'isSingleMessenger' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\NewsletterBlock.tsx
+   3:16  warning  'Crown' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  10:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+  22:10  warning  'isSubmitting' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  49:45  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  56:14  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  84:14  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\ProfileBlock.tsx
+    1:16  warning  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                    @typescript-eslint/no-unused-vars
+   77:3   warning  'isPreview' is defined but never used. Allowed unused args must match /^_/u                  @typescript-eslint/no-unused-vars
+   82:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  156:9   warning  'hasGradientFrame' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\ProfileFullEditor.tsx
+   41:3   warning  'Sparkles' is defined but never used. Allowed unused vars must match /^_/u                                       @typescript-eslint/no-unused-vars
+   55:10  warning  'NAME_ANIMATION_CSS' is defined but never used. Allowed unused vars must match /^_/u                             @typescript-eslint/no-unused-vars
+   55:30  warning  'getNameAnimationClass' is defined but never used. Allowed unused vars must match /^_/u                          @typescript-eslint/no-unused-vars
+  172:6   warning  React Hook useCallback has a missing dependency: 'uploadFile'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\ScratchBlock.tsx
+  45:6  warning  React Hook useEffect has a missing dependency: 't'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\__tests__\BlocksRendering.test.tsx
+   69:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   71:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   75:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   76:83  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   77:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   78:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   79:73  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   80:68  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   81:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:52  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   83:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   84:68  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   85:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   87:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   88:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   89:76  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   90:80  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   92:86  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   93:74  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   94:52  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:62  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   96:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   97:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   98:78  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   99:81  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  100:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\__tests__\FintechIntegration.test.tsx
+  82:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\blocks\__tests__\FreePremiumBlockGate.test.tsx
+  5:49  warning  'FreeBlockType' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  5:64  warning  'PremiumBlockType' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\chat\ChatbotWidget.tsx
+  68:16  error    Unexpected constant condition  no-constant-condition
+  95:24  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\collaboration\CollabBlockManager.tsx
+  62:6  warning  React Hook useEffect has a missing dependency: 'loadBlocks'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\collaboration\TeamsTab.tsx
+  7:43  warning  'Copy' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\AnalyticsPanel.tsx
+  34:3  warning  'Legend' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\AutomationsPanel.tsx
+  57:6  warning  React Hook useEffect has a missing dependency: 'loadAutomations'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\BookingsPanel.tsx
+    9:39  warning  'TabsContent' is defined but never used. Allowed unused vars must match /^_/u                                     @typescript-eslint/no-unused-vars
+   92:6   warning  React Hook useEffect has a missing dependency: 'fetchBookings'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  286:85  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\EventRegistrationsList.tsx
+  124:6  warning  React Hook useEffect has a missing dependency: 'fetchRegistrations'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\EventsPanel.tsx
+   18:10  warning  'DropdownMenu' is defined but never used. Allowed unused vars must match /^_/u                                  @typescript-eslint/no-unused-vars
+   18:24  warning  'DropdownMenuContent' is defined but never used. Allowed unused vars must match /^_/u                           @typescript-eslint/no-unused-vars
+   18:45  warning  'DropdownMenuItem' is defined but never used. Allowed unused vars must match /^_/u                              @typescript-eslint/no-unused-vars
+   18:63  warning  'DropdownMenuTrigger' is defined but never used. Allowed unused vars must match /^_/u                           @typescript-eslint/no-unused-vars
+   22:3   warning  'QrCode' is defined but never used. Allowed unused vars must match /^_/u                                        @typescript-eslint/no-unused-vars
+   23:3   warning  'Download' is defined but never used. Allowed unused vars must match /^_/u                                      @typescript-eslint/no-unused-vars
+   30:3   warning  'FileSpreadsheet' is defined but never used. Allowed unused vars must match /^_/u                               @typescript-eslint/no-unused-vars
+   31:3   warning  'FileText' is defined but never used. Allowed unused vars must match /^_/u                                      @typescript-eslint/no-unused-vars
+  122:6   warning  React Hook useEffect has a missing dependency: 'fetchEvents'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\LeadDetails.tsx
+  122:9  warning  'formatDate' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\LeadsPanel.tsx
+  7:10  warning  'Card' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\crm\WalletWidget.tsx
+    8:5   warning  'AlertCircle' is defined but never used. Allowed unused vars must match /^_/u                                @typescript-eslint/no-unused-vars
+    8:18  warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u                               @typescript-eslint/no-unused-vars
+    8:41  warning  'DollarSign' is defined but never used. Allowed unused vars must match /^_/u                                 @typescript-eslint/no-unused-vars
+   30:13  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u                                 @typescript-eslint/no-unused-vars
+   31:38  warning  Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+   53:8   warning  React Hook useEffect has a missing dependency: 'loadData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   77:23  warning  Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+  144:55  warning  Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\analytics\AnalyticsChart.tsx
+  33:3  warning  'showShares' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\analytics\AnalyticsExport.tsx
+   8:3   warning  'DropdownMenu' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   9:3   warning  'DropdownMenuContent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  10:3   warning  'DropdownMenuItem' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  11:3   warning  'DropdownMenuTrigger' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  13:10  warning  'Download' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  26:3   warning  'pageTitle' is assigned a value but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\analytics\BlockPerformance.tsx
+  10:10  warning  'TrendingUp' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  10:22  warning  'TrendingDown' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  10:36  warning  'Minus' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  10:43  warning  'ExternalLink' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  36:3   warning  'totalViews' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\analytics\GeographyChart.tsx
+  55:3  warning  'totalVisitors' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\analytics\TrafficSourcesChart.tsx
+  7:10  warning  'Progress' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\common\ActionCard.tsx
+  28:3  warning  'border' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\common\EmptyState.tsx
+  28:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\layout\DashboardHeader.tsx
+  34:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\layout\DashboardSidebar.tsx
+   5:16  warning  'useMemo' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  23:3   warning  'ChevronRight' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\layout\PageSwitcher.tsx
+  13:3  warning  'FileText' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  15:3  warning  'ExternalLink' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\panels\ThemePanel.tsx
+  339:81  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\AccountSettingsScreen.tsx
+  11:3   warning  'User' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  12:3   warning  'Bell' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  42:15  warning  'ProfileBlock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\ActivityScreen.tsx
+   4:26  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  18:3   warning  'Loader2' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  29:10  warning  'ScrollArea' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\EditorScreen.tsx
+   5:16  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   5:29  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   7:23  warning  'Sparkles' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   9:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+  10:10  warning  'DashboardHeader' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  14:32  warning  'ProfileBlock' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  56:3   warning  'onOpenAI' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+  80:9   warning  'showAIBuilder' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\EventDetailScreen.tsx
+   21:16  warning  'TabsContent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   40:3   warning  'UserX' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  304:14  warning  'error' is defined but never used                                              @typescript-eslint/no-unused-vars
+  322:14  warning  'error' is defined but never used                                              @typescript-eslint/no-unused-vars
+  342:14  warning  'error' is defined but never used                                              @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\EventsScreen.tsx
+   35:3   warning  'Loader2' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  195:21  warning  'ticketsData' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  227:11  warning  'isUpcoming' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\InsightsScreen.tsx
+  68:3  warning  'pageId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\LeadsScreen.tsx
+  13:40  warning  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  21:63  warning  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  23:35  warning  'error' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  23:64  warning  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  29:48  warning  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\MonetizeScreen.tsx
+  38:3  warning  'tier' is defined but never used. Allowed unused args must match /^_/u                   @typescript-eslint/no-unused-vars
+  58:9  warning  'freeFeatures' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\PageSettingsScreen.tsx
+  21:3   warning  'CreditCard' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  22:3   warning  'Lock' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  61:40  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  66:18  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  85:3   warning  'pageId' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+  91:3   warning  'isPublished' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  95:3   warning  'seoKeywords' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  97:3   warning  'premiumTier' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\PagesScreen.tsx
+  26:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\settings\AccountSettingsTab.tsx
+    7:5  warning  'User' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  125:5  warning  'premiumTier' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\dashboard-v2\screens\settings\PageSettingsTab.tsx
+  28:15  warning  'ProfileBlock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\AIGenerator.tsx
+  13:15  warning  'Block' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:22  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\BlockEditor.tsx
+  65:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\BlockEditorV2.tsx
+    7:10  warning  'motion' is defined but never used. Allowed unused vars must match /^_/u                                                    @typescript-eslint/no-unused-vars
+    7:18  warning  'AnimatePresence' is defined but never used. Allowed unused vars must match /^_/u                                           @typescript-eslint/no-unused-vars
+   19:10  warning  'ScrollArea' is defined but never used. Allowed unused vars must match /^_/u                                                @typescript-eslint/no-unused-vars
+   23:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u                                                        @typescript-eslint/no-unused-vars
+  125:46  warning  Unexpected any. Specify a different type                                                                                    @typescript-eslint/no-explicit-any
+  144:52  warning  Unexpected any. Specify a different type                                                                                    @typescript-eslint/no-explicit-any
+  157:8   warning  React Hook useCallback has a missing dependency: 'performSave'. Either include it or remove the dependency array            react-hooks/exhaustive-deps
+  160:50  warning  Unexpected any. Specify a different type                                                                                    @typescript-eslint/no-explicit-any
+  229:23  error    React Hook "useMemo" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\BlockInsertButton.tsx
+  27:37  warning  'BlockRecommendation' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\BlockManager.tsx
+  115:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\BlockRenderer.tsx
+   93:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  115:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  119:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  123:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  127:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  131:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  135:7  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\DraggableBlockList.tsx
+  124:39  warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  131:9   warning  'isPremiumBlock' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\GridEditor.tsx
+    1:39  warning  'useMemo' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+    3:45  warning  'GripHorizontal' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+   34:18  warning  'AnimatePresence' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  282:3   warning  'gridConfig' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\InlineEditableBlock.tsx
+  19:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\MobileSettingsSheet.tsx
+   43:10  warning  'openPremiumPurchase' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+   47:10  warning  'FriendsPanel' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  134:3   warning  'premiumTier' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\MobileToolbar.tsx
+   7:3  warning  'Save' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  23:3  warning  'Check' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  58:3  warning  'saving' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  60:3  warning  'onSave' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\StructureView.tsx
+  100:10  warning  'expandedBlocks' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  100:26  warning  'setExpandedBlocks' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  103:30  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\TemplateGallery.tsx
+   13:50  warning  'Search' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+  585:28  warning  'setSelectedTemplate' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  628:44  warning  Unexpected any. Specify a different type                                                        @typescript-eslint/no-explicit-any
+  656:30  warning  'isLoading' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  805:29  warning  'profile' is defined but never used. Allowed unused args must match /^_/u                       @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\TemplateMarketplace.tsx
+   13:16  warning  'TabsContent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  229:57  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  454:50  warning  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\editor\TemplatePersonalization.tsx
+  66:80  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\event-forms\EventFileUpload.tsx
+  92:13  warning  'fileExt' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\event-forms\EventFormBuilder.tsx
+   17:10   warning  'ScrollArea' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   19:73   warning  'I18nText' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+   45:3    warning  'Settings' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+   46:3    warning  'Eye' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   96:37   warning  'index' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+  116:50   warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  178:70   warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  233:73   warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  246:135  warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  316:44   warning  'sections' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+  327:48   warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  330:114  warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  361:12   warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\ArrayFieldList.tsx
+   8:10  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  17:41  warning  'items' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\CurrencySelect.tsx
+  14:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  53:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\FileUpload.tsx
+    2:30  warning  'FileText' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+    2:40  warning  'Download' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   87:13  warning  'fileExt' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  120:21  warning  Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\FlexibleMultilingualInput.tsx
+  12:39  warning  'Globe' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  17:3   warning  'getI18nText' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\ImageCropper.tsx
+  24:3  warning  'aspectRatio' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\MediaUpload.tsx
+   50:9   warning  'isGifUrl' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  112:21  warning  Unexpected any. Specify a different type                                             @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\MultilingualInput.tsx
+  13:3  warning  'LANGUAGES' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+  63:7  warning  'RECOMMENDED_LANGUAGES' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\form-fields\RichTextEditor.tsx
+  153:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\friends\FriendsPanel.tsx
+  7:16  warning  'TabsContent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\gallery\CommunityGallery.tsx
+  1:20  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\gallery\GalleryPageCard.tsx
+  10:10  warning  'NICHE_ICONS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  10:28  warning  'Niche' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  92:17  warning  'e' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\gallery\Leaderboard.tsx
+   2:18  warning  'Medal' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+   6:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  21:9   warning  'periodLabels' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\LandingGallerySection.tsx
+  12:10  warning  'NICHES' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\PartnersSection.tsx
+  27:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\PremiumValueSection.tsx
+  13:3  warning  'ArrowRight' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  15:3  warning  'Sparkles' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  25:9  warning  'router' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\TableOfContents.tsx
+  38:37  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\UseCasesGallery.tsx
+  15:3  warning  'Heart' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  16:3  warning  'Building2' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\BentoGridSection.tsx
+  2:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\DynamicIslandNav.tsx
+  3:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\HeroSection.tsx
+   7:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   8:10  warning  'Button' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+  23:11  warning  'rotate' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\InteractiveDemo.tsx
+    6:26  warning  'Trans' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   75:41  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  116:42  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\LiquidCursor.tsx
+  46:8  warning  React Hook useEffect has missing dependencies: 'cursorX' and 'cursorY'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\LogoTicker.tsx
+   1:10  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   2:18  warning  'useScroll' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+   2:29  warning  'useTransform' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   3:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   5:10  warning  'Briefcase' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  16:27  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\landing\v2\PricingAurora.tsx
+  3:17  warning  'X' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\layout\NavLink.tsx
+  28:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\legal\CookieConsent.tsx
+  24:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  33:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\legal\TermsOfServiceModal.tsx
+  19:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\legal\TurnstileWidget.tsx
+  80:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\motion\Reveal.tsx
+  130:10  warning  'isVisible' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\onboarding\AIBuilderWizard.tsx
+   31:3   warning  'User' is defined but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+   39:25  warning  'createBaseBlock' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   60:11  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  203:13  warning  'userDescription' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\onboarding\BlockHint.tsx
+  160:40  warning  'blockId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\onboarding\NicheOnboarding.tsx
+   10:3   warning  'Scissors' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   11:3   warning  'Camera' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   18:3   warning  'Megaphone' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   97:10  warning  'generating' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  154:59  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\onboarding\OnboardingWizard.tsx
+   13:10  warning  'Card' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   24:3   warning  'Scissors' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   25:3   warning  'Camera' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+  104:10  warning  'generating' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  145:59  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\onboarding\QuickStartFlow.tsx
+   27:3   warning  'Layout' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   78:10  warning  'generating' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  120:59  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\profile\FrameSelector.tsx
+  10:3  warning  'FRAME_OPTIONS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\pwa\InstallPromptDialog.tsx
+   3:10  warning  'X' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  37:56  warning  Unexpected any. Specify a different type                             @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\pwa\PWAUpdatePrompt.tsx
+   2:10  warning  'Button' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+   3:10  warning  'Card' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+   4:10  warning  'RefreshCw' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   8:15  warning  Unexpected any. Specify a different type                                     @typescript-eslint/no-explicit-any
+  22:17  warning  Unexpected console statement                                                 no-console
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\referral\ShareAfterPublishDialog.tsx
+  30:29  warning  'copyCode' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  54:16  warning  'e' is defined but never used                                                        @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\screens\Auth.tsx
+  124:6   warning  React Hook useEffect has a missing dependency: 't'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  260:14  warning  'e' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+  296:14  warning  'e' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\screens\AuthCallback.tsx
+  39:84  warning  'session' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\screens\Experts.tsx
+  11:21  warning  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  55:9   warning  'searchParams' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  63:32  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\screens\Gallery.tsx
+   15:3   warning  'TrendingUp' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   18:3   warning  'Filter' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   19:3   warning  'Copy' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   20:3   warning  'ExternalLink' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   21:3   warning  'Crown' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   23:3   warning  'Star' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   27:10  warning  'Card' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   28:10  warning  'Badge' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   29:10  warning  'Avatar' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+   29:18  warning  'AvatarFallback' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+   29:34  warning  'AvatarImage' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+   31:10  warning  'SkeletonCard' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   32:10  warning  'CommunityGallery' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  136:43  warning  'pageSlug' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\screens\Pricing.tsx
+    9:35  warning  'Sparkles' is defined but never used. Allowed unused vars must match /^_/u                   @typescript-eslint/no-unused-vars
+   30:5   warning  'isPremium' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   42:10  warning  'selectedPlan' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   42:24  warning  'setSelectedPlan' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  111:39  warning  'isPaymentLoading' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\screens\Terms.tsx
+  7:10  warning  'ScrollArea' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\seo\AEOOptimizer.tsx
+  43:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\seo\CrawlerFriendlyContent.tsx
+  17:10  warning  'generateSectionAnchors' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  66:91  warning  Unexpected any. Specify a different type                                                  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\seo\EnhancedSEOHead.tsx
+   22:10  warning  'generateSectionAnchors' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+  146:6   warning  React Hook useMemo has an unnecessary dependency: 'updatedAt'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\settings\LinkedAccountsSection.tsx
+   27:41  warning  'userEmail' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+   36:10  warning  'gcalLastSync' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   96:15  warning  'data' is assigned a value but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  147:14  warning  'error' is defined but never used                                                        @typescript-eslint/no-unused-vars
+  162:45  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  166:27  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+  189:13  warning  'redirectUri' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\social\GiftPremiumDialog.tsx
+  4:10  warning  'Input' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\streak\StreakDisplay.tsx
+  2:31  warning  'Calendar' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  2:53  warning  'X' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\templates\MyTemplatesPanel.tsx
+   27:3   warning  'Layers' is defined but never used. Allowed unused vars must match /^_/u                                          @typescript-eslint/no-unused-vars
+   85:6   warning  React Hook useEffect has a missing dependency: 'loadTemplates'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  140:35  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  141:41  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\templates\TemplatePreviewCard.tsx
+   74:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   75:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   79:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   80:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  107:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  150:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\tokens\TokensPanel.tsx
+  26:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\translation\TranslationLanguageSelector.tsx
+    6:29  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u                                                     @typescript-eslint/no-unused-vars
+   11:10  warning  'Switch' is defined but never used. Allowed unused vars must match /^_/u                                                        @typescript-eslint/no-unused-vars
+   12:10  warning  'Label' is defined but never used. Allowed unused vars must match /^_/u                                                         @typescript-eslint/no-unused-vars
+   33:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   63:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   64:59  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+   76:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  167:9   warning  'handleAutoDetectLanguage' is assigned a value but never used. Allowed unused vars must match /^_/u                             @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\badge.tsx
+   2:20  warning  'VariantProps' is defined but never used. Allowed unused vars must match /^_/u                                                  @typescript-eslint/no-unused-vars
+  33:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\button.tsx
+  78:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\card.tsx
+  86:81  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\form.tsx
+  129:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\input.tsx
+  49:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\language-selector.tsx
+   7:30  warning  'Globe' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  16:10  warning  'LANGUAGE_DEFINITIONS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  54:17  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\navigation-menu.tsx
+  111:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\select.tsx
+  7:1   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  8:15  warning  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\sidebar.tsx
+  636:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\sonner.tsx
+  27:19  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\textarea.tsx
+  42:20  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\components\ui\toggle.tsx
+  37:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\contexts\LanguageContext.tsx
+    1:78  warning  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                                                                        @typescript-eslint/no-unused-vars
+    2:8   warning  'i18n' is defined but never used. Allowed unused vars must match /^_/u                                                                           @typescript-eslint/no-unused-vars
+   50:59  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  164:10  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  166:14  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  173:49  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  173:75  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  178:50  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  178:80  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  183:41  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  203:55  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  214:6   warning  React Hook useCallback has a missing dependency: 'translateBlocksToMultipleLanguagesInternal'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  231:42  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  238:35  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  253:47  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  258:39  warning  Unexpected any. Specify a different type                                                                                                         @typescript-eslint/no-explicit-any
+  305:5   warning  React Hook useCallback has a missing dependency: 'translateObject'. Either include it or remove the dependency array                             react-hooks/exhaustive-deps
+  328:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                   react-refresh/only-export-components
+  336:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                   react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\domain\entities\Block.ts
+  6:15  warning  'MultilingualString' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\domain\entities\__tests__\Page.test.ts
+   76:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  112:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\admin\__tests__\useAdminTranslations.test.tsx
+   4:10  warning  'fetchTranslationsFromDB' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  35:74  warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+  63:62  warning  Unexpected any. Specify a different type                                                   @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\admin\useAdminAnalytics.ts
+  100:25  warning  'blocksData' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  266:45  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\admin\useAdminTemplates.ts
+   3:15  warning  'TemplateCategoryKey' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:48  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+  39:50  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+  49:50  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\admin\useAdminTranslations.ts
+   51:81  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   51:89  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   57:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  118:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\analytics\useAnalyticsTracking.tsx
+  13:26  warning  'trackViewContent' is defined but never used. Allowed unused vars must match /^_/u                                              @typescript-eslint/no-unused-vars
+  20:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  29:27  error    Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access            no-restricted-globals
+  33:7   error    Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access            no-restricted-globals
+  94:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\analytics\useHeatmapData.ts
+   5:19  warning  'startOfYear' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   5:32  warning  'endOfYear' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+   5:43  warning  'eachDayOfInterval' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   5:62  warning  'format' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   5:70  warning  'parseISO' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+   5:80  warning  'isSameDay' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  80:13  warning  'gridSize' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\analytics\useLandingAnalytics.ts
+   42:20  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+   59:5   error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+   71:5   error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  137:27  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  149:7   error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\analytics\usePageAnalytics.ts
+    5:22  warning  'startOfWeek' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+    5:35  warning  'startOfMonth' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+    5:58  warning  'subWeeks' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+   14:28  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  191:44  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\crm\__tests__\useLeads.test.tsx
+  25:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  64:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\crm\useLeads.ts
+  21:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\dashboard\useDashboard.ts
+  1:23  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  1:34  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\dashboard\useDashboardOnboarding.ts
+   2:10  warning  'toast' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  37:11  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\dashboard\useDashboardV2.ts
+   5:10  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u                                      @typescript-eslint/no-unused-vars
+  19:31  warning  'analyticsLoading' is assigned a value but never used. Allowed unused vars must match /^_/u                     @typescript-eslint/no-unused-vars
+  20:27  warning  'leadsLoading' is assigned a value but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+  20:41  warning  'getLeadStats' is assigned a value but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+  85:6   warning  React Hook useCallback has a missing dependency: 'dashboard'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\editor\useBlockEditor.tsx
+   10:22  warning  'BlockType' is defined but never used. Allowed unused vars must match /^_/u                             @typescript-eslint/no-unused-vars
+   97:16  warning  'error' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+  103:5   warning  React Hook useCallback has a missing dependency: 't'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\editor\useEditorHistory.ts
+  96:6  warning  React Hook useCallback has a missing dependency: 'undo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\page\useMultiPage.ts
+  407:52  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\page\usePageVersions.ts
+   40:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   49:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   80:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  102:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\ui\use-toast.ts
+  15:7  warning  'actionTypes' is assigned a value but only used as a type. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\ui\useHapticFeedback.ts
+  26:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\useRobokassa.ts
+  37:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\user\useAchievements.ts
+  6:28  warning  'UnlockedAchievement' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\user\useAuth.tsx
+  156:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\user\useDailyQuests.ts
+  10:8  warning  'Quest' is defined but never used. Allowed unused vars must match /^_/u                                 @typescript-eslint/no-unused-vars
+  43:6  warning  React Hook useCallback has a missing dependency: 't'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\user\usePremiumStatus.ts
+  27:6  warning  React Hook useEffect has a missing dependency: 'checkStatus'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\hooks\user\useReferral.ts
+  70:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\i18n\config.ts
+   66:48  warning  Unexpected any. Specify a different type                                         @typescript-eslint/no-explicit-any
+   96:58  warning  Unexpected any. Specify a different type                                         @typescript-eslint/no-explicit-any
+  101:61  warning  Unexpected any. Specify a different type                                         @typescript-eslint/no-explicit-any
+  160:25  warning  'fallbackValue' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  171:3   warning  Unexpected console statement                                                     no-console
+  172:3   warning  Unexpected console statement                                                     no-console
+  173:3   warning  Unexpected console statement                                                     no-console
+  183:72  warning  Unexpected any. Specify a different type                                         @typescript-eslint/no-explicit-any
+  189:5   warning  Unexpected console statement                                                     no-console
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\i18n\validation.ts
+  187:7  warning  Unexpected console statement  no-console
+  188:7  warning  Unexpected console statement  no-console
+  189:7  warning  Unexpected console statement  no-console
+  194:5  warning  Unexpected console statement  no-console
+  207:5  warning  Unexpected console statement  no-console
+  210:5  warning  Unexpected console statement  no-console
+  220:3  warning  Unexpected console statement  no-console
+  248:3  warning  Unexpected console statement  no-console
+  260:7  warning  Unexpected console statement  no-console
+  262:7  warning  Unexpected console statement  no-console
+  264:7  warning  Unexpected console statement  no-console
+  269:3  warning  Unexpected console statement  no-console
+  273:5  warning  Unexpected console statement  no-console
+  275:3  warning  Unexpected console statement  no-console
+  278:5  warning  Unexpected console statement  no-console
+  279:5  warning  Unexpected console statement  no-console
+  280:5  warning  Unexpected console statement  no-console
+  281:5  warning  Unexpected console statement  no-console
+  283:5  warning  Unexpected console statement  no-console
+  286:3  warning  Unexpected console statement  no-console
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\__tests__\i18n-db-backend.test.ts
+  29:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\ai-helpers.ts
+   38:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   97:61  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  111:72  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\blocks\block-recommendations.ts
+  8:10  warning  'BLOCK_METADATA' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\blocks\block-utils.ts
+  150:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\blocks\block-validators.ts
+    8:3   warning  'BlockFormData' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  235:40  warning  'formData' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\blocks\extractors.ts
+   58:13  error    'numStr' is never reassigned. Use 'const' instead                                     prefer-const
+  129:11  warning  'lowerText' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  204:11  warning  'tokens' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  222:18  warning  'e' is defined but never used                                                         @typescript-eslint/no-unused-vars
+  251:17  error    'baseUrl' is never reassigned. Use 'const' instead                                    prefer-const
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\blocks\internal-builder.ts
+    4:5   warning  'CatalogItem' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+    6:5   warning  'PricingItem' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+    7:5   warning  'PricingBlock' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   37:37  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   53:46  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   53:67  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   60:12  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   64:39  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   64:60  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   67:51  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   77:37  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   77:57  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+   79:49  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  129:49  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  153:21  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  166:47  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  182:38  warning  'remainderServices' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  192:9   error    'blocks' is never reassigned. Use 'const' instead                                             prefer-const
+  192:58  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  210:27  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  210:75  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  211:81  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  212:23  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  222:84  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  223:27  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  224:27  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  234:23  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  246:23  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  256:30  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  256:85  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  259:26  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  260:26  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  272:22  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  285:56  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  303:30  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  306:75  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  317:28  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  326:22  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  336:26  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  347:32  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  349:32  warning  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\export\pdf-export.ts
+  111:3  warning  'formFields' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\google-forms-parser.ts
+  107:75  warning  'lang' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  201:12  warning  'error' is defined but never used                                                @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\i18n-db-backend.ts
+   8:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\i18n-helpers.ts
+   88:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo-utils.ts
+    7:15  warning  'MultilingualString' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   98:86  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+  319:21  warning  Unexpected any. Specify a different type                                              @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\__tests__\geo-schemas.repro.test.ts
+  35:17  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  37:17  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\__tests__\seo.test.ts
+  8:27  warning  'extractFAQContext' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\anchors.ts
+   92:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  110:58  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  117:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\answer-block.ts
+  123:9  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  351:9  warning  't' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\auto-faq.ts
+  8:36  warning  'BookingBlock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\entity-linking.ts
+   30:7   warning  'COMPANY_DOMAINS' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   87:71  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+   89:62  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+   99:71  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  101:71  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  153:71  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  155:62  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  163:71  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+  165:71  warning  Unexpected any. Specify a different type                                                    @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\geo-schemas.ts
+    9:58  warning  'SocialsBlock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+    9:72  warning  'BookingBlock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  366:3   warning  'pageUrl' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\seo\key-facts.ts
+    8:50  warning  'BookingBlock' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  132:14  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  145:19  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  160:19  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  161:19  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  200:19  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  202:16  warning  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  222:56  warning  'language' is defined but never used. Allowed unused args must match /^_/u      @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\storage.ts
+   34:26  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   51:13  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   69:13  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   81:16  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   90:38  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   93:21  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  106:34  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  119:38  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  122:35  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  140:38  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  144:21  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  157:16  error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  165:9   error  Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+  179:26  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  194:13  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  206:13  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  217:16  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  226:38  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+  229:21  error  Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\utils\cache-utils.ts
+   21:23  error    Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   22:17  error    Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   34:31  error    Unexpected use of 'localStorage'. Use storage utility from '@/lib/storage' instead of direct localStorage access      no-restricted-globals
+   44:23  error    Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+   45:17  error    Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+   55:31  error    Unexpected use of 'sessionStorage'. Use storage utility from '@/lib/storage' instead of direct sessionStorage access  no-restricted-globals
+   64:48  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+   71:21  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+  119:40  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\utils\icon-utils.ts
+  25:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  25:62  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\lib\utils\logger.ts
+   48:7  warning  Unexpected console statement  no-console
+   57:7  warning  Unexpected console statement  no-console
+  102:7  warning  Unexpected console statement  no-console
+  123:9  warning  Unexpected console statement  no-console
+  136:7  warning  Unexpected console statement  no-console
+  145:7  warning  Unexpected console statement  no-console
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\main.tsx
+  114:7  warning  Unexpected console statement  no-console
+  116:7  warning  Unexpected console statement  no-console
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\AdminTemplateEditor.tsx
+   11:10  warning  'Select' is defined but never used. Allowed unused vars must match /^_/u                                          @typescript-eslint/no-unused-vars
+   11:18  warning  'SelectContent' is defined but never used. Allowed unused vars must match /^_/u                                   @typescript-eslint/no-unused-vars
+   11:33  warning  'SelectItem' is defined but never used. Allowed unused vars must match /^_/u                                      @typescript-eslint/no-unused-vars
+   11:45  warning  'SelectTrigger' is defined but never used. Allowed unused vars must match /^_/u                                   @typescript-eslint/no-unused-vars
+   11:60  warning  'SelectValue' is defined but never used. Allowed unused vars must match /^_/u                                     @typescript-eslint/no-unused-vars
+   17:10  warning  'TEMPLATE_CATEGORY_KEYS' is defined but never used. Allowed unused vars must match /^_/u                          @typescript-eslint/no-unused-vars
+   17:39  warning  'TemplateCategoryKey' is defined but never used. Allowed unused vars must match /^_/u                             @typescript-eslint/no-unused-vars
+   17:60  warning  'getTemplateCategoryLabel' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+   57:8   warning  React Hook useEffect has a missing dependency: 'fetchTemplate'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   61:56  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+   69:35  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  112:54  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  119:54  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+  294:55  warning  Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\AdminTranslations.tsx
+  198:15  warning  'flat' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\DashboardV2.tsx
+   18:10  warning  'supabase' is defined but never used. Allowed unused vars must match /^_/u                             @typescript-eslint/no-unused-vars
+   70:7   warning  'QuickStartFlow' is assigned a value but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   91:24  warning  'setSearchParams' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  112:11  warning  'canUseCustomPageBackground' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  153:10  warning  'showQuickStart' is assigned a value but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  159:53  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  159:68  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  159:79  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  220:9   warning  'handleUpdateSlug' is assigned a value but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  228:9   warning  'handleUpdateCustomDomain' is assigned a value but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  434:32  warning  'id' is defined but never used. Allowed unused args must match /^_/u                                   @typescript-eslint/no-unused-vars
+  438:33  warning  'id' is defined but never used. Allowed unused args must match /^_/u                                   @typescript-eslint/no-unused-vars
+  459:34  warning  'action' is defined but never used. Allowed unused args must match /^_/u                               @typescript-eslint/no-unused-vars
+  492:67  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  515:56  warning  Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\EventScanner.tsx
+   33:10  warning  'format' is defined but never used. Allowed unused vars must match /^_/u                                                         @typescript-eslint/no-unused-vars
+   78:9   warning  'locale' is assigned a value but never used. Allowed unused vars must match /^_/u                                                @typescript-eslint/no-unused-vars
+  391:26  warning  'e' is defined but never used. Allowed unused args must match /^_/u                                                              @typescript-eslint/no-unused-vars
+  434:18  warning  'error' is defined but never used. Allowed unused args must match /^_/u                                                          @typescript-eslint/no-unused-vars
+  496:6   warning  React Hook useEffect has missing dependencies: 'scanning' and 'startCamera'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\Index.tsx
+  23:10  warning  'Button' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  24:10  warning  'LanguageSwitcher' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\PublicPage.tsx
+    1:40  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+    7:26  warning  'ExternalLink' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+    7:40  warning  'Copy' is defined but never used. Allowed unused vars must match /^_/u                       @typescript-eslint/no-unused-vars
+   28:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u                         @typescript-eslint/no-unused-vars
+   44:25  warning  'setShowWatermark' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   77:9   warning  'error' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  116:50  warning  Unexpected any. Specify a different type                                                     @typescript-eslint/no-explicit-any
+  117:45  warning  Unexpected any. Specify a different type                                                     @typescript-eslint/no-explicit-any
+  118:43  warning  Unexpected any. Specify a different type                                                     @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\Terms.tsx
+  5:10  warning  'ScrollArea' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\__tests__\Gallery.test.tsx
+   5:18  warning  'screen' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  13:32  warning  Unexpected any. Specify a different type                                  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\pages\__tests__\PublicPage.test.tsx
+  7:10  warning  'BrowserRouter' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\platform\next\link.ts
+  15:12  warning  'prefetch' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\platform\supabase\client.ts
+  4:10  warning  'storage' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\repositories\implementations\SupabasePageRepository.ts
+   7:10  warning  'success' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   7:19  warning  'failure' is defined but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+   9:36  warning  'EditorMode' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  21:33  warning  'DEFAULT_THEME' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  21:48  warning  'DEFAULT_SEO' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\repositories\implementations\SupabaseUserRepository.ts
+  7:10  warning  'success' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\repositories\interfaces\IPageRepository.ts
+  7:21  warning  'PageTheme' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  7:32  warning  'PageSeo' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  7:41  warning  'GridConfig' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:53  warning  'EditorMode' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\services\__tests__\fintech.test.ts
+   34:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   51:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   58:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   63:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   94:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  102:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  111:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  118:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  119:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\services\pages.ts
+    5:57  warning  'EditorMode' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  301:45  warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  301:70  warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+  325:31  warning  Unexpected any. Specify a different type                                      @typescript-eslint/no-explicit-any
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\services\user.ts
+    5:15  warning  'DbUserProfile' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  150:12  warning  'error' is defined but never used                                                @typescript-eslint/no-unused-vars
+  192:12  warning  'error' is defined but never used                                                @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\testing\security.test.ts
+   5:32  warning  'vi' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:14  warning  'error' is defined but never used                                     @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\testing\setup.ts
+  88:15  warning  'callback' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  88:55  warning  'options' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\testing\test-utils.tsx
+  42:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  45:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  75:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  90:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  93:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\types\blocks\base.ts
+  5:15  warning  'I18nText' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  5:25  warning  'MultilingualString' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\types\language-context.ts
+  6:15  warning  'SupportedLanguage' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\admin\OneDrive - ╨г╨Ю '╨Р╨╗╨╝╨░╤В╤Л ╨Ь╨╡╨╜╨╡╨┤╨╢╨╝╨╡╨╜╤В ╨г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В'\╨Ф╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л\lnkmx my\inkmax\src\use-cases\page\__tests__\SavePageUseCase.test.ts
+  17:72  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+тЬЦ 834 problems (47 errors, 787 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

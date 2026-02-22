@@ -7,7 +7,6 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { format, subDays, startOfDay, eachDayOfInterval } from 'date-fns';
-import { ru } from 'date-fns/locale';
 import { Loader2 } from 'lucide-react';
 
 interface DailyData {
@@ -63,7 +62,7 @@ export function AdminCharts() {
   const [socialStats, setSocialStats] = useState<SocialStatsData[]>([]);
   const [blockTypeStats, setBlockTypeStats] = useState<{ name: string; count: number; color: string }[]>([]);
 
-  const loadChartData = async () => {
+  const loadChartData = useCallback(async () => {
     setLoading(true);
     await Promise.all([
       loadDailyGrowth(),
@@ -74,7 +73,7 @@ export function AdminCharts() {
       loadBlockTypeStats()
     ]);
     setLoading(false);
-  };
+  }, []);
 
   const loadDailyGrowth = async () => {
     try {
@@ -291,7 +290,7 @@ export function AdminCharts() {
 
   useEffect(() => {
     void loadChartData();
-  }, []);
+  }, [loadChartData]);
 
   if (loading) {
     return (

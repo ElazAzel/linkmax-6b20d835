@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/platform/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tables } from '@/integrations/supabase/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Check, X, Clock, Banknote, Loader2, Search, ExternalLink } from 'lucide-react';
+import { Check, X, Clock, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils/utils';
+
+type PayoutRequestWithProfile = Tables<'payout_requests'> & {
+    user_profiles: {
+        full_name: string | null;
+        email: string | null;
+    } | null;
+};
 
 export const AdminFintechTab = () => {
-    const [requests, setRequests] = useState<any[]>([]);
+    const [requests, setRequests] = useState<PayoutRequestWithProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -29,7 +37,7 @@ export const AdminFintechTab = () => {
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setRequests(data || []);
+            setRequests((data as any) || []);
         } catch (err: any) {
             toast.error("Failed to fetch requests: " + err.message);
         } finally {
@@ -119,10 +127,10 @@ export const AdminFintechTab = () => {
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant="outline" className="bg-primary/5">
-                                                {req.payout_method?.type === 'card' ? 'Карта' : 'Другое'}
+                                                {(req.payout_method as any)?.type === 'card' ? 'Карта' : 'Другое'}
                                             </Badge>
                                             <p className="text-[10px] mt-1 text-muted-foreground truncate max-w-[150px]">
-                                                {req.payout_method?.value}
+                                                {(req.payout_method as any)?.value}
                                             </p>
                                         </TableCell>
                                         <TableCell className="text-sm">
@@ -173,7 +181,3 @@ export const AdminFintechTab = () => {
     );
 };
 
-// Simple CN helper since it might not be imported in this context otherwise
-function cn(...inputs: any[]) {
-    return inputs.filter(Boolean).join(' ');
-}

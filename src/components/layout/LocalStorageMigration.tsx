@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AlertCircle, Upload, X } from 'lucide-react';
 import { savePage } from '@/services/database';
 import { toast } from 'sonner';
+import { storage } from '@/lib/storage';
+
 import type { PageData } from '@/types/page';
 
 const STORAGE_KEY = 'linkmax_page_data';
@@ -21,11 +23,11 @@ export function LocalStorageMigration({ userId, onMigrated }: LocalStorageMigrat
 
   useEffect(() => {
     // Check if migration was already done
-    const migrationDone = localStorage.getItem(MIGRATION_DONE_KEY);
+    const migrationDone = storage.get(MIGRATION_DONE_KEY);
     if (migrationDone) return;
 
     // Check for local storage data
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = storage.getRaw(STORAGE_KEY);
     if (stored) {
       try {
         const data = JSON.parse(stored) as PageData;
@@ -39,28 +41,28 @@ export function LocalStorageMigration({ userId, onMigrated }: LocalStorageMigrat
 
   const handleMigrate = async () => {
     if (!localData) return;
-    
+
     setMigrating(true);
     const { error } = await savePage(localData, userId);
-    
+
     if (error) {
       console.error('Migration error:', error);
       toast.error('Failed to migrate your data');
       setMigrating(false);
       return;
     }
-    
+
     // Mark migration as done
-    localStorage.setItem(MIGRATION_DONE_KEY, 'true');
-    localStorage.removeItem(STORAGE_KEY);
-    
+    storage.set(MIGRATION_DONE_KEY, 'true');
+    storage.remove(STORAGE_KEY);
+
     toast.success('Your page has been migrated to the cloud!');
     setShow(false);
     onMigrated();
   };
 
   const handleDismiss = () => {
-    localStorage.setItem(MIGRATION_DONE_KEY, 'true');
+    storage.set(MIGRATION_DONE_KEY, 'true');
     setShow(false);
   };
 

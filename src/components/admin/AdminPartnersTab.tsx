@@ -74,7 +74,7 @@ export function AdminPartnersTab() {
     const { data: partners, isLoading } = useQuery({
         queryKey: ['admin-partners'],
         queryFn: async () => {
-            const { data, error } = await (supabase as any)
+            const { data, error } = await supabase
                 .from('partners')
                 .select('*')
                 .order('sort_order', { ascending: true });
@@ -87,7 +87,7 @@ export function AdminPartnersTab() {
     // Create partner
     const createMutation = useMutation({
         mutationFn: async (data: PartnerFormData) => {
-            const { error } = await (supabase as any).from('partners').insert([data]);
+            const { error } = await supabase.from('partners').insert([data]);
             if (error) throw error;
         },
         onSuccess: () => {
@@ -104,7 +104,7 @@ export function AdminPartnersTab() {
     // Update partner
     const updateMutation = useMutation({
         mutationFn: async ({ id, data }: { id: string; data: PartnerFormData }) => {
-            const { error } = await (supabase as any).from('partners').update(data).eq('id', id);
+            const { error } = await supabase.from('partners').update(data).eq('id', id);
             if (error) throw error;
         },
         onSuccess: () => {
@@ -121,7 +121,7 @@ export function AdminPartnersTab() {
     // Delete partner
     const deleteMutation = useMutation({
         mutationFn: async (id: string) => {
-            const { error } = await (supabase as any).from('partners').delete().eq('id', id);
+            const { error } = await supabase.from('partners').delete().eq('id', id);
             if (error) throw error;
         },
         onSuccess: () => {

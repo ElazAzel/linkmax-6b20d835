@@ -22,7 +22,9 @@ import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { getEventRegistrationCount, isEmailRegistered } from '@/services/events';
 import { downloadICS, getGoogleCalendarUrl, type CalendarEvent } from '@/lib/utils/calendar-utils';
 import { EventFormRenderer } from '@/components/event-forms/EventFormRenderer';
-import { trackLead, trackPurchase } from '@/components/analytics/TrackingScripts';
+import { trackLead, trackPurchase } from '@/lib/analytics';
+import { storage } from '@/lib/storage';
+
 import type { EventBlock as EventBlockType, EventFormField } from '@/types/page';
 
 interface EventBlockProps {
@@ -105,18 +107,13 @@ export const EventBlock = memo(function EventBlock({
 
   useEffect(() => {
     if (!isOpen) return;
-    const raw = localStorage.getItem(draftKey);
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw) as { updatedAt: number; data: Record<string, FormValue> };
-      if (Date.now() - parsed.updatedAt > DRAFT_TTL_MS) {
-        localStorage.removeItem(draftKey);
-        return;
-      }
-      setFormValues(parsed.data || {});
-    } catch {
-      localStorage.removeItem(draftKey);
+    const parsed = storage.get<{ updatedAt: number; data: Record<string, FormValue> }>(draftKey);
+    if (!parsed) return;
+    if (Date.now() - parsed.updatedAt > DRAFT_TTL_MS) {
+      storage.remove(draftKey);
+      return;
     }
+    setFormValues(parsed.data || {});
   }, [draftKey, isOpen]);
 
   useEffect(() => {
@@ -128,10 +125,7 @@ export const EventBlock = memo(function EventBlock({
   }, [block.eventId, user]);
 
   const saveDraft = useCallback(() => {
-    localStorage.setItem(
-      draftKey,
-      JSON.stringify({ updatedAt: Date.now(), data: formValues })
-    );
+    storage.set(draftKey, { updatedAt: Date.now(), data: formValues });
   }, [draftKey, formValues]);
 
   const handlePromptSignup = () => {
@@ -341,7 +335,7 @@ export const EventBlock = memo(function EventBlock({
           ? t('event.registrationPending', 'Заявка отправлена на рассмотрение')
           : t('event.registrationSuccess', 'Регистрация подтверждена')
       );
-      localStorage.removeItem(draftKey);
+      storage.remove(draftKey);
 
       // Track events
       trackLead();

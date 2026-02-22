@@ -8,6 +8,8 @@ import { GalleryFilters } from './GalleryFilters';
 import { GalleryPageCard } from './GalleryPageCard';
 import { FeaturedPages } from './FeaturedPages';
 import { NicheFilter } from './NicheFilter';
+import { storage } from '@/lib/storage';
+
 
 interface CommunityGalleryProps {
   compact?: boolean;
@@ -25,15 +27,8 @@ export function CommunityGallery({
   const { t } = useTranslation();
   const { pages, loading, likePage, unlikePage, selectedNiche, setSelectedNiche, nicheCounts } = useGallery();
   const [likedPages, setLikedPages] = useState<Set<string>>(() => {
-    const storedLikes = localStorage.getItem('linkmax_liked_pages');
-    if (storedLikes) {
-      try {
-        return new Set(JSON.parse(storedLikes));
-      } catch {
-        return new Set();
-      }
-    }
-    return new Set();
+    const storedLikes = storage.get<string[]>('linkmax_liked_pages');
+    return new Set(storedLikes || []);
   });
 
   const {
@@ -56,13 +51,13 @@ export function CommunityGallery({
       const newLikedPages = new Set(likedPages);
       newLikedPages.delete(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
+      storage.set('linkmax_liked_pages', Array.from(newLikedPages));
       await unlikePage(pageId);
     } else {
       // Like
       const newLikedPages = new Set(likedPages).add(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
+      storage.set('linkmax_liked_pages', Array.from(newLikedPages));
       await likePage(pageId);
     }
   }, [likedPages, likePage, unlikePage]);

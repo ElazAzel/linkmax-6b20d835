@@ -7,12 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AnalyticsFilterPanel } from './AnalyticsFilterPanel';
 import { useAdminAnalytics, COLORS } from '@/hooks/admin/useAdminAnalytics';
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ComposedChart
+  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
-  Loader2, Eye, MousePointer, Share2, TrendingUp, TrendingDown,
-  Users, Clock, Activity, BarChart3, Target, Zap, Calendar,
+  Loader2, Eye, MousePointer, TrendingUp, TrendingDown,
+  Users, Activity, Calendar,
   Monitor, Smartphone, Tablet, Globe
 } from 'lucide-react';
 

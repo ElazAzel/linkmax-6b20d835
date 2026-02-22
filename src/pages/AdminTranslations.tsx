@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from '@/hooks/admin/useAdminAuth';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -22,14 +22,9 @@ import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
 import { useAdminTranslations, flattenObject, setNestedValue } from '@/hooks/admin/useAdminTranslations';
-import { supabase } from '@/integrations/supabase/client';
-import { upsertToDB } from '@/lib/i18n-db-backend';
 
-// Static fallbacks for initial load and development
-import ru from '@/i18n/locales/ru.json';
-import en from '@/i18n/locales/en.json';
-import kk from '@/i18n/locales/kk.json';
-// ... rest will be loaded from DB or static imports as fallback
+
+// DB translations are used primarily via useAdminTranslations hook
 
 type TranslationData = Record<string, unknown>;
 
@@ -158,7 +153,6 @@ export default function AdminTranslations() {
     translations,
     activeLanguages,
     allKeys,
-    loading: dbLoading,
     saving,
     updateTranslation,
     upsertFullTranslations,
@@ -192,8 +186,9 @@ export default function AdminTranslations() {
         const query = searchQuery.toLowerCase();
         const matchesKey = key.toLowerCase().includes(query);
         const matchesValue = activeLanguages.some(lang => {
-          const flat = flattenObject(translations[lang] || {});
-          return flat[key]?.toLowerCase().includes(query);
+          const trans = translations[lang] || {};
+          const flatObj = flattenObject(trans);
+          return flatObj[key]?.toLowerCase().includes(query);
         });
         if (!matchesKey && !matchesValue) return false;
       }

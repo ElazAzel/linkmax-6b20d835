@@ -1,5 +1,6 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
+import { Json } from '@/integrations/supabase/types';
 
 export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';
@@ -12,11 +13,17 @@ export interface WalletTransaction {
     type: TransactionType;
     status: TransactionStatus;
     description: string;
-    metadata: Record<string, any>;
+    metadata: Record<string, unknown>;
     related_entity_id?: string;
     related_entity_type?: string;
     created_at: string;
 }
+
+export type PayoutMethod = {
+    type: 'card' | 'bank' | 'crypto' | string;
+    value: string;
+    details?: Record<string, unknown>;
+};
 
 const DEFAULT_TAKE_RATE = 0.05; // 5% commission
 
@@ -33,8 +40,8 @@ export const fintechService = {
         amount: number;
         description: string;
         relatedEntityId?: string;
-        relatedEntityType?: 'lead' | 'booking' | 'event';
-        metadata?: Record<string, any>;
+        relatedEntityType?: 'lead' | 'booking' | 'event' | 'wallet_transaction';
+        metadata?: Record<string, unknown>;
     }) {
         try {
             // 1. Get or ensure wallet exists
@@ -61,7 +68,7 @@ export const fintechService = {
                     description: params.description,
                     related_entity_id: params.relatedEntityId,
                     related_entity_type: params.relatedEntityType,
-                    metadata: params.metadata || {}
+                    metadata: (params.metadata || {}) as Json
                 })
                 .select()
                 .single();
@@ -81,7 +88,7 @@ export const fintechService = {
                     description: `Platform fee (5%) for: ${params.description}`,
                     related_entity_id: transaction.id,
                     related_entity_type: 'wallet_transaction',
-                    metadata: { parent_tx_id: transaction.id }
+                    metadata: { parent_tx_id: transaction.id } as Json
                 });
 
             return transaction;
@@ -134,7 +141,7 @@ export const fintechService = {
         }
     },
 
-    async requestPayout(params: { userId: string; amount: number; method: any; notes?: string }) {
+    async requestPayout(params: { userId: string; amount: number; method: PayoutMethod; notes?: string }) {
         const { userId, amount, method, notes } = params;
 
         // 1. Get wallet
@@ -155,7 +162,7 @@ export const fintechService = {
                 user_id: userId,
                 wallet_id: wallet.id,
                 amount,
-                payout_method: method,
+                payout_method: method as Json,
                 notes,
                 status: 'requested'
             })

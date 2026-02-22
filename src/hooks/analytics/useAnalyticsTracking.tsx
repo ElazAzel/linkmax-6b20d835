@@ -10,7 +10,7 @@ import {
   trackBlockClick,
   trackShare
 } from '@/services/analytics';
-import { trackClickLink, trackViewContent } from '@/components/analytics/TrackingScripts';
+import { trackClickLink, trackViewContent } from '@/lib/analytics';
 
 interface UseAnalyticsTrackingOptions {
   pageId: string | undefined;

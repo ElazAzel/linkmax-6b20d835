@@ -4,8 +4,8 @@
  */
 import { useState, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
-  Dialog, 
+import {
+  Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
@@ -30,6 +30,8 @@ import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 import { NICHES, NICHE_ICONS, type Niche } from '@/lib/niches';
+import { storage } from '@/lib/storage';
+
 import type { Block } from '@/types/page';
 
 interface QuickStartFlowProps {
@@ -75,10 +77,10 @@ export const QuickStartFlow = memo(function QuickStartFlow({
   const [description, setDescription] = useState('');
   const [generating, setGenerating] = useState(false);
 
-  const progress = 
+  const progress =
     step === 'intro' ? 0 :
-    step === 'niche' ? 33 : 
-    step === 'details' ? 66 : 100;
+      step === 'niche' ? 33 :
+        step === 'details' ? 66 : 100;
 
   const handleSelectNiche = (niche: Niche) => {
     setSelectedNiche(niche);
@@ -114,18 +116,18 @@ export const QuickStartFlow = memo(function QuickStartFlow({
       if (error) throw error;
 
       const { profile, blocks } = data.result;
-      
+
       const formattedBlocks: Block[] = blocks.map((block: any, index: number) => ({
         id: `${block.type}-${Date.now()}-${index}`,
         ...block,
       }));
 
       setStep('complete');
-      
+
       setTimeout(() => {
         toast.success(t('onboarding.pageGenerated', 'Страница создана! 🎉'));
         onComplete({ profile, blocks: formattedBlocks, niche: selectedNiche });
-        localStorage.setItem('linkmax_onboarding_completed', 'true');
+        storage.set('linkmax_onboarding_completed', 'true');
         onClose();
       }, 1500);
 
@@ -139,7 +141,7 @@ export const QuickStartFlow = memo(function QuickStartFlow({
   }, [selectedNiche, name, description, t, onComplete, onClose]);
 
   const handleSkip = () => {
-    localStorage.setItem('linkmax_onboarding_completed', 'true');
+    storage.set('linkmax_onboarding_completed', 'true');
     onClose();
   };
 
@@ -164,7 +166,7 @@ export const QuickStartFlow = memo(function QuickStartFlow({
             <div className="inline-flex items-center justify-center h-20 w-20 rounded-[24px] bg-gradient-to-br from-primary/20 to-violet-500/20 mb-6">
               <Zap className="h-10 w-10 text-primary" />
             </div>
-            
+
             <h2 className="text-2xl font-black mb-3">
               {t('quickStart.welcomeTitle', 'Создайте страницу за 60 секунд')}
             </h2>
@@ -182,7 +184,7 @@ export const QuickStartFlow = memo(function QuickStartFlow({
                 {t('quickStart.startWithAI', 'Создать с AI')}
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
-              
+
               <Button
                 variant="ghost"
                 className="w-full h-12 rounded-2xl text-muted-foreground"
@@ -198,9 +200,9 @@ export const QuickStartFlow = memo(function QuickStartFlow({
         {step === 'niche' && (
           <div className="p-5 pt-6 animate-fade-in">
             <div className="flex items-center gap-3 mb-6">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleBack}
                 className="h-11 w-11 rounded-xl shrink-0"
               >
@@ -242,9 +244,9 @@ export const QuickStartFlow = memo(function QuickStartFlow({
         {step === 'details' && selectedNiche && (
           <div className="p-5 pt-6 animate-fade-in">
             <div className="flex items-center gap-3 mb-6">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleBack}
                 className="h-11 w-11 rounded-xl shrink-0"
               >
@@ -293,15 +295,15 @@ export const QuickStartFlow = memo(function QuickStartFlow({
             </div>
 
             <div className="pt-6 flex gap-3">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handleSkip}
                 className="flex-1 h-13 rounded-xl font-bold"
               >
                 {t('common.skip', 'Пропустить')}
               </Button>
-              <Button 
-                onClick={handleGenerate} 
+              <Button
+                onClick={handleGenerate}
                 disabled={!name.trim()}
                 className="flex-[2] h-13 rounded-xl font-bold shadow-lg shadow-primary/25"
               >

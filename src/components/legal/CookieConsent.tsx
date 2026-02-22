@@ -1,25 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { storage } from '@/lib/storage';
+
 
 const CONSENT_KEY = 'lnkmx_cookie_consent';
 
 type ConsentStatus = 'accepted' | 'rejected' | null;
 
 function getConsent(): ConsentStatus {
-    try {
-        return localStorage.getItem(CONSENT_KEY) as ConsentStatus;
-    } catch {
-        return null;
-    }
+    return storage.getRaw(CONSENT_KEY) as ConsentStatus;
 }
 
 function setConsent(status: 'accepted' | 'rejected') {
-    try {
-        localStorage.setItem(CONSENT_KEY, status);
-    } catch {
-        // Ignore storage errors
-    }
+    storage.setRaw(CONSENT_KEY, status);
 }
 
 /**

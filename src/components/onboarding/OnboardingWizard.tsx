@@ -41,6 +41,7 @@ import {
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
+import { storage } from '@/lib/storage';
 import type { Block } from '@/types/page';
 import { NICHES, type Niche } from '@/lib/niches';
 
@@ -152,7 +153,7 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
       setTimeout(() => {
         toast.success(t('onboarding.pageGenerated', 'Страница создана!'));
         onComplete({ profile, blocks: formattedBlocks, niche: selectedNiche });
-        localStorage.setItem('linkmax_onboarding_completed', 'true');
+        storage.set('linkmax_onboarding_completed', 'true');
         onClose();
       }, 1500);
 
@@ -166,7 +167,7 @@ export function OnboardingWizard({ open, onClose, onComplete }: OnboardingWizard
   }, [selectedNiche, name, description, t, onComplete, onClose]);
 
   const handleSkip = () => {
-    localStorage.setItem('linkmax_onboarding_completed', 'true');
+    storage.set('linkmax_onboarding_completed', 'true');
     onClose();
   };
 

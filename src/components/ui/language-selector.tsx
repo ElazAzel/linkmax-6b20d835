@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils/utils';
 import { LANGUAGE_DEFINITIONS, type LocaleCode } from '@/lib/i18n-helpers';
+import { storage } from '@/lib/storage';
 
 // UI languages supported by the app
 const UI_LANGUAGES: { code: LocaleCode; name: string; flag: string }[] = [
@@ -53,21 +54,21 @@ export function LanguageSelector({
   const { i18n, t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const currentLang = UI_LANGUAGES.find(l => l.code === i18n.language) 
+  const currentLang = UI_LANGUAGES.find(l => l.code === i18n.language)
     || UI_LANGUAGES.find(l => l.code === 'ru')!;
 
   const handleLanguageChange = (langCode: string) => {
     i18n.changeLanguage(langCode);
-    localStorage.setItem('i18nextLng', langCode);
+    storage.setRaw('i18nextLng', langCode);
     setOpen(false);
   };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant={variant} 
-          size={size} 
+        <Button
+          variant={variant}
+          size={size}
           className={cn('gap-1.5', className)}
         >
           {showFlag && <span className="text-base">{currentLang.flag}</span>}
@@ -101,7 +102,7 @@ export function LanguageSelector({
  */
 export function LanguageSwitcher({ className }: { className?: string }) {
   const { i18n } = useTranslation();
-  
+
   const languages = UI_LANGUAGES;
   const currentIndex = languages.findIndex(l => l.code === i18n.language);
 
@@ -109,7 +110,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     const nextIndex = (currentIndex + 1) % languages.length;
     const nextLang = languages[nextIndex];
     i18n.changeLanguage(nextLang.code);
-    localStorage.setItem('i18nextLng', nextLang.code);
+    storage.setRaw('i18nextLng', nextLang.code);
   };
 
   const currentLang = languages[currentIndex] || languages[0];

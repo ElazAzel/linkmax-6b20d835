@@ -16,6 +16,7 @@ import { getPageByUserId, likeGalleryPage, unlikeGalleryPage } from '@/services/
 import { toast } from 'sonner';
 import { GiftPremiumDialog } from '@/components/social/GiftPremiumDialog';
 import { FriendActivityFeed } from '@/components/social/FriendActivityFeed';
+import { storage } from '@/lib/storage';
 
 interface FriendsPanelProps {
   onClose: () => void;
@@ -46,15 +47,8 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
   const [isSearching, setIsSearching] = useState(false);
   const [activeTab, setActiveTab] = useState('friends');
   const [likedPages, setLikedPages] = useState<Set<string>>(() => {
-    const storedLikes = localStorage.getItem('linkmax_liked_pages');
-    if (storedLikes) {
-      try {
-        return new Set(JSON.parse(storedLikes));
-      } catch {
-        return new Set();
-      }
-    }
-    return new Set();
+    const storedLikes = storage.get<string[]>('linkmax_liked_pages');
+    return new Set(storedLikes || []);
   });
   const [giftRecipient, setGiftRecipient] = useState<{
     id: string;
@@ -70,13 +64,13 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
       const newLikedPages = new Set(likedPages);
       newLikedPages.delete(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
+      storage.set('linkmax_liked_pages', Array.from(newLikedPages));
       await unlikeGalleryPage(pageId);
       toast.success(t('friends.likeRemoved', 'Like removed'));
     } else {
       const newLikedPages = new Set(likedPages).add(pageId);
       setLikedPages(newLikedPages);
-      localStorage.setItem('linkmax_liked_pages', JSON.stringify(Array.from(newLikedPages)));
+      storage.set('linkmax_liked_pages', Array.from(newLikedPages));
       await likeGalleryPage(pageId);
       toast.success(t('friends.pageLiked', 'Page liked!'));
     }

@@ -5,7 +5,7 @@
  * Admin can bump it from the admin panel to force all users to clear cache.
  */
 
-import { storage } from '@/lib/storage';
+import { storage, session } from '@/lib/storage';
 import { supabase } from '@/integrations/supabase/client';
 
 // Version key for cache invalidation
@@ -23,6 +23,7 @@ export function clearLocalStorageCache(): void {
     if (key && (
       key.startsWith('linkmax_') ||
       key.startsWith('lnkmx_') ||
+      key.startsWith('inkmax_') ||
       key.startsWith('sb-') ||
       key.includes('react-query')
     )) {
@@ -31,7 +32,7 @@ export function clearLocalStorageCache(): void {
   }
 
   keysToRemove.forEach(key => localStorage.removeItem(key));
-  storage.clear();
+  storage.clear(); // Ensure namespaced storage is cleared too
 }
 
 /**
@@ -44,13 +45,15 @@ export function clearSessionStorageCache(): void {
     const key = sessionStorage.key(i);
     if (key && (
       key.startsWith('linkmax_') ||
-      key.startsWith('lnkmx_')
+      key.startsWith('lnkmx_') ||
+      key.startsWith('inkmax_')
     )) {
       keysToRemove.push(key);
     }
   }
 
   keysToRemove.forEach(key => sessionStorage.removeItem(key));
+  session.clear(); // Ensure namespaced session storage is cleared too
 }
 
 /**

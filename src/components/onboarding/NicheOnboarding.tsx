@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { 
-  Sparkles, 
-  Scissors, 
-  Camera, 
-  Brain, 
-  Dumbbell, 
-  Music, 
-  Palette, 
+import {
+  Sparkles,
+  Scissors,
+  Camera,
+  Brain,
+  Dumbbell,
+  Music,
+  Palette,
   GraduationCap,
   Store,
   Megaphone,
@@ -35,6 +35,8 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { storage } from '@/lib/storage';
+
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import type { Block } from '@/types/page';
@@ -99,7 +101,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
 
   const handleSelectGoal = (goal: 'clicks' | 'leads' | 'bookings') => {
     setSelectedGoal(goal);
-    localStorage.setItem('linkmax_primary_goal', goal);
+    storage.set('linkmax_primary_goal', goal);
     setStep('niche');
   };
 
@@ -147,7 +149,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
       if (error) throw error;
 
       const { profile, blocks } = data.result;
-      
+
       // Transform blocks to proper Block format
       const formattedBlocks: Block[] = blocks.map((block: any, index: number) => ({
         id: `${block.type}-${Date.now()}-${index}`,
@@ -159,9 +161,9 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
 
       toast.success(t('onboarding.pageGenerated'));
       onComplete(profile, formattedBlocks, selectedNiche);
-      
+
       // Mark onboarding as completed
-      localStorage.setItem('linkmax_niche_onboarding_completed', 'true');
+      storage.set('linkmax_niche_onboarding_completed', 'true');
       onClose();
     } catch (error) {
       console.error('Generation error:', error);
@@ -173,7 +175,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
   };
 
   const handleSkip = () => {
-    localStorage.setItem('linkmax_niche_onboarding_completed', 'true');
+    storage.set('linkmax_niche_onboarding_completed', 'true');
     onClose();
   };
 
@@ -296,7 +298,7 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
                     {t('freemium.aiLimitReached', 'Лимит AI генераций исчерпан')}
                   </div>
                   <p className="text-muted-foreground text-xs mb-2">
-                    {isPremium 
+                    {isPremium
                       ? t('freemium.aiLimitResetMonthlyPro', 'Лимит обновится в следующем месяце')
                       : t('freemium.upgradeForMoreGenerations', 'Обновите до Premium для 5 генераций в месяц')
                     }
@@ -312,9 +314,9 @@ export function NicheOnboarding({ isOpen, onClose, onComplete }: NicheOnboarding
               {canGenerate && !isPremium && (
                 <div className="p-2 rounded-lg bg-muted/50 text-xs text-muted-foreground flex items-center gap-2">
                   <Sparkles className="h-3 w-3" />
-                  {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', { 
-                    count: remainingGenerations, 
-                    total: limits.maxAIPageGenerationsPerMonth 
+                  {t('freemium.aiGenerationsRemaining', 'Осталось генераций: {{count}}/{{total}}', {
+                    count: remainingGenerations,
+                    total: limits.maxAIPageGenerationsPerMonth
                   })}
                 </div>
               )}

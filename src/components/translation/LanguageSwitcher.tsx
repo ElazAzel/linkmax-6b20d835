@@ -14,7 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils/utils';
-import type { LocaleCode } from '@/lib/i18n-helpers';
+import { LocaleCode } from '@/i18n/config';
 import { useOptionalLanguage } from '@/contexts/LanguageContext';
 import { TranslationLanguageSelector, getLanguageInfo } from '@/components/translation/TranslationLanguageSelector';
 
@@ -72,6 +72,8 @@ const ALL_LANGUAGES: { code: LocaleCode; name: string; flag: string }[] = [
   { code: 'he', name: 'עברית', flag: '🇮🇱' },
 ];
 
+import { storage } from '@/lib/storage';
+
 // Default visible languages (most common)
 const DEFAULT_VISIBLE_CODES = ['ru', 'en', 'kk', 'uk', 'uz', 'tr', 'de'];
 
@@ -110,14 +112,14 @@ export function LanguageSwitcher({
   // Show browser language notification on first load
   useEffect(() => {
     if (browserLanguage && languageContext) {
-      const hasShownNotification = localStorage.getItem('browserLangNotificationShown');
+      const hasShownNotification = storage.get<boolean>('browserLangNotificationShown');
       if (!hasShownNotification && browserLanguage !== 'en') {
         // Auto-set browser language as current language on first visit
-        const storedLang = localStorage.getItem('i18nextLng');
+        const storedLang = storage.getRaw('i18nextLng');
         if (!storedLang) {
           languageContext.setCurrentLanguage(browserLanguage);
         }
-        localStorage.setItem('browserLangNotificationShown', 'true');
+        storage.set('browserLangNotificationShown', true);
       }
     }
   }, [browserLanguage, languageContext]);
@@ -424,7 +426,7 @@ export function LanguageSwitcher({
       {languageContext && (
         <TranslationLanguageSelector
           selectedLanguages={targetTranslationLanguages}
-          onSelectionChange={(langs) => languageContext.setTargetTranslationLanguages(langs)}
+          onSelectionChange={(langs) => languageContext.setTargetTranslationLanguages(langs as LocaleCode[])}
           sourceLanguage={i18n.language as LocaleCode}
           isTranslating={isTranslating}
           compact={false}
