@@ -17,9 +17,9 @@ interface TermsOfServiceModalProps {
 
 // Company details constant - exported for use in other legal pages
 export const COMPANY_DETAILS = {
-  name: 'ИП BEEGIN',
-  address: 'г. Алматы, ул. Шолохова, д. 20/7',
-  bin: '971207300019',
+  name: 'ARchitecKZ',
+  address: 'г. Алматы, ул. Шолохова, д. 20',
+  bin: '190540008684',
   bank: 'АО "Kaspi Bank"',
   kbe: '19',
   bik: 'CASPKZKA',

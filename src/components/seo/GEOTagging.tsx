@@ -62,7 +62,7 @@ export function GEOTagging({
                 email: 'admin@lnkmx.my',
                 address: {
                     '@type': 'PostalAddress',
-                    streetAddress: t('seo.organization.street', 'Sholokhov St., 20/7'),
+                    streetAddress: t('seo.organization.street', 'Sholokhov St., 20'),
                     addressLocality: 'Almaty',
                     addressRegion: 'Almaty Region',
                     postalCode: '050000',

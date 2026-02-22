@@ -65,7 +65,7 @@ export const PremiumFooter = () => {
                         <div className="flex items-start gap-2 text-muted-foreground">
                             <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
                             <span className="text-xs leading-relaxed">
-                                {t('footer.companyInfo', 'ИП «lnkmx» / БИН 123456789012 / Казахстан, г. Алматы')}
+                                {t('footer.companyInfo', 'ARchitecKZ / БИН 190540008684 / Казахстан, г. Алматы')}
                             </span>
                         </div>
                     </div>

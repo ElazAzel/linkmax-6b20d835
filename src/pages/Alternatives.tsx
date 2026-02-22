@@ -599,8 +599,8 @@ export default function Alternatives() {
 
               {/* Company Details for RoboKassa compliance */}
               <div className="text-center text-xs text-muted-foreground pt-4 border-t border-border/30">
-                <p className="mb-1">{t('alternatives.footer.company', 'IP BEEGIN • BIN: 971207300019')}</p>
-                <p className="mb-2">{t('alternatives.footer.address', 'Almaty, Sholokhov St., 20/7')}</p>
+                <p className="mb-1">{t('alternatives.footer.company', 'ARchitecKZ • BIN: 190540008684')}</p>
+                <p className="mb-2">{t('alternatives.footer.address', 'Almaty, Sholokhov St., 20')}</p>
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   <a href="mailto:admin@lnkmx.my" className="hover:text-foreground transition-colors">
                     admin@lnkmx.my

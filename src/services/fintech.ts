@@ -41,7 +41,7 @@ export const fintechService = {
         metadata?: Record<string, unknown>;
     }) {
         try {
-            const { data: wallet, error: walletError } = await supabase
+            const { data: wallet, error: walletError } = await (supabase as any)
                 .from('user_wallets')
                 .select('id')
                 .eq('user_id', params.userId)
@@ -52,7 +52,7 @@ export const fintechService = {
                 throw new Error('Wallet not found');
             }
 
-            const { data: transaction, error: txError } = await supabase
+            const { data: transaction, error: txError } = await (supabase as any)
                 .from('wallet_transactions')
                 .insert({
                     wallet_id: wallet.id,
@@ -71,7 +71,7 @@ export const fintechService = {
             if (txError) throw txError;
 
             const feeAmount = params.amount * DEFAULT_TAKE_RATE;
-            await supabase
+            await (supabase as any)
                 .from('wallet_transactions')
                 .insert({
                     wallet_id: wallet.id,
@@ -94,7 +94,7 @@ export const fintechService = {
 
     async getWalletOverview(userId: string) {
         try {
-            const { data: wallet, error: walletError } = await supabase
+            const { data: wallet, error: walletError } = await (supabase as any)
                 .from('user_wallets')
                 .select('*')
                 .eq('user_id', userId)
@@ -102,7 +102,7 @@ export const fintechService = {
 
             if (walletError) throw walletError;
 
-            const { data: transactions, error: txError } = await supabase
+            const { data: transactions, error: txError } = await (supabase as any)
                 .from('wallet_transactions')
                 .select('*')
                 .eq('user_id', userId)
@@ -111,7 +111,7 @@ export const fintechService = {
 
             if (txError) throw txError;
 
-            const { data: pendingData } = await supabase
+            const { data: pendingData } = await (supabase as any)
                 .from('wallet_transactions')
                 .select('amount')
                 .eq('user_id', userId)
@@ -134,7 +134,7 @@ export const fintechService = {
     async requestPayout(params: { userId: string; amount: number; method: PayoutMethod; notes?: string }) {
         const { userId, amount, method, notes } = params;
 
-        const { data: wallet } = await supabase
+        const { data: wallet } = await (supabase as any)
             .from('user_wallets')
             .select('id, balance')
             .eq('user_id', userId)
@@ -144,7 +144,7 @@ export const fintechService = {
             throw new Error('Insufficient funds');
         }
 
-        const { data: request, error: requestError } = await supabase
+        const { data: request, error: requestError } = await (supabase as any)
             .from('payout_requests')
             .insert({
                 user_id: userId,
