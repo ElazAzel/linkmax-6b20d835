@@ -35,6 +35,7 @@ import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { AddLeadDialog } from '@/components/crm/AddLeadDialog';
 import { LeadDetails } from '@/components/crm/LeadDetails';
 import { BookingsPanel } from '@/components/crm/BookingsPanel';
+import { WalletWidget } from '@/components/crm/WalletWidget';
 import { cn } from '@/lib/utils/utils';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { exportLeadsToExcel } from '@/lib/export/excel-export-leads';
@@ -182,6 +183,11 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
           </div>
         }
       />
+
+      {/* Fintech Ledger Widget - Foundation for Fintech Pivot */}
+      <div className="px-5 pb-6">
+        <WalletWidget />
+      </div>
 
       {/* Tabs */}
       <div className="px-5 pb-3">

@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Clock, CalendarDays, User, Phone, Mail, Check, Loader2, MessageCircle, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { supabase } from '@/platform/supabase/client';
+import { fintechService } from '@/services/fintech';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
@@ -214,6 +215,25 @@ export const BookingBlock = memo(function BookingBlockComponent({
         });
 
       if (error) throw error;
+
+      // Record in Fintech Ledger (Phase 1)
+      try {
+        await fintechService.recordPendingIncome({
+          userId: pageOwnerId,
+          amount: block.prepaymentAmount || 0,
+          description: `Бронирование: ${formData.name} (${format(selectedDate, 'dd.MM.yyyy')} ${selectedSlot.time.substring(0, 5)})`,
+          relatedEntityId: block.id,
+          relatedEntityType: 'booking',
+          metadata: {
+            client_name: formData.name,
+            slot_date: format(selectedDate, 'yyyy-MM-dd'),
+            slot_time: selectedSlot.time
+          }
+        });
+      } catch (fintechErr) {
+        console.error('Failed to record fintech transaction', fintechErr);
+        // Don't block the main flow
+      }
 
       // Send notification to owner
       try {

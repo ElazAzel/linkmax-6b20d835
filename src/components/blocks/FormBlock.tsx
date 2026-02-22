@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
+import { fintechService } from '@/services/fintech';
 import { TurnstileWidget } from '@/components/legal/TurnstileWidget';
 
 import { trackLead } from '@/components/analytics/TrackingScripts';
@@ -70,6 +71,22 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
         } else {
           // Track lead event on success
           trackLead();
+
+          // Record in Fintech Ledger if it's a lead form with potential value
+          try {
+            await fintechService.recordPendingIncome({
+              userId: pageOwnerId,
+              amount: 0, // Forms usually don't have fixed price in Phase 1
+              description: `Лид из формы: ${name}`,
+              relatedEntityId: block.id,
+              relatedEntityType: 'lead',
+              metadata: {
+                form_data: formData
+              }
+            });
+          } catch (fintechErr) {
+            console.error('Failed to record fintech transaction for lead', fintechErr);
+          }
         }
       }
 

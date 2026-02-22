@@ -130,6 +130,8 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | **Booking** | Appointment request | Scheduling feature | DB: `bookings`, `booking_slots` |
 | **Event** | Event with registration | Event management | DB: `events`, `event_registrations` |
 | **Analytics Event** | Page view, click, conversion | Performance tracking | `src/services/analytics.ts`, DB: `analytics` |
+| **Wallet** | User balance and ledger | Fintech foundation | `src/services/fintech.ts`, DB: `user_wallets` |
+| **Transaction** | Financial record (GMV/Fee) | Ledger accounting | DB: `wallet_transactions` |
 | **Token** | Linkkon virtual currency | Gamification + marketplace | DB: `user_tokens`, `token_transactions` |
 
 ---
@@ -713,7 +715,8 @@ Based on codebase analysis, these are logical next improvements:
 
 3. **A/B testing for blocks** — Test different block configurations to optimize conversions
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
-5. **Team collaboration** — Multi-user editing for business pages
+5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees (Completed 2026-02-22)
+6. **Team collaboration** — Multi-user editing for business pages
 6. **API access** — Public API for integrations (Zapier, Make, custom apps)
 7. **Email sequences** — Automated email drip campaigns for leads
 8. ~~**Analytics export**~~ — CSV/Excel download of analytics data (Completed 2026-02-21)
