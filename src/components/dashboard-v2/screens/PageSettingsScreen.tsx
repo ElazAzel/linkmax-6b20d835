@@ -2,7 +2,7 @@
  * PageSettingsScreen - Settings for the current page (page-scoped)
  * SEO, branding, domain/slug, visibility
  */
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -127,12 +127,12 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   // Fetch initial domain status
   useEffect(() => {
     if (customDomain) {
-      supabase
-        .from('custom_domains')
+      (supabase
+        .from('custom_domains' as any) as any)
         .select('status')
         .eq('hostname', customDomain)
         .maybeSingle()
-        .then(({ data }) => {
+        .then(({ data }: any) => {
           if (data) setDbStatus(data.status as DomainStatus);
         });
     }

@@ -17,8 +17,8 @@ export const AdminFintechTab = () => {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const { data, error } = await supabase
-                .from('payout_requests')
+            const { data, error } = await (supabase
+                .from('payout_requests' as any) as any)
                 .select(`
                     *,
                     user_profiles (
@@ -44,8 +44,8 @@ export const AdminFintechTab = () => {
     const handleAction = async (id: string, status: 'completed' | 'rejected') => {
         try {
             setActionLoading(id);
-            const { error } = await supabase
-                .from('payout_requests')
+            const { error } = await (supabase
+                .from('payout_requests' as any) as any)
                 .update({
                     status,
                     processed_at: new Date().toISOString()
