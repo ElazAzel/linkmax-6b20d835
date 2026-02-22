@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 import { useAdminTranslations } from '../useAdminTranslations';
 import { fetchTranslationsFromDB, upsertToDB } from '@/lib/i18n-db-backend';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,13 +13,24 @@ vi.mock('@/lib/i18n-db-backend', () => ({
     syncI18nWithDB: vi.fn()
 }));
 
-// Mock logger
-vi.mock('@/lib/utils/logger', () => ({
-    logger: {
-        error: vi.fn(),
-        info: vi.fn()
+vi.mock('@/integrations/supabase/client', () => ({
+    supabase: {
+        from: vi.fn().mockReturnValue({
+            select: vi.fn().mockResolvedValue({ data: [], error: null })
+        })
     }
 }));
+
+vi.mock('@/lib/utils/logger', () => ({
+    logger: { error: vi.fn(), info: vi.fn() }
+}));
+
+function createWrapper() {
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    return ({ children }: { children: React.ReactNode }) => (
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+}
 
 describe('useAdminTranslations', () => {
     const mockDbData = [
@@ -36,7 +49,7 @@ describe('useAdminTranslations', () => {
     });
 
     it('should load translations on mount', async () => {
-        const { result } = renderHook(() => useAdminTranslations(true));
+        const { result } = renderHook(() => useAdminTranslations(true), { wrapper: createWrapper() });
 
         expect(result.current.loading).toBe(true);
 
@@ -50,7 +63,7 @@ describe('useAdminTranslations', () => {
     });
 
     it('should calculate all keys correctly', async () => {
-        const { result } = renderHook(() => useAdminTranslations(true));
+        const { result } = renderHook(() => useAdminTranslations(true), { wrapper: createWrapper() });
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 
@@ -61,7 +74,7 @@ describe('useAdminTranslations', () => {
 
     it('should update translation and save to DB', async () => {
         vi.mocked(upsertToDB).mockResolvedValue(undefined as any);
-        const { result } = renderHook(() => useAdminTranslations(true));
+        const { result } = renderHook(() => useAdminTranslations(true), { wrapper: createWrapper() });
 
         await waitFor(() => expect(result.current.loading).toBe(false));
 

@@ -127,12 +127,12 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
   // Fetch initial domain status
   useEffect(() => {
     if (customDomain) {
-      supabase
-        .from('custom_domains')
+      (supabase
+        .from('custom_domains' as any) as any)
         .select('status')
         .eq('hostname', customDomain)
         .maybeSingle()
-        .then(({ data }) => {
+        .then(({ data }: any) => {
           if (data) setDbStatus(data.status as DomainStatus);
         });
     }

@@ -1,15 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fetchTranslationsFromDB, upsertToDB, syncI18nWithDB } from '../i18n-db-backend';
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import i18next from 'i18next';
 
-// Mock i18next
 vi.mock('i18next', () => ({
     default: {
         addResourceBundle: vi.fn(),
         changeLanguage: vi.fn(),
         language: 'ru'
     }
+}));
+
+vi.mock('@/integrations/supabase/client', () => ({
+    supabase: {
+        from: vi.fn()
+    }
+}));
+
+vi.mock('@/lib/utils/logger', () => ({
+    logger: { error: vi.fn(), info: vi.fn() }
 }));
 
 describe('i18n-db-backend', () => {
