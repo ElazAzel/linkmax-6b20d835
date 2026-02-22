@@ -21,28 +21,15 @@ import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { LanguageUploadDialog } from '@/components/admin/LanguageUploadDialog';
+import { useAdminTranslations, flattenObject, setNestedValue } from '@/hooks/admin/useAdminTranslations';
 import { supabase } from '@/integrations/supabase/client';
-import { pushLocalToDB } from '@/lib/i18n-db-backend';
+import { upsertToDB } from '@/lib/i18n-db-backend';
 
 // Static fallbacks for initial load and development
 import ru from '@/i18n/locales/ru.json';
 import en from '@/i18n/locales/en.json';
 import kk from '@/i18n/locales/kk.json';
 // ... rest will be loaded from DB or static imports as fallback
-
-import de from '@/i18n/locales/de.json';
-import uk from '@/i18n/locales/uk.json';
-import uz from '@/i18n/locales/uz.json';
-import be from '@/i18n/locales/be.json';
-import es from '@/i18n/locales/es.json';
-import fr from '@/i18n/locales/fr.json';
-import it from '@/i18n/locales/it.json';
-import pt from '@/i18n/locales/pt.json';
-import zh from '@/i18n/locales/zh.json';
-import tr from '@/i18n/locales/tr.json';
-import ja from '@/i18n/locales/ja.json';
-import ko from '@/i18n/locales/ko.json';
-import ar from '@/i18n/locales/ar.json';
 
 type TranslationData = Record<string, unknown>;
 
@@ -114,38 +101,6 @@ const REGIONS: Record<string, string> = {
 
 const CORE_LANGUAGES = ['en', 'ru', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
 
-// Flatten nested JSON object to dot notation keys
-function flattenObject(obj: TranslationData, prefix = ''): Record<string, string> {
-  const result: Record<string, string> = {};
-
-  for (const [key, value] of Object.entries(obj)) {
-    const newKey = prefix ? `${prefix}.${key}` : key;
-
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-      Object.assign(result, flattenObject(value as TranslationData, newKey));
-    } else {
-      result[newKey] = String(value ?? '');
-    }
-  }
-
-  return result;
-}
-
-// Set nested value by dot notation key
-function setNestedValue(obj: TranslationData, key: string, value: string): void {
-  const parts = key.split('.');
-  let current: TranslationData = obj;
-
-  for (let i = 0; i < parts.length - 1; i++) {
-    if (!current[parts[i]]) {
-      current[parts[i]] = {};
-    }
-    current = current[parts[i]] as TranslationData;
-  }
-
-  current[parts[parts.length - 1]] = value;
-}
-
 // Copy structure from source with empty values
 function copyStructureEmpty(src: TranslationData): TranslationData {
   const dest: TranslationData = {};
@@ -199,21 +154,20 @@ export default function AdminTranslations() {
   const seoDescription = t('adminTranslations.seo.description', 'Internal translation management for lnkmx.');
   const { isAdmin, loading } = useAdminAuth();
 
-  // State: translations data for all active languages
-  const [translations, setTranslations] = useState<Record<string, TranslationData>>({
-    ru: JSON.parse(JSON.stringify(ru)),
-    en: JSON.parse(JSON.stringify(en)),
-    kk: JSON.parse(JSON.stringify(kk)),
-  });
-  const [isDBLoaded, setIsDBLoaded] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-
-  // State: active languages (can add more)
-  const [activeLanguages, setActiveLanguages] = useState<string[]>(['en', 'ru', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar']);
-  const [selectedLang, setSelectedLang] = useState<string>('en');
+  const {
+    translations,
+    activeLanguages,
+    setActiveLanguages,
+    allKeys,
+    loading: dbLoading,
+    saving,
+    setSaving,
+    updateTranslation,
+    setTranslations
+  } = useAdminTranslations(isAdmin);
 
   // UI state
+  const [selectedLang, setSelectedLang] = useState<string>('en');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMode, setFilterMode] = useState<'all' | 'missing'>('all');
   const [expandedNamespaces, setExpandedNamespaces] = useState<Set<string>>(new Set(['common', 'blocks']));
@@ -230,73 +184,9 @@ export default function AdminTranslations() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!loading && !isAdmin) {
-      navigate('/auth');
-      return;
-    }
-
-    // Load from DB if possible
-    const loadFromDB = async () => {
-      try {
-        const { data, error } = await supabase.from('i18n_translations').select('lang_code, data');
-        if (error) throw error;
-
-        if (data && data.length > 0) {
-          const dbTranslations: Record<string, TranslationData> = {};
-          data.forEach(item => {
-            dbTranslations[item.lang_code] = item.data;
-          });
-
-          setTranslations(prev => ({ ...prev, ...dbTranslations }));
-          setActiveLanguages(prev => Array.from(new Set([...prev, ...data.map(d => d.lang_code)])));
-        }
-      } catch (err) {
-        logger.error('Failed to load translations from DB', err);
-      } finally {
-        setIsDBLoaded(true);
-      }
-    };
-
-    if (isAdmin) {
-      loadFromDB();
-    }
-  }, [loading, isAdmin, navigate]);
-
-  // Get all unique keys from all active translations
-  const allKeys = useMemo(() => {
-    const keySet = new Set<string>();
-    for (const lang of activeLanguages) {
-      if (translations[lang]) {
-        Object.keys(flattenObject(translations[lang])).forEach(k => keySet.add(k));
-      }
-    }
-
-    const sortedKeys = Array.from(keySet).sort();
-
-    // Priority sorting: Untranslated keys FIRST
-    const missingKeys: string[] = [];
-    const fullKeys: string[] = [];
-
-    sortedKeys.forEach(key => {
-      const isMissingSomewhere = activeLanguages.some(lang => {
-        const flat = flattenObject(translations[lang] || {});
-        return !flat[key]?.trim();
-      });
-
-      if (isMissingSomewhere) {
-        missingKeys.push(key);
-      } else {
-        fullKeys.push(key);
-      }
-    });
-
-    return [...missingKeys, ...fullKeys];
-  }, [translations, activeLanguages]);
-
   // Filter keys
   const filteredKeys = useMemo(() => {
-    return allKeys.filter(key => {
+    return allKeys.all.filter(key => {
       // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -310,16 +200,14 @@ export default function AdminTranslations() {
 
       // Missing filter
       if (filterMode === 'missing') {
-        const hasMissing = activeLanguages.some(lang => {
-          const flat = flattenObject(translations[lang] || {});
-          return !flat[key]?.trim();
-        });
+        const flat = flattenObject(translations[selectedLang] || {});
+        const hasMissing = activeLanguages.some(l => !flattenObject(translations[l] || {})[key]?.trim());
         if (!hasMissing) return false;
       }
 
       return true;
     });
-  }, [allKeys, searchQuery, filterMode, translations, activeLanguages]);
+  }, [allKeys.all, searchQuery, filterMode, translations, activeLanguages, selectedLang]);
 
   // Group filtered keys by namespace
   const groupedKeys = useMemo(() => groupKeysByNamespace(filteredKeys), [filteredKeys]);
@@ -330,13 +218,13 @@ export default function AdminTranslations() {
     for (const lang of activeLanguages) {
       const flat = flattenObject(translations[lang] || {});
       let missing = 0;
-      for (const key of allKeys) {
+      for (const key of allKeys.all) {
         if (!flat[key]?.trim()) missing++;
       }
       result[lang] = missing;
     }
     return result;
-  }, [translations, activeLanguages, allKeys]);
+  }, [translations, activeLanguages, allKeys.all]);
 
   // Get value for a key in a language
   const getValue = (lang: string, key: string): string => {
@@ -344,39 +232,12 @@ export default function AdminTranslations() {
     return flat[key] || '';
   };
 
-  // Update value
-  const handleValueChange = (lang: string, key: string, value: string) => {
-    setTranslations(prev => {
-      const updated = { ...prev };
-      updated[lang] = JSON.parse(JSON.stringify(prev[lang] || {}));
-      setNestedValue(updated[lang], key, value);
-      return updated;
-    });
-  };
-
   // Save inline edit
   const handleSaveEdit = async () => {
     if (editingKey) {
-      const updatedValue = editValue;
-      handleValueChange(selectedLang, editingKey, updatedValue);
+      await updateTranslation(selectedLang, editingKey, editValue);
       setEditingKey(null);
       setEditValue('');
-
-      // Auto-save to DB if possible
-      try {
-        setSaving(true);
-        // We need the latest state, but since setTranslations is async, 
-        // we construct the data to send for this specific language
-        const updatedLangData = JSON.parse(JSON.stringify(translations[selectedLang] || {}));
-        setNestedValue(updatedLangData, editingKey, updatedValue);
-
-        await pushLocalToDB(selectedLang, updatedLangData);
-        toast.success('Сохранено в БД');
-      } catch (err) {
-        toast.error('Ошибка сохранения в БД');
-      } finally {
-        setSaving(false);
-      }
     }
   };
 
@@ -384,7 +245,6 @@ export default function AdminTranslations() {
   const handleAddLanguage = (langCode: string) => {
     if (!activeLanguages.includes(langCode)) {
       setActiveLanguages([...activeLanguages, langCode]);
-      // Initialize with empty structure from English
       if (!translations[langCode]) {
         const emptyLang = copyStructureEmpty(translations['en'] || {});
         setTranslations({ ...translations, [langCode]: emptyLang });
@@ -402,9 +262,7 @@ export default function AdminTranslations() {
       return;
     }
     setActiveLanguages(activeLanguages.filter(l => l !== langCode));
-    if (selectedLang === langCode) {
-      setSelectedLang('en');
-    }
+    if (selectedLang === langCode) setSelectedLang('en');
     toast.success(`Язык ${langCode.toUpperCase()} удалён`);
   };
 
@@ -415,7 +273,7 @@ export default function AdminTranslations() {
       toast.error('Введите ключ');
       return;
     }
-    if (allKeys.includes(trimmedKey)) {
+    if (allKeys.all.includes(trimmedKey)) {
       toast.error('Такой ключ уже существует');
       return;
     }
@@ -443,12 +301,10 @@ export default function AdminTranslations() {
     for (const lang of activeLanguages) {
       const langObj = JSON.parse(JSON.stringify(updated[lang] || {}));
       let current: TranslationData = langObj;
-
       for (let i = 0; i < parts.length - 1; i++) {
         if (!current[parts[i]]) break;
         current = current[parts[i]] as TranslationData;
       }
-
       delete current[parts[parts.length - 1]];
       updated[lang] = langObj;
     }
@@ -536,7 +392,7 @@ export default function AdminTranslations() {
     setSaving(true);
     try {
       for (const lang of activeLanguages) {
-        await pushLocalToDB(lang, translations[lang]);
+        await upsertToDB(lang, translations[lang]);
       }
       toast.success('Все переводы синхронизированы с БД');
     } catch (err) {
@@ -754,7 +610,7 @@ export default function AdminTranslations() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card>
               <CardContent className="pt-4">
-                <div className="text-2xl font-bold">{allKeys.length}</div>
+                <div className="text-2xl font-bold">{allKeys.all.length}</div>
                 <p className="text-sm text-muted-foreground">Всего ключей</p>
               </CardContent>
             </Card>
@@ -997,8 +853,7 @@ export default function AdminTranslations() {
                                     className="h-6 w-6"
                                     title="Скопировать с EN"
                                     onClick={() => {
-                                      handleValueChange(selectedLang, key, enValue);
-                                      toast.success('Скопировано с EN');
+                                      updateTranslation(selectedLang, key, enValue);
                                     }}
                                   >
                                     <Copy className="h-3 w-3" />

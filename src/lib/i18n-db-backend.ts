@@ -46,7 +46,7 @@ export async function syncI18nWithDB(i18nInstance: i18n, lng?: string) {
  * Migration helper: Push local JSON data to DB.
  * Used once or when explicitly triggered by admin.
  */
-export async function pushLocalToDB(lng: string, jsonData: any) {
+export async function upsertToDB(lng: string, jsonData: any) {
     const { error } = await supabase
         .from('i18n_translations')
         .upsert({
