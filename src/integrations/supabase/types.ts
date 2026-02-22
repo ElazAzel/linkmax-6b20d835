@@ -500,6 +500,13 @@ export type Database = {
             referencedRelation: "public_pages"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "custom_domains_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       daily_quests_completed: {
@@ -1312,6 +1319,13 @@ export type Database = {
             columns: ["wallet_id"]
             isOneToOne: false
             referencedRelation: "user_wallets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
         ]

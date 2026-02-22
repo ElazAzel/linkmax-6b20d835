@@ -15,17 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Pitch Deck Update**: Обновлен инвестиционный меморандум, интегрированы данные о новых технических преимуществах: финтех-ядре, профессиональной аналитике и масштабируемой i18n архитектуре.
 
 ### Fixed (Platform Stabilization — 2026-02-22)
-- **Technical Audit & Cleanup**: Resolved 100+ critical linting and TypeScript errors across the codebase.
-- **Supabase Integration**: Synchronized `src/integrations/supabase/types.ts` with the actual database schema for tables: `partners`, `payout_requests`, `i18n_translations`, `user_wallets`, and `payout_requests`.
-- **i18n Stability**: Restored missing exports and imports in `i18n/config.ts` and `LanguageContext.tsx`, ensuring proper translation handling during build.
-- **Rules of Hooks**: Fixed a critical violation in `BlockEditorV2.tsx` where a `useMemo` was called conditionally.
-- **Admin Panel Quality**: Completely refactored `AdminTranslations.tsx` to eliminate unused variables, redundant logic, and type mismatches.
-- **Type Guarding**: Systematic migration from `@ts-ignore` to `@ts-expect-error` to improve error traceability.
-- **SEO & Sitemap**: Resolved priority conflict in Cloudflare Worker that prevented dynamic sitemap generation by the Edge Function.
-- **PWA Support**: Implemented a core service worker (`sw.js`) and registration logic, enabling the mobile-first "Install App" capability.
-- **OAuth Redirects**: Fully integrated `returnTo` parameter support for Google and Apple sign-in flows, ensuring users return to their specific editor state after authentication.
-- **Block Registry Consistency**: Eliminated critical "block type drift" across registry, factory, and tier limits; standardized `event` and `search` block definitions.
-- **Documentation Overhaul**: Created `TECH_DEBT_BACKLOG.md` and `DATABASE_SCHEMA_GUIDE.md`, updated `PLATFORM_SNAPSHOT.md` to reflect the current Business OS strategy.
+- **Technical Audit & Cleanup**: Completed full platform audit (`docs/audits/FULL_PLATFORM_AUDIT_2026_02_22.md`) and resolved 100+ critical errors.
+- **Supabase Integration & Type Safety**: Synchronized `types.ts` with the actual database schema. Added missing tables (`payout_requests`, `user_wallets`, `wallet_transactions`) and defined crucial table relationships (e.g., JOIN support for `user_profiles`).
+- **Fintech & Admin Refactoring**: Eliminated all `as any` type assertions in `fintech.ts`, `AdminFintechTab.tsx`, and `PageSettingsScreen.tsx`. Refactored admin views to align with the actual profile schema (`display_name`, `username`).
+- **Quality & Performance**: Fixed Rules of Hooks violations, standardized block registry, and improved SEO/Sitemap reliability via Cloudflare Workers.
+- **Documentation**: Updated `PLATFORM_SNAPSHOT.md`, `TECH_DEBT_BACKLOG.md`, and `DATABASE_SCHEMA_GUIDE.md`.
 
 ### Added (Booking & Data Export — 2026-02-21)
 - **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.

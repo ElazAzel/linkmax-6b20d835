@@ -12,8 +12,8 @@ import { cn } from '@/lib/utils/utils';
 
 type PayoutRequestWithProfile = Tables<'payout_requests'> & {
     user_profiles: {
-        full_name: string | null;
-        email: string | null;
+        display_name: string | null;
+        username: string | null;
     } | null;
 };
 
@@ -25,19 +25,19 @@ export const AdminFintechTab = () => {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const { data, error } = await (supabase
-                .from('payout_requests' as any) as any)
+            const { data, error } = await supabase
+                .from('payout_requests')
                 .select(`
                     *,
                     user_profiles (
-                        full_name,
-                        email
+                        display_name,
+                        username
                     )
                 `)
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setRequests((data as any) || []);
+            setRequests(data || []);
         } catch (err: any) {
             toast.error("Failed to fetch requests: " + err.message);
         } finally {
@@ -52,8 +52,8 @@ export const AdminFintechTab = () => {
     const handleAction = async (id: string, status: 'completed' | 'rejected') => {
         try {
             setActionLoading(id);
-            const { error } = await (supabase
-                .from('payout_requests' as any) as any)
+            const { error } = await supabase
+                .from('payout_requests')
                 .update({
                     status,
                     processed_at: new Date().toISOString()
@@ -118,8 +118,8 @@ export const AdminFintechTab = () => {
                                     <TableRow key={req.id}>
                                         <TableCell>
                                             <div className="flex flex-col">
-                                                <span className="font-bold">{req.user_profiles?.full_name || 'N/A'}</span>
-                                                <span className="text-xs text-muted-foreground">{req.user_profiles?.email}</span>
+                                                <span className="font-bold">{req.user_profiles?.display_name || 'N/A'}</span>
+                                                <span className="text-xs text-muted-foreground">@{req.user_profiles?.username}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="font-bold text-lg">
