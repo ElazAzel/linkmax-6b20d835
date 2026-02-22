@@ -8,13 +8,14 @@ const corsHeaders = {
 };
 
 interface PaymentRequest {
-    type?: 'subscription' | 'payment';
+    type?: 'subscription' | 'payment' | 'tokens';
     plan?: 'pro';
     period?: 3 | 6 | 12; // months
     userId: string;
     amount?: number;
     description?: string;
     relatedId?: string;
+    tokenAmount?: number;
 }
 
 serve(async (req: Request) => {
@@ -24,7 +25,7 @@ serve(async (req: Request) => {
 
     try {
         const payload = await req.json() as PaymentRequest;
-        const { type = 'subscription', userId, plan, period, amount, description: customDescription, relatedId } = payload;
+        const { type = 'subscription', userId, plan, period, amount, description: customDescription, relatedId, tokenAmount } = payload;
 
         if (!userId) {
             throw new Error("userId is required");
@@ -36,7 +37,7 @@ serve(async (req: Request) => {
         const shp_type = type;
         const shp_plan = plan || "";
         const shp_period = period?.toString() || "";
-        const shp_related_id = relatedId || "";
+        let shp_related_id = relatedId || "";
 
         if (type === 'subscription') {
             if (plan !== 'pro' || !period || ![3, 6, 12].includes(period)) {
@@ -49,6 +50,19 @@ serve(async (req: Request) => {
             };
             outSum = pricesKzt[period];
             description = `lnkmx.my PRO (${period} мес)`;
+        } else if (type === 'tokens') {
+            if (!tokenAmount || ![1000, 5000, 10000].includes(tokenAmount)) {
+                throw new Error("Invalid token amount. Available: 1000, 5000, 10000");
+            }
+            // 1 token = 1 KZT, but with bulk discounts
+            const tokenPrices: Record<number, number> = {
+                1000: 1000,
+                5000: 4500,  // 10% discount
+                10000: 8000  // 20% discount
+            };
+            outSum = tokenPrices[tokenAmount];
+            description = `Покупка ${tokenAmount} Linkkon tokens`;
+            shp_related_id = tokenAmount.toString();
         } else {
             if (!amount || amount <= 0) {
                 throw new Error("Invalid amount for payment");
