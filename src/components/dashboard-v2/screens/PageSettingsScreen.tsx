@@ -12,6 +12,8 @@ import {
   Eye,
   Link2,
   ChevronRight,
+  RefreshCw,
+  ExternalLink,
   Check,
   AlertTriangle,
   Crown,
@@ -21,6 +23,8 @@ import {
   Info,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/platform/supabase/client';
+import { useDomainVerification, type DomainStatus } from '@/hooks/page/useDomainVerification';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -116,6 +120,25 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
 
   const [seoTitleInput, setSeoTitleInput] = useState(seoTitle || '');
   const [seoDescInput, setSeoDescInput] = useState(seoDescription || '');
+
+  const { verifyDomain, isVerifying, status: verificationStatus } = useDomainVerification(customDomain);
+  const [dbStatus, setDbStatus] = useState<DomainStatus | null>(null);
+
+  // Fetch initial domain status
+  useEffect(() => {
+    if (customDomain) {
+      supabase
+        .from('custom_domains')
+        .select('status')
+        .eq('hostname', customDomain)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data) setDbStatus(data.status as DomainStatus);
+        });
+    }
+  }, [customDomain]);
+
+  const activeStatus = verificationStatus || dbStatus;
 
   const handleSaveSlug = async () => {
     if (slugInput === pageSlug) return;
@@ -290,18 +313,73 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                   {t('dashboard.pageSettings.upgradeToConnect', 'Upgrade to Connect Domain')}
                 </Button>
               ) : (
-                <div className="bg-muted/50 p-3 rounded-xl space-y-2 text-xs text-muted-foreground border border-border/50">
-                  <div className="font-medium text-foreground flex items-center gap-2">
-                    <Info className="h-3 w-3" />
-                    {t('dashboard.pageSettings.dnsSetup', 'DNS Configuration')}
-                  </div>
-                  <p>
-                    {t('dashboard.pageSettings.dnsInstructions', 'Add a CNAME record to your domain provider:')}
-                  </p>
-                  <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center font-mono bg-background p-2 rounded border border-border/50">
-                    <span>@</span>
-                    <span className="text-muted-foreground">CNAME</span>
-                    <span>lnkmx.my</span>
+                <div className="space-y-4">
+                  {customDomain && (
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/50">
+                      <div className="flex items-center gap-2">
+                        <div className={cn(
+                          "h-2 w-2 rounded-full animate-pulse",
+                          activeStatus === 'active' ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" : "bg-amber-500"
+                        )} />
+                        <span className="text-xs font-medium uppercase tracking-wider">
+                          {activeStatus === 'active' ? t('common.active', 'Active') : t('common.configuring', 'Configuring')}
+                        </span>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 text-xs gap-1.5"
+                        onClick={() => verifyDomain(customDomain)}
+                        disabled={isVerifying}
+                      >
+                        <RefreshCw className={cn("h-3 w-3", isVerifying && "animate-spin")} />
+                        {t('common.verify', 'Verify')}
+                      </Button>
+                    </div>
+                  )}
+
+                  <div className="bg-muted/50 p-4 rounded-xl space-y-3 text-xs text-muted-foreground border border-border/50">
+                    <div className="font-medium text-foreground flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Info className="h-3 w-3" />
+                        {t('dashboard.pageSettings.dnsSetup', 'DNS Configuration')}
+                      </div>
+                      <a
+                        href="https://docs.lnkmx.my/domains"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[10px] text-primary hover:underline flex items-center gap-1"
+                      >
+                        {t('common.guide', 'Guide')}
+                        <ExternalLink className="h-2.5 w-2.5" />
+                      </a>
+                    </div>
+
+                    <p className="leading-relaxed">
+                      {t('dashboard.pageSettings.dnsInstructions', 'Add a CNAME record to your domain provider settings to point your domain to our platform:')}
+                    </p>
+
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-[60px_1fr_auto] gap-2 items-center font-mono bg-background/80 p-2.5 rounded-lg border border-border/40">
+                        <span className="text-muted-foreground">Type</span>
+                        <span className="font-bold text-foreground">CNAME</span>
+                        <Badge variant="outline" className="text-[9px] h-4 px-1 opacity-50">copy</Badge>
+                      </div>
+                      <div className="grid grid-cols-[60px_1fr_auto] gap-2 items-center font-mono bg-background/80 p-2.5 rounded-lg border border-border/40">
+                        <span className="text-muted-foreground">Host</span>
+                        <span className="font-bold text-foreground">@</span>
+                        <Badge variant="outline" className="text-[9px] h-4 px-1 opacity-50">copy</Badge>
+                      </div>
+                      <div className="grid grid-cols-[60px_1fr_auto] gap-2 items-center font-mono bg-background/80 p-2.5 rounded-lg border border-border/40">
+                        <span className="text-muted-foreground">Value</span>
+                        <span className="font-bold text-foreground">lnkmx.my</span>
+                        <Badge variant="outline" className="text-[9px] h-4 px-1 opacity-50">copy</Badge>
+                      </div>
+                    </div>
+
+                    <p className="text-[10px] italic">
+                      {t('dashboard.pageSettings.dnsHint', 'Note: DNS changes can take up to 24 hours to propagate globally.')}
+                    </p>
                   </div>
                 </div>
               )}

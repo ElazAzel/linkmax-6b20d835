@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added (Optimizations & Custom Domains — 2026-02-22)
 - **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.
+- **Custom Domains**: Полная интеграция. Создан интерфейс в Dashboard для привязки доменов с живой проверкой DNS (CNAME) через новую Edge Function `verify-domain`. Добавлены визуальные индикаторы статуса подключения.
+- **Visual Regression Testing**: Внедрены автоматизированные тесты на базе Playwright (`e2e/visual-regression.spec.ts`) для контроля целостности «стеклянного» дизайна блоков.
 - **Custom Domains Foundation**: Implemented full database infrastructure (`custom_domains` table with RLS) and an Edge Function (`resolve-domain`) to map external hostnames to internal page slugs.
 - **Enhanced Analytics**: Redesigned the `ConversionFunnel` component with `framer-motion` animations, premium gradients, and automatic drop-off rate calculations. This provides a high-end visual experience for business users tracking their sales pipeline.
+- **Pitch Deck Update**: Обновлен инвестиционный меморандум, интегрированы данные о новых технических преимуществах: финтех-ядре, профессиональной аналитике и масштабируемой i18n архитектуре.
 
 ### Added (Booking & Data Export — 2026-02-21)
 - **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.

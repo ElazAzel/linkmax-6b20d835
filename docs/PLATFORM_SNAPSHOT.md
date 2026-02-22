@@ -435,7 +435,8 @@ new -> contacted -> qualified -> won/lost
 | `public-experts` | Public | Expert directory API |
 | `seo-ssr` | Bot request | SSR HTML for crawlers (rate limited, warm-up) |
 | `pixel-proxy` | Analytics | Server-side FB CAPI / TikTok / GA4 forwarding |
-| `resolve-domain` | Domain | Custom domain resolution |
+| `resolve-domain` | Domain | Custom domain resolution (Hostname -> Slug) |
+| `verify-domain` | Domain | Real-time DNS CNAME verification via Deno.resolveDns |
 | `language-upload` | Admin | Language file uploads |
 | `send-contact-email` | Form | Contact form email via Resend |
 
@@ -711,9 +712,9 @@ npm run start
 
 Based on codebase analysis, these are logical next improvements:
 
-1. **Custom domains** — Allow Pro users to use their own domains instead of `lnkmx.my/{slug}`
+1. ~~**Custom domains**~~ — Real-time verification, CNAME resolution, and dashboard control (Completed 2026-02-22)
 
-2. **White-label mode** — Remove all platform branding for enterprise clients
+2. **White-label mode** — Remove all platform branding for enterprise clients (Roadmap)
 
 3. **A/B testing for blocks** — Test different block configurations to optimize conversions
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
@@ -728,5 +729,5 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: February 21, 2026*
-*Maintained by: lnkmx Platform Team*
+*Last updated: February 22, 2026*
+*Maintained by: Antigravity (Principal Engineer)*
