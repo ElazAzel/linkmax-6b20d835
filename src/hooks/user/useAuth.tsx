@@ -120,15 +120,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signInWithGoogle = async (_returnTo?: string) => {
+    const redirectUrl = _returnTo
+      ? `${window.location.origin}/auth?returnTo=${encodeURIComponent(_returnTo)}`
+      : window.location.origin;
+
     const { error } = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: window.location.origin,
+      redirect_uri: redirectUrl,
     });
     return { error: error || null };
   };
 
   const signInWithApple = async (_returnTo?: string) => {
+    const redirectUrl = _returnTo
+      ? `${window.location.origin}/auth?returnTo=${encodeURIComponent(_returnTo)}`
+      : window.location.origin;
+
     const { error } = await lovable.auth.signInWithOAuth('apple', {
-      redirect_uri: window.location.origin,
+      redirect_uri: redirectUrl,
     });
     return { error: error || null };
   };

@@ -257,14 +257,8 @@ async function handleRequest(request, env) {
     // The React app MUST handle "if domain != lnkmx.my, fetch page by domain"
   }
 
-  // 1. Skip static files - always origin
-
-  // 1. Skip static files - always origin
-  if (isStaticFile(pathname)) {
-    return fetch(request);
-  }
-
-  // 2. Handle /sitemap.xml specially - proxy to generate-sitemap
+  // 1. Handle /sitemap.xml specially - proxy to generate-sitemap
+  // This must be BEFORE isStaticFile check to override public/sitemap.xml
   if (pathname === '/sitemap.xml') {
     try {
       const sitemapResponse = await fetch(SITEMAP_FUNCTION_URL, {
@@ -289,7 +283,11 @@ async function handleRequest(request, env) {
     } catch (error) {
       console.error('[Worker] Sitemap proxy error:', error);
     }
-    // Fallback to origin static sitemap
+    // Fallback to origin static sitemap handled by isStaticFile below
+  }
+
+  // 2. Skip static files - always origin
+  if (isStaticFile(pathname)) {
     return fetch(request);
   }
 

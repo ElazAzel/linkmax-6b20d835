@@ -1,139 +1,128 @@
-# lnkmx: Investor & Incubator Pitch Deck
+# lnkmx: Investor & Incubator Pitch Deck (2026)
 
 > **Target Audience**: Venture Capital, Accelerators, Angel Investors
-> **Goal**: Seed Funding / Program Admission
-> **Format**: Text source for slides (10-12 slides)
+> **Goal**: Seed Funding ($250k) / Program Admission
+> **Vision**: Building the infrastructure for the Solo-Economy.
 
 ---
 
 ## Slide 1: Title & Hook
 **Title**: lnkmx
-**Subtitle**: The Micro-Business Operating System.
-**One-Liner**: Build. Manage. Grow. All in one link.
+**Subtitle**: The Business OS for the Solo-Economy.
+**One-Liner**: Build. Manage. Grow. All in one mobile dashboard.
 **Presenter**: [Your Name/Team]
 
 ---
 
-## Slide 2: The Problem (The "Tool Tax")
-**Micro-businesses and creators are drowning in tools.**
-To run a simple service business online, they currently need:
-1.  **Wix/Tilda** for a website (Complex, $20+/mo)
-2.  **Linktree** for bio links (Too limited)
-3.  **Calendly** for bookings ($12/mo)
-4.  **Mailchimp** for leads ($20/mo)
-5.  **Google Sheets** for CRM (Manual, messy)
+## Slide 2: The Problem ("Technical Paralysis")
+**Solo-entrepreneurs are drowning in a fragmented tech stack.**
+To run a digital business in 2026, they pay a "Tool Tax":
+1.  **Wix/Tilda** — Too complex for mobile-first creators.
+2.  **Linktree** — Just links. No business logic.
+3.  **Calendly** — Another $12/mo, disconnected from lead data.
+4.  **Google Sheets** — Manual CRM that leads to 30% lead leakage.
 
-**Pain Point**: High cost, disconnected data, and "admin fatigue". Most creators just want to *sell*, not manage IT.
+**Pain Point**: $50+/mo in subscriptions, 20 hours/week in manual admin, and "admin fatigue".
 
 ---
 
-## Slide 3: The Solution (Vertical Integration)
+## Slide 3: The Solution (Unified Business OS)
 **lnkmx is the All-In-One "Micro-OS".**
-We replace disjointed tools with a unified, mobile-first dashboard.
+We replace 5+ disjointed tools with a unified, AI-native infrastructure.
 
-*   **Build**: AI-powered website builder (28+ block types). Ready in 15 minutes.
-*   **Manage**: Mini-CRM for leads, bookings, and event registrations.
-*   **Grow**: Advanced analytics (Cookie-less, Heatmaps) and SEO tools.
+*   **BUILD**: AI-powered site builder (28+ blocks). Ready in 15 minutes.
+*   **MANAGE**: Native Mini-CRM + Scheduling + Event Management.
+*   **GROW**: Cookieless Analytics (Server-side Pixel Proxy) + SEO AEO tools.
 
-**Value Prop**: "Complete business infrastructure in 15 minutes."
-
----
-
-## Slide 4: The Product (Unfair Advantage)
-**Why we win on Product:**
-1.  **"Liquid Glass" Aesthetic**: A premium, motion-rich design system that makes every page look expensive by default (Glassmorphism, depth, micro-animations).
-2.  **AI Core**: Generates copy, translations (RU/EN/KK), and layout instantly. No writer's block.
-3.  **Real Business Tools**: Unlike competitors who just "link out", we capture data.
-    -   *Native Bookings* (vs Calendly link)
-    -   *Native Lead Forms* (vs Typeform link)
-    -   *Native CRM* (vs Google Sheets)
+**Value Prop**: "Your entire digital enterprise in a 15-minute setup."
 
 ---
 
-## Slide 5: Market Opportunity (Why Now?)
-**The Creator Economy is maturing.**
-*   **Trend**: Creators are becoming "Founders". They need business tools, not just vanity metrics.
-*   **Gap**: Enterprise tools (HubSpot, Salesforce) are too heavy. Simple tools (Linktree) are too light.
-*   **lnkmx** fits clearly in the "Solopreneur ERP" space.
-*   **TAM**: [Insert Market Size, e.g., 50M+ Creators globally x $10/mo serviceable market]
+## Slide 4: The Product (Our Moats)
+**Why lnkmx wins:**
+1.  **"Liquid Glass" Aesthetic**: Premium Motion-Design system. Every page looks like an expensive agency product by default.
+2.  **AI-Native Workflow**: Gemini-powered layout generation + multilingual content (RU/EN/KK/UZ).
+3.  **Data Lock-in (CRM)**: High switching costs once customer data and booking history are integrated into our ecosystem.
+4.  **Privacy-First Analytics**: Server-side CAPI/TikTok proxying for 30% more accurate data in a cookieless world.
 
 ---
 
-## Slide 6: Business Model (SaaS)
-**Freemium with clear upgrade triggers.**
+## Slide 5: Market Opportunity (Solo-Economy 2026)
+**The Creator Economy is maturing into the "Business of One".**
+*   **TAM**: Global Creator Economy — $104B (50M+ Creators).
+*   **SAM**: CIS, MENA, SEA — $300M ARR potential (High mobile penetration).
+*   **SOM**: Central Asia (KZ/UZ) — 100k paid users ($7M ARR) in 24 months.
+*   **Timing**: Solopreneurship is now a dominant economic force, not just a side hustle.
 
-**1. Free Tier (User Acquisition)**
+---
+
+## Slide 6: Business Model (PLG & Fintech Transition)
+**Freemium with clear upgrade loops.**
+
+**1. Free Tier (The Billboard)**
 *   1 Page, Core Blocks.
-*   **Viral Loop**: "Powered by lnkmx" watermark on every free page drives organic traffic.
+*   **Viral Loop**: "Powered by lnkmx" watermark drives organic CAC.
 
-**2. Pro Tier (Monetization)**
-*   **Price**: ~2,900 KZT/mo ($6-7/mo) - Accessible global pricing.
-*   **Triggers**: Removal of watermark, CRM automations, 0% transaction fees (future), Advanced Analytics.
-*   **LTV**: High retention due to CRM data lock-in (Switching costs are high once leads are in our system).
+**2. Pro Tier ($7/mo)**
+*   No watermark, 28 blocks, Full CRM/Analytics.
+*   **LTV**: $168 (based on 24-month retention).
+*   **CAC**: < $15 (10:1 LTV:CAC ratio).
+
+**3. Future (Q4 2026)**: Transition to **Take Rate model** (Fintech). Take a % of GMV passing through lnkmx wallets.
 
 ---
 
 ## Slide 7: Technical Moat & Scalability
-**Built for scale from Day 1.**
-*   **Architecture**: Serverless (Supabase + Deno Edge Functions + Cloudflare Workers). Zero dev-ops overhead.
-*   **Performance**: Static-first architecture (PWA) with optimistic UI. 99/100 Mobile Speed score.
-*   **Security**: Enterprise-grade RLS (Row Level Security). GDPR/CCPA compliant.
-*   **Scalability**: Database structure supports millions of users via RLS sharding.
+**Built for 1M+ Users.**
+*   **Stack**: Supabase + Deno Edge Functions + Cloudflare Workers.
+*   **Moat**: Server-side Pixel Proxying (Hard to replicate for basic link tools).
+*   **UI**: Optimistic updates + PWA (Production-ready mobile experience).
+*   **Security**: RLS-hardened Postgres, GDPR/CCPA ready.
 
 ---
 
-## Slide 8: Go-To-Market Strategy
-1.  **Product-Led Growth (PLG)**: The watermark on free pages determines our CAC. Every user is a billboard.
-2.  **Niche Domination**: Targeting specific high-value segments first:
-    -   *Beauty Masters* (Need booking)
-    -   *Real Estate Agents* (Need lead forms + catalogs)
-    -   *Coaches* (Need events + products)
-3.  **Partnerships**: Integration with local payment providers (Robokassa/Kaspi) to lock in the regional market first.
+## Slide 8: Go-To-Market (Niche Domination)
+1.  **"100 Founders"**: Concierge onboarding for 100 key local creators to kickstart the network effect.
+2.  **Beachhead Markets**: 
+    -   *Beauty Masters* (Replace Instagram Direct chaos with Bookings).
+    -   *Real Estate* (Lead forms + catalogs per object).
+    -   *Education* (Event registration + digital downloads).
 
 ---
 
 ## Slide 9: Competitive Landscape
-| Feature | **lnkmx** | Linktree | Wix/Tilda | Taplink |
+| Feature | **lnkmx** | Linktree | Taplink | Wix/Tilda |
 | :--- | :---: | :---: | :---: | :---: |
-| **Setup Time** | **15 min** | 5 min | 5+ hours | 30 min |
-| **CRM/Leads** | **Native** | No | Plugin required | Basic |
-| **Design Quality** | **Premium** | Basic | High | Medium |
-| **Price/Value** | **Best** | Low | Expensive | Medium |
-| **Mobile Edit** | **Native** | Yes | Poor | Yes |
-
-**Our Wedge**: We are *easier* than a website builder but *more powerful* than a bio link.
+| **Setup Time** | **15 min** | 5 min | 30 min | 5+ hours |
+| **CRM/Leads** | **Native** | No | Basic | Plugin req. |
+| **Aesthetic** | **Liquid Glass** | Basic | Table-like | High/Complex |
+| **Pricing** | **$7/mo** | High for Biz | $10+/mo | $20+/mo |
+| **Mobile-First** | **Yes** | Yes | Yes | No |
 
 ---
 
 ## Slide 10: Roadmap & Vision
-**Phase 1 (Now)**: Product Parity & Stability. (Achieved)
-**Phase 2 (Next 6-12 Mo)**: 
-*   **Mobile App**: Native iOS/Android wrappers for push notifications.
-*   **Advanced Bookings**: Calendar sync (Google/Outlook) and deposit payments.
-*   **White Label**: Enterprise solution for agencies.
-*   **API Access**: Zapier/Make integrations for advanced workflows.
-*   **Custom Domains**: SEO dominance.
-**Phase 3 (Long Term)**:
-*   **Fintech**: Native wallet & payments.
-*   **Marketplace**: Connect users (e.g., Coaches) with audiences directly.
+**Phase 1 (Stabilization)**: Fix PWA, Sitemap, and Boilers (TECH_DEBT_BACKLOG.md).
+**Phase 2 (Growth)**: Native Apps (iOS/Android) + Advanced Booking Sync.
+**Phase 3 (Fintech Pivot)**: Native Wallets & 0% fee ecosystem (for early adopters).
+**Long-term**: Becoming the **Default Banking & OS Layer** for freelancers globally.
 
 ---
 
-## Slide 11: Examples / Traction
-*   [Insert generic stats if real ones aren't public yet, e.g., "Beta platform live with X active users"]
-*   "Users are seeing X% conversion increase compared to static link pages."
-*   Status: **Production-Ready**.
+## Slide 11: Team & Traction
+**Ilyas Azelhanov (Founder/CEO)**
+*   7+ years in SaaS/EdTech. Built platforms with 5k+ active users in Year 1.
+*   Certified Business Tracker (Astana Hub).
+*   Status: **90+ Pre-orders** collected before MVP release. Production-ready core.
 
 ---
 
-## Slide 12: The Ask
-**We are looking for:**
-*   **[Amount]** in Seed capital.
-    *   *Use of funds*: 40% Engineering (Mobile App), 40% Marketing (CAC experiment), 20% Ops.
-*   **Strategic Partnerships**: Access to [Specific Industry/Region].
-*   **Mentorship**: Guidance on scaling SaaS locally and globally.
+## Slide 12: The Ask ($250,000)
+**We are raising a Seed round to capture Central Asia.**
+*   **40% Product**: Mobile Native Apps & Fintech layer.
+*   **40% Marketing**: Influence-driven GTM & Local content.
+*   **20% Ops**: Compliance (AIFC) & Server infra.
 
 **Contact**:
-[Your Name]
-[Email/Phone]
-[admin@lnkmx.my]
+admin@lnkmx.my
+[Website: lnkmx.my]

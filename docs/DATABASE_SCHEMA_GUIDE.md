@@ -1,119 +1,71 @@
 # Database Schema Guide
 
-> **Objective:** Document the data model, including schemaless JSON fields.
+This document serves as a reference for the lnkmx platform's database structure, managed via Supabase (Postgres).
 
-## 1. Core Entities (ERD)
+## Core Tables
 
-```mermaid
-erDiagram
-    users ||--o{ pages : owns
-    pages ||--o{ blocks : contains
-    pages ||--o{ leads : captures
-    pages ||--o{ bookings : schedules
-    pages ||--|{ analytics : tracks
+### `pages`
+- `id` (uuid, PK)
+- `user_id` (uuid, FK to auth.users)
+- `slug` (text, unique) - The public URL identifier (`lnkmx.my/slug`)
+- `title` (text)
+- `description` (text)
+- `theme` (jsonb) - Aesthetic settings (Liquid Glass tokens)
+- `is_published` (boolean)
+- `is_premium` (boolean)
+- `metadata` (jsonb) - SEO tags, Pixel IDs: `fb_pixel_id`, `tt_pixel_id`, `ga_id`, `yandex_id`
 
-    users {
-        uuid id PK
-        string email
-        string full_name
-        jsonb raw_user_meta_data
-    }
+### `blocks`
+- `id` (uuid, PK)
+- `page_id` (uuid, FK to pages)
+- `type` (text) - Reference to `ALL_BLOCK_TYPES` in `block-registry.ts`
+- `content` (jsonb) - Block-specific data (links, images, text)
+- `position` (integer) - Order on the page
+- `is_visible` (boolean)
 
-    pages {
-        uuid id PK
-        uuid user_id FK
-        string slug "Unique, Indexed"
-        boolean is_published
-        jsonb theme_settings
-        jsonb seo_meta
-    }
+## CRM & Interactions
 
-    blocks {
-        uuid id PK
-        uuid page_id FK
-        string type "Enum: text, image, etc."
-        int position
-        jsonb content "Flexible Data"
-        jsonb style "Visual Config"
-    }
+### `leads`
+- `id` (uuid, PK)
+- `page_id` (uuid, FK to pages)
+- `email` (text)
+- `phone` (text)
+- `full_name` (text)
+- `data` (jsonb) - Custom form fields
+- `status` (text) - `new`, `contacted`, `qualified`, `converted`
+- `source` (text) - UTM tracking
 
-    leads {
-        uuid id PK
-        uuid page_id FK
-        jsonb data "Form Submission"
-        string status "Enum: new, contacted, etc."
-    }
-```
+### `bookings`
+- `id` (uuid, PK)
+- `page_id` (uuid, FK to pages)
+- `start_time` (timestamp)
+- `end_time` (timestamp)
+- `status` (text)
+- `customer_info` (jsonb)
 
----
+## Fintech (Draft implementation)
 
-## 2. JSON Field Structures
+### `user_wallets`
+- `id` (uuid, PK)
+- `user_id` (uuid, FK to user_profiles)
+- `balance` (numeric)
+- `currency` (text)
 
-Supabase allows flexible JSONB columns. We enforce structure via Zod schemas in the code, but the DB allows flexibility.
+### `wallet_transactions`
+- `id` (uuid, PK)
+- `wallet_id` (uuid, FK)
+- `amount` (numeric)
+- `type` (text) - `credit`, `debit`
+- `metadata` (jsonb) - GMV, Fees
 
-### 2.1 `pages.theme_settings`
-Configures the global look of the page.
-```json
-{
-  "font": "Inter",
-  "background": {
-    "type": "gradient",
-    "value": "linear-gradient(to right, #ff0000, #0000ff)"
-  },
-  "buttons": {
-    "radius": "full",
-    "style": "outline"
-  }
-}
-```
+## Analytics
 
-### 2.2 `blocks.content`
-Varies by `block.type`.
-
-**Type: `link`**
-```json
-{
-  "url": "https://example.com",
-  "label": "My Website",
-  "icon": "globe"
-}
-```
-
-**Type: `image`**
-```json
-{
-  "url": "https://supabase.../image.jpg",
-  "alt": "Profile Photo",
-  "aspectRatio": "1/1"
-}
-```
-
-**Type: `form`**
-```json
-{
-  "fields": [
-    { "id": "name", "type": "text", "label": "Your Name" },
-    { "id": "email", "type": "email", "label": "Your Email" }
-  ],
-  "submitLabel": "Send Message"
-}
-```
+### `analytics`
+- `id` (bigint, PK)
+- `page_id` (uuid, FK)
+- `event_type` (text) - `page_view`, `block_click`, `form_submit`
+- `block_id` (uuid, optional)
+- `metadata` (jsonb) - Geo, Device, Referral
 
 ---
-
-## 3. Critical Tables Reference
-
-| Table | RLS | Description |
-|---|---|---|
-| `users` | Owner | Extends Supabase `auth.users`. Stores profile info. |
-| `pages` | Public/Owner | Main entity. Row per landing page. |
-| `blocks` | Public/Owner | Content units. Ordered by `position`. |
-| `leads` | Owner | Form submissions. Encrypted/Protected heavily. |
-| `analytics` | Public (Append) | Event log (page_view, click). High write volume. |
-
-## 4. Migrations & Changes
-
-- Migrations are stored in `supabase/migrations/`.
-- **Naming:** `YYYYMMDDHHMMSS_description.sql`.
-- **Apply:** `supabase db push` (Local) / `supabase db reset` (Wipe & Re-apply).
-- **Production:** Applied via CI/CD pipeline.
+*Generated based on migrations up to Feb 2026.*

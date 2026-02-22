@@ -1,20 +1,27 @@
-# lnkmx.my — The Micro-Business OS
+# lnkmx — The Business OS for the Solo-Economy
 
-> **Document Purpose:** Single source of truth for the lnkmx platform — architecture, features, user flows, and repository structure. See `PLATFORM_SNAPSHOT.md` for the complete schema and infrastructure details. Written for team onboarding and technical reference.
+> **Strategic Vision:** lnkmx is transitioning from a simple "Link-in-bio" tool to a comprehensive **Business Operating System** (Solo OS) for creators and micro-businesses. Our goal is to consolidate the fragmented tech stack (Site Builder + CRM + Booking + Payments) into a single, mobile-first, AI-native platform.
 
 ---
 
 ## 1) What lnkmx is
 
-**Positioning:** The Micro-Business Operating System — Page Builder + Mini-CRM + Analytics
+**Positioning:** The Micro-Business Operating System — Page Builder + Mini-CRM + Analytics + Fintech Foundation.
 
-lnkmx is a comprehensive SaaS platform that combines three core capabilities into one unified system:
+lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
-1. **Page Builder** — AI-powered drag-and-drop constructor with 28 customizable blocks for creating professional websites without coding
-2. **Mini-CRM** — Lead management system with status tracking, interaction history, and Telegram notifications
-3. **Analytics** — Click tracking, conversion funnels, traffic sources, device breakdown, and geography insights
+1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Liquid Glass"** aesthetic (glassmorphism, premium micro-animations, and depth) to provide a high-end look by default.
+2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking.
+3. **Advanced Analytics** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and provide 30% more accurate data for Ad spending optimization (CAPI).
+4. **Fintech Core** — Integrated ledger for transaction tracking, multi-currency wallets, and future real-world payment gateway support (Kaspi/Robokassa).
 
-The platform enables creators, freelancers, and small businesses to build their online presence, capture leads, and manage client relationships from a single dashboard. Core value: complete business system accessible in minutes.
+**Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
+
+### Key Competitive Moats
+- **Liquid Glass Aesthetic:** Premium design capital that allows users to charge more for their services.
+- **AI-Native Workflow:** Gemini-powered content and layout generation to solve "blank page syndrome".
+- **Data-Backed Retention:** High switching costs once customer data (leads/bookings) is stored in the lnkmx CRM.
+- **Privacy-First Analytics:** Server-side proxying (FB CAPI, TikTok) for 2026's cookieless environment.
 
 ### Repository Security & Privacy
 The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/inkmax/docs/ADR/0024-repository-security.md) for details on recent security hardening.

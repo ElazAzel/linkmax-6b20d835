@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Enhanced Analytics**: Redesigned the `ConversionFunnel` component with `framer-motion` animations, premium gradients, and automatic drop-off rate calculations. This provides a high-end visual experience for business users tracking their sales pipeline.
 - **Pitch Deck Update**: Обновлен инвестиционный меморандум, интегрированы данные о новых технических преимуществах: финтех-ядре, профессиональной аналитике и масштабируемой i18n архитектуре.
 
+### Fixed (Platform Stabilization — 2026-02-22)
+- **SEO & Sitemap**: Resolved priority conflict in Cloudflare Worker that prevented dynamic sitemap generation by the Edge Function.
+- **PWA Support**: Implemented a core service worker (`sw.js`) and registration logic, enabling the mobile-first "Install App" capability.
+- **OAuth Redirects**: Fully integrated `returnTo` parameter support for Google and Apple sign-in flows, ensuring users return to their specific editor state after authentication.
+- **Block Registry Consistency**: Eliminated critical "block type drift" across registry, factory, and tier limits; standardized `event` and `search` block definitions.
+- **Documentation Overhaul**: Created `TECH_DEBT_BACKLOG.md` and `DATABASE_SCHEMA_GUIDE.md`, updated `PLATFORM_SNAPSHOT.md` to reflect the current Business OS strategy.
+
 ### Added (Booking & Data Export — 2026-02-21)
 - **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.
 - **Google Calendar Sync**: Implemented full two-way Google Calendar integration for the Booking Block. Plumbed via a secure `user_integrations` database table and a new `google-calendar-sync` Edge Function to check availability in real-time and create events upon booking confirmation. Enabled via a new toggle in `BookingSettingsTab` and managed in the user's `LinkedAccountsSection`.
