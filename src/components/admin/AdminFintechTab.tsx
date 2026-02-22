@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/platform/supabase/client';
-import { Tables } from '@/integrations/supabase/types';
+// Tables not in generated types - using any
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +10,16 @@ import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
 
-type PayoutRequestWithProfile = Tables<'payout_requests'> & {
+type PayoutRequestWithProfile = {
+    id: string;
+    user_id: string;
+    amount: number;
+    status: string;
+    payout_method: any;
+    created_at: string;
+    processed_at: string | null;
+    notes: string | null;
+    wallet_id: string;
     user_profiles: {
         display_name: string | null;
         username: string | null;
@@ -25,7 +34,7 @@ export const AdminFintechTab = () => {
     const fetchRequests = async () => {
         try {
             setLoading(true);
-            const { data, error } = await supabase
+            const { data, error } = await (supabase as any)
                 .from('payout_requests')
                 .select(`
                     *,
@@ -52,7 +61,7 @@ export const AdminFintechTab = () => {
     const handleAction = async (id: string, status: 'completed' | 'rejected') => {
         try {
             setActionLoading(id);
-            const { error } = await supabase
+            const { error } = await (supabase as any)
                 .from('payout_requests')
                 .update({
                     status,

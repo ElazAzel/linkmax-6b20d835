@@ -4,7 +4,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils/utils";
 
-// @ts-expect-error - Radix UI internal types conflict with React 18 in some environments
+// @ts-ignore - Radix UI types
 const Select: any = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;
