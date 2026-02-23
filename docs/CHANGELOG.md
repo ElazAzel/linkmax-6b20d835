@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Architecture Map**: Corrected "Legacy" labels in `PLATFORM_SNAPSHOT.md` for active core components (`src/main.tsx`, `src/pages/`). Added `src/platform/` to the official structure.
 - **API Reference**: Synchronized `API.md` with the current Edge Functions list, adding `google-calendar-sync`, `robokassa`, `robokassa-webhook`, `send-email`, and `verify-domain`.
 - **Consistency**: Verified and updated documentation links and "Business OS" branding across all top-level guides.
+- **Architecture Refactoring (Admin Layer)**:
+    - Extracted direct Supabase queries from `AdminCharts.tsx` and `AdminPartnersTab.tsx` into a new `AdminService` (`src/services/admin.ts`).
+    - Implemented custom React Query hooks (`useAdminStats`, `usePartners`) in `src/hooks/admin/useAdminData.ts` to manage server state.
+    - Simplified UI components by removing boilerplate `useEffect`, `useState`, and manual error handling, resulting in ~30% code reduction in affected views.
+    - Fixed pre-existing type errors in `src/integrations/lovable/index.ts` to ensure a clean typecheck build.
 
 ### Added (Optimizations & Custom Domains — 2026-02-22)
 - **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.

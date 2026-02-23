@@ -1,13 +1,11 @@
-import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/platform/supabase/client';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
-import { format, subDays, startOfDay, eachDayOfInterval } from 'date-fns';
 import { Loader2 } from 'lucide-react';
+import { useAdminStats } from '@/hooks/admin/useAdminData';
 
 interface DailyData {
   date: string;
@@ -54,251 +52,25 @@ const COLORS = {
 
 export function AdminCharts() {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const [dailyData, setDailyData] = useState<DailyData[]>([]);
-  const [userStatusData, setUserStatusData] = useState<UserStatusData[]>([]);
-  const [eventTypeData, setEventTypeData] = useState<EventTypeData[]>([]);
-  const [cumulativeUsers, setCumulativeUsers] = useState<{ date: string; total: number }[]>([]);
-  const [socialStats, setSocialStats] = useState<SocialStatsData[]>([]);
-  const [blockTypeStats, setBlockTypeStats] = useState<{ name: string; count: number; color: string }[]>([]);
+  const { data: stats, isLoading: loading } = useAdminStats(14);
 
-  const loadChartData = useCallback(async () => {
-    setLoading(true);
-    await Promise.all([
-      loadDailyGrowth(),
-      loadUserStatus(),
-      loadEventTypes(),
-      loadCumulativeUsers(),
-      loadSocialStats(),
-      loadBlockTypeStats()
-    ]);
-    setLoading(false);
-  }, []);
-
-  const loadDailyGrowth = async () => {
-    try {
-      const days = 14;
-      const startDate = subDays(new Date(), days);
-
-      // Get all data in parallel
-      const [
-        { data: usersData },
-        { data: pagesData },
-        { data: analyticsData },
-        { data: blocksData },
-        { data: friendshipsData },
-        { data: collabsData }
-      ] = await Promise.all([
-        supabase.from('user_profiles').select('created_at').gte('created_at', startDate.toISOString()),
-        supabase.from('pages').select('created_at').gte('created_at', startDate.toISOString()),
-        supabase.from('analytics').select('event_type, created_at').gte('created_at', startDate.toISOString()),
-        supabase.from('blocks').select('created_at').gte('created_at', startDate.toISOString()),
-        supabase.from('friendships').select('created_at').gte('created_at', startDate.toISOString()),
-        supabase.from('collaborations').select('created_at').gte('created_at', startDate.toISOString())
-      ]);
-
-      // Generate daily breakdown
-      const dateRange = eachDayOfInterval({ start: startDate, end: new Date() });
-
-      const dailyStats = dateRange.map(day => {
-        const dayStart = startOfDay(day);
-        const dayEnd = new Date(dayStart);
-        dayEnd.setDate(dayEnd.getDate() + 1);
-
-        const dateStr = format(day, 'dd.MM');
-
-        const filterByDay = (items: any[] | null) =>
-          items?.filter(item => {
-            if (!item.created_at) return false;
-            const d = new Date(item.created_at);
-            return d >= dayStart && d < dayEnd;
-          }).length || 0;
-
-        const dayEvents = analyticsData?.filter(e => {
-          if (!e.created_at) return false;
-          const d = new Date(e.created_at);
-          return d >= dayStart && d < dayEnd;
-        }) || [];
-
-        return {
-          date: dateStr,
-          users: filterByDay(usersData),
-          pages: filterByDay(pagesData),
-          views: dayEvents.filter(e => e.event_type === 'view').length,
-          clicks: dayEvents.filter(e => e.event_type === 'click').length,
-          shares: dayEvents.filter(e => e.event_type === 'share').length,
-          blocks: filterByDay(blocksData),
-          friendships: filterByDay(friendshipsData),
-          collabs: filterByDay(collabsData)
-        };
-      });
-
-      setDailyData(dailyStats);
-    } catch (error) {
-      console.error('Error loading daily growth:', error);
-    }
-  };
-
-  const loadUserStatus = async () => {
-    try {
-      const now = new Date().toISOString();
-
-      const { count: premiumCount } = await supabase
-        .from('user_profiles')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_premium', true);
-
-      const { count: trialCount } = await supabase
-        .from('user_profiles')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_premium', false)
-        .gt('trial_ends_at', now);
-
-      const { count: totalCount } = await supabase
-        .from('user_profiles')
-        .select('*', { count: 'exact', head: true });
-
-      const freeCount = (totalCount || 0) - (premiumCount || 0) - (trialCount || 0);
-
-      setUserStatusData([
-        { name: 'Premium', value: premiumCount || 0, color: COLORS.premium },
-        { name: 'Trial', value: trialCount || 0, color: COLORS.trial },
-        { name: 'Free', value: Math.max(0, freeCount), color: COLORS.free }
-      ]);
-    } catch (error) {
-      console.error('Error loading user status:', error);
-    }
-  };
-
-  const loadEventTypes = async () => {
-    try {
-      const { data } = await supabase
-        .from('analytics')
-        .select('event_type');
-
-      const counts = {
-        view: 0,
-        click: 0,
-        share: 0
-      };
-
-      data?.forEach(e => {
-        if (e.event_type in counts) {
-          counts[e.event_type as keyof typeof counts]++;
-        }
-      });
-
-      setEventTypeData([
-        { name: t('adminCharts.events.views', 'Просмотры'), count: counts.view, color: COLORS.views },
-        { name: t('adminCharts.events.clicks', 'Клики'), count: counts.click, color: COLORS.clicks },
-        { name: t('adminCharts.events.shares', 'Шейры'), count: counts.share, color: COLORS.shares }
-      ]);
-    } catch (error) {
-      console.error('Error loading event types:', error);
-    }
-  };
-
-  const loadCumulativeUsers = async () => {
-    try {
-      const { data } = await supabase
-        .from('user_profiles')
-        .select('created_at')
-        .order('created_at', { ascending: true });
-
-      if (!data || data.length === 0) {
-        setCumulativeUsers([]);
-        return;
-      }
-
-      // Group by date and calculate cumulative
-      const dateMap = new Map<string, number>();
-      let cumulative = 0;
-
-      data.forEach(u => {
-        if (!u.created_at) return;
-        const dateStr = format(new Date(u.created_at), 'dd.MM');
-        cumulative++;
-        dateMap.set(dateStr, cumulative);
-      });
-
-      // Get last 30 days or all data if less
-      const entries = Array.from(dateMap.entries());
-      const last30 = entries.slice(-30);
-
-      setCumulativeUsers(last30.map(([date, total]) => ({ date, total })));
-    } catch (error) {
-      console.error('Error loading cumulative users:', error);
-    }
-  };
-
-  const loadSocialStats = async () => {
-    try {
-      const [
-        { count: totalFriends },
-        { count: acceptedFriends },
-        { count: totalCollabs },
-        { count: acceptedCollabs },
-        { count: totalTeams }
-      ] = await Promise.all([
-        supabase.from('friendships').select('*', { count: 'exact', head: true }),
-        supabase.from('friendships').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
-        supabase.from('collaborations').select('*', { count: 'exact', head: true }),
-        supabase.from('collaborations').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
-        supabase.from('teams').select('*', { count: 'exact', head: true })
-      ]);
-
-      setSocialStats([
-        { name: t('adminCharts.social.friendships', 'Дружбы'), total: totalFriends || 0, accepted: acceptedFriends || 0 },
-        { name: t('adminCharts.social.collaborations', 'Коллаборации'), total: totalCollabs || 0, accepted: acceptedCollabs || 0 },
-        { name: t('adminCharts.social.teams', 'Команды'), total: totalTeams || 0, accepted: totalTeams || 0 }
-      ]);
-    } catch (error) {
-      console.error('Error loading social stats:', error);
-    }
-  };
-
-  const loadBlockTypeStats = async () => {
-    try {
-      const { data } = await supabase
-        .from('blocks')
-        .select('type');
-
-      const typeCounts: Record<string, number> = {};
-      data?.forEach(block => {
-        typeCounts[block.type] = (typeCounts[block.type] || 0) + 1;
-      });
-
-      const colorPalette = [
-        '#8b5cf6', '#10b981', '#06b6d4', '#f97316', '#ec4899',
-        '#eab308', '#3b82f6', '#ef4444', '#14b8a6', '#a855f7'
-      ];
-
-      const sortedTypes = Object.entries(typeCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10)
-        .map(([name, count], index) => ({
-          name: name.charAt(0).toUpperCase() + name.slice(1),
-          count,
-          color: colorPalette[index % colorPalette.length]
-        }));
-
-      setBlockTypeStats(sortedTypes);
-    } catch (error) {
-      console.error('Error loading block type stats:', error);
-    }
-  };
-
-  useEffect(() => {
-    void loadChartData();
-  }, [loadChartData]);
-
-  if (loading) {
+  if (loading || !stats) {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
+
+  const {
+    dailyGrowth: dailyData,
+    userDistribution: userStatusData,
+    eventDistribution: eventTypeData,
+    cumulativeUsers,
+    socialStats,
+    blockTypeStats
+  } = stats;
+
 
   return (
     <div className="space-y-6">

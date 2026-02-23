@@ -119,7 +119,9 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 **Key files:**
 - `src/pages/Admin.tsx` — Main admin page
-- `src/components/admin/` — Admin panel components
+- `src/components/admin/` — Admin panel components refactored to use Service Layer
+- `src/services/admin.ts` — Centralized admin business logic (Stats, Partners CRUD)
+- `src/hooks/admin/useAdminData.ts` — React Query hooks for admin views
 - `src/hooks/useAdminAuth.ts` — Admin authentication check
 
 ---
@@ -513,7 +515,7 @@ lnkmx/
 │   │   └── next/                 # SSR/Edge compatibility layers
 │   │
 │   ├── hooks/                    # React hooks (60+)
-│   │   ├── admin/                # Admin panel hooks
+│   │   ├── admin/                # Admin panel hooks (useAdminData, etc.)
 │   │   ├── analytics/            # Event and tracking hooks
 │   │   ├── crm/                  # Lead management hooks
 │   │   ├── dashboard/            # Dashboard flow hooks
@@ -537,6 +539,7 @@ lnkmx/
 │   │   ├── analytics.ts          # Analytics tracking
 │   │   ├── events.ts             # Event management
 │   │   ├── tokens.ts             # Token economy
+│   │   ├── admin.ts              # Admin dashboard services
 │   │   └── ...                   # Other services
 │   │
 │   ├── domain/                   # Domain entities (Clean Architecture)

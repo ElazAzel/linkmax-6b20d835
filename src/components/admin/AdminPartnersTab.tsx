@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/platform/supabase/client';
+import { usePartners } from '@/hooks/admin/useAdminData';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -64,76 +63,19 @@ const emptyFormData: PartnerFormData = {
 
 export function AdminPartnersTab() {
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
     const [formData, setFormData] = useState<PartnerFormData>(emptyFormData);
     const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-    // Fetch partners
-    const { data: partners, isLoading } = useQuery({
-        queryKey: ['admin-partners'],
-        queryFn: async () => {
-            const { data, error } = await supabase
-                .from('partners')
-                .select('*')
-                .order('sort_order', { ascending: true });
-
-            if (error) throw error;
-            return (data || []) as Partner[];
-        },
-    });
-
-    // Create partner
-    const createMutation = useMutation({
-        mutationFn: async (data: PartnerFormData) => {
-            const { error } = await supabase.from('partners').insert([data]);
-            if (error) throw error;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin-partners'] });
-            queryClient.invalidateQueries({ queryKey: ['landing-partners'] });
-            toast.success(t('admin.partners.created', 'Партнёр добавлен'));
-            handleCloseDialog();
-        },
-        onError: (error: Error) => {
-            toast.error(error.message);
-        },
-    });
-
-    // Update partner
-    const updateMutation = useMutation({
-        mutationFn: async ({ id, data }: { id: string; data: PartnerFormData }) => {
-            const { error } = await supabase.from('partners').update(data).eq('id', id);
-            if (error) throw error;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin-partners'] });
-            queryClient.invalidateQueries({ queryKey: ['landing-partners'] });
-            toast.success(t('admin.partners.updated', 'Партнёр обновлён'));
-            handleCloseDialog();
-        },
-        onError: (error: Error) => {
-            toast.error(error.message);
-        },
-    });
-
-    // Delete partner
-    const deleteMutation = useMutation({
-        mutationFn: async (id: string) => {
-            const { error } = await supabase.from('partners').delete().eq('id', id);
-            if (error) throw error;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin-partners'] });
-            queryClient.invalidateQueries({ queryKey: ['landing-partners'] });
-            toast.success(t('admin.partners.deleted', 'Партнёр удалён'));
-            setDeleteConfirmId(null);
-        },
-        onError: (error: Error) => {
-            toast.error(error.message);
-        },
-    });
+    const {
+        partners,
+        isLoading,
+        createPartner,
+        updatePartner,
+        deletePartner,
+        isPending
+    } = usePartners();
 
     const handleOpenCreate = () => {
         setEditingPartner(null);
@@ -170,13 +112,12 @@ export function AdminPartnersTab() {
         }
 
         if (editingPartner) {
-            updateMutation.mutate({ id: editingPartner.id, data: formData });
+            updatePartner({ id: editingPartner.id, data: formData }).then(() => handleCloseDialog());
         } else {
-            createMutation.mutate(formData);
+            createPartner(formData).then(() => handleCloseDialog());
         }
     };
 
-    const isPending = createMutation.isPending || updateMutation.isPending;
 
     return (
         <div className="space-y-6">
@@ -387,10 +328,10 @@ export function AdminPartnersTab() {
                         </Button>
                         <Button
                             variant="destructive"
-                            onClick={() => deleteConfirmId && deleteMutation.mutate(deleteConfirmId)}
-                            disabled={deleteMutation.isPending}
+                            onClick={() => deleteConfirmId && deletePartner(deleteConfirmId).then(() => setDeleteConfirmId(null))}
+                            disabled={isPending}
                         >
-                            {deleteMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                            {isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                             {t('common.delete', 'Удалить')}
                         </Button>
                     </DialogFooter>
