@@ -65,7 +65,7 @@
 
 | Feature | Status | Notes |
 |---|---|---|
-| RoboKassa checkout | In progress | Subscription purchase flow |
+| RoboKassa checkout | Implemented | Subscription purchase flow and webhook handling |
 | Subscription status sync | Implemented | Access control based on plan |
 | Local pricing in KZT | Implemented | Pricing display by locale |
 | Linkkon token economy | Implemented | Virtual currency with daily quests |

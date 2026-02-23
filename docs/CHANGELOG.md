@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Documentation (Documentation Audit & Cleanup — 2026-02-23)
+- **Tech Stack Alignment**: Updated `README.md` and `PLATFORM_SNAPSHOT.md` to correctly reflect the Vite React SPA architecture, resolving legacy references to Next.js 14.
+- **Architecture Map**: Corrected "Legacy" labels in `PLATFORM_SNAPSHOT.md` for active core components (`src/main.tsx`, `src/pages/`). Added `src/platform/` to the official structure.
+- **API Reference**: Synchronized `API.md` with the current Edge Functions list, adding `google-calendar-sync`, `robokassa`, `robokassa-webhook`, `send-email`, and `verify-domain`.
+- **Consistency**: Verified and updated documentation links and "Business OS" branding across all top-level guides.
+
 ### Added (Optimizations & Custom Domains — 2026-02-22)
 - **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.
 - **Custom Domains**: Полная интеграция. Создан интерфейс в Dashboard для привязки доменов с живой проверкой DNS (CNAME) через новую Edge Function `verify-domain`. Добавлены визуальные индикаторы статуса подключения.

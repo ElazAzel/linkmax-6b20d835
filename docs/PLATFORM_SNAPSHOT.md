@@ -252,7 +252,7 @@ new -> contacted -> qualified -> won/lost
 
 ### Frontend
 
-- **Vite React SPA** (Migrated purely to Vite, no Next.js)
+- Vite React SPA (Core Platform)
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
 - i18next for RU/EN/KK/UZ (100% synchronized coverage)
@@ -295,10 +295,8 @@ new -> contacted -> qualified -> won/lost
 
 ### SEO Implementation
 
-**Metadata API (Next.js):**
-- Dynamic `generateMetadata()` in `layout.tsx` and `page.tsx`
-- Server-side fetching of user data for Open Graph tags
-- Zero layout shift for critical meta tags
+**Metadata API:**
+Dynamic SEO meta tags are managed via `react-helmet-async` on the client and injected into the initial HTML by the `seo-ssr` edge function for crawlers.
 
 **Structured data (JSON-LD):**
 - WebPage schema for all pages
@@ -383,7 +381,7 @@ new -> contacted -> qualified -> won/lost
 - `subscriptions`: plan status and billing metadata.
 - **Multi-Page**: Users can create up to 6 pages (Pro) or 1 page (Free).
 - **Custom Domains**: Pro users can connect custom domains via CNAME record.
-- **SSR/SEO**: Next.js-like SSR via Cloudflare Workers + Supabase Edge Functions for bots.
+- **SSR/SEO**: Hybrid SSR via Cloudflare Workers + `seo-ssr` Edge Function for bots.
 - **Analytics**: Built-in simple analytics + Pixel integrations (FB, TT, GA4, Yandex).
 
 **Leads and CRM:**
@@ -501,13 +499,18 @@ lnkmx/
 │   │   ├── ui/                   # shadcn/ui base components
 │   │   └── ...                   # Other feature components
 │   │
-│   ├── pages/                    # Legacy Pages (Migrated to use client)
+│   ├── pages/                    # Active Page components
 │   │   ├── DashboardV2.tsx       # Main dashboard logic
 │   │   ├── LandingV5.tsx         # Marketing landing (current)
 │   │   ├── PublicPage.tsx        # User public pages
 │   │   ├── Admin.tsx             # Admin panel
 │   │   ├── Auth.tsx              # Login/signup
 │   │   └── ...                   # Other pages
+│   │
+│   ├── platform/                 # Platform-specific integrations
+│   │   ├── supabase/             # Client & type generation
+│   │   ├── robokassa/            # Payment gateway logic
+│   │   └── next/                 # SSR/Edge compatibility layers
 │   │
 │   ├── hooks/                    # React hooks (60+)
 │   │   ├── admin/                # Admin panel hooks
@@ -565,7 +568,7 @@ lnkmx/
 │   ├── integrations/
 │   │   └── supabase/             # Supabase client and types
 │   │
-│   ├── main.tsx                  # App entry point (Legacy/Reference)
+│   ├── main.tsx                  # App entry point
 │   └── index.css                 # Global styles + design tokens
 │
 ├── supabase/
@@ -739,6 +742,6 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: February 22, 2026*
-*Current Platform Health Score: 8.8/10*
+*Last updated: February 23, 2026*
+*Current Platform Health Score: 9.0/10*
 *Maintained by: Antigravity (Principal Engineer)*

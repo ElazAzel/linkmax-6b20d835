@@ -25,12 +25,22 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 
 ### Booking & Events
 
+### Booking & Events
+
 | Function | Auth | Description |
 |---|---|---|
 | `send-booking-notification` | No JWT | Notifies of new bookings via Telegram/Email |
 | `send-booking-reminder` | No JWT | Sends booking reminders (scheduled) |
 | `send-event-confirmation` | No JWT | Sends ticket/confirmation to event attendees |
 | `send-attendee-email` | No JWT | Sends follow-up emails to event attendees |
+| `google-calendar-sync` | No JWT | Syncs bookings with Google Calendar (OAuth) |
+
+### Fintech & Payments
+
+| Function | Auth | Description |
+|---|---|---|
+| `robokassa` | No JWT | Generates Robokassa payment links/invoice |
+| `robokassa-webhook` | No JWT | Handles Robokassa payment success/fail notifications |
 
 ### Telegram Integration
 
@@ -51,6 +61,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 | `send-weekly-digest` | No JWT | Weekly activity digest emails |
 | `send-weekly-motivation` | No JWT | Weekly motivational notifications |
 | `send-trial-ending-notification` | No JWT | Pro trial expiry reminders |
+| `send-email` | No JWT | Generic email delivery service |
 
 ### SEO & Analytics
 
@@ -66,6 +77,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 |---|---|---|
 | `public-experts` | No JWT | Returns public expert directory |
 | `resolve-domain` | No JWT | Resolves custom domains to pages |
+| `verify-domain` | No JWT | Verifies CNAME/DNS for custom domains |
 | `seed-demo-accounts` | No JWT | Seeds demo accounts (admin-only check inside) |
 | `language-upload` | No JWT | Uploads language translation files |
 
@@ -119,4 +131,4 @@ Security enforced at the database level using Postgres RLS on **all tables**.
 
 ---
 
-*Last updated: 2026-02-18*
+*Last updated: 2026-02-23*

@@ -36,8 +36,8 @@
 ## 🛠 Tech Stack
 
 **Core**
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **UI Library**: [React 18](https://react.dev/)
+- **Framework**: [Vite](https://vitejs.dev/) with [React 18](https://react.dev/)
+- **Build Tool**: Vite 6+
 - **Language**: [TypeScript 5](https://www.typescriptlang.org/)
 
 **Styling & UI**
@@ -95,13 +95,14 @@ lnkmx/
 │   │   ├── blocks/      # Public view block renderers
 │   │   ├── block-editors/ # Dashboard block editors
 │   │   └── ui/          # Base design system (shadcn)
-│   ├── pages/           # Route-level components
-│   ├── hooks/           # Custom React Hooks (50+)
+│   ├── pages/           # Route-level components (Vite SPA)
+│   ├── hooks/           # Custom React Hooks (60+)
 │   ├── services/        # Business Logic & API calls
 │   ├── domain/          # Core Domain Entities
+│   ├── platform/        # Platform-specific integrations (Supabase, Robokassa)
 │   └── lib/             # Utilities & Helpers
 ├── supabase/
-│   ├── functions/       # Edge Functions
+│   ├── functions/       # 35+ Edge Functions
 │   └── migrations/      # Database Schema
 └── docs/                # Documentation
 ```
@@ -109,7 +110,8 @@ lnkmx/
 ## 📖 Documentation
 
 - **[Platform Snapshot](docs/PLATFORM_SNAPSHOT.md)**: The single source of truth for architecture and features.
-- **[Architecture](docs/ARCHITECTURE.md)**: High-level system design diagrams.
+- **[Architecture](docs/architecture.md)**: High-level system design diagrams.
+- **[API & Backend](docs/API.md)**: Reference for Edge Functions and RPCs.
 - **[Testing Strategy](docs/TESTING.md)**: Guide to running and writing tests.
 - **[Contributing](CONTRIBUTING.md)**: Guidelines for contributing code.
 

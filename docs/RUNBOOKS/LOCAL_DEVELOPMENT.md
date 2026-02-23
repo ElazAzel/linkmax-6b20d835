@@ -81,7 +81,7 @@ npm run build
   npm install
   ```
 - **Supabase Issues**: Ensure your `.env` variables match your Supabase project.
-- **Port Conflicts**: Next.js defaults to `3000`. Use `npm run dev -- -p 3001` for a different port.
+- **Port Conflicts**: Vite defaults to `5173`. If you need a different port, use `npm run dev -- --port 3001`.
 - **Edge Functions**: Deno lint errors in IDE are expected — edge functions run on Deno runtime, not Node.
 
 ---
