@@ -6,23 +6,64 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface LeadFormData {
-    [key: string]: any;
+const MAX_FIELDS = 20;
+const MAX_KEY_LENGTH = 100;
+const MAX_VALUE_LENGTH = 1000;
+const MAX_PAYLOAD_SIZE = 10 * 1024; // 10KB
+
+function escapeHtml(str: string): string {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
-interface SubmitLeadRequest {
-    pageId: string;
-    blockId: string;
-    formData: LeadFormData;
+function validateAndSanitizeFormData(formData: unknown): Record<string, string> {
+    if (!formData || typeof formData !== 'object' || Array.isArray(formData)) {
+        throw new Error('formData must be a non-null object');
+    }
+
+    const entries = Object.entries(formData as Record<string, unknown>);
+    if (entries.length === 0) {
+        throw new Error('formData must have at least one field');
+    }
+    if (entries.length > MAX_FIELDS) {
+        throw new Error(`formData exceeds maximum of ${MAX_FIELDS} fields`);
+    }
+
+    const sanitized: Record<string, string> = {};
+    for (const [key, value] of entries) {
+        if (typeof key !== 'string' || key.length === 0 || key.length > MAX_KEY_LENGTH) {
+            throw new Error(`Invalid field name (must be 1-${MAX_KEY_LENGTH} chars)`);
+        }
+        if (!/^[\w\s\-а-яА-ЯёЁәғқңөұүһіӘҒҚҢӨҰҮҺІ]+$/u.test(key)) {
+            throw new Error(`Field name contains invalid characters: ${key}`);
+        }
+        const strValue = String(value ?? '').substring(0, MAX_VALUE_LENGTH);
+        sanitized[key] = strValue;
+    }
+
+    return sanitized;
+}
+
+function isValidUUID(str: string): boolean {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
 }
 
 serve(async (req: Request) => {
-    // Handle CORS preflight
     if (req.method === 'OPTIONS') {
         return new Response(null, { headers: corsHeaders });
     }
 
     try {
+        // Check payload size
+        const contentLength = req.headers.get('content-length');
+        if (contentLength && parseInt(contentLength) > MAX_PAYLOAD_SIZE) {
+            throw new Error('Payload too large');
+        }
+
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -31,11 +72,25 @@ serve(async (req: Request) => {
         }
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
-        const { pageId, blockId, formData }: SubmitLeadRequest = await req.json();
 
-        if (!pageId || !blockId || !formData) {
-            throw new Error('Missing required fields: pageId, blockId, or formData');
+        const rawBody = await req.text();
+        if (rawBody.length > MAX_PAYLOAD_SIZE) {
+            throw new Error('Payload too large');
         }
+
+        const body = JSON.parse(rawBody);
+        const { pageId, blockId, formData } = body;
+
+        // Validate IDs
+        if (!pageId || typeof pageId !== 'string' || !isValidUUID(pageId)) {
+            throw new Error('Invalid pageId: must be a valid UUID');
+        }
+        if (!blockId || typeof blockId !== 'string') {
+            throw new Error('Missing or invalid blockId');
+        }
+
+        // Validate and sanitize form data
+        const sanitizedFormData = validateAndSanitizeFormData(formData);
 
         // 1. Insert lead into the leads table
         const { data: lead, error: insertError } = await supabase
@@ -43,7 +98,7 @@ serve(async (req: Request) => {
             .insert({
                 page_id: pageId,
                 block_id: blockId,
-                form_data: formData,
+                form_data: sanitizedFormData,
                 status: 'new'
             })
             .select()
@@ -75,14 +130,14 @@ serve(async (req: Request) => {
 
                     let text = '';
                     const lang = profile.telegram_language || 'ru';
-                    const pageName = pageData.title || pageData.slug || 'lnkmx.my';
+                    const pageName = escapeHtml(pageData.title || pageData.slug || 'lnkmx.my');
 
-                    // Format form data for the message
+                    // Format form data with HTML escaping
                     let formDetails = '';
-                    for (const [key, value] of Object.entries(formData)) {
-                        // Translate common keys if possible or just show them
-                        const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
-                        formDetails += `\n▪️ ${displayKey}: ${value}`;
+                    for (const [key, value] of Object.entries(sanitizedFormData)) {
+                        const displayKey = escapeHtml(key.charAt(0).toUpperCase() + key.slice(1));
+                        const displayValue = escapeHtml(value);
+                        formDetails += `\n▪️ ${displayKey}: ${displayValue}`;
                     }
 
                     if (lang === 'ru') {
