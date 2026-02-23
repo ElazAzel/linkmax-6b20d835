@@ -102,7 +102,7 @@ export const HomeScreen = memo(function HomeScreen({
       <div className="px-5 py-6 space-y-6">
         {/* Primary Page Card */}
         <Card className="p-6 space-y-5 glass-card border-white/20 shadow-glass-lg relative overflow-hidden group">
-          <div className="absolute inset-0 bg-liquid-mesh opacity-10 -z-1" />
+          <div className="absolute inset-0 bg-liquid-mesh opacity-10 -z-10 pointer-events-none" />
           {/* Page Header */}
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16 rounded-2xl border-2 border-border">
