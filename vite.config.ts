@@ -33,5 +33,20 @@ export default defineConfig(({ mode }) => ({
   build: {
     // Enable sourcemaps in production when Sentry token is available
     sourcemap: mode === "development" || !!process.env.SENTRY_AUTH_TOKEN,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-query': ['@tanstack/react-query'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-popover', '@radix-ui/react-tooltip', '@radix-ui/react-tabs', '@radix-ui/react-select'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-i18n': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          'vendor-charts': ['recharts'],
+          'vendor-sentry': ['@sentry/react'],
+          'vendor-dnd': ['@dnd-kit/core', '@dnd-kit/sortable'],
+        },
+      },
+    },
   },
 }));
