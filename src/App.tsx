@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner, toast } from "sonner";
@@ -8,11 +8,11 @@ import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PWAInstallPrompt } from "@/components/pwa/PWAInstallPrompt";
-import { PWAUpdatePrompt } from "@/components/pwa/PWAUpdatePrompt";
-import { CookieConsent } from "@/components/legal/CookieConsent";
-import { useWebVitals } from "@/hooks/analytics/useWebVitals";
-import { storage } from '@/lib/storage';
+
+// Lazy load non-critical shell components to reduce main bundle
+const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
+const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
+const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
 
 const queryClient = new QueryClient();
 
@@ -30,15 +30,16 @@ const PageLoader = () => (
 
 
 const App = () => {
-  // Initialize Web Vitals monitoring in development
-  useWebVitals();
-
-  // Clear old storage versions and sync i18n on app load
+  // Defer non-critical init to after first paint
   useEffect(() => {
-    storage.clearOldVersions();
-
-    // Sync translations from DB — deferred to not block paint
     requestIdleCallback(() => {
+      // Web Vitals — monitoring only, not needed for render
+      import("@/hooks/analytics/useWebVitals");
+      // Clear old storage versions
+      import('@/lib/storage').then(({ storage }) => {
+        storage.clearOldVersions();
+      });
+      // Sync translations from DB
       import('./i18n/config').then(({ default: i18n }) => {
         import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
           syncI18nWithDB(i18n);
@@ -74,9 +75,11 @@ const App = () => {
               <Suspense fallback={<PageLoader />}>
                 <Outlet />
               </Suspense>
-              <PWAInstallPrompt />
-              <PWAUpdatePrompt />
-              <CookieConsent />
+              <Suspense fallback={null}>
+                <PWAInstallPrompt />
+                <PWAUpdatePrompt />
+                <CookieConsent />
+              </Suspense>
             </TooltipProvider>
           </LanguageProvider>
         </AuthProvider>
