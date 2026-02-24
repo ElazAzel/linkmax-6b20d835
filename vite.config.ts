@@ -4,6 +4,22 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 
+// Plugin to make CSS non-render-blocking in production
+function nonBlockingCssPlugin() {
+  return {
+    name: 'non-blocking-css',
+    enforce: 'post' as const,
+    transformIndexHtml(html: string) {
+      // Convert <link rel="stylesheet"> to non-blocking pattern
+      return html.replace(
+        /<link rel="stylesheet" crossorigin href="(\/assets\/[^"]+\.css)">/g,
+        '<link rel="stylesheet" href="$1" media="print" onload="this.media=\'all\'">' +
+        '<noscript><link rel="stylesheet" href="$1"></noscript>'
+      );
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -12,6 +28,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
+    mode === 'production' && nonBlockingCssPlugin(),
     // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
     // Upload sourcemaps to Sentry in production builds (requires SENTRY_AUTH_TOKEN)
     mode === 'production' && !!process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
