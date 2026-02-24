@@ -59,17 +59,14 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </motion.div>
 
                 {/* Headline */}
-                <motion.h1
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
+                <h1
                     className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-[1.1] md:leading-[1.1]"
                 >
                     <span className="block text-foreground">{t('landing.v4.hero.titleStart', 'Build pages that')}</span>
                     <span className="block mt-2 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">
                         {t('landing.v4.hero.titleEnd', 'actually convert')}
                     </span>
-                </motion.h1>
+                </h1>
 
                 {/* Subtitle */}
                 <motion.p
