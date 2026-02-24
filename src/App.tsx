@@ -1,3 +1,6 @@
+// Polyfill requestIdleCallback for Safari
+const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
+
 import { Suspense, useEffect, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
@@ -32,7 +35,7 @@ const PageLoader = () => (
 const App = () => {
   // Defer non-critical init to after first paint
   useEffect(() => {
-    requestIdleCallback(() => {
+    _ric(() => {
       // Web Vitals — monitoring only, not needed for render
       import("@/hooks/analytics/useWebVitals");
       // Clear old storage versions

@@ -1,6 +1,9 @@
 // CRITICAL: i18n must be imported FIRST, before any React components
 import "./i18n/config";
 
+// Polyfill requestIdleCallback for Safari
+const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1) as unknown as number;
+
 import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -8,7 +11,7 @@ import "./index.css";
 import App from "./App";
 
 // Defer non-critical init to AFTER first paint
-requestIdleCallback(() => {
+_ric(() => {
   // Sentry — init after paint so it doesn't block FCP
   import("@/lib/utils/sentry");
   // Cache version check — network call, defer completely
