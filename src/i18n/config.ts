@@ -1,3 +1,6 @@
+// Polyfill requestIdleCallback for Safari
+const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
+
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -170,7 +173,7 @@ if (process.env.NODE_ENV === 'development') {
   console.log('[i18n] Initialized with language:', i18n.language);
   console.log('[i18n] Eagerly loaded: ru, en, kk. Lazy locales:', LAZY_LANGUAGES.join(', '));
   // Defer validation to not block startup
-  requestIdleCallback(() => {
+  _ric(() => {
     import('./validation').then(({ validateTranslations }) => {
       validateTranslations();
     });
