@@ -48,6 +48,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    // Disable modulepreload hints to prevent eager loading of lazy-route chunks
+    // (vendor-export, vendor-charts, vendor-sentry etc.) on the landing page.
+    // Modules are still loaded on demand via dynamic import().
+    modulePreload: false,
     // Enable sourcemaps in production when Sentry token is available
     sourcemap: true,
     rollupOptions: {
