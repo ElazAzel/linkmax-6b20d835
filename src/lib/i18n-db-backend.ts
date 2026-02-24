@@ -14,7 +14,10 @@ export async function fetchTranslationsFromDB(lng: string): Promise<any> {
             .maybeSingle();
 
         if (error) {
-            logger.error(`Error fetching translations for ${lng}:`, error);
+            // PGRST205 = table not found — expected when i18n_translations table hasn't been created
+            if (error.code !== 'PGRST205') {
+                logger.error(`Error fetching translations for ${lng}:`, error);
+            }
             return null;
         }
 

@@ -97,12 +97,16 @@ async function trackLandingEvent({ eventType, metadata = {} }: TrackLandingEvent
   if (isBot() || isDevTraffic()) return;
 
   try {
-    const session = getOrCreateSession();
+    // Skip analytics insert if user is not authenticated (avoids 401 network errors)
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    const landingSession = getOrCreateSession();
 
     const enrichedMetadata = {
       ...metadata,
-      sessionId: session.id,
-      sessionDuration: Date.now() - session.startedAt,
+      sessionId: landingSession.id,
+      sessionDuration: Date.now() - landingSession.startedAt,
       device: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
       source: document.referrer ? new URL(document.referrer).hostname : 'direct',
       userAgent: navigator.userAgent,
