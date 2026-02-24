@@ -228,12 +228,12 @@ function generateICSLink(event: EventData, lang: string): string {
   const title = event.title_i18n_json?.[lang] || event.title_i18n_json?.ru || event.title_i18n_json?.en || 'Event';
   const description = event.description_i18n_json?.[lang] || event.description_i18n_json?.ru || '';
   const location = event.location_value || '';
-  
+
   const startDate = event.start_at ? new Date(event.start_at) : new Date();
   const endDate = event.end_at ? new Date(event.end_at) : new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
-  
+
   const formatICSDate = (date: Date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  
+
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: title,
@@ -241,7 +241,7 @@ function generateICSLink(event: EventData, lang: string): string {
     details: description,
     location: location,
   });
-  
+
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
@@ -267,7 +267,7 @@ function generateEmailHTML(
   const organizerName = owner?.display_name || owner?.username || 'Organizer';
   const pageUrl = page?.slug ? `${baseUrl}/${page.slug}` : baseUrl;
   const qrCodeUrl = generateQRCodeDataUrl(ticketCode);
-  
+
   return `
 <!DOCTYPE html>
 <html lang="${lang}">
@@ -448,7 +448,7 @@ const handler = async (req: Request): Promise<Response> => {
     const lang = supportedLangs.includes(language) ? language : 'en';
     const t = translations[lang];
     const eventTitle = eventData.title_i18n_json?.[lang] || eventData.title_i18n_json?.ru || eventData.title_i18n_json?.en || 'Event';
-    
+
     // Base URL for links
     const baseUrl = "https://linkmax.lovable.app";
 
@@ -464,7 +464,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email via Resend
     // NOTE: Using onboarding@resend.dev for testing. Replace with your verified domain.
     const { data: emailResult, error: emailError } = await resend.emails.send({
-      from: "LNKMX Events <onboarding@resend.dev>",
+      from: "LNKMX Events <admin@lnkmx.my>",
       to: [regData.attendee_email],
       subject: `🎫 ${t.subject} — ${eventTitle}`,
       html: emailHTML,

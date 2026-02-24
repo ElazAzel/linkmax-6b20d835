@@ -4,8 +4,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils/utils";
 
-// @ts-ignore - Radix UI types
-const Select: any = SelectPrimitive.Root;
+const Select = SelectPrimitive.Root as any;
 
 const SelectGroup = SelectPrimitive.Group;
 

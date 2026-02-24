@@ -53,7 +53,7 @@ serve(async (req) => {
                 Authorization: `Bearer ${RESEND_API_KEY}`,
             },
             body: JSON.stringify({
-                from: "lnkmx.my <noreply@lnkmx.my>", // Pending domain verification, otherwise use 'onboarding@resend.dev' for testing
+                from: "lnkmx.my <admin@lnkmx.my>", // Checked domain
                 to,
                 subject,
                 html,

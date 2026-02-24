@@ -94,7 +94,7 @@ serve(async (req) => {
 
   try {
     const { leadId, pageOwnerId, leadName, leadEmail, leadPhone, source }: LeadNotificationRequest = await req.json();
-    
+
     // Sanitize all user inputs
     const safeName = escapeHtml(leadName);
     const safeEmail = escapeHtml(leadEmail);
@@ -249,7 +249,7 @@ serve(async (req) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: "lnkmx.my <onboarding@resend.dev>",
+              from: "lnkmx.my <admin@lnkmx.my>",
               to: [ownerEmail],
               subject: `🎉 New Lead: ${safeName}`,
               html: emailHtml,

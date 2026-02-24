@@ -1,6 +1,6 @@
 'use client';
 
-import Link, { LinkProps } from 'next/link';
+import { Link } from 'react-router-dom';
 import { usePathname } from 'next/navigation';
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils/utils';
@@ -23,7 +23,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
     return (
       <Link
         ref={ref}
-        href={href}
+        to={href}
         className={computedClassName}
         {...(props as any)}
       />

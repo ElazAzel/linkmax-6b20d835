@@ -7,7 +7,7 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { FileQuestion, Home, RefreshCw } from 'lucide-react';
 
@@ -64,7 +64,7 @@ export const PublicPageError = memo(function PublicPageError({
             asChild
             className="h-12 px-6 rounded-xl"
           >
-            <Link href="/">
+            <Link to="/">
               <Home className="h-4 w-4 mr-2" />
               {t('common.goHome', 'На главную')}
             </Link>
@@ -73,7 +73,7 @@ export const PublicPageError = memo(function PublicPageError({
 
         <p className="text-xs text-muted-foreground mt-8">
           {t('errors.createYourPage', 'Хотите создать свою страницу?')}{' '}
-          <Link href="/auth" className="text-primary hover:underline font-medium">
+          <Link to="/auth" className="text-primary hover:underline font-medium">
             {t('common.signUp', 'Регистрация')}
           </Link>
         </p>

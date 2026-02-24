@@ -10,7 +10,7 @@
 
 import { useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -156,10 +156,10 @@ export default function Experts() {
         <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="container max-w-6xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <Link href="/" className="text-xl font-bold text-primary">
+              <Link to="/" className="text-xl font-bold text-primary">
                 lnkmx
               </Link>
-              <Link href="/auth">
+              <Link to="/auth">
                 <Button variant="outline" size="sm">
                   {t('auth.signIn', 'Войти')}
                 </Button>
@@ -211,7 +211,7 @@ export default function Experts() {
         <section className="py-6 border-b">
           <div className="container max-w-6xl mx-auto px-4">
             <div className="flex flex-wrap gap-2 justify-center">
-              <Link href="/experts">
+              <Link to="/experts">
                 <Badge
                   variant={!tag ? 'default' : 'outline'}
                   className="cursor-pointer hover:bg-primary/80"
@@ -220,7 +220,7 @@ export default function Experts() {
                 </Badge>
               </Link>
               {NICHE_TAGS.map(niche => (
-                <Link key={niche.slug} href={`/experts/${niche.slug}`}>
+                <Link key={niche.slug} to={`/experts/${niche.slug}`}>
                   <Badge
                     variant={tag === niche.slug ? 'default' : 'outline'}
                     className="cursor-pointer hover:bg-primary/80"
@@ -247,7 +247,7 @@ export default function Experts() {
                 <p className="text-muted-foreground mb-4">
                   {t('experts.noResults', 'Пока нет профилей в этой категории')}
                 </p>
-                <Link href="/auth">
+                <Link to="/auth">
                   <Button>
                     {t('experts.beFirst', 'Стать первым')}
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -259,7 +259,7 @@ export default function Experts() {
                 {experts?.map(expert => (
                   <Link
                     key={expert.id}
-                    href={`/${expert.slug}`}
+                    to={`/${expert.slug}`}
                     className="group block"
                   >
                     <article
@@ -324,7 +324,7 @@ export default function Experts() {
             <p className="text-muted-foreground mb-6">
               {t('experts.ctaSubtitle', 'Присоединяйтесь к сообществу экспертов на lnkmx')}
             </p>
-            <Link href="/auth">
+            <Link to="/auth">
               <Button size="lg" className="font-semibold">
                 {t('experts.ctaButton', 'Создать страницу')}
                 <ArrowRight className="h-4 w-4 ml-2" />

@@ -1,11 +1,16 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
+### Added
+* **Dynamic Pricing:** Subscriptions are now dynamically calculated in KZT from base USD prices ($8.9, $7.9, $5.9) using real-time API from the National Bank of Kazakhstan.
+
+### Fixed
+* **Audit Resolution:** Completely removed legacy Next.js routing and link components, fully migrating 10+ legacy files to React Router DOM.
+* **Test Suite Health:** Resolved 14 failing unit tests by mocking new dependencies (Turnstile, usePublicPageByDomain, Supabase invokers).
+* **Robokassa:** Webhook correctly references `premium_expires_at` column matching DB schema.
+* **Resend:** All platform notification emails now use the branded `admin@lnkmx.my` sender.
+
+## [2026-02-24] - Full Platform Functional Audits
 ### Audit (Full Platform Functional Audit — 2026-02-24)
 - **Comprehensive Audit**: Conducted full functional audit covering all subsystems. Results: TypeScript ✅ (0 errors), Build ✅, i18n ✅ (4124 keys, 0 missing), Tests ⚠️ (206/220 passed).
 - **Browser Testing**: Verified landing page, auth (email/Google/Apple), gallery (55 pages), pricing, dashboard auth redirect — all PASS.

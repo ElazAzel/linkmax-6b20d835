@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { Check, X, Settings, ExternalLink, Copy } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -135,7 +135,7 @@ export function CollabsTab({
                     </div>
                     {collabUrl && (
                       <div className="flex items-center gap-2 text-xs">
-                        <Link href={`/collab/${collab.collab_slug}`} className="text-primary hover:underline flex items-center gap-1">
+                        <Link to={`/collab/${collab.collab_slug}`} className="text-primary hover:underline flex items-center gap-1">
                           <ExternalLink className="h-3 w-3" />
                           {t('collaboration.sharedPage', 'Совместная страница')}
                         </Link>

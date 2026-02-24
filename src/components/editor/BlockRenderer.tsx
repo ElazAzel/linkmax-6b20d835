@@ -90,8 +90,7 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
     case 'profile':
     case 'product':
     case 'avatar':
-      // @ts-ignore - safe access for mixed block types
-      rawTitle = block?.name;
+      rawTitle = (block as any)?.name;
       break;
     case 'link':
     case 'button':
@@ -121,16 +120,13 @@ function getBlockTitle(block: Block, lang: SupportedLanguage): string {
       rawTitle = (block as any)?.title;
       break;
     case 'shoutout':
-      // @ts-ignore - safe access for mixed block types
-      rawTitle = block?.displayName || block?.username;
+      rawTitle = (block as any)?.displayName || (block as any)?.username;
       break;
     case 'image':
-      // @ts-ignore - safe access for mixed block types
-      rawTitle = block?.alt;
+      rawTitle = (block as any)?.alt;
       break;
     case 'map':
-      // @ts-ignore - safe access for mixed block types
-      rawTitle = block?.address;
+      rawTitle = (block as any)?.address;
       break;
     case 'separator':
       rawTitle = 'separator';

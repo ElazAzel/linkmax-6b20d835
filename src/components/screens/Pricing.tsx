@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,10 +18,12 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { cn } from '@/lib/utils/utils';
+import { useCurrencyRate, BASE_PRICES_USD, convertUsdToKzt } from '@/hooks/useCurrencyRate';
+
 type BillingPeriod = 3 | 6 | 12;
 
 export default function Pricing() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const {
     t,
     i18n
@@ -40,6 +42,8 @@ export default function Pricing() {
   } = useTokens();
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(12);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+
+  const { data: currentRate = 497.33 } = useCurrencyRate();
   const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
   const canonical = 'https://lnkmx.my/pricing';
   const seoTitle = t('pricing.seo.title', 'lnkmx Pricing — Plans for Link in Bio & Mini-Sites');
@@ -80,24 +84,20 @@ export default function Pricing() {
       color: 'from-violet-500 to-purple-600',
       popular: true,
       pricesKzt: {
-        3: 4350,
-        6: 3698,
-        12: 3045
+        3: convertUsdToKzt(BASE_PRICES_USD[3], currentRate),
+        6: convertUsdToKzt(BASE_PRICES_USD[6], currentRate),
+        12: convertUsdToKzt(BASE_PRICES_USD[12], currentRate)
       },
-      pricesUsd: {
-        3: 8.50,
-        6: 7.20,
-        12: 5.95
-      },
+      pricesUsd: BASE_PRICES_USD,
       totalKzt: {
-        3: 13050,
-        6: 22185,
-        12: 36540
+        3: convertUsdToKzt(BASE_PRICES_USD[3] * 3, currentRate),
+        6: convertUsdToKzt(BASE_PRICES_USD[6] * 6, currentRate),
+        12: convertUsdToKzt(BASE_PRICES_USD[12] * 12, currentRate)
       },
       totalUsd: {
-        3: 25.50,
-        6: 43.20,
-        12: 71.40
+        3: +(BASE_PRICES_USD[3] * 3).toFixed(2),
+        6: +(BASE_PRICES_USD[6] * 6).toFixed(2),
+        12: +(BASE_PRICES_USD[12] * 12).toFixed(2)
       },
       features: [t('pricing.features.allBasic', 'Всё из BASIC, плюс:'), t('pricing.features.allBlocks', 'Все 25+ типов блоков без ограничений'), t('pricing.features.proThemes', 'Профессиональные темы и анимации'), t('pricing.features.media', 'Медиа: изображения, видео, карусели'), t('pricing.features.priceLists', 'Прайс-листы и каталоги товаров'), t('pricing.features.scheduler', 'Планировщик блоков'), t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'), t('pricing.features.fullCRM', 'Полноценная CRM для лидов'), t('pricing.features.telegramNotifications', 'Telegram-уведомления о заявках'), t('pricing.features.forms', 'Формы сбора заявок'), t('pricing.features.faq', 'FAQ и отзывы блоки'), t('pricing.features.timers', 'Таймеры обратного отсчёта'), t('pricing.features.aiMonthlyPro', '5 AI-генераций в месяц')]
     }
@@ -195,7 +195,7 @@ export default function Pricing() {
           <div className="backdrop-blur-2xl bg-card/50 border border-border/30 rounded-2xl shadow-glass-lg">
             <div className="container mx-auto px-4 h-14 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')}>
+                <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')}>
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div className="flex items-center gap-2">

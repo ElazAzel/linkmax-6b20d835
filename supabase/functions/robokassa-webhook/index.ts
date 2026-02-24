@@ -77,7 +77,7 @@ serve(async (req: Request) => {
                 .from('user_profiles')
                 .update({
                     is_premium: true,
-                    premium_until: endDate.toISOString(),
+                    premium_expires_at: endDate.toISOString(),
                 })
                 .eq('id', shp_user);
 

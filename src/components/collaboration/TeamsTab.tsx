@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   ExternalLink, Settings, Loader2, Users, Copy,
@@ -193,7 +193,7 @@ export function TeamsTab({
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <Link href={`/team/${team.slug}`}>
+                      <Link to={`/team/${team.slug}`}>
                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
                           <ExternalLink className="h-4 w-4" />
                         </Button>

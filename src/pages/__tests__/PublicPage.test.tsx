@@ -9,8 +9,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock usePublicPage hook
 const mockUsePublicPage = vi.fn();
+const mockUsePublicPageByDomain = vi.fn();
 vi.mock('@/hooks/page/usePageCache', () => ({
     usePublicPage: (slug: string | undefined) => mockUsePublicPage(slug),
+    usePublicPageByDomain: (domain: string | undefined) => mockUsePublicPageByDomain(domain),
 }));
 
 // ... (existing mocks) ...

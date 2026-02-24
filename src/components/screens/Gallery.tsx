@@ -6,7 +6,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
@@ -195,7 +195,7 @@ export default function Gallery() {
           <div className="px-5 pt-4 pb-3">
             <div className="flex items-center gap-4 mb-4">
               <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl" asChild>
-                <Link href="/">
+                <Link to="/">
                   <ArrowLeft className="h-5 w-5" />
                 </Link>
               </Button>

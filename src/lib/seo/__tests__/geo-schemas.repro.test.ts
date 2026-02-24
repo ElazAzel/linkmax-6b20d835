@@ -31,11 +31,11 @@ describe('generateGEOSchemas', () => {
                     name: 'Service 1',
                     price: 100,
                     currency: 'USD',
+                    targetLocation: null as any,
+                    baseLocation: undefined as any,
                 },
-                // @ts-ignore - simulating malformed data from DB
-                null,
-                // @ts-ignore - simulating undefined
-                undefined,
+                null as any,
+                undefined as any,
             ],
         };
 

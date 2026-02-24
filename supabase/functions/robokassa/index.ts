@@ -43,12 +43,30 @@ serve(async (req: Request) => {
             if (plan !== 'pro' || !period || ![3, 6, 12].includes(period)) {
                 throw new Error("Invalid subscription parameters");
             }
-            const pricesKzt: Record<number, number> = {
-                3: 13050,
-                6: 22185,
-                12: 36540
+            // Query dynamic rate from Supabase
+            const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+            const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+            const supabase = createClient(supabaseUrl, supabaseKey);
+
+            const { data: rateData, error: rateError } = await supabase
+                .from('currency_rates')
+                .select('rate')
+                .eq('currency_pair', 'USD_KZT')
+                .single();
+
+            let rate = 497.33; // Fallback rate
+            if (!rateError && rateData) {
+                rate = rateData.rate;
+            }
+
+            const basePricesUsd: Record<number, number> = {
+                3: 8.90,
+                6: 7.90,
+                12: 5.90 // Total $70.8 for 12 months
             };
-            outSum = pricesKzt[period];
+
+            const monthlyUsd = basePricesUsd[period];
+            outSum = Math.round(monthlyUsd * period * rate);
             description = `lnkmx.my PRO (${period} мес)`;
         } else if (type === 'tokens') {
             if (!tokenAmount || ![1000, 5000, 10000].includes(tokenAmount)) {

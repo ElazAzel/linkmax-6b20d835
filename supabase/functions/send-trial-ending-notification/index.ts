@@ -16,18 +16,18 @@ async function sendEmail(to: string, subject: string, html: string) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "lnkmx.my <onboarding@resend.dev>",
+      from: "lnkmx.my <admin@lnkmx.my>",
       to: [to],
       subject,
       html,
     }),
   });
-  
+
   if (!res.ok) {
     const error = await res.text();
     throw new Error(`Failed to send email: ${error}`);
   }
-  
+
   return res.json();
 }
 

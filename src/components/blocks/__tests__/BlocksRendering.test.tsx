@@ -23,6 +23,11 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
+vi.mock('@/components/legal/TurnstileWidget', () => ({
+    default: () => <div data-testid="turnstile-mock"></div>,
+    TurnstileWidget: () => <div data-testid="turnstile-mock"></div>
+}));
+
 vi.mock('@/hooks/user/useAuth', () => ({
     useAuth: () => ({
         user: { id: 'test-user-id' },

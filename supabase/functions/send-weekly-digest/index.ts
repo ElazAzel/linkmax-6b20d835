@@ -223,7 +223,7 @@ serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "lnkmx.my <onboarding@resend.dev>",
+            from: "lnkmx.my <admin@lnkmx.my>",
             to: [userEmail],
             subject: `📊 Your Weekly lnkmx.my Digest: ${viewsThisWeek} views, ${newLeadsCount} new leads`,
             html: emailHtml,
@@ -247,10 +247,10 @@ serve(async (req) => {
     console.log(`Weekly digest complete: ${emailsSent} emails sent, ${errors.length} errors`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        emailsSent, 
-        errors: errors.length > 0 ? errors : undefined 
+      JSON.stringify({
+        success: true,
+        emailsSent,
+        errors: errors.length > 0 ? errors : undefined
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

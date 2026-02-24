@@ -73,6 +73,10 @@ describe('useLeads', () => {
         const { result } = renderHook(() => useLeads());
         await waitFor(() => expect(result.current.loading).toBe(false));
 
+        // Mock edge function for createLead
+        const mockInvoke = vi.mocked(supabase.functions.invoke);
+        mockInvoke.mockResolvedValueOnce({ data: newLead, error: null } as any);
+
         await act(async () => {
             const created = await result.current.createLead({ name: 'Petr' });
             expect(created).toEqual(newLead);
