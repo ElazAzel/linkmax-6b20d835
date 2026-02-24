@@ -1,5 +1,5 @@
 import { memo, useState, useCallback } from 'react';
-import html2canvas from 'html2canvas';
+// html2canvas is dynamically imported to avoid loading on initial page load
 import {
   Dialog,
   DialogContent,
@@ -66,6 +66,7 @@ export const SaveTemplateDialog = memo(function SaveTemplateDialog({
         return;
       }
 
+      const { default: html2canvas } = await import('html2canvas');
       const canvas = await html2canvas(container, {
         scale: 0.5,
         useCORS: true,

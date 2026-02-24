@@ -2,7 +2,7 @@
  * Excel Export utility for event registrations
  * Uses exceljs for generating XLSX files (safer than SheetJS)
  */
-import ExcelJS from 'exceljs';
+// ExcelJS is dynamically imported to avoid loading 200KB+ on initial page load
 import { format } from 'date-fns';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { EventFormField } from '@/types/page';
@@ -101,7 +101,8 @@ export async function exportToExcel({
     return [...baseRow, ...fieldRow];
   });
 
-  // Create workbook with exceljs
+  // Dynamically import exceljs only when export is triggered
+  const ExcelJS = (await import('exceljs')).default;
   const workbook = new ExcelJS.Workbook();
 
   // Add registrations sheet

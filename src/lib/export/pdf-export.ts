@@ -3,8 +3,7 @@
  * Uses jsPDF for generating PDF files with tables and charts
  * Supports Cyrillic (Russian, Kazakh) and Latin characters
  */
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+// jsPDF and autoTable are dynamically imported to avoid loading 150KB+ on initial page load
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -113,7 +112,10 @@ export async function exportEventToPDF({
   includeAnalytics = true,
   includeRegistrationsList = true,
 }: PDFExportOptions): Promise<void> {
-  const doc = new jsPDF();
+  // Dynamically import jsPDF only when export is triggered
+  const { default: jsPDFConstructor } = await import('jspdf');
+  const { default: autoTable } = await import('jspdf-autotable');
+  const doc = new jsPDFConstructor();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 20;
@@ -308,7 +310,7 @@ export async function exportEventToPDF({
  * Draw a stat card
  */
 function drawStatCard(
-  doc: jsPDF,
+  doc: any,
   x: number,
   y: number,
   width: number,

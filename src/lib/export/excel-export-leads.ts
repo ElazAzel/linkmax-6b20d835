@@ -1,7 +1,7 @@
 /**
  * Excel Export utility for Leads (CRM)
  */
-import ExcelJS from 'exceljs';
+// ExcelJS is dynamically imported to avoid loading 200KB+ on initial page load
 import { format } from 'date-fns';
 import type { Lead } from '@/hooks/crm/useLeads';
 
@@ -45,7 +45,8 @@ export async function exportLeadsToExcel({
         ];
     });
 
-    // Create workbook with exceljs
+    // Dynamically import exceljs only when export is triggered
+    const ExcelJS = (await import('exceljs')).default;
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Leads');
 
