@@ -1,7 +1,7 @@
 /**
  * Excel Export utility for Analytics (Insights)
  */
-import ExcelJS from 'exceljs';
+// ExcelJS is dynamically imported to avoid loading 200KB+ on initial page load
 import { format } from 'date-fns';
 
 interface AnalyticsExportOptions {
@@ -25,6 +25,8 @@ export async function exportAnalyticsToExcel({
     dateRange,
 }: AnalyticsExportOptions): Promise<void> {
 
+    // Dynamically import exceljs only when export is triggered
+    const ExcelJS = (await import('exceljs')).default;
     const workbook = new ExcelJS.Workbook();
     const dateStr = format(new Date(), 'yyyy-MM-dd');
 
