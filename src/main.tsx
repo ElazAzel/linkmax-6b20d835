@@ -1,6 +1,3 @@
-// CRITICAL: Sentry must be initialized FIRST to capture all errors from boot
-import "@/lib/utils/sentry";
-
 // CRITICAL: i18n must be imported FIRST, before any React components
 import "./i18n/config";
 
@@ -8,11 +5,17 @@ import { StrictMode, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import { checkCacheVersion } from '@/lib/utils/cache-utils';
 import App from "./App";
 
-// Check cache version on app load
-checkCacheVersion();
+// Defer non-critical init to AFTER first paint
+requestIdleCallback(() => {
+  // Sentry — init after paint so it doesn't block FCP
+  import("@/lib/utils/sentry");
+  // Cache version check — network call, defer completely
+  import('@/lib/utils/cache-utils').then(({ checkCacheVersion }) => {
+    checkCacheVersion();
+  });
+});
 
 // Lazy load page components for route-based code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -36,7 +39,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
-const SeoLanding = lazy(() => import("./pages/SeoLanding")); // New SEO/AEO Landing Page
+const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -81,10 +84,9 @@ const router = createBrowserRouter([
         element: <NotFound />,
         loader: ({ request }) => {
           const url = new URL(request.url);
-          // Let platform handle OAuth routes via full page navigation
           if (url.pathname.startsWith('/~oauth')) {
             window.location.href = url.href;
-            return new Promise(() => { }); // Never resolves, page will navigate away
+            return new Promise(() => { });
           }
           return null;
         }

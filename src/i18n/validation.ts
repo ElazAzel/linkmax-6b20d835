@@ -1,24 +1,25 @@
-import ru from './locales/ru.json';
-import en from './locales/en.json';
-import kk from './locales/kk.json';
-import de from './locales/de.json';
-import uk from './locales/uk.json';
-import uz from './locales/uz.json';
-import be from './locales/be.json';
-import es from './locales/es.json';
-import fr from './locales/fr.json';
-import it from './locales/it.json';
-import pt from './locales/pt.json';
-import zh from './locales/zh.json';
-import tr from './locales/tr.json';
-import ja from './locales/ja.json';
-import ko from './locales/ko.json';
-import ar from './locales/ar.json';
-
 type TranslationObject = Record<string, unknown>;
 type LanguageCode = 'ru' | 'en' | 'kk' | 'de' | 'uk' | 'uz' | 'be' | 'es' | 'fr' | 'it' | 'pt' | 'zh' | 'tr' | 'ja' | 'ko' | 'ar';
 
-const translations: Record<LanguageCode, TranslationObject> = { ru, en, kk, de, uk, uz, be, es, fr, it, pt, zh, tr, ja, ko, ar };
+// Lazy import all locales — only used in dev mode
+const localeImporters: Record<LanguageCode, () => Promise<TranslationObject>> = {
+  ru: () => import('./locales/ru.json').then(m => m.default as unknown as TranslationObject),
+  en: () => import('./locales/en.json').then(m => m.default as unknown as TranslationObject),
+  kk: () => import('./locales/kk.json').then(m => m.default as unknown as TranslationObject),
+  de: () => import('./locales/de.json').then(m => m.default as unknown as TranslationObject),
+  uk: () => import('./locales/uk.json').then(m => m.default as unknown as TranslationObject),
+  uz: () => import('./locales/uz.json').then(m => m.default as unknown as TranslationObject),
+  be: () => import('./locales/be.json').then(m => m.default as unknown as TranslationObject),
+  es: () => import('./locales/es.json').then(m => m.default as unknown as TranslationObject),
+  fr: () => import('./locales/fr.json').then(m => m.default as unknown as TranslationObject),
+  it: () => import('./locales/it.json').then(m => m.default as unknown as TranslationObject),
+  pt: () => import('./locales/pt.json').then(m => m.default as unknown as TranslationObject),
+  zh: () => import('./locales/zh.json').then(m => m.default as unknown as TranslationObject),
+  tr: () => import('./locales/tr.json').then(m => m.default as unknown as TranslationObject),
+  ja: () => import('./locales/ja.json').then(m => m.default as unknown as TranslationObject),
+  ko: () => import('./locales/ko.json').then(m => m.default as unknown as TranslationObject),
+  ar: () => import('./locales/ar.json').then(m => m.default as unknown as TranslationObject),
+};
 
 /**
  * Recursively extracts all keys from a nested object
@@ -75,10 +76,8 @@ function setNestedValue(obj: TranslationObject, key: string, value: string): voi
  */
 function generatePlaceholder(key: string, lang: LanguageCode, referenceValue?: string): string {
   if (referenceValue && typeof referenceValue === 'string') {
-    // Use reference value with language prefix for easy identification
     return `[${lang.toUpperCase()}] ${referenceValue}`;
   }
-  // Generate from key name
   const lastPart = key.split('.').pop() || key;
   const readable = lastPart
     .replace(/([A-Z])/g, ' $1')
@@ -87,71 +86,54 @@ function generatePlaceholder(key: string, lang: LanguageCode, referenceValue?: s
   return `[${lang.toUpperCase()}] ${readable}`;
 }
 
+const ALL_LANGUAGES: LanguageCode[] = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
+
+async function loadAllTranslations(): Promise<Record<LanguageCode, TranslationObject>> {
+  const entries = await Promise.all(
+    ALL_LANGUAGES.map(async (lang) => {
+      const data = await localeImporters[lang]();
+      return [lang, data] as [LanguageCode, TranslationObject];
+    })
+  );
+  return Object.fromEntries(entries) as Record<LanguageCode, TranslationObject>;
+}
+
 /**
  * Finds missing keys in each language
  */
-export function getMissingTranslations(): Record<LanguageCode, string[]> {
-  const langKeys: Record<LanguageCode, string[]> = {
-    ru: getAllKeys(ru as TranslationObject),
-    en: getAllKeys(en as TranslationObject),
-    kk: getAllKeys(kk as TranslationObject),
-    de: getAllKeys(de as TranslationObject),
-    uk: getAllKeys(uk as TranslationObject),
-    uz: getAllKeys(uz as TranslationObject),
-    be: getAllKeys(be as TranslationObject),
-    es: getAllKeys(es as TranslationObject),
-    fr: getAllKeys(fr as TranslationObject),
-    it: getAllKeys(it as TranslationObject),
-    pt: getAllKeys(pt as TranslationObject),
-    zh: getAllKeys(zh as TranslationObject),
-    tr: getAllKeys(tr as TranslationObject),
-    ja: getAllKeys(ja as TranslationObject),
-    ko: getAllKeys(ko as TranslationObject),
-    ar: getAllKeys(ar as TranslationObject),
-  };
+export async function getMissingTranslations(): Promise<Record<LanguageCode, string[]>> {
+  const translations = await loadAllTranslations();
+
+  const langKeys: Record<LanguageCode, string[]> = {} as any;
+  for (const lang of ALL_LANGUAGES) {
+    langKeys[lang] = getAllKeys(translations[lang]);
+  }
 
   const allKeys = new Set<string>();
   Object.values(langKeys).forEach(keys => {
     keys.forEach(key => allKeys.add(key));
   });
 
-  return {
-    ru: Array.from(allKeys).filter(key => !langKeys.ru.includes(key)),
-    en: Array.from(allKeys).filter(key => !langKeys.en.includes(key)),
-    kk: Array.from(allKeys).filter(key => !langKeys.kk.includes(key)),
-    de: Array.from(allKeys).filter(key => !langKeys.de.includes(key)),
-    uk: Array.from(allKeys).filter(key => !langKeys.uk.includes(key)),
-    uz: Array.from(allKeys).filter(key => !langKeys.uz.includes(key)),
-    be: Array.from(allKeys).filter(key => !langKeys.be.includes(key)),
-    es: Array.from(allKeys).filter(key => !langKeys.es.includes(key)),
-    fr: Array.from(allKeys).filter(key => !langKeys.fr.includes(key)),
-    it: Array.from(allKeys).filter(key => !langKeys.it.includes(key)),
-    pt: Array.from(allKeys).filter(key => !langKeys.pt.includes(key)),
-    zh: Array.from(allKeys).filter(key => !langKeys.zh.includes(key)),
-    tr: Array.from(allKeys).filter(key => !langKeys.tr.includes(key)),
-    ja: Array.from(allKeys).filter(key => !langKeys.ja.includes(key)),
-    ko: Array.from(allKeys).filter(key => !langKeys.ko.includes(key)),
-    ar: Array.from(allKeys).filter(key => !langKeys.ar.includes(key)),
-  };
+  const result: Record<LanguageCode, string[]> = {} as any;
+  for (const lang of ALL_LANGUAGES) {
+    result[lang] = Array.from(allKeys).filter(key => !langKeys[lang].includes(key));
+  }
+  return result;
 }
 
 /**
  * Generates complete translation objects with placeholders for missing keys
  */
-export function generateMissingKeysWithPlaceholders(): Record<LanguageCode, TranslationObject> {
-  const missing = getMissingTranslations();
-  const result: Record<LanguageCode, TranslationObject> = {
-    ru: {}, en: {}, kk: {}, de: {}, uk: {}, uz: {}, be: {},
-    es: {}, fr: {}, it: {}, pt: {}, zh: {}, tr: {}, ja: {}, ko: {}, ar: {}
-  };
+export async function generateMissingKeysWithPlaceholders(): Promise<Record<LanguageCode, TranslationObject>> {
+  const translations = await loadAllTranslations();
+  const missing = await getMissingTranslations();
+  const result: Record<LanguageCode, TranslationObject> = {} as any;
 
-  const languages: LanguageCode[] = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
-
-  languages.forEach(lang => {
-    missing[lang].forEach(key => {
-      // Try to find reference value from another language
+  for (const lang of ALL_LANGUAGES) {
+    result[lang] = {};
+    for (const key of missing[lang]) {
       let referenceValue: string | undefined;
-      for (const refLang of languages) {
+      for (const refLang of ALL_LANGUAGES) {
         if (refLang !== lang) {
           const val = getNestedValue(translations[refLang], key);
           if (typeof val === 'string') {
@@ -160,11 +142,10 @@ export function generateMissingKeysWithPlaceholders(): Record<LanguageCode, Tran
           }
         }
       }
-
       const placeholder = generatePlaceholder(key, lang, referenceValue);
       setNestedValue(result[lang], key, placeholder);
-    });
-  });
+    }
+  }
 
   return result;
 }
@@ -172,10 +153,10 @@ export function generateMissingKeysWithPlaceholders(): Record<LanguageCode, Tran
 /**
  * Logs missing keys with copy-pasteable JSON
  */
-export function logMissingKeysAsJSON(): void {
+export async function logMissingKeysAsJSON(): Promise<void> {
   if (!import.meta.env.DEV) return;
 
-  const missingWithPlaceholders = generateMissingKeysWithPlaceholders();
+  const missingWithPlaceholders = await generateMissingKeysWithPlaceholders();
   const languages: LanguageCode[] = ['ru', 'en', 'kk'];
 
   let hasMissing = false;
@@ -199,7 +180,7 @@ export function logMissingKeysAsJSON(): void {
  * Copies missing translations to clipboard (call from browser console)
  */
 export async function copyMissingToClipboard(lang: LanguageCode): Promise<void> {
-  const missingWithPlaceholders = generateMissingKeysWithPlaceholders();
+  const missingWithPlaceholders = await generateMissingKeysWithPlaceholders();
   const json = JSON.stringify(missingWithPlaceholders[lang], null, 2);
 
   try {
@@ -214,31 +195,18 @@ export async function copyMissingToClipboard(lang: LanguageCode): Promise<void> 
 /**
  * Validates all translation files and logs missing keys
  */
-export function validateTranslations(): void {
+export async function validateTranslations(): Promise<void> {
   if (!import.meta.env.DEV) return;
+
+  const translations = await loadAllTranslations();
 
   console.group('🌐 [i18n] Translation Validation');
 
-  const langKeys: Record<LanguageCode, string[]> = {
-    ru: getAllKeys(ru as TranslationObject),
-    en: getAllKeys(en as TranslationObject),
-    kk: getAllKeys(kk as TranslationObject),
-    de: getAllKeys(de as TranslationObject),
-    uk: getAllKeys(uk as TranslationObject),
-    uz: getAllKeys(uz as TranslationObject),
-    be: getAllKeys(be as TranslationObject),
-    es: getAllKeys(es as TranslationObject),
-    fr: getAllKeys(fr as TranslationObject),
-    it: getAllKeys(it as TranslationObject),
-    pt: getAllKeys(pt as TranslationObject),
-    zh: getAllKeys(zh as TranslationObject),
-    tr: getAllKeys(tr as TranslationObject),
-    ja: getAllKeys(ja as TranslationObject),
-    ko: getAllKeys(ko as TranslationObject),
-    ar: getAllKeys(ar as TranslationObject),
-  };
+  const langKeys: Record<LanguageCode, string[]> = {} as any;
+  for (const lang of ALL_LANGUAGES) {
+    langKeys[lang] = getAllKeys(translations[lang]);
+  }
 
-  // Get all unique keys from all languages
   const allKeys = new Set<string>();
   Object.values(langKeys).forEach(keys => {
     keys.forEach(key => allKeys.add(key));
@@ -247,11 +215,9 @@ export function validateTranslations(): void {
   const totalKeys = allKeys.size;
   console.log(`📊 Total unique keys: ${totalKeys}`);
 
-  // Check each language
-  const languages: LanguageCode[] = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'];
   let hasIssues = false;
 
-  languages.forEach(lang => {
+  ALL_LANGUAGES.forEach(lang => {
     const keys = langKeys[lang];
     const missingFromLang = Array.from(allKeys).filter(key => !keys.includes(key));
 
@@ -265,9 +231,8 @@ export function validateTranslations(): void {
     }
   });
 
-  // Show keys that exist in some languages but not others
   console.group('📋 Coverage by language:');
-  languages.forEach(lang => {
+  ALL_LANGUAGES.forEach(lang => {
     const count = langKeys[lang].length;
     const percentage = ((count / totalKeys) * 100).toFixed(1);
     console.log(`  ${lang.toUpperCase()}: ${count}/${totalKeys} (${percentage}%)`);

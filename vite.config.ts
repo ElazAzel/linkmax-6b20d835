@@ -35,16 +35,29 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === "development" || !!process.env.SENTRY_AUTH_TOKEN,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-query': ['@tanstack/react-query'],
-          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-popover', '@radix-ui/react-tooltip', '@radix-ui/react-tabs', '@radix-ui/react-select'],
-          'vendor-motion': ['framer-motion'],
-          'vendor-supabase': ['@supabase/supabase-js'],
-          'vendor-i18n': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
-          'vendor-charts': ['recharts'],
-          'vendor-sentry': ['@sentry/react'],
-          'vendor-dnd': ['@dnd-kit/core', '@dnd-kit/sortable'],
+        manualChunks(id) {
+          // Vendor chunks for better caching and parallel loading
+          if (id.includes('node_modules/react-dom')) return 'vendor-react';
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-router')) return 'vendor-react';
+          if (id.includes('node_modules/@tanstack/react-query')) return 'vendor-query';
+          if (id.includes('node_modules/@radix-ui')) return 'vendor-ui';
+          if (id.includes('node_modules/framer-motion')) return 'vendor-motion';
+          if (id.includes('node_modules/@supabase')) return 'vendor-supabase';
+          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) return 'vendor-i18n';
+          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) return 'vendor-charts';
+          if (id.includes('node_modules/@sentry')) return 'vendor-sentry';
+          if (id.includes('node_modules/@dnd-kit')) return 'vendor-dnd';
+          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform') || id.includes('node_modules/zod')) return 'vendor-forms';
+          if (id.includes('node_modules/date-fns')) return 'vendor-date';
+          if (id.includes('node_modules/react-helmet') || id.includes('node_modules/react-day-picker')) return 'vendor-misc';
+          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) return 'vendor-3d';
+          if (id.includes('node_modules/jspdf') || id.includes('node_modules/exceljs') || id.includes('node_modules/html2canvas')) return 'vendor-export';
+          if (id.includes('node_modules/qrcode')) return 'vendor-qr';
+          // Split locale JSON files into separate chunks
+          if (id.includes('src/i18n/locales/') && !id.includes('ru.json') && !id.includes('en.json') && !id.includes('kk.json')) {
+            const match = id.match(/locales\/(\w+)\.json/);
+            if (match) return `locale-${match[1]}`;
+          }
         },
       },
     },

@@ -1,27 +1,14 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { storage } from '@/lib/storage';
+
+// Only eagerly import the 3 primary locales (ru, en, kk) — rest are lazy-loaded on demand
 import ru from './locales/ru.json';
 import en from './locales/en.json';
 import kk from './locales/kk.json';
-import de from './locales/de.json';
-import uk from './locales/uk.json';
-import uz from './locales/uz.json';
-import be from './locales/be.json';
-import es from './locales/es.json';
-import fr from './locales/fr.json';
-import it from './locales/it.json';
-import pt from './locales/pt.json';
-import zh from './locales/zh.json';
-import tr from './locales/tr.json';
-import ja from './locales/ja.json';
-import ko from './locales/ko.json';
-import ar from './locales/ar.json';
-import { validateTranslations } from './validation';
-import { storage } from '@/lib/storage';
 
 // Merge all top-level keys into translation namespace
-// This handles JSON files with structure: { translation: {...}, landingV5: {...}, ... }
 const mergeNamespaces = (json: Record<string, unknown>) => {
   const { translation, ...rest } = json as { translation: Record<string, unknown>, [key: string]: unknown };
   return {
@@ -38,13 +25,9 @@ const migrateKzToKk = () => {
   const stored = storage.getRaw('i18nextLng');
   if (stored === 'kz') {
     storage.setRaw('i18nextLng', 'kk');
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('[i18n] Migrated language from "kz" to "kk"');
-    }
   }
 };
 
-// Run migration before i18n init
 migrateKzToKk();
 
 // All supported UI languages
@@ -52,58 +35,83 @@ export const SUPPORTED_LANGUAGES = ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'e
 
 export type LocaleCode = typeof SUPPORTED_LANGUAGES[number] | (string & {});
 
+// Languages that are lazy-loaded (not in initial bundle)
+const LAZY_LANGUAGES = ['de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'] as const;
+
+// Dynamic import map for lazy locales
+const lazyLocaleImporters: Record<string, () => Promise<Record<string, unknown>>> = {
+  de: () => import('./locales/de.json').then(m => m.default as unknown as Record<string, unknown>),
+  uk: () => import('./locales/uk.json').then(m => m.default as unknown as Record<string, unknown>),
+  uz: () => import('./locales/uz.json').then(m => m.default as unknown as Record<string, unknown>),
+  be: () => import('./locales/be.json').then(m => m.default as unknown as Record<string, unknown>),
+  es: () => import('./locales/es.json').then(m => m.default as unknown as Record<string, unknown>),
+  fr: () => import('./locales/fr.json').then(m => m.default as unknown as Record<string, unknown>),
+  it: () => import('./locales/it.json').then(m => m.default as unknown as Record<string, unknown>),
+  pt: () => import('./locales/pt.json').then(m => m.default as unknown as Record<string, unknown>),
+  zh: () => import('./locales/zh.json').then(m => m.default as unknown as Record<string, unknown>),
+  tr: () => import('./locales/tr.json').then(m => m.default as unknown as Record<string, unknown>),
+  ja: () => import('./locales/ja.json').then(m => m.default as unknown as Record<string, unknown>),
+  ko: () => import('./locales/ko.json').then(m => m.default as unknown as Record<string, unknown>),
+  ar: () => import('./locales/ar.json').then(m => m.default as unknown as Record<string, unknown>),
+};
+
+// Track which lazy locales have been loaded
+const loadedLazyLocales = new Set<string>();
+
+/**
+ * Load a lazy locale on demand and add it to i18n
+ */
+async function loadLazyLocale(lang: string): Promise<void> {
+  if (loadedLazyLocales.has(lang)) return;
+  const importer = lazyLocaleImporters[lang];
+  if (!importer) return;
+
+  try {
+    const data = await importer();
+    const merged = mergeNamespaces(data);
+    i18n.addResourceBundle(lang, 'translation', merged.translation, true, true);
+    loadedLazyLocales.add(lang);
+  } catch (e) {
+    console.warn(`[i18n] Failed to load locale: ${lang}`, e);
+  }
+}
+
 // Normalize language code to supported codes
 const normalizeLanguage = (lng: string): string => {
   if (!lng) return 'ru';
-
-  // Extract base language code (e.g., 'ru-RU' -> 'ru')
   const langCode = lng.substring(0, 2).toLowerCase();
-
-  // Map 'kz' to 'kk' (Kazakh ISO code)
   if (langCode === 'kz') return 'kk';
-
-  // If it's a supported language, return it
   if (SUPPORTED_LANGUAGES.includes(langCode as any)) return langCode as LocaleCode;
-
-  // Default to English for unsupported languages
   return 'en';
 };
 
-// Custom language detector - prioritizes URL params for language switching
+// Custom language detector
 const customLanguageDetector = {
   name: 'customDetector',
   lookup() {
     if (typeof window === 'undefined') return 'ru';
-    // 1. URL parameter has highest priority (for language switching)
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang') || params.get('lng');
     if (urlLang) {
       const normalizedUrlLang = normalizeLanguage(urlLang);
-      // Save to storage when set via URL
       storage.setRaw('i18nextLng', normalizedUrlLang);
       return normalizedUrlLang;
     }
 
-    // 2. Check storage for user preference
     let stored = storage.getRaw('i18nextLng');
-
-    // Migrate 'kz' to 'kk' on read
     if (stored === 'kz') {
       stored = 'kk';
       storage.setRaw('i18nextLng', 'kk');
     }
-
     if (stored && SUPPORTED_LANGUAGES.includes(stored as any)) {
       return stored as LocaleCode;
     }
 
-    // 3. Auto-detect from browser language
     const browserLang = navigator.language || (navigator as any).languages?.[0] || '';
     return normalizeLanguage(browserLang);
   },
   cacheUserLanguage(lng: string) {
     if (typeof window === 'undefined') return;
-    // Normalize before caching
     const normalizedLng = normalizeLanguage(lng);
     storage.setRaw('i18nextLng', normalizedLng);
   }
@@ -112,7 +120,7 @@ const customLanguageDetector = {
 const languageDetectorPlugin = new LanguageDetector();
 languageDetectorPlugin.addDetector(customLanguageDetector);
 
-// Initialize i18n
+// Initialize i18n with only the 3 primary locales
 i18n
   .use(languageDetectorPlugin)
   .use(initReactI18next)
@@ -121,19 +129,6 @@ i18n
       ru: mergeNamespaces(ru),
       en: mergeNamespaces(en),
       kk: mergeNamespaces(kk),
-      de: mergeNamespaces(de),
-      uk: mergeNamespaces(uk),
-      uz: mergeNamespaces(uz),
-      be: mergeNamespaces(be),
-      es: mergeNamespaces(es),
-      fr: mergeNamespaces(fr),
-      it: mergeNamespaces(it),
-      pt: mergeNamespaces(pt),
-      zh: mergeNamespaces(zh),
-      tr: mergeNamespaces(tr),
-      ja: mergeNamespaces(ja),
-      ko: mergeNamespaces(ko),
-      ar: mergeNamespaces(ar),
     },
     supportedLngs: ['ru', 'en', 'kk', 'de', 'uk', 'uz', 'be', 'es', 'fr', 'it', 'pt', 'zh', 'tr', 'ja', 'ko', 'ar'],
     nonExplicitSupportedLngs: true,
@@ -146,7 +141,7 @@ i18n
       'default': ['en']
     },
     interpolation: {
-      escapeValue: false, // React already escapes
+      escapeValue: false,
     },
     ns: ['translation'],
     defaultNS: 'translation',
@@ -154,42 +149,51 @@ i18n
       order: ['customDetector'],
       caches: ['localStorage'],
     },
-    // Handling missing keys
     saveMissing: process.env.NODE_ENV === 'development',
     missingKeyHandler: process.env.NODE_ENV === 'development'
       ? (lngs, ns, key, fallbackValue) => {
         console.warn(`[i18n] Missing key: "${key}" for languages: [${lngs.join(', ')}], namespace: "${ns}"`);
       }
       : undefined,
-    // Return key if missing (instead of empty string)
     returnEmptyString: false,
     returnNull: false,
   });
 
-// Development diagnostics
-if (process.env.NODE_ENV === 'development') {
-  console.log('[i18n] Initialized with language:', i18n.language);
-  console.log('[i18n] Supported languages:', SUPPORTED_LANGUAGES);
-  console.log('[i18n] Resources loaded:', Object.keys(i18n.options.resources || {}));
-
-  // Validate all translations and show missing keys
-  validateTranslations();
+// If the detected language is a lazy locale, load it immediately
+const detectedLang = i18n.language;
+if (LAZY_LANGUAGES.includes(detectedLang as any)) {
+  loadLazyLocale(detectedLang);
 }
 
-// Listen for language changes
+// Development diagnostics (lazy-loaded)
+if (process.env.NODE_ENV === 'development') {
+  console.log('[i18n] Initialized with language:', i18n.language);
+  console.log('[i18n] Eagerly loaded: ru, en, kk. Lazy locales:', LAZY_LANGUAGES.join(', '));
+  // Defer validation to not block startup
+  requestIdleCallback(() => {
+    import('./validation').then(({ validateTranslations }) => {
+      validateTranslations();
+    });
+  });
+}
+
+// Listen for language changes — lazy-load locale if needed
 i18n.on('languageChanged', (lng) => {
-  // Normalize on change
   const normalized = normalizeLanguage(lng);
   if (normalized !== lng && SUPPORTED_LANGUAGES.includes(normalized as any)) {
     i18n.changeLanguage(normalized as LocaleCode);
     return;
   }
 
+  // Load lazy locale if switching to a non-primary language
+  if (LAZY_LANGUAGES.includes(normalized as any)) {
+    loadLazyLocale(normalized);
+  }
+
   if (process.env.NODE_ENV === 'development') {
     console.log('[i18n] Language changed to:', lng);
   }
 
-  // Update HTML lang attribute
   document.documentElement.lang = lng;
 });
 

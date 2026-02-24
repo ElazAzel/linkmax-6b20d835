@@ -37,10 +37,12 @@ const App = () => {
   useEffect(() => {
     storage.clearOldVersions();
 
-    // Sync translations from DB
-    import('./i18n/config').then(({ default: i18n }) => {
-      import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
-        syncI18nWithDB(i18n);
+    // Sync translations from DB — deferred to not block paint
+    requestIdleCallback(() => {
+      import('./i18n/config').then(({ default: i18n }) => {
+        import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
+          syncI18nWithDB(i18n);
+        });
       });
     });
   }, []);
