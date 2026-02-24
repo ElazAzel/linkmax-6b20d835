@@ -1,8 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import { Crown, Sparkles, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
@@ -24,7 +25,7 @@ export function PremiumFeatureGate({
   compact = false,
 }: PremiumFeatureGateProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { currentTier } = useFreemiumLimits();
 
   // Tier hierarchy: free < pro
@@ -90,7 +91,7 @@ export function PremiumFeatureGate({
             size="sm"
             variant="default"
             className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700"
-            onClick={() => router.push('/pricing')}
+            onClick={() => navigate('/pricing')}
           >
             {t('premium.upgrade', 'Улучшить до {{tier}}', { tier: tierNames[requiredTier] })}
           </Button>

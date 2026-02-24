@@ -1,8 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { memo, useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -51,7 +52,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
 }: InlineProfileEditorProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { canUsePremiumFrames } = useFreemiumLimits();
   const currentLang = i18n.language as SupportedLanguage;
 
@@ -555,7 +556,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                     onChange={(value) => onUpdate({ avatarFrame: value })}
                     isPremium={canUsePremiumFrames()}
                     avatarUrl={block.avatar}
-                    onUpgradeClick={() => router.push('/pricing')}
+                    onUpgradeClick={() => navigate('/pricing')}
                   />
                 </TabsContent>
 
@@ -604,7 +605,7 @@ export const InlineProfileEditor = memo(function InlineProfileEditor({
                     onChange={(value) => onUpdate({ nameAnimation: value })}
                     isPremium={canUsePremiumFrames()}
                     previewName={name}
-                    onUpgradeClick={() => router.push('/pricing')}
+                    onUpgradeClick={() => navigate('/pricing')}
                   />
                 </TabsContent>
               </Tabs>

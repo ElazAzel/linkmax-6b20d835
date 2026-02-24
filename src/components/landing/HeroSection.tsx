@@ -1,6 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,16 +24,16 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
   const handleCreatePage = useCallback(() => {
     if (username.trim()) {
-      router.push(`/auth?username=${encodeURIComponent(username.trim())}`);
+      navigate(`/auth?username=${encodeURIComponent(username.trim())}`);
     } else {
-      router.push('/auth');
+      navigate('/auth');
     }
   }, [username, router]);
 
@@ -190,7 +191,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
           >
             <Button
               variant="ghost"
-              onClick={() => router.push('/gallery')}
+              onClick={() => navigate('/gallery')}
               className="text-muted-foreground hover:text-foreground hover:bg-foreground/5 group px-6 py-2"
             >
               <Users className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />

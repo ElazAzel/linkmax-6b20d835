@@ -1,7 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,7 +19,7 @@ interface SimplePricingSectionProps {
 }
 
 export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSectionProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const [billingPeriod, setBillingPeriod] = useState<'3' | '6' | '12'>('12');
 
@@ -123,7 +124,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 variant="outline"
                 size="lg"
                 className="w-full rounded-xl py-5"
-                onClick={() => router.push('/auth')}
+                onClick={() => navigate('/auth')}
               >
                 {t('landing.simplePricing.free.cta', 'Начать бесплатно')}
               </Button>

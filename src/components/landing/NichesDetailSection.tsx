@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,7 @@ import {
 } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+
 
 interface NicheCard {
   icon: React.ElementType;
@@ -19,7 +20,7 @@ interface NicheCard {
 export function NichesDetailSection() {
   const { t } = useTranslation();
   const sectionAnimation = useScrollAnimation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const niches: NicheCard[] = [
     { icon: Scissors, key: 'barber', color: 'from-blue-500 to-cyan-500' },
@@ -37,7 +38,7 @@ export function NichesDetailSection() {
   ];
 
   const handleStartClick = () => {
-    router.push('/auth');
+    navigate('/auth');
   };
 
   return (

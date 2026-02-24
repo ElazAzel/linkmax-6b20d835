@@ -1,3 +1,4 @@
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 /**
  * Experts Directory Page
  * /experts - Main directory of all public profiles
@@ -9,8 +10,8 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import { Link } from 'react-router-dom';
+
+
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';

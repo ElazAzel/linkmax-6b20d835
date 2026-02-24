@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 /**
@@ -6,7 +7,7 @@
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import { Crown, Lock, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,7 +38,7 @@ export const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
   className,
 }: PremiumBlockOverlayProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <div className={cn(
@@ -58,7 +59,7 @@ export const PremiumBlockOverlay = memo(function PremiumBlockOverlay({
       <Button
         size="sm"
         className="h-10 px-5 rounded-xl font-bold shadow-lg shadow-primary/25"
-        onClick={() => router.push('/pricing')}
+        onClick={() => navigate('/pricing')}
       >
         <Sparkles className="h-4 w-4 mr-2" />
         {t('premium.upgrade', 'Перейти на Pro')}
@@ -153,11 +154,11 @@ export const LockedBlockCard = memo(function LockedBlockCard({
   onClick,
 }: LockedBlockCardProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <button
-      onClick={onClick || (() => router.push('/pricing'))}
+      onClick={onClick || (() => navigate('/pricing'))}
       className="relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all opacity-60 hover:opacity-80"
     >
       {/* Colorful icon with lock overlay */}

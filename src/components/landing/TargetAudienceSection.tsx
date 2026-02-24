@@ -1,6 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,7 +20,7 @@ interface TargetAudienceSectionProps {
 }
 
 export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceSectionProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const audiences = [
@@ -125,7 +126,7 @@ export function TargetAudienceSection({ isVisible, sectionRef }: TargetAudienceS
           style={{ animationDelay: '600ms' }}
         >
           <Button
-            onClick={() => router.push('/auth')}
+            onClick={() => navigate('/auth')}
             variant="premium"
             size="lg"
             className="rounded-2xl font-bold px-6 sm:px-8"

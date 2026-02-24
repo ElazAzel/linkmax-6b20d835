@@ -1,6 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,7 +23,7 @@ interface PremiumValueSectionProps {
 }
 
 export function PremiumValueSection({ isVisible, sectionRef }: PremiumValueSectionProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const coreFeatures = [

@@ -1,8 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+
 import {
   Camera,
   Scissors,
@@ -30,7 +31,7 @@ interface UseCase {
 
 export function UseCasesGallery() {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const sectionAnimation = useScrollAnimation();
 
   const useCases: UseCase[] = [
@@ -204,7 +205,7 @@ export function UseCasesGallery() {
         >
           <Button
             size="lg"
-            onClick={() => router.push('/gallery')}
+            onClick={() => navigate('/gallery')}
             className="rounded-xl sm:rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all group active:scale-[0.98]"
           >
             {t('landing.useCases.cta', 'Смотреть все страницы в галерее')}

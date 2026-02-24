@@ -41,11 +41,9 @@ describe('useAdminTranslations', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         // Mock supabase response
-        const mockSupabase = {
-            from: vi.fn().mockReturnThis(),
+        vi.mocked(supabase.from).mockReturnValue({
             select: vi.fn().mockResolvedValue({ data: mockDbData, error: null })
-        };
-        vi.mocked(supabase.from).mockImplementation(mockSupabase.from as any);
+        } as any);
     });
 
     it('should load translations on mount', async () => {

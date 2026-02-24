@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { memo, useState, useMemo } from 'react';
@@ -23,7 +24,7 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+
 import { getRecommendedBlocks, type BlockRecommendation } from '@/lib/blocks/block-recommendations';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
@@ -115,7 +116,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 }: BlockInsertButtonProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -184,7 +185,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
         action: {
           label: t('actions.upgrade', 'Upgrade'),
-          onClick: () => router.push('/pricing'),
+          onClick: () => navigate('/pricing'),
         },
       });
       return;

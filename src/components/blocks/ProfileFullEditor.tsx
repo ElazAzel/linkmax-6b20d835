@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import type { CoverHeight, CoverGradient, AvatarSize, ShadowStyle, AvatarPosition } from "@/types/profile-editor";
@@ -7,7 +8,7 @@ import type { CoverHeight, CoverGradient, AvatarSize, ShadowStyle, AvatarPositio
  */
 import { memo, useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import {
   Drawer,
   DrawerContent,
@@ -109,7 +110,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
 }: ProfileFullEditorProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { canUsePremiumFrames } = useFreemiumLimits();
   const currentLang = i18n.language as SupportedLanguage;
@@ -432,7 +433,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   onChange={(value) => setFormData(prev => ({ ...prev, avatarFrame: value }))}
                   isPremium={canUsePremiumFrames()}
                   avatarUrl={formData.avatar}
-                  onUpgradeClick={() => router.push('/pricing')}
+                  onUpgradeClick={() => navigate('/pricing')}
                 />
               </div>
 
@@ -465,7 +466,7 @@ export const ProfileFullEditor = memo(function ProfileFullEditor({
                   onChange={(value) => setFormData(prev => ({ ...prev, nameAnimation: value }))}
                   isPremium={canUsePremiumFrames()}
                   previewName={name}
-                  onUpgradeClick={() => router.push('/pricing')}
+                  onUpgradeClick={() => navigate('/pricing')}
                 />
               </div>
             </TabsContent>

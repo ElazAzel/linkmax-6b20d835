@@ -1,7 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { Users, ArrowRight, Crown, Eye, Heart, Loader2, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,7 +16,7 @@ import { storage } from '@/lib/storage';
 
 export function LandingGallerySection() {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { pages, loading, likePage, selectedNiche, setSelectedNiche, nicheCounts } = useGallery();
   const [likedPages, setLikedPages] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
@@ -138,7 +139,7 @@ export function LandingGallerySection() {
               <Card
                 key={page.id}
                 className="group cursor-pointer bg-card/50 backdrop-blur-xl border-border/30 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
-                onClick={() => router.push(`/${page.slug}`)}
+                onClick={() => navigate(`/${page.slug}`)}
               >
                 {/* Avatar Section */}
                 <div className="relative p-3 sm:p-4 pb-2 flex flex-col items-center">
@@ -204,7 +205,7 @@ export function LandingGallerySection() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => router.push('/gallery')}
+            onClick={() => navigate('/gallery')}
             className="rounded-2xl px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-semibold bg-background/60 backdrop-blur-xl hover:bg-accent border-border/50 hover:border-primary/30 transition-all group"
           >
             {t('landing.gallery.viewAll')}

@@ -1,3 +1,4 @@
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 'use client';
 
 /**
@@ -7,7 +8,7 @@
  */
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import {
   FolderOpen,
   PenTool,
@@ -39,9 +40,9 @@ export const AppTabBar = memo(function AppTabBar({
   crmBadge
 }: AppTabBarProps) {
   const { t } = useTranslation();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const haptic = useHapticFeedback();
 
   const tabs: TabItem[] = [
@@ -100,7 +101,7 @@ export const AppTabBar = memo(function AppTabBar({
     if (onTabChange) {
       onTabChange(tab.id);
     } else {
-      router.push(tab.path);
+      navigate(tab.path);
     }
   }, [onTabChange, router, haptic]);
 

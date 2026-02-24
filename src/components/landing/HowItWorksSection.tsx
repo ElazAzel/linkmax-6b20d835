@@ -1,7 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
 import {
   Target,
@@ -18,7 +19,7 @@ interface HowItWorksSectionProps {
 
 export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const steps = [
     {
@@ -103,7 +104,7 @@ export function HowItWorksSection({ isVisible, sectionRef }: HowItWorksSectionPr
           style={{ animationDelay: '700ms' }}
         >
           <Button
-            onClick={() => router.push('/auth')}
+            onClick={() => navigate('/auth')}
             variant="premium"
             size="lg"
             className="rounded-2xl font-bold px-6 sm:px-8"

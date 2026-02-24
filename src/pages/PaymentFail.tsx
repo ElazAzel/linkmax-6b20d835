@@ -1,11 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { XCircle, ArrowLeft, MessageCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+
 
 export default function PaymentFail() {
-    const router = useRouter();
+    const navigate = useNavigate();
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -27,7 +28,7 @@ export default function PaymentFail() {
                     <Button
                         variant="default"
                         className="w-full h-12"
-                        onClick={() => router.push('/pricing')}
+                        onClick={() => navigate('/pricing')}
                     >
                         <ArrowLeft className="mr-2 w-4 h-4" />
                         Попробовать снова

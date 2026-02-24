@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { Label } from '@/components/ui/label';
@@ -16,11 +17,11 @@ import { getLucideIcon } from '@/lib/utils/icon-utils';
 import type { ProfileFrameStyle } from '@/types/page';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { Badge } from '@/components/ui/badge';
-import { useRouter } from 'next/navigation';
+
 
 function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [frameOpen, setFrameOpen] = useState(false);
   const { canUseVerificationBadge, canUsePremiumFrames, canUseAdvancedThemes, currentTier } = useFreemiumLimits();
 
@@ -165,7 +166,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                 value={(formData.avatarFrame || 'default') as ProfileFrameStyle}
                 onChange={(value) => {
                   if (!canUsePremiumFrames() && isPremiumFrameType(value)) {
-                    router.push('/pricing');
+                    navigate('/pricing');
                     return;
                   }
                   onChange({ ...formData, avatarFrame: value as ProfileFrameStyle });
@@ -233,7 +234,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
               {t('premium.verificationRequiresPro', 'Verification badge is available for PRO users')}
             </p>
             <button
-              onClick={() => router.push('/pricing')}
+              onClick={() => navigate('/pricing')}
               className="mt-2 text-xs text-primary hover:underline"
             >
               {t('premium.upgradeToPro', 'Upgrade to PRO →')}

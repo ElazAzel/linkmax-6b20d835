@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 'use client';
 
 /**
@@ -5,7 +6,7 @@
  * Shows all registrations, allows check-in, export, and management
  */
 import { memo, useState, useEffect, useCallback } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
@@ -110,7 +111,7 @@ interface EventDetail {
 export const EventDetailScreen = memo(function EventDetailScreen() {
   const params = useParams();
   const eventId = params?.eventId as string;
-  const router = useRouter();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { isPremium } = usePremiumStatus();
@@ -156,7 +157,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
       if (eventError || !eventData) {
         toast.error(t('events.notFound', 'Событие не найдено'));
-        router.push('/dashboard/events');
+        navigate('/dashboard/events');
         return;
       }
 
@@ -557,7 +558,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/10">
         <div className="px-4 py-3">
           <div className="flex items-center gap-3 mb-3">
-            <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard/events')}>
+            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard/events')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex-1 min-w-0">
@@ -616,7 +617,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
                   openPremiumPurchase();
                   return;
                 }
-                router.push(`/dashboard/events/${eventId}/scanner`);
+                navigate(`/dashboard/events/${eventId}/scanner`);
               }}
             >
               <QrCode className="h-4 w-4 mr-1.5" />

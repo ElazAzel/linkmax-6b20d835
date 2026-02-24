@@ -1,7 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { Crown, Eye, Heart, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ import { parseMultilingualField, type SupportedLanguage } from '@/lib/i18n-helpe
 
 export function LandingFeaturedPages() {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [pages, setPages] = useState<GalleryPage[]>([]);
   const [loading, setLoading] = useState(true);
   const currentLang = i18n.language as SupportedLanguage;
@@ -122,7 +123,7 @@ export function LandingFeaturedPages() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => router.push('/gallery')}
+            onClick={() => navigate('/gallery')}
             className="rounded-xl font-semibold bg-background/60 backdrop-blur-xl hover:bg-accent border-border/50 hover:border-primary/30 group"
           >
             {t('landing.featured.viewAll', 'View All Pages')}

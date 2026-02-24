@@ -1,8 +1,9 @@
+import { useNavigate, useParams as useRRParams, useLocation, useSearchParams as useRRSearchParams } from 'react-router-dom';
 /**
  * next/navigation compatibility shim for Vite
  * Maps Next.js navigation APIs to react-router-dom equivalents
  */
-import { useNavigate, useParams as useRRParams, useLocation, useSearchParams as useRRSearchParams } from 'react-router-dom';
+
 
 export { useRRParams as useParams };
 

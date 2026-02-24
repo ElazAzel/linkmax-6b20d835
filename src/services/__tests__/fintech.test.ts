@@ -111,12 +111,13 @@ describe('fintechService', () => {
             } as any);
 
             // Let's adjust the mock for the chain .eq().eq().eq()
-            const mockChain = {
+            const mockChain: any = {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
             };
-            (mockChain.eq as any).mockReturnValue(mockChain);
-            (mockChain as any).mockResolvedValue({ data: mockPending, error: null });
+            mockChain.then = function (resolve: any) {
+                resolve({ data: mockPending, error: null });
+            };
 
             mockFrom.mockReturnValueOnce(mockChain as any);
 

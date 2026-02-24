@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 /**
@@ -6,7 +7,7 @@
  */
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { Card } from '@/components/ui/card';
@@ -63,7 +64,7 @@ interface EventsPanelProps {
 export function EventsPanel({ isPremium }: EventsPanelProps) {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft' | 'closed'>('all');
@@ -204,7 +205,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
       toast.error(t('events.scannerProOnly', 'QR-сканер доступен в Pro'));
       return;
     }
-    router.push(`/dashboard/events/${eventId}/scanner`);
+    navigate(`/dashboard/events/${eventId}/scanner`);
   };
 
   const getStatusBadge = (status: string) => {

@@ -5,15 +5,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AppTabBar } from '../AppTabBar';
 
-// Mock next/navigation
-const useRouterMock = vi.fn();
-const usePathnameMock = vi.fn();
+// Mock react-router-dom
+const useNavigateMock = vi.fn();
+const useLocationMock = vi.fn();
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: useRouterMock,
-  }),
-  usePathname: () => usePathnameMock(),
+vi.mock('react-router-dom', () => ({
+  useNavigate: () => useNavigateMock,
+  useLocation: () => useLocationMock(),
+  useSearchParams: () => [new URLSearchParams()],
+  Link: ({ children, to, className }: any) => <a href={to} className={className}>{children}</a>,
 }));
 
 const renderAppTabBar = (props = {}) => {
@@ -25,7 +25,7 @@ const renderAppTabBar = (props = {}) => {
 describe('AppTabBar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    usePathnameMock.mockReturnValue('/dashboard/editor');
+    useLocationMock.mockReturnValue({ pathname: '/dashboard/editor' });
   });
 
   it('renders all 6 tabs', () => {

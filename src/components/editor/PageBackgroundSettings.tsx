@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { memo } from 'react';
@@ -11,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { Crown, Image, Palette, Sparkles, Lock } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+
 import type { PageBackground } from '@/types/page';
 
 interface PageBackgroundSettingsProps {
@@ -26,7 +27,7 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
   canUseFeature,
 }: PageBackgroundSettingsProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const currentType = background?.type || 'solid';
   const currentValue = background?.value || '';
@@ -75,7 +76,7 @@ export const PageBackgroundSettings = memo(function PageBackgroundSettings({
 
         <Button
           size="sm"
-          onClick={() => router.push('/pricing')}
+          onClick={() => navigate('/pricing')}
           className="w-full mt-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
         >
           <Crown className="h-3.5 w-3.5 mr-1.5" />

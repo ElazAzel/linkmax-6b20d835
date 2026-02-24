@@ -1,8 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import {
   Save,
   Eye,
@@ -72,7 +73,7 @@ export const MobileToolbar = memo(function MobileToolbar({
   userId,
 }: MobileToolbarProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [moreOpen, setMoreOpen] = useState(false);
 
   // Helper to handle actions that close the sheet and open another dialog
@@ -194,7 +195,7 @@ export const MobileToolbar = memo(function MobileToolbar({
       label: t('pricing.title', 'Тарифы'),
       description: t('mobileToolbar.pricingDesc', 'Премиум возможности'),
       onClick: () => {
-        handleAction(() => router.push('/pricing'));
+        handleAction(() => navigate('/pricing'));
       },
       color: 'from-amber-500/20 to-orange-500/20',
       iconColor: 'text-amber-500',

@@ -27,11 +27,11 @@ describe('useLeads', () => {
 
     it('should fetch leads on mount', async () => {
         const mockFrom = vi.mocked(supabase.from);
-        mockFrom.mockReturnValueOnce({
+        mockFrom.mockImplementation(() => ({
             select: vi.fn().mockReturnThis(),
             eq: vi.fn().mockReturnThis(),
             order: vi.fn().mockResolvedValue({ data: mockLeads, error: null })
-        } as any);
+        } as any));
 
         const { result } = renderHook(() => useLeads());
 
@@ -56,19 +56,13 @@ describe('useLeads', () => {
         const newLead = { id: 'lead-3', name: 'Petr' };
         const mockFrom = vi.mocked(supabase.from);
 
-        // Initial fetch mock
-        mockFrom.mockReturnValueOnce({
+        mockFrom.mockImplementation(() => ({
             select: vi.fn().mockReturnThis(),
             eq: vi.fn().mockReturnThis(),
-            order: vi.fn().mockResolvedValue({ data: [], error: null })
-        } as any);
-
-        // Insert mock
-        mockFrom.mockReturnValueOnce({
+            order: vi.fn().mockResolvedValue({ data: [], error: null }),
             insert: vi.fn().mockReturnThis(),
-            select: vi.fn().mockReturnThis(),
             single: vi.fn().mockResolvedValue({ data: newLead, error: null })
-        } as any);
+        } as any));
 
         const { result } = renderHook(() => useLeads());
         await waitFor(() => expect(result.current.loading).toBe(false));

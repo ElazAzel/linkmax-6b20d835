@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 
 /**
@@ -5,7 +6,7 @@
  * Shows all user events with stats, registrations access, and quick actions
  */
 import { memo, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
@@ -64,7 +65,7 @@ interface EventsScreenProps {
 
 export const EventsScreen = memo(function EventsScreen({ className }: EventsScreenProps) {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { isPremium, isLoading: premiumLoading } = usePremiumStatus();
 
@@ -173,7 +174,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       openPremiumPurchase();
       return;
     }
-    router.push(`/dashboard/events/${eventId}/scanner`);
+    navigate(`/dashboard/events/${eventId}/scanner`);
   };
 
   const handleExportRegistrations = async (eventId: string, eventTitle: string) => {
@@ -235,7 +236,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       <Card
         key={event.id}
         className="p-4 hover:shadow-md transition-shadow cursor-pointer"
-        onClick={() => router.push(`/dashboard/events/${event.id}`)}
+        onClick={() => navigate(`/dashboard/events/${event.id}`)}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -384,7 +385,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
               <p className="text-sm text-muted-foreground mb-4">
                 {t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
               </p>
-              <Button onClick={() => router.push('/dashboard/home?tab=editor')}>
+              <Button onClick={() => navigate('/dashboard/home?tab=editor')}>
                 <Plus className="h-4 w-4 mr-2" />
                 {t('events.addEventBlock', 'Добавить блок')}
               </Button>

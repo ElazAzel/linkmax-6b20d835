@@ -1,13 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Check, ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 
 export default function PaymentSuccess() {
-    const router = useRouter();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Launch confetti
@@ -56,7 +57,7 @@ export default function PaymentSuccess() {
                 <div className="pt-4">
                     <Button
                         className="w-full h-12 text-lg bg-gradient-to-r from-violet-500 to-purple-600 shadow-lg shadow-purple-500/20"
-                        onClick={() => router.push('/dashboard')}
+                        onClick={() => navigate('/dashboard')}
                     >
                         Перейти в кабинет
                         <ArrowRight className="ml-2 w-5 h-5" />

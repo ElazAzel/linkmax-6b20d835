@@ -1,10 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 /**
  * DashboardSidebar - Desktop sidebar navigation
  * Collapsible with section groups, powered by Framer Motion
  */
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/navigation';
+
 import {
   Home,
   PenTool,
@@ -97,7 +98,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   onCollapsedChange,
 }: DashboardSidebarProps) {
   const { t } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleItemClick = (itemId: string) => {
     if (itemId === 'templates' || itemId === 'marketplace' || itemId === 'tokens' || itemId === 'achievements') {
@@ -261,7 +262,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
             >
               <Button
                 className="w-full h-10 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                onClick={() => router.push('/pricing')}
+                onClick={() => navigate('/pricing')}
               >
                 <Crown className="h-4 w-4 mr-2" />
                 {t('dashboard.sidebar.upgrade', 'Upgrade')}

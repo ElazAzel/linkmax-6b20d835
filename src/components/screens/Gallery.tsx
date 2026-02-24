@@ -6,8 +6,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft,
   Users,
@@ -47,8 +46,8 @@ import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 
 export default function Gallery() {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { pages, loading, likePage } = useGallery();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
@@ -129,8 +128,8 @@ export default function Gallery() {
     } else {
       nextParams.delete('niche');
     }
-    router.replace(`/gallery?${nextParams.toString()}`);
-  }, [searchParams, router]);
+    navigate(`/gallery?${nextParams.toString()}`, { replace: true });
+  }, [searchParams, navigate]);
 
   // Handlers - memoized
   const handleCopyTemplate = useCallback((pageSlug: string) => {
@@ -138,10 +137,10 @@ export default function Gallery() {
       description: t('gallery.goToEditor', 'Откройте редактор чтобы настроить'),
       action: {
         label: t('gallery.openEditor', 'Открыть'),
-        onClick: () => router.push('/dashboard?tab=editor'),
+        onClick: () => navigate('/dashboard?tab=editor'),
       },
     });
-  }, [t, router]);
+  }, [t, navigate]);
 
   return (
     <>
@@ -212,7 +211,7 @@ export default function Gallery() {
               <Button
                 size="sm"
                 className="h-10 rounded-xl font-bold"
-                onClick={() => router.push('/auth')}
+                onClick={() => navigate('/auth')}
               >
                 <Sparkles className="h-4 w-4 mr-1.5" />
                 {t('gallery.create', 'Создать')}
@@ -347,7 +346,7 @@ export default function Gallery() {
                         key={page.id}
                         page={page}
                         onCopy={() => handleCopyTemplate(page.slug)}
-                        onView={() => router.push(`/${page.slug}`)}
+                        onView={() => navigate(`/${page.slug}`)}
                       />
                     ))}
                   </div>
@@ -382,7 +381,7 @@ export default function Gallery() {
                       key={page.id}
                       page={page}
                       onCopy={() => handleCopyTemplate(page.slug)}
-                      onView={() => router.push(`/${page.slug}`)}
+                      onView={() => navigate(`/${page.slug}`)}
                       onLike={() => likePage(page.id)}
                     />
                   ))}
