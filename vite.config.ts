@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Enable sourcemaps in production when Sentry token is available
-    sourcemap: mode === "development" || !!process.env.SENTRY_AUTH_TOKEN,
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks(id) {
