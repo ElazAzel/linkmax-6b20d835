@@ -5,7 +5,6 @@ import { ArrowRight, Sparkles, Zap, Smartphone, BarChart3, Globe, Play } from 'l
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
-import { Button } from '@/components/ui/button'; // Import standard button for non-magnetic uses if needed
 
 interface HeroProp {
     onStart: () => void;
@@ -17,10 +16,9 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollY } = useScroll();
 
-    // Parallax effects
+    // Parallax effects (scroll-driven, don't block initial paint)
     const y1 = useTransform(scrollY, [0, 500], [0, 200]);
     const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-    const rotate = useTransform(scrollY, [0, 500], [0, 10]);
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     return (
@@ -31,7 +29,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
             {/* Animated Grid Overlay */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-            {/* Floating 3D Elements (Decorative) */}
+            {/* Floating 3D Elements (Decorative) — parallax only, no initial hide */}
             <motion.div style={{ y: y1, rotate: -5 }} className="absolute left-[5%] top-[20%] w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float-slow">
                 <Zap className="w-10 h-10 text-yellow-400" />
             </motion.div>
@@ -45,20 +43,15 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
 
             <div className="container relative z-10 px-4 md:px-6 flex flex-col items-center text-center">
 
-                {/* Badge */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="mb-8"
-                >
+                {/* Badge — render immediately for Speed Index */}
+                <div className="mb-8">
                     <Badge variant="outline" className="h-8 px-4 py-1 text-sm bg-background/50 backdrop-blur-md border-primary/20 text-primary gap-2 shadow-sm hover:bg-background/80 transition-colors cursor-default">
                         <Sparkles className="w-3.5 h-3.5" />
                         <span className="font-medium">{t('landing.v4.hero.badge', 'AI-Powered • No Code • 2 Mins')}</span>
                     </Badge>
-                </motion.div>
+                </div>
 
-                {/* Headline */}
+                {/* Headline — render immediately for LCP */}
                 <h1
                     className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-[1.1] md:leading-[1.1]"
                 >
@@ -68,23 +61,13 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                     </span>
                 </h1>
 
-                {/* Subtitle */}
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="max-w-2xl text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed"
-                >
+                {/* Subtitle — render immediately for Speed Index */}
+                <p className="max-w-2xl text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed">
                     {t('landing.v4.hero.subtitle', 'The all-in-one platform for creators and micro-businesses. AI builds the structure, you get the leads.')}
-                </motion.p>
+                </p>
 
-                {/* CTA Buttons */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center"
-                >
+                {/* CTA Buttons — render immediately for Speed Index */}
+                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center">
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
@@ -103,25 +86,19 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                         <Play className="w-4 h-4 mr-2 fill-current" />
                         {t('landing.v4.hero.secondary', 'See Examples')}
                     </MagneticButton>
-                </motion.div>
+                </div>
 
-                {/* Trust Indicators / Social Proof (Mini) */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.8 }}
-                    className="mt-16 pt-8 border-t border-border/10 w-full max-w-sm md:max-w-2xl"
-                >
+                {/* Trust Indicators — render immediately */}
+                <div className="mt-16 pt-8 border-t border-border/10 w-full max-w-sm md:max-w-2xl">
                     <div className="flex justify-between items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-                        {/* Simple logos or text for trust */}
                         <div className="flex items-center gap-2"><Smartphone className="w-5 h-5" /> <span className="text-xs font-semibold">{t('landing.v4.hero.mobileFirst', 'Mobile First')}</span></div>
                         <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5" /> <span className="text-xs font-semibold">{t('landing.v4.hero.analytics', 'Analytics')}</span></div>
                         <div className="flex items-center gap-2"><Globe className="w-5 h-5" /> <span className="text-xs font-semibold">{t('landing.v4.hero.seoReady', 'SEO Ready')}</span></div>
                     </div>
-                </motion.div>
+                </div>
             </div>
 
-            {/* Scroll Indicator */}
+            {/* Scroll Indicator — scroll-driven opacity, no initial hide */}
             <motion.div
                 style={{ opacity }}
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
