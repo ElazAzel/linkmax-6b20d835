@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Audit (Full Platform Functional Audit — 2026-02-24)
+- **Comprehensive Audit**: Conducted full functional audit covering all subsystems. Results: TypeScript ✅ (0 errors), Build ✅, i18n ✅ (4124 keys, 0 missing), Tests ⚠️ (206/220 passed).
+- **Browser Testing**: Verified landing page, auth (email/Google/Apple), gallery (55 pages), pricing, dashboard auth redirect — all PASS.
+- **Edge Functions Review**: Audited `telegram-bot-webhook`, `create-lead`, `robokassa`, `robokassa-webhook`, `pixel-proxy`, `send-lead-notification` — all SECURE.
+- **Issues Found**: 0 Critical, 3 Major (legacy `next/link` imports in 10 files, 14 test failures, large bundle chunks), 4 Minor.
+- **Health Score**: Updated to 8.5/10 (from 9.0, due to test debt and legacy imports).
+- **Report**: See [FULL_PLATFORM_AUDIT_2026_02_24.md](docs/audits/FULL_PLATFORM_AUDIT_2026_02_24.md).
+
 ### Documentation (Documentation Audit & Cleanup — 2026-02-23)
 - **Tech Stack Alignment**: Updated `README.md` and `PLATFORM_SNAPSHOT.md` to correctly reflect the Vite React SPA architecture, resolving legacy references to Next.js 14.
 - **Architecture Map**: Corrected "Legacy" labels in `PLATFORM_SNAPSHOT.md` for active core components (`src/main.tsx`, `src/pages/`). Added `src/platform/` to the official structure.
