@@ -13,7 +13,8 @@ lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**,
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Liquid Glass"** aesthetic (glassmorphism, premium micro-animations, and depth) to provide a high-end look by default.
 2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking.
 3. **Advanced Analytics** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and provide 30% more accurate data for Ad spending optimization (CAPI).
-4. **Fintech Core** — Integrated ledger for transaction tracking, multi-currency wallets, and future real-world payment gateway support (Kaspi/Robokassa).
+4. **Team Collaboration** — RBAC-based organization management for multi-user page editing and roles.
+5. **Fintech Core** — Integrated ledger for transaction tracking, multi-currency wallets, and future real-world payment gateway support (Kaspi/Robokassa).
 
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
 
@@ -733,8 +734,8 @@ Based on codebase analysis, these are logical next improvements:
 3. ~~**A/B testing for blocks**~~ — Test different block configurations to optimize conversions (Completed 2026-02-25)
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
 5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees, unit tests (Completed 2026-02-22)
-6. **Team collaboration** — Multi-user editing for business pages
-6. **API access** — Public API for integrations (Zapier, Make, custom apps)
+6. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
+7. **API access** — Public API for integrations (Zapier, Make, custom apps)
 7. **Email sequences** — Automated email drip campaigns for leads
 8. ~~**Analytics export**~~ — CSV/Excel download of analytics data (Completed 2026-02-21)
 9. **Block templates library** — Pre-configured block combinations for quick setup

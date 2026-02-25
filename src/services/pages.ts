@@ -442,6 +442,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      organization_id: pg.organization_id || undefined,
       experiments
     };
 
