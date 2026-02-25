@@ -33,6 +33,7 @@ import {
   TrafficSourcesChart,
   BlockPerformance,
   AnalyticsExport,
+  ExperimentsList,
 } from '../analytics';
 import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
@@ -584,30 +585,7 @@ export const InsightsScreen = memo(function InsightsScreen({
               {/* Experiments Tab */}
               {isPremium && (
                 <TabsContent value="experiments" className="mt-4">
-                  <motion.div
-                    className="space-y-4"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Card className="p-8 text-center flex flex-col items-center justify-center space-y-4">
-                      <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                        <FlaskConical className="h-8 w-8 text-primary" />
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="font-bold text-lg">{t('experiments.empty.title', 'A/B Тестирование')}</h3>
-                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                          {t('experiments.empty.desc', 'Создавайте тесты для своих блоков прямо в редакторе, чтобы повысить конверсию страницы.')}
-                        </p>
-                      </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => toast.info(t('experiments.info.redirect', 'Перейдите в Редактор, чтобы запустить тест для конкретного блока'))}
-                      >
-                        {t('experiments.empty.action', 'Как это работает?')}
-                      </Button>
-                    </Card>
-                  </motion.div>
+                  <ExperimentsList pageId={pageId} />
                 </TabsContent>
               )}
             </Tabs>

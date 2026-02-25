@@ -8,3 +8,4 @@ export { GeographyChart } from './GeographyChart';
 export { TrafficSourcesChart } from './TrafficSourcesChart';
 export { BlockPerformance } from './BlockPerformance';
 export { AnalyticsExport } from './AnalyticsExport';
+export { ExperimentsList } from './ExperimentsList';

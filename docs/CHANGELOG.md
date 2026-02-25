@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 * **White-label Mode:** Pro users can now fully customize their public pages by removing platform branding ("Made with lnkmx") and setting custom favicons.
+* **A/B Testing for Blocks:** Creators can now run experiments on individual blocks (links, buttons, carousels) with multi-variant testing, traffic weight allocation, and real-time conversion tracking in the Insights dashboard.
 * **Dynamic Pricing:** Subscriptions are now dynamically calculated in KZT from base USD prices ($8.9, $7.9, $5.9) using real-time API from the National Bank of Kazakhstan.
 
 ### Fixed
