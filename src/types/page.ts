@@ -90,5 +90,6 @@ export interface PageData {
   gridConfig?: GridConfig;
   niche?: string;
   previewUrl?: string; // Custom preview image for gallery
+  organization_id?: string;
   experiments?: PageExperiment[];
 }

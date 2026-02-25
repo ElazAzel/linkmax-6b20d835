@@ -23,6 +23,7 @@ export interface DbPage {
   view_count: number;
   favicon_url: string | null;
   hide_branding: boolean;
+  organization_id: string | null;
   created_at: string;
   updated_at: string;
   experiments?: any[]; // To be mapped to PageExperiment[]
@@ -184,6 +185,7 @@ export async function savePage(
       p_integrations: (pageData.integrations || null) as unknown as Json,
       p_favicon_url: pageData.favicon_url || null,
       p_hide_branding: pageData.hideBranding || false,
+      p_organization_id: pageData.organization_id || null,
     });
 
     if (upsertError) {

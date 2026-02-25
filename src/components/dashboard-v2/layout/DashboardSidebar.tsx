@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
  * Collapsible with section groups, powered by Framer Motion
  */
 import { memo, useMemo } from 'react';
+import { OrganizationSwitcher } from '../organizations/OrganizationSwitcher';
 import { useTranslation } from 'react-i18next';
 
 import Home from 'lucide-react/dist/esm/icons/home';
@@ -22,6 +23,7 @@ import Coins from 'lucide-react/dist/esm/icons/coins';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Users from 'lucide-react/dist/esm/icons/users';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -81,6 +83,7 @@ const SECTIONS: SidebarSection[] = [
     items: [
       { id: 'tokens', icon: Coins, labelKey: 'dashboard.sidebar.tokens', defaultLabel: 'Токены' },
       { id: 'achievements', icon: Trophy, labelKey: 'dashboard.sidebar.achievements', defaultLabel: 'Достижения' },
+      { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда' },
       { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки' },
     ],
   },
@@ -212,6 +215,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
           {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
         </Button>
       </div>
+
+      <OrganizationSwitcher collapsed={collapsed} />
 
       {/* Navigation */}
       <ScrollArea className="flex-1 px-3">

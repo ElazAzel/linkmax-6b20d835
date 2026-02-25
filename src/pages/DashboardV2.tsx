@@ -36,6 +36,7 @@ const SettingsScreen = lazy(() => import('@/components/dashboard-v2/screens/Sett
 const EventsScreen = lazy(() => import('@/components/dashboard-v2/screens/EventsScreen').then(m => ({ default: m.EventsScreen })));
 const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/EventDetailScreen').then(m => ({ default: m.EventDetailScreen })));
 const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
+const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen'));
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -83,7 +84,7 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team';
 
 export default function DashboardV2() {
   const navigate = useNavigate();
@@ -135,7 +136,7 @@ export default function DashboardV2() {
     // Fall back to pathname
     const pathParts = location.pathname.split('/');
     const lastPart = pathParts[pathParts.length - 1];
-    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads'].includes(lastPart)) {
+    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team'].includes(lastPart)) {
       return lastPart as TabId;
     }
     return 'home';
@@ -565,6 +566,11 @@ export default function DashboardV2() {
             {/* Leads Screen */}
             {currentTab === 'leads' && (
               <LeadsScreen />
+            )}
+
+            {/* Team Management Screen */}
+            {currentTab === 'team' && (
+              <TeamManagementScreen />
             )}
           </Suspense>
         </DashboardLayout>
