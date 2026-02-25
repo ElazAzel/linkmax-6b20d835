@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 'use client';
+import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 

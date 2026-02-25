@@ -55,7 +55,7 @@ export function extractPrice(text: string): { price: number; currency: string; r
     if (match) {
         const fullMatch = match[0];
         const preSymbol = match[1]?.trim().toLowerCase();
-        let numStr = match[2]?.replace(/[\s,]/g, '') || '0';
+        const numStr = match[2]?.replace(/[\s,]/g, '') || '0';
         const postSymbol = match[3]?.trim().toLowerCase();
 
         // Safe parse
@@ -232,7 +232,7 @@ export function extractSocialsPipeline(text: string): ParsedSocial[] {
         const contextRegex = new RegExp(`${shortcut}[:\\s.-]*@([a-zA-Z0-9_.]+)`, 'gi');
         let contextMatch;
         while ((contextMatch = contextRegex.exec(text)) !== null) {
-            let baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
+            const baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
             if (platform === 'telegram') baseUrl = 'https://t.me/';
             if (platform === 'tiktok') baseUrl = 'https://tiktok.com/@';
 
@@ -248,7 +248,7 @@ export function extractSocialsPipeline(text: string): ParsedSocial[] {
         const domainRegex = new RegExp(`${shortcut}\\.com\\/([a-zA-Z0-9_.]+)`, 'gi');
         let domainMatch;
         while ((domainMatch = domainRegex.exec(text)) !== null) {
-            let baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
+            const baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
             results.push({ platform, url: `${baseUrl}${domainMatch[1]}` });
             break;
         }

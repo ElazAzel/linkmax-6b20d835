@@ -12,14 +12,44 @@ interface TrackingScriptsProps {
     pageId?: string;
 }
 
+export type FBQ = {
+    (type: string, name?: string, parameters?: Record<string, unknown>): void;
+    callMethod?: (...args: unknown[]) => void;
+    queue: unknown[][];
+    push: FBQ;
+    loaded: boolean;
+    version: string;
+};
+
+export type TTQ = {
+    (...args: unknown[]): void;
+    methods: string[];
+    setAndDefer: (t: any, e: string) => void;
+    load: (e: string) => void;
+    page: () => void;
+    _i: Record<string, unknown[]>;
+    _t: Record<string, number>;
+    [key: string]: any;
+};
+
+export type GTag = (...args: unknown[]) => void;
+
+export type YM = {
+    (id: string, methodName: string, options?: Record<string, unknown> | string): void;
+    a?: unknown[][];
+    l?: number;
+};
+
 declare global {
     interface Window {
-        fbq: any;
-        _fbq: any;
-        ttq: any;
-        gtag: any;
-        dataLayer: any[];
-        ym: any;
+        fbq: FBQ;
+        _fbq: FBQ;
+        ttq: TTQ;
+        gtag: GTag;
+        dataLayer: unknown[][];
+        ym: YM;
+        yandex_metrika_callbacks2?: Array<() => void>;
+        opera?: string;
     }
 }
 
@@ -36,21 +66,21 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
 
         // Facebook Pixel
         if (integrations.fb_pixel) {
-            const f = window as any;
             const b = document;
-            if (!f.fbq) {
-                const n: any = f.fbq = function (...args: any[]) {
+            if (!window.fbq) {
+                const n = function (...args: unknown[]) {
                     if (n.callMethod) {
                         n.callMethod(...args);
                     } else {
                         n.queue.push(args);
                     }
-                };
-                if (!f._fbq) f._fbq = n;
+                } as FBQ;
+                if (!window._fbq) window._fbq = n;
                 n.push = n;
                 n.loaded = true;
                 n.version = '2.0';
                 n.queue = [];
+                window.fbq = n;
                 const t = b.createElement('script');
                 t.async = true;
                 t.src = 'https://connect.facebook.net/en_US/fbevents.js';
@@ -63,29 +93,29 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
 
         // TikTok Pixel
         if (integrations.tt_pixel) {
-            const w = window as any;
-            w.ttq = w.ttq || [];
-            w.ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
-            w.ttq.setAndDefer = function (t: any, e: any) {
-                t[e] = function (...args: any[]) {
+            window.ttq = window.ttq || ([] as unknown as TTQ);
+            const ttq = window.ttq;
+            ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie"];
+            ttq.setAndDefer = function (t: TTQ, e: string) {
+                t[e] = function (...args: unknown[]) {
                     t._i[e] = t._i[e] || [];
                     t._i[e].push(args);
                 };
             };
-            w.ttq.load = function (e: string) {
+            ttq.load = function (e: string) {
                 const i = "https://analytics.tiktok.com/i18n/pixel/events.js";
-                w.ttq._i = w.ttq._i || {};
-                w.ttq._i[e] = [];
-                w.ttq._t = w.ttq._t || {};
-                w.ttq._t[e] = +new Date();
+                ttq._i = ttq._i || {};
+                ttq._i[e] = [];
+                ttq._t = ttq._t || {};
+                ttq._t[e] = +new Date();
                 const o = document.createElement("script");
                 o.type = "text/javascript"; o.async = true;
                 o.src = i + "?sdkid=" + e + "&lib=ttq";
                 const a = document.getElementsByTagName("script")[0];
                 a.parentNode?.insertBefore(o, a);
             };
-            w.ttq.load(integrations.tt_pixel);
-            w.ttq.page();
+            ttq.load(integrations.tt_pixel);
+            ttq.page();
         }
 
         // Google Analytics 4
@@ -96,22 +126,20 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             document.head.appendChild(script);
 
             window.dataLayer = window.dataLayer || [];
-            const gtag = function (...args: any[]) { window.dataLayer.push(args); }
+            const gtag: GTag = function (...args: unknown[]) { window.dataLayer.push(args); }
             window.gtag = gtag;
             gtag('js', new Date());
             gtag('config', integrations.ga4_id);
         }
         // Yandex Metrika
         if (integrations.yandex_metrika) {
-            const w = window as any;
             const d = document;
-            const c = "yandex_metrika_callbacks2";
-            w[c] = w[c] || [];
-            w[c].push(function () {
+            window.yandex_metrika_callbacks2 = window.yandex_metrika_callbacks2 || [];
+            window.yandex_metrika_callbacks2.push(function () {
                 try {
-                    w.ym = w.ym || function (...args: any[]) { (w.ym.a = w.ym.a || []).push(args) };
-                    w.ym.l = 1 * new Date().getTime();
-                    w.ym(integrations.yandex_metrika, "init", {
+                    window.ym = window.ym || function (...args: unknown[]) { (window.ym.a = window.ym.a || []).push(args) };
+                    window.ym.l = 1 * new Date().getTime();
+                    window.ym(integrations.yandex_metrika!, "init", {
                         clickmap: true,
                         trackLinks: true,
                         accurateTrackBounce: true,
@@ -129,7 +157,7 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
             s.async = true;
             s.src = "https://mc.yandex.ru/metrika/tag.js";
 
-            if ((w as any).opera == "[object Opera]") {
+            if (window.opera === "[object Opera]") {
                 d.addEventListener("DOMContentLoaded", f, false);
             } else { f(); }
         }

@@ -189,7 +189,7 @@ export function generateBlocksFromTemplate(
     }
 
     // 2. Base Block Generation
-    let blocks: Block[] = templateBlocks.map((blockData: any, index: number) => {
+    const blocks: Block[] = templateBlocks.map((blockData: any, index: number) => {
         const blockType = blockData.type || 'text';
         const baseBlock = createBlock(blockType);
         const overrides = blockData.overrides || {};

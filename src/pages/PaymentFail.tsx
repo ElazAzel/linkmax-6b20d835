@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 'use client';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import XCircle from 'lucide-react/dist/esm/icons/x-circle';

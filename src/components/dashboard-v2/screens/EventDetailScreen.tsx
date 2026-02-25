@@ -1,5 +1,6 @@
-import { useNavigate, useParams } from 'react-router-dom';
 'use client';
+
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * EventDetailScreen - Detailed event view with registrations management

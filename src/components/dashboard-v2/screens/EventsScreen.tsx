@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 'use client';
+
+import { useNavigate } from 'react-router-dom';
 
 /**
  * EventsScreen - Events management dashboard

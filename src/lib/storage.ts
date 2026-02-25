@@ -31,6 +31,7 @@ export const storage = {
     get<T = unknown>(key: string): T | null {
         if (typeof window === 'undefined') return null;
         try {
+            // eslint-disable-next-line no-restricted-globals
             const item = localStorage.getItem(getKey(key));
             if (item === null) return null;
             return JSON.parse(item) as T;
@@ -48,6 +49,7 @@ export const storage = {
     set<T = unknown>(key: string, value: T): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             localStorage.setItem(getKey(key), JSON.stringify(value));
         } catch (error) {
             logger.error(`Error writing to storage: ${key}`, error, { context: 'storage' });
@@ -66,6 +68,7 @@ export const storage = {
     remove(key: string): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             localStorage.removeItem(getKey(key));
         } catch (error) {
             logger.error(`Error removing from storage: ${key}`, error, { context: 'storage' });
@@ -78,6 +81,7 @@ export const storage = {
      */
     has(key: string): boolean {
         if (typeof window === 'undefined') return false;
+        // eslint-disable-next-line no-restricted-globals
         return localStorage.getItem(getKey(key)) !== null;
     },
 
@@ -87,9 +91,11 @@ export const storage = {
     clear(): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             const keys = Object.keys(localStorage);
             keys.forEach((key) => {
                 if (key.startsWith(STORAGE_PREFIX)) {
+                    // eslint-disable-next-line no-restricted-globals
                     localStorage.removeItem(key);
                 }
             });
@@ -103,6 +109,7 @@ export const storage = {
      */
     keys(): string[] {
         if (typeof window === 'undefined') return [];
+        // eslint-disable-next-line no-restricted-globals
         const keys = Object.keys(localStorage);
         return keys
             .filter((key) => key.startsWith(getKey('')))
@@ -116,9 +123,11 @@ export const storage = {
         if (typeof window === 'undefined') return 0;
         let size = 0;
         try {
+            // eslint-disable-next-line no-restricted-globals
             const keys = Object.keys(localStorage);
             keys.forEach((key) => {
                 if (key.startsWith(STORAGE_PREFIX)) {
+                    // eslint-disable-next-line no-restricted-globals
                     const value = localStorage.getItem(key);
                     if (value) {
                         size += key.length + value.length;
@@ -137,10 +146,12 @@ export const storage = {
     clearOldVersions(): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             const keys = Object.keys(localStorage);
             keys.forEach((key) => {
                 // Remove keys with old version or no version
                 if (key.startsWith(STORAGE_PREFIX) && !key.startsWith(getKey(''))) {
+                    // eslint-disable-next-line no-restricted-globals
                     localStorage.removeItem(key);
                 }
             });
@@ -154,6 +165,7 @@ export const storage = {
      */
     getRaw(key: string): string | null {
         if (typeof window === 'undefined') return null;
+        // eslint-disable-next-line no-restricted-globals
         return localStorage.getItem(getKey(key));
     },
 
@@ -162,6 +174,7 @@ export const storage = {
      */
     setRaw(key: string, value: string): void {
         if (typeof window === 'undefined') return;
+        // eslint-disable-next-line no-restricted-globals
         localStorage.setItem(getKey(key), value);
     },
 };
@@ -176,6 +189,7 @@ export const session = {
     get<T = unknown>(key: string): T | null {
         if (typeof window === 'undefined') return null;
         try {
+            // eslint-disable-next-line no-restricted-globals
             const item = sessionStorage.getItem(getKey(key));
             if (item === null) return null;
             return JSON.parse(item) as T;
@@ -191,6 +205,7 @@ export const session = {
     set<T = unknown>(key: string, value: T): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             sessionStorage.setItem(getKey(key), JSON.stringify(value));
         } catch (error) {
             logger.error(`Error writing to session storage: ${key}`, error, { context: 'storage' });
@@ -203,6 +218,7 @@ export const session = {
     remove(key: string): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             sessionStorage.removeItem(getKey(key));
         } catch (error) {
             logger.error(`Error removing from session storage: ${key}`, error, { context: 'storage' });
@@ -214,6 +230,7 @@ export const session = {
      */
     has(key: string): boolean {
         if (typeof window === 'undefined') return false;
+        // eslint-disable-next-line no-restricted-globals
         return sessionStorage.getItem(getKey(key)) !== null;
     },
 
@@ -223,9 +240,11 @@ export const session = {
     clear(): void {
         if (typeof window === 'undefined') return;
         try {
+            // eslint-disable-next-line no-restricted-globals
             const keys = Object.keys(sessionStorage);
             keys.forEach((key) => {
                 if (key.startsWith(STORAGE_PREFIX)) {
+                    // eslint-disable-next-line no-restricted-globals
                     sessionStorage.removeItem(key);
                 }
             });

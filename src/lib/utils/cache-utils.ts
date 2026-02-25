@@ -18,7 +18,9 @@ const FALLBACK_CACHE_VERSION = '5'; // Fallback if DB is unreachable
 export function clearLocalStorageCache(): void {
   const keysToRemove: string[] = [];
 
+  // eslint-disable-next-line no-restricted-globals
   for (let i = 0; i < localStorage.length; i++) {
+    // eslint-disable-next-line no-restricted-globals
     const key = localStorage.key(i);
     if (key && (
       key.startsWith('linkmax_') ||
@@ -31,6 +33,7 @@ export function clearLocalStorageCache(): void {
     }
   }
 
+  // eslint-disable-next-line no-restricted-globals
   keysToRemove.forEach(key => localStorage.removeItem(key));
   storage.clear(); // Ensure namespaced storage is cleared too
 }
@@ -41,7 +44,9 @@ export function clearLocalStorageCache(): void {
 export function clearSessionStorageCache(): void {
   const keysToRemove: string[] = [];
 
+  // eslint-disable-next-line no-restricted-globals
   for (let i = 0; i < sessionStorage.length; i++) {
+    // eslint-disable-next-line no-restricted-globals
     const key = sessionStorage.key(i);
     if (key && (
       key.startsWith('linkmax_') ||
@@ -52,6 +57,7 @@ export function clearSessionStorageCache(): void {
     }
   }
 
+  // eslint-disable-next-line no-restricted-globals
   keysToRemove.forEach(key => sessionStorage.removeItem(key));
   session.clear(); // Ensure namespaced session storage is cleared too
 }

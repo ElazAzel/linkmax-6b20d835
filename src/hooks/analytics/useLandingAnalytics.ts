@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
+import { session } from '@/lib/storage';
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
@@ -39,9 +40,9 @@ interface LandingSession {
 
 function getOrCreateSession(): LandingSession {
   try {
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = session.get<LandingSession>(SESSION_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      return stored;
     }
   } catch {
     // Ignore
@@ -56,7 +57,7 @@ function getOrCreateSession(): LandingSession {
   };
 
   try {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    session.set(SESSION_KEY, session);
   } catch {
     // Ignore
   }
@@ -68,7 +69,7 @@ function updateSession(updates: Partial<LandingSession>) {
   try {
     const session = getOrCreateSession();
     const updated = { ...session, ...updates };
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+    session.set(SESSION_KEY, updated);
     return updated;
   } catch {
     return null;
@@ -138,7 +139,7 @@ export function useLandingAnalytics() {
     if (hasTrackedView.current || isBot() || isDevTraffic()) return;
 
     const sessionKey = 'lnkmx_landing_viewed';
-    const alreadyViewed = sessionStorage.getItem(sessionKey);
+    const alreadyViewed = session.get(sessionKey);
 
     if (!alreadyViewed) {
       trackLandingEvent({
@@ -150,7 +151,7 @@ export function useLandingAnalytics() {
           utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign'),
         }
       });
-      sessionStorage.setItem(sessionKey, 'true');
+      session.set(sessionKey, 'true');
       hasTrackedView.current = true;
     }
   }, []);

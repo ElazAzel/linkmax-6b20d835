@@ -462,7 +462,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     // Send email via Resend
-    // NOTE: Using onboarding@resend.dev for testing. Replace with your verified domain.
+    // NOTE: Using verified domain @lnkmx.my
     const { data: emailResult, error: emailError } = await resend.emails.send({
       from: "LNKMX Events <admin@lnkmx.my>",
       to: [regData.attendee_email],

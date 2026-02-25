@@ -1,3 +1,4 @@
+'use client';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 /**
  * Experts Directory Page
@@ -7,7 +8,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
  * SEO: CollectionPage schema, ItemList, internal linking
  */
 
-'use client';
+
 
 import { useEffect, useMemo } from 'react';
 

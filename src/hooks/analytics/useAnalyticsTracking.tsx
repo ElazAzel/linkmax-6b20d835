@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
+import { session } from '@/lib/storage';
 import {
   trackPageView,
   trackBlockClick,
@@ -26,11 +27,11 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
 
     // Check if we've already tracked this page in this session
     const sessionKey = `linkmax_viewed_${pageId}`;
-    const alreadyViewed = sessionStorage.getItem(sessionKey);
+    const alreadyViewed = session.get(sessionKey);
 
     if (!alreadyViewed) {
       trackPageView(pageId);
-      sessionStorage.setItem(sessionKey, 'true');
+      session.set(sessionKey, 'true');
       hasTrackedView.current = true;
     }
   }, [pageId, enabled]);

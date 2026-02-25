@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 'use client';
+import { useNavigate } from 'react-router-dom';
 
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
