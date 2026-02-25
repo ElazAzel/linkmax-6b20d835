@@ -2,7 +2,7 @@
  * Page service - handles all page-related API operations
  */
 import { supabase } from '@/platform/supabase/client';
-import type { PageData, Block, ProfileBlock, PageTheme, EditorMode, GridConfig } from '@/types/page';
+import type { PageData, Block, ProfileBlock, PageTheme, EditorMode, GridConfig, PageExperiment } from '@/types/page';
 import { createDefaultPageData } from '@/lib/constants';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { Json } from '@/platform/supabase/types';
@@ -25,6 +25,7 @@ export interface DbPage {
   hide_branding: boolean;
   created_at: string;
   updated_at: string;
+  experiments?: any[]; // To be mapped to PageExperiment[]
 }
 
 export interface DbBlock {
@@ -257,7 +258,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
   try {
     const { data: page, error: pageError } = await supabase
       .from('pages')
-      .select('*, blocks(*)')
+      .select('*, blocks(*), experiments(*, experiment_variants(*))')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle();
@@ -275,6 +276,18 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
 
     const pg = page as any;
     const blocks = pg.blocks as unknown as DbBlock[];
+
+    // Map experiments and variants
+    const experiments: PageExperiment[] = (pg.experiments || []).map((exp: any) => ({
+      id: exp.id,
+      page_id: exp.page_id,
+      name: exp.name,
+      status: exp.status,
+      started_at: exp.started_at,
+      ended_at: exp.ended_at,
+      variants: exp.experiment_variants || []
+    }));
+
     const pageData: PageData = {
       id: pg.id,
       userId: pg.user_id,
@@ -292,6 +305,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      experiments
     };
 
     return { data: pageData, error: null };
@@ -307,7 +321,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<LoadPageRe
   try {
     const { data: page, error: pageError }: any = await (supabase as any)
       .from('pages')
-      .select('*, blocks(*)')
+      .select('*, blocks(*), experiments(*, experiment_variants(*))')
       .eq('custom_domain', domain)
       .eq('is_published', true)
       .maybeSingle();
@@ -322,10 +336,22 @@ export async function loadPageByCustomDomain(domain: string): Promise<LoadPageRe
 
     // Increment view count (fire and forget)
     // Note: increment_view_count takes page_slug, we can use the slug from the found page
-    void supabase.rpc('increment_view_count', { page_slug: page.slug });
+    void supabase.rpc('increment_view_count', { page_slug: (page as any).slug });
 
     const pg = page as any;
     const blocks = pg.blocks as unknown as DbBlock[];
+
+    // Map experiments and variants
+    const experiments: PageExperiment[] = (pg.experiments || []).map((exp: any) => ({
+      id: exp.id,
+      page_id: exp.page_id,
+      name: exp.name,
+      status: exp.status,
+      started_at: exp.started_at,
+      ended_at: exp.ended_at,
+      variants: exp.experiment_variants || []
+    }));
+
     const pageData: PageData = {
       id: pg.id,
       userId: pg.user_id,
@@ -344,6 +370,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<LoadPageRe
       integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      experiments
     };
 
     return { data: pageData, error: null };
@@ -359,7 +386,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
   try {
     const { data: page, error: pageError } = await supabase
       .from('pages')
-      .select('*, blocks(*), private_page_data(*)')
+      .select('*, blocks(*), private_page_data(*), experiments(*, experiment_variants(*))')
       .eq('user_id', userId)
       .maybeSingle();
 
@@ -384,6 +411,18 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
 
     const pg = page as any;
     const blocks = pg.blocks as unknown as DbBlock[];
+
+    // Map experiments and variants
+    const experiments: PageExperiment[] = (pg.experiments || []).map((exp: any) => ({
+      id: exp.id,
+      page_id: exp.page_id,
+      name: exp.name,
+      status: exp.status,
+      started_at: exp.started_at,
+      ended_at: exp.ended_at,
+      variants: exp.experiment_variants || []
+    }));
+
     const pageData: PageData = {
       id: pg.id,
       userId: pg.user_id,
@@ -401,6 +440,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      experiments
     };
 
     // Extract chatbot context

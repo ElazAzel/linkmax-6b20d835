@@ -45,6 +45,26 @@ export interface PageIntegrations {
   webhook_url?: string;
 }
 
+// Experiment types
+export interface BlockVariation {
+  id: string;
+  experiment_id: string;
+  base_block_id: string;
+  variant_label: string;
+  block_data: Partial<Block>;
+  traffic_weight: number;
+}
+
+export interface PageExperiment {
+  id: string;
+  page_id: string;
+  name: string;
+  status: 'draft' | 'running' | 'paused' | 'ended';
+  started_at?: string;
+  ended_at?: string;
+  variants: BlockVariation[];
+}
+
 export interface PageData {
   id: string;
   userId?: string;
@@ -69,4 +89,5 @@ export interface PageData {
   gridConfig?: GridConfig;
   niche?: string;
   previewUrl?: string; // Custom preview image for gallery
+  experiments?: PageExperiment[];
 }

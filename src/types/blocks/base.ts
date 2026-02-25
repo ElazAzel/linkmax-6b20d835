@@ -90,6 +90,8 @@ export interface BlockGridProps {
     gridLayout?: GridLayoutData;
     blockSize?: BlockSizePreset;
     createdAt?: string;
+    experimentId?: string; // For A/B testing tracking
+    variantLabel?: string; // For A/B testing tracking
 }
 
 export type BlockType = 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' | 'product' | 'video' | 'carousel' | 'custom_code' | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event' | 'search';

@@ -19,6 +19,8 @@ export interface TrackEventOptions {
   pageId: string;
   eventType: AnalyticsEventType;
   blockId?: string;
+  experimentId?: string;
+  variantLabel?: string;
   metadata?: Record<string, unknown>;
 }
 
@@ -135,6 +137,10 @@ interface Session {
   visitorId: string;
 }
 
+export function getVisitorId(): string {
+  return getOrCreateSession().visitorId;
+}
+
 function getOrCreateSession(): Session {
   try {
     const stored = session.get<Session>(SESSION_KEY);
@@ -176,6 +182,8 @@ export async function trackEvent({
   pageId,
   eventType,
   blockId,
+  experimentId,
+  variantLabel,
   metadata = {},
 }: TrackEventOptions): Promise<void> {
   try {
@@ -186,6 +194,8 @@ export async function trackEvent({
     const enrichedMetadata = {
       ...metadata,
       ...utmParams,
+      experimentId,
+      variantLabel,
       visitorId: session.visitorId,
       sessionId: session.id,
       device: getDeviceType(),
@@ -243,7 +253,9 @@ export async function trackBlockClick(
   pageId: string,
   blockId: string,
   blockType?: string,
-  blockTitle?: string
+  blockTitle?: string,
+  experimentId?: string,
+  variantLabel?: string
 ): Promise<void> {
   // Increment click count in blocks table
   if (blockId) {
@@ -258,6 +270,8 @@ export async function trackBlockClick(
     pageId,
     eventType: 'click',
     blockId,
+    experimentId,
+    variantLabel,
     metadata: {
       blockType,
       blockTitle,

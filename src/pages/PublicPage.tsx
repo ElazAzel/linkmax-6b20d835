@@ -39,6 +39,9 @@ import {
 } from '@/components/ui/dialog';
 import { QRCodeSVG } from 'qrcode.react';
 
+import { usePageExperiments } from '@/hooks/page/usePageExperiments';
+import { getVisitorId } from '@/services/analytics';
+
 export default function PublicPage() {
   const { t } = useTranslation();
   const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
@@ -46,6 +49,11 @@ export default function PublicPage() {
   const [showQR, setShowQR] = useState(false);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
   const currentUrl = window.location.href;
+
+  const visitorId = useMemo(() => getVisitorId(), []);
+
+  // Language context for auto-translation
+  // ... rest of the component
 
   // Language context for auto-translation
   const { currentLanguage, translateBlocksToLanguage, isTranslating, autoTranslateEnabled } = useLanguage();
@@ -104,26 +112,29 @@ export default function PublicPage() {
   const ownerTier = ownerPremiumStatus?.tier || 'free';
   const showWatermark = !isOwnerPremium;
 
+  // Resolve A/B testing variants
+  const { blocks: experimentalBlocks, assignments } = usePageExperiments(pageData, visitorId);
+
   // Enable heatmap tracking for published pages
   useHeatmapTracking(pageData?.id, !!slug && !!pageData?.id);
 
   // Auto-translate blocks when language changes
   useEffect(() => {
-    if (!pageData?.blocks || !autoTranslateEnabled) {
+    if (!experimentalBlocks || experimentalBlocks.length === 0 || !autoTranslateEnabled) {
       setTranslatedBlocks(null);
       return;
     }
 
     // Translate blocks to current language
-    translateBlocksToLanguage(pageData.blocks as any[], currentLanguage).then((translated) => {
-      if (translated !== pageData.blocks as any) {
+    translateBlocksToLanguage(experimentalBlocks as any[], currentLanguage).then((translated) => {
+      if (translated !== experimentalBlocks as any) {
         setTranslatedBlocks(translated as any);
       }
     });
-  }, [pageData?.blocks, currentLanguage, translateBlocksToLanguage, autoTranslateEnabled]);
+  }, [experimentalBlocks, currentLanguage, translateBlocksToLanguage, autoTranslateEnabled]);
 
-  // Use translated blocks if available, otherwise original
-  const displayBlocks = translatedBlocks || pageData?.blocks || [];
+  // Use translated blocks if available, otherwise original resolved blocks
+  const displayBlocks = translatedBlocks || experimentalBlocks || [];
 
   // Build canonical URL for SEO
   const canonicalUrl = useMemo(() => {

@@ -149,7 +149,7 @@ export function BlockRenderer({ block, isPreview, pageOwnerId, pageId, isOwnerPr
   const handleClick = useCallback(() => {
     if (!isPreview) {
       const title = getBlockTitle(block, i18n.language as SupportedLanguage);
-      onBlockClick(block.id, block.type, title);
+      onBlockClick(block.id, block.type, title, block.experimentId, block.variantLabel);
     }
   }, [block, isPreview, onBlockClick, i18n.language]);
 

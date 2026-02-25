@@ -38,10 +38,10 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
 
   // Track block click — sends to internal DB + marketing pixels
   const onBlockClick = useCallback(
-    (blockId: string, blockType?: string, blockTitle?: string) => {
+    (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
       if (!pageId || !enabled) return;
       // Internal analytics (DB)
-      trackBlockClick(pageId, blockId, blockType, blockTitle);
+      trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
       // Marketing pixels (FB, TikTok, GA4)
       trackClickLink(blockTitle, undefined);
     },
@@ -70,7 +70,13 @@ import { createContext, useContext, type ReactNode } from 'react';
 
 interface AnalyticsContextValue {
   pageId: string | undefined;
-  onBlockClick: (blockId: string, blockType?: string, blockTitle?: string) => void;
+  onBlockClick: (
+    blockId: string,
+    blockType?: string,
+    blockTitle?: string,
+    experimentId?: string,
+    variantLabel?: string
+  ) => void;
   onShare: (method?: string) => void;
 }
 
