@@ -5143,6 +5143,7 @@
   },
   "cookies": {
     "title": "Cookie consent",
+    "message": "We use analytics to improve the platform. Click \"Accept\" to allow anonymous visit data collection.",
     "privacy": "Privacy Policy",
     "reject": "Reject",
     "accept": "Accept"

@@ -73,10 +73,7 @@ export function CookieConsent() {
         >
             <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-4">
                 <p className="text-sm text-muted-foreground flex-1">
-                    {t(
-                        'cookies.message',
-                        'Мы используем аналитику для улучшения платформы. Нажмите «Принять», чтобы разрешить сбор анонимных данных о посещениях.'
-                    )}
+                    {t('cookies.message')}
                     {' '}
                     <a href="/privacy" className="underline text-primary hover:text-primary/80">
                         {t('cookies.privacy', 'Политика конфиденциальности')}
