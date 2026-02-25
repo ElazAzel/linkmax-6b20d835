@@ -1833,6 +1833,11 @@
       "templatesDesc": "Дайын бет дизайндары",
       "marketplace": "Базар",
       "marketplaceDesc": "Қауымдастық үлгілері",
+      "faviconUrl": "Фавикон URL",
+      "faviconHint": "PNG немесе ICO сілтемесі. Ұсынылатын өлшем 64x64.",
+      "hideBranding": "lnkmx брендингін жасыру",
+      "hideBrandingHint": "\"Made with lnkmx\" су белгісін және сілтемелерді жою",
+      "whiteLabel": "White-label",
       "errors": {
         "slug_taken": "Бұл URL әлдеқашан алынған",
         "invalid_slug": "Қате URL"

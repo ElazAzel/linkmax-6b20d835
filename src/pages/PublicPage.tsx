@@ -44,7 +44,6 @@ export default function PublicPage() {
   const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
   const [compressedPageData, setCompressedPageData] = useState<PageData | null>(null);
   const [showQR, setShowQR] = useState(false);
-  const [showWatermark, setShowWatermark] = useState(true);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
   const currentUrl = window.location.href;
 
@@ -57,7 +56,6 @@ export default function PublicPage() {
   useEffect(() => {
     const hostname = window.location.hostname;
     // Check if hostname is not a platform domain
-    // TODO: Add env var or config for platform domains
     const isPlatformDomain =
       hostname.endsWith('lnkmx.my') ||
       hostname === 'localhost' ||
@@ -104,6 +102,7 @@ export default function PublicPage() {
 
   const isOwnerPremium = ownerPremiumStatus?.isPremium || false;
   const ownerTier = ownerPremiumStatus?.tier || 'free';
+  const showWatermark = !isOwnerPremium;
 
   // Enable heatmap tracking for published pages
   useHeatmapTracking(pageData?.id, !!slug && !!pageData?.id);

@@ -1833,6 +1833,11 @@
       "templatesDesc": "Готовые дизайны страниц",
       "marketplace": "Маркетплейс",
       "marketplaceDesc": "Шаблоны от сообщества",
+      "faviconUrl": "URL фавикона",
+      "faviconHint": "Ссылка на PNG или ICO. Рекомендуемый размер 64x64.",
+      "hideBranding": "Скрыть брендинг lnkmx",
+      "hideBrandingHint": "Удалить водяной знак \"Made with lnkmx\" и ссылки",
+      "whiteLabel": "White-label",
       "errors": {
         "slug_taken": "Этот URL уже занят",
         "invalid_slug": "Некорректный URL"

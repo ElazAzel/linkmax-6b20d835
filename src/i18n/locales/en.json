@@ -1833,6 +1833,11 @@
       "templatesDesc": "Ready-made page designs",
       "marketplace": "Marketplace",
       "marketplaceDesc": "Community templates",
+      "faviconUrl": "Favicon URL",
+      "faviconHint": "Link to PNG or ICO. Recommended size 64x64.",
+      "hideBranding": "Hide lnkmx branding",
+      "hideBrandingHint": "Remove \"Made with lnkmx\" watermark and links",
+      "whiteLabel": "White-label",
       "errors": {
         "slug_taken": "This URL is already taken",
         "invalid_slug": "Incorrect URL"
