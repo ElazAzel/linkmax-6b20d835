@@ -21,6 +21,8 @@ export interface DbPage {
   seo_meta: Json;
   is_published: boolean;
   view_count: number;
+  favicon_url: string | null;
+  hide_branding: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -179,6 +181,8 @@ export async function savePage(
       p_editor_mode: pageData.editorMode || 'linear',
       p_grid_config: (pageData.gridConfig || null) as unknown as Json,
       p_integrations: (pageData.integrations || null) as unknown as Json,
+      p_favicon_url: pageData.favicon_url || null,
+      p_hide_branding: pageData.hideBranding || false,
     });
 
     if (upsertError) {
@@ -269,22 +273,25 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: slug });
 
-    const blocks = page.blocks as unknown as DbBlock[];
+    const pg = page as any;
+    const blocks = pg.blocks as unknown as DbBlock[];
     const pageData: PageData = {
-      id: page.id,
-      userId: page.user_id,
-      slug: page.slug,
+      id: pg.id,
+      userId: pg.user_id,
+      slug: pg.slug,
       blocks: convertDbBlocksToBlocks(blocks),
-      theme: page.theme_settings as unknown as PageTheme,
-      seo: page.seo_meta as unknown as PageData['seo'],
+      theme: pg.theme_settings as unknown as PageTheme,
+      seo: pg.seo_meta as unknown as PageData['seo'],
       isPremium: blocks.some((b) => b.is_premium),
-      isPublished: page.is_published || false,
-      viewCount: page.view_count || 0,
+      isPublished: pg.is_published || false,
+      viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
-      niche: (page as unknown as { niche?: string }).niche || 'other',
-      previewUrl: (page as unknown as { preview_url?: string }).preview_url || undefined,
-      integrations: (page as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      gridConfig: (pg as unknown as { grid_config?: GridConfig }).grid_config || undefined,
+      niche: (pg as unknown as { niche?: string }).niche || 'other',
+      previewUrl: (pg as unknown as { preview_url?: string }).preview_url || undefined,
+      integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      favicon_url: pg.favicon_url || undefined,
+      hideBranding: pg.hide_branding || false,
     };
 
     return { data: pageData, error: null };
@@ -317,23 +324,26 @@ export async function loadPageByCustomDomain(domain: string): Promise<LoadPageRe
     // Note: increment_view_count takes page_slug, we can use the slug from the found page
     void supabase.rpc('increment_view_count', { page_slug: page.slug });
 
-    const blocks = page.blocks as unknown as DbBlock[];
+    const pg = page as any;
+    const blocks = pg.blocks as unknown as DbBlock[];
     const pageData: PageData = {
-      id: page.id,
-      userId: page.user_id,
-      slug: page.slug,
-      custom_domain: (page as any).custom_domain || undefined,
+      id: pg.id,
+      userId: pg.user_id,
+      slug: pg.slug,
+      custom_domain: pg.custom_domain || undefined,
       blocks: convertDbBlocksToBlocks(blocks),
-      theme: page.theme_settings as unknown as PageTheme,
-      seo: page.seo_meta as unknown as PageData['seo'],
+      theme: pg.theme_settings as unknown as PageTheme,
+      seo: pg.seo_meta as unknown as PageData['seo'],
       isPremium: blocks.some((b) => b.is_premium),
-      isPublished: page.is_published || false,
-      viewCount: page.view_count || 0,
+      isPublished: pg.is_published || false,
+      viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
-      niche: (page as unknown as { niche?: string }).niche || 'other',
-      previewUrl: (page as unknown as { preview_url?: string }).preview_url || undefined,
-      integrations: (page as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      gridConfig: (pg as unknown as { grid_config?: GridConfig }).grid_config || undefined,
+      niche: (pg as unknown as { niche?: string }).niche || 'other',
+      previewUrl: (pg as unknown as { preview_url?: string }).preview_url || undefined,
+      integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      favicon_url: pg.favicon_url || undefined,
+      hideBranding: pg.hide_branding || false,
     };
 
     return { data: pageData, error: null };
@@ -372,26 +382,29 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       };
     }
 
-    const blocks = page.blocks as unknown as DbBlock[];
+    const pg = page as any;
+    const blocks = pg.blocks as unknown as DbBlock[];
     const pageData: PageData = {
-      id: page.id,
-      userId: page.user_id,
-      slug: page.slug,
+      id: pg.id,
+      userId: pg.user_id,
+      slug: pg.slug,
       blocks: convertDbBlocksToBlocks(blocks),
-      theme: page.theme_settings as unknown as PageTheme,
-      seo: page.seo_meta as unknown as PageData['seo'],
+      theme: pg.theme_settings as unknown as PageTheme,
+      seo: pg.seo_meta as unknown as PageData['seo'],
       isPremium: blocks.some((b) => b.is_premium),
-      isPublished: page.is_published || false,
-      viewCount: page.view_count || 0,
+      isPublished: pg.is_published || false,
+      viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: (page as unknown as { grid_config?: GridConfig }).grid_config || undefined,
-      niche: (page as unknown as { niche?: string }).niche || 'other',
-      previewUrl: (page as unknown as { preview_url?: string }).preview_url || undefined,
-      integrations: (page as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      gridConfig: (pg as unknown as { grid_config?: GridConfig }).grid_config || undefined,
+      niche: (pg as unknown as { niche?: string }).niche || 'other',
+      previewUrl: (pg as unknown as { preview_url?: string }).preview_url || undefined,
+      integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      favicon_url: pg.favicon_url || undefined,
+      hideBranding: pg.hide_branding || false,
     };
 
     // Extract chatbot context
-    const privateData = page.private_page_data as unknown as { chatbot_context?: string }[] | { chatbot_context?: string } | null;
+    const privateData = pg.private_page_data as unknown as { chatbot_context?: string }[] | { chatbot_context?: string } | null;
     const chatbotContext = Array.isArray(privateData)
       ? privateData[0]?.chatbot_context
       : privateData?.chatbot_context;

@@ -57,6 +57,9 @@ interface SettingsScreenProps {
   onUpdateIntegrations?: (integrations: PageIntegrations) => void;
   integrations?: PageIntegrations;
   onToggleIndexable?: (index: boolean) => void;
+  faviconUrl?: string;
+  hideBranding?: boolean;
+  onUpdateBranding?: (branding: { faviconUrl?: string; hideBranding?: boolean }) => void;
   onUpgradePage?: () => void;
 
   // Actions
@@ -85,13 +88,16 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
     seoTitle,
     seoDescription,
     isIndexable,
+    niche,
+    onNicheChange,
+    faviconUrl,
+    hideBranding,
+    onUpdateBranding,
+    onUpgradePage,
     onUpdateSlug,
     onUpdateCustomDomain,
     onUpdateSeo,
     onToggleIndexable,
-    niche,
-    onNicheChange,
-    onUpgradePage,
     onOpenTheme,
     onOpenTemplates,
     onOpenMarketplace,
@@ -148,6 +154,9 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               isPremium={props.isPremium}
               seoTitle={seoTitle}
               seoDescription={seoDescription}
+              faviconUrl={faviconUrl}
+              hideBranding={hideBranding}
+              onUpdateBranding={onUpdateBranding}
               isIndexable={isIndexable}
               niche={niche}
               avatarUrl={avatarUrl}

@@ -359,7 +359,7 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 
 | Table | Purpose | RLS |
 |-------|---------|-----|
-| `pages` | Page metadata, slug, theme | Owner only |
+| `pages` | Page metadata, slug, theme, white-label | Owner only |
 | `blocks` | Block content, position | Via page ownership |
 | `user_profiles` | User data, premium status | Owner only |
 | `leads` | Form submissions | Owner + public insert |
@@ -727,7 +727,7 @@ Based on codebase analysis, these are logical next improvements:
 
 1. ~~**Custom domains**~~ — Real-time verification, CNAME resolution, and dashboard control (Completed 2026-02-22)
 
-2. **White-label mode** — Remove all platform branding for enterprise clients (Roadmap)
+2. ~~**White-label mode**~~ — Remove all platform branding for enterprise clients (Completed 2026-02-25)
 
 3. **A/B testing for blocks** — Test different block configurations to optimize conversions
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
@@ -745,6 +745,6 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: February 24, 2026*
-*Current Platform Health Score: 9.0/10*
+*Last updated: February 25, 2026*
+*Current Platform Health Score: 9.3/10*
 *Maintained by: Antigravity (Principal Engineer)*

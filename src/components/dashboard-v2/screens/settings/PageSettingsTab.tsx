@@ -38,6 +38,8 @@ interface PageSettingsTabProps {
     seoDescription?: string;
     isIndexable?: boolean;
     niche?: Niche;
+    faviconUrl?: string;
+    hideBranding?: boolean;
 
     // Profile info
     avatarUrl?: string;
@@ -47,6 +49,7 @@ interface PageSettingsTabProps {
     onUpdateSlug?: (slug: string) => Promise<{ success: boolean; error?: string }>;
     onUpdateCustomDomain?: (domain: string) => Promise<{ success: boolean; error?: string }>;
     onUpdateSeo?: (seo: { title?: string; description?: string }) => void;
+    onUpdateBranding?: (branding: { faviconUrl?: string; hideBranding?: boolean }) => void;
     onToggleIndexable?: (indexable: boolean) => void;
     onNicheChange: (niche: Niche) => void;
     onUpgradePage?: () => void;
@@ -67,11 +70,14 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     seoDescription,
     isIndexable,
     niche,
+    faviconUrl,
+    hideBranding,
     avatarUrl,
     displayName,
     onUpdateSlug,
     onUpdateCustomDomain,
     onUpdateSeo,
+    onUpdateBranding,
     onToggleIndexable,
     onNicheChange,
     onUpgradePage,
@@ -91,6 +97,9 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     const [domainError, setDomainError] = useState<string | null>(null);
     const [seoTitleInput, setSeoTitleInput] = useState(seoTitle || '');
     const [seoDescInput, setSeoDescInput] = useState(seoDescription || '');
+
+    const [faviconInput, setFaviconInput] = useState(faviconUrl || '');
+    const [hideBrandingInner, setHideBrandingInner] = useState(hideBranding || false);
 
     const handleSaveSlug = async () => {
         if (!onUpdateSlug || slugInput === pageSlug) return;
@@ -144,6 +153,16 @@ export const PageSettingsTab = memo(function PageSettingsTab({
             onUpdateSeo({
                 title: seoTitleInput || undefined,
                 description: seoDescInput || undefined,
+            });
+            toast.success(t('common.saved', 'Сохранено'));
+        }
+    };
+
+    const handleSaveBranding = () => {
+        if (onUpdateBranding) {
+            onUpdateBranding({
+                faviconUrl: faviconInput || undefined,
+                hideBranding: hideBrandingInner,
             });
             toast.success(t('common.saved', 'Сохранено'));
         }
@@ -477,6 +496,62 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         </div>
                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                     </button>
+                </Card>
+            </div>
+
+            {/* White-label (PRO Only) */}
+            <div className="space-y-2">
+                <div className="flex items-center gap-2 px-1">
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                        White-label
+                    </h3>
+                    {!isPremium && <Badge variant="secondary" className="text-[10px] uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                </div>
+                <Card className={cn("p-4 space-y-4 glass-card border-white/10 shadow-glass", !isPremium && "opacity-60 cursor-not-allowed relative")}>
+                    {!isPremium && (
+                        <div className="absolute inset-0 z-10" onClick={onUpgradePage} />
+                    )}
+
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                            {t('dashboard.pageSettings.faviconUrl', 'Favicon URL')}
+                        </Label>
+                        <Input
+                            value={faviconInput}
+                            onChange={(e) => setFaviconInput(e.target.value)}
+                            onBlur={handleSaveBranding}
+                            placeholder="https://example.com/favicon.png"
+                            className="h-12 rounded-xl"
+                            disabled={!isPremium}
+                        />
+                        <p className="text-[10px] text-muted-foreground">
+                            {t('dashboard.pageSettings.faviconHint', 'PNG or ICO link. Recommended size 64x64.')}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center justify-between py-2">
+                        <div className="space-y-0.5">
+                            <Label className="flex items-center gap-2">
+                                <Eye className="w-4 h-4" />
+                                {t('dashboard.pageSettings.hideBranding', 'Hide lnkmx branding')}
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                                {t('dashboard.pageSettings.hideBrandingHint', 'Remove "Made with lnkmx" watermark and links')}
+                            </p>
+                        </div>
+                        <Switch
+                            checked={hideBrandingInner}
+                            onCheckedChange={(checked) => {
+                                setHideBrandingInner(checked);
+                                if (onUpdateBranding) {
+                                    onUpdateBranding({ hideBranding: checked, faviconUrl: faviconInput || undefined });
+                                }
+                                toast.success(t('common.saved', 'Сохранено'));
+                            }}
+                            disabled={!isPremium}
+                        />
+                    </div>
                 </Card>
             </div>
         </div>

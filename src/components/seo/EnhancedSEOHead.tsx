@@ -59,6 +59,16 @@ const setLinkTag = (rel: string, href: string, hreflang?: string) => {
   link.href = href;
 };
 
+// Helper to set/update favicon
+const setFavicon = (url?: string) => {
+  if (!url) {
+    // Reset to default
+    setLinkTag('icon', '/favicon.ico');
+    return;
+  }
+  setLinkTag('icon', url);
+};
+
 // Helper to add JSON-LD schema
 const addJsonLd = (id: string, data: object | string) => {
   let script = document.querySelector(`script#${id}`) as HTMLScriptElement;
@@ -71,8 +81,8 @@ const addJsonLd = (id: string, data: object | string) => {
   script.textContent = typeof data === 'string' ? data : JSON.stringify(data);
 };
 
-export function EnhancedSEOHead({ 
-  pageData, 
+export function EnhancedSEOHead({
+  pageData,
   pageUrl,
   updatedAt,
   isNewAccount = false,
@@ -93,13 +103,13 @@ export function EnhancedSEOHead({
         isNewAccount
       );
       const meta = generatePageMeta(profile, safeBlocks, slug, qualityGate, language);
-      
+
       // Generate Answer Block for AEO
       const answerBlock = generateAnswerBlock(safeBlocks, slug, language);
-      
+
       // Generate enhanced Key Facts
       const keyFacts = generateEnhancedKeyFacts(safeBlocks, answerBlock, profile.name, language);
-      
+
       // Generate GEO Schemas with combined graph
       const geoSchemas = generateGEOSchemas(safeBlocks, {
         slug,
@@ -110,12 +120,12 @@ export function EnhancedSEOHead({
         sameAs: profile.sameAs,
         language,
       });
-      
+
       // Generate auto FAQ if needed
       const shouldGenerateAutoFAQ = !hasUserFAQ(safeBlocks);
       const faqContext = extractFAQContext(safeBlocks, profile.name, answerBlock.niche, answerBlock.location, language);
       const autoFAQ = shouldGenerateAutoFAQ ? generateAutoFAQ(faqContext, language, 5) : [];
-      
+
       // Entity links for structured data
       const entityLinks = extractEntityLinks(safeBlocks, language);
 
@@ -165,7 +175,7 @@ export function EnhancedSEOHead({
     setMetaTag('og:description', meta.description, true);
     setMetaTag('og:url', meta.canonical, true);
     setMetaTag('og:site_name', 'lnkmx', true);
-    
+
     if (meta.ogImage) {
       setMetaTag('og:image', meta.ogImage, true);
       setMetaTag('og:image:alt', `${seoData.profile.name || 'User'} profile`, true);
@@ -183,6 +193,9 @@ export function EnhancedSEOHead({
     // Canonical URL
     setLinkTag('canonical', meta.canonical);
 
+    // Favicon (White-label)
+    setFavicon(pageData.favicon_url);
+
     // Hreflang tags
     setLinkTag('alternate', `${meta.canonical}?lang=ru`, 'ru');
     setLinkTag('alternate', `${meta.canonical}?lang=en`, 'en');
@@ -194,14 +207,14 @@ export function EnhancedSEOHead({
 
     // Page quality indicator (for internal use)
     setMetaTag('page-quality-score', String(qualityGate.score));
-    
+
     // Answer block summary for AI crawlers
     setMetaTag('ai-summary', answerBlock.summary);
 
     // Cleanup on unmount
     return () => {
       document.title = 'lnkmx - AI Bio Page Builder';
-      
+
       // Remove page-specific tags
       const tagsToRemove = [
         'meta[property="og:type"]',

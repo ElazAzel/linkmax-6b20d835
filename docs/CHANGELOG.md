@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+* **White-label Mode:** Pro users can now fully customize their public pages by removing platform branding ("Made with lnkmx") and setting custom favicons.
 * **Dynamic Pricing:** Subscriptions are now dynamically calculated in KZT from base USD prices ($8.9, $7.9, $5.9) using real-time API from the National Bank of Kazakhstan.
 
 ### Fixed

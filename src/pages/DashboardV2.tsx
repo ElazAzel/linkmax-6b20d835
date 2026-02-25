@@ -518,6 +518,8 @@ export default function DashboardV2() {
                 seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
                 seoDescription={(dashboard.pageData?.seo as { description?: string })?.description}
                 isIndexable={dashboard.pageData?.isIndexable}
+                faviconUrl={dashboard.pageData?.favicon_url}
+                hideBranding={dashboard.pageData?.hideBranding}
                 onUpdateSlug={async (slug) => multiPage.updatePageSlug(multiPage.activePageId || '', slug)}
                 onUpdateCustomDomain={async (domain) => {
                   const result = await multiPage.updatePageCustomDomain(multiPage.activePageId || '', domain);
@@ -534,6 +536,9 @@ export default function DashboardV2() {
                   dashboard.updatePageDataPartial({
                     seo: { ...dashboard.pageData?.seo, ...seo },
                   });
+                }}
+                onUpdateBranding={(branding) => {
+                  dashboard.updatePageDataPartial(branding);
                 }}
                 integrations={dashboard.pageData?.integrations}
                 onUpdateIntegrations={(integrations) => {

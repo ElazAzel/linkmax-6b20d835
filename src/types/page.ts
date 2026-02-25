@@ -62,7 +62,8 @@ export interface PageData {
   isPublished?: boolean;
   isIndexable?: boolean;
   viewCount?: number;
-  metrics?: PageMetrics;
+  favicon_url?: string;
+  hideBranding?: boolean;
   integrations?: PageIntegrations;
   editorMode?: EditorMode;
   gridConfig?: GridConfig;
