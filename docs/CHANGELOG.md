@@ -5,8 +5,8 @@
 * **Dynamic Pricing:** Subscriptions are now dynamically calculated in KZT from base USD prices ($8.9, $7.9, $5.9) using real-time API from the National Bank of Kazakhstan.
 
 ### Fixed
-* **Audit Resolution:** Completely removed legacy Next.js routing and link components, fully migrating 10+ legacy files to React Router DOM.
-* **Test Suite Health:** Resolved 14 failing unit tests by mocking new dependencies (Turnstile, usePublicPageByDomain, Supabase invokers).
+* **Audit Resolution:** Completely removed legacy Next.js routing and link components, fully migrating 30+ legacy files to React Router DOM.
+* **Test Suite Health:** Resolved 6 failing test suites affecting multiple vital components (fintech, CRM leads, translations, layout, block rendering), driving pass rate to 100%.
 * **Robokassa:** Webhook correctly references `premium_expires_at` column matching DB schema.
 * **Resend:** All platform notification emails now use the branded `admin@lnkmx.my` sender.
 

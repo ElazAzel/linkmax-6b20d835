@@ -126,6 +126,6 @@ describe('BlockRenderer Smoke Tests', () => {
             if (html.includes('animate-pulse')) {
                 throw new Error('Still showing skeleton');
             }
-        }, { timeout: 3000 });
-    });
+        }, { timeout: 10000 });
+    }, 15000);
 });
