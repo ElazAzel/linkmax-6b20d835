@@ -5,6 +5,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import GripHorizontal from 'lucide-react/dist/esm/icons/grip-horizontal';
+import FlaskConical from 'lucide-react/dist/esm/icons/flask-conical';
 import {
   DndContext,
   DragOverlay,
@@ -30,6 +31,7 @@ import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { ExperimentSetupDialog } from './dialogs/ExperimentSetupDialog';
 import { cn } from '@/lib/utils/utils';
 import type { Block, ProfileBlock, GridConfig } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
@@ -119,6 +121,7 @@ interface SortableGridBlockItemProps {
   premiumTier?: PremiumTier;
   isDragging?: boolean;
   isMobile?: boolean;
+  onStartExperiment?: (block: Block) => void;
 }
 
 function SortableGridBlockItem({
@@ -128,6 +131,7 @@ function SortableGridBlockItem({
   isPremium,
   premiumTier,
   isMobile = false,
+  onStartExperiment,
 }: SortableGridBlockItemProps) {
   const {
     attributes,
@@ -231,6 +235,20 @@ function SortableGridBlockItem({
         >
           <Edit2 className="h-4 w-4" />
         </Button>
+        {isPremium && block.type !== 'profile' && (
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-8 w-8 p-0 rounded-lg shadow-sm border-primary/20 hover:border-primary/50"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onStartExperiment?.(block);
+            }}
+          >
+            <FlaskConical className="h-4 w-4 text-primary" />
+          </Button>
+        )}
         <Button
           size="sm"
           variant="destructive"
@@ -293,6 +311,7 @@ export const GridEditor = memo(function GridEditor({
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [experimentBlock, setExperimentBlock] = useState<Block | null>(null);
 
   const dndContextId = useId();
 
@@ -390,6 +409,7 @@ export const GridEditor = memo(function GridEditor({
                   isPremium={isPremium}
                   premiumTier={premiumTier}
                   isMobile={isMobile}
+                  onStartExperiment={setExperimentBlock}
                 />
 
                 {/* Insert divider after each block */}
@@ -463,6 +483,17 @@ export const GridEditor = memo(function GridEditor({
           />
         </motion.div>
       )}
+
+      {/* Experiment Setup Dialog */}
+      {experimentBlock && (
+        <ExperimentSetupDialog
+          isOpen={!!experimentBlock}
+          onOpenChange={(open) => !open && setExperimentBlock(null)}
+          pageId={profileBlock?.page_id || ''}
+          block={experimentBlock}
+        />
+      )}
     </div>
+
   );
 });

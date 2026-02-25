@@ -16,6 +16,7 @@ import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import ChartBar from 'lucide-react/dist/esm/icons/chart-bar';
 import Target from 'lucide-react/dist/esm/icons/target';
 import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import FlaskConical from 'lucide-react/dist/esm/icons/flask-conical';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -36,6 +37,7 @@ import {
 import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface InsightsScreenProps {
   pageId: string;
@@ -45,7 +47,7 @@ interface InsightsScreenProps {
 }
 
 type Period = '7d' | '14d' | '30d';
-type Tab = 'overview' | 'traffic' | 'blocks' | 'funnel';
+type Tab = 'overview' | 'traffic' | 'blocks' | 'funnel' | 'experiments';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -274,7 +276,7 @@ export const InsightsScreen = memo(function InsightsScreen({
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 h-10">
+              <TabsList className="grid w-full grid-cols-5 h-10">
                 <TabsTrigger value="overview" className="text-xs">
                   <ChartBar className="h-3.5 w-3.5 mr-1" />
                   {t('analytics.tabs.overview', 'Обзор')}
@@ -291,6 +293,12 @@ export const InsightsScreen = memo(function InsightsScreen({
                   <TrendingUp className="h-3.5 w-3.5 mr-1" />
                   {t('analytics.tabs.funnel', 'Воронка')}
                 </TabsTrigger>
+                {isPremium && (
+                  <TabsTrigger value="experiments" className="text-xs">
+                    <FlaskConical className="h-3.5 w-3.5 mr-1" />
+                    {t('analytics.tabs.experiments', 'Тесты')}
+                  </TabsTrigger>
+                )}
               </TabsList>
 
               {/* Overview Tab */}
@@ -572,6 +580,36 @@ export const InsightsScreen = memo(function InsightsScreen({
                   )}
                 </motion.div>
               </TabsContent>
+
+              {/* Experiments Tab */}
+              {isPremium && (
+                <TabsContent value="experiments" className="mt-4">
+                  <motion.div
+                    className="space-y-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Card className="p-8 text-center flex flex-col items-center justify-center space-y-4">
+                      <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                        <FlaskConical className="h-8 w-8 text-primary" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-lg">{t('experiments.empty.title', 'A/B Тестирование')}</h3>
+                        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                          {t('experiments.empty.desc', 'Создавайте тесты для своих блоков прямо в редакторе, чтобы повысить конверсию страницы.')}
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => toast.info(t('experiments.info.redirect', 'Перейдите в Редактор, чтобы запустить тест для конкретного блока'))}
+                      >
+                        {t('experiments.empty.action', 'Как это работает?')}
+                      </Button>
+                    </Card>
+                  </motion.div>
+                </TabsContent>
+              )}
             </Tabs>
           </>
         )}

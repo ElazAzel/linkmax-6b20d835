@@ -62,6 +62,7 @@ export interface PageExperiment {
   status: 'draft' | 'running' | 'paused' | 'ended';
   started_at?: string;
   ended_at?: string;
+  winning_variant_id?: string;
   variants: BlockVariation[];
 }
 
