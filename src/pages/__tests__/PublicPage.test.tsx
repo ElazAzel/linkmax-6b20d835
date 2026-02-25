@@ -131,6 +131,11 @@ describe('PublicPage', () => {
                 isLoading: true,
                 error: null,
             });
+            mockUsePublicPageByDomain.mockReturnValue({
+                data: null,
+                isLoading: true,
+                error: null,
+            });
 
             await renderPublicPage('testuser');
 
@@ -144,6 +149,11 @@ describe('PublicPage', () => {
                 data: null,
                 isLoading: false,
                 error: { message: 'Not found' },
+            });
+            mockUsePublicPageByDomain.mockReturnValue({
+                data: null,
+                isLoading: false,
+                error: null,
             });
 
             await renderPublicPage('testuser');
@@ -177,6 +187,11 @@ describe('PublicPage', () => {
                 isLoading: false,
                 error: null,
             });
+            mockUsePublicPageByDomain.mockReturnValue({
+                data: null,
+                isLoading: false,
+                error: null,
+            });
 
             await renderPublicPage('testuser');
 
@@ -193,6 +208,11 @@ describe('PublicPage', () => {
                 isLoading: false,
                 error: null,
             });
+            mockUsePublicPageByDomain.mockReturnValue({
+                data: null,
+                isLoading: false,
+                error: null,
+            });
 
             await renderPublicPage('testuser');
 
@@ -204,6 +224,11 @@ describe('PublicPage', () => {
         it('renders QR code button', async () => {
             mockUsePublicPage.mockReturnValue({
                 data: mockPageData,
+                isLoading: false,
+                error: null,
+            });
+            mockUsePublicPageByDomain.mockReturnValue({
+                data: null,
                 isLoading: false,
                 error: null,
             });

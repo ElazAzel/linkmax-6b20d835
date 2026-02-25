@@ -58,6 +58,10 @@ vi.mock('@/platform/supabase/client', () => {
     return { supabase: mock };
 });
 
+vi.mock('@/components/blocks/features/BookingBlock', () => ({
+    default: () => <div data-testid="booking-mock">Booking Block Mock</div>
+}));
+
 // Mock QueryClient
 vi.mock('@tanstack/react-query', () => ({
     useQuery: () => ({ data: null, isLoading: false }),
