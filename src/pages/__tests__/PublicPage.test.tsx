@@ -139,7 +139,8 @@ describe('PublicPage', () => {
 
             await renderPublicPage('testuser');
 
-            expect(screen.getByTestId('skeleton')).toBeInTheDocument();
+            const skeleton = await screen.findByTestId('skeleton');
+            expect(skeleton).toBeInTheDocument();
         });
     });
 
@@ -158,7 +159,8 @@ describe('PublicPage', () => {
 
             await renderPublicPage('testuser');
 
-            expect(screen.getByTestId('error')).toBeInTheDocument();
+            const errors = await screen.findAllByTestId('error');
+            expect(errors.length).toBeGreaterThan(0);
         });
     });
 

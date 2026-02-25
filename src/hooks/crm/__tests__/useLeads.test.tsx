@@ -10,8 +10,17 @@ vi.mock('@/hooks/user/useAuth', () => ({
 }));
 
 // Mock logger & toast
-vi.mock('@/lib/utils/logger', () => ({ logger: { error: vi.fn() } }));
+vi.mock('@/lib/utils/logger', () => ({ logger: { error: vi.fn((msg, err) => console.log('LOG_ERR:', err)) } }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+
+// Mock react-i18next
+const mockT = (key: string) => key;
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: mockT,
+        i18n: { language: 'ru' }
+    })
+}));
 
 describe('useLeads', () => {
     const mockUser = { id: 'user-123' };
@@ -65,11 +74,9 @@ describe('useLeads', () => {
         } as any));
 
         const { result } = renderHook(() => useLeads());
-        await waitFor(() => expect(result.current.loading).toBe(false));
-
-        // Mock edge function for createLead
-        const mockInvoke = vi.mocked(supabase.functions.invoke);
-        mockInvoke.mockResolvedValueOnce({ data: newLead, error: null } as any);
+        await waitFor(() => {
+            expect(result.current.loading).toBe(false);
+        });
 
         await act(async () => {
             const created = await result.current.createLead({ name: 'Petr' });
