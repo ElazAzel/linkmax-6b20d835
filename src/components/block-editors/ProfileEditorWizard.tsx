@@ -4,19 +4,17 @@
  */
 import { memo, useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { 
-  Image, 
-  User, 
-  FileText, 
-  Palette, 
-  ChevronRight, 
-  ChevronLeft,
-  Check,
-  Camera,
-  Upload,
-  Loader2,
-  Sparkles,
-} from 'lucide-react';
+import Image from 'lucide-react/dist/esm/icons/image';
+import User from 'lucide-react/dist/esm/icons/user';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

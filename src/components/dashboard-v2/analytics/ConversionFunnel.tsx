@@ -5,7 +5,12 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Eye, MousePointerClick, Share2, UserCheck, TrendingDown, ArrowRight } from 'lucide-react';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import UserCheck from 'lucide-react/dist/esm/icons/user-check';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { cn } from '@/lib/utils/utils';
 import { motion } from 'framer-motion';
 

@@ -4,18 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 
-import {
-  Camera,
-  Scissors,
-  Dumbbell,
-  Brain,
-  Music,
-  ShoppingBag,
-  Star,
-  ArrowRight,
-  Heart,
-  Building2
-} from 'lucide-react';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Music from 'lucide-react/dist/esm/icons/music';
+import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
+import Star from 'lucide-react/dist/esm/icons/star';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 
 interface UseCase {

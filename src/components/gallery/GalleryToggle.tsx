@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Users, Loader2 } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useGalleryStatus } from '@/hooks/social/useGallery';

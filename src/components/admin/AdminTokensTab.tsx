@@ -14,23 +14,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Coins,
-  TrendingUp,
-  TrendingDown,
-  ArrowRightLeft,
-  Crown,
-  ShoppingCart,
-  FileText,
-  Clock,
-  CheckCircle,
-  XCircle,
-  Wallet,
-  PiggyBank,
-  BarChart3,
-  Users,
-  DollarSign,
-} from 'lucide-react';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import ArrowRightLeft from 'lucide-react/dist/esm/icons/arrow-right-left';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import ShoppingCart from 'lucide-react/dist/esm/icons/shopping-cart';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
+import PiggyBank from 'lucide-react/dist/esm/icons/piggy-bank';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Users from 'lucide-react/dist/esm/icons/users';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 import { useQuery } from '@tanstack/react-query';

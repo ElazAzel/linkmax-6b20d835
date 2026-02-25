@@ -7,17 +7,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { 
-  Shield, 
-  CheckCircle2, 
-  XCircle, 
-  Clock, 
-  User, 
-  Building2,
-  ExternalLink,
-  Loader2,
-  Eye
-} from 'lucide-react';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import User from 'lucide-react/dist/esm/icons/user';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Eye from 'lucide-react/dist/esm/icons/eye';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import {

@@ -3,7 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Check, Loader2, MessageCircle, ArrowLeft, AlertCircle, Copy, ExternalLink } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 

@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Download, Smartphone, Monitor, Apple } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import Monitor from 'lucide-react/dist/esm/icons/monitor';
+import Apple from 'lucide-react/dist/esm/icons/apple';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

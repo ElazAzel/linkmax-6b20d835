@@ -131,7 +131,7 @@ export function useDashboard(options?: UseDashboardOptions) {
     const { supabase } = await import('@/platform/supabase/client');
     await supabase.auth.signOut();
     navigate('/');
-  }, [router]);
+  }, [navigate]);
 
   // Current tier string
   const currentTier = isPremium ? (tier || 'pro') : 'free';

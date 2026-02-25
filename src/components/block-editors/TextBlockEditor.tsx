@@ -5,16 +5,14 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { EditorSection, EditorField } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';
-import {
-  Type,
-  Palette,
-  Heading,
-  Pilcrow,
-  Quote,
-  AlignLeft,
-  AlignCenter,
-  AlignRight
-} from 'lucide-react';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Heading from 'lucide-react/dist/esm/icons/heading';
+import Pilcrow from 'lucide-react/dist/esm/icons/pilcrow';
+import Quote from 'lucide-react/dist/esm/icons/quote';
+import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
+import AlignCenter from 'lucide-react/dist/esm/icons/align-center';
+import AlignRight from 'lucide-react/dist/esm/icons/align-right';
 
 function TextBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();

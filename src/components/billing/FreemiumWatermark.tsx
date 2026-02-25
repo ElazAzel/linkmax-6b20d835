@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Sparkles } from 'lucide-react';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 
 interface FreemiumWatermarkProps {
   show: boolean;

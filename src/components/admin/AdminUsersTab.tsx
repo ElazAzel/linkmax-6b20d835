@@ -10,7 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAdminUsers, useTogglePremium, useExtendTrial, AdminUserData } from '@/hooks/admin/useAdminUsers';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
-import { Search, Loader2, RefreshCw, Flame } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Flame from 'lucide-react/dist/esm/icons/flame';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function AdminUsersTab() {

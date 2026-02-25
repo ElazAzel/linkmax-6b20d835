@@ -4,7 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Sparkles, Wand2, Crown, Lock } from 'lucide-react';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';

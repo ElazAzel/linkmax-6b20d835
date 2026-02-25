@@ -1,7 +1,11 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, ExternalLink, Coins, MessageCircle, Loader2 } from 'lucide-react';
+import ShoppingCart from 'lucide-react/dist/esm/icons/shopping-cart';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { getLocale } from '@/lib/utils/format';
 import type { ProductBlock as ProductBlockType } from '@/types/page';

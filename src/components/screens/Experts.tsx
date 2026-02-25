@@ -21,7 +21,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, Search, ArrowRight, ExternalLink } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Search from 'lucide-react/dist/esm/icons/search';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { cn } from '@/lib/utils/utils';
 
 // Normalized niche tags with i18n

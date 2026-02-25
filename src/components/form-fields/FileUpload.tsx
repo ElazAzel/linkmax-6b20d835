@@ -1,5 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
-import { Upload, X, Loader2, FileText, Download, HardDrive } from 'lucide-react';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import X from 'lucide-react/dist/esm/icons/x';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Download from 'lucide-react/dist/esm/icons/download';
+import HardDrive from 'lucide-react/dist/esm/icons/hard-drive';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

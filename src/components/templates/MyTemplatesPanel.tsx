@@ -14,19 +14,17 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Loader2,
-  Package,
-  ShoppingBag,
-  Trash2,
-  Download,
-  DollarSign,
-  Heart,
-  Globe,
-  Lock,
-  Layers,
-  Pencil,
-} from 'lucide-react';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Package from 'lucide-react/dist/esm/icons/package';
+import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Download from 'lucide-react/dist/esm/icons/download';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Layers from 'lucide-react/dist/esm/icons/layers';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import type { Block } from '@/types/page';
 import { TemplatePreviewCard } from './TemplatePreviewCard';
 import { EditTemplateDialog } from './EditTemplateDialog';

@@ -4,7 +4,14 @@
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Crown, Check, Sparkles, CreditCard, ArrowRight, Zap, Shield, TrendingUp } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

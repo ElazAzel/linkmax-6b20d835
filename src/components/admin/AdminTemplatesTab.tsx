@@ -13,7 +13,11 @@ import { Switch } from '@/components/ui/switch';
 import { useAdminTemplates } from '@/hooks/admin/useAdminTemplates';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
-import { Search, RefreshCw, Plus, Edit, Trash2 } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Edit from 'lucide-react/dist/esm/icons/edit';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { toast } from 'sonner';
 
 export function AdminTemplatesTab() {

@@ -2,7 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import X from 'lucide-react/dist/esm/icons/x';
+import Send from 'lucide-react/dist/esm/icons/send';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { cn } from '@/lib/utils/utils';
 
 interface Message {

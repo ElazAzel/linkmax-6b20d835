@@ -1,7 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
-import { Check, User, MessageSquare, Zap } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import User from 'lucide-react/dist/esm/icons/user';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Zap from 'lucide-react/dist/esm/icons/zap';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { useTranslation, Trans } from 'react-i18next';
 

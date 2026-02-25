@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Trash2 } from 'lucide-react';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 
 interface ArrayFieldItemProps {
   index: number;

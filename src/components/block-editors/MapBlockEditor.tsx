@@ -2,7 +2,7 @@ import type { MapBlock } from '@/types/page';
 import { withBlockEditor } from './BlockEditorWrapper';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { type MultilingualString } from '@/lib/i18n-helpers';
-import { MapPin } from 'lucide-react';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import { useTranslation } from 'react-i18next';
 
 interface MapBlockEditorProps {

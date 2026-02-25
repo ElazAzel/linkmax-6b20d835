@@ -17,7 +17,11 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { GoogleFormImport } from '@/components/crm/GoogleFormImport';
 import { EventFormBuilder } from '@/components/event-forms/EventFormBuilder';
-import { FileText, Settings, ListChecks, Info, ImageIcon } from 'lucide-react';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import ListChecks from 'lucide-react/dist/esm/icons/list-checks';
+import Info from 'lucide-react/dist/esm/icons/info';
+import ImageIcon from 'lucide-react/dist/esm/icons/image';
 import type { EventFormField } from '@/types/page';
 
 const toLocalInputValue = (value?: string) => {

@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle } from 'lucide-react';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import { Sentry, isSentryEnabled } from '@/lib/utils/sentry';
 
 interface Props {

@@ -5,7 +5,10 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Clock, Repeat, Target, TrendingUp } from 'lucide-react';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Repeat from 'lucide-react/dist/esm/icons/repeat';
+import Target from 'lucide-react/dist/esm/icons/target';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { cn } from '@/lib/utils/utils';
 
 interface EngagementMetricsProps {

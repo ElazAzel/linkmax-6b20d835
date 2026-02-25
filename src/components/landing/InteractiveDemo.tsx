@@ -2,19 +2,17 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
-  Link2, 
-  Image, 
-  Type, 
-  Trash2, 
-  GripVertical,
-  Plus,
-  Sparkles,
-  Check,
-  Instagram,
-  Youtube,
-  Twitter
-} from 'lucide-react';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import Image from 'lucide-react/dist/esm/icons/image';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Instagram from 'lucide-react/dist/esm/icons/instagram';
+import Youtube from 'lucide-react/dist/esm/icons/youtube';
+import Twitter from 'lucide-react/dist/esm/icons/twitter';
 
 interface DemoBlock {
   id: string;

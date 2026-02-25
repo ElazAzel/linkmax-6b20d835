@@ -1,6 +1,16 @@
 import { memo, useEffect, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CalendarDays, MapPin, Mail, Ticket, CheckCircle2, ArrowRight, UserPlus, Users, AlertCircle, CalendarPlus, Download } from 'lucide-react';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Ticket from 'lucide-react/dist/esm/icons/ticket';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Users from 'lucide-react/dist/esm/icons/users';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
+import Download from 'lucide-react/dist/esm/icons/download';
 import { format } from 'date-fns';
 import { ru, kk } from 'date-fns/locale';
 import { Card } from '@/components/ui/card';

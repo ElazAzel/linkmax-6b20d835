@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 
-import { Heart, Mail, MapPin } from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';

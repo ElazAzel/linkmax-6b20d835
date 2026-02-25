@@ -6,7 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { EditorSection, EditorField } from './EditorSection';
-import { Video, Youtube, Settings } from 'lucide-react';
+import Video from 'lucide-react/dist/esm/icons/video';
+import Youtube from 'lucide-react/dist/esm/icons/youtube';
+import Settings from 'lucide-react/dist/esm/icons/settings';
 
 function VideoBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();

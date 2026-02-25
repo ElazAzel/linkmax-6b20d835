@@ -1,10 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Activity, Globe, Blocks, Trophy, Flame, 
-  Target, Gift, Rocket, Users, Heart 
-} from 'lucide-react';
+import Activity from 'lucide-react/dist/esm/icons/activity';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Blocks from 'lucide-react/dist/esm/icons/blocks';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Flame from 'lucide-react/dist/esm/icons/flame';
+import Target from 'lucide-react/dist/esm/icons/target';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Rocket from 'lucide-react/dist/esm/icons/rocket';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Heart from 'lucide-react/dist/esm/icons/heart';
 import { useSocialFeatures } from '@/hooks/social/useSocialFeatures';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, kk, ru } from 'date-fns/locale';

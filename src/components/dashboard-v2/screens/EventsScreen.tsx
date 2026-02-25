@@ -19,22 +19,20 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import {
-  Calendar,
-  Users,
-  QrCode,
-  Download,
-  MapPin,
-  Clock,
-  Search,
-  Plus,
-  ExternalLink,
-  ChevronRight,
-  CalendarDays,
-  UserCheck,
-  Crown,
-  Loader2,
-} from 'lucide-react';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Users from 'lucide-react/dist/esm/icons/users';
+import QrCode from 'lucide-react/dist/esm/icons/qr-code';
+import Download from 'lucide-react/dist/esm/icons/download';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
+import UserCheck from 'lucide-react/dist/esm/icons/user-check';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { toast } from 'sonner';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';

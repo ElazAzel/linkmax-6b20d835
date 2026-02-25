@@ -1,6 +1,10 @@
 import { memo, useCallback, useState, useMemo, useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Edit2, Trash2, GripVertical, Plus, GripHorizontal } from 'lucide-react';
+import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import GripHorizontal from 'lucide-react/dist/esm/icons/grip-horizontal';
 import {
   DndContext,
   DragOverlay,

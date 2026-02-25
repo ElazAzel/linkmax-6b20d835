@@ -4,17 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import {
-  MessageSquare,
-  Bell,
-  Bot,
-  BarChart3,
-  Crown,
-  Check,
-  ArrowRight,
-  Palette,
-  Sparkles
-} from 'lucide-react';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import Bot from 'lucide-react/dist/esm/icons/bot';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Check from 'lucide-react/dist/esm/icons/check';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface PremiumValueSectionProps {

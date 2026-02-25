@@ -22,20 +22,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Layers,
-  ChevronUp,
-  ChevronDown,
-  Eye,
-  EyeOff,
-  Copy,
-  Trash2,
-  MoreHorizontal,
-  Edit2,
-  X,
-  Check,
-  GripVertical,
-} from 'lucide-react';
+import Layers from 'lucide-react/dist/esm/icons/layers';
+import ChevronUp from 'lucide-react/dist/esm/icons/chevron-up';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
+import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
+import X from 'lucide-react/dist/esm/icons/x';
+import Check from 'lucide-react/dist/esm/icons/check';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import { cn } from '@/lib/utils/utils';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 import type { Block } from '@/types/page';

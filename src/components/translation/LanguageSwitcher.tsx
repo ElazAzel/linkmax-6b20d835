@@ -1,6 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useMemo, useEffect } from 'react';
-import { Globe, Check, Languages, Loader2, Sparkles, Plus, Search, Settings2 } from 'lucide-react';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Languages from 'lucide-react/dist/esm/icons/languages';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Settings2 from 'lucide-react/dist/esm/icons/settings-2';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {

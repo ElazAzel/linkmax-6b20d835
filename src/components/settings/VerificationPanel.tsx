@@ -7,17 +7,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Shield,
-  Upload,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  User,
-  Building2,
-  FileImage,
-  AlertCircle
-} from 'lucide-react';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import User from 'lucide-react/dist/esm/icons/user';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import FileImage from 'lucide-react/dist/esm/icons/file-image';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { toast } from 'sonner';

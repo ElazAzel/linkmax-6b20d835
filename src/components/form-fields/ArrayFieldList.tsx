@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Plus } from 'lucide-react';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 
 interface ArrayFieldListProps {
   label: string;

@@ -9,7 +9,16 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Info, Calendar as CalendarIcon, X, ChevronDown, Settings2, Palette, Sparkles, Wand2, Clock } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Info from 'lucide-react/dist/esm/icons/info';
+import CalendarIcon from 'lucide-react/dist/esm/icons/calendar';
+import X from 'lucide-react/dist/esm/icons/x';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Settings2 from 'lucide-react/dist/esm/icons/settings-2';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Clock from 'lucide-react/dist/esm/icons/clock';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils/utils';
 import { AnimationSettings } from '@/components/editor/AnimationSettings';

@@ -27,20 +27,18 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Image,
-  User,
-  Type,
-  Palette,
-  Camera,
-  Upload,
-  Loader2,
-  Check,
-  X,
-  ChevronLeft,
-  Trash2,
-  Sparkles,
-} from 'lucide-react';
+import Image from 'lucide-react/dist/esm/icons/image';
+import User from 'lucide-react/dist/esm/icons/user';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { cn } from '@/lib/utils/utils';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, Loader2, UserPlus } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

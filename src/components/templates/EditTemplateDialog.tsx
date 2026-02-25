@@ -18,7 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, Save, Share2, DollarSign, Pencil } from 'lucide-react';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';

@@ -5,7 +5,17 @@
  */
 import { memo, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Search, MoreVertical, Eye, Share2, Copy, Settings, ExternalLink, Crown, Sparkles, Trash2 } from 'lucide-react';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Search from 'lucide-react/dist/esm/icons/search';
+import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';

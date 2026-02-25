@@ -8,7 +8,12 @@ import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Upload, FileJson, CheckCircle, AlertTriangle, XCircle, Loader2 } from 'lucide-react';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import FileJson from 'lucide-react/dist/esm/icons/file-json';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { useLanguageUpload, type ValidationResult } from '@/hooks/useLanguageUpload';
 import { toast } from 'sonner';
 

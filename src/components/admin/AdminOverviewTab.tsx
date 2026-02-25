@@ -9,11 +9,26 @@ import { bumpCacheVersion } from '@/lib/utils/cache-utils';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
-import {
-  Users, FileText, Eye, MousePointer, Share2, TrendingUp, Calendar,
-  Star, Trophy, Flame, MessageSquare, Link2, UserPlus, Handshake,
-  Users2, Target, Blocks, Globe, RefreshCw, Loader2
-} from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointer from 'lucide-react/dist/esm/icons/mouse-pointer';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Flame from 'lucide-react/dist/esm/icons/flame';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Handshake from 'lucide-react/dist/esm/icons/handshake';
+import Users2 from 'lucide-react/dist/esm/icons/users-2';
+import Target from 'lucide-react/dist/esm/icons/target';
+import Blocks from 'lucide-react/dist/esm/icons/blocks';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 
 interface StatCardProps {
   title: string;

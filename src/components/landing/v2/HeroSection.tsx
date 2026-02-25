@@ -1,7 +1,13 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Sparkles, Zap, Smartphone, BarChart3, Globe, Play } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Play from 'lucide-react/dist/esm/icons/play';
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';

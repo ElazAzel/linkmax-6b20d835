@@ -3,7 +3,8 @@
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, Crown } from 'lucide-react';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import Crown from 'lucide-react/dist/esm/icons/crown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

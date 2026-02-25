@@ -4,13 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
-import {
-  Target,
-  Wand2,
-  Bell,
-  ArrowRight,
-  Sparkles
-} from 'lucide-react';
+import Target from 'lucide-react/dist/esm/icons/target';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 
 interface HowItWorksSectionProps {
   isVisible: boolean;

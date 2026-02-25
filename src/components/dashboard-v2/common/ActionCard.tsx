@@ -2,7 +2,7 @@
  * ActionCard - Quick action button with icon and description
  */
 import { memo } from 'react';
-import { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 
 interface ActionCardProps {

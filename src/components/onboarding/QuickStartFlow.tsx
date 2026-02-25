@@ -15,17 +15,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import {
-  Sparkles,
-  ArrowRight,
-  ArrowLeft,
-  Loader2,
-  Check,
-  Wand2,
-  User,
-  Zap,
-  Layout,
-} from 'lucide-react';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import User from 'lucide-react/dist/esm/icons/user';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Layout from 'lucide-react/dist/esm/icons/layout';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';

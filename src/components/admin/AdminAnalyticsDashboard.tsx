@@ -10,11 +10,18 @@ import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
-import {
-  Loader2, Eye, MousePointer, TrendingUp, TrendingDown,
-  Users, Activity, Calendar,
-  Monitor, Smartphone, Tablet, Globe
-} from 'lucide-react';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointer from 'lucide-react/dist/esm/icons/mouse-pointer';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Activity from 'lucide-react/dist/esm/icons/activity';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Monitor from 'lucide-react/dist/esm/icons/monitor';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import Tablet from 'lucide-react/dist/esm/icons/tablet';
+import Globe from 'lucide-react/dist/esm/icons/globe';
 
 export function AdminAnalyticsDashboard() {
   const { t } = useTranslation();

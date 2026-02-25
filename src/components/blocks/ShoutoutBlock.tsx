@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Megaphone, ExternalLink } from 'lucide-react';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';

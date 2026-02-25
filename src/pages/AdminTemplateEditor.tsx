@@ -12,7 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { GridEditor } from '@/components/editor/GridEditor';
 import { BlockEditorV2 } from '@/components/editor/BlockEditorV2';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import type { Block } from '@/types/page';
 import { TEMPLATE_CATEGORY_KEYS, type TemplateCategoryKey, getTemplateCategoryLabel } from '@/lib/templateCategories';
 import { createBlock } from '@/lib/blocks/block-factory';

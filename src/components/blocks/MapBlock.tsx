@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { MapBlock as MapBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
-import { MapPin } from 'lucide-react';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import { getAnimationClass, getAnimationStyle } from '@/lib/animation-utils';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { useMemo } from 'react';

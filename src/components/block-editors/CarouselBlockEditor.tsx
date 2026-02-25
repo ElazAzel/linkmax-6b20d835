@@ -5,7 +5,7 @@ import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { validateCarouselBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
-import { Trash2 } from 'lucide-react';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
 

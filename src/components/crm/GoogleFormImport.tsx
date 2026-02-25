@@ -18,7 +18,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { FileText, Link, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Link from 'lucide-react/dist/esm/icons/link';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import {

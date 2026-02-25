@@ -16,24 +16,22 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Lightbulb,
-  TrendingUp,
-  TrendingDown,
-  Sparkles,
-  ArrowRight,
-  Check,
-  X,
-  Eye,
-  MousePointer,
-  Share2,
-  RefreshCw,
-  Loader2,
-  Wand2,
-  Plus,
-  Trash2,
-  Edit2,
-} from 'lucide-react';
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointer from 'lucide-react/dist/esm/icons/mouse-pointer';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import { supabase } from '@/platform/supabase/client';

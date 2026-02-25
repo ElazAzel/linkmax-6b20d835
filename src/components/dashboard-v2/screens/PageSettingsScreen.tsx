@@ -5,23 +5,21 @@
 import { memo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  Globe,
-  Palette,
-  Search,
-  Eye,
-  Link2,
-  ChevronRight,
-  RefreshCw,
-  ExternalLink,
-  Check,
-  AlertTriangle,
-  Crown,
-  Sparkles,
-  CreditCard,
-  Lock,
-  Info,
-} from 'lucide-react';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Check from 'lucide-react/dist/esm/icons/check';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Info from 'lucide-react/dist/esm/icons/info';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/platform/supabase/client';
 import { useDomainVerification, type DomainStatus } from '@/hooks/page/useDomainVerification';

@@ -8,17 +8,15 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { 
-  Pencil, 
-  Trash2, 
-  Copy, 
-  ChevronUp, 
-  ChevronDown,
-  ArrowUpToLine,
-  ArrowDownToLine,
-  X,
-  EyeOff,
-} from 'lucide-react';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import ChevronUp from 'lucide-react/dist/esm/icons/chevron-up';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import ArrowUpToLine from 'lucide-react/dist/esm/icons/arrow-up-to-line';
+import ArrowDownToLine from 'lucide-react/dist/esm/icons/arrow-down-to-line';
+import X from 'lucide-react/dist/esm/icons/x';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import type { Block } from '@/types/page';

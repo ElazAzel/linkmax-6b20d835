@@ -1,6 +1,11 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Mail, Crown, CheckCircle, Send, Loader2, Check } from 'lucide-react';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import Send from 'lucide-react/dist/esm/icons/send';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Check from 'lucide-react/dist/esm/icons/check';
 import type { NewsletterBlock as NewsletterBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

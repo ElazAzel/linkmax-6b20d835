@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Crown, Sparkles, Lock } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { useFreemiumLimits, type FreeTier } from '@/hooks/user/useFreemiumLimits';

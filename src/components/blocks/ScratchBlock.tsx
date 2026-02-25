@@ -1,6 +1,6 @@
 import { memo, useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Crown } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
 import type { ScratchBlock as ScratchBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';

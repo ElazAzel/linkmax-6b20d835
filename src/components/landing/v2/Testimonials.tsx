@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Star } from "lucide-react";
+import Star from 'lucide-react/dist/esm/icons/star';
 import { useTranslation } from "react-i18next";
 
 

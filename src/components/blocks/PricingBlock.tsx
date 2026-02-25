@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { getLocale } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/utils';
-import { Star, Tag } from 'lucide-react';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Tag from 'lucide-react/dist/esm/icons/tag';
 
 interface PricingBlockProps {
   block: PricingBlockType;

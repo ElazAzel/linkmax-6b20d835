@@ -5,7 +5,11 @@
  */
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Check, Globe, Languages, Loader2, Info } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Languages from 'lucide-react/dist/esm/icons/languages';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Info from 'lucide-react/dist/esm/icons/info';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';

@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { Download, FileText } from 'lucide-react';
+import Download from 'lucide-react/dist/esm/icons/download';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 import { useTranslation } from 'react-i18next';
 import type { DownloadBlock as DownloadBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';

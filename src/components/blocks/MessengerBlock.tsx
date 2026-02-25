@@ -1,6 +1,9 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, Send, ExternalLink, Phone } from 'lucide-react';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Send from 'lucide-react/dist/esm/icons/send';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Phone from 'lucide-react/dist/esm/icons/phone';
 import type { MessengerBlock as MessengerBlockType } from '@/types/page';
 import { supabase } from '@/platform/supabase/client';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';

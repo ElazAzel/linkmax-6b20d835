@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, Crown, Lock } from 'lucide-react';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';

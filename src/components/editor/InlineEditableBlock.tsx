@@ -1,5 +1,10 @@
 import { memo, useState, useRef, useCallback, TouchEvent } from 'react';
-import { Pencil, Trash2, GripVertical, ChevronUp, ChevronDown, MoreVertical } from 'lucide-react';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
+import ChevronUp from 'lucide-react/dist/esm/icons/chevron-up';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
 import { Button } from '@/components/ui/button';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { MobileBlockActions } from './MobileBlockActions';

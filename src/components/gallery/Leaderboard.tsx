@@ -1,5 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { Trophy, Medal, Heart, Eye, ExternalLink, Loader2, Calendar, TrendingUp } from 'lucide-react';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Medal from 'lucide-react/dist/esm/icons/medal';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

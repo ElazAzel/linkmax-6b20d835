@@ -1,7 +1,11 @@
 'use client';
 
 import { Link } from 'react-router-dom';
-import { Check, X, Settings, ExternalLink, Copy } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Copy from 'lucide-react/dist/esm/icons/copy';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

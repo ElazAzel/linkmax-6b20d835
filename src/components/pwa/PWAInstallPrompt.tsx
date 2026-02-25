@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Download, X } from 'lucide-react';
+import Download from 'lucide-react/dist/esm/icons/download';
+import X from 'lucide-react/dist/esm/icons/x';
 import { cn } from '@/lib/utils/utils';
 import { storage } from '@/lib/storage';
 

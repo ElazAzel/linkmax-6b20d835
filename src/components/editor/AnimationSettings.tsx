@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Zap } from 'lucide-react';
+import Zap from 'lucide-react/dist/esm/icons/zap';
 import type { BlockStyle } from '@/types/page';
 import { useTranslation } from 'react-i18next';
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { FAQBlock as FAQBlockType } from '@/types/page';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { getI18nText } from '@/lib/i18n-helpers';
-import { HelpCircle } from 'lucide-react';
+import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
 
 interface FAQBlockProps {
   block: FAQBlockType;

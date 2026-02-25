@@ -15,7 +15,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { History, RotateCcw, Loader2, Clock } from 'lucide-react';
+import History from 'lucide-react/dist/esm/icons/history';
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Clock from 'lucide-react/dist/esm/icons/clock';
 import type { PageVersion } from '@/hooks/page/usePageVersions';
 
 interface PageVersionsDialogProps {

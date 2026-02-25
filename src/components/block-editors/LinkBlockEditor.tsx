@@ -16,16 +16,15 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { validateLinkBlock } from '@/lib/blocks/block-validators';
 import { getBestFaviconUrl } from '@/lib/favicon-utils';
-import {
-  Link2,
-  RefreshCw,
-  Type,
-  Palette,
-  Image as ImageIcon,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-} from 'lucide-react';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Image from 'lucide-react/dist/esm/icons/image';
+const ImageIcon = Image;
+import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
+import AlignCenter from 'lucide-react/dist/esm/icons/align-center';
+import AlignRight from 'lucide-react/dist/esm/icons/align-right';
 import { cn } from '@/lib/utils/utils';
 
 // Alignment button component

@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Undo2 } from 'lucide-react';
+import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
 import { createBlock } from '@/lib/blocks/block-factory';
 import { PREMIUM_BLOCK_TYPES } from '@/lib/blocks/block-registry';
 import { APP_CONFIG } from '@/lib/constants';

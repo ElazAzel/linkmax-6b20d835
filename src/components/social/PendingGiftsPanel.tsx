@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Gift, Crown, Sparkles, X } from 'lucide-react';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import X from 'lucide-react/dist/esm/icons/x';
 import { useSocialFeatures } from '@/hooks/social/useSocialFeatures';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS, kk, ru } from 'date-fns/locale';

@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
-import { Crown, Send } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Send from 'lucide-react/dist/esm/icons/send';
 import { useTranslation } from 'react-i18next';
 import type { FormBlock as FormBlockType } from '@/types/page';
 import { Card } from '@/components/ui/card';

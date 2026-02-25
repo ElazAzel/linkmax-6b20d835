@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { UserPlus, Megaphone, ExternalLink } from 'lucide-react';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';

@@ -8,7 +8,7 @@ import { withBlockEditor } from './BlockEditorWrapper';
 import { useTranslation } from 'react-i18next';
 import { FrameGridSelector } from '@/components/editor/FramePreview';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown } from 'lucide-react';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import { useState } from 'react';
 
 interface AvatarBlockEditorProps {

@@ -20,21 +20,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Heart,
-  Download,
-  ShoppingCart,
-  Search,
-  TrendingUp,
-  Clock,
-  Star,
-  Loader2,
-  Eye,
-  User,
-  Filter,
-  X,
-  Layers
-} from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Download from 'lucide-react/dist/esm/icons/download';
+import ShoppingCart from 'lucide-react/dist/esm/icons/shopping-cart';
+import Search from 'lucide-react/dist/esm/icons/search';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import User from 'lucide-react/dist/esm/icons/user';
+import Filter from 'lucide-react/dist/esm/icons/filter';
+import X from 'lucide-react/dist/esm/icons/x';
+import Layers from 'lucide-react/dist/esm/icons/layers';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';

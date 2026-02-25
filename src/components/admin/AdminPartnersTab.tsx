@@ -23,15 +23,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import {
-    Plus,
-    Pencil,
-    Trash2,
-    Loader2,
-    ExternalLink,
-    Image as ImageIcon,
-    GripVertical,
-} from 'lucide-react';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Image from 'lucide-react/dist/esm/icons/image';
+const ImageIcon = Image;
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import { toast } from 'sonner';
 
 interface Partner {

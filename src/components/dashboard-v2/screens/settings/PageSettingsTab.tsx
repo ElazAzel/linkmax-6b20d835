@@ -1,20 +1,18 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import {
-    Link2,
-    Check,
-    AlertTriangle,
-    Search,
-    Eye,
-    Palette,
-    LayoutTemplate,
-    Store,
-    ChevronRight,
-    Globe,
-    Crown,
-    Sparkles,
-} from 'lucide-react';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import Check from 'lucide-react/dist/esm/icons/check';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Store from 'lucide-react/dist/esm/icons/store';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

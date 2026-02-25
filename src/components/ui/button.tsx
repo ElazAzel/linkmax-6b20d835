@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 
 import { cn } from "@/lib/utils/utils";
 

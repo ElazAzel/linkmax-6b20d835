@@ -19,7 +19,9 @@ import {
 } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-import { X, Check, ChevronLeft } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import Check from 'lucide-react/dist/esm/icons/check';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
 import type { Block } from '@/types/page';
 
 // Lazy load all block editors for code splitting

@@ -8,15 +8,14 @@ import { validateImageBlock } from '@/lib/blocks/block-validators';
 import { useTranslation } from 'react-i18next';
 import { EditorSection, EditorField } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';
-import {
-  Image as ImageIcon,
-  Link,
-  Palette,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Type
-} from 'lucide-react';
+import Image from 'lucide-react/dist/esm/icons/image';
+const ImageIcon = Image;
+import Link from 'lucide-react/dist/esm/icons/link';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
+import AlignCenter from 'lucide-react/dist/esm/icons/align-center';
+import AlignRight from 'lucide-react/dist/esm/icons/align-right';
+import Type from 'lucide-react/dist/esm/icons/type';
 
 function ImageBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();

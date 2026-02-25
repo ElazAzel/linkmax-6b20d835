@@ -5,12 +5,10 @@ import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import {
-  Check,
-  Crown,
-  Sparkles,
-  X
-} from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import X from 'lucide-react/dist/esm/icons/x';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface SimplePricingSectionProps {

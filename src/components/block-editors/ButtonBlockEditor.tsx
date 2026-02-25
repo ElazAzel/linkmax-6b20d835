@@ -8,18 +8,16 @@ import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';
-import {
-  Maximize2,
-  Square,
-  Minus,
-  Type,
-  Palette,
-  MousePointerClick,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Move
-} from 'lucide-react';
+import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2';
+import Square from 'lucide-react/dist/esm/icons/square';
+import Minus from 'lucide-react/dist/esm/icons/minus';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
+import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
+import AlignCenter from 'lucide-react/dist/esm/icons/align-center';
+import AlignRight from 'lucide-react/dist/esm/icons/align-right';
+import Move from 'lucide-react/dist/esm/icons/move';
 
 function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();

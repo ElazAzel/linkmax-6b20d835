@@ -1,5 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Link2, Sparkles, TrendingUp, Shield, Globe, Smartphone } from 'lucide-react';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 
 export function LinkInBioSection() {

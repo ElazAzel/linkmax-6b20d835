@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Crown, Lock } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

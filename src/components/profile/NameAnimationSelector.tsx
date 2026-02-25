@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Crown, Lock, Sparkles } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils/utils';
 import { 

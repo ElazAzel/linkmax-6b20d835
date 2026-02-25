@@ -2,7 +2,12 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils/utils";
 import { useTranslation } from "react-i18next";
-import { Briefcase, Crown, Gem, Hexagon, Layers, Shield } from "lucide-react";
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Gem from 'lucide-react/dist/esm/icons/gem';
+import Hexagon from 'lucide-react/dist/esm/icons/hexagon';
+import Layers from 'lucide-react/dist/esm/icons/layers';
+import Shield from 'lucide-react/dist/esm/icons/shield';
 
 const companies = [
     { name: "Acme Corp", icon: Hexagon },

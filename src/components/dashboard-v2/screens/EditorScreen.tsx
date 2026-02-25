@@ -4,7 +4,13 @@
  */
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Eye, Share2, Sparkles, LayoutTemplate, Undo2, Redo2, History } from 'lucide-react';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
+import Redo2 from 'lucide-react/dist/esm/icons/redo-2';
+import History from 'lucide-react/dist/esm/icons/history';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';

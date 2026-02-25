@@ -11,7 +11,11 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
-import { Crown, Image, Palette, Sparkles, Lock } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Image from 'lucide-react/dist/esm/icons/image';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 
 import type { PageBackground } from '@/types/page';
 

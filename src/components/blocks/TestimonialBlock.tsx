@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { Star, Quote } from 'lucide-react';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Quote from 'lucide-react/dist/esm/icons/quote';
 import { useTranslation } from 'react-i18next';
 import type { TestimonialBlock as TestimonialBlockType } from '@/types/page';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

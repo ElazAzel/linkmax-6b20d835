@@ -7,20 +7,18 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  ArrowLeft,
-  Users,
-  Sparkles,
-  TrendingUp,
-  Heart,
-  Search,
-  Filter,
-  Copy,
-  ExternalLink,
-  Crown,
-  Eye,
-  Star,
-} from 'lucide-react';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Filter from 'lucide-react/dist/esm/icons/filter';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Star from 'lucide-react/dist/esm/icons/star';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';

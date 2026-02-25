@@ -6,7 +6,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import type { CommunityBlock } from '@/types/page';
 import { createMultilingualString } from '@/lib/i18n-helpers';
-import { Users, Crown, Star, Heart, Zap, Lock, MessageCircle, Info } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Info from 'lucide-react/dist/esm/icons/info';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface CommunityBlockEditorProps {

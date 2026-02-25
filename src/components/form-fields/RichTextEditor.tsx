@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
-import { Link, Unlink } from 'lucide-react';
+import Link from 'lucide-react/dist/esm/icons/link';
+import Unlink from 'lucide-react/dist/esm/icons/unlink';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

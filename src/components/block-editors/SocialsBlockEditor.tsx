@@ -8,17 +8,15 @@ import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';
 import { Label } from '@/components/ui/label';
-import {
-  Share2,
-  Palette,
-  LayoutGrid,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  Plus,
-  Trash2,
-  GripVertical
-} from 'lucide-react';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import LayoutGrid from 'lucide-react/dist/esm/icons/layout-grid';
+import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
+import AlignCenter from 'lucide-react/dist/esm/icons/align-center';
+import AlignRight from 'lucide-react/dist/esm/icons/align-right';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import { Button } from '@/components/ui/button';
 import { Reorder, useDragControls } from 'framer-motion';
 

@@ -2,11 +2,19 @@ import { useNavigate } from 'react-router-dom';
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import {
-  Scissors, Camera, Dumbbell, GraduationCap, Heart, Brain,
-  Coffee, ShoppingBag, Building2, Stethoscope, Music, Palette,
-  ArrowRight
-} from 'lucide-react';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Coffee from 'lucide-react/dist/esm/icons/coffee';
+import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import Stethoscope from 'lucide-react/dist/esm/icons/stethoscope';
+import Music from 'lucide-react/dist/esm/icons/music';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { Button } from '@/components/ui/button';
 

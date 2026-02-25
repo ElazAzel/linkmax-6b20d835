@@ -9,7 +9,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useAdminPages } from '@/hooks/admin/useAdminPages';
 import { format } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
-import { Search, RefreshCw, Eye, ExternalLink } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function AdminPagesTab() {

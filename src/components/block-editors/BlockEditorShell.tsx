@@ -5,24 +5,22 @@
 import { memo, useState, useEffect, useCallback, ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    ChevronLeft,
-    Check,
-    X,
-    Eye,
-    EyeOff,
-    Type,
-    Palette,
-    Settings,
-    Loader2,
-    Save,
-    Clock,
-    Grid2x2,
-    RectangleHorizontal,
-    RectangleVertical,
-    Square,
-    Trash2,
-} from 'lucide-react';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Grid2x2 from 'lucide-react/dist/esm/icons/grid-2x2';
+import RectangleHorizontal from 'lucide-react/dist/esm/icons/rectangle-horizontal';
+import RectangleVertical from 'lucide-react/dist/esm/icons/rectangle-vertical';
+import Square from 'lucide-react/dist/esm/icons/square';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';

@@ -4,25 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Save,
-  Eye,
-  Upload,
-  Settings,
-  Wand2,
-  LayoutTemplate,
-  Trophy,
-  Users,
-  Globe,
-  MoreHorizontal,
-  X,
-  Store,
-  Coins,
-  ImageIcon,
-  Crown,
-  Flame,
-  Check,
-} from 'lucide-react';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
+import X from 'lucide-react/dist/esm/icons/x';
+import Store from 'lucide-react/dist/esm/icons/store';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import ImageIcon from 'lucide-react/dist/esm/icons/image';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Flame from 'lucide-react/dist/esm/icons/flame';
+import Check from 'lucide-react/dist/esm/icons/check';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,

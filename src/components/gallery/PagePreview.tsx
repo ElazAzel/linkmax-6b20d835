@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { User } from 'lucide-react';
+import User from 'lucide-react/dist/esm/icons/user';
 
 interface PagePreviewProps {
   slug: string;

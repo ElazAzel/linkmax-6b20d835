@@ -18,34 +18,33 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { createEmptyI18nText, getI18nText, type SupportedLanguage, type I18nText } from '@/lib/i18n-helpers';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
-import {
-  Plus,
-  GripVertical,
-  Trash2,
-  Copy,
-  ChevronDown,
-  ChevronUp,
-  Type,
-  AlignLeft,
-  Mail,
-  Phone,
-  Hash,
-  List,
-  CheckSquare,
-  Calendar,
-  Clock,
-  Link as LinkIcon,
-  Star,
-  BarChart3,
-  Grid3X3,
-  Upload,
-  Image,
-  FileText,
-  Heading,
-  Settings,
-  Eye,
-  Crown,
-} from 'lucide-react';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import ChevronUp from 'lucide-react/dist/esm/icons/chevron-up';
+import Type from 'lucide-react/dist/esm/icons/type';
+import AlignLeft from 'lucide-react/dist/esm/icons/align-left';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Hash from 'lucide-react/dist/esm/icons/hash';
+import List from 'lucide-react/dist/esm/icons/list';
+import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Link from 'lucide-react/dist/esm/icons/link';
+const LinkIcon = Link;
+import Star from 'lucide-react/dist/esm/icons/star';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import Image from 'lucide-react/dist/esm/icons/image';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Heading from 'lucide-react/dist/esm/icons/heading';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Crown from 'lucide-react/dist/esm/icons/crown';
 import type { EventFormField, EventFormSection, EventFieldType, EventFieldOption } from '@/types/page';
 
 // Field type configurations with icons and metadata

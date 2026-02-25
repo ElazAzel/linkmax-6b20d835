@@ -12,7 +12,11 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { Gift, Crown, Sparkles, Send, Heart } from 'lucide-react';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Send from 'lucide-react/dist/esm/icons/send';
+import Heart from 'lucide-react/dist/esm/icons/heart';
 import { sendPremiumGift } from '@/services/social';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';

@@ -9,7 +9,9 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { FileQuestion, Home, RefreshCw } from 'lucide-react';
+import FileQuestion from 'lucide-react/dist/esm/icons/file-question';
+import Home from 'lucide-react/dist/esm/icons/home';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 
 interface PublicPageErrorProps {
   type?: 'not-found' | 'error';

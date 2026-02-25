@@ -1,5 +1,5 @@
 import { lazy, type LazyExoticComponent, type ComponentType } from 'react';
-import { Circle } from 'lucide-react';
+import Circle from 'lucide-react/dist/esm/icons/circle';
 import type { LucideProps } from 'lucide-react';
 
 /**

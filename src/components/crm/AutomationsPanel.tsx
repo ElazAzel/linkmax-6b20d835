@@ -7,7 +7,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Bot, ChevronDown, Clock, MessageSquare, Star, Bell, Loader2, Save, Info } from 'lucide-react';
+import Bot from 'lucide-react/dist/esm/icons/bot';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Info from 'lucide-react/dist/esm/icons/info';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 

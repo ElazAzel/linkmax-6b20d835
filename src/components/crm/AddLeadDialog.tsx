@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { UserPlus } from 'lucide-react';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
 
 interface AddLeadDialogProps {
   open: boolean;

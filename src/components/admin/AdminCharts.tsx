@@ -4,7 +4,7 @@ import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
-import { Loader2 } from 'lucide-react';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { useAdminStats } from '@/hooks/admin/useAdminData';
 
 interface DailyData {

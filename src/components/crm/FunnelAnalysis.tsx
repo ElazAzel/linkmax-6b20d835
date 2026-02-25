@@ -1,15 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Eye, 
-  MousePointerClick, 
-  UserCheck, 
-  ShoppingCart,
-  ArrowDown,
-  TrendingDown,
-  Info
-} from 'lucide-react';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
+import UserCheck from 'lucide-react/dist/esm/icons/user-check';
+import ShoppingCart from 'lucide-react/dist/esm/icons/shopping-cart';
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Info from 'lucide-react/dist/esm/icons/info';
 import {
   Tooltip,
   TooltipContent,

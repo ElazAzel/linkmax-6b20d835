@@ -5,16 +5,14 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import {
-  Undo2,
-  Redo2,
-  Plus,
-  Layers,
-  ArrowUpDown,
-  Eye,
-  Save,
-  Loader2,
-} from 'lucide-react';
+import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
+import Redo2 from 'lucide-react/dist/esm/icons/redo-2';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Layers from 'lucide-react/dist/esm/icons/layers';
+import ArrowUpDown from 'lucide-react/dist/esm/icons/arrow-up-down';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { cn } from '@/lib/utils/utils';
 import {
   Tooltip,

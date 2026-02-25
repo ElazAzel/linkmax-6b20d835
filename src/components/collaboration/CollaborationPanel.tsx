@@ -1,5 +1,9 @@
 import { useCallback } from 'react';
-import { Users, Heart, Megaphone, UserPlus, Loader2 } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCollaboration } from '@/hooks/social/useCollaboration';
 import { CollabsTab } from './CollabsTab';

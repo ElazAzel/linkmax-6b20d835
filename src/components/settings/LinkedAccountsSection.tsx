@@ -8,7 +8,11 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Mail, Link2, Unlink, Loader2, CalendarSync } from 'lucide-react';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import Unlink from 'lucide-react/dist/esm/icons/unlink';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import CalendarSync from 'lucide-react/dist/esm/icons/calendar-sync';
 import { supabase } from '@/platform/supabase/client';
 
 

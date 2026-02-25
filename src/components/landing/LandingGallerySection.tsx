@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useCallback, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Users, ArrowRight, Crown, Eye, Heart, Loader2, Filter } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Filter from 'lucide-react/dist/esm/icons/filter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

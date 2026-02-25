@@ -15,30 +15,28 @@ import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import {
-  Crown,
-  Grid3X3,
-  MessageCircle,
-  Sparkles,
-  User,
-  Link2,
-  LogOut,
-  X,
-  Bell,
-  Send,
-  Tag,
-  Image,
-  ExternalLink,
-  Check,
-  Loader2,
-  Users,
-  UserPlus,
-  BarChart3,
-  Package,
-  Save,
-  Shield,
-  Palette,
-} from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import User from 'lucide-react/dist/esm/icons/user';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import X from 'lucide-react/dist/esm/icons/x';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import Send from 'lucide-react/dist/esm/icons/send';
+import Tag from 'lucide-react/dist/esm/icons/tag';
+import Image from 'lucide-react/dist/esm/icons/image';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Users from 'lucide-react/dist/esm/icons/users';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Package from 'lucide-react/dist/esm/icons/package';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import Palette from 'lucide-react/dist/esm/icons/palette';
 import { CollaborationPanel } from '@/components/collaboration/CollaborationPanel';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { ReferralPanel } from '@/components/referral/ReferralPanel';

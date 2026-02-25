@@ -1,28 +1,26 @@
 import { memo, useMemo } from 'react';
 import { cn } from '@/lib/utils/utils';
 import type { Block } from '@/types/page';
-import { 
-  Link2, 
-  Image, 
-  Type, 
-  Video, 
-  ShoppingBag, 
-  MessageCircle,
-  User,
-  Layers,
-  FormInput,
-  Star,
-  MapPin,
-  HelpCircle,
-  Clock,
-  DollarSign,
-  File,
-  Mail,
-  ListOrdered,
-  Gift,
-  Megaphone,
-  CalendarDays,
-} from 'lucide-react';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import Image from 'lucide-react/dist/esm/icons/image';
+import Type from 'lucide-react/dist/esm/icons/type';
+import Video from 'lucide-react/dist/esm/icons/video';
+import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import User from 'lucide-react/dist/esm/icons/user';
+import Layers from 'lucide-react/dist/esm/icons/layers';
+import FormInput from 'lucide-react/dist/esm/icons/form-input';
+import Star from 'lucide-react/dist/esm/icons/star';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
+import File from 'lucide-react/dist/esm/icons/file';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import ListOrdered from 'lucide-react/dist/esm/icons/list-ordered';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 
 interface TemplatePreviewCardProps {
   blocks: Block[] | unknown;

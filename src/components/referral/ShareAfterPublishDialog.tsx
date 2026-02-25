@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Gift, Copy, Share2, Users, Check, X } from 'lucide-react';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
 import {
   Dialog,
   DialogContent,

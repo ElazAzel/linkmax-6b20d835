@@ -3,15 +3,13 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { 
-  Gift, 
-  Copy, 
-  Share2, 
-  Users, 
-  Sparkles,
-  ChevronRight,
-  Check
-} from 'lucide-react';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Check from 'lucide-react/dist/esm/icons/check';
 import { useReferral } from '@/hooks/user/useReferral';
 
 interface ReferralPanelProps {

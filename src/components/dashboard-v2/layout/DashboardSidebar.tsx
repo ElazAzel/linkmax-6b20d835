@@ -6,24 +6,22 @@ import { useNavigate } from 'react-router-dom';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Home,
-  PenTool,
-  FileText,
-  Inbox,
-  BarChart3,
-  Settings,
-  Crown,
-  PanelLeftClose,
-  PanelLeft,
-  LayoutTemplate,
-  Store,
-  Trophy,
-  Coins,
-  LogOut,
-  ChevronRight,
-  Calendar,
-} from 'lucide-react';
+import Home from 'lucide-react/dist/esm/icons/home';
+import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import PanelLeftClose from 'lucide-react/dist/esm/icons/panel-left-close';
+import PanelLeft from 'lucide-react/dist/esm/icons/panel-left';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Store from 'lucide-react/dist/esm/icons/store';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';

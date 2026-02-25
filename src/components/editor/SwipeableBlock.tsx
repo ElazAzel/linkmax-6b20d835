@@ -1,6 +1,7 @@
 import { memo, useState, useRef, useCallback, TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pencil, Trash2 } from 'lucide-react';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { cn } from '@/lib/utils/utils';
 
 interface SwipeableBlockProps {

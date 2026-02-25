@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, Loader2, Trophy } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
 import { Button } from '@/components/ui/button';
 import { useGallery } from '@/hooks/social/useGallery';
 import { useGalleryFilters } from '@/hooks/social/useGalleryFilters';

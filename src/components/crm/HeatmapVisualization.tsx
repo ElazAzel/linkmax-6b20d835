@@ -3,14 +3,12 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { 
-  MousePointer2, 
-  ArrowDown,
-  Flame,
-  Eye,
-  TrendingDown,
-  Info
-} from 'lucide-react';
+import MousePointer2 from 'lucide-react/dist/esm/icons/mouse-pointer-2';
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down';
+import Flame from 'lucide-react/dist/esm/icons/flame';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Info from 'lucide-react/dist/esm/icons/info';
 import {
   Tooltip,
   TooltipContent,

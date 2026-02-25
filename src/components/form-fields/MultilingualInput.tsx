@@ -8,7 +8,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Languages, Loader2, Plus, X } from 'lucide-react';
+import Languages from 'lucide-react/dist/esm/icons/languages';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import X from 'lucide-react/dist/esm/icons/x';
 import {
   LANGUAGES,
   LANGUAGE_DEFINITIONS,

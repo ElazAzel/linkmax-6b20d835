@@ -4,7 +4,9 @@
  */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Check, ChevronDown, Globe } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Globe from 'lucide-react/dist/esm/icons/globe';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

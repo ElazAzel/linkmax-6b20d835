@@ -3,21 +3,19 @@ import { usePageAnalytics, TimePeriod } from '@/hooks/analytics/usePageAnalytics
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Eye,
-  MousePointerClick,
-  Share2,
-  Users,
-  TrendingUp,
-  TrendingDown,
-  BarChart3,
-  Calendar,
-  Globe,
-  Smartphone,
-  Tablet,
-  Monitor,
-  RefreshCw
-} from 'lucide-react';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import Users from 'lucide-react/dist/esm/icons/users';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import Tablet from 'lucide-react/dist/esm/icons/tablet';
+import Monitor from 'lucide-react/dist/esm/icons/monitor';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import {
   AreaChart,
   Area,

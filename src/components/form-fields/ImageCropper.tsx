@@ -4,7 +4,12 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
-import { ZoomIn, ZoomOut, Move, RotateCcw, Check, X } from 'lucide-react';
+import ZoomIn from 'lucide-react/dist/esm/icons/zoom-in';
+import ZoomOut from 'lucide-react/dist/esm/icons/zoom-out';
+import Move from 'lucide-react/dist/esm/icons/move';
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
 import { useTranslation } from 'react-i18next';
 
 interface ImageCropperProps {

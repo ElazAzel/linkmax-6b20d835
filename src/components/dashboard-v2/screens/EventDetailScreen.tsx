@@ -27,31 +27,29 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import {
-  ArrowLeft,
-  Users,
-  QrCode,
-  Download,
-  MapPin,
-  Clock,
-  Search,
-  ExternalLink,
-  CalendarDays,
-  UserCheck,
-  UserX,
-  Crown,
-  Loader2,
-  Mail,
-  Phone,
-  MoreVertical,
-  Check,
-  X,
-  RefreshCw,
-  Ticket,
-  FileSpreadsheet,
-  FileText,
-  BarChart3,
-} from 'lucide-react';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Users from 'lucide-react/dist/esm/icons/users';
+import QrCode from 'lucide-react/dist/esm/icons/qr-code';
+import Download from 'lucide-react/dist/esm/icons/download';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Search from 'lucide-react/dist/esm/icons/search';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
+import UserCheck from 'lucide-react/dist/esm/icons/user-check';
+import UserX from 'lucide-react/dist/esm/icons/user-x';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Ticket from 'lucide-react/dist/esm/icons/ticket';
+import FileSpreadsheet from 'lucide-react/dist/esm/icons/file-spreadsheet';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import { toast } from 'sonner';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
@@ -249,7 +247,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [user, eventId, i18n.language, t, router]);
+  }, [user, eventId, i18n.language, t, navigate]);
 
   useEffect(() => {
     fetchData();

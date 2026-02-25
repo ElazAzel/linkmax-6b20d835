@@ -4,7 +4,12 @@
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Check, Palette, Lock, Crown, Image, Sparkles } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Image from 'lucide-react/dist/esm/icons/image';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

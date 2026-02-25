@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Cloud, CloudOff, Check, Loader2 } from 'lucide-react';
+import Cloud from 'lucide-react/dist/esm/icons/cloud';
+import CloudOff from 'lucide-react/dist/esm/icons/cloud-off';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';
 

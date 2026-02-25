@@ -11,23 +11,21 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import {
-  ArrowLeft,
-  Search,
-  Download,
-  QrCode,
-  User,
-  Mail,
-  Phone,
-  Ticket,
-  Check,
-  X,
-  Clock,
-  Loader2,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-} from 'lucide-react';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Download from 'lucide-react/dist/esm/icons/download';
+import QrCode from 'lucide-react/dist/esm/icons/qr-code';
+import User from 'lucide-react/dist/esm/icons/user';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Ticket from 'lucide-react/dist/esm/icons/ticket';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';

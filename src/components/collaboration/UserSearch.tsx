@@ -1,6 +1,11 @@
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, Loader2, UserPlus, MessageCircle, Heart, ExternalLink } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

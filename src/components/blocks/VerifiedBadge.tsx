@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { Check, Crown } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Crown from 'lucide-react/dist/esm/icons/crown';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';

@@ -2,7 +2,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Lock, Coins } from 'lucide-react';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Coins from 'lucide-react/dist/esm/icons/coins';
 import type { BlockStyle } from '@/types/page';
 import { useTranslation } from 'react-i18next';
 

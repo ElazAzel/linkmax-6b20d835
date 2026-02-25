@@ -10,11 +10,21 @@ import { Label } from '@/components/ui/label';
 import { useTokens } from '@/hooks/user/useTokens';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { TOKEN_REWARDS, PLATFORM_FEE_PERCENT, TOKEN_TO_TENGE_RATE } from '@/services/tokens';
-import {
-  Coins, Crown, ArrowRight, Sparkles, TrendingUp, Gift,
-  Wallet, ShoppingBag, LayoutTemplate, Lock, Loader2,
-  ArrowDownToLine, CheckCircle2, Clock, XCircle
-} from 'lucide-react';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
+import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ArrowDownToLine from 'lucide-react/dist/esm/icons/arrow-down-to-line';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import { cn } from '@/lib/utils/utils';
 
 interface TokensPanelProps {

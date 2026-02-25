@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
 import { cn } from '@/lib/utils/utils';
 
 interface OnboardingStep {

@@ -2,7 +2,11 @@ import React from "react";
 import { cn } from "@/lib/utils/utils";
 import { useTranslation } from "react-i18next";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
-import { Copy, BarChart3, Smartphone, Users, Send } from "lucide-react";
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Send from 'lucide-react/dist/esm/icons/send';
 import { motion } from "framer-motion";
 
 const AIBuilderVisual = () => {

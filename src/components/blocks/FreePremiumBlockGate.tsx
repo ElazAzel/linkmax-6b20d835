@@ -8,7 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Crown, Lock, Sparkles, ArrowRight } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';

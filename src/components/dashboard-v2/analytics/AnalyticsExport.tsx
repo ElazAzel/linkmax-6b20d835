@@ -10,7 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Download, Table } from 'lucide-react';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Table from 'lucide-react/dist/esm/icons/table';
 import { toast } from 'sonner';
 import type { AnalyticsSummary } from '@/hooks/analytics/usePageAnalytics';
 import { exportAnalyticsToExcel } from '@/lib/export/excel-export-analytics';

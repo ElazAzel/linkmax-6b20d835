@@ -5,16 +5,14 @@
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ChevronDown,
-  Plus,
-  Check,
-  Crown,
-  FileText,
-  Settings,
-  ExternalLink,
-  Sparkles,
-} from 'lucide-react';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {

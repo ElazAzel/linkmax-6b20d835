@@ -6,22 +6,20 @@ import { useTranslation } from 'react-i18next';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
 import { formatDateShort, getLocale } from '@/lib/utils/format';
 import { toast } from 'sonner';
-import {
-  Search,
-  Plus,
-  MessageCircle,
-  Phone,
-  Mail,
-  Calendar,
-  Crown,
-  ChevronRight,
-  Loader2,
-  Send,
-  CheckCheck,
-  X,
-  Sparkles,
-  Inbox,
-} from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Send from 'lucide-react/dist/esm/icons/send';
+import CheckCheck from 'lucide-react/dist/esm/icons/check-check';
+import X from 'lucide-react/dist/esm/icons/x';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';

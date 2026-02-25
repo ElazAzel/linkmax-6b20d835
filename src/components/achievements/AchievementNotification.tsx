@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Trophy } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
 import { cn } from '@/lib/utils/utils';
 import { useSoundEffects } from '@/hooks/ui/useSoundEffects';
 import { useTranslation } from 'react-i18next';

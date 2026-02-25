@@ -1,5 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Search, SlidersHorizontal, TrendingUp, Clock, Heart, Sparkles } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import SlidersHorizontal from 'lucide-react/dist/esm/icons/sliders-horizontal';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

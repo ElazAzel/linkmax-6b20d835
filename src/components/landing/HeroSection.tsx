@@ -6,16 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState, useCallback } from 'react';
-import {
-  ArrowRight,
-  Check,
-  Bot,
-  Zap,
-  MessageSquare,
-  Bell,
-  Users,
-  Sparkles
-} from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Bot from 'lucide-react/dist/esm/icons/bot';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { cn } from '@/lib/utils/utils';
 
 interface HeroSectionProps {
@@ -35,7 +33,7 @@ export function HeroSection({ isVisible, sectionRef }: HeroSectionProps) {
     } else {
       navigate('/auth');
     }
-  }, [username, router]);
+  }, [username, navigate]);
 
   const benefits = [
     { icon: Bot, label: t('landing.hero.benefit1', 'AI создаёт всё сам'), color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' },

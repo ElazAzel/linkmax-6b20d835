@@ -1,4 +1,4 @@
-import { Coins } from 'lucide-react';
+import Coins from 'lucide-react/dist/esm/icons/coins';
 import { useTokens } from '@/hooks/user/useTokens';
 import { cn } from '@/lib/utils/utils';
 

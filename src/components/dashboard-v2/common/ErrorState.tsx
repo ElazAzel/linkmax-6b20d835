@@ -3,7 +3,8 @@
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/utils';
 

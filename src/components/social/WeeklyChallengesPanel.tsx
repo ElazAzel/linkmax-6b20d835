@@ -1,11 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Trophy, Target, Clock, Gift, 
-  Users, Blocks, Eye, Heart, Share2,
-  CheckCircle2, Sparkles
-} from 'lucide-react';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Target from 'lucide-react/dist/esm/icons/target';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Blocks from 'lucide-react/dist/esm/icons/blocks';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { useSocialFeatures } from '@/hooks/social/useSocialFeatures';
 import { cn } from '@/lib/utils/utils';
 import { useTranslation } from 'react-i18next';

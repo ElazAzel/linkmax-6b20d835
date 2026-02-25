@@ -5,7 +5,8 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { MapPin, Globe } from 'lucide-react';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Globe from 'lucide-react/dist/esm/icons/globe';
 
 interface GeoData {
   country: string;

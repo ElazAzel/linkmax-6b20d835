@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Trophy, Lock, X, ChevronRight, Sparkles } from 'lucide-react';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import X from 'lucide-react/dist/esm/icons/x';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { cn } from '@/lib/utils/utils';
 import { useAchievements } from '@/hooks/user/useAchievements';
 import type { Achievement } from '@/types/achievements';

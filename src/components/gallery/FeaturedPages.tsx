@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import { Button } from '@/components/ui/button';
 import { GalleryPageCard } from './GalleryPageCard';
 import type { GalleryPage } from '@/services/gallery';

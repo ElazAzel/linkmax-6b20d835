@@ -33,19 +33,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  Trash2,
-  MessageSquare,
-  PhoneCall,
-  Video,
-  FileText,
-  Send,
-  Tag
-} from 'lucide-react';
+import User from 'lucide-react/dist/esm/icons/user';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import PhoneCall from 'lucide-react/dist/esm/icons/phone-call';
+import Video from 'lucide-react/dist/esm/icons/video';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Send from 'lucide-react/dist/esm/icons/send';
+import Tag from 'lucide-react/dist/esm/icons/tag';
 import type { Lead } from '@/hooks/crm/useLeads';
 
 interface LeadDetailsProps {

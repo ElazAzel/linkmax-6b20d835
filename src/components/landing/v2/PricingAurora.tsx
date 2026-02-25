@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X } from "lucide-react";
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
 import { cn } from "@/lib/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

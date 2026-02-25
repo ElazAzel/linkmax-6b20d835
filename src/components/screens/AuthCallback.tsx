@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/platform/supabase/client";
-import { Loader2 } from "lucide-react";
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 
 export default function AuthCallback() {
     const navigate = useNavigate();

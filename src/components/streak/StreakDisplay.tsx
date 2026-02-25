@@ -1,5 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Flame, Trophy, Gift, Calendar, TrendingUp, X } from 'lucide-react';
+import Flame from 'lucide-react/dist/esm/icons/flame';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';

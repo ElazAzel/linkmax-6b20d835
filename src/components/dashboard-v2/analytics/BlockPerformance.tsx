@@ -7,7 +7,11 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Minus, ExternalLink, Target } from 'lucide-react';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Minus from 'lucide-react/dist/esm/icons/minus';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Target from 'lucide-react/dist/esm/icons/target';
 import { cn } from '@/lib/utils/utils';
 import type { BlockStats } from '@/hooks/analytics/usePageAnalytics';
 

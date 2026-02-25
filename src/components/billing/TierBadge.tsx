@@ -1,5 +1,6 @@
 import React from 'react';
-import { Crown, Zap } from 'lucide-react';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Zap from 'lucide-react/dist/esm/icons/zap';
 import { Badge } from '@/components/ui/badge';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 

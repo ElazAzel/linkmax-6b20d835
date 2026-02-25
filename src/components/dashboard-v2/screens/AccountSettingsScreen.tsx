@@ -8,26 +8,24 @@ import { useNavigate } from 'react-router-dom';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  User,
-  Bell,
-  Shield,
-  Globe,
-  LogOut,
-  ChevronRight,
-  Crown,
-  Check,
-  Coins,
-  Trophy,
-  Users,
-  LayoutTemplate,
-  Save,
-  Link2,
-  MessageCircle,
-  Mail,
-  CreditCard,
-  Lock,
-} from 'lucide-react';
+import User from 'lucide-react/dist/esm/icons/user';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Coins from 'lucide-react/dist/esm/icons/coins';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Users from 'lucide-react/dist/esm/icons/users';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

@@ -7,18 +7,16 @@
 import { memo, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import {
-  Eye,
-  Share2,
-  PenTool,
-  Crown,
-  ExternalLink,
-  Sparkles,
-  LayoutTemplate,
-  Store,
-  Users,
-  History,
-} from 'lucide-react';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
+import Store from 'lucide-react/dist/esm/icons/store';
+import Users from 'lucide-react/dist/esm/icons/users';
+import History from 'lucide-react/dist/esm/icons/history';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

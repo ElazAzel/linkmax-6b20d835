@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { X, Filter } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import Filter from 'lucide-react/dist/esm/icons/filter';
 
 export interface AnalyticsFilters {
   devices: string[];

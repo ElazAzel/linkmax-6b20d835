@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Heart, Copy, Crown, Eye } from 'lucide-react';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Eye from 'lucide-react/dist/esm/icons/eye';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

@@ -4,15 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import {
-  Scissors,
-  Heart,
-  Brain,
-  ArrowRight,
-  Bell,
-  MessageSquare,
-  BarChart3
-} from 'lucide-react';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 
 interface TargetAudienceSectionProps {
   isVisible: boolean;

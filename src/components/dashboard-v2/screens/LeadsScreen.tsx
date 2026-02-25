@@ -1,6 +1,11 @@
 import { memo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Inbox, Filter, Search, MoreHorizontal, CheckCircle, Clock } from 'lucide-react';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import Filter from 'lucide-react/dist/esm/icons/filter';
+import Search from 'lucide-react/dist/esm/icons/search';
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import Clock from 'lucide-react/dist/esm/icons/clock';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';

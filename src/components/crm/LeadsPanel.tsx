@@ -16,18 +16,16 @@ import {
   SheetTitle,
   SheetDescription
 } from '@/components/ui/sheet';
-import {
-  Users,
-  Plus,
-  Search,
-  Phone,
-  Mail,
-  Calendar,
-  Crown,
-  Download,
-  BarChart3,
-  CalendarDays
-} from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Download from 'lucide-react/dist/esm/icons/download';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import { toast } from 'sonner';
 import { AddLeadDialog } from './AddLeadDialog';
 import { LeadDetails } from './LeadDetails';

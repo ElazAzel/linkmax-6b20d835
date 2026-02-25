@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Trophy, Users, Medal, Crown } from 'lucide-react';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Medal from 'lucide-react/dist/esm/icons/medal';
+import Crown from 'lucide-react/dist/esm/icons/crown';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';

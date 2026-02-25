@@ -5,7 +5,9 @@
  */
 import { memo, useState, ReactNode, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, AlertCircle, CheckCircle2 } from 'lucide-react';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
 

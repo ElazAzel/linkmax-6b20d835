@@ -2,7 +2,10 @@
  * StatCard - KPI/metric card component
  */
 import { memo } from 'react';
-import { LucideIcon, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import Minus from 'lucide-react/dist/esm/icons/minus';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';

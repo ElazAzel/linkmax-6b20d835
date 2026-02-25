@@ -5,11 +5,20 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  X, Users, UserPlus, Search, Check,
-  X as XIcon, UserMinus, Trophy,
-  Sparkles, Clock, ExternalLink, Heart, Gift, Activity
-} from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import Users from 'lucide-react/dist/esm/icons/users';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Check from 'lucide-react/dist/esm/icons/check';
+import XIcon from 'lucide-react/dist/esm/icons/x';
+import UserMinus from 'lucide-react/dist/esm/icons/user-minus';
+import Trophy from 'lucide-react/dist/esm/icons/trophy';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Activity from 'lucide-react/dist/esm/icons/activity';
 import { useFriends } from '@/hooks/user/useFriends';
 import { getUserPageSlug } from '@/services/friends';
 import { getPageByUserId, likeGalleryPage, unlikeGalleryPage } from '@/services/gallery';

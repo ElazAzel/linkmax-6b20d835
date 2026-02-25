@@ -4,7 +4,11 @@
  */
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Home, PenTool, Inbox, Settings, BarChart3 } from 'lucide-react';
+import Home from 'lucide-react/dist/esm/icons/home';
+import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
+import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 import { motion } from 'framer-motion';

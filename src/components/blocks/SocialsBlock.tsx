@@ -1,10 +1,28 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Instagram, Send, Youtube, Music, Twitter, Github, Linkedin, Facebook, Globe,
-  MessageCircle, Phone, Mail, Twitch, Dribbble, Figma, Slack,
-  Chrome, Rss, Link2, AtSign, MapPin, Calendar, Podcast
-} from 'lucide-react';
+import Instagram from 'lucide-react/dist/esm/icons/instagram';
+import Send from 'lucide-react/dist/esm/icons/send';
+import Youtube from 'lucide-react/dist/esm/icons/youtube';
+import Music from 'lucide-react/dist/esm/icons/music';
+import Twitter from 'lucide-react/dist/esm/icons/twitter';
+import Github from 'lucide-react/dist/esm/icons/github';
+import Linkedin from 'lucide-react/dist/esm/icons/linkedin';
+import Facebook from 'lucide-react/dist/esm/icons/facebook';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Twitch from 'lucide-react/dist/esm/icons/twitch';
+import Dribbble from 'lucide-react/dist/esm/icons/dribbble';
+import Figma from 'lucide-react/dist/esm/icons/figma';
+import Slack from 'lucide-react/dist/esm/icons/slack';
+import Chrome from 'lucide-react/dist/esm/icons/chrome';
+import Rss from 'lucide-react/dist/esm/icons/rss';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
+import AtSign from 'lucide-react/dist/esm/icons/at-sign';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Podcast from 'lucide-react/dist/esm/icons/podcast';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { SocialsBlock as SocialsBlockType } from '@/types/page';
 import { cn } from '@/lib/utils/utils';

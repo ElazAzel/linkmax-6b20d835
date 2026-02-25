@@ -4,7 +4,15 @@
  */
 import { useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Upload, X, Loader2, FileText, File, Image as ImageIcon, Video, Music } from 'lucide-react';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import X from 'lucide-react/dist/esm/icons/x';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import File from 'lucide-react/dist/esm/icons/file';
+import Image from 'lucide-react/dist/esm/icons/image';
+const ImageIcon = Image;
+import Video from 'lucide-react/dist/esm/icons/video';
+import Music from 'lucide-react/dist/esm/icons/music';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';

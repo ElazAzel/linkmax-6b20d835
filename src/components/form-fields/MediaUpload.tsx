@@ -1,5 +1,10 @@
 import { useState, useRef } from 'react';
-import { Upload, X, Loader2, CheckCircle, Crown, Sparkles } from 'lucide-react';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import X from 'lucide-react/dist/esm/icons/x';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

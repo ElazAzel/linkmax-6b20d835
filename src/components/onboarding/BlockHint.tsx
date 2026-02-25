@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { X, Lightbulb } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils/utils';

@@ -3,7 +3,7 @@
  */
 import { memo, ReactNode, isValidElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/utils';
 

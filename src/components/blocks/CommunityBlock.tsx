@@ -6,7 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
-import { Users, Crown, Star, Heart, Zap, Lock, ExternalLink } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Star from 'lucide-react/dist/esm/icons/star';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 interface CommunityBlockProps {
   block: CommunityBlockType;

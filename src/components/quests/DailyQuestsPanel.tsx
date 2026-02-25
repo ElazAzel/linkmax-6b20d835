@@ -1,4 +1,7 @@
-import { Check, Gift, Clock, Coins } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Gift from 'lucide-react/dist/esm/icons/gift';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Coins from 'lucide-react/dist/esm/icons/coins';
 import { useTranslation } from 'react-i18next';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils/utils';

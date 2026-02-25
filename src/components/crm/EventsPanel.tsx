@@ -17,20 +17,18 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import {
-  CalendarDays,
-  Users,
-  QrCode,
-  Download,
-  RefreshCw,
-  Search,
-  ChevronRight,
-  Clock,
-  MapPin,
-  Loader2,
-  FileSpreadsheet,
-  FileText,
-} from 'lucide-react';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
+import Users from 'lucide-react/dist/esm/icons/users';
+import QrCode from 'lucide-react/dist/esm/icons/qr-code';
+import Download from 'lucide-react/dist/esm/icons/download';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Search from 'lucide-react/dist/esm/icons/search';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import FileSpreadsheet from 'lucide-react/dist/esm/icons/file-spreadsheet';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 import { toast } from 'sonner';
 import { format, isPast } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';

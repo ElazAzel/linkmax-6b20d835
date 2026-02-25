@@ -5,34 +5,32 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Sparkles,
-  Scissors,
-  Camera,
-  Brain,
-  Dumbbell,
-  Music,
-  Palette,
-  GraduationCap,
-  Store,
-  Megaphone,
-  Heart,
-  ChefHat,
-  Plane,
-  Home,
-  PartyPopper,
-  Wrench,
-  MoreHorizontal,
-  Loader2,
-  ArrowRight,
-  ArrowLeft,
-  Laptop,
-  Crown,
-  Lock,
-  MousePointerClick,
-  MessageSquare,
-  CalendarCheck
-} from 'lucide-react';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
+import Music from 'lucide-react/dist/esm/icons/music';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import Store from 'lucide-react/dist/esm/icons/store';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import ChefHat from 'lucide-react/dist/esm/icons/chef-hat';
+import Plane from 'lucide-react/dist/esm/icons/plane';
+import Home from 'lucide-react/dist/esm/icons/home';
+import PartyPopper from 'lucide-react/dist/esm/icons/party-popper';
+import Wrench from 'lucide-react/dist/esm/icons/wrench';
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Laptop from 'lucide-react/dist/esm/icons/laptop';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Lock from 'lucide-react/dist/esm/icons/lock';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import CalendarCheck from 'lucide-react/dist/esm/icons/calendar-check';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { storage } from '@/lib/storage';

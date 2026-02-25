@@ -12,7 +12,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { Search, Loader2, Crown, Edit, Calendar, User, RefreshCw, Shield } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Edit from 'lucide-react/dist/esm/icons/edit';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import User from 'lucide-react/dist/esm/icons/user';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import Shield from 'lucide-react/dist/esm/icons/shield';
 import { format, addDays, addMonths, addYears } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 

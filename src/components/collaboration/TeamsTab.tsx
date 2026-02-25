@@ -3,10 +3,15 @@
 import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  ExternalLink, Settings, Loader2, Users, Copy,
-  UserPlus, Crown, Check, Link2
-} from 'lucide-react';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import Crown from 'lucide-react/dist/esm/icons/crown';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

@@ -4,20 +4,18 @@
 import { memo, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePageAnalytics } from '@/hooks/analytics/usePageAnalytics';
-import {
-  Eye,
-  MousePointerClick,
-  Users,
-  Sparkles,
-  ArrowRight,
-  Smartphone,
-  Monitor,
-  Globe,
-  TrendingUp,
-  ChartBar,
-  Target,
-  RefreshCw,
-} from 'lucide-react';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
+import Monitor from 'lucide-react/dist/esm/icons/monitor';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import ChartBar from 'lucide-react/dist/esm/icons/chart-bar';
+import Target from 'lucide-react/dist/esm/icons/target';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';

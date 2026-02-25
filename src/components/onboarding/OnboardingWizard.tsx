@@ -12,32 +12,30 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import {
-  Sparkles,
-  ArrowRight,
-  ArrowLeft,
-  Loader2,
-  Check,
-  Wand2,
-  Layout,
-  User,
-  Scissors,
-  Camera,
-  Brain,
-  Dumbbell,
-  Music,
-  Palette,
-  GraduationCap,
-  Store,
-  Heart,
-  ChefHat,
-  Plane,
-  Home,
-  PartyPopper,
-  Wrench,
-  MoreHorizontal,
-  Laptop,
-} from 'lucide-react';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
+import Layout from 'lucide-react/dist/esm/icons/layout';
+import User from 'lucide-react/dist/esm/icons/user';
+import Scissors from 'lucide-react/dist/esm/icons/scissors';
+import Camera from 'lucide-react/dist/esm/icons/camera';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Dumbbell from 'lucide-react/dist/esm/icons/dumbbell';
+import Music from 'lucide-react/dist/esm/icons/music';
+import Palette from 'lucide-react/dist/esm/icons/palette';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import Store from 'lucide-react/dist/esm/icons/store';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import ChefHat from 'lucide-react/dist/esm/icons/chef-hat';
+import Plane from 'lucide-react/dist/esm/icons/plane';
+import Home from 'lucide-react/dist/esm/icons/home';
+import PartyPopper from 'lucide-react/dist/esm/icons/party-popper';
+import Wrench from 'lucide-react/dist/esm/icons/wrench';
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
+import Laptop from 'lucide-react/dist/esm/icons/laptop';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';

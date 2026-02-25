@@ -3,10 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-    Wallet, TrendingUp, Clock, ArrowUpRight, ArrowDownLeft,
-    AlertCircle, ChevronRight, Loader2, DollarSign, Banknote
-} from 'lucide-react';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
+import ArrowDownLeft from 'lucide-react/dist/esm/icons/arrow-down-left';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
+import Banknote from 'lucide-react/dist/esm/icons/banknote';
 import { useAuth } from '@/hooks/user/useAuth';
 import { fintechService } from '@/services/fintech';
 import { format } from 'date-fns';

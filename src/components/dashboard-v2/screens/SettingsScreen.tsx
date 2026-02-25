@@ -4,10 +4,8 @@
  */
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  User,
-  FileText,
-} from 'lucide-react';
+import User from 'lucide-react/dist/esm/icons/user';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { PageSettingsTab } from './settings/PageSettingsTab';

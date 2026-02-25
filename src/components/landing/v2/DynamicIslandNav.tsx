@@ -4,7 +4,9 @@ import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import Menu from 'lucide-react/dist/esm/icons/menu';
+import X from 'lucide-react/dist/esm/icons/x';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 
 interface NavProps {

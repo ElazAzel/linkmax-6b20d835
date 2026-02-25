@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { List, ChevronRight } from 'lucide-react';
+import List from 'lucide-react/dist/esm/icons/list';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 
 export function TableOfContents() {
   const { t } = useTranslation();

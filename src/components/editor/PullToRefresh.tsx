@@ -1,5 +1,6 @@
 import { memo, ReactNode } from 'react';
-import { Loader2, ArrowDown } from 'lucide-react';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down';
 import { cn } from '@/lib/utils/utils';
 import { usePullToRefresh } from '@/hooks/ui/usePullToRefresh';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';

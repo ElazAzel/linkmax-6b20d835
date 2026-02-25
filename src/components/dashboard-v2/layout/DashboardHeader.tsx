@@ -4,7 +4,7 @@
  */
 import { memo, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/utils';
 

@@ -17,20 +17,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-  Calendar,
-  Clock,
-  User,
-  Phone,
-  Mail,
-  MessageSquare,
-  Check,
-  X,
-  RefreshCw,
-  CalendarDays,
-  Download,
-  CalendarPlus,
-} from 'lucide-react';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import User from 'lucide-react/dist/esm/icons/user';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Check from 'lucide-react/dist/esm/icons/check';
+import X from 'lucide-react/dist/esm/icons/x';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
+import Download from 'lucide-react/dist/esm/icons/download';
+import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
 import { toast } from 'sonner';
 import { format, isToday, isTomorrow, isPast, parseISO } from 'date-fns';
 import { ru, kk, enUS } from 'date-fns/locale';
