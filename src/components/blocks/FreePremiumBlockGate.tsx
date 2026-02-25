@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 'use client';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * FreePremiumBlockGate - Visual separation for Free vs Premium blocks

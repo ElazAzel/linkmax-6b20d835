@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 'use client';
+import { useNavigate } from 'react-router-dom';
 
 import type { CoverHeight, CoverGradient, AvatarSize, ShadowStyle, AvatarPosition } from "@/types/profile-editor";
 /**
