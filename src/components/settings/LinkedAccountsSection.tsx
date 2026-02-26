@@ -14,6 +14,7 @@ import Unlink from 'lucide-react/dist/esm/icons/unlink';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import CalendarSync from 'lucide-react/dist/esm/icons/calendar-sync';
 import { supabase } from '@/platform/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 
 
 import { cn } from '@/lib/utils/utils';
@@ -97,22 +98,15 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleLinkAccount = async (provider: 'google' | 'apple') => {
     setLinkingProvider(provider);
     try {
-      const { data, error } = await supabase.auth.linkIdentity({
-        provider: provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          ...(provider === 'google' ? {
-            queryParams: {
-              access_type: 'offline',
-              prompt: 'consent',
-            },
-          } : {}),
-        },
+      // Use lovable.auth.signInWithOAuth instead of supabase.auth.linkIdentity
+      // since manual linking is disabled
+      const { error } = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin,
       });
 
       if (error) {
         console.error('Link identity error:', error);
-        toast.error(error.message || t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
+        toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
         setLinkingProvider(null);
         return;
       }
