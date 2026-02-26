@@ -32,6 +32,16 @@
     - Simplified UI components by removing boilerplate `useEffect`, `useState`, and manual error handling, resulting in ~30% code reduction in affected views.
     - Fixed pre-existing type errors in `src/integrations/lovable/index.ts` to ensure a clean typecheck build.
 
+## Багфикс: Исправление "Белого экрана"
+Я выявил и исправил критические ошибки, которые приводили к падению приложения при загрузке дашборда и публичных страниц:
+1. **SEOHead.tsx & PublicPage.tsx**: Добавлен безопасный доступ (`?.`) к объекту `seo` в `pageData`. Ранее прямое обращение к `pageData.seo.title` вызывало `TypeError`, если данные SEO не были загружены или отсутствовали.
+2. **DashboardV2.tsx**: Исправлен `lazy import` для `TeamManagementScreen`. Ранее возникло несоответствие (default export vs named import), что блокировало загрузку дашборда.
+3. **src/services/pages.ts**:
+   - Исправлена логика маппинга в функциях `loadPageBySlug` и `loadPageByCustomDomain`.
+   - Добавлена недостающая вспомогательная функция `mapExperimentData`.
+   - Добавлен маппинг `organization_id`, необходимый для работы командных функций.
+4. **TeamManagementScreen**: Компонент переведен на использование `named export` для соответствия паттерну остальных экранов дашборда.
+
 ### Added (Optimizations & Custom Domains — 2026-02-22)
 - **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.
 - **Custom Domains**: Полная интеграция. Создан интерфейс в Dashboard для привязки доменов с живой проверкой DNS (CNAME) через новую Edge Function `verify-domain`. Добавлены визуальные индикаторы статуса подключения.

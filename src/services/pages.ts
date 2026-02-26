@@ -79,6 +79,21 @@ function wrapError(error: unknown): Error {
 }
 
 /**
+ * Map raw database experiment data to PageExperiment type
+ */
+function mapExperimentData(experiments: any[]): PageExperiment[] {
+  return (experiments || []).map((exp: any) => ({
+    id: exp.id,
+    page_id: exp.page_id,
+    name: exp.name,
+    status: exp.status,
+    started_at: exp.started_at,
+    ended_at: exp.ended_at,
+    variants: exp.experiment_variants || []
+  }));
+}
+
+/**
  * Get user's slug from their profile or generate one
  */
 async function getUserSlug(userId: string): Promise<string> {
@@ -269,44 +284,36 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       return { data: null, error: wrapError(pageError) };
     }
 
-    if (!page) {
-      return { data: null, error: new Error('Page not found') };
-    }
-
-    // Increment view count (fire and forget)
-    void supabase.rpc('increment_view_count', { page_slug: slug });
+    if (pageError) return { data: null, error: wrapError(pageError) };
+    if (!page) return { data: null, error: null };
 
     const pg = page as any;
-    const blocks = pg.blocks as unknown as DbBlock[];
 
-    // Map experiments and variants
-    const experiments: PageExperiment[] = (pg.experiments || []).map((exp: any) => ({
-      id: exp.id,
-      page_id: exp.page_id,
-      name: exp.name,
-      status: exp.status,
-      started_at: exp.started_at,
-      ended_at: exp.ended_at,
-      variants: exp.experiment_variants || []
-    }));
+    // Increment view count (fire and forget)
+    void supabase.rpc('increment_view_count', { page_slug: pg.slug });
+
+    const blocks = pg.blocks || [];
+    const experiments = mapExperimentData(pg.experiments || []);
 
     const pageData: PageData = {
       id: pg.id,
       userId: pg.user_id,
       slug: pg.slug,
+      custom_domain: pg.custom_domain || undefined,
       blocks: convertDbBlocksToBlocks(blocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b) => b.is_premium),
+      isPremium: blocks.some((b: any) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: (pg as unknown as { grid_config?: GridConfig }).grid_config || undefined,
-      niche: (pg as unknown as { niche?: string }).niche || 'other',
-      previewUrl: (pg as unknown as { preview_url?: string }).preview_url || undefined,
-      integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      gridConfig: pg.grid_config || undefined,
+      niche: pg.niche || 'other',
+      previewUrl: pg.preview_url || undefined,
+      integrations: pg.integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      organization_id: pg.organization_id || undefined,
       experiments
     };
 
@@ -319,40 +326,25 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
 /**
  * Load public page by custom domain
  */
-export async function loadPageByCustomDomain(domain: string): Promise<LoadPageResult> {
+export async function loadPageByCustomDomain(domain: string): Promise<{ data: PageData | null; error: Error | null }> {
   try {
-    const { data: page, error: pageError }: any = await (supabase as any)
+    const { data: page, error: pageError } = await (supabase as any)
       .from('pages')
-      .select('*, blocks(*), experiments(*, experiment_variants(*))')
+      .select('*, blocks(*), private_page_data(*), experiments(*, experiment_variants(*))')
       .eq('custom_domain', domain)
       .eq('is_published', true)
       .maybeSingle();
 
-    if (pageError) {
-      return { data: null, error: wrapError(pageError) };
-    }
-
-    if (!page) {
-      return { data: null, error: new Error('Page not found') };
-    }
-
-    // Increment view count (fire and forget)
-    // Note: increment_view_count takes page_slug, we can use the slug from the found page
-    void supabase.rpc('increment_view_count', { page_slug: (page as any).slug });
+    if (pageError) return { data: null, error: wrapError(pageError) };
+    if (!page) return { data: null, error: null };
 
     const pg = page as any;
-    const blocks = pg.blocks as unknown as DbBlock[];
 
-    // Map experiments and variants
-    const experiments: PageExperiment[] = (pg.experiments || []).map((exp: any) => ({
-      id: exp.id,
-      page_id: exp.page_id,
-      name: exp.name,
-      status: exp.status,
-      started_at: exp.started_at,
-      ended_at: exp.ended_at,
-      variants: exp.experiment_variants || []
-    }));
+    // Increment view count (fire and forget)
+    void supabase.rpc('increment_view_count', { page_slug: pg.slug });
+
+    const blocks = pg.blocks || [];
+    const experiments = mapExperimentData(pg.experiments || []);
 
     const pageData: PageData = {
       id: pg.id,
@@ -362,16 +354,17 @@ export async function loadPageByCustomDomain(domain: string): Promise<LoadPageRe
       blocks: convertDbBlocksToBlocks(blocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b) => b.is_premium),
+      isPremium: blocks.some((b: any) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
-      gridConfig: (pg as unknown as { grid_config?: GridConfig }).grid_config || undefined,
-      niche: (pg as unknown as { niche?: string }).niche || 'other',
-      previewUrl: (pg as unknown as { preview_url?: string }).preview_url || undefined,
-      integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
+      gridConfig: pg.grid_config || undefined,
+      niche: pg.niche || 'other',
+      previewUrl: pg.preview_url || undefined,
+      integrations: pg.integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      organization_id: pg.organization_id || undefined,
       experiments
     };
 

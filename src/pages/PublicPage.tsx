@@ -152,7 +152,7 @@ export default function PublicPage() {
 
     if (navigator.share) {
       navigator.share({
-        title: pageData?.seo.title || pageData?.seo.description || t('share.defaultTitle', 'Check out my page'),
+        title: pageData?.seo?.title || pageData?.seo?.description || t('share.defaultTitle', 'Check out my page'),
         url: currentUrl,
       }).catch(() => {
         navigator.clipboard.writeText(currentUrl);
@@ -325,7 +325,7 @@ export default function PublicPage() {
               {slug && <ChatbotWidget pageSlug={slug} />}
 
               {/* Analytics Tracking Scripts */}
-              {pageData.integrations && (
+              {pageData?.integrations && (
                 <TrackingScripts integrations={pageData.integrations} pageId={pageData.id} />
               )}
             </div>

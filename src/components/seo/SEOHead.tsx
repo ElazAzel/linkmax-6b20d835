@@ -38,10 +38,10 @@ function getProfileInfo(blocks: Block[]): { name?: string; bio?: string; avatar?
 export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
   useEffect(() => {
     const profileInfo = getProfileInfo(pageData.blocks);
-    const pageTitle = pageData.seo.title || profileInfo.name || 'lnkmx Page';
-    
+    const pageTitle = pageData.seo?.title || profileInfo.name || 'lnkmx Page';
+
     // Update document title - include name + role for clear OG
-    const fullTitle = profileInfo.name 
+    const fullTitle = profileInfo.name
       ? `${profileInfo.name}${profileInfo.bio ? ` - ${profileInfo.bio.slice(0, 50)}` : ''}`
       : pageTitle;
     document.title = fullTitle;
@@ -50,7 +50,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
     const setMetaTag = (name: string, content: string, property = false) => {
       const attr = property ? 'property' : 'name';
       let meta = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement;
-      
+
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute(attr, name);
@@ -80,12 +80,12 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
     };
 
     // Basic meta tags
-    const description = pageData.seo.description || profileInfo.bio || `${profileInfo.name || 'This page'} on lnkmx`;
+    const description = pageData.seo?.description || profileInfo.bio || `${profileInfo.name || 'This page'} on lnkmx`;
     setMetaTag('description', description);
     setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
     setMetaTag('googlebot', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
-    
-    if (pageData.seo.keywords?.length) {
+
+    if (pageData.seo?.keywords?.length) {
       setMetaTag('keywords', pageData.seo.keywords.join(', '));
     } else {
       removeMetaTag('keywords');
@@ -97,7 +97,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
     setMetaTag('og:description', description, true);
     setMetaTag('og:url', pageUrl, true);
     setMetaTag('og:site_name', 'lnkmx', true);
-    
+
     // Use avatar or a default image for OG
     const imageUrl = profileInfo.avatar || pageData.previewUrl || 'https://lnkmx.my/favicon.jpg';
     setMetaTag('og:image', imageUrl, true);
@@ -127,7 +127,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
       jsonLd.id = 'page-schema';
       document.head.appendChild(jsonLd);
     }
-    
+
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
@@ -156,7 +156,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
       // Reset to defaults
       document.title = 'lnkmx - AI Bio Page Builder';
       setMetaTag('description', 'Create your bio page in 2 minutes with AI. For experts, freelancers and small business.');
-      
+
       // Remove page-specific tags
       const tagsToRemove = [
         'meta[property="og:type"]',
@@ -168,7 +168,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
         'link[rel="alternate"]',
         'script#page-schema'
       ];
-      
+
       tagsToRemove.forEach(selector => {
         const el = document.querySelector(selector);
         if (el) el.remove();

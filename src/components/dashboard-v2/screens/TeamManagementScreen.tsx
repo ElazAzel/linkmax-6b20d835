@@ -24,7 +24,7 @@ import {
 import { UserPlus, Settings, Trash2, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function TeamManagementScreen() {
+export const TeamManagementScreen = function TeamManagementScreen() {
     const { currentOrg } = useOrganizations();
     const [members, setMembers] = useState<OrganizationMember[]>([]);
     const [loading, setLoading] = useState(true);

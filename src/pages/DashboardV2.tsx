@@ -36,7 +36,7 @@ const SettingsScreen = lazy(() => import('@/components/dashboard-v2/screens/Sett
 const EventsScreen = lazy(() => import('@/components/dashboard-v2/screens/EventsScreen').then(m => ({ default: m.EventsScreen })));
 const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/EventDetailScreen').then(m => ({ default: m.EventDetailScreen })));
 const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
-const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen'));
+const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen').then(m => ({ default: m.TeamManagementScreen })));
 
 // Screen loading fallback
 const ScreenLoader = () => (
