@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
-import { session } from '@/lib/storage';
+
 import { supabase } from '@/platform/supabase/client';
 import type { Json } from '@/platform/supabase/types';
 import { logger } from '@/lib/utils/logger';
@@ -40,15 +40,15 @@ interface LandingSession {
 
 function getOrCreateSession(): LandingSession {
   try {
-    const stored = session.get<LandingSession>(SESSION_KEY);
+    const stored = sessionStorage.getItem(SESSION_KEY);
     if (stored) {
-      return stored;
+      return JSON.parse(stored);
     }
   } catch {
     // Ignore
   }
 
-  const session: LandingSession = {
+  const newSession: LandingSession = {
     id: crypto.randomUUID?.() || Math.random().toString(36).substring(2),
     startedAt: Date.now(),
     maxScrollDepth: 0,
@@ -57,19 +57,19 @@ function getOrCreateSession(): LandingSession {
   };
 
   try {
-    session.set(SESSION_KEY, session);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
   } catch {
     // Ignore
   }
 
-  return session;
+  return newSession;
 }
 
 function updateSession(updates: Partial<LandingSession>) {
   try {
-    const session = getOrCreateSession();
-    const updated = { ...session, ...updates };
-    session.set(SESSION_KEY, updated);
+    const current = getOrCreateSession();
+    const updated = { ...current, ...updates };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(updated));
     return updated;
   } catch {
     return null;
@@ -139,7 +139,7 @@ export function useLandingAnalytics() {
     if (hasTrackedView.current || isBot() || isDevTraffic()) return;
 
     const sessionKey = 'lnkmx_landing_viewed';
-    const alreadyViewed = session.get(sessionKey);
+    const alreadyViewed = sessionStorage.getItem(sessionKey);
 
     if (!alreadyViewed) {
       trackLandingEvent({
@@ -151,7 +151,7 @@ export function useLandingAnalytics() {
           utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign'),
         }
       });
-      session.set(sessionKey, 'true');
+      sessionStorage.setItem(sessionKey, 'true');
       hasTrackedView.current = true;
     }
   }, []);

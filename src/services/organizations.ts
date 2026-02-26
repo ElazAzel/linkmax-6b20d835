@@ -1,4 +1,4 @@
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/utils/logger';
 
 export type OrganizationRole = 'owner' | 'admin' | 'editor' | 'viewer';
@@ -26,7 +26,7 @@ export interface OrganizationMember {
 
 export const organizationsService = {
     async getMyOrganizations(): Promise<Organization[]> {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
             .from('organizations')
             .select('*')
             .order('created_at', { ascending: false });
@@ -39,7 +39,7 @@ export const organizationsService = {
     },
 
     async getOrganizationMembers(orgId: string): Promise<OrganizationMember[]> {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
             .from('organization_members')
             .select(`
         *,
@@ -62,7 +62,7 @@ export const organizationsService = {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return { data: null, error: 'Not authenticated' };
 
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
             .from('organizations')
             .insert({ name, owner_id: user.id })
             .select()
@@ -71,7 +71,7 @@ export const organizationsService = {
         if (error) return { data: null, error };
 
         // Add owner to members
-        await supabase.from('organization_members').insert({
+        await (supabase as any).from('organization_members').insert({
             org_id: data.id,
             user_id: user.id,
             role: 'owner'
@@ -83,7 +83,7 @@ export const organizationsService = {
     async inviteMember(orgId: string, email: string, role: OrganizationRole = 'viewer'): Promise<{ success: boolean, error: any }> {
         // Note: In a real app, this would use organization_invitations table
         // For now, we'll try to find user by email and add directly if they exist
-        const { data: userData, error: userError } = await supabase
+        const { data: userData, error: userError } = await (supabase as any)
             .from('user_profiles')
             .select('id')
             .eq('email', email) // This assumes email is public in profiles or we use a more complex auth search
@@ -93,7 +93,7 @@ export const organizationsService = {
             return { success: false, error: 'User not found or email is not linked to an account' };
         }
 
-        const { error } = await supabase.from('organization_members').insert({
+        const { error } = await (supabase as any).from('organization_members').insert({
             org_id: orgId,
             user_id: userData.id,
             role

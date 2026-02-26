@@ -18,17 +18,17 @@ function hashString(str: string): number {
  * Hook to resolve which blocks to show based on active experiments
  */
 export function usePageExperiments(pageData: PageData | null, visitorId: string | null) {
-    const resolvedBlocks = useMemo(() => {
-        if (!pageData || !pageData.blocks) return [];
+    const resolvedBlocks = useMemo((): { blocks: Block[]; assignments: Array<{ experimentId: string; variantLabel: string }> } => {
+        if (!pageData || !pageData.blocks) return { blocks: [], assignments: [] };
         if (!pageData.experiments || pageData.experiments.length === 0) {
-            return pageData.blocks;
+            return { blocks: pageData.blocks, assignments: [] };
         }
 
         const { blocks, experiments } = pageData;
         const runningExperiments = experiments.filter(exp => exp.status === 'running');
 
         if (runningExperiments.length === 0) {
-            return blocks;
+            return { blocks, assignments: [] };
         }
 
         // Map of base block ID to the resolved variant block

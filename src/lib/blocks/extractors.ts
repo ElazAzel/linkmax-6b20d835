@@ -232,11 +232,11 @@ export function extractSocialsPipeline(text: string): ParsedSocial[] {
         const contextRegex = new RegExp(`${shortcut}[:\\s.-]*@([a-zA-Z0-9_.]+)`, 'gi');
         let contextMatch;
         while ((contextMatch = contextRegex.exec(text)) !== null) {
-            const baseUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
-            if (platform === 'telegram') baseUrl = 'https://t.me/';
-            if (platform === 'tiktok') baseUrl = 'https://tiktok.com/@';
+            let resolvedUrl = `https://${SOCIAL_PLATFORMS[shortcut] === 'x' ? 'x' : SOCIAL_PLATFORMS[shortcut]}.com/`;
+            if (platform === 'telegram') resolvedUrl = 'https://t.me/';
+            if (platform === 'tiktok') resolvedUrl = 'https://tiktok.com/@';
 
-            results.push({ platform, url: `${baseUrl}${contextMatch[1]}` });
+            results.push({ platform, url: `${resolvedUrl}${contextMatch[1]}` });
             break; // Stop looking for this platform once found
         }
     }

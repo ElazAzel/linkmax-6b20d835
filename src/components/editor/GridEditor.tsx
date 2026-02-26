@@ -31,7 +31,7 @@ import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-import { ExperimentSetupDialog } from './dialogs/ExperimentSetupDialog';
+import { ExperimentSetupDialog } from '@/components/dashboard-v2/dialogs/ExperimentSetupDialog';
 import { cn } from '@/lib/utils/utils';
 import type { Block, ProfileBlock, GridConfig } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
@@ -489,7 +489,7 @@ export const GridEditor = memo(function GridEditor({
         <ExperimentSetupDialog
           isOpen={!!experimentBlock}
           onOpenChange={(open) => !open && setExperimentBlock(null)}
-          pageId={profileBlock?.page_id || ''}
+          pageId={(profileBlock as any)?.page_id || ''}
           block={experimentBlock}
         />
       )}

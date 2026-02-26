@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import type { PageExperiment, BlockVariation } from '@/types/page';
-import { wrapError } from '@/lib/utils/error-utils';
 
 export interface VariantWithStats extends BlockVariation {
     stats: {
@@ -28,7 +27,7 @@ export function useExperimentAnalytics(pageId: string | null) {
 
         try {
             // 1. Fetch experiments with variants
-            const { data: exps, error: expError } = await supabase
+            const { data: exps, error: expError } = await (supabase as any)
                 .from('experiments')
                 .select('*, variants:experiment_variants(*)')
                 .eq('page_id', pageId)
@@ -37,9 +36,7 @@ export function useExperimentAnalytics(pageId: string | null) {
             if (expError) throw expError;
 
             // 2. Enrich with stats from analytics
-            // We fetch events related to these experiments
-            const enrichedExps = await Promise.all((exps || []).map(async (exp) => {
-                // Query analytics where metadata contains the experimentId
+            const enrichedExps = await Promise.all((exps || []).map(async (exp: any) => {
                 const { data: events, error: analError } = await supabase
                     .from('analytics')
                     .select('event_type, metadata')
@@ -59,11 +56,10 @@ export function useExperimentAnalytics(pageId: string | null) {
 
                 const eventsList = (events || []) as any[];
 
-                // Calculate stats per variant
                 const variantsWithStats = exp.variants.map((v: any) => {
-                    const vEvents = eventsList.filter(e => e.metadata?.variantLabel === v.variant_label);
-                    const views = vEvents.filter(e => e.event_type === 'view').length;
-                    const clicks = vEvents.filter(e => e.event_type === 'click').length;
+                    const vEvents = eventsList.filter((e: any) => e.metadata?.variantLabel === v.variant_label);
+                    const views = vEvents.filter((e: any) => e.event_type === 'view').length;
+                    const clicks = vEvents.filter((e: any) => e.event_type === 'click').length;
                     const ctr = views > 0 ? (clicks / views) * 100 : 0;
 
                     return {
@@ -80,7 +76,7 @@ export function useExperimentAnalytics(pageId: string | null) {
 
             setExperiments(enrichedExps);
         } catch (err: any) {
-            setError(wrapError(err));
+            setError(err instanceof Error ? err : new Error(String(err)));
             console.error('Error fetching experiment analytics:', err);
         } finally {
             setLoading(false);
