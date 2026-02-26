@@ -275,7 +275,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
   try {
     const { data: page, error: pageError } = await supabase
       .from('pages')
-      .select('*, blocks(*), experiments(*, experiment_variants(*))')
+      .select('*, blocks(*)')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle();
@@ -330,7 +330,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
   try {
     const { data: page, error: pageError } = await (supabase as any)
       .from('pages')
-      .select('*, blocks(*), private_page_data(*), experiments(*, experiment_variants(*))')
+      .select('*, blocks(*), private_page_data(*)')
       .eq('custom_domain', domain)
       .eq('is_published', true)
       .maybeSingle();
@@ -381,7 +381,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
   try {
     const { data: page, error: pageError } = await supabase
       .from('pages')
-      .select('*, blocks(*), private_page_data(*), experiments(*, experiment_variants(*))')
+      .select('*, blocks(*), private_page_data(*)')
       .eq('user_id', userId)
       .maybeSingle();
 
