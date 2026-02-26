@@ -1,6 +1,5 @@
-import { supabase } from '@/platform/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import type { PageExperiment, BlockVariation, Block } from '@/types/page';
-import { wrapError } from '@/lib/utils/error-utils';
 
 /**
  * Create a new experiment with initial variants
@@ -13,7 +12,7 @@ export async function createExperiment(
 ) {
     try {
         // 1. Create the experiment
-        const { data: experiment, error: expError } = await supabase
+        const { data: experiment, error: expError } = await (supabase as any)
             .from('experiments')
             .insert({
                 page_id: pageId,
@@ -34,19 +33,19 @@ export async function createExperiment(
             traffic_weight: v.traffic_weight
         }));
 
-        const { error: varError } = await supabase
+        const { error: varError } = await (supabase as any)
             .from('experiment_variants')
             .insert(variantsToInsert);
 
         if (varError) {
             // Cleanup experiment if variants fail
-            await supabase.from('experiments').delete().eq('id', experiment.id);
+            await (supabase as any).from('experiments').delete().eq('id', experiment.id);
             throw varError;
         }
 
         return { data: experiment, error: null };
-    } catch (error) {
-        return { data: null, error: wrapError(error) };
+    } catch (error: any) {
+        return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
     }
 }
 
@@ -65,7 +64,7 @@ export async function updateExperimentStatus(
             updateData.ended_at = new Date().toISOString();
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
             .from('experiments')
             .update(updateData)
             .eq('id', experimentId)
@@ -75,7 +74,7 @@ export async function updateExperimentStatus(
         if (error) throw error;
         return { data, error: null };
     } catch (error) {
-        return { data: null, error: wrapError(error) };
+        return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
     }
 }
 
@@ -84,7 +83,7 @@ export async function updateExperimentStatus(
  */
 export async function deleteExperiment(experimentId: string) {
     try {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
             .from('experiments')
             .delete()
             .eq('id', experimentId);
@@ -92,7 +91,7 @@ export async function deleteExperiment(experimentId: string) {
         if (error) throw error;
         return { error: null };
     } catch (error) {
-        return { error: wrapError(error) };
+        return { error: error instanceof Error ? error : new Error(String(error)) };
     }
 }
 
@@ -106,7 +105,7 @@ export async function setWinningVariant(
 ) {
     try {
         // 1. Mark experiment as ended with winner
-        const { data: experiment, error: expError } = await supabase
+        const { data: experiment, error: expError } = await (supabase as any)
             .from('experiments')
             .update({
                 status: 'ended',
@@ -126,8 +125,8 @@ export async function setWinningVariant(
                 const { error: blockError } = await supabase
                     .from('blocks')
                     .update({
-                        data: variant.block_data
-                    })
+                        content: variant.block_data
+                    } as any)
                     .eq('id', variant.base_block_id);
 
                 if (blockError) throw blockError;
@@ -136,6 +135,6 @@ export async function setWinningVariant(
 
         return { data: experiment, error: null };
     } catch (error) {
-        return { data: null, error: wrapError(error) };
+        return { data: null, error: error instanceof Error ? error : new Error(String(error)) };
     }
 }
