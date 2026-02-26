@@ -772,6 +772,24 @@ export type Database = {
         }
         Relationships: []
       }
+      i18n_translations: {
+        Row: {
+          data: Json
+          lang_code: string
+          updated_at: string
+        }
+        Insert: {
+          data?: Json
+          lang_code: string
+          updated_at?: string
+        }
+        Update: {
+          data?: Json
+          lang_code?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lead_interactions: {
         Row: {
           content: string
@@ -905,6 +923,62 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          org_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          org_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          org_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          slug: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          slug?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          slug?: string | null
+        }
+        Relationships: []
       }
       page_boosts: {
         Row: {
