@@ -1,7 +1,9 @@
 # Changelog
 
 ## [Unreleased]
-* **Team Collaboration & Organizations:** Foundational RBAC system allowing creators to manage sites via Organizations. Includes member roles (Owner, Admin, Editor, Viewer), organization switching UI in the sidebar, and a dedicated Team Management screen. Existing creators are automatically migrated to a "Personal Organization" structure.
+* **Team Collaboration & Organizations**: Реализована поддержка мульти-аккаунтов, ролей и командной работы. Foundational RBAC system allowing creators to manage sites via Organizations. Includes member roles (Owner, Admin, Editor, Viewer), organization switching UI in the sidebar, and a dedicated Team Management screen. Existing creators are automatically migrated to a "Personal Organization" structure.
+* **Bugfix (Critical)**: Исправлены `TypeError` в `SEOHead` и `PublicPage`, предотвращающие "белый экран".
+* **Bugfix (Dashboard)**: Исправлен импорт модулей в `DashboardV2`, восстановлена загрузка экранов.
 * **White-label Mode:** Pro users can now fully customize their public pages by removing platform branding ("Made with lnkmx") and setting custom favicons.
 * **A/B Testing for Blocks:** Creators can now run experiments on individual blocks (links, buttons, carousels) with multi-variant testing, traffic weight allocation, and real-time conversion tracking in the Insights dashboard.
 * **Dynamic Pricing:** Subscriptions are now dynamically calculated in KZT from base USD prices ($8.9, $7.9, $5.9) using real-time API from the National Bank of Kazakhstan.
