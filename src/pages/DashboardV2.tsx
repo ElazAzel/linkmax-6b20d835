@@ -37,6 +37,9 @@ const EventsScreen = lazy(() => import('@/components/dashboard-v2/screens/Events
 const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/EventDetailScreen').then(m => ({ default: m.EventDetailScreen })));
 const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
 const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen').then(m => ({ default: m.TeamManagementScreen })));
+const ZoneDealsScreen = lazy(() => import('@/components/zones/ZoneDealsScreen').then(m => ({ default: m.ZoneDealsScreen })));
+const ZoneContactsScreen = lazy(() => import('@/components/zones/ZoneContactsScreen').then(m => ({ default: m.ZoneContactsScreen })));
+const ZoneSettingsScreen = lazy(() => import('@/components/zones/ZoneSettingsScreen').then(m => ({ default: m.ZoneSettingsScreen })));
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -84,7 +87,7 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-deals' | 'zone-contacts' | 'zone-settings';
 
 export default function DashboardV2() {
   const navigate = useNavigate();

@@ -2056,6 +2056,500 @@ export type Database = {
         }
         Relationships: []
       }
+      zone_audit_log: {
+        Row: {
+          action: string
+          actor_user_id: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          metadata_json: Json | null
+          zone_id: string
+        }
+        Insert: {
+          action: string
+          actor_user_id: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata_json?: Json | null
+          zone_id: string
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata_json?: Json | null
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_audit_log_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_contacts: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          owner_user_id: string | null
+          phone: string | null
+          tags: string[] | null
+          telegram_user_id: string | null
+          telegram_username: string | null
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          owner_user_id?: string | null
+          phone?: string | null
+          tags?: string[] | null
+          telegram_user_id?: string | null
+          telegram_username?: string | null
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          owner_user_id?: string | null
+          phone?: string | null
+          tags?: string[] | null
+          telegram_user_id?: string | null
+          telegram_username?: string | null
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_contacts_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_deal_activities: {
+        Row: {
+          created_at: string
+          created_by: string
+          deal_id: string
+          happened_at: string
+          id: string
+          summary: string
+          type: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          deal_id: string
+          happened_at?: string
+          id?: string
+          summary: string
+          type?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          deal_id?: string
+          happened_at?: string
+          id?: string
+          summary?: string
+          type?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_deal_activities_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "zone_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deal_activities_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_deal_stages: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          is_default: boolean | null
+          name: string
+          order_index: number
+          zone_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          name: string
+          order_index?: number
+          zone_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          order_index?: number
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_deal_stages_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_deals: {
+        Row: {
+          assigned_to: string | null
+          contact_id: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          lost_reason: string | null
+          next_step: string | null
+          next_step_at: string | null
+          source: string | null
+          stage_id: string | null
+          status: string
+          title: string
+          updated_at: string
+          value_amount: number | null
+          zone_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          contact_id?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          lost_reason?: string | null
+          next_step?: string | null
+          next_step_at?: string | null
+          source?: string | null
+          stage_id?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          value_amount?: number | null
+          zone_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          contact_id?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          lost_reason?: string | null
+          next_step?: string | null
+          next_step_at?: string | null
+          source?: string | null
+          stage_id?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          value_amount?: number | null
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_deals_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "zone_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deals_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "zone_deal_stages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deals_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_invites: {
+        Row: {
+          created_at: string
+          created_by: string
+          email: string
+          expires_at: string
+          id: string
+          role: string
+          status: string
+          token: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          email: string
+          expires_at?: string
+          id?: string
+          role?: string
+          status?: string
+          token?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          role?: string
+          status?: string
+          token?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_invites_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_invoices: {
+        Row: {
+          amount: number
+          contact_id: string | null
+          created_at: string
+          currency: string
+          deal_id: string | null
+          description: string | null
+          id: string
+          paid_at: string | null
+          pay_url: string | null
+          robokassa_invoice_id: string | null
+          status: string
+          zone_id: string
+        }
+        Insert: {
+          amount: number
+          contact_id?: string | null
+          created_at?: string
+          currency?: string
+          deal_id?: string | null
+          description?: string | null
+          id?: string
+          paid_at?: string | null
+          pay_url?: string | null
+          robokassa_invoice_id?: string | null
+          status?: string
+          zone_id: string
+        }
+        Update: {
+          amount?: number
+          contact_id?: string | null
+          created_at?: string
+          currency?: string
+          deal_id?: string | null
+          description?: string | null
+          id?: string
+          paid_at?: string | null
+          pay_url?: string | null
+          robokassa_invoice_id?: string | null
+          status?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_invoices_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "zone_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_invoices_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "zone_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_invoices_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_members: {
+        Row: {
+          id: string
+          joined_at: string
+          role: string
+          status: string
+          user_id: string
+          zone_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          role?: string
+          status?: string
+          user_id: string
+          zone_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          role?: string
+          status?: string
+          user_id?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_members_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          last_payment_at: string | null
+          plan_code: string
+          plan_cycle: string
+          status: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          last_payment_at?: string | null
+          plan_code: string
+          plan_cycle?: string
+          status?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          last_payment_at?: string | null
+          plan_code?: string
+          plan_cycle?: string
+          status?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_subscriptions_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: true
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zones: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          grace_period_end: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          owner_user_id: string
+          plan_code: string
+          plan_cycle: string
+          plan_status: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          grace_period_end?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          owner_user_id: string
+          plan_code?: string
+          plan_cycle?: string
+          plan_status?: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          grace_period_end?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          owner_user_id?: string
+          plan_code?: string
+          plan_cycle?: string
+          plan_status?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       public_pages: {
@@ -2186,6 +2680,15 @@ export type Database = {
         Args: { p_slug: string; p_title: string; p_user_id: string }
         Returns: Json
       }
+      create_zone: {
+        Args: {
+          p_name: string
+          p_plan_code?: string
+          p_plan_cycle?: string
+          p_slug: string
+        }
+        Returns: string
+      }
       generate_referral_code: { Args: { p_user_id: string }; Returns: string }
       generate_unique_slug: { Args: { base_slug: string }; Returns: string }
       get_auth_user_email: { Args: never; Returns: string }
@@ -2221,6 +2724,8 @@ export type Database = {
       }
       get_user_org_ids: { Args: { p_user_id: string }; Returns: string[] }
       get_user_pages: { Args: { p_user_id: string }; Returns: Json }
+      get_user_zone_ids: { Args: { p_user_id: string }; Returns: string[] }
+      get_zone_member_limit: { Args: { p_plan_code: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -2237,6 +2742,14 @@ export type Database = {
         Returns: undefined
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
+      is_zone_admin: {
+        Args: { p_user_id: string; p_zone_id: string }
+        Returns: boolean
+      }
+      is_zone_member: {
+        Args: { p_user_id: string; p_zone_id: string }
+        Returns: boolean
+      }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
       process_marketplace_purchase:
