@@ -1753,6 +1753,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_integrations_status: {
+        Row: {
+          id: string
+          is_connected: boolean
+          provider: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          is_connected?: boolean
+          provider: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          is_connected?: boolean
+          provider?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_profiles: {
         Row: {
           avatar_url: string | null
@@ -2195,6 +2219,7 @@ export type Database = {
           username: string
         }[]
       }
+      get_user_org_ids: { Args: { p_user_id: string }; Returns: string[] }
       get_user_pages: { Args: { p_user_id: string }; Returns: Json }
       has_role: {
         Args: {
