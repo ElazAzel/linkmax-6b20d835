@@ -51,7 +51,7 @@ export function useZones() {
     const fetchMembers = async () => {
       const { data } = await supabase
         .from('zone_members')
-        .select('*, user_profiles!user_id(display_name, avatar_url, username)')
+        .select('*, user_profiles(display_name, avatar_url, username)')
         .eq('zone_id', currentZoneId);
       const mapped = (data || []).map((m: any) => ({
         ...m,
