@@ -3098,6 +3098,25 @@ export type Database = {
             }
             Returns: string
           }
+        | {
+            Args: {
+              p_avatar_style: Json
+              p_avatar_url: string
+              p_description: string
+              p_editor_mode?: string
+              p_favicon_url?: string
+              p_grid_config?: Json
+              p_hide_branding?: boolean
+              p_integrations?: Json
+              p_organization_id?: string
+              p_seo_meta: Json
+              p_slug: string
+              p_theme_settings: Json
+              p_title: string
+              p_user_id: string
+            }
+            Returns: string
+          }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
