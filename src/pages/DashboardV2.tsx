@@ -47,6 +47,8 @@ const ZoneSettingsScreen = lazy(() => import('@/components/zones/ZoneSettingsScr
 const ZoneInboxScreen = lazy(() => import('@/components/zones/ZoneInboxScreen').then(m => ({ default: m.ZoneInboxScreen })));
 const ZoneTasksScreen = lazy(() => import('@/components/zones/ZoneTasksScreen').then(m => ({ default: m.ZoneTasksScreen })));
 const ZoneDashboard = lazy(() => import('@/components/zones/ZoneDashboard').then(m => ({ default: m.ZoneDashboard })));
+const ZoneAutomationsScreen = lazy(() => import('@/components/zones/ZoneAutomationsScreen').then(m => ({ default: m.ZoneAutomationsScreen })));
+const ZoneInvoicesScreen = lazy(() => import('@/components/zones/ZoneInvoicesScreen').then(m => ({ default: m.ZoneInvoicesScreen })));
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -94,9 +96,9 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-settings';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-settings';
 
-const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
+const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-settings'];
 const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
@@ -609,6 +611,8 @@ function DashboardV2Inner() {
             {currentTab === 'zone-contacts' && canUseBusinessZone() && <ZoneContactsScreenWrapper />}
             {currentTab === 'zone-inbox' && canUseBusinessZone() && <ZoneInboxScreenWrapper />}
             {currentTab === 'zone-tasks' && canUseBusinessZone() && <ZoneTasksScreenWrapper />}
+            {currentTab === 'zone-automations' && canUseBusinessZone() && <ZoneAutomationsScreenWrapper />}
+            {currentTab === 'zone-invoices' && canUseBusinessZone() && <ZoneInvoicesScreenWrapper />}
             {currentTab === 'zone-settings' && canUseBusinessZone() && <ZoneSettingsScreenWrapper />}
           </Suspense>
         </DashboardLayout>
@@ -775,6 +779,18 @@ function ZoneSettingsScreenWrapper() {
   const { currentZone, members, myRole, refetch } = useZoneContext();
   if (!currentZone) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
   return <ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} />;
+}
+
+function ZoneAutomationsScreenWrapper() {
+  const { currentZoneId } = useZoneContext();
+  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneAutomationsScreen zoneId={currentZoneId} />;
+}
+
+function ZoneInvoicesScreenWrapper() {
+  const { currentZoneId } = useZoneContext();
+  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneInvoicesScreen zoneId={currentZoneId} />;
 }
 
 export default function DashboardV2() {

@@ -2097,6 +2097,50 @@ export type Database = {
           },
         ]
       }
+      zone_automations: {
+        Row: {
+          action_type: string
+          config: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          trigger_type: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          action_type: string
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          trigger_type: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          action_type?: string
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          trigger_type?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_automations_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_contacts: {
         Row: {
           created_at: string

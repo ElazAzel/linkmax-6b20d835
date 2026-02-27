@@ -32,6 +32,8 @@ import Contact from 'lucide-react/dist/esm/icons/contact';
 import Building2 from 'lucide-react/dist/esm/icons/building-2';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import ListTodo from 'lucide-react/dist/esm/icons/list-todo';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -85,6 +87,8 @@ const SECTIONS: SidebarSection[] = [
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
       { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие' },
       { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи' },
+      { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации' },
+      { id: 'zone-invoices', icon: Receipt, labelKey: 'dashboard.sidebar.zoneInvoices', defaultLabel: 'Инвойсы' },
       { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона' },
     ],
   },
@@ -123,7 +127,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
+  const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-settings'];
 
   const handleItemClick = (itemId: string) => {
     // Gate zone items behind business tier
