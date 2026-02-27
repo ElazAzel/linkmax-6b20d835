@@ -3,21 +3,26 @@ import { supabase } from '@/platform/supabase/client';
 import { useToast } from '@/hooks/ui/use-toast';
 import { useTranslation } from 'react-i18next';
 
+export type AdminPremiumTier = 'free' | 'pro' | 'business';
+
 export interface AdminUserData {
   id: string;
   email: string;
   username: string | null;
   display_name: string | null;
   is_premium: boolean;
+  premium_tier: string | null;
+  premium_expires_at: string | null;
   trial_ends_at: string | null;
   created_at: string;
   current_streak: number;
+  is_verified: boolean | null;
 }
 
 async function fetchUsers(): Promise<AdminUserData[]> {
   const { data, error } = await supabase
     .from('user_profiles')
-    .select('id, username, display_name, is_premium, trial_ends_at, created_at, current_streak')
+    .select('id, username, display_name, is_premium, premium_tier, premium_expires_at, trial_ends_at, created_at, current_streak, is_verified')
     .order('created_at', { ascending: false })
     .limit(100);
 
@@ -38,33 +43,80 @@ export function useAdminUsers() {
   });
 }
 
-export function useTogglePremium() {
+export function useSetUserTier() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: async ({ userId, currentStatus }: { userId: string; currentStatus: boolean }) => {
+    mutationFn: async ({ userId, tier }: { userId: string; tier: AdminPremiumTier }) => {
+      const updates: Record<string, unknown> = {
+        premium_tier: tier === 'free' ? null : tier,
+        is_premium: tier !== 'free',
+      };
+
+      // If downgrading to free, clear premium expiry
+      if (tier === 'free') {
+        updates.premium_expires_at = null;
+        updates.trial_ends_at = null;
+      }
+
       const { error } = await supabase
         .from('user_profiles')
-        .update({ is_premium: !currentStatus })
+        .update(updates)
         .eq('id', userId);
-      
+
       if (error) throw error;
-      return !currentStatus;
+      return tier;
     },
-    onSuccess: (newStatus) => {
+    onSuccess: (tier) => {
+      const tierNames: Record<string, string> = { free: 'Free', pro: 'Pro', business: 'Business' };
       toast({
-        title: t('admin.statusUpdated'),
-        description: newStatus ? t('admin.premiumEnabled') : t('admin.premiumDisabled'),
+        title: t('admin.statusUpdated') || 'Статус обновлён',
+        description: `Тариф: ${tierNames[tier]}`,
       });
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
       queryClient.invalidateQueries({ queryKey: ['admin-platform-stats'] });
     },
     onError: () => {
       toast({
-        title: t('admin.error'),
-        description: t('admin.updateFailed'),
+        title: t('admin.error') || 'Ошибка',
+        description: t('admin.updateFailed') || 'Не удалось обновить',
+        variant: 'destructive',
+      });
+    },
+  });
+}
+
+export function useSetPremiumExpiry() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const { t } = useTranslation();
+
+  return useMutation({
+    mutationFn: async ({ userId, days }: { userId: string; days: number }) => {
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + days);
+
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ premium_expires_at: expiresAt.toISOString() })
+        .eq('id', userId);
+
+      if (error) throw error;
+      return days;
+    },
+    onSuccess: (days) => {
+      toast({
+        title: 'Срок подписки установлен',
+        description: `+${days} дней`,
+      });
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+    },
+    onError: () => {
+      toast({
+        title: t('admin.error') || 'Ошибка',
+        description: t('admin.updateFailed') || 'Не удалось обновить',
         variant: 'destructive',
       });
     },
@@ -91,17 +143,49 @@ export function useExtendTrial() {
     },
     onSuccess: (days) => {
       toast({
-        title: t('admin.trialExtended'),
-        description: `+${days} ${t('admin.days')}`,
+        title: t('admin.trialExtended') || 'Триал продлён',
+        description: `+${days} ${t('admin.days') || 'дней'}`,
       });
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
     },
     onError: () => {
       toast({
-        title: t('admin.error'),
-        description: t('admin.extendFailed'),
+        title: t('admin.error') || 'Ошибка',
+        description: t('admin.extendFailed') || 'Не удалось продлить',
         variant: 'destructive',
       });
     },
   });
+}
+
+export function useToggleVerification() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async ({ userId, currentStatus }: { userId: string; currentStatus: boolean }) => {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ is_verified: !currentStatus })
+        .eq('id', userId);
+
+      if (error) throw error;
+      return !currentStatus;
+    },
+    onSuccess: (newStatus) => {
+      toast({
+        title: 'Верификация обновлена',
+        description: newStatus ? 'Пользователь верифицирован' : 'Верификация снята',
+      });
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+    },
+    onError: () => {
+      toast({ title: 'Ошибка', description: 'Не удалось обновить верификацию', variant: 'destructive' });
+    },
+  });
+}
+
+// Keep legacy export for backward compat
+export function useTogglePremium() {
+  return useSetUserTier();
 }
