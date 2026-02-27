@@ -1,24 +1,29 @@
 /**
- * ZoneSettingsScreen - Zone management (members, invites, billing, audit)
+ * ZoneSettingsScreen - Zone management (members, invites, billing, general, leave)
  */
 import { memo, useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import Users from 'lucide-react/dist/esm/icons/users';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
-import LinkIcon from 'lucide-react/dist/esm/icons/link';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Copy from 'lucide-react/dist/esm/icons/copy';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import UserMinus from 'lucide-react/dist/esm/icons/user-minus';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { toast } from 'sonner';
 import type { Zone, ZoneMember, ZoneInvite, ZoneMemberRole } from '@/types/zones';
 import { ZONE_PLANS, getPlanByCode, getMemberLimitFromPlan } from '@/types/zones';
@@ -37,13 +42,22 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
   onRefetch,
 }: ZoneSettingsScreenProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<string>('member');
   const [inviting, setInviting] = useState(false);
   const [invites, setInvites] = useState<ZoneInvite[]>([]);
+  const [leaveOpen, setLeaveOpen] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  const [removeMember, setRemoveMember] = useState<ZoneMember | null>(null);
+  const [removing, setRemoving] = useState(false);
+  const [zoneName, setZoneName] = useState(zone.name);
+  const [saving, setSaving] = useState(false);
 
   const isAdmin = myRole === 'owner' || myRole === 'admin';
+  const isOwner = myRole === 'owner';
   const memberLimit = getMemberLimitFromPlan(zone.plan_code);
   const plan = getPlanByCode(zone.plan_code);
 
@@ -69,7 +83,6 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
     }
     setInviting(true);
     try {
-      const user = (await supabase.auth.getUser()).data.user;
       const { error } = await supabase.from('zone_invites').insert({
         zone_id: zone.id,
         email: inviteEmail.trim().toLowerCase(),
@@ -102,6 +115,80 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       fetchInvites();
     } catch (err: any) {
       toast.error(err.message);
+    }
+  };
+
+  const handleLeaveZone = async () => {
+    setLeaving(true);
+    try {
+      const { data, error } = await supabase.rpc('leave_zone' as any, { p_zone_id: zone.id });
+      if (error) throw error;
+      const result = data as any;
+      if (!result.success) throw new Error(result.error === 'owner_cannot_leave' ? 'Владелец не может покинуть зону' : result.error);
+      toast.success(t('zones.settings.leftZone', 'You left the zone'));
+      await onRefetch();
+      navigate('/dashboard');
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setLeaving(false);
+      setLeaveOpen(false);
+    }
+  };
+
+  const handleRemoveMember = async () => {
+    if (!removeMember) return;
+    setRemoving(true);
+    try {
+      const { data, error } = await supabase.rpc('remove_zone_member' as any, {
+        p_zone_id: zone.id,
+        p_member_user_id: removeMember.user_id,
+      });
+      if (error) throw error;
+      const result = data as any;
+      if (!result.success) throw new Error(result.error);
+      toast.success(t('zones.settings.memberRemoved', 'Member removed'));
+      await onRefetch();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setRemoving(false);
+      setRemoveMember(null);
+    }
+  };
+
+  const handleRoleChange = async (memberUserId: string, newRole: string) => {
+    try {
+      const { data, error } = await supabase.rpc('update_zone_member_role' as any, {
+        p_zone_id: zone.id,
+        p_member_user_id: memberUserId,
+        p_new_role: newRole,
+      });
+      if (error) throw error;
+      const result = data as any;
+      if (!result.success) throw new Error(result.error);
+      toast.success(t('zones.settings.roleUpdated', 'Role updated'));
+      await onRefetch();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleSaveGeneral = async () => {
+    if (!zoneName.trim() || zoneName === zone.name) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('zones')
+        .update({ name: zoneName.trim() } as any)
+        .eq('id', zone.id);
+      if (error) throw error;
+      toast.success(t('zones.settings.saved', 'Settings saved'));
+      await onRefetch();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -146,9 +233,37 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
                       <p className="text-xs text-muted-foreground">{member.email || ''}</p>
                     </div>
                   </div>
-                  <Badge variant={member.role === 'owner' ? 'default' : 'secondary'} className="text-xs">
-                    {member.role}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    {isAdmin && member.role !== 'owner' && member.user_id !== user?.id ? (
+                      <>
+                        <Select
+                          value={member.role}
+                          onValueChange={(val) => handleRoleChange(member.user_id, val)}
+                        >
+                          <SelectTrigger className="w-24 h-7 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="member">Member</SelectItem>
+                            <SelectItem value="viewer">Viewer</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                          onClick={() => setRemoveMember(member)}
+                        >
+                          <UserMinus className="h-3.5 w-3.5" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Badge variant={member.role === 'owner' ? 'default' : 'secondary'} className="text-xs">
+                        {member.role}
+                      </Badge>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -230,12 +345,44 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
             <CardContent className="p-4 space-y-4">
               <div className="space-y-2">
                 <Label>{t('zones.name', 'Zone name')}</Label>
-                <Input defaultValue={zone.name} disabled={!isAdmin} />
+                <Input
+                  value={zoneName}
+                  onChange={(e) => setZoneName(e.target.value)}
+                  disabled={!isAdmin}
+                />
               </div>
               <div className="space-y-2">
                 <Label>{t('zones.slug', 'Slug')}</Label>
                 <Input defaultValue={zone.slug} disabled />
               </div>
+              {isAdmin && (
+                <Button onClick={handleSaveGeneral} disabled={saving || zoneName === zone.name || !zoneName.trim()}>
+                  {saving && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+                  {t('common.save', 'Save')}
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Leave / Danger zone */}
+          <Card className="border-destructive/30">
+            <CardContent className="p-4 space-y-3">
+              <p className="text-sm font-medium text-destructive">{t('zones.settings.dangerZone', 'Danger Zone')}</p>
+              {!isOwner && (
+                <Button
+                  variant="outline"
+                  className="w-full border-destructive/30 text-destructive hover:bg-destructive/10"
+                  onClick={() => setLeaveOpen(true)}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {t('zones.settings.leaveZone', 'Leave Zone')}
+                </Button>
+              )}
+              {isOwner && (
+                <p className="text-xs text-muted-foreground">
+                  {t('zones.settings.ownerCannotLeave', 'As the owner, you cannot leave the zone. Transfer ownership first or contact support.')}
+                </p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -250,7 +397,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} type="email" />
+              <Input value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} type="email" placeholder="user@example.com" />
             </div>
             <div className="space-y-2">
               <Label>{t('zones.settings.role', 'Role')}</Label>
@@ -266,10 +413,61 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setInviteOpen(false)}>{t('common.cancel', 'Cancel')}</Button>
-            <Button onClick={handleInvite} disabled={inviting || !inviteEmail.trim()}>{t('zones.settings.sendInvite', 'Send Invite')}</Button>
+            <Button onClick={handleInvite} disabled={inviting || !inviteEmail.trim()}>
+              {inviting && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+              {t('zones.settings.sendInvite', 'Send Invite')}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Leave Zone Confirm */}
+      <AlertDialog open={leaveOpen} onOpenChange={setLeaveOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('zones.settings.leaveConfirmTitle', 'Leave this zone?')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('zones.settings.leaveConfirmDesc', 'You will lose access to all zone data including deals, contacts, and messages. This action cannot be undone.')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleLeaveZone}
+              disabled={leaving}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {leaving && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+              {t('zones.settings.confirmLeave', 'Leave Zone')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Remove Member Confirm */}
+      <AlertDialog open={!!removeMember} onOpenChange={(open) => !open && setRemoveMember(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('zones.settings.removeMemberTitle', 'Remove member?')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('zones.settings.removeMemberDesc', 'This will remove {{name}} from the zone. They will lose access to all zone data.', {
+                name: removeMember?.display_name || removeMember?.user_id.slice(0, 8) || ''
+              })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleRemoveMember}
+              disabled={removing}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {removing && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+              {t('zones.settings.confirmRemove', 'Remove')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 });

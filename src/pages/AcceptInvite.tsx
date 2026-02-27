@@ -61,10 +61,11 @@ export default function AcceptInvite() {
 
     const acceptMutation = useMutation({
         mutationFn: async () => {
-            const { data, error } = await supabase.rpc('accept_zone_invite', { p_token: token });
+            const { data, error } = await supabase.rpc('accept_zone_invite' as any, { p_token: token });
             if (error) throw error;
-            if (!data.success) throw new Error(data.error);
-            return data;
+            const result = data as any;
+            if (!result.success) throw new Error(result.error);
+            return result;
         },
         onSuccess: (data) => {
             toast.success(t('zones.invites.accepted', 'Welcome to the zone!'));

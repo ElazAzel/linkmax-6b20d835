@@ -1,5 +1,6 @@
 import type { Block } from '@/types/page';
 import type { Template, TemplateBlockDefinition } from '@/types/templates';
+export type { Template };
 import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';
 import { type TemplateCategoryKey } from '@/lib/templateCategories';
 

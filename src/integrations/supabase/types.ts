@@ -2863,6 +2863,7 @@ export type Database = {
       }
     }
     Functions: {
+      accept_zone_invite: { Args: { p_token: string }; Returns: Json }
       add_linkkon_tokens: {
         Args: {
           p_amount: number
@@ -2993,6 +2994,7 @@ export type Database = {
         Args: { p_user_id: string; p_zone_id: string }
         Returns: boolean
       }
+      leave_zone: { Args: { p_zone_id: string }; Returns: Json }
       like_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       like_template: { Args: { p_template_id: string }; Returns: undefined }
       process_marketplace_purchase:
@@ -3019,6 +3021,10 @@ export type Database = {
             Returns: Json
           }
       purchase_template: { Args: { p_template_id: string }; Returns: Json }
+      remove_zone_member: {
+        Args: { p_member_user_id: string; p_zone_id: string }
+        Returns: Json
+      }
       save_page_blocks: {
         Args: { p_blocks: Json; p_is_premium?: boolean; p_page_id: string }
         Returns: undefined
@@ -3039,6 +3045,14 @@ export type Database = {
       toggle_gallery_status: { Args: { p_user_id: string }; Returns: boolean }
       unlike_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       update_user_streak: { Args: { p_user_id: string }; Returns: Json }
+      update_zone_member_role: {
+        Args: {
+          p_member_user_id: string
+          p_new_role: string
+          p_zone_id: string
+        }
+        Returns: Json
+      }
       upsert_user_page:
         | {
             Args: {
