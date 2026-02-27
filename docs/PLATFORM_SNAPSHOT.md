@@ -77,14 +77,14 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 
 **Primary journey:**
 
-```
+```text
 Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → Publish → Share Link → Track Analytics → Manage Leads
 ```
 
 **Key capabilities:**
 
 | Feature | Free Tier | Pro Tier |
-|---------|-----------|----------|
+| :--- | :--- | :--- |
 | Pages | 1 | 6 (1 primary + 5 additional) |
 | Blocks | 11 free types | All 28 types |
 | AI generations | 1/month | 5/month |
@@ -117,7 +117,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 **Capabilities:**
 
 | Section | Purpose |
-|---------|---------|
+| :--- | :--- |
 | Users | View all users, premium status, ban/unban |
 | Pages | Browse all pages, feature in gallery, moderate content |
 | Analytics | Platform-wide metrics, event tracking |
@@ -140,7 +140,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 ## 3) Core Concepts (Entities)
 
 | Concept | What it is | Why it exists | Where in code |
-|---------|------------|---------------|---------------|
+| :--- | :--- | :--- | :--- |
 | **Page** | A public mini-site with blocks | Core user asset | `src/domain/entities/Page.ts`, DB: `pages` |
 | **Block** | Content unit (link, product, form, etc.) | Modular page building | `src/types/page.ts`, DB: `blocks` |
 | **Published vs Draft** | Published pages are publicly visible | Control content visibility | `pages.is_published` column |
@@ -162,7 +162,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 ### Free Blocks (11 types)
 
 | Block | Visitor sees | Creator configures | Use case |
-|-------|--------------|-------------------|----------|
+| :--- | :--- | :--- | :--- |
 | **profile** | Avatar, name, bio, verification badge | Photo, name, bio text, frame style, animations | Hero section, personal branding |
 | **link** | Clickable link card | URL, title, icon, background style | External links |
 | **button** | CTA button | URL, text, hover effects, width | Primary actions |
@@ -178,7 +178,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 ### Pro Blocks (17 types)
 
 | Block | Visitor sees | Creator configures | Use case |
-|-------|--------------|-------------------|----------|
+| :--- | :--- | :--- | :--- |
 | **video** | YouTube/Vimeo embed | URL, aspect ratio | Video content |
 | **carousel** | Image slideshow | Images array, autoplay settings | Portfolio, gallery |
 | **custom_code** | Embedded widget/HTML | HTML/CSS/JS code | Widgets, embeds |
@@ -216,7 +216,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 **Screen-based navigation:**
 
 | Screen | Component | Purpose |
-|--------|-----------|---------|
+| :--- | :--- | :--- |
 | Editor | `screens/EditorScreen.tsx` | Block management, inline editing, **mobile-optimized drag-and-drop** |
 | Analytics | `screens/InsightsScreen.tsx` | Views, clicks, conversion metrics |
 | CRM | `screens/ActivityScreen.tsx` | Leads, bookings, event registrations |
@@ -258,7 +258,7 @@ Supported platforms (Visitor tracking):
 
 **Lead status flow:**
 
-```
+```text
 new -> contacted -> qualified -> won/lost
 ```
 
@@ -307,7 +307,7 @@ new -> contacted -> qualified -> won/lost
 ### Public Routes (Vite SPA / React Router)
 
 | Route | Component | Purpose | Rendering |
-|-------|-----------|---------|-----------|
+| :--- | :--- | :--- | :--- |
 | `/` | `src/pages/LandingV5.tsx` | Marketing landing page | Client-Side |
 | `/pricing` | `src/pages/Pricing.tsx` | Plans and pricing | Client-Side |
 | `/gallery` | `src/pages/Gallery.tsx` | Community showcase | Client-Side |
@@ -349,7 +349,7 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 ### Subscription Tiers
 
 | Plan | Price (KZT/month) | Features |
-|------|-------------------|----------|
+| :--- | :--- | :--- |
 | Free | 0 | 1 page, 11 blocks, 1 AI generation/month, basic analytics |
 | Pro | 2,900 (annual) | 6 pages (1 primary + 5 additional), 28 blocks, 5 AI/month, full CRM, no watermark |
 
@@ -384,7 +384,7 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 ### Key tables
 
 | Table | Purpose | RLS |
-|-------|---------|-----|
+| :--- | :--- | :--- |
 | `pages` | Page metadata, slug, theme, white-label | Owner only |
 | `blocks` | Block content, position | Via page ownership |
 | `user_profiles` | User data, premium status | Owner only |
@@ -458,7 +458,9 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 ### Edge Functions
 
 | Function | Trigger | Purpose |
-|----------|---------|---------|
+
+| Function | Trigger | Purpose |
+| :--- | :--- | :--- |
 | `ai-content-generator` | Dashboard | AI page/block generation |
 | `chatbot-stream` | Widget | AI chatbot responses |
 | `translate-content` | Editor | Block content translation |
@@ -493,7 +495,7 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 ### Key RPC Functions
 
 | Function | Purpose |
-|----------|---------|
+| :--- | :--- |
 | `save_page_blocks` | Atomic block save with deduplication |
 | `check_page_limits` | Validate page count vs tier |
 | `generate_unique_slug` | Create unique page slug |
@@ -512,19 +514,11 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 
 ## 10) Repository Structure
 
-```
+```text
 lnkmx/
-├── docs/                          # Documentation
-│   ├── platform.md                # This file
-│   ├── architecture.md            # Technical architecture
-│   └── Features.md                # Feature status tracking
-│
-├── cloudflare-worker/             # Cloudflare Worker (SEO/Bot handling)
-│   ├── prerender-worker.js        # Worker logic
-│   └── wrangler.toml              # Worker config
-│
-├── public/                        # Static assets (images, icons)
-│
+├── docs/
+├── cloudflare-worker/
+├── public/
 ├── src/
 │   ├── components/
 │   │   ├── blocks/               # 28 block renderers (public view)
@@ -545,7 +539,7 @@ lnkmx/
 │   │   ├── ui/                   # shadcn/ui base components
 │   │   └── ...                   # Other feature components
 │   │
-│   ├── pages/                    # Active Page components
+│   ├── pages/
 │   │   ├── DashboardV2.tsx       # Main dashboard logic
 │   │   ├── LandingV5.tsx         # Marketing landing (current)
 │   │   ├── PublicPage.tsx        # User public pages
@@ -620,15 +614,15 @@ lnkmx/
 │   └── index.css                 # Global styles + design tokens
 │
 ├── supabase/
-│   ├── functions/                # 28 Edge Functions
+│   ├── functions/
 │   │   ├── ai-content-generator/
 │   │   ├── create-lead/
 │   │   ├── send-event-confirmation/
 │   │   └── ...
-│   ├── migrations/               # Database migrations
-│   └── config.toml               # Supabase config
+│   ├── migrations/
+│   └── config.toml
 │
-└── package.json                  # Dependencies
+└── package.json
 ```
 
 ### Component structure
@@ -676,7 +670,7 @@ Located in `src/components/dashboard-v2/`:
 
 ### Required Environment Variables
 
-```
+```bash
 VITE_SUPABASE_URL=            # Supabase project URL
 VITE_SUPABASE_PUBLISHABLE_KEY= # Supabase anon key
 VITE_SUPABASE_PROJECT_ID=     # Project ID
@@ -754,7 +748,7 @@ npm run start
 - Check camera permissions
 - Some devices require explicit hardware access grant
 
-# Build/Lint errors
+### 14.1 Build/Lint errors
 
 - Run `npm run typecheck` to identify type issues
 - Check for unused imports/variables

@@ -92,7 +92,7 @@ erDiagram
 | `pixel-proxy` | Серверная отправка аналитики | События на странице |
 | `create-lead` | Валидация и сохранение лида | Форма на странице |
 | `robokassa-webhook` | Обработка платежей | Уведомление от банка |
-| `telegram-bot-webhook`| Обработка команд в боте | Сообщение в ТГ |
+| `telegram-bot-webhook` | Обработка команд в боте | Сообщение в ТГ |
 
 ---
 
@@ -119,7 +119,7 @@ erDiagram
 | **Booking** | Commerce | ✅ OK | Да |
 | **Event** | Social | ✅ OK | Да |
 | **Scratch** | Interactive | ✅ OK | Да |
-| **Custom Code**| Interactive | ✅ OK | Да |
+| **Custom Code** | Interactive | ✅ OK | Да |
 | **Carousel** | Media | ✅ OK | Да |
 
 **Стандарт качества**: Все блоки должны проходить `TypeCheck`, иметь `Unit Tests` и поддерживать `MultilingualString`.
@@ -220,15 +220,15 @@ USING (auth.uid() = user_id);
 
 Бизнес-модель на одной ладони: от проблемы "Tool Tax" до решения "Solo OS".
 
-### 11.12 Cohort Analysis
+### 8.12 Cohort Analysis
 
 Анализ жизни групп пользователей (когорт) для понимания того, как обновления влияют на Retention.
 
-### 11.13 Marketing Mix (7P)
+### 8.13 Marketing Mix (7P)
 
 Product, Price, Place, Promotion, People, Process, Physical Evidence.
 
-### 11.14 OKRs
+### 8.14 OKRs
 
 Цель: Стать №1 в Центральной Азии. Ключевой результат: 100k активных мерчантов к концу 2026 года.
 

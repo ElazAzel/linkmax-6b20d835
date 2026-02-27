@@ -14,7 +14,7 @@ The platform has decent surface-level security (RLS enabled on 30+ tables, rate 
 ### Severity Distribution
 
 | Severity | Count | Examples |
-|----------|-------|---------|
+| :--- | :--- | :--- |
 | 🔴 **CRITICAL** | 7 | Token function auth bypass, booking PII leak, no GDPR compliance |
 | 🟠 **HIGH** | 8 | No observability, no CSP, XSS via custom code, no CAPTCHA |
 | 🟡 **MEDIUM** | 6 | Hreflang in SPA-only, no anti-fraud, no cold-start monitoring |
@@ -40,6 +40,7 @@ CREATE POLICY "Users can delete own leads" ON public.leads FOR DELETE USING (aut
 ### 🔴 Bookings — PII DATA LEAK (migration exists but status unclear)
 
 **Original policy** (in `20251226171027`):
+
 ```sql
 -- DANGEROUS: Anyone can see ALL booking details for published pages
 CREATE POLICY "Anyone can view bookings for public pages"
@@ -50,6 +51,7 @@ USING (EXISTS (SELECT 1 FROM pages WHERE pages.id = bookings.page_id AND pages.i
 **Impact**: Any anonymous/authenticated user could query `SELECT client_name, client_phone, client_email FROM bookings` and see ALL client PII for any published page. This is a GDPR violation and reputational killer.
 
 **Fix exists** in `20260216000000_comprehensive_security.sql`:
+
 ```sql
 DROP POLICY IF EXISTS "Anyone can view bookings for public pages" ON public.bookings;
 ```
@@ -98,7 +100,7 @@ CREATE FUNCTION public.has_role(_user_id uuid, _role app_role) RETURNS boolean
 ### 🟠 Edge Functions — Only 1 of ~27 checks admin role
 
 | Edge Function | Admin Check | Status |
-|---|---|---|
+| :--- | :--- | :--- |
 | `language-upload` | ✅ `rpc('has_role', ...)` | SECURE |
 | `seed-demo-accounts` | ❌ None | **VULNERABLE** |
 | All other admin-facing functions | ❌ None | **VULNERABLE** |
@@ -126,7 +128,7 @@ CREATE FUNCTION public.has_role(_user_id uuid, _role app_role) RETURNS boolean
 ### Analysis
 
 | Attack Vector | Protected? | Details |
-|---|---|---|
+| :--- | :--- | :--- |
 | localStorage/token theft | ✅ Yes | No `allow-same-origin` — iframe can't access parent's localStorage |
 | Phishing forms | ❌ **No** | `allow-forms` + `allow-popups` = can create fake login forms and submit to attacker |
 | Redirect to malicious site | ❌ **No** | `allow-popups` allows `window.open()` to any URL |
@@ -135,11 +137,12 @@ CREATE FUNCTION public.has_role(_user_id uuid, _role app_role) RETURNS boolean
 
 ### 🟠 No Content Security Policy (CSP)
 
-```
+```bash
 grep -r "Content-Security-Policy" src/ → 0 results
 ```
 
 No CSP headers are set anywhere in the application. This means:
+
 - Inline scripts execute freely
 - External resources load from any origin
 - No frame-ancestors restriction
@@ -177,12 +180,12 @@ const RATE_LIMIT_REQUESTS = 15; // 15 requests per minute per IP
 ### Claims vs Reality
 
 | Claimed Feature | Actually Exists? |
-|---|---|
+| :--- | :--- |
 | "Proxy pixel events (FB, TikTok) to prevent ad-blockers" | ❌ **No code found** |
 | Server-Side Events (CAPI) | ❌ **No code found** |
 | `fbq`, `ttq`, `gtag`, `ym()` | ❌ **Zero references in `src/lib/`** |
 
-```
+```bash
 grep -ri "pixel.*proxy\|server.*event\|CAPI\|conversion.*api" src/ → 0 results
 grep -ri "fbq\|ttq\|gtag\|metrika\|ym(" src/lib/ → 0 results
 ```
@@ -241,7 +244,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ### Legal Promises vs Code
 
 | Document | Promise | Implementation |
-|---|---|---|
+| :--- | :--- | :--- |
 | `Terms.tsx` §11.2 | "User may delete the account" | ❌ No `deleteAccount` function exists |
 | `Privacy.tsx` §9.3 | "User may delete their account and content" | ❌ No delete cascade beyond FK `ON DELETE CASCADE` |
 | Privacy Policy | Implied: right to data export | ❌ No `exportData` function exists |
@@ -268,7 +271,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ### Security (Hardened)
 
 | Function | Auth Check | Status |
-|---|---|---|
+| :--- | :--- | :--- |
 | `add_linkkon_tokens` | ✅ `auth.uid() = p_user_id OR admin` | SECURE |
 | `spend_linkkon_tokens` | ✅ `auth.uid() = p_user_id` | SECURE |
 | `convert_tokens_to_premium` | ✅ `auth.uid() = p_user_id` | SECURE |
@@ -280,7 +283,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ### Financial Risks
 
 | Area | Status | Risk |
-|---|---|---|
+| :--- | :--- | :--- |
 | Real payment gateway (Stripe/Kaspi) | ❌ Not integrated | Cannot monetize |
 | Token purchase flow | ❌ Not implemented | Tokens are free only |
 | Refund flow | ❌ Not implemented | No way to reverse transactions |
@@ -303,7 +306,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ```
 
 | Capability | Status |
-|---|---|
+| :--- | :--- |
 | Error tracking (Sentry) | ❌ TODO comment only |
 | Log aggregation (Logflare/Datadog) | ❌ Not integrated |
 | Request correlation (trace IDs) | ❌ Not implemented |
@@ -322,7 +325,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ### Edge Functions Rate Limit Matrix
 
 | Function | Rate Limit | Auth Required | Risk |
-|---|---|---|---|
+| :--- | :--- | :--- | :--- |
 | `create-lead` | 15/min/IP | ❌ Public | ⚠️ No CAPTCHA |
 | `ai-content-generator` | 20/min/IP | ✅ Auth | ✅ OK |
 | `translate-content` | 20/min/IP | ✅ Auth | ⚠️ High per-call cost (GPT) |
@@ -343,7 +346,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ### Cold Start Risk
 
 | Function | Size | External APIs | Cold Start Risk |
-|---|---|---|---|
+| :--- | :--- | :--- | :--- |
 | `seo-ssr` | ~300 lines | Supabase DB | 🟠 Bots get 500 on cold start |
 | `telegram-bot-webhook` | ~440 lines | Telegram API, Supabase DB | 🟠 Webhook timeouts → missed messages |
 | `ai-content-generator` | ~535 lines | OpenAI, Supabase DB | 🟡 User-facing delay acceptable |
@@ -359,7 +362,7 @@ status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'cancell
 ### What's Implemented (Code Level)
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | SSR for bots | ✅ `seo-ssr` edge function | Cloudflare Worker detects User-Agent |
 | robots.txt | ✅ In `public/` + Cloudflare | Configured for major crawlers |
 | Sitemap | ❌ `sitemap.ts.bak` — disabled | **P0 issue from initial audit** |
@@ -395,7 +398,7 @@ const alreadyViewed = sessionStorage.getItem(sessionKey);
 ```
 
 | Concern | Status |
-|---|---|
+| :--- | :--- |
 | Session dedup | ✅ Via `sessionStorage` |
 | Cross-tab dedup | ❌ Each tab = new session in some browsers |
 | Private/incognito mode | ❌ Every visit = "unique" (sessionStorage cleared) |
@@ -414,7 +417,7 @@ const alreadyViewed = sessionStorage.getItem(sessionKey);
 ### Translation Coverage
 
 | Area | ru | en | kk | Status |
-|---|---|---|---|---|
+| :--- | :--- | :--- | :--- | :--- |
 | UI strings | ✅ | ✅ | ⚠️ | kk.json quality uncertain |
 | Telegram bot | ✅ | ✅ | ✅ | 3 languages built-in |
 | Email notifications | ? | ? | ? | Not verified |
@@ -444,7 +447,7 @@ const alreadyViewed = sessionStorage.getItem(sessionKey);
 ### Cross-Browser Concerns
 
 | Browser | Risk Area | Status |
-|---|---|---|
+| :--- | :--- | :--- |
 | Safari iOS | Blob URLs in iframe, PWA | 🟠 Not tested |
 | Telegram in-app WebView | Limited API, custom UA | 🟠 Not tested |
 | Old Android WebView | CSS Grid, ES2020+ | 🟡 Not tested |
@@ -455,7 +458,7 @@ const alreadyViewed = sessionStorage.getItem(sessionKey);
 ## Summary Scorecard
 
 | Area | Score | Critical Issues |
-|---|---|---|
+| :--- | :--- | :--- |
 | 1. RLS / Data Isolation | 7/10 | Booking PII leak (fix exists, deployment unclear) |
 | 2. Admin RBAC | 5/10 | Only 1 edge function checks admin role |
 | 3. Custom Code XSS | 4/10 | Phishing via forms/popups, no CSP, no content validation |
@@ -491,16 +494,16 @@ const alreadyViewed = sessionStorage.getItem(sessionKey);
 
 ### 🟠 Week 2 — Legal & Data Protection
 
-6. **Implement cookie consent banner** with tracking opt-out
-7. **Create data export endpoint** (edge function → query all user tables → return JSON)
-8. **Create account deletion** cascade function
-9. **Add CSP headers** via Cloudflare Worker or meta tag
-10. **Add admin role check** to all admin-facing edge functions
+1. **Implement cookie consent banner** with tracking opt-out
+2. **Create data export endpoint** (edge function → query all user tables → return JSON)
+3. **Create account deletion** cascade function
+4. **Add CSP headers** via Cloudflare Worker or meta tag
+5. **Add admin role check** to all admin-facing edge functions
 
 ### 🟡 Week 3 — Business Logic
 
-11. **Fix double-booking** — add UNIQUE constraint + timezone field
-12. **Add CAPTCHA** to create-lead (Cloudflare Turnstile recommended — free)
-13. **Integrate Sentry** for error tracking
-14. **Implement pixel proxy** or remove the claim from marketing
-15. **Add hreflang to SSR output** in seo-ssr edge function
+1. **Fix double-booking** — add UNIQUE constraint + timezone field
+2. **Add CAPTCHA** to create-lead (Cloudflare Turnstile recommended — free)
+3. **Integrate Sentry** for error tracking
+4. **Implement pixel proxy** or remove the claim from marketing
+5. **Add hreflang to SSR output** in seo-ssr edge function

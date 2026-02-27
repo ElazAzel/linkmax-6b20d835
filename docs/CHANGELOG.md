@@ -24,6 +24,12 @@
 * **Robokassa:** Webhook correctly references `premium_expires_at` column matching DB schema.
 * **Resend:** All platform notification emails now use the branded `admin@lnkmx.my` sender.
 
+### [2026-02-27] - Documentation Linting & Standardization
+
+* **Linter**: Resolved over 100 Markdown linting warnings across `COMPREHENSIVE_PLATFORM_GUIDE.md`, `DEEP_SECURITY_AUDIT_2026_02_18.md`, and `PLATFORM_SNAPSHOT.md`.
+* **Standardization**: Unified table styles (compact/aligned pipes), enforced language tagging for code blocks, and corrected header hierarchy for the "Encyclopedia" version of the docs.
+* **Navigation**: Fixed broken numbering in methodologies and week-to-week priority lists in audit reports.
+
 ### [2026-02-27] - Platform Audit & SEO/AI Optimization
 
 * **Audit**: Completed comprehensive platform audit. Verified full migration to `react-router-dom` and removed legacy `next/link` dependencies.
