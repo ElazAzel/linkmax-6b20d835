@@ -1,7 +1,47 @@
 User-agent: *
 Allow: /
 Disallow: /dashboard/
+Disallow: /dashboard-v2/
 Disallow: /admin/
-Disallow: /auth/callback
+Disallow: /auth/
+Disallow: /editor/
+Disallow: /crm/
+Disallow: /settings/
+Disallow: /install/
+Disallow: /team/
+
+# AI Crawlers - welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
 
 Sitemap: https://lnkmx.my/sitemap.xml
+
+# Host
+Host: https://lnkmx.my
