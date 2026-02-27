@@ -393,8 +393,19 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 - `lead_interactions`: status history and notes.
 - `crm_automations`: automated follow-up rules.
 
-**Analytics:**
-- `analytics`: page views, CTA clicks, block clicks, and marketing events.
+**Business Zones (Multi-Tenant Workspaces):**
+- `zones`: workspace metadata, billing plan, owner.
+- `zone_members`: RBAC membership (owner/admin/member/viewer).
+- `zone_subscriptions`: plan billing cycles and status.
+- `zone_contacts`: shared CRM contacts per zone.
+- `zone_deals`: sales pipeline with Kanban stages.
+- `zone_deal_stages`: customizable pipeline stage definitions.
+- `zone_deal_activities`: deal activity log.
+- `zone_conversations`: team inbox conversations (Telegram, etc.).
+- `zone_messages`: realtime messages within conversations.
+- `zone_tasks`: collaborative task management with priorities and assignments.
+- `zone_invoices`: invoice tracking per deal/contact.
+- `zone_invites`: invite tokens for onboarding new members.
 
 **Social features:**
 - `friendships`: user connections.
@@ -490,6 +501,7 @@ lnkmx/
 │   │   ├── block-editors/        # 28 block editors (dashboard)
 │   │   ├── editor/               # Editor core logics (BlockRenderer, etc)
 │   │   ├── dashboard-v2/         # Dashboard components
+│   │   ├── zones/                # Business Zone UI (CRM, Inbox, Tasks, Settings)
 │   │   ├── landing-v5/           # Landing page sections
 │   │   ├── admin/                # Admin panel components
 │   │   ├── auth/                 # Auth forms
@@ -525,7 +537,8 @@ lnkmx/
 │   │   ├── page/                 # Page state and versions
 │   │   ├── social/               # Collab, community, friends
 │   │   ├── ui/                   # Gesture, sound, toast
-│   │   └── user/                 # Auth, profile, billing
+│   │   ├── user/                 # Auth, profile, billing
+│   │   └── zones/                # Zone hooks (useZones, useZoneContacts, useZoneDeals, useZoneTasks)
 │   │   
 │   ├── lib/                      # Core utilities
 │   │   ├── blocks/               # Block factories and validators
@@ -734,10 +747,11 @@ Based on codebase analysis, these are logical next improvements:
 3. ~~**A/B testing for blocks**~~ — Test different block configurations to optimize conversions (Completed 2026-02-25)
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
 5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees, unit tests (Completed 2026-02-22)
-6. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
-7. **API access** — Public API for integrations (Zapier, Make, custom apps)
-7. **Email sequences** — Automated email drip campaigns for leads
-8. ~~**Analytics export**~~ — CSV/Excel download of analytics data (Completed 2026-02-21)
+7. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
+8. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-02-27)
+9. **API access** — Public API for integrations (Zapier, Make, custom apps)
+10. **Email sequences** — Automated email drip campaigns for leads
+11. ~~**Analytics export**~~ — CSV/Excel download of analytics data (Completed 2026-02-21)
 9. **Block templates library** — Pre-configured block combinations for quick setup
 
 10. **Mobile app** — Native iOS/Android app for page management
@@ -747,6 +761,6 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: February 25, 2026*
+*Last updated: February 27, 2026*
 *Current Platform Health Score: 9.3/10*
 *Maintained by: Antigravity (Principal Engineer)*
