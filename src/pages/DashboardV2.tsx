@@ -44,6 +44,7 @@ const ZoneDealsScreen = lazy(() => import('@/components/zones/ZoneDealsScreen').
 const ZoneContactsScreen = lazy(() => import('@/components/zones/ZoneContactsScreen').then(m => ({ default: m.ZoneContactsScreen })));
 const ZoneSettingsScreen = lazy(() => import('@/components/zones/ZoneSettingsScreen').then(m => ({ default: m.ZoneSettingsScreen })));
 const ZoneInboxScreen = lazy(() => import('@/components/zones/ZoneInboxScreen').then(m => ({ default: m.ZoneInboxScreen })));
+const ZoneTasksScreen = lazy(() => import('@/components/zones/ZoneTasksScreen').then(m => ({ default: m.ZoneTasksScreen })));
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -91,9 +92,9 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-settings';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-settings';
 
-const ZONE_TABS = ['zone-deals', 'zone-contacts', 'zone-inbox', 'zone-settings'];
+const ZONE_TABS = ['zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
 const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
@@ -587,6 +588,7 @@ function DashboardV2Inner() {
             {currentTab === 'zone-deals' && <ZoneDealsScreenWrapper />}
             {currentTab === 'zone-contacts' && <ZoneContactsScreenWrapper />}
             {currentTab === 'zone-inbox' && <ZoneInboxScreenWrapper />}
+            {currentTab === 'zone-tasks' && <ZoneTasksScreenWrapper />}
             {currentTab === 'zone-settings' && <ZoneSettingsScreenWrapper />}
           </Suspense>
         </DashboardLayout>
@@ -735,6 +737,12 @@ function ZoneInboxScreenWrapper() {
   const { currentZoneId } = useZoneContext();
   if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
   return <ZoneInboxScreen zoneId={currentZoneId} />;
+}
+
+function ZoneTasksScreenWrapper() {
+  const { currentZoneId } = useZoneContext();
+  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneTasksScreen zoneId={currentZoneId} />;
 }
 
 function ZoneSettingsScreenWrapper() {
