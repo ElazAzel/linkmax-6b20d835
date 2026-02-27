@@ -26,7 +26,7 @@
 
 ### [2026-02-27] - Platform Audit & SEO/AI Optimization
 
-- **Audit**: Completed comprehensive platform audit. Verified full migration to `react-router-dom` and removed legacy `next/link` dependencies.
+* **Audit**: Completed comprehensive platform audit. Verified full migration to `react-router-dom` and removed legacy `next/link` dependencies.
 * **SEO/AI**: Implemented `AISearchOptimizer` for AI-powered search (AEO). Added GEO-tagging for Kazakhstan/Almaty.
 * **Content**: Rewrote `SeoLanding.tsx` into a bilingual Bot Hub for improved indexing.
 * **Sitemap**: Automated dynamic sitemap generation via Edge Functions.
@@ -35,7 +35,7 @@
 
 ### Audit (Full Platform Functional Audit — 2026-02-24)
 
-- **Comprehensive Audit**: Conducted full functional audit covering all subsystems. Results: TypeScript ✅ (0 errors), Build ✅, i18n ✅ (4124 keys, 0 missing), Tests ⚠️ (206/220 passed).
+* **Comprehensive Audit**: Conducted full functional audit covering all subsystems. Results: TypeScript ✅ (0 errors), Build ✅, i18n ✅ (4124 keys, 0 missing), Tests ⚠️ (206/220 passed).
 * **Browser Testing**: Verified landing page, auth (email/Google/Apple), gallery (55 pages), pricing, dashboard auth redirect — all PASS.
 * **Edge Functions Review**: Audited `telegram-bot-webhook`, `create-lead`, `robokassa`, `robokassa-webhook`, `pixel-proxy`, `send-lead-notification` — all SECURE.
 * **Issues Found**: 0 Critical, 3 Major (legacy `next/link` imports in 10 files, 14 test failures, large bundle chunks), 4 Minor.
@@ -44,7 +44,7 @@
 
 ### Documentation (Documentation Audit & Cleanup — 2026-02-23)
 
-- **Tech Stack Alignment**: Updated `README.md` and `PLATFORM_SNAPSHOT.md` to correctly reflect the Vite React SPA architecture, resolving legacy references to Next.js 14.
+* **Tech Stack Alignment**: Updated `README.md` and `PLATFORM_SNAPSHOT.md` to correctly reflect the Vite React SPA architecture, resolving legacy references to Next.js 14.
 * **Architecture Map**: Corrected "Legacy" labels in `PLATFORM_SNAPSHOT.md` for active core components (`src/main.tsx`, `src/pages/`). Added `src/platform/` to the official structure.
 * **API Reference**: Synchronized `API.md` with the current Edge Functions list, adding `google-calendar-sync`, `robokassa`, `robokassa-webhook`, `send-email`, and `verify-domain`.
 * **Consistency**: Verified and updated documentation links and "Business OS" branding across all top-level guides.
@@ -68,7 +68,7 @@
 
 ### Added (Optimizations & Custom Domains — 2026-02-22)
 
-- **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.
+* **i18n Refactoring**: Migrated `AdminTranslations.tsx` and `useAdminTranslations` hook to React Query. This introduces automatic caching, background synchronization, and a much cleaner asynchronous state management flow for translation updates.
 * **Custom Domains**: Полная интеграция. Создан интерфейс в Dashboard для привязки доменов с живой проверкой DNS (CNAME) через новую Edge Function `verify-domain`. Добавлены визуальные индикаторы статуса подключения.
 * **Visual Regression Testing**: Внедрены автоматизированные тесты на базе Playwright (`e2e/visual-regression.spec.ts`) для контроля целостности «стеклянного» дизайна блоков.
 * **Custom Domains Foundation**: Implemented full database infrastructure (`custom_domains` table with RLS) and an Edge Function (`resolve-domain`) to map external hostnames to internal page slugs.
@@ -77,7 +77,8 @@
 
 ### Fixed (Platform Stabilization — 2026-02-22)
 
-- **Technical Audit & Cleanup**: Completed full platform audit (`docs/audits/FULL_PLATFORM_AUDIT_2026_02_22.md`) and resolved 100+ critical errors.
+* **Technical Audit & Cleanup**: Completed full platform audit (`docs/audits/FULL_PLATFORM_AUDIT_2026_02_22.md`) and resolved 100+ critical errors.
+
 * **Supabase Integration & Type Safety**: Synchronized `types.ts` with the actual database schema. Added missing tables (`payout_requests`, `user_wallets`, `wallet_transactions`) and defined crucial table relationships (e.g., JOIN support for `user_profiles`).
 * **Fintech & Admin Refactoring**: Eliminated all `as any` type assertions in `fintech.ts`, `AdminFintechTab.tsx`, and `PageSettingsScreen.tsx`. Refactored admin views to align with the actual profile schema (`display_name`, `username`).
 * **Quality & Performance**: Fixed Rules of Hooks violations, standardized block registry, and improved SEO/Sitemap reliability via Cloudflare Workers.
@@ -85,13 +86,15 @@
 
 ### Added (Booking & Data Export — 2026-02-21)
 
-- **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.
+* **Data Export Utilities**: Added native Excel Export functionality for Leads and Analytics. Pro users can now download comprehensive `.xlsx` reports with summary sheets directly from the Dashboard.
+
 * **Google Calendar Sync**: Implemented full two-way Google Calendar integration for the Booking Block. Plumbed via a secure `user_integrations` database table and a new `google-calendar-sync` Edge Function to check availability in real-time and create events upon booking confirmation. Enabled via a new toggle in `BookingSettingsTab` and managed in the user's `LinkedAccountsSection`.
 * **Automated Booking Reminders**: Verified and integrated existing `send-booking-reminder` Edge Function to handle Morning notifications for upcoming appointments via Telegram.
 
 ### Added (UX & i18n Finalization — 2026-02-21)
 
-- **Deep Translation via AI**: Wrote a custom concurrent Google Translate script to automatically translate over 3,600 Russian placeholder strings left in `en.json`, `kk.json`, and `uz.json`. The entire app is now genuinely, fully translated with zero cyrillic text showing up under non-Russian language selections.
+* **Deep Translation via AI**: Wrote a custom concurrent Google Translate script to automatically translate over 3,600 Russian placeholder strings left in `en.json`, `kk.json`, and `uz.json`. The entire app is now genuinely, fully translated with zero cyrillic text showing up under non-Russian language selections.
+
 * **Complete Localization Coverage**: Wrapped remaining hardcoded Russian strings in the `BookingBlock`, `CustomCodeBlock`, `EventBlock`, `FreePremiumBlockGate`, and `TemplateMarketplace` components with `t()` translation calls.
 * **Landing V2 Translation Alignment**: Translated newly identified strings in the updated `InteractiveDemo` and `BentoGridSection` V2 components ("Choose your niche", "Everything you need to grow", etc.) completely ensuring 100% cyrillic removal in EN/KK/UZ pages.
 * **Landing SEO & Meta Tags Translation**: Conducted a final deep audit across all public-facing pages (`Index.tsx`, `Pricing.tsx`, `Gallery.tsx`, `Alternatives.tsx`). Extracted and translated all hardcoded English SEO tags, metadata, and structured data properties (`AISearchOptimizer`, `AEOOptimizer`) to ensure maximum global indexability.
@@ -101,7 +104,8 @@
 
 ### Added (Technical Epic: i18n Synchronization — 2026-02-20)
 
-- **Comprehensive Global Synchronization**: Synchronized `en.json`, `kk.json`, and `uz.json` with `ru.json` as the source of truth, establishing 100% key coverage.
+* **Comprehensive Global Synchronization**: Synchronized `en.json`, `kk.json`, and `uz.json` with `ru.json` as the source of truth, establishing 100% key coverage.
+
 * **Automated Key Extraction**: Identified and extracted **1448 missing keys** directly from JSX/TSX files using custom AST-aware scripts (`extract-context.mjs`).
 * **Context-Aware Translation**: Translated all 1400+ keys into Russian, filling gaps in Analytics, Admin, Editor, and Landing components.
 * **English Default Recovery**: Automatically populated `en.json` with original English strings extracted from the code, restoring the intended non-translated text for English users.
@@ -111,7 +115,8 @@
 
 ### Added (Strategy & Expansion — 2026-02-20)
 
-- **Template Builder (Admin Panel)**: Created `/admin/templates` with a visual Block Editor. Admins can now orchestrate, save, and tag layout structures directly to the `page_templates` database.
+* **Template Builder (Admin Panel)**: Created `/admin/templates` with a visual Block Editor. Admins can now orchestrate, save, and tag layout structures directly to the `page_templates` database.
+
 * **CRM & Lead Collection (Inbox)**: Upgraded Form blocks to securely capture user submissions into a centralized `leads` table. Creators can now view and manage these natively within the DashboardV2 "Leads" tab.
 * **Advanced Analytics**: Enhanced the Insights tab to calculate and display Click-Through-Rates (CTR = clicks / views * 100) dynamically per block, handling edge cases to prevent NaN errors.
 * **Custom Domains (Pro Feature)**: Rolled out foundational database schema (`custom_domain` column) and UI inside PageSettingsTab for Pro users to configure their own domains.
@@ -119,7 +124,8 @@
 
 ### Fixed (Block Editor & Analytics Audit — 2026-02-20)
 
-- **Editor Responsiveness & Adaptation**: Fixed squashed blocks on Desktop by adding `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `GridEditor.tsx`. Adjusted Mobile Drawer sizing to prevent overflow clipping.
+* **Editor Responsiveness & Adaptation**: Fixed squashed blocks on Desktop by adding `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` to `GridEditor.tsx`. Adjusted Mobile Drawer sizing to prevent overflow clipping.
+
 * **Keystroke Performance (Live Preview)**: Implemented React `useDeferredValue` in `BlockEditorV2` to completely decouple instantaneous input from the heavy 3D/Framer Motion Live Preview renderer. Typing is now lag-free at 60fps across all devices.
 * **Lost Data / Save Reliability Race Condition**: Refactored the global state orchestrator (`useCloudPageState`) to enforce atomic functional React state updaters (`setPageData(prev => ...)`). This guarantees that auto-save network debouncers correctly capture concurrent block modifications (e.g. fast typing followed by immediate modal close), permanently resolving the "Sometimes blocks fail to save" bug.
 * **Grid Layout Styling**: Removed unwanted physical borders, drop-shadows, and background clipping explicitly for naturally transparent layouts (Separators and Social blocks) within the 2-column `GridBlocksRenderer`.
@@ -130,7 +136,8 @@
 
 ### Internal Optimization (Agent Rules — 2026-02-20)
 
-- **Agent Roles and Skills Structure**: Relocated the `.agents` directory items into `.agent/rules` to streamline agent context and maintain explicit localization.
+* **Agent Roles and Skills Structure**: Relocated the `.agents` directory items into `.agent/rules` to streamline agent context and maintain explicit localization.
+
 * **Config Re-alignment**: Re-aligned `ANTIGRAVITY_CONFIG.md` to refer directly to `.agent/rules` over deprecated paths, safely deleting `.agents`.
 * **LLM Prompt Optimization**: Refactored `ANTIGRAVITY_CONFIG.md`, agent personas (`frontend_specialist.md`, `backend_specialist.md`, etc.), and `general.md` using explicit XML tags (`<project_context>`, `<persona>`, etc.) to drastically improve comprehension and instruction adherence globally for Antigravity, Gemini, and Claude Opus LLMs.
 * **Communication Protocol**: Added strict requirements to always respond in **Russian** and conduct a mandatory "Pre-Work Communication" phase (questions and suggestions) before starting any technical implementation. Updated `123role.md`, `general.md`, and `ANTIGRAVITY_CONFIG.md`.
@@ -139,14 +146,16 @@
 
 ### Added (Infrastructure — 2026-02-18)
 
-- **Pixel Proxy**: New `pixel-proxy` edge function forwarding events server-side to Facebook CAPI, TikTok Events API, and GA4 Measurement Protocol — bypasses ad-blockers for ~30-40% event recapture.
+* **Pixel Proxy**: New `pixel-proxy` edge function forwarding events server-side to Facebook CAPI, TikTok Events API, and GA4 Measurement Protocol — bypasses ad-blockers for ~30-40% event recapture.
+
 * **Dual Pixel Firing**: `TrackingScripts.tsx` now fires both client-side pixel + server-side `sendBeacon` to `/functions/v1/pixel-proxy` for all events (PageView, Lead, Purchase, InitiateCheckout).
 * **Edge Function Warm-up**: `pg_cron` job pings `seo-ssr`, `telegram-bot-webhook`, and `pixel-proxy` every 4 minutes via `pg_net` to prevent cold start latency.
 * **Warm-up Endpoints**: `?warmup=true` early return added to `seo-ssr`, `telegram-bot-webhook`, and `pixel-proxy`.
 
 ### Security (Deep Audit Fixes — 2026-02-18)
 
-- **Critical Auth Bypass**: Added `auth.uid()` checks to `get_token_analytics` (admin-only), `claim_daily_token_reward`, and `process_marketplace_purchase`.
+* **Critical Auth Bypass**: Added `auth.uid()` checks to `get_token_analytics` (admin-only), `claim_daily_token_reward`, and `process_marketplace_purchase`.
+
 * **Rate Limiting**: Added in-memory rate limiting (60 req/min/IP) to `seo-ssr` edge function to prevent DDoS.
 * **Booking Data Leak**: Ensured overly permissive RLS policy dropped, replaced with owner/user-only policies.
 * **Double-Booking Prevention**: Added partial unique index on `(page_id, block_id, slot_date, slot_time)` for active bookings.
@@ -158,40 +167,37 @@
 
 ### Anti-Spam & Observability (2026-02-18)
 
-- **Cloudflare Turnstile CAPTCHA**: Added invisible CAPTCHA to `FormBlock` with server-side verification in `create-lead` edge function.
+* **Cloudflare Turnstile CAPTCHA**: Added invisible CAPTCHA to `FormBlock` with server-side verification in `create-lead` edge function.
+
 * **Error Reporting**: Replaced Sentry TODO stubs in `logger.ts` with working production error reporter (structured errors via `sendBeacon` to `VITE_SENTRY_DSN`).
 * **CSP Hardened**: Added `challenges.cloudflare.com` to script-src, connect-src, frame-src for Turnstile support.
 
 ### i18n / Locale Formatting (2026-02-18)
 
-- **Centralized formatters**: New `src/lib/format.ts` with `formatDate`, `formatDateTime`, `formatDateShort`, `formatCurrency`, `formatRelativeTime` using correct BCP 47 locale (ru→ru-RU, en→en-US, kk→kk-KZ).
+* **Centralized formatters**: New `src/lib/format.ts` with `formatDate`, `formatDateTime`, `formatDateShort`, `formatCurrency`, `formatRelativeTime` using correct BCP 47 locale (ru→ru-RU, en→en-US, kk→kk-KZ).
+
 * **Fixed hardcoded locales**: Replaced 11 `toLocaleDateString('ru-RU', ...)` calls in `TokensPanel`, `LeadsPanel`, `LeadDetails`, `ActivityScreen` with centralized formatters.
 * **Fixed hardcoded locales (prices)**: Replaced `toLocaleString('ru-RU')` in `PricingBlock` and `ProductBlock` with `getLocale(i18n.language)`.
 
 ### Accessibility (2026-02-18)
 
-- **aria-labels**: Added `aria-label` to 11 icon-only buttons in `EditorToolbar` and `BlockManager`.
+* **aria-labels**: Added `aria-label` to 11 icon-only buttons in `EditorToolbar` and `BlockManager`.
+
 * **DialogDescription**: Added missing `DialogDescription` to dialogs in `EventBlock`, `ProductBlock`.
 
 ### Bug Fixes (2026-02-18)
 
-- **ProductBlock**: Removed duplicate `redirectToTokenPurchase()` call causing double redirect.
+* **ProductBlock**: Removed duplicate `redirectToTokenPurchase()` call causing double redirect.
 
 ### Added
 
-- `manifest.json` for PWA support (fixed broken `/manifest.webmanifest` link in `index.html`).
+* `manifest.json` for PWA support (fixed broken `/manifest.webmanifest` link in `index.html`).
+
 * `search` block type added to `block-registry.ts` `PREMIUM_BLOCK_TYPES` (was only in `useFreemiumLimits`).
 * Hreflang tags (`ru`, `en`, `kk`, `x-default`) in SSR output for international SEO.
 
-### Added
+### Added - Visual Design & SEO
 
-- **Block Editor Improvements**:
-  * Enabled drag-and-drop on mobile devices by attaching listeners to the entire block card (with long-press support).
-  * Improved click-to-edit reliability on Desktop by removing restrictive event prevention.
-  * Fixed "Editor not opening" on PC by memoizing block icons to prevent re-render loops and suspension issues.
-  * Added missing `DialogDescription` to desktop editor for accessibility compliance.
-* Unit test files for `ai-content-generator` and `create-lead` edge functions.
-* `PLATFORM_SNAPSHOT.md`, `RUNBOOKS`, `ADRs` (initial overhaul).
 * **Liquid Glass Design Overhaul**: Comprehensive platform-wide refactor to adopt a premium, modern aesthetic.
   * Updated all 28 block types (interactive and static) with glassmorphism, backdrop blurs, and premium shadows.
   * Redesigned `BookingBlock` with a modern calendar UI, floating confirmation cards, and improved time slot selection.
@@ -205,11 +211,12 @@
 
 ### Security
 
-- **Repository Hardening**:
+* **Repository Hardening**:
   * Changed visibility to **Private** to prevent unauthorized copying.
   * Rewrote git history cross-branch to purge accidentally committed `.env` secrets.
   * Unified `.gitignore` to ensure core internal docs are tracked in the private repo while keeping secrets out.
   * Documented security decisions in [ADR 0024](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/inkmax/docs/ADR/0024-repository-security.md).
+
 * Hardened `upsert_user_page` function to enforce `auth.uid()` check.
 * Fixed RLS policies for `languages` and `language_upload_history` tables to use correct `has_role()` check.
 * **Comprehensive Security Hardening**:
@@ -219,9 +226,10 @@
   * Fixed admin check in `language-upload` edge function to use `has_role` RPC.
 * **Content Security Policy (CSP)**: Updated `index.html` to allow analytics (FB, TikTok, GA4, Yandex) and localization (Locize) scripts while maintaining security.
 
-### Fixed
+### Fixed - Deployment & Performance
 
-- **Authentication**: Resolved infinite redirect loop during Google/Apple sign-in by correcting the `redirect_uri` to point to `/auth/callback`.
+* **Authentication**: Resolved infinite redirect loop during Google/Apple sign-in by correcting the `redirect_uri` to point to `/auth/callback`.
+
 * **Block Editor**: Fixed "Editor not opening" on PC and intermittent issues on mobile by optimizing event handling and drag sensors.
 * Type errors and missing Deno namespace references in `ai-content-generator` and `create-lead` edge functions.
 * "Screen lock" glitch in Block Editor by disabling modal behavior on style selectors.
@@ -239,14 +247,15 @@
 
 ### Optimized
 
-- Codebase quality by resolving over 700 linting warnings/errors.
+* Codebase quality by resolving over 700 linting warnings/errors.
 
 ### Changed
 
-- **Mobile Editor UX**:
+* **Mobile Editor UX**:
   * Implemented dedicated drag handles (`::` icon) for block reordering on mobile to prevent conflict with "Tap to Edit".
   * Removed artificial delays on mobile interactions for instant responsiveness.
   * Added `framer-motion` animations for smoother UI transitions in the editor.
+
 * **Auth Refactoring & Error Handling UX**:
   * Removed fragile `next/navigation` shim usage in Auth components in favor of standard `react-router-dom` hooks (`useNavigate`, `useSearchParams`).
   * Removed residual `@lovable.dev/cloud-auth-js` wrapper logic from `useAuth.tsx`, fully transitioning to native `supabase.auth.signInWithOAuth` for better control and stability.
@@ -270,4 +279,4 @@
 
 ### Added
 
-- Initial project structure and documentation.
+* Initial project structure and documentation.
