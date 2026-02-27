@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -37,9 +37,9 @@ interface StatCardProps {
   subtitle?: string;
 }
 
-function StatCard({ title, value, icon, subtitle }: StatCardProps) {
+const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard({ title, value, icon, subtitle }, ref) {
   return (
-    <Card>
+    <Card ref={ref}>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
       </CardHeader>
@@ -52,7 +52,7 @@ function StatCard({ title, value, icon, subtitle }: StatCardProps) {
       </CardContent>
     </Card>
   );
-}
+});
 
 function StatsSection({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
