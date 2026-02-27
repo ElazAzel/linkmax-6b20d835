@@ -149,6 +149,22 @@
 
 ---
 
+## 11. Orchestration & Specialist Mapping
+
+Для обеспечения качества и системности, каждый навык (Skill) мапится на конкретную роль агента в системе Antigravity.
+
+| Навык (Skill) | Агент (Role) | Ответственность |
+|---------------|--------------|-----------------|
+| **Rapid Spec Builder** | `planner.md` | ТЗ, API-контракты, декомпозиция |
+| **Clean Architecture** | `arch-reviev.md`| Контроль слоев, зависимости |
+| **Auto Refactor Pro** | `refactor.md` | Очистка кода, DRY |
+| **Smart Test Generator**| `qa_specialist.md`| Unit/E2E сценарии |
+| **Performance Scanner** | `frontend/backend`| Оптимизация |
+| **API Guardian** | `backend_specialist`| Zod-валидация, типизация |
+| **Standardized Errors** | `debugger.md` | Логирование, Toast-уведомления|
+
+---
+
 ## Применение
 
 Эти правила действуют для **всех** AI-агентов, работающих с проектом. При каждом изменении кода агент должен:
@@ -158,3 +174,4 @@
 3. **Обработать ошибки** (Error Handling Standardizer)
 4. **Оценить производительность** (Performance Scanner)
 5. **Обновить контекст** (Context Memory Sync)
+6. **Сверить с PLATFORM_SNAPSHOT.md** (Source of Truth)

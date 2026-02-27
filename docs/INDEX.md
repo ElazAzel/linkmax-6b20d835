@@ -67,6 +67,7 @@ Additional:
 - **[Audits Archive](./audits/)**: Historical audit reports and remediation plans.
 - **[Deep Security Audit (2026-02-18)](./DEEP_SECURITY_AUDIT_2026_02_18.md)**: Latest security audit.
 - **[Full Platform Audit (2026-02-18)](./FULL_PLATFORM_AUDIT_2026_02_18.md)**: Latest platform audit.
+- **[Audit Report (2026-02-27)](./AUDIT_REPORT_2026_02_27.md)**: *Latest* audit of docs and orchestration.
 - **[Health Check (2026-02-14)](./health-check-2026-02-14.md)**: System health snapshot.
 
 ---
