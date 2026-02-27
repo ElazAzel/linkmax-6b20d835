@@ -13,6 +13,8 @@
         "popular": "Popular",
         "basicDesc": "Start for free",
         "proDesc": "Everything for professionals and business",
+        "businessDesc": "CRM, team & zones for business",
+        "new": "New",
         "free": {
             "title": "Free"
         },
@@ -60,7 +62,14 @@
             "forms": "Lead forms",
             "faq": "FAQ and review blocks",
             "timers": "Countdown timers",
-            "aiMonthlyPro": "5 AI generations/month"
+            "aiMonthlyPro": "5 AI generations/month",
+            "allPro": "Everything in PRO, plus:",
+            "businessZones": "Business Zones (workspaces)",
+            "teamCRM": "Team CRM & Kanban",
+            "teamInbox": "Team chat & tasks",
+            "teamRoles": "Roles & access control",
+            "teamMembers": "Up to 5 team members",
+            "prioritySupport": "Priority support"
         },
         "limitations": {
             "watermark": "lnkmx.my watermark",
