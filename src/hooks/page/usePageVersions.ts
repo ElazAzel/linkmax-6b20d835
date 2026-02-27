@@ -73,7 +73,9 @@ export function usePageVersions(onRestore?: (blocks: Block[], theme?: PageTheme,
 
     try {
       // Generate content hash for deduplication
-      const contentHash = btoa(JSON.stringify(blocks).slice(0, 100));
+      const jsonSlice = JSON.stringify(blocks).slice(0, 100);
+      // Use encodeURIComponent to handle non-Latin1 chars (Cyrillic etc.)
+      const contentHash = btoa(encodeURIComponent(jsonSlice));
       const versionId = `v-${Date.now()}`;
 
       // Insert new version
