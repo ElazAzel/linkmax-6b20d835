@@ -136,9 +136,9 @@ function spin() {
 }
 function checkWin(final) {
   btn.disabled = false;
-  if (final[0] === final[1] && final[1] === final[2]) { result.innerHTML = '🎉 JACKPOT! 🎉'; result.style.color = '#ffd700'; }
-  else if (final[0] === final[1] || final[1] === final[2] || final[0] === final[2]) { result.innerHTML = '✨ Nice! ✨'; result.style.color = '#7bed9f'; }
-  else { result.innerHTML = 'Try again!'; result.style.color = '#fff'; }
+  if (final[0] === final[1] && final[1] === final[2]) { result.textContent = '🎉 JACKPOT! 🎉'; result.style.color = '#ffd700'; }
+  else if (final[0] === final[1] || final[1] === final[2] || final[0] === final[2]) { result.textContent = '✨ Nice! ✨'; result.style.color = '#7bed9f'; }
+  else { result.textContent = 'Try again!'; result.style.color = '#fff'; }
 }`
   },
   {
@@ -272,7 +272,7 @@ function spinWheel() {
       spinning = false; document.getElementById('spinWheel').disabled = false;
       const normalizedRotation = rotation % (2 * Math.PI);
       const index = Math.floor((2 * Math.PI - normalizedRotation + Math.PI / 2) / (2 * Math.PI / prizes.length)) % prizes.length;
-      document.getElementById('wheelResult').innerHTML = '🎉 ' + prizes[index] + '!';
+      document.getElementById('wheelResult').textContent = '🎉 ' + prizes[index] + '!';
     }
   }
   requestAnimationFrame(animate);
@@ -656,7 +656,7 @@ updatePomoDisplay();`
 function formatSW(ms) { const m = Math.floor(ms / 60000); const s = Math.floor((ms % 60000) / 1000); const cs = Math.floor((ms % 1000) / 10); return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + '.' + String(cs).padStart(2,'0'); }
 function updateSWDisplay() { document.getElementById('swDisplay').textContent = formatSW(swTime); }
 function toggleSW() { const btn = document.getElementById('swStartBtn'); if (swRunning) { clearInterval(swInterval); swRunning = false; btn.textContent = 'Start'; btn.classList.remove('running'); } else { const start = Date.now() - swTime; swInterval = setInterval(() => { swTime = Date.now() - start; updateSWDisplay(); }, 10); swRunning = true; btn.textContent = 'Stop'; btn.classList.add('running'); } }
-function lapSW() { if (!swRunning) return; laps.push(swTime); const lapsEl = document.getElementById('swLaps'); const lapEl = document.createElement('div'); lapEl.className = 'sw-lap'; lapEl.innerHTML = '<span>Lap ' + laps.length + '</span><span>' + formatSW(swTime) + '</span>'; lapsEl.insertBefore(lapEl, lapsEl.firstChild); }
+function lapSW() { if (!swRunning) return; laps.push(swTime); const lapsEl = document.getElementById('swLaps'); const lapEl = document.createElement('div'); lapEl.className = 'sw-lap'; const s1 = document.createElement('span'); s1.textContent = 'Lap ' + laps.length; const s2 = document.createElement('span'); s2.textContent = formatSW(swTime); lapEl.appendChild(s1); lapEl.appendChild(s2); lapsEl.insertBefore(lapEl, lapsEl.firstChild); }
 function resetSW() { clearInterval(swInterval); swTime = 0; swRunning = false; laps = []; document.getElementById('swDisplay').textContent = '00:00.00'; document.getElementById('swStartBtn').textContent = 'Start'; document.getElementById('swStartBtn').classList.remove('running'); document.getElementById('swLaps').innerHTML = ''; }`
   },
 
@@ -836,7 +836,7 @@ showQuestion();`
     javascript: `let selectedTime = null;
 document.getElementById('bookDate').valueAsDate = new Date();
 function selectTime(btn) { document.querySelectorAll('.booking-times button').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selectedTime = btn.textContent; }
-function submitBooking() { const date = document.getElementById('bookDate').value; if (!date || !selectedTime) { document.getElementById('bookConfirm').textContent = '⚠️ Please select date and time'; return; } document.getElementById('bookConfirm').innerHTML = '✅ Booked for ' + date + ' at ' + selectedTime + '<br><small>Confirmation sent!</small>'; }`
+function submitBooking() { const date = document.getElementById('bookDate').value; if (!date || !selectedTime) { document.getElementById('bookConfirm').textContent = '⚠️ Please select date and time'; return; } document.getElementById('bookConfirm').textContent = '✅ Booked for ' + date + ' at ' + selectedTime + ' — Confirmation sent!'; }`
   },
   {
     id: 'price-quote',

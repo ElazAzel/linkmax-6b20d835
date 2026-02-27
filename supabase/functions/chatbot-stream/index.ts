@@ -77,10 +77,56 @@ serve(async (req) => {
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-    const { pageSlug, messages } = await req.json();
+    // Validate payload size (max 10KB)
+    const bodyText = await req.text();
+    if (bodyText.length > 10240) {
+      return new Response(
+        JSON.stringify({ error: 'Payload too large' }),
+        { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
-    if (!pageSlug || !messages) {
+    const { pageSlug, messages } = JSON.parse(bodyText);
+    
+    if (!pageSlug || !messages || !Array.isArray(messages)) {
       throw new Error('Missing required parameters');
+    }
+    
+    // Validate pageSlug format (alphanumeric, hyphens, underscores, max 100 chars)
+    if (typeof pageSlug !== 'string' || pageSlug.length > 100 || !/^[a-zA-Z0-9_-]+$/.test(pageSlug)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid pageSlug format' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Validate messages array (max 20 messages, max 1000 chars each)
+    if (messages.length > 20) {
+      return new Response(
+        JSON.stringify({ error: 'Too many messages in conversation. Please start a new chat.' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    for (const msg of messages) {
+      if (!msg.role || !msg.content || typeof msg.content !== 'string') {
+        return new Response(
+          JSON.stringify({ error: 'Invalid message format' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      if (!['user', 'assistant'].includes(msg.role)) {
+        return new Response(
+          JSON.stringify({ error: 'Invalid message role' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      if (msg.content.length > 1000) {
+        return new Response(
+          JSON.stringify({ error: 'Message too long. Maximum 1000 characters.' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -207,7 +253,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in chatbot-stream:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
+      JSON.stringify({ error: 'An internal error occurred. Please try again later.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
