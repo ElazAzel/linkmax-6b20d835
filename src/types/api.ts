@@ -121,7 +121,7 @@ export interface PublishPageResult {
  */
 export interface PremiumStatusResult {
   isPremium: boolean;
-  tier: 'free' | 'pro';
+  tier: 'free' | 'pro' | 'business';
   trialEndsAt: string | null;
   inTrial: boolean;
 }
