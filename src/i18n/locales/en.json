@@ -765,7 +765,7 @@
     "completeDescription": "Your page is created and ready to edit"
   },
   "landing": {
-    "ticker": { "title": "Trusted by creators worldwide" },
+    "ticker": { "title": "Trusted by creators worldwide", "creators": "Creators", "coaches": "Coaches", "designers": "Designers", "startups": "Startups", "agencies": "Agencies", "clinics": "Clinics", "studios": "Studios", "experts": "Experts" },
     "bento": {
       "sectionTitle": "Everything you need to grow",
       "sectionDesc": "Website builder + CRM + analytics. One platform instead of ten tools.",
