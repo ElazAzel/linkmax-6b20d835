@@ -14,6 +14,8 @@ import Settings from 'lucide-react/dist/esm/icons/settings';
 import Kanban from 'lucide-react/dist/esm/icons/kanban';
 import Contact from 'lucide-react/dist/esm/icons/contact';
 import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import ListTodo from 'lucide-react/dist/esm/icons/list-todo';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
@@ -70,6 +72,8 @@ const TABS: NavTab[] = [
 const MORE_ITEMS: NavTab[] = [
   { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты', path: '' },
+  { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие', path: '' },
+  { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи', path: '' },
   { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона', path: '' },
   { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
   { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда', path: '' },

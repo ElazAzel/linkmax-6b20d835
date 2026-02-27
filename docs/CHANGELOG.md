@@ -1,6 +1,14 @@
 # Changelog
 
 ## [Unreleased]
+* **Business Zones (Multi-Tenant Workspaces)**: Полная реализация модуля бизнес-зон с четырьмя подсистемами:
+  - **CRM Pipeline**: Kanban-доска сделок с этапами, контакты, активности сделок.
+  - **Team Inbox**: Групповой чат в реальном времени через Supabase Realtime, привязка к контактам.
+  - **Task Management**: Задачи с приоритетами (urgent/high/medium/low), назначением исполнителей, Kanban-статусами.
+  - **Zone Settings**: Управление участниками, инвайтами, биллингом.
+  - **Безопасность**: RLS через `SECURITY DEFINER` функции (`is_zone_member`, `is_zone_admin`). Атомарное создание зоны через `create_zone()` RPC.
+  - **Тарифы**: от 5 до 1000+ участников, 7 планов Business.
+* **Performance (Landing)**: Удалён `framer-motion` из критического пути лендинга, заменён на CSS-анимации и IntersectionObserver (экономия ~42KB).
 * **Team Collaboration & Organizations**: Реализована поддержка мульти-аккаунтов, ролей и командной работы. Foundational RBAC system allowing creators to manage sites via Organizations. Includes member roles (Owner, Admin, Editor, Viewer), organization switching UI in the sidebar, and a dedicated Team Management screen. Existing creators are automatically migrated to a "Personal Organization" structure.
 * **Bugfix (Critical)**: Исправлены `TypeError` в `SEOHead` и `PublicPage`, предотвращающие "белый экран".
 * **Bugfix (Dashboard)**: Исправлен импорт модулей в `DashboardV2`, восстановлена загрузка экранов.
