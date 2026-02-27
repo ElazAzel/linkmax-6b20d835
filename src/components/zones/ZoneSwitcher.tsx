@@ -61,59 +61,74 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
     }
   };
 
-  if (zones.length === 0 && !currentZone) {
-    return null; // Don't show if no zones
-  }
+  // Show create button even when no zones exist
+  const hasNoZones = zones.length === 0 && !currentZone;
 
   return (
     <>
       <div className={cn("px-3 mb-2", collapsed && "px-1")}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className={cn(
-                "w-full justify-start gap-2 h-9 text-sm font-medium",
-                collapsed && "justify-center px-0"
-              )}
-            >
-              <Building2 className="h-4 w-4 shrink-0 text-primary" />
-              {!collapsed && (
-                <>
-                  <span className="truncate flex-1 text-left">
-                    {currentZone?.name || t('zones.selectZone', 'Select zone')}
-                  </span>
-                  {currentZone && (
-                    <Badge variant="outline" className="text-[9px] px-1 h-4 shrink-0">
-                      {currentZone.plan_status === 'active' ? 'BIZ' : currentZone.plan_status.toUpperCase()}
-                    </Badge>
-                  )}
-                  <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground" />
-                </>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56">
-            {zones.map(zone => (
-              <DropdownMenuItem
-                key={zone.id}
-                onClick={() => onSelectZone(zone.id)}
-                className="gap-2"
-              >
-                <Building2 className="h-4 w-4" />
-                <span className="truncate flex-1">{zone.name}</span>
-                {zone.id === currentZone?.id && (
-                  <Check className="h-4 w-4 text-primary" />
+        {hasNoZones ? (
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full justify-start gap-2 h-9 text-sm font-medium border-dashed border-primary/30 text-primary hover:bg-primary/5",
+              collapsed && "justify-center px-0"
+            )}
+            onClick={() => setCreateOpen(true)}
+          >
+            <Plus className="h-4 w-4 shrink-0" />
+            {!collapsed && (
+              <span className="truncate">{t('zones.createZone', 'Создать зону')}</span>
+            )}
+          </Button>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className={cn(
+                  "w-full justify-start gap-2 h-9 text-sm font-medium",
+                  collapsed && "justify-center px-0"
                 )}
+              >
+                <Building2 className="h-4 w-4 shrink-0 text-primary" />
+                {!collapsed && (
+                  <>
+                    <span className="truncate flex-1 text-left">
+                      {currentZone?.name || t('zones.selectZone', 'Select zone')}
+                    </span>
+                    {currentZone && (
+                      <Badge variant="outline" className="text-[9px] px-1 h-4 shrink-0">
+                        {currentZone.plan_status === 'active' ? 'BIZ' : currentZone.plan_status.toUpperCase()}
+                      </Badge>
+                    )}
+                    <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground" />
+                  </>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              {zones.map(zone => (
+                <DropdownMenuItem
+                  key={zone.id}
+                  onClick={() => onSelectZone(zone.id)}
+                  className="gap-2"
+                >
+                  <Building2 className="h-4 w-4" />
+                  <span className="truncate flex-1">{zone.name}</span>
+                  {zone.id === currentZone?.id && (
+                    <Check className="h-4 w-4 text-primary" />
+                  )}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setCreateOpen(true)} className="gap-2">
+                <Plus className="h-4 w-4" />
+                {t('zones.createZone', 'Создать зону')}
               </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setCreateOpen(true)} className="gap-2">
-              <Plus className="h-4 w-4" />
-              {t('zones.createZone', 'Create zone')}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
