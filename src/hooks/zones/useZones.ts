@@ -22,10 +22,10 @@ export function useZones() {
         .from('zones')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       setZones((data as Zone[]) || []);
-      
+
       // Auto-select first zone if none selected
       if (!currentZoneId && data && data.length > 0) {
         setCurrentZoneId(data[0].id);
@@ -40,18 +40,18 @@ export function useZones() {
   useEffect(() => { fetchZones(); }, [fetchZones]);
 
   // Current zone
-  const currentZone = useMemo(() => 
+  const currentZone = useMemo(() =>
     zones.find(z => z.id === currentZoneId) || null
-  , [zones, currentZoneId]);
+    , [zones, currentZoneId]);
 
   // Fetch members when zone changes (join user_profiles for display info)
   useEffect(() => {
     if (!currentZoneId) { setMembers([]); return; }
-    
+
     const fetchMembers = async () => {
       const { data } = await supabase
         .from('zone_members')
-        .select('*, user_profiles:user_id(display_name, avatar_url, username)')
+        .select('*, user_profiles(display_name, avatar_url, username)')
         .eq('zone_id', currentZoneId);
       const mapped = (data || []).map((m: any) => ({
         ...m,

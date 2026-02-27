@@ -223,7 +223,7 @@ export const TemplateGallery = memo(function TemplateGallery({
                 onClick={() => setSelectedCategory(cat)}
                 className="h-7 text-xs px-3 whitespace-nowrap"
               >
-                {getTemplateCategoryLabel(cat, t)}
+                {getTemplateCategoryLabel(t, cat)}
               </Button>
             ))}
           </div>
