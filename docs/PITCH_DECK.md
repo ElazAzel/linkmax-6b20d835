@@ -1,128 +1,134 @@
-# lnkmx: Investor & Incubator Pitch Deck (2026)
+# lnkmx: Pitch Deck (2026) — The Business OS for the Solo-Economy
 
-> **Target Audience**: Venture Capital, Accelerators, Angel Investors
-> **Goal**: Seed Funding ($250k) / Program Admission
-> **Vision**: Building the infrastructure for the Solo-Economy.
+> **Видение**: Создание инфраструктуры для экономики независимых специалистов. Стирание границ между созданием сайта, управлением клиентами и финансовыми операциями.
 
 ---
 
-## Slide 1: Title & Hook
-**Title**: lnkmx
-**Subtitle**: The Business OS for the Solo-Economy.
-**One-Liner**: Build. Manage. Grow. All in one mobile dashboard.
-**Presenter**: [Your Name/Team]
+## Slide 1: lnkmx — Операционная система для вашего бизнеса
+
+**Основной посыл**: Мы не просто "ссылка в био". Мы — фундамент вашего цифрового предприятия.
+
+- **One-Liner**: Собери. Управляй. Масштабируй. Всё в одном мобильном дашборде.
+- **Позиционирование**: Микро-ОС для соло-предпринимателей и микро-бизнеса.
 
 ---
 
-## Slide 2: The Problem ("Technical Paralysis")
-**Solo-entrepreneurs are drowning in a fragmented tech stack.**
-To run a digital business in 2026, they pay a "Tool Tax":
-1.  **Wix/Tilda** — Too complex for mobile-first creators.
-2.  **Linktree** — Just links. No business logic.
-3.  **Calendly** — Another $12/mo, disconnected from lead data.
-4.  **Google Sheets** — Manual CRM that leads to 30% lead leakage.
+## Slide 2: Проблема («Технологический налог»)
 
-**Pain Point**: $50+/mo in subscriptions, 20 hours/week in manual admin, and "admin fatigue".
+**Соло-предприниматели тонут в разрозненных инструментах.**
+Чтобы запустить бизнес сегодня, они платят «налог на инструменты»:
 
----
+1. **Wix/Tilda** — Слишком сложно для мобильных создателей.
+2. **Linktree** — Пустые ссылки. Нет бизнес-логики и захвата лидов.
+3. **Calendly/Acuity** — Лишние $15/мес за функции, оторванные от базы клиентов.
+4. **WhatsApp/Telegram** — Хаос в переписках, "утечка" 30% лидов из-за отсутствия CRM.
 
-## Slide 3: The Solution (Unified Business OS)
-**lnkmx is the All-In-One "Micro-OS".**
-We replace 5+ disjointed tools with a unified, AI-native infrastructure.
-
-*   **BUILD**: AI-powered site builder (28+ blocks). Ready in 15 minutes.
-*   **MANAGE**: Native Mini-CRM + Scheduling + Event Management.
-*   **GROW**: Cookieless Analytics (Server-side Pixel Proxy) + SEO AEO tools.
-
-**Value Prop**: "Your entire digital enterprise in a 15-minute setup."
+**Итог**: $50+/мес подписок, 15 часов/неделю на рутину и «админская усталость».
 
 ---
 
-## Slide 4: The Product (Our Moats)
-**Why lnkmx wins:**
-1.  **"Liquid Glass" Aesthetic**: Premium Motion-Design system. Every page looks like an expensive agency product by default.
-2.  **AI-Native Workflow**: Gemini-powered layout generation + multilingual content (RU/EN/KK/UZ).
-3.  **Data Lock-in (CRM)**: High switching costs once customer data and booking history are integrated into our ecosystem.
-4.  **Privacy-First Analytics**: Server-side CAPI/TikTok proxying for 30% more accurate data in a cookieless world.
+## Slide 3: Решение (Unified Business OS)
+
+**lnkmx — это "Micro-OS" «всё-в-одном».**
+Мы заменяем 5+ разрозненных сервисов единой AI-инфраструктурой, настраиваемой за 15 минут.
+
+- **BUILD**: AI-конструктор (28+ блоков) с эстетикой **"Liquid Glass"**. Премиальный вид "из коробки".
+- **MANAGE**: Нативная **Business Zone** (Mini-CRM + Kanban сделок + Задачи + Командный инбокс).
+- **GROW**: Серверная аналитика (**Pixel Proxy**) + A/B тесты блоков для максимизации конверсии.
+- **PAY**: Встроенное финансовое ядро (Ledger + Мультивалютные кошельки).
 
 ---
 
-## Slide 5: Market Opportunity (Solo-Economy 2026)
-**The Creator Economy is maturing into the "Business of One".**
-*   **TAM**: Global Creator Economy — $104B (50M+ Creators).
-*   **SAM**: CIS, MENA, SEA — $300M ARR potential (High mobile penetration).
-*   **SOM**: Central Asia (KZ/UZ) — 100k paid users ($7M ARR) in 24 months.
-*   **Timing**: Solopreneurship is now a dominant economic force, not just a side hustle.
+## Slide 4: Продукт и Технологическое преимущество
+
+**Почему lnkmx побеждает:**
+
+1. **Эстетика Liquid Glass**: Уникальный дизайн-код (стекломорфизм, глубина, микро-анимации). Сайт пользователя выглядит как продукт дорогого дизайн-агентства.
+2. **AI-Native Workflow**: Генерация структуры страницы под нишу через Gemini AI. Перевод контента на 4 языка (RU/EN/KK/UZ) в один клик.
+3. **Privacy-First Analytics**: Проксирование пикселей (FB, TikTok, GA4) через сервер. +30% точных данных в мире без куки.
+4. **Data Lock-in & Switching Costs**: Высокая стоимость перехода, когда все лиды, записи и история сделок уже интегрированы в нашу CRM.
 
 ---
 
-## Slide 6: Business Model (PLG & Fintech Transition)
+## Slide 5: Бизнес-модель (PLG & Fintech Transition)
+
 **Freemium with clear upgrade loops.**
 
-**1. Free Tier (The Billboard)**
-*   1 Page, Core Blocks.
-*   **Viral Loop**: "Powered by lnkmx" watermark drives organic CAC.
-
-**2. Pro Tier ($7/mo)**
-*   No watermark, 28 blocks, Full CRM/Analytics.
-*   **LTV**: $168 (based on 24-month retention).
-*   **CAC**: < $15 (10:1 LTV:CAC ratio).
-
-**3. Future (Q4 2026)**: Transition to **Take Rate model** (Fintech). Take a % of GMV passing through lnkmx wallets.
+1. **Free Tier**: 1 страница, 11 базовых блоков. Водяной знак "Powered by lnkmx" работает как виральная петля захвата юзеров.
+2. **Pro Tier (~$7/мес)**: 6 страниц, все 28 блоков, полная CRM, отсутствие вотермарки, кастомные домены.
+3. **White-Label**: Режим для агентств и энтерпрайза без упоминания платформы.
+4. **Fintech (Q4 2026)**: Переход к модели **Take Rate**. % от оборота (GMV), проходящего через инвойсы и кошельки lnkmx.
 
 ---
 
-## Slide 7: Technical Moat & Scalability
-**Built for 1M+ Users.**
-*   **Stack**: Supabase + Deno Edge Functions + Cloudflare Workers.
-*   **Moat**: Server-side Pixel Proxying (Hard to replicate for basic link tools).
-*   **UI**: Optimistic updates + PWA (Production-ready mobile experience).
-*   **Security**: RLS-hardened Postgres, GDPR/CCPA ready.
+## Slide 6: Анализ рынка (Solo-Economy 2026)
+
+* **TAM**: Глобальная экономика создателей — $100B+ (50M+ человек).
+- **SAM**: Рынки СНГ, ЮВА и MENA — потенциал $500M ARR (высокая доля мобильного трафика).
+- **SOM**: Центральная Азия — 100k платных пользователей ($8M ARR) за первые 24 месяца.
+- **Тайминг**: Соло-предпринимательство становится основной экономической силой, а не просто подработкой.
 
 ---
 
-## Slide 8: Go-To-Market (Niche Domination)
-1.  **"100 Founders"**: Concierge onboarding for 100 key local creators to kickstart the network effect.
-2.  **Beachhead Markets**: 
-    -   *Beauty Masters* (Replace Instagram Direct chaos with Bookings).
-    -   *Real Estate* (Lead forms + catalogs per object).
-    -   *Education* (Event registration + digital downloads).
+## Slide 7: Технический стек и Масштабируемость
+
+**Инфраструктура, готовая к 1M+ пользователей.**
+
+- **Stack**: React 18 / Supabase / Deno Edge Functions / Cloudflare Workers.
+- **Security**: Строгая изоляция данных через RLS (Row Level Security). GDPR/CCPA Ready.
+- **Performance**: PWA с мгновенной загрузкой и оптимистичными обновлениями данных.
+- **Reliability**: Автоматическое создание снепшотов страниц и версионность.
 
 ---
 
-## Slide 9: Competitive Landscape
-| Feature | **lnkmx** | Linktree | Taplink | Wix/Tilda |
+## Slide 8: Текущий прогресс и Traction
+
+- **Статус**: Ядро платформы полностью готово (READY FOR SCALE).
+- **Функционал**: Реализованы CRM, Букинг, Ивенты, Финтех-ядро, А/Б тесты.
+- **Localization**: 100% покрытие 4 языков (RU, EN, KK, UZ).
+- **Traction**: 90+ предзаказов до официального релиза. Платформа прошла 4 глубоких аудита архитектуры.
+
+---
+
+## Slide 9: Конкурентное окружение
+
+| Характеристика | **lnkmx** | Linktree | Taplink | Tilda/Wix |
 | :--- | :---: | :---: | :---: | :---: |
-| **Setup Time** | **15 min** | 5 min | 30 min | 5+ hours |
-| **CRM/Leads** | **Native** | No | Basic | Plugin req. |
-| **Aesthetic** | **Liquid Glass** | Basic | Table-like | High/Complex |
-| **Pricing** | **$7/mo** | High for Biz | $10+/mo | $20+/mo |
-| **Mobile-First** | **Yes** | Yes | Yes | No |
+| **Время запуска** | **15 мин** | 5 мин | 30 мин | 5+ часов |
+| **Бизнес-логика** | **CRM + Задачи** | Нет | Базово | Через плагины |
+| **Дизайн** | **Liquid Glass** | Шаблонно | Таблично | Сложный конструктор |
+| **Мобильность** | **100% Mobile** | Да | Да | Нет (Desktop-first) |
+| **Аналитика** | **Server Proxy** | Базово | Нет | Базово |
 
 ---
 
-## Slide 10: Roadmap & Vision
-**Phase 1 (Stabilization)**: Fix PWA, Sitemap, and Boilers (TECH_DEBT_BACKLOG.md).
-**Phase 2 (Growth)**: Native Apps (iOS/Android) + Advanced Booking Sync.
-**Phase 3 (Fintech Pivot)**: Native Wallets & 0% fee ecosystem (for early adopters).
-**Long-term**: Becoming the **Default Banking & OS Layer** for freelancers globally.
+## Slide 10: Roadmap 2026
+
+- **Q1**: Релиз Community-маркетплейса шаблонов и виджетов.
+- **Q2**: Мобильные приложения (iOS/Android) для мгновенного управления CRM.
+- **Q3**: Запуск Public API для интеграции с Zapier/Make.
+- **Q4**: Fintech-пивот — внедрение платежного шлюза и внутренних кошельков.
 
 ---
 
-## Slide 11: Team & Traction
-**Ilyas Azelhanov (Founder/CEO)**
-*   7+ years in SaaS/EdTech. Built platforms with 5k+ active users in Year 1.
-*   Certified Business Tracker (Astana Hub).
-*   Status: **90+ Pre-orders** collected before MVP release. Production-ready core.
+## Slide 11: Команда и Запрос
+
+**Ильяс Азельханов (Founder/CEO)**
+
+- 7+ лет опыта в SaaS/EdTech. Экспертиза в архитектуре масштабируемых систем.
+
+**Запрос (Seed Round): $250,000**
+
+- **40% Продукт**: Разработка мобильных приложений и финтех-слоя.
+- **40% Маркетинг**: Захват доли рынка через Influence-маркетинг в СНГ и ЮВА.
+- **20% Operations**: Регистрация в МФЦА, комплаенс и серверная инфраструктура.
 
 ---
 
-## Slide 12: The Ask ($250,000)
-**We are raising a Seed round to capture Central Asia.**
-*   **40% Product**: Mobile Native Apps & Fintech layer.
-*   **40% Marketing**: Influence-driven GTM & Local content.
-*   **20% Ops**: Compliance (AIFC) & Server infra.
+## Slide 12: Контакты
 
-**Contact**:
-admin@lnkmx.my
-[Website: lnkmx.my]
+**lnkmx — Build the future of Solo-Economy.**
+
+- **Email**: <admin@lnkmx.my>
+- **Web**: [lnkmx.my](https://lnkmx.my)
+- **Status**: Ready for the next leap.
