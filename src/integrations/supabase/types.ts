@@ -1125,9 +1125,11 @@ export type Database = {
           created_at: string | null
           description: string | null
           editor_mode: string
+          favicon_url: string | null
           gallery_featured_at: string | null
           gallery_likes: number | null
           grid_config: Json | null
+          hide_branding: boolean | null
           id: string
           integrations: Json | null
           is_in_gallery: boolean | null
@@ -1137,6 +1139,7 @@ export type Database = {
           is_published: boolean | null
           last_snapshot_at: string | null
           niche: string | null
+          organization_id: string | null
           page_type: string | null
           preview_url: string | null
           quality_score: number | null
@@ -1154,9 +1157,11 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           editor_mode?: string
+          favicon_url?: string | null
           gallery_featured_at?: string | null
           gallery_likes?: number | null
           grid_config?: Json | null
+          hide_branding?: boolean | null
           id?: string
           integrations?: Json | null
           is_in_gallery?: boolean | null
@@ -1166,6 +1171,7 @@ export type Database = {
           is_published?: boolean | null
           last_snapshot_at?: string | null
           niche?: string | null
+          organization_id?: string | null
           page_type?: string | null
           preview_url?: string | null
           quality_score?: number | null
@@ -1183,9 +1189,11 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           editor_mode?: string
+          favicon_url?: string | null
           gallery_featured_at?: string | null
           gallery_likes?: number | null
           grid_config?: Json | null
+          hide_branding?: boolean | null
           id?: string
           integrations?: Json | null
           is_in_gallery?: boolean | null
@@ -1195,6 +1203,7 @@ export type Database = {
           is_published?: boolean | null
           last_snapshot_at?: string | null
           niche?: string | null
+          organization_id?: string | null
           page_type?: string | null
           preview_url?: string | null
           quality_score?: number | null
@@ -2547,6 +2556,20 @@ export type Database = {
           zone_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "zone_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "public_user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "zone_members_zone_id_fkey"
             columns: ["zone_id"]
