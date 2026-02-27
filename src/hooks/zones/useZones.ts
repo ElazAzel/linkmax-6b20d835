@@ -44,18 +44,23 @@ export function useZones() {
     zones.find(z => z.id === currentZoneId) || null
   , [zones, currentZoneId]);
 
-  // Fetch members when zone changes
+  // Fetch members when zone changes (join user_profiles for display info)
   useEffect(() => {
     if (!currentZoneId) { setMembers([]); return; }
     
-    const fetch = async () => {
+    const fetchMembers = async () => {
       const { data } = await supabase
         .from('zone_members')
-        .select('*')
+        .select('*, user_profiles:user_id(display_name, avatar_url, username)')
         .eq('zone_id', currentZoneId);
-      setMembers((data as ZoneMember[]) || []);
+      const mapped = (data || []).map((m: any) => ({
+        ...m,
+        display_name: m.user_profiles?.display_name || m.user_profiles?.username || null,
+        avatar_url: m.user_profiles?.avatar_url || null,
+      }));
+      setMembers(mapped as ZoneMember[]);
     };
-    fetch();
+    fetchMembers();
   }, [currentZoneId]);
 
   // My role in current zone

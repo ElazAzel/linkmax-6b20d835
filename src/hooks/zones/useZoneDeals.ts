@@ -45,9 +45,10 @@ export function useZoneDeals(zoneId: string | null) {
 
   const createDeal = useCallback(async (deal: Partial<ZoneDeal>) => {
     if (!zoneId) throw new Error('No zone selected');
+    const userId = (await supabase.auth.getUser()).data.user?.id;
     const { data, error } = await supabase
       .from('zone_deals')
-      .insert({ ...deal, zone_id: zoneId } as any)
+      .insert({ ...deal, zone_id: zoneId, assigned_to: userId, created_by: userId } as any)
       .select()
       .single();
     if (error) throw error;
