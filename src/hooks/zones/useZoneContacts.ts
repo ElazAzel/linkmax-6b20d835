@@ -57,5 +57,20 @@ export function useZoneContacts(zoneId: string | null) {
     await fetchContacts();
   }, [fetchContacts]);
 
-  return { contacts, loading, createContact, updateContact, deleteContact, refetch: fetchContacts };
+  const bulkImport = useCallback(async (contactsList: Partial<ZoneContact>[]) => {
+    if (!zoneId) throw new Error('No zone selected');
+    const userId = (await supabase.auth.getUser()).data.user?.id;
+    const rows = contactsList.map(c => ({
+      ...c,
+      zone_id: zoneId,
+      owner_user_id: userId,
+    }));
+    const { error } = await supabase
+      .from('zone_contacts')
+      .insert(rows as any);
+    if (error) throw error;
+    await fetchContacts();
+  }, [zoneId, fetchContacts]);
+
+  return { contacts, loading, createContact, updateContact, deleteContact, bulkImport, refetch: fetchContacts };
 }
