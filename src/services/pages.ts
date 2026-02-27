@@ -200,7 +200,7 @@ export async function savePage(
       p_integrations: (pageData.integrations || null) as unknown as Json,
       p_favicon_url: pageData.favicon_url || null,
       p_hide_branding: pageData.hideBranding || false,
-      p_organization_id: pageData.organization_id || null,
+      p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : null,
     });
 
     if (upsertError) {

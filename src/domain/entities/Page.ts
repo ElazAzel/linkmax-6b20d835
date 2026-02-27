@@ -38,20 +38,28 @@ export interface GridConfig {
   cellHeight: number;
 }
 
-  /**
-   * NEW: Page i18n configuration
-   * Controls which languages are available on this page and defaults
-   */
-  export interface PageI18nConfig {
-    /** List of active language codes for this page (e.g., ['ru', 'en', 'tr']) */
-    languages: string[];
-    /** Default/primary language code (must be in languages list) */
-    defaultLanguage: string;
-    /** Auto-detection mode: if 'auto', use Accept-Language / geo / browser language */
-    languageMode?: 'auto' | 'manual';
-  }
+/**
+ * NEW: Page i18n configuration
+ * Controls which languages are available on this page and defaults
+ */
+export interface PageI18nConfig {
+  /** List of active language codes for this page (e.g., ['ru', 'en', 'tr']) */
+  languages: string[];
+  /** Default/primary language code (must be in languages list) */
+  defaultLanguage: string;
+  /** Auto-detection mode: if 'auto', use Accept-Language / geo / browser language */
+  languageMode?: 'auto' | 'manual';
+}
 
-  // ============= Page Entity =============
+export interface PageIntegrations {
+  fb_pixel?: string;
+  tt_pixel?: string;
+  ga4_id?: string;
+  yandex_metrika?: string;
+  webhook_url?: string;
+}
+
+// ============= Page Entity =============
 
 export interface Page<TBlock extends BaseBlock = BaseBlock> {
   id: string;
@@ -68,8 +76,14 @@ export interface Page<TBlock extends BaseBlock = BaseBlock> {
   viewCount?: number;
   createdAt?: string;
   updatedAt?: string;
-    /** NEW: i18n configuration for this page */
-    i18n?: PageI18nConfig;
+  /** NEW: i18n configuration for this page */
+  i18n?: PageI18nConfig;
+  niche?: string;
+  favicon_url?: string;
+  hideBranding?: boolean;
+  organization_id?: string;
+  previewUrl?: string;
+  integrations?: PageIntegrations;
 }
 
 // ============= Default Values =============
@@ -94,11 +108,11 @@ export const DEFAULT_GRID_CONFIG: GridConfig = {
   cellHeight: 100,
 };
 
-  export const DEFAULT_I18N_CONFIG: PageI18nConfig = {
-    languages: ['ru', 'en', 'kk'],
-    defaultLanguage: 'ru',
-    languageMode: 'auto',
-  };
+export const DEFAULT_I18N_CONFIG: PageI18nConfig = {
+  languages: ['ru', 'en', 'kk'],
+  defaultLanguage: 'ru',
+  languageMode: 'auto',
+};
 
 // ============= Factory Functions =============
 
@@ -162,11 +176,11 @@ export function countBlocks(page: Page, excludeProfile: boolean = false): number
  */
 export function getBlockCountByType(page: Page): Record<BlockType, number> {
   const counts = {} as Record<BlockType, number>;
-  
+
   for (const block of page.blocks) {
     counts[block.type] = (counts[block.type] || 0) + 1;
   }
-  
+
   return counts;
 }
 
@@ -194,12 +208,12 @@ export function canPublishPage(page: Page): { canPublish: boolean; reason?: stri
   if (page.blocks.length === 0) {
     return { canPublish: false, reason: 'Page must have at least one block' };
   }
-  
+
   const hasProfile = page.blocks.some(block => block.type === 'profile');
   if (!hasProfile) {
     return { canPublish: false, reason: 'Page must have a profile block' };
   }
-  
+
   return { canPublish: true };
 }
 
@@ -208,15 +222,15 @@ export function canPublishPage(page: Page): { canPublish: boolean; reason?: stri
  */
 export function validatePage(page: Page): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
-  
+
   if (!page.userId) {
     errors.push('User ID is required');
   }
-  
+
   if (!page.blocks || page.blocks.length === 0) {
     errors.push('Page must have at least one block');
   }
-  
+
   return {
     valid: errors.length === 0,
     errors,
@@ -232,21 +246,21 @@ export function reorderBlocks<TBlock extends BaseBlock>(
 ): Page<TBlock> {
   const blockMap = new Map(page.blocks.map(block => [block.id, block]));
   const reorderedBlocks: TBlock[] = [];
-  
+
   for (const id of newOrder) {
     const block = blockMap.get(id);
     if (block) {
       reorderedBlocks.push(block);
     }
   }
-  
+
   // Add any blocks not in the new order at the end
   for (const block of page.blocks) {
     if (!newOrder.includes(block.id)) {
       reorderedBlocks.push(block);
     }
   }
-  
+
   return {
     ...page,
     blocks: reorderedBlocks,
@@ -267,10 +281,10 @@ export function reorderBlocksByIndex<TBlock extends BaseBlock>(
   if (toIndex < 0 || toIndex >= blocks.length) {
     return blocks;
   }
-  
+
   const result = [...blocks];
   const [removed] = result.splice(fromIndex, 1);
   result.splice(toIndex, 0, removed);
-  
+
   return result;
 }

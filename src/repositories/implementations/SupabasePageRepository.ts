@@ -59,10 +59,10 @@ function convertDbBlocksToBlocks(dbBlocks: DbBlock[]): Block[] {
 
 function extractBlockTitle(block: Block, lang: SupportedLanguage = 'ru'): string | null {
   if (!('title' in block) && !('name' in block)) return null;
-  
+
   const rawTitle = 'title' in block ? block.title : ('name' in block ? (block as ProfileBlock).name : null);
   if (!rawTitle) return null;
-  
+
   if (typeof rawTitle === 'string') return rawTitle;
   return getI18nText(rawTitle, lang);
 }
@@ -107,7 +107,7 @@ export class SupabasePageRepository implements IPageRepository {
   async save(dto: SavePageDTO): Promise<Result<SavePageResponse, Error>> {
     return tryCatchAsync(async () => {
       const { pageData, userId, chatbotContext } = dto;
-      
+
       const slugResult = await this.getUserSlug(userId);
       if (!slugResult.success) {
         throw (slugResult as { success: false; error: Error }).error;
@@ -132,6 +132,10 @@ export class SupabasePageRepository implements IPageRepository {
         p_seo_meta: pageData.seo as unknown as Json,
         p_editor_mode: pageData.editorMode || 'linear',
         p_grid_config: (pageData.gridConfig || null) as unknown as Json,
+        p_integrations: (pageData.integrations || null) as unknown as Json,
+        p_favicon_url: pageData.favicon_url || null,
+        p_hide_branding: pageData.hideBranding || false,
+        p_organization_id: pageData.organization_id || null,
       });
 
       if (upsertError) {

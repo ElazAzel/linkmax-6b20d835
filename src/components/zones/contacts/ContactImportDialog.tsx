@@ -3,7 +3,7 @@
  */
 import { memo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -153,6 +153,9 @@ export const ContactImportDialog = memo(function ContactImportDialog({
             <FileSpreadsheet className="h-5 w-5" />
             {t('zones.contacts.import', 'Import Contacts')}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('zones.contacts.importDescription', 'Upload a CSV or Excel file to import contacts into your zone')}
+          </DialogDescription>
         </DialogHeader>
 
         {rows.length === 0 ? (
