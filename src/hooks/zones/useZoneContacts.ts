@@ -28,9 +28,10 @@ export function useZoneContacts(zoneId: string | null) {
 
   const createContact = useCallback(async (contact: Partial<ZoneContact>) => {
     if (!zoneId) throw new Error('No zone selected');
+    const userId = (await supabase.auth.getUser()).data.user?.id;
     const { data, error } = await supabase
       .from('zone_contacts')
-      .insert({ ...contact, zone_id: zoneId } as any)
+      .insert({ ...contact, zone_id: zoneId, owner_user_id: userId } as any)
       .select()
       .single();
     if (error) throw error;

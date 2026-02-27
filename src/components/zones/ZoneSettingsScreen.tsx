@@ -1,7 +1,7 @@
 /**
  * ZoneSettingsScreen - Zone management (members, invites, billing, audit)
  */
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -55,7 +55,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
     setInvites((data as ZoneInvite[]) || []);
   }, [zone.id]);
 
-  useState(() => { fetchInvites(); });
+  useEffect(() => { fetchInvites(); }, [fetchInvites]);
 
   const handleInvite = async () => {
     if (!inviteEmail.trim()) return;
