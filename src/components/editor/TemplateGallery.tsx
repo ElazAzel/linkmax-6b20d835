@@ -283,8 +283,9 @@ export const TemplateGallery = memo(function TemplateGallery({
           <TemplatePersonalization
             open={personalizationOpen}
             onClose={() => setPersonalizationOpen(false)}
-            template={selectedTemplate}
-            onSelect={(blocks) => {
+            templateBlocks={selectedTemplate.blocks?.map((b: any) => ({ type: b.type, overrides: b })) || []}
+            templateName={selectedTemplate.name || ''}
+            onApply={(blocks) => {
               onSelect(blocks);
               onClose();
             }}
@@ -294,6 +295,10 @@ export const TemplateGallery = memo(function TemplateGallery({
         <TemplateMarketplace
           open={marketplaceOpen}
           onClose={() => setMarketplaceOpen(false)}
+          onApplyTemplate={(blocks) => {
+            onSelect(blocks);
+            onClose();
+          }}
         />
       </DialogContent>
     </Dialog>

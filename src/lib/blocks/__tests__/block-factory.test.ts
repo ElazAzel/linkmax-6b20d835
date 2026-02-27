@@ -10,7 +10,7 @@ if (typeof crypto === 'undefined') {
 
 describe('block-factory', () => {
     it('should create a profile block with default values', () => {
-        const block = createBlock('profile');
+        const block = createBlock('profile') as any;
         expect(block.type).toBe('profile');
         expect(block.id).toContain('profile-');
         expect(block.name).toBe('Your Name');
@@ -18,7 +18,7 @@ describe('block-factory', () => {
 
     it('should create a link block and apply overrides', () => {
         const overrides = { title: 'Custom Link', url: 'https://test.com' };
-        const block = createBlock('link', overrides);
+        const block = createBlock('link', overrides) as any;
         expect(block.type).toBe('link');
         expect(block.title).toBe('Custom Link');
         expect(block.url).toBe('https://test.com');
@@ -29,7 +29,7 @@ describe('block-factory', () => {
     });
 
     it('should correctly generate an event block with internal eventId', () => {
-        const block = createBlock('event');
+        const block = createBlock('event') as any;
         expect(block.type).toBe('event');
         expect(block.eventId).toBeDefined();
         expect(typeof block.eventId).toBe('string');

@@ -53,12 +53,12 @@ export function BlockExperimentDialog({
                 [
                     {
                         variant_label: 'Variant A',
-                        block_data: block.content, // Original content
+                        block_data: block as any, // Original block data
                         traffic_weight: trafficA,
                     },
                     {
                         variant_label: variantBLabel,
-                        block_data: { ...block.content, _is_variant_b: true }, // Placeholder for variant B data
+                        block_data: { ...(block as any), _is_variant_b: true }, // Placeholder for variant B data
                         traffic_weight: 100 - trafficA,
                     },
                 ]
