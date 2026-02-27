@@ -18,11 +18,13 @@ type PayoutRequestWithProfile = {
     user_id: string;
     amount: number;
     status: string;
-    payout_method: any;
-    created_at: string;
+    payment_method: string | null;
+    payment_details: any;
+    admin_notes: string | null;
+    processed_by: string | null;
     processed_at: string | null;
-    notes: string | null;
-    wallet_id: string;
+    created_at: string;
+    updated_at: string;
     user_profiles: {
         display_name: string | null;
         username: string | null;
@@ -38,18 +40,24 @@ export const AdminFintechTab = () => {
         try {
             setLoading(true);
             const { data, error } = await (supabase as any)
-                .from('payout_requests')
-                .select(`
-                    *,
-                    user_profiles (
-                        display_name,
-                        username
-                    )
-                `)
+                .from('token_withdrawals')
+                .select('*')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setRequests(data || []);
+
+            // Fetch user profiles separately
+            const userIds = Array.from(new Set((data || []).map((d: any) => String(d.user_id)))) as string[];
+            const { data: profiles } = userIds.length > 0 
+                ? await supabase.from('user_profiles').select('id, display_name, username').in('id', userIds)
+                : { data: [] as any[] };
+
+            const profileMap = new Map((profiles || []).map(p => [p.id, p]));
+            const enriched = (data || []).map((d: any) => ({
+                ...d,
+                user_profiles: profileMap.get(d.user_id) || null,
+            }));
+            setRequests(enriched);
         } catch (err: any) {
             toast.error("Failed to fetch requests: " + err.message);
         } finally {
@@ -64,8 +72,8 @@ export const AdminFintechTab = () => {
     const handleAction = async (id: string, status: 'completed' | 'rejected') => {
         try {
             setActionLoading(id);
-            const { error } = await (supabase as any)
-                .from('payout_requests')
+            const { error } = await supabase
+                .from('token_withdrawals')
                 .update({
                     status,
                     processed_at: new Date().toISOString()
@@ -139,10 +147,10 @@ export const AdminFintechTab = () => {
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant="outline" className="bg-primary/5">
-                                                {(req.payout_method as any)?.type === 'card' ? 'Карта' : 'Другое'}
+                                                {req.payment_method || 'Другое'}
                                             </Badge>
                                             <p className="text-[10px] mt-1 text-muted-foreground truncate max-w-[150px]">
-                                                {(req.payout_method as any)?.value}
+                                                {req.payment_details?.notes || ''}
                                             </p>
                                         </TableCell>
                                         <TableCell className="text-sm">
@@ -151,7 +159,7 @@ export const AdminFintechTab = () => {
                                         <TableCell>
                                             <Badge className={cn(
                                                 "capitalize",
-                                                req.status === 'requested' ? "bg-amber-500/20 text-amber-500" :
+                                                req.status === 'pending' ? "bg-amber-500/20 text-amber-500" :
                                                     req.status === 'completed' ? "bg-emerald-500/20 text-emerald-500" :
                                                         "bg-red-500/20 text-red-500"
                                             )}>
@@ -159,7 +167,7 @@ export const AdminFintechTab = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            {req.status === 'requested' && (
+                                            {req.status === 'pending' && (
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Button
                                                         size="sm"

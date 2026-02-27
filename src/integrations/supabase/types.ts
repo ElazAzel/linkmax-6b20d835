@@ -2901,6 +2901,7 @@ export type Database = {
           slug: string
         }[]
       }
+      get_team_owner: { Args: { p_team_id: string }; Returns: string }
       get_token_analytics: {
         Args: { p_end_date?: string; p_start_date?: string }
         Returns: Json
@@ -2935,6 +2936,11 @@ export type Database = {
         Returns: undefined
       }
       increment_view_count: { Args: { page_slug: string }; Returns: undefined }
+      is_team_member: {
+        Args: { p_team_id: string; p_user_id: string }
+        Returns: boolean
+      }
+      is_team_public: { Args: { p_team_id: string }; Returns: boolean }
       is_zone_admin: {
         Args: { p_user_id: string; p_zone_id: string }
         Returns: boolean

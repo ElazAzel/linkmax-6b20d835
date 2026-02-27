@@ -145,14 +145,13 @@ export const fintechService = {
         }
 
         const { data: request, error: requestError } = await (supabase as any)
-            .from('payout_requests')
+            .from('token_withdrawals')
             .insert({
                 user_id: userId,
-                wallet_id: wallet.id,
                 amount,
-                payout_method: method as Json,
-                notes,
-                status: 'requested'
+                payment_method: method,
+                payment_details: notes ? { notes } : null,
+                status: 'pending'
             })
             .select()
             .single();

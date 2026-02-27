@@ -38,7 +38,7 @@ export function AdminTemplatesTab() {
         if (!templates) return [];
         return templates.filter(t =>
             t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (t.niches && t.niches.join(', ').toLowerCase().includes(searchQuery.toLowerCase()))
+            (t.category && t.category.toLowerCase().includes(searchQuery.toLowerCase()))
         );
     }, [templates, searchQuery]);
 
@@ -135,10 +135,9 @@ export function AdminTemplatesTab() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex gap-1 flex-wrap">
-                                            {template.niches?.map((niche: string) => (
-                                                <Badge key={niche} variant="outline">{niche}</Badge>
-                                            ))}
-                                            {(!template.niches || template.niches.length === 0) && (
+                                            {template.category ? (
+                                                <Badge variant="outline">{template.category}</Badge>
+                                            ) : (
                                                 <span className="text-xs text-muted-foreground">--</span>
                                             )}
                                         </div>

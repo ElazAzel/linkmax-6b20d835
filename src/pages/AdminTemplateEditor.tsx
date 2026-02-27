@@ -23,7 +23,7 @@ interface TemplateData {
     id?: string;
     name: string;
     description: string;
-    niches: string[];
+    category: string;
     is_premium: boolean;
     is_public: boolean;
     preview_image: string;
@@ -34,7 +34,7 @@ interface TemplateData {
 const DEFAULT_TEMPLATE: TemplateData = {
     name: '',
     description: '',
-    niches: [],
+    category: 'general',
     is_premium: false,
     is_public: false,
     preview_image: '',
@@ -60,8 +60,8 @@ export default function AdminTemplateEditor() {
 
     async function fetchTemplate(templateId: string) {
         try {
-            const { data, error } = await (supabase as any)
-                .from('page_templates')
+            const { data, error } = await supabase
+                .from('templates')
                 .select('*')
                 .eq('id', templateId)
                 .single();
@@ -73,7 +73,7 @@ export default function AdminTemplateEditor() {
                     id: d.id,
                     name: d.name,
                     description: d.description || '',
-                    niches: d.niches || [],
+                    category: d.category || 'general',
                     is_premium: d.is_premium,
                     is_public: d.is_public,
                     preview_image: d.preview_image || '',
@@ -101,25 +101,25 @@ export default function AdminTemplateEditor() {
             const payload = {
                 name: data.name,
                 description: data.description,
-                niches: data.niches,
+                category: data.category,
                 is_premium: data.is_premium,
                 is_public: data.is_public,
                 preview_image: data.preview_image,
-                blocks: data.blocks,
+                blocks: data.blocks as unknown as import('@/integrations/supabase/types').Json,
                 sort_order: data.sort_order,
                 updated_at: new Date().toISOString(),
             };
 
             if (id && id !== 'new') {
-                const { error } = await (supabase as any)
-                    .from('page_templates')
+                const { error } = await supabase
+                    .from('templates')
                     .update(payload)
                     .eq('id', id);
                 if (error) throw error;
                 toast.success(t('admin.templateUpdated', 'Template updated'));
             } else {
-                const { error } = await (supabase as any)
-                    .from('page_templates')
+                const { error } = await supabase
+                    .from('templates')
                     .insert(payload);
                 if (error) throw error;
                 toast.success(t('admin.templateCreated', 'Template created'));
@@ -213,10 +213,10 @@ export default function AdminTemplateEditor() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label>{t('admin.niches', 'Niches')}</Label>
+                                <Label>{t('admin.category', 'Category')}</Label>
                                 <Input
-                                    value={data.niches.join(', ')}
-                                    onChange={e => setData(prev => ({ ...prev, niches: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))}
+                                    value={data.category}
+                                    onChange={e => setData(prev => ({ ...prev, category: e.target.value }))}
                                     placeholder="e.g. fitness, beauty, creator"
                                 />
                             </div>
