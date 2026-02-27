@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import { useMultiPage } from '@/hooks/page/useMultiPage';
 import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
+import { useLeads } from '@/hooks/crm/useLeads';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
 
@@ -121,7 +122,8 @@ function DashboardV2Inner() {
   // Core state - with onPublish callback for automatic versioning
   const dashboard = useDashboard({ onPublish: handlePublishVersion });
   const multiPage = useMultiPage();
-  const { canUseCustomPageBackground } = useFreemiumLimits();
+  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth } = useFreemiumLimits();
+  const { leads } = useLeads();
 
   // Editor history
   const editorHistory = useEditorHistory(
@@ -383,6 +385,7 @@ function DashboardV2Inner() {
                 pageData={dashboard.pageData}
                 loading={dashboard.loading}
                 isPremium={dashboard.isPremium}
+                realLeadsCount={leads.length}
                 onOpenEditor={() => handleTabChange('editor')}
                 onPreview={() => dashboard.sharingState.handlePreview()}
                 onShare={() => dashboard.sharingState.handleShare()}
@@ -438,18 +441,32 @@ function DashboardV2Inner() {
                 onEditPage={handleEditPage}
                 onPreviewPage={handlePreviewPage}
                 onSharePage={handleSharePage}
-                onDuplicatePage={() => toast.info(t('common.comingSoon', 'Coming soon'))}
+                onDuplicatePage={async (id) => {
+                  const page = multiPage.pages.find(p => p.id === id);
+                  if (page) {
+                    const result = await multiPage.createPage(`${page.title} (copy)`, `${page.slug}-copy`);
+                    if (result.success) {
+                      toast.success(t('dashboard.pages.duplicated', 'Page duplicated'));
+                    } else {
+                      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to duplicate'));
+                    }
+                  }
+                }}
                 onPageSettings={(id) => {
                   multiPage.switchPage(id);
                   handleTabChange('settings');
                 }}
-                onDeletePage={(id) => {
-                  // TODO: Add delete confirmation
-                  toast.info(t('common.comingSoon', 'Coming soon'));
+                onDeletePage={async (id) => {
+                  if (!confirm(t('dashboard.pages.deleteConfirm', 'Are you sure you want to delete this page? This cannot be undone.'))) return;
+                  const result = await multiPage.deletePage(id);
+                  if (result.success) {
+                    toast.success(t('dashboard.pages.deleted', 'Page deleted'));
+                  } else {
+                    toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
+                  }
                 }}
                 onUpgradePage={(id) => {
-                  // TODO: Open page upgrade flow
-                  toast.info(t('common.comingSoon', 'Coming soon'));
+                  navigate('/pricing');
                 }}
                 onUpgradePlan={() => navigate('/pricing')}
               />
@@ -485,9 +502,9 @@ function DashboardV2Inner() {
                   paidPages: multiPage.limits?.paidPages || 0,
                   freePages: multiPage.limits?.freePages || 1,
                   blocksUsed: dashboard.pageData?.blocks.length || 0,
-                  blocksLimit: dashboard.isPremium ? 50 : 8,
-                  aiGenerationsUsed: 0,
-                  aiGenerationsLimit: dashboard.isPremium ? 20 : 3,
+                  blocksLimit: freemiumLimits.maxBlocks === Infinity ? 999 : freemiumLimits.maxBlocks,
+                  aiGenerationsUsed: getAIPageGenerationsThisMonth(),
+                  aiGenerationsLimit: freemiumLimits.maxAIPageGenerationsPerMonth === Infinity ? 999 : freemiumLimits.maxAIPageGenerationsPerMonth,
                 }}
                 onUpgrade={() => navigate('/pricing')}
               />

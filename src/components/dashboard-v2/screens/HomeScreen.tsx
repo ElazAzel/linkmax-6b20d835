@@ -33,6 +33,7 @@ interface HomeScreenProps {
   pageData: PageData | null;
   loading: boolean;
   isPremium: boolean;
+  realLeadsCount?: number;
   onOpenEditor: () => void;
   onPreview: () => void;
   onShare: () => void;
@@ -57,6 +58,7 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenVersions,
   onOpenInsights,
   onOpenActivity,
+  realLeadsCount = 0,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -82,11 +84,10 @@ export const HomeScreen = memo(function HomeScreen({
   const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
-  // Stats for this week (mock for now, would come from analytics hook)
+  // Real stats from props
   const weeklyStats = {
     views: viewCount,
-    clicks: Math.floor(viewCount * 0.3),
-    leads: Math.floor(viewCount * 0.05),
+    leads: realLeadsCount,
   };
 
   return (
