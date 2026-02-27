@@ -117,7 +117,7 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
 
 // ============= Freemium Limits =============
 
-export type PremiumTier = 'free' | 'pro';
+export type PremiumTier = 'free' | 'pro' | 'business';
 
 export interface FreemiumLimits {
   maxBlocks: number;

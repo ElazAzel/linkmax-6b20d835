@@ -23,7 +23,7 @@ import Shield from 'lucide-react/dist/esm/icons/shield';
 import { format, addDays, addMonths, addYears } from 'date-fns';
 import { ru, enUS, kk } from 'date-fns/locale';
 
-type PremiumTier = 'free' | 'pro';
+type PremiumTier = 'free' | 'pro' | 'business';
 
 interface UserTierData {
   id: string;
@@ -177,6 +177,8 @@ export function UserTierManager() {
     switch (tier) {
       case 'pro':
         return <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white">{t('admin.tierPro')}</Badge>;
+      case 'business':
+        return <Badge className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">{t('admin.tierBusiness', 'Business')}</Badge>;
       default:
         return <Badge variant="secondary">{t('admin.tierFree')}</Badge>;
     }
@@ -251,6 +253,12 @@ export function UserTierManager() {
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-yellow-500">{users.filter(u => u.premium_tier === 'pro').length}</div>
             <div className="text-sm text-muted-foreground">{t('admin.tierPro')}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-blue-500">{users.filter(u => u.premium_tier === 'business').length}</div>
+            <div className="text-sm text-muted-foreground">{t('admin.tierBusiness', 'Business')}</div>
           </CardContent>
         </Card>
       </div>
@@ -342,6 +350,7 @@ export function UserTierManager() {
                                   <SelectContent>
                                     <SelectItem value="free">{t('admin.tierFree')}</SelectItem>
                                     <SelectItem value="pro">{t('admin.tierPro')}</SelectItem>
+                                    <SelectItem value="business">{t('admin.tierBusiness', 'Business')}</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
