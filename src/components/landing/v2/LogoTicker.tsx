@@ -1,8 +1,5 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils/utils";
 import { useTranslation } from "react-i18next";
-import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Gem from 'lucide-react/dist/esm/icons/gem';
 import Hexagon from 'lucide-react/dist/esm/icons/hexagon';
@@ -36,7 +33,7 @@ function GlobeIcon(props: any) {
             <line x1="2" x2="22" y1="12" y2="12" />
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
         </svg>
-    )
+    );
 }
 
 export const LogoTicker = () => {
@@ -47,24 +44,19 @@ export const LogoTicker = () => {
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">{t('landing.v2.logoTicker.title', 'Trusted by creators worldwide')}</p>
             </div>
             <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black,transparent)]">
-                <motion.div
-                    animate={{ x: "-50%" }}
-                    transition={{
-                        duration: 20,
-                        ease: "linear",
-                        repeat: Infinity,
-                    }}
-                    className="flex gap-12 sm:gap-24 items-center pr-12 sm:pr-24 shrink-0"
+                <div
+                    className="flex gap-12 sm:gap-24 items-center pr-12 sm:pr-24 shrink-0 animate-[ticker_20s_linear_infinite]"
+                    style={{ animation: 'ticker 20s linear infinite' }}
                 >
-                    {/* Duplicate list for infinite loop */}
                     {[...companies, ...companies].map((company, index) => (
                         <div key={index} className="flex items-center gap-2 text-muted-foreground/50 hover:text-primary transition-colors cursor-default group">
                             <company.icon className="w-6 h-6 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
                             <span className="font-bold text-lg hidden sm:block">{company.name}</span>
                         </div>
                     ))}
-                </motion.div>
+                </div>
             </div>
+            <style>{`@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}`}</style>
         </div>
     );
 };

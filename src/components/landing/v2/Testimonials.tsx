@@ -1,9 +1,6 @@
-import { motion } from "framer-motion";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Star from 'lucide-react/dist/esm/icons/star';
 import { useTranslation } from "react-i18next";
-
-
 
 export const Testimonials = () => {
     const { t } = useTranslation();
@@ -46,13 +43,9 @@ export const Testimonials = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {testimonials.map((testimonial, i) => (
-                        <motion.div
+                        <div
                             key={i}
-                            initial={{ opacity: 1, y: 0 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            whileHover={{ y: -5 }}
-                            className="bg-card border border-border/60 rounded-2xl p-6 flex flex-col gap-4"
+                            className="bg-card border border-border/60 rounded-2xl p-6 flex flex-col gap-4 transition-transform duration-200 hover:-translate-y-1"
                         >
                             <div className="flex gap-1 text-primary">
                                 {[...Array(5)].map((_, j) => (
@@ -71,7 +64,7 @@ export const Testimonials = () => {
                                     <div className="text-xs text-muted-foreground">{testimonial.role}</div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>

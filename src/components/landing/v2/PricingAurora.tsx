@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Check from 'lucide-react/dist/esm/icons/check';
-import X from 'lucide-react/dist/esm/icons/x';
 import { cn } from "@/lib/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -9,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { MagneticButton } from "./MagneticButton";
-
 
 export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) => void }) => {
     const { t, i18n } = useTranslation();
@@ -24,6 +21,15 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
             totalYearly: isKZ ? '36 540 ₸' : '$60'
         }
     };
+
+    const features = [
+        t('landing.v2.pricing.pro.f1_new', 'Все блоки без ограничений'),
+        t('landing.v2.pricing.pro.f2_new', 'Онлайн-запись и своя мини-CRM'),
+        t('landing.v2.pricing.pro.f3_new', 'Мгновенные заявки в Telegram'),
+        t('landing.v2.pricing.pro.f4_new', 'Продажа товаров и билетов'),
+        t('landing.v2.pricing.pro.f5_new', 'Встроенный QR-сканер'),
+        t('landing.v2.pricing.pro.f6_new', 'Продвинутая статистика'),
+    ];
 
     return (
         <section className="py-24 relative overflow-hidden z-10 bg-background">
@@ -54,11 +60,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                 </div>
 
                 <div className="max-w-md mx-auto">
-                    {/* Pro Plan */}
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="bg-card border-2 border-primary/30 rounded-2xl p-1 relative"
-                    >
+                    <div className="bg-card border-2 border-primary/30 rounded-2xl p-1 relative transition-transform duration-200 hover:-translate-y-1">
                         <div className="bg-card rounded-xl p-7 h-full flex flex-col relative overflow-hidden">
                             <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-4 py-1 rounded-bl-xl">
                                 {t('landing.v2.pricing.popular', 'POPULAR')}
@@ -69,17 +71,12 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                     {t('landing.v2.pricing.pro.name', 'Pro')} <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t('landing.v2.pricing.aiPowered', 'AI Powered')}</span>
                                 </h3>
                                 <div className="flex items-baseline gap-1">
-                                    <AnimatePresence mode="wait">
-                                        <motion.span
-                                            key={isYearly ? 'year' : 'month'}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -10 }}
-                                            className="text-4xl font-black"
-                                        >
-                                            {isYearly ? prices.pro.yearly : prices.pro.monthly}
-                                        </motion.span>
-                                    </AnimatePresence>
+                                    <span
+                                        key={isYearly ? 'year' : 'month'}
+                                        className="text-4xl font-black transition-opacity duration-200"
+                                    >
+                                        {isYearly ? prices.pro.yearly : prices.pro.monthly}
+                                    </span>
                                     <span className="text-muted-foreground">/ {t('landing.v2.pricing.perMonth', 'month')}</span>
                                 </div>
                                 {isYearly && (
@@ -89,27 +86,14 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                 )}
                             </div>
 
-                            <motion.ul
-                                className="space-y-4 mb-8 flex-1"
-                                initial="hidden"
-                                animate="visible"
-                                variants={{
-                                    hidden: { opacity: 0 },
-                                    visible: {
-                                        opacity: 1,
-                                        transition: {
-                                            staggerChildren: 0.1
-                                        }
-                                    }
-                                }}
-                            >
-                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm font-medium"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f1_new', 'Все блоки без ограничений')}</span></motion.li>
-                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f2_new', 'Онлайн-запись и своя мини-CRM')}</span></motion.li>
-                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f3_new', 'Мгновенные заявки в Telegram')}</span></motion.li>
-                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f4_new', 'Продажа товаров и билетов')}</span></motion.li>
-                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f5_new', 'Встроенный QR-сканер')}</span></motion.li>
-                                <motion.li variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="flex items-center gap-3 text-sm"><Check className="w-5 h-5 text-primary shrink-0" /> <span>{t('landing.v2.pricing.pro.f6_new', 'Продвинутая статистика')}</span></motion.li>
-                            </motion.ul>
+                            <ul className="space-y-4 mb-8 flex-1">
+                                {features.map((f, i) => (
+                                    <li key={i} className="flex items-center gap-3 text-sm">
+                                        <Check className="w-5 h-5 text-primary shrink-0" />
+                                        <span>{f}</span>
+                                    </li>
+                                ))}
+                            </ul>
 
                             <MagneticButton className="w-full rounded-xl mb-3" onClick={() => onPlanSelect('pro')}>
                                 {t('landing.v2.pricing.pro.cta', 'Start Pro Trial')}
@@ -123,7 +107,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                 {t('landing.v2.pricing.free.cta', 'Начать бесплатно')}
                             </Button>
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
