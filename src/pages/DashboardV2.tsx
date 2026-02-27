@@ -14,6 +14,9 @@ import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
 
+// Zone context
+import { ZoneProvider, useZoneContext } from '@/contexts/ZoneContext';
+
 // SEO
 import { supabase } from '@/platform/supabase/client';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
@@ -89,7 +92,10 @@ import type { Niche } from '@/lib/niches';
 
 type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-deals' | 'zone-contacts' | 'zone-settings';
 
-export default function DashboardV2() {
+const ZONE_TABS = ['zone-deals', 'zone-contacts', 'zone-settings'];
+const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
+
+function DashboardV2Inner() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -133,13 +139,13 @@ export default function DashboardV2() {
     }
     // First check query params
     const tabParam = searchParams.get('tab') as TabId;
-    if (tabParam && ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads'].includes(tabParam)) {
+    if (tabParam && ALL_TABS.includes(tabParam)) {
       return tabParam;
     }
     // Fall back to pathname
     const pathParts = location.pathname.split('/');
     const lastPart = pathParts[pathParts.length - 1];
-    if (['home', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team'].includes(lastPart)) {
+    if (ALL_TABS.includes(lastPart)) {
       return lastPart as TabId;
     }
     return 'home';
@@ -575,6 +581,11 @@ export default function DashboardV2() {
             {currentTab === 'team' && (
               <TeamManagementScreen />
             )}
+
+            {/* Zone Screens */}
+            {currentTab === 'zone-deals' && <ZoneDealsScreenWrapper />}
+            {currentTab === 'zone-contacts' && <ZoneContactsScreenWrapper />}
+            {currentTab === 'zone-settings' && <ZoneSettingsScreenWrapper />}
           </Suspense>
         </DashboardLayout>
 
@@ -702,5 +713,32 @@ export default function DashboardV2() {
         </Suspense>
       </div>
     </>
+  );
+}
+
+/** Zone screen wrappers that read ZoneContext */
+function ZoneDealsScreenWrapper() {
+  const { currentZoneId } = useZoneContext();
+  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneDealsScreen zoneId={currentZoneId} />;
+}
+
+function ZoneContactsScreenWrapper() {
+  const { currentZoneId } = useZoneContext();
+  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneContactsScreen zoneId={currentZoneId} />;
+}
+
+function ZoneSettingsScreenWrapper() {
+  const { currentZone, members, myRole, refetch } = useZoneContext();
+  if (!currentZone) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} />;
+}
+
+export default function DashboardV2() {
+  return (
+    <ZoneProvider>
+      <DashboardV2Inner />
+    </ZoneProvider>
   );
 }

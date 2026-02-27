@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
  * DashboardSidebar - Desktop sidebar navigation
  * Collapsible with section groups, powered by Framer Motion
  */
-import { memo, useMemo } from 'react';
+import { memo, useMemo, lazy, Suspense } from 'react';
 import { OrganizationSwitcher } from '../organizations/OrganizationSwitcher';
 import { useTranslation } from 'react-i18next';
+
+const ZoneSwitcherSlot = lazy(() => import('@/components/zones/ZoneSwitcherSlot'));
 
 import Home from 'lucide-react/dist/esm/icons/home';
 import PenTool from 'lucide-react/dist/esm/icons/pen-tool';
@@ -24,6 +26,9 @@ import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Users from 'lucide-react/dist/esm/icons/users';
+import Kanban from 'lucide-react/dist/esm/icons/kanban';
+import Contact from 'lucide-react/dist/esm/icons/contact';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -66,6 +71,16 @@ const MAIN_ITEMS: SidebarItem[] = [
 ];
 
 const SECTIONS: SidebarSection[] = [
+  {
+    id: 'zone',
+    titleKey: 'dashboard.sidebar.zone',
+    defaultTitle: 'Бизнес-зона',
+    items: [
+      { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
+      { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
+      { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона' },
+    ],
+  },
   {
     id: 'tools',
     titleKey: 'dashboard.sidebar.tools',
@@ -216,6 +231,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
       </div>
 
       <OrganizationSwitcher collapsed={collapsed} />
+      <Suspense fallback={null}><ZoneSwitcherSlot collapsed={collapsed} /></Suspense>
 
       {/* Navigation */}
       <ScrollArea className="flex-1 px-3">
