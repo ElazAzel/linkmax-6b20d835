@@ -19,15 +19,18 @@ lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**,
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
 
 ### Key Competitive Moats
+
 - **Liquid Glass Aesthetic:** Premium design capital that allows users to charge more for their services.
 - **AI-Native Workflow:** Gemini-powered content and layout generation to solve "blank page syndrome".
 - **Data-Backed Retention:** High switching costs once customer data (leads/bookings) is stored in the lnkmx CRM.
 - **Privacy-First Analytics:** Server-side proxying (FB CAPI, TikTok) for 2026's cookieless environment.
 
 ### Repository Security & Privacy
+
 The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/inkmax/docs/ADR/0024-repository-security.md) for details on recent security hardening.
 
 **Target audiences:**
+
 - Experts and consultants showcasing services with booking and lead capture
 - Small businesses managing products, clients, and analytics
 - Service providers (beauty, fitness, education) with appointment scheduling
@@ -38,7 +41,7 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 - Legal entity: ИП BEEGIN
 - BIN: 971207300019
 - Address: г. Алматы, ул. Шолохова, д. 20/7
-- Email: admin@lnkmx.my
+- Email: <admin@lnkmx.my>
 - Phone: +7 705 109 76 64
 
 ---
@@ -48,11 +51,13 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 ### 2.1 Visitor (Public Page Viewer)
 
 **What they see:**
+
 - Creator's profile (avatar, name, bio, verification badge)
 - Block-based content: links, products, services, galleries, events
 - Interactive elements: booking forms, event registration, contact forms
 
 **Actions they can perform:**
+
 - Click links and CTAs → tracked as `block_click` events
 - Submit lead forms → creates record in `leads` table
 - Register for events → creates `event_registrations` + receives email/ticket
@@ -60,6 +65,7 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 - Download files, view videos, browse catalogs
 
 **Data captured (anonymized):**
+
 - Page views (`analytics.event_type = 'page_view'`)
 - Block clicks with block_id reference
 - UTM parameters stored in `metadata` JSON
@@ -70,6 +76,7 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 ### 2.2 Creator (Page Owner)
 
 **Primary journey:**
+
 ```
 Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → Publish → Share Link → Track Analytics → Manage Leads
 ```
@@ -87,6 +94,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | Custom domain | No | Yes |
 
 **Dashboard sections (DashboardV2):**
+
 - **Editor** — Block management, drag-drop reordering, inline editing
 - **Analytics (Insights)** — Views, clicks, conversions, advanced block CTR
 - **CRM (Leads)** — Centralized inbox for form leads, bookings, and registrations
@@ -95,6 +103,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 - **History** — Version rollback (pages with content)
 
 **Multi-page management:**
+
 - Switch pages via sidebar dropdown
 - Each page has unique slug: `lnkmx.my/{slug}`
 - Pro users can upgrade additional pages to "paid" status for premium features
@@ -119,6 +128,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | Partners | Manage partner logos and links |
 
 **Key files:**
+
 - `src/pages/Admin.tsx` — Main admin page
 - `src/components/admin/` — Admin panel components refactored to use Service Layer
 - `src/services/admin.ts` — Centralized admin business logic (Stats, Partners CRUD)
@@ -188,6 +198,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | **event** | Event with registration | Date, location, capacity, form | Event management |
 
 **Code locations:**
+
 - Block renderers: `src/components/blocks/{BlockName}Block.tsx`
 - Block editors: `src/components/block-editors/{BlockName}BlockEditor.tsx`
 - Type definitions: `src/types/page.ts`
@@ -213,21 +224,25 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | Account Settings | `screens/AccountSettingsScreen.tsx` | Profile, billing, notifications |
 
 **Auto-save mechanism:**
+
 - Hook: `src/hooks/useCloudPageState.ts`
 - 1.5-second debounce on block changes
 - Request versioning prevents stale overwrites
 - Visual indicator: Saving... then Saved toast
 
 **Publish flow:**
+
 1. User clicks Publish button
 2. `pages.is_published` set to `true`
 3. Snapshot saved to `page_snapshots` (keeps last 5 versions)
 4. Page accessible at `lnkmx.my/{slug}`
 
 ### Pixel Analytics Integration
+
 **Located in:** Page Settings -> Integrations
 
 Supported platforms (Visitor tracking):
+
 - **Facebook Pixel** (PageView)
 - **TikTok Pixel** (PageView)
 - **Google Analytics 4** (GA4)
@@ -236,16 +251,19 @@ Supported platforms (Visitor tracking):
 ### CRM/Inbox Features
 
 **Entities displayed:**
+
 - **Leads** — Form submissions with status pipeline (new, contacted, qualified, converted)
 - **Bookings** — Appointment requests with date/time/status
 - **Event Registrations** — Attendees with ticket codes
 
 **Lead status flow:**
+
 ```
 new -> contacted -> qualified -> won/lost
 ```
 
 **Automation (Pro):**
+
 - CRM automations table: `crm_automations`
 - Edge function: `process-crm-automations`
 - Configurable follow-up triggers
@@ -272,6 +290,7 @@ new -> contacted -> qualified -> won/lost
 - pg_cron for scheduled jobs (warm-up, digests, reminders)
 
 ### Edge Infrastructure
+
 - **Cloudflare Workers** - Handles incoming requests for SEO/bot detection and pre-rendering
 
 ### AI integration (Decoupling in Progress)
@@ -303,6 +322,7 @@ new -> contacted -> qualified -> won/lost
 Dynamic SEO meta tags are managed via `react-helmet-async` on the client and injected into the initial HTML by the `seo-ssr` edge function for crawlers.
 
 **Structured data (JSON-LD):**
+
 - WebPage schema for all pages
 - Person/Organization for profiles
 - FAQPage for FAQ blocks
@@ -310,11 +330,13 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 - LocalBusiness for service pages
 
 **AEO/GEO optimization:**
+
 - **Server-rendered HTML** for AI crawlers (ChatGPT, Perplexity, Gemini)
 - Semantic HTML (h2/h3 structure)
 - Key facts bullet points
 
 **Technical SEO:**
+
 - Sitemap: `src/app/sitemap.ts` (Dynamic generation)
 - SEO Landing: `/seo-landing` for deep indexing of core platform value.
 - Robots: `src/app/robots.ts`
@@ -334,10 +356,12 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 ### Plan Checking
 
 **Frontend hooks:**
+
 - `src/hooks/usePremiumStatus.ts` — Returns `isPremium`, `premiumExpiresAt`
 - `src/hooks/useFreemiumLimits.ts` — Checks specific feature access
 
 **Database columns:**
+
 - `user_profiles.is_premium` — Boolean premium status
 - `user_profiles.premium_expires_at` — Expiration timestamp
 - `user_profiles.trial_ends_at` — Trial period end
@@ -379,6 +403,7 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 ### Data model (high level)
 
 **Core entities:**
+
 - `pages`: public page metadata, SEO settings, theme.
 - `blocks`: structured blocks for each page (28 types).
 - `user_profiles`: plan, limits, and profile data.
@@ -389,11 +414,13 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 - **Analytics**: Built-in simple analytics + Pixel integrations (FB, TT, GA4, Yandex).
 
 **Leads and CRM:**
+
 - `leads`: lead records collected from forms.
 - `lead_interactions`: status history and notes.
 - `crm_automations`: automated follow-up rules.
 
 **Business Zones (Multi-Tenant Workspaces):**
+
 - `zones`: workspace metadata, billing plan, owner.
 - `zone_members`: RBAC membership (owner/admin/member/viewer).
 - `zone_subscriptions`: plan billing cycles and status.
@@ -408,17 +435,20 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 - `zone_invites`: invite tokens for onboarding new members.
 
 **Social features:**
+
 - `friendships`: user connections.
 - `shoutouts`: cross-promotion between users.
 - `collaborations`: joint page features.
 
 **Events and Bookings:**
+
 - `events`: event management.
 - `event_registrations`: attendee tracking.
 - `bookings`: appointment scheduling.
 - `booking_slots`: availability management.
 
 **Gamification:**
+
 - `user_tokens`: Linkkon token balances.
 - `token_transactions`: token economy history.
 - `user_achievements`: unlocked achievements.
@@ -606,6 +636,7 @@ lnkmx/
 **Landing page v5 (current):**
 
 Located in `src/components/landing-v5/`:
+
 - `NavBar.tsx` - Navigation with scroll effects
 - `HeroSection.tsx` - Hero with animated preview
 - `ProblemSolutionSection.tsx` - Pain points and solutions
@@ -621,10 +652,11 @@ Located in `src/components/landing-v5/`:
 - `FooterSection.tsx` - Footer with links
 
 **Liquid Glass Design System** - A premium visual overhaul featuring:
-  - **Glassmorphism**: Consistent use of `glass-card`, `backdrop-blur-xl`, and `border-white/10`.
-  - **Depth & Shadows**: Layered shadows using `shadow-glass`, `shadow-glass-lg`, and `shadow-primary/20`.
-  - **Premium Typography**: Extensive use of `text-gradient` for headers.
-  - **Interactive Micro-animations**: Hover scales (`scale-[1.02]`), active presses (`scale-[0.98]`), and background glow transitions.
+
+- **Glassmorphism**: Consistent use of `glass-card`, `backdrop-blur-xl`, and `border-white/10`.
+- **Depth & Shadows**: Layered shadows using `shadow-glass`, `shadow-glass-lg`, and `shadow-primary/20`.
+- **Premium Typography**: Extensive use of `text-gradient` for headers.
+- **Interactive Micro-animations**: Hover scales (`scale-[1.02]`), active presses (`scale-[0.98]`), and background glow transitions.
 - **Motion system** (CSS + IntersectionObserver)
   - Staggered reveals and intersection-based transitions.
   - Performance-optimized CSS animations.
@@ -632,6 +664,7 @@ Located in `src/components/landing-v5/`:
 **Dashboard v2 (current):**
 
 Located in `src/components/dashboard-v2/`:
+
 - Layout components (header, sidebar, navigation)
 - Screen components (editor, analytics, CRM, settings)
 - Common utilities and dialogs
@@ -686,41 +719,49 @@ npm run start
 ### Common Issues
 
 **Migration/Schema errors:**
+
 - Check `supabase/migrations/` for pending migrations
 - Run migrations via Lovable Cloud interface
 - Verify RLS policies do not block expected operations
 
 **Block save failures:**
+
 - Check network tab for 400/500 errors on `/rest/v1/blocks`
 - Verify `page_id` exists and user owns the page
 - Check for duplicate block IDs (use `ensureBlockIds()`)
 
 **Auth loops:**
+
 - Clear localStorage (`sb-*` keys)
 - Check `user_profiles` table has matching user record
 - Verify Supabase auth settings (auto-confirm enabled)
 
 **AI generation fails:**
+
 - Check `GEMINI_API_KEY` secret is set
 - Verify rate limits (3/week for free users)
 - Check Edge Function logs for errors
 
 **Event registration not working:**
+
 - Verify `events` table has matching event_id
 - Check `event_registrations` RLS allows public insert
 - Verify email service (Resend) is configured
 
 **QR scanner not working:**
+
 - Requires HTTPS (not localhost)
 - Check camera permissions
 - Some devices require explicit hardware access grant
 
-# Build/Lint errors:
+# Build/Lint errors
+
 - Run `npm run typecheck` to identify type issues
 - Check for unused imports/variables
 - Verify all block types are registered in `block-registry.ts`
 
 **Git Push Errors:**
+
 - **HTTP 408/Timeout:** Run `git config http.postBuffer 524288000` to increase buffer size.
 - **GH001 Large Files:** Check if `.next` folder was committed. Remove it from git history and add to `.gitignore`.
 
@@ -747,14 +788,14 @@ Based on codebase analysis, these are logical next improvements:
 3. ~~**A/B testing for blocks**~~ — Test different block configurations to optimize conversions (Completed 2026-02-25)
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
 5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees, unit tests (Completed 2026-02-22)
-7. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
-8. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-02-27)
-9. **API access** — Public API for integrations (Zapier, Make, custom apps)
-10. **Email sequences** — Automated email drip campaigns for leads
-11. ~~**Analytics export**~~ — CSV/Excel download of analytics data (Completed 2026-02-21)
-9. **Block templates library** — Pre-configured block combinations for quick setup
-
-10. **Mobile app** — Native iOS/Android app for page management
+6. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
+7. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-02-27)
+8. **Business Zones Phase 1 (Deals DnD & Detail)**: Implementing drag-and-drop for Kanban and side-panel (Sheet) for deal details. (In Progress)
+9. **Business Zones Phase 2 (Contacts CRM)**: Advanced contact cards with history and segmentation. (Planned)
+10. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
+11. **API access** — Public API for integrations (Zapier, Make, custom apps)
+12. **Email sequences** — Automated email drip campaigns for leads
+13. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: 100% sync reached for RU/EN/KK/UZ (Feb 2026).
 - **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/lnkmx my/inkmax/docs/audits/FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_22.md](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/lnkmx my/inkmax/docs/audits/FULL_PLATFORM_AUDIT_2026_02_22.md), and [FULL_PLATFORM_AUDIT_2026_02_24.md](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/lnkmx my/inkmax/docs/audits/FULL_PLATFORM_AUDIT_2026_02_24.md).
