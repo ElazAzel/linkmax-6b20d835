@@ -1001,15 +1001,15 @@
     "v4": {
       "hero": {
         "badge": "The Micro-Business OS",
-        "title": "Website, CRM and analytics - in one place",
-        "titleStart": "Create pages that",
-        "titleEnd": "really convert",
-        "subtitle": "Page builder, application management, click analytics. Everything your small business needs - no code required.",
-        "cta": "Create for free",
-        "secondary": "View examples",
-        "trust1": "Page builder",
-        "trust2": "Mini CRM",
-        "trust3": "Analytics",
+        "title": "Website, CRM & Analytics — in one place",
+        "titleStart": "Website, CRM & Analytics",
+        "titleEnd": "in one place",
+        "subtitle": "Page builder, lead management, click analytics. Everything your small business needs — no code required.",
+        "cta": "Start for Free",
+        "secondary": "See Examples",
+        "trust1": "Smart Blocks",
+        "trust2": "Creators",
+        "trust3": "Languages",
         "mobileFirst": "Mobile First",
         "analytics": "Analytics",
         "seoReady": "SEO Ready",
@@ -1388,7 +1388,7 @@
     "socialProof": {
       "title": "Sample pages"
     },
-    "pricing": {
+    "pricingLegacy": {
       "title": "Tariffs",
       "subtitle": "Start for free and upgrade when you need more",
       "forever": "Forever",
@@ -4492,18 +4492,18 @@
       "secondary": "View examples"
     },
     "footer": {
-      "description": "Mini-site for link in bio. Services, prices, application form - in 2 minutes.",
+      "description": "The all-in-one platform for creators and micro-businesses.",
       "product": "Product",
       "examples": "Examples",
-      "pricing": "Tariffs",
+      "pricing": "Pricing",
       "templates": "Templates",
       "company": "Company",
       "about": "About Us",
       "blog": "Blog",
       "contacts": "Contacts",
-      "legal": "Documents",
-      "privacy": "Confidentiality",
-      "terms": "Terms",
+      "legal": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
       "language": "Language",
       "copyright": "© {{year}} lnkmx. Made in Kazakhstan."
     },
