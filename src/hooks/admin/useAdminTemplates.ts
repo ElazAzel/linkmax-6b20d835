@@ -6,7 +6,7 @@ export interface AdminTemplateData {
     id: string;
     name: string;
     description?: string;
-    niches: string[];
+    category: string;
     is_premium: boolean;
     is_public: boolean;
     preview_image?: string;
@@ -16,8 +16,8 @@ export interface AdminTemplateData {
 }
 
 async function fetchTemplates(): Promise<AdminTemplateData[]> {
-    const { data, error } = await (supabase as any)
-        .from('page_templates')
+    const { data, error } = await supabase
+        .from('templates')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -36,7 +36,7 @@ export function useAdminTemplates() {
 
     const deleteTemplate = useMutation({
         mutationFn: async (id: string) => {
-            const { error } = await (supabase as any).from('page_templates').delete().eq('id', id);
+            const { error } = await supabase.from('templates').delete().eq('id', id);
             if (error) throw error;
         },
         onSuccess: () => {
@@ -46,8 +46,8 @@ export function useAdminTemplates() {
 
     const updateTemplateStatus = useMutation({
         mutationFn: async ({ id, is_public }: { id: string; is_public: boolean }) => {
-            const { error } = await (supabase as any)
-                .from('page_templates')
+            const { error } = await supabase
+                .from('templates')
                 .update({ is_public })
                 .eq('id', id);
             if (error) throw error;
