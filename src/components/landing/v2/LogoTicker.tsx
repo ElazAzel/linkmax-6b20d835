@@ -8,19 +8,25 @@ import Zap from 'lucide-react/dist/esm/icons/zap';
 import Palette from 'lucide-react/dist/esm/icons/palette';
 import Rocket from 'lucide-react/dist/esm/icons/rocket';
 
-const companies = [
-    { name: "Creators", icon: Crown },
-    { name: "Coaches", icon: Zap },
-    { name: "Designers", icon: Palette },
-    { name: "Startups", icon: Rocket },
-    { name: "Agencies", icon: Hexagon },
-    { name: "Clinics", icon: Shield },
-    { name: "Studios", icon: Gem },
-    { name: "Experts", icon: Layers },
+const companyIcons = [Crown, Zap, Palette, Rocket, Hexagon, Shield, Gem, Layers];
+const companyKeys = [
+    'landing.ticker.creators',
+    'landing.ticker.coaches',
+    'landing.ticker.designers',
+    'landing.ticker.startups',
+    'landing.ticker.agencies',
+    'landing.ticker.clinics',
+    'landing.ticker.studios',
+    'landing.ticker.experts',
 ];
 
 export const LogoTicker = () => {
     const { t } = useTranslation();
+    const companies = companyKeys.map((key, i) => ({
+        name: t(key, key.split('.').pop()!),
+        Icon: companyIcons[i],
+    }));
+
     return (
         <div className="py-10 bg-background/50 border-y border-white/5 backdrop-blur-sm overflow-hidden">
             <div className="container mx-auto px-4 mb-4 text-center">
@@ -33,7 +39,7 @@ export const LogoTicker = () => {
                 >
                     {[...companies, ...companies].map((company, index) => (
                         <div key={index} className="flex items-center gap-2 text-muted-foreground/50 hover:text-primary transition-colors cursor-default group">
-                            <company.icon className="w-6 h-6 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
+                            <company.Icon className="w-6 h-6 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
                             <span className="font-bold text-lg hidden sm:block">{company.name}</span>
                         </div>
                     ))}
