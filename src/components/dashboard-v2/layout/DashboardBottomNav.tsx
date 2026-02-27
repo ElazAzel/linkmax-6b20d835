@@ -70,6 +70,7 @@ const TABS: NavTab[] = [
 ];
 
 const MORE_ITEMS: NavTab[] = [
+  { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Аналитика', path: '' },
   { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты', path: '' },
   { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие', path: '' },

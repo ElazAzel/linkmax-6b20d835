@@ -46,6 +46,7 @@ const ZoneContactsScreen = lazy(() => import('@/components/zones/ZoneContactsScr
 const ZoneSettingsScreen = lazy(() => import('@/components/zones/ZoneSettingsScreen').then(m => ({ default: m.ZoneSettingsScreen })));
 const ZoneInboxScreen = lazy(() => import('@/components/zones/ZoneInboxScreen').then(m => ({ default: m.ZoneInboxScreen })));
 const ZoneTasksScreen = lazy(() => import('@/components/zones/ZoneTasksScreen').then(m => ({ default: m.ZoneTasksScreen })));
+const ZoneDashboard = lazy(() => import('@/components/zones/ZoneDashboard').then(m => ({ default: m.ZoneDashboard })));
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -93,9 +94,9 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-settings';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-settings';
 
-const ZONE_TABS = ['zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
+const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
 const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
@@ -603,6 +604,7 @@ function DashboardV2Inner() {
             )}
 
             {/* Zone Screens - Business tier only */}
+            {currentTab === 'zone-dashboard' && canUseBusinessZone() && <ZoneDashboardWrapper />}
             {currentTab === 'zone-deals' && canUseBusinessZone() && <ZoneDealsScreenWrapper />}
             {currentTab === 'zone-contacts' && canUseBusinessZone() && <ZoneContactsScreenWrapper />}
             {currentTab === 'zone-inbox' && canUseBusinessZone() && <ZoneInboxScreenWrapper />}
@@ -739,6 +741,12 @@ function DashboardV2Inner() {
 }
 
 /** Zone screen wrappers that read ZoneContext */
+function ZoneDashboardWrapper() {
+  const { currentZoneId } = useZoneContext();
+  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+  return <ZoneDashboard zoneId={currentZoneId} />;
+}
+
 function ZoneDealsScreenWrapper() {
   const { currentZoneId } = useZoneContext();
   if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
