@@ -1,7 +1,9 @@
 /**
  * ZoneSwitcherSlot - Lazy wrapper for ZoneSwitcher that uses ZoneContext
+ * Only visible for business tier users
  */
 import { useZoneContext } from '@/contexts/ZoneContext';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { ZoneSwitcher } from './ZoneSwitcher';
 
 interface Props {
@@ -10,7 +12,9 @@ interface Props {
 
 export default function ZoneSwitcherSlot({ collapsed }: Props) {
   const { zones, currentZone, setCurrentZoneId, createZone } = useZoneContext();
+  const { canUseBusinessZone } = useFreemiumLimits();
 
+  if (!canUseBusinessZone()) return null;
   if (zones.length === 0 && !currentZone) return null;
 
   return (

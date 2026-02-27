@@ -18,6 +18,7 @@ interface DashboardLayoutProps {
   onTabChange: (tabId: string) => void;
   activityBadge?: number;
   isPremium: boolean;
+  isBusinessTier?: boolean;
   onSignOut: () => void;
 }
 
@@ -27,6 +28,7 @@ export const DashboardLayout = memo(function DashboardLayout({
   onTabChange,
   activityBadge,
   isPremium,
+  isBusinessTier = false,
   onSignOut,
 }: DashboardLayoutProps) {
   const isMobile = useIsMobile();
@@ -41,6 +43,7 @@ export const DashboardLayout = memo(function DashboardLayout({
           onTabChange={onTabChange}
           activityBadge={activityBadge}
           isPremium={isPremium}
+          isBusinessTier={isBusinessTier}
           onSignOut={onSignOut}
           collapsed={sidebarCollapsed}
           onCollapsedChange={setSidebarCollapsed}
