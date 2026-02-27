@@ -27,7 +27,7 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { cn } from '@/lib/utils/utils';
-import { useCurrencyRate, BASE_PRICES_USD, convertUsdToKzt } from '@/hooks/useCurrencyRate';
+import { useCurrencyRate, BASE_PRICES_USD, convertUsdToKzt, FIXED_PRICES_KZT, getTotalPriceKzt } from '@/hooks/useCurrencyRate';
 
 type BillingPeriod = 3 | 6 | 12;
 
@@ -58,32 +58,16 @@ export default function Pricing() {
   const seoTitle = t('pricing.seo.title', 'lnkmx Pricing — Plans for Link in Bio & Mini-Sites');
   const seoDescription = t('pricing.seo.description', 'Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.');
 
-  // Pricing in KZT: 3mo = 4350₸/mo, 6mo = 3698₸/mo (15% off), 12mo = 3045₸/mo (30% off)
+  // Pricing: fixed KZT prices, USD derived from rate
   const pricingPlans = {
     basic: {
       name: 'BASIC',
       icon: Zap,
       color: 'from-slate-500 to-slate-600',
-      pricesKzt: {
-        3: 0,
-        6: 0,
-        12: 0
-      },
-      pricesUsd: {
-        3: 0,
-        6: 0,
-        12: 0
-      },
-      totalKzt: {
-        3: 0,
-        6: 0,
-        12: 0
-      },
-      totalUsd: {
-        3: 0,
-        6: 0,
-        12: 0
-      },
+      pricesKzt: { 3: 0, 6: 0, 12: 0 },
+      pricesUsd: { 3: 0, 6: 0, 12: 0 },
+      totalKzt: { 3: 0, 6: 0, 12: 0 },
+      totalUsd: { 3: 0, 6: 0, 12: 0 },
       features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
       limitations: [t('pricing.limitations.watermark', 'Водяной знак lnkmx.my'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
     },
@@ -93,15 +77,15 @@ export default function Pricing() {
       color: 'from-violet-500 to-purple-600',
       popular: true,
       pricesKzt: {
-        3: convertUsdToKzt(BASE_PRICES_USD[3], currentRate),
-        6: convertUsdToKzt(BASE_PRICES_USD[6], currentRate),
-        12: convertUsdToKzt(BASE_PRICES_USD[12], currentRate)
+        3: FIXED_PRICES_KZT[3],
+        6: FIXED_PRICES_KZT[6],
+        12: FIXED_PRICES_KZT[12]
       },
       pricesUsd: BASE_PRICES_USD,
       totalKzt: {
-        3: convertUsdToKzt(BASE_PRICES_USD[3] * 3, currentRate),
-        6: convertUsdToKzt(BASE_PRICES_USD[6] * 6, currentRate),
-        12: convertUsdToKzt(BASE_PRICES_USD[12] * 12, currentRate)
+        3: getTotalPriceKzt(3),
+        6: getTotalPriceKzt(6),
+        12: getTotalPriceKzt(12)
       },
       totalUsd: {
         3: +(BASE_PRICES_USD[3] * 3).toFixed(2),
@@ -109,6 +93,24 @@ export default function Pricing() {
         12: +(BASE_PRICES_USD[12] * 12).toFixed(2)
       },
       features: [t('pricing.features.allBasic', 'Всё из BASIC, плюс:'), t('pricing.features.allBlocks', 'Все 25+ типов блоков без ограничений'), t('pricing.features.proThemes', 'Профессиональные темы и анимации'), t('pricing.features.media', 'Медиа: изображения, видео, карусели'), t('pricing.features.priceLists', 'Прайс-листы и каталоги товаров'), t('pricing.features.scheduler', 'Планировщик блоков'), t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'), t('pricing.features.fullCRM', 'Полноценная CRM для лидов'), t('pricing.features.telegramNotifications', 'Telegram-уведомления о заявках'), t('pricing.features.forms', 'Формы сбора заявок'), t('pricing.features.faq', 'FAQ и отзывы блоки'), t('pricing.features.timers', 'Таймеры обратного отсчёта'), t('pricing.features.aiMonthlyPro', '5 AI-генераций в месяц')]
+    },
+    business: {
+      name: 'BUSINESS',
+      icon: Sparkles,
+      color: 'from-amber-500 to-orange-600',
+      pricesKzt: { 3: 9900, 6: 8415, 12: 6930 },
+      pricesUsd: { 3: 19.90, 6: 16.90, 12: 13.90 },
+      totalKzt: { 3: 29700, 6: 50490, 12: 83160 },
+      totalUsd: { 3: 59.70, 6: 101.40, 12: 166.80 },
+      features: [
+        t('pricing.features.allPro', 'Всё из PRO, плюс:'),
+        t('pricing.features.businessZones', 'Бизнес-зоны (рабочие пространства)'),
+        t('pricing.features.teamCRM', 'Командная CRM и Kanban'),
+        t('pricing.features.teamInbox', 'Командный чат и задачи'),
+        t('pricing.features.teamRoles', 'Роли и разграничение доступа'),
+        t('pricing.features.teamMembers', 'До 5 участников команды'),
+        t('pricing.features.prioritySupport', 'Приоритетная поддержка')
+      ]
     }
   };
   const getSavingsPercent = (period: BillingPeriod): number => {
@@ -255,112 +257,119 @@ export default function Pricing() {
           </div>
         </div>}
 
-        {/* Pricing Card - Unified PRO Focus */}
-        <div className="max-w-md mx-auto mb-12">
-          {(() => {
-            const planKey = 'pro';
-            const plan = pricingPlans.pro;
+        {/* Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+          {(['pro', 'business'] as const).map((planKey) => {
+            const plan = pricingPlans[planKey];
             const Icon = plan.icon;
             const isCurrentPlan = tier === planKey;
             const monthlyKzt = plan.pricesKzt[billingPeriod];
             const monthlyUsd = plan.pricesUsd[billingPeriod];
             const totalKzt = plan.totalKzt[billingPeriod];
             const totalUsd = plan.totalUsd[billingPeriod];
+            const isPopular = 'popular' in plan && plan.popular;
 
             return (
-              <div className="space-y-6">
-                <Card className={cn(
-                  "relative overflow-hidden transition-all duration-300 hover:scale-[1.01] border-primary shadow-lg shadow-primary/20",
-                  isCurrentPlan && "ring-2 ring-primary"
-                )}>
+              <Card key={planKey} className={cn(
+                "relative overflow-hidden transition-all duration-300 hover:scale-[1.01]",
+                isPopular && "border-primary shadow-lg shadow-primary/20",
+                planKey === 'business' && "border-amber-500/50 shadow-lg shadow-amber-500/10",
+                isCurrentPlan && "ring-2 ring-primary"
+              )}>
+                {isPopular && (
                   <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-bl-xl">
                     {t('pricing.popular', 'Популярный')}
                   </div>
+                )}
+                {planKey === 'business' && (
+                  <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
+                    {t('pricing.new', 'Новинка')}
+                  </div>
+                )}
 
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center`}>
-                        <Icon className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <CardTitle className="flex items-center">
-                          {plan.name}
-                          {getCurrentPlanBadge(planKey)}
-                        </CardTitle>
-                        <CardDescription>
-                          {t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}
-                        </CardDescription>
-                      </div>
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center`}>
+                      <Icon className="h-6 w-6 text-white" />
                     </div>
-
-                    {/* Price */}
-                    <div className="mt-4">
-                      {isKztPrimary ? (
-                        <>
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold">{monthlyKzt.toLocaleString()}₸</span>
-                            <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
-                          </div>
-                          <div className="text-sm text-muted-foreground mt-1">
-                            {totalKzt.toLocaleString()}₸ {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
-                          </div>
-                          <div className="text-xs text-muted-foreground/70 mt-0.5">
-                            ≈ ${monthlyUsd.toFixed(2)}/{t('pricing.month', 'мес')}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-4xl font-bold">${monthlyUsd.toFixed(2)}</span>
-                            <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
-                          </div>
-                          <div className="text-sm text-muted-foreground mt-1">
-                            ${totalUsd} {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
-                          </div>
-                          <div className="text-xs text-muted-foreground/70 mt-0.5">
-                            ≈ {monthlyKzt.toLocaleString()}₸/{t('pricing.month', 'мес')}
-                          </div>
-                        </>
-                      )}
+                    <div>
+                      <CardTitle className="flex items-center">
+                        {plan.name}
+                        {getCurrentPlanBadge(planKey)}
+                      </CardTitle>
+                      <CardDescription>
+                        {planKey === 'pro' ? t('pricing.proDesc', 'Всё для профессионалов и бизнеса') : t('pricing.businessDesc', 'CRM, команда и зоны для бизнеса')}
+                      </CardDescription>
                     </div>
-                  </CardHeader>
+                  </div>
 
-                  <CardContent className="space-y-6">
-                    {/* Features */}
-                    <ul className="grid grid-cols-1 gap-2">
-                      {plan.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm">
-                          <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="mt-4">
+                    {isKztPrimary ? (
+                      <>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-4xl font-bold">{monthlyKzt.toLocaleString()}₸</span>
+                          <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
+                        </div>
+                        <div className="text-sm text-muted-foreground mt-1">
+                          {totalKzt.toLocaleString()}₸ {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                        </div>
+                        <div className="text-xs text-muted-foreground/70 mt-0.5">
+                          ≈ ${monthlyUsd.toFixed(2)}/{t('pricing.month', 'мес')}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-4xl font-bold">${monthlyUsd.toFixed(2)}</span>
+                          <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
+                        </div>
+                        <div className="text-sm text-muted-foreground mt-1">
+                          ${totalUsd} {t('pricing.totalFor', 'за')} {billingPeriod} {t('pricing.months', 'мес')}
+                        </div>
+                        <div className="text-xs text-muted-foreground/70 mt-0.5">
+                          ≈ {monthlyKzt.toLocaleString()}₸/{t('pricing.month', 'мес')}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </CardHeader>
 
-                    {/* CTA Button */}
-                    <Button
-                      data-testid={`pricing-plan-${planKey}-cta`}
-                      className="w-full h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600"
-                      disabled={isCurrentPlan || isLoading}
-                      onClick={() => handleSelectPlan(planKey)}
-                    >
-                      {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
-                    </Button>
-                  </CardContent>
-                </Card>
+                <CardContent className="space-y-6">
+                  <ul className="grid grid-cols-1 gap-2">
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-start gap-2 text-sm">
+                        <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                {/* Try for free link */}
-                <div className="text-center">
                   <Button
-                    variant="link"
-                    className="text-muted-foreground hover:text-primary transition-colors h-auto p-0"
-                    onClick={() => handleSelectPlan('basic')}
+                    className={cn(
+                      "w-full h-12 text-lg font-bold rounded-xl shadow-lg",
+                      planKey === 'pro' && "shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600",
+                      planKey === 'business' && "shadow-amber-500/20 bg-gradient-to-r from-amber-500 to-orange-600"
+                    )}
+                    disabled={isCurrentPlan || isLoading}
+                    onClick={() => handleSelectPlan(planKey)}
                   >
-                    {t('pricing.startFree', 'Попробовать бесплатно')}
+                    {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
                   </Button>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             );
-          })()}
+          })}
+        </div>
+
+        {/* Try for free link */}
+        <div className="text-center mb-12">
+          <Button
+            variant="link"
+            className="text-muted-foreground hover:text-primary transition-colors h-auto p-0"
+            onClick={() => handleSelectPlan('basic')}
+          >
+            {t('pricing.startFree', 'Попробовать бесплатно')}
+          </Button>
         </div>
 
 

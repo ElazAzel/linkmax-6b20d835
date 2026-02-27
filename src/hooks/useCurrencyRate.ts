@@ -7,6 +7,21 @@ export const BASE_PRICES_USD = {
     12: 5.90
 };
 
+// Fixed KZT prices as per pricing strategy
+export const FIXED_PRICES_KZT: Record<number, number> = {
+    3: 4350,
+    6: 3698,
+    12: 3045
+};
+
+export function getMonthlyPriceKzt(period: 3 | 6 | 12): number {
+    return FIXED_PRICES_KZT[period];
+}
+
+export function getTotalPriceKzt(period: 3 | 6 | 12): number {
+    return FIXED_PRICES_KZT[period] * period;
+}
+
 export function useCurrencyRate() {
     return useQuery({
         queryKey: ['currency_rate', 'USD_KZT'],

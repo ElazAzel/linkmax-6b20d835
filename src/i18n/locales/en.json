@@ -824,7 +824,17 @@
       "f5": "Built-in QR scanner",
       "f6": "Advanced analytics & reports",
       "proCta": "Start Pro Trial",
-      "freeCta": "Start for free"
+      "freeCta": "Start for free",
+      "newBadge": "NEW",
+      "businessName": "Business",
+      "teamLabel": "Team",
+      "businessCta": "Start Business",
+      "b1": "Everything in Pro, plus:",
+      "b2": "Business Zones (workspaces)",
+      "b3": "Team CRM & Kanban",
+      "b4": "Team chat & tasks",
+      "b5": "Roles & access control",
+      "b6": "Up to 5 team members"
     },
     "demo": {
       "title": "How it works",
@@ -4594,6 +4604,8 @@
     "popular": "Popular",
     "basicDesc": "Get started for free",
     "proDesc": "Everything for professionals and business",
+    "businessDesc": "CRM, team & zones for business",
+    "new": "New",
     "free": {
       "title": "For free"
     },
@@ -4641,7 +4653,14 @@
       "forms": "Application collection forms",
       "faq": "FAQ and feedback blocks",
       "timers": "Countdown timers",
-      "aiMonthlyPro": "5 AI generations per month"
+      "aiMonthlyPro": "5 AI generations per month",
+      "allPro": "Everything from PRO, plus:",
+      "businessZones": "Business Zones (workspaces)",
+      "teamCRM": "Team CRM & Kanban",
+      "teamInbox": "Team chat & tasks",
+      "teamRoles": "Roles & access control",
+      "teamMembers": "Up to 5 team members",
+      "prioritySupport": "Priority support"
     },
     "limitations": {
       "watermark": "Watermark lnkmx.my",
