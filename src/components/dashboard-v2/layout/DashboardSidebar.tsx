@@ -29,6 +29,7 @@ import Users from 'lucide-react/dist/esm/icons/users';
 import Kanban from 'lucide-react/dist/esm/icons/kanban';
 import Contact from 'lucide-react/dist/esm/icons/contact';
 import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -78,6 +79,7 @@ const SECTIONS: SidebarSection[] = [
     items: [
       { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
+      { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие' },
       { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона' },
     ],
   },

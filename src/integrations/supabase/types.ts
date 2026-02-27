@@ -2147,6 +2147,63 @@ export type Database = {
           },
         ]
       }
+      zone_conversations: {
+        Row: {
+          assigned_to: string | null
+          channel: string
+          contact_id: string | null
+          created_at: string
+          external_chat_id: string | null
+          id: string
+          last_message_at: string | null
+          status: string
+          title: string | null
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          channel?: string
+          contact_id?: string | null
+          created_at?: string
+          external_chat_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          channel?: string
+          contact_id?: string | null
+          created_at?: string
+          external_chat_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_conversations_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "zone_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_conversations_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_deal_activities: {
         Row: {
           created_at: string
@@ -2448,6 +2505,57 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "zone_members_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          direction: string
+          id: string
+          metadata: Json | null
+          sender_id: string | null
+          sender_type: string
+          zone_id: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          direction?: string
+          id?: string
+          metadata?: Json | null
+          sender_id?: string | null
+          sender_type?: string
+          zone_id: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          metadata?: Json | null
+          sender_id?: string | null
+          sender_type?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "zone_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_messages_zone_id_fkey"
             columns: ["zone_id"]
             isOneToOne: false
             referencedRelation: "zones"

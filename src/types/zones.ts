@@ -45,6 +45,8 @@ export type ZoneMemberStatus = 'active' | 'suspended';
 export type ZoneInviteStatus = 'pending' | 'accepted' | 'expired' | 'revoked';
 export type DealStatus = 'open' | 'won' | 'lost';
 export type InvoiceStatus = 'created' | 'paid' | 'failed' | 'expired';
+export type ConversationStatus = 'open' | 'closed' | 'archived';
+export type MessageDirection = 'inbound' | 'outbound';
 
 export interface Zone {
   id: string;
