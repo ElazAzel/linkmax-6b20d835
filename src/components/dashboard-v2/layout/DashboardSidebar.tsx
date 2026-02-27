@@ -80,6 +80,7 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.zone',
     defaultTitle: 'Бизнес-зона',
     items: [
+      { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Аналитика' },
       { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
       { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие' },
@@ -122,7 +123,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const ZONE_ITEM_IDS = ['zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
+  const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
 
   const handleItemClick = (itemId: string) => {
     // Gate zone items behind business tier
