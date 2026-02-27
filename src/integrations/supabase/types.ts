@@ -2889,6 +2889,18 @@ export type Database = {
           version_id: string
         }[]
       }
+      get_team_by_invite_code: {
+        Args: { p_code: string }
+        Returns: {
+          avatar_url: string
+          description: string
+          id: string
+          is_public: boolean
+          name: string
+          niche: string
+          slug: string
+        }[]
+      }
       get_token_analytics: {
         Args: { p_end_date?: string; p_start_date?: string }
         Returns: Json
