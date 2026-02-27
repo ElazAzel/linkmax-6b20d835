@@ -1,106 +1,157 @@
 /**
- * ZoneTasksScreen - Kanban-style task board for zones
+ * ZoneTasksScreen - Kanban-style task board with DnD, filters, detail sheet
  */
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
 import { useZoneTasks, type ZoneTask, type TaskStatus, type TaskPriority } from '@/hooks/zones/useZoneTasks';
+import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
+import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneContext } from '@/contexts/ZoneContext';
+import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils/utils';
-import { format } from 'date-fns';
+import { Label } from '@/components/ui/label';
+import { TaskCard } from './tasks/TaskCard';
+import { TaskKanbanColumn, VISIBLE_COLUMNS } from './tasks/TaskKanbanColumn';
+import { TaskDetailSheet } from './tasks/TaskDetailSheet';
 import Plus from 'lucide-react/dist/esm/icons/plus';
-import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
-import Circle from 'lucide-react/dist/esm/icons/circle';
-import Clock from 'lucide-react/dist/esm/icons/clock';
-import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import ListTodo from 'lucide-react/dist/esm/icons/list-todo';
-import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
-import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import Filter from 'lucide-react/dist/esm/icons/filter';
 
 interface Props {
   zoneId: string;
 }
 
-const STATUS_CONFIG: Record<TaskStatus, { icon: any; label: string; color: string }> = {
-  todo: { icon: Circle, label: 'К выполнению', color: 'text-muted-foreground' },
-  in_progress: { icon: Clock, label: 'В работе', color: 'text-blue-500' },
-  done: { icon: CheckCircle2, label: 'Готово', color: 'text-green-500' },
-  cancelled: { icon: XCircle, label: 'Отменено', color: 'text-red-500' },
+const PRIORITY_CONFIG: Record<TaskPriority, { label: string }> = {
+  low: { label: 'Низкий' },
+  medium: { label: 'Средний' },
+  high: { label: 'Высокий' },
+  urgent: { label: 'Срочный' },
 };
-
-const PRIORITY_CONFIG: Record<TaskPriority, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
-  low: { label: 'Низкий', variant: 'outline' },
-  medium: { label: 'Средний', variant: 'secondary' },
-  high: { label: 'Высокий', variant: 'default' },
-  urgent: { label: 'Срочный', variant: 'destructive' },
-};
-
-const COLUMNS: TaskStatus[] = ['todo', 'in_progress', 'done'];
 
 export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) {
   const { t } = useTranslation();
   const { tasks, loading, createTask, updateTask, deleteTask } = useZoneTasks(zoneId);
+  const { contacts } = useZoneContacts(zoneId);
+  const { deals } = useZoneDeals(zoneId);
   const { members } = useZoneContext();
+
+  // Create dialog state
   const [createOpen, setCreateOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newPriority, setNewPriority] = useState<TaskPriority>('medium');
-  const [newAssignee, setNewAssignee] = useState<string>('');
+  const [newAssignee, setNewAssignee] = useState('');
+  const [newDueDate, setNewDueDate] = useState('');
+  const [newDescription, setNewDescription] = useState('');
+
+  // Detail sheet
+  const [selectedTask, setSelectedTask] = useState<ZoneTask | null>(null);
+
+  // Filters
+  const [filterMy, setFilterMy] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  // Get current user id once
+  useState(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null));
+  });
+
+  // DnD
+  const [activeDragTask, setActiveDragTask] = useState<ZoneTask | null>(null);
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+
+  const filteredTasks = useMemo(() => {
+    if (!filterMy || !currentUserId) return tasks;
+    return tasks.filter(t => t.assigned_to === currentUserId);
+  }, [tasks, filterMy, currentUserId]);
 
   const tasksByStatus = useMemo(() => {
     const grouped: Record<TaskStatus, ZoneTask[]> = { todo: [], in_progress: [], done: [], cancelled: [] };
-    tasks.forEach(t => { grouped[t.status]?.push(t); });
+    filteredTasks.forEach(t => { grouped[t.status]?.push(t); });
     return grouped;
+  }, [filteredTasks]);
+
+  const overdueCount = useMemo(() => {
+    const now = new Date();
+    return tasks.filter(t => t.due_date && t.status !== 'done' && t.status !== 'cancelled' && new Date(t.due_date) < now).length;
   }, [tasks]);
+
+  const getMemberName = useCallback((userId: string | null) => {
+    if (!userId) return null;
+    const m = members.find(m => m.user_id === userId);
+    return m?.display_name || m?.email || null;
+  }, [members]);
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveDragTask(event.active.data.current?.task ?? null);
+  }, []);
+
+  const handleDragEnd = useCallback(async (event: DragEndEvent) => {
+    setActiveDragTask(null);
+    const { active, over } = event;
+    if (!over) return;
+    const task = active.data.current?.task as ZoneTask | undefined;
+    const newStatus = over.data.current?.status as TaskStatus | undefined;
+    if (!task || !newStatus || task.status === newStatus) return;
+    await updateTask(task.id, { status: newStatus });
+  }, [updateTask]);
 
   const handleCreate = async () => {
     if (!newTitle.trim()) return;
     try {
       await createTask({
         title: newTitle.trim(),
+        description: newDescription.trim() || null,
         priority: newPriority,
         assigned_to: newAssignee || null,
+        due_date: newDueDate ? new Date(newDueDate).toISOString() : null,
       });
       setCreateOpen(false);
       setNewTitle('');
+      setNewDescription('');
       setNewPriority('medium');
       setNewAssignee('');
+      setNewDueDate('');
     } catch { /* handled */ }
-  };
-
-  const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
-    await updateTask(taskId, { status: newStatus });
-  };
-
-  const getMemberName = (userId: string | null) => {
-    if (!userId) return null;
-    const m = members.find(m => m.user_id === userId);
-    return m?.display_name || m?.email || null;
   };
 
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-64px)]">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border/30">
+      <div className="flex items-center justify-between p-4 border-b border-border/30 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <ListTodo className="h-5 w-5 text-primary" />
           <h1 className="text-lg font-bold">{t('zones.tasks.title', 'Задачи')}</h1>
           <Badge variant="secondary" className="text-xs">{tasks.length}</Badge>
+          {overdueCount > 0 && (
+            <Badge variant="destructive" className="text-xs">{overdueCount} просрочено</Badge>
+          )}
         </div>
-        <Button size="sm" onClick={() => setCreateOpen(true)}>
-          <Plus className="h-4 w-4 mr-1" />
-          {t('zones.tasks.new', 'Новая задача')}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant={filterMy ? 'default' : 'outline'}
+            onClick={() => setFilterMy(!filterMy)}
+            className="text-xs"
+          >
+            <Filter className="h-3.5 w-3.5 mr-1" />
+            {filterMy ? 'Мои' : 'Все'}
+          </Button>
+          <Button size="sm" onClick={() => setCreateOpen(true)}>
+            <Plus className="h-4 w-4 mr-1" />
+            {t('zones.tasks.new', 'Новая задача')}
+          </Button>
+        </div>
       </div>
 
-      {/* Kanban Board */}
+      {/* Kanban Board with DnD */}
       <div className="flex-1 overflow-x-auto p-4">
         {loading ? (
           <div className="flex gap-4">
-            {COLUMNS.map(col => (
+            {VISIBLE_COLUMNS.map(col => (
               <div key={col} className="w-72 shrink-0 space-y-3">
                 <div className="h-8 bg-muted rounded animate-pulse" />
                 {[1, 2].map(i => <div key={i} className="h-24 bg-muted rounded-lg animate-pulse" />)}
@@ -108,43 +159,26 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             ))}
           </div>
         ) : (
-          <div className="flex gap-4 min-h-[400px]">
-            {COLUMNS.map(status => {
-              const config = STATUS_CONFIG[status];
-              const Icon = config.icon;
-              const columnTasks = tasksByStatus[status];
-              return (
-                <div key={status} className="w-72 md:w-80 shrink-0 flex flex-col">
-                  {/* Column Header */}
-                  <div className="flex items-center gap-2 mb-3 px-1">
-                    <Icon className={cn("h-4 w-4", config.color)} />
-                    <span className="text-sm font-semibold">{config.label}</span>
-                    <Badge variant="outline" className="text-[10px] ml-auto">{columnTasks.length}</Badge>
-                  </div>
-
-                  {/* Cards */}
-                  <ScrollArea className="flex-1">
-                    <div className="space-y-2 pr-2">
-                      {columnTasks.map(task => (
-                        <TaskCard
-                          key={task.id}
-                          task={task}
-                          onStatusChange={handleStatusChange}
-                          onDelete={deleteTask}
-                          getMemberName={getMemberName}
-                        />
-                      ))}
-                      {columnTasks.length === 0 && (
-                        <div className="text-center text-muted-foreground text-xs py-8 border border-dashed rounded-lg">
-                          {t('zones.tasks.empty', 'Пусто')}
-                        </div>
-                      )}
-                    </div>
-                  </ScrollArea>
+          <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <div className="flex gap-4 min-h-[400px]">
+              {VISIBLE_COLUMNS.map(status => (
+                <TaskKanbanColumn
+                  key={status}
+                  status={status}
+                  tasks={tasksByStatus[status]}
+                  onTaskClick={setSelectedTask}
+                  getMemberName={getMemberName}
+                />
+              ))}
+            </div>
+            <DragOverlay>
+              {activeDragTask && (
+                <div className="w-72">
+                  <TaskCard task={activeDragTask} onClick={() => {}} isDragOverlay />
                 </div>
-              );
-            })}
-          </div>
+              )}
+            </DragOverlay>
+          </DndContext>
         )}
       </div>
 
@@ -155,112 +189,81 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             <DialogTitle>{t('zones.tasks.newTask', 'Новая задача')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2">
-            <Input
-              value={newTitle}
-              onChange={e => setNewTitle(e.target.value)}
-              placeholder={t('zones.tasks.titlePlaceholder', 'Название задачи')}
-              onKeyDown={e => e.key === 'Enter' && handleCreate()}
-            />
-            <div className="flex gap-2">
-              {(Object.keys(PRIORITY_CONFIG) as TaskPriority[]).map(p => (
-                <Button
-                  key={p}
-                  size="sm"
-                  variant={newPriority === p ? 'default' : 'outline'}
-                  onClick={() => setNewPriority(p)}
-                  className="text-xs"
-                >
-                  {PRIORITY_CONFIG[p].label}
-                </Button>
-              ))}
+            <div>
+              <Label>Название</Label>
+              <Input
+                value={newTitle}
+                onChange={e => setNewTitle(e.target.value)}
+                placeholder="Название задачи"
+                onKeyDown={e => e.key === 'Enter' && handleCreate()}
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Описание</Label>
+              <Input
+                value={newDescription}
+                onChange={e => setNewDescription(e.target.value)}
+                placeholder="Описание (необязательно)"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Срок</Label>
+              <Input type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} className="mt-1" />
+            </div>
+            <div>
+              <Label>Приоритет</Label>
+              <div className="flex gap-2 mt-1">
+                {(Object.keys(PRIORITY_CONFIG) as TaskPriority[]).map(p => (
+                  <Button
+                    key={p}
+                    size="sm"
+                    variant={newPriority === p ? 'default' : 'outline'}
+                    onClick={() => setNewPriority(p)}
+                    className="text-xs"
+                  >
+                    {PRIORITY_CONFIG[p].label}
+                  </Button>
+                ))}
+              </div>
             </div>
             {members.length > 0 && (
-              <select
-                className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm"
-                value={newAssignee}
-                onChange={e => setNewAssignee(e.target.value)}
-              >
-                <option value="">{t('zones.tasks.unassigned', 'Не назначено')}</option>
-                {members.map(m => (
-                  <option key={m.user_id} value={m.user_id}>
-                    {m.display_name || m.email || m.user_id}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <Label>Ответственный</Label>
+                <select
+                  className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
+                  value={newAssignee}
+                  onChange={e => setNewAssignee(e.target.value)}
+                >
+                  <option value="">Не назначено</option>
+                  {members.map(m => (
+                    <option key={m.user_id} value={m.user_id}>
+                      {m.display_name || m.email || m.user_id}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>
-              {t('common.cancel', 'Отмена')}
-            </Button>
-            <Button onClick={handleCreate} disabled={!newTitle.trim()}>
-              {t('common.create', 'Создать')}
-            </Button>
+            <Button variant="outline" onClick={() => setCreateOpen(false)}>Отмена</Button>
+            <Button onClick={handleCreate} disabled={!newTitle.trim()}>Создать</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Detail Sheet */}
+      <TaskDetailSheet
+        task={selectedTask}
+        open={!!selectedTask}
+        onOpenChange={(open) => { if (!open) setSelectedTask(null); }}
+        onUpdate={updateTask}
+        onDelete={deleteTask}
+        members={members}
+        contacts={contacts}
+        deals={deals}
+      />
     </div>
   );
 });
-
-// ─── Task Card ───
-interface TaskCardProps {
-  task: ZoneTask;
-  onStatusChange: (id: string, status: TaskStatus) => void;
-  onDelete: (id: string) => void;
-  getMemberName: (id: string | null) => string | null;
-}
-
-function TaskCard({ task, onStatusChange, onDelete, getMemberName }: TaskCardProps) {
-  const priorityConf = PRIORITY_CONFIG[task.priority];
-  const nextStatus: TaskStatus | null =
-    task.status === 'todo' ? 'in_progress' :
-    task.status === 'in_progress' ? 'done' : null;
-
-  const assigneeName = getMemberName(task.assigned_to);
-
-  return (
-    <div className="bg-card border border-border/40 rounded-lg p-3 hover:shadow-sm transition-shadow group">
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-medium leading-tight flex-1">{task.title}</p>
-        <Badge variant={priorityConf.variant} className="text-[9px] shrink-0 h-5">
-          {task.priority === 'urgent' && <AlertCircle className="h-2.5 w-2.5 mr-0.5" />}
-          {priorityConf.label}
-        </Badge>
-      </div>
-
-      {assigneeName && (
-        <p className="text-[11px] text-muted-foreground mt-1.5">→ {assigneeName}</p>
-      )}
-
-      {task.due_date && (
-        <p className="text-[11px] text-muted-foreground mt-1">
-          📅 {format(new Date(task.due_date), 'dd.MM.yyyy')}
-        </p>
-      )}
-
-      <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/20">
-        {nextStatus ? (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-6 text-[11px] px-2"
-            onClick={() => onStatusChange(task.id, nextStatus)}
-          >
-            {nextStatus === 'in_progress' ? '▶ В работу' : '✓ Готово'}
-          </Button>
-        ) : (
-          <span className="text-[11px] text-green-500 font-medium">✓ Выполнено</span>
-        )}
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 text-destructive"
-          onClick={() => onDelete(task.id)}
-        >
-          <Trash2 className="h-3 w-3" />
-        </Button>
-      </div>
-    </div>
-  );
-}
