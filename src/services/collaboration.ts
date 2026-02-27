@@ -489,16 +489,14 @@ export async function joinTeamByInviteCode(inviteCode: string): Promise<{ succes
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: 'Not authenticated' };
 
-  // Find team by invite code
-  const { data: team, error: teamError } = await supabase
-    .from('teams')
-    .select('*')
-    .eq('invite_code', inviteCode)
-    .maybeSingle();
+  // Find team by invite code via secure RPC
+  const { data: teams, error: teamError } = await supabase
+    .rpc('get_team_by_invite_code', { p_code: inviteCode });
 
-  if (teamError || !team) {
+  if (teamError || !teams || teams.length === 0) {
     return { success: false, error: 'Invalid invite code' };
   }
+  const team = teams[0] as unknown as Team & { id: string; name: string; owner_id?: string };
 
   // Check if user is already a member
   const { data: existingMember } = await supabase
@@ -553,14 +551,11 @@ export async function joinTeamByInviteCode(inviteCode: string): Promise<{ succes
 
 // Get team by invite code (for preview)
 export async function getTeamByInviteCode(inviteCode: string): Promise<Team | null> {
-  const { data, error } = await supabase
-    .from('teams')
-    .select('*')
-    .eq('invite_code', inviteCode)
-    .maybeSingle();
+  const { data: teams, error } = await supabase
+    .rpc('get_team_by_invite_code', { p_code: inviteCode });
 
-  if (error || !data) return null;
-  return { ...data, is_public: data.is_public ?? true } as Team;
+  if (error || !teams || teams.length === 0) return null;
+  return { ...teams[0], is_public: (teams[0] as Record<string, unknown>).is_public ?? true } as Team;
 }
 
 // Shoutout functions

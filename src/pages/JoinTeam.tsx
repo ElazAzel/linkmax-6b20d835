@@ -23,18 +23,16 @@ interface TeamData {
   avatar_url: string | null;
   slug: string;
   niche: string | null;
-  owner_id: string;
+  is_public: boolean | null;
   membersCount: number;
 }
 
 async function fetchTeamByInviteCode(inviteCode: string): Promise<TeamData | null> {
-  const { data: team, error } = await supabase
-    .from('teams')
-    .select('id, name, description, avatar_url, slug, niche, owner_id')
-    .eq('invite_code', inviteCode)
-    .maybeSingle();
+  const { data: teams, error } = await supabase
+    .rpc('get_team_by_invite_code', { p_code: inviteCode });
 
-  if (error || !team) return null;
+  if (error || !teams || teams.length === 0) return null;
+  const team = teams[0];
 
   // Get members count
   const { count } = await supabase
