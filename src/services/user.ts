@@ -177,7 +177,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
     
     // Determine tier
-    let tier: 'free' | 'pro' = 'free';
+    let tier: 'free' | 'pro' | 'business' = 'free';
     let isPremium = false;
     
     // Check if user has active premium
@@ -185,7 +185,9 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     
     if (hasActivePremium) {
       isPremium = true;
-      tier = 'pro';
+      // Check if user has business tier
+      const profileTier = (data as { premium_tier?: string }).premium_tier;
+      tier = profileTier === 'business' ? 'business' : 'pro';
     }
 
     return { isPremium, tier, trialEndsAt: data.trial_ends_at, inTrial };
