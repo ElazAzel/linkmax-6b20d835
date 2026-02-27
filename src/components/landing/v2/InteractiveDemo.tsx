@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
 import Check from 'lucide-react/dist/esm/icons/check';
 import User from 'lucide-react/dist/esm/icons/user';
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export const InteractiveDemo = () => {
     const isMobile = useIsMobile();
@@ -75,6 +74,7 @@ export const InteractiveDemo = () => {
     return <DesktopDemo steps={steps} />;
 };
 
+/** CSS-only IntersectionObserver reveal for mobile steps */
 function MobileDemo({ steps }: { steps: any[] }) {
     const { t } = useTranslation();
     return (
@@ -83,36 +83,61 @@ function MobileDemo({ steps }: { steps: any[] }) {
                 <h2 className="text-2xl font-bold text-center mb-10">{t('landing.howItWorks', 'How it works')}</h2>
                 <div className="space-y-8">
                     {steps.map((step, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ duration: 0.4, delay: i * 0.1 }}
-                            className="flex flex-col gap-4"
-                        >
-                            <div className="flex items-start gap-4">
-                                <div className="relative">
-                                    <div className="w-12 h-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 text-lg font-bold">
-                                        {i + 1}
+                        <RevealOnScroll key={i} delay={i * 100}>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex items-start gap-4">
+                                    <div className="relative">
+                                        <div className="w-12 h-12 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 text-lg font-bold">
+                                            {i + 1}
+                                        </div>
+                                        {i < steps.length - 1 && (
+                                            <div className="absolute top-14 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-border" />
+                                        )}
                                     </div>
-                                    {i < steps.length - 1 && (
-                                        <div className="absolute top-14 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-border" />
-                                    )}
+                                    <div className="pt-1">
+                                        <h3 className="text-lg font-bold">{step.title}</h3>
+                                        <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{step.description}</p>
+                                    </div>
                                 </div>
-                                <div className="pt-1">
-                                    <h3 className="text-lg font-bold">{step.title}</h3>
-                                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{step.description}</p>
+                                <div className="bg-card border border-border/60 rounded-2xl overflow-hidden ml-16 shadow-sm">
+                                    {step.mockContent}
                                 </div>
                             </div>
-                            <div className="bg-card border border-border/60 rounded-2xl overflow-hidden ml-16 shadow-sm">
-                                {step.mockContent}
-                            </div>
-                        </motion.div>
+                        </RevealOnScroll>
                     ))}
                 </div>
             </div>
         </section>
+    );
+}
+
+/** CSS-only reveal wrapper using IntersectionObserver */
+function RevealOnScroll({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+            { threshold: 0.2 }
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(20px)',
+                transition: `opacity 0.4s ease ${delay}ms, transform 0.4s ease ${delay}ms`,
+            }}
+        >
+            {children}
+        </div>
     );
 }
 
@@ -146,32 +171,33 @@ function DesktopDemo({ steps }: { steps: any[] }) {
         <section className="py-24 bg-background">
             <div className="container max-w-6xl px-8">
                 <div className="relative flex">
-                    {/* Left: Sticky phone mockup — uses flex basis to take space */}
+                    {/* Left: Sticky phone mockup */}
                     <div className="w-1/2 shrink-0">
                         <div className="sticky top-24 flex items-center justify-center py-8">
                             <div className="relative w-[300px] h-[580px] bg-foreground/90 rounded-[3rem] border-8 border-muted shadow-2xl overflow-hidden">
-                                {/* Notch */}
                                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground/90 rounded-b-xl z-20" />
-                                {/* Step screens */}
-                                <AnimatePresence mode="wait">
-                                    <motion.div
-                                        key={activeStep}
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 1.05 }}
-                                        transition={{ duration: 0.35, ease: "easeOut" }}
+                                {/* CSS transition instead of AnimatePresence */}
+                                {steps.map((step, i) => (
+                                    <div
+                                        key={i}
                                         className="absolute inset-0 pt-12 bg-background flex flex-col text-foreground"
+                                        style={{
+                                            opacity: activeStep === i ? 1 : 0,
+                                            transform: activeStep === i ? 'scale(1)' : 'scale(0.95)',
+                                            transition: 'opacity 0.35s ease-out, transform 0.35s ease-out',
+                                            pointerEvents: activeStep === i ? 'auto' : 'none',
+                                            zIndex: activeStep === i ? 1 : 0,
+                                        }}
                                     >
-                                        {steps[activeStep].mockContent}
-                                    </motion.div>
-                                </AnimatePresence>
-                                {/* Home indicator */}
-                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-muted-foreground/30 rounded-full" />
+                                        {step.mockContent}
+                                    </div>
+                                ))}
+                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-muted-foreground/30 rounded-full z-10" />
                             </div>
                         </div>
                     </div>
 
-                    {/* Right: Steps that scroll — drives the height */}
+                    {/* Right: Steps */}
                     <div className="w-1/2 flex flex-col pl-10">
                         {steps.map((step, i) => (
                             <div

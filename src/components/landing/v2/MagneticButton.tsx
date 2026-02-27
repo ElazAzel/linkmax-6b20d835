@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 
@@ -8,7 +7,7 @@ interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
     className?: string;
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
     size?: 'default' | 'sm' | 'lg' | 'icon';
-    strength?: number; // How strong the magnetic pull is (default: 30)
+    strength?: number;
     onClick?: () => void;
 }
 
@@ -21,27 +20,27 @@ export const MagneticButton = ({
     ...props
 }: MagneticButtonProps) => {
     const ref = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [transform, setTransform] = useState('translate(0px, 0px)');
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const { clientX, clientY } = e;
-        const { left, top, width, height } = ref.current!.getBoundingClientRect();
-        const x = clientX - (left + width / 2);
-        const y = clientY - (top + height / 2);
-        setPosition({ x: x / (strength / 2), y: y / (strength / 2) });
-    };
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const el = ref.current;
+        if (!el) return;
+        const { left, top, width, height } = el.getBoundingClientRect();
+        const x = (e.clientX - (left + width / 2)) / (strength / 2);
+        const y = (e.clientY - (top + height / 2)) / (strength / 2);
+        setTransform(`translate(${x}px, ${y}px)`);
+    }, [strength]);
 
-    const handleMouseLeave = () => {
-        setPosition({ x: 0, y: 0 });
-    };
+    const handleMouseLeave = useCallback(() => {
+        setTransform('translate(0px, 0px)');
+    }, []);
 
     return (
-        <motion.div
+        <div
             ref={ref}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            animate={{ x: position.x, y: position.y }}
-            transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
+            style={{ transform, transition: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
             className="inline-block"
         >
             <Button
@@ -53,9 +52,8 @@ export const MagneticButton = ({
                 <span className="relative z-10 flex items-center gap-2">
                     {children}
                 </span>
-                {/* Shine effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0" />
             </Button>
-        </motion.div>
+        </div>
     );
 };
