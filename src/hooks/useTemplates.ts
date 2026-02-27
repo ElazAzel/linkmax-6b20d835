@@ -2,16 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
 import type { TemplateCategoryKey } from '@/lib/templateCategories';
-
-export interface Template {
-    id: string;
-    name: string;
-    description: string;
-    category: TemplateCategoryKey;
-    preview: string;
-    isPremium?: boolean;
-    blocks: Array<{ type: string; overrides?: Record<string, unknown> }>;
-}
+import type { Template } from '@/types/templates';
 
 export function useTemplates() {
     return useQuery({

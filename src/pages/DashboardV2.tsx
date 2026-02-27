@@ -27,6 +27,7 @@ import {
   DashboardLayout,
   PageSwitcher,
 } from '@/components/dashboard-v2/layout';
+import { ScreenErrorBoundary } from '@/components/dashboard-v2/common';
 
 
 // Lazy load screens for bundle optimization (reduces DashboardV2 chunk by ~80%)
@@ -41,14 +42,17 @@ const EventsScreen = lazy(() => import('@/components/dashboard-v2/screens/Events
 const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/EventDetailScreen').then(m => ({ default: m.EventDetailScreen })));
 const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
 const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen').then(m => ({ default: m.TeamManagementScreen })));
-const ZoneDealsScreen = lazy(() => import('@/components/zones/ZoneDealsScreen').then(m => ({ default: m.ZoneDealsScreen })));
-const ZoneContactsScreen = lazy(() => import('@/components/zones/ZoneContactsScreen').then(m => ({ default: m.ZoneContactsScreen })));
-const ZoneSettingsScreen = lazy(() => import('@/components/zones/ZoneSettingsScreen').then(m => ({ default: m.ZoneSettingsScreen })));
-const ZoneInboxScreen = lazy(() => import('@/components/zones/ZoneInboxScreen').then(m => ({ default: m.ZoneInboxScreen })));
-const ZoneTasksScreen = lazy(() => import('@/components/zones/ZoneTasksScreen').then(m => ({ default: m.ZoneTasksScreen })));
-const ZoneDashboard = lazy(() => import('@/components/zones/ZoneDashboard').then(m => ({ default: m.ZoneDashboard })));
-const ZoneAutomationsScreen = lazy(() => import('@/components/zones/ZoneAutomationsScreen').then(m => ({ default: m.ZoneAutomationsScreen })));
-const ZoneInvoicesScreen = lazy(() => import('@/components/zones/ZoneInvoicesScreen').then(m => ({ default: m.ZoneInvoicesScreen })));
+
+import {
+  ZoneDashboardWrapper,
+  ZoneDealsScreenWrapper,
+  ZoneContactsScreenWrapper,
+  ZoneInboxScreenWrapper,
+  ZoneTasksScreenWrapper,
+  ZoneSettingsScreenWrapper,
+  ZoneAutomationsScreenWrapper,
+  ZoneInvoicesScreenWrapper
+} from '@/components/zones/ZoneWrappers';
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -385,224 +389,244 @@ function DashboardV2Inner() {
           <Suspense fallback={<ScreenLoader />}>
             {/* Home Screen */}
             {currentTab === 'home' && (
-              <HomeScreen
-                pageData={dashboard.pageData}
-                loading={dashboard.loading}
-                isPremium={dashboard.isPremium}
-                realLeadsCount={leads.length}
-                onOpenEditor={() => handleTabChange('editor')}
-                onPreview={() => dashboard.sharingState.handlePreview()}
-                onShare={() => dashboard.sharingState.handleShare()}
-                onOpenTemplates={() => setTemplateGalleryOpen(true)}
-                onOpenMarketplace={() => setShowMarketplace(true)}
-                pageSwitcher={pageSwitcherElement}
-                onOpenVersions={() => setShowVersions(true)}
-                onOpenInsights={() => handleTabChange('insights')}
-                onOpenActivity={() => handleTabChange('activity')}
-              />
+              <ScreenErrorBoundary screenName="Home">
+                <HomeScreen
+                  pageData={dashboard.pageData}
+                  loading={dashboard.loading}
+                  isPremium={dashboard.isPremium}
+                  realLeadsCount={leads.length}
+                  onOpenEditor={() => handleTabChange('editor')}
+                  onPreview={() => dashboard.sharingState.handlePreview()}
+                  onShare={() => dashboard.sharingState.handleShare()}
+                  onOpenTemplates={() => setTemplateGalleryOpen(true)}
+                  onOpenMarketplace={() => setShowMarketplace(true)}
+                  pageSwitcher={pageSwitcherElement}
+                  onOpenVersions={() => setShowVersions(true)}
+                  onOpenInsights={() => handleTabChange('insights')}
+                  onOpenActivity={() => handleTabChange('activity')}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Editor Screen */}
             {currentTab === 'editor' && (
-              <EditorScreen
-                pageData={dashboard.pageData}
-                loading={dashboard.loading}
-                isPremium={dashboard.isPremium}
-                currentTier={dashboard.isPremium ? 'pro' : 'free'}
-                premiumTier={dashboard.currentTier}
-                onInsertBlock={dashboard.blockEditor.handleInsertBlock}
-                onEditBlock={dashboard.blockEditor.handleEditBlock}
-                onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
-                onUpdateBlock={dashboard.updateBlock}
-                onReorderBlocks={dashboard.reorderBlocks}
-                onPreview={() => dashboard.sharingState.handlePreview()}
-                onShare={() => dashboard.sharingState.handleShare()}
-                onOpenTemplates={() => setTemplateGalleryOpen(true)}
-                onOpenAI={() => dashboard.aiState.openAIBuilder()}
-                canUndo={editorHistory.canUndo}
-                canRedo={editorHistory.canRedo}
-                onUndo={editorHistory.undo}
-                onRedo={editorHistory.redo}
-                onOpenVersions={() => setShowVersions(true)}
-              />
+              <ScreenErrorBoundary screenName="Editor">
+                <EditorScreen
+                  pageData={dashboard.pageData}
+                  loading={dashboard.loading}
+                  isPremium={dashboard.isPremium}
+                  currentTier={dashboard.isPremium ? 'pro' : 'free'}
+                  premiumTier={dashboard.currentTier}
+                  onInsertBlock={dashboard.blockEditor.handleInsertBlock}
+                  onEditBlock={dashboard.blockEditor.handleEditBlock}
+                  onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
+                  onUpdateBlock={dashboard.updateBlock}
+                  onReorderBlocks={dashboard.reorderBlocks}
+                  onPreview={() => dashboard.sharingState.handlePreview()}
+                  onShare={() => dashboard.sharingState.handleShare()}
+                  onOpenTemplates={() => setTemplateGalleryOpen(true)}
+                  onOpenAI={() => dashboard.aiState.openAIBuilder()}
+                  canUndo={editorHistory.canUndo}
+                  canRedo={editorHistory.canRedo}
+                  onUndo={editorHistory.undo}
+                  onRedo={editorHistory.redo}
+                  onOpenVersions={() => setShowVersions(true)}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Pages Screen */}
             {currentTab === 'pages' && (
-              <PagesScreen
-                pages={pagesForScreen}
-                limits={multiPage.limits ? {
-                  tier: multiPage.limits.tier as 'free' | 'pro',
-                  currentPages: multiPage.limits.currentPages,
-                  maxPages: multiPage.limits.maxPages,
-                  paidPages: multiPage.limits.paidPages,
-                  freePages: multiPage.limits.freePages,
-                  canCreate: multiPage.limits.canCreate,
-                } : undefined}
-                loading={multiPage.loading}
-                isPremium={dashboard.isPremium}
-                onCreatePage={() => setShowCreatePage(true)}
-                onEditPage={handleEditPage}
-                onPreviewPage={handlePreviewPage}
-                onSharePage={handleSharePage}
-                onDuplicatePage={async (id) => {
-                  const page = multiPage.pages.find(p => p.id === id);
-                  if (page) {
-                    const result = await multiPage.createPage(`${page.title} (copy)`, `${page.slug}-copy`);
-                    if (result.success) {
-                      toast.success(t('dashboard.pages.duplicated', 'Page duplicated'));
-                    } else {
-                      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to duplicate'));
+              <ScreenErrorBoundary screenName="Pages">
+                <PagesScreen
+                  pages={pagesForScreen}
+                  limits={multiPage.limits ? {
+                    tier: multiPage.limits.tier as 'free' | 'pro',
+                    currentPages: multiPage.limits.currentPages,
+                    maxPages: multiPage.limits.maxPages,
+                    paidPages: multiPage.limits.paidPages,
+                    freePages: multiPage.limits.freePages,
+                    canCreate: multiPage.limits.canCreate,
+                  } : undefined}
+                  loading={multiPage.loading}
+                  isPremium={dashboard.isPremium}
+                  onCreatePage={() => setShowCreatePage(true)}
+                  onEditPage={handleEditPage}
+                  onPreviewPage={handlePreviewPage}
+                  onSharePage={handleSharePage}
+                  onDuplicatePage={async (id) => {
+                    const page = multiPage.pages.find(p => p.id === id);
+                    if (page) {
+                      const result = await multiPage.createPage(`${page.title} (copy)`, `${page.slug}-copy`);
+                      if (result.success) {
+                        toast.success(t('dashboard.pages.duplicated', 'Page duplicated'));
+                      } else {
+                        toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to duplicate'));
+                      }
                     }
-                  }
-                }}
-                onPageSettings={(id) => {
-                  multiPage.switchPage(id);
-                  handleTabChange('settings');
-                }}
-                onDeletePage={async (id) => {
-                  if (!confirm(t('dashboard.pages.deleteConfirm', 'Are you sure you want to delete this page? This cannot be undone.'))) return;
-                  const result = await multiPage.deletePage(id);
-                  if (result.success) {
-                    toast.success(t('dashboard.pages.deleted', 'Page deleted'));
-                  } else {
-                    toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
-                  }
-                }}
-                onUpgradePage={(id) => {
-                  navigate('/pricing');
-                }}
-                onUpgradePlan={() => navigate('/pricing')}
-              />
+                  }}
+                  onPageSettings={(id) => {
+                    multiPage.switchPage(id);
+                    handleTabChange('settings');
+                  }}
+                  onDeletePage={async (id) => {
+                    if (!confirm(t('dashboard.pages.deleteConfirm', 'Are you sure you want to delete this page? This cannot be undone.'))) return;
+                    const result = await multiPage.deletePage(id);
+                    if (result.success) {
+                      toast.success(t('dashboard.pages.deleted', 'Page deleted'));
+                    } else {
+                      toast.error(t(`dashboard.pages.errors.${result.error}`, 'Failed to delete page'));
+                    }
+                  }}
+                  onUpgradePage={(id) => {
+                    navigate('/pricing');
+                  }}
+                  onUpgradePlan={() => navigate('/pricing')}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Activity Screen */}
             {currentTab === 'activity' && (
-              <ActivityScreen
-                isPremium={dashboard.isPremium}
-              />
+              <ScreenErrorBoundary screenName="Activity">
+                <ActivityScreen
+                  isPremium={dashboard.isPremium}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Insights Screen */}
             {currentTab === 'insights' && (
-              <InsightsScreen
-                pageId={dashboard.pageData?.id || ''}
-                blocks={dashboard.pageData?.blocks || []}
-                isPremium={dashboard.isPremium}
-                onApplyInsight={(action) => {
-                  handleTabChange('home');
-                }}
-              />
+              <ScreenErrorBoundary screenName="Insights">
+                <InsightsScreen
+                  pageId={dashboard.pageData?.id || ''}
+                  blocks={dashboard.pageData?.blocks || []}
+                  isPremium={dashboard.isPremium}
+                  onApplyInsight={(action) => {
+                    handleTabChange('home');
+                  }}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Monetize Screen */}
             {currentTab === 'monetize' && (
-              <MonetizeScreen
-                isPremium={dashboard.isPremium}
-                tier={dashboard.isPremium ? 'pro' : 'free'}
-                limits={{
-                  pagesUsed: multiPage.limits?.currentPages || 1,
-                  pagesLimit: multiPage.limits?.maxPages || 1,
-                  paidPages: multiPage.limits?.paidPages || 0,
-                  freePages: multiPage.limits?.freePages || 1,
-                  blocksUsed: dashboard.pageData?.blocks.length || 0,
-                  blocksLimit: freemiumLimits.maxBlocks === Infinity ? 999 : freemiumLimits.maxBlocks,
-                  aiGenerationsUsed: getAIPageGenerationsThisMonth(),
-                  aiGenerationsLimit: freemiumLimits.maxAIPageGenerationsPerMonth === Infinity ? 999 : freemiumLimits.maxAIPageGenerationsPerMonth,
-                }}
-                onUpgrade={() => navigate('/pricing')}
-              />
+              <ScreenErrorBoundary screenName="Monetize">
+                <MonetizeScreen
+                  isPremium={dashboard.isPremium}
+                  tier={dashboard.isPremium ? 'pro' : 'free'}
+                  limits={{
+                    pagesUsed: multiPage.limits?.currentPages || 1,
+                    pagesLimit: multiPage.limits?.maxPages || 1,
+                    paidPages: multiPage.limits?.paidPages || 0,
+                    freePages: multiPage.limits?.freePages || 1,
+                    blocksUsed: dashboard.pageData?.blocks.length || 0,
+                    blocksLimit: freemiumLimits.maxBlocks === Infinity ? 999 : freemiumLimits.maxBlocks,
+                    aiGenerationsUsed: getAIPageGenerationsThisMonth(),
+                    aiGenerationsLimit: freemiumLimits.maxAIPageGenerationsPerMonth === Infinity ? 999 : freemiumLimits.maxAIPageGenerationsPerMonth,
+                  }}
+                  onUpgrade={() => navigate('/pricing')}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Settings Screen */}
             {currentTab === 'settings' && (
-              <SettingsScreen
-                usernameInput={dashboard.usernameState.usernameInput}
-                onUsernameChange={dashboard.usernameState.setUsernameInput}
-                onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
-                usernameSaving={dashboard.usernameState.saving}
-                profileBlock={dashboard.profileBlock}
-                onUpdateProfile={dashboard.handleUpdateProfile as any}
-                isPremium={dashboard.isPremium}
-                premiumTier={dashboard.currentTier}
-                emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}
-                onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
-                telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
-                telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-                onTelegramChange={dashboard.userProfile.updateTelegramNotifications}
-                niche={dashboard.pageData?.niche as Niche | undefined}
-                onNicheChange={dashboard.updateNiche}
-                onSignOut={dashboard.handleSignOut}
-                onOpenFriends={() => setShowFriends(true)}
-                onOpenSaveTemplate={() => setShowSaveTemplate(true)}
-                onOpenMyTemplates={() => setShowMyTemplates(true)}
-                onOpenTokens={() => setShowTokens(true)}
-                onOpenAchievements={() => setShowAchievements(true)}
-                onOpenTheme={() => setShowTheme(true)}
-                onOpenMarketplace={() => setShowMarketplace(true)}
-                onOpenTemplates={() => setTemplateGalleryOpen(true)}
-                onOpenAIBuilder={() => dashboard.onboardingState.openAIBuilderFromSettings()}
-                // Page settings props
-                pageTitle={multiPage.activePage?.title}
-                pageSlug={multiPage.activePage?.slug}
-                customDomain={(multiPage.activePage as any)?.custom_domain}
-                isPaid={multiPage.activePage?.isPaid}
-                isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
-                seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
-                seoDescription={(dashboard.pageData?.seo as { description?: string })?.description}
-                isIndexable={dashboard.pageData?.isIndexable}
-                faviconUrl={dashboard.pageData?.favicon_url}
-                hideBranding={dashboard.pageData?.hideBranding}
-                onUpdateSlug={async (slug) => multiPage.updatePageSlug(multiPage.activePageId || '', slug)}
-                onUpdateCustomDomain={async (domain) => {
-                  const result = await multiPage.updatePageCustomDomain(multiPage.activePageId || '', domain);
-                  if (result.success) {
-                    try {
-                      await multiPage.loadPages();
-                    } catch (e) {
-                      console.error(e)
+              <ScreenErrorBoundary screenName="Settings">
+                <SettingsScreen
+                  usernameInput={dashboard.usernameState.usernameInput}
+                  onUsernameChange={dashboard.usernameState.setUsernameInput}
+                  onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
+                  usernameSaving={dashboard.usernameState.saving}
+                  profileBlock={dashboard.profileBlock}
+                  onUpdateProfile={dashboard.handleUpdateProfile as any}
+                  isPremium={dashboard.isPremium}
+                  premiumTier={dashboard.currentTier}
+                  emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}
+                  onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
+                  telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
+                  telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
+                  onTelegramChange={dashboard.userProfile.updateTelegramNotifications}
+                  niche={dashboard.pageData?.niche as Niche | undefined}
+                  onNicheChange={dashboard.updateNiche}
+                  onSignOut={dashboard.handleSignOut}
+                  onOpenFriends={() => setShowFriends(true)}
+                  onOpenSaveTemplate={() => setShowSaveTemplate(true)}
+                  onOpenMyTemplates={() => setShowMyTemplates(true)}
+                  onOpenTokens={() => setShowTokens(true)}
+                  onOpenAchievements={() => setShowAchievements(true)}
+                  onOpenTheme={() => setShowTheme(true)}
+                  onOpenMarketplace={() => setShowMarketplace(true)}
+                  onOpenTemplates={() => setTemplateGalleryOpen(true)}
+                  onOpenAIBuilder={() => dashboard.onboardingState.openAIBuilderFromSettings()}
+                  // Page settings props
+                  pageTitle={multiPage.activePage?.title}
+                  pageSlug={multiPage.activePage?.slug}
+                  customDomain={(multiPage.activePage as any)?.custom_domain}
+                  isPaid={multiPage.activePage?.isPaid}
+                  isPrimaryPaid={multiPage.activePage?.isPrimaryPaid}
+                  seoTitle={(dashboard.pageData?.seo as { title?: string })?.title}
+                  seoDescription={(dashboard.pageData?.seo as { description?: string })?.description}
+                  isIndexable={dashboard.pageData?.isIndexable}
+                  faviconUrl={dashboard.pageData?.favicon_url}
+                  hideBranding={dashboard.pageData?.hideBranding}
+                  onUpdateSlug={async (slug) => multiPage.updatePageSlug(multiPage.activePageId || '', slug)}
+                  onUpdateCustomDomain={async (domain) => {
+                    const result = await multiPage.updatePageCustomDomain(multiPage.activePageId || '', domain);
+                    if (result.success) {
+                      try {
+                        await multiPage.loadPages();
+                      } catch (e) {
+                        console.error(e)
+                      }
                     }
-                  }
-                  return result;
-                }}
-                onUpdateSeo={(seo) => {
-                  dashboard.updatePageDataPartial({
-                    seo: { ...dashboard.pageData?.seo, ...seo },
-                  });
-                }}
-                onUpdateBranding={(branding) => {
-                  dashboard.updatePageDataPartial(branding);
-                }}
-                integrations={dashboard.pageData?.integrations}
-                onUpdateIntegrations={(integrations) => {
-                  dashboard.updatePageDataPartial({ integrations });
-                }}
-                onToggleIndexable={(indexable) => {
-                  dashboard.updatePageDataPartial({ isIndexable: indexable });
-                }}
-                onUpgradePage={() => {
-                  toast.info(t('common.comingSoon', 'Coming soon'));
-                }}
-              />
+                    return result;
+                  }}
+                  onUpdateSeo={(seo) => {
+                    dashboard.updatePageDataPartial({
+                      seo: { ...dashboard.pageData?.seo, ...seo },
+                    });
+                  }}
+                  onUpdateBranding={(branding) => {
+                    dashboard.updatePageDataPartial(branding);
+                  }}
+                  integrations={dashboard.pageData?.integrations}
+                  onUpdateIntegrations={(integrations) => {
+                    dashboard.updatePageDataPartial({ integrations });
+                  }}
+                  onToggleIndexable={(indexable) => {
+                    dashboard.updatePageDataPartial({ isIndexable: indexable });
+                  }}
+                  onUpgradePage={() => {
+                    toast.info(t('common.comingSoon', 'Coming soon'));
+                  }}
+                />
+              </ScreenErrorBoundary>
             )}
 
             {/* Events Screen */}
             {currentTab === 'events' && (
-              location.pathname.match(/\/dashboard\/events\/[^/]+$/) && !location.pathname.includes('/scanner') ? (
-                <EventDetailScreen />
-              ) : (
-                <EventsScreen />
-              )
+              <ScreenErrorBoundary screenName="Events">
+                {location.pathname.match(/\/dashboard\/events\/[^/]+$/) && !location.pathname.includes('/scanner') ? (
+                  <EventDetailScreen />
+                ) : (
+                  <EventsScreen />
+                )}
+              </ScreenErrorBoundary>
             )}
 
             {/* Leads Screen */}
             {currentTab === 'leads' && (
-              <LeadsScreen />
+              <ScreenErrorBoundary screenName="Leads">
+                <LeadsScreen />
+              </ScreenErrorBoundary>
             )}
 
             {/* Team Management Screen */}
             {currentTab === 'team' && (
-              <TeamManagementScreen />
+              <ScreenErrorBoundary screenName="Team">
+                <TeamManagementScreen />
+              </ScreenErrorBoundary>
             )}
 
             {/* Zone Screens - Business tier only */}
@@ -744,54 +768,7 @@ function DashboardV2Inner() {
   );
 }
 
-/** Zone screen wrappers that read ZoneContext */
-function ZoneDashboardWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneDashboard zoneId={currentZoneId} />;
-}
 
-function ZoneDealsScreenWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneDealsScreen zoneId={currentZoneId} />;
-}
-
-function ZoneContactsScreenWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneContactsScreen zoneId={currentZoneId} />;
-}
-
-function ZoneInboxScreenWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneInboxScreen zoneId={currentZoneId} />;
-}
-
-function ZoneTasksScreenWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneTasksScreen zoneId={currentZoneId} />;
-}
-
-function ZoneSettingsScreenWrapper() {
-  const { currentZone, members, myRole, refetch } = useZoneContext();
-  if (!currentZone) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} />;
-}
-
-function ZoneAutomationsScreenWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneAutomationsScreen zoneId={currentZoneId} />;
-}
-
-function ZoneInvoicesScreenWrapper() {
-  const { currentZoneId } = useZoneContext();
-  if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
-  return <ZoneInvoicesScreen zoneId={currentZoneId} />;
-}
 
 export default function DashboardV2() {
   return (

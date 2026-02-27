@@ -4,3 +4,4 @@ export { LoadingSkeleton } from './LoadingSkeleton';
 export { StatusBadge, type StatusType } from './StatusBadge';
 export { StatCard } from './StatCard';
 export { ActionCard } from './ActionCard';
+export { ScreenErrorBoundary } from './ScreenErrorBoundary';
