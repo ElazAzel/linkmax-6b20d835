@@ -16,7 +16,7 @@ export const PRO_EXTENDED_BLOCKS = [
   'download', 'form', 'countdown', 'booking', 'community'
 ] as const;
 
-export type FreeTier = 'free' | 'pro';
+export type FreeTier = 'free' | 'pro' | 'business';
 
 // Feature flags for each tier
 export interface TierFeatures {
@@ -40,6 +40,7 @@ export interface TierFeatures {
   canUsePremiumFrames: boolean;
   canUseAdvancedThemes: boolean;
   canUseCustomPageBackground: boolean;
+  canUseBusinessZone: boolean;
 }
 
 export const FREE_LIMITS: TierFeatures = {
@@ -63,6 +64,7 @@ export const FREE_LIMITS: TierFeatures = {
   canUsePremiumFrames: false,
   canUseAdvancedThemes: false,
   canUseCustomPageBackground: false,
+  canUseBusinessZone: false,
 };
 
 // Pro tier includes ALL premium features (business merged)
@@ -87,6 +89,13 @@ export const PRO_LIMITS: TierFeatures = {
   canUsePremiumFrames: true,
   canUseAdvancedThemes: true,
   canUseCustomPageBackground: true,
+  canUseBusinessZone: false, // Only business tier
+};
+
+// Business tier = Pro + Business Zone access
+export const BUSINESS_LIMITS: TierFeatures = {
+  ...PRO_LIMITS,
+  canUseBusinessZone: true,
 };
 
 // Helper to get block tier
@@ -100,14 +109,15 @@ export function getBlockTier(blockType: string): FreeTier {
 export function useFreemiumLimits() {
   const { isPremium, isLoading, tier = 'free' } = usePremiumStatus();
 
-  // Determine current tier limits (business is now pro)
+  // Determine current tier limits
   const getCurrentLimits = () => {
+    if (tier === 'business') return BUSINESS_LIMITS;
     if (tier === 'pro' || isPremium) return PRO_LIMITS;
     return FREE_LIMITS;
   };
 
   const limits = getCurrentLimits();
-  const currentTier: FreeTier = (tier === 'pro' || isPremium) ? 'pro' : 'free';
+  const currentTier: FreeTier = tier === 'business' ? 'business' : (tier === 'pro' || isPremium) ? 'pro' : 'free';
 
   const canAddBlock = (currentBlockCount: number) => {
     return currentBlockCount < limits.maxBlocks;
@@ -240,6 +250,7 @@ export function useFreemiumLimits() {
     canUsePremiumFrames,
     canUseAdvancedThemes,
     canUseCustomPageBackground,
+    canUseBusinessZone: () => limits.canUseBusinessZone,
     getMaxLeads,
   };
 }

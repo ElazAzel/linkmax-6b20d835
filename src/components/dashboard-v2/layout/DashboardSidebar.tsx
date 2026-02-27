@@ -23,6 +23,7 @@ import Store from 'lucide-react/dist/esm/icons/store';
 import Trophy from 'lucide-react/dist/esm/icons/trophy';
 import Coins from 'lucide-react/dist/esm/icons/coins';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import Lock from 'lucide-react/dist/esm/icons/lock';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Users from 'lucide-react/dist/esm/icons/users';
@@ -58,6 +59,7 @@ interface DashboardSidebarProps {
   onTabChange: (tabId: string) => void;
   activityBadge?: number;
   isPremium: boolean;
+  isBusinessTier?: boolean;
   onSignOut: () => void;
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
@@ -112,6 +114,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   onTabChange,
   activityBadge,
   isPremium,
+  isBusinessTier = false,
   onSignOut,
   collapsed = false,
   onCollapsedChange,
@@ -119,9 +122,15 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const ZONE_ITEM_IDS = ['zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-settings'];
+
   const handleItemClick = (itemId: string) => {
+    // Gate zone items behind business tier
+    if (ZONE_ITEM_IDS.includes(itemId) && !isBusinessTier) {
+      navigate('/pricing');
+      return;
+    }
     if (itemId === 'templates' || itemId === 'marketplace' || itemId === 'tokens' || itemId === 'achievements') {
-      // These open modals, emit custom event
       window.dispatchEvent(new CustomEvent(`open${itemId.charAt(0).toUpperCase() + itemId.slice(1)}`));
     } else {
       onTabChange(itemId);
@@ -130,6 +139,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
 
   const renderItem = (item: SidebarItem) => {
     const isActive = activeTab === item.id;
+    const isZoneLocked = ZONE_ITEM_IDS.includes(item.id) && !isBusinessTier;
     const Icon = item.icon;
     const badge = item.id === 'activity' ? activityBadge : item.badge;
 
@@ -141,7 +151,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
           "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all relative group",
           "hover:bg-primary/5 hover:translate-x-1",
           isActive && "bg-primary/10 text-primary font-bold shadow-sm border-l-2 border-primary min-h-[44px]",
-          collapsed && "justify-center px-0.5" // Tighter padding when collapsed
+          isZoneLocked && "opacity-50",
+          collapsed && "justify-center px-0.5"
         )}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -170,7 +181,10 @@ export const DashboardSidebar = memo(function DashboardSidebar({
               className="flex-1 text-left flex items-center justify-between overflow-hidden whitespace-nowrap z-10 relative"
             >
               <span className="text-sm truncate">{t(item.labelKey, item.defaultLabel)}</span>
-              {badge !== undefined && (
+              {isZoneLocked && (
+                <Lock className="h-3.5 w-3.5 ml-auto shrink-0 text-muted-foreground" />
+              )}
+              {!isZoneLocked && badge !== undefined && (
                 <Badge
                   variant="outline"
                   className={cn(

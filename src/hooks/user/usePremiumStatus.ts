@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/user/useAuth';
 import { checkPremiumStatus as checkPremiumStatusService } from '@/services/user';
 import { logger } from '@/lib/utils/logger';
 
-export type PremiumTier = 'free' | 'pro';
+export type PremiumTier = 'free' | 'pro' | 'business';
 
 export function usePremiumStatus() {
   const { user } = useAuth();

@@ -122,7 +122,7 @@ function DashboardV2Inner() {
   // Core state - with onPublish callback for automatic versioning
   const dashboard = useDashboard({ onPublish: handlePublishVersion });
   const multiPage = useMultiPage();
-  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth } = useFreemiumLimits();
+  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
 
   // Editor history
@@ -376,6 +376,7 @@ function DashboardV2Inner() {
           activeTab={currentTab}
           onTabChange={handleTabChange}
           isPremium={dashboard.isPremium}
+          isBusinessTier={canUseBusinessZone()}
           onSignOut={dashboard.handleSignOut}
         >
           <Suspense fallback={<ScreenLoader />}>
@@ -601,12 +602,12 @@ function DashboardV2Inner() {
               <TeamManagementScreen />
             )}
 
-            {/* Zone Screens */}
-            {currentTab === 'zone-deals' && <ZoneDealsScreenWrapper />}
-            {currentTab === 'zone-contacts' && <ZoneContactsScreenWrapper />}
-            {currentTab === 'zone-inbox' && <ZoneInboxScreenWrapper />}
-            {currentTab === 'zone-tasks' && <ZoneTasksScreenWrapper />}
-            {currentTab === 'zone-settings' && <ZoneSettingsScreenWrapper />}
+            {/* Zone Screens - Business tier only */}
+            {currentTab === 'zone-deals' && canUseBusinessZone() && <ZoneDealsScreenWrapper />}
+            {currentTab === 'zone-contacts' && canUseBusinessZone() && <ZoneContactsScreenWrapper />}
+            {currentTab === 'zone-inbox' && canUseBusinessZone() && <ZoneInboxScreenWrapper />}
+            {currentTab === 'zone-tasks' && canUseBusinessZone() && <ZoneTasksScreenWrapper />}
+            {currentTab === 'zone-settings' && canUseBusinessZone() && <ZoneSettingsScreenWrapper />}
           </Suspense>
         </DashboardLayout>
 
