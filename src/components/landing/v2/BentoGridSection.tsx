@@ -2,17 +2,56 @@ import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils/utils";
 import { useTranslation } from "react-i18next";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
-import Copy from 'lucide-react/dist/esm/icons/copy';
+import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
-import Users from 'lucide-react/dist/esm/icons/users';
 import Send from 'lucide-react/dist/esm/icons/send';
+import Kanban from 'lucide-react/dist/esm/icons/kanban-square';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+
+/** Reveal on scroll wrapper */
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.15 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)', transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms` }}>
+      {children}
+    </div>
+  );
+}
 
 const AIBuilderVisual = () => {
   const { t } = useTranslation();
+  const [typing, setTyping] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setTyping(true); }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
-      <div className="text-3xl font-bold text-primary animate-pulse mx-[10px]">{t('landing.aiPowered', 'AI Powered')}</div>
+    <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,hsl(var(--primary)/0.08)_50%,transparent_75%)] bg-[length:200%_200%] animate-[gradient-shift_3s_ease_infinite]" />
+      <div className="flex flex-col items-center gap-2 z-10">
+        <Sparkles className="w-8 h-8 text-primary animate-pulse" />
+        <div className={cn("text-xl font-bold text-primary transition-opacity duration-700", typing ? "opacity-100" : "opacity-0")}>
+          {t('landing.bento.aiPowered', 'AI-Powered')}
+        </div>
+        <div className={cn("text-xs text-muted-foreground transition-opacity duration-700 delay-300", typing ? "opacity-100" : "opacity-0")}>
+          {t('landing.bento.aiSub', 'Structure • Copy • Design')}
+        </div>
+      </div>
     </div>
   );
 };
@@ -20,7 +59,6 @@ const AIBuilderVisual = () => {
 const AnalyticsVisual = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -28,19 +66,48 @@ const AnalyticsVisual = () => {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-
   const bars = [40, 60, 50, 80, 65, 90, 70];
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 items-end justify-center pb-4 gap-2 group-hover/bento:scale-105 transition-transform duration-500">
       {bars.map((h, i) => (
         <div
           key={i}
-          className="w-4 bg-primary/60 rounded-t-sm transition-all duration-1000"
-          style={{
-            height: visible ? `${h}%` : '10px',
-            transitionDelay: `${i * 100}ms`,
-          }}
+          className="w-4 bg-primary/60 rounded-t-sm transition-all duration-1000 hover:bg-primary"
+          style={{ height: visible ? `${h}%` : '10px', transitionDelay: `${i * 100}ms` }}
         />
+      ))}
+    </div>
+  );
+};
+
+const CRMVisual = () => {
+  const { t } = useTranslation();
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const stages = [
+    { label: t('landing.bento.crmNew', 'New'), count: 5, color: 'bg-blue-500' },
+    { label: t('landing.bento.crmInProgress', 'In Progress'), count: 3, color: 'bg-yellow-500' },
+    { label: t('landing.bento.crmDone', 'Done'), count: 8, color: 'bg-green-500' },
+  ];
+  return (
+    <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 items-center justify-center gap-3 p-4 group-hover/bento:scale-105 transition-transform duration-500">
+      {stages.map((s, i) => (
+        <div
+          key={i}
+          className={cn("flex flex-col items-center gap-1 rounded-lg bg-background/60 backdrop-blur-sm border border-border/40 p-2 flex-1 transition-all duration-500", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
+          style={{ transitionDelay: `${i * 150}ms` }}
+        >
+          <div className={cn("w-2 h-2 rounded-full", s.color)} />
+          <span className="text-[10px] font-medium text-muted-foreground">{s.label}</span>
+          <span className="text-lg font-bold text-foreground">{s.count}</span>
+        </div>
       ))}
     </div>
   );
@@ -48,11 +115,11 @@ const AnalyticsVisual = () => {
 
 const MobileVisual = () => (
   <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 items-center justify-center relative group-hover/bento:scale-105 transition-transform duration-500">
-    <div className="w-24 h-40 border-4 border-primary/30 rounded-[1.5rem] bg-foreground/80 flex flex-col items-center pt-2">
+    <div className="w-24 h-40 border-4 border-primary/30 rounded-[1.5rem] bg-foreground/80 flex flex-col items-center pt-2 shadow-lg shadow-primary/10">
       <div className="w-8 h-1 bg-primary/30 rounded-full mb-2" />
       <div className="w-16 h-2 bg-muted-foreground/30 rounded-sm mb-1" />
       <div className="w-16 h-2 bg-muted-foreground/20 rounded-sm mb-1" />
-      <div className="w-12 h-8 bg-primary/60 rounded-lg mt-4" />
+      <div className="w-12 h-8 bg-primary/60 rounded-lg mt-4 animate-pulse" />
     </div>
   </div>
 );
@@ -61,7 +128,6 @@ const LeadsVisual = () => {
   const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -69,13 +135,11 @@ const LeadsVisual = () => {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-
   const items = [
-    { text: t('landing.newLead1', 'New lead: Sarah K.'), delay: '200ms' },
-    { text: t('landing.newLead2', 'New lead: Alex M.'), delay: '500ms' },
-    { text: t('landing.newLeadsToday', '+12 today'), delay: '800ms', highlight: true },
+    { text: t('landing.bento.lead1', 'New lead: Sarah K.'), delay: '200ms' },
+    { text: t('landing.bento.lead2', 'New lead: Alex M.'), delay: '500ms' },
+    { text: t('landing.bento.leadCount', '+12 today'), delay: '800ms', highlight: true },
   ];
-
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-sky-500/15 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
       <div className="absolute left-6 top-1/2 -translate-y-1/2">
@@ -89,17 +153,29 @@ const LeadsVisual = () => {
             key={i}
             className={cn(
               "flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm transition-all duration-500",
-              item.highlight
-                ? "bg-primary/10 border border-primary/20"
-                : "bg-background/80 backdrop-blur-sm border border-border/40",
+              item.highlight ? "bg-primary/10 border border-primary/20" : "bg-background/80 backdrop-blur-sm border border-border/40",
               visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-5"
             )}
             style={{ transitionDelay: item.delay }}
           >
             {!item.highlight && <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />}
-            <span className={cn("text-xs", item.highlight ? "font-bold text-primary" : "font-medium")}>
-              {item.text}
-            </span>
+            <span className={cn("text-xs", item.highlight ? "font-bold text-primary" : "font-medium")}>{item.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const BookingVisual = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-violet-500/15 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
+      <div className="flex flex-col gap-1.5 p-3">
+        {['10:00', '11:30', '14:00'].map((time, i) => (
+          <div key={i} className={cn("flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors", i === 1 ? "bg-primary/15 text-primary border border-primary/20" : "bg-muted/50 text-muted-foreground")}>
+            <Calendar className="w-3 h-3" />
+            {time} — {t('landing.bento.bookingSlot', 'Available')}
           </div>
         ))}
       </div>
@@ -112,53 +188,75 @@ export function BentoGridSection() {
 
   const items = [
     {
-      title: t('landing.aiBuilderTitle', 'AI Page Builder'),
-      description: t('landing.aiBuilderDesc', 'Describe your business, and our AI builds the perfect structure, copy, and layout in seconds.'),
+      title: t('landing.bento.aiTitle', 'AI Page Builder'),
+      description: t('landing.bento.aiDesc', 'Describe your business and AI creates the perfect structure, copy, and layout in seconds.'),
       header: <AIBuilderVisual />,
-      icon: <Copy className="h-4 w-4 text-muted-foreground" />,
+      icon: <Sparkles className="h-4 w-4 text-muted-foreground" />,
       className: "md:col-span-2"
     },
     {
-      title: t('landing.deepAnalyticsTitle', 'Deep Analytics'),
-      description: t('landing.deepAnalyticsDesc', 'Track every click, view, and conversion with privacy-focused, real-time analytics.'),
+      title: t('landing.bento.analyticsTitle', 'Live Analytics'),
+      description: t('landing.bento.analyticsDesc', 'Track every click, view, and conversion with real-time, privacy-first analytics.'),
       header: <AnalyticsVisual />,
       icon: <BarChart3 className="h-4 w-4 text-muted-foreground" />,
       className: "md:col-span-1"
     },
     {
-      title: t('landing.mobileEditorTitle', 'Mobile First Editor'),
-      description: t('landing.mobileEditorDesc', 'Edit your page from your phone. Full power in your pocket.'),
+      title: t('landing.bento.mobileTitle', 'Mobile First Editor'),
+      description: t('landing.bento.mobileDesc', 'Full editing power from your phone. Build and publish on the go.'),
       header: <MobileVisual />,
       icon: <Smartphone className="h-4 w-4 text-muted-foreground" />,
       className: "md:col-span-1"
     },
     {
-      title: t('landing.instantLeadsTitle', 'Instant Leads'),
-      description: t('landing.instantLeadsDesc', 'Get leads delivered straight to Telegram. No more missing customers.'),
+      title: t('landing.bento.crmTitle', 'Built-in CRM'),
+      description: t('landing.bento.crmDesc', 'Manage leads, deals, and clients from a Kanban pipeline. No extra tools needed.'),
+      header: <CRMVisual />,
+      icon: <Kanban className="h-4 w-4 text-muted-foreground" />,
+      className: "md:col-span-1"
+    },
+    {
+      title: t('landing.bento.leadsTitle', 'Instant Leads to Telegram'),
+      description: t('landing.bento.leadsDesc', 'Get leads delivered straight to Telegram. Never miss a customer.'),
       header: <LeadsVisual />,
-      icon: <Users className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-2"
-    }
+      icon: <Send className="h-4 w-4 text-muted-foreground" />,
+      className: "md:col-span-1"
+    },
+    {
+      title: t('landing.bento.bookingTitle', 'Online Booking'),
+      description: t('landing.bento.bookingDesc', 'Let clients book slots directly. Automated calendar, zero phone calls.'),
+      header: <BookingVisual />,
+      icon: <Calendar className="h-4 w-4 text-muted-foreground" />,
+      className: "md:col-span-1"
+    },
   ];
 
   return (
     <div className="py-20 relative px-4">
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto mb-10 text-center">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">{t('landing.growTitle', 'Everything you need to grow')}</h2>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          {t('landing.growDesc', 'Powerful features wrapped in a beautiful, easy-to-use interface.')}
-        </p>
+        <Reveal>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">{t('landing.bento.sectionTitle', 'Everything you need to grow')}</h2>
+        </Reveal>
+        <Reveal delay={100}>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            {t('landing.bento.sectionDesc', 'Website builder + CRM + analytics. One platform instead of ten tools.')}
+          </p>
+        </Reveal>
       </div>
-      <BentoGrid className="max-w-4xl mx-auto">
+      <BentoGrid className="max-w-5xl mx-auto">
         {items.map((item, i) => (
-          <BentoGridItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            header={item.header}
-            icon={item.icon}
-            className={item.className}
-          />
+          <Reveal key={i} delay={i * 80}>
+            <BentoGridItem
+              title={item.title}
+              description={item.description}
+              header={item.header}
+              icon={item.icon}
+              className={item.className}
+            />
+          </Reveal>
         ))}
       </BentoGrid>
     </div>
