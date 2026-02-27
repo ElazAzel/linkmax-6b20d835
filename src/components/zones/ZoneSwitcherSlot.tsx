@@ -15,7 +15,6 @@ export default function ZoneSwitcherSlot({ collapsed }: Props) {
   const { canUseBusinessZone } = useFreemiumLimits();
 
   if (!canUseBusinessZone()) return null;
-  if (zones.length === 0 && !currentZone) return null;
 
   return (
     <ZoneSwitcher
