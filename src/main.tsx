@@ -43,6 +43,7 @@ const PaymentTerms = lazy(() => import("./pages/PaymentTerms"));
 const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
+const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
@@ -83,6 +84,7 @@ const router = createBrowserRouter([
       { path: "admin/templates/:id", element: <AdminTemplateEditor /> },
       { path: "team/:slug", element: <TeamPage /> },
       { path: "join/:inviteCode", element: <JoinTeam /> },
+      { path: "invites/:token", element: <AcceptInvite /> },
       { path: "terms", element: <Terms /> },
       { path: "privacy", element: <Privacy /> },
       { path: "payment-terms", element: <PaymentTerms /> },

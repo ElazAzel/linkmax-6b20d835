@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Building2 from 'lucide-react/dist/esm/icons/building-2';
@@ -135,6 +135,9 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('zones.createZone', 'Create zone')}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('zones.createZoneDescription', 'Define a name and slug to create a new dedicated workspace')}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">

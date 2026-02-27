@@ -145,7 +145,7 @@ export const TemplateGallery = memo(function TemplateGallery({
               <span className="truncate">{t('templates.title', 'Галерея шаблонов')}</span>
             </DialogTitle>
             <DialogDescription className="sr-only">
-              {t('templates.description', 'Выберите шаблон для вашей страницы')}
+              {t('templates.description', 'Выберите шаблон для вашей страницы — AI персонализирует под ваш бизнес')}
             </DialogDescription>
             <Button
               variant="outline"
@@ -157,9 +157,6 @@ export const TemplateGallery = memo(function TemplateGallery({
               <span className="hidden xs:inline">{t('templates.marketplace', 'Маркетплейс')}</span>
             </Button>
           </div>
-          <DialogDescription className="text-xs sm:text-sm">
-            {t('templates.description', 'Выберите готовый шаблон — AI персонализирует под ваш бизнес')}
-          </DialogDescription>
         </DialogHeader>
 
         {/* Smart Match Input */}

@@ -29,7 +29,7 @@ export function useZoneDeals(zoneId: string | null) {
         .select('*, zone_contacts(*), zone_deal_stages(*)')
         .eq('zone_id', zoneId)
         .order('created_at', { ascending: false });
-      
+
       const mapped = (data || []).map((d: any) => ({
         ...d,
         contact: d.zone_contacts || undefined,
@@ -48,7 +48,7 @@ export function useZoneDeals(zoneId: string | null) {
     const userId = (await supabase.auth.getUser()).data.user?.id;
     const { data, error } = await supabase
       .from('zone_deals')
-      .insert({ ...deal, zone_id: zoneId, assigned_to: userId, created_by: userId } as any)
+      .insert({ ...deal, zone_id: zoneId, assigned_to: userId } as any)
       .select()
       .single();
     if (error) throw error;

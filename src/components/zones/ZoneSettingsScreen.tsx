@@ -16,6 +16,9 @@ import Users from 'lucide-react/dist/esm/icons/users';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import LinkIcon from 'lucide-react/dist/esm/icons/link';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Copy from 'lucide-react/dist/esm/icons/copy';
 import { toast } from 'sonner';
 import type { Zone, ZoneMember, ZoneInvite, ZoneMemberRole } from '@/types/zones';
 import { ZONE_PLANS, getPlanByCode, getMemberLimitFromPlan } from '@/types/zones';
@@ -85,6 +88,23 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
     }
   };
 
+  const copyInviteLink = (token: string) => {
+    const url = `${window.location.origin}/invites/${token}`;
+    navigator.clipboard.writeText(url);
+    toast.success(t('zones.settings.linkCopied', 'Invite link copied to clipboard'));
+  };
+
+  const handleRevokeInvite = async (id: string) => {
+    try {
+      const { error } = await supabase.from('zone_invites').delete().eq('id', id);
+      if (error) throw error;
+      toast.success(t('zones.settings.inviteRevoked', 'Invite revoked'));
+      fetchInvites();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold">{zone.name} — {t('zones.settings.title', 'Settings')}</h1>
@@ -139,15 +159,25 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">{t('zones.settings.pendingInvites', 'Pending invites')}</p>
               {invites.map(invite => (
-                <Card key={invite.id}>
+                <Card key={invite.id} className="border-dashed">
                   <CardContent className="p-3 flex items-center justify-between">
-                    <div>
-                      <p className="text-sm">{invite.email}</p>
-                      <p className="text-xs text-muted-foreground">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium truncate">{invite.email}</p>
+                        <Badge variant="outline" className="text-[10px] h-4">{invite.role}</Badge>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">
                         {t('zones.settings.expires', 'Expires')}: {new Date(invite.expires_at).toLocaleDateString()}
                       </p>
                     </div>
-                    <Badge variant="outline" className="text-xs">{invite.role}</Badge>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" onClick={() => copyInviteLink(invite.token)}>
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleRevokeInvite(invite.id)}>
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}

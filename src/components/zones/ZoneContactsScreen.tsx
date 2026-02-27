@@ -9,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Phone from 'lucide-react/dist/esm/icons/phone';
@@ -45,7 +45,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
 
   const filtered = useMemo(() => {
     return contacts.filter(c => {
-      const matchSearch = !search || 
+      const matchSearch = !search ||
         c.name.toLowerCase().includes(search.toLowerCase()) ||
         c.phone?.includes(search) ||
         c.email?.toLowerCase().includes(search.toLowerCase());
@@ -192,6 +192,9 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('zones.contacts.add', 'Add Contact')}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('zones.contacts.addDescription', 'Create a new contact in this zone by providing their details')}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">

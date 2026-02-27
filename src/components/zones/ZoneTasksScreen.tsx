@@ -12,7 +12,7 @@ import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { TaskCard } from './tasks/TaskCard';
 import { TaskKanbanColumn, VISIBLE_COLUMNS } from './tasks/TaskKanbanColumn';
@@ -174,7 +174,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             <DragOverlay>
               {activeDragTask && (
                 <div className="w-72">
-                  <TaskCard task={activeDragTask} onClick={() => {}} isDragOverlay />
+                  <TaskCard task={activeDragTask} onClick={() => { }} isDragOverlay />
                 </div>
               )}
             </DragOverlay>

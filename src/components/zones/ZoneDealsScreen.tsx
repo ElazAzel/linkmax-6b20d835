@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Filter from 'lucide-react/dist/esm/icons/filter';
 import { toast } from 'sonner';
@@ -176,7 +176,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           ))}
         </div>
         <DragOverlay>
-          {activeDragDeal && <DealCard deal={activeDragDeal} onClick={() => {}} />}
+          {activeDragDeal && <DealCard deal={activeDragDeal} onClick={() => { }} />}
         </DragOverlay>
       </DndContext>
 
@@ -185,6 +185,9 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('zones.deals.newDeal', 'New Deal')}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('zones.deals.newDealDescription', 'Fill in the information to create a new deal in the pipeline')}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
