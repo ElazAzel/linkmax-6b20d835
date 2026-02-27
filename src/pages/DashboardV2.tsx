@@ -588,7 +588,10 @@ function DashboardV2Inner() {
                     });
                   }}
                   onUpdateBranding={(branding) => {
-                    dashboard.updatePageDataPartial(branding);
+                    dashboard.updatePageDataPartial({
+                      favicon_url: branding.faviconUrl,
+                      hideBranding: branding.hideBranding,
+                    });
                   }}
                   integrations={dashboard.pageData?.integrations}
                   onUpdateIntegrations={(integrations) => {

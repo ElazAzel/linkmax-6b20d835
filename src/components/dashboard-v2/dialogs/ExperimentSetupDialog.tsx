@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FlaskConical from 'lucide-react/dist/esm/icons/flask-conical';
 import Plus from 'lucide-react/dist/esm/icons/plus';
-import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
-import Save from 'lucide-react/dist/esm/icons/save';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -19,11 +18,11 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { createExperiment } from '@/services/experiments';
 import { toast } from 'sonner';
 import type { Block } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
+import { VariantBlockEditor } from '@/components/editor/experiments/VariantBlockEditor';
 
 interface ExperimentSetupDialogProps {
     isOpen: boolean;
@@ -56,18 +55,21 @@ export function ExperimentSetupDialog({
         }
     ]);
     const [loading, setLoading] = useState(false);
+    const [editingVariantIndex, setEditingVariantIndex] = useState<number | null>(null);
 
-    // Sync weights if there are 2 variants
     const handleWeightChange = (index: number, value: number) => {
         const newVariants = [...variants];
         newVariants[index].traffic_weight = value;
-
-        // Auto-balance if 2 variants
         if (newVariants.length === 2) {
             const otherIndex = index === 0 ? 1 : 0;
             newVariants[otherIndex].traffic_weight = 100 - value;
         }
+        setVariants(newVariants);
+    };
 
+    const handleVariantBlockChange = (index: number, updatedBlock: Block) => {
+        const newVariants = [...variants];
+        newVariants[index].block_data = updatedBlock;
         setVariants(newVariants);
     };
 
@@ -104,7 +106,7 @@ export function ExperimentSetupDialog({
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px] gap-6">
+            <DialogContent className="sm:max-w-[540px] gap-6 max-h-[85vh] overflow-y-auto">
                 <DialogHeader>
                     <div className="flex items-center gap-2 mb-1">
                         <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -118,7 +120,6 @@ export function ExperimentSetupDialog({
                 </DialogHeader>
 
                 <div className="space-y-6 py-2">
-                    {/* Experiment Name */}
                     <div className="space-y-2">
                         <Label htmlFor="name">{t('experiments.setup.nameLabel', 'Название эксперимента')}</Label>
                         <Input
@@ -129,7 +130,6 @@ export function ExperimentSetupDialog({
                         />
                     </div>
 
-                    {/* Variants Setup */}
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <Label className="text-base font-bold">{t('experiments.setup.variants', 'Варианты и трафик')}</Label>
@@ -167,18 +167,26 @@ export function ExperimentSetupDialog({
                                     />
 
                                     {v.variant_label !== 'A' && (
-                                        <div className="flex justify-end gap-2 pt-1">
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="h-8 text-xs font-bold gap-1.5"
-                                                onClick={() => {
-                                                    toast.info(t('experiments.setup.editVariant', 'Редактирование варианта будет доступно в следующем обновлении'));
-                                                }}
-                                            >
-                                                <Plus className="h-3 w-3" />
-                                                {t('experiments.setup.configure', 'Настроить контент')}
-                                            </Button>
+                                        <div className="space-y-3">
+                                            <div className="flex justify-end">
+                                                <Button
+                                                    variant={editingVariantIndex === i ? "secondary" : "ghost"}
+                                                    size="sm"
+                                                    className="h-8 text-xs font-bold gap-1.5"
+                                                    onClick={() => setEditingVariantIndex(editingVariantIndex === i ? null : i)}
+                                                >
+                                                    <Pencil className="h-3 w-3" />
+                                                    {editingVariantIndex === i
+                                                        ? t('experiments.setup.hideEditor', 'Скрыть редактор')
+                                                        : t('experiments.setup.configure', 'Настроить контент')}
+                                                </Button>
+                                            </div>
+                                            {editingVariantIndex === i && (
+                                                <VariantBlockEditor
+                                                    block={v.block_data as Block}
+                                                    onChange={(updated) => handleVariantBlockChange(i, updated)}
+                                                />
+                                            )}
                                         </div>
                                     )}
                                 </div>
