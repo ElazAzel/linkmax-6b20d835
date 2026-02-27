@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
@@ -19,30 +18,50 @@ const scrollTo = (href: string) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
 };
 
-export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
-    const { scrollY } = useScroll();
+/**
+ * Scroll-hide hook using passive listener + rAF (no forced reflow).
+ */
+function useScrollHide(expanded: boolean) {
     const [hidden, setHidden] = useState(false);
+    const prevScrollY = useRef(0);
+
+    useEffect(() => {
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const current = window.scrollY;
+                if (current > prevScrollY.current && current > 150 && !expanded) {
+                    setHidden(true);
+                } else {
+                    setHidden(false);
+                }
+                prevScrollY.current = current;
+                ticking = false;
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [expanded]);
+
+    return hidden;
+}
+
+export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
     const [expanded, setExpanded] = useState(false);
     const { t } = useTranslation();
     const isMobile = useIsMobile();
-
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious() ?? 0;
-        if (latest > previous && latest > 150 && !expanded) {
-            setHidden(true);
-        } else {
-            setHidden(false);
-        }
-    });
+    const hidden = useScrollHide(expanded);
 
     // Desktop: inline nav, no expandable menu
     if (!isMobile) {
         return (
-            <motion.div
-                variants={{ visible: { y: 0 }, hidden: { y: -100 } }}
-                animate={hidden ? "hidden" : "visible"}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="fixed top-6 inset-x-0 z-50 flex justify-center pointer-events-none"
+            <div
+                className={cn(
+                    "fixed top-6 inset-x-0 z-50 flex justify-center pointer-events-none transition-transform duration-300 ease-in-out",
+                    hidden ? "-translate-y-[100px]" : "translate-y-0"
+                )}
             >
                 <div className="bg-black/80 dark:bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto rounded-full px-2 py-1.5 flex items-center gap-1">
                     <span className="font-bold text-white tracking-tight px-4 cursor-default">
@@ -85,27 +104,23 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         {t('landing.v2.nav.getStarted', 'Get Started')}
                     </Button>
                 </div>
-            </motion.div>
+            </div>
         );
     }
 
-    // Mobile: compact pill with expandable menu
+    // Mobile: compact pill with expandable menu (CSS transitions, no framer-motion)
     return (
-        <motion.div
-            variants={{ visible: { y: 0 }, hidden: { y: -100 } }}
-            animate={hidden ? "hidden" : "visible"}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="fixed top-4 inset-x-0 z-50 flex justify-center pointer-events-none px-4"
+        <div
+            className={cn(
+                "fixed top-4 inset-x-0 z-50 flex justify-center pointer-events-none px-4 transition-transform duration-300 ease-in-out",
+                hidden ? "-translate-y-[100px]" : "translate-y-0"
+            )}
         >
-            <motion.div
-                layout
-                animate={{
-                    width: expanded ? "100%" : "auto",
-                    height: expanded ? "auto" : 48,
-                    borderRadius: expanded ? 20 : 32
-                }}
-                transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                className="relative bg-black/80 dark:bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto overflow-hidden max-w-md w-full flex flex-col items-center"
+            <div
+                className={cn(
+                    "relative bg-black/80 dark:bg-black/90 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto overflow-hidden max-w-md w-full flex flex-col items-center transition-all duration-300 ease-out",
+                    expanded ? "rounded-[20px]" : "rounded-full"
+                )}
             >
                 {/* Compact bar */}
                 <div className="flex items-center justify-between w-full h-12 px-2 pl-4 gap-2 shrink-0">
@@ -113,66 +128,49 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                         lnk<span className="text-primary">mx</span>
                     </span>
 
-                    <AnimatePresence mode="popLayout">
-                        {!expanded && (
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                className="flex items-center gap-1"
+                    {!expanded ? (
+                        <div className="flex items-center gap-1 animate-in fade-in duration-200">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-white/70 hover:text-white hover:bg-white/10 rounded-full px-2.5 text-xs"
+                                onClick={onLogin}
                             >
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-7 text-white/70 hover:text-white hover:bg-white/10 rounded-full px-2.5 text-xs"
-                                    onClick={onLogin}
-                                >
-                                    {t('landing.v2.nav.login', 'Log in')}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    className="h-7 bg-white text-black hover:bg-white/90 rounded-full px-3 text-xs font-semibold"
-                                    onClick={onSignup}
-                                >
-                                    {t('landing.v2.nav.start', 'Start')}
-                                </Button>
-                                <button
-                                    onClick={() => setExpanded(true)}
-                                    className="p-2 rounded-full hover:bg-white/10 text-white/70 transition-colors"
-                                    aria-label="Open menu"
-                                >
-                                    <Menu className="w-4 h-4" />
-                                </button>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    <AnimatePresence>
-                        {expanded && (
-                            <motion.button
-                                initial={{ opacity: 0, rotate: -90 }}
-                                animate={{ opacity: 1, rotate: 0 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setExpanded(false)}
-                                className="p-2 rounded-full hover:bg-white/10 text-white/70 transition-colors z-20"
-                                aria-label="Close menu"
+                                {t('landing.v2.nav.login', 'Log in')}
+                            </Button>
+                            <Button
+                                size="sm"
+                                className="h-7 bg-white text-black hover:bg-white/90 rounded-full px-3 text-xs font-semibold"
+                                onClick={onSignup}
                             >
-                                <X className="w-4 h-4" />
-                            </motion.button>
-                        )}
-                    </AnimatePresence>
+                                {t('landing.v2.nav.start', 'Start')}
+                            </Button>
+                            <button
+                                onClick={() => setExpanded(true)}
+                                className="p-2 rounded-full hover:bg-white/10 text-white/70 transition-colors"
+                                aria-label="Open menu"
+                            >
+                                <Menu className="w-4 h-4" />
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setExpanded(false)}
+                            className="p-2 rounded-full hover:bg-white/10 text-white/70 transition-colors z-20 animate-in fade-in spin-in-90 duration-200"
+                            aria-label="Close menu"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    )}
                 </div>
 
-                {/* Expanded content */}
-                <AnimatePresence>
-                    {expanded && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                            transition={{ delay: 0.1 }}
-                            className="w-full px-5 pb-5 pt-1 flex flex-col gap-4"
-                        >
+                {/* Expanded content - CSS grid transition for smooth height */}
+                <div
+                    className="grid transition-all duration-300 ease-out w-full"
+                    style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
+                >
+                    <div className="overflow-hidden">
+                        <div className="px-5 pb-5 pt-1 flex flex-col gap-4">
                             <nav className="flex flex-col gap-1">
                                 {[
                                     { href: '#features', label: t('landing.v2.nav.features', 'Features') },
@@ -210,10 +208,10 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>
                             </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </motion.div>
-        </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };

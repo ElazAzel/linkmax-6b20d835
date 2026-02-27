@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
@@ -10,22 +9,48 @@ import Globe from 'lucide-react/dist/esm/icons/globe';
 import Play from 'lucide-react/dist/esm/icons/play';
 import { MagneticButton } from './MagneticButton';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils/utils';
 
 interface HeroProp {
     onStart: () => void;
     onExamples: () => void;
 }
 
+/**
+ * CSS-only parallax hook using transform (no forced reflow).
+ * Uses passive scroll listener + requestAnimationFrame to avoid layout thrashing.
+ */
+function useScrollParallax() {
+    const [style1, setStyle1] = useState<React.CSSProperties>({});
+    const [style2, setStyle2] = useState<React.CSSProperties>({});
+    const [opacityStyle, setOpacityStyle] = useState<React.CSSProperties>({});
+
+    useEffect(() => {
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const sy = window.scrollY;
+                const y1 = (sy / 500) * 200;
+                const y2 = (sy / 500) * -150;
+                const opacity = Math.max(0, 1 - sy / 300);
+                setStyle1({ transform: `translateY(${y1}px) rotate(-5deg)`, willChange: 'transform' });
+                setStyle2({ transform: `translateY(${y2}px) rotate(10deg)`, willChange: 'transform' });
+                setOpacityStyle({ opacity, willChange: 'opacity' });
+                ticking = false;
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    return { style1, style2, opacityStyle };
+}
+
 export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
     const { t } = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollY } = useScroll();
-
-    // Parallax effects (scroll-driven, don't block initial paint)
-    const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-    const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-    const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+    const { style1, style2, opacityStyle } = useScrollParallax();
 
     return (
         <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden py-20">
@@ -35,17 +60,17 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
             {/* Animated Grid Overlay */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-            {/* Floating 3D Elements (Decorative) — parallax only, no initial hide */}
-            <motion.div style={{ y: y1, rotate: -5 }} className="absolute left-[5%] top-[20%] w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float-slow">
+            {/* Floating 3D Elements (Decorative) — CSS parallax, no framer-motion reflow */}
+            <div style={style1} className="absolute left-[5%] top-[20%] w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float-slow">
                 <Zap className="w-10 h-10 text-yellow-400" />
-            </motion.div>
-            <motion.div style={{ y: y2, rotate: 10 }} className="absolute right-[10%] top-[15%] w-32 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float">
+            </div>
+            <div style={style2} className="absolute right-[10%] top-[15%] w-32 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float">
                 <div className="flex gap-2">
                     <div className="w-3 h-3 rounded-full bg-red-400" />
                     <div className="w-3 h-3 rounded-full bg-yellow-400" />
                     <div className="w-3 h-3 rounded-full bg-green-400" />
                 </div>
-            </motion.div>
+            </div>
 
             <div className="container relative z-10 px-4 md:px-6 flex flex-col items-center text-center">
 
@@ -104,14 +129,14 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
             </div>
 
-            {/* Scroll Indicator — scroll-driven opacity, no initial hide */}
-            <motion.div
-                style={{ opacity }}
+            {/* Scroll Indicator — CSS opacity, no framer-motion */}
+            <div
+                style={opacityStyle}
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground/50">{t('landing.v4.hero.scroll', 'Scroll')}</span>
                 <div className="w-[1px] h-12 bg-gradient-to-b from-primary/50 to-transparent" />
-            </motion.div>
+            </div>
         </section>
     );
 };
