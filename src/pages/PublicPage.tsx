@@ -287,8 +287,8 @@ export default function PublicPage() {
                   </Button>
                 </div>
 
-                {/* Branding - hidden when watermark is shown OR if white-label is active */}
-                {!showWatermark && !pageData?.hideBranding && (
+              {/* Branding - hidden when watermark is shown OR if white-label is active (premium only) */}
+                {!showWatermark && !(isOwnerPremium && pageData?.hideBranding) && (
                   <div className="mt-8 sm:mt-12 text-center pb-4">
                     <a
                       href="/"
@@ -299,12 +299,12 @@ export default function PublicPage() {
                   </div>
                 )}
 
-                {/* Extra padding for watermark - only if branding is NOT hidden */}
-                {(showWatermark && !pageData?.hideBranding) && <div className="h-16" />}
+                {/* Extra padding for watermark */}
+                {showWatermark && <div className="h-16" />}
               </div>
 
-              {/* Freemium Watermark - also check hideBranding flag */}
-              <FreemiumWatermark show={showWatermark && !pageData?.hideBranding} />
+              {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
+              <FreemiumWatermark show={showWatermark} />
 
               {/* QR Dialog */}
               <Dialog open={showQR} onOpenChange={setShowQR}>
