@@ -13,7 +13,8 @@ export interface ButtonBlock {
     };
     hoverEffect?: 'glow' | 'scale' | 'shadow' | 'none';
     alignment?: 'left' | 'center' | 'right';
-    width?: 'full' | 'medium' | 'small';
+    width?: 'full' | 'medium' | 'small' | 'large' | 'auto';
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }

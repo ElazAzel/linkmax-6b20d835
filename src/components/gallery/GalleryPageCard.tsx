@@ -85,8 +85,9 @@ export function GalleryPageCard({
 
   return (
     <Card
+      variant="borderless"
       className={`
-        group overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer active:scale-[0.98] border-0 shadow-none
+        group overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer active:scale-[0.98]
         ${featured
           ? 'bg-gradient-to-br from-primary/10 via-card/80 to-card'
           : 'bg-card/50 backdrop-blur-lg'
