@@ -34,8 +34,16 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
   const hasAnyCustomStyle = hasLegacyBackground || hasBlockStyle;
 
   const widthClass = block.width === 'full' ? 'w-full' 
-    : block.width === 'small' ? 'w-auto min-w-[120px]' 
+    : block.width === 'small' ? 'w-auto min-w-[100px]' 
+    : block.width === 'large' ? 'w-full sm:w-auto sm:min-w-[360px] sm:max-w-lg'
+    : block.width === 'auto' ? 'w-auto'
     : 'w-full sm:w-auto sm:min-w-[280px] sm:max-w-md';
+
+  const sizeClass = block.size === 'xs' ? 'px-4 py-2 text-xs rounded-xl'
+    : block.size === 'sm' ? 'px-5 py-3 text-sm rounded-xl'
+    : block.size === 'lg' ? 'px-8 sm:px-10 py-5 text-base sm:text-lg rounded-2xl'
+    : block.size === 'xl' ? 'px-10 sm:px-12 py-6 text-lg sm:text-xl rounded-3xl'
+    : 'px-6 sm:px-8 py-4 text-sm sm:text-base rounded-2xl';
 
   return (
     <div className={cn("flex w-full", alignmentClass)}>
@@ -43,7 +51,8 @@ export const ButtonBlock = memo(function ButtonBlockComponent({ block, onClick }
         onClick={handleClick}
         className={cn(
           widthClass,
-          "relative overflow-hidden rounded-2xl px-6 sm:px-8 py-4 text-sm sm:text-base font-semibold",
+          "relative overflow-hidden font-semibold",
+          sizeClass,
           "shadow-glass-lg backdrop-blur-xl transition-all duration-300",
           "hover:shadow-glass-xl hover:scale-[1.02] active:scale-[0.98]",
           "break-words hyphens-auto",
