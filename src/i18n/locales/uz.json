@@ -532,7 +532,7 @@
     "newsletter": "Axborot byulleteni",
     "booking": "Yozib olish",
     "testimonial": "Sharhlar",
-    "scratch": "Scratch",
+    "scratch": "Tirnash",
     "faq": "FAQ",
     "countdown": "Taymer",
     "map": "Xarita",
@@ -921,7 +921,7 @@
         "description": "lnkmx bilan rivojlanayotgan minglab ijodkorlar, ekspertlar va kichik bizneslarga qoʻshiling. Kredit karta yo'q.",
         "primary": "Bepul boshlang",
         "secondary": "Misollarni ko'rish",
-        "note": "Forever Free Plan • Istalgan vaqtda bekor qilish • 24/7 Yordam"
+        "note": "Abadiy bepul reja • Istalgan vaqtda bekor qilish • 24/7 Yordam"
       }
     },
     "gallery": {
@@ -2011,7 +2011,7 @@
       "emptyDesc": "Mijozlaringizdan arizalar bu yerda sahifadagi shakllar va testlar orqali paydo bo'ladi."
     },
     "addFirstBlock": "Birinchi blokni qo'shish uchun + tugmasini bosing",
-    "templateApplied": "Template applied!"
+    "templateApplied": "Shablon qo'llanildi!"
   },
   "blocks": {
     "profile": "Profil",
@@ -2151,7 +2151,7 @@
       "afterLabelPlaceholder": "Keyin"
     },
     "customCode": "Kod",
-    "scratch": "Scratch",
+    "scratch": "Tirnash",
     "shoutout": {
       "recommend": "Men Tavsiya qilaman",
       "userNotFound": "Foydalanuvchi topilmadi"
@@ -2234,7 +2234,7 @@
       "title": "lnkmx-ga kiring",
       "description": "Bio-da sahifa havolasini yaratish va nashr qilish uchun tizimga kiring."
     },
-    "required": "Please sign in",
+    "required": "Iltimos, tizimga kiring",
     "loginRequired": "Hisobingizga kiring",
     "signupEmailSent": "We sent a confirmation link to your email",
     "login": "Tizimga kirish"
@@ -2300,7 +2300,7 @@
     },
     "featuredPages": "Featured Pages",
     "searchPlaceholder": "Search pages...",
-    "sortBy": "Sort by",
+    "sortBy": "Saralash",
     "totalPages": "{{count}} pages in gallery",
     "searchResults": "Filtering by ",
     "shareToGallery": "Share to Gallery",
@@ -2362,7 +2362,7 @@
     "title": "Check out my lnkmx.my page!",
     "published": "Page Published!",
     "publishedDesc": "Share your published page with others",
-    "yourPageLink": "Your page link",
+    "yourPageLink": "Sahifangiz havolasi",
     "shareNow": "Share Now"
   },
   "toasts": {
@@ -2596,7 +2596,7 @@
     "clearUserCache": "Barcha foydalanuvchilar uchun keshni tiklash",
     "clearUserCacheDesc": "Ilova keyingi yuklanganda har bir foydalanuvchi keshi tozalanadi",
     "bumpCache": "Keshni tiklash",
-    "refresh": "Refresh",
+    "refresh": "Yangilash",
     "status": "Holat",
     "created": "Created",
     "actions": "Harakatlar",
@@ -3142,11 +3142,11 @@
       "applyFailed": "Kodni qo'llashda xato"
     },
     "topReferrers": "Top Referrers",
-    "inviteFriend": "Invite a friend",
+    "inviteFriend": "Do'stingizni taklif qiling",
     "bothGetBonus": "You both get +3 days Premium!",
     "shareReferralLink": "Share Referral Link",
-    "friendsInvited": "Friends invited",
-    "bonusEarned": "Bonus days earned"
+    "friendsInvited": "Do'stlar taklif qilindi",
+    "bonusEarned": "Bonus kunlar to'plandi"
   },
   "social": {
     "weeklyChallenge": "Haftalik sinov",
@@ -3429,7 +3429,7 @@
     "shareLink": "Ulashish",
     "qrCode": "QR kodi",
     "scanToShare": "Sahifani ko'rish uchun kodni skanerlang",
-    "defaultDescription": "View my profile"
+    "defaultDescription": "Mening profilimni ko'ring"
   },
   "teams": {
     "title": "Jamoalar",
@@ -4870,9 +4870,9 @@
     },
     "noInsights": "Sizning sahifangiz mukammal optimallashtirilgan!",
     "error": "Tahlil xatosi",
-    "applied": "Insight qo'llanildi",
+    "applied": "Tavsiya qo'llanildi",
     "undone": "Amal bekor qilindi",
-    "title": "AI insights",
+    "title": "AI tavsiyalari",
     "description": "Yaxshilash bo'yicha tavsiyalar",
     "analyze": "Tahlil",
     "empty": "bosing",
@@ -5119,19 +5119,19 @@
     "status": "Holat"
   },
   "streak": {
-    "title": "Streak",
-    "keepGoing": "Keep it going!",
-    "days": "days",
-    "nextMilestone": "Next milestone",
-    "bonusDays": "bonus days",
-    "best": "Best",
-    "earned": "Earned",
-    "milestoneReached": "Milestone Reached!",
-    "milestoneDescription": "Congratulations on reaching a new streak milestone!",
-    "bonusEarned": "You",
-    "bonusTrialDays": "bonus trial days!",
-    "awesome": "Awesome!",
-    "milestones": "Streak Milestones"
+    "title": "Ketma-ketlik",
+    "keepGoing": "Davom eting!",
+    "days": "kun",
+    "nextMilestone": "Keyingi bosqich",
+    "bonusDays": "bonus kunlar",
+    "best": "Eng yaxshi",
+    "earned": "Topilgan",
+    "milestoneReached": "Bosqichga erishildi!",
+    "milestoneDescription": "Yangi ketma-ketlik bosqichiga erishganingiz bilan tabriklaymiz!",
+    "bonusEarned": "Siz",
+    "bonusTrialDays": "bonus sinov kunlari!",
+    "awesome": "Ajoyib!",
+    "milestones": "Ketma-ketlik bosqichlari"
   },
   "structure": {
     "title": "Tuzilishi",
