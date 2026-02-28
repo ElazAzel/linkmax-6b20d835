@@ -1,10 +1,12 @@
 /**
  * useMultiPage - Hook for multi-page state management
- * Handles page switching, limits, and CRUD operations
+ * Handles page switching, limits, and CRUD operations.
+ * Pages list is filtered by current organization when available.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '@/hooks/user/useAuth';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
+import { useOrganizations } from '@/hooks/useOrganizations';
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { storage } from '@/lib/storage';
@@ -55,6 +57,7 @@ interface PageRow {
   created_at: string | null;
   preview_url: string | null;
   custom_domain?: string | null;
+  organization_id?: string | null;
 }
 
 // ============= Constants =============
@@ -66,6 +69,7 @@ const ACTIVE_PAGE_KEY = 'active_page_id';
 export function useMultiPage() {
   const { user } = useAuth();
   const { isPremium, tier } = usePremiumStatus();
+  const { currentOrg } = useOrganizations();
 
   const [pages, setPages] = useState<UserPage[]>([]);
   const [activePageId, setActivePageId] = useState<string | null>(null);
@@ -79,7 +83,7 @@ export function useMultiPage() {
     return pages.find(p => p.id === activePageId) || pages[0] || null;
   }, [pages, activePageId]);
 
-  // Load user pages
+  // Load user pages (filtered by current organization)
   const loadPages = useCallback(async () => {
     if (!user?.id) {
       setPages([]);
@@ -91,12 +95,22 @@ export function useMultiPage() {
       setLoading(true);
       setError(null);
 
-      // Get pages directly from table (use * to include new columns)
-      const { data: pagesData, error: pagesError } = await supabase
+      let query = supabase
         .from('pages')
         .select('*')
-        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
+
+      if (currentOrg?.id) {
+        if (currentOrg.name === 'Personal Organization') {
+          query = query.or(`organization_id.is.null,organization_id.eq.${currentOrg.id}`);
+        } else {
+          query = query.eq('organization_id', currentOrg.id);
+        }
+      } else {
+        query = query.eq('user_id', user.id);
+      }
+
+      const { data: pagesData, error: pagesError } = await query;
 
       if (pagesError) {
         throw pagesError;
@@ -136,12 +150,15 @@ export function useMultiPage() {
         canCreate: userPages.length < maxPages,
       });
 
-      // Restore active page from storage
+      // Restore or reset active page when list changes (e.g. after org switch)
       const savedActiveId = storage.get<string>(ACTIVE_PAGE_KEY);
-      if (savedActiveId && userPages.some(p => p.id === savedActiveId)) {
+      if (userPages.length === 0) {
+        setActivePageId(null);
+      } else if (savedActiveId && userPages.some(p => p.id === savedActiveId)) {
         setActivePageId(savedActiveId);
-      } else if (userPages.length > 0) {
+      } else {
         setActivePageId(userPages[0].id);
+        storage.set(ACTIVE_PAGE_KEY, userPages[0].id);
       }
 
     } catch (err) {
@@ -150,7 +167,7 @@ export function useMultiPage() {
     } finally {
       setLoading(false);
     }
-  }, [user?.id, isPremium]);
+  }, [user?.id, isPremium, currentOrg?.id, currentOrg?.name]);
 
   // Initial load
   useEffect(() => {
@@ -205,6 +222,7 @@ export function useMultiPage() {
         .from('pages')
         .insert({
           user_id: user.id,
+          organization_id: currentOrg?.id ?? null,
           title: title || 'My Page',
           slug: finalSlug,
           theme_settings: {
@@ -264,7 +282,7 @@ export function useMultiPage() {
         error: err instanceof Error ? err.message : 'Failed to create page',
       };
     }
-  }, [user?.id, limits, loadPages, switchPage]);
+  }, [user?.id, limits, loadPages, switchPage, currentOrg?.id]);
 
   // Set primary paid page
   const setPrimaryPaidPage = useCallback(async (pageId: string): Promise<{ success: boolean; error?: string }> => {

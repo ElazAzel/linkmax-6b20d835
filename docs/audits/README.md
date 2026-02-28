@@ -9,6 +9,7 @@
 | **[PLATFORM_SNAPSHOT.md](PLATFORM_SNAPSHOT.md)** | **Главный источник истины** — текущее состояние платформы: архитектура, модули, роли, схема данных, стек. Обновляется при значимых изменениях. |
 | **[AUDIT_REPORT_2026_02_27.md](AUDIT_REPORT_2026_02_27.md)** | Последний сводный аудит (документация, оркестрация, рекомендации). |
 | **[FULL_AUDIT_REPORT.md](FULL_AUDIT_REPORT.md)** | Полный аудит: код, i18n, UX/UI, производительность, безопасность, CI/CD. |
+| **[AUDIT_ORGANIZATIONS_AND_BUSINESS_ZONES.md](AUDIT_ORGANIZATIONS_AND_BUSINESS_ZONES.md)** | Аудит организаций, команд/коллабораций и бизнес-зон (CRM). |
 
 ## Исторические отчёты
 
