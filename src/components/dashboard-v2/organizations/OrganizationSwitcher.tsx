@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import {
     DropdownMenu,
@@ -9,16 +9,45 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ChevronDown, Plus, Users, User } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
-import { motion } from 'framer-motion';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '@/components/ui/dialog';
+import { organizationsService } from '@/services/organizations';
+import { toast } from 'sonner';
 
 interface OrganizationSwitcherProps {
     collapsed?: boolean;
 }
 
 export function OrganizationSwitcher({ collapsed }: OrganizationSwitcherProps) {
-    const { organizations, currentOrg, switchOrganization, loading } = useOrganizations();
+    const { organizations, currentOrg, switchOrganization, loading, refreshOrganizations } = useOrganizations();
+    const [showCreate, setShowCreate] = useState(false);
+    const [newName, setNewName] = useState('');
+    const [creating, setCreating] = useState(false);
+
+    async function handleCreate(e: React.FormEvent) {
+        e.preventDefault();
+        if (!newName.trim()) return;
+        setCreating(true);
+        const { data, error } = await organizationsService.createOrganization(newName.trim());
+        setCreating(false);
+        if (error) {
+            toast.error('Не удалось создать команду');
+        } else if (data) {
+            toast.success('Команда создана');
+            setShowCreate(false);
+            setNewName('');
+            await refreshOrganizations();
+            switchOrganization(data);
+        }
+    }
 
     if (loading) {
         return (
@@ -84,12 +113,40 @@ export function OrganizationSwitcher({ collapsed }: OrganizationSwitcherProps) {
                         );
                     })}
                     <DropdownMenuSeparator className="bg-white/5" />
-                    <DropdownMenuItem className="flex items-center gap-2 py-2 cursor-pointer text-primary focus:bg-primary/10">
+                    <DropdownMenuItem
+                        onClick={() => setShowCreate(true)}
+                        className="flex items-center gap-2 py-2 cursor-pointer text-primary focus:bg-primary/10"
+                    >
                         <Plus className="h-4 w-4" />
                         <span>Создать команду</span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            <Dialog open={showCreate} onOpenChange={setShowCreate}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Создать команду</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleCreate} className="space-y-4">
+                        <Input
+                            placeholder="Название команды"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            autoFocus
+                            required
+                        />
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setShowCreate(false)}>
+                                Отмена
+                            </Button>
+                            <Button type="submit" disabled={creating || !newName.trim()}>
+                                {creating ? 'Создание...' : 'Создать'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
