@@ -367,16 +367,16 @@
     "subscribe": "Жазылу",
     "sending": "Жіберілуде...",
     "addImage": "Add Image",
-    "download": "Download",
-    "buy": "Buy",
-    "removeCustomIcon": "Remove custom icon",
+    "download": "Жүктеп алу",
+    "buy": "Сатып алу",
+    "removeCustomIcon": "Таңдаулы белгішені алып тастау",
     "addPlatform": "Add Platform",
-    "send": "Send",
+    "send": "Жіберу",
     "buyTokens": "Токендерді сатып алыңыз",
     "buyForTokens": "үшін сатып алыңыз",
     "tapToView": "Толығырақ →",
     "save": "Сақтау",
-    "upgrade": "Upgrade",
+    "upgrade": "Жаңарту",
     "cancel": "Болдырмау"
   },
   "profile": {
@@ -489,7 +489,7 @@
     "glow": "Жарқырау",
     "gradient": "Градиент",
     "shake": "Шайқау",
-    "pulse": "Ripple",
+    "pulse": "Тербеліс",
     "rainbow": "Кемпірқосақ",
     "neon": "Неон",
     "unlockAll": "Барлық анимациялардың құлпын ашыңыз"
@@ -958,24 +958,24 @@
         "subtitle": "Платформа туралы білуіңіз керек барлық нәрсе",
         "items": [
           {
-            "question": "",
-            "answer": ""
+            "question": "lnkmx деген не және ол кімге арналған?",
+            "answer": "lnkmx — микробизнес үшін операциялық жүйе. Бұл эксперттер, фрилансерлер және жылдам сайт, сұрауларға арналған кірістірілген CRM және күрделі параметрсіз қарапайым аналитика қажет шағын бизнес үшін идеалды."
           },
           {
-            "question": "",
-            "answer": ""
+            "question": "Бағдарламалауды білу керек пе?",
+            "answer": "Жоқ, lnkmx — no-code платформа. Сайтты дайын блоктардан Lego жинағы сияқты жинайсыз. Ал кірістірілген AI көмекші сіз үшін мәтіндерді жаза алады."
           },
           {
-            "question": "",
-            "answer": ""
+            "question": "Тәуекелде төлем қабылдауға бола ма?",
+            "answer": "Иә, платформа Қазақстан нарығына толық бейімделген. Бағаларды KZT-те көрсете аласыз, жергілікті төлем жүйелерімен интеграциялар белсенді әзірленуде."
           },
           {
-            "question": "",
-            "answer": ""
+            "question": "lnkmx сайты Google жарнамасына (SEO) көмектесе ме?",
+            "answer": "Сөзсіз. lnkmx-тегі барлық беттер іздеу жүйелері үшін автоматты түрде оңтайландырылған: жылдам жүктелу, мобильді құрылғыларға бейімділік және 2025 жылы SEO үшін сыни маңызды дұрыс семантикалық белгілеу (Schema.org)."
           },
           {
-            "question": "",
-            "answer": ""
+            "question": "Тегін жоспар бар ма?",
+            "answer": "Иә, бізде негізгі мүмкіндіктері бар мәңгілік тегін жоспар бар. Бет жасап, инвестициясыз сұраулар қабылдауды бастай аласыз."
           }
         ]
       },
@@ -986,7 +986,7 @@
         "description": "lnkmx арқылы дамып келе жатқан мыңдаған жасаушыларға, сарапшыларға және шағын бизнеске қосылыңыз. Несие картасы жоқ.",
         "primary": "Тегін бастаңыз",
         "secondary": "Мысалдар көру",
-        "note": "Forever Free Plan • Кез келген уақытта бас тарту • 24/7 қолдау"
+        "note": "Мәңгілік тегін жоспар • Кез келген уақытта бас тарту • 24/7 қолдау"
       }
     },
     "gallery": {
@@ -2299,7 +2299,7 @@
       "title": "lnkmx жүйесіне кіріңіз",
       "description": "Биодағы бет сілтемесін жасау және жариялау үшін жүйеге кіріңіз."
     },
-    "required": "Please sign in",
+    "required": "Кіріңіз",
     "loginRequired": "Тіркелгіңізге кіріңіз",
     "signupEmailSent": "We sent a confirmation link to your email",
     "login": "Жүйеге кіру"
@@ -2365,12 +2365,12 @@
     },
     "featuredPages": "Featured Pages",
     "searchPlaceholder": "Search pages...",
-    "sortBy": "Sort by",
+    "sortBy": "Сұрыптау",
     "totalPages": "{{count}} pages in gallery",
     "searchResults": "Filtering by ",
     "shareToGallery": "Share to Gallery",
     "shareDescription": "Show your page in the community gallery",
-    "allNiches": "All",
+    "allNiches": "Барлығы",
     "pages": "беттер",
     "create": "Жасау",
     "statsPages": "Беттер",
@@ -2427,7 +2427,7 @@
     "title": "Check out my lnkmx.my page!",
     "published": "Page Published!",
     "publishedDesc": "Share your published page with others",
-    "yourPageLink": "Your page link",
+    "yourPageLink": "Сіздің бет сілтемеңіз",
     "shareNow": "Share Now"
   },
   "toasts": {
@@ -2562,7 +2562,7 @@
     "searchUsers": "Пайдаланушыларды іздеу...",
     "tierBusiness": "Business",
     "tierPro": "Pro",
-    "tierFree": "Free",
+    "tierFree": "Тегін",
     "lifetime": "Өмір үшін",
     "expired": "Мерзімі бітті",
     "expiresOn": "Мерзімі бітеді",
@@ -2661,9 +2661,9 @@
     "clearUserCache": "Барлық пайдаланушылар үшін кэшті қалпына келтіріңіз",
     "clearUserCacheDesc": "Қолданба келесі рет жүктелгенде, әрбір пайдаланушының кэші тазаланады",
     "bumpCache": "Кэшті қалпына келтіру",
-    "refresh": "Refresh",
-    "status": "Status",
-    "created": "Created",
+    "refresh": "Жаңарту",
+    "status": "Күй",
+    "created": "Жасалған",
     "actions": "Әрекеттер",
     "partners": {
       "title": "Серіктестер",
@@ -2693,16 +2693,16 @@
       "deleteWarning": "Бұл әрекетті қайтару мүмкін емес."
     },
     "confirmDeleteTemplate": "Are you sure you want to delete template ",
-    "templateDeleted": "Template deleted",
-    "errorDeletingTemplate": "Error deleting template",
-    "errorUpdatingStatus": "Error updating status",
+    "templateDeleted": "Үлгі жойылды",
+    "errorDeletingTemplate": "Үлгіні жою қатесі",
+    "errorUpdatingStatus": "Күйді жаңарту қатесі",
     "searchTemplates": "Search templates...",
     "createTemplate": "Create Template",
-    "templateName": "Name",
-    "niches": "Niches",
-    "public": "Public",
-    "hidden": "Hidden",
-    "noTemplatesFound": "No templates found",
+    "templateName": "Атау",
+    "niches": "Нишалар",
+    "public": "Жария",
+    "hidden": "Жасырын",
+    "noTemplatesFound": "Үлгілер табылмады",
     "editUserTierDescription": "Пайдаланушыға кіру деңгейін өзгерту",
     "roleAdmin": "Админ"
   },
@@ -3207,11 +3207,11 @@
       "applyFailed": "Кодты қолдану кезіндегі қате"
     },
     "topReferrers": "Top Referrers",
-    "inviteFriend": "Invite a friend",
+    "inviteFriend": "Досыңызды шақырыңыз",
     "bothGetBonus": "You both get +3 days Premium!",
     "shareReferralLink": "Share Referral Link",
-    "friendsInvited": "Friends invited",
-    "bonusEarned": "Bonus days earned"
+    "friendsInvited": "Достар шақырылды",
+    "bonusEarned": "Бонус күндері жинақталды"
   },
   "social": {
     "weeklyChallenge": "Апталық сынақ",
@@ -3418,7 +3418,7 @@
       "style": "Стиль және SEO",
       "icon": "Белгіше",
       "iconDesc": "Сілтеме белгішесін реттеңіз",
-      "settings": "Settings"
+      "settings": "Баптаулар"
     },
     "saving": "Сақталуда...",
     "unsaved": "Сақталмаған",
@@ -3468,14 +3468,14 @@
     },
     "source": "Дереккөз",
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
-    "namePlaceholder": "Client name",
+    "namePlaceholder": "Клиент аты",
     "phone": "Phone",
     "notes": "Notes",
     "notesPlaceholder": "Additional notes about this lead...",
     "addInteraction": "Add Interaction",
     "interactionPlaceholder": "What happened?",
     "history": "History",
-    "noInteractions": "No interactions yet",
+    "noInteractions": "Әзірге өзара әрекет жоқ",
     "deleteLead": "Delete Lead",
     "confirmDelete": "Delete this lead?",
     "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
@@ -3494,7 +3494,7 @@
     "shareLink": "Бөлісу",
     "qrCode": "QR коды",
     "scanToShare": "Бетті көру үшін кодты сканерлеңіз",
-    "defaultDescription": "View my profile"
+    "defaultDescription": "Менің профилімді қарау"
   },
   "teams": {
     "title": "Командалар",
@@ -4417,16 +4417,16 @@
         "title": "Қысқа жауаптар",
         "items": [
           {
-            "q": "",
-            "a": ""
+            "q": "Қаншалықты жылдам іске қосуға болады?",
+            "a": "2 минутта: AI жауаптарыңыз бойынша бет құрады."
           },
           {
-            "q": "",
-            "a": ""
+            "q": "Лидтер үшін CRM бар ма?",
+            "a": "Иә, барлық лидтер бір жерде сақталады және басқарылады."
           },
           {
-            "q": "",
-            "a": ""
+            "q": "Жергілікті бизнес үшін жарайды ма?",
+            "a": "Иә, қаланы, картаны және жергілікті сұранысты қамту үшін брондауды қосыңыз."
           }
         ]
       }
@@ -5062,7 +5062,7 @@
   "upload": {
     "fileTooLarge": "File too large (max 10MB)",
     "success": "Uploaded!",
-    "error": "Upload failed",
+    "error": "Жүктеу сәтсіз аяқталды",
     "uploading": "Жүктелуде...",
     "dragOrClick": "Сүйреп апарыңыз немесе басыңыз",
     "maxSize": "MaxSize",
@@ -5073,60 +5073,60 @@
     "gifPremiumOnly": "GIF uploads are available for Premium users only",
     "compressed": "compressed",
     "gifPreserved": "GIF animation preserved",
-    "tab": "Upload",
+    "tab": "Жүктеп алу",
     "compressing": "Compressing...",
-    "click": "Click to upload",
+    "click": "Жүктеп алу үшін басыңыз",
     "autoCompress": "Auto-compressed, max 15MB",
     "gifPremium": "GIF available with Premium"
   },
   "layouts": {
-    "list": "List",
-    "grid": "Grid"
+    "list": "Тізім",
+    "grid": "Тор"
   },
   "tier": {
-    "free": "Free",
+    "free": "Тегін",
     "blocksCount": "блоктар"
   },
   "scratch": {
-    "scratchHere": "👆 Scratch here",
-    "revealed": "🎉 Revealed!",
-    "hint": "Scratch the layer to reveal a surprise"
+    "scratchHere": "👆 Мұнда сыпырыңыз",
+    "revealed": "🎉 Ашылды!",
+    "hint": "Таңқаларлықты көру үшін қабатын сыпырыңыз"
   },
   "guide": {
     "pdf": "Pdf"
   },
   "messages": {
-    "loading": "Loading...",
-    "failedToSignUp": "FailedToSignUp",
-    "accountCreated": "AccountCreated",
-    "failedToSignIn": "FailedToSignIn"
+    "loading": "Жүктелуде...",
+    "failedToSignUp": "Тіркелу сәтсіз аяқталды",
+    "accountCreated": "Аккаунт жасалды",
+    "failedToSignIn": "Кіру сәтсіз аяқталды"
   },
   "bookings": {
-    "fetchError": "Failed to load bookings",
-    "cancelError": "Failed to cancel booking",
-    "cancelSuccess": "Booking cancelled",
-    "confirmError": "Failed to confirm booking",
-    "confirmSuccess": "Booking confirmed",
-    "completeError": "Failed to complete booking",
-    "completeSuccess": "Booking marked as completed",
-    "today": "Today",
-    "tomorrow": "Tomorrow",
-    "noBookingsToExport": "No bookings to export",
-    "exportSuccess": "Bookings exported successfully",
-    "appointmentWith": "Appointment with",
-    "calendarExported": "Added to calendar",
-    "total": "Total",
-    "upcoming": "Upcoming",
-    "confirmed": "Confirmed",
-    "past": "Past",
-    "all": "All",
-    "noBookings": "No bookings yet",
-    "addToCalendar": "Add to Calendar",
+    "fetchError": "Брондауларды жүктеу сәтсіз",
+    "cancelError": "Брондауды болдырмау сәтсіз",
+    "cancelSuccess": "Брондау болдырмады",
+    "confirmError": "Брондауды растау сәтсіз",
+    "confirmSuccess": "Брондау расталды",
+    "completeError": "Брондауды аяқтау сәтсіз",
+    "completeSuccess": "Брондау аяқталған деп белгіленді",
+    "today": "Бүгін",
+    "tomorrow": "Ертең",
+    "noBookingsToExport": "Экспортталатын брондау жоқ",
+    "exportSuccess": "Брондаулар сәтті экспортталды",
+    "appointmentWith": "Кездесу",
+    "calendarExported": "Күнтізбеге қосылды",
+    "total": "Барлығы",
+    "upcoming": "Алдағы",
+    "confirmed": "Расталған",
+    "past": "Өткен",
+    "all": "Барлығы",
+    "noBookings": "Әзірге брондау жоқ",
+    "addToCalendar": "Күнтізбеге қосу",
     "exportCSV": "CSV",
-    "refresh": "Refresh",
-    "cancelTitle": "Cancel Booking?",
-    "cancelDescription": "Are you sure you want to cancel this booking? The client will be notified.",
-    "confirmCancel": "Yes, Cancel Booking"
+    "refresh": "Жаңарту",
+    "cancelTitle": "Брондауды болдырмаймыз ба?",
+    "cancelDescription": "Бұл брондауды болдырмағыңыз келетініне сенімдісіз бе? Клиентке хабарланады.",
+    "confirmCancel": "Иә, брондауды болдырмау"
   },
   "versions": {
     "title": "Нұсқа тарихы",
@@ -5196,7 +5196,7 @@
     "title": "Streak",
     "keepGoing": "Keep it going!",
     "days": "days",
-    "nextMilestone": "Next milestone",
+    "nextMilestone": "Келесі кезең",
     "bonusDays": "bonus days",
     "best": "Best",
     "earned": "Earned",
@@ -5231,12 +5231,12 @@
     "reset": "Қалпына келтіру"
   },
   "leaderboard": {
-    "week": "This Week",
-    "month": "This Month",
-    "allTime": "All Time",
-    "title": "Top Pages",
-    "all": "All",
-    "empty": "No pages yet for this period"
+    "week": "Осы апта",
+    "month": "Осы ай",
+    "allTime": "Барлық уақыт",
+    "title": "Жетекші беттер",
+    "all": "Барлығы",
+    "empty": "Осы кезең үшін әзірге беттер жоқ"
   },
   "tabbar": {
     "projects": "Жобалар",
