@@ -27,9 +27,10 @@ import Download from 'lucide-react/dist/esm/icons/download';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import { toast } from 'sonner';
+import { lazy, Suspense } from 'react';
 import { AddLeadDialog } from './AddLeadDialog';
 import { LeadDetails } from './LeadDetails';
-import { AnalyticsPanel } from './AnalyticsPanel';
+const AnalyticsPanel = lazy(() => import('./AnalyticsPanel').then(m => ({ default: m.AnalyticsPanel })));
 import { BookingsPanel } from './BookingsPanel';
 import { FunnelAnalysis } from './FunnelAnalysis';
 import { HeatmapVisualization } from './HeatmapVisualization';
@@ -229,7 +230,9 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
             </TabsContent>
 
             <TabsContent value="analytics" className="mt-0">
-              <AnalyticsPanel />
+              <Suspense fallback={<div className="flex justify-center py-8"><div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" /></div>}>
+                <AnalyticsPanel />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="funnel" className="mt-0">

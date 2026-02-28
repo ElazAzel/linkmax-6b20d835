@@ -17,7 +17,16 @@ const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").
 const PWAUpdatePrompt = lazy(() => import("@/components/pwa/PWAUpdatePrompt").then(m => ({ default: m.PWAUpdatePrompt })));
 const CookieConsent = lazy(() => import("@/components/legal/CookieConsent").then(m => ({ default: m.CookieConsent })));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // Loading fallback for pages
 const PageLoader = () => (

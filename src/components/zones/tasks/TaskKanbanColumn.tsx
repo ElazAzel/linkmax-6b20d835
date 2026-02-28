@@ -3,6 +3,7 @@
  */
 import { memo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils/utils';
@@ -11,12 +12,13 @@ import type { ZoneTask, TaskStatus } from '@/hooks/zones/useZoneTasks';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Circle from 'lucide-react/dist/esm/icons/circle';
 import Clock from 'lucide-react/dist/esm/icons/clock';
+import type { LucideIcon } from 'lucide-react';
 
-const STATUS_CONFIG: Record<TaskStatus, { icon: any; label: string; color: string }> = {
-  todo: { icon: Circle, label: 'К выполнению', color: 'text-muted-foreground' },
-  in_progress: { icon: Clock, label: 'В работе', color: 'text-blue-500' },
-  done: { icon: CheckCircle2, label: 'Готово', color: 'text-green-500' },
-  cancelled: { icon: Circle, label: 'Отменено', color: 'text-red-500' },
+const STATUS_CONFIG: Record<TaskStatus, { icon: LucideIcon; labelKey: string; color: string }> = {
+  todo: { icon: Circle, labelKey: 'tasks.status.todo', color: 'text-muted-foreground' },
+  in_progress: { icon: Clock, labelKey: 'tasks.status.inProgress', color: 'text-blue-500' },
+  done: { icon: CheckCircle2, labelKey: 'tasks.status.done', color: 'text-green-500' },
+  cancelled: { icon: Circle, labelKey: 'tasks.status.cancelled', color: 'text-red-500' },
 };
 
 const VISIBLE_COLUMNS: TaskStatus[] = ['todo', 'in_progress', 'done'];
@@ -34,6 +36,7 @@ export const TaskKanbanColumn = memo(function TaskKanbanColumn({
   onTaskClick,
   getMemberName,
 }: TaskKanbanColumnProps) {
+  const { t } = useTranslation();
   const config = STATUS_CONFIG[status];
   const Icon = config.icon;
   const { setNodeRef, isOver } = useDroppable({
@@ -45,7 +48,7 @@ export const TaskKanbanColumn = memo(function TaskKanbanColumn({
     <div className="w-72 md:w-80 shrink-0 flex flex-col">
       <div className="flex items-center gap-2 mb-3 px-1">
         <Icon className={cn("h-4 w-4", config.color)} />
-        <span className="text-sm font-semibold">{config.label}</span>
+        <span className="text-sm font-semibold">{t(config.labelKey)}</span>
         <Badge variant="outline" className="text-[10px] ml-auto">{tasks.length}</Badge>
       </div>
 
@@ -67,7 +70,7 @@ export const TaskKanbanColumn = memo(function TaskKanbanColumn({
           ))}
           {tasks.length === 0 && (
             <div className="text-center text-muted-foreground text-xs py-8 border border-dashed rounded-lg">
-              Пусто
+              {t('tasks.empty')}
             </div>
           )}
         </div>

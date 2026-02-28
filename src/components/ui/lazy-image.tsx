@@ -6,6 +6,8 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt: string;
   placeholderClassName?: string;
   wrapperClassName?: string;
+  srcSet?: string;
+  sizes?: string;
 }
 
 export const LazyImage = memo(function LazyImage({
@@ -14,6 +16,8 @@ export const LazyImage = memo(function LazyImage({
   className,
   placeholderClassName,
   wrapperClassName,
+  srcSet,
+  sizes,
   ...props
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -95,6 +99,8 @@ export const LazyImage = memo(function LazyImage({
         <img
           src={src}
           alt={alt}
+          srcSet={srcSet}
+          sizes={sizes}
           className={cn(
             'transition-opacity duration-300',
             isLoaded ? 'opacity-100' : 'opacity-0',

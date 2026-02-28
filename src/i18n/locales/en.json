@@ -5256,5 +5256,36 @@
   "notFound": {
     "message": "Oops! Page not found",
     "returnHome": "Return to Home"
+  },
+  "tasks": {
+    "status": {
+      "todo": "To do",
+      "inProgress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "empty": "Empty",
+    "editTitle": "Edit task",
+    "titleLabel": "Title",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Add task description...",
+    "statusLabel": "Status",
+    "priorityLabel": "Priority",
+    "dueDateLabel": "Due date",
+    "assigneeLabel": "Assignee",
+    "unassigned": "Unassigned",
+    "contactLabel": "Contact",
+    "noContact": "No contact",
+    "dealLabel": "Deal",
+    "noDeal": "No deal",
+    "createdAt": "Created",
+    "completedAt": "Completed",
+    "save": "Save"
   }
 }

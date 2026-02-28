@@ -6,6 +6,11 @@
     },
     "include": [
         "src/lib/**/*",
+        "src/domain/**/*",
+        "src/use-cases/**/*",
+        "src/repositories/**/*",
+        "src/services/**/*",
+        "src/types/**/*",
         "src/vite-env.d.ts"
     ]
 }

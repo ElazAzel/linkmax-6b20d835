@@ -19,7 +19,7 @@ export function PWAUpdatePrompt() {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                 // New service worker available
-                console.log('New content is available; please refresh.');
+                // New service worker content available — prompt user to refresh
               }
             });
           }

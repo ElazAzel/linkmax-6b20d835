@@ -12,14 +12,16 @@ Follow these steps to add the Cloudflare API token to your GitHub repository:
 4. Click **New repository secret**
 5. Enter the following:
    - **Name:** `CLOUDFLARE_API_TOKEN`
-   - **Value:** `T7pmsB-i1p59KXslYhlQoL8RIEoi4SJ3jvgm1J3h`
+   - **Value:** *(get the token from Cloudflare Dashboard → API Tokens)*
 6. Click **Add secret**
+
+> **IMPORTANT:** Never commit API tokens or secrets to the repository. Always use GitHub Secrets or environment variables.
 
 ### 2. Verify Configuration
 
-Ensure `cloudflare-worker/wrangler.toml` has the correct account ID:
+Ensure `cloudflare-worker/wrangler.toml` has the correct account ID (get it from Cloudflare Dashboard → Overview):
 ```toml
-account_id = "9058b638459bffbf366813802933852b"
+account_id = "<YOUR_CLOUDFLARE_ACCOUNT_ID>"
 name = "lnkmx-prerender"
 main = "prerender-worker.js"
 ```
@@ -52,6 +54,8 @@ main = "prerender-worker.js"
 - ✅ Token is never displayed in logs (masked by GitHub)
 - ✅ Token is only used during workflow execution
 - ✅ Only available to authorized workflows and manual trigger
+- ⚠️ **Never** hardcode tokens in documentation or source code
+- ⚠️ Rotate tokens periodically via Cloudflare Dashboard → API Tokens
 
 ## 🚀 Deployment Status
 

@@ -200,6 +200,9 @@
 </head>
 
 <body>
+  <!-- Skip to content for keyboard navigation (a11y) -->
+  <a href="#root" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded-md focus:text-sm focus:font-medium" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" onfocus="this.style.position='fixed';this.style.left='0.5rem';this.style.top='0.5rem';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';this.style.zIndex='9999';this.style.background='#8b5cf6';this.style.color='#fff';this.style.padding='0.5rem 1rem';this.style.borderRadius='0.375rem'" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';this.style.overflow='hidden'">Skip to content</a>
+
   <!-- Main React App Container — skeleton HTML paints as FCP before JS loads -->
   <div id="root">
     <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#09090b">

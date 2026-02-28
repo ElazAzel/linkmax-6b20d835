@@ -3,6 +3,7 @@
  */
 import { memo } from 'react';
 import { useDraggable } from '@dnd-kit/core';
+import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
 import { format, isPast, isToday } from 'date-fns';
@@ -11,11 +12,11 @@ import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 
-const PRIORITY_CONFIG: Record<TaskPriority, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
-  low: { label: 'Низкий', variant: 'outline' },
-  medium: { label: 'Средний', variant: 'secondary' },
-  high: { label: 'Высокий', variant: 'default' },
-  urgent: { label: 'Срочный', variant: 'destructive' },
+const PRIORITY_CONFIG: Record<TaskPriority, { labelKey: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+  low: { labelKey: 'tasks.priority.low', variant: 'outline' },
+  medium: { labelKey: 'tasks.priority.medium', variant: 'secondary' },
+  high: { labelKey: 'tasks.priority.high', variant: 'default' },
+  urgent: { labelKey: 'tasks.priority.urgent', variant: 'destructive' },
 };
 
 interface TaskCardProps {
@@ -26,6 +27,7 @@ interface TaskCardProps {
 }
 
 export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, isDragOverlay }: TaskCardProps) {
+  const { t } = useTranslation();
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: task.id,
     data: { task },
@@ -61,7 +63,7 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
             <p className="text-sm font-medium leading-tight flex-1 truncate">{task.title}</p>
             <Badge variant={priorityConf.variant} className="text-[9px] shrink-0 h-5">
               {task.priority === 'urgent' && <AlertCircle className="h-2.5 w-2.5 mr-0.5" />}
-              {priorityConf.label}
+              {t(priorityConf.labelKey)}
             </Badge>
           </div>
 

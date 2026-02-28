@@ -4,6 +4,15 @@
 
 import { logger } from '@/lib/utils/logger';
 
+const APP_DOMAIN = import.meta.env.VITE_APP_DOMAIN || 'https://lnkmx.my';
+
+/**
+ * Get the configured application domain (without trailing slash)
+ */
+export function getAppDomain(): string {
+  return APP_DOMAIN.replace(/\/$/, '');
+}
+
 /**
  * Get the base URL of the application
  */
@@ -15,7 +24,7 @@ export function getBaseUrl(): string {
  * Generate a public page URL from a slug
  */
 export function getPublicPageUrl(slug: string): string {
-  return `https://lnkmx.my/${slug}`;
+  return `${getAppDomain()}/${slug}`;
 }
 
 /**

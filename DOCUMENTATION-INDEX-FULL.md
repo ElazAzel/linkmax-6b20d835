@@ -1,8 +1,8 @@
 # 📚 Индекс документации InkMax
 
-**Версия:** 2.0  
-**Дата обновления:** 1 февраля 2026  
-**Статус:** Complete ✅
+**Версия:** 2.1  
+**Дата обновления:** 28 февраля 2026  
+**Статус:** Updated ✅
 
 ---
 
@@ -23,28 +23,25 @@
    - Структура БД
 
 ### Для разработчиков
-3. **[BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md)** - Справочник блоков (1 час)
-   - Все 28 блоков
-   - Props каждого блока
-   - Типы данных
-   - Примеры использования
-
-4. **[PLATFORM-DOCUMENTATION.md](./docs/PLATFORM-DOCUMENTATION.md)** - Документация платформы (30 мин)
+3. **[COMPREHENSIVE_PLATFORM_GUIDE.md](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)** - Документация платформы (30 мин)
    - Архитектура
-   - Категорий блоков
+   - Категории блоков
    - Функциональность
    - Интеграции
    - Многоязычность
 
+4. **[UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)** - UI компоненты (30 мин)
+   - Компоненты дизайн-системы
+   - Примеры использования
+
 ### Для архитекторов
-5. **[BLOCKS-AUDIT.md](./docs/BLOCKS-AUDIT.md)** - Полный аудит блоков (1 час)
-   - Аудит каждого блока
-   - Анализ функциональности
+5. **[FULL_PLATFORM_AUDIT_2026_02_18.md](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)** - Полный аудит платформы (1 час)
+   - Аудит функциональности
    - Производительность
    - Безопасность
    - Рекомендации
 
-6. **[AUDIT-REPORT-2026-02-01.md](./AUDIT-REPORT-2026-02-01.md)** - Итоговый отчет (20 мин)
+6. **[AUDIT_REPORT_2026_02_27.md](./docs/AUDIT_REPORT_2026_02_27.md)** - Итоговый отчет (20 мин)
    - Результаты аудита
    - Статистика
    - Выводы
@@ -66,22 +63,25 @@
 #### Platform & Architecture
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
-| **PLATFORM-DOCUMENTATION.md** | Полная документация платформы | ~580 строк |
+| **COMPREHENSIVE_PLATFORM_GUIDE.md** | Полная документация платформы | ~580 строк |
 | **architecture.md** | Архитектура системы | ~300 строк |
-| **ARCHITECTURE-DIAGRAM.md** | Диаграммы архитектуры | ~100 строк |
+| **ARCHITECTURE_PATTERNS.md** | Паттерны архитектуры | ~100 строк |
+| **2_PLATFORM_ARCHITECTURE.md** | Архитектура платформы | ~300 строк |
 
-#### Блоки
+#### Аудиты & Отчёты
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
-| **BLOCKS-REFERENCE.md** | Справочник всех 28 блоков | ~750 строк |
-| **BLOCKS-AUDIT.md** | Полный аудит функциональности | ~650 строк |
-| **blocks-audit.md** | Краткий аудит (старый) | ~200 строк |
+| **FULL_PLATFORM_AUDIT_2026_02_18.md** | Полный аудит платформы | ~650 строк |
+| **AUDIT_REPORT_2026_02_18.md** | Отчёт аудита (февр 18) | ~400 строк |
+| **AUDIT_REPORT_2026_02_27.md** | Отчёт аудита (февр 27) | ~400 строк |
+| **DEEP_SECURITY_AUDIT_2026_02_18.md** | Глубокий аудит безопасности | ~300 строк |
 
 #### Security & Performance
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
 | **SECURITY.md** | Security measures | ~200 строк |
-| **performance.md** | Performance metrics | ~200 строк |
+| **SECURITY_OPS.md** | Security operations | ~200 строк |
+| **PERFORMANCE_GUIDE.md** | Performance guide | ~200 строк |
 
 #### Features
 | Документ | Назначение | Объем |
@@ -94,62 +94,48 @@
 #### Implementation Guides
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
-| **SEO-GEO-AEO-IMPLEMENTATION.md** | SEO/GEO/AEO реализация | ~300 строк |
-| **SSR-IMPLEMENTATION.md** | Server-side rendering | ~200 строк |
+| **aeo-geo-implementation.md** | SEO/GEO/AEO реализация | ~300 строк |
 | **i18n_ops.md** | i18n операции | ~150 строк |
-| **i18n_coverage.md** | i18n покрытие | ~100 строк |
+| **translation_playbook.md** | Playbook переводов | ~200 строк |
 
 #### Deployment & Testing
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
-| **DEPLOYMENT-GUIDE.md** | Руководство развертывания | ~200 строк |
-| **DEPLOYMENT-CHECKLIST.md** | Чек-лист развертывания | ~100 строк |
-| **TESTING-STRATEGY.md** | Стратегия тестирования | ~150 строк |
-| **SSR-TESTING.md** | Тестирование SSR | ~100 строк |
-
-#### Operations & Troubleshooting
-| Документ | Назначение | Объем |
-|----------|-----------|-------|
-| **troubleshooting.md** | Решение проблем | ~200 строк |
-| **FIX_PLAN.md** | План исправлений | ~150 строк |
-
-#### Audits & Reports
-| Документ | Назначение | Объем |
-|----------|-----------|-------|
-| **AUDIT_REPORT.md** | Audit report | ~200 строк |
-| **LANDING_AUDIT_SUMMARY.md** | Landing page audit | ~150 строк |
-| **LANDING_PAGE_AUDIT.md** | Landing page audit (detail) | ~300 строк |
-| **PLATFORM-AUDIT-REPORT.md** | Platform audit | ~250 строк |
-| **ux-audit-report.md** | UX audit | ~200 строк |
+| **TESTING.md** | Стратегия тестирования | ~150 строк |
 
 #### Database & Business
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
 | **DEPENDENCY_MAP.md** | Dependency mapping | ~200 строк |
-| **FIX_PLAN.md** | Fix plan | ~150 строк |
+| **DATABASE_SCHEMA_GUIDE.md** | Database schema guide | ~200 строк |
 | **demo-accounts.md** | Demo аккаунты | ~50 строк |
+| **API.md** | API documentation | ~200 строк |
 
-#### Marketing & Sales
+#### Marketing & Strategy
 | Документ | Назначение | Объем |
 |----------|-----------|-------|
+| **1_PRODUCT_VISION.md** | Product vision | ~200 строк |
+| **3_MARKETING_STRATEGY.md** | Marketing strategy | ~200 строк |
+| **4_INVESTMENT_MEMO.md** | Investment memo | ~200 строк |
+| **5_PRODUCT_ROADMAP.md** | Product roadmap | ~200 строк |
+| **PITCH_DECK.md** | Pitch deck | ~200 строк |
 | **dashboard-redesign.md** | Dashboard redesign | ~150 строк |
-| **translation_playbook.md** | Playbook переводов | ~200 строк |
 
-#### SEO Subdirectory (/docs/seo)
-| Документ | Назначение |
-|----------|-----------|
-| **CHECKLIST.md** | SEO чек-лист |
-| **INDEXING.md** | Индексирование |
-| **PRERENDER.md** | Prerendering |
-| **search-console.md** | Google Search Console |
-| **LOVABLE_PROMPT_RU.md** | Промптинг (RU) |
+#### Operations
+| Документ | Назначение | Объем |
+|----------|-----------|-------|
+| **6_OPERATIONAL_HANDBOOK.md** | Operational handbook | ~200 строк |
+| **TECH_DEBT_BACKLOG.md** | Tech debt backlog | ~150 строк |
+| **STACK_REFERENCES.md** | Stack references | ~100 строк |
+| **FUTURE_STACK.md** | Future stack | ~100 строк |
 
 #### Other
 | Документ | Назначение |
 |----------|-----------|
-| **REMEDIATION-PLAN.md** | План ремедиации |
-| **REMEDIATION-EXECUTION-STATUS.md** | Статус выполнения |
-| **IMPLEMENTATION-SUMMARY.md** | Сводка реализации |
+| **A11Y_CHECKLIST.md** | Accessibility checklist |
+| **COMPETITIVE_NOTES.md** | Competitive analysis |
+| **PRESENTATION_AUDIT.md** | Presentation audit |
+| **CHANGELOG.md** | Changelog |
 
 ---
 
@@ -158,28 +144,28 @@
 ### Я новый в команде
 1. 👀 **[README.md](./README.md)** - узнать о проекте (5 мин)
 2. 🚀 **[DEVELOPER-QUICKSTART.md](./DEVELOPER-QUICKSTART.md)** - начать разработку (15 мин)
-3. 🧩 **[BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md)** - изучить блоки (1 час)
+3. 🧩 **[COMPREHENSIVE_PLATFORM_GUIDE.md](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)** - изучить платформу (1 час)
 
 ### Я разработчик
-1. 🏗️ **[PLATFORM-DOCUMENTATION.md](./docs/PLATFORM-DOCUMENTATION.md)** - архитектура (30 мин)
-2. 🧩 **[BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md)** - блоки (1 час)
+1. 🏗️ **[COMPREHENSIVE_PLATFORM_GUIDE.md](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)** - архитектура (30 мин)
+2. 🧩 **[UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)** - UI компоненты (30 мин)
 3. 🔒 **[SECURITY.md](./docs/SECURITY.md)** - безопасность (20 мин)
-4. 🔍 **[SSR-IMPLEMENTATION.md](./docs/SSR-IMPLEMENTATION.md)** - SSR (15 мин)
+4. 🔍 **[aeo-geo-implementation.md](./docs/aeo-geo-implementation.md)** - SEO/AEO (15 мин)
 
 ### Я тестер
-1. 🧪 **[TESTING-STRATEGY.md](./docs/TESTING-STRATEGY.md)** - стратегия (20 мин)
-2. 📋 **[BLOCKS-AUDIT.md](./docs/BLOCKS-AUDIT.md)** - аудит (1 час)
-3. 🚀 **[DEPLOYMENT-CHECKLIST.md](./docs/DEPLOYMENT-CHECKLIST.md)** - чек-лист (10 мин)
+1. 🧪 **[TESTING.md](./docs/TESTING.md)** - стратегия (20 мин)
+2. 📋 **[FULL_PLATFORM_AUDIT_2026_02_18.md](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)** - аудит (1 час)
+3. 🚀 **[DEPLOYMENT-CHECKLIST.md](./DEPLOYMENT-CHECKLIST.md)** - чек-лист (10 мин)
 
 ### Я DevOps/архитектор
 1. 🏗️ **[architecture.md](./docs/architecture.md)** - архитектура (30 мин)
-2. 🚀 **[DEPLOYMENT-GUIDE.md](./docs/DEPLOYMENT-GUIDE.md)** - развертывание (30 мин)
-3. 📊 **[BLOCKS-AUDIT.md](./docs/BLOCKS-AUDIT.md)** - аудит (1 час)
-4. ⚡ **[performance.md](./docs/performance.md)** - производительность (15 мин)
+2. 🚀 **[6_OPERATIONAL_HANDBOOK.md](./docs/6_OPERATIONAL_HANDBOOK.md)** - операции (30 мин)
+3. 📊 **[FULL_PLATFORM_AUDIT_2026_02_18.md](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)** - аудит (1 час)
+4. ⚡ **[PERFORMANCE_GUIDE.md](./docs/PERFORMANCE_GUIDE.md)** - производительность (15 мин)
 
 ### Я продакт менеджер
-1. 📚 **[PLATFORM-DOCUMENTATION.md](./docs/PLATFORM-DOCUMENTATION.md)** - фичи (30 мин)
-2. 📋 **[AUDIT-REPORT-2026-02-01.md](./AUDIT-REPORT-2026-02-01.md)** - статус (20 мин)
+1. 📚 **[1_PRODUCT_VISION.md](./docs/1_PRODUCT_VISION.md)** - видение продукта (30 мин)
+2. 📋 **[5_PRODUCT_ROADMAP.md](./docs/5_PRODUCT_ROADMAP.md)** - roadmap (20 мин)
 3. 🎯 **[Features.md](./docs/Features.md)** - список фич (15 мин)
 
 ---
@@ -187,29 +173,26 @@
 ## 🔍 Поиск по темам
 
 ### Блоки
-- **Все 28 блоков:** [BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md)
-- **Аудит блоков:** [BLOCKS-AUDIT.md](./docs/BLOCKS-AUDIT.md)
 - **Event блок:** [event-block.md](./docs/event-block.md)
+- **UI компоненты:** [UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)
 
 ### SEO & Marketing
-- **SEO/GEO/AEO:** [SEO-GEO-AEO-IMPLEMENTATION.md](./docs/SEO-GEO-AEO-IMPLEMENTATION.md)
-- **Prerendering:** [docs/seo/PRERENDER.md](./docs/seo/PRERENDER.md)
-- **Поиск в Google:** [docs/seo/search-console.md](./docs/seo/search-console.md)
+- **SEO/GEO/AEO:** [aeo-geo-implementation.md](./docs/aeo-geo-implementation.md)
 
 ### Разработка
 - **Архитектура:** [architecture.md](./docs/architecture.md)
 - **i18n:** [i18n_ops.md](./docs/i18n_ops.md)
-- **SSR:** [SSR-IMPLEMENTATION.md](./docs/SSR-IMPLEMENTATION.md)
 - **Многостраничность:** [multi-page.md](./docs/multi-page.md)
+- **API:** [API.md](./docs/API.md)
 
 ### Операции
-- **Развертывание:** [DEPLOYMENT-GUIDE.md](./docs/DEPLOYMENT-GUIDE.md)
-- **Тестирование:** [TESTING-STRATEGY.md](./docs/TESTING-STRATEGY.md)
-- **Troubleshooting:** [troubleshooting.md](./docs/troubleshooting.md)
+- **Тестирование:** [TESTING.md](./docs/TESTING.md)
+- **Operational Handbook:** [6_OPERATIONAL_HANDBOOK.md](./docs/6_OPERATIONAL_HANDBOOK.md)
 
 ### Безопасность
 - **Security:** [SECURITY.md](./docs/SECURITY.md)
-- **Аудиты:** [AUDIT_REPORT.md](./docs/AUDIT_REPORT.md)
+- **Security Ops:** [SECURITY_OPS.md](./docs/SECURITY_OPS.md)
+- **Аудиты:** [AUDIT_REPORT_2026_02_27.md](./docs/AUDIT_REPORT_2026_02_27.md)
 
 ### UI & Components
 - **UI компоненты:** [UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)
@@ -226,7 +209,7 @@
 | Всего слов | 50,000+ |
 | На русском | 20+ |
 | На английском | 15+ |
-| Последнее обновление | 1 февраля 2026 |
+| Последнее обновление | 28 февраля 2026 |
 | Статус | ✅ Актуально |
 
 ---
@@ -236,21 +219,20 @@
 ### Core
 - 🏠 [Home](./README.md)
 - 🚀 [Quick Start](./DEVELOPER-QUICKSTART.md)
-- 📖 [Platform Docs](./docs/PLATFORM-DOCUMENTATION.md)
+- 📖 [Platform Docs](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)
 
 ### Features
-- 🧩 [Blocks](./docs/BLOCKS-REFERENCE.md)
+- 🧩 [UI Components](./docs/UI-COMPONENTS.md)
 - 🔐 [Security](./docs/SECURITY.md)
-- 📊 [Performance](./docs/performance.md)
+- 📊 [Performance](./docs/PERFORMANCE_GUIDE.md)
 
 ### Audit & Report
-- 📋 [Blocks Audit](./docs/BLOCKS-AUDIT.md)
-- 📊 [Audit Report](./AUDIT-REPORT-2026-02-01.md)
+- 📋 [Platform Audit](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)
+- 📊 [Latest Audit](./docs/AUDIT_REPORT_2026_02_27.md)
 
 ### Operations
-- 🚀 [Deploy Guide](./docs/DEPLOYMENT-GUIDE.md)
-- 🧪 [Testing](./docs/TESTING-STRATEGY.md)
-- 🔧 [Troubleshooting](./docs/troubleshooting.md)
+- 🧪 [Testing](./docs/TESTING.md)
+- 🔧 [Operational Handbook](./docs/6_OPERATIONAL_HANDBOOK.md)
 
 ---
 
@@ -259,20 +241,20 @@
 ### Обязательно прочитать (Tier 1)
 1. README.md
 2. DEVELOPER-QUICKSTART.md
-3. PLATFORM-DOCUMENTATION.md
-4. BLOCKS-REFERENCE.md
+3. COMPREHENSIVE_PLATFORM_GUIDE.md
+4. UI-COMPONENTS.md
 
 ### Рекомендуется (Tier 2)
 1. architecture.md
 2. SECURITY.md
-3. performance.md
-4. BLOCKS-AUDIT.md
+3. PERFORMANCE_GUIDE.md
+4. FULL_PLATFORM_AUDIT_2026_02_18.md
 
 ### По мере необходимости (Tier 3)
-1. DEPLOYMENT-GUIDE.md
-2. TESTING-STRATEGY.md
+1. 6_OPERATIONAL_HANDBOOK.md
+2. TESTING.md
 3. i18n_ops.md
-4. SSR-IMPLEMENTATION.md
+4. aeo-geo-implementation.md
 
 ---
 
@@ -281,7 +263,7 @@
 | Дата | Что обновлено |
 |------|---------------|
 | 1 фев 2026 | Добавлены BLOCKS-AUDIT.md, PLATFORM-DOCUMENTATION.md, BLOCKS-REFERENCE.md, DEVELOPER-QUICKSTART.md, DOCUMENTATION-INDEX.md |
-| - | - |
+| 28 фев 2026 | Исправлены битые ссылки, обновлён индекс на реально существующие файлы |
 
 ---
 
@@ -323,6 +305,6 @@ A: 28 блоков, описаны в [BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERE
 
 ---
 
-**Версия:** 2.0  
-**Дата:** 1 февраля 2026  
+**Версия:** 2.1  
+**Дата:** 28 февраля 2026  
 **Статус:** ✅ Complete & Up to Date

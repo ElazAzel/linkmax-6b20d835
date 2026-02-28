@@ -5256,5 +5256,36 @@
   "notFound": {
     "message": "Упс! Страница не найдена",
     "returnHome": "Вернуться домой"
+  },
+  "tasks": {
+    "status": {
+      "todo": "К выполнению",
+      "inProgress": "В работе",
+      "done": "Готово",
+      "cancelled": "Отменено"
+    },
+    "priority": {
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий",
+      "urgent": "Срочный"
+    },
+    "empty": "Пусто",
+    "editTitle": "Редактирование задачи",
+    "titleLabel": "Название",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Добавьте описание задачи...",
+    "statusLabel": "Статус",
+    "priorityLabel": "Приоритет",
+    "dueDateLabel": "Срок выполнения",
+    "assigneeLabel": "Ответственный",
+    "unassigned": "Не назначено",
+    "contactLabel": "Контакт",
+    "noContact": "Без контакта",
+    "dealLabel": "Сделка",
+    "noDeal": "Без сделки",
+    "createdAt": "Создано",
+    "completedAt": "Завершено",
+    "save": "Сохранить"
   }
 }

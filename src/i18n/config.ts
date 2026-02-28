@@ -170,8 +170,10 @@ if (LAZY_LANGUAGES.includes(detectedLang as any)) {
 
 // Development diagnostics (lazy-loaded)
 if (process.env.NODE_ENV === 'development') {
-  console.log('[i18n] Initialized with language:', i18n.language);
-  console.log('[i18n] Eagerly loaded: ru, en, kk. Lazy locales:', LAZY_LANGUAGES.join(', '));
+  import('@/lib/utils/logger').then(({ logger }) => {
+    logger.debug('Initialized with language: ' + i18n.language, { context: 'i18n' });
+    logger.debug('Eagerly loaded: ru, en, kk. Lazy locales: ' + LAZY_LANGUAGES.join(', '), { context: 'i18n' });
+  });
   // Defer validation to not block startup
   _ric(() => {
     import('./validation').then(({ validateTranslations }) => {
@@ -194,7 +196,9 @@ i18n.on('languageChanged', (lng) => {
   }
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('[i18n] Language changed to:', lng);
+    import('@/lib/utils/logger').then(({ logger }) => {
+      logger.debug('Language changed to: ' + lng, { context: 'i18n' });
+    });
   }
 
   document.documentElement.lang = lng;

@@ -52,8 +52,8 @@ export default defineConfig(({ mode }) => ({
     // (vendor-export, vendor-charts, vendor-sentry etc.) on the landing page.
     // Modules are still loaded on demand via dynamic import().
     modulePreload: false,
-    // Enable sourcemaps in production when Sentry token is available
-    sourcemap: true,
+    sourcemap: !!process.env.SENTRY_AUTH_TOKEN,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks(id) {

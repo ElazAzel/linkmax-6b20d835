@@ -2,6 +2,7 @@
  * TaskDetailSheet - Side panel for viewing/editing a task
  */
 import { memo, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,18 +16,18 @@ import type { ZoneMember, ZoneContact, ZoneDeal } from '@/types/zones';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Save from 'lucide-react/dist/esm/icons/save';
 
-const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
-  { value: 'todo', label: 'К выполнению' },
-  { value: 'in_progress', label: 'В работе' },
-  { value: 'done', label: 'Готово' },
-  { value: 'cancelled', label: 'Отменено' },
+const STATUS_OPTIONS: { value: TaskStatus; labelKey: string }[] = [
+  { value: 'todo', labelKey: 'tasks.status.todo' },
+  { value: 'in_progress', labelKey: 'tasks.status.inProgress' },
+  { value: 'done', labelKey: 'tasks.status.done' },
+  { value: 'cancelled', labelKey: 'tasks.status.cancelled' },
 ];
 
-const PRIORITY_OPTIONS: { value: TaskPriority; label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }[] = [
-  { value: 'low', label: 'Низкий', variant: 'outline' },
-  { value: 'medium', label: 'Средний', variant: 'secondary' },
-  { value: 'high', label: 'Высокий', variant: 'default' },
-  { value: 'urgent', label: 'Срочный', variant: 'destructive' },
+const PRIORITY_OPTIONS: { value: TaskPriority; labelKey: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }[] = [
+  { value: 'low', labelKey: 'tasks.priority.low', variant: 'outline' },
+  { value: 'medium', labelKey: 'tasks.priority.medium', variant: 'secondary' },
+  { value: 'high', labelKey: 'tasks.priority.high', variant: 'default' },
+  { value: 'urgent', labelKey: 'tasks.priority.urgent', variant: 'destructive' },
 ];
 
 interface TaskDetailSheetProps {
@@ -73,6 +74,8 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
     }
   }, [task]);
 
+  const { t } = useTranslation();
+
   if (!task) return null;
 
   const handleSave = async () => {
@@ -103,30 +106,30 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-md overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="text-left">Редактирование задачи</SheetTitle>
+          <SheetTitle className="text-left">{t('tasks.editTitle')}</SheetTitle>
         </SheetHeader>
 
         <div className="space-y-4 mt-4">
           {/* Title */}
           <div>
-            <Label>Название</Label>
+            <Label>{t('tasks.titleLabel')}</Label>
             <Input value={title} onChange={e => setTitle(e.target.value)} className="mt-1" />
           </div>
 
           {/* Description */}
           <div>
-            <Label>Описание</Label>
+            <Label>{t('tasks.descriptionLabel')}</Label>
             <Textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
-              placeholder="Добавьте описание задачи..."
+              placeholder={t('tasks.descriptionPlaceholder')}
               className="mt-1 min-h-[80px]"
             />
           </div>
 
           {/* Status */}
           <div>
-            <Label>Статус</Label>
+            <Label>{t('tasks.statusLabel')}</Label>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {STATUS_OPTIONS.map(s => (
                 <Button
@@ -136,7 +139,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                   className="text-xs h-7"
                   onClick={() => setStatus(s.value)}
                 >
-                  {s.label}
+                  {t(s.labelKey)}
                 </Button>
               ))}
             </div>
@@ -144,7 +147,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
 
           {/* Priority */}
           <div>
-            <Label>Приоритет</Label>
+            <Label>{t('tasks.priorityLabel')}</Label>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {PRIORITY_OPTIONS.map(p => (
                 <Button
@@ -154,7 +157,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                   className="text-xs h-7"
                   onClick={() => setPriority(p.value)}
                 >
-                  {p.label}
+                  {t(p.labelKey)}
                 </Button>
               ))}
             </div>
@@ -162,19 +165,19 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
 
           {/* Due Date */}
           <div>
-            <Label>Срок выполнения</Label>
+            <Label>{t('tasks.dueDateLabel')}</Label>
             <Input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} className="mt-1" />
           </div>
 
           {/* Assignee */}
           <div>
-            <Label>Ответственный</Label>
+            <Label>{t('tasks.assigneeLabel')}</Label>
             <select
               className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
               value={assignedTo}
               onChange={e => setAssignedTo(e.target.value)}
             >
-              <option value="">Не назначено</option>
+              <option value="">{t('tasks.unassigned')}</option>
               {members.map(m => (
                 <option key={m.user_id} value={m.user_id}>
                   {m.display_name || m.email || m.user_id}
@@ -186,13 +189,13 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
           {/* Contact */}
           {contacts.length > 0 && (
             <div>
-              <Label>Контакт</Label>
+              <Label>{t('tasks.contactLabel')}</Label>
               <select
                 className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
                 value={contactId}
                 onChange={e => setContactId(e.target.value)}
               >
-                <option value="">Без контакта</option>
+                <option value="">{t('tasks.noContact')}</option>
                 {contacts.map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
@@ -203,13 +206,13 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
           {/* Deal */}
           {deals.length > 0 && (
             <div>
-              <Label>Сделка</Label>
+              <Label>{t('tasks.dealLabel')}</Label>
               <select
                 className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
                 value={dealId}
                 onChange={e => setDealId(e.target.value)}
               >
-                <option value="">Без сделки</option>
+                <option value="">{t('tasks.noDeal')}</option>
                 {deals.map(d => (
                   <option key={d.id} value={d.id}>{d.title}</option>
                 ))}
@@ -219,15 +222,15 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
 
           {/* Meta */}
           <div className="text-xs text-muted-foreground pt-2 border-t border-border/30 space-y-1">
-            <p>Создано: {format(new Date(task.created_at), 'dd.MM.yyyy HH:mm')}</p>
-            {task.completed_at && <p>Завершено: {format(new Date(task.completed_at), 'dd.MM.yyyy HH:mm')}</p>}
+            <p>{t('tasks.createdAt')}: {format(new Date(task.created_at), 'dd.MM.yyyy HH:mm')}</p>
+            {task.completed_at && <p>{t('tasks.completedAt')}: {format(new Date(task.completed_at), 'dd.MM.yyyy HH:mm')}</p>}
           </div>
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">
             <Button onClick={handleSave} disabled={saving || !title.trim()} className="flex-1">
               <Save className="h-4 w-4 mr-1" />
-              Сохранить
+              {t('tasks.save')}
             </Button>
             <Button variant="destructive" size="icon" onClick={handleDelete}>
               <Trash2 className="h-4 w-4" />

@@ -21,6 +21,7 @@ import { ZoneProvider, useZoneContext } from '@/contexts/ZoneContext';
 // SEO
 import { supabase } from '@/platform/supabase/client';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 // Dashboard v2 components
 import {
@@ -194,7 +195,7 @@ function DashboardV2Inner() {
   }, [pageVersions]);
 
   // SEO
-  const canonical = 'https://lnkmx.my/dashboard';
+  const canonical = `${getAppDomain()}/dashboard`;
   const seoTitle = t('dashboard.seo.title', 'lnkmx Dashboard');
   const seoDescription = t('dashboard.seo.description', 'Manage your lnkmx pages, leads, and analytics.');
 
@@ -264,14 +265,14 @@ function DashboardV2Inner() {
   const handlePreviewPage = useCallback((pageId: string) => {
     const page = multiPage.pages.find(p => p.id === pageId);
     if (page) {
-      window.open(`https://lnkmx.my/${page.slug}`, '_blank');
+      window.open(getPublicPageUrl(page.slug), '_blank');
     }
   }, [multiPage.pages]);
 
   const handleSharePage = useCallback((pageId: string) => {
     const page = multiPage.pages.find(p => p.id === pageId);
     if (page) {
-      navigator.clipboard.writeText(`https://lnkmx.my/${page.slug}`);
+      navigator.clipboard.writeText(getPublicPageUrl(page.slug));
       toast.success(t('dashboard.pages.linkCopied', 'Link copied!'));
     }
   }, [multiPage.pages, t]);
