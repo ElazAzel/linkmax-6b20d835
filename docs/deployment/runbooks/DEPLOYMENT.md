@@ -7,7 +7,7 @@
 - [ ] All tests pass (`npm run test`)
 - [ ] Type check passes (`npx tsc --noEmit`)
 - [ ] Build succeeds locally (`npm run build`)
-- [ ] Changelog updated (`docs/CHANGELOG.md`)
+- [ ] Changelog updated ([docs/operations/CHANGELOG.md](../../operations/CHANGELOG.md))
 - [ ] Edge functions tested locally if modified
 
 ## Frontend Deployment

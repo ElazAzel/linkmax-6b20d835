@@ -137,12 +137,12 @@ lnkmx/
 
 ## 📖 Documentation
 
-- **[Developer Quickstart](docs/DEVELOPER-QUICKSTART.md)**: Get running in minutes.
-- **[Comprehensive Platform Guide](docs/COMPREHENSIVE_PLATFORM_GUIDE.md)**: Product vision, modules, and roadmap.
-- **[Architecture](docs/architecture.md)**: High-level system design.
-- **[Stack References](docs/STACK_REFERENCES.md)**: Libraries and best practices.
-- **[API & Backend](docs/API.md)**: Edge Functions and RPCs.
-- **[Testing](docs/TESTING.md)**: Unit and E2E tests.
+- **[Developer Quickstart](docs/getting-started/DEVELOPER-QUICKSTART.md)**: Get running in minutes.
+- **[Comprehensive Platform Guide](docs/architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)**: Product vision, modules, and roadmap.
+- **[Architecture](docs/architecture/architecture.md)**: High-level system design.
+- **[Stack References](docs/architecture/STACK_REFERENCES.md)**: Libraries and best practices.
+- **[API & Backend](docs/implementation/API.md)**: Edge Functions and RPCs.
+- **[Testing](docs/testing/TESTING.md)**: Unit and E2E tests.
 - **[Documentation Index](docs/DOCUMENTATION-INDEX-FULL.md)**: Full doc catalog.
 - **[Contributing](CONTRIBUTING.md)**: Guidelines for contributing.
 

@@ -79,3 +79,10 @@
 
 1. Open Command Palette (Ctrl+Shift+P).
 2. Type "TypeScript: Restart TS Server".
+
+## Next steps
+
+- **[Comprehensive Platform Guide](../architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — полное описание платформы, модулей и блоков.
+- **[Documentation index](../INDEX.md)** — навигация по разделам документации.
+- **[Full doc catalog](../DOCUMENTATION-INDEX-FULL.md)** — каталог всех документов по папкам и ролям.
+- **[Contributing](../../CONTRIBUTING.md)** — как участвовать в разработке (ветки, коммиты, PR).

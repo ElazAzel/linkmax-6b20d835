@@ -221,7 +221,7 @@
   * Changed visibility to **Private** to prevent unauthorized copying.
   * Rewrote git history cross-branch to purge accidentally committed `.env` secrets.
   * Unified `.gitignore` to ensure core internal docs are tracked in the private repo while keeping secrets out.
-  * Documented security decisions in [ADR 0024](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/inkmax/docs/ADR/0024-repository-security.md).
+  * Documented security decisions in [ADR 0024](../ADR/0024-repository-security.md).
 
 * Hardened `upsert_user_page` function to enforce `auth.uid()` check.
 * Fixed RLS policies for `languages` and `language_upload_history` tables to use correct `has_role()` check.

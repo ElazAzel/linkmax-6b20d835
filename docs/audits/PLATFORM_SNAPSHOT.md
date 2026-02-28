@@ -27,7 +27,7 @@ lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**,
 
 ### Repository Security & Privacy
 
-The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/inkmax/docs/ADR/0024-repository-security.md) for details on recent security hardening.
+The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](../../ADR/0024-repository-security.md) for details on recent security hardening.
 
 **Target audiences:**
 
@@ -792,7 +792,7 @@ Based on codebase analysis, these are logical next improvements:
 13. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: 100% sync reached for RU/EN/KK/UZ (Feb 2026).
-- **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/lnkmx my/inkmax/docs/audits/FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_22.md](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/lnkmx my/inkmax/docs/audits/FULL_PLATFORM_AUDIT_2026_02_22.md), and [FULL_PLATFORM_AUDIT_2026_02_24.md](file:///c:/Users/admin/OneDrive - УО 'Алматы Менеджмент Университет'/Документы/lnkmx my/inkmax/docs/audits/FULL_PLATFORM_AUDIT_2026_02_24.md).
+- **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_22.md](FULL_PLATFORM_AUDIT_2026_02_22.md), and [FULL_PLATFORM_AUDIT_2026_02_24.md](FULL_PLATFORM_AUDIT_2026_02_24.md).
 
 ---
 

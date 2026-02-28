@@ -90,4 +90,4 @@ The editor experience feels instant.
 *   **Pixels**: We proxy pixel events (FB, TikTok) to prevent ad-blockers where possible and simplify configuration for users.
 
 ---
-**Reference**: For direct code paths and deep-dive details, refer to `docs/PLATFORM_SNAPSHOT.md`.
+**Reference**: For direct code paths and deep-dive details, refer to [PLATFORM_SNAPSHOT.md](../audits/PLATFORM_SNAPSHOT.md).

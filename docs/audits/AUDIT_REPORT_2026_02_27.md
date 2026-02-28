@@ -2,20 +2,20 @@
 
 ## 1. Обзор документов
 
-### [PLATFORM_SNAPSHOT.md](file:///c:/Users/i.azelkhanov/Documents/inkmax/docs/PLATFORM_SNAPSHOT.md)
+### [PLATFORM_SNAPSHOT.md](PLATFORM_SNAPSHOT.md)
 
 **Статус**: Актуален (обновлен 27.02.2026).
 
 * **Оценка**: 10/10. Содержит исчерпывающую информацию об архитектуре, ролях пользователей, стеке технологий и текущем состоянии платформы. Исправно выполняет роль "единого источника истины".
 
-### [.lovable/plan.md](file:///c:/Users/i.azelkhanov/Documents/inkmax/.lovable/plan.md)
+### [.lovable/plan.md](../../.lovable/plan.md)
 
 **Статус**: В работе.
 
 * **Оценка**: 9/10. Содержит качественный Gap-анализ относительно Bitrix24. Приоритеты расставлены верно (P0 для Deals DnD и Contact Detail).
 * **Рекомендация**: Интегрировать ключевые вехи из этого файла в общую дорожную карту в `PLATFORM_SNAPSHOT.md` после завершения текущего спринта.
 
-### [ai-agent-rules.md](file:///c:/Users/i.azelkhanov/Documents/inkmax/docs/ai-agent-rules.md)
+### [ai-agent-rules.md](../operations/ai-agent-rules.md)
 
 **Статус**: Рекомендовано обновление.
 
