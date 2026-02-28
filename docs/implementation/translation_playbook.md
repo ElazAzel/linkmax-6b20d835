@@ -72,6 +72,10 @@
   3) Keep old keys for one release cycle, then remove after analytics confirms no usage.
   4) Update the i18n export CSV to include both old and new keys during migration.
 
+## Locale coverage (common + fields)
+
+The **common** (undo, creating, upgrade, saved, deleteConfirm, noResults, saving, optional, toHome, collapse, generating, generate) and **fields** (description, fileName, fileSize, platforms, layout, iconStyle, whatPeopleSay, testimonials, testimonial, role, testimonialText, rating, content, heading, paragraph, quote, videoUrl, aspectRatio, etc.) blocks are translated for all UI locales: **ru**, **en**, **kk**, **uz**, **de**, **uk**, **be**, **es**, **fr**, **it**, **pt**, **zh**, **tr**, **ja**, **ko**, **ar**. For any remaining empty keys in a locale, run `npm run i18n:fill` to copy values from `en.json` (English fallback).
+
 ## Workflow (Unified AI-powered UX)
 
 The platform uses a unified manager for internationalization located in `scripts/i18n-manager.mjs`.

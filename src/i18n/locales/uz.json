@@ -36,7 +36,7 @@
     "urlRequired": "Google Form havolasini kiriting",
     "invalidUrl": "Havola noto‘g‘ri. docs.google.com/forms/... kabi havoladan foydalaning.",
     "loading": "Yuklanmoqda...",
-    "importFromUrl": "Import",
+    "importFromUrl": "Import qilish",
     "fetchFailed": "Shakl yuklanmadi. Havolani tekshiring.",
     "formClosed": "Shakl javoblar uchun yopiq",
     "formNotPublic": "Shakl ommaviy emas. Google Forms sozlamalarida ruxsatni oching.",
@@ -54,7 +54,7 @@
     "foundFields": "Maydonlar topildi",
     "formTitle": "Shakl nomi",
     "importSuccess": "Import qilingan maydonlar: {{count}}",
-    "import": "Import"
+    "import": "Import qilish"
   },
   "legal": {
     "termsOfService": "Foydalanuvchi shartnomasi",
@@ -118,10 +118,10 @@
     "comingSoon": "Tez orada",
     "undo": "Bekor qilish",
     "pasteFailed": "Qo‘yib bo‘lmadi",
-    "creating": "Creating...",
-    "upgrade": "Upgrade to PRO",
+    "creating": "Yaratilmoqda...",
+    "upgrade": "PRO ga yangilang",
     "none": "Yo'q",
-    "saved": "Saved",
+    "saved": "Saqlandi",
     "deleteConfirm": "Haqiqatan ham bu blokni oʻchirib tashlamoqchimisiz?",
     "noResults": "Hech narsa topilmadi",
     "saving": "Saqlanmoqda...",
@@ -235,10 +235,10 @@
     "hiddenText": "Yashirin matn/sovrin",
     "socialsTitle": "Ijtimoiy tarmoqlar",
     "height": "Blok balandligi",
-    "description": "Description",
+    "description": "Tavsif",
     "file": "Fayl",
-    "fileName": "File Name",
-    "fileSize": "File Size",
+    "fileName": "Fayl nomi",
+    "fileSize": "Fayl hajmi",
     "iconPreview": "Belgini oldindan ko'rish",
     "noUrl": "URL manzilini kiriting",
     "iconMode": "Belgilar manbai",
@@ -247,22 +247,22 @@
     "refreshIcon": "Yangilash belgisi",
     "customIcon": "O'z belgisi",
     "enterCommaSeparatedColors": "Ranglarni vergul bilan ajrating",
-    "platforms": "Platforms",
-    "layout": "Layout",
-    "iconStyle": "Icon Style",
-    "whatPeopleSay": "What People Say",
-    "testimonials": "Testimonials",
-    "testimonial": "Testimonial",
-    "role": "Role",
-    "testimonialText": "Testimonial Text",
-    "testimonialPlaceholder": "This is an amazing product!",
-    "rating": "Rating",
-    "content": "Content",
-    "heading": "Heading",
-    "paragraph": "Paragraph",
-    "quote": "Quote",
-    "videoUrl": "Video URL",
-    "aspectRatio": "Aspect Ratio",
+    "platforms": "Platformalar",
+    "layout": "Joylashuv",
+    "iconStyle": "Belgi uslubi",
+    "whatPeopleSay": "Odamlar nima deyadi",
+    "testimonials": "Sharhlar",
+    "testimonial": "Sharh",
+    "role": "Rol",
+    "testimonialText": "Sharh matni",
+    "testimonialPlaceholder": "Bu ajoyib mahsulot!",
+    "rating": "Reyting",
+    "content": "Mazmun",
+    "heading": "Sarlavha",
+    "paragraph": "Paragraf",
+    "quote": "Iqtibos",
+    "videoUrl": "Video havolasi",
+    "aspectRatio": "Eni va bo'yi nisbati",
     "niche": "Niche",
     "subscribeToNewsletterPlaceholder": "Axborot byulleteniga obuna bo'ling",
     "newsletterDescPlaceholder": "Kirish qutingizga eng so'nggi yangilanishlarni oling",
@@ -366,17 +366,17 @@
   "actions": {
     "subscribe": "Obuna boʻling",
     "sending": "Yuborilmoqda...",
-    "addImage": "Add Image",
-    "download": "Download",
-    "buy": "Buy",
-    "removeCustomIcon": "Remove custom icon",
-    "addPlatform": "Add Platform",
-    "send": "Send",
+    "addImage": "Rasm qo'shish",
+    "download": "Yuklab olish",
+    "buy": "Sotib olish",
+    "removeCustomIcon": "Maxsus belgini olib tashlash",
+    "addPlatform": "Platforma qo'shish",
+    "send": "Yuborish",
     "buyTokens": "Tokenlarni sotib oling",
     "buyForTokens": "uchun sotib oling",
     "tapToView": "Batafsil →",
     "save": "Saqlash",
-    "upgrade": "Upgrade",
+    "upgrade": "Yangilash",
     "cancel": "Bekor qilish"
   },
   "profile": {
@@ -824,11 +824,11 @@
           "desc": "Boshlash uchun ideal",
           "cta": "Boshlanishi",
           "features": [
-            "Unlimited links",
-            "Basic analytics",
-            "Custom themes",
-            "QR code generator",
-            "Social icons"
+            "Cheksiz havolalar",
+            "Asosiy tahlil",
+            "Maxsus mavzular",
+            "QR kod generatori",
+            "Ijtimoiy tarmoq belgilari"
           ]
         },
         "pro": {
@@ -837,12 +837,12 @@
           "badge": "MASHXUR",
           "cta": "Pro versiyasiga yangilang",
           "features": [
-            "Everything in Free",
-            "Advanced analytics",
-            "Remove branding",
-            "Custom domain",
-            "Priority support",
-            "AI content generation"
+            "Bepul rejadagi hamma narsa",
+            "Kengaytirilgan tahlil",
+            "Brendni olib tashlash",
+            "O'z domeningiz",
+            "Ustuvor qo'llab-quvvatlash",
+            "AI kontent yaratish"
           ]
         }
       },
@@ -867,24 +867,24 @@
         "subtitle": "Platforma haqida bilishingiz kerak bo'lgan hamma narsa",
         "items": [
           {
-            "question": "What is lnkmx and who is it for?",
-            "answer": "lnkmx is an operating system for micro-businesses. It is ideal for experts, freelancers, and small businesses who need a fast website, built-in CRM for requests, and simple analytics without complex settings."
+            "question": "lnkmx nima va u kimlar uchun?",
+            "answer": "lnkmx — mikrobiznes uchun operatsion tizim. Ekspertlar, frilanserlar va tez veb-sayt, so'rovlar uchun CRM va murakkab sozlamasiz oddiy tahlil kerak bo'lgan kichik biznes uchun idealdir."
           },
           {
-            "question": "Do I need to know programming?",
-            "answer": "No, lnkmx is a no-code platform. You build a site from ready-made blocks, like a Lego set. And the built-in AI assistant can write texts for you."
+            "question": "Dasturlashni bilishim kerakmi?",
+            "answer": "Yo'q, lnkmx — kodsiz platforma. Siz saytni tayyor bloklardan, Lego kabi yasaysiz. O'rnatilgan AI yordamchi matnlarni siz uchun yozishi mumkin."
           },
           {
-            "question": "Can I accept payments in Tenge?",
-            "answer": "Yes, the platform is fully adapted for the Kazakhstan market. You can specify prices in KZT, and integrations with local payment systems are in active development."
+            "question": "To'lovlarni tengeda qabul qila olamanmi?",
+            "answer": "Ha, platforma Qozog'iston bozoriga to'liq moslashtirilgan. Narxlarni KZT da ko'rsatishingiz mumkin, mahalliy to'lov tizimlari bilan integratsiyalar faol ishlab chiqilmoqda."
           },
           {
-            "question": "Does a site on lnkmx help with Google promotion (SEO)?",
-            "answer": "Absolutely. All pages on lnkmx are automatically optimized for search engines: fast loading, adaptability for mobile devices, and correct semantic markup (Schema.org), which is critically important for SEO in 2025."
+            "question": "lnkmx dagi sayt Google reklamasi (SEO) da yordam beradimi?",
+            "answer": "Albatta. lnkmx dagi barcha sahifalar qidiruv tizimlari uchun avtomatik optimallashtirilgan: tez yuklanish, mobil qurilmalar uchun moslashuvchanlik va to'g'ri semantik belgilash (Schema.org), bu 2025 yil SEO uchun muhim."
           },
           {
-            "question": "Is there a free plan?",
-            "answer": "Yes, we have a forever free plan with basic features. You can create a page and start accepting requests without investment."
+            "question": "Bepul reja bormi?",
+            "answer": "Ha, bizda asosiy imkoniyatlar bilan abadiy bepul reja mavjud. Siz sahifa yaratishingiz va investitsiyasiz so'rovlarni qabul qilishni boshlashingiz mumkin."
           }
         ]
       },
@@ -909,7 +909,7 @@
     },
     "v4": {
       "hero": {
-        "badge": "The Micro-Business OS",
+        "badge": "Mikrobiznes OS",
         "title": "Veb-sayt, CRM va analitika - bir joyda",
         "titleStart": "Bunday sahifalarni yarating",
         "titleEnd": "haqiqatan ham aylantirish",
@@ -1822,9 +1822,9 @@
       "seoTitle": "Meta Title",
       "seoTitlePlaceholder": "Qidiruv tizimlari uchun sarlavha",
       "seoDescription": "Meta Description",
-      "seoDescPlaceholder": "Description for search results",
-      "indexable": "Indexing by search engines",
-      "indexableHint": "Show page in Google and other search engines",
+      "seoDescPlaceholder": "Qidiruv natijalari uchun tavsif",
+      "indexable": "Qidiruv tizimlari tomonidan indekslash",
+      "indexableHint": "Sahifani Google va boshqa qidiruv tizimlarida ko'rsatish",
       "category": "Turkum",
       "branding": "Brendlash",
       "theme": "Mavzu va ranglar",
@@ -1837,7 +1837,7 @@
       "faviconHint": "PNG yoki ICO ga havola. Tavsiya etilgan o'lcham 64x64.",
       "hideBranding": "lnkmx brendini yashirish",
       "hideBrandingHint": "\"Made with lnkmx\" suv belgisi va havolalarini olib tashlang",
-      "whiteLabel": "White-label",
+      "whiteLabel": "Oq yorliq (brendsiz)",
       "errors": {
         "slug_taken": "Bu URL allaqachon olingan",
         "invalid_slug": "Noto'g'ri URL"
@@ -2279,7 +2279,7 @@
     "searchResults": "Filtering by ",
     "shareToGallery": "Share to Gallery",
     "shareDescription": "Show your page in the community gallery",
-    "allNiches": "All",
+    "allNiches": "Barchasi",
     "pages": "sahifalar",
     "create": "Yaratish",
     "statsPages": "Sahifalar",
@@ -2471,7 +2471,7 @@
     "searchUsers": "Foydalanuvchilarni qidirish...",
     "tierBusiness": "Business",
     "tierPro": "Pro",
-    "tierFree": "Free",
+    "tierFree": "Bepul",
     "lifetime": "Hayot uchun",
     "expired": "Muddati tugagan",
     "expiresOn": "Muddati tugaydi",
@@ -2571,7 +2571,7 @@
     "clearUserCacheDesc": "Ilova keyingi yuklanganda har bir foydalanuvchi keshi tozalanadi",
     "bumpCache": "Keshni tiklash",
     "refresh": "Refresh",
-    "status": "Status",
+    "status": "Holat",
     "created": "Created",
     "actions": "Harakatlar",
     "partners": {
@@ -2586,7 +2586,7 @@
       "logo": "Logotip",
       "name": "Ism",
       "website": "Veb-sayt",
-      "status": "Status",
+      "status": "Holat",
       "active": "Faol",
       "inactive": "Yashirin",
       "edit": "Hamkorni tahrirlash",
@@ -2602,18 +2602,18 @@
       "deleteWarning": "Bu amalni ortga qaytarib bo‘lmaydi."
     },
     "confirmDeleteTemplate": "Are you sure you want to delete template ",
-    "templateDeleted": "Template deleted",
-    "errorDeletingTemplate": "Error deleting template",
-    "errorUpdatingStatus": "Error updating status",
-    "searchTemplates": "Search templates...",
-    "createTemplate": "Create Template",
-    "templateName": "Name",
-    "niches": "Niches",
-    "public": "Public",
-    "hidden": "Hidden",
-    "noTemplatesFound": "No templates found",
+    "templateDeleted": "Shablon o'chirildi",
+    "errorDeletingTemplate": "Shablonni o'chirishda xato",
+    "errorUpdatingStatus": "Statusni yangilashda xato",
+    "searchTemplates": "Shablonlarni qidirish...",
+    "createTemplate": "Shablon yaratish",
+    "templateName": "Nomi",
+    "niches": "Yo'nalishlar",
+    "public": "Ommaviy",
+    "hidden": "Yashirin",
+    "noTemplatesFound": "Shablonlar topilmadi",
     "editUserTierDescription": "Foydalanuvchiga kirish darajasini o'zgartirish",
-    "roleAdmin": "Admin"
+    "roleAdmin": "Administrator"
   },
   "adminCharts": {
     "userGrowth": "Foydalanuvchilarning o'sishi",
@@ -3327,7 +3327,7 @@
       "style": "Uslub va SEO",
       "icon": "Belgi",
       "iconDesc": "Havola belgisini moslashtiring",
-      "settings": "Settings"
+      "settings": "Sozlamalar"
     },
     "saving": "Saqlanmoqda...",
     "unsaved": "Saqlanmagan",
@@ -3368,7 +3368,7 @@
     "formData": "Shakl ma'lumotlari",
     "addLead": "Etakchi qo'shing",
     "status": {
-      "label": "Status",
+      "label": "Holat",
       "new": "Yangi",
       "contacted": "Aloqa qilindi",
       "qualified": "Malakali",
@@ -3377,18 +3377,18 @@
     },
     "source": "Manba",
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
-    "namePlaceholder": "Client name",
-    "phone": "Phone",
-    "notes": "Notes",
-    "notesPlaceholder": "Additional notes about this lead...",
-    "addInteraction": "Add Interaction",
-    "interactionPlaceholder": "What happened?",
-    "history": "History",
-    "noInteractions": "No interactions yet",
-    "deleteLead": "Delete Lead",
-    "confirmDelete": "Delete this lead?",
-    "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
-    "openPanel": "Open CRM",
+    "namePlaceholder": "Mijoz ismi",
+    "phone": "Telefon",
+    "notes": "Eslatmalar",
+    "notesPlaceholder": "Ushbu lid haqida qo'shimcha eslatmalar...",
+    "addInteraction": "O'zaro ta'sir qo'shish",
+    "interactionPlaceholder": "Nima bo'ldi?",
+    "history": "Tarix",
+    "noInteractions": "Hali o'zaro ta'sirlar yo'q",
+    "deleteLead": "Lidni o'chirish",
+    "confirmDelete": "Ushbu lidni o'chirasizmi?",
+    "deleteWarning": "Bu amalni bekor qilib bo'lmaydi. Barcha o'zaro ta'sirlar ham o'chiriladi.",
+    "openPanel": "CRM ni ochish",
     "upgradeToPremium": "Premium oling"
   },
   "pagination": {
@@ -3599,7 +3599,7 @@
     "title": "Tekshirish uchun arizalar",
     "user": "Foydalanuvchi",
     "type": "Turi",
-    "status": "Status",
+    "status": "Holat",
     "date": "Sana",
     "actions": "Harakatlar",
     "view": "Ko'rish",
@@ -4015,7 +4015,7 @@
     "locationOffline": "Oflayn",
     "locationValue": "Manzil yoki havola",
     "capacity": "Imkoniyat",
-    "status": "Status",
+    "status": "Holat",
     "statusDraft": "Qoralama",
     "statusPublished": "Chop etilgan",
     "statusClosed": "Yopiq",
@@ -4836,7 +4836,7 @@
     },
     "lowPerforming": {
       "title": "Samarasiz blok",
-      "description": "Description"
+      "description": "Tavsif"
     },
     "mobileOpt": {
       "title": "Mobil uchun optimallashtirish",
@@ -4960,73 +4960,73 @@
     "xlarge": "Extra Large - 160px"
   },
   "upload": {
-    "fileTooLarge": "File too large (max 10MB)",
-    "success": "Uploaded!",
-    "error": "Upload failed",
+    "fileTooLarge": "Fayl juda katta (maks. 10MB)",
+    "success": "Yuklandi!",
+    "error": "Yuklash muvaffaqiyatsiz",
     "uploading": "Yuklanmoqda...",
     "dragOrClick": "Surang yoki bosing",
-    "maxSize": "MaxSize",
+    "maxSize": "Maks. hajmi",
     "platform": "Platformaga",
     "storedOnPlatform": "Platformada saqlanadi",
     "signInRequired": "Fayllarni yuklash uchun tizimga kiring",
     "externalNote": "Fayl to'g'ridan-to'g'ri havoladan yuklab olinadi",
-    "gifPremiumOnly": "GIF uploads are available for Premium users only",
-    "compressed": "compressed",
-    "gifPreserved": "GIF animation preserved",
-    "tab": "Upload",
-    "compressing": "Compressing...",
-    "click": "Click to upload",
-    "autoCompress": "Auto-compressed, max 15MB",
-    "gifPremium": "GIF available with Premium"
+    "gifPremiumOnly": "GIF yuklash faqat Premium foydalanuvchilar uchun",
+    "compressed": "siqilgan",
+    "gifPreserved": "GIF animatsiyasi saqlanadi",
+    "tab": "Yuklash",
+    "compressing": "Siqilmoqda...",
+    "click": "Yuklash uchun bosing",
+    "autoCompress": "Avtomatik siqiladi, maks. 15MB",
+    "gifPremium": "GIF Premium bilan mavjud"
   },
   "layouts": {
-    "list": "List",
-    "grid": "Grid"
+    "list": "Ro'yxat",
+    "grid": "Panjara"
   },
   "tier": {
-    "free": "Free",
+    "free": "Bepul",
     "blocksCount": "bloklar"
   },
   "scratch": {
-    "scratchHere": "👆 Scratch here",
-    "revealed": "🎉 Revealed!",
-    "hint": "Scratch the layer to reveal a surprise"
+    "scratchHere": "👆 Bu yerni tirnang",
+    "revealed": "🎉 Ochildi!",
+    "hint": "Sovrinni ko'rish uchun qatlamni tirnang"
   },
   "guide": {
     "pdf": "Pdf"
   },
   "messages": {
-    "loading": "Loading...",
-    "failedToSignUp": "FailedToSignUp",
-    "accountCreated": "AccountCreated",
-    "failedToSignIn": "FailedToSignIn"
+    "loading": "Yuklanmoqda...",
+    "failedToSignUp": "Ro'yxatdan o'tish muvaffaqiyatsiz",
+    "accountCreated": "Hisob yaratildi",
+    "failedToSignIn": "Tizimga kirish muvaffaqiyatsiz"
   },
   "bookings": {
-    "fetchError": "Failed to load bookings",
-    "cancelError": "Failed to cancel booking",
-    "cancelSuccess": "Booking cancelled",
-    "confirmError": "Failed to confirm booking",
-    "confirmSuccess": "Booking confirmed",
-    "completeError": "Failed to complete booking",
-    "completeSuccess": "Booking marked as completed",
-    "today": "Today",
-    "tomorrow": "Tomorrow",
-    "noBookingsToExport": "No bookings to export",
-    "exportSuccess": "Bookings exported successfully",
-    "appointmentWith": "Appointment with",
-    "calendarExported": "Added to calendar",
-    "total": "Total",
-    "upcoming": "Upcoming",
-    "confirmed": "Confirmed",
-    "past": "Past",
-    "all": "All",
-    "noBookings": "No bookings yet",
-    "addToCalendar": "Add to Calendar",
+    "fetchError": "Bronlarni yuklab bo'lmadi",
+    "cancelError": "Bronni bekor qilish muvaffaqiyatsiz",
+    "cancelSuccess": "Bron bekor qilindi",
+    "confirmError": "Bronni tasdiqlash muvaffaqiyatsiz",
+    "confirmSuccess": "Bron tasdiqlandi",
+    "completeError": "Bronni yakunlash muvaffaqiyatsiz",
+    "completeSuccess": "Bron bajarilgan deb belgilandi",
+    "today": "Bugun",
+    "tomorrow": "Ertaga",
+    "noBookingsToExport": "Eksport qilish uchun bronlar yo'q",
+    "exportSuccess": "Bronlar muvaffaqiyatli eksport qilindi",
+    "appointmentWith": "Uchrashuv",
+    "calendarExported": "Kalendarga qo'shildi",
+    "total": "Jami",
+    "upcoming": "Kutilayotgan",
+    "confirmed": "Tasdiqlangan",
+    "past": "O'tgan",
+    "all": "Barchasi",
+    "noBookings": "Hali bronlar yo'q",
+    "addToCalendar": "Kalendarga qo'shish",
     "exportCSV": "CSV",
-    "refresh": "Refresh",
-    "cancelTitle": "Cancel Booking?",
-    "cancelDescription": "Are you sure you want to cancel this booking? The client will be notified.",
-    "confirmCancel": "Yes, Cancel Booking"
+    "refresh": "Yangilash",
+    "cancelTitle": "Bronni bekor qilish?",
+    "cancelDescription": "Ushbu bronni bekor qilmoqchimisiz? Mijozga xabar beriladi.",
+    "confirmCancel": "Ha, bronni bekor qilish"
   },
   "versions": {
     "title": "Versiya tarixi",
@@ -5039,10 +5039,10 @@
     "restore": "Qayta tiklash"
   },
   "autosave": {
-    "pending": "Pending...",
-    "saving": "Saving...",
-    "saved": "Saved",
-    "error": "Error"
+    "pending": "Kutilmoqda...",
+    "saving": "Saqlanmoqda...",
+    "saved": "Saqlandi",
+    "error": "Xato"
   },
   "blockManager": {
     "title": "Bloklar",
@@ -5090,7 +5090,7 @@
     "galleryDesc": "Jamoa ishlari",
     "pricingDesc": "Premium xususiyatlar",
     "moreOptions": "Menyu",
-    "status": "Status"
+    "status": "Holat"
   },
   "streak": {
     "title": "Streak",
@@ -5131,16 +5131,16 @@
     "reset": "Qayta tiklash"
   },
   "leaderboard": {
-    "week": "This Week",
-    "month": "This Month",
-    "allTime": "All Time",
-    "title": "Top Pages",
-    "all": "All",
-    "empty": "No pages yet for this period"
+    "week": "Bu hafta",
+    "month": "Bu oy",
+    "allTime": "Barcha vaqt",
+    "title": "Eng yaxshi sahifalar",
+    "all": "Barchasi",
+    "empty": "Ushbu davr uchun sahifalar hali yo'q"
   },
   "tabbar": {
     "projects": "Loyihalar",
-    "editor": "muharrir",
+    "editor": "Tahrirchi",
     "crm": "CRM",
     "analytics": "Analitika",
     "gallery": "Galereya",
