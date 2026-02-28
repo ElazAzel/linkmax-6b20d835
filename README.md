@@ -104,6 +104,16 @@
    ```
    App runs at **http://localhost:8080**
 
+### Подключение npm (если команда `npm` не найдена)
+
+- Установите [Node.js](https://nodejs.org/) (LTS, v18+) — в комплекте идёт npm.
+- Либо используйте [nvm-windows](https://github.com/coreybutler/nvm-windows): `nvm install 20` → `nvm use 20`. В проекте есть `.nvmrc` (рекомендуемая версия).
+- Откройте **новый** терминал (Cursor/VS Code: Terminal → New Terminal), чтобы подхватился PATH, затем:
+  ```bash
+  npm install
+  ```
+- Или из PowerShell в корне проекта: `.\scripts\install-deps.ps1`
+
 ---
 
 ## 📂 Project Structure
