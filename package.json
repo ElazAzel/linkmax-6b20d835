@@ -25,6 +25,7 @@
     "i18n:check": "node scripts/i18n-manager.mjs check",
     "i18n:fill": "node scripts/sync-locales-fill-missing.mjs",
     "i18n:check-coverage": "node scripts/check-locale-coverage.mjs",
+    "i18n:audit": "node scripts/audit-locales.mjs",
     "i18n:export": "node scripts/i18n-export.mjs",
     "i18n:import": "node scripts/i18n-import.mjs",
     "test": "vitest",
