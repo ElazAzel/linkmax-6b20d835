@@ -70,12 +70,7 @@ git diff origin/main...main --stat
 ```
 
 ### Step 3: GitHub Actions Setup (Required for CI/CD)
-**Setup Instructions:**
-1. Go to GitHub repo → Settings → Secrets and variables → Actions
-2. Create new secret: `CLOUDFLARE_API_TOKEN`
-   - Get token from: https://dash.cloudflare.com/profile/api-tokens
-   - Required permissions: Workers (Edit), Account (Read)
-3. Verify `account_id` in `cloudflare-worker/wrangler.toml` matches your Cloudflare account
+**Setup Instructions:** See [GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md).
 
 **Deployment Methods:**
 
@@ -192,24 +187,6 @@ If issues occur after deployment:
 
 ---
 
-## 📊 PHASE 2 READY
-
-After deployment, immediately start Phase 2:
-
-**Phase 2 Goals:**
-- Reduce `any` types: 143 → 20
-- Reduce ESLint errors: 175 → 50
-- Improve code quality: 65% → 80%
-- Platform score: 75 → 80+
-
-**Phase 2 Timeline:**
-- Start: February 1, 2026
-- Duration: 2 weeks (20-25 hours)
-- Resources: 1 developer
-- Status: Fully prepared in PHASE-2-START-GUIDE.md
-
----
-
 ## ✨ SUMMARY
 
 ### What Changed
@@ -217,7 +194,7 @@ After deployment, immediately start Phase 2:
 - useEffect dependencies: Fixed ✓
 - Security vulnerabilities: Mitigated ✓
 - Build system: Verified working ✓
-- Documentation: Comprehensive (25,000+ lines) ✓
+- Documentation: Comprehensive ✓
 
 ### Status Summary
 ```
@@ -242,10 +219,8 @@ After deployment, immediately start Phase 2:
 
 **Next Step:** Deploy to production  
 **Timeline:** Immediately or as scheduled  
-**Support:** All documentation available in `/workspaces/inkmax/`
 
 ---
 
 *Deployment Checklist Generated: February 28, 2026*  
-*Prepared by: GitHub Copilot*  
 *Status: ✅ READY FOR PRODUCTION DEPLOYMENT*

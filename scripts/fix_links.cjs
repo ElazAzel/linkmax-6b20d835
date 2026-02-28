@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const projectRoot = path.join(__dirname, '..');
+
 function walk(dir) {
     let results = [];
     const list = fs.readdirSync(dir);
@@ -18,7 +20,7 @@ function walk(dir) {
     return results;
 }
 
-const files = walk(path.join(__dirname, 'src'));
+const files = walk(path.join(projectRoot, 'src'));
 let count = 0;
 
 for (const file of files) {

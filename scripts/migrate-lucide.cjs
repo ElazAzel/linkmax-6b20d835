@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
+const projectRoot = path.join(__dirname, '..');
+
 // Helper to reliably convert PascalCase to kebab-case
 function toKebabCase(str) {
-    // e.g. "MessageCircle" -> "message-circle"
-    // e.g. "ArrowLeft" -> "arrow-left"
     return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
@@ -12,24 +12,16 @@ function processFile(filePath) {
     let content = fs.readFileSync(filePath, 'utf8');
     const originalContent = content;
 
-    // Regex to match "import { ... } from 'lucide-react';"
-    // Handles multiline and spacing
     const importRegex = /import\s+({[^}]+})\s+from\s+['"]lucide-react['"];?/g;
 
     content = content.replace(importRegex, (match, importsString) => {
-        // Extract individual icon names
-        // `importsString` is like "{ Check, ArrowRight }" or multiline
         const icons = importsString
-            .replace(/[{}]/g, '') // remove brackets
-            .split(',') // split by comma
-            .map(i => i.trim()) // trim whitespace
-            .filter(i => i.length > 0); // remove empty
+            .replace(/[{}]/g, '')
+            .split(',')
+            .map(i => i.trim())
+            .filter(i => i.length > 0);
 
         if (icons.length === 0) return match;
-
-        // Optional: some imports might have aliases like "Check as CheckIcon"
-        // We should handle "X as Y" aliases if they exist in lucide-react?
-        // Let's assume standard "ImportName" for now.
 
         const individualImports = icons.map(iconDef => {
             let importName = iconDef;
@@ -75,7 +67,7 @@ function walkDir(dir) {
     }
 }
 
-const targetDir = path.join(__dirname, 'src');
+const targetDir = path.join(projectRoot, 'src');
 console.log(`Starting migration in ${targetDir}...`);
 walkDir(targetDir);
 console.log('Migration complete.');

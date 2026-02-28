@@ -25,7 +25,7 @@
     ```
 
 3. **Configure environment** (optional for first run):
-   - Copy `.env.example` to `.env`
+   - Copy `.env.example` to `.env` (in project root)
    - Set `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` (and optionally `VITE_APP_DOMAIN`)
 
 4. **Start development server**:

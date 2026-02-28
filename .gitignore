@@ -37,15 +37,8 @@ test-results/
 .playwright/
 
 # Temporary audit/lint/report files
-final_lint_results.json
-lint_results.json
-lint_src_results.json
-lint_errors*.txt
-lint_admin_translations.json
-i18n_report*.txt
-missing.txt
-ru-queue.json
-FULL_AUDIT_REPORT.md
+reports/
+!reports/README.md
 *.tsbuildinfo
 
 # Migration backup folders

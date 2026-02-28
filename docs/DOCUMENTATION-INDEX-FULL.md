@@ -9,39 +9,39 @@
 ## 🚀 Начните отсюда
 
 ### Для всех
-1. **[DEVELOPER-QUICKSTART.md](./DEVELOPER-QUICKSTART.md)** - Быстрый старт (15 мин)
-   - Что такое InkMax
+1. **[DEVELOPER-QUICKSTART.md](DEVELOPER-QUICKSTART.md)** - Быстрый старт (15 мин)
+   - Что такое linkMax
    - Stack технологий
    - 28 блоков (список)
    - Как добавить блок
    - Полезные ссылки
 
-2. **[README.md](./README.md)** - Главная страница
+2. **[README.md](../README.md)** - Главная страница
    - Обзор проекта
    - Quick start
    - Ключевые фичи
    - Структура БД
 
 ### Для разработчиков
-3. **[COMPREHENSIVE_PLATFORM_GUIDE.md](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)** - Документация платформы (30 мин)
+3. **[COMPREHENSIVE_PLATFORM_GUIDE.md](COMPREHENSIVE_PLATFORM_GUIDE.md)** - Документация платформы (30 мин)
    - Архитектура
    - Категории блоков
    - Функциональность
    - Интеграции
    - Многоязычность
 
-4. **[UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)** - UI компоненты (30 мин)
+4. **[UI-COMPONENTS.md](UI-COMPONENTS.md)** - UI компоненты (30 мин)
    - Компоненты дизайн-системы
    - Примеры использования
 
 ### Для архитекторов
-5. **[FULL_PLATFORM_AUDIT_2026_02_18.md](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)** - Полный аудит платформы (1 час)
+5. **[FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md)** - Полный аудит платформы (1 час)
    - Аудит функциональности
    - Производительность
    - Безопасность
    - Рекомендации
 
-6. **[AUDIT_REPORT_2026_02_27.md](./docs/AUDIT_REPORT_2026_02_27.md)** - Итоговый отчет (20 мин)
+6. **[AUDIT_REPORT_2026_02_27.md](AUDIT_REPORT_2026_02_27.md)** - Итоговый отчет (20 мин)
    - Результаты аудита
    - Статистика
    - Выводы
@@ -142,61 +142,61 @@
 ## 🎯 Документы по назначению
 
 ### Я новый в команде
-1. 👀 **[README.md](./README.md)** - узнать о проекте (5 мин)
-2. 🚀 **[DEVELOPER-QUICKSTART.md](./DEVELOPER-QUICKSTART.md)** - начать разработку (15 мин)
-3. 🧩 **[COMPREHENSIVE_PLATFORM_GUIDE.md](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)** - изучить платформу (1 час)
+1. 👀 **[README.md](../README.md)** - узнать о проекте (5 мин)
+2. 🚀 **[DEVELOPER-QUICKSTART.md](DEVELOPER-QUICKSTART.md)** - начать разработку (15 мин)
+3. 🧩 **[COMPREHENSIVE_PLATFORM_GUIDE.md](COMPREHENSIVE_PLATFORM_GUIDE.md)** - изучить платформу (1 час)
 
 ### Я разработчик
-1. 🏗️ **[COMPREHENSIVE_PLATFORM_GUIDE.md](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)** - архитектура (30 мин)
-2. 🧩 **[UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)** - UI компоненты (30 мин)
-3. 🔒 **[SECURITY.md](./docs/SECURITY.md)** - безопасность (20 мин)
-4. 🔍 **[aeo-geo-implementation.md](./docs/aeo-geo-implementation.md)** - SEO/AEO (15 мин)
+1. 🏗️ **[COMPREHENSIVE_PLATFORM_GUIDE.md](COMPREHENSIVE_PLATFORM_GUIDE.md)** - архитектура (30 мин)
+2. 🧩 **[UI-COMPONENTS.md](UI-COMPONENTS.md)** - UI компоненты (30 мин)
+3. 🔒 **[SECURITY.md](SECURITY.md)** - безопасность (20 мин)
+4. 🔍 **[aeo-geo-implementation.md](aeo-geo-implementation.md)** - SEO/AEO (15 мин)
 
 ### Я тестер
-1. 🧪 **[TESTING.md](./docs/TESTING.md)** - стратегия (20 мин)
-2. 📋 **[FULL_PLATFORM_AUDIT_2026_02_18.md](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)** - аудит (1 час)
-3. 🚀 **[DEPLOYMENT-CHECKLIST.md](./DEPLOYMENT-CHECKLIST.md)** - чек-лист (10 мин)
+1. 🧪 **[TESTING.md](TESTING.md)** - стратегия (20 мин)
+2. 📋 **[FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md)** - аудит (1 час)
+3. 🚀 **[DEPLOYMENT-CHECKLIST.md](DEPLOYMENT-CHECKLIST.md)** - чек-лист (10 мин)
 
 ### Я DevOps/архитектор
-1. 🏗️ **[architecture.md](./docs/architecture.md)** - архитектура (30 мин)
-2. 🚀 **[6_OPERATIONAL_HANDBOOK.md](./docs/6_OPERATIONAL_HANDBOOK.md)** - операции (30 мин)
-3. 📊 **[FULL_PLATFORM_AUDIT_2026_02_18.md](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)** - аудит (1 час)
-4. ⚡ **[PERFORMANCE_GUIDE.md](./docs/PERFORMANCE_GUIDE.md)** - производительность (15 мин)
+1. 🏗️ **[architecture.md](architecture.md)** - архитектура (30 мин)
+2. 🚀 **[6_OPERATIONAL_HANDBOOK.md](6_OPERATIONAL_HANDBOOK.md)** - операции (30 мин)
+3. 📊 **[FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md)** - аудит (1 час)
+4. ⚡ **[PERFORMANCE_GUIDE.md](PERFORMANCE_GUIDE.md)** - производительность (15 мин)
 
 ### Я продакт менеджер
-1. 📚 **[1_PRODUCT_VISION.md](./docs/1_PRODUCT_VISION.md)** - видение продукта (30 мин)
-2. 📋 **[5_PRODUCT_ROADMAP.md](./docs/5_PRODUCT_ROADMAP.md)** - roadmap (20 мин)
-3. 🎯 **[Features.md](./docs/Features.md)** - список фич (15 мин)
+1. 📚 **[1_PRODUCT_VISION.md](1_PRODUCT_VISION.md)** - видение продукта (30 мин)
+2. 📋 **[5_PRODUCT_ROADMAP.md](5_PRODUCT_ROADMAP.md)** - roadmap (20 мин)
+3. 🎯 **[Features.md](Features.md)** - список фич (15 мин)
 
 ---
 
 ## 🔍 Поиск по темам
 
 ### Блоки
-- **Event блок:** [event-block.md](./docs/event-block.md)
-- **UI компоненты:** [UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)
+- **Event блок:** [event-block.md](event-block.md)
+- **UI компоненты:** [UI-COMPONENTS.md](UI-COMPONENTS.md)
 
 ### SEO & Marketing
-- **SEO/GEO/AEO:** [aeo-geo-implementation.md](./docs/aeo-geo-implementation.md)
+- **SEO/GEO/AEO:** [aeo-geo-implementation.md](aeo-geo-implementation.md)
 
 ### Разработка
-- **Архитектура:** [architecture.md](./docs/architecture.md)
-- **i18n:** [i18n_ops.md](./docs/i18n_ops.md)
-- **Многостраничность:** [multi-page.md](./docs/multi-page.md)
-- **API:** [API.md](./docs/API.md)
+- **Архитектура:** [architecture.md](architecture.md)
+- **i18n:** [i18n_ops.md](i18n_ops.md)
+- **Многостраничность:** [multi-page.md](multi-page.md)
+- **API:** [API.md](API.md)
 
 ### Операции
-- **Тестирование:** [TESTING.md](./docs/TESTING.md)
-- **Operational Handbook:** [6_OPERATIONAL_HANDBOOK.md](./docs/6_OPERATIONAL_HANDBOOK.md)
+- **Тестирование:** [TESTING.md](TESTING.md)
+- **Operational Handbook:** [6_OPERATIONAL_HANDBOOK.md](6_OPERATIONAL_HANDBOOK.md)
 
 ### Безопасность
-- **Security:** [SECURITY.md](./docs/SECURITY.md)
-- **Security Ops:** [SECURITY_OPS.md](./docs/SECURITY_OPS.md)
-- **Аудиты:** [AUDIT_REPORT_2026_02_27.md](./docs/AUDIT_REPORT_2026_02_27.md)
+- **Security:** [SECURITY.md](SECURITY.md)
+- **Security Ops:** [SECURITY_OPS.md](SECURITY_OPS.md)
+- **Аудиты:** [AUDIT_REPORT_2026_02_27.md](AUDIT_REPORT_2026_02_27.md)
 
 ### UI & Components
-- **UI компоненты:** [UI-COMPONENTS.md](./docs/UI-COMPONENTS.md)
-- **Dashboard:** [dashboard-redesign.md](./docs/dashboard-redesign.md)
+- **UI компоненты:** [UI-COMPONENTS.md](UI-COMPONENTS.md)
+- **Dashboard:** [dashboard-redesign.md](dashboard-redesign.md)
 
 ---
 
@@ -217,22 +217,22 @@
 ## ⚡ Быстрые ссылки
 
 ### Core
-- 🏠 [Home](./README.md)
-- 🚀 [Quick Start](./DEVELOPER-QUICKSTART.md)
-- 📖 [Platform Docs](./docs/COMPREHENSIVE_PLATFORM_GUIDE.md)
+- 🏠 [Home](../README.md)
+- 🚀 [Quick Start](DEVELOPER-QUICKSTART.md)
+- 📖 [Platform Docs](COMPREHENSIVE_PLATFORM_GUIDE.md)
 
 ### Features
-- 🧩 [UI Components](./docs/UI-COMPONENTS.md)
-- 🔐 [Security](./docs/SECURITY.md)
-- 📊 [Performance](./docs/PERFORMANCE_GUIDE.md)
+- 🧩 [UI Components](UI-COMPONENTS.md)
+- 🔐 [Security](SECURITY.md)
+- 📊 [Performance](PERFORMANCE_GUIDE.md)
 
 ### Audit & Report
-- 📋 [Platform Audit](./docs/FULL_PLATFORM_AUDIT_2026_02_18.md)
-- 📊 [Latest Audit](./docs/AUDIT_REPORT_2026_02_27.md)
+- 📋 [Platform Audit](FULL_PLATFORM_AUDIT_2026_02_18.md)
+- 📊 [Latest Audit](AUDIT_REPORT_2026_02_27.md)
 
 ### Operations
-- 🧪 [Testing](./docs/TESTING.md)
-- 🔧 [Operational Handbook](./docs/6_OPERATIONAL_HANDBOOK.md)
+- 🧪 [Testing](TESTING.md)
+- 🔧 [Operational Handbook](6_OPERATIONAL_HANDBOOK.md)
 
 ---
 
@@ -280,19 +280,19 @@
 ## ❓ FAQ
 
 **Q: С чего начать?**
-A: Начните с [DEVELOPER-QUICKSTART.md](./DEVELOPER-QUICKSTART.md)
+A: Начните с [DEVELOPER-QUICKSTART.md](DEVELOPER-QUICKSTART.md)
 
 **Q: Где найти информацию о блоках?**
-A: [BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md)
+A: [BLOCKS-REFERENCE.md](BLOCKS-REFERENCE.md)
 
 **Q: Где информация о безопасности?**
-A: [SECURITY.md](./docs/SECURITY.md)
+A: [SECURITY.md](SECURITY.md)
 
 **Q: Как развернуть приложение?**
-A: [DEPLOYMENT-GUIDE.md](./docs/DEPLOYMENT-GUIDE.md)
+A: [DEPLOYMENT-GUIDE.md](DEPLOYMENT-GUIDE.md)
 
 **Q: Какие блоки есть?**
-A: 28 блоков, описаны в [BLOCKS-REFERENCE.md](./docs/BLOCKS-REFERENCE.md)
+A: 28 блоков, описаны в [BLOCKS-REFERENCE.md](BLOCKS-REFERENCE.md)
 
 ---
 

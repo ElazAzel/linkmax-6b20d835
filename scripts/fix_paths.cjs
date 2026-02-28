@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const projectRoot = path.join(__dirname, '..');
+
 const corrections = {
     'users2': 'users-2',
     'edit2': 'edit-2',
@@ -22,7 +24,6 @@ function processFile(filePath) {
 
     for (const [wrong, right] of Object.entries(corrections)) {
         if (wrong.includes('import')) {
-            // Replace whole lines for types
             content = content.replace(wrong, right);
         } else {
             const wrongPath = `lucide-react/dist/esm/icons/${wrong}`;
@@ -50,4 +51,4 @@ function walkDir(dir) {
     }
 }
 
-walkDir(path.join(__dirname, 'src'));
+walkDir(path.join(projectRoot, 'src'));

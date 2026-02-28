@@ -85,8 +85,8 @@ After adding the secret, the next push to `main` will automatically:
 
 ## 📝 Related Files
 
-- Workflow definition: [.github/workflows/deploy.yml](.github/workflows/deploy.yml)
-- Cloudflare config: [cloudflare-worker/wrangler.toml](cloudflare-worker/wrangler.toml)
+- Workflow definition: [.github/workflows/deploy.yml](../.github/workflows/deploy.yml)
+- Cloudflare config: [cloudflare-worker/wrangler.toml](../cloudflare-worker/wrangler.toml)
 - Deployment checklist: [DEPLOYMENT-CHECKLIST.md](DEPLOYMENT-CHECKLIST.md)
 
 ---

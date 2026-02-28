@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const projectRoot = path.join(__dirname, '..');
+
 function walkDir(dir) {
     let results = [];
     const list = fs.readdirSync(dir);
@@ -19,7 +21,7 @@ function walkDir(dir) {
     return results;
 }
 
-const files = walkDir(path.join(__dirname, 'src'));
+const files = walkDir(path.join(projectRoot, 'src'));
 
 let modifiedCount = 0;
 
@@ -33,7 +35,6 @@ for (const file of files) {
         content = content.replace(/import\s+\{\s*useRouter\s*\}\s+from\s+['"]next\/navigation['"];?/, "import { useNavigate } from 'react-router-dom';");
         content = content.replace(/import\s+\{\s*useRouter\s*,\s*useParams\s*\}\s+from\s+['"]next\/navigation['"];?/, "import { useNavigate, useParams } from 'react-router-dom';");
         content = content.replace(/import\s+\{\s*usePathname\s*,\s*useRouter\s*,\s*useSearchParams\s*\}\s+from\s+['"]next\/navigation['"];?/, "import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';");
-        content = content.replace(/import\s+\{\s*useRouter\s*,\s*useSearchParams\s*\}\s+from\s+['"]next\/navigation['"];?/, "import { useNavigate, useSearchParams } from 'react-router-dom';");
 
         content = content.replace(/const\s+router\s*=\s*useRouter\(\);?/g, "const navigate = useNavigate();");
         content = content.replace(/router\.push\(/g, "navigate(");
@@ -48,7 +49,6 @@ for (const file of files) {
 
     if (content.match(/import.*useParams.*next\/navigation/)) {
         content = content.replace(/import\s+\{\s*useParams\s*,\s*useSearchParams\s*\}\s+from\s+['"]next\/navigation['"];?/, "import { useParams, useSearchParams } from 'react-router-dom';");
-        content = content.replace(/import\s+\{\s*useParams\s*\}\s+from\s+['"]next\/navigation['"];?/, "import { useParams } from 'react-router-dom';");
     }
 
     let reactRouterDomImports = [];

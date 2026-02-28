@@ -1,4 +1,9 @@
-import { generateBlocksFromTemplate } from './src/lib/blocks/internal-builder';
+/**
+ * One-off script to evaluate internal block builder. Run from project root:
+ * npx tsx scripts/evaluate-internal-builder.ts
+ * or: node --loader ts-node/esm scripts/evaluate-internal-builder.ts
+ */
+import { generateBlocksFromTemplate } from '../src/lib/blocks/internal-builder';
 
 const mockTemplate = [
     { type: 'profile', id: 'tmpl-profile' }
@@ -18,15 +23,15 @@ const generated = generateBlocksFromTemplate(mockTemplate, mockUserInput);
 
 const summary = generated.map(b => {
     let details = '';
-    const anim = (b as any).nameAnimation ? `[Anim: ${(b as any).nameAnimation}]` : '';
-    const size = (b as any).blockSize ? `[Size: ${(b as any).blockSize}]` : '[Size: default]';
+    const anim = (b as Record<string, unknown>).nameAnimation ? `[Anim: ${(b as Record<string, unknown>).nameAnimation}]` : '';
+    const size = (b as Record<string, unknown>).blockSize ? `[Size: ${(b as Record<string, unknown>).blockSize}]` : '[Size: default]';
 
-    if (b.type === 'scratch') details = `(Gift: ${(b as any).content})`;
+    if (b.type === 'scratch') details = `(Gift: ${(b as Record<string, unknown>).content})`;
     if (b.type === 'profile') details = `${anim}`;
-    if (b.type === 'button') details = `(CTA URL: ${(b as any).url})`;
-    if (b.type === 'map') details = `(Address: ${(b as any).address})`;
-    if (b.type === 'video') details = `(Video URL: ${(b as any).url})`;
-    if (b.type === 'text') details = `(Starts with: ${(b as any).content.slice(0, 30)}...)`;
+    if (b.type === 'button') details = `(CTA URL: ${(b as Record<string, unknown>).url})`;
+    if (b.type === 'map') details = `(Address: ${(b as Record<string, unknown>).address})`;
+    if (b.type === 'video') details = `(Video URL: ${(b as Record<string, unknown>).url})`;
+    if (b.type === 'text') details = `(Starts with: ${((b as Record<string, unknown>).content as string)?.slice(0, 30)}...)`;
 
     return `${b.type} ${size} ${details}`;
 });
