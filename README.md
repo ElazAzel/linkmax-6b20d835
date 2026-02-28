@@ -137,6 +137,7 @@ lnkmx/
 
 ## 📖 Documentation
 
+- **[Docs overview](docs/README.md)**: Entry point and navigation.
 - **[Developer Quickstart](docs/getting-started/DEVELOPER-QUICKSTART.md)**: Get running in minutes.
 - **[Comprehensive Platform Guide](docs/architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)**: Product vision, modules, and roadmap.
 - **[Architecture](docs/architecture/architecture.md)**: High-level system design.

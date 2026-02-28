@@ -1,10 +1,11 @@
 # 📚 Индекс документации InkMax
 
-**Версия:** 2.2  
+**Версия:** 2.3  
 **Дата обновления:** 28 февраля 2026  
 **Статус:** Updated ✅
 
-Документы в `docs/` разнесены по смыслу по подпапкам (см. [Структура docs](#-структура-docs)).
+Документы в `docs/` разнесены по смыслу по подпапкам (см. [Структура docs](#-структура-docs)).  
+**Точка входа:** [README.md](README.md). **Термины:** [GLOSSARY.md](GLOSSARY.md).
 
 ---
 
@@ -53,6 +54,13 @@
 
 ## 📖 Полный каталог по папкам
 
+### Корень docs/
+| Документ | Назначение |
+|----------|------------|
+| **README.md** | Точка входа в документацию, навигация по папкам |
+| **INDEX.md** | Краткий индекс по разделам |
+| **GLOSSARY.md** | Глоссарий терминов проекта и ссылка на переводы |
+
 ### getting-started/
 | Документ | Назначение |
 |----------|------------|
@@ -61,6 +69,7 @@
 ### architecture/
 | Документ | Назначение |
 |----------|------------|
+| **README.md** | Обзор раздела и навигация по документам архитектуры |
 | **COMPREHENSIVE_PLATFORM_GUIDE.md** | Полная документация платформы |
 | **architecture.md** | Архитектура системы |
 | **ARCHITECTURE_PATTERNS.md** | Паттерны архитектуры |
@@ -74,6 +83,7 @@
 ### audits/
 | Документ | Назначение |
 |----------|------------|
+| **README.md** | Актуальные vs исторические аудиты, источник истины (PLATFORM_SNAPSHOT) |
 | **FULL_PLATFORM_AUDIT_2026_02_18.md** | Полный аудит платформы |
 | **AUDIT_REPORT_2026_02_18.md**, **AUDIT_REPORT_2026_02_27.md** | Отчёты аудита |
 | **DEEP_SECURITY_AUDIT_2026_02_18.md** | Аудит безопасности |
@@ -94,9 +104,10 @@
 ### seo/
 | Документ | Назначение |
 |----------|------------|
+| **README.md** | Обзор раздела SEO/SSR/AEO/GEO и навигация |
 | **SEO-SSR.md** | SSR и бот-рендеринг |
 | **aeo-geo-implementation.md** | AEO/GEO реализация |
-| **QUICK-START-SEO-GEO-AEO.md**, **SSR-GEO-AEO-QUICK-START.md** | Краткие старты |
+| **QUICK-START-SEO-GEO-AEO.md** | Краткий старт (ссылки на основные документы) |
 | **INDEXING.md**, **PRERENDER.md**, **search-console.md**, **CHECKLIST.md** | Технические SEO-документы |
 
 ### security/
@@ -121,8 +132,9 @@
 | **API.md** | API и Edge Functions |
 | **DATABASE_SCHEMA_GUIDE.md** | Схема БД |
 | **i18n_ops.md** | i18n-операции |
-| **translation_playbook.md** | Playbook переводов |
+| **translation_playbook.md** | Playbook переводов (глоссарий RU/KK/EN, стиль) |
 | **demo-accounts.md** | Демо-аккаунты |
+| **README.md** | Обзор раздела API, БД, i18n |
 
 ### product/
 | Документ | Назначение |
@@ -218,6 +230,9 @@ A: [SECURITY.md](security/SECURITY.md)
 **Q: Как развернуть приложение?**  
 A: [DEPLOYMENT-CHECKLIST.md](deployment/DEPLOYMENT-CHECKLIST.md), [runbooks/DEPLOYMENT.md](deployment/runbooks/DEPLOYMENT.md)
 
+**Q: Где глоссарий терминов?**  
+A: [GLOSSARY.md](GLOSSARY.md); для переводов RU/KK/EN — [translation_playbook.md](implementation/translation_playbook.md)
+
 ---
 
-**Версия:** 2.2 · **Дата:** 28 февраля 2026 · **Статус:** ✅ Актуально
+**Версия:** 2.3 · **Дата:** 28 февраля 2026 · **Статус:** ✅ Актуально
