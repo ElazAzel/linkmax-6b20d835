@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Consenso ai cookie",
+    "message": "Utilizziamo l'analytics per migliorare la piattaforma. Clicca \"Accetta\" per consentire la raccolta anonima dei dati di visita.",
+    "privacy": "Informativa sulla privacy",
+    "reject": "Rifiuta",
+    "accept": "Accetta"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "Pagina non trovata",
+    "returnHome": "Torna alla home"
+  },
+  "tasks": {
+    "status": {
+      "todo": "Da fare",
+      "inProgress": "In corso",
+      "done": "Fatto",
+      "cancelled": "Annullato"
+    },
+    "priority": {
+      "low": "Bassa",
+      "medium": "Media",
+      "high": "Alta",
+      "urgent": "Urgente"
+    },
+    "empty": "Vuoto",
+    "editTitle": "Modifica attività",
+    "titleLabel": "Titolo",
+    "descriptionLabel": "Descrizione",
+    "descriptionPlaceholder": "Aggiungi descrizione attività...",
+    "statusLabel": "Stato",
+    "priorityLabel": "Priorità",
+    "dueDateLabel": "Scadenza",
+    "assigneeLabel": "Assegnatario",
+    "unassigned": "Non assegnato",
+    "contactLabel": "Contatto",
+    "noContact": "Nessun contatto",
+    "dealLabel": "Affare",
+    "noDeal": "Nessun affare",
+    "createdAt": "Creato",
+    "completedAt": "Completato",
+    "save": "Salva"
   }
 }

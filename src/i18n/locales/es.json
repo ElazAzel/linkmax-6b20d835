@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Consentimiento de cookies",
+    "message": "Usamos análisis para mejorar la plataforma. Haz clic en \"Aceptar\" para permitir la recopilación anónima de datos de visitas.",
+    "privacy": "Política de privacidad",
+    "reject": "Rechazar",
+    "accept": "Aceptar"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "¡Página no encontrada!",
+    "returnHome": "Volver al inicio"
+  },
+  "tasks": {
+    "status": {
+      "todo": "Por hacer",
+      "inProgress": "En curso",
+      "done": "Hecho",
+      "cancelled": "Cancelado"
+    },
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "urgent": "Urgente"
+    },
+    "empty": "Vacío",
+    "editTitle": "Editar tarea",
+    "titleLabel": "Título",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Añadir descripción de la tarea...",
+    "statusLabel": "Estado",
+    "priorityLabel": "Prioridad",
+    "dueDateLabel": "Fecha límite",
+    "assigneeLabel": "Responsable",
+    "unassigned": "Sin asignar",
+    "contactLabel": "Contacto",
+    "noContact": "Sin contacto",
+    "dealLabel": "Oportunidad",
+    "noDeal": "Sin oportunidad",
+    "createdAt": "Creado",
+    "completedAt": "Completado",
+    "save": "Guardar"
   }
 }

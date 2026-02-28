@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Cookie同意",
+    "message": "プラットフォーム改善のため分析を行っています。「同意」をクリックすると匿名の訪問データ収集を許可します。",
+    "privacy": "プライバシーポリシー",
+    "reject": "拒否",
+    "accept": "同意"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "ページが見つかりません",
+    "returnHome": "ホームに戻る"
+  },
+  "tasks": {
+    "status": {
+      "todo": "未着手",
+      "inProgress": "進行中",
+      "done": "完了",
+      "cancelled": "キャンセル"
+    },
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "urgent": "緊急"
+    },
+    "empty": "空",
+    "editTitle": "タスクを編集",
+    "titleLabel": "タイトル",
+    "descriptionLabel": "説明",
+    "descriptionPlaceholder": "タスクの説明を追加...",
+    "statusLabel": "ステータス",
+    "priorityLabel": "優先度",
+    "dueDateLabel": "期限",
+    "assigneeLabel": "担当者",
+    "unassigned": "未割り当て",
+    "contactLabel": "連絡先",
+    "noContact": "連絡先なし",
+    "dealLabel": "案件",
+    "noDeal": "案件なし",
+    "createdAt": "作成日",
+    "completedAt": "完了日",
+    "save": "保存"
   }
 }

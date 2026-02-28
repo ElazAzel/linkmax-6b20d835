@@ -108,7 +108,14 @@ This will:
 - Automatically fix missing `{{placeholders}}` in all target languages.
 - Delete the `i18n-queue.json` file.
 
-### 5. Verification
+### 5. Fill missing keys (all locales)
+To ensure every locale has the same keys as `en.json` and no empty strings (English fallback where not yet translated):
+```bash
+npm run i18n:fill
+```
+This runs `scripts/sync-locales-fill-missing.mjs`: for each locale file it deep-merges from `en.json` and fills only missing or empty values, preserving existing translations.
+
+### 6. Verification
 Check the coverage status at any time:
 ```bash
 npm run i18n:status

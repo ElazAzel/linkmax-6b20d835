@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Çerez onayı",
+    "message": "Platformu iyileştirmek için analitik kullanıyoruz. Anonim ziyaret verisi toplamaya izin vermek için \"Kabul Et\"e tıklayın.",
+    "privacy": "Gizlilik politikası",
+    "reject": "Reddet",
+    "accept": "Kabul Et"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "Sayfa bulunamadı",
+    "returnHome": "Ana sayfaya dön"
+  },
+  "tasks": {
+    "status": {
+      "todo": "Yapılacak",
+      "inProgress": "Devam ediyor",
+      "done": "Tamamlandı",
+      "cancelled": "İptal"
+    },
+    "priority": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek",
+      "urgent": "Acil"
+    },
+    "empty": "Boş",
+    "editTitle": "Görevi düzenle",
+    "titleLabel": "Başlık",
+    "descriptionLabel": "Açıklama",
+    "descriptionPlaceholder": "Görev açıklaması ekle...",
+    "statusLabel": "Durum",
+    "priorityLabel": "Öncelik",
+    "dueDateLabel": "Bitiş tarihi",
+    "assigneeLabel": "Atanan",
+    "unassigned": "Atanmamış",
+    "contactLabel": "İletişim",
+    "noContact": "İletişim yok",
+    "dealLabel": "Anlaşma",
+    "noDeal": "Anlaşma yok",
+    "createdAt": "Oluşturuldu",
+    "completedAt": "Tamamlandı",
+    "save": "Kaydet"
   }
 }

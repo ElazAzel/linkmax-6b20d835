@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Consentement aux cookies",
+    "message": "Nous utilisons l'analytique pour améliorer la plateforme. Cliquez sur \"Accepter\" pour autoriser la collecte anonyme des données de visite.",
+    "privacy": "Politique de confidentialité",
+    "reject": "Refuser",
+    "accept": "Accepter"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "Page introuvable",
+    "returnHome": "Retour à l'accueil"
+  },
+  "tasks": {
+    "status": {
+      "todo": "À faire",
+      "inProgress": "En cours",
+      "done": "Terminé",
+      "cancelled": "Annulé"
+    },
+    "priority": {
+      "low": "Basse",
+      "medium": "Moyenne",
+      "high": "Haute",
+      "urgent": "Urgent"
+    },
+    "empty": "Vide",
+    "editTitle": "Modifier la tâche",
+    "titleLabel": "Titre",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Ajouter une description...",
+    "statusLabel": "Statut",
+    "priorityLabel": "Priorité",
+    "dueDateLabel": "Échéance",
+    "assigneeLabel": "Responsable",
+    "unassigned": "Non assigné",
+    "contactLabel": "Contact",
+    "noContact": "Aucun contact",
+    "dealLabel": "Affaire",
+    "noDeal": "Aucune affaire",
+    "createdAt": "Créé",
+    "completedAt": "Terminé",
+    "save": "Enregistrer"
   }
 }

@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Cookie 同意",
+    "message": "我们使用分析以改进平台。点击「接受」即表示允许收集匿名访问数据。",
+    "privacy": "隐私政策",
+    "reject": "拒绝",
+    "accept": "接受"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "页面未找到",
+    "returnHome": "返回首页"
+  },
+  "tasks": {
+    "status": {
+      "todo": "待办",
+      "inProgress": "进行中",
+      "done": "已完成",
+      "cancelled": "已取消"
+    },
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "urgent": "紧急"
+    },
+    "empty": "空",
+    "editTitle": "编辑任务",
+    "titleLabel": "标题",
+    "descriptionLabel": "描述",
+    "descriptionPlaceholder": "添加任务描述...",
+    "statusLabel": "状态",
+    "priorityLabel": "优先级",
+    "dueDateLabel": "截止日期",
+    "assigneeLabel": "负责人",
+    "unassigned": "未分配",
+    "contactLabel": "联系人",
+    "noContact": "无联系人",
+    "dealLabel": "交易",
+    "noDeal": "无交易",
+    "createdAt": "创建于",
+    "completedAt": "完成于",
+    "save": "保存"
   }
 }

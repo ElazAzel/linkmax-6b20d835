@@ -65,8 +65,8 @@
     "privacyDescription": "Жеке деректерді өңдеу саясатын оқыңыз",
     "privacyLink": "Құпиялылық саясаты",
     "andThe": "Және",
-    "paymentTerms": "PaymentTerms",
-    "paymentTermsDescription": "PaymentTermsDescription"
+    "paymentTerms": "Төлем шарттары",
+    "paymentTermsDescription": "Платформаның төлем және қайтару саясаты"
   },
   "common": {
     "close": "Жабу",
@@ -5254,7 +5254,38 @@
     "accept": "Қабылдау"
   },
   "notFound": {
-    "message": "Oops! Page not found",
-    "returnHome": "Return to Home"
+    "message": "Бет табылмады",
+    "returnHome": "Басты бетке"
+  },
+  "tasks": {
+    "status": {
+      "todo": "Орындалуы керек",
+      "inProgress": "Орындалуда",
+      "done": "Орындалды",
+      "cancelled": "Бас тартылды"
+    },
+    "priority": {
+      "low": "Төмен",
+      "medium": "Орташа",
+      "high": "Жоғары",
+      "urgent": "Шұғыл"
+    },
+    "empty": "Бос",
+    "editTitle": "Тапсырманы өңдеу",
+    "titleLabel": "Тақырып",
+    "descriptionLabel": "Сипаттама",
+    "descriptionPlaceholder": "Тапсырма сипаттамасын қосыңыз...",
+    "statusLabel": "Күйі",
+    "priorityLabel": "Басымдылық",
+    "dueDateLabel": "Мерзімі",
+    "assigneeLabel": "Жауапты",
+    "unassigned": "Тағайындалмаған",
+    "contactLabel": "Байланыс",
+    "noContact": "Байланыс жоқ",
+    "dealLabel": "Келісім",
+    "noDeal": "Келісім жоқ",
+    "createdAt": "Жасалған",
+    "completedAt": "Орындалған",
+    "save": "Сақтау"
   }
 }

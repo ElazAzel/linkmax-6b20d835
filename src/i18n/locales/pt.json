@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Consentimento de cookies",
+    "message": "Usamos análise para melhorar a plataforma. Clique em \"Aceitar\" para permitir a coleta anônima de dados de visitas.",
+    "privacy": "Política de privacidade",
+    "reject": "Recusar",
+    "accept": "Aceitar"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "Página não encontrada",
+    "returnHome": "Voltar ao início"
+  },
+  "tasks": {
+    "status": {
+      "todo": "A fazer",
+      "inProgress": "Em progresso",
+      "done": "Concluído",
+      "cancelled": "Cancelado"
+    },
+    "priority": {
+      "low": "Baixa",
+      "medium": "Média",
+      "high": "Alta",
+      "urgent": "Urgente"
+    },
+    "empty": "Vazio",
+    "editTitle": "Editar tarefa",
+    "titleLabel": "Título",
+    "descriptionLabel": "Descrição",
+    "descriptionPlaceholder": "Adicionar descrição da tarefa...",
+    "statusLabel": "Status",
+    "priorityLabel": "Prioridade",
+    "dueDateLabel": "Data de vencimento",
+    "assigneeLabel": "Responsável",
+    "unassigned": "Não atribuído",
+    "contactLabel": "Contacto",
+    "noContact": "Sem contacto",
+    "dealLabel": "Negócio",
+    "noDeal": "Sem negócio",
+    "createdAt": "Criado",
+    "completedAt": "Concluído",
+    "save": "Guardar"
   }
 }

@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Згода на cookie",
+    "message": "Мы выкарыстоўваем аналітыку для паляпшэння платформы. Націсніце \"Прыняць\", каб дазволіць збор ананімных даных наведванняў.",
+    "privacy": "Палітыка прыватнасці",
+    "reject": "Адхіліць",
+    "accept": "Прыняць"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "Старонка не знойдзена",
+    "returnHome": "На галоўную"
+  },
+  "tasks": {
+    "status": {
+      "todo": "Да выканання",
+      "inProgress": "Выконваецца",
+      "done": "Выканана",
+      "cancelled": "Скасавана"
+    },
+    "priority": {
+      "low": "Нізкая",
+      "medium": "Сярэдняя",
+      "high": "Высокая",
+      "urgent": "Тэрмінова"
+    },
+    "empty": "Пуста",
+    "editTitle": "Рэдагаваць задачу",
+    "titleLabel": "Назва",
+    "descriptionLabel": "Апісанне",
+    "descriptionPlaceholder": "Дадайце апісанне задачы...",
+    "statusLabel": "Статус",
+    "priorityLabel": "Прыярытэт",
+    "dueDateLabel": "Тэрмін",
+    "assigneeLabel": "Выканавец",
+    "unassigned": "Не прызначана",
+    "contactLabel": "Кантакт",
+    "noContact": "Няма кантакту",
+    "dealLabel": "Зделка",
+    "noDeal": "Няма здзелкі",
+    "createdAt": "Створана",
+    "completedAt": "Завершана",
+    "save": "Захаваць"
   }
 }

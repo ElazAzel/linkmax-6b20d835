@@ -65,8 +65,8 @@
     "privacyDescription": "Shaxsiy ma'lumotlarni qayta ishlash siyosatini o'qing",
     "privacyLink": "Maxfiylik siyosati",
     "andThe": "Va",
-    "paymentTerms": "PaymentTerms",
-    "paymentTermsDescription": "PaymentTermsDescription"
+    "paymentTerms": "To'lov shartlari",
+    "paymentTermsDescription": "Platformaning to'lov va qaytarish siyosati"
   },
   "common": {
     "close": "Yopish",
@@ -5147,13 +5147,45 @@
     "settings": "Sozlamalar"
   },
   "cookies": {
-    "title": "Cookie consent",
+    "title": "Cookie roziligi",
+    "message": "Platformani yaxshilash uchun analitikadan foydalanamiz. Anonim tashrif ma'lumotlarini to'plashga ruxsat berish uchun \"Qabul qilish\" ni bosing.",
     "privacy": "Maxfiylik siyosati",
     "reject": "Rad etish",
     "accept": "Qabul qiling"
   },
   "notFound": {
-    "message": "Oops! Page not found",
-    "returnHome": "Return to Home"
+    "message": "Sahifa topilmadi",
+    "returnHome": "Bosh sahifaga"
+  },
+  "tasks": {
+    "status": {
+      "todo": "Bajarilishi kerak",
+      "inProgress": "Jarayonda",
+      "done": "Bajarildi",
+      "cancelled": "Bekor qilindi"
+    },
+    "priority": {
+      "low": "Past",
+      "medium": "O'rta",
+      "high": "Yuqori",
+      "urgent": "Shoshilinch"
+    },
+    "empty": "Bo'sh",
+    "editTitle": "Vazifani tahrirlash",
+    "titleLabel": "Sarlavha",
+    "descriptionLabel": "Tavsif",
+    "descriptionPlaceholder": "Vazifa tavsifini qo'shing...",
+    "statusLabel": "Holat",
+    "priorityLabel": "Ustuvorlik",
+    "dueDateLabel": "Muddat",
+    "assigneeLabel": "Javobgar",
+    "unassigned": "Tayinlanmagan",
+    "contactLabel": "Aloqa",
+    "noContact": "Aloqa yo'q",
+    "dealLabel": "Bitim",
+    "noDeal": "Bitim yo'q",
+    "createdAt": "Yaratilgan",
+    "completedAt": "Bajarilgan",
+    "save": "Saqlash"
   }
 }

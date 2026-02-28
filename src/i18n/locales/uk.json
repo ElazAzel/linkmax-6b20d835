@@ -5142,13 +5142,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "Згода на cookie",
+    "message": "Ми використовуємо аналітику для покращення платформи. Натисніть \"Прийняти\", щоб дозволити збір анонімних даних відвідувань.",
+    "privacy": "Політика конфіденційності",
+    "reject": "Відхилити",
+    "accept": "Прийняти"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "Сторінку не знайдено",
+    "returnHome": "На головну"
+  },
+  "tasks": {
+    "status": {
+      "todo": "До виконання",
+      "inProgress": "Виконується",
+      "done": "Виконано",
+      "cancelled": "Скасовано"
+    },
+    "priority": {
+      "low": "Низька",
+      "medium": "Середня",
+      "high": "Висока",
+      "urgent": "Терміново"
+    },
+    "empty": "Порожньо",
+    "editTitle": "Редагувати задачу",
+    "titleLabel": "Назва",
+    "descriptionLabel": "Опис",
+    "descriptionPlaceholder": "Додати опис задачі...",
+    "statusLabel": "Статус",
+    "priorityLabel": "Пріоритет",
+    "dueDateLabel": "Термін",
+    "assigneeLabel": "Виконавець",
+    "unassigned": "Не призначено",
+    "contactLabel": "Контакт",
+    "noContact": "Немає контакту",
+    "dealLabel": "Угода",
+    "noDeal": "Немає угоди",
+    "createdAt": "Створено",
+    "completedAt": "Завершено",
+    "save": "Зберегти"
   }
 }

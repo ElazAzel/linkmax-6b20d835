@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "쿠키 동의",
+    "message": "플랫폼 개선을 위해 분석을 사용합니다. \"동의\"를 클릭하면 익명 방문 데이터 수집을 허용합니다.",
+    "privacy": "개인정보 처리방침",
+    "reject": "거부",
+    "accept": "동의"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "페이지를 찾을 수 없습니다",
+    "returnHome": "홈으로"
+  },
+  "tasks": {
+    "status": {
+      "todo": "할 일",
+      "inProgress": "진행 중",
+      "done": "완료",
+      "cancelled": "취소됨"
+    },
+    "priority": {
+      "low": "낮음",
+      "medium": "중간",
+      "high": "높음",
+      "urgent": "긴급"
+    },
+    "empty": "비어 있음",
+    "editTitle": "작업 편집",
+    "titleLabel": "제목",
+    "descriptionLabel": "설명",
+    "descriptionPlaceholder": "작업 설명 추가...",
+    "statusLabel": "상태",
+    "priorityLabel": "우선순위",
+    "dueDateLabel": "마감일",
+    "assigneeLabel": "담당자",
+    "unassigned": "미할당",
+    "contactLabel": "연락처",
+    "noContact": "연락처 없음",
+    "dealLabel": "딜",
+    "noDeal": "딜 없음",
+    "createdAt": "생성됨",
+    "completedAt": "완료됨",
+    "save": "저장"
   }
 }

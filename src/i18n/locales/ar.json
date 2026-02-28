@@ -5108,13 +5108,45 @@
     "settings": ""
   },
   "cookies": {
-    "title": "",
-    "privacy": "",
-    "reject": "",
-    "accept": ""
+    "title": "موافقة ملفات تعريف الارتباط",
+    "message": "نستخدم التحليلات لتحسين المنصة. انقر \"قبول\" للسماح بجمع بيانات الزيارات المجهولة.",
+    "privacy": "سياسة الخصوصية",
+    "reject": "رفض",
+    "accept": "قبول"
   },
   "notFound": {
-    "message": "",
-    "returnHome": ""
+    "message": "عذراً! الصفحة غير موجودة",
+    "returnHome": "العودة للرئيسية"
+  },
+  "tasks": {
+    "status": {
+      "todo": "للتنفيذ",
+      "inProgress": "قيد التنفيذ",
+      "done": "تم",
+      "cancelled": "ملغى"
+    },
+    "priority": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية",
+      "urgent": "عاجلة"
+    },
+    "empty": "فارغ",
+    "editTitle": "تعديل المهمة",
+    "titleLabel": "العنوان",
+    "descriptionLabel": "الوصف",
+    "descriptionPlaceholder": "أضف وصف المهمة...",
+    "statusLabel": "الحالة",
+    "priorityLabel": "الأولوية",
+    "dueDateLabel": "تاريخ الاستحقاق",
+    "assigneeLabel": "المسند إليه",
+    "unassigned": "غير مسند",
+    "contactLabel": "جهة الاتصال",
+    "noContact": "لا يوجد اتصال",
+    "dealLabel": "الصفقة",
+    "noDeal": "لا توجد صفقة",
+    "createdAt": "تاريخ الإنشاء",
+    "completedAt": "تاريخ الإكمال",
+    "save": "حفظ"
   }
 }
