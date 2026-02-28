@@ -304,7 +304,7 @@ export default function PublicPage() {
               </div>
 
               {/* Freemium Watermark - also check hideBranding flag */}
-              <FreemiumWatermark show={showWatermark && !pageData?.isPremium && !pageData?.hideBranding} />
+              <FreemiumWatermark show={showWatermark && !pageData?.hideBranding} />
 
               {/* QR Dialog */}
               <Dialog open={showQR} onOpenChange={setShowQR}>
