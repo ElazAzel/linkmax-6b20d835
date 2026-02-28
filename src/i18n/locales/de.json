@@ -765,54 +765,80 @@
     "completeDescription": ""
   },
   "landing": {
+    "ticker": { "title": "Vertraut von Kreativen weltweit", "creators": "Kreative", "coaches": "Coaches", "designers": "Designer", "startups": "Startups", "agencies": "Agenturen", "clinics": "Kliniken", "studios": "Studios", "experts": "Experten" },
+    "bento": {
+      "sectionTitle": "Alles, was Sie zum Wachstum brauchen",
+      "sectionDesc": "Website-Builder + CRM + Analytics. Eine Plattform statt zehn Tools.",
+      "aiTitle": "KI-Seitenbuilder",
+      "aiDesc": "Beschreiben Sie Ihr Geschäft, die KI erstellt in Sekunden Struktur, Text und Layout.",
+      "aiPowered": "KI-gestützt",
+      "aiSub": "Struktur • Text • Design",
+      "analyticsTitle": "Live-Analytics",
+      "analyticsDesc": "Jeden Klick, Aufruf und Conversion in Echtzeit, datenschutzfreundlich.",
+      "mobileTitle": "Mobile-First-Editor",
+      "mobileDesc": "Volle Bearbeitung vom Smartphone. Erstellen und veröffentlichen Sie unterwegs.",
+      "crmTitle": "Integriertes CRM",
+      "crmDesc": "Leads, Deals und Kunden im Kanban-Pipeline verwalten. Keine Extra-Tools nötig.",
+      "crmNew": "Neu",
+      "crmInProgress": "In Bearbeitung",
+      "crmDone": "Erledigt",
+      "leadsTitle": "Leads sofort in Telegram",
+      "leadsDesc": "Leads direkt in Telegram erhalten. Verpassen Sie keinen Kunden.",
+      "lead1": "Neuer Lead: Sarah K.",
+      "lead2": "Neuer Lead: Alex M.",
+      "leadCount": "+12 heute",
+      "bookingTitle": "Online-Buchung",
+      "bookingDesc": "Kunden buchen Slots direkt. Automatischer Kalender, keine Anrufe.",
+      "bookingSlot": "Verfügbar"
+    },
     "v6": {
       "hero": {
         "badge": "V6.0 Live",
-        "titlePrefix": "Everything you do —",
-        "titleHighlight": "in one link.",
-        "titleSuffix": "",
-        "titleBrand": "",
-        "description": "Combine content, products, and services into a beautiful page. No designers or coding required. Accept orders and grow.",
-        "ctaPrimary": "Create Page for Free",
-        "ctaSecondary": "View Examples",
-        "noCard": "No credit card",
-        "cancelAnytime": "Cancel anytime",
+        "titlePrefix": "Alles, was Sie tun",
+        "titleHighlight": "in einem Link.",
+        "titleSuffix": "für Ihr Geschäft",
+        "titleBrand": "lnkmx.my",
+        "description": "Kombinieren Sie Inhalte, Produkte und Dienstleistungen auf einer Seite. Ohne Designer und Programmierer. Bestellungen annehmen und wachsen.",
+        "ctaPrimary": "Seite kostenlos erstellen",
+        "ctaSecondary": "Beispiele ansehen",
+        "noCard": "Keine Kreditkarte nötig",
+        "cancelAnytime": "Jederzeit kündbar",
         "cardRevenue": {
-          "label": "Revenue",
-          "value": "$12,450"
+          "label": "Umsatz",
+          "value": "12.450$"
         },
         "cardLead": {
-          "title": "New Client!",
-          "subtitle": "Just now via lnkmx.my"
+          "title": "Neuer Kunde!",
+          "subtitle": "Gerade über lnkmx.my"
         }
       },
       "features": {
-        "title": "More than just a link.",
-        "subtitle": "A complete business tool.",
-        "description": "Everything you need to sell and connect with customers in one place.",
+        "title": "Mehr als nur ein Link.",
+        "subtitle": "Ein komplettes Business-Tool.",
+        "description": "Alles zum Verkaufen und für die Kundenkommunikation – an einem Ort.",
         "mobileBuilder": {
-          "title": "Mobile-First Builder",
-          "desc": "Designed for the phone generation. Edit, preview, and publish directly from your mobile device."
+          "title": "Mobile-First-Editor",
+          "desc": "Für die Smartphone-Generation. Direkt vom Handy bearbeiten, prüfen und veröffentlichen."
         },
         "analytics": {
-          "title": "Real-time Analytics",
-          "desc": "Track clicks, views, and conversion events with privacy-focused built-in analytics."
+          "title": "Live-Analytics",
+          "desc": "Klicks, Aufrufe und Konversionen mit datenschutzfreundlicher Analytics verfolgen."
         },
         "domain": {
-          "title": "Custom Domain",
-          "desc": "Connect your own .com or .kz domain for professional branding."
+          "title": "Eigene Domain",
+          "desc": "Verbinden Sie .com oder .kz für professionelles Branding."
         },
         "seo": {
-          "title": "Instant SEO",
-          "desc": "AI-generated meta tags and schema markup ensuring perfect search indexing."
+          "title": "Sofort-SEO",
+          "desc": "KI-generierte Meta-Tags und Schema für perfekte Suchindexierung."
         },
         "blocks": {
           "title": "28+ Smart Blocks",
-          "desc": "From simple links to complex forms and booking systems."
+          "desc": "Von einfachen Links bis zu Formularen und Buchungssystemen."
         },
         "payments": {
-          "title": "Global Payments",
-          "desc": "Accept payments from anywhere via Stripe, Kaspi, or Crypto."
+          "title": "Zahlungen akzeptieren",
+          "desc": "Zahlungen von überall via Stripe, Kaspi oder Krypto."
         }
       },
       "pricing": {
@@ -4526,7 +4552,7 @@
       "buyTokens": "Tokens kaufen"
     },
     "securePayments": "",
-    "cancelAnytime": "",
+    "cancelAnytime": "Jederzeit kündbar",
     "moneyBack": "",
     "companyDetails": {
       "nameLine": "ARchitecKZ • БИН: 190540008684",

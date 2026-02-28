@@ -765,54 +765,80 @@
     "completeDescription": ""
   },
   "landing": {
+    "ticker": { "title": "Dünya çapında içerik üreticileri güveniyor", "creators": "İçerik Üreticileri", "coaches": "Koçlar", "designers": "Tasarımcılar", "startups": "Girişimler", "agencies": "Ajanslar", "clinics": "Klinikler", "studios": "Stüdyolar", "experts": "Uzmanlar" },
+    "bento": {
+      "sectionTitle": "Büyümek için ihtiyacınız olan her şey",
+      "sectionDesc": "Site oluşturucu + CRM + analitik. On araç yerine tek platform.",
+      "aiTitle": "Yapay Zeka Sayfa Oluşturucu",
+      "aiDesc": "İşinizi tanımlayın, yapay zeka saniyeler içinde yapı, metin ve düzen oluşturur.",
+      "aiPowered": "Yapay Zeka Destekli",
+      "aiSub": "Yapı • Metin • Tasarım",
+      "analyticsTitle": "Canlı Analitik",
+      "analyticsDesc": "Her tıklama, görüntüleme ve dönüşümü gerçek zamanlı, gizlilik odaklı analitikle takip edin.",
+      "mobileTitle": "Önce Mobil Düzenleyici",
+      "mobileDesc": "Telefonunuzdan tam düzenleme gücü. İstediğiniz yerde oluşturun ve yayınlayın.",
+      "crmTitle": "Dahili CRM",
+      "crmDesc": "Kanban pipeline ile lead, anlaşma ve müşterileri yönetin. Ekstra araç gerekmez.",
+      "crmNew": "Yeni",
+      "crmInProgress": "Devam Ediyor",
+      "crmDone": "Tamamlandı",
+      "leadsTitle": "Leadler anında Telegram'a",
+      "leadsDesc": "Leadleri doğrudan Telegram'da alın. Hiçbir müşteriyi kaçırmayın.",
+      "lead1": "Yeni lead: Sarah K.",
+      "lead2": "Yeni lead: Alex M.",
+      "leadCount": "Bugün +12",
+      "bookingTitle": "Çevrimiçi rezervasyon",
+      "bookingDesc": "Müşteriler slotları doğrudan rezerve etsin. Otomatik takvim, sıfır arama.",
+      "bookingSlot": "Müsait"
+    },
     "v6": {
       "hero": {
-        "badge": "",
-        "titlePrefix": "",
-        "titleHighlight": "",
-        "titleSuffix": "",
-        "titleBrand": "",
-        "description": "",
-        "ctaPrimary": "",
-        "ctaSecondary": "",
-        "noCard": "",
-        "cancelAnytime": "",
+        "badge": "V6.0 Canlı",
+        "titlePrefix": "Yaptığınız her şey",
+        "titleHighlight": "tek bir linkte.",
+        "titleSuffix": "iş için",
+        "titleBrand": "lnkmx.my",
+        "description": "İçerik, ürün ve hizmetleri güzel bir sayfada birleştirin. Tasarımcı ve programcı olmadan. Sipariş alın, büyüyün.",
+        "ctaPrimary": "Ücretsiz sayfa oluştur",
+        "ctaSecondary": "Örnekleri gör",
+        "noCard": "Kredi kartı gerekmez",
+        "cancelAnytime": "İstediğiniz zaman iptal",
         "cardRevenue": {
-          "label": "",
-          "value": ""
+          "label": "Gelir",
+          "value": "12.450$"
         },
         "cardLead": {
-          "title": "",
-          "subtitle": ""
+          "title": "Yeni müşteri!",
+          "subtitle": "lnkmx.my üzerinden geldi"
         }
       },
       "features": {
-        "title": "",
-        "subtitle": "",
-        "description": "",
+        "title": "Sadece bir linkten fazlası.",
+        "subtitle": "Tam bir iş aracı.",
+        "description": "Satış ve müşteri iletişimi için gereken her şey tek yerde.",
         "mobileBuilder": {
-          "title": "",
-          "desc": ""
+          "title": "Mobil tasarımcı",
+          "desc": "Akıllı telefon nesli için. Telefondan düzenleyin, inceleyin, yayınlayın."
         },
         "analytics": {
-          "title": "",
-          "desc": ""
+          "title": "Canlı analitik",
+          "desc": "Tıklama, görüntüleme ve dönüşümleri gizliliğe saygılı şekilde takip edin."
         },
         "domain": {
-          "title": "",
-          "desc": ""
+          "title": "Kendi domaininiz",
+          "desc": "Profesyonel marka için .com veya .kz domain bağlayın."
         },
         "seo": {
-          "title": "",
-          "desc": ""
+          "title": "Anında SEO",
+          "desc": "Mükemmel indeksleme için yapay zeka ile meta etiketler ve şema."
         },
         "blocks": {
-          "title": "",
-          "desc": ""
+          "title": "28+ akıllı blok",
+          "desc": "Basit linklerden form ve rezervasyon sistemlerine."
         },
         "payments": {
-          "title": "",
-          "desc": ""
+          "title": "Ödeme kabul et",
+          "desc": "Stripe, Kaspi veya kripto ile her yerden ödeme alın."
         }
       },
       "pricing": {

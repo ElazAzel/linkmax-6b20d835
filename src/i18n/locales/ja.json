@@ -765,54 +765,80 @@
     "completeDescription": ""
   },
   "landing": {
+    "ticker": { "title": "世界中のクリエイターに信頼されています", "creators": "クリエイター", "coaches": "コーチ", "designers": "デザイナー", "startups": "スタートアップ", "agencies": "エージェンシー", "clinics": "クリニック", "studios": "スタジオ", "experts": "エキスパート" },
+    "bento": {
+      "sectionTitle": "成長に必要なすべて",
+      "sectionDesc": "サイトビルダー + CRM + 分析。10個のツールの代わりに1つのプラットフォーム。",
+      "aiTitle": "AIページビルダー",
+      "aiDesc": "ビジネスを説明するだけで、AIが数秒で構造・コピー・レイアウトを作成。",
+      "aiPowered": "AI搭載",
+      "aiSub": "構造 • コピー • デザイン",
+      "analyticsTitle": "ライブ分析",
+      "analyticsDesc": "クリック、表示、コンバージョンをリアルタイムで追跡。プライバシーを重視した分析。",
+      "mobileTitle": "モバイルファーストエディター",
+      "mobileDesc": "スマホからフル編集。外出先でも作成・公開。",
+      "crmTitle": "内蔵CRM",
+      "crmDesc": "リード、案件、クライアントをカンバンパイプラインで管理。追加ツール不要。",
+      "crmNew": "新規",
+      "crmInProgress": "進行中",
+      "crmDone": "完了",
+      "leadsTitle": "リードをTelegramに即配信",
+      "leadsDesc": "リードをTelegramに直接届け。顧客を取り逃がしません。",
+      "lead1": "新規リード: Sarah K.",
+      "lead2": "新規リード: Alex M.",
+      "leadCount": "今日+12件",
+      "bookingTitle": "オンライン予約",
+      "bookingDesc": "クライアントが直接スロットを予約。自動カレンダー、電話不要。",
+      "bookingSlot": "空きあり"
+    },
     "v6": {
       "hero": {
-        "badge": "",
-        "titlePrefix": "",
-        "titleHighlight": "",
-        "titleSuffix": "",
-        "titleBrand": "",
-        "description": "",
-        "ctaPrimary": "",
-        "ctaSecondary": "",
-        "noCard": "",
-        "cancelAnytime": "",
+        "badge": "V6.0 ライブ",
+        "titlePrefix": "あなたのやることすべて",
+        "titleHighlight": "1つのリンクで。",
+        "titleSuffix": "ビジネスに",
+        "titleBrand": "lnkmx.my",
+        "description": "コンテンツ、商品、サービスを1つの美しいページに。デザイナーやプログラマー不要。注文を受け、成長を。",
+        "ctaPrimary": "無料でページを作成",
+        "ctaSecondary": "例を見る",
+        "noCard": "クレジットカード不要",
+        "cancelAnytime": "いつでも解約可",
         "cardRevenue": {
-          "label": "",
-          "value": ""
+          "label": "収益",
+          "value": "12,450ドル"
         },
         "cardLead": {
-          "title": "",
-          "subtitle": ""
+          "title": "新規顧客！",
+          "subtitle": "lnkmx.my経由で届きました"
         }
       },
       "features": {
-        "title": "",
-        "subtitle": "",
-        "description": "",
+        "title": "リンク以上のもの。",
+        "subtitle": "ビジネスツール一式。",
+        "description": "販売と顧客とのやり取りに必要なすべてが1つに。",
         "mobileBuilder": {
-          "title": "",
-          "desc": ""
+          "title": "モバイルデザイナー",
+          "desc": "スマホ世代向け。スマホから編集・確認・公開。"
         },
         "analytics": {
-          "title": "",
-          "desc": ""
+          "title": "ライブ分析",
+          "desc": "クリック、表示、コンバージョンを追跡。プライバシー重視。"
         },
         "domain": {
-          "title": "",
-          "desc": ""
+          "title": "独自ドメイン",
+          "desc": ".comや.kzドメインを接続してプロのブランディングを。"
         },
         "seo": {
-          "title": "",
-          "desc": ""
+          "title": "即座のSEO",
+          "desc": "AI生成のメタタグとスキーマで検索インデックス最適化。"
         },
         "blocks": {
-          "title": "",
-          "desc": ""
+          "title": "28以上のスマートブロック",
+          "desc": "シンプルなリンクからフォーム・予約システムまで。"
         },
         "payments": {
-          "title": "",
-          "desc": ""
+          "title": "決済を受け付ける",
+          "desc": "Stripe、Kaspi、暗号でどこからでも決済。"
         }
       },
       "pricing": {

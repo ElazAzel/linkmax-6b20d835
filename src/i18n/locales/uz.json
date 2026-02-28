@@ -765,6 +765,32 @@
     "completeDescription": "Sizning sahifangiz yaratilgan va tahrirlashga tayyor"
   },
   "landing": {
+    "ticker": { "title": "Butun dunyo yaratuvchilari ishonadi", "creators": "Yaratuvchilar", "coaches": "Murabbiylar", "designers": "Dizaynerlar", "startups": "Startaplar", "agencies": "Agentliklar", "clinics": "Klinikalar", "studios": "Studiyalar", "experts": "Ekspertlar" },
+    "bento": {
+      "sectionTitle": "O'sish uchun kerak bo'lgan hamma narsa",
+      "sectionDesc": "Sayt yaratuvchi + CRM + tahlil. O'n ta vosita o'rniga bitta platforma.",
+      "aiTitle": "AI bilan sahifa yaratish",
+      "aiDesc": "Biznesingizni tasvirlang, AI soniyalar ichida tuzilma, matn va joylashuvni yaratadi.",
+      "aiPowered": "AI asosida",
+      "aiSub": "Tuzilma • Matn • Dizayn",
+      "analyticsTitle": "Jonli tahlil",
+      "analyticsDesc": "Har bir bosish, ko'rish va konversiyani real vaqt rejimida, maxfiylikni hurmat qiluvchi tahlillar bilan kuzating.",
+      "mobileTitle": "Avval mobil muharrir",
+      "mobileDesc": "Telefoningizdan to'liq tahrir qilish. Yo'lda yarating va nashr qiling.",
+      "crmTitle": "O'rnatilgan CRM",
+      "crmDesc": "Lidlarni, bitimlarni va mijozlarni Kanban pipeline orqali boshqaring. Qo'shimcha vositalar kerak emas.",
+      "crmNew": "Yangi",
+      "crmInProgress": "Jarayonda",
+      "crmDone": "Bajarildi",
+      "leadsTitle": "Lidlar darhol Telegramga",
+      "leadsDesc": "Lidlarni to'g'ridan-to'g'ri Telegramda oling. Hech qanday mijozni o'tkazib yubormang.",
+      "lead1": "Yangi lid: Sarah K.",
+      "lead2": "Yangi lid: Alex M.",
+      "leadCount": "Bugun +12",
+      "bookingTitle": "Onlayn bron qilish",
+      "bookingDesc": "Mijozlar vaqtlarni to'g'ridan-to'g'ri bron qilsin. Avtomatik kalendar, telefon qo'ng'iroqlari yo'q.",
+      "bookingSlot": "Mavjud"
+    },
     "v6": {
       "hero": {
         "badge": "V6.0 Live",

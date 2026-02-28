@@ -765,54 +765,80 @@
     "completeDescription": ""
   },
   "landing": {
+    "ticker": { "title": "Approuvé par des créateurs du monde entier", "creators": "Créateurs", "coaches": "Coachs", "designers": "Designers", "startups": "Startups", "agencies": "Agences", "clinics": "Cliniques", "studios": "Studios", "experts": "Experts" },
+    "bento": {
+      "sectionTitle": "Tout ce qu'il vous faut pour grandir",
+      "sectionDesc": "Créateur de site + CRM + analytiques. Une plateforme à la place de dix outils.",
+      "aiTitle": "Créateur de pages IA",
+      "aiDesc": "Décrivez votre activité et l'IA crée la structure, le texte et la mise en page en quelques secondes.",
+      "aiPowered": "Propulsé par l'IA",
+      "aiSub": "Structure • Texte • Design",
+      "analyticsTitle": "Analytiques en direct",
+      "analyticsDesc": "Suivez chaque clic, vue et conversion avec des analytiques en temps réel et respectueuses de la vie privée.",
+      "mobileTitle": "Éditeur mobile d'abord",
+      "mobileDesc": "Toute la puissance d'édition depuis votre téléphone. Créez et publiez où que vous soyez.",
+      "crmTitle": "CRM intégré",
+      "crmDesc": "Gérez les leads, deals et clients depuis un pipeline Kanban. Pas d'outils supplémentaires.",
+      "crmNew": "Nouveau",
+      "crmInProgress": "En cours",
+      "crmDone": "Terminé",
+      "leadsTitle": "Leads instantanés vers Telegram",
+      "leadsDesc": "Recevez les leads directement dans Telegram. Ne manquez jamais un client.",
+      "lead1": "Nouveau lead : Sarah K.",
+      "lead2": "Nouveau lead : Alex M.",
+      "leadCount": "+12 aujourd'hui",
+      "bookingTitle": "Réservation en ligne",
+      "bookingDesc": "Les clients réservent des créneaux directement. Calendrier automatisé, zéro appel.",
+      "bookingSlot": "Disponible"
+    },
     "v6": {
       "hero": {
-        "badge": "",
-        "titlePrefix": "",
-        "titleHighlight": "",
-        "titleSuffix": "",
-        "titleBrand": "",
-        "description": "",
-        "ctaPrimary": "",
-        "ctaSecondary": "",
-        "noCard": "",
-        "cancelAnytime": "",
+        "badge": "V6.0 en direct",
+        "titlePrefix": "Tout ce que vous faites",
+        "titleHighlight": "un seul lien.",
+        "titleSuffix": "pour votre activité",
+        "titleBrand": "lnkmx.my",
+        "description": "Combinez contenu, produits et services sur une belle page. Sans designers ni code. Prenez des commandes et développez-vous.",
+        "ctaPrimary": "Créer une page gratuitement",
+        "ctaSecondary": "Voir les exemples",
+        "noCard": "Sans carte bancaire",
+        "cancelAnytime": "Annulez à tout moment",
         "cardRevenue": {
-          "label": "",
-          "value": ""
+          "label": "Revenus",
+          "value": "12 450 $"
         },
         "cardLead": {
-          "title": "",
-          "subtitle": ""
+          "title": "Nouveau client !",
+          "subtitle": "Vient d'arriver via lnkmx.my"
         }
       },
       "features": {
-        "title": "",
-        "subtitle": "",
-        "description": "",
+        "title": "Plus qu'un simple lien.",
+        "subtitle": "Un outil business complet.",
+        "description": "Tout ce qu'il faut pour vendre et communiquer avec les clients en un seul endroit.",
         "mobileBuilder": {
-          "title": "",
-          "desc": ""
+          "title": "Créateur mobile",
+          "desc": "Pensé pour le mobile. Modifiez, vérifiez et publiez depuis votre téléphone."
         },
         "analytics": {
-          "title": "",
-          "desc": ""
+          "title": "Analytiques en direct",
+          "desc": "Suivez les clics, vues et conversions dans le respect de la vie privée."
         },
         "domain": {
-          "title": "",
-          "desc": ""
+          "title": "Votre propre domaine",
+          "desc": "Connectez votre domaine .com ou .kz pour une image pro."
         },
         "seo": {
-          "title": "",
-          "desc": ""
+          "title": "SEO instantané",
+          "desc": "Balises meta et schéma générés par l'IA pour un référencement optimal."
         },
         "blocks": {
-          "title": "",
-          "desc": ""
+          "title": "28+ blocs intelligents",
+          "desc": "Des liens simples aux formulaires et systèmes de réservation."
         },
         "payments": {
-          "title": "",
-          "desc": ""
+          "title": "Accepter les paiements",
+          "desc": "Encaissement partout via Stripe, Kaspi ou crypto."
         }
       },
       "pricing": {

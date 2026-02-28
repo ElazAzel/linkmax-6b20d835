@@ -765,54 +765,80 @@
     "completeDescription": ""
   },
   "landing": {
+    "ticker": { "title": "Confiado por criadores em todo o mundo", "creators": "Criadores", "coaches": "Coaches", "designers": "Designers", "startups": "Startups", "agencies": "Agências", "clinics": "Clínicas", "studios": "Estúdios", "experts": "Especialistas" },
+    "bento": {
+      "sectionTitle": "Tudo o que precisa para crescer",
+      "sectionDesc": "Construtor de sites + CRM + analíticos. Uma plataforma em vez de dez ferramentas.",
+      "aiTitle": "Construtor de páginas com IA",
+      "aiDesc": "Descreva o seu negócio e a IA cria estrutura, texto e layout em segundos.",
+      "aiPowered": "Com IA",
+      "aiSub": "Estrutura • Texto • Design",
+      "analyticsTitle": "Analíticos em tempo real",
+      "analyticsDesc": "Acompanhe cada clique, visualização e conversão com analíticos em tempo real e respeitadores da privacidade.",
+      "mobileTitle": "Editor mobile first",
+      "mobileDesc": "Poder de edição completo no telemóvel. Crie e publique em qualquer lugar.",
+      "crmTitle": "CRM integrado",
+      "crmDesc": "Gerir leads, negócios e clientes num pipeline Kanban. Sem ferramentas extra.",
+      "crmNew": "Novo",
+      "crmInProgress": "Em curso",
+      "crmDone": "Concluído",
+      "leadsTitle": "Leads instantâneos para o Telegram",
+      "leadsDesc": "Receba os leads diretamente no Telegram. Não perca nenhum cliente.",
+      "lead1": "Novo lead: Sarah K.",
+      "lead2": "Novo lead: Alex M.",
+      "leadCount": "+12 hoje",
+      "bookingTitle": "Marcação online",
+      "bookingDesc": "Os clientes marcam slots diretamente. Calendário automático, zero chamadas.",
+      "bookingSlot": "Disponível"
+    },
     "v6": {
       "hero": {
-        "badge": "",
-        "titlePrefix": "",
-        "titleHighlight": "",
-        "titleSuffix": "",
-        "titleBrand": "",
-        "description": "",
-        "ctaPrimary": "",
-        "ctaSecondary": "",
-        "noCard": "",
-        "cancelAnytime": "",
+        "badge": "V6.0 ao vivo",
+        "titlePrefix": "Tudo o que faz",
+        "titleHighlight": "num link.",
+        "titleSuffix": "para o seu negócio",
+        "titleBrand": "lnkmx.my",
+        "description": "Combine conteúdo, produtos e serviços numa página bonita. Sem designers nem programação. Aceite encomendas e cresça.",
+        "ctaPrimary": "Criar página grátis",
+        "ctaSecondary": "Ver exemplos",
+        "noCard": "Sem cartão de crédito",
+        "cancelAnytime": "Cancele quando quiser",
         "cardRevenue": {
-          "label": "",
-          "value": ""
+          "label": "Receitas",
+          "value": "12.450$"
         },
         "cardLead": {
-          "title": "",
-          "subtitle": ""
+          "title": "Novo cliente!",
+          "subtitle": "Acabou de chegar via lnkmx.my"
         }
       },
       "features": {
-        "title": "",
-        "subtitle": "",
-        "description": "",
+        "title": "Mais do que um link.",
+        "subtitle": "Uma ferramenta de negócio completa.",
+        "description": "Tudo o que precisa para vender e comunicar com clientes num só sítio.",
         "mobileBuilder": {
-          "title": "",
-          "desc": ""
+          "title": "Construtor móvel",
+          "desc": "Feito para o telemóvel. Edite, reveja e publique a partir do telefone."
         },
         "analytics": {
-          "title": "",
-          "desc": ""
+          "title": "Analíticos em tempo real",
+          "desc": "Acompanhe cliques, visualizações e conversões com respeito pela privacidade."
         },
         "domain": {
-          "title": "",
-          "desc": ""
+          "title": "O seu domínio",
+          "desc": "Ligue o domínio .com ou .kz para uma marca profissional."
         },
         "seo": {
-          "title": "",
-          "desc": ""
+          "title": "SEO instantâneo",
+          "desc": "Meta tags e esquema gerados por IA para indexação perfeita."
         },
         "blocks": {
-          "title": "",
-          "desc": ""
+          "title": "28+ blocos inteligentes",
+          "desc": "De links simples a formulários e sistemas de reserva."
         },
         "payments": {
-          "title": "",
-          "desc": ""
+          "title": "Aceitar pagamentos",
+          "desc": "Receba pagamentos de qualquer sítio via Stripe, Kaspi ou cripto."
         }
       },
       "pricing": {

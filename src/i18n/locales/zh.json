@@ -765,54 +765,80 @@
     "completeDescription": ""
   },
   "landing": {
+    "ticker": { "title": "全球创作者信赖之选", "creators": "创作者", "coaches": "教练", "designers": "设计师", "startups": "初创", "agencies": "代理商", "clinics": "诊所", "studios": "工作室", "experts": "专家" },
+    "bento": {
+      "sectionTitle": "成长所需，一应俱全",
+      "sectionDesc": "建站 + CRM + 分析。一个平台替代十种工具。",
+      "aiTitle": "AI 页面生成器",
+      "aiDesc": "描述你的业务，AI 在几秒内生成结构、文案与版式。",
+      "aiPowered": "AI 驱动",
+      "aiSub": "结构 • 文案 • 设计",
+      "analyticsTitle": "实时分析",
+      "analyticsDesc": "追踪每次点击、浏览与转化，实时、隐私优先的分析。",
+      "mobileTitle": "移动优先编辑器",
+      "mobileDesc": "在手机上完成全部编辑。随时随地创建与发布。",
+      "crmTitle": "内置 CRM",
+      "crmDesc": "用看板管道管理线索、商机和客户。无需额外工具。",
+      "crmNew": "新建",
+      "crmInProgress": "进行中",
+      "crmDone": "已完成",
+      "leadsTitle": "线索即时推送到 Telegram",
+      "leadsDesc": "线索直接送达 Telegram。不错过任何客户。",
+      "lead1": "新线索：Sarah K.",
+      "lead2": "新线索：Alex M.",
+      "leadCount": "今日 +12",
+      "bookingTitle": "在线预约",
+      "bookingDesc": "客户直接预约时段。自动日历，无需电话。",
+      "bookingSlot": "可预约"
+    },
     "v6": {
       "hero": {
-        "badge": "",
-        "titlePrefix": "",
-        "titleHighlight": "",
-        "titleSuffix": "",
-        "titleBrand": "",
-        "description": "",
-        "ctaPrimary": "",
-        "ctaSecondary": "",
-        "noCard": "",
-        "cancelAnytime": "",
+        "badge": "V6.0 已上线",
+        "titlePrefix": "您所做的一切",
+        "titleHighlight": "一个链接。",
+        "titleSuffix": "为业务",
+        "titleBrand": "lnkmx.my",
+        "description": "将内容、产品和服务整合到精美页面。无需设计师与编程。接单并成长。",
+        "ctaPrimary": "免费创建页面",
+        "ctaSecondary": "查看示例",
+        "noCard": "无需信用卡",
+        "cancelAnytime": "随时取消",
         "cardRevenue": {
-          "label": "",
-          "value": ""
+          "label": "收入",
+          "value": "12,450 美元"
         },
         "cardLead": {
-          "title": "",
-          "subtitle": ""
+          "title": "新客户！",
+          "subtitle": "刚刚通过 lnkmx.my 到达"
         }
       },
       "features": {
-        "title": "",
-        "subtitle": "",
-        "description": "",
+        "title": "不止一个链接。",
+        "subtitle": "完整的业务工具。",
+        "description": "销售与客户沟通所需的一切，尽在一处。",
         "mobileBuilder": {
-          "title": "",
-          "desc": ""
+          "title": "移动端设计",
+          "desc": "为手机世代设计。在手机上编辑、预览、发布。"
         },
         "analytics": {
-          "title": "",
-          "desc": ""
+          "title": "实时分析",
+          "desc": "追踪点击、浏览与转化，尊重隐私。"
         },
         "domain": {
-          "title": "",
-          "desc": ""
+          "title": "自有域名",
+          "desc": "连接 .com 或 .kz 域名，打造专业品牌。"
         },
         "seo": {
-          "title": "",
-          "desc": ""
+          "title": "即时 SEO",
+          "desc": "AI 生成元标签与结构化数据，利于索引。"
         },
         "blocks": {
-          "title": "",
-          "desc": ""
+          "title": "28+ 智能模块",
+          "desc": "从简单链接到表单与预约系统。"
         },
         "payments": {
-          "title": "",
-          "desc": ""
+          "title": "接受支付",
+          "desc": "通过 Stripe、Kaspi 或加密货币随时随地收款。"
         }
       },
       "pricing": {
