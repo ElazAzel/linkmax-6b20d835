@@ -86,10 +86,10 @@ export function GalleryPageCard({
   return (
     <Card
       className={`
-        group overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer active:scale-[0.98]
+        group overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer active:scale-[0.98] border-0 shadow-none
         ${featured
-          ? 'bg-gradient-to-br from-primary/10 via-card/80 to-card border-primary/30'
-          : 'bg-card/50 backdrop-blur-lg border-border/30 hover:border-border/50'
+          ? 'bg-gradient-to-br from-primary/10 via-card/80 to-card'
+          : 'bg-card/50 backdrop-blur-lg'
         }
       `}
       onClick={(e) => handleView()}
