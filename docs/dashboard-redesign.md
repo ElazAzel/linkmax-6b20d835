@@ -1,5 +1,8 @@
 # Dashboard Redesign v2.0
 
+> **Status:** Implemented (February 2026)  
+> **Location:** `src/components/dashboard-v2/` — layout, screens, analytics, common components.
+
 ## Information Architecture (IA)
 
 ### New Section Structure

@@ -1,5 +1,7 @@
 # Developer Quickstart
 
+> **Last Updated:** February 28, 2026
+
 ## Prerequisites
 
 - **Node.js**: v18 or higher (v20 recommended)
@@ -22,18 +24,34 @@
     # If this fails, see Troubleshooting below
     ```
 
-3. **Start development server**:
+3. **Configure environment** (optional for first run):
+   - Copy `.env.example` to `.env`
+   - Set `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` (and optionally `VITE_APP_DOMAIN`)
+
+4. **Start development server**:
 
     ```bash
     npm run dev
     ```
+   App runs at **http://localhost:8080**
+
+## Key commands
+
+- `npm run build` — production build
+- `npm run test` — unit tests (Vitest)
+- `npm run e2e` — E2E tests (Playwright; ensure dev server is on port 8080 or start via Playwright)
+- `npm run typecheck` / `npm run typecheck:strict` — TypeScript check
+- `npm run lint` — ESLint
+- `npm run mobile:sync` — sync web build to Capacitor (iOS/Android)
 
 ## Project Structure
 
-- `src/components/`: Reusable UI components (shadcn/ui)
-- `src/pages/`: Route components
-- `src/lib/`: Utilities and helpers
-- `src/hooks/`: Custom React hooks
+- `src/components/`: UI and business components (blocks, dashboard-v2, zones, ui)
+- `src/pages/`: Route-level components
+- `src/hooks/`: Custom React hooks (60+)
+- `src/services/`: API and business logic
+- `src/lib/`: Utilities, SEO, export (PDF/Excel)
+- `src/i18n/locales/`: Translation files (16 languages)
 
 ## Troubleshooting
 

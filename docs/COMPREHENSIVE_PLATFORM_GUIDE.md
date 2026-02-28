@@ -1,6 +1,9 @@
 # lnkmx — Ультимативный гид по платформе (Encyclopedia v2026.02)
 
-Платформа lnkmx — это не просто конструктор персональных страниц. Это полноценная **Business Operating System (Solo OS)**, спроектированная для экономики независимых специалистов (Solo-Economy). Мы объединили создание сайтов, управление клиентами, аналитику и финансовые инструменты в единую мобильную экосистему.
+> **Last Updated:** February 28, 2026  
+> **Maintained by:** Product & Engineering
+
+Платформа lnkmx — это не просто конструктор персональных страниц. Это полноценная **Business Operating System (Solo OS)**, спроектированная для экономики независимых специалистов (Solo-Economy). Мы объединили создание сайтов, управление клиентами (CRM, Kanban, Задачи), аналитику и финансовые инструменты в единую мобильную экосистему.
 
 ---
 
@@ -9,15 +12,15 @@
 ### 1.1 Миссия и цель
 
 **Миссия**: Стереть границы между маркетингом и операционным управлением для микро-бизнеса. Мы устраняем «налог на инструменты» (необходимость платить за 5+ сервисов), предоставляя унифицированную инфраструктуру «всё-в-одном» за 15 минут.
-**Виджение**: Стать дефолтной «Identity + Business OS» для каждого специалиста в Центральной Азии и на развивающихся рынках.
+**Видение**: Стать дефолтной «Identity + Business OS» для каждого специалиста в Центральной Азии и на развивающихся рынках.
 
 ### 1.2 Целевые аудитории и решения
 
 | Персона | Проблема/Боли | Решение от lnkmx |
 | :--- | :--- | :--- |
-| **Beauty-мастер** | Хаос в записях через DM, отсутствие предоплат, клиентская база в блокноте. | Нативный **Booking Block** с календарем + **Portfolio Carousel** + **Services List** + CRM для учета клиентов. |
+| **Beauty-мастер** | Хаос в записях через DM, отсутствие предоплат, клиентская база в блокноте. | Нативный **Booking Block** с календарем + **Portfolio Carousel** + **Services List** + CRM и **Business Zone** (сделки, задачи). |
 | **Коуч/Эксперт** | Продажа вебинаров через ручные переводы, разрозненные ссылки на гайды. | **Event Block** (регистрация и билеты) + **Lead Form** + **Digital Product Download** с оплатой. |
-| **Риэлтор** | Обезличенные страницы агентств, сложные CRM, потеря персонального бренда. | **Lead Capture** (мгновенные уведомления в TG) + **Property Catalog** + Персональный бренд на базе Liquid Glass. |
+| **Риэлтор** | Обезличенные страницы агентств, сложные CRM, потеря персонального бренда. | **Lead Capture** (мгновенные уведомления в TG) + **Property Catalog** + **Business Zone** (Kanban сделок, задачи, контакты) + Liquid Glass. |
 
 ### 1.3 Стратегические столпы
 
@@ -34,30 +37,30 @@
 Ядро системы, использующее динамический диспетчер блоков `BlockRenderer.tsx`.
 
 - **AI-Onboarding**: Использует Google Gemini для анализа ниши. Промпты жестко ограничены для исключения галлюцинаций.
-- **Auto-save**: Zustand-state синхронизируется с БД с дебаунсом 1.5 сек. Используется Request Versioning для предотвращения перезаписи старыми данными.
-- **Multilingual**: Поддержка `ru, en, kk, uz` на уровне БД. Все строковые поля блоков используют тип `MultilingualString`.
+- **Auto-save**: Zustand-state синхронизируется с БД с дебаунсом. Используется Request Versioning для предотвращения перезаписи старыми данными.
+- **Multilingual**: 16 языков (RU, EN, KK — eager; DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR — lazy). Все строковые поля блоков поддерживают мультиязычность.
 
-### 2.2 Mini-CRM и Управление лидами
+### 2.2 Mini-CRM и Business Zone
 
-- **Pipeline**: Система статусов `new -> contacted -> qualified -> won/lost`.
-- **Inbox**: Единый интерфейс для `leads`, `bookings` и `event_registrations`.
-- **Notifications**: Edge-функция `send-lead-notification` отправляет PUSH в Telegram-бот через 500мс после создания лида.
+- **Leads**: Система статусов `new -> contacted -> qualified -> won/lost`. Единый инбокс для лидов, бронирований и регистраций на события.
+- **Business Zone (Zones)**: Рабочие пространства с изоляцией по `zone_id`. **Kanban** сделок, **Tasks** (доска с приоритетами, сроками, ответственными), **Contacts**. RBAC через БД.
+- **Notifications**: Edge-функции отправляют PUSH в Telegram-бот при новом лиде/бронировании.
 
-### 2.3 Business Zones (Мультиарендность)
-
-- **Workspaces**: Изоляция через `zone_id`.
-- **RBAC**: Роли проверяются через DB-функцию `public.has_role(auth.uid(), 'admin')`.
-- **Kanban**: Drag-and-drop интерфейс для управления сделками в реальном времени.
-
-### 2.4 Advanced Analytics (Pixel Proxy)
+### 2.3 Advanced Analytics (Pixel Proxy)
 
 - **CAPI Integration**: Серверная отправка событий в Facebook CAPI и TikTok Events API для обхода блокировщиков (Ad-blockers).
-- **Insights**: Расчет CTR каждого блока в реальном времени.
+- **Insights**: CTR по блокам, источники трафика, география; A/B эксперименты по вариантам блоков.
 
-### 2.5 Fintech Ledger
+### 2.4 Fintech Ledger
 
-- **Ledger**: Каждая операция записывается как минимум в две таблицы (`wallet_transactions` и `ledger_logs`) для обеспечения целостности.
+- **Ledger**: Операции записываются в `wallet_transactions` и `ledger_logs`. Платформа Robokassa интегрирована (слой в `platform/robokassa`).
 - **GMV Tracking**: Мониторинг оборота через инвойсы.
+
+### 2.5 SEO и индексация
+
+- **Bot detection**: Cloudflare Worker направляет ботов на Supabase Edge Functions (`seo-ssr`, `generate-sitemap`).
+- **Pre-render**: Лендинг, галерея, профили экспертов — HTML для роботов. JSON-LD и GEO-схемы.
+- **Sitemap**: Динамическая генерация (10k+ URL).
 
 ---
 
@@ -65,10 +68,12 @@
 
 ### 3.1 Технологический стек
 
-- **Frontend**: React 18, Vite (SPA), TypeScript.
+- **Frontend**: React 18.3, Vite 6, TypeScript 5.8. React Router 6 (lazy routes). TanStack Query 5 (defaults: staleTime 5 min, gcTime 10 min).
 - **State**: Zustand (Editor), React Query (Server cache).
-- **Backend**: Supabase (Postgres, Auth, Storage).
-- **Edge**: Deno Runtime (Edge Functions).
+- **Backend**: Supabase (Postgres, Auth, Storage). 28+ Edge Functions (Deno).
+- **SSR/Bots**: Cloudflare Worker (prerender, sitemap).
+- **Mobile**: Capacitor 8 (iOS/Android).
+- **Monitoring**: Sentry, Web Vitals. Централизованный logger (dev/prod).
 
 ### 3.2 Схема данных (Core Entities)
 
@@ -79,170 +84,85 @@ erDiagram
     pages ||--o{ leads : receives
     pages ||--o{ bookings : schedules
     pages ||--o{ analytics : tracks
+    user_profiles ||--o{ zones : owns
+    zones ||--o{ zone_deals : contains
+    zones ||--o{ zone_tasks : contains
+    zones ||--o{ zone_contacts : contains
     user_profiles ||--o{ user_tokens : balance
     leads ||--o{ lead_interactions : history
 ```
 
-### 3.3 Список критических Edge Functions (28+)
+### 3.3 Критические Edge Functions (28+)
 
 | Функция | Задача | Триггер |
 | :--- | :--- | :--- |
 | `ai-content-generator` | Генерация контента страницы | UI Dashboard |
 | `seo-ssr` | Предрендеринг для ботов (SSR) | Запрос от робота |
+| `generate-sitemap` | Генерация sitemap | Запрос от робота/кроулера |
 | `pixel-proxy` | Серверная отправка аналитики | События на странице |
 | `create-lead` | Валидация и сохранение лида | Форма на странице |
-| `robokassa-webhook` | Обработка платежей | Уведомление от банка |
+| `send-lead-notification` | Уведомление в Telegram | После создания лида |
 | `telegram-bot-webhook` | Обработка команд в боте | Сообщение в ТГ |
+| *+ ещё 21 функция* | Уведомления, рассылки, букинг, события, CRM | См. `supabase/config.toml` |
 
 ---
 
 ## 4. Дизайн-система "Liquid Glass"
 
-Дизайн lnkmx — это наш главный Moat (ров).
+Дизайн lnkmx — наш главный Moat.
 
-- **Glassmorphism**: Использование `backdrop-blur-xl`, полупрозрачных фонов (`bg-white/10`) и тонких границ (`border-white/20`).
-- **Design Tokens**:
-  - `shadow-glass`: Глубокие, мягкие тени с размытием.
-  - `text-gradient`: Градиенты на заголовках для премиального вида.
-- **Animations**:
-  - Нативные CSS-переменные для плавности.
-  - Framer Motion для сложных переходов между экранами дашборда.
+- **Glassmorphism**: `backdrop-blur-xl`, полупрозрачные фоны (`bg-white/10`), тонкие границы (`border-white/20`).
+- **Design Tokens**: `shadow-glass`, `text-gradient`. Адаптивный container padding (1rem / 1.5rem / 2rem).
+- **Animations**: CSS-переменные, Framer Motion для переходов. Поддержка `prefers-reduced-motion`. Skip-to-content для a11y.
 
 ---
 
-## 5. Реестр и аудит блоков
+## 5. Реестр блоков
 
-| Тип блока | Категория | Статус | Премиум? |
-| :--- | :--- | :--- | :--- |
-| **Profile** | Basic | ✅ OK | Нет |
-| **Link** | Basic | ✅ OK | Нет |
-| **Booking** | Commerce | ✅ OK | Да |
-| **Event** | Social | ✅ OK | Да |
-| **Scratch** | Interactive | ✅ OK | Да |
-| **Custom Code** | Interactive | ✅ OK | Да |
-| **Carousel** | Media | ✅ OK | Да |
-
-**Стандарт качества**: Все блоки должны проходить `TypeCheck`, иметь `Unit Tests` и поддерживать `MultilingualString`.
+28+ типов блоков: Profile, Link, Button, Social, Booking, Event, Lead Form, Products, Carousel, Video, Newsletter, Scratch, Custom Code, Experts, Gallery, и др. Часть блоков премиум. Все блоки проходят TypeCheck и поддерживают мультиязычность. Стандарт: Unit Tests и MultilingualString.
 
 ---
 
 ## 6. Продуктовый роадмап 2026
 
+### Q1 2026 (выполнено)
+
+- Платформа, 28+ блоков, Auth (Google/Apple/Telegram), PWA с shortcuts.
+- Business Zone (CRM, Kanban, Tasks, Contacts), Pixel Proxy, A/B тесты.
+- SEO/SSR (Cloudflare + Supabase), 16 языков, Sentry, Web Vitals, Capacitor инициализирован.
+
 ### Q2 2026: Mobile Dominance
 
-- Запуск нативных приложений (iOS/Android) на базе Capacitor.
-- Push-уведомления о лидах и записях.
-- **Booking V2**: Двусторонняя синхронизация с Google Calendar.
+- Нативные приложения (Capacitor iOS/Android), Push-уведомления.
+- **Booking V2**: Синхронизация с Google Calendar, депозиты.
 
 ### Q3 2026: Open Platform
 
-- **Public API**: Для интеграции с Zapier, Make и AmoCRM.
-- **White-Label Mode**: Полное удаление брендинга lnkmx для агентств.
+- **Public API**, Zapier/Make, White-Label для агентств.
 
 ### Q4 2026: Fintech & Monetization
 
-- **Link Wallet**: Прием платежей напрямую на карту владельца.
-- **Paywalls**: Платный доступ к контенту или скачиванию файлов.
+- **Link Wallet**, платный контент, Team Collaboration.
 
 ---
 
 ## 7. Безопасность и Операции
 
-### 7.1 RLS Паттерны
-
-```sql
--- Пример политики для защиты лидов
-CREATE POLICY "Users can only view own leads" 
-ON public.leads FOR SELECT 
-USING (auth.uid() = user_id);
-```
-
-Безопасность инкапсулирована на уровне БД. Приложение никогда не запрашивает данные без фильтрации по `auth.uid()`.
-
-### 7.2 Инцидент-респонс (Runbook)
-
-- **SLA**: Доступность платформы 99.9%.
-- **SEV-1**: Немедленное переключение на резервные Edge-ноды, уведомление в Telegram-канал мониторинга.
-- **Content Moderation**: Скрипты на базе Google Vision API автоматически блокируют страницы с NSFW-контентом или фишингом.
+- **RLS**: Все таблицы защищены политиками по `auth.uid()` / `zone_id`.
+- **Edge Functions**: В `config.toml` для каждой функции задокументировано использование `verify_jwt` (public/cron/webhook vs authenticated).
+- **Runbook**: SEV-1/2/3, Status Page, Content Moderation (Google Vision, report-based).
 
 ---
 
-## 8. Методологии и Аналитика (Strategic Layer)
-
-### 8.1 Customer Journey Map (CJM)
-
-*Пример в lnkmx*: Мы отслеживаем путь от клика по ссылке в Instagram до публикации страницы и получения первого лида. Узкое место — AI-генерируемый контент (если он слишком общий, юзер уходит).
-
-### 8.2 Customer Development (CustDev)
-
-*Пример*: Регулярные интервью с мастерами маникюра привели к созданию блока "Скретч-карта" для удержания клиентов.
-
-### 8.3 Jobs To Be Done (JTBD)
-
-*Работа*: «Когда у меня запускается предзапись на курс, я хочу быстро собрать страницу с формой, чтобы не тратить время на верстку и начать продажи».
-
-### 8.4 User Story Mapping (USM)
-
-Метод планирования релизов: от "Показать кнопки" до "Автоматизировать рассылку по лидам".
-
-### 8.5 Unit Economics
-
-Мы считаем CAC (стоимость привлечения) через виральный коэффициент (K-factor) от вотермарка.
-
-### 8.6 Pirate Metrics (AARRR)
-
-- **Acquisition**: Органический рост через страницы пользователей.
-- **Activation**: Публикация страницы в первые 5 минут.
-- **Retention**: Частота входа в CRM.
-- **Referral**: Linkkon токены.
-- **Revenue**: Подписка Pro за 2900 ₸.
-
-### 8.7 North Star Metric
-
-**Active Leads Processed**: Количество лидов, которые наши пользователи успешно обработали через нашу CRM.
-
-### 8.8 SWOT-анализ
-
-- **S**: Дизайн Liquid Glass.
-- **W**: Зависимость от Supabase.
-- **O**: Рост экономики создателей.
-- **T**: Агрессия Linktree на рынке СНГ.
-
-### 8.9 HADI-циклы
-
-Еженедельная проверка гипотез. Пример: «Если заменить кнопку "Создать" на "Запустить бизнес", конверсия вырастет на 3%».
-
-### 8.10 RICE Scoring
-
-Метод приоритизации бэклога: Reach (охват), Impact (влияние), Confidence (уверенность), Effort (затраты).
-
-### 8.11 Lean Canvas
-
-Бизнес-модель на одной ладони: от проблемы "Tool Tax" до решения "Solo OS".
-
-### 8.12 Cohort Analysis
-
-Анализ жизни групп пользователей (когорт) для понимания того, как обновления влияют на Retention.
-
-### 8.13 Marketing Mix (7P)
-
-Product, Price, Place, Promotion, People, Process, Physical Evidence.
-
-### 8.14 OKRs
-
-Цель: Стать №1 в Центральной Азии. Ключевой результат: 100k активных мерчантов к концу 2026 года.
-
----
-
-## 9. Быстрый старт разработчика
+## 8. Быстрый старт разработчика
 
 1. **Клонирование**: `git clone <url>`
 2. **Зависимости**: `npm install`
-3. **Окружение**: Настроить `.env` (URL и ANON KEY от Supabase).
-4. **Запуск**: `npm run dev` (доступ по localhost:3000).
-5. **Тесты**: `npm run test` (всегда запускать перед деплоем).
+3. **Окружение**: Скопировать `.env.example` в `.env`, задать Supabase URL и keys (и при необходимости `VITE_APP_DOMAIN`).
+4. **Запуск**: `npm run dev` — приложение на **http://localhost:8080**
+5. **Тесты**: `npm run test`, `npm run e2e` (Playwright на порту 8080).
 
 ---
 
-*Документ обновлен: 27 февраля 2026 г.*
-*Maintained by: Antigravity Team*
+*Документ обновлен: 28 февраля 2026 г.*  
+*Maintained by: Product & Engineering*

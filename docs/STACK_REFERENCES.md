@@ -1,14 +1,16 @@
 # Technology Stack & References
 
 > **Objective:** Centralized list of official documentation, guides, and best practices for the libraries used in lnkmx.
+> **Last Updated:** February 28, 2026
 
 ## 1. Core Framework
 
 | Tool | Version | Docs | Purpose |
 |---|---|---|---|
-| **Vite** | 6.x | [Official Docs](https://vitejs.dev/guide/) | Build tool & Dev Server. |
-| **React** | 18.x | [React Docs](https://react.dev/) | UI Library. |
-| **TypeScript** | 5.x | [TS Handbook](https://www.typescriptlang.org/docs/) | Static Typing. |
+| **Vite** | 6.x | [Official Docs](https://vitejs.dev/guide/) | Build tool & Dev Server (port 8080). |
+| **React** | 18.3.x | [React Docs](https://react.dev/) | UI Library. |
+| **TypeScript** | 5.8.x | [TS Handbook](https://www.typescriptlang.org/docs/) | Static Typing. |
+| **React Router** | 6.30.x | [React Router](https://reactrouter.com/) | SPA routing, lazy-loaded routes. |
 
 ## 2. UI & Styling
 
@@ -41,16 +43,18 @@
 |---|---|---|
 | **dnd-kit** | [dndkit.com](https://dndkit.com/) | Accessible drag-and-drop for the Block Editor. |
 | **Recharts** | [recharts.org](https://recharts.org/en-US) | Analytics charts (Line, Bar, Area). |
-| **i18next** | [react.i18next.com](https://react.i18next.com/) | Localization (RU/EN/KK). |
+| **i18next** | [react.i18next.com](https://react.i18next.com/) | Localization (16 languages: RU, EN, KK primary; DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR lazy). |
 | **Vaul** | [vaul.emilkowal.ski](https://vaul.emilkowal.ski/) | Mobile drawer/bottom sheet component. |
 | **Sonner** | [sonner.emilkowal.ski](https://sonner.emilkowal.ski/) | Toast notifications. |
 
-## 6. Testing
+## 6. Testing & Quality
 
 | Tool | Docs | Key Use Cases |
 |---|---|---|
-| **Playwright** | [playwright.dev](https://playwright.dev/) | E2E Testing. |
+| **Playwright** | [playwright.dev](https://playwright.dev/) | E2E Testing (baseURL: localhost:8080). |
 | **Vitest** | [vitest.dev](https://vitest.dev/) | Unit Testing. |
+| **Knip** | [knip.dev](https://knip.dev/) | Unused code & dependency analysis. |
+| **dependency-cruiser** | [npm](https://www.npmjs.com/package/dependency-cruiser) | Cycle & layer validation. |
 
 ---
 
@@ -68,7 +72,7 @@
 - **[TkDodo's Blog](https://tkdodo.eu/blog/practical-react-query)**: The "unofficial bible" of React Query patterns.
 - **Best Practices**:
   - **Dependencies**: Include all variables in the Query Key: `['todos', { status, page }]`.
-  - **Staleness**: Set `staleTime: 5 * 60 * 1000` (5 mins) for data that rarely changes to avoid over-fetching.
+  - **Staleness**: Defaults in app: `staleTime: 5 * 60 * 1000`, `gcTime: 10 * 60 * 1000`, `retry: 2`, `refetchOnWindowFocus: false`.
   - **Optimistic Updates**: Use for immediate UI feedback on mutations (like "Like" buttons or drag-and-drop).
 
 ### Tailwind CSS Architecture

@@ -1,7 +1,7 @@
 # 5. Product Roadmap (2026)
 
 > **Status:** Active
-> **Last Updated:** February 18, 2026
+> **Last Updated:** February 28, 2026
 > **Execution Horizon:** 12 Months
 
 ---
@@ -10,8 +10,8 @@
 
 | Quarter | Theme | Key Deliverables |
 | :--- | :--- | :--- |
-| **Q1 2026** | **Foundation & Parity** (Completed) | Platform Launch, Core Blocks, Stripe/Auth Basics, PWA. |
-| **Q2 2026** | **Growth & Mobile** | Native Mobile App (iOS/Android), Push Notifications, Booking V2. |
+| **Q1 2026** | **Foundation & Parity** (Completed) | Platform Launch, 28+ Blocks, Auth (Google/Apple/Telegram), PWA, Business Zone (CRM/Kanban/Tasks), Pixel Proxy, A/B Tests, SEO/SSR (Cloudflare + Supabase). |
+| **Q2 2026** | **Growth & Mobile** | Native Mobile App (Capacitor 8 — iOS/Android initialized), Push Notifications, Booking V2. |
 | **Q3 2026** | **Ecosystem & API** | Public API, Zapier Integration, White-Label Mode for Agencies. |
 | **Q4 2026** | **Fintech & Scale** | Native Wallet, Paid Newsletters, Team Collaboration. |
 

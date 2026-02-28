@@ -1,7 +1,7 @@
 # 4. Investment Memo
 
 > **Confidential**
-> **Date:** February 18, 2026
+> **Date:** February 28, 2026
 > **Round:** Seed / Pre-Seed
 
 ---
@@ -39,11 +39,11 @@
 ---
 
 ## 4. Traction & Metrics
-*(Note: Placeholder figures - assume early traction)*
-*   **Product**: Live in Production (Web + PWA).
+*   **Product**: Live in Production (Web + PWA + Capacitor iOS/Android).
+*   **i18n**: 16 languages (RU, EN, KK primary; DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR lazy-loaded).
 *   **Users**: Beta phase active.
 *   **CAC**: Organic (Zero paid spend). Driven by viral watermark.
-*   **Retention**: Initial feedback shows high stickiness due to CRM usage.
+*   **Retention**: Initial feedback shows high stickiness due to CRM and Business Zone (Kanban, Tasks).
 
 ---
 
