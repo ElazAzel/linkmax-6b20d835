@@ -60,13 +60,13 @@ const setLinkTag = (rel: string, href: string, hreflang?: string) => {
 };
 
 // Helper to set/update favicon
+const DEFAULT_FAVICON = '/favicon.png';
+
 const setFavicon = (url?: string) => {
-  if (!url) {
-    // Reset to default
-    setLinkTag('icon', '/favicon.ico');
-    return;
-  }
-  setLinkTag('icon', url);
+  const normalized = url?.trim() || DEFAULT_FAVICON;
+  setLinkTag('icon', normalized);
+  setLinkTag('shortcut icon', normalized);
+  setLinkTag('apple-touch-icon', normalized);
 };
 
 // Helper to add JSON-LD schema
@@ -214,6 +214,7 @@ export function EnhancedSEOHead({
     // Cleanup on unmount
     return () => {
       document.title = 'lnkmx - AI Bio Page Builder';
+      setFavicon();
 
       // Remove page-specific tags
       const tagsToRemove = [
