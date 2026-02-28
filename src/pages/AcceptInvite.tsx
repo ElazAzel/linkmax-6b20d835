@@ -30,12 +30,7 @@ interface InviteData {
 }
 
 async function fetchInvite(token: string): Promise<InviteData | null> {
-    const { data, error } = await supabase
-        .from('zone_invites')
-        .select('*, zones(name, logo_url)')
-        .eq('token', token)
-        .eq('status', 'pending')
-        .maybeSingle();
+    const { data, error } = await supabase.rpc('get_zone_invite_by_token' as any, { p_token: token });
 
     if (error || !data) return null;
     return data as any;

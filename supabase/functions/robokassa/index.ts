@@ -4,13 +4,13 @@ import { crypto } from "https://deno.land/std@0.168.0/crypto/mod.ts";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 interface PaymentRequest {
     type?: 'subscription' | 'payment' | 'tokens';
     plan?: 'pro';
-    period?: 3 | 6 | 12; // months
+    period?: 3 | 6 | 12;
     userId: string;
     amount?: number;
     description?: string;
@@ -24,11 +24,41 @@ serve(async (req: Request) => {
     }
 
     try {
+        // Authenticate the caller
+        const authHeader = req.headers.get('Authorization');
+        if (!authHeader?.startsWith('Bearer ')) {
+            return new Response(
+                JSON.stringify({ error: 'Unauthorized' }),
+                { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+        }
+
+        const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+        const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+        const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+            global: { headers: { Authorization: authHeader } },
+        });
+
+        const token = authHeader.replace('Bearer ', '');
+        const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+        if (claimsError || !claimsData?.claims) {
+            return new Response(
+                JSON.stringify({ error: 'Unauthorized' }),
+                { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+        }
+
+        const authenticatedUserId = claimsData.claims.sub;
+
         const payload = await req.json() as PaymentRequest;
         const { type = 'subscription', userId, plan, period, amount, description: customDescription, relatedId, tokenAmount } = payload;
 
-        if (!userId) {
-            throw new Error("userId is required");
+        // Verify the userId matches the authenticated user
+        if (!userId || userId !== authenticatedUserId) {
+            return new Response(
+                JSON.stringify({ error: 'Forbidden: userId mismatch' }),
+                { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
         }
 
         let outSum = 0;
@@ -43,8 +73,6 @@ serve(async (req: Request) => {
             if (plan !== 'pro' || !period || ![3, 6, 12].includes(period)) {
                 throw new Error("Invalid subscription parameters");
             }
-            // Query dynamic rate from Supabase
-            const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
             const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
             const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -54,7 +82,7 @@ serve(async (req: Request) => {
                 .eq('currency_pair', 'USD_KZT')
                 .single();
 
-            let rate = 497.33; // Fallback rate
+            let rate = 497.33;
             if (!rateError && rateData) {
                 rate = rateData.rate;
             }
@@ -62,7 +90,7 @@ serve(async (req: Request) => {
             const basePricesUsd: Record<number, number> = {
                 3: 8.90,
                 6: 7.90,
-                12: 5.90 // Total $70.8 for 12 months
+                12: 5.90
             };
 
             const monthlyUsd = basePricesUsd[period];
@@ -72,11 +100,10 @@ serve(async (req: Request) => {
             if (!tokenAmount || ![1000, 5000, 10000].includes(tokenAmount)) {
                 throw new Error("Invalid token amount. Available: 1000, 5000, 10000");
             }
-            // 1 token = 1 KZT, but with bulk discounts
             const tokenPrices: Record<number, number> = {
                 1000: 1000,
-                5000: 4500,  // 10% discount
-                10000: 8000  // 20% discount
+                5000: 4500,
+                10000: 8000
             };
             outSum = tokenPrices[tokenAmount];
             description = `Покупка ${tokenAmount} Linkkon tokens`;
@@ -101,7 +128,6 @@ serve(async (req: Request) => {
         const invId = Date.now().toString().slice(-9);
         const culture = "ru";
 
-        // Signature: login:outSum:invId:pass1:shp_... sorted alphabetically
         const shpParams = {
             shp_plan,
             shp_period,
