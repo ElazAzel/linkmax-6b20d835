@@ -1,6 +1,5 @@
 /**
- * Gallery v1.3 - Mobile-first community gallery with performance optimizations
- * iOS-style design with filters, skeleton loading, and one-tap copy
+ * Gallery v2.0 - Clean, modern community gallery
  */
 'use client';
 
@@ -10,28 +9,18 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Users from 'lucide-react/dist/esm/icons/users';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Search from 'lucide-react/dist/esm/icons/search';
-import Filter from 'lucide-react/dist/esm/icons/filter';
-import Copy from 'lucide-react/dist/esm/icons/copy';
-import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
-import Crown from 'lucide-react/dist/esm/icons/crown';
 import Eye from 'lucide-react/dist/esm/icons/eye';
-import Star from 'lucide-react/dist/esm/icons/star';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { SkeletonCard, SkeletonGalleryGrid, SkeletonStats } from '@/components/ui/skeleton-card';
-import { CommunityGallery } from '@/components/gallery/CommunityGallery';
+import { SkeletonGalleryGrid } from '@/components/ui/skeleton-card';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useGallery } from '@/hooks/social/useGallery';
-import { FeaturedPageCard } from '@/components/gallery/FeaturedPageCard';
 import { GalleryPageCard } from '@/components/gallery/GalleryPageCard';
 import { NICHES, NICHE_ICONS } from '@/lib/niches';
 import { cn } from '@/lib/utils/utils';
@@ -43,6 +32,8 @@ import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
+type SortMode = 'popular' | 'recent' | 'views';
+
 export default function Gallery() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -51,6 +42,9 @@ export default function Gallery() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedNiche, setSelectedNiche] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'gallery' | 'leaderboard'>('gallery');
+  const [sortMode, setSortMode] = useState<SortMode>('popular');
+  const [showSearch, setShowSearch] = useState(false);
+
   const nicheLabel = selectedNiche ? t(`niches.${selectedNiche}`, selectedNiche) : null;
   const canonical = selectedNiche
     ? `${getAppDomain()}/gallery?niche=${selectedNiche}`
@@ -64,24 +58,36 @@ export default function Gallery() {
       'gallery.seo.description',
       'Explore real lnkmx link in bio pages by creators and businesses. Find templates, niches, and inspiration for your mini-site.'
     );
-  const seoHighlights = t('gallery.seoIntro.highlights', { returnObjects: true }) as string[];
 
-  // Quick stats - memoized for performance
-  const totalLikes = useMemo(() =>
-    pages.reduce((sum, p) => sum + (p.gallery_likes || 0), 0), [pages]);
-  const totalViews = useMemo(() =>
-    pages.reduce((sum, p) => sum + (p.view_count || 0), 0), [pages]);
+  // Filter & sort pages
+  const filteredPages = useMemo(() => {
+    let result = pages.filter(page => {
+      const matchesSearch = !searchQuery ||
+        page.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        page.description?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesNiche = !selectedNiche || page.niche === selectedNiche;
+      return matchesSearch && matchesNiche;
+    });
 
-  // Filter pages - memoized
-  const filteredPages = useMemo(() => pages.filter(page => {
-    const matchesSearch = !searchQuery ||
-      page.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      page.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesNiche = !selectedNiche || page.niche === selectedNiche;
-    return matchesSearch && matchesNiche;
-  }), [pages, searchQuery, selectedNiche]);
+    switch (sortMode) {
+      case 'popular':
+        result.sort((a, b) => (b.gallery_likes || 0) - (a.gallery_likes || 0));
+        break;
+      case 'views':
+        result.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+        break;
+      case 'recent':
+        result.sort((a, b) => {
+          const aDate = a.gallery_featured_at ? new Date(a.gallery_featured_at).getTime() : 0;
+          const bDate = b.gallery_featured_at ? new Date(b.gallery_featured_at).getTime() : 0;
+          return bDate - aDate;
+        });
+        break;
+    }
 
-  // Featured pages (top 5 by likes) - memoized
+    return result;
+  }, [pages, searchQuery, selectedNiche, sortMode]);
+
   const featuredPages = useMemo(() => [...pages]
     .sort((a, b) => (b.gallery_likes || 0) - (a.gallery_likes || 0))
     .slice(0, 5), [pages]);
@@ -112,9 +118,7 @@ export default function Gallery() {
     const nicheParam = searchParams.get('niche');
     if (nicheParam && NICHES.includes(nicheParam as (typeof NICHES)[number])) {
       setSelectedNiche(nicheParam);
-      return;
-    }
-    if (!nicheParam) {
+    } else if (!nicheParam) {
       setSelectedNiche(null);
     }
   }, [searchParams]);
@@ -130,7 +134,6 @@ export default function Gallery() {
     navigate(`/gallery?${nextParams.toString()}`, { replace: true });
   }, [searchParams, navigate]);
 
-  // Handlers - memoized
   const handleCopyTemplate = useCallback((pageSlug: string) => {
     toast.success(t('gallery.templateCopied', 'Шаблон скопирован!'), {
       description: t('gallery.goToEditor', 'Откройте редактор чтобы настроить'),
@@ -140,6 +143,8 @@ export default function Gallery() {
       },
     });
   }, [t, navigate]);
+
+  const seoHighlights = t('gallery.seoIntro.highlights', { returnObjects: true }) as string[];
 
   return (
     <>
@@ -187,68 +192,73 @@ export default function Gallery() {
         solutionStatement={t('gallery.seo.opt.solution', 'The Gallery provides real-world examples across multiple industries showing successful page implementations')}
       />
       <StructuredData id="gallery-schema" data={gallerySchema} />
-      <div className="min-h-screen bg-background pb-20">
-        {/* Header - Sticky glass effect */}
-        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-2xl border-b border-border/10">
-          <div className="px-5 pt-4 pb-3">
-            <div className="flex items-center gap-4 mb-4">
-              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl" asChild>
+
+      <div className="min-h-screen bg-background">
+        {/* Compact header */}
+        <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-xl border-b border-border/20">
+          <div className="max-w-6xl mx-auto px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full shrink-0" asChild>
                 <Link to="/">
-                  <ArrowLeft className="h-5 w-5" />
+                  <ArrowLeft className="h-4 w-4" />
                 </Link>
               </Button>
-              <div className="flex-1">
-                <h1 className="text-xl font-black flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" />
-                  {t('gallery.title', 'Галерея')}
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  {pages.length} {t('gallery.pages', 'страниц')}
-                </p>
-              </div>
+
+              {showSearch ? (
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    autoFocus
+                    placeholder={t('gallery.searchPlaceholder', 'Поиск...')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-9 pl-9 pr-9 rounded-full bg-muted/50 border-0 text-sm"
+                  />
+                  <button
+                    onClick={() => { setShowSearch(false); setSearchQuery(''); }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex-1 min-w-0">
+                    <h1 className="text-lg font-bold truncate">
+                      {t('gallery.title', 'Галерея')}
+                    </h1>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 rounded-full shrink-0"
+                    onClick={() => setShowSearch(true)}
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
+
               <LanguageSwitcher />
               <Button
                 size="sm"
-                className="h-10 rounded-xl font-bold"
+                className="h-9 rounded-full font-semibold text-xs px-4 shrink-0"
                 onClick={() => navigate('/auth')}
               >
-                <Sparkles className="h-4 w-4 mr-1.5" />
+                <Sparkles className="h-3.5 w-3.5 mr-1" />
                 {t('gallery.create', 'Создать')}
               </Button>
             </div>
 
-            {/* Stats row - with skeleton loading */}
-            {loading ? (
-              <SkeletonStats />
-            ) : (
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="p-3 rounded-xl bg-muted/50 text-center">
-                  <Sparkles className="h-4 w-4 mx-auto text-primary mb-1" />
-                  <p className="text-lg font-black">{pages.length}</p>
-                  <p className="text-xs text-muted-foreground">{t('gallery.statsPages', 'Страниц')}</p>
-                </div>
-                <div className="p-3 rounded-xl bg-muted/50 text-center">
-                  <Heart className="h-4 w-4 mx-auto text-red-500 mb-1" />
-                  <p className="text-lg font-black">{totalLikes}</p>
-                  <p className="text-xs text-muted-foreground">{t('gallery.statsLikes', 'Лайков')}</p>
-                </div>
-                <div className="p-3 rounded-xl bg-muted/50 text-center">
-                  <Eye className="h-4 w-4 mx-auto text-emerald-500 mb-1" />
-                  <p className="text-lg font-black">{totalViews}</p>
-                  <p className="text-xs text-muted-foreground">{t('gallery.statsViews', 'Просмотров')}</p>
-                </div>
-              </div>
-            )}
-
             {/* Tabs */}
-            <div className="bg-muted/50 rounded-xl p-1 flex gap-1">
+            <div className="flex gap-1 mt-3 bg-muted/40 rounded-full p-0.5">
               <button
                 onClick={() => setActiveTab('gallery')}
                 className={cn(
-                  "flex-1 h-10 rounded-lg text-sm font-bold transition-all",
+                  "flex-1 h-8 rounded-full text-xs font-semibold transition-all",
                   activeTab === 'gallery'
                     ? "bg-background shadow-sm text-foreground"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {t('gallery.tabGallery', 'Галерея')}
@@ -256,10 +266,10 @@ export default function Gallery() {
               <button
                 onClick={() => setActiveTab('leaderboard')}
                 className={cn(
-                  "flex-1 h-10 rounded-lg text-sm font-bold transition-all",
+                  "flex-1 h-8 rounded-full text-xs font-semibold transition-all",
                   activeTab === 'leaderboard'
                     ? "bg-background shadow-sm text-foreground"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {t('gallery.tabLeaderboard', 'Рейтинг')}
@@ -269,112 +279,83 @@ export default function Gallery() {
         </header>
 
         {activeTab === 'gallery' && (
-          <>
-            {/* SEO intro */}
-            <section className="px-5 pt-4">
-              <div className="rounded-2xl border border-border/40 bg-card/60 p-5 space-y-3">
-                <h2 className="text-base font-semibold">{t('gallery.seoIntro.title')}</h2>
-                <p className="text-sm text-muted-foreground">{t('gallery.seoIntro.subtitle')}</p>
-                <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
-                  {seoHighlights.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <div className="pt-2">
-                  <h3 className="text-sm font-semibold">{t('gallery.seoIntro.locationTitle')}</h3>
-                  <p className="text-sm text-muted-foreground">{t('gallery.seoIntro.locationBody')}</p>
-                </div>
-              </div>
-            </section>
-
-            {/* Search */}
-            <div className="px-5 py-3">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder={t('gallery.searchPlaceholder', 'Поиск страниц...')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-11 pl-12 rounded-xl bg-muted/50 border-0 text-base"
-                />
-              </div>
-            </div>
-
-            {/* Niche filters - Horizontal scroll */}
-            <div className="px-5 pb-3 overflow-x-auto scrollbar-hide">
-              <div className="flex gap-2 min-w-max">
+          <div className="max-w-6xl mx-auto">
+            {/* Niche filter pills */}
+            <div className="px-4 pt-4 pb-2 overflow-x-auto scrollbar-hide">
+              <div className="flex gap-1.5 min-w-max">
                 <button
                   onClick={() => updateNiche(null)}
                   className={cn(
-                    "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all",
+                    "h-8 px-3.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all",
                     !selectedNiche
-                      ? "bg-foreground text-background"
-                      : "bg-muted/60 text-muted-foreground"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-muted/50 text-muted-foreground hover:bg-muted"
                   )}
                 >
                   {t('gallery.allNiches', 'Все')}
                 </button>
-                {NICHES.slice(0, 10).map((niche) => (
+                {NICHES.map((niche) => (
                   <button
                     key={niche}
-                    onClick={() => updateNiche(niche)}
+                    onClick={() => updateNiche(selectedNiche === niche ? null : niche)}
                     className={cn(
-                      "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-1.5",
+                      "h-8 px-3.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1",
                       selectedNiche === niche
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted/60 text-muted-foreground"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "bg-muted/50 text-muted-foreground hover:bg-muted"
                     )}
                   >
-                    <span>{NICHE_ICONS[niche]}</span>
+                    <span className="text-sm">{NICHE_ICONS[niche]}</span>
                     {t(`niches.${niche}`, niche)}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Featured carousel */}
-            {!searchQuery && !selectedNiche && featuredPages.length > 0 && (
-              <div className="px-5 pb-4">
-                <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">
-                  {t('gallery.featured', 'Популярные')}
-                </h2>
-                <ScrollArea className="w-full">
-                  <div className="flex gap-3 pb-2">
-                    {featuredPages.map((page) => (
-                      <FeaturedPageCard
-                        key={page.id}
-                        page={page}
-                        onCopy={() => handleCopyTemplate(page.slug)}
-                        onView={() => navigate(`/${page.slug}`)}
-                      />
-                    ))}
-                  </div>
-                  <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+            {/* Sort buttons */}
+            <div className="px-4 pb-3 flex items-center gap-2">
+              <div className="flex gap-1 bg-muted/30 rounded-full p-0.5">
+                {([
+                  { key: 'popular' as SortMode, icon: Heart, label: t('gallery.sortPopular', 'Популярные') },
+                  { key: 'views' as SortMode, icon: Eye, label: t('gallery.sortViews', 'Просмотры') },
+                  { key: 'recent' as SortMode, icon: TrendingUp, label: t('gallery.sortRecent', 'Новые') },
+                ]).map(({ key, icon: Icon, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => setSortMode(key)}
+                    className={cn(
+                      "h-7 px-3 rounded-full text-[11px] font-medium transition-all flex items-center gap-1",
+                      sortMode === key
+                        ? "bg-background shadow-sm text-foreground"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    <Icon className="h-3 w-3" />
+                    {label}
+                  </button>
+                ))}
               </div>
-            )}
+              <span className="text-xs text-muted-foreground ml-auto">
+                {filteredPages.length} {t('gallery.pages', 'страниц')}
+              </span>
+            </div>
 
-            {/* Pages grid */}
-            <div className="px-5">
-              <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">
-                {selectedNiche
-                  ? t(`niches.${selectedNiche}`, selectedNiche)
-                  : t('gallery.allPages', 'Все страницы')}
-                <span className="ml-2 text-xs font-normal">({filteredPages.length})</span>
-              </h2>
-
+            {/* Grid */}
+            <div className="px-4 pb-20">
               {loading ? (
                 <SkeletonGalleryGrid />
               ) : filteredPages.length === 0 ? (
-                <div className="text-center py-12">
-                  <Users className="h-12 w-12 mx-auto text-muted-foreground/30 mb-4" />
-                  <h3 className="font-bold mb-2">{t('gallery.noPages', 'Страниц не найдено')}</h3>
+                <div className="text-center py-16">
+                  <div className="w-14 h-14 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <h3 className="font-semibold mb-1">{t('gallery.noPages', 'Страниц не найдено')}</h3>
                   <p className="text-sm text-muted-foreground">
                     {t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                   {filteredPages.map((page) => (
                     <GalleryPageCard
                       key={page.id}
@@ -387,11 +368,24 @@ export default function Gallery() {
                 </div>
               )}
             </div>
-          </>
+
+            {/* Hidden SEO content */}
+            <section className="sr-only" aria-hidden="false">
+              <h2>{t('gallery.seoIntro.title')}</h2>
+              <p>{t('gallery.seoIntro.subtitle')}</p>
+              <ul>
+                {Array.isArray(seoHighlights) && seoHighlights.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <h3>{t('gallery.seoIntro.locationTitle')}</h3>
+              <p>{t('gallery.seoIntro.locationBody')}</p>
+            </section>
+          </div>
         )}
 
         {activeTab === 'leaderboard' && (
-          <div className="px-5 py-4 space-y-6">
+          <div className="max-w-6xl mx-auto px-4 py-4 space-y-6 pb-20">
             <Leaderboard />
             <TopReferrers />
           </div>
@@ -400,5 +394,3 @@ export default function Gallery() {
     </>
   );
 }
-
-

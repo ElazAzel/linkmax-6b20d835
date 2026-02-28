@@ -51,21 +51,33 @@ export const organizationsService = {
     async getOrganizationMembers(orgId: string): Promise<OrganizationMember[]> {
         const { data, error } = await supabase
             .from('organization_members')
-            .select(`
-                *,
-                profile:user_profiles (
-                    username,
-                    display_name,
-                    avatar_url
-                )
-            `)
+            .select('*')
             .eq('org_id', orgId);
 
         if (error) {
             logger.error('Error fetching organization members', error);
             return [];
         }
-        return (data || []) as OrganizationMember[];
+
+        const members = data || [];
+        // Fetch profiles separately
+        const userIds = members.map(m => m.user_id);
+        if (userIds.length === 0) return [];
+
+        const { data: profiles } = await supabase
+            .from('user_profiles')
+            .select('id, username, display_name, avatar_url')
+            .in('id', userIds);
+
+        const profileMap = new Map(
+            (profiles || []).map(p => [p.id, { username: p.username, display_name: p.display_name, avatar_url: p.avatar_url }])
+        );
+
+        return members.map(m => ({
+            ...m,
+            role: m.role as OrganizationRole,
+            profile: profileMap.get(m.user_id) || { username: null, display_name: null, avatar_url: null },
+        }));
     },
 
     async createOrganization(name: string): Promise<{ data: Organization | null; error: unknown }> {
@@ -108,7 +120,7 @@ export const organizationsService = {
         const { data: userData, error: userError } = await supabase
             .from('user_profiles')
             .select('id')
-            .eq('email', email)
+            .eq('username', email)
             .maybeSingle();
 
         if (userError || !userData) {

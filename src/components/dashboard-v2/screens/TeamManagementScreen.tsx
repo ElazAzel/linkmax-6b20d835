@@ -58,7 +58,7 @@ export const TeamManagementScreen = function TeamManagementScreen() {
             setInviteEmail('');
             loadMembers();
         } else {
-            toast.error(error || 'Ошибка при отправке приглашения');
+            toast.error(String(error) || 'Ошибка при отправке приглашения');
         }
     }
 
