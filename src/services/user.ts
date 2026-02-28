@@ -181,7 +181,9 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     let isPremium = false;
     
     // Check if user has active premium
-    const hasActivePremium = premiumActive || data.is_premium || inTrial;
+    // Only trust is_premium flag if there's no expiration date set, or if it hasn't expired
+    const isPremiumFlagValid = data.is_premium && (!premiumExpiresAt || premiumActive);
+    const hasActivePremium = premiumActive || isPremiumFlagValid || inTrial;
     
     if (hasActivePremium) {
       isPremium = true;
