@@ -19,7 +19,7 @@
     "none": "Әсері жоқ",
     "shimmer": "✨ Трансфузия",
     "glow": "💡 Жарқырау",
-    "pulse": "💓 Ripple",
+    "pulse": "💓 Тербеліс",
     "blink": "👁 жыпылықтайды",
     "rainbow": "🌈 Кемпірқосақ",
     "neon": "🔮Неон",
@@ -5139,10 +5139,10 @@
     "restore": "Қалпына келтіру"
   },
   "autosave": {
-    "pending": "Pending...",
-    "saving": "Saving...",
-    "saved": "Saved",
-    "error": "Error"
+    "pending": "Күтуде...",
+    "saving": "Сақталуда...",
+    "saved": "Сақталды",
+    "error": "Қате"
   },
   "blockManager": {
     "title": "Блоктар",

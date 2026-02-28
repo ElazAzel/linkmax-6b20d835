@@ -74,7 +74,17 @@
 
 ## Locale coverage (common + fields)
 
-The **common** (undo, creating, upgrade, saved, deleteConfirm, noResults, saving, optional, toHome, collapse, generating, generate) and **fields** (description, fileName, fileSize, platforms, layout, iconStyle, whatPeopleSay, testimonials, testimonial, role, testimonialText, rating, content, heading, paragraph, quote, videoUrl, aspectRatio, etc.) blocks are translated for all UI locales: **ru**, **en**, **kk**, **uz**, **de**, **uk**, **be**, **es**, **fr**, **it**, **pt**, **zh**, **tr**, **ja**, **ko**, **ar**. For any remaining empty keys in a locale, run `npm run i18n:fill` to copy values from `en.json` (English fallback).
+The **common** (undo, creating, upgrade, saved, deleteConfirm, noResults, saving, optional, toHome, collapse, generating, generate) and **fields** (description, fileName, fileSize, platforms, layout, iconStyle, whatPeopleSay, testimonials, testimonial, role, testimonialText, rating, content, heading, paragraph, quote, videoUrl, aspectRatio, etc.) blocks are translated for all UI locales: **ru**, **en**, **kk**, **uz**, **de**, **uk**, **be**, **es**, **fr**, **it**, **pt**, **zh**, **tr**, **ja**, **ko**, **ar**. Additional blocks (translation, textEffects, googleForms, legal, hints, richText, quickStart, wizard, form, newsletter, actions, profile, verification, frames, nameAnimation, etc.) are fully translated in **ar** and **uz**; other locales may still have empty or English-only keys in deeper sections.
+
+### Check and fill all translations
+
+1. **Count empty keys per locale:**  
+   `npm run i18n:check-coverage`  
+   Prints how many values are still empty in each locale file.
+
+2. **Fill every empty key from English:**  
+   `npm run i18n:fill`  
+   Copies from `en.json` into any locale key that is missing or empty. After this, no key is blank (fallback is English). You can then replace those values with proper translations per language.
 
 ## Workflow (Unified AI-powered UX)
 

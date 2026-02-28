@@ -1,6 +1,6 @@
 {
   "2": {
-    "5 MB": ""
+    "5 MB": "5 МБ"
   },
   "translation": {
     "selectLanguages": "Обрати мови",
@@ -17,20 +17,20 @@
   },
   "textEffects": {
     "none": "Без ефекту",
-    "shimmer": "✨ Переливание",
+    "shimmer": "✨ Переливання",
     "glow": "💡 Світіння",
     "pulse": "💓 Пульсація",
-    "blink": "👁 Мигание",
+    "blink": "👁 Мигання",
     "rainbow": "🌈 Райдуга",
     "neon": "🔮 Неон",
-    "typewriter": "⌨️ Печатная машинка",
+    "typewriter": "⌨️ Друкована машинка",
     "gradientFlow": "🌊 Текучий градієнт"
   },
   "googleForms": {
-    "importTitle": "Импорт з Google Forms",
-    "importDescription": "Импортируйте структуру полей з публичной Google Forms",
+    "importTitle": "Імпорт з Google Forms",
+    "importDescription": "Імпортуйте структуру полів з публічної Google Forms",
     "byUrl": "За посиланням",
-    "manualJson": "Вручную (JSON)",
+    "manualJson": "Вручну (JSON)",
     "formUrl": "Посилання на Google Form",
     "urlHint": "Форма має бути публічною (доступна всім за посиланням)",
     "urlRequired": "Введіть посилання на Google Form",
@@ -41,32 +41,32 @@
     "formClosed": "Форму закрито для відповідей",
     "formNotPublic": "Форма не публічна. Відкрийте доступ у налаштуваннях Google Forms.",
     "formDataNotFound": "Не вдалося знайти дані форми",
-    "parseError": "Помилка парсинга. Проверьте формат.",
-    "unknownError": "Неизвестная помилка",
-    "noFields": "Не найдено полей для импорта",
-    "parseSuccess": "Форма успішно распознана!",
-    "serverError": "Помилка сервера. Попробуйте позже.",
+    "parseError": "Помилка парсингу. Перевірте формат.",
+    "unknownError": "Невідома помилка",
+    "noFields": "Не знайдено полів для імпорту",
+    "parseSuccess": "Форму успішно розпізнано!",
+    "serverError": "Помилка сервера. Спробуйте пізніше.",
     "jsonStructure": "Структура форми (JSON)",
     "loadTemplate": "Завантажити шаблон",
     "jsonHint": "Типи: short_text, long_text, single_choice, multiple_choice, dropdown, date",
-    "parseJson": "Распарсить",
-    "templateLoaded": "Шаблон загружен",
-    "foundFields": "Знайдено полей",
+    "parseJson": "Розпарсити",
+    "templateLoaded": "Шаблон завантажено",
+    "foundFields": "Знайдено полів",
     "formTitle": "Назва форми",
-    "importSuccess": "Импортировано полей: {{count}}",
+    "importSuccess": "Імпортовано полів: {{count}}",
     "import": "Імпортувати"
   },
   "legal": {
     "termsOfService": "Користувацьке угода",
     "termsDescription": "Ознайомтеся з умовами використання платформи lnkmx",
-    "agreeToTerms": "Я принимаю умови",
-    "termsLink": "Пользовательского соглашения",
+    "agreeToTerms": "Я приймаю умови",
+    "termsLink": "Користувацької угоди",
     "privacyPolicy": "Політика конфіденційності",
     "privacyDescription": "Ознайомтеся з політикою обробки персональних даних",
-    "privacyLink": "Политики конфіденційності",
+    "privacyLink": "Політики конфіденційності",
     "andThe": "і",
-    "paymentTerms": "",
-    "paymentTermsDescription": ""
+    "paymentTerms": "Умови оплати",
+    "paymentTermsDescription": "Політика оплати та повернення платформи"
   },
   "common": {
     "close": "Закрити",

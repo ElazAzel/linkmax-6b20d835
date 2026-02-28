@@ -1,6 +1,6 @@
 {
   "2": {
-    "5 MB": ""
+    "5 MB": "5 MB"
   },
   "translation": {
     "selectLanguages": "Sprachen auswählen",
@@ -65,8 +65,8 @@
     "privacyDescription": "Bitte lesen Sie die Richtlinie zur Verarbeitung personenbezogener Daten",
     "privacyLink": "Datenschutzerklärung",
     "andThe": "und",
-    "paymentTerms": "",
-    "paymentTermsDescription": ""
+    "paymentTerms": "Zahlungsbedingungen",
+    "paymentTermsDescription": "Zahlungs- und Rückgaberichtlinie der Plattform"
   },
   "common": {
     "close": "Schließen",
