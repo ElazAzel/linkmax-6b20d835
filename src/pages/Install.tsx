@@ -10,6 +10,7 @@ import Zap from 'lucide-react/dist/esm/icons/zap';
 import Cloud from 'lucide-react/dist/esm/icons/cloud';
 import { useTranslation } from 'react-i18next';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -19,7 +20,7 @@ interface BeforeInstallPromptEvent extends Event {
 export default function Install() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const canonical = 'https://lnkmx.my/install';
+  const canonical = `${getAppDomain()}/install`;
   const seoTitle = t('install.seo.title', 'Install lnkmx');
   const seoDescription = t('install.seo.description', 'Install lnkmx as a PWA for quick access.');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);

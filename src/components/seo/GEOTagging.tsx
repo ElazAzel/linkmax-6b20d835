@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface GEOTaggingProps {
     latitude?: number;
@@ -55,9 +56,9 @@ export function GEOTagging({
                 '@type': 'LocalBusiness',
                 name: 'lnkmx',
                 description: t('seo.organization.description', 'AI-powered link in bio and mini-landing page builder'),
-                url: 'https://lnkmx.my',
-                logo: 'https://lnkmx.my/favicon.png',
-                image: 'https://lnkmx.my/favicon.jpg',
+                url: getAppDomain(),
+                logo: `${getAppDomain()}/favicon.png`,
+                image: `${getAppDomain()}/favicon.jpg`,
                 telephone: '+77051097664',
                 email: 'admin@lnkmx.my',
                 address: {

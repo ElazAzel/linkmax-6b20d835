@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import type { Block, FAQBlock, PricingBlock, EventBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { extractProfileFromBlocks } from '@/lib/seo-utils';
+import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
 import { generateKeyFacts } from '@/lib/seo/key-facts';
 import { generateAutoFAQ, extractFAQContext, hasUserFAQ } from '@/lib/seo/auto-faq';
@@ -110,7 +111,7 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
         
         {/* Entity identification */}
         <meta itemProp="name" content={profile.name || slug} />
-        <link itemProp="url" href={`https://lnkmx.my/${slug}`} />
+        <link itemProp="url" href={getPublicPageUrl(slug)} />
         
         {answerBlock.niche && (
           <meta itemProp="jobTitle" content={answerBlock.niche} />
@@ -179,7 +180,7 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
                 <meta itemProp="priceCurrency" content={item.currency || pricingBlock.currency || 'KZT'} />
                 <link itemProp="availability" href="https://schema.org/InStock" />
               </span>
-              <link itemProp="provider" href={`https://lnkmx.my/${slug}#geo-answer`} />
+              <link itemProp="provider" href={`${getPublicPageUrl(slug)}#geo-answer`} />
             </article>
           ))}
         </section>
@@ -209,7 +210,7 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
                   <span itemProp={event.locationType === 'online' ? 'url' : 'address'}>{event.locationValue}</span>
                 </span>
               )}
-              <link itemProp="organizer" href={`https://lnkmx.my/${slug}#geo-answer`} />
+              <link itemProp="organizer" href={`${getPublicPageUrl(slug)}#geo-answer`} />
             </article>
           ))}
         </section>
@@ -268,7 +269,7 @@ export function GEOEnhancedContent({ blocks, slug }: GEOEnhancedContentProps) {
       {/* Source attribution */}
       <footer data-geo="source">
         <p>
-          {t.source}: <a href={`https://lnkmx.my/${slug}`} itemProp="url">lnkmx.my/{slug}</a>
+          {t.source}: <a href={getPublicPageUrl(slug)} itemProp="url">lnkmx.my/{slug}</a>
         </p>
       </footer>
     </div>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { PageData, Block, ProfileBlock, AvatarBlock } from '@/types/page';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface SEOHeadProps {
   pageData: PageData;
@@ -99,7 +100,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
     setMetaTag('og:site_name', 'lnkmx', true);
 
     // Use avatar or a default image for OG
-    const imageUrl = profileInfo.avatar || pageData.previewUrl || 'https://lnkmx.my/favicon.jpg';
+    const imageUrl = profileInfo.avatar || pageData.previewUrl || `${getAppDomain()}/favicon.jpg`;
     setMetaTag('og:image', imageUrl, true);
     setMetaTag('og:image:alt', `${profileInfo.name || 'User'} profile`, true);
 
@@ -146,7 +147,7 @@ export function SEOHead({ pageData, pageUrl }: SEOHeadProps) {
       isPartOf: {
         '@type': 'WebSite',
         name: 'lnkmx',
-        url: 'https://lnkmx.my',
+        url: getAppDomain(),
       },
     };
     jsonLd.textContent = JSON.stringify(structuredData);

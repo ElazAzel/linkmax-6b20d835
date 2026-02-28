@@ -6,11 +6,12 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { Button } from '@/components/ui/button';
 import { COMPANY_DETAILS } from '@/components/legal/TermsOfServiceModal';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 const Privacy = () => {
     const { t, i18n } = useTranslation();
     const lang = i18n.language;
-    const canonical = 'https://lnkmx.my/privacy';
+    const canonical = `${getAppDomain()}/privacy`;
     const seoTitle =
         lang === 'ru'
             ? 'Политика конфиденциальности — lnkmx'
@@ -39,7 +40,7 @@ const Privacy = () => {
                     <h2 className="text-2xl font-semibold mt-8 mb-4">2. Operator and Contacts</h2>
                     <p className="mb-2">2.1. Personal data operator (Administration): {COMPANY_DETAILS.name}, BIN (IIN) {COMPANY_DETAILS.bin}, address: {COMPANY_DETAILS.address}.</p>
                     <p className="mb-2">2.2. Contact for personal data inquiries: {COMPANY_DETAILS.email}.</p>
-                    <p className="mb-4">2.3. The current version of the Policy is available at: https://lnkmx.my/privacy.</p>
+                    <p className="mb-4">{`2.3. The current version of the Policy is available at: ${getAppDomain()}/privacy.`}</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">3. Terms</h2>
                     <p className="mb-2">3.1. User - a legally capable individual who has registered an account on the Platform.</p>
@@ -83,7 +84,7 @@ const Privacy = () => {
                     <p className="mb-4">11.2. To exercise rights, the User may send a request to {COMPANY_DETAILS.email}.</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">12. Policy Changes</h2>
-                    <p className="mb-4">12.1. The Administration may update the Policy; the new version takes effect upon publication at https://lnkmx.my/privacy unless otherwise specified.</p>
+                    <p className="mb-4">{`12.1. The Administration may update the Policy; the new version takes effect upon publication at ${getAppDomain()}/privacy unless otherwise specified.`}</p>
                 </>
             );
         }
@@ -102,7 +103,7 @@ const Privacy = () => {
                     <h2 className="text-2xl font-semibold mt-8 mb-4">2. Оператор және байланыстар</h2>
                     <p className="mb-2">2.1. Дербес деректер операторы (Әкімшілік): {COMPANY_DETAILS.name}, БСН (ЖСН) {COMPANY_DETAILS.bin}, мекенжай: {COMPANY_DETAILS.address}.</p>
                     <p className="mb-2">2.2. Дербес деректер бойынша сұрауларға байланыс: {COMPANY_DETAILS.email}.</p>
-                    <p className="mb-4">2.3. Саясаттың ағымдағы нұсқасы мына мекенжайда қол жетімді: https://lnkmx.my/privacy.</p>
+                    <p className="mb-4">{`2.3. Саясаттың ағымдағы нұсқасы мына мекенжайда қол жетімді: ${getAppDomain()}/privacy.`}</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">3-12. Толық мәтін</h2>
                     <p className="mb-4">Толық ақпарат алу үшін орыс немесе ағылшын нұсқасын қараңыз.</p>
@@ -124,7 +125,7 @@ const Privacy = () => {
                 <h2 className="text-2xl font-semibold mt-8 mb-4">2. Оператор и контакты</h2>
                 <p className="mb-2">2.1. Оператор персональных данных (Администрация): {COMPANY_DETAILS.name}, БИН (ИИН) {COMPANY_DETAILS.bin}, адрес: {COMPANY_DETAILS.address}.</p>
                 <p className="mb-2">2.2. Контакты для обращений по персональным данным: {COMPANY_DETAILS.email}.</p>
-                <p className="mb-4">2.3. Актуальная версия Политики размещается по адресу: https://lnkmx.my/privacy.</p>
+                <p className="mb-4">{`2.3. Актуальная версия Политики размещается по адресу: ${getAppDomain()}/privacy.`}</p>
 
                 <h2 className="text-2xl font-semibold mt-8 mb-4">3. Термины</h2>
                 <p className="mb-2">3.1. Пользователь - дееспособное физическое лицо, зарегистрировавшее аккаунт на Платформе.</p>
@@ -168,7 +169,7 @@ const Privacy = () => {
                 <p className="mb-4">11.2. Для реализации прав Пользователь может направить запрос на {COMPANY_DETAILS.email}.</p>
 
                 <h2 className="text-2xl font-semibold mt-8 mb-4">12. Изменение Политики</h2>
-                <p className="mb-4">12.1. Администрация вправе обновлять Политику; новая редакция вступает в силу с момента публикации на https://lnkmx.my/privacy, если не указано иное.</p>
+                <p className="mb-4">{`12.1. Администрация вправе обновлять Политику; новая редакция вступает в силу с момента публикации на ${getAppDomain()}/privacy, если не указано иное.`}</p>
             </>
         );
     };

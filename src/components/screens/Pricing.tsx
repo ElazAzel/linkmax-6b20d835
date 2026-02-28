@@ -27,6 +27,7 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { cn } from '@/lib/utils/utils';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 import { useCurrencyRate, BASE_PRICES_USD, convertUsdToKzt, FIXED_PRICES_KZT, getTotalPriceKzt } from '@/hooks/useCurrencyRate';
 
 type BillingPeriod = 3 | 6 | 12;
@@ -54,7 +55,7 @@ export default function Pricing() {
 
   const { data: currentRate = 497.33 } = useCurrencyRate();
   const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
-  const canonical = 'https://lnkmx.my/pricing';
+  const canonical = `${getAppDomain()}/pricing`;
   const seoTitle = t('pricing.seo.title', 'lnkmx Pricing — Plans for Link in Bio & Mini-Sites');
   const seoDescription = t('pricing.seo.description', 'Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.');
 
@@ -158,7 +159,7 @@ export default function Pricing() {
       pageUrl={canonical}
       pageTitle={seoTitle}
       pageDescription={seoDescription}
-      imageUrl="https://lnkmx.my/og-pricing.png"
+      imageUrl={`${getAppDomain()}/og-pricing.png`}
       imageAlt={t('pricing.seo.imageAlt', 'lnkmx Pricing Plans')}
       type="website"
     />

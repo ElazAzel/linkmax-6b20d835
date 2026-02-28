@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { AISearchOptimizer } from "@/components/seo/AISearchOptimizer";
 import { StructuredData } from "@/components/seo/StructuredData";
+import { getAppDomain } from "@/lib/utils/url-helpers";
 
 const SeoLanding = () => {
     const navigate = useNavigate();
@@ -68,8 +69,8 @@ const SeoLanding = () => {
             {
                 "@type": "Organization",
                 "name": "lnkmx",
-                "url": "https://lnkmx.my",
-                "logo": "https://lnkmx.my/logo.png",
+                "url": getAppDomain(),
+                "logo": `${getAppDomain()}/logo.png`,
                 "sameAs": [
                     "https://instagram.com/lnkmx.my",
                 ],

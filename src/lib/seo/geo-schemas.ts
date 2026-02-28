@@ -8,6 +8,7 @@
 
 import type { Block, PricingBlock, EventBlock, FAQBlock, SocialsBlock, BookingBlock, MapBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
+import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 import type { AnswerBlockData } from './answer-block';
 
 export interface GEOSchemas {
@@ -46,7 +47,7 @@ export function generateGEOSchemas(
   blocks: Block[],
   context: SchemaContext
 ): GEOSchemas {
-  const pageUrl = `https://lnkmx.my/${context.slug}`;
+  const pageUrl = getPublicPageUrl(context.slug);
   const now = new Date().toISOString();
 
   // Guard against undefined/null blocks
@@ -188,15 +189,15 @@ function generateWebPage(
     },
     isPartOf: {
       '@type': 'WebSite',
-      '@id': 'https://lnkmx.my#website',
+      '@id': `${getAppDomain()}#website`,
       name: 'lnkmx',
-      url: 'https://lnkmx.my',
+      url: getAppDomain(),
     },
     provider: {
       '@type': 'Organization',
       name: 'lnkmx',
-      url: 'https://lnkmx.my',
-      logo: 'https://lnkmx.my/favicon.jpg',
+      url: getAppDomain(),
+      logo: `${getAppDomain()}/favicon.jpg`,
     },
   };
 }
@@ -210,7 +211,7 @@ function generateBreadcrumb(context: SchemaContext, pageUrl: string): object {
       '@type': 'ListItem',
       position: 1,
       name: 'lnkmx',
-      item: 'https://lnkmx.my',
+      item: getAppDomain(),
     },
     {
       '@type': 'ListItem',
@@ -226,7 +227,7 @@ function generateBreadcrumb(context: SchemaContext, pageUrl: string): object {
       '@type': 'ListItem',
       position: 2,
       name: context.answerBlock.niche,
-      item: `https://lnkmx.my/experts/${encodeURIComponent(context.answerBlock.niche.toLowerCase())}`,
+      item: `${getAppDomain()}/experts/${encodeURIComponent(context.answerBlock.niche.toLowerCase())}`,
     });
     items[2].position = 3;
   }

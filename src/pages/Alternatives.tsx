@@ -19,6 +19,7 @@ import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 // SEO Component for Alternatives page
 function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
@@ -74,16 +75,16 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
 
     setMetaTag('og:title', ogTitle, true);
     setMetaTag('og:description', ogDescription, true);
-    setMetaTag('og:url', 'https://lnkmx.my/alternatives', true);
+    setMetaTag('og:url', `${getAppDomain()}/alternatives`, true);
     setMetaTag('twitter:title', ogTitle);
     setMetaTag('twitter:description', ogDescription);
 
     // Canonical + hreflang for alternatives page
-    setLinkTag('canonical', 'https://lnkmx.my/alternatives');
-    setLinkTag('alternate', 'https://lnkmx.my/alternatives?lang=ru', 'ru');
-    setLinkTag('alternate', 'https://lnkmx.my/alternatives?lang=en', 'en');
-    setLinkTag('alternate', 'https://lnkmx.my/alternatives?lang=kk', 'kk');
-    setLinkTag('alternate', 'https://lnkmx.my/alternatives', 'x-default');
+    setLinkTag('canonical', `${getAppDomain()}/alternatives`);
+    setLinkTag('alternate', `${getAppDomain()}/alternatives?lang=ru`, 'ru');
+    setLinkTag('alternate', `${getAppDomain()}/alternatives?lang=en`, 'en');
+    setLinkTag('alternate', `${getAppDomain()}/alternatives?lang=kk`, 'kk');
+    setLinkTag('alternate', `${getAppDomain()}/alternatives`, 'x-default');
 
     // Schema for comparison page
     const existingSchema = document.querySelectorAll('script.alternatives-schema');
@@ -94,7 +95,7 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
       '@type': 'WebPage',
       name: title,
       description: description,
-      url: 'https://lnkmx.my/alternatives',
+      url: `${getAppDomain()}/alternatives`,
     };
 
     const breadcrumbSchema = {
@@ -105,13 +106,13 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
           '@type': 'ListItem',
           position: 1,
           name: 'lnkmx',
-          item: 'https://lnkmx.my/',
+          item: `${getAppDomain()}/`,
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: t('alternatives.seo.breadcrumb', 'Alternatives'),
-          item: 'https://lnkmx.my/alternatives',
+          item: `${getAppDomain()}/alternatives`,
         },
       ],
     };
@@ -284,10 +285,10 @@ export default function Alternatives() {
     <>
       <AlternativesSEOHead currentLanguage={i18n.language} />
       <SEOMetaEnhancer
-        pageUrl="https://lnkmx.my/alternatives"
+        pageUrl={`${getAppDomain()}/alternatives`}
         pageTitle={t('alternatives.seo.title', 'lnkmx alternatives - Linktree, Taplink, Carrd, Beacons comparison')}
         pageDescription={t('alternatives.seo.description', 'Compare lnkmx with Linktree, Taplink, Carrd and Beacons. See which tool fits link-in-bio, mini-landing or lead collection needs.')}
-        imageUrl="https://lnkmx.my/og-alternatives.png"
+        imageUrl={`${getAppDomain()}/og-alternatives.png`}
         imageAlt={t('alternatives.seo.imageAlt', 'lnkmx vs Alternatives Comparison')}
         type="article"
         section="Comparisons"

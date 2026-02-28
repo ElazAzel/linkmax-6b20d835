@@ -41,6 +41,7 @@ import { StructuredData } from '@/components/seo/StructuredData';
 import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { GEOTagging } from '@/components/seo/GEOTagging';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
+import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 export default function Gallery() {
   const { t, i18n } = useTranslation();
@@ -52,8 +53,8 @@ export default function Gallery() {
   const [activeTab, setActiveTab] = useState<'gallery' | 'leaderboard'>('gallery');
   const nicheLabel = selectedNiche ? t(`niches.${selectedNiche}`, selectedNiche) : null;
   const canonical = selectedNiche
-    ? `https://lnkmx.my/gallery?niche=${selectedNiche}`
-    : 'https://lnkmx.my/gallery';
+    ? `${getAppDomain()}/gallery?niche=${selectedNiche}`
+    : `${getAppDomain()}/gallery`;
   const seoTitle = selectedNiche
     ? t('gallery.seo.nicheTitle', { niche: nicheLabel, defaultValue: `lnkmx Gallery — ${nicheLabel}` })
     : t('gallery.seo.title', 'lnkmx Gallery — Link in Bio Examples & Templates');
@@ -100,7 +101,7 @@ export default function Gallery() {
         itemListElement: featuredPages.map((page, index) => ({
           '@type': 'ListItem',
           position: index + 1,
-          url: `https://lnkmx.my/${page.slug}`,
+          url: getPublicPageUrl(page.slug),
           name: page.title || page.slug,
         })),
       },
@@ -158,7 +159,7 @@ export default function Gallery() {
         pageUrl={canonical}
         pageTitle={seoTitle}
         pageDescription={seoDescription}
-        imageUrl="https://lnkmx.my/og-gallery.png"
+        imageUrl={`${getAppDomain()}/og-gallery.png`}
         imageAlt={t('gallery.seo.imageAlt', 'lnkmx Gallery - Link in Bio Examples')}
         type="website"
       />

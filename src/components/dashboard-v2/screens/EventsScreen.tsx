@@ -37,6 +37,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { toast } from 'sonner';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
+import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 interface EventData {
   id: string;
@@ -324,7 +325,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
             className="h-8 text-xs gap-1.5 ml-auto"
             onClick={(e) => {
               e.stopPropagation();
-              window.open(`https://lnkmx.my/${event.pageSlug}`, '_blank');
+              window.open(getPublicPageUrl(event.pageSlug), '_blank');
             }}
           >
             <ExternalLink className="h-3.5 w-3.5" />

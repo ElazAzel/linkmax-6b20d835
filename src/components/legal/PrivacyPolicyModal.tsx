@@ -10,6 +10,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { COMPANY_DETAILS } from './TermsOfServiceModal';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface PrivacyPolicyModalProps {
   open: boolean;
@@ -35,7 +36,7 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
           <h3 className="font-semibold mt-6 mb-2">2. Operator and Contacts</h3>
           <p className="text-sm text-muted-foreground mb-2">2.1. Personal data operator (Administration): {COMPANY_DETAILS.name}, BIN (IIN) {COMPANY_DETAILS.bin}, address: {COMPANY_DETAILS.address}.</p>
           <p className="text-sm text-muted-foreground mb-2">2.2. Contact for personal data inquiries: {COMPANY_DETAILS.email}.</p>
-          <p className="text-sm text-muted-foreground mb-2">2.3. The current version of the Policy is available at: https://lnkmx.my/privacy.</p>
+          <p className="text-sm text-muted-foreground mb-2">{`2.3. The current version of the Policy is available at: ${getAppDomain()}/privacy.`}</p>
 
           <h3 className="font-semibold mt-6 mb-2">3. Terms</h3>
           <p className="text-sm text-muted-foreground mb-2">3.1. User - a legally capable individual who has registered an account on the Platform.</p>
@@ -79,7 +80,7 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
           <p className="text-sm text-muted-foreground mb-2">11.2. To exercise rights, the User may send a request to {COMPANY_DETAILS.email}.</p>
 
           <h3 className="font-semibold mt-6 mb-2">12. Policy Changes</h3>
-          <p className="text-sm text-muted-foreground mb-2">12.1. The Administration may update the Policy; the new version takes effect upon publication at https://lnkmx.my/privacy unless otherwise specified.</p>
+          <p className="text-sm text-muted-foreground mb-2">{`12.1. The Administration may update the Policy; the new version takes effect upon publication at ${getAppDomain()}/privacy unless otherwise specified.`}</p>
         </>
       );
     }
@@ -98,7 +99,7 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
           <h3 className="font-semibold mt-6 mb-2">2. Оператор және байланыстар</h3>
           <p className="text-sm text-muted-foreground mb-2">2.1. Дербес деректер операторы (Әкімшілік): {COMPANY_DETAILS.name}, БСН (ЖСН) {COMPANY_DETAILS.bin}, мекенжай: {COMPANY_DETAILS.address}.</p>
           <p className="text-sm text-muted-foreground mb-2">2.2. Дербес деректер бойынша сұрауларға байланыс: {COMPANY_DETAILS.email}.</p>
-          <p className="text-sm text-muted-foreground mb-2">2.3. Саясаттың ағымдағы нұсқасы мына мекенжайда қол жетімді: https://lnkmx.my/privacy.</p>
+          <p className="text-sm text-muted-foreground mb-2">{`2.3. Саясаттың ағымдағы нұсқасы мына мекенжайда қол жетімді: ${getAppDomain()}/privacy.`}</p>
 
           <h3 className="font-semibold mt-6 mb-2">3. Терминдер</h3>
           <p className="text-sm text-muted-foreground mb-2">3.1. Пайдаланушы - Платформада аккаунт тіркеген әрекетке қабілетті жеке тұлға.</p>
@@ -142,7 +143,7 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
           <p className="text-sm text-muted-foreground mb-2">11.2. Құқықтарды іске асыру үшін Пайдаланушы {COMPANY_DETAILS.email} мекенжайына сұрау жібере алады.</p>
 
           <h3 className="font-semibold mt-6 mb-2">12. Саясатты өзгерту</h3>
-          <p className="text-sm text-muted-foreground mb-2">12.1. Әкімшілік Саясатты жаңарта алады; жаңа нұсқа https://lnkmx.my/privacy мекенжайында жарияланған сәттен күшіне енеді, егер өзгеше көрсетілмесе.</p>
+          <p className="text-sm text-muted-foreground mb-2">{`12.1. Әкімшілік Саясатты жаңарта алады; жаңа нұсқа ${getAppDomain()}/privacy мекенжайында жарияланған сәттен күшіне енеді, егер өзгеше көрсетілмесе.`}</p>
         </>
       );
     }
@@ -161,7 +162,7 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
         <h3 className="font-semibold mt-6 mb-2">2. Оператор и контакты</h3>
         <p className="text-sm text-muted-foreground mb-2">2.1. Оператор персональных данных (Администрация): {COMPANY_DETAILS.name}, БИН (ИИН) {COMPANY_DETAILS.bin}, адрес: {COMPANY_DETAILS.address}.</p>
         <p className="text-sm text-muted-foreground mb-2">2.2. Контакты для обращений по персональным данным: {COMPANY_DETAILS.email}.</p>
-        <p className="text-sm text-muted-foreground mb-2">2.3. Актуальная версия Политики размещается по адресу: https://lnkmx.my/privacy.</p>
+        <p className="text-sm text-muted-foreground mb-2">{`2.3. Актуальная версия Политики размещается по адресу: ${getAppDomain()}/privacy.`}</p>
 
         <h3 className="font-semibold mt-6 mb-2">3. Термины</h3>
         <p className="text-sm text-muted-foreground mb-2">3.1. Пользователь - дееспособное физическое лицо, зарегистрировавшее аккаунт на Платформе.</p>
@@ -205,7 +206,7 @@ export function PrivacyPolicyModal({ open, onOpenChange }: PrivacyPolicyModalPro
         <p className="text-sm text-muted-foreground mb-2">11.2. Для реализации прав Пользователь может направить запрос на {COMPANY_DETAILS.email}.</p>
 
         <h3 className="font-semibold mt-6 mb-2">12. Изменение Политики</h3>
-        <p className="text-sm text-muted-foreground mb-2">12.1. Администрация вправе обновлять Политику; новая редакция вступает в силу с момента публикации на https://lnkmx.my/privacy, если не указано иное.</p>
+        <p className="text-sm text-muted-foreground mb-2">{`12.1. Администрация вправе обновлять Политику; новая редакция вступает в силу с момента публикации на ${getAppDomain()}/privacy, если не указано иное.`}</p>
       </>
     );
   };

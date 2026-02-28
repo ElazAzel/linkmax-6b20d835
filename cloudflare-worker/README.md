@@ -1,6 +1,6 @@
 # Cloudflare Worker для SSR публичных страниц
 
-Этот воркер перенаправляет запросы от поисковых ботов и AI-краулеров на Edge Function `render-page` для получения серверно-отрендеренного HTML.
+Этот воркер перенаправляет запросы от поисковых ботов и AI-краулеров на Edge Functions `generate-sitemap` (для карты сайта) и `seo-ssr` (для серверного рендеринга) для получения серверно-отрендеренного HTML.
 
 ## Архитектура
 
@@ -126,7 +126,8 @@ curl -I -H "User-Agent: Googlebot" https://lnkmx.my/elazart
 SSR контент генерируется через Edge Function:
 
 ```text
-GET https://pphdcfxucfndmwulpfwv.supabase.co/functions/v1/render-page?slug={slug}&lang={lang}
+GET https://<project-ref>.supabase.co/functions/v1/seo-ssr?slug={slug}&lang={lang}
+GET https://<project-ref>.supabase.co/functions/v1/generate-sitemap
 ```
 
 Параметры:

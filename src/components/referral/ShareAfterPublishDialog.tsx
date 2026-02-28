@@ -57,7 +57,7 @@ export function ShareAfterPublishDialog({
           url: publishedUrl,
         });
       } catch (e) {
-        // User cancelled
+        // fire-and-forget: user cancelled share dialog, non-critical
       }
     } else {
       handleCopyPageLink();

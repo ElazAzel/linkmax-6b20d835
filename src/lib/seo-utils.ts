@@ -6,6 +6,7 @@
 import type { Block, FAQBlock, EventBlock, ProfileBlock, AvatarBlock, SocialsBlock, PricingBlock } from '@/types/page';
 import type { MultilingualString } from '@/lib/i18n-helpers';
 import { getI18nText } from '@/lib/i18n-helpers';
+import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 // ============= Quality Gate =============
 
@@ -283,7 +284,7 @@ export function generatePageMeta(
     : 'noindex, nofollow';
 
   // Canonical URL (clean, no UTM)
-  const canonical = `https://lnkmx.my/${slug}`;
+  const canonical = getPublicPageUrl(slug);
 
   return {
     title: title.slice(0, 60),
@@ -312,7 +313,7 @@ export function generateSchemas(
   meta: GeneratedMeta,
   language: 'ru' | 'en' | 'kk' = 'ru'
 ): SchemaData {
-  const pageUrl = `https://lnkmx.my/${slug}`;
+  const pageUrl = getPublicPageUrl(slug);
   const now = new Date().toISOString();
 
   // Main entity (Person or Organization)
@@ -349,12 +350,12 @@ export function generateSchemas(
     isPartOf: {
       '@type': 'WebSite',
       name: 'lnkmx',
-      url: 'https://lnkmx.my',
+      url: getAppDomain(),
     },
     provider: {
       '@type': 'Organization',
       name: 'lnkmx',
-      url: 'https://lnkmx.my',
+      url: getAppDomain(),
     },
   };
 
@@ -367,7 +368,7 @@ export function generateSchemas(
         '@type': 'ListItem',
         position: 1,
         name: 'lnkmx',
-        item: 'https://lnkmx.my',
+        item: getAppDomain(),
       },
       {
         '@type': 'ListItem',

@@ -29,6 +29,7 @@ import { trackShare } from '@/services/analytics';
 import { checkPremiumStatus } from '@/services/user';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
+import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 import type { PageData, PageBackground, Block } from '@/types/page';
 import {
   Dialog,
@@ -139,7 +140,7 @@ export default function PublicPage() {
   // Build canonical URL for SEO
   const canonicalUrl = useMemo(() => {
     if (slug) {
-      return `https://lnkmx.my/${slug}`;
+      return getPublicPageUrl(slug);
     }
     return window.location.href;
   }, [slug]);
@@ -218,7 +219,7 @@ export default function PublicPage() {
             pageUrl={canonicalUrl}
             pageTitle={pageData.seo?.title || pageData.slug || 'Profile'}
             pageDescription={pageData.seo?.description || t('publicPage.defaultDescription', 'View my profile')}
-            imageUrl={'https://lnkmx.my/og-default.png'}
+            imageUrl={`${getAppDomain()}/og-default.png`}
             imageAlt={pageData.seo?.title || pageData.slug}
             type="profile"
           />

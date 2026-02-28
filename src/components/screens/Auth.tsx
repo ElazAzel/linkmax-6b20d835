@@ -23,6 +23,7 @@ import { TermsLink } from '@/components/legal/TermsOfServiceModal';
 import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { Checkbox } from '@/components/ui/checkbox';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 const authSchema = z.object({
   email: z
@@ -45,7 +46,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
-  const canonical = 'https://lnkmx.my/auth';
+  const canonical = `${getAppDomain()}/auth`;
   const seoTitle = t('auth.seo.title', 'Sign in to lnkmx');
   const seoDescription = t(
     'auth.seo.description',

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getTopPremiumPages, type GalleryPage } from '@/services/gallery';
+import { logger } from '@/lib/utils/logger';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
 import { parseMultilingualField, type SupportedLanguage } from '@/lib/i18n-helpers';
 
@@ -27,7 +28,10 @@ export function LandingFeaturedPages() {
     getTopPremiumPages(5).then(data => {
       setPages(data);
       setLoading(false);
-    }).catch(() => setLoading(false));
+    }).catch((error) => {
+      logger.error('Failed to load featured pages', error, { context: 'LandingFeaturedPages' });
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {

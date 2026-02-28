@@ -27,6 +27,7 @@ import Search from 'lucide-react/dist/esm/icons/search';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { cn } from '@/lib/utils/utils';
+import { getAppDomain, getPublicPageUrl } from '@/lib/utils/url-helpers';
 
 // Normalized niche tags with i18n
 const NICHE_TAGS = [
@@ -95,8 +96,8 @@ export default function Experts() {
     : t('experts.directoryDescription', 'Найдите экспертов и специалистов на lnkmx');
 
   const canonical = tag
-    ? `https://lnkmx.my/experts/${tag}`
-    : 'https://lnkmx.my/experts';
+    ? `${getAppDomain()}/experts/${tag}`
+    : `${getAppDomain()}/experts`;
 
   // JSON-LD Schema
   useEffect(() => {
@@ -114,7 +115,7 @@ export default function Experts() {
           item: {
             '@type': 'Person',
             name: expert.title || expert.slug,
-            url: `https://lnkmx.my/${expert.slug}`,
+            url: getPublicPageUrl(expert.slug),
             image: expert.avatar_url,
           },
         })),
@@ -122,7 +123,7 @@ export default function Experts() {
       isPartOf: {
         '@type': 'WebSite',
         name: 'lnkmx',
-        url: 'https://lnkmx.my',
+        url: getAppDomain(),
       },
     };
 
@@ -295,7 +296,7 @@ export default function Experts() {
                           >
                             {expert.description || t('experts.noDescription', 'Нет описания')}
                           </p>
-                          <meta itemProp="url" content={`https://lnkmx.my/${expert.slug}`} />
+                          <meta itemProp="url" content={getPublicPageUrl(expert.slug)} />
                         </div>
                         <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>

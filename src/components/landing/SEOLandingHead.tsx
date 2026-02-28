@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface SEOLandingHeadProps {
   currentLanguage: string;
@@ -104,23 +105,23 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     }
 
     // Canonical
-    setLinkTag('canonical', 'https://lnkmx.my/');
+    setLinkTag('canonical', `${getAppDomain()}/`);
 
     // Hreflang tags for international SEO
-    setLinkTag('alternate', 'https://lnkmx.my/?lang=ru', 'ru');
-    setLinkTag('alternate', 'https://lnkmx.my/?lang=en', 'en');
-    setLinkTag('alternate', 'https://lnkmx.my/?lang=kk', 'kk');
-    setLinkTag('alternate', 'https://lnkmx.my/', 'x-default');
+    setLinkTag('alternate', `${getAppDomain()}/?lang=ru`, 'ru');
+    setLinkTag('alternate', `${getAppDomain()}/?lang=en`, 'en');
+    setLinkTag('alternate', `${getAppDomain()}/?lang=kk`, 'kk');
+    setLinkTag('alternate', `${getAppDomain()}/`, 'x-default');
 
     // Update html lang attribute
     document.documentElement.lang = currentLanguage === 'kk' ? 'kk' : currentLanguage === 'en' ? 'en' : 'ru';
 
     // OG Image
-    const ogImageUrl = 'https://lnkmx.my/og-image.png';
+    const ogImageUrl = `${getAppDomain()}/og-image.png`;
     
     // Open Graph optimized for social sharing
     setMetaTag('og:type', 'website', true);
-    setMetaTag('og:url', 'https://lnkmx.my/', true);
+    setMetaTag('og:url', `${getAppDomain()}/`, true);
     setMetaTag('og:title', title, true);
     setMetaTag('og:description', description, true);
     setMetaTag('og:site_name', 'lnkmx', true);
@@ -161,13 +162,13 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const organizationSchema = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      '@id': 'https://lnkmx.my/#organization',
+      '@id': `${getAppDomain()}/#organization`,
       name: 'lnkmx',
       alternateName: ['lnkmx.my', 'The Micro-Business OS'],
-      url: 'https://lnkmx.my/',
+      url: `${getAppDomain()}/`,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://lnkmx.my/favicon.jpg',
+        url: `${getAppDomain()}/favicon.jpg`,
         width: 512,
         height: 512,
       },
@@ -183,20 +184,20 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const websiteSchema = {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      '@id': 'https://lnkmx.my/#website',
+      '@id': `${getAppDomain()}/#website`,
       name: 'lnkmx - The Micro-Business OS',
-      url: 'https://lnkmx.my/',
+      url: `${getAppDomain()}/`,
       inLanguage: ['ru', 'en', 'kk'],
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: 'https://lnkmx.my/{username}',
+          urlTemplate: `${getAppDomain()}/{username}`,
         },
         'query-input': 'required name=username',
       },
       publisher: {
-        '@id': 'https://lnkmx.my/#organization',
+        '@id': `${getAppDomain()}/#organization`,
       },
     };
 
@@ -205,7 +206,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: 'lnkmx - The Micro-Business OS',
-      url: 'https://lnkmx.my/',
+      url: `${getAppDomain()}/`,
       applicationCategory: 'BusinessApplication',
       applicationSubCategory: [
         'Website Builder',
@@ -240,7 +241,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
           price: '0',
           priceCurrency: 'USD',
           availability: 'https://schema.org/InStock',
-          url: 'https://lnkmx.my/pricing',
+          url: `${getAppDomain()}/pricing`,
         },
         {
           '@type': 'Offer',
@@ -248,24 +249,24 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
           price: '2.61',
           priceCurrency: 'USD',
           availability: 'https://schema.org/InStock',
-          url: 'https://lnkmx.my/pricing',
+          url: `${getAppDomain()}/pricing`,
         },
       ],
       publisher: {
-        '@id': 'https://lnkmx.my/#organization',
+        '@id': `${getAppDomain()}/#organization`,
       },
     };
 
     const webPageSchema = {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      '@id': 'https://lnkmx.my/#homepage',
+      '@id': `${getAppDomain()}/#homepage`,
       name: title,
       description: description,
-      url: 'https://lnkmx.my/',
+      url: `${getAppDomain()}/`,
       inLanguage: pageLanguage,
       isPartOf: {
-        '@id': 'https://lnkmx.my/#website',
+        '@id': `${getAppDomain()}/#website`,
       },
       about: [
         {
@@ -282,7 +283,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         },
       ],
       mainEntity: {
-        '@id': 'https://lnkmx.my/#organization',
+        '@id': `${getAppDomain()}/#organization`,
       },
     };
 
@@ -299,7 +300,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         isRussian ? 'Аналитическая платформа' : 'Analytics Platform',
       ],
       provider: {
-        '@id': 'https://lnkmx.my/#organization',
+        '@id': `${getAppDomain()}/#organization`,
       },
       description: isRussian
         ? 'Полноценная платформа для микробизнеса: конструктор страниц с AI, встроенная CRM для управления заявками, аналитика и автоматизация.'
@@ -371,19 +372,19 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
           '@type': 'ListItem',
           position: 1,
           name: 'lnkmx',
-          item: 'https://lnkmx.my/',
+          item: `${getAppDomain()}/`,
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: isRussian ? 'Тарифы' : isKazakh ? 'Тарифтер' : 'Pricing',
-          item: 'https://lnkmx.my/pricing',
+          item: `${getAppDomain()}/pricing`,
         },
         {
           '@type': 'ListItem',
           position: 3,
           name: isRussian ? 'Галерея' : isKazakh ? 'Галерея' : 'Gallery',
-          item: 'https://lnkmx.my/gallery',
+          item: `${getAppDomain()}/gallery`,
         },
       ],
     };

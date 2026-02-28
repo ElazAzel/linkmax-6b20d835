@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
@@ -53,7 +54,7 @@ function TabLoader() {
 export default function Admin() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const canonical = 'https://lnkmx.my/admin';
+  const canonical = `${getAppDomain()}/admin`;
   const seoTitle = t('admin.seo.title', 'lnkmx Admin');
   const seoDescription = t('admin.seo.description', 'Admin tools for managing lnkmx.');
   const { isAdmin, loading, user } = useAdminAuth();

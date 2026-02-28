@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { Button } from '@/components/ui/button';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 const PaymentTerms = () => {
     const { t, i18n } = useTranslation();
     const lang = i18n.language;
-    const canonical = 'https://lnkmx.my/payment-terms';
+    const canonical = `${getAppDomain()}/payment-terms`;
     const seoTitle =
         lang === 'ru'
             ? 'Условия оплаты — lnkmx'

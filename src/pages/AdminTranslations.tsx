@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Shield from 'lucide-react/dist/esm/icons/shield';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -157,7 +158,7 @@ function mergeDeep(target: TranslationData, source: TranslationData): Translatio
 export default function AdminTranslations() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const canonical = 'https://lnkmx.my/admin/translations';
+  const canonical = `${getAppDomain()}/admin/translations`;
   const seoTitle = t('adminTranslations.seo.title', 'lnkmx Admin Translations');
   const seoDescription = t('adminTranslations.seo.description', 'Internal translation management for lnkmx.');
   const { isAdmin, loading } = useAdminAuth();

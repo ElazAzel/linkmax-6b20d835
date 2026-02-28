@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface AISearchOptimizerProps {
     pageType: 'homepage' | 'product' | 'gallery' | 'profile' | 'article' | 'pricing';
@@ -139,7 +140,7 @@ export function AISearchOptimizer({
             '@graph': [
                 {
                     '@type': 'Thing',
-                    '@id': `https://lnkmx.my/#${pageType}`,
+                    '@id': `${getAppDomain()}/#${pageType}`,
                     name: entityName,
                     description: primaryAnswer || solutionStatement,
                     url: window.location.href,
@@ -148,7 +149,7 @@ export function AISearchOptimizer({
                 },
                 ...(useCases.length > 0 ? [{
                     '@type': 'ItemList',
-                    '@id': 'https://lnkmx.my/#use-cases',
+                    '@id': `${getAppDomain()}/#use-cases`,
                     name: `${entityName} Use Cases`,
                     itemListElement: useCases.map((useCase, index) => ({
                         '@type': 'ListItem',
@@ -158,7 +159,7 @@ export function AISearchOptimizer({
                 }] : []),
                 ...(keyFeatures.length > 0 ? [{
                     '@type': 'ItemList',
-                    '@id': 'https://lnkmx.my/#features',
+                    '@id': `${getAppDomain()}/#features`,
                     name: `${entityName} Features`,
                     itemListElement: keyFeatures.map((feature, index) => ({
                         '@type': 'ListItem',

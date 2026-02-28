@@ -52,6 +52,7 @@ import FileSpreadsheet from 'lucide-react/dist/esm/icons/file-spreadsheet';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import { toast } from 'sonner';
+import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
 import { exportToExcel, exportToCSV } from '@/lib/export/excel-export';
@@ -664,7 +665,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
               variant="outline"
               size="sm"
               className="h-9 w-9 p-0"
-              onClick={() => window.open(`https://lnkmx.my/${event.pageSlug}`, '_blank')}
+              onClick={() => window.open(getPublicPageUrl(event.pageSlug), '_blank')}
             >
               <ExternalLink className="h-4 w-4" />
             </Button>

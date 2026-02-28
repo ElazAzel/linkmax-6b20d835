@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import type { Block, FAQBlock, EventBlock, PricingBlock, SocialsBlock, TextBlock } from '@/types/page';
 import { getI18nText } from '@/lib/i18n-helpers';
 import { extractProfileFromBlocks, generateSourceContext } from '@/lib/seo-utils';
+import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { generateSectionAnchors, SECTION_LABELS } from '@/lib/seo/anchors';
 import { extractEntityLinks } from '@/lib/seo/entity-linking';
 import { generateAnswerBlock } from '@/lib/seo/answer-block';
@@ -102,7 +103,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
             />
           )}
           {/* Canonical URL */}
-          <link itemProp="url" href={`https://lnkmx.my/${slug}`} />
+          <link itemProp="url" href={getPublicPageUrl(slug)} />
           
           {/* sameAs links for entity linking */}
           {entityLinks.sameAs.map((url, i) => (
@@ -296,7 +297,7 @@ export function CrawlerFriendlyContent({ blocks, slug, updatedAt }: CrawlerFrien
         <footer>
           <small>{sourceContext}</small>
           <p>
-            <a href={`https://lnkmx.my/${slug}`} itemProp="url">
+            <a href={getPublicPageUrl(slug)} itemProp="url">
               lnkmx.my/{slug}
             </a>
           </p>

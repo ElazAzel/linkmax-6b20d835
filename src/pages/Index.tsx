@@ -5,6 +5,7 @@ import { useLandingAnalytics, useSectionObserver } from '@/hooks/analytics/useLa
 import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 // Critical above-fold components - load eagerly
 import { HeroSection } from '@/components/landing/v2/HeroSection';
@@ -63,16 +64,16 @@ export default function Index() {
       <SEOLandingHead currentLanguage={i18n.language} />
       <Suspense fallback={null}>
         <SEOMetaEnhancer
-          pageUrl="https://lnkmx.my/"
+          pageUrl={`${getAppDomain()}/`}
           pageTitle={t('landing.v4.hero.title', 'Build pages that convert')}
           pageDescription={t('landing.v4.hero.subtitle', 'The all-in-one platform for creators. AI builds the structure, you get the leads.')}
-          imageUrl="https://lnkmx.my/og-image.png"
+          imageUrl={`${getAppDomain()}/og-image.png`}
           imageAlt="lnkmx - AI Page Builder"
           type="website"
         />
         <GEOTagging includeOrganization={true} />
         <AEOOptimizer
-          pageUrl="https://lnkmx.my/"
+          pageUrl={`${getAppDomain()}/`}
           type="howto"
           howToName={t('landing.v4.seo.howToName', 'How to build a landing page with AI')}
           howToDescription={t('landing.v4.seo.howToDesc', 'Create a professional page in 2 minutes')}

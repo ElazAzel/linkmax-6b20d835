@@ -7,11 +7,12 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { COMPANY_DETAILS } from '@/components/legal/TermsOfServiceModal';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 const Terms = () => {
     const { t, i18n } = useTranslation();
     const lang = i18n.language;
-    const canonical = 'https://lnkmx.my/terms';
+    const canonical = `${getAppDomain()}/terms`;
     const seoTitle =
         lang === 'ru'
             ? 'Пользовательское соглашение — lnkmx'
@@ -44,12 +45,12 @@ const Terms = () => {
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">2. Terms and Definitions</h2>
                     <p className="mb-2">2.1. lnkmx.my - an online platform for creating personal mini-sites (link-in-bio pages/micro-landings), analytics, and lead management, including AI-based features.</p>
-                    <p className="mb-2">2.2. Platform - the website https://lnkmx.my, subdomains, API, PWA, and other interfaces for accessing lnkmx.my services.</p>
+                    <p className="mb-2">{`2.2. Platform - the website ${getAppDomain()}, subdomains, API, PWA, and other interfaces for accessing lnkmx.my services.`}</p>
                     <p className="mb-2">2.3. User - a legally capable individual and/or representative of a legal entity/sole proprietor using the Platform.</p>
                     <p className="mb-2">2.4. Account - User's account (email/password, social logins, Telegram ID, etc.) for authentication.</p>
                     <p className="mb-2">2.5. User Content - any materials posted by the User (texts, images, videos, links, products, forms, files, etc.).</p>
                     <p className="mb-2">2.6. Public Page - User's page/mini-site available at a unique address (slug).</p>
-                    <p className="mb-2">2.7. Privacy Policy - document on personal data processing at https://lnkmx.my/privacy.</p>
+                    <p className="mb-2">{`2.7. Privacy Policy - document on personal data processing at ${getAppDomain()}/privacy.`}</p>
                     <p className="mb-4">2.8. Payment Terms - separate document with payment/refund/commission/provider terms published by the Administration on the Platform.</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">3. Subject of Agreement and Acceptance</h2>
@@ -75,7 +76,7 @@ const Terms = () => {
                     <h2 className="text-2xl font-semibold mt-8 mb-4">7. Paid Features and Payment</h2>
                     <p className="mb-2">7.1. The Platform may include paid plans/subscriptions (e.g., PRO/BUSINESS) and additional services.</p>
                     <p className="mb-2">7.2. Payment terms, refunds, payment providers, subscription periods, commissions, and other financial terms are governed by Payment Terms, which are an integral part of the Agreement.</p>
-                    <p className="mb-4">7.3. Current prices and plan details are published at https://lnkmx.my/pricing; changes apply to new periods/purchases unless otherwise specified in Payment Terms.</p>
+                    <p className="mb-4">{`7.3. Current prices and plan details are published at ${getAppDomain()}/pricing; changes apply to new periods/purchases unless otherwise specified in Payment Terms.`}</p>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">8. User Content and Intellectual Property</h2>
                     <p className="mb-2">8.1. All exclusive rights to the Platform (code, design, brand, documentation) belong to the Administration or are used on legal grounds.</p>
@@ -100,7 +101,7 @@ const Terms = () => {
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4">13. Contacts and Notifications</h2>
                     <p className="mb-2">13.1. Inquiries/claims should be sent to {COMPANY_DETAILS.email}.</p>
-                    <p className="mb-4">13.2. The current version of the Agreement is available at: https://lnkmx.my/terms.</p>
+                    <p className="mb-4">{`13.2. The current version of the Agreement is available at: ${getAppDomain()}/terms.`}</p>
                 </>
             );
         }
@@ -145,12 +146,12 @@ const Terms = () => {
 
                 <h2 className="text-2xl font-semibold mt-8 mb-4">2. Термины и определения</h2>
                 <p className="mb-2">2.1. lnkmx.my - онлайн-платформа для создания персональных мини-сайтов (link-in-bio страниц/микролендингов), аналитики и управления лидами, включая функции на базе ИИ.</p>
-                <p className="mb-2">2.2. Платформа - сайт https://lnkmx.my, поддомены, API, PWA и иные интерфейсы доступа к сервисам lnkmx.my.</p>
+                <p className="mb-2">{`2.2. Платформа - сайт ${getAppDomain()}, поддомены, API, PWA и иные интерфейсы доступа к сервисам lnkmx.my.`}</p>
                 <p className="mb-2">2.3. Пользователь - дееспособное физическое лицо и/или представитель юрлица/ИП, использующий Платформу.</p>
                 <p className="mb-2">2.4. Аккаунт - учётная запись Пользователя (email/пароль, соц. логины, Telegram ID и пр.) для аутентификации.</p>
                 <p className="mb-2">2.5. Контент Пользователя - любые материалы, размещаемые Пользователем (тексты, изображения, видео, ссылки, товары, формы, файлы и др.).</p>
                 <p className="mb-2">2.6. Публичная страница (Page) - страница/мини-сайт Пользователя, доступный по уникальному адресу (slug).</p>
-                <p className="mb-2">2.7. Политика конфиденциальности - документ по обработке персональных данных по адресу https://lnkmx.my/privacy.</p>
+                <p className="mb-2">{`2.7. Политика конфиденциальности - документ по обработке персональных данных по адресу ${getAppDomain()}/privacy.`}</p>
                 <p className="mb-4">2.8. Payment Terms (Условия оплаты) - отдельный документ с условиями оплаты/возвратов/комиссий/провайдерами, размещаемый Администрацией на Платформе.</p>
 
                 <h2 className="text-2xl font-semibold mt-8 mb-4">3. Предмет соглашения и акцепт</h2>
@@ -176,7 +177,7 @@ const Terms = () => {
                 <h2 className="text-2xl font-semibold mt-8 mb-4">7. Платные функции и оплата</h2>
                 <p className="mb-2">7.1. Платформа может включать платные тарифы/подписки (например, PRO/BUSINESS) и дополнительные услуги.</p>
                 <p className="mb-2">7.2. Условия оплаты, возвратов, провайдеры платежей, период подписки, комиссии и иные финансовые условия регулируются Payment Terms, которые являются неотъемлемой частью Соглашения.</p>
-                <p className="mb-4">7.3. Актуальные цены и состав тарифов публикуются на https://lnkmx.my/pricing; изменения применяются для новых периодов/покупок, если не указано иное в Payment Terms.</p>
+                <p className="mb-4">{`7.3. Актуальные цены и состав тарифов публикуются на ${getAppDomain()}/pricing; изменения применяются для новых периодов/покупок, если не указано иное в Payment Terms.`}</p>
 
                 <h2 className="text-2xl font-semibold mt-8 mb-4">8. Контент пользователя и интеллектуальная собственность</h2>
                 <p className="mb-2">8.1. Все исключительные права на Платформу (код, дизайн, бренд, документация) принадлежат Администрации или используются на законных основаниях.</p>
@@ -201,7 +202,7 @@ const Terms = () => {
 
                 <h2 className="text-2xl font-semibold mt-8 mb-4">13. Контакты и уведомления</h2>
                 <p className="mb-2">13.1. Обращения/претензии направляются на {COMPANY_DETAILS.email}.</p>
-                <p className="mb-4">13.2. Актуальная версия Соглашения доступна по адресу: https://lnkmx.my/terms.</p>
+                <p className="mb-4">{`13.2. Актуальная версия Соглашения доступна по адресу: ${getAppDomain()}/terms.`}</p>
             </>
         );
     };

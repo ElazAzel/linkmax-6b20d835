@@ -1,5 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface FreemiumWatermarkProps {
   show: boolean;
@@ -32,7 +33,7 @@ export const FreemiumWatermark = memo(function FreemiumWatermark({ show }: Freem
 
   return (
     <a
-      href="https://lnkmx.my"
+      href={getAppDomain()}
       target="_blank"
       rel="noopener noreferrer"
       className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm border border-border rounded-full shadow-lg hover:shadow-xl transition-all duration-700 hover:scale-105 group ${
