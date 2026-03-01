@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
-import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import Menu from 'lucide-react/dist/esm/icons/menu';
 import X from 'lucide-react/dist/esm/icons/x';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+
+// Lazy load LanguageSwitcher — it imports dropdown-menu, switch, input, scroll-area
+// which are not needed until user interacts with the nav
+const LanguageSwitcher = lazy(() => import('@/components/translation/LanguageSwitcher').then(m => ({ default: m.LanguageSwitcher })));
 
 interface NavProps {
     onLogin: () => void;
@@ -86,7 +89,9 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
 
                     <div className="w-px h-5 bg-white/10 mx-1" />
 
-                    <LanguageSwitcher />
+                    <Suspense fallback={null}>
+                        <LanguageSwitcher />
+                    </Suspense>
 
                     <Button
                         variant="ghost"
@@ -188,7 +193,9 @@ export const DynamicIslandNav = ({ onLogin, onSignup }: NavProps) => {
                                 ))}
                             </nav>
 
-                            <LanguageSwitcher />
+                            <Suspense fallback={null}>
+                                <LanguageSwitcher />
+                            </Suspense>
 
                             <div className="h-px bg-white/10 w-full" />
 
