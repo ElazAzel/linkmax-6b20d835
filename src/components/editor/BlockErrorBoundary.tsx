@@ -1,6 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
-import { Sentry, isSentryEnabled } from '@/lib/utils/sentry';
 
 interface Props {
     children: ReactNode;
@@ -23,13 +22,16 @@ export class BlockErrorBoundary extends Component<Props, State> {
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error('Block rendering error:', error, errorInfo);
-        if (isSentryEnabled) {
-            Sentry.withScope((scope) => {
-                scope.setTag('component', 'BlockErrorBoundary');
-                scope.setExtra('componentStack', errorInfo.componentStack);
-                Sentry.captureException(error);
-            });
-        }
+        // Lazy-load Sentry to avoid pulling it into the main bundle
+        import('@/lib/utils/sentry').then(({ Sentry, isSentryEnabled }) => {
+            if (isSentryEnabled) {
+                Sentry.withScope((scope) => {
+                    scope.setTag('component', 'BlockErrorBoundary');
+                    scope.setExtra('componentStack', errorInfo.componentStack);
+                    Sentry.captureException(error);
+                });
+            }
+        });
     }
 
     public render() {

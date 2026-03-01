@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { onLCP, onCLS, onINP, onTTFB, type Metric } from 'web-vitals';
 import { logger } from '@/lib/utils/logger';
-import { Sentry, isSentryEnabled } from '@/lib/utils/sentry';
 
 // Web Vitals types (kept for backward compatibility)
 export interface WebVitalsMetric {
@@ -26,17 +25,18 @@ function toWebVitalsMetric(metric: Metric): WebVitalsMetric {
 }
 
 /**
- * Send a metric to Sentry as a custom measurement
+ * Send a metric to Sentry as a custom measurement (lazy-loaded)
  */
 function reportToSentry(metric: Metric): void {
-  if (!isSentryEnabled) return;
-
-  const unit = metric.name === 'CLS' ? '' : 'millisecond';
-  Sentry.setMeasurement(
-    `web_vitals.${metric.name.toLowerCase()}`,
-    metric.value,
-    unit
-  );
+  import('@/lib/utils/sentry').then(({ Sentry, isSentryEnabled }) => {
+    if (!isSentryEnabled) return;
+    const unit = metric.name === 'CLS' ? '' : 'millisecond';
+    Sentry.setMeasurement(
+      `web_vitals.${metric.name.toLowerCase()}`,
+      metric.value,
+      unit
+    );
+  });
 }
 
 /**
