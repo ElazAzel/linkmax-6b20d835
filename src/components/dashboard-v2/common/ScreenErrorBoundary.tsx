@@ -1,7 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import RefreshCcw from 'lucide-react/dist/esm/icons/refresh-ccw';
-import { Button } from '@/components/ui';
+import { Button } from '@/components/ui/button';
 
 interface Props {
     children: ReactNode;

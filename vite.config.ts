@@ -72,8 +72,15 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules/date-fns')) return 'vendor-date';
           if (id.includes('node_modules/react-helmet') || id.includes('node_modules/react-day-picker')) return 'vendor-misc';
           if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) return 'vendor-3d';
-          if (id.includes('node_modules/jspdf') || id.includes('node_modules/exceljs') || id.includes('node_modules/html2canvas')) return 'vendor-export';
+          if (id.includes('node_modules/jspdf')) return 'vendor-export-pdf';
+          if (id.includes('node_modules/exceljs')) return 'vendor-export-xlsx';
+          if (id.includes('node_modules/html2canvas')) return 'vendor-export-canvas';
           if (id.includes('node_modules/qrcode')) return 'vendor-qr';
+          if (id.includes('node_modules/web-vitals')) return 'vendor-vitals';
+          if (id.includes('node_modules/sonner') || id.includes('node_modules/cmdk')) return 'vendor-misc';
+          if (id.includes('node_modules/class-variance-authority') || id.includes('node_modules/clsx') || id.includes('node_modules/tailwind-merge')) return 'vendor-misc';
+          // Catch-all: prevent Rollup from creating unexpected large shared chunks
+          if (id.includes('node_modules/')) return 'vendor-other';
           // Split locale JSON files into separate chunks
           if (id.includes('src/i18n/locales/') && !id.includes('ru.json') && !id.includes('en.json') && !id.includes('kk.json')) {
             const match = id.match(/locales\/(\w+)\.json/);

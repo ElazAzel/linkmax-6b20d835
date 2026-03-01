@@ -9,7 +9,8 @@ export * from "./button";
 export * from "./calendar";
 export * from "./card";
 export * from "./carousel";
-export * from "./chart";
+// chart is excluded from barrel to avoid pulling recharts (116KB) into shared chunks
+// Import directly: import { ChartContainer } from '@/components/ui/chart'
 export * from "./checkbox";
 export * from "./collapsible";
 export * from "./command";
