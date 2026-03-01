@@ -42,22 +42,36 @@ const PageLoader = () => (
 
 
 const App = () => {
-  // Defer non-critical init to after first paint
+  // Defer non-critical init until user interacts or after 8s
+  // This prevents web-vitals, storage, and i18n-db-backend chunks from loading on initial paint
   useEffect(() => {
-    _ric(() => {
-      // Web Vitals — monitoring only, not needed for render
-      import("@/hooks/analytics/useWebVitals");
-      // Clear old storage versions
-      import('@/lib/storage').then(({ storage }) => {
-        storage.clearOldVersions();
-      });
-      // Sync translations from DB
-      import('./i18n/config').then(({ default: i18n }) => {
-        import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
-          syncI18nWithDB(i18n);
+    let fired = false;
+    const run = () => {
+      if (fired) return;
+      fired = true;
+      ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
+        window.removeEventListener(e, run)
+      );
+      _ric(() => {
+        // Web Vitals — monitoring only, not needed for render
+        import("@/hooks/analytics/useWebVitals");
+        // Clear old storage versions
+        import('@/lib/storage').then(({ storage }) => {
+          storage.clearOldVersions();
+        });
+        // Sync translations from DB
+        import('./i18n/config').then(({ default: i18n }) => {
+          import('./lib/i18n-db-backend').then(({ syncI18nWithDB }) => {
+            syncI18nWithDB(i18n);
+          });
         });
       });
-    });
+    };
+    ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
+      window.addEventListener(e, run, { once: true, passive: true })
+    );
+    const timer = setTimeout(run, 8000);
+    return () => { clearTimeout(timer); };
   }, []);
 
   // Listen for OAuth errors in URL
