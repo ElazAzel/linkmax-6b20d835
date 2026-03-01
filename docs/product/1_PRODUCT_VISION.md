@@ -1,7 +1,7 @@
 # 1. Product Vision & Strategy
 
 > **Status:** Active
-> **Last Updated:** February 28, 2026
+> **Last Updated:** March 1, 2026
 > **Owner:** Product Team
 
 ---
@@ -56,6 +56,9 @@ We don't want to integrate with Calendly; we want to kill Calendly for this segm
 
 ### Bet 3: Hyper-Localization (Regional Dominance First)
 Global competitors (Linktree) ignore local nuances. We win by integrating local payment gateways (Kaspi, Robokassa), local languages (KZ/RU/EN), and local auth methods (Telegram integration).
+
+### Positioning vs Bitrix24 and heavy CRMs
+We do **not** compete with Bitrix24 or enterprise CRMs on breadth. We position lnkmx as the **anti-Bitrix for solopreneurs**: simple, fast, mobile-first, and working out of the box in 15 minutes—no implementation, no programmers. Where Bitrix24 is complex, slow, desktop-centric, and expensive per seat, lnkmx is «3 clicks», lightweight analytics, PWA + native apps, and a single Pro tariff. We deliver *just enough* CRM (deals, contacts, tasks, automations, invoices) to run a one-person or micro team, and deliberately avoid BPMN, telephony, HR, and document workflow.
 
 ---
 

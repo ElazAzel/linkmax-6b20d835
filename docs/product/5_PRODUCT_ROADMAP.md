@@ -1,7 +1,7 @@
 # 5. Product Roadmap (2026)
 
 > **Status:** Active
-> **Last Updated:** February 28, 2026
+> **Last Updated:** March 1, 2026
 > **Execution Horizon:** 12 Months
 
 ---
@@ -50,6 +50,16 @@ We use the **RICE** score to prioritize features:
 *   **E**ffort: Engineering weeks.
 
 *Current Top Priority*: **Booking V2** (High Reach, High Impact for Beauty vertical).
+
+---
+
+## 3.1 Competitive Plan Phases (vs Bitrix24 / Taplink / Linktree)
+
+| Phase | Focus | Quarter | Status |
+| :--- | :--- | :--- | :--- |
+| **A** | Закрыть критичные пробелы CRM (Deals DnD/Won-Lost/фильтры, Contact Detail, Tasks, Zone Analytics, Automations, Invoices + Robokassa) | Q1–Q2 2026 | Done |
+| **B** | Усилить «где конкуренты слабы»: онбординг, месседжи «CRM без внедрения», «Вся работа со смартфона», сравнения lnkmx vs Taplink/Linktree/Bitrix24 | Ongoing | In progress |
+| **C** | Локализация: Kaspi (KZ), Custom domains (Q3) | Q2–Q3 2026 | Planned |
 
 ---
 

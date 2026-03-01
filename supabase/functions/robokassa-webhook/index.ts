@@ -86,15 +86,21 @@ serve(async (req: Request) => {
                 return new Response("DB ERROR", { status: 500 });
             }
         } else if (shp_type === 'payment') {
-            // Fintech logic: Record the income as COMPLETED
             const amount = parseFloat(outSum);
 
-            // 1. Find the pending transaction if it exists by relatedId
-            // 2. Or just create/update transaction status to 'completed'
-            // We'll use our fintechService-like logic here in SQL or RPC for atomicity
+            // Update zone_invoices if this payment is for a zone invoice
+            const { data: zoneInv } = await supabase
+                .from('zone_invoices')
+                .select('id')
+                .eq('robokassa_invoice_id', invId)
+                .maybeSingle();
+            if (zoneInv) {
+                await supabase
+                    .from('zone_invoices')
+                    .update({ status: 'paid', paid_at: new Date().toISOString() } as any)
+                    .eq('id', zoneInv.id);
+            }
 
-            // For now, update transactions where internal_ref = invId (if we stored it)
-            // Or just record income directly
             const { data: txData, error: txError } = await supabase.rpc('record_wallet_income', {
                 p_user_id: shp_user,
                 p_amount: amount,

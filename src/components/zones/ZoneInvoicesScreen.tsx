@@ -56,8 +56,8 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
         amount,
         currency: form.currency,
         description: form.description || null,
-        contact_id: form.contact_id || null,
-        deal_id: form.deal_id || null,
+        contact_id: form.contact_id && form.contact_id !== 'none' ? form.contact_id : null,
+        deal_id: form.deal_id && form.deal_id !== 'none' ? form.deal_id : null,
       } as any);
       setShowCreate(false);
       setForm({ amount: '', currency: 'KZT', description: '', contact_id: '', deal_id: '' });

@@ -35,6 +35,11 @@ export function useZoneContacts(zoneId: string | null) {
       .select()
       .single();
     if (error) throw error;
+    try {
+      await supabase.functions.invoke('run-zone-automations', {
+        body: { zone_id: zoneId, trigger_type: 'new_contact', contact_id: data.id },
+      });
+    } catch (_) { /* non-blocking */ }
     await fetchContacts();
     return data;
   }, [zoneId, fetchContacts]);

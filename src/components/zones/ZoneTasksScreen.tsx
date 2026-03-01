@@ -46,6 +46,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
   const [newAssignee, setNewAssignee] = useState('');
   const [newDueDate, setNewDueDate] = useState('');
   const [newDescription, setNewDescription] = useState('');
+  const [newContactId, setNewContactId] = useState('');
+  const [newDealId, setNewDealId] = useState('');
 
   // Detail sheet
   const [selectedTask, setSelectedTask] = useState<ZoneTask | null>(null);
@@ -108,6 +110,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
         priority: newPriority,
         assigned_to: newAssignee || null,
         due_date: newDueDate ? new Date(newDueDate).toISOString() : null,
+        contact_id: newContactId || null,
+        deal_id: newDealId || null,
       });
       setCreateOpen(false);
       setNewTitle('');
@@ -115,6 +119,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
       setNewPriority('medium');
       setNewAssignee('');
       setNewDueDate('');
+      setNewContactId('');
+      setNewDealId('');
     } catch { /* handled */ }
   };
 
@@ -241,6 +247,36 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
                     <option key={m.user_id} value={m.user_id}>
                       {m.display_name || m.email || m.user_id}
                     </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {contacts.length > 0 && (
+              <div>
+                <Label>{t('zones.tasks.contact', 'Contact')}</Label>
+                <select
+                  className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
+                  value={newContactId}
+                  onChange={e => setNewContactId(e.target.value)}
+                >
+                  <option value="">—</option>
+                  {contacts.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {deals.length > 0 && (
+              <div>
+                <Label>{t('zones.tasks.deal', 'Deal')}</Label>
+                <select
+                  className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
+                  value={newDealId}
+                  onChange={e => setNewDealId(e.target.value)}
+                >
+                  <option value="">—</option>
+                  {deals.filter(d => d.status === 'open').map(d => (
+                    <option key={d.id} value={d.id}>{d.title}</option>
                   ))}
                 </select>
               </div>

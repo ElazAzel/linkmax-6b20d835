@@ -67,7 +67,12 @@ export function useZoneDeals(zoneId: string | null) {
 
   const moveDealToStage = useCallback(async (dealId: string, stageId: string) => {
     await updateDeal(dealId, { stage_id: stageId } as any);
-  }, [updateDeal]);
+    try {
+      await supabase.functions.invoke('run-zone-automations', {
+        body: { zone_id: zoneId, trigger_type: 'deal_stage_change', deal_id: dealId, stage_id: stageId },
+      });
+    } catch (_) { /* non-blocking */ }
+  }, [updateDeal, zoneId]);
 
   const addActivity = useCallback(async (dealId: string, type: string, summary: string) => {
     if (!zoneId) return;

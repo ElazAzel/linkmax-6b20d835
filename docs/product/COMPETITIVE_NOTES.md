@@ -51,6 +51,18 @@
 | Beautiful default themes | High — first impression matters | Partial — strong theme system, room for premium templates |
 | Mobile-first editing experience | High — most creators use mobile | ✅ PWA + responsive editor |
 
+### Bitrix24 (enterprise CRM / all-in-one)
+
+| Weakness (Bitrix24) | Our response (lnkmx) |
+|---|---|
+| Сложный интерфейс, долгая адаптация | «3 клика», онбординг без инструкций, «CRM за 15 минут без внедрения» |
+| Медленная работа, тяжёлые отчёты | Лёгкий Zone Dashboard, быстрые запросы, кэш (React Query) |
+| Слабое мобильное приложение | PWA + нативные приложения (Capacitor), пуш-уведомления |
+| Дорого, рост по пользователям | Один тариф Pro ~$6.5/мес, без per-seat |
+| Кастомизация = программисты | Только «достаточный» набор: сделки, контакты, задачи, 3–5 автоматизаций, инвойсы — без BPMN, телефонии, документооборота |
+
+**Позиционирование:** lnkmx — «анти-Битрикс» для соло и микро-бизнеса: простая, быстрая, мобильная CRM и визитка за 15 минут, без внедрения и программистов.
+
 ---
 
 ## Adoption Proposals
@@ -65,4 +77,4 @@
 
 ---
 
-*Last updated: 2026-02-18*
+*Last updated: 2026-03-01*
