@@ -111,7 +111,8 @@ export default function PublicPage() {
 
   const isOwnerPremium = ownerPremiumStatus?.isPremium || false;
   const ownerTier = ownerPremiumStatus?.tier || 'free';
-  const showWatermark = !isOwnerPremium;
+  // Watermark always shows UNLESS premium/business user explicitly enabled hideBranding
+  const showWatermark = !(isOwnerPremium && pageData?.hideBranding);
 
   // Resolve A/B testing variants
   const { blocks: experimentalBlocks, assignments } = usePageExperiments(pageData, visitorId);
@@ -289,16 +290,7 @@ export default function PublicPage() {
                 </div>
 
               {/* Branding - hidden when watermark is shown OR if white-label is active (premium only) */}
-                {!showWatermark && !(isOwnerPremium && pageData?.hideBranding) && (
-                  <div className="mt-8 sm:mt-12 text-center pb-4">
-                    <a
-                      href="/"
-                      className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      lnkmx.my
-                    </a>
-                  </div>
-                )}
+              {/* Branding handled by FreemiumWatermark */}
 
                 {/* Extra padding for watermark */}
                 {showWatermark && <div className="h-16" />}
