@@ -163,10 +163,8 @@ function SortableGridBlockItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'relative group overflow-hidden transition-all duration-300',
-        isFrameless
-          ? 'rounded-xl'
-          : 'glass-card rounded-2xl border-white/10 shadow-glass hover:shadow-glass-lg hover:border-white/20 hover:scale-[1.01]',
+        'relative group overflow-hidden transition-all duration-300 rounded-2xl border-0',
+        !isFrameless && 'bg-card/50',
         colSpanClass,
         rowSpanClass,
         isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
@@ -375,19 +373,7 @@ export const GridEditor = memo(function GridEditor({
         </div>
       )}
 
-      {/* Insert after profile / before first content block */}
-      {contentBlocks.length > 0 && (
-        <InsertBetweenDivider
-          position={0}
-          onInsert={handleInsertBlock}
-          isPremium={isPremium}
-          currentTier={currentTier}
-          currentBlockCount={blocks.length}
-          isMobile={isMobile}
-        />
-      )}
-
-      {/* Grid container with interleaved insert dividers */}
+      {/* Grid container */}
       <DndContext
         key={dndContextId}
         sensors={sensors}
@@ -399,31 +385,18 @@ export const GridEditor = memo(function GridEditor({
           items={contentBlocks.map(b => b.id)}
           strategy={verticalListSortingStrategy}
         >
-          <div className="space-y-2">
-            {contentBlocks.map((block, index) => (
-              <div key={block.id}>
-                <SortableGridBlockItem
-                  block={block}
-                  onEdit={onEditBlock}
-                  onDelete={onDeleteBlock}
-                  isPremium={isPremium}
-                  premiumTier={premiumTier}
-                  isMobile={isMobile}
-                  onStartExperiment={setExperimentBlock}
-                />
-
-                {/* Insert divider after each block */}
-                {index < contentBlocks.length - 1 && (
-                  <InsertBetweenDivider
-                    position={index + 1}
-                    onInsert={handleInsertBlock}
-                    isPremium={isPremium}
-                    currentTier={currentTier}
-                    currentBlockCount={blocks.length}
-                    isMobile={isMobile}
-                  />
-                )}
-              </div>
+          <div className="grid grid-cols-2 gap-3 grid-flow-row-dense">
+            {contentBlocks.map((block) => (
+              <SortableGridBlockItem
+                key={block.id}
+                block={block}
+                onEdit={onEditBlock}
+                onDelete={onDeleteBlock}
+                isPremium={isPremium}
+                premiumTier={premiumTier}
+                isMobile={isMobile}
+                onStartExperiment={setExperimentBlock}
+              />
             ))}
           </div>
         </SortableContext>
