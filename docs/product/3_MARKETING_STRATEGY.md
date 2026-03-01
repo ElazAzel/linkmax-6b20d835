@@ -21,6 +21,8 @@ Our strategy relies on **Product-Led Growth (PLG)** fueled by a viral loop, rein
 ### 2.2. Niche Domination (Outbound/Content)
 We are targeting **3 Beachhead Markets** to start.
 
+**Content & comparison:** Comparison page with lnkmx vs Linktree, Taplink, Carrd, Beacons and «Почему не Bitrix24 для соло»: [/alternatives](https://lnkmx.my/alternatives). Use in campaigns and SEO.
+
 #### A. Beauty Masters (Salons, Lash Techs, Barbers)
 *   **Pain**: "DM me for appointment" is chaotic. No deposit system.
 *   **Offer**: "Get a booking link in 5 mins."

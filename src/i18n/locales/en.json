@@ -3100,6 +3100,34 @@
       "signIn": "Login",
       "company": "ARchitecKZ • BIN: 190540008684",
       "address": "Almaty, st. Sholokhova, 20"
+    },
+    "bitrix24": {
+      "title": "Why not Bitrix24 for solopreneurs",
+      "intro": "Bitrix24 is built for teams and enterprises. For solo and micro-business we offer a simpler alternative.",
+      "rowSimplicity": "Simplicity",
+      "rowTime": "Time to launch",
+      "rowMobile": "Mobile-first",
+      "rowPrice": "Price (solo)",
+      "lnkmxSimple": "3 clicks, no manuals",
+      "bitrixComplex": "Complex UI, long onboarding",
+      "lnkmx15min": "CRM in 15 minutes, no implementation",
+      "bitrixWeeks": "Weeks, often consultants",
+      "lnkmxMobile": "PWA + native apps, push",
+      "bitrixWeak": "Weak mobile app",
+      "lnkmxPrice": "One Pro plan ~$6.5/mo",
+      "bitrixPrice": "Grows with users, per-seat",
+      "positioning": "lnkmx is the anti-Bitrix for solopreneurs: simple, fast, mobile CRM and landing in 15 minutes—no implementation or developers.",
+      "cta": "Create page"
+    }
+  },
+  "phaseB": {
+    "whyLnkmx": {
+      "title": "Why lnkmx",
+      "noSetup": "CRM in 15 minutes — no implementation",
+      "mobile": "Full workflow from your smartphone",
+      "premium": "Premium design out of the box",
+      "emptyDeals": "CRM in 15 minutes — no implementation. Add your first deal.",
+      "emptyContacts": "Full workflow from your smartphone. Import contacts or add manually."
     }
   },
   "blockPreview": {
@@ -4631,6 +4659,12 @@
       "addressLine": "Almaty, st. Sholokhova, 20"
     },
     "paymentNote": "Payment via RoboKassa",
+    "whyLnkmx": {
+      "title": "Why lnkmx",
+      "noSetup": "CRM in 15 minutes — no implementation",
+      "mobile": "Full workflow from your smartphone",
+      "premium": "Premium design out of the box"
+    },
     "features": {
       "basicThemes": "Basic themes",
       "basicCustomization": "Basic setup (colors, fonts)",

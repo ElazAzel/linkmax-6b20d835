@@ -294,6 +294,27 @@ export const HomeScreen = memo(function HomeScreen({
             </div>
           </div>
         </Card>
+
+        {/* Phase B: Why lnkmx — value props */}
+        <Card className="p-5 border-border/40 bg-card/50">
+          <h4 className="font-bold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
+            {t('phaseB.whyLnkmx.title', 'Почему lnkmx')}
+          </h4>
+          <ul className="space-y-2 text-sm">
+            <li className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+              {t('phaseB.whyLnkmx.noSetup', 'CRM за 15 минут — без внедрения')}
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+              {t('phaseB.whyLnkmx.mobile', 'Вся работа со смартфона')}
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+              {t('phaseB.whyLnkmx.premium', 'Дизайн премиум из коробки')}
+            </li>
+          </ul>
+        </Card>
       </div>
     </div>
   );

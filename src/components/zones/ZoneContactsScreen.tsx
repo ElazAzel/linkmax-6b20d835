@@ -143,7 +143,14 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             {contacts.length === 0
-              ? t('zones.contacts.empty', 'No contacts yet')
+              ? (
+                <>
+                  {t('zones.contacts.empty', 'No contacts yet')}
+                  <span className="block mt-1 text-muted-foreground text-sm">
+                    {t('phaseB.whyLnkmx.emptyContacts', 'Вся работа со смартфона. Импортируйте контакты или добавьте вручную.')}
+                  </span>
+                </>
+              )
               : t('zones.contacts.noResults', 'No matching contacts')}
           </div>
         ) : (

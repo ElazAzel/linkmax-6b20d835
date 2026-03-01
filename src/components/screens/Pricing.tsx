@@ -258,6 +258,27 @@ export default function Pricing() {
           </div>
         </div>}
 
+        {/* Why lnkmx — Phase B value block */}
+        <Card className="max-w-2xl mx-auto mb-10 p-6 border-primary/20 bg-primary/5">
+          <h3 className="font-bold text-lg mb-3 text-center">
+            {t('pricing.whyLnkmx.title', 'Почему lnkmx')}
+          </h3>
+          <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-center">
+            <li className="flex flex-col items-center gap-1">
+              <Zap className="h-5 w-5 text-primary" />
+              <span>{t('pricing.whyLnkmx.noSetup', 'CRM за 15 минут — без внедрения')}</span>
+            </li>
+            <li className="flex flex-col items-center gap-1">
+              <MessageCircle className="h-5 w-5 text-primary" />
+              <span>{t('pricing.whyLnkmx.mobile', 'Вся работа со смартфона')}</span>
+            </li>
+            <li className="flex flex-col items-center gap-1">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <span>{t('pricing.whyLnkmx.premium', 'Дизайн премиум из коробки')}</span>
+            </li>
+          </ul>
+        </Card>
+
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
           {(['pro', 'business'] as const).map((planKey) => {

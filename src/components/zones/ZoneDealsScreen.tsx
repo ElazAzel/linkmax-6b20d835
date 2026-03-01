@@ -270,6 +270,11 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           KZT
         </Badge>
       </div>
+      {deals.filter((d) => d.status === 'open').length === 0 && (
+        <p className="text-sm text-muted-foreground mt-2">
+          {t('phaseB.whyLnkmx.emptyDeals', 'CRM за 15 минут — без внедрения. Добавьте первую сделку.')}
+        </p>
+      )}
 
       {/* Kanban Board with DnD */}
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>

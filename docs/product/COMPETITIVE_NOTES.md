@@ -27,6 +27,8 @@
 
 ## Competitor Teardown
 
+**Phase B (месседжи и сравнения):** Done — месседжи «CRM без внедрения», «со смартфона», «премиум из коробки» добавлены в онбординг/дашборд и на страницу тарифов; страница сравнения [/alternatives](/alternatives) дополнена блоком «Почему не Bitrix24 для соло».
+
 ### Taplink (CIS market leader)
 
 | Best Practice | Applicability | Our Status |

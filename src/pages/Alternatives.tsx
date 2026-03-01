@@ -549,6 +549,66 @@ export default function Alternatives() {
             </Card>
           </section>
 
+          {/* Why not Bitrix24 for solopreneurs — Phase B comparison */}
+          <section className="mb-12 sm:mb-16">
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-violet-500/5">
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Crown className="h-5 w-5 text-primary" />
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-bold">
+                    {t('alternatives.bitrix24.title', 'Почему не Bitrix24 для соло')}
+                  </h2>
+                </div>
+                <p className="text-muted-foreground text-sm mb-6">
+                  {t('alternatives.bitrix24.intro', 'Bitrix24 заточен под команды и предприятия. Для соло и микро-бизнеса мы предлагаем более простую альтернативу.')}
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[400px] text-sm">
+                    <thead>
+                      <tr className="border-b border-border">
+                        <th className="text-left p-3 font-semibold">{t('alternatives.matrix.featureLabel', 'Функция')}</th>
+                        <th className="text-center p-3 text-primary">lnkmx</th>
+                        <th className="text-center p-3 text-muted-foreground">Bitrix24</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-border/50">
+                        <td className="p-3 font-medium">{t('alternatives.bitrix24.rowSimplicity', 'Простота')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmxSimple', '3 клика, без инструкций')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixComplex', 'Сложный интерфейс, долгая адаптация')}</td>
+                      </tr>
+                      <tr className="border-b border-border/50">
+                        <td className="p-3 font-medium">{t('alternatives.bitrix24.rowTime', 'Время до запуска')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmx15min', 'CRM за 15 минут, без внедрения')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixWeeks', 'Недели, часто консультанты')}</td>
+                      </tr>
+                      <tr className="border-b border-border/50">
+                        <td className="p-3 font-medium">{t('alternatives.bitrix24.rowMobile', 'Мобильность')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmxMobile', 'PWA + нативные приложения, пуш')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixWeak', 'Слабое мобильное приложение')}</td>
+                      </tr>
+                      <tr className="border-b border-border/50">
+                        <td className="p-3 font-medium">{t('alternatives.bitrix24.rowPrice', 'Цена (соло)')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmxPrice', 'Один тариф Pro ~$6.5/мес')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixPrice', 'Рост по пользователям, per-seat')}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-sm text-muted-foreground mt-4 italic">
+                  {t('alternatives.bitrix24.positioning', 'lnkmx — «анти-Битрикс» для соло и микро-бизнеса: простая, быстрая, мобильная CRM и визитка за 15 минут, без внедрения и программистов.')}
+                </p>
+                <div className="mt-6">
+                  <Button onClick={() => handleCtaClick('/auth', 'bitrix24')} className="rounded-xl">
+                    {t('alternatives.bitrix24.cta', 'Создать страницу')}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+
           {/* Final CTA */}
           <section className="text-center py-12">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
