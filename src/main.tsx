@@ -10,15 +10,32 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 
-// Defer non-critical init to AFTER first paint
-_ric(() => {
-  // Sentry — init after paint so it doesn't block FCP
-  import("@/lib/utils/sentry");
-  // Cache version check — network call, defer completely
+// Defer non-critical init: only load after user interacts or 10s idle
+// This prevents vendor-sentry (150KB) and cache-utils from loading on landing page
+const deferNonCritical = () => {
+  // Sentry — only init when actually needed (lazy-loaded via logger on first error)
+  // No eager import here; logger.ts handles dynamic import on warn/error
+  
+  // Cache version check — defer to background
   import('@/lib/utils/cache-utils').then(({ checkCacheVersion }) => {
     checkCacheVersion();
   });
-});
+};
+
+// Trigger on first user interaction OR after 10s, whichever comes first
+let deferFired = false;
+const fireDeferOnce = () => {
+  if (deferFired) return;
+  deferFired = true;
+  ['scroll', 'click', 'keydown', 'touchstart'].forEach(e => 
+    window.removeEventListener(e, fireDeferOnce)
+  );
+  _ric(deferNonCritical);
+};
+['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
+  window.addEventListener(e, fireDeferOnce, { once: true, passive: true })
+);
+setTimeout(fireDeferOnce, 10000);
 
 // Lazy load page components for route-based code splitting
 const Index = lazy(() => import("./pages/Index"));
