@@ -102,12 +102,11 @@ export const GridBlocksRenderer = memo(function GridBlocksRenderer({
                 key={block.id}
                 className={cn(
                   'overflow-hidden flex transition-all duration-300 rounded-xl',
-                  !isTransparent && 'bg-card border border-border/50 shadow-sm hover:shadow-md hover:scale-[1.01]',
-                  isTransparent && 'bg-transparent border-transparent shadow-none border-0 hover:scale-[1.01]',
+                  !isTransparent && 'bg-card border-0 hover:scale-[1.01]',
+                  isTransparent && 'bg-transparent border-0 hover:scale-[1.01]',
                   alignmentClass,
                   colSpanClass,
                   rowSpanClass,
-                  // Min height handling to match editor (skip for transparent blocks)
                   !isTransparent && 'min-h-[140px]',
                   !isTransparent && dimensions.gridRows === 2 && 'min-h-[296px]'
                 )}
