@@ -69,7 +69,9 @@ export default function PublicPage() {
       hostname.endsWith('lnkmx.my') ||
       hostname === 'localhost' ||
       hostname === '127.0.0.1' ||
-      hostname.endsWith('.vercel.app'); // Preview deployments
+      hostname.endsWith('.vercel.app') ||
+      hostname.endsWith('.lovableproject.com') ||
+      hostname.endsWith('.lovable.app');
 
     if (!isPlatformDomain) {
       setCustomDomain(hostname);
