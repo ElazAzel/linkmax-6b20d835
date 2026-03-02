@@ -1123,6 +1123,7 @@ export type Database = {
           avatar_style: Json | null
           avatar_url: string | null
           created_at: string | null
+          custom_domain: string | null
           description: string | null
           editor_mode: string
           favicon_url: string | null
@@ -1155,6 +1156,7 @@ export type Database = {
           avatar_style?: Json | null
           avatar_url?: string | null
           created_at?: string | null
+          custom_domain?: string | null
           description?: string | null
           editor_mode?: string
           favicon_url?: string | null
@@ -1187,6 +1189,7 @@ export type Database = {
           avatar_style?: Json | null
           avatar_url?: string | null
           created_at?: string | null
+          custom_domain?: string | null
           description?: string | null
           editor_mode?: string
           favicon_url?: string | null
