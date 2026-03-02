@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => ({
       "next/navigation": path.resolve(__dirname, "./src/platform/next/navigation.ts"),
       "next/link": path.resolve(__dirname, "./src/platform/next/link.ts"),
     },
-    dedupe: ["react", "react-dom", "react/jsx-runtime"],
+    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   build: {
     // Disable modulepreload hints to prevent eager loading of lazy-route chunks
@@ -58,9 +58,8 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Vendor chunks for better caching and parallel loading
-          if (id.includes('node_modules/react-dom')) return 'vendor-react';
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-router')) return 'vendor-react';
+          // React must NOT be in manualChunks — dedupe handles single instance
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/') || id.includes('node_modules/react-router')) return undefined;
           if (id.includes('node_modules/@tanstack/react-query')) return 'vendor-query';
           if (id.includes('node_modules/@radix-ui')) return 'vendor-ui';
           if (id.includes('node_modules/framer-motion')) return 'vendor-motion';
