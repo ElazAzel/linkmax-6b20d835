@@ -46,6 +46,7 @@ export default defineConfig(({ mode }) => ({
       "next/navigation": path.resolve(__dirname, "./src/platform/next/navigation.ts"),
       "next/link": path.resolve(__dirname, "./src/platform/next/link.ts"),
     },
+    dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
   build: {
     // Disable modulepreload hints to prevent eager loading of lazy-route chunks
