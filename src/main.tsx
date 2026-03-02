@@ -211,13 +211,30 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>
 );
 
-// Register Service Worker for PWA
+// Register Service Worker for PWA (with one-time stale-cache migration)
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(() => {
-      // Service Worker registered successfully
-    }).catch(() => {
-      // Service Worker registration failed — non-blocking
-    });
+  window.addEventListener('load', async () => {
+    try {
+      const SW_MIGRATION_KEY = 'lnkmx_sw_migrated_v3';
+      if (!localStorage.getItem(SW_MIGRATION_KEY)) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+
+        if ('caches' in window) {
+          const names = await caches.keys();
+          await Promise.all(
+            names
+              .filter((name) => name.startsWith('lnkmx-') || name.startsWith('linkmax-'))
+              .map((name) => caches.delete(name))
+          );
+        }
+
+        localStorage.setItem(SW_MIGRATION_KEY, '1');
+      }
+
+      await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
+    } catch {
+      // Service Worker registration/migration failed — non-blocking
+    }
   });
 }
