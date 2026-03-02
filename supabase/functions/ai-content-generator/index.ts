@@ -100,6 +100,23 @@ serve(async (req: Request) => {
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    // Server-side premium status check
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('is_premium, premium_tier, trial_ends_at')
+      .eq('id', user.id)
+      .single();
+
+    const isPremiumUser = profile?.is_premium || 
+      (profile?.trial_ends_at && new Date(profile.trial_ends_at) > new Date());
+
+    if (!isPremiumUser) {
+      return new Response(
+        JSON.stringify({ error: 'Premium subscription required for AI content generation.' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Check if body exists and is not empty
     const text = await req.text();
     if (!text) {
