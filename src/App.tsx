@@ -1,7 +1,7 @@
 // Polyfill requestIdleCallback for Safari
 const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
 
-import { Suspense, useEffect, lazy } from "react";
+import React, { Suspense, useEffect, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner, toast } from "sonner";
@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { Skeleton } from "@/components/ui/skeleton";
+
 
 // Lazy load non-critical shell components to reduce main bundle
 const PWAInstallPrompt = lazy(() => import("@/components/pwa/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
@@ -28,17 +28,50 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback for pages
+// Loading fallback for pages — visible in both light and dark mode
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="space-y-4 w-full max-w-md p-4">
-      <Skeleton className="h-12 w-3/4 mx-auto" />
-      <Skeleton className="h-64 w-full" />
-      <Skeleton className="h-12 w-full" />
-      <Skeleton className="h-12 w-full" />
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      <p className="text-sm text-muted-foreground animate-pulse">Loading…</p>
     </div>
   </div>
 );
+
+// Error boundary for lazy-loaded routes
+class RouteErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.error('Route error:', error);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center space-y-4 p-6">
+            <p className="text-lg font-semibold text-foreground">Something went wrong</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium"
+            >
+              Reload page
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 
 const App = () => {
@@ -98,9 +131,11 @@ const App = () => {
             <TooltipProvider>
               <Toaster />
               <Sonner />
-              <Suspense fallback={<PageLoader />}>
-                <Outlet />
-              </Suspense>
+              <RouteErrorBoundary>
+                <Suspense fallback={<PageLoader />}>
+                  <Outlet />
+                </Suspense>
+              </RouteErrorBoundary>
               <Suspense fallback={null}>
                 <PWAInstallPrompt />
                 <PWAUpdatePrompt />
