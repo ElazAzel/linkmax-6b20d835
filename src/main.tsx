@@ -9,6 +9,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App";
+import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 
 // Defer non-critical init: only load after user interacts or 10s idle
 // This prevents vendor-sentry (150KB) and cache-utils from loading on landing page
@@ -37,9 +39,78 @@ const fireDeferOnce = () => {
 );
 setTimeout(fireDeferOnce, 10000);
 
+// Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
+const CHUNK_RECOVERY_KEY = 'lnkmx_chunk_recovery_once';
+
+function isChunkRuntimeError(err: unknown): boolean {
+  const message = typeof err === 'string'
+    ? err
+    : (err as { message?: string })?.message || '';
+
+  return [
+    'ChunkLoadError',
+    'Loading chunk',
+    'Failed to fetch dynamically imported module',
+    'Importing a module script failed',
+    'O is not a function',
+  ].some((token) => message.includes(token));
+}
+
+function recoverFromStaleAssets(): void {
+  try {
+    if (sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
+    sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
+
+    // Clear runtime caches that can hold stale assets
+    try {
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('linkmax_') || key.startsWith('lnkmx_') || key.startsWith('sb-')) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch {
+      // ignore
+    }
+
+    try {
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => caches.delete(name));
+          window.location.reload();
+        });
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    window.location.reload();
+  } catch {
+    window.location.reload();
+  }
+}
+
+window.addEventListener('error', (event) => {
+  if (isChunkRuntimeError(event.error || event.message)) {
+    recoverFromStaleAssets();
+  }
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  if (isChunkRuntimeError(event.reason)) {
+    event.preventDefault();
+    recoverFromStaleAssets();
+  }
+});
+
+// If app boot succeeded, allow future recovery attempts
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    sessionStorage.removeItem(CHUNK_RECOVERY_KEY);
+  }, 15000);
+});
+
 // Lazy load page components for route-based code splitting
-const Index = lazy(() => import("./pages/Index"));
-const Auth = lazy(() => import("./pages/Auth"));
 const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const Dashboard = lazy(() => import("./pages/DashboardV2"));
 const PublicPage = lazy(() => import("./pages/PublicPage"));
