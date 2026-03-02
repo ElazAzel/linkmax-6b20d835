@@ -465,7 +465,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h2 className="text-xl font-black mb-0.5" dangerouslySetInnerHTML={{ __html: t('aiBuilder.nicheQuestions.title', 'Расскажите о себе ✨') }}></h2>
+                <h2 className="text-xl font-black mb-0.5">{t('aiBuilder.nicheQuestions.title', 'Расскажите о себе ✨')}</h2>
                 <p className="text-muted-foreground text-sm">
                   {t('aiBuilder.nicheQuestions.desc', 'Эти данные нужны для заполнения блоков. Вы можете пропустить любой шаг.')}
                 </p>
