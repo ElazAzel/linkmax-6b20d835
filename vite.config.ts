@@ -49,45 +49,11 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   build: {
-    // Disable modulepreload hints to prevent eager loading of lazy-route chunks
-    // (vendor-export, vendor-charts, vendor-sentry etc.) on the landing page.
-    // Modules are still loaded on demand via dynamic import().
-    modulePreload: false,
+    // Keep default module preload behavior for correct dependency ordering in production.
     sourcemap: !!process.env.SENTRY_AUTH_TOKEN,
     chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          // React must NOT be in manualChunks — dedupe handles single instance
-          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/') || id.includes('node_modules/react-router')) return undefined;
-          if (id.includes('node_modules/@tanstack/react-query')) return 'vendor-query';
-          if (id.includes('node_modules/@radix-ui')) return 'vendor-ui';
-          if (id.includes('node_modules/framer-motion')) return 'vendor-motion';
-          if (id.includes('node_modules/@supabase')) return 'vendor-supabase';
-          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) return 'vendor-i18n';
-          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) return 'vendor-charts';
-          if (id.includes('node_modules/@sentry')) return 'vendor-sentry';
-          if (id.includes('node_modules/@dnd-kit')) return 'vendor-dnd';
-          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform') || id.includes('node_modules/zod')) return 'vendor-forms';
-          if (id.includes('node_modules/date-fns')) return 'vendor-date';
-          if (id.includes('node_modules/react-helmet') || id.includes('node_modules/react-day-picker')) return 'vendor-misc';
-          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) return 'vendor-3d';
-          if (id.includes('node_modules/jspdf')) return 'vendor-export-pdf';
-          if (id.includes('node_modules/exceljs')) return 'vendor-export-xlsx';
-          if (id.includes('node_modules/html2canvas')) return 'vendor-export-canvas';
-          if (id.includes('node_modules/qrcode')) return 'vendor-qr';
-          if (id.includes('node_modules/web-vitals')) return 'vendor-vitals';
-          if (id.includes('node_modules/sonner') || id.includes('node_modules/cmdk')) return 'vendor-misc';
-          if (id.includes('node_modules/class-variance-authority') || id.includes('node_modules/clsx') || id.includes('node_modules/tailwind-merge')) return 'vendor-misc';
-          // Catch-all: prevent Rollup from creating unexpected large shared chunks
-          if (id.includes('node_modules/')) return 'vendor-other';
-          // Split locale JSON files into separate chunks
-          if (id.includes('src/i18n/locales/') && !id.includes('ru.json') && !id.includes('en.json') && !id.includes('kk.json')) {
-            const match = id.match(/locales\/(\w+)\.json/);
-            if (match) return `locale-${match[1]}`;
-          }
-        },
-      },
-    },
+    // Use Vite/Rollup default chunk strategy for runtime stability.
+    // Custom manualChunks caused intermittent cross-chunk runtime mismatch in production.
+    rollupOptions: {},
   },
 }));
