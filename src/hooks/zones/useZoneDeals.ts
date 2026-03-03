@@ -9,6 +9,7 @@ import type { ZoneDeal, ZoneDealStage, ZoneDealActivity } from '@/types/zones';
 export const zoneDealsKeys = {
   stages: (zoneId: string) => ['zone-deal-stages', zoneId] as const,
   all: (zoneId: string) => ['zone-deals', zoneId] as const,
+  zoneActivities: (zoneId: string) => ['zone-activities', zoneId] as const,
   activities: (zoneId: string, dealId: string) => ['zone-deal-activities', zoneId, dealId] as const,
   dealProducts: (zoneId: string, dealId: string) => ['zone-deal-products', zoneId, dealId] as const,
   products: (zoneId: string) => ['zone-products', zoneId] as const,
@@ -37,6 +38,17 @@ async function fetchDeals(zoneId: string): Promise<ZoneDeal[]> {
     contact: d.zone_contacts || undefined,
     stage: d.zone_deal_stages || undefined,
   })) as ZoneDeal[];
+}
+
+async function fetchZoneActivities(zoneId: string): Promise<ZoneDealActivity[]> {
+  const { data, error } = await supabase
+    .from('zone_deal_activities')
+    .select('*')
+    .eq('zone_id', zoneId)
+    .order('happened_at', { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  return (data || []) as ZoneDealActivity[];
 }
 
 async function fetchActivities(zoneId: string, dealId: string): Promise<ZoneDealActivity[]> {
@@ -77,8 +89,16 @@ export function useZoneDeals(zoneId: string | null) {
     staleTime: 15_000,
   });
 
+  const { data: activities = [] } = useQuery({
+    queryKey: zoneDealsKeys.zoneActivities(safeZoneId),
+    queryFn: () => fetchZoneActivities(safeZoneId),
+    enabled: !!zoneId,
+    staleTime: 10_000,
+  });
+
   const invalidateDeals = () => {
     queryClient.invalidateQueries({ queryKey: zoneDealsKeys.all(safeZoneId) });
+    queryClient.invalidateQueries({ queryKey: zoneDealsKeys.zoneActivities(safeZoneId) });
   };
 
   const createDealMutation = useMutation({
@@ -143,31 +163,41 @@ export function useZoneDeals(zoneId: string | null) {
       if (error) throw error;
     },
     onSuccess: (data, variables) => {
+      invalidateDeals();
       queryClient.invalidateQueries({ queryKey: zoneDealsKeys.activities(safeZoneId, variables.dealId) });
     },
   });
 
-  // Backward-compatible API
-  const createDeal = async (deal: Partial<ZoneDeal>) => createDealMutation.mutateAsync(deal);
-  const updateDeal = async (dealId: string, updates: Partial<ZoneDeal>) => updateDealMutation.mutateAsync({ dealId, updates });
-  const moveDealToStage = async (dealId: string, stageId: string) => moveDealToStageMutation.mutateAsync({ dealId, stageId });
-  const addActivity = async (dealId: string, type: string, summary: string) => addActivityMutation.mutateAsync({ dealId, type, summary });
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('zone_deals')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      invalidateDeals();
+    },
+  });
 
+  // Backward-compatible API
   return {
     deals,
     stages,
+    activities,
     loading,
-    createDeal,
-    updateDeal,
-    moveDealToStage,
-    addActivity,
+    createDeal: (deal: Partial<ZoneDeal>) => createDealMutation.mutateAsync(deal),
+    updateDeal: (dealId: string, updates: Partial<ZoneDeal>) => updateDealMutation.mutateAsync({ dealId, updates }),
+    moveDealToStage: (dealId: string, stageId: string) => moveDealToStageMutation.mutateAsync({ dealId, stageId }),
+    addActivity: (dealId: string, type: string, summary: string) => addActivityMutation.mutateAsync({ dealId, type, summary }),
+    deleteDeal: (id: string) => deleteMutation.mutateAsync(id),
     refetch: invalidateDeals,
     refetchStages: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId) }),
   };
 }
 
 export function useZoneDealActivities(zoneId: string | null, dealId: string | null) {
-  const queryClient = useQueryClient();
   const safeZoneId = zoneId || '';
   const safeDealId = dealId || '';
 

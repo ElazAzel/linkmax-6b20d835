@@ -127,7 +127,12 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
   };
 
   const formatAmount = (amount: number, currency: string) => {
-    return new Intl.NumberFormat('ru-KZ', { style: 'currency', currency }).format(amount);
+    return new Intl.NumberFormat('ru-KZ', { style: 'currency', currency, maximumFractionDigits: 0 }).format(amount);
+  };
+
+  const formatInvoiceNumber = (num: number | null, id: string) => {
+    if (!num) return id.slice(0, 8).toUpperCase();
+    return `INV-${num.toString().padStart(3, '0')}`;
   };
 
   const totalPaid = useMemo(() => invoices.filter(i => i.status === 'paid').reduce((s, i) => s + Number(i.amount), 0), [invoices]);
@@ -212,7 +217,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                         {st.label}
                       </Badge>
                       <span className="text-[10px] font-mono text-muted-foreground uppercase mr-auto">
-                        #{inv.invoice_number || inv.id.slice(0, 8)}
+                        #{formatInvoiceNumber(inv.invoice_number, inv.id)}
                       </span>
                     </div>
                     <div className="text-xl font-black group-hover:text-primary transition-colors">

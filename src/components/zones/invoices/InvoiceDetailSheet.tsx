@@ -67,7 +67,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
                     <div className="flex items-center gap-2 mb-2">
                         <Receipt className="h-5 w-5 text-primary" />
                         <Badge variant="outline" className="text-[10px] font-mono uppercase tracking-widest">
-                            Invoice #{invoice.invoice_number || invoice.id.slice(0, 8)}
+                            #{invoice.invoice_number ? `INV-${invoice.invoice_number.toString().padStart(3, '0')}` : invoice.id.slice(0, 8).toUpperCase()}
                         </Badge>
                     </div>
                     <SheetTitle className="text-left font-bold text-2xl">
