@@ -1,5 +1,5 @@
 /**
- * TaskCard - Draggable task card for Kanban board
+ * TaskCard - Draggable task card for Kanban board with glassmorphism
  */
 import { memo } from 'react';
 import { useDraggable } from '@dnd-kit/core';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
 import { format, isPast, isToday } from 'date-fns';
-import type { ZoneTask, TaskPriority } from '@/hooks/zones/useZoneTasks';
+import type { ZoneTask, TaskPriority } from '@/types/zones';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
@@ -42,47 +42,62 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
     <div
       ref={isDragOverlay ? undefined : setNodeRef}
       className={cn(
-        "bg-card border rounded-lg p-3 cursor-pointer hover:shadow-sm transition-all group",
-        isOverdue ? "border-destructive/50 bg-destructive/5" : "border-border/40",
-        isDragging && "opacity-30",
-        isDragOverlay && "shadow-lg rotate-2 scale-105"
+        "bg-background/40 backdrop-blur-md border border-border/40 rounded-xl p-3 cursor-pointer",
+        "hover:bg-background/60 hover:border-border/80 hover:shadow-lg transition-all duration-300 group",
+        isOverdue && "border-destructive/30 bg-destructive/5",
+        isDragging && "opacity-20",
+        isDragOverlay && "shadow-2xl rotate-1 scale-105 border-primary/50 bg-background/80"
       )}
       onClick={onClick}
     >
-      <div className="flex items-start gap-1.5">
+      <div className="flex items-start gap-2">
         <div
           {...attributes}
           {...listeners}
-          className="mt-0.5 cursor-grab opacity-0 group-hover:opacity-50 hover:!opacity-100 shrink-0"
+          className="mt-1 cursor-grab opacity-0 group-hover:opacity-40 hover:!opacity-100 shrink-0 transition-opacity"
           onClick={(e) => e.stopPropagation()}
         >
           <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 space-y-2">
           <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-medium leading-tight flex-1 truncate">{task.title}</p>
-            <Badge variant={priorityConf.variant} className="text-[9px] shrink-0 h-5">
+            <p className={cn(
+              "text-sm font-semibold leading-tight flex-1 truncate",
+              task.status === 'done' && "text-muted-foreground line-through decoration-muted-foreground/50 font-normal"
+            )}>
+              {task.title}
+            </p>
+            <Badge variant={priorityConf.variant} className="text-[9px] shrink-0 h-4 px-1.5 uppercase font-bold tracking-wider">
               {task.priority === 'urgent' && <AlertCircle className="h-2.5 w-2.5 mr-0.5" />}
               {t(priorityConf.labelKey)}
             </Badge>
           </div>
 
           {task.description && (
-            <p className="text-[11px] text-muted-foreground mt-1 line-clamp-1">{task.description}</p>
+            <p className="text-[11px] text-muted-foreground line-clamp-2 leading-normal">
+              {task.description}
+            </p>
           )}
 
-          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-            {assigneeName && (
-              <span className="text-[11px] text-muted-foreground">→ {assigneeName}</span>
-            )}
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <div className="flex items-center gap-2 overflow-hidden">
+              {assigneeName && (
+                <div className="flex items-center gap-1 min-w-0">
+                  <div className="h-4 w-4 rounded-full bg-primary/20 flex items-center justify-center text-[8px] font-bold text-primary shrink-0">
+                    {assigneeName[0].toUpperCase()}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground truncate">{assigneeName}</span>
+                </div>
+              )}
+            </div>
+
             {task.due_date && (
               <span className={cn(
-                "text-[11px] flex items-center gap-0.5",
-                isOverdue ? "text-destructive font-medium" : isDueToday ? "text-warning font-medium" : "text-muted-foreground"
+                "text-[10px] flex items-center gap-1 shrink-0 px-1.5 py-0.5 rounded-full bg-muted/40",
+                isOverdue ? "text-destructive font-bold bg-destructive/10" : isDueToday ? "text-warning font-bold bg-warning/10" : "text-muted-foreground"
               )}>
                 <Calendar className="h-2.5 w-2.5" />
-                {format(new Date(task.due_date), 'dd.MM.yyyy')}
-                {isOverdue && ' ⚠'}
+                {format(new Date(task.due_date), 'dd MMM')}
               </span>
             )}
           </div>
@@ -91,3 +106,4 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
     </div>
   );
 });
+

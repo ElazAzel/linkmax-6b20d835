@@ -34,7 +34,15 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
   const [selectedContact, setSelectedContact] = useState<ZoneContact | null>(null);
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [newContact, setNewContact] = useState({ name: '', phone: '', email: '', telegram_username: '', tags: '' });
+  const [newContact, setNewContact] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    telegram_username: '',
+    tags: '',
+    company: '',
+    position: '',
+  });
 
   // Collect all unique tags
   const allTags = useMemo(() => {
@@ -63,9 +71,11 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
         email: newContact.email || null,
         telegram_username: newContact.telegram_username || null,
         tags: newContact.tags ? newContact.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+        company: newContact.company || null,
+        position: newContact.position || null,
       } as any);
       setCreateOpen(false);
-      setNewContact({ name: '', phone: '', email: '', telegram_username: '', tags: '' });
+      setNewContact({ name: '', phone: '', email: '', telegram_username: '', tags: '', company: '', position: '' });
       toast.success(t('zones.contacts.created', 'Contact created'));
     } catch (err: any) {
       toast.error(err.message);
@@ -165,7 +175,14 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
                   {contact.name.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{contact.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium truncate">{contact.name}</p>
+                    {contact.company && (
+                      <Badge variant="outline" className="text-[10px] font-normal py-0">
+                        {contact.company}
+                      </Badge>
+                    )}
+                  </div>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
                     {contact.phone && (
                       <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{contact.phone}</span>
@@ -219,6 +236,16 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
             <div className="space-y-2">
               <Label>Telegram</Label>
               <Input value={newContact.telegram_username} onChange={e => setNewContact(p => ({ ...p, telegram_username: e.target.value }))} placeholder="@username" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Company</Label>
+                <Input value={newContact.company} onChange={e => setNewContact(p => ({ ...p, company: e.target.value }))} placeholder="Pied Piper" />
+              </div>
+              <div className="space-y-2">
+                <Label>Position</Label>
+                <Input value={newContact.position} onChange={e => setNewContact(p => ({ ...p, position: e.target.value }))} placeholder="CEO" />
+              </div>
             </div>
             <div className="space-y-2">
               <Label>{t('zones.contacts.tags', 'Tags')}</Label>

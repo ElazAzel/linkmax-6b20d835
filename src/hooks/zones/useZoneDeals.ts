@@ -10,6 +10,8 @@ export const zoneDealsKeys = {
   stages: (zoneId: string) => ['zone-deal-stages', zoneId] as const,
   all: (zoneId: string) => ['zone-deals', zoneId] as const,
   activities: (zoneId: string, dealId: string) => ['zone-deal-activities', zoneId, dealId] as const,
+  dealProducts: (zoneId: string, dealId: string) => ['zone-deal-products', zoneId, dealId] as const,
+  products: (zoneId: string) => ['zone-products', zoneId] as const,
 };
 
 // ─── Fetch functions ───
@@ -30,11 +32,30 @@ async function fetchDeals(zoneId: string): Promise<ZoneDeal[]> {
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data || []).map((d: Record<string, unknown>) => ({
+  return (data || []).map((d: Record<string, any>) => ({
     ...d,
     contact: d.zone_contacts || undefined,
     stage: d.zone_deal_stages || undefined,
   })) as ZoneDeal[];
+}
+
+async function fetchActivities(zoneId: string, dealId: string): Promise<ZoneDealActivity[]> {
+  const { data, error } = await supabase
+    .from('zone_deal_activities')
+    .select('*')
+    .eq('deal_id', dealId)
+    .order('happened_at', { ascending: false });
+  if (error) throw error;
+  return (data || []) as ZoneDealActivity[];
+}
+
+async function fetchDealProducts(zoneId: string, dealId: string) {
+  const { data, error } = await supabase
+    .from('zone_deal_products')
+    .select('*, zone_products(*)')
+    .eq('deal_id', dealId);
+  if (error) throw error;
+  return (data || []) as any[];
 }
 
 // ─── Hooks ───
@@ -83,7 +104,10 @@ export function useZoneDeals(zoneId: string | null) {
         .eq('id', dealId);
       if (error) throw error;
     },
-    onSuccess: invalidateDeals,
+    onSuccess: (data, variables) => {
+      invalidateDeals();
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.activities(safeZoneId, variables.dealId) });
+    },
   });
 
   const moveDealToStageMutation = useMutation({
@@ -98,7 +122,10 @@ export function useZoneDeals(zoneId: string | null) {
         body: { zone_id: zoneId, trigger_type: 'deal_stage_change', deal_id: dealId, stage_id: stageId },
       }).catch(() => { });
     },
-    onSuccess: invalidateDeals,
+    onSuccess: (data, variables) => {
+      invalidateDeals();
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.activities(safeZoneId, variables.dealId) });
+    },
   });
 
   const addActivityMutation = useMutation({
@@ -114,6 +141,9 @@ export function useZoneDeals(zoneId: string | null) {
           created_by: (await supabase.auth.getUser()).data.user?.id || '',
         });
       if (error) throw error;
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.activities(safeZoneId, variables.dealId) });
     },
   });
 
@@ -133,5 +163,71 @@ export function useZoneDeals(zoneId: string | null) {
     addActivity,
     refetch: invalidateDeals,
     refetchStages: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId) }),
+  };
+}
+
+export function useZoneDealActivities(zoneId: string | null, dealId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+  const safeDealId = dealId || '';
+
+  const { data: activities = [], isLoading: loading } = useQuery({
+    queryKey: zoneDealsKeys.activities(safeZoneId, safeDealId),
+    queryFn: () => fetchActivities(safeZoneId, safeDealId),
+    enabled: !!zoneId && !!dealId,
+    staleTime: 10_000,
+  });
+
+  return { activities, loading };
+}
+
+export function useZoneDealProducts(zoneId: string | null, dealId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+  const safeDealId = dealId || '';
+
+  const { data: dealProducts = [], isLoading: loading } = useQuery({
+    queryKey: zoneDealsKeys.dealProducts(safeZoneId, safeDealId),
+    queryFn: () => fetchDealProducts(safeZoneId, safeDealId),
+    enabled: !!zoneId && !!dealId,
+    staleTime: 30_000,
+  });
+
+  const addProduct = useMutation({
+    mutationFn: async ({ productId, quantity, unitPrice }: { productId: string; quantity: number; unitPrice: number }) => {
+      const { error } = await supabase
+        .from('zone_deal_products')
+        .insert({
+          deal_id: dealId,
+          product_id: productId,
+          quantity,
+          unit_price: unitPrice,
+          subtotal: quantity * unitPrice
+        });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.dealProducts(safeZoneId, safeDealId) });
+    },
+  });
+
+  const removeProduct = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('zone_deal_products')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.dealProducts(safeZoneId, safeDealId) });
+    },
+  });
+
+  return {
+    dealProducts,
+    loading,
+    addProduct: (p: { productId: string; quantity: number; unitPrice: number }) => addProduct.mutateAsync(p),
+    removeProduct: (id: string) => removeProduct.mutateAsync(id)
   };
 }

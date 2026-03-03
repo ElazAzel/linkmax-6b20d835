@@ -1,32 +1,13 @@
-/**
- * Hook: Manage tasks for a zone (React Query)
- */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
+import type { ZoneTask, TaskStatus, TaskPriority, ZoneTaskChecklistItem } from '@/types/zones';
 
-// ─── Types ───
-export type TaskStatus = 'todo' | 'in_progress' | 'done' | 'cancelled';
-export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
-
-export interface ZoneTask {
-  id: string;
-  zone_id: string;
-  title: string;
-  description: string | null;
-  status: TaskStatus;
-  priority: TaskPriority;
-  assigned_to: string | null;
-  contact_id: string | null;
-  deal_id: string | null;
-  due_date: string | null;
-  created_by: string;
-  created_at: string;
-  updated_at: string;
-}
+export type { TaskStatus, TaskPriority, ZoneTask };
 
 // ─── Query Keys ───
 export const zoneTasksKeys = {
   all: (zoneId: string) => ['zone-tasks', zoneId] as const,
+  checklist: (zoneId: string, taskId: string) => ['zone-task-checklist', zoneId, taskId] as const,
 };
 
 // ─── Fetch ───
@@ -40,7 +21,17 @@ async function fetchTasks(zoneId: string): Promise<ZoneTask[]> {
   return (data || []) as ZoneTask[];
 }
 
-// ─── Hook ───
+async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskChecklistItem[]> {
+  const { data, error } = await supabase
+    .from('zone_task_checklist')
+    .select('*')
+    .eq('task_id', taskId)
+    .order('order_index');
+  if (error) throw error;
+  return (data || []) as ZoneTaskChecklistItem[];
+}
+
+// ─── Hook: All Zone Tasks ───
 export function useZoneTasks(zoneId: string | null) {
   const queryClient = useQueryClient();
   const safeZoneId = zoneId || '';
@@ -105,4 +96,64 @@ export function useZoneTasks(zoneId: string | null) {
   const deleteTask = async (taskId: string) => deleteTaskMutation.mutateAsync(taskId);
 
   return { tasks, loading, createTask, updateTask, deleteTask, refetch: invalidateTasks };
+}
+
+// ─── Hook: Task Checklist ───
+export function useZoneTaskChecklist(zoneId: string | null, taskId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+  const safeTaskId = taskId || '';
+
+  const { data: checklist = [], isLoading: loading } = useQuery({
+    queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId),
+    queryFn: () => fetchChecklist(safeZoneId, safeTaskId),
+    enabled: !!zoneId && !!taskId,
+    staleTime: 30_000,
+  });
+
+  const addItem = useMutation({
+    mutationFn: async (title: string) => {
+      const { error } = await supabase
+        .from('zone_task_checklist')
+        .insert({
+          task_id: taskId,
+          zone_id: zoneId,
+          title,
+          is_done: false,
+          order_index: checklist.length,
+        });
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId) }),
+  });
+
+  const toggleItem = useMutation({
+    mutationFn: async ({ id, is_done }: { id: string; is_done: boolean }) => {
+      const { error } = await supabase
+        .from('zone_task_checklist')
+        .update({ is_done })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId) }),
+  });
+
+  const removeItem = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('zone_task_checklist')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId) }),
+  });
+
+  return {
+    checklist,
+    loading,
+    addItem: (title: string) => addItem.mutateAsync(title),
+    toggleItem: (id: string, is_done: boolean) => toggleItem.mutateAsync({ id, is_done }),
+    removeItem: (id: string) => removeItem.mutateAsync(id),
+  };
 }

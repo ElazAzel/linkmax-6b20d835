@@ -1,9 +1,8 @@
 /**
- * ContactDetailSheet - Side panel with contact info + linked deals, tasks, conversations
+ * ContactDetailSheet - Side panel with contact info + timeline/notes + linked deals, tasks, conversations
  */
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/platform/supabase/client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
@@ -20,9 +20,16 @@ import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Save from 'lucide-react/dist/esm/icons/save';
 import X from 'lucide-react/dist/esm/icons/x';
+import Building2 from 'lucide-react/dist/esm/icons/building-2';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Tag from 'lucide-react/dist/esm/icons/tag';
+import Send from 'lucide-react/dist/esm/icons/send';
 import { toast } from 'sonner';
-import type { ZoneContact, ZoneDeal } from '@/types/zones';
-import type { ZoneTask } from '@/hooks/zones/useZoneTasks';
+import type { ZoneContact } from '@/types/zones';
+import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
+import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
+import { useZoneContactNotes } from '@/hooks/zones/useZoneContacts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 interface ContactDetailSheetProps {
@@ -43,51 +50,36 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
   onDeleteContact,
 }: ContactDetailSheetProps) {
   const { t } = useTranslation();
-  const [linkedDeals, setLinkedDeals] = useState<ZoneDeal[]>([]);
-  const [linkedTasks, setLinkedTasks] = useState<ZoneTask[]>([]);
-  const [conversationCount, setConversationCount] = useState(0);
   const [editing, setEditing] = useState(false);
-  const [editData, setEditData] = useState({ name: '', phone: '', email: '', telegram_username: '', tags: '' });
+  const [editData, setEditData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    telegram_username: '',
+    tags: '',
+    company: '',
+    position: '',
+    address: '',
+    notes: '',
+  });
+  const [newNote, setNewNote] = useState('');
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const fetchLinkedData = useCallback(async () => {
-    if (!contact) return;
-    setLoading(true);
-    try {
-      const [dealsRes, tasksRes, convoRes] = await Promise.all([
-        supabase
-          .from('zone_deals')
-          .select('*, zone_deal_stages(*)')
-          .eq('zone_id', zoneId)
-          .eq('contact_id', contact.id)
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('zone_tasks')
-          .select('*')
-          .eq('zone_id', zoneId)
-          .eq('contact_id', contact.id)
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('zone_conversations')
-          .select('id', { count: 'exact', head: true })
-          .eq('zone_id', zoneId)
-          .eq('contact_id', contact.id),
-      ]);
-      setLinkedDeals((dealsRes.data || []).map((d: any) => ({ ...d, stage: d.zone_deal_stages || undefined })) as ZoneDeal[]);
-      setLinkedTasks((tasksRes.data || []) as ZoneTask[]);
-      setConversationCount(convoRes.count || 0);
-    } finally {
-      setLoading(false);
-    }
-  }, [contact?.id, zoneId]);
+  // React Query Hooks for linked data
+  const { deals } = useZoneDeals(open ? zoneId : null);
+  const { tasks } = useZoneTasks(open ? zoneId : null);
+  const { notes, addNote, loading: notesLoading } = useZoneContactNotes(
+    open ? zoneId : null,
+    open && contact ? contact.id : null
+  );
+
+  // Filter linked data for THIS contact
+  const linkedDeals = useMemo(() => deals.filter(d => d.contact_id === contact?.id), [deals, contact?.id]);
+  const linkedTasks = useMemo(() => tasks.filter(t => t.contact_id === contact?.id), [tasks, contact?.id]);
 
   useEffect(() => {
-    if (open && contact) {
-      fetchLinkedData();
-      setEditing(false);
-    }
-  }, [open, contact?.id, fetchLinkedData]);
+    if (open && contact) setEditing(false);
+  }, [open, contact?.id]);
 
   const startEdit = () => {
     if (!contact) return;
@@ -97,6 +89,10 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
       email: contact.email || '',
       telegram_username: contact.telegram_username || '',
       tags: (contact.tags || []).join(', '),
+      company: contact.company || '',
+      position: contact.position || '',
+      address: contact.address || '',
+      notes: contact.notes || '',
     });
     setEditing(true);
   };
@@ -110,9 +106,23 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
         email: editData.email || null,
         telegram_username: editData.telegram_username || null,
         tags: editData.tags.split(',').map(t => t.trim()).filter(Boolean),
+        company: editData.company || null,
+        position: editData.position || null,
+        address: editData.address || null,
+        notes: editData.notes || null,
       } as any);
       setEditing(false);
       toast.success(t('zones.contacts.updated', 'Contact updated'));
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleAddNote = async () => {
+    if (!newNote.trim()) return;
+    try {
+      await addNote('note', newNote.trim());
+      setNewNote('');
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -143,8 +153,8 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-full sm:max-w-md">
-          <SheetHeader>
+        <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
+          <SheetHeader className="p-6 pb-2">
             <SheetTitle className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
                 {contact.name.charAt(0).toUpperCase()}
@@ -172,106 +182,92 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
             </SheetTitle>
           </SheetHeader>
 
-          <ScrollArea className="h-[calc(100vh-120px)] mt-4">
-            <div className="space-y-4 pr-4">
-              {/* Contact Info */}
-              {editing ? (
-                <div className="space-y-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs">{t('zones.contacts.phone', 'Phone')}</Label>
-                    <Input value={editData.phone} onChange={e => setEditData(p => ({ ...p, phone: e.target.value }))} />
+          <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-6">
+              <TabsList className="w-full grid grid-cols-4">
+                <TabsTrigger value="timeline" className="text-[10px]">{t('zones.contacts.notes', 'Timeline')}</TabsTrigger>
+                <TabsTrigger value="deals" className="text-[10px]">{t('zones.deals.title', 'Deals')} ({linkedDeals.length})</TabsTrigger>
+                <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+                <TabsTrigger value="details" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
+              </TabsList>
+            </div>
+
+            <ScrollArea className="flex-1 px-6">
+              <div className="py-4 space-y-4">
+                <TabsContent value="timeline" className="space-y-4 m-0">
+                  {/* Add Note Input */}
+                  <div className="relative group">
+                    <Textarea
+                      placeholder={t('zones.contacts.addNotePlaceholder', 'Write a note...')}
+                      value={newNote}
+                      onChange={e => setNewNote(e.target.value)}
+                      className="min-h-[80px] bg-muted/30 focus-visible:ring-1 pr-10 resize-none"
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="absolute right-2 bottom-2 h-8 w-8 text-primary opacity-0 group-focus-within:opacity-100 transition-opacity"
+                      disabled={!newNote.trim() || notesLoading}
+                      onClick={handleAddNote}
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs">{t('zones.contacts.email', 'Email')}</Label>
-                    <Input value={editData.email} onChange={e => setEditData(p => ({ ...p, email: e.target.value }))} type="email" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs">Telegram</Label>
-                    <Input value={editData.telegram_username} onChange={e => setEditData(p => ({ ...p, telegram_username: e.target.value }))} placeholder="@username" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs">{t('zones.contacts.tags', 'Tags')} ({t('zones.contacts.commaSeparated', 'comma-separated')})</Label>
-                    <Input value={editData.tags} onChange={e => setEditData(p => ({ ...p, tags: e.target.value }))} placeholder="VIP, partner" />
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {contact.phone && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span>{contact.phone}</span>
+
+                  {/* Notes List */}
+                  {notes.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground italic text-sm">
+                      {t('zones.contacts.noNotes', 'No activities recorded yet')}
                     </div>
-                  )}
-                  {contact.email && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <span>{contact.email}</span>
-                    </div>
-                  )}
-                  {contact.telegram_username && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <MessageCircle className="h-4 w-4 text-muted-foreground" />
-                      <span>@{contact.telegram_username}</span>
-                    </div>
-                  )}
-                  {contact.tags && contact.tags.length > 0 && (
-                    <div className="flex gap-1 flex-wrap pt-1">
-                      {contact.tags.map(tag => (
-                        <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                  ) : (
+                    <div className="space-y-4 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-muted">
+                      {notes.map(note => (
+                        <div key={note.id} className="relative pl-8">
+                          <div className="absolute left-0 top-1 w-[24px] h-[24px] rounded-full bg-background border-2 border-primary flex items-center justify-center z-10">
+                            <Badge className="p-0 bg-primary h-1.5 w-1.5 rounded-full" />
+                          </div>
+                          <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
+                            <div className="flex justify-between items-start">
+                              <span className="text-[10px] uppercase font-bold text-muted-foreground">{note.type}</span>
+                              <span className="text-[10px] text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                            </div>
+                            <p className="text-sm whitespace-pre-wrap">{note.content}</p>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   )}
-                  {!contact.phone && !contact.email && !contact.telegram_username && (
-                    <p className="text-sm text-muted-foreground">{t('zones.contacts.noInfo', 'No contact info')}</p>
-                  )}
-                </div>
-              )}
+                </TabsContent>
 
-              <Separator />
-
-              {/* Linked Data Tabs */}
-              <Tabs defaultValue="deals" className="w-full">
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="deals" className="text-xs">
-                    {t('zones.deals.title', 'Deals')} ({linkedDeals.length})
-                  </TabsTrigger>
-                  <TabsTrigger value="tasks" className="text-xs">
-                    {t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})
-                  </TabsTrigger>
-                  <TabsTrigger value="inbox" className="text-xs">
-                    {t('zones.inbox.title', 'Inbox')} ({conversationCount})
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="deals" className="space-y-2 mt-2">
+                <TabsContent value="deals" className="space-y-2 m-0">
                   {linkedDeals.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-4">{t('zones.contacts.noDeals', 'No deals linked')}</p>
+                    <p className="text-sm text-muted-foreground text-center py-8 italic">{t('zones.contacts.noDeals', 'No deals linked')}</p>
                   ) : linkedDeals.map(deal => (
-                    <Card key={deal.id} className="overflow-hidden">
+                    <Card key={deal.id} className="overflow-hidden bg-muted/20 border-muted">
                       <CardContent className="p-3 space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="font-medium text-sm truncate">{deal.title}</span>
                           {getStatusBadge(deal.status)}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                           {deal.stage && (
                             <span className="flex items-center gap-1">
-                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: deal.stage.color }} />
+                              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: deal.stage.color }} />
                               {deal.stage.name}
                             </span>
                           )}
-                          <span>{deal.value_amount?.toLocaleString()} {deal.currency}</span>
+                          <span className="font-medium text-foreground">{deal.value_amount?.toLocaleString()} {deal.currency}</span>
                         </div>
                       </CardContent>
                     </Card>
                   ))}
                 </TabsContent>
 
-                <TabsContent value="tasks" className="space-y-2 mt-2">
+                <TabsContent value="tasks" className="space-y-2 m-0">
                   {linkedTasks.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-4">{t('zones.contacts.noTasks', 'No tasks linked')}</p>
+                    <p className="text-sm text-muted-foreground text-center py-8 italic">{t('zones.contacts.noTasks', 'No tasks linked')}</p>
                   ) : linkedTasks.map(task => (
-                    <Card key={task.id} className="overflow-hidden">
+                    <Card key={task.id} className="overflow-hidden bg-muted/20 border-muted">
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium truncate">{task.title}</span>
@@ -280,7 +276,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           </Badge>
                         </div>
                         {task.due_date && (
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-[10px] text-muted-foreground mt-1">
                             Due: {new Date(task.due_date).toLocaleDateString()}
                           </p>
                         )}
@@ -289,34 +285,131 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                   ))}
                 </TabsContent>
 
-                <TabsContent value="inbox" className="mt-2">
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    {conversationCount > 0
-                      ? t('zones.contacts.conversationsCount', '{{count}} conversations', { count: conversationCount })
-                      : t('zones.contacts.noConversations', 'No conversations yet')}
-                  </p>
+                <TabsContent value="details" className="space-y-6 m-0">
+                  {/* Personal/Company Info */}
+                  <div className="space-y-4">
+                    {editing ? (
+                      <div className="grid grid-cols-1 gap-3">
+                        <div className="space-y-1">
+                          <Label className="text-xs">{t('zones.contacts.phone', 'Phone')}</Label>
+                          <Input value={editData.phone} onChange={e => setEditData(p => ({ ...p, phone: e.target.value }))} className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">{t('zones.contacts.email', 'Email')}</Label>
+                          <Input value={editData.email} onChange={e => setEditData(p => ({ ...p, email: e.target.value }))} type="email" className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Company</Label>
+                          <Input value={editData.company} onChange={e => setEditData(p => ({ ...p, company: e.target.value }))} className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Position</Label>
+                          <Input value={editData.position} onChange={e => setEditData(p => ({ ...p, position: e.target.value }))} className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Address</Label>
+                          <Input value={editData.address} onChange={e => setEditData(p => ({ ...p, address: e.target.value }))} className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Telegram</Label>
+                          <Input value={editData.telegram_username} onChange={e => setEditData(p => ({ ...p, telegram_username: e.target.value }))} placeholder="@username" className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Tags</Label>
+                          <Input value={editData.tags} onChange={e => setEditData(p => ({ ...p, tags: e.target.value }))} placeholder="VIP, partner" className="h-8" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">General Notes</Label>
+                          <Textarea value={editData.notes} onChange={e => setEditData(p => ({ ...p, notes: e.target.value }))} className="min-h-[100px] text-sm" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="flex gap-2 items-start text-sm">
+                          <Phone className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.phone', 'Phone')}</p>
+                            <p className="font-medium">{contact.phone || '—'}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 items-start text-sm">
+                          <Mail className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.email', 'Email')}</p>
+                            <p className="font-medium">{contact.email || '—'}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 items-start text-sm">
+                          <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] text-muted-foreground leading-none">Company</p>
+                            <p className="font-medium">{contact.company || '—'}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 items-start text-sm">
+                          <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] text-muted-foreground leading-none">Position</p>
+                            <p className="font-medium">{contact.position || '—'}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 items-start text-sm">
+                          <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] text-muted-foreground leading-none">Address</p>
+                            <p className="font-medium">{contact.address || '—'}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 items-start text-sm">
+                          <MessageCircle className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] text-muted-foreground leading-none">Telegram</p>
+                            <p className="font-medium">{contact.telegram_username ? `@${contact.telegram_username}` : '—'}</p>
+                          </div>
+                        </div>
+                        {contact.tags && contact.tags.length > 0 && (
+                          <div className="flex gap-2 items-start text-sm">
+                            <Tag className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div className="flex gap-1 flex-wrap">
+                              {contact.tags.map(tag => (
+                                <Badge key={tag} variant="secondary" className="text-[10px] py-0 px-1.5">{tag}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {contact.notes && (
+                          <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                            <p className="text-[10px] text-primary font-bold uppercase mb-1">General Notes</p>
+                            <p className="text-sm whitespace-pre-wrap">{contact.notes}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </TabsContent>
-              </Tabs>
+              </div>
+            </ScrollArea>
+          </Tabs>
 
-              {/* Summary stats */}
-              <div className="grid grid-cols-3 gap-2 text-center pt-2">
-                <div className="p-2 rounded-lg bg-muted/50">
-                  <p className="text-lg font-bold">{linkedDeals.filter(d => d.status === 'won').length}</p>
-                  <p className="text-[10px] text-muted-foreground">{t('zones.deals.won', 'Won')}</p>
-                </div>
-                <div className="p-2 rounded-lg bg-muted/50">
-                  <p className="text-lg font-bold">
-                    {linkedDeals.filter(d => d.status === 'open').reduce((s, d) => s + (d.value_amount || 0), 0).toLocaleString()}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">KZT {t('zones.contacts.pipeline', 'Pipeline')}</p>
-                </div>
-                <div className="p-2 rounded-lg bg-muted/50">
-                  <p className="text-lg font-bold">{linkedTasks.filter(t => t.status !== 'done').length}</p>
-                  <p className="text-[10px] text-muted-foreground">{t('zones.contacts.openTasks', 'Open tasks')}</p>
-                </div>
+          {/* Quick stats footer */}
+          {!editing && (
+            <div className="p-4 bg-muted/30 border-t grid grid-cols-3 gap-2 text-center">
+              <div>
+                <p className="text-xs font-bold">{linkedDeals.filter(d => d.status === 'won').length}</p>
+                <p className="text-[8px] text-muted-foreground uppercase">{t('zones.deals.won', 'Won')}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold">
+                  {linkedDeals.filter(d => d.status === 'open').reduce((s, d) => s + (d.value_amount || 0), 0).toLocaleString()}
+                </p>
+                <p className="text-[8px] text-muted-foreground uppercase">KZT {t('zones.contacts.pipeline', 'Pipeline')}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold">{linkedTasks.filter(t => t.status !== 'done').length}</p>
+                <p className="text-[8px] text-muted-foreground uppercase">{t('zones.contacts.openTasks', 'Open tasks')}</p>
               </div>
             </div>
-          </ScrollArea>
+          )}
         </SheetContent>
       </Sheet>
 
@@ -338,3 +431,4 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
     </>
   );
 });
+

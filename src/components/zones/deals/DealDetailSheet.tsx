@@ -1,9 +1,8 @@
 /**
- * DealDetailSheet - Side panel with full deal info + activity timeline
+ * DealDetailSheet - Side panel with full deal info + activity timeline + products
  */
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '@/platform/supabase/client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -13,15 +12,25 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Plus from 'lucide-react/dist/esm/icons/plus';
+import X from 'lucide-react/dist/esm/icons/x';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
+import Package from 'lucide-react/dist/esm/icons/package';
+import Tag from 'lucide-react/dist/esm/icons/tag';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
-import type { ZoneDeal, ZoneDealStage, ZoneDealActivity } from '@/types/zones';
+import type { ZoneDeal, ZoneDealStage } from '@/types/zones';
+import { useZoneDealActivities, useZoneDealProducts } from '@/hooks/zones/useZoneDeals';
+import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
+import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 
 interface DealDetailSheetProps {
   deal: ZoneDeal | null;
@@ -43,24 +52,28 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   onAddActivity,
 }: DealDetailSheetProps) {
   const { t } = useTranslation();
-  const [activities, setActivities] = useState<ZoneDealActivity[]>([]);
   const [newActivity, setNewActivity] = useState('');
   const [lostReason, setLostReason] = useState('');
   const [showLostDialog, setShowLostDialog] = useState(false);
+  const [isAddingProduct, setIsAddingProduct] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState('');
+  const [newProdQty, setNewProdQty] = useState(1);
 
-  const fetchActivities = useCallback(async () => {
-    if (!deal) return;
-    const { data } = await supabase
-      .from('zone_deal_activities')
-      .select('*')
-      .eq('deal_id', deal.id)
-      .order('happened_at', { ascending: false }) as any;
-    setActivities((data as ZoneDealActivity[]) || []);
-  }, [deal?.id]);
+  // React Query Hooks
+  const { activities, loading: activitiesLoading } = useZoneDealActivities(deal?.zone_id || null, deal?.id || null);
+  const { dealProducts, addProduct, removeProduct } = useZoneDealProducts(deal?.zone_id || null, deal?.id || null);
+  const { products } = useZoneProducts(deal?.zone_id || null);
+  const { tasks } = useZoneTasks(deal?.zone_id || null);
+
+  const linkedTasks = useMemo(() => tasks.filter(t => t.deal_id === deal?.id), [tasks, deal?.id]);
+  const dealTotal = useMemo(() => dealProducts.reduce((sum, p) => sum + (p.subtotal || 0), 0), [dealProducts]);
 
   useEffect(() => {
-    if (open && deal) fetchActivities();
-  }, [open, deal?.id, fetchActivities]);
+    if (open && deal) {
+      setShowLostDialog(false);
+      setIsAddingProduct(false);
+    }
+  }, [open, deal?.id]);
 
   if (!deal) return null;
 
@@ -70,33 +83,68 @@ export const DealDetailSheet = memo(function DealDetailSheet({
 
   const handleAddActivity = async () => {
     if (!newActivity.trim()) return;
-    await onAddActivity(deal.id, 'note', newActivity.trim());
-    setNewActivity('');
-    await fetchActivities();
+    try {
+      await onAddActivity(deal.id, 'note', newActivity.trim());
+      setNewActivity('');
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   const handleWon = async () => {
-    await onUpdateDeal(deal.id, { status: 'won' } as any);
-    await onAddActivity(deal.id, 'status_change', 'Deal marked as Won');
-    onOpenChange(false);
-    toast.success(t('zones.deals.markedWon', 'Deal marked as won!'));
+    try {
+      await onUpdateDeal(deal.id, { status: 'won' } as any);
+      await onAddActivity(deal.id, 'status_change', 'Deal marked as Won');
+      onOpenChange(false);
+      toast.success(t('zones.deals.markedWon', 'Deal marked as won!'));
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   const handleLost = async () => {
-    await onUpdateDeal(deal.id, { status: 'lost', lost_reason: lostReason || null } as any);
-    await onAddActivity(deal.id, 'status_change', `Deal lost: ${lostReason || 'No reason'}`);
-    setShowLostDialog(false);
-    setLostReason('');
-    onOpenChange(false);
-    toast.info(t('zones.deals.markedLost', 'Deal marked as lost'));
+    try {
+      await onUpdateDeal(deal.id, { status: 'lost', lost_reason: lostReason || null } as any);
+      await onAddActivity(deal.id, 'status_change', `Deal lost: ${lostReason || 'No reason'}`);
+      setShowLostDialog(false);
+      setLostReason('');
+      onOpenChange(false);
+      toast.info(t('zones.deals.markedLost', 'Deal marked as lost'));
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   const handleMoveNext = async () => {
     if (!canMoveNext) return;
-    const nextStage = stages[currentStageIdx + 1];
-    await onMoveDealToStage(deal.id, nextStage.id);
-    await onAddActivity(deal.id, 'stage_change', `Moved to ${nextStage.name}`);
-    await fetchActivities();
+    try {
+      const nextStage = stages[currentStageIdx + 1];
+      await onMoveDealToStage(deal.id, nextStage.id);
+      await onAddActivity(deal.id, 'stage_change', `Moved to ${nextStage.name}`);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleAddProduct = async () => {
+    const prod = products.find(p => p.id === selectedProductId);
+    if (!prod) return;
+    try {
+      await addProduct({
+        productId: prod.id,
+        quantity: newProdQty,
+        unitPrice: prod.price
+      });
+      // Optionally sync deal value_amount?
+      if (dealTotal + (prod.price * newProdQty) !== deal.value_amount) {
+        await onUpdateDeal(deal.id, { value_amount: dealTotal + (prod.price * newProdQty) });
+      }
+      setIsAddingProduct(false);
+      setSelectedProductId('');
+      setNewProdQty(1);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   const getActivityIcon = (type: string) => {
@@ -110,154 +158,267 @@ export const DealDetailSheet = memo(function DealDetailSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md">
-        <SheetHeader>
+      <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
+        <SheetHeader className="p-6 pb-2">
           <SheetTitle className="flex items-center gap-2">
-            {deal.title}
+            <span className="truncate">{deal.title}</span>
             {deal.status !== 'open' && (
-              <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-xs">
+              <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-[10px]">
                 {deal.status === 'won' ? '✓ Won' : '✗ Lost'}
               </Badge>
             )}
           </SheetTitle>
         </SheetHeader>
-        <ScrollArea className="h-[calc(100vh-120px)] mt-4">
-          <div className="space-y-4 pr-4">
-            {/* Stage */}
-            <div className="space-y-1">
-              <Label className="text-xs text-muted-foreground">{t('zones.deals.stage', 'Stage')}</Label>
-              <Select
-                value={deal.stage_id || ''}
-                onValueChange={async (v) => {
-                  await onMoveDealToStage(deal.id, v);
-                  const stage = stages.find((s) => s.id === v);
-                  if (stage) await onAddActivity(deal.id, 'stage_change', `Moved to ${stage.name}`);
-                  await fetchActivities();
-                }}
-              >
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {stages.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
-                        {s.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
 
-            {/* Value */}
-            <div className="space-y-1">
-              <Label className="text-xs text-muted-foreground">{t('zones.deals.value', 'Value')}</Label>
-              <p className="font-bold text-lg">{deal.value_amount.toLocaleString()} {deal.currency}</p>
-            </div>
+        <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
+          <div className="px-6">
+            <TabsList className="w-full grid grid-cols-4">
+              <TabsTrigger value="timeline" className="text-[10px]">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
+              <TabsTrigger value="products" className="text-[10px]">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
+              <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+              <TabsTrigger value="info" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
+            </TabsList>
+          </div>
 
-            {/* Contact */}
-            {deal.contact && (
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">{t('zones.deals.contact', 'Contact')}</Label>
-                <p className="font-medium">{deal.contact.name}</p>
-                {deal.contact.phone && <p className="text-sm text-muted-foreground">{deal.contact.phone}</p>}
-                {deal.contact.email && <p className="text-sm text-muted-foreground">{deal.contact.email}</p>}
-              </div>
-            )}
-
-            {/* Next Step */}
-            <div className="space-y-1">
-              <Label className="text-xs text-muted-foreground">{t('zones.deals.nextStep', 'Next step')}</Label>
-              <p className={cn("text-sm", isOverdue && "text-destructive font-medium")}>
-                {deal.next_step || '—'}
-              </p>
-              {deal.next_step_at && (
-                <p className={cn("text-xs", isOverdue ? "text-destructive" : "text-muted-foreground")}>
-                  {new Date(deal.next_step_at).toLocaleString()}
-                </p>
-              )}
-            </div>
-
-            {/* Status actions */}
-            {deal.status === 'open' && (
-              <div className="flex gap-2 pt-2">
-                <Button variant="outline" className="flex-1" onClick={handleMoveNext} disabled={!canMoveNext}>
-                  <ArrowRight className="h-4 w-4 mr-1" />
-                  {t('zones.deals.moveNext', 'Move next')}
-                </Button>
-                <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white" onClick={handleWon}>
-                  {t('zones.deals.win', 'Won')}
-                </Button>
-                <Button variant="destructive" className="flex-1" onClick={() => setShowLostDialog(true)}>
-                  {t('zones.deals.lose', 'Lost')}
-                </Button>
-              </div>
-            )}
-
-            {/* Lost reason dialog */}
-            {showLostDialog && (
-              <div className="space-y-2 p-3 border rounded-lg bg-muted/50">
-                <Label className="text-sm">{t('zones.deals.lostReason', 'Reason for losing')}</Label>
-                <Textarea
-                  value={lostReason}
-                  onChange={(e) => setLostReason(e.target.value)}
-                  placeholder={t('zones.deals.lostReasonPlaceholder', 'Price too high, competitor won...')}
-                  rows={2}
-                />
+          <ScrollArea className="flex-1 px-6">
+            <div className="py-4 space-y-4">
+              {/* Timeline Tab */}
+              <TabsContent value="timeline" className="space-y-4 m-0">
                 <div className="flex gap-2">
-                  <Button size="sm" variant="destructive" onClick={handleLost}>
-                    {t('zones.deals.confirmLost', 'Confirm Lost')}
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => setShowLostDialog(false)}>
-                    {t('common.cancel', 'Cancel')}
+                  <Input
+                    value={newActivity}
+                    onChange={(e) => setNewActivity(e.target.value)}
+                    placeholder={t('zones.deals.addNote', 'Add a note...')}
+                    className="text-sm h-9"
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddActivity()}
+                  />
+                  <Button size="icon" variant="ghost" onClick={handleAddActivity} disabled={!newActivity.trim() || activitiesLoading}>
+                    <Plus className="h-4 w-4" />
                   </Button>
                 </div>
-              </div>
-            )}
 
-            <Separator />
+                <div className="space-y-3 relative before:absolute before:inset-y-1 before:left-[11px] before:w-[2px] before:bg-muted">
+                  {activities.map((activity) => (
+                    <div key={activity.id} className="relative pl-8">
+                      <div className="absolute left-0 top-1 w-[24px] h-[24px] rounded-full bg-background border flex items-center justify-center z-10 text-muted-foreground">
+                        {getActivityIcon(activity.type)}
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="text-sm font-medium leading-tight">{activity.summary}</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                          {new Date(activity.happened_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  {activities.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-8 italic">{t('zones.deals.noActivities', 'No activities yet')}</p>
+                  )}
+                </div>
+              </TabsContent>
 
-            {/* Activity Timeline */}
-            <div className="space-y-3">
-              <Label className="text-sm font-semibold">{t('zones.deals.activities', 'Activity')}</Label>
+              {/* Products Tab */}
+              <TabsContent value="products" className="space-y-4 m-0">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase text-muted-foreground">{t('zones.invoices.total', 'Total')}:</span>
+                  <span className="font-bold text-lg">{dealTotal.toLocaleString()} {deal.currency}</span>
+                </div>
 
-              {/* Add activity */}
-              <div className="flex gap-2">
-                <Input
-                  value={newActivity}
-                  onChange={(e) => setNewActivity(e.target.value)}
-                  placeholder={t('zones.deals.addNote', 'Add a note...')}
-                  className="text-sm"
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddActivity()}
-                />
-                <Button size="sm" variant="outline" onClick={handleAddActivity} disabled={!newActivity.trim()}>
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
+                <div className="space-y-2">
+                  {dealProducts.map(dp => (
+                    <div key={dp.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 border border-muted group">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate">{dp.zone_products?.name || 'Product'}</p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {dp.quantity} x {dp.unit_price?.toLocaleString()} {deal.currency}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-semibold">{dp.subtotal?.toLocaleString()}</span>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-destructive"
+                          onClick={() => removeProduct(dp.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-              {/* Timeline */}
-              <div className="space-y-2">
-                {activities.length === 0 && (
-                  <p className="text-xs text-muted-foreground text-center py-4">
-                    {t('zones.deals.noActivities', 'No activities yet')}
-                  </p>
-                )}
-                {activities.map((activity) => (
-                  <div key={activity.id} className="flex gap-2 items-start text-sm">
-                    <div className="mt-1 text-muted-foreground">{getActivityIcon(activity.type)}</div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm">{activity.summary}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(activity.happened_at).toLocaleString()}
-                      </p>
+                {isAddingProduct ? (
+                  <div className="p-3 rounded-lg border bg-muted/20 space-y-3">
+                    <div className="space-y-1">
+                      <Label className="text-[10px]">Select Product</Label>
+                      <Select value={selectedProductId} onValueChange={setSelectedProductId}>
+                        <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select..." /></SelectTrigger>
+                        <SelectContent>
+                          {products.filter(p => p.active).map(p => (
+                            <SelectItem key={p.id} value={p.id}>{p.name} ({p.price.toLocaleString()})</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="flex-1 space-y-1">
+                        <Label className="text-[10px]">Qty</Label>
+                        <Input type="number" value={newProdQty} onChange={e => setNewProdQty(Number(e.target.value))} className="h-8" />
+                      </div>
+                      <div className="flex items-end gap-1">
+                        <Button size="sm" className="h-8" onClick={handleAddProduct} disabled={!selectedProductId}>Add</Button>
+                        <Button size="sm" variant="ghost" className="h-8" onClick={() => setIsAddingProduct(false)}>Cancel</Button>
+                      </div>
                     </div>
                   </div>
+                ) : (
+                  <Button variant="outline" size="sm" className="w-full border-dashed" onClick={() => setIsAddingProduct(true)}>
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add product
+                  </Button>
+                )}
+              </TabsContent>
+
+              {/* Tasks Tab */}
+              <TabsContent value="tasks" className="space-y-3 m-0">
+                {linkedTasks.map(task => (
+                  <Card key={task.id} className="overflow-hidden bg-muted/20 border-muted">
+                    <CardContent className="p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <CheckSquare className={cn("h-4 w-4 shrink-0", task.status === 'done' ? "text-green-600" : "text-muted-foreground")} />
+                          <span className="text-sm font-medium truncate">{task.title}</span>
+                        </div>
+                        <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-[10px]">
+                          {task.status}
+                        </Badge>
+                      </div>
+                      {task.due_date && (
+                        <p className="text-[10px] text-muted-foreground mt-1 ml-6">
+                          Due: {new Date(task.due_date).toLocaleDateString()}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
                 ))}
-              </div>
+                {linkedTasks.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-8 italic">{t('zones.deals.noTasks', 'No tasks linked')}</p>
+                )}
+              </TabsContent>
+
+              {/* Info Tab */}
+              <TabsContent value="info" className="space-y-6 m-0">
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">{t('zones.deals.stage', 'Stage')}</Label>
+                    <Select
+                      value={deal.stage_id || ''}
+                      onValueChange={async (v) => {
+                        await onMoveDealToStage(deal.id, v);
+                        const stage = stages.find((s) => s.id === v);
+                        if (stage) await onAddActivity(deal.id, 'stage_change', `Moved to ${stage.name}`);
+                      }}
+                    >
+                      <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {stages.map((s) => (
+                          <SelectItem key={s.id} value={s.id}>
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
+                              {s.name}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex gap-2 items-start text-sm">
+                      <Tag className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div className="space-y-0.5">
+                        <p className="text-[10px] text-muted-foreground leading-none">{t('zones.deals.value', 'Value')}</p>
+                        <p className="font-bold">{deal.value_amount.toLocaleString()} {deal.currency}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 items-start text-sm">
+                      <Clock className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                      <div className="space-y-0.5">
+                        <p className="text-[10px] text-muted-foreground leading-none">{t('zones.deals.nextStep', 'Next step')}</p>
+                        <p className={cn("font-medium", isOverdue && "text-destructive")}>{deal.next_step || '—'}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {deal.contact && (
+                    <Card className="bg-primary/5 border-primary/10">
+                      <CardContent className="p-3 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
+                            {deal.contact.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold leading-none">{deal.contact.name}</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">Linked Contact</p>
+                          </div>
+                        </div>
+                        <div className="pt-1 space-y-1">
+                          {deal.contact.phone && <div className="flex items-center gap-2 text-[10px]"><Phone className="h-3 w-3" />{deal.contact.phone}</div>}
+                          {deal.contact.email && <div className="flex items-center gap-2 text-[10px]"><Mail className="h-3 w-3" />{deal.contact.email}</div>}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+
+                {deal.status === 'open' && (
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold">{t('common.actions', 'Status Actions')}</Label>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1 text-xs" onClick={handleMoveNext} disabled={!canMoveNext}>
+                        <ArrowRight className="h-4 w-4 mr-1" />
+                        {t('zones.deals.moveNext', 'Move next')}
+                      </Button>
+                      <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs" onClick={handleWon}>
+                        {t('zones.deals.win', 'Won')}
+                      </Button>
+                      <Button variant="destructive" className="flex-1 text-xs" onClick={() => setShowLostDialog(true)}>
+                        {t('zones.deals.lose', 'Lost')}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {showLostDialog && (
+                  <div className="space-y-2 p-3 border rounded-lg bg-red-50/50 dark:bg-red-950/20">
+                    <Label className="text-xs">{t('zones.deals.lostReason', 'Reason for losing')}</Label>
+                    <Textarea
+                      value={lostReason}
+                      onChange={(e) => setLostReason(e.target.value)}
+                      placeholder={t('zones.deals.lostReasonPlaceholder', 'Price...')}
+                      rows={2}
+                      className="text-sm"
+                    />
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="destructive" onClick={handleLost}>Confirm Lost</Button>
+                      <Button size="sm" variant="outline" onClick={() => setShowLostDialog(false)}>Cancel</Button>
+                    </div>
+                  </div>
+                )}
+
+                {deal.lost_reason && (
+                  <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                    <p className="text-[10px] text-destructive font-bold uppercase mb-1">Lost Reason</p>
+                    <p className="text-sm">{deal.lost_reason}</p>
+                  </div>
+                )}
+              </TabsContent>
             </div>
-          </div>
-        </ScrollArea>
+          </ScrollArea>
+        </Tabs>
       </SheetContent>
     </Sheet>
   );
 });
+

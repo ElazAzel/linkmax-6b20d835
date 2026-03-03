@@ -219,6 +219,30 @@ export interface ZoneInvoiceItem {
   created_at: string;
 }
 
+export type TaskStatus = 'todo' | 'in_progress' | 'done' | 'cancelled';
+export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
+
+export interface ZoneTask {
+  id: string;
+  zone_id: string;
+  title: string;
+  description: string | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  assigned_to: string | null;
+  contact_id: string | null;
+  deal_id: string | null;
+  due_date: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  completed_at?: string | null;
+  // Joined
+  contact?: ZoneContact;
+  deal?: ZoneDeal;
+  checklist?: ZoneTaskChecklistItem[];
+}
+
 export interface ZoneTaskChecklistItem {
   id: string;
   task_id: string;
