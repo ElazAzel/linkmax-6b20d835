@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### [2026-03-03] - CRM & Business Zones Enhancements (Phase 2)
+
+* **Tasks Management**:
+  * Added **Checklist Support**: Users can now add, toggle, and manage sub-tasks (checklists) within any task.
+  * **Liquid Glass UI**: Refactored `TaskCard` and `TaskDetailSheet` with premium glassmorphism aesthetics and micro-animations.
+  * **Hook Refactoring**: Migrated `useZoneTasks` to React Query for robust server-state synchronization.
+* **Invoices System**:
+  * **Multi-Item Support**: Invoices now handle multiple line items with unit prices and quantities.
+  * **Invoice Detail View**: Created `InvoiceDetailSheet` for comprehensive invoice review and status management.
+  * **Automatic Totals**: Real-time calculation of invoice amounts during creation.
+* **Automations**:
+  * **Advanced Engine**: Expanded triggers (`invoice_paid`, `task_completed`) and actions (`change_deal_stage`).
+  * **Visual Flow UI**: Redesigned Rule cards with a clear "Trigger -> Action" visual representation.
+* **Architecture**:
+  * Centralized all shared CRM types in `@/types/zones.ts`.
+  * Standardized all CRM screens (Contacts, Deals, Tasks, Invoices, Automations) to use React Query hooks.
+
 * **Business Zones (Multi-Tenant Workspaces)**: Полная реализация модуля бизнес-зон с четырьмя подсистемами:
   * **CRM Pipeline**: Kanban-доска сделок с этапами, контакты, активности сделок.
   * **Team Inbox**: Групповой чат в реальном времени через Supabase Realtime, привязка к контактам.

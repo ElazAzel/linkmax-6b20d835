@@ -430,9 +430,10 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 - `zone_deal_activities`: deal activity log.
 - `zone_conversations`: team inbox conversations (Telegram, etc.).
 - `zone_messages`: realtime messages within conversations.
-- `zone_tasks`: collaborative task management with priorities and assignments.
-- `zone_invoices`: invoice tracking per deal/contact.
+- `zone_tasks`: collaborative task management with priorities, assignments, and **checklists**.
+- `zone_invoices`: invoice tracking per deal/contact with **multi-item support**.
 - `zone_invites`: invite tokens for onboarding new members.
+- `zone_automations`: advanced rule-based CRM engine (triggers: invoice paid, stage change, etc.).
 
 **Social features:**
 
@@ -783,9 +784,9 @@ Based on codebase analysis, these are logical next improvements:
 4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
 5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees, unit tests (Completed 2026-02-22)
 6. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
-7. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-02-27)
-8. **Business Zones Phase 1 (Deals DnD & Detail)**: Implementing drag-and-drop for Kanban and side-panel (Sheet) for deal details. (In Progress)
-9. **Business Zones Phase 2 (Contacts CRM)**: Advanced contact cards with history and segmentation. (Planned)
+7. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments, checklists), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-03-03)
+8. **Business Zones Phase 1 (Deals DnD & Detail)**: Implementing drag-and-drop for Kanban and side-panel (Sheet) for deal details. (Completed 2026-03-03)
+9. **Business Zones Phase 2 (CRM Enhancements)**: Advanced contact cards, task checklists, multi-item invoices, and complex automations. (Completed 2026-03-03)
 10. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
 11. **API access** — Public API for integrations (Zapier, Make, custom apps)
 12. **Email sequences** — Automated email drip campaigns for leads
@@ -796,6 +797,6 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: February 27, 2026*
-*Current Platform Health Score: 9.3/10*
+*Last updated: March 3, 2026*
+*Current Platform Health Score: 9.5/10*
 *Maintained by: Antigravity (Principal Engineer)*
