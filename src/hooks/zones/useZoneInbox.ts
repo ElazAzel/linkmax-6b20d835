@@ -1,7 +1,8 @@
 /**
- * Hook: Manage inbox conversations and messages for a zone
+ * Hook: Manage inbox conversations and messages for a zone (React Query + Realtime)
  */
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 
 export interface ZoneConversation {
@@ -30,58 +31,59 @@ export interface ZoneMessage {
   sender_type: string;
   sender_id: string | null;
   body: string;
-  metadata: any;
+  metadata: unknown;
   created_at: string;
 }
 
+// ─── Query Keys ───
+export const zoneInboxKeys = {
+  conversations: (zoneId: string) => ['zone-conversations', zoneId] as const,
+  messages: (conversationId: string) => ['zone-messages', conversationId] as const,
+};
+
+// ─── Fetch ───
+async function fetchConversations(zoneId: string): Promise<ZoneConversation[]> {
+  const { data, error } = await supabase
+    .from('zone_conversations')
+    .select('*, zone_contacts(name, phone, telegram_username)')
+    .eq('zone_id', zoneId)
+    .order('last_message_at', { ascending: false, nullsFirst: false });
+  if (error) throw error;
+  return (data || []).map((c: Record<string, unknown>) => ({
+    ...c,
+    contact: c.zone_contacts || undefined,
+  })) as ZoneConversation[];
+}
+
+async function fetchMessages(conversationId: string): Promise<ZoneMessage[]> {
+  const { data, error } = await supabase
+    .from('zone_messages')
+    .select('*')
+    .eq('conversation_id', conversationId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return (data || []) as ZoneMessage[];
+}
+
+// ─── Hook ───
 export function useZoneInbox(zoneId: string | null) {
-  const [conversations, setConversations] = useState<ZoneConversation[]>([]);
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<ZoneMessage[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [messagesLoading, setMessagesLoading] = useState(false);
-  const channelRef = useRef<any>(null);
 
-  // Fetch conversations
-  const fetchConversations = useCallback(async () => {
-    if (!zoneId) return;
-    setLoading(true);
-    try {
-      const { data } = await supabase
-        .from('zone_conversations')
-        .select('*, zone_contacts(name, phone, telegram_username)')
-        .eq('zone_id', zoneId)
-        .order('last_message_at', { ascending: false, nullsFirst: false });
+  const { data: conversations = [], isLoading: loading } = useQuery({
+    queryKey: zoneInboxKeys.conversations(safeZoneId),
+    queryFn: () => fetchConversations(safeZoneId),
+    enabled: !!zoneId,
+    staleTime: 10_000,
+  });
 
-      const mapped = (data || []).map((c: any) => ({
-        ...c,
-        contact: c.zone_contacts || undefined,
-      }));
-      setConversations(mapped);
-    } finally {
-      setLoading(false);
-    }
-  }, [zoneId]);
-
-  useEffect(() => { fetchConversations(); }, [fetchConversations]);
-
-  // Fetch messages for active conversation
-  const fetchMessages = useCallback(async () => {
-    if (!activeConversationId) { setMessages([]); return; }
-    setMessagesLoading(true);
-    try {
-      const { data } = await supabase
-        .from('zone_messages')
-        .select('*')
-        .eq('conversation_id', activeConversationId)
-        .order('created_at', { ascending: true });
-      setMessages((data as ZoneMessage[]) || []);
-    } finally {
-      setMessagesLoading(false);
-    }
-  }, [activeConversationId]);
-
-  useEffect(() => { fetchMessages(); }, [fetchMessages]);
+  const { data: messages = [], isLoading: messagesLoading } = useQuery({
+    queryKey: zoneInboxKeys.messages(activeConversationId || ''),
+    queryFn: () => fetchMessages(activeConversationId!),
+    enabled: !!activeConversationId,
+    staleTime: 5_000,
+  });
 
   // Realtime subscription for new messages
   useEffect(() => {
@@ -95,71 +97,90 @@ export function useZoneInbox(zoneId: string | null) {
         filter: `zone_id=eq.${zoneId}`,
       }, (payload) => {
         const msg = payload.new as ZoneMessage;
+        // Optimistically add message if in active conversation
         if (msg.conversation_id === activeConversationId) {
-          setMessages(prev => [...prev, msg]);
+          queryClient.setQueryData<ZoneMessage[]>(
+            zoneInboxKeys.messages(activeConversationId),
+            (old) => [...(old || []), msg]
+          );
         }
-        // Update conversation list
-        fetchConversations();
+        // Refresh conversation list
+        queryClient.invalidateQueries({ queryKey: zoneInboxKeys.conversations(safeZoneId) });
       })
       .subscribe();
 
-    channelRef.current = channel;
     return () => { supabase.removeChannel(channel); };
-  }, [zoneId, activeConversationId, fetchConversations]);
+  }, [zoneId, activeConversationId, queryClient, safeZoneId]);
 
-  // Send message
-  const sendMessage = useCallback(async (conversationId: string, body: string) => {
-    if (!zoneId) throw new Error('No zone');
-    const userId = (await supabase.auth.getUser()).data.user?.id;
-    const { error } = await supabase
-      .from('zone_messages')
-      .insert({
-        conversation_id: conversationId,
-        zone_id: zoneId,
-        direction: 'outbound',
-        sender_type: 'member',
-        sender_id: userId || '',
-        body,
-      } as any);
-    if (error) throw error;
+  const sendMessageMutation = useMutation({
+    mutationFn: async ({ conversationId, body }: { conversationId: string; body: string }) => {
+      if (!zoneId) throw new Error('No zone');
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const { error } = await supabase
+        .from('zone_messages')
+        .insert({
+          conversation_id: conversationId,
+          zone_id: zoneId,
+          direction: 'outbound',
+          sender_type: 'member',
+          sender_id: userId || '',
+          body,
+        });
+      if (error) throw error;
+      // Update last_message_at
+      await supabase
+        .from('zone_conversations')
+        .update({ last_message_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .eq('id', conversationId);
+    },
+    onSuccess: () => {
+      if (activeConversationId) {
+        queryClient.invalidateQueries({ queryKey: zoneInboxKeys.messages(activeConversationId) });
+      }
+      queryClient.invalidateQueries({ queryKey: zoneInboxKeys.conversations(safeZoneId) });
+    },
+  });
 
-    // Update last_message_at
-    await supabase
-      .from('zone_conversations')
-      .update({ last_message_at: new Date().toISOString(), updated_at: new Date().toISOString() } as any)
-      .eq('id', conversationId);
-  }, [zoneId]);
+  const createConversationMutation = useMutation({
+    mutationFn: async ({ title, contactId }: { title: string; contactId?: string }) => {
+      if (!zoneId) throw new Error('No zone');
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const { data, error } = await supabase
+        .from('zone_conversations')
+        .insert({
+          zone_id: zoneId,
+          title,
+          contact_id: contactId || null,
+          assigned_to: userId,
+          channel: 'internal',
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      return data as ZoneConversation;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneInboxKeys.conversations(safeZoneId) });
+    },
+  });
 
-  // Create conversation
-  const createConversation = useCallback(async (title: string, contactId?: string) => {
-    if (!zoneId) throw new Error('No zone');
-    const userId = (await supabase.auth.getUser()).data.user?.id;
-    const { data, error } = await supabase
-      .from('zone_conversations')
-      .insert({
-        zone_id: zoneId,
-        title,
-        contact_id: contactId || null,
-        assigned_to: userId,
-        channel: 'internal',
-      } as any)
-      .select()
-      .single();
-    if (error) throw error;
-    await fetchConversations();
-    return data;
-  }, [zoneId, fetchConversations]);
+  const updateConversationMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneConversation> }) => {
+      const { error } = await supabase
+        .from('zone_conversations')
+        .update(updates)
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneInboxKeys.conversations(safeZoneId) });
+    },
+  });
 
-  // Update conversation status
-  const updateConversation = useCallback(async (id: string, updates: Partial<ZoneConversation>) => {
-    const { error } = await supabase
-      .from('zone_conversations')
-      .update(updates as any)
-      .eq('id', id);
-    if (error) throw error;
-    await fetchConversations();
-  }, [fetchConversations]);
-
+  // Backward-compatible API
+  const sendMessage = async (conversationId: string, body: string) => sendMessageMutation.mutateAsync({ conversationId, body });
+  const createConversation = async (title: string, contactId?: string) => createConversationMutation.mutateAsync({ title, contactId });
+  const updateConversation = async (id: string, updates: Partial<ZoneConversation>) => updateConversationMutation.mutateAsync({ id, updates });
   const activeConversation = conversations.find(c => c.id === activeConversationId) || null;
 
   return {
@@ -173,6 +194,6 @@ export function useZoneInbox(zoneId: string | null) {
     sendMessage,
     createConversation,
     updateConversation,
-    refetch: fetchConversations,
+    refetch: () => queryClient.invalidateQueries({ queryKey: zoneInboxKeys.conversations(safeZoneId) }),
   };
 }

@@ -1,72 +1,57 @@
 /**
- * Hook: Manage invoices for a zone
+ * Hook: Manage invoices for a zone (React Query)
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { ZoneInvoice } from '@/types/zones';
 
+// ─── Query Keys ───
+export const zoneInvoicesKeys = {
+  all: (zoneId: string) => ['zone-invoices', zoneId] as const,
+};
+
+// ─── Fetch ───
+async function fetchInvoices(zoneId: string): Promise<ZoneInvoice[]> {
+  const { data, error } = await supabase
+    .from('zone_invoices')
+    .select('*')
+    .eq('zone_id', zoneId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data || []) as ZoneInvoice[];
+}
+
+// ─── Hook ───
 export function useZoneInvoices(zoneId: string | null) {
-  const [invoices, setInvoices] = useState<ZoneInvoice[]>([]);
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
 
-  const fetch = useCallback(async () => {
-    if (!zoneId) return;
-    setLoading(true);
-    try {
-      const { data } = await supabase
+  const { data: invoices = [], isLoading: loading } = useQuery({
+    queryKey: zoneInvoicesKeys.all(safeZoneId),
+    queryFn: () => fetchInvoices(safeZoneId),
+    enabled: !!zoneId,
+    staleTime: 30_000,
+  });
+
+  const invalidateInvoices = () => {
+    queryClient.invalidateQueries({ queryKey: zoneInvoicesKeys.all(safeZoneId) });
+  };
+
+  const createMutation = useMutation({
+    mutationFn: async (invoice: Partial<ZoneInvoice>) => {
+      if (!zoneId) throw new Error('No zone selected');
+      const { data, error } = await supabase
         .from('zone_invoices')
-        .select('*')
-        .eq('zone_id', zoneId)
-        .order('created_at', { ascending: false });
-      setInvoices((data as ZoneInvoice[]) || []);
-    } finally {
-      setLoading(false);
-    }
-  }, [zoneId]);
+        .insert({ ...invoice, zone_id: zoneId })
+        .select()
+        .single();
+      if (error) throw error;
+      return data as ZoneInvoice;
+    },
+    onSuccess: invalidateInvoices,
+  });
 
-  useEffect(() => { fetch(); }, [fetch]);
+  const create = async (invoice: Partial<ZoneInvoice>) => createMutation.mutateAsync(invoice);
 
-  const create = useCallback(async (invoice: Partial<ZoneInvoice>) => {
-    if (!zoneId) throw new Error('No zone');
-    const { data: inserted, error } = await supabase
-      .from('zone_invoices')
-      .insert({ ...invoice, zone_id: zoneId, status: 'created' } as any)
-      .select()
-      .single();
-    if (error) throw error;
-    const invoiceId = inserted.id;
-    try {
-      const { data: zone } = await supabase.from('zones').select('owner_user_id').eq('id', zoneId).single();
-      const ownerId = zone?.owner_user_id;
-      if (ownerId && inserted.amount) {
-        const { data: payData } = await supabase.functions.invoke('robokassa', {
-          body: {
-            type: 'payment',
-            userId: ownerId,
-            amount: Number(inserted.amount),
-            description: inserted.description || `Invoice #${invoiceId.slice(0, 8)}`,
-            relatedId: invoiceId,
-          },
-        });
-        if (payData?.url && payData?.invId) {
-          await supabase
-            .from('zone_invoices')
-            .update({ pay_url: payData.url, robokassa_invoice_id: payData.invId } as any)
-            .eq('id', invoiceId);
-        }
-      }
-    } catch (_) { /* non-blocking */ }
-    await fetch();
-  }, [zoneId, fetch]);
-
-  const updateStatus = useCallback(async (id: string, status: string) => {
-    const { error } = await supabase
-      .from('zone_invoices')
-      .update({ status } as any)
-      .eq('id', id);
-    if (error) throw error;
-    await fetch();
-  }, [fetch]);
-
-  return { invoices, loading, create, updateStatus, refetch: fetch };
+  return { invoices, loading, create, refetch: invalidateInvoices };
 }

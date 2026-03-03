@@ -1,7 +1,7 @@
 /**
- * Hook: Manage automations for a zone
+ * Hook: Manage automations for a zone (React Query)
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 
 export interface ZoneAutomation {
@@ -9,64 +9,82 @@ export interface ZoneAutomation {
   zone_id: string;
   trigger_type: string;
   action_type: string;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   is_active: boolean;
   name: string;
   created_at: string;
   updated_at: string;
 }
 
+// ─── Query Keys ───
+export const zoneAutomationsKeys = {
+  all: (zoneId: string) => ['zone-automations', zoneId] as const,
+};
+
+// ─── Fetch ───
+async function fetchAutomations(zoneId: string): Promise<ZoneAutomation[]> {
+  const { data, error } = await supabase
+    .from('zone_automations')
+    .select('*')
+    .eq('zone_id', zoneId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data || []) as ZoneAutomation[];
+}
+
+// ─── Hook ───
 export function useZoneAutomations(zoneId: string | null) {
-  const [automations, setAutomations] = useState<ZoneAutomation[]>([]);
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
 
-  const fetch = useCallback(async () => {
-    if (!zoneId) return;
-    setLoading(true);
-    try {
-      const { data } = await supabase
+  const { data: automations = [], isLoading: loading } = useQuery({
+    queryKey: zoneAutomationsKeys.all(safeZoneId),
+    queryFn: () => fetchAutomations(safeZoneId),
+    enabled: !!zoneId,
+    staleTime: 60_000,
+  });
+
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey: zoneAutomationsKeys.all(safeZoneId) });
+  };
+
+  const createMutation = useMutation({
+    mutationFn: async (automation: Partial<ZoneAutomation>) => {
+      if (!zoneId) throw new Error('No zone');
+      const { error } = await supabase
         .from('zone_automations')
-        .select('*')
-        .eq('zone_id', zoneId)
-        .order('created_at', { ascending: false });
-      setAutomations((data as ZoneAutomation[]) || []);
-    } finally {
-      setLoading(false);
-    }
-  }, [zoneId]);
+        .insert({ ...automation, zone_id: zoneId });
+      if (error) throw error;
+    },
+    onSuccess: invalidate,
+  });
 
-  useEffect(() => { fetch(); }, [fetch]);
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneAutomation> }) => {
+      const { error } = await supabase
+        .from('zone_automations')
+        .update(updates)
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: invalidate,
+  });
 
-  const create = useCallback(async (automation: Partial<ZoneAutomation>) => {
-    if (!zoneId) throw new Error('No zone');
-    const { error } = await supabase
-      .from('zone_automations')
-      .insert({ ...automation, zone_id: zoneId } as any);
-    if (error) throw error;
-    await fetch();
-  }, [zoneId, fetch]);
+  const removeMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('zone_automations')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: invalidate,
+  });
 
-  const update = useCallback(async (id: string, updates: Partial<ZoneAutomation>) => {
-    const { error } = await supabase
-      .from('zone_automations')
-      .update(updates as any)
-      .eq('id', id);
-    if (error) throw error;
-    await fetch();
-  }, [fetch]);
+  const create = async (automation: Partial<ZoneAutomation>) => createMutation.mutateAsync(automation);
+  const update = async (id: string, updates: Partial<ZoneAutomation>) => updateMutation.mutateAsync({ id, updates });
+  const remove = async (id: string) => removeMutation.mutateAsync(id);
+  const toggle = async (id: string, active: boolean) => updateMutation.mutateAsync({ id, updates: { is_active: active } });
 
-  const remove = useCallback(async (id: string) => {
-    const { error } = await supabase
-      .from('zone_automations')
-      .delete()
-      .eq('id', id);
-    if (error) throw error;
-    await fetch();
-  }, [fetch]);
-
-  const toggle = useCallback(async (id: string, active: boolean) => {
-    await update(id, { is_active: active });
-  }, [update]);
-
-  return { automations, loading, create, update, remove, toggle, refetch: fetch };
+  return { automations, loading, create, update, remove, toggle, refetch: invalidate };
 }

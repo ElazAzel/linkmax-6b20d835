@@ -14,13 +14,13 @@ export interface ZonePlan {
 }
 
 export const ZONE_PLANS: ZonePlan[] = [
-  { code: 'business_5',    memberLimit: 5,      monthlyPrice: 3045,   yearlyPrice: 36540 },
-  { code: 'business_50',   memberLimit: 50,     monthlyPrice: 15225,  yearlyPrice: 182700 },
-  { code: 'business_100',  memberLimit: 100,    monthlyPrice: 38080,  yearlyPrice: 297000 },
-  { code: 'business_300',  memberLimit: 300,    monthlyPrice: 76125,  yearlyPrice: 548100 },
-  { code: 'business_700',  memberLimit: 700,    monthlyPrice: 121800, yearlyPrice: 913500 },
-  { code: 'business_1000', memberLimit: 1000,   monthlyPrice: 152250, yearlyPrice: 1169280 },
-  { code: 'business_unl',  memberLimit: 999999, monthlyPrice: 182700, yearlyPrice: 1461600 },
+  { code: 'business_5', memberLimit: 5, monthlyPrice: 3045, yearlyPrice: 36540 },
+  { code: 'business_50', memberLimit: 50, monthlyPrice: 15225, yearlyPrice: 182700 },
+  { code: 'business_100', memberLimit: 100, monthlyPrice: 38080, yearlyPrice: 297000 },
+  { code: 'business_300', memberLimit: 300, monthlyPrice: 76125, yearlyPrice: 548100 },
+  { code: 'business_700', memberLimit: 700, monthlyPrice: 121800, yearlyPrice: 913500 },
+  { code: 'business_1000', memberLimit: 1000, monthlyPrice: 152250, yearlyPrice: 1169280 },
+  { code: 'business_unl', memberLimit: 999999, monthlyPrice: 182700, yearlyPrice: 1461600 },
 ];
 
 export function getPlanCode(baseCode: string, cycle: PlanCycle): string {
@@ -99,8 +99,26 @@ export interface ZoneContact {
   telegram_username: string | null;
   tags: string[];
   owner_user_id: string | null;
+  // CRM fields
+  company: string | null;
+  position: string | null;
+  address: string | null;
+  source: string | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export type ContactNoteType = 'note' | 'call' | 'email' | 'meeting' | 'task';
+
+export interface ZoneContactNote {
+  id: string;
+  zone_id: string;
+  contact_id: string;
+  type: ContactNoteType;
+  content: string;
+  created_by: string;
+  created_at: string;
 }
 
 export interface ZoneDealStage {
@@ -131,6 +149,7 @@ export interface ZoneDeal {
   // Joined
   contact?: ZoneContact;
   stage?: ZoneDealStage;
+  products?: ZoneDealProduct[];
 }
 
 export interface ZoneDealActivity {
@@ -144,6 +163,31 @@ export interface ZoneDealActivity {
   created_at: string;
 }
 
+export interface ZoneProduct {
+  id: string;
+  zone_id: string;
+  name: string;
+  description: string | null;
+  unit_price: number;
+  currency: string;
+  unit: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ZoneDealProduct {
+  id: string;
+  deal_id: string;
+  zone_id: string;
+  product_id: string | null;
+  name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+  created_at: string;
+}
+
 export interface ZoneInvoice {
   id: string;
   zone_id: string;
@@ -153,10 +197,36 @@ export interface ZoneInvoice {
   currency: string;
   description: string | null;
   status: InvoiceStatus;
+  invoice_number: number | null;
   robokassa_invoice_id: string | null;
   pay_url: string | null;
   created_at: string;
   paid_at: string | null;
+  // Joined
+  items?: ZoneInvoiceItem[];
+  contact?: ZoneContact;
+}
+
+export interface ZoneInvoiceItem {
+  id: string;
+  invoice_id: string;
+  zone_id: string;
+  product_id: string | null;
+  name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+  created_at: string;
+}
+
+export interface ZoneTaskChecklistItem {
+  id: string;
+  task_id: string;
+  zone_id: string;
+  title: string;
+  is_done: boolean;
+  order_index: number;
+  created_at: string;
 }
 
 // ============ Zone Context ============
