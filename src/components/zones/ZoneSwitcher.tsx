@@ -55,7 +55,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
       setSlug('');
       toast.success(t('zones.created', 'Zone created!'));
     } catch (err: any) {
-      toast.error(err.message || 'Failed to create zone');
+      toast.error(err.message || t('zones.createError', 'Failed to create zone'));
     } finally {
       setCreating(false);
     }
@@ -78,7 +78,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
           >
             <Plus className="h-4 w-4 shrink-0" />
             {!collapsed && (
-              <span className="truncate">{t('zones.createZone', 'Создать зону')}</span>
+              <span className="truncate">{t('zones.createZone', 'Create Zone')}</span>
             )}
           </Button>
         ) : (
@@ -124,7 +124,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setCreateOpen(true)} className="gap-2">
                 <Plus className="h-4 w-4" />
-                {t('zones.createZone', 'Создать зону')}
+                {t('zones.createZone', 'Create Zone')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

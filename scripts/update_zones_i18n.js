@@ -8,6 +8,14 @@ const __dirname = path.dirname(__filename);
 const localesDir = path.join(__dirname, '../src/i18n/locales');
 
 const zonesEN = {
+  "selectOrCreate": "Select or create a zone",
+  "createZone": "Create Zone",
+  "selectZone": "Select Zone",
+  "createZoneDescription": "Define a name and slug to create a new dedicated workspace",
+  "slug": "Slug",
+  "name": "Zone Name",
+  "created": "Zone created!",
+  "createError": "Failed to create zone",
   "dashboard": {
     "title": "Business Analytics",
     "period7d": "7 days",
@@ -217,10 +225,34 @@ const zonesEN = {
       "notify_owner": "Notify owner",
       "create_deal": "Create new deal"
     }
+  },
+  "inbox": {
+    "title": "Inbox",
+    "conversation": "Conversation",
+    "close": "Close",
+    "new": "New",
+    "empty": "No conversations yet",
+    "startNew": "Start conversation",
+    "closed": "Closed",
+    "selectConversation": "Select a conversation to start messaging",
+    "noMessages": "No messages in this conversation",
+    "typePlaceholder": "Type a message...",
+    "newConversation": "New Conversation",
+    "titlePlaceholder": "Conversation subject",
+    "sendError": "Failed to send message",
+    "createError": "Failed to create conversation"
   }
 };
 
 const zonesRU = {
+  "selectOrCreate": "Выберите или создайте зону",
+  "createZone": "Создать зону",
+  "selectZone": "Выбрать зону",
+  "createZoneDescription": "Укажите название и слаг для создания выделенного рабочего пространства",
+  "slug": "Слаг",
+  "name": "Название зоны",
+  "created": "Зона создана!",
+  "createError": "Не удалось создать зону",
   "dashboard": {
     "title": "Аналитика Бизнеса",
     "period7d": "7 дней",
@@ -430,10 +462,34 @@ const zonesRU = {
       "notify_owner": "Уведомить владельца",
       "create_deal": "Создать новую сделку"
     }
+  },
+  "inbox": {
+    "title": "Входящие",
+    "conversation": "Диалог",
+    "close": "Закрыть",
+    "new": "Новый",
+    "empty": "Нет диалогов",
+    "startNew": "Начать диалог",
+    "closed": "Закрыт",
+    "selectConversation": "Выберите диалог для начала общения",
+    "noMessages": "В этом диалоге пока нет сообщений",
+    "typePlaceholder": "Введите сообщение...",
+    "newConversation": "Новый диалог",
+    "titlePlaceholder": "Тема диалога",
+    "sendError": "Не удалось отправить сообщение",
+    "createError": "Не удалось создать диалог"
   }
 };
 
 const zonesKK = {
+  "selectOrCreate": "Аймақты таңдаңыз немесе жасаңыз",
+  "createZone": "Аймақты жасау",
+  "selectZone": "Аймақты таңдау",
+  "createZoneDescription": "Кеңістікті жасау үшін атау мен слагты көрсетіңіз",
+  "slug": "Слаг",
+  "name": "Аймақ атауы",
+  "created": "Аймақ жасалды!",
+  "createError": "Аймақты жасау мүмкін болмады",
   "dashboard": {
     "title": "Бизнес талдау",
     "period7d": "7 күн",
@@ -643,6 +699,22 @@ const zonesKK = {
       "notify_owner": "Иесіне хабарлау",
       "create_deal": "Жаңа мәміле жасау"
     }
+  },
+  "inbox": {
+    "title": "Кіріс жәшігі",
+    "conversation": "Диалог",
+    "close": "Жабу",
+    "new": "Жаңа",
+    "empty": "Диалогтар әлі жоқ",
+    "startNew": "Диалогты бастау",
+    "closed": "Жабылған",
+    "selectConversation": "Сөйлесуді бастау үшін диалогты таңдаңыз",
+    "noMessages": "Бұл диалогта әлі хабарлама жоқ",
+    "typePlaceholder": "Хабарлама енгізіңіз...",
+    "newConversation": "Жаңа диалог",
+    "titlePlaceholder": "Диалог тақырыбы",
+    "sendError": "Хабарлама жіберу мүмкін болмады",
+    "createError": "Диалог жасау мүмкін болмады"
   }
 };
 

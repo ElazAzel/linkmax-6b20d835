@@ -18,6 +18,7 @@ import User from 'lucide-react/dist/esm/icons/user';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Archive from 'lucide-react/dist/esm/icons/archive';
 import { format } from 'date-fns';
+import { useToast } from '@/components/ui/use-toast';
 
 interface Props {
   zoneId: string;
@@ -25,6 +26,7 @@ interface Props {
 
 export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const {
     conversations,
     activeConversation,
@@ -55,8 +57,12 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
     try {
       await sendMessage(activeConversationId, messageInput.trim());
       setMessageInput('');
-    } catch {
-      // error handled
+    } catch (err) {
+      console.error('Send message error:', err);
+      toast({
+        title: t('zones.inbox.sendError', 'Не удалось отправить сообщение'),
+        variant: 'destructive',
+      });
     } finally {
       setSending(false);
     }
@@ -69,8 +75,12 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
       if (conv) setActiveConversationId(conv.id);
       setCreateOpen(false);
       setNewTitle('');
-    } catch {
-      // error
+    } catch (err) {
+      console.error('Create conversation error:', err);
+      toast({
+        title: t('zones.inbox.createError', 'Не удалось создать диалог'),
+        variant: 'destructive',
+      });
     }
   };
 
@@ -166,7 +176,7 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium truncate">
-                            {conv.title || conv.contact?.name || 'Диалог'}
+                            {conv.title || conv.contact?.name || t('zones.inbox.conversation', 'Диалог')}
                           </span>
                           <span className="text-[10px] text-muted-foreground shrink-0">
                             {conv.last_message_at ? format(new Date(conv.last_message_at), 'HH:mm') : ''}

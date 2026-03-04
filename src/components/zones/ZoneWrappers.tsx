@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useZoneContext } from '@/contexts/ZoneContext';
 
 // Lazy load zone screens
@@ -13,49 +14,57 @@ const ZoneInvoicesScreen = lazy(() => import('./ZoneInvoicesScreen').then(m => (
 
 /** Zone screen wrappers that read ZoneContext */
 export function ZoneDashboardWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneDashboard zoneId={currentZoneId} />;
 }
 
 export function ZoneDealsScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneDealsScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneContactsScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneContactsScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneInboxScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneInboxScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneTasksScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneTasksScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneSettingsScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZone, members, myRole, refetch } = useZoneContext();
-    if (!currentZone) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZone) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} />;
 }
 
 export function ZoneAutomationsScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneAutomationsScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneInvoicesScreenWrapper() {
+    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">Выберите или создайте зону</div>;
+    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
     return <ZoneInvoicesScreen zoneId={currentZoneId} />;
 }

@@ -5313,6 +5313,14 @@
     "save": "Save"
   },
   "zones": {
+    "selectOrCreate": "Select or create a zone",
+    "createZone": "Create Zone",
+    "selectZone": "Select Zone",
+    "createZoneDescription": "Define a name and slug to create a new dedicated workspace",
+    "slug": "Slug",
+    "name": "Zone Name",
+    "created": "Zone created!",
+    "createError": "Failed to create zone",
     "dashboard": {
       "title": "Business Analytics",
       "period7d": "7 days",
@@ -5522,6 +5530,22 @@
         "notify_owner": "Notify owner",
         "create_deal": "Create new deal"
       }
+    },
+    "inbox": {
+      "title": "Inbox",
+      "conversation": "Conversation",
+      "close": "Close",
+      "new": "New",
+      "empty": "No conversations yet",
+      "startNew": "Start conversation",
+      "closed": "Closed",
+      "selectConversation": "Select a conversation to start messaging",
+      "noMessages": "No messages in this conversation",
+      "typePlaceholder": "Type a message...",
+      "newConversation": "New Conversation",
+      "titlePlaceholder": "Conversation subject",
+      "sendError": "Failed to send message",
+      "createError": "Failed to create conversation"
     }
   }
 }
