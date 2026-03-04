@@ -21,16 +21,16 @@ async function fetchContacts(zoneId: string): Promise<ZoneContact[]> {
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data || []) as ZoneContact[];
+  return (data || []) as unknown as ZoneContact[];
 }
 
 async function fetchContactNotes(zoneId: string, contactId: string): Promise<ZoneContactNote[]> {
-  const { data, error } = await supabase
-    .from('zone_contact_notes')
+  const { data, error } = await (supabase
+    .from('zone_contact_notes' as any)
     .select('*')
     .eq('zone_id', zoneId)
     .eq('contact_id', contactId)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false }) as any);
   if (error) throw error;
   return (data || []) as ZoneContactNote[];
 }
@@ -53,7 +53,7 @@ export function useZoneContacts(zoneId: string | null) {
       const userId = (await supabase.auth.getUser()).data.user?.id;
       const { data, error } = await supabase
         .from('zone_contacts')
-        .insert({ ...contact, zone_id: zoneId, owner_user_id: userId })
+        .insert({ ...contact, zone_id: zoneId, owner_user_id: userId } as any)
         .select()
         .single();
       if (error) throw error;
@@ -61,7 +61,7 @@ export function useZoneContacts(zoneId: string | null) {
       supabase.functions.invoke('run-zone-automations', {
         body: { zone_id: zoneId, trigger_type: 'new_contact', contact_id: data.id },
       }).catch(() => { });
-      return data as ZoneContact;
+      return data as unknown as ZoneContact;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: zoneContactsKeys.all(safeZoneId) });
@@ -72,7 +72,7 @@ export function useZoneContacts(zoneId: string | null) {
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneContact> }) => {
       const { error } = await supabase
         .from('zone_contacts')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id);
       if (error) throw error;
     },
@@ -105,7 +105,7 @@ export function useZoneContacts(zoneId: string | null) {
       }));
       const { error } = await supabase
         .from('zone_contacts')
-        .insert(rows);
+        .insert(rows as any);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -139,8 +139,8 @@ export function useZoneContactNotes(zoneId: string | null, contactId: string | n
     mutationFn: async ({ type, content }: { type: ContactNoteType; content: string }) => {
       if (!zoneId || !contactId) throw new Error('No zone/contact');
       const userId = (await supabase.auth.getUser()).data.user?.id;
-      const { data, error } = await supabase
-        .from('zone_contact_notes')
+      const { data, error } = await (supabase
+        .from('zone_contact_notes' as any)
         .insert({
           zone_id: zoneId,
           contact_id: contactId,
@@ -149,7 +149,7 @@ export function useZoneContactNotes(zoneId: string | null, contactId: string | n
           created_by: userId || '',
         })
         .select()
-        .single();
+        .single() as any);
       if (error) throw error;
       return data as ZoneContactNote;
     },
@@ -160,10 +160,10 @@ export function useZoneContactNotes(zoneId: string | null, contactId: string | n
 
   const deleteNoteMutation = useMutation({
     mutationFn: async (noteId: string) => {
-      const { error } = await supabase
-        .from('zone_contact_notes')
+      const { error } = await (supabase
+        .from('zone_contact_notes' as any)
         .delete()
-        .eq('id', noteId);
+        .eq('id', noteId) as any);
       if (error) throw error;
     },
     onSuccess: () => {

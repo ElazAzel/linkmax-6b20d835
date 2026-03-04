@@ -12,11 +12,11 @@ export const zoneProductsKeys = {
 
 // ─── Fetch functions ───
 async function fetchProducts(zoneId: string): Promise<ZoneProduct[]> {
-    const { data, error } = await supabase
-        .from('zone_products')
+    const { data, error } = await (supabase
+        .from('zone_products' as any)
         .select('*')
         .eq('zone_id', zoneId)
-        .order('name');
+        .order('name') as any);
     if (error) throw error;
     return (data || []) as ZoneProduct[];
 }
@@ -40,11 +40,11 @@ export function useZoneProducts(zoneId: string | null) {
     const createProduct = useMutation({
         mutationFn: async (product: Partial<ZoneProduct>) => {
             if (!zoneId) throw new Error('No zone selected');
-            const { data, error } = await supabase
-                .from('zone_products')
+            const { data, error } = await (supabase
+                .from('zone_products' as any)
                 .insert({ ...product, zone_id: zoneId })
                 .select()
-                .single();
+                .single() as any);
             if (error) throw error;
             return data as ZoneProduct;
         },
@@ -53,10 +53,10 @@ export function useZoneProducts(zoneId: string | null) {
 
     const updateProduct = useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneProduct> }) => {
-            const { error } = await supabase
-                .from('zone_products')
+            const { error } = await (supabase
+                .from('zone_products' as any)
                 .update(updates)
-                .eq('id', id);
+                .eq('id', id) as any);
             if (error) throw error;
         },
         onSuccess: invalidateProducts,
@@ -64,10 +64,10 @@ export function useZoneProducts(zoneId: string | null) {
 
     const deleteProduct = useMutation({
         mutationFn: async (id: string) => {
-            const { error } = await supabase
-                .from('zone_products')
+            const { error } = await (supabase
+                .from('zone_products' as any)
                 .delete()
-                .eq('id', id);
+                .eq('id', id) as any);
             if (error) throw error;
         },
         onSuccess: invalidateProducts,

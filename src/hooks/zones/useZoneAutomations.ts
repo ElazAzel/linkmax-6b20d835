@@ -29,7 +29,7 @@ async function fetchAutomations(zoneId: string): Promise<ZoneAutomation[]> {
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data || []) as ZoneAutomation[];
+  return (data || []) as unknown as ZoneAutomation[];
 }
 
 // ─── Hook ───
@@ -53,7 +53,7 @@ export function useZoneAutomations(zoneId: string | null) {
       if (!zoneId) throw new Error('No zone');
       const { error } = await supabase
         .from('zone_automations')
-        .insert({ ...automation, zone_id: zoneId });
+        .insert({ ...automation, zone_id: zoneId } as any);
       if (error) throw error;
     },
     onSuccess: invalidate,
@@ -63,7 +63,7 @@ export function useZoneAutomations(zoneId: string | null) {
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneAutomation> }) => {
       const { error } = await supabase
         .from('zone_automations')
-        .update(updates)
+        .update(updates as any)
         .eq('id', id);
       if (error) throw error;
     },

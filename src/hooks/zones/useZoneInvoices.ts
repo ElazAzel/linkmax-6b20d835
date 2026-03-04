@@ -18,15 +18,15 @@ async function fetchInvoices(zoneId: string): Promise<ZoneInvoice[]> {
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data || []) as ZoneInvoice[];
+  return (data || []) as unknown as ZoneInvoice[];
 }
 
 async function fetchInvoiceItems(zoneId: string, invoiceId: string): Promise<ZoneInvoiceItem[]> {
-  const { data, error } = await supabase
-    .from('zone_invoice_items')
+  const { data, error } = await (supabase
+    .from('zone_invoice_items' as any)
     .select('*')
     .eq('invoice_id', invoiceId)
-    .order('created_at');
+    .order('created_at') as any);
   if (error) throw error;
   return (data || []) as ZoneInvoiceItem[];
 }
@@ -52,11 +52,11 @@ export function useZoneInvoices(zoneId: string | null) {
       if (!zoneId) throw new Error('No zone selected');
       const { data, error } = await supabase
         .from('zone_invoices')
-        .insert({ ...invoice, zone_id: zoneId })
+        .insert({ ...invoice, zone_id: zoneId } as any)
         .select()
         .single();
       if (error) throw error;
-      return data as ZoneInvoice;
+      return data as unknown as ZoneInvoice;
     },
     onSuccess: invalidateInvoices,
   });
@@ -65,27 +65,25 @@ export function useZoneInvoices(zoneId: string | null) {
     mutationFn: async ({ invoice, items }: { invoice: Partial<ZoneInvoice>; items: Partial<ZoneInvoiceItem>[] }) => {
       if (!zoneId) throw new Error('No zone selected');
 
-      // 1. Create invoice
       const { data: invData, error: invError } = await supabase
         .from('zone_invoices')
-        .insert({ ...invoice, zone_id: zoneId })
+        .insert({ ...invoice, zone_id: zoneId } as any)
         .select()
         .single();
       if (invError) throw invError;
 
-      // 2. Create items if any
       if (items.length > 0) {
-        const { error: itemsError } = await supabase
-          .from('zone_invoice_items')
+        const { error: itemsError } = await (supabase
+          .from('zone_invoice_items' as any)
           .insert(items.map(item => ({
             ...item,
             invoice_id: invData.id,
             zone_id: zoneId,
-          })));
+          }))) as any);
         if (itemsError) throw itemsError;
       }
 
-      return invData as ZoneInvoice;
+      return invData as unknown as ZoneInvoice;
     },
     onSuccess: invalidateInvoices,
   });
@@ -94,7 +92,7 @@ export function useZoneInvoices(zoneId: string | null) {
     mutationFn: async ({ invoiceId, status }: { invoiceId: string; status: ZoneInvoice['status'] }) => {
       const { error } = await supabase
         .from('zone_invoices')
-        .update({ status })
+        .update({ status } as any)
         .eq('id', invoiceId);
       if (error) throw error;
     },
