@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### [2026-03-04] - Dashboard & Finance (Phase 3)
+
+* **Invoice Numbering**:
+  * Автоматическая генерация порядковых номеров (`#INV-001`, `#INV-002`, ...) через DB-триггер `trg_zone_invoice_number`.
+  * Обновлён UI инвойсов: `ZoneInvoicesScreen` и `InvoiceDetailSheet` используют формат `INV-XXX`.
+* **Business Dashboard**:
+  * Новые KPI-виджеты: Pipeline Value, Оплачено (по инвойсам), Win Rate, Клиентская база.
+  * Карточки «Ожидаемые платежи» и «Просроченные задачи» с realtime-данными.
+  * Лента активности сделок (timeline) с относительным временем.
+  * Применён стиль «Liquid Glass» (glassmorphism) ко всем элементам дашборда.
+* **useZoneDeals Hook**:
+  * Добавлена функция `fetchZoneActivities` для получения всех активностей зоны.
+  * Хук теперь экспортирует `activities` и `deleteDeal`.
+
 ### [2026-03-03] - CRM & Business Zones Enhancements (Phase 2)
 
 * **Tasks Management**:
