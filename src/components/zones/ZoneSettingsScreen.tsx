@@ -244,9 +244,9 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="admin">Admin</SelectItem>
-                            <SelectItem value="member">Member</SelectItem>
-                            <SelectItem value="viewer">Viewer</SelectItem>
+                            <SelectItem value="admin">{t('zones.settings.roles.admin', 'Admin')}</SelectItem>
+                            <SelectItem value="member">{t('zones.settings.roles.member', 'Member')}</SelectItem>
+                            <SelectItem value="viewer">{t('zones.settings.roles.viewer', 'Viewer')}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button
@@ -396,7 +396,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label>Email</Label>
+              <Label>{t('zones.settings.emailLabel', 'Email')}</Label>
               <Input value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} type="email" placeholder="user@example.com" />
             </div>
             <div className="space-y-2">
@@ -404,9 +404,9 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
               <Select value={inviteRole} onValueChange={setInviteRole}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="member">Member</SelectItem>
-                  <SelectItem value="viewer">Viewer</SelectItem>
+                  <SelectItem value="admin">{t('zones.settings.roles.admin', 'Admin')}</SelectItem>
+                  <SelectItem value="member">{t('zones.settings.roles.member', 'Member')}</SelectItem>
+                  <SelectItem value="viewer">{t('zones.settings.roles.viewer', 'Viewer')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

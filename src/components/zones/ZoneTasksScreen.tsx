@@ -1,7 +1,7 @@
 /**
  * ZoneTasksScreen - Kanban-style task board with DnD, filters, detail sheet
  */
-import { memo, useState, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DndContext, DragOverlay, PointerSensor, TouchSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
@@ -13,6 +13,7 @@ import { supabase } from '@/platform/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { TaskCard } from './tasks/TaskCard';
@@ -58,9 +59,9 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // Get current user id once
-  useState(() => {
+  useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null));
-  });
+  }, []);
 
   // DnD
   const [activeDragTask, setActiveDragTask] = useState<ZoneTask | null>(null);
@@ -241,48 +242,51 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {members.length > 0 && (
               <div>
                 <Label>Ответственный</Label>
-                <select
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
-                  value={newAssignee}
-                  onChange={e => setNewAssignee(e.target.value)}
-                >
-                  <option value="">Не назначено</option>
-                  {members.map(m => (
-                    <option key={m.user_id} value={m.user_id}>
-                      {m.display_name || m.email || m.user_id}
-                    </option>
-                  ))}
-                </select>
+                <Select value={newAssignee} onValueChange={setNewAssignee}>
+                  <SelectTrigger className="h-9 mt-1">
+                    <SelectValue placeholder="Не назначено" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Не назначено</SelectItem>
+                    {members.map(m => (
+                      <SelectItem key={m.user_id} value={m.user_id}>
+                        {m.display_name || m.email || m.user_id}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
             {contacts.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.contact', 'Contact')}</Label>
-                <select
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
-                  value={newContactId}
-                  onChange={e => setNewContactId(e.target.value)}
-                >
-                  <option value="">—</option>
-                  {contacts.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+                <Select value={newContactId} onValueChange={setNewContactId}>
+                  <SelectTrigger className="h-9 mt-1">
+                    <SelectValue placeholder="—" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">—</SelectItem>
+                    {contacts.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
             {deals.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.deal', 'Deal')}</Label>
-                <select
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm mt-1"
-                  value={newDealId}
-                  onChange={e => setNewDealId(e.target.value)}
-                >
-                  <option value="">—</option>
-                  {deals.filter(d => d.status === 'open').map(d => (
-                    <option key={d.id} value={d.id}>{d.title}</option>
-                  ))}
-                </select>
+                <Select value={newDealId} onValueChange={setNewDealId}>
+                  <SelectTrigger className="h-9 mt-1">
+                    <SelectValue placeholder="—" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">—</SelectItem>
+                    {deals.filter(d => d.status === 'open').map(d => (
+                      <SelectItem key={d.id} value={d.id}>{d.title}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
           </div>

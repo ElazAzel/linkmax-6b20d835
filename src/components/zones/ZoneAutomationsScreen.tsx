@@ -26,18 +26,18 @@ import Play from 'lucide-react/dist/esm/icons/play';
 import Pause from 'lucide-react/dist/esm/icons/pause';
 
 const TRIGGERS = [
-  { value: 'deal_stage_change', label: 'Стадия сделки изменена', icon: '🎯' },
-  { value: 'invoice_paid', label: 'Инвойс оплачен', icon: '💰' },
-  { value: 'task_completed', label: 'Задача выполнена', icon: '✅' },
-  { value: 'new_contact', label: 'Новый контакт создан', icon: '👤' },
-  { value: 'overdue_next_step', label: 'Просрочен шаг в сделке', icon: '⏰' },
+  { value: 'deal_stage_change', get label() { return window.i18n?.t('zones.automations.triggerStageChange', 'Стадия сделки изменена') || 'Стадия сделки изменена'; }, icon: '🎯' },
+  { value: 'invoice_paid', get label() { return window.i18n?.t('zones.automations.triggerInvoicePaid', 'Инвойс оплачен') || 'Инвойс оплачен'; }, icon: '💰' },
+  { value: 'task_completed', get label() { return window.i18n?.t('zones.automations.triggerTaskCompleted', 'Задача выполнена') || 'Задача выполнена'; }, icon: '✅' },
+  { value: 'new_contact', get label() { return window.i18n?.t('zones.automations.triggerNewContact', 'Новый контакт создан') || 'Новый контакт создан'; }, icon: '👤' },
+  { value: 'overdue_next_step', get label() { return window.i18n?.t('zones.automations.triggerOverdueNextStep', 'Просрочен шаг в сделке') || 'Просрочен шаг в сделке'; }, icon: '⏰' },
 ];
 
 const ACTIONS = [
-  { value: 'create_task', label: 'Создать задачу', icon: '📝' },
-  { value: 'change_deal_stage', label: 'Изменить стадию сделки', icon: '🚀' },
-  { value: 'notify_owner', label: 'Уведомить владельца', icon: '🔔' },
-  { value: 'create_deal', label: 'Создать новую сделку', icon: '➕' },
+  { value: 'create_task', get label() { return window.i18n?.t('zones.automations.actionCreateTask', 'Создать задачу') || 'Создать задачу'; }, icon: '📝' },
+  { value: 'change_deal_stage', get label() { return window.i18n?.t('zones.automations.actionChangeStage', 'Изменить стадию сделки') || 'Изменить стадию сделки'; }, icon: '🚀' },
+  { value: 'notify_owner', get label() { return window.i18n?.t('zones.automations.actionNotifyOwner', 'Уведомить владельца') || 'Уведомить владельца'; }, icon: '🔔' },
+  { value: 'create_deal', get label() { return window.i18n?.t('zones.automations.actionCreateDeal', 'Создать новую сделку') || 'Создать новую сделку'; }, icon: '➕' },
 ];
 
 interface Props {
@@ -58,7 +58,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
 
   const handleCreate = async () => {
     if (!form.name || !form.trigger_type || !form.action_type) {
-      toast.error('Пожалуйста, заполните необходимые поля');
+      toast.error(t('zones.automations.fillRequired', 'Пожалуйста, заполните необходимые поля'));
       return;
     }
     try {
@@ -68,18 +68,18 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
       });
       setShowCreate(false);
       setForm({ name: '', trigger_type: '', action_type: '', config: {} });
-      toast.success('Автоматизация добавлена');
+      toast.success(t('zones.automations.created', 'Автоматизация добавлена'));
     } catch {
-      toast.error('Не удалось создать автоматизацию');
+      toast.error(t('zones.automations.createError', 'Не удалось создать автоматизацию'));
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await remove(id);
-      toast.success('Правило удалено');
+      toast.success(t('zones.automations.deleted', 'Правило удалено'));
     } catch {
-      toast.error('Ошибка удаления');
+      toast.error(t('zones.automations.deleteError', 'Ошибка удаления'));
     }
   };
 
@@ -94,12 +94,12 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
             <Zap className="h-6 w-6 fill-current" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Автоматизации</h2>
-            <p className="text-sm text-muted-foreground">Настраивайте правила для вашего CRM</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t('zones.automations.title', 'Автоматизации')}</h2>
+            <p className="text-sm text-muted-foreground">{t('zones.automations.subtitle', 'Настраивайте правила для вашего CRM')}</p>
           </div>
         </div>
         <Button onClick={() => setShowCreate(true)} className="rounded-xl shadow-lg shadow-warning/20 hover:scale-105 transition-transform">
-          <Plus className="h-4 w-4 mr-2" /> Добавить правило
+          <Plus className="h-4 w-4 mr-2" /> {t('zones.automations.addRule', 'Добавить правило')}
         </Button>
       </div>
 
@@ -113,12 +113,12 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
         <Card className="bg-background/20 border-dashed border-2 py-16">
           <CardContent className="text-center">
             <Zap className="h-16 w-16 mx-auto text-muted-foreground/10 mb-6 group-hover:animate-pulse" />
-            <h3 className="text-xl font-bold mb-2">Автоматизируйте рутину</h3>
+            <h3 className="text-xl font-bold mb-2">{t('zones.automations.emptyTitle', 'Автоматизируйте рутину')}</h3>
             <p className="text-muted-foreground max-w-sm mx-auto mb-8">
-              Создавайте правила, которые будут срабатывать автоматически при определенных событиях.
+              {t('zones.automations.emptyDesc', 'Создавайте правила, которые будут срабатывать автоматически при определенных событиях.')}
             </p>
             <Button variant="outline" onClick={() => setShowCreate(true)} className="rounded-xl border-dashed">
-              Попробовать первое правило
+              {t('zones.automations.tryFirst', 'Попробовать первое правило')}
             </Button>
           </CardContent>
         </Card>
@@ -142,7 +142,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                     <div className="flex items-center gap-2">
                       <span className="text-lg font-bold truncate tracking-tight">{a.name}</span>
                       <Badge variant={a.is_active ? 'default' : 'secondary'} className="text-[10px] uppercase font-black px-1.5 py-0">
-                        {a.is_active ? 'ACTIVE' : 'PAUSED'}
+                        {a.is_active ? t('zones.automations.active', 'ACTIVE') : t('zones.automations.paused', 'PAUSED')}
                       </Badge>
                     </div>
 
@@ -190,27 +190,27 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
         <DialogContent className="max-w-xl bg-background/95 backdrop-blur-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
-              <Plus className="h-5 w-5 text-warning" /> Новое правило
+              <Plus className="h-5 w-5 text-warning" /> {t('zones.automations.newRule', 'Новое правило')}
             </DialogTitle>
-            <DialogDescription>Опишите логику автоматизации: когда срабатывает и что делает.</DialogDescription>
+            <DialogDescription>{t('zones.automations.ruleDesc', 'Опишите логику автоматизации: когда срабатывает и что делает.')}</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-6 py-4">
             <div className="space-y-2">
-              <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">Название правила</Label>
+              <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">{t('zones.automations.ruleName', 'Название правила')}</Label>
               <Input
                 value={form.name}
                 onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                placeholder="Например: Авто-инвойс при закрытии"
+                placeholder={t('zones.automations.ruleNamePlaceholder', 'Например: Авто-инвойс при закрытии')}
                 className="bg-muted/20 border-border/40"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">Триггер (Когда)</Label>
+                <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">{t('zones.automations.trigger', 'Триггер (Когда)')}</Label>
                 <Select value={form.trigger_type} onValueChange={v => setForm(f => ({ ...f, trigger_type: v, config: {} }))}>
-                  <SelectTrigger className="bg-muted/30 h-11"><SelectValue placeholder="Событие" /></SelectTrigger>
+                  <SelectTrigger className="bg-muted/30 h-11"><SelectValue placeholder={t('zones.automations.event', 'Событие')} /></SelectTrigger>
                   <SelectContent>
                     {TRIGGERS.map(t => (
                       <SelectItem key={t.value} value={t.value} className="py-3">
@@ -225,9 +225,9 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">Действие (Тогда)</Label>
+                <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">{t('zones.automations.action', 'Действие (Тогда)')}</Label>
                 <Select value={form.action_type} onValueChange={v => setForm(f => ({ ...f, action_type: v }))}>
-                  <SelectTrigger className="bg-muted/30 h-11"><SelectValue placeholder="Реакция" /></SelectTrigger>
+                  <SelectTrigger className="bg-muted/30 h-11"><SelectValue placeholder={t('zones.automations.reaction', 'Реакция')} /></SelectTrigger>
                   <SelectContent>
                     {ACTIONS.map(a => (
                       <SelectItem key={a.value} value={a.value} className="py-3">
@@ -246,19 +246,19 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
             {(form.trigger_type || form.action_type) && (
               <div className="p-4 rounded-2xl bg-muted/20 border border-border/40 space-y-4">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase text-muted-foreground tracking-widest mb-1">
-                  <Settings2 className="h-3 w-3" /> Настройка параметров
+                  <Settings2 className="h-3 w-3" /> {t('zones.automations.configParams', 'Настройка параметров')}
                 </div>
 
                 {form.trigger_type === 'deal_stage_change' && stages.length > 0 && (
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Стадия сделки</Label>
+                    <Label className="text-xs font-medium">{t('zones.automations.dealStage', 'Стадия сделки')}</Label>
                     <Select
                       value={form.config.stage_id || ''}
                       onValueChange={v => setForm(f => ({ ...f, config: { ...f.config, stage_id: v } }))}
                     >
-                      <SelectTrigger className="bg-background/50 h-9"><SelectValue placeholder="Любая" /></SelectTrigger>
+                      <SelectTrigger className="bg-background/50 h-9"><SelectValue placeholder={t('zones.automations.anyStage', 'Любая стадия')} /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="any">Любая стадия</SelectItem>
+                        <SelectItem value="any">{t('zones.automations.anyStage', 'Любая стадия')}</SelectItem>
                         {stages.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                       </SelectContent>
                     </Select>
@@ -267,11 +267,11 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
 
                 {form.action_type === 'create_task' && (
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Текст задачи</Label>
+                    <Label className="text-xs font-medium">{t('zones.automations.taskText', 'Текст задачи')}</Label>
                     <Input
                       value={form.config.task_title || ''}
                       onChange={e => setForm(f => ({ ...f, config: { ...f.config, task_title: e.target.value } }))}
-                      placeholder="Например: Позвонить и подтвердить оплату"
+                      placeholder={t('zones.automations.taskTextPlaceholder', 'Например: Позвонить и подтвердить оплату')}
                       className="bg-background/50 h-9"
                     />
                   </div>
@@ -279,12 +279,12 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
 
                 {form.action_type === 'change_deal_stage' && stages.length > 0 && (
                   <div className="space-y-2">
-                    <Label className="text-xs font-medium">Перевести на стадию</Label>
+                    <Label className="text-xs font-medium">{t('zones.automations.changeToStage', 'Перевести на стадию')}</Label>
                     <Select
                       value={form.config.target_stage_id || ''}
                       onValueChange={v => setForm(f => ({ ...f, config: { ...f.config, target_stage_id: v } }))}
                     >
-                      <SelectTrigger className="bg-background/50 h-9"><SelectValue placeholder="Выберите стадию" /></SelectTrigger>
+                      <SelectTrigger className="bg-background/50 h-9"><SelectValue placeholder={t('zones.automations.selectStage', 'Выберите стадию')} /></SelectTrigger>
                       <SelectContent>
                         {stages.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                       </SelectContent>
@@ -296,9 +296,9 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
           </div>
 
           <DialogFooter className="pt-4 border-t border-border/10">
-            <Button variant="ghost" onClick={() => setShowCreate(false)}>Отмена</Button>
+            <Button variant="ghost" onClick={() => setShowCreate(false)}>{t('common.cancel', 'Отмена')}</Button>
             <Button onClick={handleCreate} className="px-8 shadow-lg shadow-warning/20 bg-warning text-warning-foreground hover:bg-warning/90">
-              Активировать
+              {t('zones.automations.activate', 'Активировать')}
             </Button>
           </DialogFooter>
         </DialogContent>

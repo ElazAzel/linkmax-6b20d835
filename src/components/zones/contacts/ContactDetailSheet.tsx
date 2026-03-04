@@ -144,9 +144,9 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'won': return <Badge className="bg-green-600 text-white text-[10px]">Won</Badge>;
-      case 'lost': return <Badge variant="destructive" className="text-[10px]">Lost</Badge>;
-      default: return <Badge variant="outline" className="text-[10px]">Open</Badge>;
+      case 'won': return <Badge className="bg-green-600 text-white text-[10px]">{t('zones.deals.won', 'Won')}</Badge>;
+      case 'lost': return <Badge variant="destructive" className="text-[10px]">{t('zones.deals.lost', 'Lost')}</Badge>;
+      default: return <Badge variant="outline" className="text-[10px]">{t('zones.deals.open', 'Open')}</Badge>;
     }
   };
 
@@ -277,7 +277,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                         </div>
                         {task.due_date && (
                           <p className="text-[10px] text-muted-foreground mt-1">
-                            Due: {new Date(task.due_date).toLocaleDateString()}
+                            {t('zones.tasks.due', 'Due:')} {new Date(task.due_date).toLocaleDateString()}
                           </p>
                         )}
                       </CardContent>
@@ -299,15 +299,15 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <Input value={editData.email} onChange={e => setEditData(p => ({ ...p, email: e.target.value }))} type="email" className="h-8" />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">Company</Label>
+                          <Label className="text-xs">{t('zones.contacts.company', 'Company')}</Label>
                           <Input value={editData.company} onChange={e => setEditData(p => ({ ...p, company: e.target.value }))} className="h-8" />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">Position</Label>
+                          <Label className="text-xs">{t('zones.contacts.position', 'Position')}</Label>
                           <Input value={editData.position} onChange={e => setEditData(p => ({ ...p, position: e.target.value }))} className="h-8" />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">Address</Label>
+                          <Label className="text-xs">{t('zones.contacts.address', 'Address')}</Label>
                           <Input value={editData.address} onChange={e => setEditData(p => ({ ...p, address: e.target.value }))} className="h-8" />
                         </div>
                         <div className="space-y-1">
@@ -315,11 +315,11 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <Input value={editData.telegram_username} onChange={e => setEditData(p => ({ ...p, telegram_username: e.target.value }))} placeholder="@username" className="h-8" />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">Tags</Label>
+                          <Label className="text-xs">{t('zones.contacts.tags', 'Tags')}</Label>
                           <Input value={editData.tags} onChange={e => setEditData(p => ({ ...p, tags: e.target.value }))} placeholder="VIP, partner" className="h-8" />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-xs">General Notes</Label>
+                          <Label className="text-xs">{t('zones.contacts.generalNotes', 'General Notes')}</Label>
                           <Textarea value={editData.notes} onChange={e => setEditData(p => ({ ...p, notes: e.target.value }))} className="min-h-[100px] text-sm" />
                         </div>
                       </div>
@@ -342,21 +342,21 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                         <div className="flex gap-2 items-start text-sm">
                           <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                           <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">Company</p>
+                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.company', 'Company')}</p>
                             <p className="font-medium">{contact.company || '—'}</p>
                           </div>
                         </div>
                         <div className="flex gap-2 items-start text-sm">
                           <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                           <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">Position</p>
+                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.position', 'Position')}</p>
                             <p className="font-medium">{contact.position || '—'}</p>
                           </div>
                         </div>
                         <div className="flex gap-2 items-start text-sm">
                           <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                           <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">Address</p>
+                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.address', 'Address')}</p>
                             <p className="font-medium">{contact.address || '—'}</p>
                           </div>
                         </div>
@@ -379,7 +379,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                         )}
                         {contact.notes && (
                           <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
-                            <p className="text-[10px] text-primary font-bold uppercase mb-1">General Notes</p>
+                            <p className="text-[10px] text-primary font-bold uppercase mb-1">{t('zones.contacts.generalNotes', 'General Notes')}</p>
                             <p className="text-sm whitespace-pre-wrap">{contact.notes}</p>
                           </div>
                         )}

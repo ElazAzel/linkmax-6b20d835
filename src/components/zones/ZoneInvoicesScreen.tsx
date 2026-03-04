@@ -28,12 +28,7 @@ import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import type { ZoneInvoice, ZoneInvoiceItem } from '@/types/zones';
 
-const STATUS_MAP: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
-  created: { label: 'Создан', variant: 'outline' },
-  paid: { label: 'Оплачен', variant: 'default' },
-  failed: { label: 'Ошибка', variant: 'destructive' },
-  expired: { label: 'Истёк', variant: 'secondary' },
-};
+// Status config moved inside component to use translation hook safely
 
 interface Props {
   zoneId: string;
@@ -55,6 +50,13 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
 
   const [showCreate, setShowCreate] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<ZoneInvoice | null>(null);
+
+  const statusMap = useMemo(() => ({
+    created: { label: t('zones.invoices.statusCreated', 'Создан'), variant: 'outline' as const },
+    paid: { label: t('zones.invoices.statusPaid', 'Оплачен'), variant: 'default' as const },
+    failed: { label: t('zones.invoices.statusFailed', 'Ошибка'), variant: 'destructive' as const },
+    expired: { label: t('zones.invoices.statusExpired', 'Истёк'), variant: 'secondary' as const },
+  }), [t]);
 
   // Form state
   const [form, setForm] = useState({
@@ -85,12 +87,12 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
 
   const handleCreate = async () => {
     if (totalAmount <= 0) {
-      toast.error('Сумма инвойса должна быть больше нуля');
+      toast.error(t('zones.invoices.errorZeroAmount', 'Сумма инвойса должна быть больше нуля'));
       return;
     }
     const validItems = items.filter(i => i.name.trim() && i.unit_price > 0);
     if (validItems.length === 0) {
-      toast.error('Добавьте хотя бы одну позицию с названием и ценой');
+      toast.error(t('zones.invoices.errorNoItems', 'Добавьте хотя бы одну позицию с названием и ценой'));
       return;
     }
 
@@ -114,10 +116,10 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
       await createWithItems(invoiceData as any, invoiceItems as any);
       setShowCreate(false);
       resetForm();
-      toast.success('Инвойс успешно создан');
+      toast.success(t('zones.invoices.created', 'Инвойс успешно создан'));
     } catch (err) {
       console.error(err);
-      toast.error('Ошибка при создании инвойса');
+      toast.error(t('zones.invoices.createError', 'Ошибка при создании инвойса'));
     }
   };
 
@@ -145,10 +147,10 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
           <div className="p-2 rounded-xl bg-primary/10">
             <Receipt className="h-6 w-6 text-primary" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight">Финансы</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t('zones.invoices.title', 'Финансы')}</h2>
         </div>
         <Button onClick={() => setShowCreate(true)} className="rounded-xl shadow-lg shadow-primary/20">
-          <Plus className="h-4 w-4 mr-2" /> Выставить инвойс
+          <Plus className="h-4 w-4 mr-2" /> {t('zones.invoices.createInvoice', 'Выставить инвойс')}
         </Button>
       </div>
 
@@ -156,7 +158,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="bg-background/40 backdrop-blur-sm border-border/40 overflow-hidden group">
           <CardContent className="p-5">
-            <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider mb-1">Оплачено</p>
+            <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider mb-1">{t('zones.invoices.paid', 'Оплачено')}</p>
             <div className="text-2xl font-black text-primary transition-transform group-hover:scale-105 origin-left duration-300">
               {formatAmount(totalPaid, 'KZT')}
             </div>
@@ -164,7 +166,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
         </Card>
         <Card className="bg-background/40 backdrop-blur-sm border-border/40 overflow-hidden group">
           <CardContent className="p-5">
-            <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider mb-1">Ожидает оплаты</p>
+            <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider mb-1">{t('zones.invoices.pending', 'Ожидает оплаты')}</p>
             <div className="text-2xl font-black text-warning transition-transform group-hover:scale-105 origin-left duration-300">
               {formatAmount(totalPending, 'KZT')}
             </div>
@@ -173,7 +175,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
         <Card className="bg-background/40 backdrop-blur-sm border-border/40 overflow-hidden group col-span-2 lg:col-span-1 border-dashed">
           <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider mb-1">Всего инвойсов</p>
+              <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider mb-1">{t('zones.invoices.totalCount', 'Всего инвойсов')}</p>
               <div className="text-2xl font-black">{invoices.length}</div>
             </div>
             <Receipt className="h-8 w-8 text-muted-foreground opacity-10" />
@@ -191,9 +193,9 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
         <Card className="bg-background/20 border-dashed border-2">
           <CardContent className="py-20 text-center">
             <Receipt className="h-16 w-16 mx-auto text-muted-foreground/20 mb-4" />
-            <h3 className="text-lg font-semibold">Инвойсов пока нет</h3>
+            <h3 className="text-lg font-semibold">{t('zones.invoices.emptyTitle', 'Инвойсов пока нет')}</h3>
             <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-2">
-              Нажмите кнопку "Выставить инвойс", чтобы отправить запрос на оплату клиенту.
+              {t('zones.invoices.emptyDesc', 'Нажмите кнопку "Выставить инвойс", чтобы отправить запрос на оплату клиенту.')}
             </p>
           </CardContent>
         </Card>
@@ -202,7 +204,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
       {/* Invoice Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {invoices.map(inv => {
-          const st = STATUS_MAP[inv.status] || STATUS_MAP.created;
+          const st = statusMap[inv.status as keyof typeof statusMap] || statusMap.created;
           return (
             <Card
               key={inv.id}
@@ -251,21 +253,21 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
       <Dialog open={showCreate} onOpenChange={(open) => { setShowCreate(open); if (!open) resetForm(); }}>
         <DialogContent className="max-w-2xl bg-background/95 backdrop-blur-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Выставить инвойс</DialogTitle>
-            <DialogDescription>Добавьте позиции и выберите клиента для формирования счета.</DialogDescription>
+            <DialogTitle className="text-xl font-bold">{t('zones.invoices.createInvoice', 'Выставить инвойс')}</DialogTitle>
+            <DialogDescription>{t('zones.invoices.createDialogDesc', 'Добавьте позиции и выберите клиента для формирования счета.')}</DialogDescription>
           </DialogHeader>
 
           <ScrollArea className="max-h-[60vh] pr-4">
             <div className="space-y-6 py-2">
               {/* Items Section */}
               <div className="space-y-3">
-                <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Позиции</Label>
+                <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('zones.invoices.items', 'Позиции')}</Label>
                 <div className="space-y-3">
                   {items.map((item, idx) => (
                     <div key={item.id} className="grid grid-cols-12 gap-2 p-3 rounded-xl bg-muted/30 border border-border/20 group">
                       <div className="col-span-6">
                         <Input
-                          placeholder="Название услуги или товара"
+                          placeholder={t('zones.invoices.itemNamePlaceholder', 'Название услуги или товара')}
                           value={item.name}
                           onChange={e => handleUpdateItem(item.id, { name: e.target.value })}
                           className="bg-muted/10"
@@ -274,7 +276,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                       <div className="col-span-2">
                         <Input
                           type="number"
-                          placeholder="Кол"
+                          placeholder={t('zones.invoices.quantity', 'Кол-во')}
                           value={item.quantity}
                           onChange={e => handleUpdateItem(item.id, { quantity: Number(e.target.value) })}
                           className="bg-muted/10 px-2"
@@ -283,7 +285,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                       <div className="col-span-3">
                         <Input
                           type="number"
-                          placeholder="Цена"
+                          placeholder={t('zones.invoices.price', 'Цена')}
                           value={item.unit_price}
                           onChange={e => handleUpdateItem(item.id, { unit_price: Number(e.target.value) })}
                           className="bg-muted/10 pr-2"
@@ -302,7 +304,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                     </div>
                   ))}
                   <Button variant="outline" size="sm" onClick={handleAddItem} className="w-full h-8 border-dashed rounded-xl">
-                    <Plus className="h-3 w-3 mr-1" /> Добавить позицию
+                    <Plus className="h-3 w-3 mr-1" /> {t('zones.invoices.addItem', 'Добавить позицию')}
                   </Button>
                 </div>
               </div>
@@ -313,21 +315,21 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">Клиент</Label>
+                    <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">{t('zones.invoices.client', 'Клиент')}</Label>
                     <Select value={form.contact_id} onValueChange={v => setForm(f => ({ ...f, contact_id: v }))}>
-                      <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Выберите контакт" /></SelectTrigger>
+                      <SelectTrigger className="bg-muted/30"><SelectValue placeholder={t('zones.invoices.selectContact', 'Выберите контакт')} /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">Без привязки</SelectItem>
+                        <SelectItem value="none">{t('zones.invoices.noLink', 'Без привязки')}</SelectItem>
                         {contacts.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">Сделка</Label>
+                    <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">{t('zones.invoices.deal', 'Сделка')}</Label>
                     <Select value={form.deal_id} onValueChange={v => setForm(f => ({ ...f, deal_id: v }))}>
-                      <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Связать со сделкой" /></SelectTrigger>
+                      <SelectTrigger className="bg-muted/30"><SelectValue placeholder={t('zones.invoices.linkDeal', 'Связать со сделкой')} /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">Без привязки</SelectItem>
+                        <SelectItem value="none">{t('zones.invoices.noLink', 'Без привязки')}</SelectItem>
                         {deals.filter(d => d.status === 'open').map(d => <SelectItem key={d.id} value={d.id}>{d.title}</SelectItem>)}
                       </SelectContent>
                     </Select>
@@ -336,11 +338,11 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
 
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">Примечание</Label>
+                    <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">{t('zones.invoices.noteLabel', 'Примечание')}</Label>
                     <Textarea
                       value={form.description}
                       onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                      placeholder="Условия или комментарий..."
+                      placeholder={t('zones.invoices.notePlaceholder', 'Условия или комментарий...')}
                       className="resize-none h-[106px] bg-muted/30"
                     />
                   </div>
@@ -352,12 +354,12 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
           <DialogFooter className="border-t pt-4 px-6 -mx-6">
             <div className="flex items-center justify-between w-full">
               <div className="text-left">
-                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Итоговая сумма</p>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('zones.invoices.totalAmount', 'Итоговая сумма')}</p>
                 <p className="text-2xl font-black text-primary">{formatAmount(totalAmount, form.currency)}</p>
               </div>
               <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => setShowCreate(false)}>Отмена</Button>
-                <Button onClick={handleCreate} size="lg" className="px-8 shadow-lg shadow-primary/20">Выставить инвойс</Button>
+                <Button variant="ghost" onClick={() => setShowCreate(false)}>{t('common.cancel', 'Отмена')}</Button>
+                <Button onClick={handleCreate} size="lg" className="px-8 shadow-lg shadow-primary/20">{t('zones.invoices.createInvoice', 'Выставить инвойс')}</Button>
               </div>
             </div>
           </DialogFooter>

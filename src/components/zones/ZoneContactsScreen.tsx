@@ -239,11 +239,11 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Company</Label>
+                <Label>{t('zones.contacts.company', 'Company')}</Label>
                 <Input value={newContact.company} onChange={e => setNewContact(p => ({ ...p, company: e.target.value }))} placeholder="Pied Piper" />
               </div>
               <div className="space-y-2">
-                <Label>Position</Label>
+                <Label>{t('zones.contacts.position', 'Position')}</Label>
                 <Input value={newContact.position} onChange={e => setNewContact(p => ({ ...p, position: e.target.value }))} placeholder="CEO" />
               </div>
             </div>

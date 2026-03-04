@@ -164,7 +164,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
             <span className="truncate">{deal.title}</span>
             {deal.status !== 'open' && (
               <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-[10px]">
-                {deal.status === 'won' ? '✓ Won' : '✗ Lost'}
+                {deal.status === 'won' ? `✓ ${t('zones.deals.win', 'Won')}` : `✗ ${t('zones.deals.lose', 'Lost')}`}
               </Badge>
             )}
           </SheetTitle>
@@ -251,9 +251,9 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                 {isAddingProduct ? (
                   <div className="p-3 rounded-lg border bg-muted/20 space-y-3">
                     <div className="space-y-1">
-                      <Label className="text-[10px]">Select Product</Label>
+                      <Label className="text-[10px]">{t('zones.deals.selectProduct', 'Select Product')}</Label>
                       <Select value={selectedProductId} onValueChange={setSelectedProductId}>
-                        <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select..." /></SelectTrigger>
+                        <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={t('zones.deals.selectPlaceholder', 'Select...')} /></SelectTrigger>
                         <SelectContent>
                           {products.filter(p => p.is_active).map(p => (
                             <SelectItem key={p.id} value={p.id}>{p.name} ({p.unit_price.toLocaleString()})</SelectItem>
@@ -263,19 +263,19 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     </div>
                     <div className="flex gap-2">
                       <div className="flex-1 space-y-1">
-                        <Label className="text-[10px]">Qty</Label>
+                        <Label className="text-[10px]">{t('zones.deals.qty', 'Qty')}</Label>
                         <Input type="number" value={newProdQty} onChange={e => setNewProdQty(Number(e.target.value))} className="h-8" />
                       </div>
                       <div className="flex items-end gap-1">
-                        <Button size="sm" className="h-8" onClick={handleAddProduct} disabled={!selectedProductId}>Add</Button>
-                        <Button size="sm" variant="ghost" className="h-8" onClick={() => setIsAddingProduct(false)}>Cancel</Button>
+                        <Button size="sm" className="h-8" onClick={handleAddProduct} disabled={!selectedProductId}>{t('zones.deals.add', 'Add')}</Button>
+                        <Button size="sm" variant="ghost" className="h-8" onClick={() => setIsAddingProduct(false)}>{t('zones.deals.cancel', 'Cancel')}</Button>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <Button variant="outline" size="sm" className="w-full border-dashed" onClick={() => setIsAddingProduct(true)}>
                     <Plus className="h-4 w-4 mr-1" />
-                    Add product
+                    {t('zones.deals.addProduct', 'Add product')}
                   </Button>
                 )}
               </TabsContent>
@@ -296,7 +296,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       </div>
                       {task.due_date && (
                         <p className="text-[10px] text-muted-foreground mt-1 ml-6">
-                          Due: {new Date(task.due_date).toLocaleDateString()}
+                          {t('zones.tasks.due', 'Due:')} {new Date(task.due_date).toLocaleDateString()}
                         </p>
                       )}
                     </CardContent>
@@ -360,7 +360,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           </div>
                           <div>
                             <p className="text-xs font-bold leading-none">{deal.contact.name}</p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">Linked Contact</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{t('zones.deals.linkedContact', 'Linked Contact')}</p>
                           </div>
                         </div>
                         <div className="pt-1 space-y-1">
@@ -401,15 +401,15 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       className="text-sm"
                     />
                     <div className="flex gap-2">
-                      <Button size="sm" variant="destructive" onClick={handleLost}>Confirm Lost</Button>
-                      <Button size="sm" variant="outline" onClick={() => setShowLostDialog(false)}>Cancel</Button>
+                      <Button size="sm" variant="destructive" onClick={handleLost}>{t('zones.deals.confirmLost', 'Confirm Lost')}</Button>
+                      <Button size="sm" variant="outline" onClick={() => setShowLostDialog(false)}>{t('common.cancel', 'Cancel')}</Button>
                     </div>
                   </div>
                 )}
 
                 {deal.lost_reason && (
                   <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                    <p className="text-[10px] text-destructive font-bold uppercase mb-1">Lost Reason</p>
+                    <p className="text-[10px] text-destructive font-bold uppercase mb-1">{t('zones.deals.lostReason', 'Lost Reason')}</p>
                     <p className="text-sm">{deal.lost_reason}</p>
                   </div>
                 )}

@@ -1,4 +1,5 @@
 import { memo, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
@@ -27,21 +28,24 @@ interface Props {
 
 type Period = '7d' | '30d' | '90d' | 'all';
 
-const PERIOD_OPTIONS: { value: Period; label: string }[] = [
-  { value: '7d', label: '7 дней' },
-  { value: '30d', label: '30 дней' },
-  { value: '90d', label: '90 дней' },
-  { value: 'all', label: 'Всё время' },
+const getPeriodOptions = (t: any): { value: Period; label: string }[] => [
+  { value: '7d', label: t('zones.dashboard.period7d', '7 дней') },
+  { value: '30d', label: t('zones.dashboard.period30d', '30 дней') },
+  { value: '90d', label: t('zones.dashboard.period90d', '90 дней') },
+  { value: 'all', label: t('common.allTime', 'Всё время') },
 ];
 
 const FUNNEL_COLORS = ['hsl(var(--primary))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))'];
 
 export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
+  const { t } = useTranslation();
   const { deals, stages, activities } = useZoneDeals(zoneId);
   const { tasks } = useZoneTasks(zoneId);
   const { contacts } = useZoneContacts(zoneId);
   const { invoices } = useZoneInvoices(zoneId);
   const [period, setPeriod] = useState<Period>('30d');
+
+  const periodOptions = useMemo(() => getPeriodOptions(t), [t]);
 
   const cutoffDate = useMemo(() => {
     if (period === 'all') return null;
@@ -76,12 +80,30 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
     const paidAmount = filteredInvoices.filter(i => i.status === 'paid').reduce((s, i) => s + Number(i.amount), 0);
     const pendingAmount = filteredInvoices.filter(i => i.status === 'created').reduce((s, i) => s + Number(i.amount), 0);
 
+    // Trend calculation for paid amount
+    let trend = '';
+    if (period !== 'all' && cutoffDate) {
+      const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
+      const prevCutoff = subDays(cutoffDate, days);
+      const prevInvoices = invoices.filter(i =>
+        isAfter(new Date(i.created_at), prevCutoff) &&
+        !isAfter(new Date(i.created_at), cutoffDate) &&
+        i.status === 'paid'
+      );
+      const prevPaidAmount = prevInvoices.reduce((s, i) => s + Number(i.amount), 0);
+      if (prevPaidAmount > 0) {
+        const diff = ((paidAmount - prevPaidAmount) / prevPaidAmount) * 100;
+        trend = (diff >= 0 ? '+' : '') + Math.round(diff) + '%';
+      }
+    }
+
     return {
       open: open.length, won: won.length, lost: lost.length, pipelineValue, wonValue, winRate,
       overdueTasks,
-      paidAmount, pendingAmount
+      paidAmount, pendingAmount,
+      trend
     };
-  }, [filteredDeals, tasks, filteredInvoices]);
+  }, [filteredDeals, tasks, filteredInvoices, invoices, period, cutoffDate]);
 
   // Funnel data from stages
   const funnelData = useMemo(() => {
@@ -116,10 +138,10 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
           <div className="p-1.5 rounded-lg bg-primary/10">
             <BarChart3 className="h-4 w-4 text-primary" />
           </div>
-          <h1 className="text-lg font-bold">Аналитика Бизнеса</h1>
+          <h1 className="text-lg font-bold">{t('zones.dashboard.title', 'Аналитика Бизнеса')}</h1>
         </div>
         <div className="flex gap-1 p-1 bg-muted/30 rounded-lg">
-          {PERIOD_OPTIONS.map(p => (
+          {periodOptions.map(p => (
             <Button
               key={p.value}
               size="sm"
@@ -141,28 +163,28 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <MetricCard
             icon={<Target className="h-4 w-4 text-primary" />}
-            label="Pipeline"
+            label={t('zones.dashboard.pipeline', 'Pipeline')}
             value={`${formatCurrencyValue(metrics.pipelineValue)} ₸`}
-            sub={`${metrics.open} открытых сделок`}
+            sub={t('zones.dashboard.openDealsCount', '{{count}} открытых сделок', { count: metrics.open })}
           />
           <MetricCard
             icon={<DollarSign className="h-4 w-4 text-green-500" />}
-            label="Оплачено"
+            label={t('zones.dashboard.paid', 'Оплачено')}
             value={`${formatCurrencyValue(metrics.paidAmount)} ₸`}
-            sub="по инвойсам"
-            trend="+12%"
+            sub={t('zones.dashboard.byInvoices', 'по инвойсам')}
+            trend={metrics.trend}
           />
           <MetricCard
             icon={<TrendingUp className="h-4 w-4 text-blue-500" />}
-            label="Win Rate"
+            label={t('zones.dashboard.winRate', 'Win Rate')}
             value={`${metrics.winRate}%`}
             sub={`${metrics.won}W / ${metrics.lost}L`}
           />
           <MetricCard
             icon={<Users className="h-4 w-4 text-violet-500" />}
-            label="Клиенты"
+            label={t('zones.dashboard.clients', 'Клиенты')}
             value={contacts.length.toString()}
-            sub="в базе CRM"
+            sub={t('zones.dashboard.inCrmBase', 'в базе CRM')}
           />
         </div>
 
@@ -173,7 +195,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
               {/* Pipeline by stage */}
               <Card className="bg-background/40 backdrop-blur-sm border-border/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Сделки по стадиям</CardTitle>
+                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('zones.dashboard.dealsByStage', 'Сделки по стадиям')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {stageBarData.some(d => d.count > 0) ? (
@@ -184,8 +206,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                         <Tooltip
                           contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: '12px', border: '1px solid hsl(var(--border)/0.5)' }}
                           formatter={(value: number, name: string) => [
-                            name === 'count' ? `${value} сделок` : `${formatCurrencyValue(value)} ₸`,
-                            name === 'count' ? 'Количество' : 'Сумма'
+                            name === 'count' ? t('zones.dashboard.dealsCount', '{{count}} сделок', { count: value }) : `${formatCurrencyValue(value)} ₸`,
+                            name === 'count' ? t('common.quantity', 'Количество') : t('common.amount', 'Сумма')
                           ]}
                         />
                         <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={32}>
@@ -197,7 +219,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                     </ResponsiveContainer>
                   ) : (
                     <div className="h-[220px] flex items-center justify-center text-muted-foreground text-xs italic">
-                      Нет данных за период
+                      {t('zones.dashboard.noDataForPeriod', 'Нет данных за период')}
                     </div>
                   )}
                 </CardContent>
@@ -206,7 +228,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
               {/* Funnel */}
               <Card className="bg-background/40 backdrop-blur-sm border-border/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Воронка продаж</CardTitle>
+                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('zones.dashboard.salesFunnel', 'Воронка продаж')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {funnelData.length > 0 ? (
@@ -236,7 +258,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                     </div>
                   ) : (
                     <div className="h-[220px] flex items-center justify-center text-muted-foreground text-xs italic">
-                      Нет открытых сделок
+                      {t('zones.dashboard.noOpenDeals', 'Нет открытых сделок')}
                     </div>
                   )}
                 </CardContent>
@@ -247,25 +269,25 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
             <div className="grid md:grid-cols-2 gap-4">
               <Card className="bg-background/40 backdrop-blur-sm border-border/40">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Ожидаемые платежи</CardTitle>
+                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('zones.dashboard.pendingPayments', 'Ожидаемые платежи')}</CardTitle>
                   <Receipt className="h-4 w-4 text-warning opacity-50" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-black text-warning mb-1">
                     {new Intl.NumberFormat('ru-KZ', { style: 'currency', currency: 'KZT', maximumFractionDigits: 0 }).format(metrics.pendingAmount)}
                   </div>
-                  <p className="text-[10px] text-muted-foreground">Сумма всех активных инвойсов</p>
+                  <p className="text-[10px] text-muted-foreground">{t('zones.dashboard.pendingPaymentsDesc', 'Сумма всех активных инвойсов')}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-background/40 backdrop-blur-sm border-border/40">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">Просроченные задачи</CardTitle>
+                  <CardTitle className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{t('zones.dashboard.overdueTasks', 'Просроченные задачи')}</CardTitle>
                   <AlertCircle className="h-4 w-4 text-destructive opacity-50" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-black text-destructive mb-1">{metrics.overdueTasks}</div>
-                  <p className="text-[10px] text-muted-foreground">Требуют немедленного внимания</p>
+                  <p className="text-[10px] text-muted-foreground">{t('zones.dashboard.overdueTasksDesc', 'Требуют немедленного внимания')}</p>
                 </CardContent>
               </Card>
             </div>
@@ -277,7 +299,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
               <CardHeader className="pb-2 border-b border-border/10">
                 <div className="flex items-center gap-2">
                   <History className="h-4 w-4 text-primary" />
-                  <CardTitle className="text-xs uppercase font-bold tracking-widest">Активность</CardTitle>
+                  <CardTitle className="text-xs uppercase font-bold tracking-widest">{t('zones.dashboard.activity', 'Активность')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
@@ -304,7 +326,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                     </div>
                   ) : (
                     <div className="p-8 text-center text-muted-foreground text-xs italic">
-                      Нет недавней активности
+                      {t('zones.dashboard.noRecentActivity', 'Нет недавней активности')}
                     </div>
                   )}
                 </ScrollArea>
