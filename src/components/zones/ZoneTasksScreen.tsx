@@ -242,12 +242,12 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {members.length > 0 && (
               <div>
                 <Label>Ответственный</Label>
-                <Select value={newAssignee} onValueChange={setNewAssignee}>
+                <Select value={newAssignee || '__none__'} onValueChange={v => setNewAssignee(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
                     <SelectValue placeholder="Не назначено" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Не назначено</SelectItem>
+                    <SelectItem value="__none__">Не назначено</SelectItem>
                     {members.map(m => (
                       <SelectItem key={m.user_id} value={m.user_id}>
                         {m.display_name || m.email || m.user_id}
@@ -260,12 +260,12 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {contacts.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.contact', 'Contact')}</Label>
-                <Select value={newContactId} onValueChange={setNewContactId}>
+                <Select value={newContactId || '__none__'} onValueChange={v => setNewContactId(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
                     <SelectValue placeholder="—" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">—</SelectItem>
+                    <SelectItem value="__none__">—</SelectItem>
                     {contacts.map(c => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
@@ -276,12 +276,12 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {deals.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.deal', 'Deal')}</Label>
-                <Select value={newDealId} onValueChange={setNewDealId}>
+                <Select value={newDealId || '__none__'} onValueChange={v => setNewDealId(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
                     <SelectValue placeholder="—" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">—</SelectItem>
+                    <SelectItem value="__none__">—</SelectItem>
                     {deals.filter(d => d.status === 'open').map(d => (
                       <SelectItem key={d.id} value={d.id}>{d.title}</SelectItem>
                     ))}

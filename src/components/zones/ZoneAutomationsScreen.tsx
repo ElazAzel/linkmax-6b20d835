@@ -25,20 +25,20 @@ import Settings2 from 'lucide-react/dist/esm/icons/settings-2';
 import Play from 'lucide-react/dist/esm/icons/play';
 import Pause from 'lucide-react/dist/esm/icons/pause';
 
-const TRIGGERS = [
-  { value: 'deal_stage_change', get label() { return window.i18n?.t('zones.automations.triggerStageChange', 'Стадия сделки изменена') || 'Стадия сделки изменена'; }, icon: '🎯' },
-  { value: 'invoice_paid', get label() { return window.i18n?.t('zones.automations.triggerInvoicePaid', 'Инвойс оплачен') || 'Инвойс оплачен'; }, icon: '💰' },
-  { value: 'task_completed', get label() { return window.i18n?.t('zones.automations.triggerTaskCompleted', 'Задача выполнена') || 'Задача выполнена'; }, icon: '✅' },
-  { value: 'new_contact', get label() { return window.i18n?.t('zones.automations.triggerNewContact', 'Новый контакт создан') || 'Новый контакт создан'; }, icon: '👤' },
-  { value: 'overdue_next_step', get label() { return window.i18n?.t('zones.automations.triggerOverdueNextStep', 'Просрочен шаг в сделке') || 'Просрочен шаг в сделке'; }, icon: '⏰' },
-];
+const TRIGGER_DEFS = [
+  { value: 'deal_stage_change', labelKey: 'zones.automations.triggerStageChange', fallback: 'Стадия сделки изменена', icon: '🎯' },
+  { value: 'invoice_paid', labelKey: 'zones.automations.triggerInvoicePaid', fallback: 'Инвойс оплачен', icon: '💰' },
+  { value: 'task_completed', labelKey: 'zones.automations.triggerTaskCompleted', fallback: 'Задача выполнена', icon: '✅' },
+  { value: 'new_contact', labelKey: 'zones.automations.triggerNewContact', fallback: 'Новый контакт создан', icon: '👤' },
+  { value: 'overdue_next_step', labelKey: 'zones.automations.triggerOverdueNextStep', fallback: 'Просрочен шаг в сделке', icon: '⏰' },
+] as const;
 
-const ACTIONS = [
-  { value: 'create_task', get label() { return window.i18n?.t('zones.automations.actionCreateTask', 'Создать задачу') || 'Создать задачу'; }, icon: '📝' },
-  { value: 'change_deal_stage', get label() { return window.i18n?.t('zones.automations.actionChangeStage', 'Изменить стадию сделки') || 'Изменить стадию сделки'; }, icon: '🚀' },
-  { value: 'notify_owner', get label() { return window.i18n?.t('zones.automations.actionNotifyOwner', 'Уведомить владельца') || 'Уведомить владельца'; }, icon: '🔔' },
-  { value: 'create_deal', get label() { return window.i18n?.t('zones.automations.actionCreateDeal', 'Создать новую сделку') || 'Создать новую сделку'; }, icon: '➕' },
-];
+const ACTION_DEFS = [
+  { value: 'create_task', labelKey: 'zones.automations.actionCreateTask', fallback: 'Создать задачу', icon: '📝' },
+  { value: 'change_deal_stage', labelKey: 'zones.automations.actionChangeStage', fallback: 'Изменить стадию сделки', icon: '🚀' },
+  { value: 'notify_owner', labelKey: 'zones.automations.actionNotifyOwner', fallback: 'Уведомить владельца', icon: '🔔' },
+  { value: 'create_deal', labelKey: 'zones.automations.actionCreateDeal', fallback: 'Создать новую сделку', icon: '➕' },
+] as const;
 
 interface Props {
   zoneId: string;
@@ -83,6 +83,8 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
     }
   };
 
+  const TRIGGERS = useMemo(() => TRIGGER_DEFS.map(d => ({ ...d, label: t(d.labelKey, d.fallback) })), [t]);
+  const ACTIONS = useMemo(() => ACTION_DEFS.map(d => ({ ...d, label: t(d.labelKey, d.fallback) })), [t]);
   const getTrigger = (v: string) => TRIGGERS.find(t => t.value === v);
   const getAction = (v: string) => ACTIONS.find(a => a.value === v);
 

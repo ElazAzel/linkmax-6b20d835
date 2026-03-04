@@ -197,12 +197,12 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             <PopoverContent className="w-72" align="end">
               <div className="space-y-3">
                 <Label className="text-xs text-muted-foreground">{t('zones.deals.assignee', 'Assignee')}</Label>
-                <Select value={filterAssignee} onValueChange={setFilterAssignee}>
+                <Select value={filterAssignee || '__all__'} onValueChange={v => setFilterAssignee(v === '__all__' ? '' : v)}>
                   <SelectTrigger>
                     <SelectValue placeholder={t('zones.deals.allAssignees', 'All')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">{t('zones.deals.allAssignees', 'All')}</SelectItem>
+                    <SelectItem value="__all__">{t('zones.deals.allAssignees', 'All')}</SelectItem>
                     {members.map((m) => (
                       <SelectItem key={m.user_id} value={m.user_id}>
                         {m.display_name || m.email || m.user_id?.slice(0, 8)}
