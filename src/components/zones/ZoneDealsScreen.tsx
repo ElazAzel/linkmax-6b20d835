@@ -202,7 +202,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                     <SelectValue placeholder={t('zones.deals.allAssignees', 'All')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">{t('zones.deals.allAssignees', 'All')}</SelectItem>
+                    <SelectItem value="__all__">{t('zones.deals.allAssignees', 'All')}</SelectItem>
                     {members.map((m) => (
                       <SelectItem key={m.user_id} value={m.user_id}>
                         {m.display_name || m.email || m.user_id?.slice(0, 8)}

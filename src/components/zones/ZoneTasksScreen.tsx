@@ -247,7 +247,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
                     <SelectValue placeholder="Не назначено" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Не назначено</SelectItem>
+                    <SelectItem value="__none__">Не назначено</SelectItem>
                     {members.map(m => (
                       <SelectItem key={m.user_id} value={m.user_id}>
                         {m.display_name || m.email || m.user_id}
@@ -265,7 +265,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
                     <SelectValue placeholder="—" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">—</SelectItem>
+                    <SelectItem value="__none__">—</SelectItem>
                     {contacts.map(c => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
@@ -281,7 +281,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
                     <SelectValue placeholder="—" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">—</SelectItem>
+                    <SelectItem value="__none__">—</SelectItem>
                     {deals.filter(d => d.status === 'open').map(d => (
                       <SelectItem key={d.id} value={d.id}>{d.title}</SelectItem>
                     ))}
