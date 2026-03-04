@@ -23,7 +23,7 @@ async function fetchStages(zoneId: string): Promise<ZoneDealStage[]> {
     .eq('zone_id', zoneId)
     .order('order_index');
   if (error) throw error;
-  return (data || []) as ZoneDealStage[];
+  return (data || []) as unknown as ZoneDealStage[];
 }
 
 async function fetchDeals(zoneId: string): Promise<ZoneDeal[]> {
@@ -48,7 +48,7 @@ async function fetchZoneActivities(zoneId: string): Promise<ZoneDealActivity[]> 
     .order('happened_at', { ascending: false })
     .limit(50);
   if (error) throw error;
-  return (data || []) as ZoneDealActivity[];
+  return (data || []) as unknown as ZoneDealActivity[];
 }
 
 async function fetchActivities(zoneId: string, dealId: string): Promise<ZoneDealActivity[]> {
@@ -58,14 +58,14 @@ async function fetchActivities(zoneId: string, dealId: string): Promise<ZoneDeal
     .eq('deal_id', dealId)
     .order('happened_at', { ascending: false });
   if (error) throw error;
-  return (data || []) as ZoneDealActivity[];
+  return (data || []) as unknown as ZoneDealActivity[];
 }
 
 async function fetchDealProducts(zoneId: string, dealId: string) {
-  const { data, error } = await supabase
-    .from('zone_deal_products')
+  const { data, error } = await (supabase
+    .from('zone_deal_products' as any)
     .select('*, zone_products(*)')
-    .eq('deal_id', dealId);
+    .eq('deal_id', dealId) as any);
   if (error) throw error;
   return (data || []) as any[];
 }
@@ -107,11 +107,11 @@ export function useZoneDeals(zoneId: string | null) {
       const userId = (await supabase.auth.getUser()).data.user?.id;
       const { data, error } = await supabase
         .from('zone_deals')
-        .insert({ ...deal, zone_id: zoneId, assigned_to: userId })
+        .insert({ ...deal, zone_id: zoneId, assigned_to: userId } as any)
         .select()
         .single();
       if (error) throw error;
-      return data as ZoneDeal;
+      return data as unknown as ZoneDeal;
     },
     onSuccess: invalidateDeals,
   });
@@ -120,7 +120,7 @@ export function useZoneDeals(zoneId: string | null) {
     mutationFn: async ({ dealId, updates }: { dealId: string; updates: Partial<ZoneDeal> }) => {
       const { error } = await supabase
         .from('zone_deals')
-        .update(updates)
+        .update(updates as any)
         .eq('id', dealId);
       if (error) throw error;
     },
@@ -137,7 +137,6 @@ export function useZoneDeals(zoneId: string | null) {
         .update({ stage_id: stageId })
         .eq('id', dealId);
       if (error) throw error;
-      // Fire automations (non-blocking)
       supabase.functions.invoke('run-zone-automations', {
         body: { zone_id: zoneId, trigger_type: 'deal_stage_change', deal_id: dealId, stage_id: stageId },
       }).catch(() => { });
@@ -159,7 +158,7 @@ export function useZoneDeals(zoneId: string | null) {
           type,
           summary,
           created_by: (await supabase.auth.getUser()).data.user?.id || '',
-        });
+        } as any);
       if (error) throw error;
     },
     onSuccess: (data, variables) => {
@@ -181,7 +180,6 @@ export function useZoneDeals(zoneId: string | null) {
     },
   });
 
-  // Backward-compatible API
   return {
     deals,
     stages,
@@ -225,15 +223,15 @@ export function useZoneDealProducts(zoneId: string | null, dealId: string | null
 
   const addProduct = useMutation({
     mutationFn: async ({ productId, quantity, unitPrice }: { productId: string; quantity: number; unitPrice: number }) => {
-      const { error } = await supabase
-        .from('zone_deal_products')
+      const { error } = await (supabase
+        .from('zone_deal_products' as any)
         .insert({
           deal_id: dealId,
           product_id: productId,
           quantity,
           unit_price: unitPrice,
           subtotal: quantity * unitPrice
-        });
+        }) as any);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -243,10 +241,10 @@ export function useZoneDealProducts(zoneId: string | null, dealId: string | null
 
   const removeProduct = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('zone_deal_products')
+      const { error } = await (supabase
+        .from('zone_deal_products' as any)
         .delete()
-        .eq('id', id);
+        .eq('id', id) as any);
       if (error) throw error;
     },
     onSuccess: () => {
