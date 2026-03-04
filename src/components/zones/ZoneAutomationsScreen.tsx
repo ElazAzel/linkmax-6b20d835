@@ -83,6 +83,8 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
     }
   };
 
+  const TRIGGERS = useMemo(() => TRIGGER_DEFS.map(d => ({ ...d, label: t(d.labelKey, d.fallback) })), [t]);
+  const ACTIONS = useMemo(() => ACTION_DEFS.map(d => ({ ...d, label: t(d.labelKey, d.fallback) })), [t]);
   const getTrigger = (v: string) => TRIGGERS.find(t => t.value === v);
   const getAction = (v: string) => ACTIONS.find(a => a.value === v);
 
