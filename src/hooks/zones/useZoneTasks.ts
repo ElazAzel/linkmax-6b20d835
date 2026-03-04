@@ -18,15 +18,15 @@ async function fetchTasks(zoneId: string): Promise<ZoneTask[]> {
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data || []) as ZoneTask[];
+  return (data || []) as unknown as ZoneTask[];
 }
 
 async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskChecklistItem[]> {
-  const { data, error } = await supabase
-    .from('zone_task_checklist')
+  const { data, error } = await (supabase
+    .from('zone_task_checklist' as any)
     .select('*')
     .eq('task_id', taskId)
-    .order('order_index');
+    .order('order_index') as any);
   if (error) throw error;
   return (data || []) as ZoneTaskChecklistItem[];
 }
@@ -59,11 +59,11 @@ export function useZoneTasks(zoneId: string | null) {
           created_by: userId || '',
           status: task.status || 'todo',
           priority: task.priority || 'medium',
-        })
+        } as any)
         .select()
         .single();
       if (error) throw error;
-      return data as ZoneTask;
+      return data as unknown as ZoneTask;
     },
     onSuccess: invalidateTasks,
   });
@@ -72,7 +72,7 @@ export function useZoneTasks(zoneId: string | null) {
     mutationFn: async ({ taskId, updates }: { taskId: string; updates: Partial<ZoneTask> }) => {
       const { error } = await supabase
         .from('zone_tasks')
-        .update(updates)
+        .update(updates as any)
         .eq('id', taskId);
       if (error) throw error;
     },
@@ -90,7 +90,6 @@ export function useZoneTasks(zoneId: string | null) {
     onSuccess: invalidateTasks,
   });
 
-  // Backward-compatible API
   const createTask = async (task: Partial<ZoneTask>) => createTaskMutation.mutateAsync(task);
   const updateTask = async (taskId: string, updates: Partial<ZoneTask>) => updateTaskMutation.mutateAsync({ taskId, updates });
   const deleteTask = async (taskId: string) => deleteTaskMutation.mutateAsync(taskId);
@@ -113,15 +112,15 @@ export function useZoneTaskChecklist(zoneId: string | null, taskId: string | nul
 
   const addItem = useMutation({
     mutationFn: async (title: string) => {
-      const { error } = await supabase
-        .from('zone_task_checklist')
+      const { error } = await (supabase
+        .from('zone_task_checklist' as any)
         .insert({
           task_id: taskId,
           zone_id: zoneId,
           title,
           is_done: false,
           order_index: checklist.length,
-        });
+        }) as any);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId) }),
@@ -129,10 +128,10 @@ export function useZoneTaskChecklist(zoneId: string | null, taskId: string | nul
 
   const toggleItem = useMutation({
     mutationFn: async ({ id, is_done }: { id: string; is_done: boolean }) => {
-      const { error } = await supabase
-        .from('zone_task_checklist')
+      const { error } = await (supabase
+        .from('zone_task_checklist' as any)
         .update({ is_done })
-        .eq('id', id);
+        .eq('id', id) as any);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId) }),
@@ -140,10 +139,10 @@ export function useZoneTaskChecklist(zoneId: string | null, taskId: string | nul
 
   const removeItem = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('zone_task_checklist')
+      const { error } = await (supabase
+        .from('zone_task_checklist' as any)
         .delete()
-        .eq('id', id);
+        .eq('id', id) as any);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.checklist(safeZoneId, safeTaskId) }),

@@ -133,11 +133,11 @@ export const DealDetailSheet = memo(function DealDetailSheet({
       await addProduct({
         productId: prod.id,
         quantity: newProdQty,
-        unitPrice: prod.price
+        unitPrice: prod.unit_price
       });
       // Optionally sync deal value_amount?
-      if (dealTotal + (prod.price * newProdQty) !== deal.value_amount) {
-        await onUpdateDeal(deal.id, { value_amount: dealTotal + (prod.price * newProdQty) });
+      if (dealTotal + (prod.unit_price * newProdQty) !== deal.value_amount) {
+        await onUpdateDeal(deal.id, { value_amount: dealTotal + (prod.unit_price * newProdQty) });
       }
       setIsAddingProduct(false);
       setSelectedProductId('');
@@ -255,8 +255,8 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       <Select value={selectedProductId} onValueChange={setSelectedProductId}>
                         <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select..." /></SelectTrigger>
                         <SelectContent>
-                          {products.filter(p => p.active).map(p => (
-                            <SelectItem key={p.id} value={p.id}>{p.name} ({p.price.toLocaleString()})</SelectItem>
+                          {products.filter(p => p.is_active).map(p => (
+                            <SelectItem key={p.id} value={p.id}>{p.name} ({p.unit_price.toLocaleString()})</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
