@@ -2466,6 +2466,54 @@ export type Database = {
           },
         ]
       }
+      zone_invoice_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          invoice_id: string
+          quantity: number
+          total: number | null
+          unit_price: number
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id: string
+          quantity?: number
+          total?: number | null
+          unit_price?: number
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id?: string
+          quantity?: number
+          total?: number | null
+          unit_price?: number
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "zone_invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_invoice_items_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_invoices: {
         Row: {
           amount: number
