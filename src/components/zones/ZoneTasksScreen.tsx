@@ -3,7 +3,7 @@
  */
 import { memo, useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
+import { DndContext, DragOverlay, PointerSensor, TouchSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import type { ZoneTask, TaskStatus, TaskPriority } from '@/types/zones';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
