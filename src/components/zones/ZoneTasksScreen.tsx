@@ -64,7 +64,10 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
 
   // DnD
   const [activeDragTask, setActiveDragTask] = useState<ZoneTask | null>(null);
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } })
+  );
 
   const filteredTasks = useMemo(() => {
     if (!filterMy || !currentUserId) return tasks;

@@ -54,7 +54,7 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
         <div
           {...attributes}
           {...listeners}
-          className="mt-1 cursor-grab opacity-0 group-hover:opacity-40 hover:!opacity-100 shrink-0 transition-opacity"
+          className="mt-1 cursor-grab opacity-40 group-hover:opacity-60 hover:!opacity-100 shrink-0 transition-opacity touch-none"
           onClick={(e) => e.stopPropagation()}
         >
           <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
