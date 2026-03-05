@@ -26,6 +26,7 @@ import LogOut from 'lucide-react/dist/esm/icons/log-out';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import Users from 'lucide-react/dist/esm/icons/users';
 import Kanban from 'lucide-react/dist/esm/icons/kanban';
 import Contact from 'lucide-react/dist/esm/icons/contact';
