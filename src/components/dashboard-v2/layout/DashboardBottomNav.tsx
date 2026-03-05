@@ -18,6 +18,7 @@ import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import ListTodo from 'lucide-react/dist/esm/icons/list-todo';
 import Zap from 'lucide-react/dist/esm/icons/zap';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
+import Package from 'lucide-react/dist/esm/icons/package';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
