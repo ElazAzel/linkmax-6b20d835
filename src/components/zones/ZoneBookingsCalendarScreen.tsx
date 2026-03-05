@@ -8,7 +8,11 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils/utils';
+import { downloadICS, getGoogleCalendarUrl, getOutlookCalendarUrl } from '@/lib/utils/calendar-utils';
+import { supabase } from '@/platform/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 import {
   addDays, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth,
   format, isSameDay, isWithinInterval, eachDayOfInterval, getDay,
@@ -24,6 +28,9 @@ import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import LinkIcon from 'lucide-react/dist/esm/icons/link';
 
 interface Props {
   zoneId: string;
