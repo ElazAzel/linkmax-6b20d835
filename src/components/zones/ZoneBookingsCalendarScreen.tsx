@@ -142,9 +142,10 @@ export const ZoneBookingsCalendarScreen = memo(function ZoneBookingsCalendarScre
             {t('zones.calendar.subtitle', 'Все записи из блоков Booking ваших страниц')}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Badge variant="secondary">{t('zones.calendar.today', 'Сегодня')}: {stats.today}</Badge>
           <Badge variant="outline">{t('zones.calendar.upcoming', 'Предстоящие')}: {stats.upcoming}</Badge>
+          <CalendarExportMenu zoneId={zoneId} t={t} />
         </div>
       </div>
 
