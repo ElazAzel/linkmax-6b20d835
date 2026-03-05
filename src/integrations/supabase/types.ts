@@ -3117,6 +3117,17 @@ export type Database = {
         }
         Returns: Json
       }
+      sync_block_contact_to_zone: {
+        Args: {
+          p_email?: string
+          p_name: string
+          p_owner_user_id?: string
+          p_page_id: string
+          p_phone?: string
+          p_source_tag?: string
+        }
+        Returns: string
+      }
       toggle_gallery_status: { Args: { p_user_id: string }; Returns: boolean }
       unlike_gallery_page: { Args: { p_page_id: string }; Returns: undefined }
       update_user_streak: { Args: { p_user_id: string }; Returns: Json }
