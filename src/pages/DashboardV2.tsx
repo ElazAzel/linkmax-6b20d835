@@ -52,7 +52,9 @@ import {
   ZoneTasksScreenWrapper,
   ZoneSettingsScreenWrapper,
   ZoneAutomationsScreenWrapper,
-  ZoneInvoicesScreenWrapper
+  ZoneInvoicesScreenWrapper,
+  ZoneBookingsCalendarScreenWrapper,
+  ZoneEventsScreenWrapper,
 } from '@/components/zones/ZoneWrappers';
 
 // Screen loading fallback
@@ -101,9 +103,9 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-settings';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-settings' | 'zone-calendar' | 'zone-events';
 
-const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-settings'];
+const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-calendar', 'zone-events', 'zone-settings'];
 const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
@@ -641,6 +643,8 @@ function DashboardV2Inner() {
             {currentTab === 'zone-tasks' && canUseBusinessZone() && <ZoneTasksScreenWrapper />}
             {currentTab === 'zone-automations' && canUseBusinessZone() && <ZoneAutomationsScreenWrapper />}
             {currentTab === 'zone-invoices' && canUseBusinessZone() && <ZoneInvoicesScreenWrapper />}
+            {currentTab === 'zone-calendar' && canUseBusinessZone() && <ZoneBookingsCalendarScreenWrapper />}
+            {currentTab === 'zone-events' && canUseBusinessZone() && <ZoneEventsScreenWrapper />}
             {currentTab === 'zone-settings' && canUseBusinessZone() && <ZoneSettingsScreenWrapper />}
           </Suspense>
         </DashboardLayout>
