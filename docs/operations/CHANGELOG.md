@@ -2,9 +2,14 @@
 
 ## [Unreleased]
 
-### [2026-03-05] - Electronic Document Management (EDO)
+### [2026-03-05] - Electronic Document Management (EDO) & System Stabilization
 
-* **Document Generator**:
+* **Template Externalization (Phase 2)**:
+  * Перенос более 150 КБ хардкодных данных шаблонов страниц и виджетов в базу данных Supabase (`widget_templates`, `templates`). Это позволило существенно уменьшить размер основного бандла приложения.
+  * Реализован хук `useWidgetTemplates` и обновлены компоненты `TemplateGallery`, `CustomCodeBlockEditor` для работы с БД с поддержкой безопасного отката на статические данные.
+* **Monetization Foundation (Phase 1)**:
+  * Создана инфраструктура для платежей: таблица `orders` для отслеживания транзакций и сервис `PaymentService` для интеграции с Kaspi, Robokassa и Stripe.
+* **Document Generator (EDO)**:
   * Реализована подсистема EDO (ЭДО) для генерации актов, счетов и контрактов по шаблонам.
   * Созданы таблицы `zone_document_templates` и `zone_documents` с полной поддержкой RLS через `is_zone_member`.
   * Разработан визуальный интерфейс `ZoneDocumentsScreen` и модальное окно `ZoneDocumentCreator`.

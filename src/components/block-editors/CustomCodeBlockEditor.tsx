@@ -24,7 +24,9 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { useState, useMemo } from 'react';
-import { WIDGET_TEMPLATES, WIDGET_CATEGORIES, type WidgetTemplate } from '@/lib/widget-templates';
+import { WIDGET_CATEGORIES, HARDCODED_WIDGET_TEMPLATES, type WidgetTemplate } from '@/lib/widget-templates';
+import { useWidgetTemplates } from '@/hooks/useWidgetTemplates';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 const CATEGORY_ICONS = { games: Gamepad2, calculators: Calculator, timers: Timer, engagement: Heart, business: Briefcase, social: Users };
@@ -37,12 +39,15 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
   const [showTemplates, setShowTemplates] = useState(!data.html);
   const [selectedCategory, setSelectedCategory] = useState<string>('games');
 
-  const applyTemplate = (template: WidgetTemplate) => {
-    handleChange({ ...data, html: template.html, css: template.css, javascript: template.javascript, title: i18n.language === 'ru' ? template.nameRu : template.name, enableInteraction: true });
-    setShowTemplates(false);
-  };
+  // Fetch templates from DB
+  const { data: dbWidgetTemplates, isLoading: isWidgetsLoading } = useWidgetTemplates();
 
-  const filteredTemplates = WIDGET_TEMPLATES.filter(t => t.category === selectedCategory);
+  // Use DB templates if available, otherwise fallback to hardcoded
+  const widgetTemplates = (dbWidgetTemplates && dbWidgetTemplates.length > 0)
+    ? dbWidgetTemplates
+    : HARDCODED_WIDGET_TEMPLATES;
+
+  const filteredTemplates = widgetTemplates.filter(t => t.category === selectedCategory);
 
   const previewContent = useMemo(() => {
     const html = data.html || '';

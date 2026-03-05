@@ -153,6 +153,8 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | **Experiment** | A/B test for a block | Conversion optimization | `src/services/experiments.ts`, DB: `experiments` |
 | **Wallet** | User balance and ledger | Fintech foundation | `src/services/fintech.ts`, DB: `user_wallets` |
 | **Transaction** | Financial record (GMV/Fee) | Ledger accounting | DB: `wallet_transactions` |
+| **Widget Template**| Resuable HTML/JS/CSS snippet | DB-driven customization | DB: `widget_templates` |
+| **Order** | Payment transaction record | Tracking status & provider | DB: `orders` |
 | **Token** | Linkkon virtual currency | Gamification + marketplace | DB: `user_tokens`, `token_transactions` |
 
 ---
@@ -397,6 +399,8 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 | `page_snapshots` | Version history | Owner only |
 | `languages` | Translations | Admin management, public read |
 | `i18n_translations` | JSONB store for DB-driven translations | Admin only |
+| `widget_templates` | Reusable widget HTML/CSS/JS snippets | Admin only (seed) |
+| `orders` | Payment transaction records | User read-only, service update |
 | `custom_domains` | Mapping of domains to pages | Owner + Admins |
 | `zone_document_templates` | Templates for document generation | Zone Member access |
 | `zone_documents` | Generated documents with status | Zone Member access |
@@ -791,11 +795,13 @@ Based on codebase analysis, these are logical next improvements:
 7. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments, checklists), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-03-03)
 8. **Business Zones Phase 1 (Deals DnD & Detail)**: Implementing drag-and-drop for Kanban and side-panel (Sheet) for deal details. (Completed 2026-03-03)
 9. **Business Zones Phase 2 (CRM Enhancements)**: Advanced contact cards, task checklists, multi-item invoices, and complex automations. (Completed 2026-03-03)
-10. **Business Zones Phase 3 (EDO & Document Management)**: Integration of act/contract/invoice generation directly from deals, template management, and document status tracking. (Completed 2026-03-05)
-11. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
-12. **API access** — Public API for integrations (Zapier, Make, custom apps)
-13. **Email sequences** — Automated email drip campaigns for leads
-14. **Mobile app** — Native iOS/Android app for page management
+| 10. **Business Zones Phase 3 (EDO & Document Management)**: Integration of act/contract/invoice generation directly from deals, template management, and document status tracking. (Completed 2026-03-05)
+| 11. **Technical Debt (Phase 2): Template Externalization**: Moved 150KB+ of hardcoded templates to DB. (Completed 2026-03-05)
+| 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
+| 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
+10. **API access** — Public API for integrations (Zapier, Make, custom apps)
+11. **Email sequences** — Automated email drip campaigns for leads
+12. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: 100% sync reached for RU/EN/KK/UZ (Feb 2026).
 - **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_24.md](FULL_PLATFORM_AUDIT_2026_02_24.md), and [EDO_MODULE_AUDIT_2026_03_05.md](EDO_MODULE_AUDIT_2026_03_05.md).

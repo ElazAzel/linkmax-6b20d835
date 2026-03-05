@@ -34,7 +34,7 @@ export const WIDGET_CATEGORIES = {
   social: { name: 'Social', nameRu: 'Социальные', icon: 'Users' },
 } as const;
 
-export const WIDGET_TEMPLATES: WidgetTemplate[] = [
+export const HARDCODED_WIDGET_TEMPLATES: WidgetTemplate[] = [
   // ==================== GAMES ====================
   {
     id: 'minesweeper',
@@ -978,9 +978,9 @@ setInterval(() => { showTestimonial((currentTs + 1) % testimonials.length); }, 5
 ];
 
 export function getWidgetsByCategory(category: keyof typeof WIDGET_CATEGORIES): WidgetTemplate[] {
-  return WIDGET_TEMPLATES.filter(w => w.category === category);
+  return HARDCODED_WIDGET_TEMPLATES.filter(w => w.category === category);
 }
 
 export function getWidgetById(id: string): WidgetTemplate | undefined {
-  return WIDGET_TEMPLATES.find(w => w.id === id);
+  return HARDCODED_WIDGET_TEMPLATES.find(w => w.id === id);
 }
