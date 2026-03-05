@@ -85,6 +85,8 @@ const SECTIONS: SidebarSection[] = [
       { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Аналитика' },
       { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
+      { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь' },
+      { id: 'zone-events', icon: Calendar, labelKey: 'dashboard.sidebar.zoneEvents', defaultLabel: 'Ивенты' },
       { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие' },
       { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи' },
       { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации' },
@@ -127,7 +129,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-settings'];
+  const ZONE_ITEM_IDS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-calendar', 'zone-events', 'zone-settings'];
 
   const handleItemClick = (itemId: string) => {
     // Gate zone items behind business tier
