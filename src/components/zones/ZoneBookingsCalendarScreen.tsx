@@ -205,6 +205,70 @@ export const ZoneBookingsCalendarScreen = memo(function ZoneBookingsCalendarScre
   );
 });
 
+
+// ============ Calendar Export Menu ============
+function CalendarExportMenu({ zoneId, t }: { zoneId: string; t: any }) {
+  const [copying, setCopying] = useState(false);
+
+  const handleExportAllICS = useCallback(async () => {
+    // Fetch bookings and generate a combined ICS file
+    const { data: zone } = await supabase
+      .from('zones' as any)
+      .select('calendar_feed_token, name')
+      .eq('id', zoneId)
+      .single();
+
+    if (!zone) return;
+    const zoneData = zone as any;
+
+    // Open the feed URL for download
+    const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${zoneData.calendar_feed_token}`;
+    window.open(feedUrl, '_blank');
+  }, [zoneId]);
+
+  const handleCopyFeedUrl = useCallback(async () => {
+    setCopying(true);
+    try {
+      const { data: zone } = await supabase
+        .from('zones' as any)
+        .select('calendar_feed_token')
+        .eq('id', zoneId)
+        .single();
+
+      if (!zone) return;
+      const zoneData = zone as any;
+      const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${zoneData.calendar_feed_token}`;
+      await navigator.clipboard.writeText(feedUrl);
+      toast({ title: t('zones.calendar.feedCopied', 'Ссылка на календарь скопирована') });
+    } catch {
+      toast({ title: t('common.error', 'Ошибка'), variant: 'destructive' });
+    } finally {
+      setCopying(false);
+    }
+  }, [zoneId, t]);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm">
+          <Share2 className="h-4 w-4 mr-1" />
+          {t('zones.calendar.export', 'Экспорт')}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={handleExportAllICS}>
+          <Download className="h-4 w-4 mr-2" />
+          {t('zones.calendar.downloadICS', 'Скачать .ics (Apple Calendar)')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyFeedUrl}>
+          <LinkIcon className="h-4 w-4 mr-2" />
+          {t('zones.calendar.copyFeedUrl', 'Скопировать URL подписки')}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 // ============ Month View ============
 function MonthView({
   days, bookingsByDate, currentDate, locale, onSelectBooking, t,
