@@ -434,6 +434,8 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 - `zone_invoices`: invoice tracking per deal/contact with **multi-item support**.
 - `zone_invites`: invite tokens for onboarding new members.
 - `zone_automations`: advanced rule-based CRM engine (triggers: invoice paid, stage change, etc.).
+- `zone_document_templates`: customizable HTML templates for Acts/Invoices/Contracts generation.
+- `zone_documents`: actual generated documents attached to deals and contacts supporting status tracking.
 
 **Social features:**
 

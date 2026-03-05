@@ -47,6 +47,7 @@ export type DealStatus = 'open' | 'won' | 'lost';
 export type InvoiceStatus = 'created' | 'paid' | 'failed' | 'expired';
 export type ConversationStatus = 'open' | 'closed' | 'archived';
 export type MessageDirection = 'inbound' | 'outbound';
+export type DocumentStatus = 'draft' | 'signed' | 'sent' | 'archived';
 
 export interface Zone {
   id: string;
@@ -251,6 +252,37 @@ export interface ZoneTaskChecklistItem {
   is_done: boolean;
   order_index: number;
   created_at: string;
+}
+
+export interface ZoneDocumentTemplate {
+  id: string;
+  zone_id: string;
+  name: string;
+  description: string | null;
+  content_html: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ZoneDocument {
+  id: string;
+  zone_id: string;
+  deal_id: string | null;
+  contact_id: string | null;
+  template_id: string | null;
+  title: string;
+  document_number: string | null;
+  file_url: string | null;
+  status: DocumentStatus;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+  
+  // Joined
+  template?: ZoneDocumentTemplate;
+  contact?: ZoneContact;
+  deal?: ZoneDeal;
 }
 
 // ============ Zone Context ============

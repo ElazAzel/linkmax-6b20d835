@@ -31,6 +31,13 @@ import type { ZoneDeal, ZoneDealStage } from '@/types/zones';
 import { useZoneDealActivities, useZoneDealProducts } from '@/hooks/zones/useZoneDeals';
 import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
+import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
+import { ZoneDocumentCreator } from '../documents/ZoneDocumentCreator';
+import FileSignature from 'lucide-react/dist/esm/icons/file-signature';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Download from 'lucide-react/dist/esm/icons/download';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 interface DealDetailSheetProps {
   deal: ZoneDeal | null;
@@ -64,9 +71,13 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const { dealProducts, addProduct, removeProduct } = useZoneDealProducts(deal?.zone_id || null, deal?.id || null);
   const { products } = useZoneProducts(deal?.zone_id || null);
   const { tasks } = useZoneTasks(deal?.zone_id || null);
+  const { documents } = useZoneDocuments();
 
   const linkedTasks = useMemo(() => tasks.filter(t => t.deal_id === deal?.id), [tasks, deal?.id]);
+  const linkedDocs = useMemo(() => documents?.filter(d => d.deal_id === deal?.id) || [], [documents, deal?.id]);
   const dealTotal = useMemo(() => dealProducts.reduce((sum, p) => sum + (p.subtotal || 0), 0), [dealProducts]);
+
+  const [isCreatorOpen, setIsCreatorOpen] = useState(false);
 
   useEffect(() => {
     if (open && deal) {
@@ -176,6 +187,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
               <TabsTrigger value="timeline" className="text-[10px]">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
               <TabsTrigger value="products" className="text-[10px]">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
               <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+              <TabsTrigger value="docs" className="text-[10px]">Документы ({linkedDocs.length})</TabsTrigger>
               <TabsTrigger value="info" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
             </TabsList>
           </div>
@@ -307,6 +319,45 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                 )}
               </TabsContent>
 
+              {/* Documents Tab */}
+              <TabsContent value="docs" className="space-y-3 m-0">
+                <Button variant="outline" size="sm" className="w-full border-dashed mb-2" onClick={() => setIsCreatorOpen(true)}>
+                  <Plus className="h-4 w-4 mr-1" />
+                  Создать документ
+                </Button>
+
+                {linkedDocs.map(doc => (
+                  <Card key={doc.id} className="overflow-hidden bg-muted/20 border-muted">
+                    <CardContent className="p-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <FileSignature className="h-4 w-4 shrink-0 text-primary" />
+                          <div className="min-w-0">
+                            <span className="text-sm font-medium truncate block">{doc.title}</span>
+                            <span className="text-[10px] text-muted-foreground block">
+                              {format(new Date(doc.created_at), 'd MMM yyyy', { locale: ru })}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Badge variant="outline" className="text-[10px] bg-primary/10 mr-1">
+                            {doc.status}
+                          </Badge>
+                          {doc.file_url && (
+                            <Button size="icon" variant="ghost" className="h-6 w-6">
+                              <Download className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {linkedDocs.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-8 italic">Нет созданных документов</p>
+                )}
+              </TabsContent>
+
               {/* Info Tab */}
               <TabsContent value="info" className="space-y-6 m-0">
                 <div className="space-y-4">
@@ -417,6 +468,12 @@ export const DealDetailSheet = memo(function DealDetailSheet({
             </div>
           </ScrollArea>
         </Tabs>
+        <ZoneDocumentCreator
+          open={isCreatorOpen}
+          onOpenChange={setIsCreatorOpen}
+          defaultDealId={deal?.id}
+          defaultContactId={deal?.contact_id || undefined}
+        />
       </SheetContent>
     </Sheet>
   );

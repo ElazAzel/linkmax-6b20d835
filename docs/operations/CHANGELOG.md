@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### [2026-03-05] - Electronic Document Management (EDO)
+
+* **Document Generator**:
+  * Реализована подсистема EDO (ЭДО) для генерации актов, счетов и контрактов по шаблонам.
+  * Созданы таблицы `zone_document_templates` и `zone_documents` с полной поддержкой RLS через `is_zone_member`.
+  * Разработан визуальный интерфейс `ZoneDocumentsScreen` и модальное окно `ZoneDocumentCreator`.
+* **CRM Integration**:
+  * В деталях сделки (`DealDetailSheet`) добавлена вкладка "Документы" для быстрой связи и генерации документов под конкретную сделку.
+  * Внедрён хук `useZoneDocuments` для реактивного управления статусами (Draft, Sent, Signed) и авто-подстановки переменных.
+
 ### [2026-03-04] - Dashboard & Finance (Phase 3)
 
 * **Invoice Numbering**:
