@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
+import { useZoneContext } from '@/contexts/ZoneContext';
 import { Loader2, FileText } from 'lucide-react';
 
 interface ZoneDocumentCreatorProps {
@@ -17,9 +18,12 @@ interface ZoneDocumentCreatorProps {
 }
 
 export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, defaultContactId }: ZoneDocumentCreatorProps) => {
+    const { currentZone } = useZoneContext();
+    const zoneId = currentZone?.id;
+
     const { templates, createDocument, isCreating } = useZoneDocuments();
-    const { deals } = useZoneDeals();
-    const { contacts } = useZoneContacts();
+    const { deals } = useZoneDeals(zoneId || null);
+    const { contacts } = useZoneContacts(zoneId || null);
 
     const [title, setTitle] = useState('');
     const [templateId, setTemplateId] = useState<string>('');
