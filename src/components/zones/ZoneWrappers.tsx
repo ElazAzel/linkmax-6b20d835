@@ -11,60 +11,71 @@ const ZoneTasksScreen = lazy(() => import('./ZoneTasksScreen').then(m => ({ defa
 const ZoneSettingsScreen = lazy(() => import('./ZoneSettingsScreen').then(m => ({ default: m.ZoneSettingsScreen })));
 const ZoneAutomationsScreen = lazy(() => import('./ZoneAutomationsScreen').then(m => ({ default: m.ZoneAutomationsScreen })));
 const ZoneInvoicesScreen = lazy(() => import('./ZoneInvoicesScreen').then(m => ({ default: m.ZoneInvoicesScreen })));
+const ZoneBookingsCalendarScreen = lazy(() => import('./ZoneBookingsCalendarScreen').then(m => ({ default: m.ZoneBookingsCalendarScreen })));
+const ZoneEventsScreen = lazy(() => import('./ZoneEventsScreen').then(m => ({ default: m.ZoneEventsScreen })));
+
+function NoZone() {
+    const { t } = useTranslation();
+    return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+}
 
 /** Zone screen wrappers that read ZoneContext */
 export function ZoneDashboardWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneDashboard zoneId={currentZoneId} />;
 }
 
 export function ZoneDealsScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneDealsScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneContactsScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneContactsScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneInboxScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneInboxScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneTasksScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneTasksScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneSettingsScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZone, members, myRole, refetch } = useZoneContext();
-    if (!currentZone) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZone) return <NoZone />;
     return <ZoneSettingsScreen zone={currentZone} members={members} myRole={myRole} onRefetch={refetch} />;
 }
 
 export function ZoneAutomationsScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneAutomationsScreen zoneId={currentZoneId} />;
 }
 
 export function ZoneInvoicesScreenWrapper() {
-    const { t } = useTranslation();
     const { currentZoneId } = useZoneContext();
-    if (!currentZoneId) return <div className="p-6 text-center text-muted-foreground">{t('zones.selectOrCreate', 'Выберите или создайте зону')}</div>;
+    if (!currentZoneId) return <NoZone />;
     return <ZoneInvoicesScreen zoneId={currentZoneId} />;
+}
+
+export function ZoneBookingsCalendarScreenWrapper() {
+    const { currentZoneId } = useZoneContext();
+    if (!currentZoneId) return <NoZone />;
+    return <ZoneBookingsCalendarScreen zoneId={currentZoneId} />;
+}
+
+export function ZoneEventsScreenWrapper() {
+    const { currentZoneId } = useZoneContext();
+    if (!currentZoneId) return <NoZone />;
+    return <ZoneEventsScreen zoneId={currentZoneId} />;
 }

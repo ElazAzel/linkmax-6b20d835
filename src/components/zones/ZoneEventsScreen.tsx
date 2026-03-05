@@ -101,7 +101,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
         </Card>
         <Card>
           <CardContent className="p-3 flex items-center gap-3">
-            <Eye className="h-5 w-5 text-emerald-500" />
+            <Eye className="h-5 w-5 text-primary/70" />
             <div>
               <div className="text-lg font-bold">{stats.published}</div>
               <div className="text-[10px] text-muted-foreground">{t('zones.events.published', 'Активных')}</div>
@@ -110,7 +110,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
         </Card>
         <Card>
           <CardContent className="p-3 flex items-center gap-3">
-            <Ticket className="h-5 w-5 text-blue-500" />
+            <Ticket className="h-5 w-5 text-primary/60" />
             <div>
               <div className="text-lg font-bold">{stats.totalRegs}</div>
               <div className="text-[10px] text-muted-foreground">{t('zones.events.totalRegistrations', 'Регистраций')}</div>
@@ -119,7 +119,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
         </Card>
         <Card>
           <CardContent className="p-3 flex items-center gap-3">
-            <TrendingUp className="h-5 w-5 text-amber-500" />
+            <TrendingUp className="h-5 w-5 text-primary/50" />
             <div>
               <div className="text-lg font-bold">{stats.totalRevenue > 0 ? stats.totalRevenue.toLocaleString() : '—'}</div>
               <div className="text-[10px] text-muted-foreground">{t('zones.events.revenue', 'Выручка')}</div>
