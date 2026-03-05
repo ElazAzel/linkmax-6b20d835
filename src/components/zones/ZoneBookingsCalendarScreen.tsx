@@ -441,6 +441,54 @@ function WeekDayView({
 
 // ============ Booking Detail ============
 function BookingDetail({ booking, t }: { booking: ZoneBooking; t: any }) {
+  const handleExportICS = () => {
+    const startAt = `${booking.slot_date}T${booking.slot_time}`;
+    const endAt = booking.slot_end_time
+      ? `${booking.slot_date}T${booking.slot_end_time}`
+      : undefined;
+
+    downloadICS({
+      title: `Booking: ${booking.client_name}`,
+      description: [
+        booking.client_email && `Email: ${booking.client_email}`,
+        booking.client_phone && `Phone: ${booking.client_phone}`,
+        booking.client_notes,
+      ].filter(Boolean).join('\n'),
+      startAt,
+      endAt,
+    });
+  };
+
+  const handleGoogleCalendar = () => {
+    const startAt = `${booking.slot_date}T${booking.slot_time}`;
+    const endAt = booking.slot_end_time
+      ? `${booking.slot_date}T${booking.slot_end_time}`
+      : undefined;
+
+    const url = getGoogleCalendarUrl({
+      title: `Booking: ${booking.client_name}`,
+      description: booking.client_notes || '',
+      startAt,
+      endAt,
+    });
+    window.open(url, '_blank');
+  };
+
+  const handleOutlook = () => {
+    const startAt = `${booking.slot_date}T${booking.slot_time}`;
+    const endAt = booking.slot_end_time
+      ? `${booking.slot_date}T${booking.slot_end_time}`
+      : undefined;
+
+    const url = getOutlookCalendarUrl({
+      title: `Booking: ${booking.client_name}`,
+      description: booking.client_notes || '',
+      startAt,
+      endAt,
+    });
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="mt-4 space-y-4">
       <div className="space-y-3">
@@ -482,6 +530,26 @@ function BookingDetail({ booking, t }: { booking: ZoneBooking; t: any }) {
             <p className="text-sm text-muted-foreground">{booking.client_notes}</p>
           </div>
         )}
+
+        {/* Export buttons */}
+        <div className="border-t pt-3 space-y-2">
+          <p className="text-xs font-medium text-muted-foreground">{t('zones.calendar.addToCalendar', 'Добавить в календарь')}</p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={handleExportICS}>
+              <Download className="h-3 w-3 mr-1" />
+              Apple Calendar
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleGoogleCalendar}>
+              <CalendarIcon className="h-3 w-3 mr-1" />
+              Google
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleOutlook}>
+              <CalendarIcon className="h-3 w-3 mr-1" />
+              Outlook
+            </Button>
+          </div>
+        </div>
+
         {booking.page_title && (
           <div className="text-xs text-muted-foreground border-t pt-3">
             {t('zones.calendar.fromPage', 'Со страницы')}: {booking.page_title}
