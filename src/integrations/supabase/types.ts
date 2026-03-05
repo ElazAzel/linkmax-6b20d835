@@ -2803,6 +2803,7 @@ export type Database = {
       }
       zones: {
         Row: {
+          calendar_feed_token: string | null
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
@@ -2818,6 +2819,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -2833,6 +2835,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          calendar_feed_token?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null

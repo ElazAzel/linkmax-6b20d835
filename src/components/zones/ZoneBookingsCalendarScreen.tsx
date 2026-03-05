@@ -8,7 +8,11 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils/utils';
+import { downloadICS, getGoogleCalendarUrl, getOutlookCalendarUrl } from '@/lib/utils/calendar-utils';
+import { supabase } from '@/platform/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 import {
   addDays, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth,
   format, isSameDay, isWithinInterval, eachDayOfInterval, getDay,
@@ -24,6 +28,9 @@ import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
+import LinkIcon from 'lucide-react/dist/esm/icons/link';
 
 interface Props {
   zoneId: string;
@@ -135,9 +142,10 @@ export const ZoneBookingsCalendarScreen = memo(function ZoneBookingsCalendarScre
             {t('zones.calendar.subtitle', 'Все записи из блоков Booking ваших страниц')}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Badge variant="secondary">{t('zones.calendar.today', 'Сегодня')}: {stats.today}</Badge>
           <Badge variant="outline">{t('zones.calendar.upcoming', 'Предстоящие')}: {stats.upcoming}</Badge>
+          <CalendarExportMenu zoneId={zoneId} t={t} />
         </div>
       </div>
 
@@ -196,6 +204,70 @@ export const ZoneBookingsCalendarScreen = memo(function ZoneBookingsCalendarScre
     </div>
   );
 });
+
+
+// ============ Calendar Export Menu ============
+function CalendarExportMenu({ zoneId, t }: { zoneId: string; t: any }) {
+  const [copying, setCopying] = useState(false);
+
+  const handleExportAllICS = useCallback(async () => {
+    // Fetch bookings and generate a combined ICS file
+    const { data: zone } = await supabase
+      .from('zones' as any)
+      .select('calendar_feed_token, name')
+      .eq('id', zoneId)
+      .single();
+
+    if (!zone) return;
+    const zoneData = zone as any;
+
+    // Open the feed URL for download
+    const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${zoneData.calendar_feed_token}`;
+    window.open(feedUrl, '_blank');
+  }, [zoneId]);
+
+  const handleCopyFeedUrl = useCallback(async () => {
+    setCopying(true);
+    try {
+      const { data: zone } = await supabase
+        .from('zones' as any)
+        .select('calendar_feed_token')
+        .eq('id', zoneId)
+        .single();
+
+      if (!zone) return;
+      const zoneData = zone as any;
+      const feedUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?token=${zoneData.calendar_feed_token}`;
+      await navigator.clipboard.writeText(feedUrl);
+      toast({ title: t('zones.calendar.feedCopied', 'Ссылка на календарь скопирована') });
+    } catch {
+      toast({ title: t('common.error', 'Ошибка'), variant: 'destructive' });
+    } finally {
+      setCopying(false);
+    }
+  }, [zoneId, t]);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm">
+          <Share2 className="h-4 w-4 mr-1" />
+          {t('zones.calendar.export', 'Экспорт')}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={handleExportAllICS}>
+          <Download className="h-4 w-4 mr-2" />
+          {t('zones.calendar.downloadICS', 'Скачать .ics (Apple Calendar)')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyFeedUrl}>
+          <LinkIcon className="h-4 w-4 mr-2" />
+          {t('zones.calendar.copyFeedUrl', 'Скопировать URL подписки')}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 // ============ Month View ============
 function MonthView({
@@ -369,6 +441,54 @@ function WeekDayView({
 
 // ============ Booking Detail ============
 function BookingDetail({ booking, t }: { booking: ZoneBooking; t: any }) {
+  const handleExportICS = () => {
+    const startAt = `${booking.slot_date}T${booking.slot_time}`;
+    const endAt = booking.slot_end_time
+      ? `${booking.slot_date}T${booking.slot_end_time}`
+      : undefined;
+
+    downloadICS({
+      title: `Booking: ${booking.client_name}`,
+      description: [
+        booking.client_email && `Email: ${booking.client_email}`,
+        booking.client_phone && `Phone: ${booking.client_phone}`,
+        booking.client_notes,
+      ].filter(Boolean).join('\n'),
+      startAt,
+      endAt,
+    });
+  };
+
+  const handleGoogleCalendar = () => {
+    const startAt = `${booking.slot_date}T${booking.slot_time}`;
+    const endAt = booking.slot_end_time
+      ? `${booking.slot_date}T${booking.slot_end_time}`
+      : undefined;
+
+    const url = getGoogleCalendarUrl({
+      title: `Booking: ${booking.client_name}`,
+      description: booking.client_notes || '',
+      startAt,
+      endAt,
+    });
+    window.open(url, '_blank');
+  };
+
+  const handleOutlook = () => {
+    const startAt = `${booking.slot_date}T${booking.slot_time}`;
+    const endAt = booking.slot_end_time
+      ? `${booking.slot_date}T${booking.slot_end_time}`
+      : undefined;
+
+    const url = getOutlookCalendarUrl({
+      title: `Booking: ${booking.client_name}`,
+      description: booking.client_notes || '',
+      startAt,
+      endAt,
+    });
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="mt-4 space-y-4">
       <div className="space-y-3">
@@ -410,6 +530,26 @@ function BookingDetail({ booking, t }: { booking: ZoneBooking; t: any }) {
             <p className="text-sm text-muted-foreground">{booking.client_notes}</p>
           </div>
         )}
+
+        {/* Export buttons */}
+        <div className="border-t pt-3 space-y-2">
+          <p className="text-xs font-medium text-muted-foreground">{t('zones.calendar.addToCalendar', 'Добавить в календарь')}</p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={handleExportICS}>
+              <Download className="h-3 w-3 mr-1" />
+              Apple Calendar
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleGoogleCalendar}>
+              <CalendarIcon className="h-3 w-3 mr-1" />
+              Google
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleOutlook}>
+              <CalendarIcon className="h-3 w-3 mr-1" />
+              Outlook
+            </Button>
+          </div>
+        </div>
+
         {booking.page_title && (
           <div className="text-xs text-muted-foreground border-t pt-3">
             {t('zones.calendar.fromPage', 'Со страницы')}: {booking.page_title}

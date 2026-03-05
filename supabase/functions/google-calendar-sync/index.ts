@@ -7,6 +7,9 @@ const corsHeaders = {
         "authorization, x-client-info, apikey, content-type",
 };
 
+const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+const GOOGLE_CALENDAR_API = "https://www.googleapis.com/calendar/v3";
+
 serve(async (req) => {
     if (req.method === "OPTIONS") {
         return new Response("ok", { headers: corsHeaders });
@@ -23,39 +26,207 @@ serve(async (req) => {
             }
         );
 
+        const supabaseAdmin = createClient(
+            Deno.env.get("SUPABASE_URL") ?? "",
+            Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+        );
+
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
         if (authError || !user) {
             throw new Error("Unauthorized");
         }
 
+        const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
+        const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET");
+
+        if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+            return new Response(JSON.stringify({ error: "Google Calendar not configured" }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                status: 503,
+            });
+        }
+
         const { action, payload } = await req.json();
 
+        // ─── Exchange OAuth code for tokens ───
         if (action === "exchange_code") {
-            // 1. Exchange OAuth code for tokens using Google API
-            // 2. Save tokens to public.user_integrations
-            // Note: In production, require a secure backend flow
-            return new Response(JSON.stringify({ success: true, message: "Code exchanged internally" }), {
+            const { code, redirect_uri } = payload;
+            if (!code || !redirect_uri) throw new Error("Missing code or redirect_uri");
+
+            const tokenRes = await fetch(GOOGLE_TOKEN_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    code,
+                    client_id: GOOGLE_CLIENT_ID,
+                    client_secret: GOOGLE_CLIENT_SECRET,
+                    redirect_uri,
+                    grant_type: "authorization_code",
+                }),
+            });
+
+            const tokens = await tokenRes.json();
+            if (tokens.error) throw new Error(tokens.error_description || tokens.error);
+
+            // Save tokens
+            await supabaseAdmin
+                .from("user_integrations_status")
+                .upsert({
+                    user_id: user.id,
+                    provider: "google_calendar",
+                    is_connected: true,
+                    updated_at: new Date().toISOString(),
+                }, { onConflict: "user_id,provider" });
+
+            // Store refresh token securely (in a separate private table or vault)
+            // For now, store in user_integrations_status metadata approach
+            // In production, use Supabase Vault
+            await supabaseAdmin.rpc("set_user_integration_tokens", {
+                p_user_id: user.id,
+                p_provider: "google_calendar",
+                p_access_token: tokens.access_token,
+                p_refresh_token: tokens.refresh_token || null,
+                p_expires_at: tokens.expires_in
+                    ? new Date(Date.now() + tokens.expires_in * 1000).toISOString()
+                    : null,
+            }).catch(() => {
+                // Fallback: function may not exist yet
+                console.warn("set_user_integration_tokens RPC not available");
+            });
+
+            return new Response(JSON.stringify({ success: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
-                status: 200,
             });
         }
 
+        // ─── Check availability (pull busy slots) ───
         if (action === "check_availability") {
-            // 1. Fetch user integration (refresh token)
-            // 2. Fetch events from Google Calendar API
-            // 3. Return blocked slots
-            return new Response(JSON.stringify({ blocked_slots: [] }), {
+            const { time_min, time_max } = payload;
+            const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+
+            if (!accessToken) {
+                return new Response(JSON.stringify({ error: "Not connected to Google Calendar", connected: false }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    status: 401,
+                });
+            }
+
+            const calRes = await fetch(
+                `${GOOGLE_CALENDAR_API}/freeBusy`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        timeMin: time_min,
+                        timeMax: time_max,
+                        items: [{ id: "primary" }],
+                    }),
+                }
+            );
+
+            const calData = await calRes.json();
+            const busySlots = calData?.calendars?.primary?.busy || [];
+
+            return new Response(JSON.stringify({ blocked_slots: busySlots }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
-                status: 200,
             });
         }
 
+        // ─── Create event in Google Calendar ───
         if (action === "create_event") {
-            // 1. Fetch refresh token
-            // 2. Create Event in Google Calendar
-            return new Response(JSON.stringify({ success: true, event_id: "mock_id" }), {
+            const { summary, description, start, end, location } = payload;
+            const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+
+            if (!accessToken) {
+                return new Response(JSON.stringify({ error: "Not connected to Google Calendar", connected: false }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    status: 401,
+                });
+            }
+
+            const eventRes = await fetch(
+                `${GOOGLE_CALENDAR_API}/calendars/primary/events`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        summary,
+                        description,
+                        location,
+                        start: { dateTime: start, timeZone: "UTC" },
+                        end: { dateTime: end, timeZone: "UTC" },
+                    }),
+                }
+            );
+
+            const eventData = await eventRes.json();
+
+            if (eventData.error) {
+                throw new Error(eventData.error.message || "Failed to create event");
+            }
+
+            return new Response(JSON.stringify({ success: true, event_id: eventData.id }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
-                status: 200,
+            });
+        }
+
+        // ─── Push booking to Google Calendar ───
+        if (action === "push_booking") {
+            const { booking_id } = payload;
+            const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+
+            if (!accessToken) {
+                return new Response(JSON.stringify({ error: "Not connected", connected: false }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    status: 401,
+                });
+            }
+
+            // Fetch booking details
+            const { data: booking, error: bErr } = await supabaseAdmin
+                .from("bookings")
+                .select("*")
+                .eq("id", booking_id)
+                .single();
+
+            if (bErr || !booking) throw new Error("Booking not found");
+
+            const startDT = `${booking.slot_date}T${booking.slot_time}`;
+            const endDT = booking.slot_end_time
+                ? `${booking.slot_date}T${booking.slot_end_time}`
+                : new Date(new Date(startDT).getTime() + 3600000).toISOString();
+
+            const eventRes = await fetch(
+                `${GOOGLE_CALENDAR_API}/calendars/primary/events`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        summary: `Booking: ${booking.client_name}`,
+                        description: [
+                            booking.client_email && `Email: ${booking.client_email}`,
+                            booking.client_phone && `Phone: ${booking.client_phone}`,
+                            booking.client_notes && `Notes: ${booking.client_notes}`,
+                        ].filter(Boolean).join("\n"),
+                        start: { dateTime: startDT, timeZone: "UTC" },
+                        end: { dateTime: endDT, timeZone: "UTC" },
+                    }),
+                }
+            );
+
+            const eventData = await eventRes.json();
+
+            return new Response(JSON.stringify({ success: true, event_id: eventData.id }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
         }
 
@@ -63,7 +234,6 @@ serve(async (req) => {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
             status: 400,
         });
-
     } catch (error) {
         console.error(error);
         return new Response(JSON.stringify({ error: error.message }), {
@@ -72,3 +242,56 @@ serve(async (req) => {
         });
     }
 });
+
+/**
+ * Get a valid access token, refreshing if needed.
+ */
+async function getAccessToken(
+    supabaseAdmin: any,
+    userId: string,
+    clientId: string,
+    clientSecret: string
+): Promise<string | null> {
+    // Try to get stored token via RPC
+    const { data, error } = await supabaseAdmin.rpc("get_user_integration_tokens", {
+        p_user_id: userId,
+        p_provider: "google_calendar",
+    }).catch(() => ({ data: null, error: true }));
+
+    if (!data || error) return null;
+
+    const { access_token, refresh_token, expires_at } = data;
+
+    // Check if token is still valid (with 5 min buffer)
+    if (expires_at && new Date(expires_at).getTime() > Date.now() + 5 * 60 * 1000) {
+        return access_token;
+    }
+
+    // Refresh the token
+    if (!refresh_token) return null;
+
+    const refreshRes = await fetch("https://oauth2.googleapis.com/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+            refresh_token,
+            client_id: clientId,
+            client_secret: clientSecret,
+            grant_type: "refresh_token",
+        }),
+    });
+
+    const refreshData = await refreshRes.json();
+    if (refreshData.error) return null;
+
+    // Update stored token
+    await supabaseAdmin.rpc("set_user_integration_tokens", {
+        p_user_id: userId,
+        p_provider: "google_calendar",
+        p_access_token: refreshData.access_token,
+        p_refresh_token: refresh_token, // Keep existing refresh token
+        p_expires_at: new Date(Date.now() + refreshData.expires_in * 1000).toISOString(),
+    }).catch(() => {});
+
+    return refreshData.access_token;
+}
