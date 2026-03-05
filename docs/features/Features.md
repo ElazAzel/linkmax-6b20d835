@@ -1,6 +1,7 @@
 # lnkmx Features
 
 ## Status legend
+
 - **Implemented**: shipped and usable in production.
 - **In progress**: partially shipped or under active development.
 - **Planned**: on roadmap, not shipped yet.
@@ -10,7 +11,7 @@
 ## Core Blocks (Free Tier)
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | Profile, text, buttons, links | Implemented | Basic identity and CTA blocks |
 | Images, separators, socials | Implemented | Visual structure and social links |
 | Lead form (basic) | Implemented | Collect inquiries into leads |
@@ -20,7 +21,7 @@
 ## Pro Blocks
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | Pricing block | Implemented | Service packages with locale-aware formatting |
 | Catalog block | Implemented | Product listings with cart |
 | Video and carousel blocks | Implemented | Rich media blocks |
@@ -34,7 +35,7 @@
 ## AI
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | AI page draft generation | Implemented | Drafts structure and copy via Gemini |
 | AI copy refinements | In progress | Short copy tweaks and rephrasing |
 | Auto-translation | Implemented | RU/EN/KK content variants |
@@ -43,7 +44,7 @@
 ## CRM & Leads
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | Lead capture | Implemented | Create lead records from forms (Turnstile CAPTCHA) |
 | Lead status tracking | Implemented | Pipeline stages and notes |
 | Telegram notifications | Implemented | Lead alerts via Telegram bot |
@@ -61,10 +62,22 @@
 | Cookie consent gating | Implemented | Analytics requires explicit consent |
 | Funnel analytics | Planned | Signup to publish to Pro |
 
+## Business Zones (Business OS)
+
+| Feature | Status | Notes |
+| :--- | :--- | :--- |
+| Kanban Pipeline | Implemented | Drag-and-drop deals management with custom stages |
+| Task Management | Implemented | Priority-based tasks with checklists and assignments |
+| Shared Contacts | Implemented | Consolidated contact database for the entire zone |
+| Invoice System | Implemented | Multi-item invoices with automated numbering and tracking |
+| Document Management (EDO) | Implemented | Template-based generation of Acts, Contracts, and Invoices |
+| Zone Automations | Implemented | Trigger-based workflows (e.g., stage change -> notification) |
+| Team Collaboration | Implemented | RBAC-based member management (Owner, Admin, Member) |
+
 ## Payments & Subscriptions
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | RoboKassa checkout | Implemented | Subscription purchase flow and webhook handling |
 | Subscription status sync | Implemented | Access control based on plan |
 | Local pricing in KZT | Implemented | Pricing display by locale |
@@ -73,9 +86,10 @@
 ## Collaboration & Growth
 
 | Feature | Status | Notes |
-|---|---|---|
+| :--- | :--- | :--- |
 | Gallery and templates | Implemented | Public examples and inspirations |
-| Teams and collaborations | In progress | Shared access to pages |
+| Teams and collaborations | Implemented | Shared access to pages and Business Zones |
+| Custom Domains | Implemented | Connect your-domain.com with auto-SSL |
 | Referral program | Planned | Incentivized sharing |
 | Expert directory | Implemented | Public expert profiles API |
 
@@ -108,4 +122,4 @@
 
 ---
 
-*Last updated: 2026-02-18*
+*Last updated: 2026-03-05*

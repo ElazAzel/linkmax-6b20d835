@@ -1,7 +1,7 @@
 # 📚 Индекс документации InkMax
 
-**Версия:** 2.3  
-**Дата обновления:** 28 февраля 2026  
+**Версия:** 2.4  
+**Дата обновления:** 5 марта 2026  
 **Статус:** Updated ✅
 
 Документы в `docs/` разнесены по смыслу по подпапкам (см. [Структура docs](#-структура-docs)).  
@@ -12,6 +12,7 @@
 ## 🚀 Начните отсюда
 
 ### Для всех
+
 1. **[DEVELOPER-QUICKSTART.md](getting-started/DEVELOPER-QUICKSTART.md)** — быстрый старт (15 мин)
    - Что такое InkMax
    - Stack технологий
@@ -23,12 +24,14 @@
    - Обзор проекта, Quick start, ключевые фичи, структура БД
 
 ### Для разработчиков
+
 3. **[COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — документация платформы (30 мин)
-4. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — UI-компоненты (30 мин)
+2. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — UI-компоненты (30 мин)
 
 ### Для архитекторов
+
 5. **[FULL_PLATFORM_AUDIT_2026_02_18.md](audits/FULL_PLATFORM_AUDIT_2026_02_18.md)** — полный аудит платформы (1 час)
-6. **[AUDIT_REPORT_2026_02_27.md](audits/AUDIT_REPORT_2026_02_27.md)** — итоговый отчёт (20 мин)
+2. **[AUDIT_REPORT_2026_02_27.md](audits/AUDIT_REPORT_2026_02_27.md)** — итоговый отчёт (20 мин)
 
 ---
 
@@ -55,6 +58,7 @@
 ## 📖 Полный каталог по папкам
 
 ### Корень docs/
+
 | Документ | Назначение |
 |----------|------------|
 | **README.md** | Точка входа в документацию, навигация по папкам |
@@ -62,11 +66,13 @@
 | **GLOSSARY.md** | Глоссарий терминов проекта и ссылка на переводы |
 
 ### getting-started/
+
 | Документ | Назначение |
 |----------|------------|
 | **DEVELOPER-QUICKSTART.md** | Быстрый старт для разработчиков |
 
 ### architecture/
+
 | Документ | Назначение |
 |----------|------------|
 | **README.md** | Обзор раздела и навигация по документам архитектуры |
@@ -81,6 +87,7 @@
 | **graphs/** | Диаграммы (dependency-graph и др.) |
 
 ### audits/
+
 | Документ | Назначение |
 |----------|------------|
 | **README.md** | Актуальные vs исторические аудиты, источник истины (PLATFORM_SNAPSHOT) |
@@ -89,11 +96,13 @@
 | **DEEP_SECURITY_AUDIT_2026_02_18.md** | Аудит безопасности |
 | **FULL_AUDIT_REPORT.md** | Сводный аудит |
 | **PLATFORM_SNAPSHOT.md** | Снимок состояния платформы |
+| **EDO_MODULE_AUDIT_2026_03_05.md** | Аудит модуля ЭДО (Business Zones) |
 | **RULES_AUDIT_2026_02_20.md**, **PRESENTATION_AUDIT.md** | Аудиты правил и презентаций |
 | **health-check-2026-02-14.md** | Health-check |
 | + прочие отчёты в папке **audits/** | |
 
 ### deployment/
+
 | Документ | Назначение |
 |----------|------------|
 | **DEPLOYMENT-CHECKLIST.md** | Чек-лист деплоя |
@@ -102,6 +111,7 @@
 | **runbooks/LOCAL_DEVELOPMENT.md** | Локальная разработка |
 
 ### seo/
+
 | Документ | Назначение |
 |----------|------------|
 | **README.md** | Обзор раздела SEO/SSR/AEO/GEO и навигация |
@@ -111,6 +121,7 @@
 | **INDEXING.md**, **PRERENDER.md**, **search-console.md**, **CHECKLIST.md** | Технические SEO-документы |
 
 ### security/
+
 | Документ | Назначение |
 |----------|------------|
 | **SECURITY.md** | Меры безопасности |
@@ -118,6 +129,7 @@
 | **RLS_VERIFICATION.sql** | Проверка RLS |
 
 ### features/
+
 | Документ | Назначение |
 |----------|------------|
 | **Features.md** | Список фич |
@@ -127,6 +139,7 @@
 | **dashboard-redesign.md** | Редизайн дашборда |
 
 ### implementation/
+
 | Документ | Назначение |
 |----------|------------|
 | **API.md** | API и Edge Functions |
@@ -137,6 +150,7 @@
 | **README.md** | Обзор раздела API, БД, i18n |
 
 ### product/
+
 | Документ | Назначение |
 |----------|------------|
 | **1_PRODUCT_VISION.md** | Видение продукта |
@@ -147,11 +161,13 @@
 | **COMPETITIVE_NOTES.md** | Конкуренты и рынок |
 
 ### testing/
+
 | Документ | Назначение |
 |----------|------------|
 | **TESTING.md** | Стратегия тестирования |
 
 ### operations/
+
 | Документ | Назначение |
 |----------|------------|
 | **6_OPERATIONAL_HANDBOOK.md** | Операционное руководство |
@@ -165,28 +181,33 @@
 ## 🎯 Документы по ролям
 
 ### Я новый в команде
+
 1. 👀 [README.md](../README.md) — узнать о проекте (5 мин)
 2. 🚀 [DEVELOPER-QUICKSTART.md](getting-started/DEVELOPER-QUICKSTART.md) — начать разработку (15 мин)
 3. 🧩 [COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md) — изучить платформу (1 час)
 
 ### Я разработчик
+
 1. 🏗️ [COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md) — архитектура (30 мин)
 2. 🧩 [UI-COMPONENTS.md](features/UI-COMPONENTS.md) — UI (30 мин)
 3. 🔒 [SECURITY.md](security/SECURITY.md) — безопасность (20 мин)
 4. 🔍 [aeo-geo-implementation.md](seo/aeo-geo-implementation.md) — SEO/AEO (15 мин)
 
 ### Я тестер
+
 1. 🧪 [TESTING.md](testing/TESTING.md) — стратегия (20 мин)
 2. 📋 [FULL_PLATFORM_AUDIT_2026_02_18.md](audits/FULL_PLATFORM_AUDIT_2026_02_18.md) — аудит (1 час)
 3. 🚀 [DEPLOYMENT-CHECKLIST.md](deployment/DEPLOYMENT-CHECKLIST.md) — чек-лист (10 мин)
 
 ### Я DevOps/архитектор
+
 1. 🏗️ [architecture.md](architecture/architecture.md) — архитектура (30 мин)
 2. 🚀 [6_OPERATIONAL_HANDBOOK.md](operations/6_OPERATIONAL_HANDBOOK.md) — операции (30 мин)
 3. 📊 [FULL_PLATFORM_AUDIT_2026_02_18.md](audits/FULL_PLATFORM_AUDIT_2026_02_18.md) — аудит (1 час)
 4. ⚡ [PERFORMANCE_GUIDE.md](architecture/PERFORMANCE_GUIDE.md) — производительность (15 мин)
 
 ### Я продакт-менеджер
+
 1. 📚 [1_PRODUCT_VISION.md](product/1_PRODUCT_VISION.md) — видение (30 мин)
 2. 📋 [5_PRODUCT_ROADMAP.md](product/5_PRODUCT_ROADMAP.md) — roadmap (20 мин)
 3. 🎯 [Features.md](features/Features.md) — фичи (15 мин)
@@ -196,20 +217,24 @@
 ## ⚡ Быстрые ссылки
 
 ### Core
+
 - 🏠 [Home](../README.md)
 - 🚀 [Quick Start](getting-started/DEVELOPER-QUICKSTART.md)
 - 📖 [Platform Docs](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)
 
 ### Features & UI
+
 - 🧩 [UI Components](features/UI-COMPONENTS.md)
 - 📊 [Performance](architecture/PERFORMANCE_GUIDE.md)
 - 🔐 [Security](security/SECURITY.md)
 
 ### Audit & Reports
+
 - 📋 [Platform Audit](audits/FULL_PLATFORM_AUDIT_2026_02_18.md)
 - 📊 [Latest Audit](audits/AUDIT_REPORT_2026_02_27.md)
 
 ### Operations
+
 - 🧪 [Testing](testing/TESTING.md)
 - 🔧 [Operational Handbook](operations/6_OPERATIONAL_HANDBOOK.md)
 - 🚀 [Deployment](deployment/DEPLOYMENT-CHECKLIST.md)

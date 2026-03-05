@@ -80,6 +80,7 @@ Additional: [Pitch Deck](product/PITCH_DECK.md), [Competitive Notes](product/COM
 - **[Audits Archive](audits/)**: Historical audits and remediation plans.
 - **[Full Platform Audit (2026-02-18)](audits/FULL_PLATFORM_AUDIT_2026_02_18.md)**
 - **[Audit Report (2026-02-27)](audits/AUDIT_REPORT_2026_02_27.md)**
+- **[EDO Module Audit (2026-03-05)](audits/EDO_MODULE_AUDIT_2026_03_05.md)**
 - **[Deep Security Audit](audits/DEEP_SECURITY_AUDIT_2026_02_18.md)**
 - **[Health Check (2026-02-14)](audits/health-check-2026-02-14.md)**
 

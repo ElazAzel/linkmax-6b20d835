@@ -101,6 +101,8 @@ PostgreSQL functions for atomic operations and secure logic.
 | `export_user_data` | `user_id` | **GDPR**: Returns all user data as JSONB |
 | `delete_user_account` | `user_id` | **GDPR**: Cascading delete across 15+ tables |
 | `warmup_edge_functions` | — | Pings critical edge functions (called by pg_cron) |
+| `is_zone_member` | `zone_id` | **Security Definer**: Checks if `auth.uid()` is an active member of the zone |
+| `is_zone_admin` | `zone_id` | **Security Definer**: Checks if `auth.uid()` has admin/owner permissions in the zone |
 
 ---
 
@@ -109,6 +111,7 @@ PostgreSQL functions for atomic operations and secure logic.
 Security enforced at the database level using Postgres RLS on **all tables**.
 
 ### Policy Categories
+
 - **`public`**: Can view published pages, user profiles, and blocks.
 - **`owner`**: Can view, edit, and delete own data (`auth.uid() = user_id`).
 - **`anon`**: Can insert leads, bookings, and analytics events.
@@ -124,6 +127,13 @@ Security enforced at the database level using Postgres RLS on **all tables**.
 | `leads` | ✅ | Owner read, Public insert (via edge function) |
 | `bookings` | ✅ | Owner + customer access only |
 | `analytics` | ✅ | Page owner read, Public insert |
+| `zones` | ✅ | Owner/Member read, Owner write |
+| `zone_members` | ✅ | Member read, Admin/Owner write |
+| `zone_deals` | ✅ | Zone member access via `is_zone_member` |
+| `zone_tasks` | ✅ | Zone member access via `is_zone_member` |
+| `zone_contacts` | ✅ | Zone member access via `is_zone_member` |
+| `zone_invoices` | ✅ | Zone member access via `is_zone_member` |
+| `zone_documents` | ✅ | Zone member access via `is_zone_member` |
 | `token_transactions` | ✅ | User/seller/buyer access |
 | `rate_limits` | ✅ | Edge function service-role access |
 
@@ -131,4 +141,4 @@ Security enforced at the database level using Postgres RLS on **all tables**.
 
 ---
 
-*Last updated: 2026-02-23*
+*Last updated: 2026-03-05*

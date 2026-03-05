@@ -38,12 +38,12 @@
 
 - **AI-Onboarding**: Использует Google Gemini для анализа ниши. Промпты жестко ограничены для исключения галлюцинаций.
 - **Auto-save**: Zustand-state синхронизируется с БД с дебаунсом. Используется Request Versioning для предотвращения перезаписи старыми данными.
-- **Multilingual**: 16 языков (RU, EN, KK — eager; DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR — lazy). Все строковые поля блоков поддерживают мультиязычность.
+- **Multilingual**: 4 синхронизированных языка (RU, EN, KK, UZ). Еще 12 языков (DE, UK, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR — lazy). Все строковые поля блоков поддерживают мультиязычность.
 
 ### 2.2 Mini-CRM и Business Zone
 
 - **Leads**: Система статусов `new -> contacted -> qualified -> won/lost`. Единый инбокс для лидов, бронирований и регистраций на события.
-- **Business Zone (Zones)**: Рабочие пространства с изоляцией по `zone_id`. **Kanban** сделок, **Tasks** (доска с приоритетами, сроками, ответственными), **Contacts**. RBAC через БД.
+- **Business Zone (Zones)**: Рабочие пространства с изоляцией по `zone_id`. **Kanban** сделок, **Tasks** (доска с приоритетами, сроками, ответственными, чеклистами), **Contacts**, **Invoices** (счета с автоматической нумерацией), **EDO** (генерация актов и договоров по шаблонам). RBAC через БД.
 - **Notifications**: Edge-функции отправляют PUSH в Telegram-бот при новом лиде/бронировании.
 
 ### 2.3 Advanced Analytics (Pixel Proxy)
@@ -88,6 +88,9 @@ erDiagram
     zones ||--o{ zone_deals : contains
     zones ||--o{ zone_tasks : contains
     zones ||--o{ zone_contacts : contains
+    zones ||--o{ zone_invoices : contains
+    zones ||--o{ zone_documents : contains
+    zone_document_templates ||--o{ zone_documents : defines
     user_profiles ||--o{ user_tokens : balance
     leads ||--o{ lead_interactions : history
 ```
@@ -159,10 +162,10 @@ erDiagram
 1. **Клонирование**: `git clone <url>`
 2. **Зависимости**: `npm install`
 3. **Окружение**: Скопировать `.env.example` в `.env`, задать Supabase URL и keys (и при необходимости `VITE_APP_DOMAIN`).
-4. **Запуск**: `npm run dev` — приложение на **http://localhost:8080**
+4. **Запуск**: `npm run dev` — приложение на **<http://localhost:8080>**
 5. **Тесты**: `npm run test`, `npm run e2e` (Playwright на порту 8080).
 
 ---
 
-*Документ обновлен: 28 февраля 2026 г.*  
+*Документ обновлен: 5 марта 2026 г.*  
 *Maintained by: Product & Engineering*
