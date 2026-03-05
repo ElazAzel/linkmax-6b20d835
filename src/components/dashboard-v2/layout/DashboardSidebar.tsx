@@ -279,8 +279,8 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2">
-                    {t(section.titleKey, section.defaultTitle)}
+                  <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+                    <span>{t(section.titleKey, section.defaultTitle)}</span>
                   </div>
                 </motion.div>
               )}
