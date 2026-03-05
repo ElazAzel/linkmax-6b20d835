@@ -87,7 +87,7 @@ const SECTIONS: SidebarSection[] = [
       { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
       { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь' },
-      { id: 'zone-events', icon: Calendar, labelKey: 'dashboard.sidebar.zoneEvents', defaultLabel: 'Ивенты' },
+      { id: 'zone-events', icon: CalendarDays, labelKey: 'dashboard.sidebar.zoneEvents', defaultLabel: 'Ивенты' },
       { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие' },
       { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи' },
       { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации' },
