@@ -7,9 +7,8 @@ import { ZoneDocument, ZoneDocumentTemplate } from '@/types/zones';
 /**
  * Hook for managing Zone Documents (EDO)
  */
-export function useZoneDocuments(dealId?: string, contactId?: string) {
-    const { currentZone, isReadOnly } = useZoneContext();
-    const zoneId = currentZone?.id;
+export function useZoneDocuments(zoneId: string | null, dealId?: string, contactId?: string) {
+    const { isReadOnly } = useZoneContext();
     const queryClient = useQueryClient();
 
     // 1. Fetch Documents

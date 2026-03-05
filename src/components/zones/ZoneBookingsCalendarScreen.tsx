@@ -94,9 +94,9 @@ export const ZoneBookingsCalendarScreen = memo(function ZoneBookingsCalendarScre
       map.get(key)!.push(b);
     }
     // Sort by time
-    for (const [, arr] of map) {
+    Array.from(map.values()).forEach(arr => {
       arr.sort((a, b) => a.slot_time.localeCompare(b.slot_time));
-    }
+    });
     return map;
   }, [bookings]);
 

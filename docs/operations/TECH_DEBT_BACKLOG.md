@@ -72,9 +72,7 @@
 
 ### 8. Frontend Hook Consistency (In-Progress)
 
-- **Проблема**: В ходе аудита ЭДО выявлена рассинхронизация аргументов в хуках `useZoneDeals` и `useZoneContacts`. Некоторые вызовы не передавали `zoneId`.
-- **Что сделать**:
-  - [x] Исправить вызовы в `ZoneDocumentCreator.tsx`.
+- [x] **Frontend Hook Consistency**: Some hooks in `src/hooks/zones/` (e.g. `useZoneDocuments`) were using `useZoneContext` instead of taking `zoneId` as an argument. Fixed and updated call sites.
   - [ ] Провести глобальный аудит использования хуков в папке `src/components/zones/` на предмет обязательной передачи `zoneId`.
 
 ## Metadata

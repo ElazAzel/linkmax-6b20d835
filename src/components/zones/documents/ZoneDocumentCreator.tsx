@@ -21,9 +21,9 @@ export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, default
     const { currentZone } = useZoneContext();
     const zoneId = currentZone?.id;
 
-    const { templates, createDocument, isCreating } = useZoneDocuments();
-    const { deals } = useZoneDeals(zoneId || null);
-    const { contacts } = useZoneContacts(zoneId || null);
+    const { templates, createDocument, isCreating } = useZoneDocuments(zoneId);
+    const { deals } = useZoneDeals(zoneId);
+    const { contacts } = useZoneContacts(zoneId);
 
     const [title, setTitle] = useState('');
     const [templateId, setTemplateId] = useState<string>('');

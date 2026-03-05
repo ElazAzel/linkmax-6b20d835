@@ -8,9 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ZoneDocument } from '@/types/zones';
 import { ZoneDocumentCreator } from './ZoneDocumentCreator';
+import { useZoneContext } from '@/contexts/ZoneContext';
 
 export const ZoneDocumentsScreen = () => {
-    const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments();
+    const { currentZone } = useZoneContext();
+    const zoneId = currentZone?.id || null;
+    const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId);
     const [isCreatorOpen, setIsCreatorOpen] = useState(false);
 
     const getStatusColor = (status: string) => {

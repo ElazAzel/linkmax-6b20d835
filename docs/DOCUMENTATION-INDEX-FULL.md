@@ -25,12 +25,12 @@
 
 ### Для разработчиков
 
-3. **[COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — документация платформы (30 мин)
+1. **[COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — документация платформы (30 мин)
 2. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — UI-компоненты (30 мин)
 
 ### Для архитекторов
 
-5. **[FULL_PLATFORM_AUDIT_2026_02_18.md](audits/FULL_PLATFORM_AUDIT_2026_02_18.md)** — полный аудит платформы (1 час)
+1. **[FULL_PLATFORM_AUDIT_2026_02_18.md](audits/FULL_PLATFORM_AUDIT_2026_02_18.md)** — полный аудит платформы (1 час)
 2. **[AUDIT_REPORT_2026_02_27.md](audits/AUDIT_REPORT_2026_02_27.md)** — итоговый отчёт (20 мин)
 
 ---
@@ -157,6 +157,7 @@
 | **3_MARKETING_STRATEGY.md** | Маркетинговая стратегия |
 | **4_INVESTMENT_MEMO.md** | Инвестиционный меморандум |
 | **5_PRODUCT_ROADMAP.md** | Дорожная карта |
+| **STRATEGIC_PLAN_2026.md** | Стратегический план развития (стабилизация, мобильность) |
 | **PITCH_DECK.md** | Питч-дек |
 | **COMPETITIVE_NOTES.md** | Конкуренты и рынок |
 

@@ -45,6 +45,7 @@ Documents are organized by topic in subfolders.
 4. [**Investment Memo**](product/4_INVESTMENT_MEMO.md) — the "Business Case"
 5. [**Product Roadmap**](product/5_PRODUCT_ROADMAP.md) — the "Timeline"
 6. [**Operational Handbook**](operations/6_OPERATIONAL_HANDBOOK.md) — the "Runbook"
+7. [**Strategic Plan 2026**](product/STRATEGIC_PLAN_2026.md) — the "Future"
 
 Additional: [Pitch Deck](product/PITCH_DECK.md), [Competitive Notes](product/COMPETITIVE_NOTES.md).
 
