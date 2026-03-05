@@ -69,7 +69,11 @@ export default function Auth() {
   // Get referral code and mode from URL
   const refCode = searchParams.get('ref');
   const urlMode = searchParams.get('mode');
-  const returnTo = searchParams.get('returnTo');
+
+  // Persistence for deep-linking
+  const hashParams = new URL(window.location.href).hash.substring(1);
+  const hashSearchParams = new URLSearchParams(hashParams);
+  const returnTo = searchParams.get('returnTo') || hashSearchParams.get('returnTo');
   const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
 
   // Check for auth errors returned from OAuth redirect

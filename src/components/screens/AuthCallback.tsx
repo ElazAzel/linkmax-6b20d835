@@ -39,7 +39,8 @@ export default function AuthCallback() {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === "SIGNED_IN") {
                 const returnTo = hashParams.get('returnTo') || searchParams.get('returnTo');
-                navigate(returnTo || "/dashboard/settings", { replace: true });
+                const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
+                navigate(safeReturnTo || "/dashboard", { replace: true });
             }
         });
 
@@ -48,7 +49,8 @@ export default function AuthCallback() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 const returnTo = searchParams.get('returnTo') || hashParams.get('returnTo');
-                navigate(returnTo || "/dashboard/settings", { replace: true });
+                const safeReturnTo = returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//') ? returnTo : undefined;
+                navigate(safeReturnTo || "/dashboard", { replace: true });
             } else {
                 if (!window.location.hash) {
                     navigate("/auth", { replace: true });

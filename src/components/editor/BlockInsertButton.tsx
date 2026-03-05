@@ -112,12 +112,12 @@ const ALL_BLOCKS: BlockConfig[] = [
   { type: 'form', label: 'blockTypes.form', Icon: FormInput, color: 'bg-purple-500', tier: 'pro' },
   { type: 'newsletter', label: 'blockTypes.newsletter', Icon: Mail, color: 'bg-sky-500', tier: 'pro' },
   { type: 'booking', label: 'blockTypes.booking', Icon: Calendar, color: 'bg-fuchsia-500', tier: 'pro' },
-  { type: 'event', label: 'blockTypes.event', Icon: CalendarDays, color: 'bg-emerald-600', tier: 'free' },
+  { type: 'event', label: 'blockTypes.event', Icon: CalendarDays, color: 'bg-emerald-600', tier: 'pro' },
 
   // Interactive (now pro tier)
   { type: 'testimonial', label: 'blockTypes.testimonial', Icon: Star, color: 'bg-yellow-500', tier: 'pro' },
   { type: 'scratch', label: 'blockTypes.scratch', Icon: Gift, color: 'bg-red-400', tier: 'pro' },
-  { type: 'faq', label: 'blockTypes.faq', Icon: HelpCircle, color: 'bg-blue-400', tier: 'pro' },
+  { type: 'faq', label: 'blockTypes.faq', Icon: HelpCircle, color: 'bg-blue-400', tier: 'free' },
   { type: 'countdown', label: 'blockTypes.countdown', Icon: Clock, color: 'bg-orange-400', tier: 'pro' },
 
   // Other
@@ -127,6 +127,7 @@ const ALL_BLOCKS: BlockConfig[] = [
 
   // Social - Community
   { type: 'community', label: 'blockTypes.community', Icon: () => <span className="text-xl">👥</span>, color: 'bg-indigo-400', tier: 'pro' },
+  { type: 'search', label: 'blockTypes.search', Icon: Search, color: 'bg-slate-400', tier: 'pro' },
 ];
 
 export const BlockInsertButton = memo(function BlockInsertButton({

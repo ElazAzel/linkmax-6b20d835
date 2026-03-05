@@ -3,12 +3,12 @@ import { storage } from '@/lib/storage';
 
 // Block tiers based on pricing plans (Free + Pro only)
 export const FREE_BLOCKS = [
-  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar'
+  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'faq'
 ] as const;
 
 export const PRO_BLOCKS = [
   'video', 'carousel', 'pricing', 'product', 'catalog', 'custom_code',
-  'before_after', 'faq', 'testimonial', 'newsletter', 'scratch', 'search', 'shoutout', 'event'
+  'before_after', 'testimonial', 'newsletter', 'scratch', 'search', 'shoutout', 'event'
 ] as const;
 
 // Business blocks merged into Pro

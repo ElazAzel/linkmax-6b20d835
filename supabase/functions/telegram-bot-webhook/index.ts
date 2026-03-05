@@ -11,6 +11,12 @@ const messages = {
   ru: {
     welcome: "🌐 Добро пожаловать в lnkmx.my!\n\nВыберите язык:",
     language_changed: "✅ Язык изменён на русский",
+    stats: (subs: number, users: number) => `📊 <b>Статистика:</b>\n\n🤖 Подписчиков: ${subs}\n👤 Пользователей: ${users}`,
+    publish_on: "🚀 Ваша страница опубликована!",
+    publish_off: "📴 Страница снята с публикации",
+    admin_only: "⛔️ Доступ только для админов",
+    not_linked: "⚠️ Аккаунт не привязан. Используйте /start",
+    no_page: "❌ Страница не найдена",
     greeting: (name: string, chatId: number) =>
       `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в lnkmx.my и вставьте его в поле регистрации.`,
     help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID`,
@@ -27,6 +33,12 @@ const messages = {
   en: {
     welcome: "🌐 Welcome to lnkmx.my!\n\nChoose your language:",
     language_changed: "✅ Language changed to English",
+    stats: (subs: number, users: number) => `📊 <b>Stats:</b>\n\n🤖 Subscribers: ${subs}\n👤 Users: ${users}`,
+    publish_on: "🚀 Your page is now published!",
+    publish_off: "📴 Page unpublished",
+    admin_only: "⛔️ Admin only",
+    not_linked: "⚠️ Account not linked. Use /start",
+    no_page: "❌ Page not found",
     greeting: (name: string, chatId: number) =>
       `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to lnkmx.my and paste it into the registration field.`,
     help: `📚 <b>Commands:</b>\n\n/start - Get started\n/help - Help\n/language - Change language\n/id - Show Chat ID`,
@@ -43,6 +55,12 @@ const messages = {
   kk: {
     welcome: "🌐 lnkmx.my-қа қош келдіңіз!\n\nТілді таңдаңыз:",
     language_changed: "✅ Тіл қазақшаға өзгертілді",
+    stats: (subs: number, users: number) => `📊 <b>Статистика:</b>\n\n🤖 Жазылушылар: ${subs}\n👤 Пайдаланушылар: ${users}`,
+    publish_on: "🚀 Бет жарияланды!",
+    publish_off: "📴 Бет жарияланымнан алынды",
+    admin_only: "⛔️ Тек админдер үшін",
+    not_linked: "⚠️ Тіркелмегенсіз. /start командасын қолданыңыз",
+    no_page: "❌ Бет табылмады",
     greeting: (name: string, chatId: number) =>
       `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін lnkmx.my-қа оралып, тіркеу өрісіне қойыңыз.`,
     help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету`,
@@ -59,9 +77,6 @@ const messages = {
 };
 
 type Language = 'ru' | 'en' | 'kk';
-
-// Store language preferences in memory for unlinked users
-const tempLanguageStore: Record<string, Language> = {};
 
 interface TelegramUpdate {
   update_id: number;
@@ -102,18 +117,24 @@ interface TelegramUpdate {
 async function getUserLanguage(supabase: any, chatId: string): Promise<Language> {
   try {
     const { data, error } = await supabase
+      .from('telegram_bot_settings')
+      .select('language')
+      .eq('chat_id', chatId)
+      .maybeSingle();
+
+    if (!error && data?.language) {
+      return data.language as Language;
+    }
+
+    // Fallback to user_profiles if linked
+    const { data: profileData } = await supabase
       .from('user_profiles')
       .select('telegram_language')
       .eq('telegram_chat_id', chatId)
       .maybeSingle();
 
-    if (!error && data?.telegram_language) {
-      return data.telegram_language as Language;
-    }
-
-    // Check temp store for unlinked users
-    if (tempLanguageStore[chatId]) {
-      return tempLanguageStore[chatId];
+    if (profileData?.telegram_language) {
+      return profileData.telegram_language as Language;
     }
 
     return 'ru';
@@ -125,7 +146,13 @@ async function getUserLanguage(supabase: any, chatId: string): Promise<Language>
 
 async function setUserLanguage(supabase: any, chatId: string, language: Language): Promise<void> {
   try {
-    // First try to update in database
+    // Upsert into telegram_bot_settings
+    await supabase.rpc('upsert_telegram_bot_settings', {
+      p_chat_id: chatId,
+      p_language: language
+    });
+
+    // Also update profile if linked
     const { data: existingUser } = await supabase
       .from('user_profiles')
       .select('id')
@@ -138,9 +165,6 @@ async function setUserLanguage(supabase: any, chatId: string, language: Language
         .update({ telegram_language: language })
         .eq('telegram_chat_id', chatId);
     }
-
-    // Always store in temp (in case user links later)
-    tempLanguageStore[chatId] = language;
     console.log(`Language set to ${language} for chat ${chatId}`);
   } catch (e) {
     console.error('Error setting language:', e);
@@ -396,6 +420,42 @@ serve(async (req: Request) => {
             [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
           ]
         };
+      } else if (text === '/stats') {
+        // Check if admin
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        const { data: isAdmin } = profile ? await supabase.rpc('has_role', { _user_id: profile.id, _role: 'admin' }) : { data: false };
+
+        if (isAdmin) {
+          const { count: subsCount } = await supabase.from('telegram_bot_settings').select('*', { count: 'exact', head: true });
+          const { count: usersCount } = await supabase.from('user_profiles').select('*', { count: 'exact', head: true });
+          responseText = m.stats(subsCount || 0, usersCount || 0);
+        } else {
+          responseText = m.admin_only;
+        }
+      } else if (text === '/publish') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (profile) {
+          const { data: page } = await supabase.from('pages').select('id, is_published').eq('user_id', profile.id).maybeSingle();
+          if (page) {
+            const newStatus = !page.is_published;
+            await supabase.from('pages').update({ is_published: newStatus }).eq('id', page.id);
+            responseText = newStatus ? m.publish_on : m.publish_off;
+          } else {
+            responseText = m.no_page;
+          }
+        } else {
+          responseText = m.not_linked;
+        }
       } else {
         // Any other message - just show the ID
         responseText = m.chat_id(chatId);
