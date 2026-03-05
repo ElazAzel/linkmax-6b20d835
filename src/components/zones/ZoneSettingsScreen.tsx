@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +27,7 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { toast } from 'sonner';
 import type { Zone, ZoneMember, ZoneInvite, ZoneMemberRole } from '@/types/zones';
 import { ZONE_PLANS, getPlanByCode, getMemberLimitFromPlan } from '@/types/zones';
+import { ZonePlanSelector } from './ZonePlanSelector';
 
 interface ZoneSettingsScreenProps {
   zone: Zone;
@@ -303,38 +304,50 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
         {/* Billing Tab */}
         <TabsContent value="billing" className="space-y-4 mt-4">
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">{t('zones.settings.currentPlan', 'Current Plan')}</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <div>
+                <CardTitle className="text-lg">{t('zones.settings.currentPlan', 'Current Plan')}</CardTitle>
+                <CardDescription>{t('zones.settings.planDesc', 'Manage your membership tier and usage limits.')}</CardDescription>
+              </div>
+              <Badge variant={zone.plan_status === 'active' ? 'default' : 'destructive'} className="h-6">
+                {zone.plan_status.toUpperCase()}
+              </Badge>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t('zones.settings.plan', 'Plan')}</span>
-                <span className="font-medium">{zone.plan_code}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t('zones.settings.cycle', 'Cycle')}</span>
-                <span className="font-medium">{zone.plan_cycle === 'monthly' ? t('zones.settings.monthly', 'Monthly') : t('zones.settings.yearly', 'Yearly')}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t('zones.settings.status', 'Status')}</span>
-                <Badge variant={zone.plan_status === 'active' ? 'default' : 'destructive'}>
-                  {zone.plan_status}
-                </Badge>
-              </div>
-              {zone.current_period_end && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('zones.settings.renewsAt', 'Renews at')}</span>
-                  <span className="text-sm">{new Date(zone.current_period_end).toLocaleDateString()}</span>
+            <CardContent className="space-y-4 pt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">{t('zones.settings.plan', 'Plan')}</span>
+                  <p className="font-semibold text-lg">{zone.plan_code.replace('business_', 'Business ')}</p>
                 </div>
-              )}
-              {plan && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('zones.settings.price', 'Price')}</span>
-                  <span className="font-bold text-primary">
-                    {zone.plan_cycle === 'monthly' ? plan.monthlyPrice.toLocaleString() : plan.yearlyPrice.toLocaleString()} KZT
-                  </span>
+                <div className="space-y-1 text-right">
+                  <span className="text-xs text-muted-foreground uppercase font-bold tracking-wider">{t('zones.settings.cycle', 'Billing Cycle')}</span>
+                  <p className="font-medium capitalize">{zone.plan_cycle}</p>
                 </div>
-              )}
+              </div>
+
+              <div className="h-px bg-white/5" />
+
+              <div className="flex justify-between items-center bg-primary/5 p-4 rounded-lg border border-primary/10">
+                <div>
+                  <p className="text-sm font-medium">{t('zones.settings.renewsAt', 'Next Renewal')}</p>
+                  <p className="text-2xl font-bold tracking-tight">
+                    {zone.current_period_end ? new Date(zone.current_period_end).toLocaleDateString() : 'N/A'}
+                  </p>
+                </div>
+                {plan && (
+                  <div className="text-right">
+                    <p className="text-sm font-medium text-muted-foreground">{t('zones.settings.price', 'Subscription Cost')}</p>
+                    <p className="text-xl font-bold text-primary">
+                      {zone.plan_cycle === 'monthly' ? plan.monthlyPrice.toLocaleString() : plan.yearlyPrice.toLocaleString()} KZT
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <p className="text-sm font-medium mb-3">{t('zones.settings.managePlan', 'Upgrade or Change Plan')}</p>
+                <ZonePlanSelector zone={zone} onRefetch={onRefetch} />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

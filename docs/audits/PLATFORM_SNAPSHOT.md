@@ -397,10 +397,11 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 | `analytics` | Event tracking | Public insert, owner read |
 | `user_tokens` | Linkkon balance | Owner only |
 | `page_snapshots` | Version history | Owner only |
-| `languages` | Translations | Admin management, public read |
+| `languages`         | Translations                       | Admin management, public read |
+| `templates`         | Project page templates (JSON blocks) | slug (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
 | `i18n_translations` | JSONB store for DB-driven translations | Admin only |
-| `widget_templates` | Reusable widget HTML/CSS/JS snippets | Admin only (seed) |
-| `orders` | Payment transaction records | User read-only, service update |
+| `widget_templates`  | Reusable block/widget templates      | id (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
+| `orders`            | Payment transactions tracking        | id (PK), user_id, amount, currency, status, provider, description, metadata |
 | `custom_domains` | Mapping of domains to pages | Owner + Admins |
 | `zone_document_templates` | Templates for document generation | Zone Member access |
 | `zone_documents` | Generated documents with status | Zone Member access |

@@ -21,6 +21,7 @@ serve(async (req: Request) => {
         const shp_type = formData.get("shp_type") as string;
         const shp_plan = formData.get("shp_plan") as string;
         const shp_period = formData.get("shp_period") as string;
+        const shp_zone = formData.get("shp_zone") as string;
         const shp_related_id = formData.get("shp_related_id") as string;
 
         if (!outSum || !invId || !signatureValue || !shp_user) {
@@ -34,15 +35,18 @@ serve(async (req: Request) => {
         }
 
         // Signature: outSum:invId:pass2:shp_... sorted alphabetically
-        const shpParams = {
+        const shpParams: Record<string, string> = {
             shp_plan,
             shp_period,
-            shp_related_id,
             shp_type,
             shp_user
         };
 
+        if (shp_zone) shpParams.shp_zone = shp_zone;
+        if (shp_related_id) shpParams.shp_related_id = shp_related_id;
+
         const shpSorted = Object.entries(shpParams)
+            .filter(([_, v]) => v !== null && v !== undefined)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([key, value]) => `${key}=${value}`);
 
@@ -68,6 +72,12 @@ serve(async (req: Request) => {
         const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
         const supabase = createClient(supabaseUrl, supabaseKey);
 
+        // Update Order status
+        await supabase
+            .from('orders')
+            .update({ status: 'completed' })
+            .eq('id', invId);
+
         if (shp_type === 'subscription' || !shp_type) {
             const months = parseInt(shp_period || "0", 10);
             const endDate = new Date();
@@ -83,6 +93,26 @@ serve(async (req: Request) => {
 
             if (updateError) {
                 console.error("Failed to update user profile", updateError);
+                return new Response("DB ERROR", { status: 500 });
+            }
+        } else if (shp_type === 'zone_upgrade' && shp_zone) {
+            const months = parseInt(shp_period || "1", 10);
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + months);
+
+            const { error: zoneError } = await supabase
+                .from('zones')
+                .update({
+                    plan_code: shp_plan,
+                    plan_cycle: months === 12 ? 'yearly' : 'monthly',
+                    plan_status: 'active',
+                    current_period_start: new Date().toISOString(),
+                    current_period_end: endDate.toISOString()
+                } as any)
+                .eq('id', shp_zone);
+
+            if (zoneError) {
+                console.error("Failed to upgrade zone", zoneError);
                 return new Response("DB ERROR", { status: 500 });
             }
         } else if (shp_type === 'payment') {

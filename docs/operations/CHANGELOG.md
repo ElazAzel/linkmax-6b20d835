@@ -161,6 +161,7 @@
 * **Automated Key Extraction**: Identified and extracted **1448 missing keys** directly from JSX/TSX files using custom AST-aware scripts (`extract-context.mjs`).
 * **Context-Aware Translation**: Translated all 1400+ keys into Russian, filling gaps in Analytics, Admin, Editor, and Landing components.
 * **English Default Recovery**: Automatically populated `en.json` with original English strings extracted from the code, restoring the intended non-translated text for English users.
+
 * **Kazakh & Uzbek Baseline**: Performed foundational translations for Kazakh and Uzbek for core landing and dashboard sections.
 * **Interpolation Protection**: Developed `fix-placeholders.mjs` to systematically fix `{{placeholder}}` mismatches across all locale files, ensuring app stability and preventing runtime crashes in non-Russian languages.
 * **i18n Maintenance Toolkit**: Added permanent scripts in `/scripts` for future automated context extraction, key merging, and structural synchronization.

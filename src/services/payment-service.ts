@@ -26,58 +26,28 @@ export interface PaymentSession {
 export class PaymentService {
     /**
      * Creates a new payment order and returns a session URL for the user to complete payment.
+     * Invokes the secure 'create-payment-session' Edge Function.
      */
     static async createOrder(params: {
         zoneId: string;
-        amount: number;
-        currency?: string;
-        provider: PaymentProvider;
+        planCode: string;
+        cycle: 'monthly' | 'yearly';
         description: string;
         metadata?: Record<string, any>;
     }): Promise<PaymentSession> {
-        const { zoneId, amount, currency = 'KZT', provider, description, metadata } = params;
+        const { data, error } = await supabase.functions.invoke('create-payment-session', {
+            body: params
+        });
 
-        // 1. Log order to database
-        const { data: order, error } = await supabase
-            .from('orders') // Assuming an 'orders' table exists or will be created
-            .insert({
-                zone_id: zoneId,
-                amount,
-                currency,
-                provider,
-                description,
-                status: 'pending',
-                metadata
-            })
-            .select()
-            .single();
-
-        if (error) {
-            console.error('Failed to create order:', error);
-            throw new Error('Payment initialization failed');
-        }
-
-        // 2. Generate provider-specific session
-        let paymentUrl = '';
-
-        switch (provider) {
-            case 'kaspi':
-                paymentUrl = await this.generateKaspiUrl(order.id, amount);
-                break;
-            case 'robokassa':
-                paymentUrl = await this.generateRobokassaUrl(order.id, amount, description);
-                break;
-            case 'stripe':
-                paymentUrl = await this.generateStripeUrl(order.id, amount);
-                break;
-            default:
-                throw new Error(`Unsupported provider: ${provider}`);
+        if (error || !data.success) {
+            console.error('Failed to create payment session:', error || data?.error);
+            throw new Error(data?.error || 'Payment initialization failed');
         }
 
         return {
-            orderId: order.id,
-            paymentUrl,
-            provider
+            orderId: data.orderId,
+            paymentUrl: data.paymentUrl,
+            provider: 'robokassa' // Currently primary provider
         };
     }
 
@@ -93,22 +63,5 @@ export class PaymentService {
 
         if (error) return 'pending';
         return data.status as PaymentOrder['status'];
-    }
-
-    // Private helpers for URL generation (Mock implementations for skeleton)
-
-    private static async generateKaspiUrl(orderId: string, amount: number): Promise<string> {
-        // In production, this would call a Kaspi API or generate a signed link
-        // For now, return a mock redirect
-        return `https://kaspi.kz/pay/inkmax?order=${orderId}&amount=${amount}`;
-    }
-
-    private static async generateRobokassaUrl(orderId: string, amount: number, description: string): Promise<string> {
-        // Robokassa requires signature calculation
-        return `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=inkmax&OutSum=${amount}&InvId=${orderId}&Desc=${encodeURIComponent(description)}`;
-    }
-
-    private static async generateStripeUrl(orderId: string, amount: number): Promise<string> {
-        return `https://checkout.stripe.com/pay/${orderId}`;
     }
 }
