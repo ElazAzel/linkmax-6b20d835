@@ -721,6 +721,108 @@ export type Database = {
           },
         ]
       }
+      experiment_variants: {
+        Row: {
+          block_data: Json
+          clicks: number
+          conversions: number
+          created_at: string
+          experiment_id: string
+          id: string
+          impressions: number
+          variant_key: string
+        }
+        Insert: {
+          block_data?: Json
+          clicks?: number
+          conversions?: number
+          created_at?: string
+          experiment_id: string
+          id?: string
+          impressions?: number
+          variant_key?: string
+        }
+        Update: {
+          block_data?: Json
+          clicks?: number
+          conversions?: number
+          created_at?: string
+          experiment_id?: string
+          id?: string
+          impressions?: number
+          variant_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiment_variants_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experiments: {
+        Row: {
+          block_id: string
+          created_at: string
+          ended_at: string | null
+          id: string
+          name: string
+          page_id: string
+          started_at: string
+          status: string
+          traffic_split: number
+          winning_variant_id: string | null
+        }
+        Insert: {
+          block_id: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          name?: string
+          page_id: string
+          started_at?: string
+          status?: string
+          traffic_split?: number
+          winning_variant_id?: string | null
+        }
+        Update: {
+          block_id?: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          name?: string
+          page_id?: string
+          started_at?: string
+          status?: string
+          traffic_split?: number
+          winning_variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiments_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       friend_activities: {
         Row: {
           activity_type: string
@@ -2153,6 +2255,51 @@ export type Database = {
           },
         ]
       }
+      zone_contact_notes: {
+        Row: {
+          contact_id: string
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          type: string
+          zone_id: string
+        }
+        Insert: {
+          contact_id: string
+          content: string
+          created_at?: string
+          created_by: string
+          id?: string
+          type?: string
+          zone_id: string
+        }
+        Update: {
+          contact_id?: string
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          type?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_contact_notes_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "zone_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_contact_notes_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_contacts: {
         Row: {
           created_at: string
@@ -2681,6 +2828,53 @@ export type Database = {
           },
         ]
       }
+      zone_notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          is_read: boolean
+          title: string
+          type: string
+          user_id: string
+          zone_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          is_read?: boolean
+          title: string
+          type?: string
+          user_id: string
+          zone_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          is_read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_notifications_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_subscriptions: {
         Row: {
           created_at: string
@@ -3050,10 +3244,19 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_block_clicks: {
-        Args: { block_uuid: string }
-        Returns: undefined
-      }
+      increment_block_clicks:
+        | {
+            Args: { block_uuid: string }
+            Returns: {
+              error: true
+            } & "Could not choose the best candidate function between: public.increment_block_clicks(block_uuid => text), public.increment_block_clicks(block_uuid => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
+          }
+        | {
+            Args: { block_uuid: string }
+            Returns: {
+              error: true
+            } & "Could not choose the best candidate function between: public.increment_block_clicks(block_uuid => text), public.increment_block_clicks(block_uuid => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
+          }
       increment_challenge_progress: {
         Args: { p_challenge_key: string }
         Returns: undefined

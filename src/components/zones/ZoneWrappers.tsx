@@ -13,6 +13,7 @@ const ZoneAutomationsScreen = lazy(() => import('./ZoneAutomationsScreen').then(
 const ZoneInvoicesScreen = lazy(() => import('./ZoneInvoicesScreen').then(m => ({ default: m.ZoneInvoicesScreen })));
 const ZoneBookingsCalendarScreen = lazy(() => import('./ZoneBookingsCalendarScreen').then(m => ({ default: m.ZoneBookingsCalendarScreen })));
 const ZoneEventsScreen = lazy(() => import('./ZoneEventsScreen').then(m => ({ default: m.ZoneEventsScreen })));
+const ZoneProductsScreen = lazy(() => import('./ZoneProductsScreen').then(m => ({ default: m.ZoneProductsScreen })));
 
 function NoZone() {
     const { t } = useTranslation();
@@ -78,4 +79,10 @@ export function ZoneEventsScreenWrapper() {
     const { currentZoneId } = useZoneContext();
     if (!currentZoneId) return <NoZone />;
     return <ZoneEventsScreen zoneId={currentZoneId} />;
+}
+
+export function ZoneProductsScreenWrapper() {
+    const { currentZoneId } = useZoneContext();
+    if (!currentZoneId) return <NoZone />;
+    return <ZoneProductsScreen zoneId={currentZoneId} />;
 }
