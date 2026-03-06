@@ -71,7 +71,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const { dealProducts, addProduct, removeProduct } = useZoneDealProducts(deal?.zone_id || null, deal?.id || null);
   const { products } = useZoneProducts(deal?.zone_id || null);
   const { tasks } = useZoneTasks(deal?.zone_id || null);
-  const { documents } = useZoneDocuments(deal?.zone_id || null, deal?.id);
+  const { documents } = useZoneDocuments(deal?.zone_id || null, { dealId: deal?.id });
 
   const linkedTasks = useMemo(() => tasks.filter(t => t.deal_id === deal?.id), [tasks, deal?.id]);
   const linkedDocs = useMemo(() => documents?.filter(d => d.deal_id === deal?.id) || [], [documents, deal?.id]);

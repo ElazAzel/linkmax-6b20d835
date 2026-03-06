@@ -70,10 +70,13 @@
   - [x] Интегрировать Roadmap CRM из `.lovable/plan.md` в Snapshot.
   - [x] Обновить всю документацию по модулям Business Zones (Invoices, EDO).
 
-### 8. Frontend Hook Consistency (In-Progress)
+### 8. Frontend Hook Consistency
 
-- [x] **Frontend Hook Consistency**: Some hooks in `src/hooks/zones/` (e.g. `useZoneDocuments`) were using `useZoneContext` instead of taking `zoneId` as an argument. Fixed and updated call sites.
-  - [ ] Провести глобальный аудит использования хуков в папке `src/components/zones/` на предмет обязательной передачи `zoneId`.
+- **Статус**: ✅ **Исправлено** (Audit 06.03.2026).
+- **Что сделано**:
+  - [x] Проведен глобальный аудит `src/hooks/zones/`.
+  - [x] Рефакторинг `useZoneDocuments.ts` для удаления зависимости от `useZoneContext`.
+  - [x] Обновлены все места вызова в компонентах.
 
 ## Metadata
 

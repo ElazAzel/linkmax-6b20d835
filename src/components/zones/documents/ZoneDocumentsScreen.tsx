@@ -11,9 +11,9 @@ import { ZoneDocumentCreator } from './ZoneDocumentCreator';
 import { useZoneContext } from '@/contexts/ZoneContext';
 
 export const ZoneDocumentsScreen = () => {
-    const { currentZone } = useZoneContext();
+    const { currentZone, isReadOnly } = useZoneContext();
     const zoneId = currentZone?.id || null;
-    const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId);
+    const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId, { isReadOnly });
     const [isCreatorOpen, setIsCreatorOpen] = useState(false);
 
     const getStatusColor = (status: string) => {

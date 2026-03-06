@@ -18,10 +18,10 @@ interface ZoneDocumentCreatorProps {
 }
 
 export const ZoneDocumentCreator = ({ open, onOpenChange, defaultDealId, defaultContactId }: ZoneDocumentCreatorProps) => {
-    const { currentZone } = useZoneContext();
-    const zoneId = currentZone?.id;
+    const { currentZone, isReadOnly } = useZoneContext();
+    const zoneId = currentZone?.id || null;
 
-    const { templates, createDocument, isCreating } = useZoneDocuments(zoneId);
+    const { templates, createDocument, isCreating } = useZoneDocuments(zoneId, { isReadOnly });
     const { deals } = useZoneDeals(zoneId);
     const { contacts } = useZoneContacts(zoneId);
 

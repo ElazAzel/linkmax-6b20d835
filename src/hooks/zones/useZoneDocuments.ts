@@ -1,14 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import { useZoneContext } from '@/contexts/ZoneContext';
 import { toast } from 'sonner';
 import { ZoneDocument, ZoneDocumentTemplate } from '@/types/zones';
 
 /**
  * Hook for managing Zone Documents (EDO)
  */
-export function useZoneDocuments(zoneId: string | null, dealId?: string, contactId?: string) {
-    const { isReadOnly } = useZoneContext();
+export function useZoneDocuments(
+    zoneId: string | null,
+    options: {
+        dealId?: string;
+        contactId?: string;
+        isReadOnly?: boolean;
+    } = {}
+) {
+    const { dealId, contactId, isReadOnly = false } = options;
     const queryClient = useQueryClient();
 
     // 1. Fetch Documents
