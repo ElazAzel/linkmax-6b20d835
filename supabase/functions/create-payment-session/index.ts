@@ -1,12 +1,7 @@
-/// <reference lib="deno.ns" />
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { crypto } from "https://deno.land/std@0.168.0/crypto/mod.ts";
-
-const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { serve } from "http/server";
+import { createClient } from "supabase";
+import { crypto } from "crypto";
+import { corsHeaders, createErrorResponse, createSuccessResponse, getSupabaseUser } from "../_shared/utils.ts";
 
 // Simplified ZONE_PLANS for server-side validation
 const ZONE_PLANS = [
@@ -30,14 +25,10 @@ serve(async (req) => {
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         // 1. Get user from Auth header
-        const authHeader = req.headers.get('Authorization')!;
-        const tempClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
-            global: { headers: { Authorization: authHeader } }
-        });
-        const { data: { user }, error: authError } = await tempClient.auth.getUser();
+        const { user, error: authError } = await getSupabaseUser(req);
 
         if (authError || !user) {
-            return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+            return createErrorResponse("Unauthorized", 401);
         }
 
         // 2. Parse request

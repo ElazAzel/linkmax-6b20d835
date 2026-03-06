@@ -798,6 +798,7 @@ Based on codebase analysis, these are logical next improvements:
 9. **Business Zones Phase 2 (CRM Enhancements)**: Advanced contact cards, task checklists, multi-item invoices, and complex automations. (Completed 2026-03-03)
 | 10. **Business Zones Phase 3 (EDO & Document Management)**: Integration of act/contract/invoice generation directly from deals, template management, and document status tracking. (Completed 2026-03-05)
 | 11. **Technical Debt (Phase 2): Template Externalization**: Moved 150KB+ of hardcoded templates to DB. (Completed 2026-03-05)
+| 12. **Phase 6: Regional Expansion & Technical Hardening**: Standardized Edge Functions with import maps, implemented manual CRM automations (Auto-Invoice), established Kaspi Pay service bridge, and added E2E CRM workflow verification. (Completed 2026-03-06)
 | 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
 | 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
 10. **API access** — Public API for integrations (Zapier, Make, custom apps)

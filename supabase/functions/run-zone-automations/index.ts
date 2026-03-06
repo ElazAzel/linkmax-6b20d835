@@ -1,12 +1,6 @@
-/// <reference lib="deno.ns" />
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { serve } from "http/server";
+import { createClient } from "supabase";
+import { corsHeaders, createErrorResponse } from "../_shared/utils.ts";
 
 interface ZoneAutomation {
   id: string;
@@ -37,10 +31,7 @@ serve(async (req: Request) => {
     };
 
     if (!zone_id || !trigger_type) {
-      return new Response(
-        JSON.stringify({ error: "zone_id and trigger_type are required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return createErrorResponse("zone_id and trigger_type are required", 400);
     }
 
     const { data: automations, error: autoError } = await supabase
@@ -91,7 +82,7 @@ serve(async (req: Request) => {
         const { error: taskErr } = await supabase.from("zone_tasks").insert({
           zone_id,
           title: taskTitle,
-          description: null,
+          description: `Automatically created from automation ${auto.id}`,
           status: "todo",
           priority: "medium",
           assigned_to: assignedTo || createdBy,
@@ -120,6 +111,25 @@ serve(async (req: Request) => {
           assigned_to: zone?.owner_user_id ?? null,
         });
         if (!dealErr) runCount++;
+      } else if (auto.action_type === "create_invoice" && deal_id) {
+        const { data: deal } = await supabase
+          .from("zone_deals")
+          .select("title, value_amount, contact_id, currency")
+          .eq("id", deal_id)
+          .single();
+
+        if (deal) {
+          const { error: invErr } = await supabase.from("zone_invoices").insert({
+            zone_id,
+            deal_id,
+            contact_id: deal.contact_id,
+            amount: deal.value_amount,
+            currency: deal.currency || "KZT",
+            status: 'created',
+            title: `Invoice: ${deal.title}`
+          } as any);
+          if (!invErr) runCount++;
+        }
       } else if (auto.action_type === "notify_owner") {
         runCount++;
       }
@@ -131,9 +141,6 @@ serve(async (req: Request) => {
     );
   } catch (err: unknown) {
     console.error("run-zone-automations error:", err);
-    return new Response(
-      JSON.stringify({ error: (err as Error).message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return createErrorResponse(err as Error, 500);
   }
 });
