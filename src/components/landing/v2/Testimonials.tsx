@@ -3,6 +3,7 @@ import Star from 'lucide-react/dist/esm/icons/star';
 import { useTranslation } from "react-i18next";
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils/utils";
+import { SectionWrapper } from '@/components/shared/SectionWrapper';
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -52,13 +53,13 @@ export const Testimonials = () => {
     ];
 
     return (
-        <section className="py-20 relative overflow-hidden z-10 bg-background">
+        <SectionWrapper className="overflow-hidden z-10 bg-background">
             {/* Subtle background glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
 
             <div className="container px-4 mx-auto relative">
                 <Reveal>
-                    <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">
+                    <h2 className="text-section-title text-center mb-4">
                         {t('landing.testimonials.title', 'Loved by')}{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.testimonials.count', '2,000+')}</span>{' '}
                         {t('landing.testimonials.suffix', 'Creators')}
@@ -66,7 +67,7 @@ export const Testimonials = () => {
                 </Reveal>
                 <Reveal delay={100}>
                     <p className="text-center text-muted-foreground mb-12 max-w-lg mx-auto">
-                        {t('landing.testimonials.subtitle', 'Experts, coaches, and small businesses trust lnkmx to grow.')}
+                        {t('landing.testimonials.subtitle', 'Experts, coaches, and small businesses trust LinkMAX to grow.')}
                     </p>
                 </Reveal>
 
@@ -96,6 +97,6 @@ export const Testimonials = () => {
                     ))}
                 </div>
             </div>
-        </section>
+        </SectionWrapper>
     );
 };

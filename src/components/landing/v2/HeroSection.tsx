@@ -112,7 +112,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
 
                 {/* Headline */}
-                <h1 className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-[1.1] md:leading-[1.1]">
+                <h1 className="max-w-4xl text-display mb-6">
                     <span className="block text-foreground">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
                     <span className="block mt-2 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-primary/60 animate-[gradient-shift_4s_ease_infinite] bg-[length:200%_auto]">
                         {t('landing.v4.hero.titleEnd', 'in one place')}
@@ -149,19 +149,19 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col items-center gap-1 group">
                             <Layers className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-lg md:text-xl font-bold text-foreground"><AnimatedCount target={28} suffix="+" /></span>
+                            <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={28} suffix="+" /></span>
                             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust1', 'Smart Blocks')}</span>
                         </div>
                         <div className="w-px h-10 bg-border/20" />
                         <div className="flex flex-col items-center gap-1 group">
                             <Users className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-lg md:text-xl font-bold text-foreground"><AnimatedCount target={2000} suffix="+" /></span>
+                            <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2000} suffix="+" /></span>
                             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust2', 'Creators')}</span>
                         </div>
                         <div className="w-px h-10 bg-border/20" />
                         <div className="flex flex-col items-center gap-1 group">
                             <Globe className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-lg md:text-xl font-bold text-foreground"><AnimatedCount target={40} suffix="+" /></span>
+                            <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={40} suffix="+" /></span>
                             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust3', 'Languages')}</span>
                         </div>
                     </div>

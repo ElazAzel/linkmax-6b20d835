@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { MagneticButton } from "./MagneticButton";
+import { SectionWrapper } from '@/components/shared/SectionWrapper';
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -63,14 +64,14 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
     ];
 
     return (
-        <section className="py-24 relative overflow-hidden z-10 bg-background">
+        <SectionWrapper id="pricing" className="overflow-hidden z-10 bg-background">
             <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/8 blur-[100px] pointer-events-none" />
 
-            <div className="container px-4 mx-auto relative z-10">
+            <div className="relative z-10">
                 <div className="text-center max-w-2xl mx-auto mb-16">
                     <Reveal>
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                        <h2 className="text-section-title mb-6">
                             {t('landing.pricing.title', 'Simple Pricing,')}{' '}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70">{t('landing.pricing.titleHighlight', 'Exponential Growth')}</span>
                         </h2>
@@ -111,7 +112,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                         {t('landing.pricing.proName', 'Pro')} <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t('landing.pricing.aiPowered', 'AI Powered')}</span>
                                     </h3>
                                     <div className="flex items-baseline gap-1">
-                                        <span className="text-4xl font-black">
+                                        <span className="text-4xl font-black tabular-nums">
                                             {isYearly ? prices.pro.yearly : prices.pro.monthly}
                                         </span>
                                         <span className="text-muted-foreground">/ {t('landing.pricing.perMonth', 'month')}</span>
@@ -150,7 +151,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                         {t('landing.pricing.businessName', 'Business')} <span className="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full">{t('landing.pricing.teamLabel', 'Team')}</span>
                                     </h3>
                                     <div className="flex items-baseline gap-1">
-                                        <span className="text-4xl font-black">
+                                        <span className="text-4xl font-black tabular-nums">
                                             {isYearly ? prices.business.yearly : prices.business.monthly}
                                         </span>
                                         <span className="text-muted-foreground">/ {t('landing.pricing.perMonth', 'month')}</span>
@@ -190,6 +191,6 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                     </div>
                 </Reveal>
             </div>
-        </section>
+        </SectionWrapper>
     );
 };

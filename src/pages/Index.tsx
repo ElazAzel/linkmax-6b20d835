@@ -111,11 +111,9 @@ export default function Index() {
           <LogoTicker />
         </Suspense>
 
-        <div id="features">
-          <Suspense fallback={<div className="h-96" />}>
-            <BentoGridSection />
-          </Suspense>
-        </div>
+        <Suspense fallback={<div className="h-96" />}>
+          <BentoGridSection />
+        </Suspense>
 
         <div id="demo" className="relative z-0">
           <Suspense fallback={<div className="h-96" />}>
@@ -128,11 +126,9 @@ export default function Index() {
             <Testimonials />
           </Suspense>
 
-          <div id="pricing">
-            <Suspense fallback={<div className="h-96" />}>
-              <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
-            </Suspense>
-          </div>
+          <Suspense fallback={<div className="h-96" />}>
+            <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
+          </Suspense>
 
           {/* Footer */}
           <Suspense fallback={<div className="h-40" />}>

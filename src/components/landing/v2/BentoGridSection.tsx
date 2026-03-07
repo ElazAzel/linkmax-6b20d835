@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils/utils";
 import { useTranslation } from "react-i18next";
 import { BentoGrid, BentoGridItem } from "./BentoGrid";
+import { SectionWrapper } from '@/components/shared/SectionWrapper';
+import { SectionHeading } from '@/components/shared/SectionHeading';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import BarChart3 from 'lucide-react/dist/esm/icons/bar-chart-3';
 import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
@@ -232,20 +234,17 @@ export function BentoGridSection() {
   ];
 
   return (
-    <div className="py-20 relative px-4">
+    <SectionWrapper id="features">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto mb-10 text-center">
-        <Reveal>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">{t('landing.bento.sectionTitle', 'Everything you need to grow')}</h2>
-        </Reveal>
-        <Reveal delay={100}>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t('landing.bento.sectionDesc', 'Website builder + CRM + analytics. One platform instead of ten tools.')}
-          </p>
-        </Reveal>
-      </div>
+      <Reveal>
+        <SectionHeading
+          title={t('landing.bento.sectionTitle', 'Everything you need to grow')}
+          subtitle={t('landing.bento.sectionDesc', 'Website builder + CRM + analytics. One platform instead of ten tools.')}
+        />
+      </Reveal>
+
       <BentoGrid className="max-w-5xl mx-auto">
         {items.map((item, i) => (
           <Reveal key={i} delay={i * 80}>
@@ -259,6 +258,6 @@ export function BentoGridSection() {
           </Reveal>
         ))}
       </BentoGrid>
-    </div>
+    </SectionWrapper>
   );
 }

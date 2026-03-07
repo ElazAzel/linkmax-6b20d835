@@ -133,7 +133,7 @@ export const HomeScreen = memo(function HomeScreen({
               onClick={onOpenEditor}
               className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-primary/5 hover:translate-y-[-2px] border-white/20"
             >
-              <div className="text-2xl font-black text-gradient">{blockCount}</div>
+              <div className="text-2xl font-black text-gradient tabular-nums">{blockCount}</div>
               <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 {t('dashboard.home.blocks', 'блоков')}
               </div>
@@ -142,7 +142,7 @@ export const HomeScreen = memo(function HomeScreen({
               onClick={onOpenInsights}
               className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-emerald-500/5 hover:translate-y-[-2px] border-white/20"
             >
-              <div className="text-2xl font-black text-gradient-blue">{viewCount}</div>
+              <div className="text-2xl font-black text-gradient-blue tabular-nums">{viewCount}</div>
               <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 {t('dashboard.home.views', 'просмотров')}
               </div>
@@ -151,7 +151,7 @@ export const HomeScreen = memo(function HomeScreen({
               onClick={onOpenActivity}
               className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-violet-500/5 hover:translate-y-[-2px] border-white/20"
             >
-              <div className="text-2xl font-black text-gradient-purple">{weeklyStats.leads}</div>
+              <div className="text-2xl font-black text-gradient-purple tabular-nums">{weeklyStats.leads}</div>
               <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                 {t('dashboard.home.leads', 'заявок')}
               </div>
@@ -295,10 +295,10 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </Card>
 
-        {/* Phase B: Why lnkmx — value props */}
+        {/* Phase B: Why LinkMAX — value props */}
         <Card className="p-5 border-border/40 bg-card/50">
           <h4 className="font-bold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-            {t('phaseB.whyLnkmx.title', 'Почему lnkmx')}
+            {t('phaseB.whyLnkmx.title', 'Почему LinkMAX')}
           </h4>
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2">
