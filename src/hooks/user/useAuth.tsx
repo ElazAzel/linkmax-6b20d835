@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/platform/supabase/client';
-import { lovable } from '@/integrations/lovable/index';
 import { storage } from '@/lib/storage';
 import { logger } from '@/lib/utils/logger';
 
@@ -125,8 +124,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ? `${window.location.origin}/auth?returnTo=${encodeURIComponent(_returnTo)}`
       : window.location.origin;
 
-    const { error } = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: redirectUrl,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+      }
     });
     return { error: error || null };
   };
@@ -136,8 +138,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ? `${window.location.origin}/auth?returnTo=${encodeURIComponent(_returnTo)}`
       : window.location.origin;
 
-    const { error } = await lovable.auth.signInWithOAuth('apple', {
-      redirect_uri: redirectUrl,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        redirectTo: redirectUrl,
+      }
     });
     return { error: error || null };
   };

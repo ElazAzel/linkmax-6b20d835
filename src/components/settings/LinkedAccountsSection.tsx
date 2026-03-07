@@ -14,7 +14,6 @@ import Unlink from 'lucide-react/dist/esm/icons/unlink';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import CalendarSync from 'lucide-react/dist/esm/icons/calendar-sync';
 import { supabase } from '@/platform/supabase/client';
-import { lovable } from '@/integrations/lovable/index';
 
 
 import { cn } from '@/lib/utils/utils';
@@ -109,17 +108,6 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
 
       if (error) {
         console.error('Link identity error:', error);
-        // If linkIdentity is disabled, fall back to signInWithOAuth (works for Google via email matching)
-        if (error.message?.includes('Manual linking is disabled') || error.status === 422) {
-          const { error: oauthError } = await lovable.auth.signInWithOAuth(provider, {
-            redirect_uri: window.location.origin,
-          });
-          if (oauthError) {
-            toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
-            setLinkingProvider(null);
-          }
-          return;
-        }
         toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
         setLinkingProvider(null);
         return;
@@ -146,12 +134,22 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
       if (!user) return;
 
       const identity = user.identities?.find(i => i.provider === provider);
-      if (!identity) return;
+      if (!identity) {
+        toast.error(t('settings.linkedAccounts.identityNotFound', 'Identity not found or already unlinked'));
+        await loadLinkedAccounts();
+        setLinkingProvider(null);
+        return;
+      }
 
       const { error } = await supabase.auth.unlinkIdentity(identity);
 
       if (error) {
-        toast.error(error.message || t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
+        if (error.status === 404 || error.message?.includes('not found') || error.message?.includes('primary')) {
+          toast.error(t('settings.linkedAccounts.primaryIdentity', 'Аккаунт не найден или является основным (primary). Основной метод входа отвязать нельзя.'));
+          await loadLinkedAccounts();
+        } else {
+          toast.error(error.message || t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
+        }
       } else {
         toast.success(t('settings.linkedAccounts.unlinkSuccess', 'Account unlinked'));
         await loadLinkedAccounts();
