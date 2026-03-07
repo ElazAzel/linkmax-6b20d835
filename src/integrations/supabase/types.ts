@@ -2255,6 +2255,47 @@ export type Database = {
           },
         ]
       }
+      zone_contact_fields: {
+        Row: {
+          created_at: string
+          id: string
+          is_required: boolean
+          name: string
+          order_index: number
+          type: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_required?: boolean
+          name: string
+          order_index?: number
+          type?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_required?: boolean
+          name?: string
+          order_index?: number
+          type?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_contact_fields_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_contact_notes: {
         Row: {
           contact_id: string
@@ -2302,12 +2343,18 @@ export type Database = {
       }
       zone_contacts: {
         Row: {
+          address: string | null
+          company: string | null
           created_at: string
+          custom_fields: Json | null
           email: string | null
           id: string
           name: string
+          notes: string | null
           owner_user_id: string | null
           phone: string | null
+          position: string | null
+          source: string | null
           tags: string[] | null
           telegram_user_id: string | null
           telegram_username: string | null
@@ -2315,12 +2362,18 @@ export type Database = {
           zone_id: string
         }
         Insert: {
+          address?: string | null
+          company?: string | null
           created_at?: string
+          custom_fields?: Json | null
           email?: string | null
           id?: string
           name: string
+          notes?: string | null
           owner_user_id?: string | null
           phone?: string | null
+          position?: string | null
+          source?: string | null
           tags?: string[] | null
           telegram_user_id?: string | null
           telegram_username?: string | null
@@ -2328,12 +2381,18 @@ export type Database = {
           zone_id: string
         }
         Update: {
+          address?: string | null
+          company?: string | null
           created_at?: string
+          custom_fields?: Json | null
           email?: string | null
           id?: string
           name?: string
+          notes?: string | null
           owner_user_id?: string | null
           phone?: string | null
+          position?: string | null
+          source?: string | null
           tags?: string[] | null
           telegram_user_id?: string | null
           telegram_username?: string | null
@@ -2455,6 +2514,50 @@ export type Database = {
           },
         ]
       }
+      zone_deal_fields: {
+        Row: {
+          created_at: string
+          id: string
+          is_required: boolean
+          name: string
+          options: string[] | null
+          order_index: number
+          type: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_required?: boolean
+          name: string
+          options?: string[] | null
+          order_index?: number
+          type?: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_required?: boolean
+          name?: string
+          options?: string[] | null
+          order_index?: number
+          type?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_deal_fields_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_deal_stages: {
         Row: {
           color: string | null
@@ -2499,10 +2602,12 @@ export type Database = {
           contact_id: string | null
           created_at: string
           currency: string | null
+          custom_fields: Json | null
           id: string
           lost_reason: string | null
           next_step: string | null
           next_step_at: string | null
+          pipeline_id: string | null
           source: string | null
           stage_id: string | null
           status: string
@@ -2516,10 +2621,12 @@ export type Database = {
           contact_id?: string | null
           created_at?: string
           currency?: string | null
+          custom_fields?: Json | null
           id?: string
           lost_reason?: string | null
           next_step?: string | null
           next_step_at?: string | null
+          pipeline_id?: string | null
           source?: string | null
           stage_id?: string | null
           status?: string
@@ -2533,10 +2640,12 @@ export type Database = {
           contact_id?: string | null
           created_at?: string
           currency?: string | null
+          custom_fields?: Json | null
           id?: string
           lost_reason?: string | null
           next_step?: string | null
           next_step_at?: string | null
+          pipeline_id?: string | null
           source?: string | null
           stage_id?: string | null
           status?: string
@@ -2551,6 +2660,13 @@ export type Database = {
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "zone_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deals_pipeline_id_fkey"
+            columns: ["pipeline_id"]
+            isOneToOne: false
+            referencedRelation: "zone_pipelines"
             referencedColumns: ["id"]
           },
           {
@@ -2868,6 +2984,91 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "zone_notifications_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_pipelines: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          order_index: number
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          order_index?: number
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          order_index?: number
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_pipelines_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_products: {
+        Row: {
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          unit: string
+          unit_price: number
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          unit?: string
+          unit_price?: number
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          unit?: string
+          unit_price?: number
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_products_zone_id_fkey"
             columns: ["zone_id"]
             isOneToOne: false
             referencedRelation: "zones"
