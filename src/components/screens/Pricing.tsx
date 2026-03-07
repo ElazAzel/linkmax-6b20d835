@@ -56,8 +56,8 @@ export default function Pricing() {
   const { data: currentRate = 497.33 } = useCurrencyRate();
   const isKztPrimary = i18n.language === 'ru' || i18n.language === 'kk';
   const canonical = `${getAppDomain()}/pricing`;
-  const seoTitle = t('pricing.seo.title', 'lnkmx Pricing — Plans for Link in Bio & Mini-Sites');
-  const seoDescription = t('pricing.seo.description', 'Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.');
+  const seoTitle = t('pricing.seo.title', 'LinkMAX Pricing — Plans for Link in Bio & Mini-Sites');
+  const seoDescription = t('pricing.seo.description', 'Compare LinkMAX plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.');
 
   // Pricing: fixed KZT prices, USD derived from rate
   const pricingPlans = {
@@ -70,7 +70,7 @@ export default function Pricing() {
       totalKzt: { 3: 0, 6: 0, 12: 0 },
       totalUsd: { 3: 0, 6: 0, 12: 0 },
       features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
-      limitations: [t('pricing.limitations.watermark', 'Водяной знак lnkmx.my'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
+      limitations: [t('pricing.limitations.watermark', 'Водяной знак LinkMAX.my'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
     },
     pro: {
       name: 'PRO',
@@ -160,15 +160,15 @@ export default function Pricing() {
       pageTitle={seoTitle}
       pageDescription={seoDescription}
       imageUrl={`${getAppDomain()}/og-pricing.png`}
-      imageAlt={t('pricing.seo.imageAlt', 'lnkmx Pricing Plans')}
+      imageAlt={t('pricing.seo.imageAlt', 'LinkMAX Pricing Plans')}
       type="website"
     />
     <GEOTagging includeOrganization={false} />
     <AISearchOptimizer
       pageType="pricing"
-      primaryQuestion={t('pricing.seo.opt.question', 'How much does lnkmx cost?')}
-      primaryAnswer={t('pricing.seo.opt.answer', 'lnkmx offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.')}
-      entityName="lnkmx Pricing"
+      primaryQuestion={t('pricing.seo.opt.question', 'How much does LinkMAX cost?')}
+      primaryAnswer={t('pricing.seo.opt.answer', 'LinkMAX offers a free Basic plan and a Pro plan starting from 3,045 KZT (approximately $6 USD) for 12 months. Pro features include unlimited pages, custom domains, analytics, and priority support.')}
+      entityName="LinkMAX Pricing"
       entityCategory="SaaS Pricing, Subscription Plans, Link in Bio Pricing"
       useCases={[
         t('pricing.seo.opt.uses.1', 'Start free with Basic plan'),
@@ -182,7 +182,7 @@ export default function Pricing() {
         t('pricing.seo.opt.audience.3', 'Growing businesses needing more features'),
       ]}
       problemStatement={t('pricing.seo.opt.problem', 'Most link-in-bio and page builder tools are too expensive for micro-businesses and freelancers')}
-      solutionStatement={t('pricing.seo.opt.solution', 'lnkmx offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months')}
+      solutionStatement={t('pricing.seo.opt.solution', 'LinkMAX offers a free plan for basic needs and affordable Pro pricing starting at just $6 for 12 months')}
       keyFeatures={[
         t('pricing.seo.opt.features.1', 'Free Basic plan available'),
         t('pricing.seo.opt.features.2', 'Pro plan: 3,045 KZT/mo (Annual)'),
@@ -211,7 +211,7 @@ export default function Pricing() {
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div className="flex items-center gap-2">
-                  <img src="/favicon.png" alt="lnkmx" className="h-8 w-8 rounded-xl object-contain" />
+                  <img src="/favicon.png" alt="LinkMAX" className="h-8 w-8 rounded-xl object-contain" />
                   <h1 className="text-xl font-bold text-primary">
                     {t('pricing.title', 'Тарифы')}
                   </h1>
@@ -231,7 +231,7 @@ export default function Pricing() {
             {t('pricing.choosePlan', 'Выберите подходящий тариф')}
           </h2>
           <p data-testid="pricing-description" className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t('pricing.description', 'Разблокируйте все возможности lnkmx.my для вашего бизнеса')}
+            {t('pricing.description', 'Разблокируйте все возможности LinkMAX.my для вашего бизнеса')}
           </p>
         </div>
 
@@ -261,7 +261,7 @@ export default function Pricing() {
         {/* Why lnkmx — Phase B value block */}
         <Card className="max-w-2xl mx-auto mb-10 p-6 border-primary/20 bg-primary/5">
           <h3 className="font-bold text-lg mb-3 text-center">
-            {t('pricing.whyLnkmx.title', 'Почему lnkmx')}
+            {t('pricing.whyLnkmx.title', 'Почему LinkMAX')}
           </h3>
           <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-center">
             <li className="flex flex-col items-center gap-1">

@@ -40,7 +40,7 @@ const fireDeferOnce = () => {
 setTimeout(fireDeferOnce, 10000);
 
 // Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
-const CHUNK_RECOVERY_KEY = 'lnkmx_chunk_recovery_once';
+const CHUNK_RECOVERY_KEY = 'linkmax_chunk_recovery_once';
 
 function isChunkRuntimeError(err: unknown): boolean {
   const message = typeof err === 'string'
@@ -64,7 +64,7 @@ function recoverFromStaleAssets(): void {
     // Clear runtime caches that can hold stale assets
     try {
       Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith('linkmax_') || key.startsWith('lnkmx_') || key.startsWith('sb-')) {
+        if (key.startsWith('linkmax_') || key.startsWith('sb-')) {
           localStorage.removeItem(key);
         }
       });

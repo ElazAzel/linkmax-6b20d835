@@ -1,14 +1,14 @@
-# lnkmx — The Business OS for the Solo-Economy (Encyclopedia v2026.03)
+# LinkMAX — The Business OS for the Solo-Economy (Encyclopedia v2026.03)
 
-> **Strategic Vision:** lnkmx is the **"Anti-Bitrix/AmoCRM"** for solopreneurs. We are a comprehensive **Business Operating System** (Solo OS) that consolidates the fragmented tech stack into a single, mobile-first, AI-native platform with a **"Step-by-Growth"** monetization model.
+> **Strategic Vision:** LinkMAX is the **"Anti-Bitrix/AmoCRM"** for solopreneurs. We are a comprehensive **Business Operating System** (Solo OS) that consolidates the fragmented tech stack into a single, mobile-first, AI-native platform with a **"Step-by-Growth"** monetization model.
 
 ---
 
-## 1) What lnkmx is
+## 1) What LinkMAX is
 
 **Positioning:** The Micro-Business Operating System — Page Builder + Mini-CRM + Analytics + Fintech Foundation.
 
-lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
+LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Liquid Glass"** aesthetic (glassmorphism, premium micro-animations, and depth) to provide a high-end look by default.
 2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking.
@@ -22,7 +22,7 @@ lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**,
 
 - **Liquid Glass Aesthetic:** Premium design capital that allows users to charge more for their services.
 - **AI-Native Workflow:** Gemini-powered content and layout generation to solve "blank page syndrome".
-- **Data-Backed Retention:** High switching costs once customer data (leads/bookings) is stored in the lnkmx CRM.
+- **Data-Backed Retention:** High switching costs once customer data (leads/bookings) is stored in the LinkMAX CRM.
 - **Privacy-First Analytics:** Server-side proxying (FB CAPI, TikTok) for 2026's cookieless environment.
 
 ### Repository Security & Privacy
@@ -41,7 +41,7 @@ The codebase is hosted in a **Private** repository to protect intellectual prope
 - Legal entity: ИП BEEGIN
 - BIN: 971207300019
 - Address: г. Алматы, ул. Шолохова, д. 20/7
-- Email: <admin@lnkmx.my>
+- Email: <admin@LinkMAX.my>
 - Phone: +7 705 109 76 64
 
 ---
@@ -106,7 +106,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 **Multi-page management:**
 
 - Switch pages via sidebar dropdown
-- Each page has unique slug: `lnkmx.my/{slug}`
+- Each page has unique slug: `LinkMAX.my/{slug}`
 - Pro users can upgrade additional pages to "paid" status for premium features
 
 ---
@@ -238,7 +238,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 1. User clicks Publish button
 2. `pages.is_published` set to `true`
 3. Snapshot saved to `page_snapshots` (keeps last 5 versions)
-4. Page accessible at `lnkmx.my/{slug}`
+4. Page accessible at `LinkMAX.my/{slug}`
 
 ### Pixel Analytics Integration
 
@@ -353,7 +353,7 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 
 ### 8.1 Модель монетизации (Step-by-Growth)
 
-lnkmx использует гибридную модель, направленную на минимизацию барьеров для входа. Подробности в [2. Бизнес-модель и Фин-модель](../product/2_BUSINESS_FINANCIAL_MODEL.md).
+LinkMAX использует гибридную модель, направленную на минимизацию барьеров для входа. Подробности в [2. Бизнес-модель и Фин-модель](../product/2_BUSINESS_FINANCIAL_MODEL.md).
 
 | План | Цена (KZT/мес) | Описание |
 | :--- | :--- | :--- |
@@ -531,7 +531,7 @@ lnkmx использует гибридную модель, направленн
 ## 10) Repository Structure
 
 ```text
-lnkmx/
+LinkMAX/
 ├── docs/
 ├── cloudflare-worker/
 ├── public/

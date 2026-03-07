@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { AISearchOptimizer } from "@/components/seo/AISearchOptimizer";
+import { FAQSchema } from "@/components/seo/FAQSchema";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { getAppDomain } from "@/lib/utils/url-helpers";
 
@@ -357,6 +358,22 @@ const SeoLanding = () => {
                 ]}
             />
 
+            <FAQSchema
+                faqItems={lang === "ru" || lang === "be" || lang === "uk" ? [
+                    { question: "Что такое LinkMAX?", answer: "Это универсальная операционная система для микро-бизнеса, включающая AI-конструктор страниц, CRM и аналитику." },
+                    { question: "Сколько стоит LinkMAX?", answer: "Есть бесплатный тариф Identity. Платные тарифы начинаются от небольшого процента с продаж или фиксированной подписки." },
+                    { question: "Поддерживает ли LinkMAX прием платежей?", answer: "Да, интегрированы популярные платежные системы, такие как RoboKassa и Kaspi." }
+                ] : lang === "kk" ? [
+                    { question: "LinkMAX дегеніміз не?", answer: "Бұл микро-бизнеске арналған әмбебап операциялық жүйе, оған AI парақша конструкторы, CRM және аналитика кіреді." },
+                    { question: "LinkMAX қанша тұрады?", answer: "Тегін Identity тарифі бар. Ақылы тарифтер сатылымнан аз пайыз немесе тіркелген жазылымнан басталады." },
+                    { question: "LinkMAX төлемдерді қабылдауды қолдай ма?", answer: "Иә, RoboKassa және Kaspi сияғы танымал төлем жүйелері интеграцияланған." }
+                ] : [
+                    { question: "What is LinkMAX?", answer: "It is a universal Operating System for micro-businesses, including an AI page builder, CRM, and analytics." },
+                    { question: "How much does LinkMAX cost?", answer: "There is a free Identity plan. Paid plans start from a small percentage of sales or a fixed subscription fee." },
+                    { question: "Does LinkMAX support payments?", answer: "Yes, popular payment systems like RoboKassa and Stripe are integrated." }
+                ]}
+            />
+
             <StructuredData id="seo-landing-jsonld" data={structuredData} />
 
             <header>
@@ -382,7 +399,7 @@ const SeoLanding = () => {
             <footer className="mt-12 pt-8 border-t border-gray-200 text-sm text-muted-foreground">
                 <p>&copy; {new Date().getFullYear()} LinkMAX. All rights reserved.</p>
                 <address className="not-italic mt-4">
-                    lnkmx.my HQ<br />
+                    LinkMAX HQ<br />
                     Almaty, Kazakhstan<br />
                     <a href="mailto:support@lnkmx.my" className="text-blue-600">support@lnkmx.my</a>
                 </address>

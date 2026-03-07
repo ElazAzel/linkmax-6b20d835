@@ -58,7 +58,7 @@
   },
   "legal": {
     "termsOfService": "Foydalanuvchi shartnomasi",
-    "termsDescription": "lnkmx platformasidan foydalanish shartlarini o'qing",
+    "termsDescription": "LinkMAX platformasidan foydalanish shartlarini o'qing",
     "agreeToTerms": "Men shartlarni qabul qilaman",
     "termsLink": "Foydalanuvchi shartnomasi",
     "privacyPolicy": "Maxfiylik siyosati",
@@ -797,7 +797,7 @@
         "titlePrefix": "Siz qilayotgan hamma narsa",
         "titleHighlight": "bitta havola.",
         "titleSuffix": "biznes uchun",
-        "titleBrand": "lnkmx.my",
+        "titleBrand": "LinkMAX.my",
         "description": "Kontent, mahsulotlar va xizmatlarni chiroyli sahifaga birlashtiring. Dizaynerlar va dasturchilarsiz. Buyurtmalarni oling va o'stiring.",
         "ctaPrimary": "Bepul sahifa yarating",
         "ctaSecondary": "Misollarni ko'rish",
@@ -809,7 +809,7 @@
         },
         "cardLead": {
           "title": "Yangi mijoz!",
-          "subtitle": "Faqat lnkmx.my orqali"
+          "subtitle": "Faqat LinkMAX.my orqali"
         }
       },
       "features": {
@@ -893,20 +893,20 @@
         "subtitle": "Platforma haqida bilishingiz kerak bo'lgan hamma narsa",
         "items": [
           {
-            "question": "lnkmx nima va u kimlar uchun?",
-            "answer": "lnkmx — mikrobiznes uchun operatsion tizim. Ekspertlar, frilanserlar va tez veb-sayt, so'rovlar uchun CRM va murakkab sozlamasiz oddiy tahlil kerak bo'lgan kichik biznes uchun idealdir."
+            "question": "LinkMAX nima va u kimlar uchun?",
+            "answer": "LinkMAX — mikrobiznes uchun operatsion tizim. Ekspertlar, frilanserlar va tez veb-sayt, so'rovlar uchun CRM va murakkab sozlamasiz oddiy tahlil kerak bo'lgan kichik biznes uchun idealdir."
           },
           {
             "question": "Dasturlashni bilishim kerakmi?",
-            "answer": "Yo'q, lnkmx — kodsiz platforma. Siz saytni tayyor bloklardan, Lego kabi yasaysiz. O'rnatilgan AI yordamchi matnlarni siz uchun yozishi mumkin."
+            "answer": "Yo'q, LinkMAX — kodsiz platforma. Siz saytni tayyor bloklardan, Lego kabi yasaysiz. O'rnatilgan AI yordamchi matnlarni siz uchun yozishi mumkin."
           },
           {
             "question": "To'lovlarni tengeda qabul qila olamanmi?",
             "answer": "Ha, platforma Qozog'iston bozoriga to'liq moslashtirilgan. Narxlarni KZT da ko'rsatishingiz mumkin, mahalliy to'lov tizimlari bilan integratsiyalar faol ishlab chiqilmoqda."
           },
           {
-            "question": "lnkmx dagi sayt Google reklamasi (SEO) da yordam beradimi?",
-            "answer": "Albatta. lnkmx dagi barcha sahifalar qidiruv tizimlari uchun avtomatik optimallashtirilgan: tez yuklanish, mobil qurilmalar uchun moslashuvchanlik va to'g'ri semantik belgilash (Schema.org), bu 2025 yil SEO uchun muhim."
+            "question": "LinkMAX dagi sayt Google reklamasi (SEO) da yordam beradimi?",
+            "answer": "Albatta. LinkMAX dagi barcha sahifalar qidiruv tizimlari uchun avtomatik optimallashtirilgan: tez yuklanish, mobil qurilmalar uchun moslashuvchanlik va to'g'ri semantik belgilash (Schema.org), bu 2025 yil SEO uchun muhim."
           },
           {
             "question": "Bepul reja bormi?",
@@ -918,7 +918,7 @@
         "badge": "Ishga tushirishga tayyormisiz?",
         "titlePrefix": "Mikro-saytingizni yarating",
         "titleSuffix": "bugun bepul.",
-        "description": "lnkmx bilan rivojlanayotgan minglab ijodkorlar, ekspertlar va kichik bizneslarga qoʻshiling. Kredit karta yo'q.",
+        "description": "LinkMAX bilan rivojlanayotgan minglab ijodkorlar, ekspertlar va kichik bizneslarga qoʻshiling. Kredit karta yo'q.",
         "primary": "Bepul boshlang",
         "secondary": "Misollarni ko'rish",
         "note": "Abadiy bepul reja • Istalgan vaqtda bekor qilish • 24/7 Yordam"
@@ -927,7 +927,7 @@
     "gallery": {
       "badge": "Misollar",
       "title": "Eng yaxshi sahifalar galereyasi",
-      "subtitle": "Boshqa mutaxassislar va brendlar lnkmx.my-dan qanday foydalanishini ko'ring",
+      "subtitle": "Boshqa mutaxassislar va brendlar LinkMAX.my-dan qanday foydalanishini ko'ring",
       "viewAll": "Galereyani ochish"
     },
     "partners": {
@@ -1035,7 +1035,7 @@
       },
       "proof": {
         "title": "Namuna sahifalar",
-        "subtitle": "Boshqalar lnkmx-dan qanday foydalanishini ko'ring"
+        "subtitle": "Boshqalar LinkMAX-dan qanday foydalanishini ko'ring"
       },
       "pricing": {
         "title": "Oddiy tariflar",
@@ -1069,12 +1069,12 @@
       "seo": {
         "howToName": "AI yordamida ochilish sahifasini qanday qurish mumkin",
         "howToDesc": "2 daqiqada professional sahifa yarating",
-        "question": "lnkmx nima?",
-        "answer": "lnkmx - yaratuvchilar uchun sun'iy intellekt asosidagi sahifa yaratuvchisi."
+        "question": "LinkMAX nima?",
+        "answer": "LinkMAX - yaratuvchilar uchun sun'iy intellekt asosidagi sahifa yaratuvchisi."
       }
     },
     "niches": {
-      "title": "lnkmx.my kimga mos keladi?",
+      "title": "LinkMAX.my kimga mos keladi?",
       "subtitle": "Biz har bir joy uchun maxsus shablonlarni yaratdik. AI auditoriyangizning og'riqli nuqtalarini biladi va sizning ehtiyojlaringizga moslashtirilgan sahifa yaratadi",
       "cta": "Mening uyim uchun sahifa yarating",
       "barber": {
@@ -1142,7 +1142,7 @@
       "title": "Link-in-Bio nima va u nima uchun kerak?",
       "subtitle": "Havolalar sahifasi - bu sizning barcha resurslaringizni birlashtirgan mini-sayt: ijtimoiy tarmoqlar, messenjerlar, portfel, mahsulot va xizmatlar.",
       "p1": "Link-in-Bio (biodagi havola, ko'p havola) - Instagram, TikTok, YouTube yoki Telegram profil tavsifida joylashtirgan sahifa. Bitta havola o'rniga siz tugmalar, kontaktlar va hatto mahsulot katalogiga ega to'liq huquqli mini-uchun sahifaga ega bo'lasiz.",
-      "p2": "lnkmx.my - bu AI tarkibini yaratishga ega Linktree va Taplink-ga zamonaviy alternativ. Siz joy tanlaysiz (sartarosh, fotograf, murabbiy, psixolog) va sun'iy intellekt 2 daqiqada tayyor sahifani yaratadi: profil, kerakli bloklar va matnlar.",
+      "p2": "LinkMAX.my - bu AI tarkibini yaratishga ega Linktree va Taplink-ga zamonaviy alternativ. Siz joy tanlaysiz (sartarosh, fotograf, murabbiy, psixolog) va sun'iy intellekt 2 daqiqada tayyor sahifani yaratadi: profil, kerakli bloklar va matnlar.",
       "p3": "Raqobatchilarimizdan farqli o'laroq, biz sizning savdolaringizdan komissiya olmaymiz. Tovar va xizmatlardan tushgan barcha pul sizniki. O'rnatilgan tahlil va CRM sizga qaysi havolalar yaxshiroq ishlashini tushunishga yordam beradi.",
       "benefit1": "Barcha havolalar bir joyda",
       "benefit2": "AI kontent yaratadi",
@@ -1184,7 +1184,7 @@
       "viewExamples": "Misollarni ko'rish"
     },
     "forWhom": {
-      "title": "lnkmx kimga mos keladi?",
+      "title": "LinkMAX kimga mos keladi?",
       "expert": {
         "title": "Mutaxassislar va murabbiylar",
         "desc": "Xizmatlar, holatlar, aniq taklif"
@@ -1208,7 +1208,7 @@
       "item2": "Odamlar bir xil savollarni berishadi va siz qo'lda javob berasiz va vaqtni behuda sarflaysiz",
       "item3": "Sahifa postga yo'l emas, balki havolalar menyusiga aylanadi",
       "item4": "Hech qanday tushuncha yo'q: odamlar aslida nimani bosadi va e'tibor qaerga yo'qoladi",
-      "solution": "lnkmx tashrif buyuruvchi sizning kimligingizni, qanchalik foydali ekanligingizni, qancha turadi va qayerga murojaat qilish kerakligini tezda tushunadigan aniq sahifa yaratadi. Siz yetakchilar va tahlillarni bir joyda ko‘rasiz."
+      "solution": "LinkMAX tashrif buyuruvchi sizning kimligingizni, qanchalik foydali ekanligingizni, qancha turadi va qayerga murojaat qilish kerakligini tezda tushunadigan aniq sahifa yaratadi. Siz yetakchilar va tahlillarni bir joyda ko‘rasiz."
     },
     "howItWorks": "Bu qanday ishlaydi",
     "features": {
@@ -1358,19 +1358,19 @@
       "secondaryCta": "Misollarni ko'rish"
     },
     "footer": {
-      "copyright": "© 2025 lnkmx",
+      "copyright": "© 2025 LinkMAX",
       "alternatives": "Taqqoslash"
     },
     "faq": {
       "badge": "Savollar va javoblar",
       "title": "Tez-tez so'raladigan savollar",
-      "subtitle": "lnkmx haqidagi mashhur savollarga javoblar",
+      "subtitle": "LinkMAX haqidagi mashhur savollarga javoblar",
       "q1": {
-        "question": "lnkmx nima va u nima uchun?",
-        "answer": "lnkmx - bu bio va mini-sayt yaratuvchisidagi AI havolasi bo'lib, u havolalar, xizmatlar, yozuvlar va ilovalar uchun bitta aniq sahifani birlashtirishga yordam beradi."
+        "question": "LinkMAX nima va u nima uchun?",
+        "answer": "LinkMAX - bu bio va mini-sayt yaratuvchisidagi AI havolasi bo'lib, u havolalar, xizmatlar, yozuvlar va ilovalar uchun bitta aniq sahifani birlashtirishga yordam beradi."
       },
       "q2": {
-        "question": "lnkmx-dan foydalanish qancha turadi?",
+        "question": "LinkMAX-dan foydalanish qancha turadi?",
         "answer": "Asosiy reja abadiy bepul. Pro: 3 oy - 4,350₸/oy, 6 oy - 3,698₸/oy (-15%), 12 oy - 3,045₸/oy (-30%). Onlayn to'lov, 14 kun ichida qaytarib berish."
       },
       "q3": {
@@ -1390,11 +1390,11 @@
         "answer": "Ha. Sahifani bevosita smartfoningizdan tahrirlashingiz mumkin."
       },
       "q7": {
-        "question": "lnkmx qanday integratsiyalarni qo'llab-quvvatlaydi?",
+        "question": "LinkMAX qanday integratsiyalarni qo'llab-quvvatlaydi?",
         "answer": "Etakchi bildirishnomalar uchun Telegram va rejalashtirish uchun Google Calendar. Ijtimoiy tarmoqlar va messenjerlar blok sifatida mavjud."
       },
       "q8": {
-        "question": "lnkmx sotishdan komissiya oladimi?",
+        "question": "LinkMAX sotishdan komissiya oladimi?",
         "answer": "Savdolaringiz uchun 0% komissiya yo'q - siz faqat obuna uchun to'laysiz."
       },
       "q9": {
@@ -1411,10 +1411,10 @@
       },
       "q12": {
         "question": "Lnkmx Linktree va Taplinkdan qanday farq qiladi?",
-        "answer": "lnkmx-da AI sahifa yaratuvchisi, CRM va bildirishnomalar mavjud. Bundan tashqari, moslashuvchan bloklar, aniq tariflar va mahalliy tillar."
+        "answer": "LinkMAX-da AI sahifa yaratuvchisi, CRM va bildirishnomalar mavjud. Bundan tashqari, moslashuvchan bloklar, aniq tariflar va mahalliy tillar."
       },
       "q13": {
-        "question": "lnkmx do'kon yoki xizmat uchun mos keladimi?",
+        "question": "LinkMAX do'kon yoki xizmat uchun mos keladimi?",
         "answer": "Ha. Mijoz tezda buyurtma berish yoki yozib olish uchun katalog, narxlar ro'yxati, ariza shakllari va aloqa tugmachalarini qo'shishingiz mumkin."
       },
       "q14": {
@@ -1441,7 +1441,7 @@
     "featured": {
       "badge": "Eng yaxshi ijodkorlar",
       "title": "Tavsiya etilgan sahifalar",
-      "subtitle": "lnkmx.my bilan yaratilgan eng mashhur sahifalarni kashf qiling",
+      "subtitle": "LinkMAX.my bilan yaratilgan eng mashhur sahifalarni kashf qiling",
       "viewAll": "Barcha sahifalarni ko'rish"
     },
     "premiumValue": {
@@ -1534,7 +1534,7 @@
         "result2": "Tahlil: mijozlar qaerdan kelgan?",
         "result3": "Excelsiz buyurtma boshqaruvi"
       },
-      "title": "lnkmx.my kimlar uchun yaratilgan?",
+      "title": "LinkMAX.my kimlar uchun yaratilgan?",
       "subtitle": "Sizning joyingiz uchun maxsus natijalar",
       "cta": "Sahifa yarating"
     },
@@ -1673,7 +1673,7 @@
       "blocks": "bloklar"
     },
     "seo": {
-      "title": "Shaxsiy hisob lnkmx",
+      "title": "Shaxsiy hisob LinkMAX",
       "description": "Sahifalar, yetakchilar va tahlillarni boshqaring."
     },
     "home": {
@@ -1861,8 +1861,8 @@
       "marketplaceDesc": "Hamjamiyat shablonlar",
       "faviconUrl": "Favikon URL",
       "faviconHint": "PNG yoki ICO ga havola. Tavsiya etilgan o'lcham 64x64.",
-      "hideBranding": "lnkmx brendini yashirish",
-      "hideBrandingHint": "\"Made with lnkmx\" suv belgisi va havolalarini olib tashlang",
+      "hideBranding": "LinkMAX brendini yashirish",
+      "hideBrandingHint": "\"Made with LinkMAX\" suv belgisi va havolalarini olib tashlang",
       "whiteLabel": "Oq yorliq (brendsiz)",
       "errors": {
         "slug_taken": "Bu URL allaqachon olingan",
@@ -1877,7 +1877,7 @@
       "dnsInstructions": "Domen registratoridan CNAME yozuvini qo‘shing:",
       "domainInvalid": "To'g'ri domenni kiriting (masalan, yourdomain.com)",
       "yourDomain": "Sizning domeningiz",
-      "domainHint": "lnkmx.my ga ishora qiluvchi CNAME yozuvini qo'shing",
+      "domainHint": "LinkMAX.my ga ishora qiluvchi CNAME yozuvini qo'shing",
       "dnsConfig": "Ushbu DNS yozuvini sozlang:",
       "aiBuilder": "AI Builder",
       "aiBuilderBtn": "Sahifani AI bilan to'ldiring",
@@ -2182,7 +2182,7 @@
     "welcomeBack": "Qaytib kelganingizdan xursandmiz!",
     "enterCredentials": "Kirish ma'lumotlaringizni kiriting",
     "signInToAccount": "Hisobingizga kiring",
-    "title": "lnkmx",
+    "title": "LinkMAX",
     "subtitle": "1 daqiqada mini-sayt",
     "backToHome": "Uy",
     "passwordHint": "Kamida 8 ta belgi, bosh harf va raqam",
@@ -2231,7 +2231,7 @@
       "recoverViaTelegram": "Telegram orqali tiklang"
     },
     "seo": {
-      "title": "lnkmx-ga kiring",
+      "title": "LinkMAX-ga kiring",
       "description": "Bio-da sahifa havolasini yaratish va nashr qilish uchun tizimga kiring."
     },
     "required": "Iltimos, tizimga kiring",
@@ -2262,13 +2262,13 @@
     "emptyDescription": "Ushbu turkum o'z yulduzini kutmoqda. Sahifani yarating va yuqoriga chiqing.",
     "noResults": "Hech narsa topilmadi",
     "seo": {
-      "title": "Galereya lnkmx - bio va mini-saytlardagi havolalarga misollar",
+      "title": "Galereya LinkMAX - bio va mini-saytlardagi havolalarga misollar",
       "description": "Haqiqiy foydalanuvchi sahifalari: andozalar, bo'shliqlar, bio-dagi havolangiz uchun g'oyalar.",
-      "nicheTitle": "Galereya lnkmx — {{niche}}",
-      "nicheDescription": "{{niche}} joydagi lnkmx sahifalariga misollar: andozalar, g'oyalar va tuzilma.",
-      "imageAlt": "lnkmx Gallery - Link in Bio Examples",
+      "nicheTitle": "Galereya LinkMAX — {{niche}}",
+      "nicheDescription": "{{niche}} joydagi LinkMAX sahifalariga misollar: andozalar, g'oyalar va tuzilma.",
+      "imageAlt": "LinkMAX Gallery - Link in Bio Examples",
       "opt": {
-        "question": "lnkmx sahifalarining misollarini qayerda ko'rishim mumkin?",
+        "question": "LinkMAX sahifalarining misollarini qayerda ko'rishim mumkin?",
         "answer": "Lnkmx galereyasi turli sohalarda foydalanuvchilar tomonidan yaratilgan sahifalarning haqiqiy namunalarini namoyish etadi, shu jumladan frilanserlar, bizneslar, go'zallik bo'yicha mutaxassislar, fitnes murabbiylari va kontent yaratuvchilari.",
         "uses": {
           "1": "Professional sahifa misollarini ko'rib chiqing",
@@ -2359,7 +2359,7 @@
     "defaultTitle": "Mening sahifamni tekshiring",
     "qrDialogTitle": "QR kodi",
     "qrDialogDescription": "Sahifani almashish uchun ushbu kodni skanerlang",
-    "title": "Check out my lnkmx.my page!",
+    "title": "Check out my LinkMAX.my page!",
     "published": "Page Published!",
     "publishedDesc": "Share your published page with others",
     "yourPageLink": "Sahifangiz havolasi",
@@ -2511,8 +2511,8 @@
       "sat": "Shanba"
     },
     "seo": {
-      "title": "Administrator paneli lnkmx",
-      "description": "Ichki lnkmx boshqaruv vositalari."
+      "title": "Administrator paneli LinkMAX",
+      "description": "Ichki LinkMAX boshqaruv vositalari."
     },
     "analyticsTitle": "Platforma tahlili",
     "analyticsSubtitle": "Faoliyat va asosiy ko'rsatkichlarni ko'rib chiqish",
@@ -2922,20 +2922,20 @@
   },
   "alternatives": {
     "seo": {
-      "title": "lnkmx alternativalari - Linktree, Taplink, Carrd, Beacons-ni taqqoslash",
-      "description": "lnkmx-ni Linktree, Taplink, Carrd va Beacons bilan solishtiring. Bio-in-bio, mini-landing va ilovalarni yig'ish uchun qaysi vosita mos kelishini ko'ring.",
+      "title": "LinkMAX alternativalari - Linktree, Taplink, Carrd, Beacons-ni taqqoslash",
+      "description": "LinkMAX-ni Linktree, Taplink, Carrd va Beacons bilan solishtiring. Bio-in-bio, mini-landing va ilovalarni yig'ish uchun qaysi vosita mos kelishini ko'ring.",
       "keywords": "linktree muqobili, taplink alternativi, karta muqobili, mayoqlar muqobili, bio taqqoslashdagi havola, mini ochilish sahifasi taqqoslashi",
       "schemaName": "Bio platformalarida havolani taqqoslash",
       "schemaDescription": "CRM va 0% komissiyali AI link-in-bio quruvchisi",
-      "defaultTitle": "lnkmx - AI link-in-bio konstruktori",
-      "ogTitle": "lnkmx vs Linktree va Taplink - taqqoslash va muqobil",
-      "ogDescription": "Lnkmx, Linktree va Taplink-ni xususiyatlari, narxi va qulayligi bo'yicha solishtiring. Nima uchun lnkmx foydali alternativ hisoblanadi.",
+      "defaultTitle": "LinkMAX - AI link-in-bio konstruktori",
+      "ogTitle": "LinkMAX vs Linktree va Taplink - taqqoslash va muqobil",
+      "ogDescription": "Lnkmx, Linktree va Taplink-ni xususiyatlari, narxi va qulayligi bo'yicha solishtiring. Nima uchun LinkMAX foydali alternativ hisoblanadi.",
       "breadcrumb": "Alternativlar",
-      "imageAlt": "lnkmx vs Alternatives Comparison",
+      "imageAlt": "LinkMAX vs Alternatives Comparison",
       "opt": {
         "question": "Linktree-ga eng yaxshi alternativalar qanday?",
-        "answer": "Eng yaxshi Linktree alternativalariga lnkmx (AI-ga asoslangan, o'rnatilgan CRM), Beacons (ijodkorga yo'naltirilgan), Koji (interaktiv), Taplink (tahlil) va Stan Store (elektron tijorat) kiradi. lnkmx o'zining AI sahifa yaratuvchisi, etakchi boshqaruvi va arzon narxlari bilan ajralib turadi.",
-        "entity": "lnkmx raqobatchilarga qarshi",
+        "answer": "Eng yaxshi Linktree alternativalariga LinkMAX (AI-ga asoslangan, o'rnatilgan CRM), Beacons (ijodkorga yo'naltirilgan), Koji (interaktiv), Taplink (tahlil) va Stan Store (elektron tijorat) kiradi. LinkMAX o'zining AI sahifa yaratuvchisi, etakchi boshqaruvi va arzon narxlari bilan ajralib turadi.",
+        "entity": "LinkMAX raqobatchilarga qarshi",
         "uses": {
           "1": "Link-in-bio vositalarini solishtiring",
           "2": "Linktree muqobillarini toping",
@@ -2950,7 +2950,7 @@
           "4": "Kontent yaratuvchilari vositalarni tanlashadi"
         },
         "problem": "Foydalanuvchilar o'z ehtiyojlari uchun to'g'ri link-in-bio vositasini tanlash uchun xolis taqqoslashlari kerak",
-        "solution": "lnkmx AI sahifa yaratuvchisi va raqobatchilarda etishmayotgan o'rnatilgan CRM kabi noyob xususiyatlarni ko'rsatadigan shaffof taqqoslashni ta'minlaydi.",
+        "solution": "LinkMAX AI sahifa yaratuvchisi va raqobatchilarda etishmayotgan o'rnatilgan CRM kabi noyob xususiyatlarni ko'rsatadigan shaffof taqqoslashni ta'minlaydi.",
         "features": {
           "1": "Xususiyatlar bo'yicha taqqoslash jadvali",
           "2": "Halol ijobiy va salbiy tomonlari",
@@ -2965,15 +2965,15 @@
     },
     "hero": {
       "badge": "Taqqoslash bo'yicha qo'llanma",
-      "title": "lnkmx vs Linktree, Taplink, Carrd, Beacons",
-      "description": "Katta va'dalarsiz taqqoslash: lnkmx qanday vazifalarga mos keladi va qachon boshqa vositani tanlash kerak.",
+      "title": "LinkMAX vs Linktree, Taplink, Carrd, Beacons",
+      "description": "Katta va'dalarsiz taqqoslash: LinkMAX qanday vazifalarga mos keladi va qachon boshqa vositani tanlash kerak.",
       "ctaPrimary": "Bepul sahifa yarating",
       "ctaSecondary": "Narxlarni ko'rish",
       "ctaTertiary": "Misollarni ko'rish"
     },
     "segments": {
       "title": "Qanday muammolarni hal qilasiz?",
-      "cta": "lnkmx ni sinab ko'ring",
+      "cta": "LinkMAX ni sinab ko'ring",
       "linkInBio": {
         "title": "Link-in-bio vositalari",
         "description": "Bizga tezkor havolalar va murakkab tuzilmasiz minimal profil kerak.",
@@ -3007,7 +3007,7 @@
       }
     },
     "whenToChoose": {
-      "title": "Qachon lnkmx ni tanlash kerak",
+      "title": "Qachon LinkMAX ni tanlash kerak",
       "item1": "Sizga havolalar ro'yxatiga emas, balki ilovaga olib boradigan bitta havola kerak.",
       "item2": "Etakchilarni qabul qilish va ularni mini-CRMda qayd etish muhimdir.",
       "item3": "Dizayner yoki kodsiz tezda ishga tushirish kerak.",
@@ -3016,7 +3016,7 @@
       "cta": "Sahifa yarating"
     },
     "whenNotToChoose": {
-      "title": "Qachon lnkmx mos kelmasligi mumkin",
+      "title": "Qachon LinkMAX mos kelmasligi mumkin",
       "item1": "Bizga maxsus mantiqqa ega murakkab ko'p sahifali veb-sayt kerak.",
       "item2": "HTML va xosting ustidan to'liq nazoratni talab qiladi.",
       "item3": "Ilovalarni yig'masdan faqat ijtimoiy tarmoqlarni boshqarishni xohlaysiz.",
@@ -3025,7 +3025,7 @@
     },
     "finalCta": {
       "title": "Sinashga tayyormisiz?",
-      "description": "Sahifani yarating va lnkmx sizning vazifangizga mos kelishini tekshiring.",
+      "description": "Sahifani yarating va LinkMAX sizning vazifangizga mos kelishini tekshiring.",
       "primary": "Sahifa yarating",
       "secondary": "Misollarni ko'rish"
     },
@@ -3925,7 +3925,7 @@
   },
   "seo": {
     "landing": {
-      "title": "lnkmx - bir havoladan mini-sayt va ilovalar",
+      "title": "LinkMAX - bir havoladan mini-sayt va ilovalar",
       "description": "Mutaxassislar, frilanserlar va kichik biznes uchun AI mini-sayt quruvchisi. Taklif, narxlar ro'yxati va ariza shakllarini 2 daqiqada to'plang.",
       "keywords": "biodagi havola, biodagi havola, havola sahifasi, mini-sayt, tashrif qog'ozi sayti, linktree alternativasi, taplink alternativi"
     },
@@ -3936,27 +3936,27 @@
   },
   "adminTranslations": {
     "seo": {
-      "title": "lnkmx tarjimalari",
+      "title": "LinkMAX tarjimalari",
       "description": "Ichki tarjimani boshqarish."
     }
   },
   "install": {
     "seo": {
-      "title": "lnkmx o'rnatilmoqda",
-      "description": "Tez kirish uchun lnkmx-ni PWA sifatida o'rnating."
+      "title": "LinkMAX o'rnatilmoqda",
+      "description": "Tez kirish uchun LinkMAX-ni PWA sifatida o'rnating."
     },
-    "title": "lnkmx.my ni o'rnating",
-    "description": "Tez kirish uchun qurilmangizga lnkmx.my ilovasini oʻrnating",
+    "title": "LinkMAX.my ni o'rnating",
+    "description": "Tez kirish uchun qurilmangizga LinkMAX.my ilovasini oʻrnating",
     "subtitle": "Sahifa nashr etildi! Tez kirish va oflayn tahrirlash uchun ilovani oʻrnating.",
     "yourLink": "Sizning havolangiz:",
     "desktop": {
       "title": "Ish stoli",
-      "ready": "lnkmx.my o'rnatishga tayyor!",
+      "ready": "LinkMAX.my o'rnatishga tayyor!",
       "installNow": "Hozir oʻrnating",
       "step1": "O'rnatish belgisini toping",
       "step1desc": "Odatda u manzil satrida joylashgan (Chrome, Edge)",
       "step2": "\"O'rnatish\" tugmasini bosing",
-      "step2desc": "lnkmx.my-ni ish stolingizga qo'shing"
+      "step2desc": "LinkMAX.my-ni ish stolingizga qo'shing"
     },
     "ios": {
       "step1": "Safari-da oching",
@@ -4176,7 +4176,7 @@
       },
       "step3": {
         "title": "Nashr qilish",
-        "description": "lnkmx.my/name havolasini oling va uni bioga joylashtiring"
+        "description": "LinkMAX.my/name havolasini oling va uni bioga joylashtiring"
       },
       "cta": "Sinab ko'ring",
       "note": "Yaratish uchun 2 daqiqa"
@@ -4184,7 +4184,7 @@
     "results": {
       "badge": "Kim uchun",
       "title": "Bir sahifa - turli vazifalar",
-      "subtitle": "Qanday bo'lmasin, lnkmx ilovalarni olishga yordam beradi",
+      "subtitle": "Qanday bo'lmasin, LinkMAX ilovalarni olishga yordam beradi",
       "creators": {
         "title": "Bloggerlar va ijodkorlar",
         "problem": "Obunachilar mahsulotingizni qayerdan sotib olishni bilishmaydi",
@@ -4253,7 +4253,7 @@
       "expert": "Mutaxassis"
     },
     "trust": {
-      "badge": "Nima uchun lnkmx",
+      "badge": "Nima uchun LinkMAX",
       "title": "Vaqtni qadrlaydiganlar uchun",
       "subtitle": "Qo'shimcha hech narsa. Faqat ilovalarni olib keladigan narsa.",
       "speed": {
@@ -4286,7 +4286,7 @@
           "1": "1 sahifa",
           "2": "Asosiy bloklar",
           "3": "AIning 3 avlodi",
-          "4": "lnkmx suv belgisi"
+          "4": "LinkMAX suv belgisi"
         },
         "cta": "Bepul boshlang"
       },
@@ -4313,7 +4313,7 @@
       "bestValue": "Foydali"
     },
     "seo": {
-      "badge": "lnkmx nima",
+      "badge": "LinkMAX nima",
       "title": "Mikrobiznes uchun operatsion tizim",
       "items": {
         "1": "Micro-Business OS - biznes uchun hamma narsa bir joyda",
@@ -4328,8 +4328,8 @@
       "title": "Odamlar va botlar tushunishi mumkin bo'lgan qisqa javoblar",
       "subtitle": "Semantik kontent nima taklif qilayotganingizni va qayerda ishlayotganingizni tezda tushunishga yordam beradi.",
       "what": {
-        "title": "lnkmx nima",
-        "body": "lnkmx - bu mikrobiznes uchun sahifa yaratuvchisi + CRM. Bir joyda mini-sayt yarating, ilovalarni qabul qiling va mijozlarni boshqaring."
+        "title": "LinkMAX nima",
+        "body": "LinkMAX - bu mikrobiznes uchun sahifa yaratuvchisi + CRM. Bir joyda mini-sayt yarating, ilovalarni qabul qiling va mijozlarni boshqaring."
       },
       "for": {
         "title": "Kim uchun",
@@ -4371,8 +4371,8 @@
       "title": "Tez-tez beriladigan savollar",
       "subtitle": "Javobni topa olmadingizmi? Qo'llab-quvvatlashga yozing",
       "q1": {
-        "question": "lnkmx nima?",
-        "answer": "lnkmx - bu Micro-Business OT: kichik biznes uchun operatsion tizim. AI sahifa yaratuvchisi, so'rovlar uchun o'rnatilgan CRM, Telegram xabarnomalari va tahlillarni o'z ichiga oladi. Bir joyda biznes boshlash uchun kerak bo'lgan hamma narsa."
+        "question": "LinkMAX nima?",
+        "answer": "LinkMAX - bu Micro-Business OT: kichik biznes uchun operatsion tizim. AI sahifa yaratuvchisi, so'rovlar uchun o'rnatilgan CRM, Telegram xabarnomalari va tahlillarni o'z ichiga oladi. Bir joyda biznes boshlash uchun kerak bo'lgan hamma narsa."
       },
       "q2": {
         "question": "Narxi qancha?",
@@ -4408,7 +4408,7 @@
       },
       "q10": {
         "question": "Domenimni olsam bo'ladimi?",
-        "answer": "Ha, Pro-da. lnkmx.my/name o'rniga u yoursite.com bo'ladi."
+        "answer": "Ha, Pro-da. LinkMAX.my/name o'rniga u yoursite.com bo'ladi."
       },
       "q11": {
         "question": "Pro uchun qanday to'lash kerak?",
@@ -4440,17 +4440,17 @@
       "privacy": "Maxfiylik",
       "terms": "Shartlar",
       "language": "Til",
-      "copyright": "© {{year}} lnkmx. Qozog'istonda ishlab chiqarilgan."
+      "copyright": "© {{year}} LinkMAX. Qozog'istonda ishlab chiqarilgan."
     },
     "floatingCta": "Yaratish"
   },
   "experts": {
     "title": "mutaxassislar",
-    "directoryTitle": "Ekspertlar katalogi | lnkmx",
-    "directoryDescription": "lnkmx-da mutaxassislar va mutaxassislarni toping",
-    "tagDescription": "lnkmx saytida {{tag}} mutaxassisning profili",
+    "directoryTitle": "Ekspertlar katalogi | LinkMAX",
+    "directoryDescription": "LinkMAX-da mutaxassislar va mutaxassislarni toping",
+    "tagDescription": "LinkMAX saytida {{tag}} mutaxassisning profili",
     "findExperts": "Mutaxassislarni toping",
-    "onLnkmx": "lnkmx da",
+    "onLnkmx": "LinkMAX da",
     "subtitle": "Mutaxassislar, frilanserlar va kichik biznes uchun mini-saytlar",
     "searchPlaceholder": "Ism yoki joy bo'yicha qidiring...",
     "profiles": "profillar",
@@ -4460,7 +4460,7 @@
     "views": "qarashlar",
     "noDescription": "Ta'rif yo'q",
     "ctaTitle": "O'z sahifangizni bepul yarating",
-    "ctaSubtitle": "lnkmx ekspertlar hamjamiyatiga qo'shiling",
+    "ctaSubtitle": "LinkMAX ekspertlar hamjamiyatiga qo'shiling",
     "ctaButton": "Sahifa yarating"
   },
   "footer": {
@@ -4502,12 +4502,12 @@
   },
   "pricing": {
     "seo": {
-      "title": "lnkmx tariflari - Bio va mini-saytlardagi havolalar uchun rejalar",
-      "description": "lnkmx rejalarini solishtiring: bepul quruvchi, AIga ega Pro, CRM, analitik va shaxsiy domeningiz. Shaffof narxlar.",
-      "imageAlt": "Tarif rejalari lnkmx",
+      "title": "LinkMAX tariflari - Bio va mini-saytlardagi havolalar uchun rejalar",
+      "description": "LinkMAX rejalarini solishtiring: bepul quruvchi, AIga ega Pro, CRM, analitik va shaxsiy domeningiz. Shaffof narxlar.",
+      "imageAlt": "Tarif rejalari LinkMAX",
       "opt": {
-        "question": "lnkmx qancha turadi?",
-        "answer": "lnkmx 12 oyga 3045 KZT (taxminan $6 USD) dan boshlanadigan bepul Asosiy reja va Pro rejasini taklif etadi. Pro xususiyatlariga cheksiz sahifalar, maxsus domenlar, tahlillar va ustuvor yordam kiradi.",
+        "question": "LinkMAX qancha turadi?",
+        "answer": "LinkMAX 12 oyga 3045 KZT (taxminan $6 USD) dan boshlanadigan bepul Asosiy reja va Pro rejasini taklif etadi. Pro xususiyatlariga cheksiz sahifalar, maxsus domenlar, tahlillar va ustuvor yordam kiradi.",
         "uses": {
           "1": "Asosiy tarif rejasi bilan bepul boshlang",
           "2": "Kengaytirilgan funksiyalar uchun Pro-ga yangilang",
@@ -4520,7 +4520,7 @@
           "3": "Rivojlanayotgan korxonalar ko'proq xususiyatlarga muhtoj"
         },
         "problem": "Bio-in-bio va sahifa yaratish vositalarining aksariyati mikro-biznes va frilanserlar uchun juda qimmat",
-        "solution": "lnkmx asosiy ehtiyojlar uchun bepul reja va 12 oy davomida atigi 6 dollardan boshlanadigan arzon Pro narxlarini taklif etadi.",
+        "solution": "LinkMAX asosiy ehtiyojlar uchun bepul reja va 12 oy davomida atigi 6 dollardan boshlanadigan arzon Pro narxlarini taklif etadi.",
         "features": {
           "1": "Bepul asosiy reja mavjud",
           "2": "Pro rejasi: oyiga 3,045 KZT (yillik)",
@@ -4533,7 +4533,7 @@
     },
     "title": "Tariflar",
     "choosePlan": "To'g'ri tarifni tanlang",
-    "description": "Biznesingiz uchun lnkmx.my ning barcha imkoniyatlarini oching",
+    "description": "Biznesingiz uchun LinkMAX.my ning barcha imkoniyatlarini oching",
     "months": "oylar",
     "savingsText": "Saqlash",
     "popular": "Mashhur",
@@ -4589,7 +4589,7 @@
       "aiMonthlyPro": "Oyiga 5 ta AI avlodi"
     },
     "limitations": {
-      "watermark": "Suv belgisi lnkmx.my",
+      "watermark": "Suv belgisi LinkMAX.my",
       "limitedBlocks": "Maksimal 10 blok"
     }
   },

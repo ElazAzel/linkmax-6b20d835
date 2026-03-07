@@ -23,7 +23,7 @@ export function AISearchOptimizer({
     pageType,
     primaryQuestion,
     primaryAnswer,
-    entityName = 'lnkmx',
+    entityName = 'LinkMAX',
     entityCategory = 'Business Tools, Page Builder, CRM, Link in Bio',
     useCases = [],
     targetAudience = [],
@@ -97,7 +97,7 @@ export function AISearchOptimizer({
 
         // Citation metadata
         setMetaTag('citation_title', entityName);
-        setMetaTag('citation_author', 'lnkmx Team');
+        setMetaTag('citation_author', 'LinkMAX Team');
         setMetaTag('citation_publication_date', new Date().toISOString().split('T')[0]);
         setMetaTag('citation_language', i18n.language);
 

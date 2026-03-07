@@ -68,7 +68,7 @@ export default function Index() {
           pageTitle={t('landing.v4.hero.title', 'Build pages that convert')}
           pageDescription={t('landing.v4.hero.subtitle', 'The all-in-one platform for creators. AI builds the structure, you get the leads.')}
           imageUrl={`${getAppDomain()}/og-image.png`}
-          imageAlt="lnkmx - AI Page Builder"
+          imageAlt="LinkMAX - AI Page Builder"
           type="website"
         />
         <GEOTagging includeOrganization={true} />
@@ -81,9 +81,9 @@ export default function Index() {
         />
         <AISearchOptimizer
           pageType="homepage"
-          primaryQuestion={t('landing.v4.seo.question', 'What is lnkmx?')}
-          primaryAnswer={t('landing.v4.seo.answer', 'lnkmx is an AI-powered page builder for creators.')}
-          entityName="lnkmx"
+          primaryQuestion={t('landing.v4.seo.question', 'What is LinkMAX?')}
+          primaryAnswer={t('landing.v4.seo.answer', 'LinkMAX is an AI-powered page builder for creators.')}
+          entityName="LinkMAX"
           entityCategory="SaaS"
         />
       </Suspense>

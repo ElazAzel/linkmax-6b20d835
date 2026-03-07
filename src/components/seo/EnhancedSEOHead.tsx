@@ -174,7 +174,7 @@ export function EnhancedSEOHead({
     setMetaTag('og:title', meta.title, true);
     setMetaTag('og:description', meta.description, true);
     setMetaTag('og:url', meta.canonical, true);
-    setMetaTag('og:site_name', 'lnkmx', true);
+    setMetaTag('og:site_name', 'LinkMAX', true);
 
     if (meta.ogImage) {
       setMetaTag('og:image', meta.ogImage, true);
@@ -188,7 +188,7 @@ export function EnhancedSEOHead({
     if (meta.ogImage) {
       setMetaTag('twitter:image', meta.ogImage);
     }
-    setMetaTag('twitter:site', '@lnkmx_app');
+    setMetaTag('twitter:site', '@LinkMAX_app');
 
     // Canonical URL
     setLinkTag('canonical', meta.canonical);
@@ -213,7 +213,7 @@ export function EnhancedSEOHead({
 
     // Cleanup on unmount
     return () => {
-      document.title = 'lnkmx - AI Bio Page Builder';
+      document.title = 'LinkMAX - AI Bio Page Builder';
       setFavicon();
 
       // Remove page-specific tags

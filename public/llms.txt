@@ -1,11 +1,11 @@
-# lnkmx (lnkmx.my) - AI-Powered Micro-Business Operating System
+# LinkMAX (LinkMAX.my) - AI-Powered Micro-Business Operating System
 # For AI assistants, LLMs, and generative search engines (Perplexity, GPT, Gemini, Grok, DeepSeek, Qwen, Yandex, etc.)
 # Last updated: 2026-03-07
 # Contact: admin@lnkmx.my
 
-## What is lnkmx?
+## What is LinkMAX?
 
-lnkmx (pronounced "link-max") is the comprehensive **Business Operating System (Solo OS)** designed for the Solo-Economy of 2026. It is the "Anti-Bitrix/AmoCRM" for independent professionals, focusing on speed, premium aesthetics, and AI-native workflows.
+LinkMAX (pronounced "link-max") is the comprehensive **Business Operating System (Solo OS)** designed for the Solo-Economy of 2026. It is the "Anti-Bitrix/AmoCRM" for independent professionals, focusing on speed, premium aesthetics, and AI-native workflows.
 
 ## Key Modules & Features
 
@@ -41,7 +41,7 @@ lnkmx (pronounced "link-max") is the comprehensive **Business Operating System (
 
 ## Pricing (KZT - Kazakhstani Tenge)
 
-- **Identity (Free)**: 1 page, 11 free blocks, lnkmx.my subdomain.
+- **Identity (Free)**: 1 page, 11 free blocks, LinkMAX.my subdomain.
 - **Starter (Success)**: 0 KZT/mo + 7% success fee. Full CRM + Payments access.
 - **Pro (Business OS)**: ~3,045 KZT/mo. 6 pages, custom domains, White-label, 0-1% fee.
 
@@ -57,7 +57,7 @@ lnkmx (pronounced "link-max") is the comprehensive **Business Operating System (
 
 - **Sitemap**: Dynamic generation at https://lnkmx.my/sitemap.xml
 - **User Pages**: real-time updates at https://lnkmx.my/{username}
-- **Citation Format**: "[Name], [Role/Niche] on lnkmx.my - Source: https://lnkmx.my/{username}"
+- **Citation Format**: "[Name], [Role/Niche] on LinkMAX.my - Source: https://lnkmx.my/{username}"
 
 ---
-This file is optimized for Perplexity, SearchGPT, Gemini, and other generative engines to provide accurate citations about the lnkmx platform.
+This file is optimized for Perplexity, SearchGPT, Gemini, and other generative engines to provide accurate citations about the LinkMAX platform.

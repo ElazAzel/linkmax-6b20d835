@@ -2,16 +2,22 @@
 
 ## [Unreleased]
 
-### [2026-03-07] - SEO & AI Bot Optimization (AEO/GEO)
+### [2026-03-07] - LinkMAX Brand Transition & SEO/AEO Optimization
 
-* **AI Bot Accessibility**:
-  * Обновлен `llms.txt`: добавлена поддержка Perplexity, GPT, Gemini, Grok, DeepSeek, Qwen и Yandex. Описаны модули "Business Zones", "Fintech Core" и модель "Step-by-Growth".
-  * Оптимизирован `robots.txt`: разрешен доступ ко всем метаданным платформы для ИИ-краулеров, явно указан путь к `llms.txt`.
+* **Global Rebranding**:
+  * Платформа официально переименована в **LinkMAX**.
+  * Проведен глобальный ребрендинг всех пользовательских интерфейсов (`Index`, `Pricing`, `Auth`, `SeoLanding`).
+  * Обновлены все файлы локализации (16 языков), включая `en.json`, `ru.json`, `kk.json`, `uz.json`.
+  * Обновлены системные файлы: `index.html`, `llms.txt`, `robots.txt`, `sitemap.xml`.
+* **AI Bot Accessibility (AEO/GEO)**:
+  * Обновлен `llms.txt`: добавлена поддержка LinkMAX для Perplexity, GPT, Gemini, Grok, DeepSeek, Qwen и Yandex.
+  * Оптимизирован `robots.txt`: разрешен доступ ко всем метаданным для ИИ-краулеров.
+  * Интегрирован новый компонент `FAQSchema.tsx` для захвата блоков "People Also Ask" в поисковой выдаче.
 * **Search Engine Optimization**:
-  * Синхронизирован `sitemap.xml`: добавлена структура для глубокого индексирования экспертов по категориям и динамических профилей.
-  * Обновлены мета-теги в `index.html`: внедрен `ai-summary` и расширена схема `SoftwareApplication` (Business OS positioning).
+  * Синхронизирован `sitemap.xml`: исправлен брендинг и структура для глубокого индексирования.
+  * Обновлены мета-теги в `index.html`: внедрен `ai-summary` и расширена схема `SoftwareApplication` (LinkMAX Business OS).
 * **Bot Hub (SeoLanding)**:
-  * Обновлена страница `SeoLanding.tsx`: актуализированы `keyFeatures` и `useCases` (CRM Kanban, Pixel Proxy, Fintech).
+  * Страница `SeoLanding.tsx` полностью переведена на бренд LinkMAX с актуализацией всех `keyFeatures` и `useCases`.
 
 ### [2026-03-07] - Monetization Pivot & Global Documentation Sync (v2.5)
 
@@ -95,7 +101,7 @@
 * **Team Collaboration & Organizations**: Реализована поддержка мульти-аккаунтов, ролей и командной работы. Foundational RBAC system allowing creators to manage sites via Organizations. Includes member roles (Owner, Admin, Editor, Viewer), organization switching UI in the sidebar, and a dedicated Team Management screen. Existing creators are automatically migrated to a "Personal Organization" structure.
 * **Bugfix (Critical)**: Исправлены `TypeError` в `SEOHead` и `PublicPage`, предотвращающие "белый экран".
 * **Bugfix (Dashboard)**: Исправлен импорт модулей в `DashboardV2`, восстановлена загрузка экранов.
-* **White-label Mode:** Pro users can now fully customize their public pages by removing platform branding ("Made with lnkmx") and setting custom favicons.
+* **White-label Mode:** Pro users can now fully customize their public pages by removing platform branding ("Made with LinkMAX") and setting custom favicons.
 * **A/B Testing for Blocks:** Creators can now run experiments on individual blocks (links, buttons, carousels) with multi-variant testing, traffic weight allocation, and real-time conversion tracking in the Insights dashboard.
 * **Dynamic Pricing:** Subscriptions are now dynamically calculated in KZT from base USD prices ($8.9, $7.9, $5.9) using real-time API from the National Bank of Kazakhstan.
 
@@ -104,7 +110,7 @@
 * **Audit Resolution:** Completely removed legacy Next.js routing and link components, fully migrating 30+ legacy files to React Router DOM.
 * **Test Suite Health:** Resolved 6 failing test suites affecting multiple vital components (fintech, CRM leads, translations, layout, block rendering), driving pass rate to 100%.
 * **Robokassa:** Webhook correctly references `premium_expires_at` column matching DB schema.
-* **Resend:** All platform notification emails now use the branded `admin@lnkmx.my` sender.
+* **Resend:** All platform notification emails now use the branded `admin@LinkMAX.my` sender.
 
 ### [2026-02-27] - Documentation Linting & Standardization
 
