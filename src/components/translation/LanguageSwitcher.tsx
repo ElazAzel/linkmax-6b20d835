@@ -216,7 +216,7 @@ export function LanguageSwitcher({
           data-testid="language-switcher-trigger"
           variant="ghost"
           size="sm"
-          aria-label="Change language"
+          aria-label={`Change language: ${currentLanguage.name}`}
           className={cn(
             "h-9 px-3 gap-2 rounded-full",
             "bg-background/50 backdrop-blur-sm border border-border/50",
