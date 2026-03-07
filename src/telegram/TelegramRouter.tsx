@@ -4,6 +4,7 @@ import { useZoneAnalytics } from '@/hooks/zones/useZoneAnalytics';
 import { CRMScreen } from './screens/CRMScreen';
 import { OnboardingScreen } from './screens/OnboardingScreen';
 import { BookingsScreen } from './screens/BookingsScreen';
+import { PageEditorScreen } from './screens/PageEditorScreen';
 import type { TelegramScreen } from './types';
 
 // ---- Icons (inline SVG for zero-dep bottom nav) ----
@@ -250,7 +251,7 @@ export function TelegramRouter() {
         case 'home':
             return <HomeScreen />;
         case 'page':
-            return <StubScreen title="Моя страница" icon="📄" />;
+            return <PageEditorScreen />;
         case 'crm':
             return <CRMScreen />;
         case 'bookings':

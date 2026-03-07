@@ -175,6 +175,17 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
                 throw new Error(data?.error || 'Invalid initData');
             }
 
+            if (data.session) {
+                const { error: setSessionError } = await supabase.auth.setSession({
+                    access_token: data.session.access_token,
+                    refresh_token: data.session.refresh_token,
+                });
+
+                if (setSessionError) {
+                    console.error('[TelegramApp] Failed to set session:', setSessionError);
+                }
+            }
+
             setUser(data.user);
             setIsReady(true);
 

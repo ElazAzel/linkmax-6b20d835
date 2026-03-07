@@ -463,3 +463,49 @@
     color: var(--tg-hint-color);
     opacity: 0.6;
 }
+
+.tg-input--small {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.tg-form-group {
+    margin-bottom: 20px;
+}
+
+.tg-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--tg-hint-color);
+    margin-bottom: 6px;
+    padding-left: 4px;
+}
+
+/* --- Tabs --- */
+.tg-tabs {
+    display: flex;
+    background-color: var(--tg-secondary-bg-color);
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+}
+
+.tg-tab {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    color: var(--tg-hint-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tg-tab--active {
+    background-color: var(--tg-bg-color);
+    color: var(--tg-text-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

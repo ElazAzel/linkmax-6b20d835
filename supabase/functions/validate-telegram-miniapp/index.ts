@@ -374,16 +374,17 @@ serve(async (req: Request) => {
             });
         }
 
-        // ---- Step 5: Generate session token for the Mini App ----
-        // Use Supabase Admin to generate a short-lived token
+        // ---- Step 5: Generate session for the Mini App ----
+        // This allows the frontend SDK to be fully authenticated
         const { data: sessionData, error: sessionError } =
-            await supabase.auth.admin.generateLink({
-                type: "magiclink",
-                email: `tg_${data.user.id}@telegram.linkmax.user`,
+            await supabase.auth.admin.createSession({
+                userId: userId,
             });
 
-        // Alternatively, use custom JWT or just return userId for client to use
-        // For P0, return the user info and let client use anon key + RPC
+        if (sessionError || !sessionData?.session) {
+            console.error("Failed to create session:", sessionError);
+        }
+
         return new Response(
             JSON.stringify({
                 valid: true,
@@ -396,15 +397,9 @@ serve(async (req: Request) => {
                     language_code: data.user.language_code,
                     is_premium: data.user.is_premium,
                 },
+                session: sessionData?.session || null,
                 start_param: data.start_param,
                 launch_source: launchSource,
-                // Include magic link properties if available
-                magic_link: sessionData?.properties?.hashed_token
-                    ? {
-                        token_hash: sessionData.properties.hashed_token,
-                        redirect_to: `${supabaseUrl}/auth/v1/verify`,
-                    }
-                    : null,
             }),
             {
                 status: 200,
