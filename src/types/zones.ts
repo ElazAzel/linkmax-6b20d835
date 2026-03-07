@@ -155,6 +155,20 @@ export interface ZoneDealStage {
   is_default: boolean;
 }
 
+export type ZoneDealFieldType = 'text' | 'number' | 'date' | 'boolean' | 'select';
+
+export interface ZoneDealField {
+  id: string;
+  zone_id: string;
+  name: string;
+  type: ZoneDealFieldType;
+  options: string[] | null;
+  is_required: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ZoneDeal {
   id: string;
   zone_id: string;
@@ -170,6 +184,7 @@ export interface ZoneDeal {
   status: DealStatus;
   lost_reason: string | null;
   source: string | null;
+  custom_fields: Record<string, any>;
   created_at: string;
   updated_at: string;
   // Joined

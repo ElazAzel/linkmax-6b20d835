@@ -33,11 +33,11 @@ async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskC
 }
 
 async function fetchComments(zoneId: string, taskId: string) {
-  const { data, error } = await supabase
-    .from('zone_task_comments')
+  const { data, error } = await (supabase
+    .from('zone_task_comments' as any)
     .select('*, user:user_id(email, raw_user_meta_data)')
     .eq('task_id', taskId)
-    .order('created_at', { ascending: true });
+    .order('created_at', { ascending: true }) as any);
   if (error) throw error;
   return data || [];
 }
@@ -185,14 +185,14 @@ export function useZoneTaskComments(zoneId: string | null, taskId: string | null
     mutationFn: async (content: string) => {
       if (!zoneId || !taskId) throw new Error('No zone or task selected');
       const userId = (await supabase.auth.getUser()).data.user?.id;
-      const { error } = await supabase
-        .from('zone_task_comments')
+      const { error } = await (supabase
+        .from('zone_task_comments' as any)
         .insert({
           zone_id: zoneId,
           task_id: taskId,
           user_id: userId,
           content,
-        } as any);
+        }) as any);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId) }),
@@ -200,10 +200,10 @@ export function useZoneTaskComments(zoneId: string | null, taskId: string | null
 
   const updateCommentMutation = useMutation({
     mutationFn: async ({ id, content }: { id: string; content: string }) => {
-      const { error } = await supabase
-        .from('zone_task_comments')
-        .update({ content } as any)
-        .eq('id', id);
+      const { error } = await (supabase
+        .from('zone_task_comments' as any)
+        .update({ content })
+        .eq('id', id) as any);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId) }),
@@ -211,10 +211,10 @@ export function useZoneTaskComments(zoneId: string | null, taskId: string | null
 
   const deleteCommentMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from('zone_task_comments')
+      const { error } = await (supabase
+        .from('zone_task_comments' as any)
         .delete()
-        .eq('id', id);
+        .eq('id', id) as any);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId) }),
