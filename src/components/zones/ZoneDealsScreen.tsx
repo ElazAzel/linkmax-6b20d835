@@ -27,6 +27,19 @@ interface ZoneDealsScreenProps {
   zoneId: string;
 }
 
+interface DealsFilterPreset {
+  id: string;
+  name: string;
+  filters: {
+    filterOverdue: boolean;
+    filterAssignee: string;
+    filterDateFrom: string;
+    filterDateTo: string;
+    filterValueMin: string;
+    filterValueMax: string;
+  };
+}
+
 export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDealsScreenProps) {
   const { t } = useTranslation();
   const { members } = useZoneContext();
@@ -44,6 +57,12 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const [filterOpen, setFilterOpen] = useState(false);
   const [newDeal, setNewDeal] = useState({ title: '', contact_id: '', value_amount: 0, next_step: '' });
 
+  // Saved filter presets (per zone, local to browser)
+  const [filterPresets, setFilterPresets] = useState<DealsFilterPreset[]>([]);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('');
+  const [presetDialogOpen, setPresetDialogOpen] = useState(false);
+  const [presetName, setPresetName] = useState('');
+
   /** When user drops deal on last stage, show Won/Lost dialog */
   const [pendingWonLost, setPendingWonLost] = useState<{ deal: ZoneDeal; targetStageId: string } | null>(null);
   const [pendingLostReason, setPendingLostReason] = useState('');
@@ -53,6 +72,76 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } })
   );
+
+  const storageKey = useMemo(
+    () => `lnkmx_zone_deals_presets_${zoneId}`,
+    [zoneId]
+  );
+
+  // Load presets from localStorage
+  useMemo(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem(storageKey) : null;
+      if (raw) {
+        const parsed = JSON.parse(raw) as DealsFilterPreset[];
+        setFilterPresets(Array.isArray(parsed) ? parsed : []);
+      }
+    } catch {
+      // ignore
+    }
+  }, [storageKey]);
+
+  const clearPresetSelection = () => {
+    if (selectedPresetId) {
+      setSelectedPresetId('');
+    }
+  };
+
+  const handleApplyPreset = (presetId: string) => {
+    const preset = filterPresets.find(p => p.id === presetId);
+    if (!preset) return;
+
+    setSelectedPresetId(presetId);
+    setFilterOverdue(preset.filters.filterOverdue);
+    setFilterAssignee(preset.filters.filterAssignee);
+    setFilterDateFrom(preset.filters.filterDateFrom);
+    setFilterDateTo(preset.filters.filterDateTo);
+    setFilterValueMin(preset.filters.filterValueMin);
+    setFilterValueMax(preset.filters.filterValueMax);
+  };
+
+  const handleSavePreset = () => {
+    const name = presetName.trim();
+    if (!name) return;
+
+    const newPreset: DealsFilterPreset = {
+      id: (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
+        ? (crypto as any).randomUUID()
+        : Math.random().toString(36).slice(2),
+      name,
+      filters: {
+        filterOverdue,
+        filterAssignee,
+        filterDateFrom,
+        filterDateTo,
+        filterValueMin,
+        filterValueMax,
+      },
+    };
+
+    const updated = [...filterPresets, newPreset];
+    setFilterPresets(updated);
+    setSelectedPresetId(newPreset.id);
+    setPresetDialogOpen(false);
+
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(storageKey, JSON.stringify(updated));
+      }
+    } catch {
+      // ignore storage errors
+    }
+  };
 
   // Group deals by stage (with all filters)
   const dealsByStage = useMemo(() => {
@@ -174,19 +263,22 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
   if (loading) {
     return (
-      <div className="p-6 animate-pulse space-y-4">
-        <div className="h-8 bg-muted rounded w-48" />
-        <div className="h-64 bg-muted rounded-xl" />
+      <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-64px)]">
+        <div className="p-6 animate-pulse space-y-4">
+          <div className="h-8 bg-muted rounded w-48" />
+          <div className="h-64 bg-muted rounded-xl" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-64px)]">
+      <div className="p-4 md:p-6 space-y-4 flex-1 overflow-y-auto">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <h1 className="text-2xl font-bold">{t('zones.deals.title', 'Deals Pipeline')}</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap items-center">
           <Popover open={filterOpen} onOpenChange={setFilterOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
@@ -197,7 +289,13 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             <PopoverContent className="w-72" align="end">
               <div className="space-y-3">
                 <Label className="text-xs text-muted-foreground">{t('zones.deals.assignee', 'Assignee')}</Label>
-                <Select value={filterAssignee || '__all__'} onValueChange={v => setFilterAssignee(v === '__all__' ? '' : v)}>
+                <Select
+                  value={filterAssignee || '__all__'}
+                  onValueChange={v => {
+                    clearPresetSelection();
+                    setFilterAssignee(v === '__all__' ? '' : v);
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder={t('zones.deals.allAssignees', 'All')} />
                   </SelectTrigger>
@@ -213,24 +311,67 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <Label className="text-xs text-muted-foreground">{t('zones.deals.dateFrom', 'From')}</Label>
-                    <Input type="date" value={filterDateFrom} onChange={(e) => setFilterDateFrom(e.target.value)} />
+                    <Input
+                      type="date"
+                      value={filterDateFrom}
+                      onChange={(e) => {
+                        clearPresetSelection();
+                        setFilterDateFrom(e.target.value);
+                      }}
+                    />
                   </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">{t('zones.deals.dateTo', 'To')}</Label>
-                    <Input type="date" value={filterDateTo} onChange={(e) => setFilterDateTo(e.target.value)} />
+                    <Input
+                      type="date"
+                      value={filterDateTo}
+                      onChange={(e) => {
+                        clearPresetSelection();
+                        setFilterDateTo(e.target.value);
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <Label className="text-xs text-muted-foreground">{t('zones.deals.valueMin', 'Min value')}</Label>
-                    <Input type="number" placeholder="0" value={filterValueMin} onChange={(e) => setFilterValueMin(e.target.value)} />
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={filterValueMin}
+                      onChange={(e) => {
+                        clearPresetSelection();
+                        setFilterValueMin(e.target.value);
+                      }}
+                    />
                   </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">{t('zones.deals.valueMax', 'Max value')}</Label>
-                    <Input type="number" placeholder="—" value={filterValueMax} onChange={(e) => setFilterValueMax(e.target.value)} />
+                    <Input
+                      type="number"
+                      placeholder="—"
+                      value={filterValueMax}
+                      onChange={(e) => {
+                        clearPresetSelection();
+                        setFilterValueMax(e.target.value);
+                      }}
+                    />
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => { setFilterAssignee(''); setFilterDateFrom(''); setFilterDateTo(''); setFilterValueMin(''); setFilterValueMax(''); setFilterOpen(false); }}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setFilterAssignee('');
+                    setFilterDateFrom('');
+                    setFilterDateTo('');
+                    setFilterValueMin('');
+                    setFilterValueMax('');
+                    setFilterOverdue(false);
+                    setSelectedPresetId('');
+                    setFilterOpen(false);
+                  }}
+                >
                   {t('zones.deals.clearFilters', 'Clear filters')}
                 </Button>
               </div>
@@ -239,11 +380,46 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           <Button
             variant={filterOverdue ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setFilterOverdue(!filterOverdue)}
+            onClick={() => {
+              clearPresetSelection();
+              setFilterOverdue(!filterOverdue);
+            }}
           >
             <Filter className="h-4 w-4 mr-1" />
             {t('zones.deals.overdue', 'Overdue')}
           </Button>
+          <Select
+            value={selectedPresetId || '__none__'}
+            onValueChange={(v) => {
+              if (v === '__none__') {
+                setSelectedPresetId('');
+                return;
+              }
+              if (v === '__save__') {
+                setPresetName('');
+                setPresetDialogOpen(true);
+                return;
+              }
+              handleApplyPreset(v);
+            }}
+          >
+            <SelectTrigger className="h-9 w-40 text-xs">
+              <SelectValue placeholder={t('zones.deals.presets.placeholder', 'Фильтры')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__none__">
+                {t('zones.deals.presets.none', 'Без пресета')}
+              </SelectItem>
+              {filterPresets.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  {p.name}
+                </SelectItem>
+              ))}
+              <SelectItem value="__save__">
+                {t('zones.deals.presets.saveCurrent', 'Сохранить текущие')}
+              </SelectItem>
+            </SelectContent>
+          </Select>
           <Button onClick={() => setCreateOpen(true)} size="sm">
             <Plus className="h-4 w-4 mr-1" />
             {t('zones.deals.newDeal', 'New Deal')}
@@ -278,7 +454,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
       {/* Kanban Board with DnD */}
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="flex gap-4 overflow-x-auto pb-4 min-h-[400px]">
+        <div className="flex gap-4 overflow-x-auto pb-4 min-h-[360px] md:min-h-[420px]">
           {stages.map((stage) => (
             <DealKanbanColumn
               key={stage.id}
@@ -292,6 +468,37 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
           {activeDragDeal && <DealCard deal={activeDragDeal} onClick={() => { }} />}
         </DragOverlay>
       </DndContext>
+      </div>
+
+      {/* Save filters preset dialog */}
+      <Dialog open={presetDialogOpen} onOpenChange={setPresetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('zones.deals.presets.saveTitle', 'Сохранить фильтры')}</DialogTitle>
+            <DialogDescription>
+              {t('zones.deals.presets.saveDescription', 'Введите название для текущей комбинации фильтров, чтобы быстро применять её позже.')}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 py-2">
+            <Label className="text-xs">
+              {t('zones.deals.presets.nameLabel', 'Название пресета')}
+            </Label>
+            <Input
+              value={presetName}
+              onChange={(e) => setPresetName(e.target.value)}
+              placeholder={t('zones.deals.presets.namePlaceholder', 'Например: Большие сделки за месяц')}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPresetDialogOpen(false)}>
+              {t('common.cancel', 'Cancel')}
+            </Button>
+            <Button onClick={handleSavePreset} disabled={!presetName.trim()}>
+              {t('common.save', 'Save')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Create Deal Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>

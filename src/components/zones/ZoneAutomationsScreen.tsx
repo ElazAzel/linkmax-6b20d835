@@ -88,6 +88,34 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
   const getTrigger = (v: string) => TRIGGERS.find(t => t.value === v);
   const getAction = (v: string) => ACTIONS.find(a => a.value === v);
 
+  const applyPreset = (presetId: 'overdue-task' | 'invoice-paid') => {
+    if (presetId === 'overdue-task') {
+      setForm({
+        name: t('zones.automations.presets.overdueTaskName', 'Задача при просрочке шага'),
+        trigger_type: 'overdue_next_step',
+        action_type: 'create_task',
+        config: {
+          task_title: t(
+            'zones.automations.presets.overdueTaskText',
+            'Позвонить клиенту и обновить статус сделки'
+          ),
+        },
+      });
+      setShowCreate(true);
+      return;
+    }
+
+    if (presetId === 'invoice-paid') {
+      setForm({
+        name: t('zones.automations.presets.invoicePaidName', 'Закрывать сделку после оплаты'),
+        trigger_type: 'invoice_paid',
+        action_type: 'change_deal_stage',
+        config: {},
+      });
+      setShowCreate(true);
+    }
+  };
+
   return (
     <div className="p-4 md:p-6 space-y-8 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
@@ -102,6 +130,26 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
         </div>
         <Button onClick={() => setShowCreate(true)} className="rounded-xl shadow-lg shadow-warning/20 hover:scale-105 transition-transform">
           <Plus className="h-4 w-4 mr-2" /> {t('zones.automations.addRule', 'Добавить правило')}
+        </Button>
+      </div>
+
+      {/* Quick presets */}
+      <div className="flex flex-wrap gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-full border-dashed text-xs"
+          onClick={() => applyPreset('overdue-task')}
+        >
+          ⏰ {t('zones.automations.presets.overdueTaskChip', 'Задача при просрочке шага')}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-full border-dashed text-xs"
+          onClick={() => applyPreset('invoice-paid')}
+        >
+          💰 {t('zones.automations.presets.invoicePaidChip', 'Закрывать сделку после оплаты')}
         </Button>
       </div>
 

@@ -26,6 +26,13 @@ interface ZoneContactsScreenProps {
   zoneId: string;
 }
 
+interface ContactsFilterPreset {
+  id: string;
+  name: string;
+  search: string;
+  activeTag: string | null;
+}
+
 export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: ZoneContactsScreenProps) {
   const { t } = useTranslation();
   const { contacts, loading, createContact, updateContact, deleteContact, bulkImport } = useZoneContacts(zoneId);
@@ -34,6 +41,10 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
   const [selectedContact, setSelectedContact] = useState<ZoneContact | null>(null);
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [presets, setPresets] = useState<ContactsFilterPreset[]>([]);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('');
+  const [presetDialogOpen, setPresetDialogOpen] = useState(false);
+  const [presetName, setPresetName] = useState('');
   const [newContact, setNewContact] = useState({
     name: '',
     phone: '',
@@ -43,6 +54,67 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
     company: '',
     position: '',
   });
+
+  const storageKey = useMemo(
+    () => `lnkmx_zone_contacts_presets_${zoneId}`,
+    [zoneId]
+  );
+
+  // Load presets from localStorage
+  useMemo(() => {
+    try {
+      if (typeof window === 'undefined') return;
+      const raw = window.localStorage.getItem(storageKey);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as ContactsFilterPreset[];
+      if (Array.isArray(parsed)) {
+        setPresets(parsed);
+      }
+    } catch {
+      // ignore
+    }
+  }, [storageKey]);
+
+  const clearPresetSelection = () => {
+    if (selectedPresetId) {
+      setSelectedPresetId('');
+    }
+  };
+
+  const applyPreset = (presetId: string) => {
+    const preset = presets.find(p => p.id === presetId);
+    if (!preset) return;
+    setSelectedPresetId(preset.id);
+    setSearch(preset.search);
+    setActiveTag(preset.activeTag);
+  };
+
+  const handleSavePreset = () => {
+    const name = presetName.trim();
+    if (!name) return;
+
+    const newPreset: ContactsFilterPreset = {
+      id: (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
+        ? (crypto as any).randomUUID()
+        : Math.random().toString(36).slice(2),
+      name,
+      search,
+      activeTag,
+    };
+
+    const updated = [...presets, newPreset];
+    setPresets(updated);
+    setSelectedPresetId(newPreset.id);
+    setPresetDialogOpen(false);
+
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(storageKey, JSON.stringify(updated));
+      }
+    } catch {
+      // ignore
+    }
+  };
 
   // Collect all unique tags
   const allTags = useMemo(() => {
@@ -90,9 +162,9 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
 
   return (
     <div className="p-4 md:p-6 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <h1 className="text-2xl font-bold">{t('zones.contacts.title', 'Contacts')}</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" size="sm" onClick={() => setImportOpen(true)}>
             <Upload className="h-4 w-4 mr-1" />
             {t('zones.contacts.import', 'Import')}
@@ -105,27 +177,94 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
       </div>
 
       {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder={t('zones.contacts.search', 'Search contacts...')}
-          className="pl-9"
-        />
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative sm:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={e => {
+              clearPresetSelection();
+              setSearch(e.target.value);
+            }}
+            placeholder={t('zones.contacts.search', 'Search contacts...')}
+            className="pl-9"
+          />
+        </div>
+        {presets.length > 0 && (
+          <div className="flex items-center gap-2">
+            <Label className="text-xs text-muted-foreground">
+              {t('zones.contacts.presets.label', 'Segments')}
+            </Label>
+            <select
+              value={selectedPresetId || ''}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (!v) {
+                  setSelectedPresetId('');
+                  return;
+                }
+                if (v === '__save__') {
+                  setPresetName('');
+                  setPresetDialogOpen(true);
+                  return;
+                }
+                applyPreset(v);
+              }}
+              className="h-8 rounded-md border border-input bg-background px-2 text-xs"
+            >
+              <option value="">{t('zones.contacts.presets.none', 'All contacts')}</option>
+              {presets.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+              <option value="__save__">
+                {t('zones.contacts.presets.saveCurrent', 'Save current filters')}
+              </option>
+            </select>
+          </div>
+        )}
+        {presets.length === 0 && (search || activeTag) && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 text-xs"
+            onClick={() => {
+              setPresetName('');
+              setPresetDialogOpen(true);
+            }}
+          >
+            {t('zones.contacts.presets.createFromCurrent', 'Save as segment')}
+          </Button>
+        )}
       </div>
 
       {/* Tags Filter */}
       {allTags.length > 0 && (
         <div className="flex gap-1.5 flex-wrap">
           {activeTag && (
-            <Badge variant="default" className="cursor-pointer gap-1" onClick={() => setActiveTag(null)}>
+            <Badge
+              variant="default"
+              className="cursor-pointer gap-1"
+              onClick={() => {
+                clearPresetSelection();
+                setActiveTag(null);
+              }}
+            >
               {activeTag}
               <X className="h-3 w-3" />
             </Badge>
           )}
           {allTags.filter(t => t !== activeTag).map(tag => (
-            <Badge key={tag} variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setActiveTag(tag)}>
+            <Badge
+              key={tag}
+              variant="outline"
+              className="cursor-pointer hover:bg-muted"
+              onClick={() => {
+                clearPresetSelection();
+                setActiveTag(tag);
+              }}
+            >
               {tag}
             </Badge>
           ))}
@@ -143,6 +282,36 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
           </Badge>
         )}
       </div>
+
+      {/* Save preset dialog */}
+      <Dialog open={presetDialogOpen} onOpenChange={setPresetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('zones.contacts.presets.saveTitle', 'Save segment')}</DialogTitle>
+            <DialogDescription>
+              {t('zones.contacts.presets.saveDescription', 'Give a name to this combination of search and tags to reuse it later.')}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 py-2">
+            <Label className="text-xs">
+              {t('zones.contacts.presets.nameLabel', 'Segment name')}
+            </Label>
+            <Input
+              value={presetName}
+              onChange={(e) => setPresetName(e.target.value)}
+              placeholder={t('zones.contacts.presets.namePlaceholder', 'e.g. VIP clients, warm leads')}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPresetDialogOpen(false)}>
+              {t('common.cancel', 'Cancel')}
+            </Button>
+            <Button onClick={handleSavePreset} disabled={!presetName.trim()}>
+              {t('common.save', 'Save')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Contacts List */}
       <div className="space-y-2">
