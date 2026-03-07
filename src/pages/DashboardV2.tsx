@@ -57,6 +57,7 @@ import {
   ZoneBookingsCalendarScreenWrapper,
   ZoneEventsScreenWrapper,
   ZoneProductsScreenWrapper,
+  ZoneAnalyticsScreenWrapper,
 } from '@/components/zones/ZoneWrappers';
 import { ZoneCommandPalette } from '@/components/zones/ZoneCommandPalette';
 
@@ -106,9 +107,9 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics';
 
-const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings'];
+const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics'];
 const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
@@ -640,6 +641,7 @@ function DashboardV2Inner() {
 
             {/* Zone Screens - Business tier only */}
             {currentTab === 'zone-dashboard' && canUseBusinessZone() && <ZoneDashboardWrapper />}
+            {currentTab === 'zone-analytics' && canUseBusinessZone() && <ZoneAnalyticsScreenWrapper />}
             {currentTab === 'zone-deals' && canUseBusinessZone() && <ZoneDealsScreenWrapper />}
             {currentTab === 'zone-contacts' && canUseBusinessZone() && <ZoneContactsScreenWrapper />}
             {currentTab === 'zone-inbox' && canUseBusinessZone() && <ZoneInboxScreenWrapper />}

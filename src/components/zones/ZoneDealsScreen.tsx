@@ -15,12 +15,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Download from 'lucide-react/dist/esm/icons/download';
 import Filter from 'lucide-react/dist/esm/icons/filter';
 import { toast } from 'sonner';
 import { generateId } from '@/lib/utils/generateId';
 import type { ZoneDeal } from '@/types/zones';
+import { useZoneDealFields } from '@/hooks/zones/useZoneDealFields';
 import { DealKanbanColumn } from './deals/DealKanbanColumn';
 import { DealCard } from './deals/DealCard';
 import { DealDetailSheet } from './deals/DealDetailSheet';
@@ -65,6 +67,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     return deals.filter(d => d.pipeline_id === selectedPipelineId || !d.pipeline_id);
   }, [deals, selectedPipelineId]);
   const { contacts } = useZoneContacts(zoneId);
+  const { fields: dealFields } = useZoneDealFields(zoneId);
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedDeal, setSelectedDeal] = useState<ZoneDeal | null>(null);
   const [activeDragDeal, setActiveDragDeal] = useState<ZoneDeal | null>(null);
@@ -75,7 +78,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const [filterValueMin, setFilterValueMin] = useState<string>('');
   const [filterValueMax, setFilterValueMax] = useState<string>('');
   const [filterOpen, setFilterOpen] = useState(false);
-  const [newDeal, setNewDeal] = useState({ title: '', contact_id: '', value_amount: 0, next_step: '' });
+  const [newDeal, setNewDeal] = useState({ title: '', contact_id: '', value_amount: 0, next_step: '', custom_fields: {} as Record<string, any> });
 
   // Saved filter presets (per zone, local to browser)
   const [filterPresets, setFilterPresets] = useState<DealsFilterPreset[]>([]);
@@ -254,20 +257,28 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
   const handleCreate = async () => {
     if (!newDeal.title.trim()) return;
+
+    const firstStageId = selectedPipelineId
+      ? stages.find(s => s.pipeline_id === selectedPipelineId)?.id
+      : (stages.length > 0 ? stages[0].id : null);
+
+    if (!firstStageId) {
+      toast.error(t('zones.deals.noStages', 'No stages available'));
+      return;
+    }
+
     try {
-      const defaultStage = currentStages.find((s) => s.is_default) || currentStages[0];
       await createDeal({
         title: newDeal.title,
         contact_id: newDeal.contact_id || null,
-        pipeline_id: selectedPipelineId || null,
         value_amount: newDeal.value_amount,
-        next_step: newDeal.next_step || null,
-        stage_id: defaultStage?.id || null,
-        status: 'open',
-        currency: 'KZT',
-      } as any);
+        stage_id: firstStageId,
+        next_step: newDeal.next_step || undefined,
+        pipeline_id: selectedPipelineId || null,
+        custom_fields: newDeal.custom_fields,
+      });
       setCreateOpen(false);
-      setNewDeal({ title: '', contact_id: '', value_amount: 0, next_step: '' });
+      setNewDeal({ title: '', contact_id: '', value_amount: 0, next_step: '', custom_fields: {} });
       toast.success(t('zones.deals.created', 'Deal created'));
     } catch (err: any) {
       toast.error(err.message);
@@ -589,6 +600,53 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                 placeholder={t('zones.deals.nextStepPlaceholder', 'Call back tomorrow')}
               />
             </div>
+
+            {/* Custom Fields */}
+            {dealFields.length > 0 && (
+              <div className="pt-2 border-t mt-4 space-y-4">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t('zones.deals.customFieldsBlock', 'Дополнительные поля')}</p>
+                {dealFields.map(field => (
+                  <div key={field.id} className="space-y-2">
+                    <Label className="flex items-center gap-1">
+                      {field.name} {field.is_required && <span className="text-destructive">*</span>}
+                    </Label>
+
+                    {field.type === 'text' && (
+                      <Input
+                        value={newDeal.custom_fields[field.name] || ''}
+                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: e.target.value } }))}
+                      />
+                    )}
+
+                    {field.type === 'number' && (
+                      <Input
+                        type="number"
+                        value={newDeal.custom_fields[field.name] || ''}
+                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: Number(e.target.value) } }))}
+                      />
+                    )}
+
+                    {field.type === 'date' && (
+                      <Input
+                        type="date"
+                        value={newDeal.custom_fields[field.name] || ''}
+                        onChange={e => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: e.target.value } }))}
+                      />
+                    )}
+
+                    {field.type === 'boolean' && (
+                      <div className="flex items-center space-x-2 h-10">
+                        <Checkbox
+                          checked={!!newDeal.custom_fields[field.name]}
+                          onCheckedChange={c => setNewDeal(p => ({ ...p, custom_fields: { ...p.custom_fields, [field.name]: !!c } }))}
+                        />
+                        <span className="text-sm">{t('common.yes', 'Да')}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>

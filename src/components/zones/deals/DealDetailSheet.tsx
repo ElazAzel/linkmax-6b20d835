@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -29,6 +30,7 @@ import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import type { ZoneDeal, ZoneDealStage } from '@/types/zones';
 import { useZoneDealActivities, useZoneDealProducts } from '@/hooks/zones/useZoneDeals';
+import { useZoneDealFields } from '@/hooks/zones/useZoneDealFields';
 import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
@@ -66,6 +68,10 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const [selectedProductId, setSelectedProductId] = useState('');
   const [newProdQty, setNewProdQty] = useState(1);
 
+  // Custom fields state
+  const { fields: dealFields } = useZoneDealFields(deal?.zone_id || null);
+  const [customFieldsValues, setCustomFieldsValues] = useState<Record<string, any>>({});
+
   // React Query Hooks
   const { activities, loading: activitiesLoading } = useZoneDealActivities(deal?.zone_id || null, deal?.id || null);
   const { dealProducts, addProduct, removeProduct } = useZoneDealProducts(deal?.zone_id || null, deal?.id || null);
@@ -83,8 +89,9 @@ export const DealDetailSheet = memo(function DealDetailSheet({
     if (open && deal) {
       setShowLostDialog(false);
       setIsAddingProduct(false);
+      setCustomFieldsValues(deal.custom_fields || {});
     }
-  }, [open, deal?.id]);
+  }, [open, deal?.id, deal?.custom_fields]);
 
   if (!deal) return null;
 
@@ -401,6 +408,62 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       </div>
                     </div>
                   </div>
+
+                  {dealFields.length > 0 && (
+                    <div className="pt-2 border-t mt-4 space-y-4">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t('zones.deals.customFieldsBlock', 'Дополнительные поля')}</p>
+                      {dealFields.map(field => (
+                        <div key={field.id} className="space-y-1.5">
+                          <Label className="flex items-center gap-1 text-xs">
+                            {field.name}
+                          </Label>
+
+                          {field.type === 'text' && (
+                            <Input
+                              className="h-8 text-sm bg-muted/30"
+                              value={customFieldsValues[field.name] || ''}
+                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.name]: e.target.value }))}
+                              onBlur={() => onUpdateDeal(deal.id, { custom_fields: customFieldsValues })}
+                            />
+                          )}
+
+                          {field.type === 'number' && (
+                            <Input
+                              type="number"
+                              className="h-8 text-sm bg-muted/30"
+                              value={customFieldsValues[field.name] || ''}
+                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.name]: Number(e.target.value) }))}
+                              onBlur={() => onUpdateDeal(deal.id, { custom_fields: customFieldsValues })}
+                            />
+                          )}
+
+                          {field.type === 'date' && (
+                            <Input
+                              type="date"
+                              className="h-8 text-sm bg-muted/30"
+                              value={customFieldsValues[field.name] || ''}
+                              onChange={e => setCustomFieldsValues(p => ({ ...p, [field.name]: e.target.value }))}
+                              onBlur={() => onUpdateDeal(deal.id, { custom_fields: customFieldsValues })}
+                            />
+                          )}
+
+                          {field.type === 'boolean' && (
+                            <div className="flex items-center space-x-2 h-8">
+                              <Checkbox
+                                checked={!!customFieldsValues[field.name]}
+                                onCheckedChange={async (c) => {
+                                  const newVal = { ...customFieldsValues, [field.name]: !!c };
+                                  setCustomFieldsValues(newVal);
+                                  await onUpdateDeal(deal.id, { custom_fields: newVal });
+                                }}
+                              />
+                              <span className="text-xs">{t('common.yes', 'Да')}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   {deal.contact && (
                     <Card className="bg-primary/5 border-primary/10">

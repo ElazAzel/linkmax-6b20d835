@@ -17,7 +17,7 @@ import Auth from "./pages/Auth";
 const deferNonCritical = () => {
   // Sentry — only init when actually needed (lazy-loaded via logger on first error)
   // No eager import here; logger.ts handles dynamic import on warn/error
-  
+
   // Cache version check — defer to background
   import('@/lib/utils/cache-utils').then(({ checkCacheVersion }) => {
     checkCacheVersion();
@@ -29,7 +29,7 @@ let deferFired = false;
 const fireDeferOnce = () => {
   if (deferFired) return;
   deferFired = true;
-  ['scroll', 'click', 'keydown', 'touchstart'].forEach(e => 
+  ['scroll', 'click', 'keydown', 'touchstart'].forEach(e =>
     window.removeEventListener(e, fireDeferOnce)
   );
   _ric(deferNonCritical);
@@ -153,6 +153,7 @@ const router = createBrowserRouter([
       { path: "dashboard/events/:eventId", element: <Dashboard /> },
       { path: "dashboard/events/:eventId/scanner", element: <EventScanner /> },
       { path: "dashboard/zone-dashboard", element: <Dashboard /> },
+      { path: "dashboard/zone-analytics", element: <Dashboard /> },
       { path: "dashboard/zone-deals", element: <Dashboard /> },
       { path: "dashboard/zone-contacts", element: <Dashboard /> },
       { path: "dashboard/zone-inbox", element: <Dashboard /> },

@@ -30,6 +30,7 @@ import { ZONE_PLANS, getPlanByCode, getMemberLimitFromPlan } from '@/types/zones
 import { ZonePlanSelector } from './ZonePlanSelector';
 import { ZonePipelineSettings } from './settings/ZonePipelineSettings';
 import { ZoneContactFieldsSettings } from './settings/ZoneContactFieldsSettings';
+import { ZoneDealFieldsSettings } from './settings/ZoneDealFieldsSettings';
 import Layers from 'lucide-react/dist/esm/icons/layers';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 
@@ -371,9 +372,14 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
           </Card>
         </TabsContent>
 
-        {/* Contact Fields Tab */}
-        <TabsContent value="fields" className="space-y-4 mt-4">
-          <ZoneContactFieldsSettings zoneId={zone.id} />
+        {/* Contact/Deal Fields Tab */}
+        <TabsContent value="fields" className="space-y-8 mt-4">
+          <div>
+            <ZoneContactFieldsSettings zoneId={zone.id} />
+          </div>
+          <div className="pt-4 border-t border-border/50">
+            <ZoneDealFieldsSettings zoneId={zone.id} />
+          </div>
         </TabsContent>
 
         {/* General Tab */}
