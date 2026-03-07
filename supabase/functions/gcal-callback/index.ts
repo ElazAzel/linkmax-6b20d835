@@ -75,11 +75,11 @@ serve(async (req) => {
         );
 
         const dataToVerify = `${user_id}:${redirect_url}:${ts}`;
-        const sigBytes = base64Decode(sig);
+        const sigBytes = new Uint8Array(base64Decode(sig));
         const isValid = await crypto.subtle.verify(
             "HMAC",
             key,
-            sigBytes,
+            sigBytes as ArrayBuffer,
             encoder.encode(dataToVerify)
         );
 
@@ -164,10 +164,11 @@ serve(async (req) => {
 
         // Redirect back to the app
         return Response.redirect(`${redirect_url}?gcal_connected=true`, 302);
-    } catch (err) {
+    } catch (err: unknown) {
         console.error("gcal-callback error:", err);
+        const message = err instanceof Error ? err.message : String(err);
         return new Response(
-            `Error processing Google Calendar callback: ${err.message}`,
+            `Error processing Google Calendar callback: ${message}`,
             { status: 500 }
         );
     }
