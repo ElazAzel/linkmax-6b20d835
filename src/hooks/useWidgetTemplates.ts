@@ -19,10 +19,10 @@ export function useWidgetTemplates() {
     return useQuery({
         queryKey: ['widget_templates'],
         queryFn: async () => {
-            const { data, error } = await supabase
-                .from('widget_templates')
+            const { data, error } = await (supabase
+                .from('widget_templates' as any)
                 .select('*')
-                .order('id', { ascending: true });
+                .order('id', { ascending: true }) as any);
 
             if (error) throw error;
 

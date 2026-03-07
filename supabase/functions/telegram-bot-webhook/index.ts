@@ -114,6 +114,8 @@ interface TelegramUpdate {
   };
 }
 
+const tempLanguageStore: Record<string, string> = {};
+
 async function getUserLanguage(supabase: any, chatId: string): Promise<Language> {
   try {
     const { data, error } = await supabase

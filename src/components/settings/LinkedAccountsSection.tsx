@@ -98,14 +98,28 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleLinkAccount = async (provider: 'google' | 'apple') => {
     setLinkingProvider(provider);
     try {
-      // Use lovable.auth.signInWithOAuth instead of supabase.auth.linkIdentity
-      // since manual linking is disabled
-      const { error } = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+      // Use supabase.auth.linkIdentity to properly link to the existing account
+      // This ensures Apple (which uses private relay emails) doesn't create a new account
+      const { data, error } = await supabase.auth.linkIdentity({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/dashboard/settings`,
+        },
       });
 
       if (error) {
         console.error('Link identity error:', error);
+        // If linkIdentity is disabled, fall back to signInWithOAuth (works for Google via email matching)
+        if (error.message?.includes('Manual linking is disabled') || error.status === 422) {
+          const { error: oauthError } = await lovable.auth.signInWithOAuth(provider, {
+            redirect_uri: window.location.origin,
+          });
+          if (oauthError) {
+            toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
+            setLinkingProvider(null);
+          }
+          return;
+        }
         toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
         setLinkingProvider(null);
         return;
