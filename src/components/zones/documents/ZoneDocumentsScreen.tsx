@@ -29,7 +29,7 @@ const FILTER_TABS: { value: StatusFilter; label: string }[] = [
     { value: 'draft', label: 'Черновики' },
     { value: 'sent', label: 'Отправленные' },
     { value: 'signed', label: 'Подписанные' },
-    { value: 'cancelled', label: 'Отменённые' },
+    { value: 'archived', label: 'Архив' },
 ];
 
 export const ZoneDocumentsScreen = () => {
