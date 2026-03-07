@@ -97,9 +97,10 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   const handleLinkAccount = async (provider: 'google' | 'apple') => {
     setLinkingProvider(provider);
     try {
-      // Use supabase.auth.linkIdentity to properly link to the existing account
-      // This ensures Apple (which uses private relay emails) doesn't create a new account
-      const { data, error } = await supabase.auth.linkIdentity({
+      // Manual linking is disabled in this Supabase project.
+      // Use signInWithOAuth — Supabase auto-links identities when
+      // the OAuth email matches an existing account ("automatic linking").
+      const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: `${window.location.origin}/dashboard/settings`,
@@ -107,58 +108,24 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
       });
 
       if (error) {
-        console.error('Link identity error:', error);
-        toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
+        console.error('Link account error:', error);
+        toast.error(t('settings.linkedAccounts.linkFailed', 'Не удалось привязать аккаунт'));
         setLinkingProvider(null);
         return;
       }
 
-      // If successful, the browser will redirect to the OAuth provider
+      // Browser will redirect to the OAuth provider → Supabase auto-links → redirects back
     } catch (error) {
-      console.error('Link identity exception:', error);
-      toast.error(t('settings.linkedAccounts.linkFailed', 'Failed to link account'));
+      console.error('Link account exception:', error);
+      toast.error(t('settings.linkedAccounts.linkFailed', 'Не удалось привязать аккаунт'));
       setLinkingProvider(null);
     }
   };
 
-  const handleUnlinkAccount = async (provider: 'google' | 'apple') => {
-    const linkedCount = linkedAccounts.filter(a => a.linked).length;
-    if (linkedCount <= 1) {
-      toast.error(t('settings.linkedAccounts.cannotUnlinkLast', 'You must have at least one login method'));
-      return;
-    }
-
-    setLinkingProvider(provider);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const identity = user.identities?.find(i => i.provider === provider);
-      if (!identity) {
-        toast.error(t('settings.linkedAccounts.identityNotFound', 'Identity not found or already unlinked'));
-        await loadLinkedAccounts();
-        setLinkingProvider(null);
-        return;
-      }
-
-      const { error } = await supabase.auth.unlinkIdentity(identity);
-
-      if (error) {
-        if (error.status === 404 || error.message?.includes('not found') || error.message?.includes('primary')) {
-          toast.error(t('settings.linkedAccounts.primaryIdentity', 'Аккаунт не найден или является основным (primary). Основной метод входа отвязать нельзя.'));
-          await loadLinkedAccounts();
-        } else {
-          toast.error(error.message || t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
-        }
-      } else {
-        toast.success(t('settings.linkedAccounts.unlinkSuccess', 'Account unlinked'));
-        await loadLinkedAccounts();
-      }
-    } catch (error) {
-      toast.error(t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
-    } finally {
-      setLinkingProvider(null);
-    }
+  const handleUnlinkAccount = async (_provider: 'google' | 'apple') => {
+    // Manual linking/unlinking is disabled in this Supabase project.
+    // unlinkIdentity requires manual linking to be enabled.
+    toast.info(t('settings.linkedAccounts.unlinkNotSupported', 'Отвязка аккаунтов временно недоступна. Обратитесь в поддержку.'));
   };
 
   // Google Calendar Integration Functions
