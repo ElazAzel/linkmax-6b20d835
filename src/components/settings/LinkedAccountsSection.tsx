@@ -1,6 +1,7 @@
 /**
  * LinkedAccountsSection - Manage linked OAuth accounts
  * Allows users to link/unlink Google and Apple accounts
+ * and connect Google Calendar integration via OAuth 2.0
  */
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +45,7 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
     checkGcalIntegration();
   }, []);
 
+  // Handle OAuth error params from Supabase auth redirect
   useEffect(() => {
     const searchParams = new URL(window.location.href).searchParams;
     const authError = searchParams.get('auth_error');
@@ -53,13 +55,37 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
       toast.error(t('settings.linkedAccounts.linkFailedReason', 'Failed to link account: {{reason}}', {
         reason: authErrorDescription || authError
       }));
-      // Clean up URL
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete('auth_error');
-      newUrl.searchParams.delete('auth_error_description');
-      window.history.replaceState(null, '', newUrl.toString());
+      cleanupUrlParams(['auth_error', 'auth_error_description']);
     }
   }, [t]);
+
+  // Handle Google Calendar OAuth callback params
+  useEffect(() => {
+    const searchParams = new URL(window.location.href).searchParams;
+    const gcalConnected = searchParams.get('gcal_connected');
+    const gcalError = searchParams.get('gcal_error');
+
+    if (gcalConnected === 'true') {
+      toast.success(t('settings.integrations.gcalConnected', 'Google Calendar успешно подключён!'));
+      setGcalIsConnected(true);
+      setGcalLastSync(new Date().toISOString());
+      cleanupUrlParams(['gcal_connected']);
+    }
+
+    if (gcalError) {
+      toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar: {{reason}}', {
+        reason: gcalError
+      }));
+      cleanupUrlParams(['gcal_error']);
+    }
+  }, [t]);
+
+  /** Remove specified query params from current URL without reload */
+  const cleanupUrlParams = (params: string[]) => {
+    const newUrl = new URL(window.location.href);
+    params.forEach(p => newUrl.searchParams.delete(p));
+    window.history.replaceState(null, '', newUrl.toString());
+  };
 
   const loadLinkedAccounts = async () => {
     try {
@@ -164,7 +190,8 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
     }
   };
 
-  // Google Calendar Integration Functions
+  // ─── Google Calendar Integration Functions ───
+
   const checkGcalIntegration = async () => {
     try {
       setGcalIsLoading(true);
@@ -199,27 +226,33 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('No active session');
 
-      const redirectUri = `${window.location.origin}/dashboard/settings`;
+      const redirectUrl = `${window.location.origin}/dashboard/settings`;
 
-      // Google OAuth URL (Requires setup in Google Cloud Console)
-      // For now, we simulate the flow pointing to our Edge Function or a redirect
+      // Call Edge Function to get the Google OAuth consent URL
+      const { data, error } = await supabase.functions.invoke('google-calendar-sync', {
+        body: {
+          action: 'get_auth_url',
+          payload: { redirect_url: redirectUrl },
+        },
+      });
+
+      if (error) {
+        console.error('get_auth_url error:', error);
+        toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar'));
+        setLinkingProvider(null);
+        return;
+      }
+
+      if (!data?.auth_url) {
+        toast.error(t('settings.integrations.gcalNotConfigured', 'Google Calendar не настроен на сервере'));
+        setLinkingProvider(null);
+        return;
+      }
+
       toast.info(t('settings.integrations.gcalRedirecting', 'Перенаправление в Google...'));
 
-      // In a real implementation we might redirect directly to Google OAuth Consent here
-      // and pass state to our Edge Function.
-
-      // const GOOGLE_CLIENT_ID = process.env.VITE_GOOGLE_CLIENT_ID;
-      // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/calendar.events&access_type=offline&prompt=consent`;
-      // window.location.href = url;
-
-      // Simulate success for now as we don't have the Google Client ID configured
-      setTimeout(async () => {
-        toast.success(t('settings.integrations.gcalConnected', 'Успешно подключено (Режим MOCK)'));
-        setGcalIsConnected(true);
-        setGcalLastSync(new Date().toISOString());
-        setLinkingProvider(null);
-      }, 1500);
-
+      // Redirect to Google OAuth Consent Screen
+      window.location.href = data.auth_url;
     } catch (err) {
       console.error(err);
       toast.error(t('settings.integrations.gcalFailed', 'Ошибка подключения Google Calendar'));
@@ -228,10 +261,32 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
   };
 
   const handleDisconnectGcal = async () => {
-    // In production we would delete the row from user_integrations
-    toast.success(t('settings.integrations.gcalDisconnected', 'Google Calendar отключен'));
-    setGcalIsConnected(false);
-    setGcalLastSync(null);
+    setLinkingProvider('google_calendar');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('No active session');
+
+      const { error } = await supabase.functions.invoke('google-calendar-sync', {
+        body: {
+          action: 'disconnect',
+          payload: {},
+        },
+      });
+
+      if (error) {
+        console.error('disconnect error:', error);
+        toast.error(t('settings.integrations.gcalDisconnectFailed', 'Ошибка отключения Google Calendar'));
+      } else {
+        toast.success(t('settings.integrations.gcalDisconnected', 'Google Calendar отключен'));
+        setGcalIsConnected(false);
+        setGcalLastSync(null);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(t('settings.integrations.gcalDisconnectFailed', 'Ошибка отключения Google Calendar'));
+    } finally {
+      setLinkingProvider(null);
+    }
   };
 
   const getProviderIcon = (provider: string) => {

@@ -89,6 +89,9 @@ verify_jwt = false # Public: sitemap must be accessible without auth
 [functions.seo-ssr]
 verify_jwt = false # Public: SSR pages must be accessible without auth
 
+[functions.gcal-callback]
+verify_jwt = false  # OAuth callback from Google, no JWT
+
 [functions.google-forms-parser]
 verify_jwt = false # Webhook: called by Google Forms
 

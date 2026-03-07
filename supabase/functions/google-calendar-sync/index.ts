@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
+import { encode as base64Encode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
 
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
@@ -9,6 +10,8 @@ const corsHeaders = {
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_CALENDAR_API = "https://www.googleapis.com/calendar/v3";
+const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 
 serve(async (req) => {
     if (req.method === "OPTIONS") {
@@ -48,6 +51,57 @@ serve(async (req) => {
 
         const { action, payload } = await req.json();
 
+        // ─── Generate Google OAuth URL ───
+        if (action === "get_auth_url") {
+            const { redirect_url } = payload;
+            if (!redirect_url) throw new Error("Missing redirect_url");
+
+            const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+            const callbackUrl = `${supabaseUrl}/functions/v1/gcal-callback`;
+
+            // Build HMAC-signed state
+            const ts = Date.now();
+            const dataToSign = `${user.id}:${redirect_url}:${ts}`;
+
+            const encoder = new TextEncoder();
+            const key = await crypto.subtle.importKey(
+                "raw",
+                encoder.encode(GOOGLE_CLIENT_SECRET),
+                { name: "HMAC", hash: "SHA-256" },
+                false,
+                ["sign"]
+            );
+            const sigBuffer = await crypto.subtle.sign(
+                "HMAC",
+                key,
+                encoder.encode(dataToSign)
+            );
+            const sig = base64Encode(new Uint8Array(sigBuffer));
+
+            const stateObj = {
+                user_id: user.id,
+                redirect_url,
+                ts,
+                sig,
+            };
+            const stateB64 = base64Encode(
+                encoder.encode(JSON.stringify(stateObj))
+            );
+
+            const authUrl = new URL(GOOGLE_AUTH_URL);
+            authUrl.searchParams.set("client_id", GOOGLE_CLIENT_ID);
+            authUrl.searchParams.set("redirect_uri", callbackUrl);
+            authUrl.searchParams.set("response_type", "code");
+            authUrl.searchParams.set("scope", CALENDAR_SCOPE);
+            authUrl.searchParams.set("access_type", "offline");
+            authUrl.searchParams.set("prompt", "consent");
+            authUrl.searchParams.set("state", stateB64);
+
+            return new Response(JSON.stringify({ auth_url: authUrl.toString() }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+        }
+
         // ─── Exchange OAuth code for tokens ───
         if (action === "exchange_code") {
             const { code, redirect_uri } = payload;
@@ -68,7 +122,18 @@ serve(async (req) => {
             const tokens = await tokenRes.json();
             if (tokens.error) throw new Error(tokens.error_description || tokens.error);
 
-            // Save tokens
+            // Save tokens via RPC
+            await supabaseAdmin.rpc("set_user_integration_tokens", {
+                p_user_id: user.id,
+                p_provider: "google_calendar",
+                p_access_token: tokens.access_token,
+                p_refresh_token: tokens.refresh_token || null,
+                p_expires_at: tokens.expires_in
+                    ? new Date(Date.now() + tokens.expires_in * 1000).toISOString()
+                    : null,
+            });
+
+            // Update status table
             await supabaseAdmin
                 .from("user_integrations_status")
                 .upsert({
@@ -78,21 +143,41 @@ serve(async (req) => {
                     updated_at: new Date().toISOString(),
                 }, { onConflict: "user_id,provider" });
 
-            // Store refresh token securely (in a separate private table or vault)
-            // For now, store in user_integrations_status metadata approach
-            // In production, use Supabase Vault
-            await supabaseAdmin.rpc("set_user_integration_tokens", {
+            return new Response(JSON.stringify({ success: true }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+        }
+
+        // ─── Disconnect Google Calendar ───
+        if (action === "disconnect") {
+            // Revoke token at Google (best effort)
+            try {
+                const tokenData = await supabaseAdmin.rpc("get_user_integration_tokens", {
+                    p_user_id: user.id,
+                    p_provider: "google_calendar",
+                });
+
+                if (tokenData.data?.access_token) {
+                    await fetch(
+                        `https://oauth2.googleapis.com/revoke?token=${tokenData.data.access_token}`,
+                        { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+                    ).catch(() => { }); // Best effort
+                }
+            } catch {
+                // Ignore revocation errors
+            }
+
+            // Delete tokens from DB
+            await supabaseAdmin.rpc("delete_user_integration", {
                 p_user_id: user.id,
                 p_provider: "google_calendar",
-                p_access_token: tokens.access_token,
-                p_refresh_token: tokens.refresh_token || null,
-                p_expires_at: tokens.expires_in
-                    ? new Date(Date.now() + tokens.expires_in * 1000).toISOString()
-                    : null,
-            }).catch(() => {
-                // Fallback: function may not exist yet
-                console.warn("set_user_integration_tokens RPC not available");
             });
+
+            // Disable gcal_sync_enabled on user_profiles
+            await supabaseAdmin
+                .from("user_profiles")
+                .update({ gcal_sync_enabled: false })
+                .eq("id", user.id);
 
             return new Response(JSON.stringify({ success: true }), {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -252,15 +337,18 @@ async function getAccessToken(
     clientId: string,
     clientSecret: string
 ): Promise<string | null> {
-    // Try to get stored token via RPC
     const { data, error } = await supabaseAdmin.rpc("get_user_integration_tokens", {
         p_user_id: userId,
         p_provider: "google_calendar",
-    }).catch(() => ({ data: null, error: true }));
+    });
 
     if (!data || error) return null;
 
-    const { access_token, refresh_token, expires_at } = data;
+    // RPC returns a table, so data may be an array
+    const row = Array.isArray(data) ? data[0] : data;
+    if (!row) return null;
+
+    const { access_token, refresh_token, expires_at } = row;
 
     // Check if token is still valid (with 5 min buffer)
     if (expires_at && new Date(expires_at).getTime() > Date.now() + 5 * 60 * 1000) {
@@ -291,7 +379,7 @@ async function getAccessToken(
         p_access_token: refreshData.access_token,
         p_refresh_token: refresh_token, // Keep existing refresh token
         p_expires_at: new Date(Date.now() + refreshData.expires_in * 1000).toISOString(),
-    }).catch(() => {});
+    }).catch(() => { });
 
     return refreshData.access_token;
 }
