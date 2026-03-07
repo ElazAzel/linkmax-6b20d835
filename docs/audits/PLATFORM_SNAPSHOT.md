@@ -12,9 +12,9 @@ lnkmx is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**,
 
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Liquid Glass"** aesthetic (glassmorphism, premium micro-animations, and depth) to provide a high-end look by default.
 2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking.
-3. **Advanced Analytics** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and provide 30% more accurate data for Ad spending optimization (CAPI).
-4. **Team Collaboration** — RBAC-based organization management for multi-user page editing and roles.
-5. **Fintech Core** — Integrated ledger for transaction tracking, multi-currency wallets, and future real-world payment gateway support (Kaspi/Robokassa).
+3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
+4. **Team Collaboration & Business Zones** — RBAC-based organization management and multi-tenant workspaces with CRM Kanban and Team Inbox.
+5. **Fintech Core** — Integrated ledger, sequential invoicing, and transaction tracking with a **"Step-by-Growth"** monetization model.
 
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
 
@@ -334,15 +334,17 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 
 **AEO/GEO optimization:**
 
-- **Server-rendered HTML** for AI crawlers (ChatGPT, Perplexity, Gemini)
+- **Server-rendered HTML** for AI crawlers (ChatGPT, Perplexity, Gemini, Grok, DeepSeek, Qwen)
 - Semantic HTML (h2/h3 structure)
-- Key facts bullet points
+- Key facts bullet points and **Answer Block** generation
+- Meta `ai-summary` and dedicated `llms.txt` for AI assistant discovery
 
 **Technical SEO:**
 
-- Sitemap: `src/app/sitemap.ts` (Dynamic generation)
+- Sitemap: `public/sitemap.xml` (Seed) + `generate-sitemap` Edge Function (Full index)
 - SEO Landing: `/seo-landing` for deep indexing of core platform value.
-- Robots: `src/app/robots.ts`
+- Robots: `public/robots.txt` (AI-bot optimized)
+- AI Metadata: `public/llms.txt`
 - Canonical URLs per page
 
 ---

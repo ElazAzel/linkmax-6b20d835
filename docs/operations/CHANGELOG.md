@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### [2026-03-07] - SEO & AI Bot Optimization (AEO/GEO)
+
+* **AI Bot Accessibility**:
+  * Обновлен `llms.txt`: добавлена поддержка Perplexity, GPT, Gemini, Grok, DeepSeek, Qwen и Yandex. Описаны модули "Business Zones", "Fintech Core" и модель "Step-by-Growth".
+  * Оптимизирован `robots.txt`: разрешен доступ ко всем метаданным платформы для ИИ-краулеров, явно указан путь к `llms.txt`.
+* **Search Engine Optimization**:
+  * Синхронизирован `sitemap.xml`: добавлена структура для глубокого индексирования экспертов по категориям и динамических профилей.
+  * Обновлены мета-теги в `index.html`: внедрен `ai-summary` и расширена схема `SoftwareApplication` (Business OS positioning).
+* **Bot Hub (SeoLanding)**:
+  * Обновлена страница `SeoLanding.tsx`: актуализированы `keyFeatures` и `useCases` (CRM Kanban, Pixel Proxy, Fintech).
+
 ### [2026-03-07] - Monetization Pivot & Global Documentation Sync (v2.5)
 
 * **Monetization (Step-by-Growth)**:

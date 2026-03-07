@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -6,7 +7,7 @@
   <!-- Main Pages - High Priority for AI Search Engines -->
   <url>
     <loc>https://lnkmx.my/</loc>
-    <lastmod>2026-02-05</lastmod>
+    <lastmod>2026-03-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/?lang=ru"/>
@@ -21,83 +22,54 @@
   
   <url>
     <loc>https://lnkmx.my/gallery</loc>
-    <lastmod>2026-02-05</lastmod>
+    <lastmod>2026-03-07</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/gallery?lang=ru"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/gallery?lang=en"/>
     <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/gallery?lang=kk"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/gallery"/>
-    <image:image>
-      <image:loc>https://lnkmx.my/og-gallery.png</image:loc>
-      <image:title>lnkmx Gallery - Examples and Templates</image:title>
-    </image:image>
   </url>
   
   <url>
-    <loc>https://lnkmx.my/alternatives</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/alternatives?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/alternatives?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/alternatives?lang=kk"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/alternatives"/>
-    <image:image>
-      <image:loc>https://lnkmx.my/og-alternatives.png</image:loc>
-      <image:title>lnkmx vs Alternatives Comparison</image:title>
-    </image:image>
+    <loc>https://lnkmx.my/experts</loc>
+    <lastmod>2026-03-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/experts?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/experts?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/experts?lang=kk"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/experts"/>
   </url>
-  
+
   <url>
     <loc>https://lnkmx.my/pricing</loc>
-    <lastmod>2026-02-05</lastmod>
+    <lastmod>2026-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://lnkmx.my/pricing?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://lnkmx.my/pricing?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="kk" href="https://lnkmx.my/pricing?lang=kk"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lnkmx.my/pricing"/>
-    <image:image>
-      <image:loc>https://lnkmx.my/og-pricing.png</image:loc>
-      <image:title>lnkmx Pricing Plans</image:title>
-    </image:image>
   </url>
 
-  <!-- Gallery Categories - Niche Pages -->
   <url>
-    <loc>https://lnkmx.my/gallery?niche=freelancer</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://lnkmx.my/gallery?niche=business</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://lnkmx.my/gallery?niche=creator</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://lnkmx.my/gallery?niche=beauty</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://lnkmx.my/gallery?niche=fitness</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
+    <loc>https://lnkmx.my/alternatives</loc>
+    <lastmod>2026-03-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 
+  <url>
+    <loc>https://lnkmx.my/seo-landing</loc>
+    <lastmod>2026-03-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Niche Categories -->
+  <url><loc>https://lnkmx.my/experts/beauty</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/experts/fitness</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/experts/business</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/experts/education</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lnkmx.my/experts/consulting</loc><lastmod>2026-03-07</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+
+  <!-- Dynamic profiles available at /[slug] -->
+  <!-- This static file acts as a seed, the edge function handles full dynamic index -->
 </urlset>

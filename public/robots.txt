@@ -10,6 +10,10 @@ Disallow: /settings/
 Disallow: /install/
 Disallow: /team/
 
+# Explicitly allow AI bots to read platform metadata
+Allow: /llms.txt
+Allow: /sitemap.xml
+
 # AI Crawlers - welcome
 User-agent: GPTBot
 Allow: /
@@ -39,6 +43,16 @@ User-agent: Bytespider
 Allow: /
 
 User-agent: CCBot
+Allow: /
+
+# Emerging AI Bots
+User-agent: Grok
+Allow: /
+
+User-agent: DeepSeek
+Allow: /
+
+User-agent: QwenBot
 Allow: /
 
 Sitemap: https://lnkmx.my/sitemap.xml

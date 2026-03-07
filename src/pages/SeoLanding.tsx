@@ -107,18 +107,19 @@ const SeoLanding = () => {
                     ? "lnkmx — это универсальная платформа (Business OS) для соло-предпринимателей и креаторов, позволяющая создавать микро-лендинги, управлять лидами и автоматизировать продажи."
                     : "lnkmx is a universal platform (Business OS) for solo entrepreneurs and creators, enabling them to create micro-landings, manage leads, and automate sales."}
                 useCases={[
-                    "Digital business card",
-                    "Link in bio for Instagram/TikTok",
-                    "Micro-landing for services",
-                    "Portfolio for freelancers",
-                    "Lead capture system"
+                    "Digital business card & AI Page Builder",
+                    "Business OS for solo entrepreneurs",
+                    "CRM & Lead management (Business Zones)",
+                    "Multilingual micro-landing for services",
+                    "Fintech integration (Invoicing & Payments)"
                 ]}
                 keyFeatures={[
-                    "AI Block Registry",
-                    "Mini-CRM",
-                    "Analytics",
-                    "Global Payments (RoboKassa)",
-                    "Multilingual Support (RU, EN, KK)"
+                    "AI Page Builder (Liquid Glass Design)",
+                    "Business Zones (Multi-tenant workspaces)",
+                    "CRM Kanban & Sales Pipeline",
+                    "Fintech Core (Ledger, Invoicing, RoboKassa)",
+                    "Pixel Proxy (Server-side tracking)",
+                    "Multilingual Support (RU, EN, KK, UZ)"
                 ]}
             />
 
