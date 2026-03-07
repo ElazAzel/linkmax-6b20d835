@@ -477,9 +477,55 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                             <p className="text-[10px] text-muted-foreground mt-0.5">{t('zones.deals.linkedContact', 'Linked Contact')}</p>
                           </div>
                         </div>
-                        <div className="pt-1 space-y-1">
-                          {deal.contact.phone && <div className="flex items-center gap-2 text-[10px]"><Phone className="h-3 w-3" />{deal.contact.phone}</div>}
-                          {deal.contact.email && <div className="flex items-center gap-2 text-[10px]"><Mail className="h-3 w-3" />{deal.contact.email}</div>}
+                        <div className="pt-1 space-y-2">
+                          {deal.contact.phone && (
+                            <div className="flex items-center justify-between group/item">
+                              <div className="flex items-center gap-2 text-[10px]">
+                                <Phone className="h-3 w-3 text-muted-foreground" />
+                                {deal.contact.phone}
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 px-2 text-[10px] opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                onClick={() => window.open(`tel:${deal.contact.phone}`, '_self')}
+                              >
+                                {t('zones.contacts.call', 'Call')}
+                              </Button>
+                            </div>
+                          )}
+                          {deal.contact.email && (
+                            <div className="flex items-center justify-between group/item">
+                              <div className="flex items-center gap-2 text-[10px]">
+                                <Mail className="h-3 w-3 text-muted-foreground" />
+                                {deal.contact.email}
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 px-2 text-[10px] opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                onClick={() => window.open(`mailto:${deal.contact.email}`, '_blank')}
+                              >
+                                {t('zones.contacts.sendEmail', 'Email')}
+                              </Button>
+                            </div>
+                          )}
+                          {deal.contact.telegram_username && (
+                            <div className="flex items-center justify-between group/item">
+                              <div className="flex items-center gap-2 text-[10px]">
+                                <Send className="h-3 w-3 text-blue-500" />
+                                @{deal.contact.telegram_username}
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 px-2 text-[10px] opacity-0 group-hover/item:opacity-100 transition-opacity text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+                                onClick={() => window.open(`https://t.me/${deal.contact.telegram_username}`, '_blank')}
+                              >
+                                Telegram
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>

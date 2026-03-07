@@ -9,12 +9,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ZoneDocument } from '@/types/zones';
 import { ZoneDocumentCreator } from './ZoneDocumentCreator';
 import { useZoneContext } from '@/contexts/ZoneContext';
+import { ZoneDocumentTemplatesSettings } from './ZoneDocumentTemplatesSettings';
 
 export const ZoneDocumentsScreen = () => {
     const { currentZone, isReadOnly } = useZoneContext();
     const zoneId = currentZone?.id || null;
     const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId, { isReadOnly });
     const [isCreatorOpen, setIsCreatorOpen] = useState(false);
+    const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -50,7 +52,11 @@ export const ZoneDocumentsScreen = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 text-white">
+                    <Button
+                        variant="outline"
+                        className="border-white/10 bg-white/5 hover:bg-white/10 text-white"
+                        onClick={() => setIsTemplatesOpen(true)}
+                    >
                         <Settings className="w-4 h-4 mr-2" />
                         Шаблоны
                     </Button>
@@ -171,6 +177,14 @@ export const ZoneDocumentsScreen = () => {
                     </div>
                 )}
             </div>
+            <ZoneDocumentCreator
+                open={isCreatorOpen}
+                onOpenChange={setIsCreatorOpen}
+            />
+            <ZoneDocumentTemplatesSettings
+                open={isTemplatesOpen}
+                onOpenChange={setIsTemplatesOpen}
+            />
         </div>
     );
 };

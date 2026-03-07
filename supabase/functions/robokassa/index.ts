@@ -12,6 +12,7 @@ interface PaymentRequest {
     plan?: 'pro';
     period?: 3 | 6 | 12;
     userId: string;
+    zoneId?: string;
     amount?: number;
     description?: string;
     relatedId?: string;
@@ -67,6 +68,7 @@ serve(async (req: Request) => {
         const shp_type = type;
         const shp_plan = plan || "";
         const shp_period = period?.toString() || "";
+        const shp_zone = payload.zoneId || "";
         let shp_related_id = relatedId || "";
 
         if (type === 'subscription') {
@@ -133,7 +135,8 @@ serve(async (req: Request) => {
             shp_period,
             shp_related_id,
             shp_type,
-            shp_user
+            shp_user,
+            shp_zone
         };
 
         const shpSorted = Object.entries(shpParams)
@@ -167,7 +170,8 @@ serve(async (req: Request) => {
             shp_type: shp_type,
             shp_plan: shp_plan,
             shp_period: shp_period,
-            shp_related_id: shp_related_id
+            shp_related_id: shp_related_id,
+            shp_zone: shp_zone
         });
 
         return new Response(

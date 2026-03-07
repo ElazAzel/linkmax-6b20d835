@@ -14,10 +14,15 @@ import type { ZoneInvoice, ZoneMember, ZoneContact, ZoneDeal } from '@/types/zon
 import { useZoneInvoiceItems } from '@/hooks/zones/useZoneInvoices';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+import LinkIcon from 'lucide-react/dist/esm/icons/link';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Download from 'lucide-react/dist/esm/icons/download';
+import { generateRoboKassaUrl } from '@/services/zones/robokassa';
+import { supabase } from '@/platform/supabase/client';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 // Status config moved inside component to use translation hook safely
 
@@ -42,6 +47,41 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
 }: InvoiceDetailSheetProps) {
     const { t } = useTranslation();
     const { items, loading: itemsLoading } = useZoneInvoiceItems(invoice?.zone_id || null, invoice?.id || null);
+    const [generatingUrl, setGeneratingUrl] = useState(false);
+
+    const handleGeneratePayUrl = async () => {
+        if (!invoice) return;
+        setGeneratingUrl(true);
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) throw new Error('User not authenticated');
+
+            const url = await generateRoboKassaUrl({
+                type: 'payment',
+                amount: Number(invoice.amount),
+                userId: user.id,
+                zoneId: invoice.zone_id,
+                relatedId: invoice.id,
+                description: invoice.description || `Invoice #${invoice.invoice_number || invoice.id.slice(0, 8)}`,
+            });
+
+            // Update invoice with the new URL
+            const { error } = await supabase
+                .from('zone_invoices')
+                .update({ pay_url: url } as any)
+                .eq('id', invoice.id);
+
+            if (error) throw error;
+            toast.success(t('zones.invoices.urlGenerated', 'Link generated'));
+            // Note: Since we updated DB, the parent should ideally refetch or we should use a shared state.
+            // For now, simpler: we just tell useZoneInvoices to refetch if needed, but here we just update DB.
+        } catch (err: any) {
+            console.error(err);
+            toast.error(err.message || 'Failed to generate link');
+        } finally {
+            setGeneratingUrl(false);
+        }
+    };
 
     const contact = useMemo(() => contacts.find(c => c.id === invoice?.contact_id), [contacts, invoice]);
     const deal = useMemo(() => deals.find(d => d.id === invoice?.deal_id), [deals, invoice]);
@@ -176,12 +216,25 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
 
                 {/* Actions */}
                 <div className="p-6 pt-2 bg-muted/20 border-t space-y-3">
-                    {invoice.pay_url && invoice.status === 'created' && (
-                        <Button className="w-full shadow-lg shadow-primary/20" asChild>
-                            <a href={invoice.pay_url} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="h-4 w-4 mr-2" /> {t('zones.invoices.payLink', 'Ссылка на оплату')}
-                            </a>
-                        </Button>
+                    {invoice.status === 'created' && (
+                        <div className="space-y-2">
+                            {invoice.pay_url ? (
+                                <Button className="w-full shadow-lg shadow-primary/20" asChild>
+                                    <a href={invoice.pay_url} target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink className="h-4 w-4 mr-2" /> {t('zones.invoices.payLink', 'Ссылка на оплату')}
+                                    </a>
+                                </Button>
+                            ) : (
+                                <Button
+                                    className="w-full bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20"
+                                    onClick={handleGeneratePayUrl}
+                                    disabled={generatingUrl}
+                                >
+                                    <LinkIcon className="h-4 w-4 mr-2" />
+                                    {generatingUrl ? t('common.loading', 'Loading...') : t('zones.invoices.generatePayLink', 'Спегенерировать ссылку')}
+                                </Button>
+                            )}
+                        </div>
                     )}
 
                     <div className="grid grid-cols-2 gap-2">

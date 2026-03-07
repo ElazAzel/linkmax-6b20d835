@@ -149,6 +149,55 @@ export function useZoneDocuments(
         }
     });
 
+    // 6. Template Mutations
+    const createTemplateMutation = useMutation({
+        mutationFn: async (template: Partial<ZoneDocumentTemplate>) => {
+            if (!zoneId) throw new Error('No active zone');
+            const { data, error } = await supabase
+                .from('zone_document_templates' as any)
+                .insert({ ...template, zone_id: zoneId })
+                .select()
+                .single();
+            if (error) throw error;
+            return data as unknown as ZoneDocumentTemplate;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['zone-document-templates', zoneId] });
+            toast.success('Шаблон создан');
+        }
+    });
+
+    const updateTemplateMutation = useMutation({
+        mutationFn: async (template: Partial<ZoneDocumentTemplate> & { id: string }) => {
+            const { data, error } = await supabase
+                .from('zone_document_templates' as any)
+                .update(template)
+                .eq('id', template.id)
+                .select()
+                .single();
+            if (error) throw error;
+            return data as unknown as ZoneDocumentTemplate;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['zone-document-templates', zoneId] });
+            toast.success('Шаблон обновлен');
+        }
+    });
+
+    const deleteTemplateMutation = useMutation({
+        mutationFn: async (id: string) => {
+            const { error } = await supabase
+                .from('zone_document_templates' as any)
+                .delete()
+                .eq('id', id);
+            if (error) throw error;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['zone-document-templates', zoneId] });
+            toast.success('Шаблон удален');
+        }
+    });
+
     return {
         documents,
         templates,
@@ -158,6 +207,10 @@ export function useZoneDocuments(
         updateDocumentStatus: updateDocumentStatusMutation.mutateAsync,
         isUpdatingStatus: updateDocumentStatusMutation.isPending,
         deleteDocument: deleteDocumentMutation.mutateAsync,
-        isDeleting: deleteDocumentMutation.isPending
+        isDeleting: deleteDocumentMutation.isPending,
+        createTemplate: createTemplateMutation.mutateAsync,
+        updateTemplate: updateTemplateMutation.mutateAsync,
+        deleteTemplate: deleteTemplateMutation.mutateAsync,
+        isTemplateLoading: isLoadingTemplates || createTemplateMutation.isPending || updateTemplateMutation.isPending || deleteTemplateMutation.isPending
     };
 }

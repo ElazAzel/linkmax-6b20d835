@@ -350,19 +350,44 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <div className="flex gap-2 items-start text-sm">
-                          <Phone className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                          <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.phone', 'Phone')}</p>
-                            <p className="font-medium">{contact.phone || '—'}</p>
+                        <div className="flex items-center justify-between group/item">
+                          <div className="flex gap-2 items-start text-sm">
+                            <Phone className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div className="space-y-0.5">
+                              <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.phone', 'Phone')}</p>
+                              <p className="font-medium">{contact.phone || '—'}</p>
+                            </div>
                           </div>
+                          {contact.phone && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-xs opacity-0 group-hover/item:opacity-100 transition-opacity"
+                              onClick={() => window.open(`tel:${contact.phone}`, '_self')}
+                            >
+                              {t('zones.contacts.call', 'Call')}
+                            </Button>
+                          )}
                         </div>
-                        <div className="flex gap-2 items-start text-sm">
-                          <Mail className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                          <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.email', 'Email')}</p>
-                            <p className="font-medium">{contact.email || '—'}</p>
+
+                        <div className="flex items-center justify-between group/item">
+                          <div className="flex gap-2 items-start text-sm">
+                            <Mail className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div className="space-y-0.5">
+                              <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.email', 'Email')}</p>
+                              <p className="font-medium">{contact.email || '—'}</p>
+                            </div>
                           </div>
+                          {contact.email && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-xs opacity-0 group-hover/item:opacity-100 transition-opacity"
+                              onClick={() => window.open(`mailto:${contact.email}`, '_blank')}
+                            >
+                              {t('zones.contacts.sendEmail', 'Email')}
+                            </Button>
+                          )}
                         </div>
                         <div className="flex gap-2 items-start text-sm">
                           <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
@@ -385,12 +410,24 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                             <p className="font-medium">{contact.address || '—'}</p>
                           </div>
                         </div>
-                        <div className="flex gap-2 items-start text-sm">
-                          <MessageCircle className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                          <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">Telegram</p>
-                            <p className="font-medium">{contact.telegram_username ? `@${contact.telegram_username}` : '—'}</p>
+                        <div className="flex items-center justify-between group/item">
+                          <div className="flex gap-2 items-start text-sm">
+                            <Send className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                            <div className="space-y-0.5">
+                              <p className="text-[10px] text-muted-foreground leading-none">Telegram</p>
+                              <p className="font-medium">{contact.telegram_username ? `@${contact.telegram_username}` : '—'}</p>
+                            </div>
                           </div>
+                          {contact.telegram_username && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-xs opacity-0 group-hover/item:opacity-100 transition-opacity text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+                              onClick={() => window.open(`https://t.me/${contact.telegram_username}`, '_blank')}
+                            >
+                              Telegram
+                            </Button>
+                          )}
                         </div>
                         {contact.tags && contact.tags.length > 0 && (
                           <div className="flex gap-2 items-start text-sm">
