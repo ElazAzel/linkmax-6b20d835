@@ -32,7 +32,7 @@ async function hmacSHA256(
 ): Promise<ArrayBuffer> {
     const cryptoKey = await crypto.subtle.importKey(
         "raw",
-        key,
+        key as ArrayBuffer,
         { name: "HMAC", hash: "SHA-256" },
         false,
         ["sign"]
@@ -206,9 +206,10 @@ serve(async (req: Request) => {
         try {
             data = await validateInitData(initData, botToken);
         } catch (e) {
-            console.error("initData validation failed:", e.message);
+            const errorMessage = e instanceof Error ? e.message : String(e);
+            console.error("initData validation failed:", errorMessage);
             return new Response(
-                JSON.stringify({ valid: false, error: e.message }),
+                JSON.stringify({ valid: false, error: errorMessage }),
                 {
                     status: 401,
                     headers: { ...corsHeaders, "Content-Type": "application/json" },
