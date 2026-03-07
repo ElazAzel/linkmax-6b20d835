@@ -142,7 +142,7 @@ async function getUserLanguage(supabase: any, chatId: string): Promise<Language>
     return 'ru';
   } catch (e) {
     console.error('Error getting language:', e);
-    return tempLanguageStore[chatId] || 'ru';
+    return (tempLanguageStore[chatId] as Language) || 'ru';
   }
 }
 
