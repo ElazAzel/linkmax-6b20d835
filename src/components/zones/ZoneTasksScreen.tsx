@@ -27,11 +27,11 @@ interface Props {
   zoneId: string;
 }
 
-const PRIORITY_CONFIG: Record<TaskPriority, { label: string }> = {
-  low: { label: 'Низкий' },
-  medium: { label: 'Средний' },
-  high: { label: 'Высокий' },
-  urgent: { label: 'Срочный' },
+const PRIORITY_KEYS: Record<TaskPriority, string> = {
+  low: 'zones.tasks.priorityLow',
+  medium: 'zones.tasks.priorityMedium',
+  high: 'zones.tasks.priorityHigh',
+  urgent: 'zones.tasks.priorityUrgent',
 };
 
 export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) {
@@ -138,7 +138,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
           <h1 className="text-lg font-bold">{t('zones.tasks.title', 'Задачи')}</h1>
           <Badge variant="secondary" className="text-xs">{tasks.length}</Badge>
           {overdueCount > 0 && (
-            <Badge variant="destructive" className="text-xs">{overdueCount} просрочено</Badge>
+            <Badge variant="destructive" className="text-xs">{overdueCount} {t('zones.tasks.overdue', 'просрочено')}</Badge>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -149,7 +149,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             className="text-xs"
           >
             <Filter className="h-3.5 w-3.5 mr-1" />
-            {filterMy ? 'Мои' : 'Все'}
+            {filterMy ? t('zones.tasks.mine', 'Мои') : t('zones.tasks.all', 'Все')}
           </Button>
           <Button size="sm" onClick={() => setCreateOpen(true)}>
             <Plus className="h-4 w-4 mr-1" />
@@ -201,32 +201,32 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
           </DialogHeader>
           <div className="space-y-3 py-2">
             <div>
-              <Label>Название</Label>
+              <Label>{t('zones.tasks.taskTitle', 'Название')}</Label>
               <Input
                 value={newTitle}
                 onChange={e => setNewTitle(e.target.value)}
-                placeholder="Название задачи"
+                placeholder={t('zones.tasks.taskTitlePlaceholder', 'Название задачи')}
                 onKeyDown={e => e.key === 'Enter' && handleCreate()}
                 className="mt-1"
               />
             </div>
             <div>
-              <Label>Описание</Label>
+              <Label>{t('zones.tasks.description', 'Описание')}</Label>
               <Input
                 value={newDescription}
                 onChange={e => setNewDescription(e.target.value)}
-                placeholder="Описание (необязательно)"
+                placeholder={t('zones.tasks.descriptionPlaceholder', 'Описание (необязательно)')}
                 className="mt-1"
               />
             </div>
             <div>
-              <Label>Срок</Label>
+              <Label>{t('zones.tasks.dueDate', 'Срок')}</Label>
               <Input type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} className="mt-1" />
             </div>
             <div>
-              <Label>Приоритет</Label>
+              <Label>{t('zones.tasks.priority', 'Приоритет')}</Label>
               <div className="flex gap-2 mt-1">
-                {(Object.keys(PRIORITY_CONFIG) as TaskPriority[]).map(p => (
+                {(Object.keys(PRIORITY_KEYS) as TaskPriority[]).map(p => (
                   <Button
                     key={p}
                     size="sm"
@@ -234,20 +234,20 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
                     onClick={() => setNewPriority(p)}
                     className="text-xs"
                   >
-                    {PRIORITY_CONFIG[p].label}
+                    {t(PRIORITY_KEYS[p], p)}
                   </Button>
                 ))}
               </div>
             </div>
             {members.length > 0 && (
               <div>
-                <Label>Ответственный</Label>
+                <Label>{t('zones.tasks.assignee', 'Ответственный')}</Label>
                 <Select value={newAssignee || '__none__'} onValueChange={v => setNewAssignee(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
-                    <SelectValue placeholder="Не назначено" />
+                    <SelectValue placeholder={t('zones.tasks.unassigned', 'Не назначено')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="__none__">Не назначено</SelectItem>
+                    <SelectItem value="__none__">{t('zones.tasks.unassigned', 'Не назначено')}</SelectItem>
                     {members.map(m => (
                       <SelectItem key={m.user_id} value={m.user_id}>
                         {m.display_name || m.email || m.user_id}
@@ -291,8 +291,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>Отмена</Button>
-            <Button onClick={handleCreate} disabled={!newTitle.trim()}>Создать</Button>
+            <Button variant="outline" onClick={() => setCreateOpen(false)}>{t('common.cancel', 'Отмена')}</Button>
+            <Button onClick={handleCreate} disabled={!newTitle.trim()}>{t('common.create', 'Создать')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

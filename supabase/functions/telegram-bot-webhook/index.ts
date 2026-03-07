@@ -19,7 +19,7 @@ const messages = {
     no_page: "❌ Страница не найдена",
     greeting: (name: string, chatId: number) =>
       `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в lnkmx.my и вставьте его в поле регистрации.`,
-    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID`,
+    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID\n/zone - Сводка по зоне\n/deals - Открытые сделки\n/tasks - Задачи на сегодня\n/contacts - Последние контакты`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Как подключить Telegram к lnkmx.my:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
     chat_id: (chatId: number) =>
@@ -41,7 +41,7 @@ const messages = {
     no_page: "❌ Page not found",
     greeting: (name: string, chatId: number) =>
       `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to lnkmx.my and paste it into the registration field.`,
-    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/help - Help\n/language - Change language\n/id - Show Chat ID`,
+    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
     help_full: (chatId: number) =>
       `ℹ️ <b>How to connect Telegram to lnkmx.my:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
     chat_id: (chatId: number) =>
@@ -63,7 +63,7 @@ const messages = {
     no_page: "❌ Бет табылмады",
     greeting: (name: string, chatId: number) =>
       `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін lnkmx.my-қа оралып, тіркеу өрісіне қойыңыз.`,
-    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету`,
+    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету\n/zone - Аймақ шолуы\n/deals - Ашық мәмілелер\n/tasks - Бүгінгі тапсырмалар\n/contacts - Соңғы контактілер`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Telegram-ды lnkmx.my-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
     chat_id: (chatId: number) =>
@@ -457,6 +457,121 @@ serve(async (req: Request) => {
           }
         } else {
           responseText = m.not_linked;
+        }
+      } else if (text === '/zone' || text === '/deals' || text === '/tasks' || text === '/contacts') {
+        // Zone commands — find user's zone through linked profile
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          // Find user's zone (first membership)
+          const { data: membership } = await supabase
+            .from('zone_members')
+            .select('zone_id')
+            .eq('user_id', profile.id)
+            .limit(1)
+            .maybeSingle();
+
+          if (!membership) {
+            responseText = lang === 'ru' ? '❌ У вас нет привязанных зон' : lang === 'kk' ? '❌ Сізде байланыстырылған аймақтар жоқ' : '❌ No zones found';
+          } else {
+            const zoneId = membership.zone_id;
+
+            if (text === '/zone') {
+              // Zone overview: counts of deals, contacts, tasks
+              const [dealsRes, contactsRes, tasksRes, zoneRes] = await Promise.all([
+                supabase.from('zone_deals').select('*', { count: 'exact', head: true }).eq('zone_id', zoneId).eq('status', 'open'),
+                supabase.from('zone_contacts').select('*', { count: 'exact', head: true }).eq('zone_id', zoneId),
+                supabase.from('zone_tasks').select('*', { count: 'exact', head: true }).eq('zone_id', zoneId).neq('status', 'done'),
+                supabase.from('zones').select('name').eq('id', zoneId).single(),
+              ]);
+              const zoneName = zoneRes.data?.name || 'Zone';
+              if (lang === 'ru') {
+                responseText = `🏢 <b>${zoneName}</b>\n\n📊 Сводка:\n• Открытые сделки: ${dealsRes.count || 0}\n• Контакты: ${contactsRes.count || 0}\n• Активные задачи: ${tasksRes.count || 0}`;
+              } else if (lang === 'kk') {
+                responseText = `🏢 <b>${zoneName}</b>\n\n📊 Шолу:\n• Ашық мәмілелер: ${dealsRes.count || 0}\n• Контактілер: ${contactsRes.count || 0}\n• Белсенді тапсырмалар: ${tasksRes.count || 0}`;
+              } else {
+                responseText = `🏢 <b>${zoneName}</b>\n\n📊 Overview:\n• Open deals: ${dealsRes.count || 0}\n• Contacts: ${contactsRes.count || 0}\n• Active tasks: ${tasksRes.count || 0}`;
+              }
+
+            } else if (text === '/deals') {
+              const { data: deals } = await supabase
+                .from('zone_deals')
+                .select('title, value_amount, currency, created_at')
+                .eq('zone_id', zoneId)
+                .eq('status', 'open')
+                .order('created_at', { ascending: false })
+                .limit(5);
+              if (!deals || deals.length === 0) {
+                responseText = lang === 'ru' ? '📭 Нет открытых сделок' : lang === 'kk' ? '📭 Ашық мәмілелер жоқ' : '📭 No open deals';
+              } else {
+                const header = lang === 'ru' ? '💰 <b>Открытые сделки (последние 5):</b>' : lang === 'kk' ? '💰 <b>Ашық мәмілелер (соңғы 5):</b>' : '💰 <b>Open deals (latest 5):</b>';
+                const lines = deals.map((d: any, i: number) =>
+                  `${i + 1}. ${d.title} — ${d.value_amount?.toLocaleString() || 0} ${d.currency || '₸'}`
+                );
+                responseText = `${header}\n\n${lines.join('\n')}`;
+              }
+
+            } else if (text === '/tasks') {
+              const today = new Date().toISOString().split('T')[0];
+              const { data: tasks } = await supabase
+                .from('zone_tasks')
+                .select('title, priority, due_date')
+                .eq('zone_id', zoneId)
+                .neq('status', 'done')
+                .neq('status', 'cancelled')
+                .order('due_date', { ascending: true, nullsFirst: false })
+                .limit(10);
+              if (!tasks || tasks.length === 0) {
+                responseText = lang === 'ru' ? '✅ Нет активных задач' : lang === 'kk' ? '✅ Белсенді тапсырмалар жоқ' : '✅ No active tasks';
+              } else {
+                const overdue = tasks.filter((t: any) => t.due_date && t.due_date < today);
+                const todayTasks = tasks.filter((t: any) => t.due_date === today);
+                const upcoming = tasks.filter((t: any) => !t.due_date || t.due_date > today);
+                const parts: string[] = [];
+                if (overdue.length > 0) {
+                  const label = lang === 'ru' ? '🔴 Просрочено' : lang === 'kk' ? '🔴 Мерзімі өткен' : '🔴 Overdue';
+                  parts.push(`${label}:`);
+                  overdue.forEach((t: any) => parts.push(`  • ${t.title} (${t.due_date})`));
+                }
+                if (todayTasks.length > 0) {
+                  const label = lang === 'ru' ? '🟡 Сегодня' : lang === 'kk' ? '🟡 Бүгін' : '🟡 Today';
+                  parts.push(`${label}:`);
+                  todayTasks.forEach((t: any) => parts.push(`  • ${t.title}`));
+                }
+                if (upcoming.length > 0) {
+                  const label = lang === 'ru' ? '🔵 Предстоящие' : lang === 'kk' ? '🔵 Алдағы' : '🔵 Upcoming';
+                  parts.push(`${label}:`);
+                  upcoming.slice(0, 5).forEach((t: any) => parts.push(`  • ${t.title}${t.due_date ? ` (${t.due_date})` : ''}`));
+                }
+                const header = lang === 'ru' ? '📋 <b>Задачи:</b>' : lang === 'kk' ? '📋 <b>Тапсырмалар:</b>' : '📋 <b>Tasks:</b>';
+                responseText = `${header}\n\n${parts.join('\n')}`;
+              }
+
+            } else if (text === '/contacts') {
+              const { data: contacts } = await supabase
+                .from('zone_contacts')
+                .select('name, phone, email, created_at')
+                .eq('zone_id', zoneId)
+                .order('created_at', { ascending: false })
+                .limit(5);
+              if (!contacts || contacts.length === 0) {
+                responseText = lang === 'ru' ? '📭 Нет контактов' : lang === 'kk' ? '📭 Контактілер жоқ' : '📭 No contacts';
+              } else {
+                const header = lang === 'ru' ? '👥 <b>Последние контакты:</b>' : lang === 'kk' ? '👥 <b>Соңғы контактілер:</b>' : '👥 <b>Recent contacts:</b>';
+                const lines = contacts.map((c: any, i: number) => {
+                  const details = [c.phone, c.email].filter(Boolean).join(' | ');
+                  return `${i + 1}. ${c.name}${details ? ` — ${details}` : ''}`;
+                });
+                responseText = `${header}\n\n${lines.join('\n')}`;
+              }
+            }
+          }
         }
       } else {
         // Any other message - just show the ID

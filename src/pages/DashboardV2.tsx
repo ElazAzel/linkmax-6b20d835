@@ -58,6 +58,7 @@ import {
   ZoneEventsScreenWrapper,
   ZoneProductsScreenWrapper,
 } from '@/components/zones/ZoneWrappers';
+import { ZoneCommandPalette } from '@/components/zones/ZoneCommandPalette';
 
 // Screen loading fallback
 const ScreenLoader = () => (
@@ -786,6 +787,7 @@ export default function DashboardV2() {
   return (
     <ZoneProvider>
       <DashboardV2Inner />
+      <ZoneCommandPalette />
     </ZoneProvider>
   );
 }

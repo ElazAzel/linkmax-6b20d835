@@ -26,6 +26,7 @@ import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import FileDown from 'lucide-react/dist/esm/icons/file-down';
 import type { ZoneInvoice, ZoneInvoiceItem } from '@/types/zones';
 
 // Status config moved inside component to use translation hook safely
@@ -215,10 +216,10 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge variant={st.variant} className="text-[10px] uppercase font-bold tracking-wider rounded-md">
+                      <Badge variant={st.variant} className="text-xs uppercase font-bold tracking-wider rounded-md">
                         {st.label}
                       </Badge>
-                      <span className="text-[10px] font-mono text-muted-foreground uppercase mr-auto">
+                      <span className="text-xs font-mono text-muted-foreground uppercase mr-auto">
                         #{formatInvoiceNumber(inv.invoice_number, inv.id)}
                       </span>
                     </div>
@@ -229,18 +230,46 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                       <p className="text-xs text-muted-foreground line-clamp-1 mt-1">{inv.description}</p>
                     )}
                     <div className="flex items-center gap-4 mt-4 pt-3 border-t border-border/10">
-                      <div className="text-[10px] text-muted-foreground">
+                      <div className="text-xs text-muted-foreground">
                         {format(new Date(inv.created_at), 'd MMM yyyy', { locale: ru })}
                       </div>
                       {inv.contact_id && (
-                        <div className="text-[10px] font-bold text-primary max-w-[100px] truncate">
+                        <div className="text-xs font-bold text-primary max-w-[100px] truncate">
                           ID: {inv.contact_id.slice(0, 8)}
                         </div>
                       )}
                     </div>
                   </div>
-                  <div className="p-3 rounded-full bg-muted/20 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-all">
-                    <ExternalLink className="h-5 w-5" />
+                  <div className="flex flex-col items-center gap-2">
+                    <button
+                      className="p-3 rounded-full bg-muted/20 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedInvoice(inv);
+                      }}
+                    >
+                      <ExternalLink className="h-5 w-5" />
+                    </button>
+                    <button
+                      className="p-2 rounded-full bg-muted/10 text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500 transition-all"
+                      title={t('zones.invoices.downloadPDF', 'Download PDF')}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          const { exportInvoiceToPDF } = await import('@/lib/export/pdf-export-invoice');
+                          await exportInvoiceToPDF({
+                            invoice: inv,
+                            items: (inv as any).items || [],
+                            zoneName: 'Zone',
+                          });
+                          toast.success(t('zones.invoices.pdfSuccess', 'PDF saved'));
+                        } catch (err: any) {
+                          toast.error(err.message || 'PDF export failed');
+                        }
+                      }}
+                    >
+                      <FileDown className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               </CardContent>
@@ -354,7 +383,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
           <DialogFooter className="border-t pt-4 px-6 -mx-6">
             <div className="flex items-center justify-between w-full">
               <div className="text-left">
-                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('zones.invoices.totalAmount', 'Итоговая сумма')}</p>
+                <p className="text-xs uppercase font-bold text-muted-foreground tracking-wider">{t('zones.invoices.totalAmount', 'Итоговая сумма')}</p>
                 <p className="text-2xl font-black text-primary">{formatAmount(totalAmount, form.currency)}</p>
               </div>
               <div className="flex gap-2">

@@ -18,7 +18,7 @@ import User from 'lucide-react/dist/esm/icons/user';
 import Check from 'lucide-react/dist/esm/icons/check';
 import Archive from 'lucide-react/dist/esm/icons/archive';
 import { format } from 'date-fns';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 
 interface Props {
   zoneId: string;
@@ -26,7 +26,6 @@ interface Props {
 
 export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const {
     conversations,
     activeConversation,
@@ -59,10 +58,7 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
       setMessageInput('');
     } catch (err) {
       console.error('Send message error:', err);
-      toast({
-        title: t('zones.inbox.sendError', 'Не удалось отправить сообщение'),
-        variant: 'destructive',
-      });
+      toast.error(t('zones.inbox.sendError', 'Не удалось отправить сообщение'));
     } finally {
       setSending(false);
     }
@@ -77,10 +73,7 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
       setNewTitle('');
     } catch (err) {
       console.error('Create conversation error:', err);
-      toast({
-        title: t('zones.inbox.createError', 'Не удалось создать диалог'),
-        variant: 'destructive',
-      });
+      toast.error(t('zones.inbox.createError', 'Не удалось создать диалог'));
     }
   };
 
@@ -111,7 +104,7 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
               : t('zones.inbox.title', 'Входящие')}
           </h1>
           {activeConversation && (
-            <Badge variant="outline" className="text-[10px]">
+            <Badge variant="outline" className="text-xs">
               {activeConversation.channel}
             </Badge>
           )}
@@ -178,16 +171,16 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
                           <span className="text-sm font-medium truncate">
                             {conv.title || conv.contact?.name || t('zones.inbox.conversation', 'Диалог')}
                           </span>
-                          <span className="text-[10px] text-muted-foreground shrink-0">
+                          <span className="text-xs text-muted-foreground shrink-0">
                             {conv.last_message_at ? format(new Date(conv.last_message_at), 'HH:mm') : ''}
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Badge variant="outline" className="text-[9px] px-1 h-4">
+                          <Badge variant="outline" className="text-xs px-1 h-4">
                             {conv.channel}
                           </Badge>
                           {conv.status === 'closed' && (
-                            <Badge variant="secondary" className="text-[9px] px-1 h-4">
+                            <Badge variant="secondary" className="text-xs px-1 h-4">
                               <Archive className="h-2 w-2 mr-0.5" />
                               {t('zones.inbox.closed', 'Закрыт')}
                             </Badge>
@@ -242,7 +235,7 @@ export const ZoneInboxScreen = memo(function ZoneInboxScreen({ zoneId }: Props) 
                       >
                         <p className="text-sm whitespace-pre-wrap break-words">{msg.body}</p>
                         <p className={cn(
-                          "text-[10px] mt-1",
+                          "text-xs mt-1",
                           msg.direction === 'outbound' ? "text-primary-foreground/60" : "text-muted-foreground"
                         )}>
                           {format(new Date(msg.created_at), 'HH:mm')}

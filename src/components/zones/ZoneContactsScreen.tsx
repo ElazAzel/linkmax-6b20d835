@@ -1,7 +1,7 @@
 /**
  * ZoneContactsScreen - Contact management for zones with CRM features
  */
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
 import { Button } from '@/components/ui/button';
@@ -16,9 +16,11 @@ import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import Upload from 'lucide-react/dist/esm/icons/upload';
+import Download from 'lucide-react/dist/esm/icons/download';
 import X from 'lucide-react/dist/esm/icons/x';
 import { toast } from 'sonner';
 import type { ZoneContact } from '@/types/zones';
+import { generateId } from '@/lib/utils/generateId';
 import { ContactDetailSheet } from './contacts/ContactDetailSheet';
 import { ContactImportDialog } from './contacts/ContactImportDialog';
 
@@ -61,7 +63,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
   );
 
   // Load presets from localStorage
-  useMemo(() => {
+  useEffect(() => {
     try {
       if (typeof window === 'undefined') return;
       const raw = window.localStorage.getItem(storageKey);
@@ -94,9 +96,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
     if (!name) return;
 
     const newPreset: ContactsFilterPreset = {
-      id: (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
-        ? (crypto as any).randomUUID()
-        : Math.random().toString(36).slice(2),
+      id: generateId(),
       name,
       search,
       activeTag,
@@ -165,6 +165,18 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <h1 className="text-2xl font-bold">{t('zones.contacts.title', 'Contacts')}</h1>
         <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" size="sm" onClick={async () => {
+            try {
+              const { exportContactsToExcel } = await import('@/lib/export/excel-export-zone');
+              await exportContactsToExcel({ contacts: filtered });
+              toast.success(t('zones.contacts.exportSuccess', 'Contacts exported'));
+            } catch (err: any) {
+              toast.error(err.message || 'Export failed');
+            }
+          }}>
+            <Download className="h-4 w-4 mr-1" />
+            {t('zones.contacts.export', 'Export')}
+          </Button>
           <Button variant="outline" size="sm" onClick={() => setImportOpen(true)}>
             <Upload className="h-4 w-4 mr-1" />
             {t('zones.contacts.import', 'Import')}

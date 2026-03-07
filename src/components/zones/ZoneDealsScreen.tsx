@@ -1,7 +1,7 @@
 /**
  * ZoneDealsScreen - Kanban pipeline for zone deals with DnD
  */
-import { memo, useState, useCallback, useMemo } from 'react';
+import { memo, useState, useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DndContext, DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
@@ -16,8 +16,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
 import Plus from 'lucide-react/dist/esm/icons/plus';
+import Download from 'lucide-react/dist/esm/icons/download';
 import Filter from 'lucide-react/dist/esm/icons/filter';
 import { toast } from 'sonner';
+import { generateId } from '@/lib/utils/generateId';
 import type { ZoneDeal } from '@/types/zones';
 import { DealKanbanColumn } from './deals/DealKanbanColumn';
 import { DealCard } from './deals/DealCard';
@@ -79,7 +81,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   );
 
   // Load presets from localStorage
-  useMemo(() => {
+  useEffect(() => {
     try {
       const raw = typeof window !== 'undefined' ? window.localStorage.getItem(storageKey) : null;
       if (raw) {
@@ -115,9 +117,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     if (!name) return;
 
     const newPreset: DealsFilterPreset = {
-      id: (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
-        ? (crypto as any).randomUUID()
-        : Math.random().toString(36).slice(2),
+      id: generateId(),
       name,
       filters: {
         filterOverdue,
@@ -275,199 +275,211 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-64px)]">
       <div className="p-4 md:p-6 space-y-4 flex-1 overflow-y-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <h1 className="text-2xl font-bold">{t('zones.deals.title', 'Deals Pipeline')}</h1>
-        <div className="flex gap-2 flex-wrap items-center">
-          <Popover open={filterOpen} onOpenChange={setFilterOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Filter className="h-4 w-4 mr-1" />
-                {t('zones.deals.filters', 'Filters')}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-72" align="end">
-              <div className="space-y-3">
-                <Label className="text-xs text-muted-foreground">{t('zones.deals.assignee', 'Assignee')}</Label>
-                <Select
-                  value={filterAssignee || '__all__'}
-                  onValueChange={v => {
-                    clearPresetSelection();
-                    setFilterAssignee(v === '__all__' ? '' : v);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('zones.deals.allAssignees', 'All')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__all__">{t('zones.deals.allAssignees', 'All')}</SelectItem>
-                    {members.map((m) => (
-                      <SelectItem key={m.user_id} value={m.user_id}>
-                        {m.display_name || m.email || m.user_id?.slice(0, 8)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">{t('zones.deals.dateFrom', 'From')}</Label>
-                    <Input
-                      type="date"
-                      value={filterDateFrom}
-                      onChange={(e) => {
-                        clearPresetSelection();
-                        setFilterDateFrom(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">{t('zones.deals.dateTo', 'To')}</Label>
-                    <Input
-                      type="date"
-                      value={filterDateTo}
-                      onChange={(e) => {
-                        clearPresetSelection();
-                        setFilterDateTo(e.target.value);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">{t('zones.deals.valueMin', 'Min value')}</Label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      value={filterValueMin}
-                      onChange={(e) => {
-                        clearPresetSelection();
-                        setFilterValueMin(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground">{t('zones.deals.valueMax', 'Max value')}</Label>
-                    <Input
-                      type="number"
-                      placeholder="—"
-                      value={filterValueMax}
-                      onChange={(e) => {
-                        clearPresetSelection();
-                        setFilterValueMax(e.target.value);
-                      }}
-                    />
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setFilterAssignee('');
-                    setFilterDateFrom('');
-                    setFilterDateTo('');
-                    setFilterValueMin('');
-                    setFilterValueMax('');
-                    setFilterOverdue(false);
-                    setSelectedPresetId('');
-                    setFilterOpen(false);
-                  }}
-                >
-                  {t('zones.deals.clearFilters', 'Clear filters')}
+        {/* Header */}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <h1 className="text-2xl font-bold">{t('zones.deals.title', 'Deals Pipeline')}</h1>
+          <div className="flex gap-2 flex-wrap items-center">
+            <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-1" />
+                  {t('zones.deals.filters', 'Filters')}
                 </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Button
-            variant={filterOverdue ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => {
-              clearPresetSelection();
-              setFilterOverdue(!filterOverdue);
-            }}
-          >
-            <Filter className="h-4 w-4 mr-1" />
-            {t('zones.deals.overdue', 'Overdue')}
-          </Button>
-          <Select
-            value={selectedPresetId || '__none__'}
-            onValueChange={(v) => {
-              if (v === '__none__') {
-                setSelectedPresetId('');
-                return;
-              }
-              if (v === '__save__') {
-                setPresetName('');
-                setPresetDialogOpen(true);
-                return;
-              }
-              handleApplyPreset(v);
-            }}
-          >
-            <SelectTrigger className="h-9 w-40 text-xs">
-              <SelectValue placeholder={t('zones.deals.presets.placeholder', 'Фильтры')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="__none__">
-                {t('zones.deals.presets.none', 'Без пресета')}
-              </SelectItem>
-              {filterPresets.map((p) => (
-                <SelectItem key={p.id} value={p.id}>
-                  {p.name}
+              </PopoverTrigger>
+              <PopoverContent className="w-72" align="end">
+                <div className="space-y-3">
+                  <Label className="text-xs text-muted-foreground">{t('zones.deals.assignee', 'Assignee')}</Label>
+                  <Select
+                    value={filterAssignee || '__all__'}
+                    onValueChange={v => {
+                      clearPresetSelection();
+                      setFilterAssignee(v === '__all__' ? '' : v);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('zones.deals.allAssignees', 'All')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__all__">{t('zones.deals.allAssignees', 'All')}</SelectItem>
+                      {members.map((m) => (
+                        <SelectItem key={m.user_id} value={m.user_id}>
+                          {m.display_name || m.email || m.user_id?.slice(0, 8)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">{t('zones.deals.dateFrom', 'From')}</Label>
+                      <Input
+                        type="date"
+                        value={filterDateFrom}
+                        onChange={(e) => {
+                          clearPresetSelection();
+                          setFilterDateFrom(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">{t('zones.deals.dateTo', 'To')}</Label>
+                      <Input
+                        type="date"
+                        value={filterDateTo}
+                        onChange={(e) => {
+                          clearPresetSelection();
+                          setFilterDateTo(e.target.value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">{t('zones.deals.valueMin', 'Min value')}</Label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={filterValueMin}
+                        onChange={(e) => {
+                          clearPresetSelection();
+                          setFilterValueMin(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">{t('zones.deals.valueMax', 'Max value')}</Label>
+                      <Input
+                        type="number"
+                        placeholder="—"
+                        value={filterValueMax}
+                        onChange={(e) => {
+                          clearPresetSelection();
+                          setFilterValueMax(e.target.value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setFilterAssignee('');
+                      setFilterDateFrom('');
+                      setFilterDateTo('');
+                      setFilterValueMin('');
+                      setFilterValueMax('');
+                      setFilterOverdue(false);
+                      setSelectedPresetId('');
+                      setFilterOpen(false);
+                    }}
+                  >
+                    {t('zones.deals.clearFilters', 'Clear filters')}
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Button
+              variant={filterOverdue ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                clearPresetSelection();
+                setFilterOverdue(!filterOverdue);
+              }}
+            >
+              <Filter className="h-4 w-4 mr-1" />
+              {t('zones.deals.overdue', 'Overdue')}
+            </Button>
+            <Select
+              value={selectedPresetId || '__none__'}
+              onValueChange={(v) => {
+                if (v === '__none__') {
+                  setSelectedPresetId('');
+                  return;
+                }
+                if (v === '__save__') {
+                  setPresetName('');
+                  setPresetDialogOpen(true);
+                  return;
+                }
+                handleApplyPreset(v);
+              }}
+            >
+              <SelectTrigger className="h-9 w-40 text-xs">
+                <SelectValue placeholder={t('zones.deals.presets.placeholder', 'Фильтры')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">
+                  {t('zones.deals.presets.none', 'Без пресета')}
                 </SelectItem>
-              ))}
-              <SelectItem value="__save__">
-                {t('zones.deals.presets.saveCurrent', 'Сохранить текущие')}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-          <Button onClick={() => setCreateOpen(true)} size="sm">
-            <Plus className="h-4 w-4 mr-1" />
-            {t('zones.deals.newDeal', 'New Deal')}
-          </Button>
+                {filterPresets.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.name}
+                  </SelectItem>
+                ))}
+                <SelectItem value="__save__">
+                  {t('zones.deals.presets.saveCurrent', 'Сохранить текущие')}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" size="sm" onClick={async () => {
+              try {
+                const { exportDealsToExcel } = await import('@/lib/export/excel-export-zone');
+                await exportDealsToExcel({ deals });
+                toast.success(t('zones.deals.exportSuccess', 'Deals exported'));
+              } catch (err: any) {
+                toast.error(err.message || 'Export failed');
+              }
+            }}>
+              <Download className="h-4 w-4 mr-1" />
+              {t('zones.deals.export', 'Export')}
+            </Button>
+            <Button onClick={() => setCreateOpen(true)} size="sm">
+              <Plus className="h-4 w-4 mr-1" />
+              {t('zones.deals.newDeal', 'New Deal')}
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Summary stats */}
-      <div className="flex gap-3 flex-wrap">
-        <Badge variant="outline" className="text-sm py-1 px-3">
-          {deals.filter((d) => d.status === 'open').length} {t('zones.deals.open', 'open')}
-        </Badge>
-        <Badge variant="outline" className="text-sm py-1 px-3 border-green-500/30 text-green-600">
-          {deals.filter((d) => d.status === 'won').length} {t('zones.deals.won', 'won')}
-        </Badge>
-        <Badge variant="outline" className="text-sm py-1 px-3 border-red-500/30 text-red-600">
-          {deals.filter((d) => d.status === 'lost').length} {t('zones.deals.lost', 'lost')}
-        </Badge>
-        <Badge variant="outline" className="text-sm py-1 px-3 text-primary">
-          {deals
-            .filter((d) => d.status === 'open')
-            .reduce((sum, d) => sum + (d.value_amount || 0), 0)
-            .toLocaleString()}{' '}
-          KZT
-        </Badge>
-      </div>
-      {deals.filter((d) => d.status === 'open').length === 0 && (
-        <p className="text-sm text-muted-foreground mt-2">
-          {t('phaseB.whyLnkmx.emptyDeals', 'CRM за 15 минут — без внедрения. Добавьте первую сделку.')}
-        </p>
-      )}
-
-      {/* Kanban Board with DnD */}
-      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="flex gap-4 overflow-x-auto pb-4 min-h-[360px] md:min-h-[420px]">
-          {stages.map((stage) => (
-            <DealKanbanColumn
-              key={stage.id}
-              stage={stage}
-              deals={dealsByStage.get(stage.id) || []}
-              onDealClick={setSelectedDeal}
-            />
-          ))}
+        {/* Summary stats */}
+        <div className="flex gap-3 flex-wrap">
+          <Badge variant="outline" className="text-sm py-1 px-3">
+            {deals.filter((d) => d.status === 'open').length} {t('zones.deals.open', 'open')}
+          </Badge>
+          <Badge variant="outline" className="text-sm py-1 px-3 border-green-500/30 text-green-600">
+            {deals.filter((d) => d.status === 'won').length} {t('zones.deals.won', 'won')}
+          </Badge>
+          <Badge variant="outline" className="text-sm py-1 px-3 border-red-500/30 text-red-600">
+            {deals.filter((d) => d.status === 'lost').length} {t('zones.deals.lost', 'lost')}
+          </Badge>
+          <Badge variant="outline" className="text-sm py-1 px-3 text-primary">
+            {deals
+              .filter((d) => d.status === 'open')
+              .reduce((sum, d) => sum + (d.value_amount || 0), 0)
+              .toLocaleString()}{' '}
+            KZT
+          </Badge>
         </div>
-        <DragOverlay>
-          {activeDragDeal && <DealCard deal={activeDragDeal} onClick={() => { }} />}
-        </DragOverlay>
-      </DndContext>
+        {deals.filter((d) => d.status === 'open').length === 0 && (
+          <p className="text-sm text-muted-foreground mt-2">
+            {t('phaseB.whyLnkmx.emptyDeals', 'CRM за 15 минут — без внедрения. Добавьте первую сделку.')}
+          </p>
+        )}
+
+        {/* Kanban Board with DnD */}
+        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+          <div className="flex gap-4 overflow-x-auto pb-4 min-h-[360px] md:min-h-[420px]">
+            {stages.map((stage) => (
+              <DealKanbanColumn
+                key={stage.id}
+                stage={stage}
+                deals={dealsByStage.get(stage.id) || []}
+                onDealClick={setSelectedDeal}
+              />
+            ))}
+          </div>
+          <DragOverlay>
+            {activeDragDeal && <DealCard deal={activeDragDeal} onClick={() => { }} />}
+          </DragOverlay>
+        </DndContext>
       </div>
 
       {/* Save filters preset dialog */}
