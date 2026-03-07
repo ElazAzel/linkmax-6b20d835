@@ -39,6 +39,15 @@ function CustomCodeBlockEditorComponent({ formData, onChange }: BaseBlockEditorP
   const [showTemplates, setShowTemplates] = useState(!data.html);
   const [selectedCategory, setSelectedCategory] = useState<string>('games');
 
+  const applyTemplate = (template: any) => {
+    handleChange({
+      html: template.html || '',
+      css: template.css || '',
+      javascript: template.javascript || '',
+    });
+    setShowTemplates(false);
+  };
+
   // Fetch templates from DB
   const { data: dbWidgetTemplates, isLoading: isWidgetsLoading } = useWidgetTemplates();
 
