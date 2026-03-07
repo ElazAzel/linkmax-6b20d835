@@ -17,6 +17,8 @@ import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Store from 'lucide-react/dist/esm/icons/store';
 import Users from 'lucide-react/dist/esm/icons/users';
 import History from 'lucide-react/dist/esm/icons/history';
+import LayoutGrid from 'lucide-react/dist/esm/icons/layout-grid';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +30,7 @@ import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
+import { StatCard } from '@/components/shared/StatCard';
 
 interface HomeScreenProps {
   pageData: PageData | null;
@@ -129,32 +132,32 @@ export const HomeScreen = memo(function HomeScreen({
 
           {/* Stats Row */}
           <div className="grid grid-cols-3 gap-3">
-            <button
-              onClick={onOpenEditor}
-              className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-primary/5 hover:translate-y-[-2px] border-white/20"
-            >
-              <div className="text-2xl font-black text-gradient tabular-nums">{blockCount}</div>
-              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
-                {t('dashboard.home.blocks', 'блоков')}
-              </div>
+            <button onClick={onOpenEditor} className="text-left transition-transform active:scale-95">
+              <StatCard
+                icon={<LayoutGrid className="w-5 h-5" />}
+                value={blockCount}
+                label={t('dashboard.home.blocks', 'блоков')}
+                variant="glass"
+                compact
+              />
             </button>
-            <button
-              onClick={onOpenInsights}
-              className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-emerald-500/5 hover:translate-y-[-2px] border-white/20"
-            >
-              <div className="text-2xl font-black text-gradient-blue tabular-nums">{viewCount}</div>
-              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
-                {t('dashboard.home.views', 'просмотров')}
-              </div>
+            <button onClick={onOpenInsights} className="text-left transition-transform active:scale-95">
+              <StatCard
+                icon={<Eye className="w-5 h-5 text-emerald-500" />}
+                value={viewCount}
+                label={t('dashboard.home.views', 'просмотров')}
+                variant="glass"
+                compact
+              />
             </button>
-            <button
-              onClick={onOpenActivity}
-              className="p-4 rounded-2xl glass-subtle text-center transition-all active:scale-95 hover:bg-violet-500/5 hover:translate-y-[-2px] border-white/20"
-            >
-              <div className="text-2xl font-black text-gradient-purple tabular-nums">{weeklyStats.leads}</div>
-              <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
-                {t('dashboard.home.leads', 'заявок')}
-              </div>
+            <button onClick={onOpenActivity} className="text-left transition-transform active:scale-95">
+              <StatCard
+                icon={<MessageSquare className="w-5 h-5 text-violet-500" />}
+                value={weeklyStats.leads}
+                label={t('dashboard.home.leads', 'заявок')}
+                variant="glass"
+                compact
+              />
             </button>
           </div>
 
