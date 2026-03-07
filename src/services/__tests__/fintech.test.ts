@@ -101,25 +101,16 @@ describe('fintechService', () => {
                 limit: vi.fn().mockResolvedValue({ data: mockTxs, error: null })
             } as any);
 
-            // Pending GMV call
-            mockFrom.mockReturnValueOnce({
-                select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-                match: vi.fn().mockReturnThis(), // Assuming multiple eq or filter
-                // The implementation uses multiple .eq().eq().eq()
-                // So we need to mock the chain correctly
-            } as any);
-
-            // Let's adjust the mock for the chain .eq().eq().eq()
-            const mockChain: any = {
+            // Pending GMV call: emulate chained .select().eq().eq().eq() that resolves when awaited
+            const pendingQuery: any = {
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
             };
-            mockChain.then = function (resolve: any) {
+            pendingQuery.then = (resolve: any) => {
                 resolve({ data: mockPending, error: null });
             };
 
-            mockFrom.mockReturnValueOnce(mockChain as any);
+            mockFrom.mockReturnValueOnce(pendingQuery as any);
 
             const result = await fintechService.getWalletOverview(userId);
 

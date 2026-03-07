@@ -42,6 +42,7 @@ vi.mock('@/hooks/analytics/useAnalyticsTracking', () => ({
 // Mock services
 vi.mock('@/services/analytics', () => ({
     trackShare: vi.fn(),
+    getVisitorId: vi.fn(() => 'test-visitor-id'),
 }));
 
 vi.mock('@/services/user', () => ({
