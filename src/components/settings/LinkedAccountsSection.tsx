@@ -122,10 +122,46 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
     }
   };
 
-  const handleUnlinkAccount = async (_provider: 'google' | 'apple') => {
-    // Manual linking/unlinking is disabled in this Supabase project.
-    // unlinkIdentity requires manual linking to be enabled.
-    toast.info(t('settings.linkedAccounts.unlinkNotSupported', 'Отвязка аккаунтов временно недоступна. Обратитесь в поддержку.'));
+  const handleUnlinkAccount = async (provider: 'google' | 'apple') => {
+    const linkedCount = linkedAccounts.filter(a => a.linked).length;
+    if (linkedCount <= 1) {
+      toast.error(t('settings.linkedAccounts.cannotUnlinkLast', 'You must have at least one login method'));
+      return;
+    }
+
+    setLinkingProvider(provider);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const identity = user.identities?.find(i => i.provider === provider);
+      if (!identity) {
+        toast.error(t('settings.linkedAccounts.identityNotFound', 'Identity not found or already unlinked'));
+        await loadLinkedAccounts();
+        setLinkingProvider(null);
+        return;
+      }
+
+      const { error } = await supabase.auth.unlinkIdentity(identity);
+
+      if (error) {
+        if (error.status === 404 || error.message?.includes('not found') || error.message?.includes('primary')) {
+          toast.error(t('settings.linkedAccounts.primaryIdentity', 'Основной метод входа отвязать нельзя. В настройках Supabase также должно быть включено Manual Linking.'));
+          await loadLinkedAccounts();
+        } else if (error.message?.includes('Manual linking is disabled') || error.status === 422) {
+          toast.error('Отвязка и ручная привязка отключены в вашем проекте Supabase. Включите "Manual Linking" в настройках Authentication -> Providers.', { duration: 6000 });
+        } else {
+          toast.error(error.message || t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
+        }
+      } else {
+        toast.success(t('settings.linkedAccounts.unlinkSuccess', 'Account unlinked'));
+        await loadLinkedAccounts();
+      }
+    } catch (error) {
+      toast.error(t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
+    } finally {
+      setLinkingProvider(null);
+    }
   };
 
   // Google Calendar Integration Functions
