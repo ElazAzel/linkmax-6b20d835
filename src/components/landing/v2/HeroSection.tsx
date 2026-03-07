@@ -67,7 +67,7 @@ function AnimatedCount({ target, suffix = '' }: { target: number; suffix?: strin
         return () => obs.disconnect();
     }, [target]);
 
-    return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+    return <span ref={ref} className="tabular-nums">{count.toLocaleString()}{suffix}</span>;
 }
 
 export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
@@ -125,7 +125,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center">
+                <div className="flex flex-col gap-4 w-full sm:w-auto items-center">
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
@@ -135,15 +135,13 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                         <ArrowRight className="w-5 h-5 ml-1" />
                     </MagneticButton>
 
-                    <MagneticButton
+                    <button
                         onClick={onExamples}
-                        variant="outline"
-                        size="lg"
-                        className="h-14 px-8 rounded-2xl text-lg font-medium bg-background/50 backdrop-blur-sm border-input hover:bg-accent/50 min-w-[200px]"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors group"
                     >
-                        <Play className="w-4 h-4 mr-2 fill-current" />
+                        <Play className="w-3.5 h-3.5 fill-current group-hover:scale-110 transition-transform" />
                         {t('landing.v4.hero.secondary', 'See Examples')}
-                    </MagneticButton>
+                    </button>
                 </div>
 
                 {/* Animated Stats Strip */}
@@ -152,19 +150,19 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                         <div className="flex flex-col items-center gap-1 group">
                             <Layers className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-lg md:text-xl font-bold text-foreground"><AnimatedCount target={28} suffix="+" /></span>
-                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{t('landing.v4.hero.trust1', 'Smart Blocks')}</span>
+                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust1', 'Smart Blocks')}</span>
                         </div>
                         <div className="w-px h-10 bg-border/20" />
                         <div className="flex flex-col items-center gap-1 group">
                             <Users className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-lg md:text-xl font-bold text-foreground"><AnimatedCount target={2000} suffix="+" /></span>
-                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{t('landing.v4.hero.trust2', 'Creators')}</span>
+                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust2', 'Creators')}</span>
                         </div>
                         <div className="w-px h-10 bg-border/20" />
                         <div className="flex flex-col items-center gap-1 group">
                             <Globe className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-lg md:text-xl font-bold text-foreground"><AnimatedCount target={40} suffix="+" /></span>
-                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{t('landing.v4.hero.trust3', 'Languages')}</span>
+                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust3', 'Languages')}</span>
                         </div>
                     </div>
                 </div>

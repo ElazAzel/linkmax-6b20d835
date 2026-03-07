@@ -2,7 +2,7 @@
 
 export const GrainOverlay = () => {
     return (
-        <div className="pointer-events-none fixed inset-0 z-[40] overflow-hidden opacity-30 mix-blend-overlay">
+        <div className="pointer-events-none fixed inset-0 z-[40] overflow-hidden opacity-30 mix-blend-overlay hidden sm:block">
             {/* CSS-only grain effect (no external image dependency) */}
             <div
                 className="absolute inset-[-200%] h-[400%] w-[400%] animate-grain opacity-[0.08]"

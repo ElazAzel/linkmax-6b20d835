@@ -2,6 +2,26 @@
 
 ## [Unreleased]
 
+### [2026-03-07] - Design System Foundation & Shared Components
+
+* **Shared Component Library** (`src/components/shared/`):
+  * `SectionWrapper` — reusable section with standard padding, container, `data-section` analytics attribute.
+  * `SectionHeading` — badge + title + subtitle, text-gradient support, localization-safe with `text-balance`.
+  * `EmptyState` — promoted from dashboard-v2 to shared (re-export, backward compatible).
+  * `StatCard` — metric card with `tabular-nums`, glass/solid variants, trend indicator, compact mode.
+  * `CTAGroup` — responsive button pair, auto-stacks on mobile, no fixed widths (i18n safe).
+* **Semantic CSS Tokens** (`index.css`):
+  * Typography roles: `.text-display`, `.text-hero`, `.text-section-title`, `.text-card-title`, `.text-label`, `.text-caption`, `.text-helper`.
+  * Spacing tokens: `--space-section-y`, `--space-block-gap`, `--space-card-p`, `--space-input-y`, `--space-safe-x` with mobile overrides (25% compression).
+  * Opacity tokens: `--text-primary` (1.0), `--text-secondary` (0.7), `--text-tertiary` (0.5), `--text-disabled` (0.35).
+* **Performance**:
+  * `GrainOverlay` hidden on mobile (`hidden sm:block`) — saves GPU on small screens.
+  * `AnimatedCount` uses `tabular-nums` for stable numeric widths.
+* **Landing Hero** (`HeroSection.tsx`):
+  * Secondary CTA converted from large outline button to subtle text link — focuses attention on primary CTA.
+  * Stat labels use `min-w-0 truncate` for i18n safety (KK/UZ text expansion).
+* **Branding Fix**: Replaced hardcoded `lnkmx` → `LinkMAX` in DashboardV2 SEO defaults.
+
 ### [2026-03-07] - LinkMAX Brand Transition & SEO/AEO Optimization
 
 * **Global Rebranding**:

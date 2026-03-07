@@ -202,8 +202,8 @@ function DashboardV2Inner() {
 
   // SEO
   const canonical = `${getAppDomain()}/dashboard`;
-  const seoTitle = t('dashboard.seo.title', 'lnkmx Dashboard');
-  const seoDescription = t('dashboard.seo.description', 'Manage your lnkmx pages, leads, and analytics.');
+  const seoTitle = t('dashboard.seo.title', 'LinkMAX Dashboard');
+  const seoDescription = t('dashboard.seo.description', 'Manage your LinkMAX pages, leads, and analytics.');
 
   // Check for new user quick start - show only for users with 2 or fewer blocks
   useEffect(() => {

@@ -241,6 +241,23 @@
 
     /* Spacing */
     --spacing: 0.25rem;
+
+    /* ========================================
+       SEMANTIC SPACING TOKENS
+       ======================================== */
+    --space-section-y: 4rem;
+    --space-block-gap: 0.75rem;
+    --space-card-p: 1.5rem;
+    --space-input-y: 0.75rem;
+    --space-safe-x: 1rem;
+
+    /* ========================================
+       OPACITY / HIERARCHY TOKENS
+       ======================================== */
+    --text-primary: 1;
+    --text-secondary: 0.7;
+    --text-tertiary: 0.5;
+    --text-disabled: 0.35;
   }
 
   .dark {
@@ -355,6 +372,114 @@
 }
 
 @layer utilities {
+  /* ========================================
+     SEMANTIC TYPOGRAPHY ROLES
+     Use these instead of ad-hoc text-* sizes
+     ======================================== */
+
+  /* Display — Landing hero ONLY. Avoid in multilingual-heavy UIs. */
+  .text-display {
+    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
+    font-size: 3rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  @media (min-width: 768px) {
+    .text-display {
+      font-size: 4.5rem;
+      line-height: 1.05;
+    }
+  }
+
+  /* Hero — Section hero, page titles. ONE per screen. */
+  .text-hero {
+    font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
+    font-size: 1.875rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  @media (min-width: 768px) {
+    .text-hero {
+      font-size: 3rem;
+      line-height: 1.16;
+    }
+  }
+
+  /* Section Title — Headings within sections. */
+  .text-section-title {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  @media (min-width: 768px) {
+    .text-section-title {
+      font-size: 1.875rem;
+      line-height: 1.25;
+    }
+  }
+
+  /* Card Title — Card headers, panel titles. */
+  .text-card-title {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+    .text-card-title {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* Label — Form labels, tags. Compact. */
+  .text-label {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  /* Caption — Meta, timestamps. Smallest. */
+  .text-caption {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  /* Helper — Error messages, hints. Use with min-h for i18n. */
+  .text-helper {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 400;
+    min-height: 1.25rem;
+  }
+
+  /* ========================================
+     MOBILE SPACING OVERRIDES
+     Compress spacing by ~25% on mobile
+     ======================================== */
+  @media (max-width: 640px) {
+    :root {
+      --space-section-y: 3rem;
+      --space-block-gap: 0.5rem;
+      --space-card-p: 1rem;
+      --space-safe-x: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --space-safe-x: 2rem;
+    }
+  }
+
   /* ========================================
      LIQUID GLASS UTILITIES
      ======================================== */
@@ -929,11 +1054,9 @@
 }
 
 .text-spotlight {
-  background: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    hsl(var(--primary)) 0%,
-    transparent 50%
-  );
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      hsl(var(--primary)) 0%,
+      transparent 50%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
