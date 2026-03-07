@@ -153,7 +153,7 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | **Experiment** | A/B test for a block | Conversion optimization | `src/services/experiments.ts`, DB: `experiments` |
 | **Wallet** | User balance and ledger | Fintech foundation | `src/services/fintech.ts`, DB: `user_wallets` |
 | **Transaction** | Financial record (GMV/Fee) | Ledger accounting | DB: `wallet_transactions` |
-| **Widget Template**| Resuable HTML/JS/CSS snippet | DB-driven customization | DB: `widget_templates` |
+| **Widget Template** | Resuable HTML/JS/CSS snippet | DB-driven customization | DB: `widget_templates` |
 | **Order** | Payment transaction record | Tracking status & provider | DB: `orders` |
 | **Token** | Linkkon virtual currency | Gamification + marketplace | DB: `user_tokens`, `token_transactions` |
 
@@ -348,12 +348,15 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 
 ## 8) Payments and Plans
 
-### Subscription Tiers
+### 8.1 Модель монетизации (Step-by-Growth)
 
-| Plan | Price (KZT/month) | Features |
+lnkmx использует гибридную модель, направленную на минимизацию барьеров для входа. Подробности в [2. Бизнес-модель и Фин-модель](../product/2_BUSINESS_FINANCIAL_MODEL.md).
+
+| План | Цена (KZT/мес) | Описание |
 | :--- | :--- | :--- |
-| Free | 0 | 1 page, 11 blocks, 1 AI generation/month, basic analytics |
-| Pro | 2,900 (annual) | 6 pages (1 primary + 5 additional), 28 blocks, 5 AI/month, full CRM, no watermark |
+| **Identity (Free)** | 0 | 1 страница, виральность через вотермарку. |
+| **Starter (Transaction)** | 0 + 7% комиссия | Доступ к CRM и Payments без абонплаты. Платите только когда зарабатываете. |
+| **Pro (Business)** | 2,900 (annual) | White-label, 6 страниц, полная CRM, комиссия 0-1%. |
 
 ### Plan Checking
 
@@ -397,11 +400,11 @@ Dynamic SEO meta tags are managed via `react-helmet-async` on the client and inj
 | `analytics` | Event tracking | Public insert, owner read |
 | `user_tokens` | Linkkon balance | Owner only |
 | `page_snapshots` | Version history | Owner only |
-| `languages`         | Translations                       | Admin management, public read |
-| `templates`         | Project page templates (JSON blocks) | slug (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
+| `languages` | Translations | Admin management, public read |
+| `templates` | Project page templates (JSON blocks) | slug (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
 | `i18n_translations` | JSONB store for DB-driven translations | Admin only |
-| `widget_templates`  | Reusable block/widget templates      | id (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
-| `orders`            | Payment transactions tracking        | id (PK), user_id, amount, currency, status, provider, description, metadata |
+| `widget_templates` | Reusable block/widget templates | id (PK), name, description, category, thumbnail_url, components (JSONB), is_active |
+| `orders` | Payment transactions tracking | id (PK), user_id, amount, currency, status, provider, description, metadata |
 | `custom_domains` | Mapping of domains to pages | Owner + Admins |
 | `zone_document_templates` | Templates for document generation | Zone Member access |
 | `zone_documents` | Generated documents with status | Zone Member access |

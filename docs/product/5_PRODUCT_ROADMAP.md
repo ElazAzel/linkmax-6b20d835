@@ -1,86 +1,75 @@
-# 5. Product Roadmap (2026)
+# 5. Дорожная карта продукта lnkmx (2026-2027)
 
-> **Status:** Active
-> **Last Updated:** March 5, 2026
-> **Execution Horizon:** 12 Months
+> **Статус**: Активно
+> **Последнее обновление**: 7 марта 2026
+> **Горизонт планирования**: 12-18 месяцев
 
 ---
 
-## 1. Roadmap Overview
+## 1. Обзор этапов (Quarterly Themes)
 
-| Quarter | Theme | Key Deliverables |
+| Квартал | Тема | Ключевые результаты |
 | :--- | :--- | :--- |
-| **Q1 2026** | **Business OS Foundation** (Completed) | Platform Launch, 28+ Blocks, Business Zones (Deals, Tasks, Contacts, Invoices, EDO), Custom Domains, Team Collaboration, Pixel Proxy, A/B Tests, SEO/SSR. |
-| **Q2 2026** | **Mobile & Automations** | Native Mobile App (Capacitor 8), Push Notifications, Advanced Workflow Automations, Kaspi Integration (KZ). |
-| **Q3 2026** | **Ecosystem & API** | Public API, Zapier/Make Integration, White-Label Mode for Agencies. |
-| **Q4 2026** | **Scale & Fintech V2** | Native Wallet, Paid Newsletters, Multi-currency Settlement, AI-native Financial Insights. |
+| **Q1 2026** | **Business OS Foundation** (Завершено) | Запуск платформы, 28+ блоков, Бизнес-зоны (CRM, Сделки, Задачи, Инвойсы), Командная работа, SEO/SSR, A/B тесты. |
+| **Q2 2026** | **The Monetization Pivot** | Запуск тарифа **Starter (0$ + %)**, Нативная оплата Kaspi/Robokassa (KZ), Исправление UX-долга (шрифты, доступность), PWA V2. |
+| **Q3 2026** | **CRM Depth & Growth** | Множественные пайплайны, Кастомные поля, Экспорт данных/Отчеты, Нативное мобильное приложение (Capacitor), Реферальная система Pro. |
+| **Q4 2026** | **Scale & Fintech Core** | Внутренние кошельки, Автоматизация выплат, Защищенная доставка цифровых товаров, AI-предиктивная аналитика продаж. |
 
 ---
 
-## 2. Detailed Milestones
+## 2. Детальные приоритеты
 
-### Q2 2026: Mobile Dominance
+### Q2 2026: Монетизация и Надежность
 
-**Goal**: Shift users from mobile-web to native app for higher retention.
+**Цель**: Обнулить барьер входа для новичков и довести UX до уровня "Business Ready".
 
-* **Native App Wrapper**: Wrap PWA in Capacitor/React Native for Store presence.
-* **Push Notifications**: "New Lead", "New Booking", "Weekly Stat Summary".
-* **Booking V2**:
-  * Google Calendar / Outlook 2-way sync.
-  * Buffer times, multiple staff members.
-  * Deposit payments (prevent no-shows).
+* **Starter Tier Launch**: Техническая реализация автоматического удержания комиссии (Fee) через платежные шлюзы.
+* **Native Payment Integration**: Бесшовный Kaspi QR и Robokassa "в один клик" из карточки сделки.
+* **UX/UI Audit Remediation**:
+  * Увеличение шрифтов (отказ от `text-[10px]` в пользу читаемых 12px+).
+  * Исправление логики бронирований (Timezone support + защита от double-booking).
+  * Улучшение Touch Targets для работы на ходу со смартфона.
+* **PWA V2**: Полноценный оффлайн-режим для чтения списка контактов и задач.
 
-### Q3 2026: The "Open Platform"
+### Q3 2026: Глубина продукта (CRM 2.0)
 
-**Goal**: Integrate with the wider local ecosystem.
+**Цель**: Удержание средних и крупных клиентов через "Data Lock-in" и расширенные функции управления.
 
-* **Zapier/Make Integration**: Allow leads to flow to external CRMs (HubSpot, AmoCRM) if needed.
-* **White-Label Agency Mode**: Allow agencies to resell lnkmx under their own brand/domain.
-* **Custom Domains**: [COMPLETED 2026-02-22] Automated SSL provisioning for user-owned domains (`user.com` instead of `lnkmx.my/user`).
+* **Advanced CRM**:
+  * Множественные воронки продаж (для разных продуктов в одной зоне).
+  * Настраиваемые поля (Custom Fields) для Сделок и Контактов.
+  * Глобальный поиск через Command Palette (Cmd+K).
+* **Reporting & Analytics**:
+  * Экспорт всей базы в Excel/CSV (запрос пользователей).
+  * Генерация PDF инвойсов и Актов выполненных работ.
+  * Дашборд воронки продаж и финансовый отчет P&L (Profit & Loss).
+* **Mobile App**: Публикация в App Store / Google Play для повышения лояльности.
 
-### Q4 2026: Fintech Layer
+### Q4 2026: Fintech & Scale
 
-**Goal**: Monetize transactions, not just subscriptions.
+**Цель**: Превращение lnkmx в полноценный финансовый хаб для соло-бизнеса.
 
-* **Link Wallet**: built-in wallet for receiving payments from clients.
-* **Digital Products**: Secure file delivery (eBooks, Presets) with expiration links.
-* **Paid Subscriptions**: Users can charge *their* followers for access to exclusive content (Patreon-lite).
-
----
-
-## 3. Prioritization Framework (RICE)
-
-We use the **RICE** score to prioritize features:
-
-* **R**each: How many users will this affect?
-* **I**mpact: How much will it increase conversion/retention?
-* **C**onfidence: How sure are we?
-* **E**ffort: Engineering weeks.
-
-*Current Top Priority*: **Booking V2** (High Reach, High Impact for Beauty vertical).
+* **Wallet & Ledger**: Внутренний учет средств пользователя с возможностью моментального вывода.
+* **Digital Goods Engine**: Автоматизация продажи гайдов, пресетов и курсов с защитой ссылок.
+* **AI Financial Advisor**: Анализ трат и доходов пользователя с рекомендациями по налоговой оптимизации (на базе локальных законов KZ).
 
 ---
 
-## 3.1 Competitive Plan Phases (vs Bitrix24 / Taplink / Linktree)
+## 3. СТРАТЕГИЯ: "Anti-Bitrix" (Competitive Moats)
 
-| Phase | Focus | Quarter | Status |
-| :--- | :--- | :--- | :--- |
-| **A** | Закрыть критичные пробелы CRM (Deals DnD/Won-Lost/фильтры, Contact Detail, Tasks, Zone Analytics, Automations, Invoices + Robokassa) | Q1–Q2 2026 | Done |
-| **B** | Усилить «где конкуренты слабы»: онбординг, месседжи «CRM без внедрения», «Вся работа со смартфона», сравнения lnkmx vs Taplink/Linktree/Bitrix24 | Ongoing | In progress |
-| **C** | Локализация: Kaspi (KZ), Custom domains (Q3) | Q2–Q3 2026 | Planned |
+| Этап | Фокус | Статус |
+| :--- | :--- | :--- |
+| **A** | **CRM Zero-Entry**: Сделать CRM бесплатным для всех (Starter), пока нет прибыли. | **Planned (Q2)** |
+| **B** | **Mobile-First CRM**: Оптимизировать все интерфейсы под работу одной рукой "в поле". | **In Progress** |
+| **C** | **Product-Led Growth**: Вотермарка "Powered by" на Free-страницах как основной канал трафика. | **Active** |
 
 ---
 
-## 4. Feature Specifications (Upcoming)
+## 4. Метрики успеха (KPIs)
 
-### Feature: Custom Domains
+1. **Retention Loop**: Рост удержания пользователей за счет накопления данных в CRM.
+2. **Conversion to Pro**: Переход с тарифа Starter на Pro (3,045 ₸/мес) при достижении оборота >42,000 ₸.
+3. **App Store Rating**: Оценка приложения >4.5 (фокус на надежность и дизайн Liquid Glass).
 
-* **User Story**: "As a Pro user, I want to attach `mypage.com` so I look more professional."
-* **Tech Spec**: Cloudflare for SaaS integration (SSL termination).
-* **Success Metric**: 10% of Pro users attach a custom domain.
-
-### Feature: Team Collaboration
-
-* **User Story**: "As a steady business, I want my assistant to manage bookings without giving them my password."
-* **Status**: [COMPLETED 2026-02-25] Invite system via email, Role-based access control (RBAC) in Supabase.
-* **Success Metric**: 5% of accounts invite a second member.
+---
+> Roadmap утвержден: 2026.03.07 | Команда lnkmx

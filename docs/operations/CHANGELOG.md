@@ -253,7 +253,7 @@
 
 * **ProductBlock**: Removed duplicate `redirectToTokenPurchase()` call causing double redirect.
 
-### Added
+### Added (PWA & SEO — 2026-02-18)
 
 * `manifest.json` for PWA support (fixed broken `/manifest.webmanifest` link in `index.html`).
 
@@ -341,6 +341,6 @@
 
 ## [0.0.0] - 2026-02-13
 
-### Added
+### Added (Initial Release — 2026-02-13)
 
 * Initial project structure and documentation.

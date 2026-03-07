@@ -48,7 +48,7 @@ We are targeting **3 Beachhead Markets** to start.
 
 ## 3. Brand Identity
 
-**"The Apple of Solopreneur Tools"**
+### "The Apple of Solopreneur Tools"
 
 * **Voice**: Empowering, Professional, Concise. We don't use tech jargon (no "DNS", "API", "Integration"). We use business terms ("Growth", "Clients", "Sales").
 * **Visuals**: **Liquid Glass**. High-end, premium, trustworthy. When a user sees a lnkmx page, it should signal "This professional is successful."
@@ -67,8 +67,8 @@ We use a **Freemium** model. The Free tier is generous enough to go viral, but t
 | Tier | Price (KZT) | Price (USD) | Value Proposition |
 | :--- | :--- | :--- | :--- |
 | **Identity (Free)** | 0 ₸ | $0 | **Виджет в био**. Базовые блоки + вотермарка. |
-| **Starter (Success)**| 0 ₸ + 7% fee | $0 + 7% | **Первые деньги**. Доступ к CRM и инвойсам без абонплаты. |
-| **Pro (Business)** | 2,900 ₸/mo | ~$6.50 | **Рост**. White-label, 6 страниц, полная CRM, комиссия 0-1%. |
+| **Starter (Success)** | 0 ₸ + 7% fee | $0 + 7% | **Первые деньги**. Доступ к CRM и инвойсам без абонплаты. |
+| **Pro (Business)** | 3,045 ₸/mo | ~$6.50 | **Рост**. White-label, 6 страниц, полная CRM, комиссия 0-1%. |
 
 ### Psychology
 
