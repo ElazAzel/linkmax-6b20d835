@@ -4,6 +4,7 @@
 import { memo, useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
+import { useZoneContactFields } from '@/hooks/zones/useZoneContactFields';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,6 +39,7 @@ interface ContactsFilterPreset {
 export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: ZoneContactsScreenProps) {
   const { t } = useTranslation();
   const { contacts, loading, createContact, updateContact, deleteContact, bulkImport } = useZoneContacts(zoneId);
+  const { fields } = useZoneContactFields(zoneId);
   const [createOpen, setCreateOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState<ZoneContact | null>(null);
@@ -55,6 +57,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
     tags: '',
     company: '',
     position: '',
+    custom_fields: {} as Record<string, any>,
   });
 
   const storageKey = useMemo(
@@ -145,9 +148,10 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
         tags: newContact.tags ? newContact.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
         company: newContact.company || null,
         position: newContact.position || null,
+        custom_fields: newContact.custom_fields,
       } as any);
       setCreateOpen(false);
-      setNewContact({ name: '', phone: '', email: '', telegram_username: '', tags: '', company: '', position: '' });
+      setNewContact({ name: '', phone: '', email: '', telegram_username: '', tags: '', company: '', position: '', custom_fields: {} });
       toast.success(t('zones.contacts.created', 'Contact created'));
     } catch (err: any) {
       toast.error(err.message);
@@ -432,6 +436,27 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
               <Label>{t('zones.contacts.tags', 'Tags')}</Label>
               <Input value={newContact.tags} onChange={e => setNewContact(p => ({ ...p, tags: e.target.value }))} placeholder="VIP, partner" />
             </div>
+
+            {/* Custom Fields */}
+            {fields.length > 0 && (
+              <div className="space-y-4 pt-2 border-t mt-4">
+                <p className="text-sm font-medium">{t('zones.contacts.additionalInfo', 'Дополнительная информация')}</p>
+                {fields.map(f => (
+                  <div key={f.id} className="space-y-2">
+                    <Label>{f.name} {f.is_required && '*'}</Label>
+                    <Input
+                      type={f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text'}
+                      value={newContact.custom_fields[f.id] || ''}
+                      onChange={e => {
+                        let val: any = e.target.value;
+                        if (f.type === 'number') val = Number(val);
+                        setNewContact(p => ({ ...p, custom_fields: { ...p.custom_fields, [f.id]: val } }));
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateOpen(false)}>{t('common.cancel', 'Cancel')}</Button>

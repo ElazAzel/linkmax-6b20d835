@@ -106,6 +106,7 @@ export interface ZoneContact {
   address: string | null;
   source: string | null;
   notes: string | null;
+  custom_fields?: Record<string, any>;
   created_at: string;
   updated_at: string;
 }
@@ -120,6 +121,19 @@ export interface ZoneContactNote {
   content: string;
   created_by: string;
   created_at: string;
+}
+
+export type ZoneContactFieldType = 'text' | 'number' | 'date' | 'boolean';
+
+export interface ZoneContactField {
+  id: string;
+  zone_id: string;
+  name: string;
+  type: ZoneContactFieldType;
+  is_required: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ZonePipeline {
@@ -234,6 +248,7 @@ export interface ZoneInvoiceItem {
 
 export type TaskStatus = 'todo' | 'in_progress' | 'done' | 'cancelled';
 export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
+export type TaskRecurrenceRule = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'none';
 
 export interface ZoneTask {
   id: string;
@@ -246,6 +261,8 @@ export interface ZoneTask {
   contact_id: string | null;
   deal_id: string | null;
   due_date: string | null;
+  recurrence_rule?: TaskRecurrenceRule | null;
+  recurrence_end_date?: string | null;
   created_by: string;
   created_at: string;
   updated_at: string;
@@ -264,6 +281,23 @@ export interface ZoneTaskChecklistItem {
   is_done: boolean;
   order_index: number;
   created_at: string;
+}
+
+export interface ZoneTaskComment {
+  id: string;
+  zone_id: string;
+  task_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  // Joined
+  user?: {
+    email?: string;
+    raw_user_meta_data?: {
+      display_name?: string;
+    }
+  }
 }
 
 export interface ZoneDocumentTemplate {

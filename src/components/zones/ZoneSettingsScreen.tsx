@@ -29,7 +29,9 @@ import type { Zone, ZoneMember, ZoneInvite, ZoneMemberRole } from '@/types/zones
 import { ZONE_PLANS, getPlanByCode, getMemberLimitFromPlan } from '@/types/zones';
 import { ZonePlanSelector } from './ZonePlanSelector';
 import { ZonePipelineSettings } from './settings/ZonePipelineSettings';
+import { ZoneContactFieldsSettings } from './settings/ZoneContactFieldsSettings';
 import Layers from 'lucide-react/dist/esm/icons/layers';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 
 interface ZoneSettingsScreenProps {
   zone: Zone;
@@ -200,11 +202,12 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       <h1 className="text-2xl font-bold">{zone.name} — {t('zones.settings.title', 'Settings')}</h1>
 
       <Tabs defaultValue="members">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="members" className="gap-1"><Users className="h-4 w-4" />{t('zones.settings.members', 'Members')}</TabsTrigger>
-          <TabsTrigger value="billing" className="gap-1"><CreditCard className="h-4 w-4" />{t('zones.settings.billing', 'Billing')}</TabsTrigger>
-          <TabsTrigger value="pipelines" className="gap-1"><Layers className="h-4 w-4" />{t('zones.settings.pipelinesTab', 'Воронки')}</TabsTrigger>
-          <TabsTrigger value="general" className="gap-1"><Shield className="h-4 w-4" />{t('zones.settings.general', 'General')}</TabsTrigger>
+        <TabsList className="flex flex-wrap h-auto gap-1">
+          <TabsTrigger value="members" className="gap-1 flex-1 min-w-[120px]"><Users className="h-4 w-4" />{t('zones.settings.members', 'Members')}</TabsTrigger>
+          <TabsTrigger value="billing" className="gap-1 flex-1 min-w-[120px]"><CreditCard className="h-4 w-4" />{t('zones.settings.billing', 'Billing')}</TabsTrigger>
+          <TabsTrigger value="pipelines" className="gap-1 flex-1 min-w-[120px]"><Layers className="h-4 w-4" />{t('zones.settings.pipelinesTab', 'Воронки')}</TabsTrigger>
+          <TabsTrigger value="fields" className="gap-1 flex-1 min-w-[120px]"><FileText className="h-4 w-4" />{t('zones.settings.fieldsTab', 'Поля')}</TabsTrigger>
+          <TabsTrigger value="general" className="gap-1 flex-1 min-w-[120px]"><Shield className="h-4 w-4" />{t('zones.settings.general', 'General')}</TabsTrigger>
         </TabsList>
 
         {/* Members Tab */}
@@ -366,6 +369,11 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
               <ZonePipelineSettings zoneId={zone.id} />
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Contact Fields Tab */}
+        <TabsContent value="fields" className="space-y-4 mt-4">
+          <ZoneContactFieldsSettings zoneId={zone.id} />
         </TabsContent>
 
         {/* General Tab */}

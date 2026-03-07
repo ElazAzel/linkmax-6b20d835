@@ -8,6 +8,7 @@ export type { TaskStatus, TaskPriority, ZoneTask };
 export const zoneTasksKeys = {
   all: (zoneId: string) => ['zone-tasks', zoneId] as const,
   checklist: (zoneId: string, taskId: string) => ['zone-task-checklist', zoneId, taskId] as const,
+  comments: (zoneId: string, taskId: string) => ['zone-task-comments', zoneId, taskId] as const,
 };
 
 // ─── Fetch ───
@@ -29,6 +30,16 @@ async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskC
     .order('order_index') as any);
   if (error) throw error;
   return (data || []) as ZoneTaskChecklistItem[];
+}
+
+async function fetchComments(zoneId: string, taskId: string) {
+  const { data, error } = await supabase
+    .from('zone_task_comments')
+    .select('*, user:user_id(email, raw_user_meta_data)')
+    .eq('task_id', taskId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data || [];
 }
 
 // ─── Hook: All Zone Tasks ───
@@ -154,5 +165,66 @@ export function useZoneTaskChecklist(zoneId: string | null, taskId: string | nul
     addItem: (title: string) => addItem.mutateAsync(title),
     toggleItem: (id: string, is_done: boolean) => toggleItem.mutateAsync({ id, is_done }),
     removeItem: (id: string) => removeItem.mutateAsync(id),
+  };
+}
+
+// ─── Hook: Task Comments ───
+export function useZoneTaskComments(zoneId: string | null, taskId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+  const safeTaskId = taskId || '';
+
+  const { data: comments = [], isLoading: loading } = useQuery({
+    queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId),
+    queryFn: () => fetchComments(safeZoneId, safeTaskId),
+    enabled: !!zoneId && !!taskId,
+    staleTime: 30_000,
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: async (content: string) => {
+      if (!zoneId || !taskId) throw new Error('No zone or task selected');
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const { error } = await supabase
+        .from('zone_task_comments')
+        .insert({
+          zone_id: zoneId,
+          task_id: taskId,
+          user_id: userId,
+          content,
+        } as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId) }),
+  });
+
+  const updateCommentMutation = useMutation({
+    mutationFn: async ({ id, content }: { id: string; content: string }) => {
+      const { error } = await supabase
+        .from('zone_task_comments')
+        .update({ content } as any)
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId) }),
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('zone_task_comments')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneTasksKeys.comments(safeZoneId, safeTaskId) }),
+  });
+
+  return {
+    comments: comments as any[], // temporary any until types are exported cleanly if needed
+    loading,
+    addComment: async (content: string) => addCommentMutation.mutateAsync(content),
+    updateComment: async (id: string, content: string) => updateCommentMutation.mutateAsync({ id, content }),
+    deleteComment: async (id: string) => deleteCommentMutation.mutateAsync(id),
   };
 }

@@ -5,7 +5,7 @@ import { memo, useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DndContext, DragOverlay, PointerSensor, TouchSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from '@dnd-kit/core';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
-import type { ZoneTask, TaskStatus, TaskPriority } from '@/types/zones';
+import type { ZoneTask, TaskStatus, TaskPriority, TaskRecurrenceRule } from '@/types/zones';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneContext } from '@/contexts/ZoneContext';
@@ -34,6 +34,14 @@ const PRIORITY_KEYS: Record<TaskPriority, string> = {
   urgent: 'zones.tasks.priorityUrgent',
 };
 
+const RECURRENCE_OPTIONS: { value: TaskRecurrenceRule; labelKey: string }[] = [
+  { value: 'none', labelKey: 'common.none', },
+  { value: 'daily', labelKey: 'tasks.recurrence.daily' },
+  { value: 'weekly', labelKey: 'tasks.recurrence.weekly' },
+  { value: 'monthly', labelKey: 'tasks.recurrence.monthly' },
+  { value: 'yearly', labelKey: 'tasks.recurrence.yearly' },
+];
+
 export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) {
   const { t } = useTranslation();
   const { tasks, loading, createTask, updateTask, deleteTask } = useZoneTasks(zoneId);
@@ -47,6 +55,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
   const [newPriority, setNewPriority] = useState<TaskPriority>('medium');
   const [newAssignee, setNewAssignee] = useState('');
   const [newDueDate, setNewDueDate] = useState('');
+  const [newRecurrenceRule, setNewRecurrenceRule] = useState<TaskRecurrenceRule>('none');
+  const [newRecurrenceEndDate, setNewRecurrenceEndDate] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newContactId, setNewContactId] = useState('');
   const [newDealId, setNewDealId] = useState('');
@@ -115,6 +125,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
         priority: newPriority,
         assigned_to: newAssignee || null,
         due_date: newDueDate ? new Date(newDueDate).toISOString() : null,
+        recurrence_rule: newRecurrenceRule === 'none' ? null : newRecurrenceRule,
+        recurrence_end_date: newRecurrenceRule !== 'none' && newRecurrenceEndDate ? new Date(newRecurrenceEndDate).toISOString() : null,
         contact_id: newContactId || null,
         deal_id: newDealId || null,
       });
@@ -124,6 +136,8 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
       setNewPriority('medium');
       setNewAssignee('');
       setNewDueDate('');
+      setNewRecurrenceRule('none');
+      setNewRecurrenceEndDate('');
       setNewContactId('');
       setNewDealId('');
     } catch { /* handled */ }
@@ -219,10 +233,33 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
                 className="mt-1"
               />
             </div>
-            <div>
-              <Label>{t('zones.tasks.dueDate', 'Срок')}</Label>
-              <Input type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} className="mt-1" />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>{t('zones.tasks.dueDate', 'Срок')}</Label>
+                <Input type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} className="mt-1" />
+              </div>
+              <div>
+                <Label>{t('tasks.recurrenceLabel', 'Повторение')}</Label>
+                <Select value={newRecurrenceRule} onValueChange={(v: TaskRecurrenceRule) => setNewRecurrenceRule(v)}>
+                  <SelectTrigger className="h-9 mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {RECURRENCE_OPTIONS.map(r => (
+                      <SelectItem key={r.value} value={r.value}>
+                        {t(r.labelKey, r.value === 'none' ? 'Никогда' : r.value === 'daily' ? 'Каждый день' : r.value === 'weekly' ? 'Каждую неделю' : r.value === 'monthly' ? 'Каждый месяц' : 'Каждый год')}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
+
+            {newRecurrenceRule !== 'none' && (
+              <div>
+                <Label>{t('tasks.recurrenceUntil', 'Повторять до')}</Label>
+                <Input type="date" value={newRecurrenceEndDate} onChange={e => setNewRecurrenceEndDate(e.target.value)} className="mt-1" />
+              </div>
+            )}
+
             <div>
               <Label>{t('zones.tasks.priority', 'Приоритет')}</Label>
               <div className="flex gap-2 mt-1">

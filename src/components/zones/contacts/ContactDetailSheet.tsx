@@ -29,7 +29,8 @@ import { toast } from 'sonner';
 import type { ZoneContact } from '@/types/zones';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
-import { useZoneContactNotes } from '@/hooks/zones/useZoneContacts';
+import { useZoneContacts, useZoneContactNotes } from '@/hooks/zones/useZoneContacts';
+import { useZoneContactFields } from '@/hooks/zones/useZoneContactFields';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 interface ContactDetailSheetProps {
@@ -61,6 +62,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
     position: '',
     address: '',
     notes: '',
+    custom_fields: {} as Record<string, any>,
   });
   const [newNote, setNewNote] = useState('');
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -72,6 +74,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
     open ? zoneId : null,
     open && contact ? contact.id : null
   );
+  const { fields } = useZoneContactFields(open ? zoneId : null);
 
   // Filter linked data for THIS contact
   const linkedDeals = useMemo(() => deals.filter(d => d.contact_id === contact?.id), [deals, contact?.id]);
@@ -93,6 +96,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
       position: contact.position || '',
       address: contact.address || '',
       notes: contact.notes || '',
+      custom_fields: contact.custom_fields || {},
     });
     setEditing(true);
   };
@@ -110,6 +114,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
         position: editData.position || null,
         address: editData.address || null,
         notes: editData.notes || null,
+        custom_fields: editData.custom_fields,
       } as any);
       setEditing(false);
       toast.success(t('zones.contacts.updated', 'Contact updated'));
@@ -322,6 +327,26 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <Label className="text-xs">{t('zones.contacts.generalNotes', 'General Notes')}</Label>
                           <Textarea value={editData.notes} onChange={e => setEditData(p => ({ ...p, notes: e.target.value }))} className="min-h-[100px] text-sm" />
                         </div>
+                        {fields.length > 0 && (
+                          <div className="pt-4 border-t space-y-3 mt-4">
+                            <p className="text-xs font-bold uppercase text-muted-foreground">{t('zones.contacts.additionalInfo', 'Дополнительная информация')}</p>
+                            {fields.map(f => (
+                              <div key={f.id} className="space-y-1">
+                                <Label className="text-xs">{f.name} {f.is_required && '*'}</Label>
+                                <Input
+                                  className="h-8"
+                                  type={f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text'}
+                                  value={editData.custom_fields[f.id] || ''}
+                                  onChange={e => {
+                                    let val: any = e.target.value;
+                                    if (f.type === 'number') val = Number(val);
+                                    setEditData(p => ({ ...p, custom_fields: { ...p.custom_fields, [f.id]: val } }));
+                                  }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -377,6 +402,28 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                             </div>
                           </div>
                         )}
+
+                        {fields.length > 0 && fields.some(f => contact.custom_fields?.[f.id]) && (
+                          <div className="mt-6 pt-4 border-t space-y-3">
+                            <p className="text-[10px] text-muted-foreground font-bold uppercase">{t('zones.contacts.additionalInfo', 'Дополнительная информация')}</p>
+                            {fields.map(f => {
+                              const val = contact.custom_fields?.[f.id];
+                              if (val === undefined || val === null || val === '') return null;
+                              return (
+                                <div key={f.id} className="flex gap-2 items-start text-sm">
+                                  <Tag className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0 opacity-50" />
+                                  <div className="space-y-0.5">
+                                    <p className="text-[10px] text-muted-foreground leading-none">{f.name}</p>
+                                    <p className="font-medium">
+                                      {f.type === 'boolean' ? (val ? 'Да' : 'Нет') : val}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+
                         {contact.notes && (
                           <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
                             <p className="text-[10px] text-primary font-bold uppercase mb-1">{t('zones.contacts.generalNotes', 'General Notes')}</p>
