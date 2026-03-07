@@ -189,17 +189,19 @@ export function usePageAnalytics() {
         const currentLang = i18n.language as SupportedLanguage;
         blocks.forEach(block => {
           const content = block.content as any;
-          // Use getI18nText to handle MultilingualString objects
+          // Use stable ID from content if available, fallback to DB id
+          const blockId = content?.id || block.id;
+
           const rawTitle = block.title || content?.title || content?.name || block.type;
           const blockTitle = typeof rawTitle === 'object'
             ? getI18nText(rawTitle, currentLang)
             : rawTitle;
 
-          blockStatsMap.set(block.id, {
-            blockId: block.id,
+          blockStatsMap.set(blockId, {
+            blockId,
             blockType: block.type,
             blockTitle,
-            clicks: 0, // Initialize to 0 to only count clicks from the selected period
+            clicks: 0,
             views: 0,
             ctr: 0,
           });
@@ -208,6 +210,7 @@ export function usePageAnalytics() {
 
       // Count clicks per block from events
       events.filter(e => e.event_type === 'click' && e.block_id).forEach(e => {
+        // e.block_id in the analytics table now stores the stable ID
         const stats = blockStatsMap.get(e.block_id!);
         if (stats) {
           stats.clicks++;
