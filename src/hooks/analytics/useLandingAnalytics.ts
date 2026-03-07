@@ -93,9 +93,11 @@ interface TrackLandingEventOptions {
   metadata?: Record<string, unknown>;
 }
 
+const LANDING_ANALYTICS_ENABLED = !import.meta.env.DEV;
+
 async function trackLandingEvent({ eventType, metadata = {} }: TrackLandingEventOptions): Promise<void> {
-  // Filter bots and dev traffic
-  if (isBot() || isDevTraffic()) return;
+  // Filter bots, dev traffic and disable in local dev
+  if (!LANDING_ANALYTICS_ENABLED || isBot() || isDevTraffic()) return;
 
   try {
     // Skip analytics insert if user is not authenticated (avoids 401 network errors)

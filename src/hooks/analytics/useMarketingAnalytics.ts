@@ -44,11 +44,13 @@ function isDevTraffic(): boolean {
   );
 }
 
+const MARKETING_ANALYTICS_ENABLED = !import.meta.env.DEV;
+
 export function useMarketingAnalytics() {
   const trackedEvents = useRef<Set<string>>(new Set());
 
   const trackMarketingEvent = useCallback(async ({ eventType, metadata = {} }: TrackMarketingEventOptions) => {
-    if (isBot() || isDevTraffic()) return;
+    if (!MARKETING_ANALYTICS_ENABLED || isBot() || isDevTraffic()) return;
 
     try {
       await supabase.from('analytics').insert({

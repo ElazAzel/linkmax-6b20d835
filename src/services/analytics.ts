@@ -38,6 +38,13 @@ export interface AnalyticsEvent {
 // ============================================
 
 /**
+ * Global analytics feature flag.
+ * We полностью отключаем клиентскую аналитику в dev‑режиме,
+ * чтобы избежать 401/403 в локальной среде без настроенных политик.
+ */
+const ANALYTICS_ENABLED = !import.meta.env.DEV;
+
+/**
  * Get visitor fingerprint for unique visitor tracking
  * Uses a combination of available browser data
  */
@@ -186,6 +193,9 @@ export async function trackEvent({
   variantLabel,
   metadata = {},
 }: TrackEventOptions): Promise<void> {
+  if (!ANALYTICS_ENABLED) {
+    return;
+  }
   try {
     const session = getOrCreateSession();
     const referrer = getReferrerInfo();

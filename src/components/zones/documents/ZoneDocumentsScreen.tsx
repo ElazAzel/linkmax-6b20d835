@@ -119,10 +119,35 @@ export const ZoneDocumentsScreen = () => {
                                     </Badge>
 
                                     <div className="flex items-center gap-1">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white/60 hover:text-white" title="Просмотр">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8 text-white/60 hover:text-white"
+                                            title="Просмотр"
+                                            disabled={!doc.file_url}
+                                            onClick={() => {
+                                                if (!doc.file_url) return;
+                                                window.open(doc.file_url, '_blank', 'noopener,noreferrer');
+                                            }}
+                                        >
                                             <Eye className="w-4 h-4" />
                                         </Button>
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white/60 hover:text-primary" title="Скачать PDF" disabled={!doc.file_url}>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8 text-white/60 hover:text-primary"
+                                            title="Скачать PDF"
+                                            disabled={!doc.file_url}
+                                            onClick={() => {
+                                                if (!doc.file_url) return;
+                                                const link = document.createElement('a');
+                                                link.href = doc.file_url;
+                                                link.download = doc.title || 'document';
+                                                document.body.appendChild(link);
+                                                link.click();
+                                                document.body.removeChild(link);
+                                            }}
+                                        >
                                             <Download className="w-4 h-4" />
                                         </Button>
                                         <Button

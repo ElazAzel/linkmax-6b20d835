@@ -16,6 +16,7 @@ interface HeatmapEvent {
 
 const BATCH_INTERVAL = 5000; // Send batch every 5 seconds
 const MAX_BATCH_SIZE = 50;
+const HEATMAP_ENABLED = !import.meta.env.DEV;
 
 export function useHeatmapTracking(pageId: string | undefined, enabled: boolean = true) {
   const eventsBuffer = useRef<HeatmapEvent[]>([]);
@@ -24,7 +25,7 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
 
   // Send batched events to database
   const flushEvents = useCallback(async () => {
-    if (!pageId || eventsBuffer.current.length === 0) return;
+    if (!HEATMAP_ENABLED || !pageId || eventsBuffer.current.length === 0) return;
 
     const events = [...eventsBuffer.current];
     eventsBuffer.current = [];
@@ -131,7 +132,7 @@ export function useHeatmapTracking(pageId: string | undefined, enabled: boolean 
   }, []);
 
   useEffect(() => {
-    if (!enabled || !pageId) return;
+    if (!enabled || !pageId || !HEATMAP_ENABLED) return;
 
     // Add event listeners
     document.addEventListener('click', handleClick, { passive: true });
