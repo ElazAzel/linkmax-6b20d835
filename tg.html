@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="color-scheme" content="light dark" />
+    <title>LinkMAX — Business OS</title>
+
+    <!-- Telegram WebApp SDK — MUST be loaded before app code -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        /* Critical inline styles for instant first paint */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            /* Use Telegram theme colors immediately */
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        #tg-root {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* Initial loading spinner */
+        .tg-initial-loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        .tg-initial-loader::after {
+            content: '';
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top-color: var(--tg-theme-button-color, #3390ec);
+            border-radius: 50%;
+            animation: tg-init-spin 0.7s linear infinite;
+        }
+
+        @keyframes tg-init-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tg-root">
+        <!-- Loading spinner shown until React hydrates -->
+        <div class="tg-initial-loader"></div>
+    </div>
+    <script type="module" src="/src/telegram/main.tsx"></script>
+</body>
+
+</html>

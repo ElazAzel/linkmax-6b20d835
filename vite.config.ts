@@ -52,8 +52,12 @@ export default defineConfig(({ mode }) => ({
     // Keep default module preload behavior for correct dependency ordering in production.
     sourcemap: !!process.env.SENTRY_AUTH_TOKEN,
     chunkSizeWarningLimit: 1000,
-    // Use Vite/Rollup default chunk strategy for runtime stability.
-    // Custom manualChunks caused intermittent cross-chunk runtime mismatch in production.
-    rollupOptions: {},
+    // Multi-page entry: main app + Telegram Mini App
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        telegram: path.resolve(__dirname, 'tg.html'),
+      },
+    },
   },
 }));

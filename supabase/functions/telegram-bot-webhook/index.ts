@@ -6,10 +6,14 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Mini App base URL
+const MINIAPP_URL = 'https://lnkmx.my/tg/';
+const BOT_USERNAME = 'linkmaxmy_bot';
+
 // Multilingual messages
 const messages = {
   ru: {
-    welcome: "🌐 Добро пожаловать в lnkmx.my!\n\nВыберите язык:",
+    welcome: "🌐 Добро пожаловать в LinkMAX!\n\nВыберите язык:",
     language_changed: "✅ Язык изменён на русский",
     stats: (subs: number, users: number) => `📊 <b>Статистика:</b>\n\n🤖 Подписчиков: ${subs}\n👤 Пользователей: ${users}`,
     publish_on: "🚀 Ваша страница опубликована!",
@@ -18,20 +22,24 @@ const messages = {
     not_linked: "⚠️ Аккаунт не привязан. Используйте /start",
     no_page: "❌ Страница не найдена",
     greeting: (name: string, chatId: number) =>
-      `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в lnkmx.my и вставьте его в поле регистрации.`,
-    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID\n/zone - Сводка по зоне\n/deals - Открытые сделки\n/tasks - Задачи на сегодня\n/contacts - Последние контакты`,
+      `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в LinkMAX и вставьте его в поле регистрации.`,
+    greeting_miniapp: (name: string) =>
+      `👋 Привет, ${name}!\n\n🚀 <b>LinkMAX — ваш Business OS в Telegram</b>\n\nОткройте Mini App чтобы:\n• Создать страницу\n• Работать с лидами\n• Управлять бронированиями\n• Смотреть аналитику`,
+    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/app - Открыть Mini App\n/page - Моя страница\n/crm - Лиды / CRM\n/bookings - Бронирования\n/pay - Платежи\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID\n/zone - Сводка по зоне\n/deals - Открытые сделки\n/tasks - Задачи на сегодня\n/contacts - Последние контакты`,
     help_full: (chatId: number) =>
-      `ℹ️ <b>Как подключить Telegram к lnkmx.my:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
+      `ℹ️ <b>Как подключить Telegram к LinkMAX:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
     chat_id: (chatId: number) =>
       `📋 <b>Ваш Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Нажмите чтобы скопировать`,
     copy_btn: '📋 Скопировать Chat ID',
     continue_btn: '✅ Продолжить регистрацию',
+    open_app_btn: '🚀 Открыть LinkMAX',
     how_works_btn: 'ℹ️ Как это работает?',
     register_btn: '📝 Регистрация',
     copied: 'Chat ID скопирован!',
+    support: '💬 <b>Поддержка</b>\n\nЕсли у вас есть вопросы или нужна помощь:\n\n• Напишите @linkmax_support\n• Или опишите проблему прямо здесь',
   },
   en: {
-    welcome: "🌐 Welcome to lnkmx.my!\n\nChoose your language:",
+    welcome: "🌐 Welcome to LinkMAX!\n\nChoose your language:",
     language_changed: "✅ Language changed to English",
     stats: (subs: number, users: number) => `📊 <b>Stats:</b>\n\n🤖 Subscribers: ${subs}\n👤 Users: ${users}`,
     publish_on: "🚀 Your page is now published!",
@@ -40,20 +48,24 @@ const messages = {
     not_linked: "⚠️ Account not linked. Use /start",
     no_page: "❌ Page not found",
     greeting: (name: string, chatId: number) =>
-      `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to lnkmx.my and paste it into the registration field.`,
-    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
+      `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to LinkMAX and paste it into the registration field.`,
+    greeting_miniapp: (name: string) =>
+      `👋 Hello, ${name}!\n\n🚀 <b>LinkMAX — your Business OS in Telegram</b>\n\nOpen the Mini App to:\n• Create your page\n• Manage leads\n• Handle bookings\n• View analytics`,
+    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/app - Open Mini App\n/page - My page\n/crm - Leads / CRM\n/bookings - Bookings\n/pay - Payments\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
     help_full: (chatId: number) =>
-      `ℹ️ <b>How to connect Telegram to lnkmx.my:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
+      `ℹ️ <b>How to connect Telegram to LinkMAX:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
     chat_id: (chatId: number) =>
       `📋 <b>Your Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Tap to copy`,
     copy_btn: '📋 Copy Chat ID',
     continue_btn: '✅ Continue registration',
+    open_app_btn: '🚀 Open LinkMAX',
     how_works_btn: 'ℹ️ How does it work?',
     register_btn: '📝 Registration',
     copied: 'Chat ID copied!',
+    support: '💬 <b>Support</b>\n\nIf you have questions or need help:\n\n• Message @linkmax_support\n• Or describe your issue right here',
   },
   kk: {
-    welcome: "🌐 lnkmx.my-қа қош келдіңіз!\n\nТілді таңдаңыз:",
+    welcome: "🌐 LinkMAX-қа қош келдіңіз!\n\nТілді таңдаңыз:",
     language_changed: "✅ Тіл қазақшаға өзгертілді",
     stats: (subs: number, users: number) => `📊 <b>Статистика:</b>\n\n🤖 Жазылушылар: ${subs}\n👤 Пайдаланушылар: ${users}`,
     publish_on: "🚀 Бет жарияланды!",
@@ -63,16 +75,20 @@ const messages = {
     no_page: "❌ Бет табылмады",
     greeting: (name: string, chatId: number) =>
       `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін lnkmx.my-қа оралып, тіркеу өрісіне қойыңыз.`,
-    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету\n/zone - Аймақ шолуы\n/deals - Ашық мәмілелер\n/tasks - Бүгінгі тапсырмалар\n/contacts - Соңғы контактілер`,
+    greeting_miniapp: (name: string) =>
+      `👋 Сәлем, ${name}!\n\n🚀 <b>LinkMAX — сіздің Business OS Telegram-да</b>\n\nMini App ашыңыз:\n• Бет жасау\n• Лидтерді басқару\n• Брондауларды басқару\n• Аналитика көру`,
+    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/app - Mini App ашу\n/page - Менің бетім\n/crm - Лидтер / CRM\n/bookings - Брондаулар\n/pay - Төлемдер\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету\n/zone - Аймақ шолуы\n/deals - Ашық мәмілелер\n/tasks - Бүгінгі тапсырмалар\n/contacts - Соңғы контактілер`,
     help_full: (chatId: number) =>
-      `ℹ️ <b>Telegram-ды lnkmx.my-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
+      `ℹ️ <b>Telegram-ды LinkMAX-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
     chat_id: (chatId: number) =>
       `📋 <b>Сіздің Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ Көшіру үшін басыңыз`,
     copy_btn: '📋 Chat ID көшіру',
     continue_btn: '✅ Тіркелуді жалғастыру',
+    open_app_btn: '🚀 LinkMAX ашу',
     how_works_btn: 'ℹ️ Бұл қалай жұмыс істейді?',
     register_btn: '📝 Тіркелу',
     copied: 'Chat ID көшірілді!',
+    support: '💬 <b>Қолдау</b>\n\nСұрақтарыңыз болса немесе көмек қажет болса:\n\n• @linkmax_support жазыңыз\n• Немесе мәселені осы жерде сипаттаңыз',
   },
 };
 
@@ -190,9 +206,23 @@ function getMainKeyboard(lang: Language) {
   const m = messages[lang];
   return {
     inline_keyboard: [
+      [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
       [{ text: m.copy_btn, callback_data: 'copy_id' }],
       [{ text: m.continue_btn, url: 'https://lnkmx.my/auth' }],
       [{ text: m.how_works_btn, callback_data: 'help' }],
+      [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
+    ],
+  };
+}
+
+function getMiniAppKeyboard(lang: Language, startapp?: string) {
+  const m = messages[lang];
+  const url = startapp
+    ? `https://t.me/${BOT_USERNAME}/app?startapp=${startapp}`
+    : MINIAPP_URL;
+  return {
+    inline_keyboard: [
+      [{ text: m.open_app_btn, web_app: { url } }],
       [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
     ],
   };
@@ -202,6 +232,7 @@ function getHelpKeyboard(lang: Language) {
   const m = messages[lang];
   return {
     inline_keyboard: [
+      [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
       [{ text: m.copy_btn, callback_data: 'copy_id' }],
       [{ text: m.register_btn, url: 'https://lnkmx.my/auth' }],
       [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
@@ -389,6 +420,9 @@ serve(async (req: Request) => {
       let replyMarkup: object | null = null;
 
       if (text === '/start' || text.startsWith('/start ')) {
+        // Handle startapp parameter from deep links
+        const startappParam = text.startsWith('/start ') ? text.split(' ')[1] : null;
+
         // Check if first time user - show language selection
         const isFirstTime = !tempLanguageStore[chatIdStr];
 
@@ -399,25 +433,58 @@ serve(async (req: Request) => {
           .eq('telegram_chat_id', chatIdStr)
           .single();
 
-        if (isFirstTime && !userData) {
+        if (startappParam) {
+          // Deep link: show Mini App greeting + open button
+          responseText = m.greeting_miniapp(firstName);
+          replyMarkup = getMiniAppKeyboard(lang, startappParam);
+        } else if (isFirstTime && !userData) {
           // First time - show language selection
-          responseText = '🌐 Добро пожаловать в lnkmx.my!\nWelcome to lnkmx.my!\nLinkMAX-қа қош келдіңіз!\n\nВыберите язык / Choose language / Тілді таңдаңыз:';
+          responseText = '🌐 Добро пожаловать в LinkMAX!\nWelcome to LinkMAX!\nLinkMAX-қа қош келдіңіз!\n\nВыберите язык / Choose language / Тілді таңдаңыз:';
           replyMarkup = getLanguageKeyboard();
         } else {
-          // Return user - use their language
-          responseText = m.greeting(firstName, chatId);
+          // Return user - show greeting with Mini App button
+          responseText = m.greeting_miniapp(firstName);
           replyMarkup = getMainKeyboard(lang);
         }
+      } else if (text === '/app') {
+        // Open Mini App Home
+        responseText = m.greeting_miniapp(firstName);
+        replyMarkup = getMiniAppKeyboard(lang);
+      } else if (text === '/page') {
+        // Open Mini App → Page editor
+        responseText = lang === 'ru' ? '📄 Откройте Mini App для редактирования страницы' : lang === 'kk' ? '📄 Бетті өңдеу үшін Mini App ашыңыз' : '📄 Open Mini App to edit your page';
+        replyMarkup = getMiniAppKeyboard(lang, 'page');
+      } else if (text === '/crm') {
+        // Open Mini App → CRM
+        responseText = lang === 'ru' ? '📩 Откройте Mini App для работы с лидами' : lang === 'kk' ? '📩 Лидтермен жұмыс істеу үшін Mini App ашыңыз' : '📩 Open Mini App to manage leads';
+        replyMarkup = getMiniAppKeyboard(lang, 'crm');
+      } else if (text === '/bookings') {
+        // Open Mini App → Bookings
+        responseText = lang === 'ru' ? '📅 Откройте Mini App для управления бронированиями' : lang === 'kk' ? '📅 Брондауларды басқару үшін Mini App ашыңыз' : '📅 Open Mini App to manage bookings';
+        replyMarkup = getMiniAppKeyboard(lang, 'bookings');
+      } else if (text === '/pay') {
+        // Open Mini App → Payments
+        responseText = lang === 'ru' ? '💳 Откройте Mini App для управления платежами' : lang === 'kk' ? '💳 Төлемдерді басқару үшін Mini App ашыңыз' : '💳 Open Mini App to manage payments';
+        replyMarkup = getMiniAppKeyboard(lang, 'pay');
+      } else if (text === '/support') {
+        // Support info
+        responseText = m.support;
+        replyMarkup = {
+          inline_keyboard: [
+            [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
+          ]
+        };
       } else if (text === '/language') {
         responseText = '🌐 Выберите язык / Choose language / Тілді таңдаңыз:';
         replyMarkup = getLanguageKeyboard();
       } else if (text === '/help') {
-        responseText = m.help_full(chatId);
+        responseText = m.help;
         replyMarkup = getHelpKeyboard(lang);
       } else if (text === '/id') {
         responseText = m.chat_id(chatId);
         replyMarkup = {
           inline_keyboard: [
+            [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
             [{ text: m.continue_btn, url: 'https://lnkmx.my/auth' }],
             [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
           ]
