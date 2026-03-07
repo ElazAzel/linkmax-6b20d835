@@ -378,6 +378,11 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
                     {t('settings.linkedAccounts.connected', 'Connected')}
                   </Badge>
                 )}
+                {account.provider === 'apple' && !account.linked && (
+                  <Badge variant="secondary" className="text-[10px] h-4 px-1.5 uppercase tracking-wider font-bold opacity-70">
+                    {t('common.coming_soon', 'Скоро')}
+                  </Badge>
+                )}
               </div>
               {account.email && (
                 <p className="text-sm text-muted-foreground truncate">{account.email}</p>
@@ -388,7 +393,7 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
                 variant="outline"
                 size="sm"
                 className="shrink-0 rounded-xl"
-                disabled={linkingProvider !== null}
+                disabled={linkingProvider !== null || (account.provider === 'apple' && !account.linked)}
                 onClick={() => account.linked ? handleUnlinkAccount(account.provider as 'google' | 'apple') : handleLinkAccount(account.provider as 'google' | 'apple')}
               >
                 {linkingProvider === account.provider ? (
