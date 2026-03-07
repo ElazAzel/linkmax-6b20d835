@@ -160,17 +160,19 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
           <SheetHeader className="p-6 pb-2">
-            <SheetTitle className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
-                {contact.name.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                {editing ? (
-                  <Input value={editData.name} onChange={e => setEditData(p => ({ ...p, name: e.target.value }))} className="h-8" />
-                ) : (
-                  <span className="truncate">{contact.name}</span>
-                )}
-              </div>
+            <div className="flex justify-between items-start gap-4">
+              <SheetTitle className="flex items-center gap-2 min-w-0">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
+                  {contact.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  {editing ? (
+                    <Input value={editData.name} onChange={e => setEditData(p => ({ ...p, name: e.target.value }))} className="h-8" />
+                  ) : (
+                    <span className="truncate">{contact.name}</span>
+                  )}
+                </div>
+              </SheetTitle>
               <div className="flex gap-1">
                 {editing ? (
                   <>
@@ -184,7 +186,46 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                   </>
                 )}
               </div>
-            </SheetTitle>
+            </div>
+
+            {/* Quick Actions Bar */}
+            {!editing && (
+              <div className="flex gap-2 mt-4">
+                {contact.phone && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 h-9 gap-2 dark:bg-muted/30"
+                    onClick={() => window.open(`tel:${contact.phone}`, '_self')}
+                  >
+                    <Phone className="h-3.5 w-3.5" />
+                    {t('zones.contacts.call', 'Call')}
+                  </Button>
+                )}
+                {contact.email && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 h-9 gap-2 dark:bg-muted/30"
+                    onClick={() => window.open(`mailto:${contact.email}`, '_blank')}
+                  >
+                    <Mail className="h-3.5 w-3.5" />
+                    {t('zones.contacts.sendEmail', 'Email')}
+                  </Button>
+                )}
+                {contact.telegram_username && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 h-9 gap-2 text-blue-500 border-blue-500/20 hover:bg-blue-500/10 dark:bg-blue-500/5"
+                    onClick={() => window.open(`https://t.me/${contact.telegram_username}`, '_blank')}
+                  >
+                    <Send className="h-3.5 w-3.5" />
+                    Telegram
+                  </Button>
+                )}
+              </div>
+            )}
           </SheetHeader>
 
           <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">

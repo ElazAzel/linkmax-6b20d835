@@ -14,7 +14,7 @@ export interface RoboKassaPaymentParams {
 /**
  * Calls the robokassa edge function to generate a payment URL
  */
-export async function generateRoboKassaUrl(params: RoboKassaPaymentParams): Promise<string> {
+export async function generateRoboKassaUrl(params: RoboKassaPaymentParams): Promise<{ url: string; invId: string }> {
     const { data, error } = await supabase.functions.invoke('robokassa', {
         body: params,
     });
@@ -24,5 +24,8 @@ export async function generateRoboKassaUrl(params: RoboKassaPaymentParams): Prom
         throw new Error(error.message || 'Failed to generate payment URL');
     }
 
-    return data.url;
+    return {
+        url: data.url,
+        invId: data.invId
+    };
 }

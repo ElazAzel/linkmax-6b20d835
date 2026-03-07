@@ -56,7 +56,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error('User not authenticated');
 
-            const url = await generateRoboKassaUrl({
+            const { url, invId } = await generateRoboKassaUrl({
                 type: 'payment',
                 amount: Number(invoice.amount),
                 userId: user.id,
@@ -65,10 +65,13 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
                 description: invoice.description || `Invoice #${invoice.invoice_number || invoice.id.slice(0, 8)}`,
             });
 
-            // Update invoice with the new URL
+            // Update invoice with the new URL and RoboKassa's Internal InvId
             const { error } = await supabase
                 .from('zone_invoices')
-                .update({ pay_url: url } as any)
+                .update({
+                    pay_url: url,
+                    robokassa_invoice_id: invId
+                } as any)
                 .eq('id', invoice.id);
 
             if (error) throw error;

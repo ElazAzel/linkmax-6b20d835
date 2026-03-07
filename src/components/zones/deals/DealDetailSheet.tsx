@@ -478,54 +478,41 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                             <p className="text-[10px] text-muted-foreground mt-0.5">{t('zones.deals.linkedContact', 'Linked Contact')}</p>
                           </div>
                         </div>
-                        <div className="pt-1 space-y-2">
-                          {deal.contact.phone && (
-                            <div className="flex items-center justify-between group/item">
-                              <div className="flex items-center gap-2 text-[10px]">
-                                <Phone className="h-3 w-3 text-muted-foreground" />
-                                {deal.contact.phone}
-                              </div>
+                        <div className="pt-2 flex flex-col gap-2">
+                          <div className="flex gap-2">
+                            {deal.contact.phone && (
                               <Button
-                                variant="ghost"
+                                variant="outline"
                                 size="sm"
-                                className="h-6 px-2 text-[10px] opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                className="flex-1 h-8 gap-1.5 text-[10px]"
                                 onClick={() => window.open(`tel:${deal.contact.phone}`, '_self')}
                               >
+                                <Phone className="h-3 w-3" />
                                 {t('zones.contacts.call', 'Call')}
                               </Button>
-                            </div>
-                          )}
-                          {deal.contact.email && (
-                            <div className="flex items-center justify-between group/item">
-                              <div className="flex items-center gap-2 text-[10px]">
-                                <Mail className="h-3 w-3 text-muted-foreground" />
-                                {deal.contact.email}
-                              </div>
+                            )}
+                            {deal.contact.email && (
                               <Button
-                                variant="ghost"
+                                variant="outline"
                                 size="sm"
-                                className="h-6 px-2 text-[10px] opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                className="flex-1 h-8 gap-1.5 text-[10px]"
                                 onClick={() => window.open(`mailto:${deal.contact.email}`, '_blank')}
                               >
+                                <Mail className="h-3 w-3" />
                                 {t('zones.contacts.sendEmail', 'Email')}
                               </Button>
-                            </div>
-                          )}
+                            )}
+                          </div>
                           {deal.contact.telegram_username && (
-                            <div className="flex items-center justify-between group/item">
-                              <div className="flex items-center gap-2 text-[10px]">
-                                <Send className="h-3 w-3 text-blue-500" />
-                                @{deal.contact.telegram_username}
-                              </div>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 px-2 text-[10px] opacity-0 group-hover/item:opacity-100 transition-opacity text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-                                onClick={() => window.open(`https://t.me/${deal.contact.telegram_username}`, '_blank')}
-                              >
-                                Telegram
-                              </Button>
-                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full h-8 gap-1.5 text-[10px] text-blue-500 border-blue-500/20 hover:bg-blue-500/10 dark:bg-blue-500/5"
+                              onClick={() => window.open(`https://t.me/${deal.contact.telegram_username}`, '_blank')}
+                            >
+                              <Send className="h-3 w-3" />
+                              Telegram (@{deal.contact.telegram_username})
+                            </Button>
                           )}
                         </div>
                       </CardContent>
