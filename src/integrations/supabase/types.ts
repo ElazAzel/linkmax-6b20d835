@@ -2685,6 +2685,121 @@ export type Database = {
           },
         ]
       }
+      zone_document_templates: {
+        Row: {
+          content_html: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          content_html?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          content_html?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_document_templates_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zone_documents: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          created_by: string | null
+          deal_id: string | null
+          document_number: string | null
+          file_url: string | null
+          id: string
+          status: string
+          template_id: string | null
+          title: string
+          updated_at: string
+          zone_id: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_id?: string | null
+          document_number?: string | null
+          file_url?: string | null
+          id?: string
+          status?: string
+          template_id?: string | null
+          title: string
+          updated_at?: string
+          zone_id: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_id?: string | null
+          document_number?: string | null
+          file_url?: string | null
+          id?: string
+          status?: string
+          template_id?: string | null
+          title?: string
+          updated_at?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_documents_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "zone_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_documents_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "zone_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_documents_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "zone_document_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_documents_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_invites: {
         Row: {
           created_at: string
