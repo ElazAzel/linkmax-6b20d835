@@ -24,6 +24,7 @@ import { PrivacyLink } from '@/components/legal/PrivacyPolicyModal';
 import { Checkbox } from '@/components/ui/checkbox';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
+import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 
 const authSchema = z.object({
   email: z
@@ -52,10 +53,10 @@ export default function Auth() {
     'auth.seo.description',
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
-  const { user, signUp, signIn, signInWithGoogle, signInWithApple } = useAuth();
+  const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
-  const [isOAuthLoading, setIsOAuthLoading] = useState<'google' | 'apple' | null>(null);
+  const [isOAuthLoading, setIsOAuthLoading] = useState<'google' | 'apple' | 'telegram' | null>(null);
   const [authMode, setAuthMode] = useState<AuthMode>('signin');
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [signupEmailSent, setSignupEmailSent] = useState(false);
@@ -367,6 +368,19 @@ export default function Auth() {
     setIsOAuthLoading(null);
   };
 
+  const handleTelegramAuth = async (telegramData: any) => {
+    setIsOAuthLoading('telegram');
+    const { error } = await signInWithTelegram(telegramData);
+    if (error) {
+      toast.error(error.message || t('messages.failedToSignIn'));
+      playError();
+    } else {
+      playSuccess();
+      toast.success(t('auth.welcomeBack', 'Welcome back!'));
+    }
+    setIsOAuthLoading(null);
+  };
+
   return (
     <>
       <StaticSEOHead
@@ -502,6 +516,16 @@ export default function Auth() {
               <CardContent className="space-y-4">
                 {/* OAuth Buttons */}
                 <div className="space-y-3">
+                  {/* Telegram Login */}
+                  <div className={`transition-opacity duration-300 ${isOAuthLoading === 'telegram' ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <TelegramLoginButton
+                      botName={import.meta.env.VITE_TELEGRAM_BOT_NAME || 'linkmaxmy_bot'}
+                      onAuth={handleTelegramAuth}
+                      buttonSize="large"
+                      cornerRadius={16}
+                    />
+                  </div>
+
                   <Button
                     type="button"
                     variant="outline"

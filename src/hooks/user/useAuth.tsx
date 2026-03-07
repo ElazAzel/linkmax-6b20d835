@@ -12,6 +12,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ data: { user: User | null; session: Session | null } | null; error: AuthError | null }>;
   signInWithGoogle: (returnTo?: string) => Promise<{ error: Error | null }>;
   signInWithApple: (returnTo?: string) => Promise<{ error: Error | null }>;
+  signInWithTelegram: (telegramData: any) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -147,12 +148,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error: error || null };
   };
 
+  const signInWithTelegram = async (telegramData: any) => {
+    try {
+      const { data, error: invokeError } = await supabase.functions.invoke('auth-telegram-web', {
+        body: { telegramData }
+      });
+
+      if (invokeError) throw new Error(invokeError.message || 'Telegram auth failed');
+      if (!data?.valid) throw new Error(data?.error || 'Invalid Telegram data');
+
+      if (data.session) {
+        const { error: setSessionError } = await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+
+        if (setSessionError) throw setSessionError;
+      }
+
+      return { error: null };
+    } catch (err: any) {
+      logger.error('Telegram sign-in error:', err, { context: 'Auth' });
+      return { error: err };
+    }
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signInWithGoogle, signInWithApple, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram, signOut }}>
       {children}
     </AuthContext.Provider>
   );

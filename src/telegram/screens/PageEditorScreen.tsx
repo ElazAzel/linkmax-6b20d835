@@ -3,12 +3,13 @@ import { useTelegram } from '../TelegramContext';
 import { useCloudPageState } from '@/hooks/page/useCloudPageState';
 import type { ProfileBlock, LinkBlock } from '@/types/blocks/content';
 import type { Block } from '@/types/page';
+import { QRCodeSVG } from 'qrcode.react';
 
 export function PageEditorScreen() {
     const { haptic, setBottomButton } = useTelegram();
     const { pageData, loading, updateBlock, addBlock, deleteBlock, saving, publish } = useCloudPageState();
 
-    const [activeTab, setActiveTab] = useState<'profile' | 'links'>('profile');
+    const [activeTab, setActiveTab] = useState<'profile' | 'links' | 'qr'>('profile');
 
     // Find blocks
     const profileBlock = pageData?.blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
@@ -63,6 +64,12 @@ export function PageEditorScreen() {
                         onClick={() => { haptic('selection'); setActiveTab('links'); }}
                     >
                         Ссылки
+                    </button>
+                    <button
+                        className={`tg-tab ${activeTab === 'qr' ? 'tg-tab--active' : ''}`}
+                        onClick={() => { haptic('selection'); setActiveTab('qr'); }}
+                    >
+                        QR-код
                     </button>
                 </div>
             </div>
@@ -146,6 +153,24 @@ export function PageEditorScreen() {
                         >
                             + Добавить ссылку
                         </button>
+                    </div>
+                )}
+
+                {activeTab === 'qr' && (
+                    <div className="tg-slide-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 20 }}>
+                        <div style={{ background: 'white', padding: 16, borderRadius: 16, marginBottom: 16 }}>
+                            <QRCodeSVG
+                                value={`https://lnkmx.my/${pageData.slug}`}
+                                size={200}
+                                bgColor={"#ffffff"}
+                                fgColor={"#000000"}
+                                level={"H"}
+                                marginSize={1}
+                            />
+                        </div>
+                        <p className="tg-text-hint" style={{ textAlign: 'center' }}>
+                            Покажите этот код вашим клиентам для быстрого перехода на страницу.
+                        </p>
                     </div>
                 )}
             </div>

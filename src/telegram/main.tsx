@@ -11,6 +11,7 @@ import '../i18n/config';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from '@/hooks/user/useAuth';
 import TelegramApp from './TelegramApp';
 
 // Lighter QueryClient for Mini App — shorter stale/gc times
@@ -31,7 +32,9 @@ if (container) {
     createRoot(container).render(
         <React.StrictMode>
             <QueryClientProvider client={queryClient}>
-                <TelegramApp />
+                <AuthProvider>
+                    <TelegramApp />
+                </AuthProvider>
             </QueryClientProvider>
         </React.StrictMode>
     );
