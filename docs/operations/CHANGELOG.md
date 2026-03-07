@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### [2026-03-07] - Monetization Pivot & Global Documentation Sync (v2.5)
+
+* **Monetization (Step-by-Growth)**:
+  * Полноценный переход на транзакционную модель "Step-by-Growth".
+  * Внедрены новые тарифы: **Identity** (Free), **Starter** (Success-First, 7% fee), **Pro** (Business OS, 1% fee).
+  * Создан [ADR 0026](../../ADR/0026-monetization-step-by-growth.md) с описанием бизнес-логики и последствий.
+* **Global Documentation Audit (Encyclopedia v2026.03)**:
+  * Обновлено более 100 файлов документации для соответствия новой стратегии и позиционированию "Anti-Bitrix".
+  * Синхронизированы `INDEX.md`, `DOCUMENTATION-INDEX-FULL.md`, `PLATFORM_SNAPSHOT.md` и `COMPREHENSIVE_PLATFORM_GUIDE.md`.
+  * Рефакторинг `API.md` с удалением дублей и исправлением линтинга таблиц.
+* **Product Strategy**:
+  * Создан документ `2_BUSINESS_FINANCIAL_MODEL.md` с детальным расчетом юнит-экономики и CAC/LTV.
+  * Обновлены `STRATEGIC_PLAN_2026.md` и `PRODUCT_ROADMAP.md` (Success-First запуск в Q2).
+
 ### [2026-03-07] - RoboKassa Tracking, CRM UX & Insights Fix
 
 * **RoboKassa Integration Fix**:

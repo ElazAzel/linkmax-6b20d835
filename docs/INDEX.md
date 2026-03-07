@@ -42,10 +42,11 @@ Documents are organized by topic in subfolders.
 1. [**Product Vision**](product/1_PRODUCT_VISION.md) — the "Why"
 2. [**Platform Architecture**](architecture/2_PLATFORM_ARCHITECTURE.md) — the "How"
 3. [**Marketing & GTM**](product/3_MARKETING_STRATEGY.md) — the "Growth"
-4. [**Investment Memo**](product/4_INVESTMENT_MEMO.md) — the "Business Case"
-5. [**Product Roadmap**](product/5_PRODUCT_ROADMAP.md) — the "Timeline"
-6. [**Operational Handbook**](operations/6_OPERATIONAL_HANDBOOK.md) — the "Runbook"
-7. [**Strategic Plan 2026**](product/STRATEGIC_PLAN_2026.md) — the "Future"
+4. [**Business & Financial Model**](product/2_BUSINESS_FINANCIAL_MODEL.md) — the "Economics" (Step-by-Growth)
+5. [**Investment Memo**](product/4_INVESTMENT_MEMO.md) — the "Business Case"
+6. [**Product Roadmap**](product/5_PRODUCT_ROADMAP.md) — the "Timeline"
+7. [**Operational Handbook**](operations/6_OPERATIONAL_HANDBOOK.md) — the "Runbook"
+8. [**Strategic Plan 2026**](product/STRATEGIC_PLAN_2026.md) — the "Future"
 
 Additional: [Pitch Deck](product/PITCH_DECK.md), [Competitive Notes](product/COMPETITIVE_NOTES.md).
 

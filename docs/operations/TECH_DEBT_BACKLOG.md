@@ -22,13 +22,14 @@
   - [x] Восстановить работу `sitemap.ts` (заменено статическим xml в public).
 - [x] Проверить индексацию поисковыми роботами (Интегрирован `AISearchOptimizer` 27.02.2026).
 
-### 3. Monetization & Payments (Preparation)
+### 3. Monetization & Payments (Step-by-Growth)
 
-- **Проблема:** Отсутствует интеграция с реальными фиатными платежами (Kaspi, Stripe).
-- **Статус:** ⚠️ **Инфраструктура готова** (Health Score: 8/10). Добавлены таблицы Wallets, Ledger и RLS политики.
+- **Проблема:** Переход от подписочной модели к транзакционной требует сложной логики сплитования и биллинга.
+- **Статус:** ⚠️ **Infrastructure Ready** (Health Score: 8/10). ADR 0026 принят, архитектура согласована.
 - **Что сделать:**
-  - [x] Спроектировать слой транзакций для реальных денег (готово в БД).
-  - [ ] Реализовать интеграцию с Kaspi API (или Robokassa).
+  - [x] Спроектировать слой транзакций (ADR 0026).
+  - [ ] Реализовать `process-transaction-fee` Edge Function для Starter (7%) и Pro (1%).
+  - [ ] Интегрировать Kaspi QR (Merchant API) для автоматизации списаний.
 
 ## Высокий приоритет (P1 — UX & Stability)
 
@@ -80,4 +81,4 @@
 
 ## Metadata
 
-*Документ обновлен: 5 марта 2026 г. (Documentation Audit & EDO Update)*
+*Документ обновлен: 7 марта 2026 г. (Global Documentation Sync & Step-by-Growth Pivot)*

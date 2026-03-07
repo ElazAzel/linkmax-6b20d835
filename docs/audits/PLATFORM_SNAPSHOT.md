@@ -1,6 +1,6 @@
-# lnkmx — The Business OS for the Solo-Economy
+# lnkmx — The Business OS for the Solo-Economy (Encyclopedia v2026.03)
 
-> **Strategic Vision:** lnkmx is transitioning from a simple "Link-in-bio" tool to a comprehensive **Business Operating System** (Solo OS) for creators and micro-businesses. Our goal is to consolidate the fragmented tech stack (Site Builder + CRM + Booking + Payments) into a single, mobile-first, AI-native platform.
+> **Strategic Vision:** lnkmx is the **"Anti-Bitrix/AmoCRM"** for solopreneurs. We are a comprehensive **Business Operating System** (Solo OS) that consolidates the fragmented tech stack into a single, mobile-first, AI-native platform with a **"Step-by-Growth"** monetization model.
 
 ---
 
@@ -83,15 +83,16 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 **Key capabilities:**
 
-| Feature | Free Tier | Pro Tier |
-| :--- | :--- | :--- |
-| Pages | 1 | 6 (1 primary + 5 additional) |
-| Blocks | 11 free types | All 28 types |
-| AI generations | 1/month | 5/month |
-| Analytics | Basic (7 days) | Full (30 days + heatmaps) |
-| CRM/Leads | View only | Full management |
-| Remove watermark | No | Yes |
-| Custom domain | No | Yes |
+| Feature | Identity (Free) | Starter (Success) | Pro (Business OS) |
+| :--- | :--- | :--- | :--- |
+| **Price** | $0 / mo | **$0 / mo + 7% fee** | **~$6.5 / mo + 1% fee** |
+| Pages | 1 | 2 | 6 |
+| Blocks | 11 free types | All 28 types | All 28 types |
+| AI generations | 1/month | 3/month | 10/month |
+| Analytics | Basic (7 days) | Full | Deep + Heatmaps |
+| CRM/Leads | View only | Full management | Full + Automations |
+| Remove watermark | No | Yes | Yes |
+| Custom domain | No | Yes | Yes |
 
 **Dashboard sections (DashboardV2):**
 
@@ -356,7 +357,7 @@ lnkmx использует гибридную модель, направленн
 | :--- | :--- | :--- |
 | **Identity (Free)** | 0 | 1 страница, виральность через вотермарку. |
 | **Starter (Transaction)** | 0 + 7% комиссия | Доступ к CRM и Payments без абонплаты. Платите только когда зарабатываете. |
-| **Pro (Business)** | 2,900 (annual) | White-label, 6 страниц, полная CRM, комиссия 0-1%. |
+| **Pro (Business)** | ~3,045 (annual) | White-label, 6 страниц, полная CRM, комиссия 0-1%. |
 
 ### Plan Checking
 
@@ -798,7 +799,9 @@ Based on codebase analysis, these are logical next improvements:
 6. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
 7. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments, checklists), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-03-03)
 8. **Business Zones Phase 1 (Deals DnD & Detail)**: Implementing drag-and-drop for Kanban and side-panel (Sheet) for deal details. (Completed 2026-03-03)
-9. **Business Zones Phase 2 (CRM Enhancements)**: Advanced contact cards, task checklists, multi-item invoices, and complex automations. (Completed 2026-03-03)
+9. **Global Documentation Sync**: Updating 100+ files to version 2.5/2026.03. Aligning with Step-by-Growth strategy and Anti-Bitrix positioning. (In Progress)
+10. **Starter Tier Launch**: Implementation of 7% transaction fee logic and Kaspi/Robokassa deep integration. (Next)
+11. **Business Zones Phase 2 (CRM Enhancements)**: Advanced contact cards, task checklists, multi-item invoices, and complex automations. (Completed 2026-03-03)
 | 10. **Business Zones Phase 3 (EDO & Document Management)**: Integration of act/contract/invoice generation directly from deals, template management, and document status tracking. (Completed 2026-03-05)
 | 11. **Technical Debt (Phase 2): Template Externalization**: Moved 150KB+ of hardcoded templates to DB. (Completed 2026-03-05)
 | 12. **RoboKassa & Billing Expansion**: Full integration of RoboKassa for Business Zones with transaction tracking and sequential invoice numbering. (Completed 2026-03-07)
@@ -806,9 +809,9 @@ Based on codebase analysis, these are logical next improvements:
 | 12. **Phase 6: Regional Expansion & Technical Hardening**: Standardized Edge Functions with import maps, implemented manual CRM automations (Auto-Invoice), established Kaspi Pay service bridge, and added E2E CRM workflow verification. (Completed 2026-03-06)
 | 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
 | 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
-10. **API access** — Public API for integrations (Zapier, Make, custom apps)
-11. **Email sequences** — Automated email drip campaigns for leads
-12. **Mobile app** — Native iOS/Android app for page management
+12. **API access** — Public API for integrations (Zapier, Make, custom apps)
+13. **Email sequences** — Automated email drip campaigns for leads
+14. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: 100% sync reached for RU/EN/KK/UZ (Feb 2026).
 - **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_24.md](FULL_PLATFORM_AUDIT_2026_02_24.md), and [EDO_MODULE_AUDIT_2026_03_05.md](EDO_MODULE_AUDIT_2026_03_05.md).

@@ -9,7 +9,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 ### AI & Content
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `ai-content-generator` | No JWT | Generates page content and copy using Google Gemini |
 | `chatbot-stream` | No JWT | Streams AI chatbot responses for public page widget |
 | `translate-content` | No JWT | Translates block content between RU/EN/KK |
@@ -17,7 +17,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 ### Lead & CRM
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `create-lead` | No JWT | Validates and inserts leads from public forms. Rate limited (15/min). Turnstile CAPTCHA |
 | `send-lead-notification` | No JWT | Notifies page owner of new leads via Telegram/Email |
 | `process-crm-automations` | No JWT | Cron (hourly) — executes CRM automation rules |
@@ -25,10 +25,8 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 
 ### Booking & Events
 
-### Booking & Events
-
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `send-booking-notification` | No JWT | Notifies of new bookings via Telegram/Email |
 | `send-booking-reminder` | No JWT | Sends booking reminders (scheduled) |
 | `send-event-confirmation` | No JWT | Sends ticket/confirmation to event attendees |
@@ -38,14 +36,16 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 ### Fintech & Payments
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `robokassa` | No JWT | Generates Robokassa payment links/invoice |
-| `robokassa-webhook` | No JWT | Handles Robokassa payment success/fail notifications |
+| `kaspi-pay` | No JWT | Integration with Kaspi QR and merchant API |
+| `process-transaction-fee` | Internal | Calculates and splits 7% (Starter) or 1% (Pro) fees |
+| `monetization-webhook` | No JWT | Unified handler for all payment events |
 
 ### Telegram Integration
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `telegram-bot-webhook` | No JWT | Handles incoming Telegram messages. Warm-up: `?warmup=true` |
 | `validate-telegram` | No JWT | Verifies Telegram login widgets |
 | `telegram-password-reset` | No JWT | Handles password reset via Telegram |
@@ -53,7 +53,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 ### Notifications (Social/Team)
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `send-collab-notification` | No JWT | Collaboration request notifications |
 | `send-friend-notification` | No JWT | Friend invitation notifications |
 | `send-social-notification` | No JWT | Social interaction notifications |
@@ -66,7 +66,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 ### SEO & Analytics
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `seo-ssr` | No JWT | Server-side rendered HTML for bots/crawlers. Rate limited (60/min). Warm-up support |
 | `generate-sitemap` | No JWT | Generates `sitemap.xml` for SEO |
 | `pixel-proxy` | No JWT | **Server-side pixel forwarding** — FB CAPI, TikTok Events, GA4 MP. Rate limited (100/min) |
@@ -74,14 +74,15 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 ### Other
 
 | Function | Auth | Description |
-|---|---|---|
+| :--- | :--- | :--- |
 | `public-experts` | No JWT | Returns public expert directory |
 | `resolve-domain` | No JWT | Resolves custom domains to pages |
 | `verify-domain` | No JWT | Verifies CNAME/DNS for custom domains |
 | `seed-demo-accounts` | No JWT | Seeds demo accounts (admin-only check inside) |
 | `language-upload` | No JWT | Uploads language translation files |
 
-> **Note**: All functions use `verify_jwt = false` in `config.toml` but implement their own auth checks where needed (e.g., `seed-demo-accounts` verifies admin role).
+> [!NOTE]
+> All functions use `verify_jwt = false` in `config.toml` but implement their own auth checks where needed (e.g., `seed-demo-accounts` verifies admin role).
 
 ---
 
@@ -90,7 +91,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 PostgreSQL functions for atomic operations and secure logic.
 
 | Function | Params | Purpose |
-|---|---|---|
+| :--- | :--- | :--- |
 | `check_page_limits` | `user_id` | Verifies if user can create more pages based on tier |
 | `save_page_blocks` | `page_id`, `blocks_json` | Atomically replaces blocks for a page with versioning |
 | `increment_view_count` | `page_id` | Efficiently increments page views +1 |
@@ -120,7 +121,7 @@ Security enforced at the database level using Postgres RLS on **all tables**.
 ### Critical Tables
 
 | Table | RLS | Policies |
-|---|---|---|
+| :--- | :--- | :--- |
 | `pages` | ✅ | Public read (if `is_published`), Owner write |
 | `blocks` | ✅ | Access through page ownership |
 | `user_profiles` | ✅ | Public read (sanitized), Owner write |
@@ -137,8 +138,10 @@ Security enforced at the database level using Postgres RLS on **all tables**.
 | `token_transactions` | ✅ | User/seller/buyer access |
 | `rate_limits` | ✅ | Edge function service-role access |
 
-> **Security Note**: Never disable RLS. Use `SECURITY DEFINER` functions carefully and always validate `auth.uid()`.
+> [!CAUTION]
+> Never disable RLS. Use `SECURITY DEFINER` functions carefully and always validate `auth.uid()`.
 
 ---
 
-*Last updated: 2026-03-05*
+> [!IMPORTANT]
+> Last updated: 2026-03-07

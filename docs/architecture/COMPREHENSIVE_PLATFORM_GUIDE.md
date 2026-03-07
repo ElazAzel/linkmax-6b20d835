@@ -1,9 +1,9 @@
-# lnkmx — Ультимативный гид по платформе (Encyclopedia v2026.02)
+# lnkmx — Ультимативный гид по платформе (Encyclopedia v2026.03)
 
-> **Last Updated:** February 28, 2026  
+> **Last Updated:** March 7, 2026  
 > **Maintained by:** Product & Engineering
 
-Платформа lnkmx — это не просто конструктор персональных страниц. Это полноценная **Business Operating System (Solo OS)**, спроектированная для экономики независимых специалистов (Solo-Economy). Мы объединили создание сайтов, управление клиентами (CRM, Kanban, Задачи), аналитику и финансовые инструменты в единую мобильную экосистему.
+Платформа lnkmx — это не просто конструктор персональных страниц. Это полноценная **Business Operating System (Solo OS)**, позиционируемая как **"Anti-Bitrix/AmoCRM"** для экономики независимых специалистов (Solo-Economy). Мы объединили создание сайтов, управление клиентами (CRM, Kanban, Задачи), аналитику и финансовые инструменты в единую мобильную экосистему с транзакционной моделью монетизации **"Step-by-Growth"**.
 
 ---
 
@@ -51,10 +51,14 @@
 - **CAPI Integration**: Серверная отправка событий в Facebook CAPI и TikTok Events API для обхода блокировщиков (Ad-blockers).
 - **Insights**: CTR по блокам, источники трафика, география; A/B эксперименты по вариантам блоков.
 
-### 2.4 Fintech Ledger
+### 2.4 Fintech Ledger (Step-by-Growth)
 
-- **Ledger**: Операции записываются в `wallet_transactions` и `ledger_logs`. Платформа Robokassa интегрирована (слой в `platform/robokassa`).
-- **GMV Tracking**: Мониторинг оборота через инвойсы.
+- **Monetization Engine**: Реализация модели "Step-by-Growth".
+  - **Identity (Free)**: Базовая визитка.
+  - **Starter (Success-First)**: 0$ / мес + 7% комиссия с транзакций.
+  - **Pro (Business OS)**: ~6.5$ / мес + 1% комиссия.
+- **Ledger**: Операции записываются в `wallet_transactions` и `ledger_logs`. Платформа Robokassa и Kaspi QR интегрированы для автоматического списания комиссий.
+- **GMV Tracking**: Мониторинг оборота через инвойсы и цифровые продукты.
 
 ### 2.5 SEO и индексация
 
@@ -132,20 +136,25 @@ erDiagram
 
 - Платформа, 28+ блоков, Auth (Google/Apple/Telegram), PWA с shortcuts.
 - Business Zone (CRM, Kanban, Tasks, Contacts), Pixel Proxy, A/B тесты.
-- SEO/SSR (Cloudflare + Supabase), 16 языков, Sentry, Web Vitals, Capacitor инициализирован.
+- SEO/SSR (Cloudflare + Supabase), 16 языков, Sentry, Web Vitals.
 
-### Q2 2026: Mobile Dominance
+### Q2 2026: Success-First Launch
 
-- Нативные приложения (Capacitor iOS/Android), Push-уведомления.
-- **Booking V2**: Синхронизация с Google Calendar, депозиты.
+- **Starter Tier**: Запуск транзакционной модели 7%.
+- **Payments**: Полная интеграция Kaspi QR и Robokassa (автоматизация сплитов).
+- **Mobile**: Нативные приложения (Capacitor iOS/Android).
 
-### Q3 2026: Open Platform
+### Q3 2026: CRM Mastery
 
-- **Public API**, Zapier/Make, White-Label для агентств.
+- **Custom Fields**: Гибкая настройка карточек клиентов.
+- **Advanced Export**: Отчеты в Excel/PDF.
+- **Zapier/Make**: Открытие API для интеграций.
 
-### Q4 2026: Fintech & Monetization
+### Q4 2026: Global Fintech Pivot
 
-- **Link Wallet**, платный контент, Team Collaboration.
+- **Internal Wallet**: Прямые выплаты и внутренний баланс.
+- **Digital Goods**: Магазин цифровых товаров.
+- **AI Financial Advisor**: Автоматический аудит доходов/расходов.
 
 ---
 
@@ -167,5 +176,5 @@ erDiagram
 
 ---
 
-*Документ обновлен: 5 марта 2026 г.*  
+*Документ обновлен: 7 марта 2026 г.*  
 *Maintained by: Product & Engineering*
