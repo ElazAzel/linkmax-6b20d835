@@ -1,5 +1,9 @@
-import React from 'react';
 import { useTelegram } from './TelegramContext';
+import { useTelegramZone } from './hooks/useTelegramZone';
+import { useZoneAnalytics } from '@/hooks/zones/useZoneAnalytics';
+import { CRMScreen } from './screens/CRMScreen';
+import { OnboardingScreen } from './screens/OnboardingScreen';
+import { BookingsScreen } from './screens/BookingsScreen';
 import type { TelegramScreen } from './types';
 
 // ---- Icons (inline SVG for zero-dep bottom nav) ----
@@ -104,36 +108,38 @@ function ErrorScreen({ error }: { error: string | null }) {
     );
 }
 
-// ---- Home Screen (P0 Stub) ----
+// ---- Home Screen ----
 
 function HomeScreen() {
     const { user, haptic, setScreen } = useTelegram();
+    const { zoneId } = useTelegramZone();
+    const { metrics, loading } = useZoneAnalytics(zoneId);
 
     const quickActions = [
         {
             icon: '📄',
-            bg: '#e3f2fd',
+            bg: 'var(--tg-theme-secondary-bg-color)',
             title: 'Моя страница',
             desc: 'Редактировать и опубликовать',
             screen: 'page' as TelegramScreen,
         },
         {
             icon: '📩',
-            bg: '#fce4ec',
+            bg: 'var(--tg-theme-secondary-bg-color)',
             title: 'Лиды',
             desc: 'Входящие заявки',
             screen: 'crm' as TelegramScreen,
         },
         {
             icon: '📅',
-            bg: '#e8f5e9',
+            bg: 'var(--tg-theme-secondary-bg-color)',
             title: 'Бронирования',
             desc: 'Записи и расписание',
             screen: 'bookings' as TelegramScreen,
         },
         {
             icon: '💳',
-            bg: '#fff3e0',
+            bg: 'var(--tg-theme-secondary-bg-color)',
             title: 'Платежи',
             desc: 'Инвойсы и тариф',
             screen: 'payments' as TelegramScreen,
@@ -148,30 +154,36 @@ function HomeScreen() {
                     Привет, {user?.first_name || 'друг'} 👋
                 </h1>
                 <p className="tg-text-hint" style={{ fontSize: 15, marginTop: 4 }}>
-                    Ваш бизнес-хаб в Telegram
+                    Ваш бизнес-центр в Telegram
                 </p>
             </div>
 
             {/* Stats Row */}
             <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
                 <div className="tg-stat-card">
-                    <span className="tg-stat-value">—</span>
-                    <span className="tg-stat-label">Лиды сегодня</span>
+                    <span className="tg-stat-value">
+                        {loading ? '...' : metrics?.deals?.open || 0}
+                    </span>
+                    <span className="tg-stat-label">Лиды</span>
                 </div>
                 <div className="tg-stat-card">
-                    <span className="tg-stat-value">—</span>
-                    <span className="tg-stat-label">Брони</span>
+                    <span className="tg-stat-value">
+                        {loading ? '...' : metrics?.tasks?.pending || 0}
+                    </span>
+                    <span className="tg-stat-label">Дела</span>
                 </div>
                 <div className="tg-stat-card">
-                    <span className="tg-stat-value">—</span>
+                    <span className="tg-stat-value">
+                        {loading ? '...' : (metrics?.invoices?.totalPaidAmount ? `${metrics.invoices.totalPaidAmount}₽` : '0₽')}
+                    </span>
                     <span className="tg-stat-label">Выручка</span>
                 </div>
             </div>
 
             {/* Quick Actions */}
             <div className="tg-section">
-                <div className="tg-section-header">Быстрые действия</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div className="tg-section-header">Инструменты</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {quickActions.map((action) => (
                         <div
                             key={action.screen}
@@ -183,7 +195,7 @@ function HomeScreen() {
                         >
                             <div
                                 className="tg-quick-action-icon"
-                                style={{ backgroundColor: action.bg }}
+                                style={{ fontSize: 20 }}
                             >
                                 {action.icon}
                             </div>
@@ -229,8 +241,9 @@ function StubScreen({ title, icon }: { title: string; icon: string }) {
 
 export function TelegramRouter() {
     const { route, isLoading, error } = useTelegram();
+    const { isLoading: zoneLoading } = useTelegramZone();
 
-    if (isLoading || route.screen === 'loading') return <LoadingScreen />;
+    if (isLoading || zoneLoading || route.screen === 'loading') return <LoadingScreen />;
     if (error || route.screen === 'error') return <ErrorScreen error={error} />;
 
     switch (route.screen) {
@@ -239,15 +252,15 @@ export function TelegramRouter() {
         case 'page':
             return <StubScreen title="Моя страница" icon="📄" />;
         case 'crm':
-            return <StubScreen title="Лиды / CRM" icon="📩" />;
+            return <CRMScreen />;
         case 'bookings':
-            return <StubScreen title="Бронирования" icon="📅" />;
+            return <BookingsScreen />;
         case 'payments':
             return <StubScreen title="Платежи" icon="💳" />;
         case 'settings':
             return <StubScreen title="Настройки" icon="⚙️" />;
         case 'onboarding':
-            return <StubScreen title="Добро пожаловать" icon="🚀" />;
+            return <OnboardingScreen />;
         case 'lead_detail':
             return <StubScreen title={`Лид ${route.entityId || ''}`} icon="👤" />;
         case 'deal_detail':
