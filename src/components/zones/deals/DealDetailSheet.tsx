@@ -26,6 +26,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
 import Package from 'lucide-react/dist/esm/icons/package';
 import Tag from 'lucide-react/dist/esm/icons/tag';
+import Send from 'lucide-react/dist/esm/icons/send';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import type { ZoneDeal, ZoneDealStage } from '@/types/zones';

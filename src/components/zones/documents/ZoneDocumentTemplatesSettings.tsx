@@ -59,7 +59,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                         Управление шаблонами
                     </DialogTitle>
                     <DialogDescription className="text-white/60">
-                        Создавайте и редактируйте шаблоны документов с поддержкой переменных {{ contact_name }}, {{ deal_title }} и др.
+                        Создавайте и редактируйте шаблоны документов с поддержкой переменных {'{{ contact_name }}'}, {'{{ deal_title }}'} и др.
                     </DialogDescription>
                 </DialogHeader>
 
