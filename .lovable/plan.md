@@ -1,10 +1,9 @@
 
-
 # Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
 ## Текущее состояние LinkMAX Business Zones
 
-Реализовано 5 модулей: Deals (Kanban), Contacts (список), Inbox (realtime чат), Tasks (Kanban), Settings (участники, биллинг). Есть RLS, зоны, роли, инвайты, grace-period. Это примерно **15-20% функциональности Bitrix24 Professional** для микро-команд.
+Реализовано 6 модулей: Deals (Kanban), Contacts (список), Inbox (realtime чат), Tasks (Kanban), Invoices (RoboKassa), Settings (участники, биллинг). Есть RLS, зоны, роли, инвайты, grace-period. Это примерно **25-30% функциональности Bitrix24 Professional** для микро-команд.
 
 ---
 
@@ -103,30 +102,34 @@
 | 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
 | 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
 | 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
 ---
 
 ## Технический план реализации
 
-### DB миграции (новые таблицы/колонки):
+### DB миграции (новые таблицы/колонки)
+
 - `zone_automations` (для Фазы 5)
 - Остальные таблицы уже существуют и покрывают Фазы 1-4
 
-### Новые файлы:
+### Новые файлы
+
 - `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
 - `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
 - `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
 - `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
 - `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
 
-### Модифицируемые файлы:
+### Модифицируемые файлы
+
 - `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
 - `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
 - `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
 - `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
 
-### Зависимости:
+### Зависимости
+
 - Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
 - Новых зависимостей не требуется
 
@@ -139,4 +142,3 @@
 3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
 4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
 5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
-

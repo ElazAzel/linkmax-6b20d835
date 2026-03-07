@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### [2026-03-07] - RoboKassa Tracking, CRM UX & Insights Fix
+
+* **RoboKassa Integration Fix**:
+  * Исправлено отслеживание платежей в `zone_invoices`: теперь при генерации ссылки на оплату в БД сохраняется `robokassa_invoice_id` (ID транзакции).
+  * Это позволяет вебхуку `robokassa-webhook` корректно находить и обновлять статус инвойса на "Paid".
+* **CRM UX Enhancements**:
+  * В `ContactDetailSheet` и `DealDetailSheet` добавлены постоянные кнопки быстрых действий: **Позвонить**, **Email** и **Telegram**.
+  * Кнопки вынесены из скрытых hover-состояний в основной интерфейс для мгновенного доступа.
+* **Analytics Fix**:
+  * Исправлена работа экрана `Insights`: восстановлена выгрузка статистики кликов по блокам.
+
 ### [2026-03-05] - Electronic Document Management (EDO) & System Stabilization
 
 * **Template Externalization (Phase 2)**:
