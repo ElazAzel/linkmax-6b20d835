@@ -28,7 +28,7 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
   useEffect(() => {
     const title = t(
       'alternatives.seo.title',
-      'lnkmx alternatives - Linktree, Taplink, Carrd, Beacons comparison'
+      'LinkMAX alternatives - Linktree, Taplink, Carrd, Beacons comparison'
     );
     document.title = title;
 
@@ -59,7 +59,7 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
 
     const description = t(
       'alternatives.seo.description',
-      'Compare lnkmx with Linktree, Taplink, Carrd and Beacons. See which tool fits link-in-bio, mini-landing or lead collection needs.'
+      'Compare LinkMAX with Linktree, Taplink, Carrd and Beacons. See which tool fits link-in-bio, mini-landing or lead collection needs.'
     );
     const ogTitle = t('alternatives.seo.ogTitle', title);
     const ogDescription = t('alternatives.seo.ogDescription', description);
@@ -105,7 +105,7 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'lnkmx',
+          name: 'LinkMAX',
           item: `${getAppDomain()}/`,
         },
         {
@@ -126,7 +126,7 @@ function AlternativesSEOHead({ currentLanguage }: { currentLanguage: string }) {
     });
 
     return () => {
-      document.title = t('alternatives.seo.defaultTitle', 'lnkmx.my - AI-Powered Link-in-Bio Platform');
+      document.title = t('alternatives.seo.defaultTitle', 'LinkMAX.my - AI-Powered Link-in-Bio Platform');
       const schemaToRemove = document.querySelectorAll('script.alternatives-schema');
       schemaToRemove.forEach((schema) => schema.remove());
     };
@@ -192,7 +192,7 @@ export default function Alternatives() {
 
   const comparisonRows: Array<{
     feature: string;
-    lnkmx: MatrixValue;
+    LinkMAX: MatrixValue;
     linktree: MatrixValue;
     taplink: MatrixValue;
     carrd: MatrixValue;
@@ -200,7 +200,7 @@ export default function Alternatives() {
   }> = [
       {
         feature: t('alternatives.matrix.rows.linkPage', 'Базовая страница ссылок'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'yes',
         taplink: 'yes',
         carrd: 'yes',
@@ -208,7 +208,7 @@ export default function Alternatives() {
       },
       {
         feature: t('alternatives.matrix.rows.miniLanding', 'Мини-лендинг с блоками (прайс, FAQ, формы)'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'depends',
         taplink: 'depends',
         carrd: 'depends',
@@ -216,7 +216,7 @@ export default function Alternatives() {
       },
       {
         feature: t('alternatives.matrix.rows.aiGeneration', 'AI генерация структуры страницы'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'depends',
         taplink: 'depends',
         carrd: 'depends',
@@ -224,7 +224,7 @@ export default function Alternatives() {
       },
       {
         feature: t('alternatives.matrix.rows.leadsCrm', 'Лиды и мини-CRM'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'depends',
         taplink: 'depends',
         carrd: 'depends',
@@ -232,7 +232,7 @@ export default function Alternatives() {
       },
       {
         feature: t('alternatives.matrix.rows.telegram', 'Уведомления в Telegram'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'depends',
         taplink: 'depends',
         carrd: 'depends',
@@ -240,7 +240,7 @@ export default function Alternatives() {
       },
       {
         feature: t('alternatives.matrix.rows.localization', 'RU/EN/KK локализация'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'depends',
         taplink: 'depends',
         carrd: 'depends',
@@ -248,7 +248,7 @@ export default function Alternatives() {
       },
       {
         feature: t('alternatives.matrix.rows.localPricing', 'Цены и оплата в KZT'),
-        lnkmx: 'yes',
+        LinkMAX: 'yes',
         linktree: 'depends',
         taplink: 'depends',
         carrd: 'depends',
@@ -286,10 +286,10 @@ export default function Alternatives() {
       <AlternativesSEOHead currentLanguage={i18n.language} />
       <SEOMetaEnhancer
         pageUrl={`${getAppDomain()}/alternatives`}
-        pageTitle={t('alternatives.seo.title', 'lnkmx alternatives - Linktree, Taplink, Carrd, Beacons comparison')}
-        pageDescription={t('alternatives.seo.description', 'Compare lnkmx with Linktree, Taplink, Carrd and Beacons. See which tool fits link-in-bio, mini-landing or lead collection needs.')}
+        pageTitle={t('alternatives.seo.title', 'LinkMAX alternatives - Linktree, Taplink, Carrd, Beacons comparison')}
+        pageDescription={t('alternatives.seo.description', 'Compare LinkMAX with Linktree, Taplink, Carrd and Beacons. See which tool fits link-in-bio, mini-landing or lead collection needs.')}
         imageUrl={`${getAppDomain()}/og-alternatives.png`}
-        imageAlt={t('alternatives.seo.imageAlt', 'lnkmx vs Alternatives Comparison')}
+        imageAlt={t('alternatives.seo.imageAlt', 'LinkMAX vs Alternatives Comparison')}
         type="article"
         section="Comparisons"
       />
@@ -297,8 +297,8 @@ export default function Alternatives() {
       <AISearchOptimizer
         pageType="article"
         primaryQuestion={t('alternatives.seo.opt.question', 'What are the best alternatives to Linktree?')}
-        primaryAnswer={t('alternatives.seo.opt.answer', 'Top Linktree alternatives include lnkmx (AI-powered, built-in CRM), Beacons (creator-focused), Koji (interactive), Taplink (analytics), and Stan Store (e-commerce). lnkmx stands out with its AI page builder, lead management, and affordable pricing.')}
-        entityName={t('alternatives.seo.opt.entity', 'lnkmx vs Competitors')}
+        primaryAnswer={t('alternatives.seo.opt.answer', 'Top Linktree alternatives include LinkMAX (AI-powered, built-in CRM), Beacons (creator-focused), Koji (interactive), Taplink (analytics), and Stan Store (e-commerce). LinkMAX stands out with its AI page builder, lead management, and affordable pricing.')}
+        entityName={t('alternatives.seo.opt.entity', 'LinkMAX vs Competitors')}
         entityCategory="Comparison, Link in Bio Tools, Linktree Alternative"
         useCases={[
           t('alternatives.seo.opt.uses.1', 'Compare link-in-bio tools'),
@@ -314,7 +314,7 @@ export default function Alternatives() {
           t('alternatives.seo.opt.audience.4', 'Content creators choosing tools'),
         ]}
         problemStatement={t('alternatives.seo.opt.problem', 'Users need unbiased comparisons to choose the right link-in-bio tool for their needs')}
-        solutionStatement={t('alternatives.seo.opt.solution', 'lnkmx provides transparent comparison showing unique features like AI page builder and built-in CRM that competitors lack')}
+        solutionStatement={t('alternatives.seo.opt.solution', 'LinkMAX provides transparent comparison showing unique features like AI page builder and built-in CRM that competitors lack')}
         keyFeatures={[
           t('alternatives.seo.opt.features.1', 'Feature-by-feature comparison table'),
           t('alternatives.seo.opt.features.2', 'Honest pros and cons'),
@@ -342,7 +342,7 @@ export default function Alternatives() {
                   </Button>
                   <Link to="/" className="flex items-center gap-2">
                     <span className="text-xl font-bold">
-                      lnkmx<span className="text-gradient">.my</span>
+                      LinkMAX<span className="text-gradient">.my</span>
                     </span>
                   </Link>
                 </div>
@@ -372,7 +372,7 @@ export default function Alternatives() {
               data-testid="alternatives-hero-title"
               className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight"
             >
-              {t('alternatives.hero.title', 'lnkmx vs Linktree, Taplink, Carrd, Beacons')}
+              {t('alternatives.hero.title', 'LinkMAX vs Linktree, Taplink, Carrd, Beacons')}
             </h1>
 
             <p
@@ -381,7 +381,7 @@ export default function Alternatives() {
             >
               {t(
                 'alternatives.hero.description',
-                'Сравнение без громких обещаний: для каких задач подходит lnkmx, и когда стоит выбрать другой инструмент.'
+                'Сравнение без громких обещаний: для каких задач подходит LinkMAX, и когда стоит выбрать другой инструмент.'
               )}
             </p>
 
@@ -427,7 +427,7 @@ export default function Alternatives() {
 
             <div className="flex justify-center mt-6">
               <Button onClick={() => handleCtaClick('/auth', 'segments')} className="rounded-xl">
-                {t('alternatives.segments.cta', 'Попробовать lnkmx')}
+                {t('alternatives.segments.cta', 'Попробовать LinkMAX')}
               </Button>
             </div>
           </section>
@@ -447,7 +447,7 @@ export default function Alternatives() {
                         {t('alternatives.matrix.featureLabel', 'Функция')}
                       </th>
                       <th className="text-center p-4">
-                        <span className="text-muted-foreground">lnkmx</span>
+                        <span className="text-muted-foreground">LinkMAX</span>
                       </th>
                       <th className="text-center p-4">
                         <span className="text-muted-foreground">Linktree</span>
@@ -467,7 +467,7 @@ export default function Alternatives() {
                     {comparisonRows.map((row, index) => (
                       <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                         <td className="p-4 font-medium">{row.feature}</td>
-                        <td className="p-4 text-center bg-primary/5">{renderMatrixValue(row.lnkmx)}</td>
+                        <td className="p-4 text-center bg-primary/5">{renderMatrixValue(row.LinkMAX)}</td>
                         <td className="p-4 text-center">{renderMatrixValue(row.linktree)}</td>
                         <td className="p-4 text-center">{renderMatrixValue(row.taplink)}</td>
                         <td className="p-4 text-center">{renderMatrixValue(row.carrd)}</td>
@@ -493,7 +493,7 @@ export default function Alternatives() {
             </div>
           </section>
 
-          {/* When to choose lnkmx */}
+          {/* When to choose LinkMAX */}
           <section className="mb-12 sm:mb-16">
             <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-violet-500/5">
               <CardContent className="p-6 sm:p-8">
@@ -502,7 +502,7 @@ export default function Alternatives() {
                     <Crown className="h-5 w-5 text-primary" />
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-bold">
-                    {t('alternatives.whenToChoose.title', 'Когда выбирать lnkmx')}
+                    {t('alternatives.whenToChoose.title', 'Когда выбирать LinkMAX')}
                   </h2>
                 </div>
                 <ul className="space-y-3 text-sm text-muted-foreground">
@@ -522,12 +522,12 @@ export default function Alternatives() {
             </Card>
           </section>
 
-          {/* When not to choose lnkmx */}
+          {/* When not to choose LinkMAX */}
           <section className="mb-12 sm:mb-16">
             <Card className="border-border/40">
               <CardContent className="p-6 sm:p-8">
                 <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-                  {t('alternatives.whenNotToChoose.title', 'Когда lnkmx может не подойти')}
+                  {t('alternatives.whenNotToChoose.title', 'Когда LinkMAX может не подойти')}
                 </h2>
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   {whenNotToChoose.map((item, index) => (
@@ -569,36 +569,36 @@ export default function Alternatives() {
                     <thead>
                       <tr className="border-b border-border">
                         <th className="text-left p-3 font-semibold">{t('alternatives.matrix.featureLabel', 'Функция')}</th>
-                        <th className="text-center p-3 text-primary">lnkmx</th>
+                        <th className="text-center p-3 text-primary">LinkMAX</th>
                         <th className="text-center p-3 text-muted-foreground">Bitrix24</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="border-b border-border/50">
                         <td className="p-3 font-medium">{t('alternatives.bitrix24.rowSimplicity', 'Простота')}</td>
-                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmxSimple', '3 клика, без инструкций')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.LinkMAXSimple', '3 клика, без инструкций')}</td>
                         <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixComplex', 'Сложный интерфейс, долгая адаптация')}</td>
                       </tr>
                       <tr className="border-b border-border/50">
                         <td className="p-3 font-medium">{t('alternatives.bitrix24.rowTime', 'Время до запуска')}</td>
-                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmx15min', 'CRM за 15 минут, без внедрения')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.LinkMAX15min', 'CRM за 15 минут, без внедрения')}</td>
                         <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixWeeks', 'Недели, часто консультанты')}</td>
                       </tr>
                       <tr className="border-b border-border/50">
                         <td className="p-3 font-medium">{t('alternatives.bitrix24.rowMobile', 'Мобильность')}</td>
-                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmxMobile', 'PWA + нативные приложения, пуш')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.LinkMAXMobile', 'PWA + нативные приложения, пуш')}</td>
                         <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixWeak', 'Слабое мобильное приложение')}</td>
                       </tr>
                       <tr className="border-b border-border/50">
                         <td className="p-3 font-medium">{t('alternatives.bitrix24.rowPrice', 'Цена (соло)')}</td>
-                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.lnkmxPrice', 'Один тариф Pro ~$6.5/мес')}</td>
+                        <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.LinkMAXPrice', 'Один тариф Pro ~$6.5/мес')}</td>
                         <td className="p-3 text-center text-muted-foreground">{t('alternatives.bitrix24.bitrixPrice', 'Рост по пользователям, per-seat')}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <p className="text-sm text-muted-foreground mt-4 italic">
-                  {t('alternatives.bitrix24.positioning', 'lnkmx — «анти-Битрикс» для соло и микро-бизнеса: простая, быстрая, мобильная CRM и визитка за 15 минут, без внедрения и программистов.')}
+                  {t('alternatives.bitrix24.positioning', 'LinkMAX — «анти-Битрикс» для соло и микро-бизнеса: простая, быстрая, мобильная CRM и визитка за 15 минут, без внедрения и программистов.')}
                 </p>
                 <div className="mt-6">
                   <Button onClick={() => handleCtaClick('/auth', 'bitrix24')} className="rounded-xl">
@@ -617,7 +617,7 @@ export default function Alternatives() {
             <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
               {t(
                 'alternatives.finalCta.description',
-                'Создайте страницу и проверьте, подходит ли lnkmx под вашу задачу.'
+                'Создайте страницу и проверьте, подходит ли LinkMAX под вашу задачу.'
               )}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -640,7 +640,7 @@ export default function Alternatives() {
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <Link to="/" className="flex items-center">
                   <span className="text-lg font-bold">
-                    lnkmx<span className="text-gradient">.my</span>
+                    LinkMAX<span className="text-gradient">.my</span>
                   </span>
                 </Link>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -661,8 +661,8 @@ export default function Alternatives() {
                 <p className="mb-1">{t('alternatives.footer.company', 'ARchitecKZ • BIN: 190540008684')}</p>
                 <p className="mb-2">{t('alternatives.footer.address', 'Almaty, Sholokhov St., 20')}</p>
                 <div className="flex flex-wrap items-center justify-center gap-3">
-                  <a href="mailto:admin@lnkmx.my" className="hover:text-foreground transition-colors">
-                    admin@lnkmx.my
+                  <a href="mailto:admin@LinkMAX.my" className="hover:text-foreground transition-colors">
+                    admin@LinkMAX.my
                   </a>
                   <span>•</span>
                   <a href="tel:+77051097664" className="hover:text-foreground transition-colors">
@@ -672,7 +672,7 @@ export default function Alternatives() {
               </div>
 
               <p className="text-xs text-muted-foreground text-center">
-                {t('landingV5.footer.copyright', { year: new Date().getFullYear(), defaultValue: `© ${new Date().getFullYear()} lnkmx.my` })}
+                {t('landingV5.footer.copyright', { year: new Date().getFullYear(), defaultValue: `© ${new Date().getFullYear()} LinkMAX.my` })}
               </p>
             </div>
           </div>

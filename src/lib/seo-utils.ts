@@ -208,7 +208,7 @@ export function generateAutoAbout(
   if (profile.name) {
     parts.push(profile.name);
   } else {
-    parts.push(language === 'ru' ? 'Профиль на lnkmx' : language === 'kk' ? 'lnkmx профилі' : 'Profile on lnkmx');
+    parts.push(language === 'ru' ? 'Профиль на LinkMAX' : language === 'kk' ? 'LinkMAX профилі' : 'Profile on LinkMAX');
   }
 
   // What they offer
@@ -255,13 +255,13 @@ export function generatePageMeta(
   qualityGate: QualityGateResult,
   language: 'ru' | 'en' | 'kk' = 'ru'
 ): GeneratedMeta {
-  // Title: Name - Role | lnkmx (max 60 chars)
-  let title = profile.name || 'lnkmx';
+  // Title: Name - Role | LinkMAX (max 60 chars)
+  let title = profile.name || 'LinkMAX';
   if (profile.bio && title.length + profile.bio.length < 55) {
     title = `${title} - ${profile.bio.slice(0, 50)}`;
   }
   if (title.length < 55) {
-    title = `${title} | lnkmx`;
+    title = `${title} | LinkMAX`;
   }
 
   // Description: 160-180 chars based on bio and content
@@ -271,10 +271,10 @@ export function generatePageMeta(
   } else if (description.length < 100) {
     // Add platform context
     const suffix = language === 'ru'
-      ? ' - Мини-сайт на lnkmx.my'
+      ? ' - Мини-сайт на LinkMAX.my'
       : language === 'kk'
-        ? ' - lnkmx.my мини-сайты'
-        : ' - Mini-site on lnkmx.my';
+        ? ' - LinkMAX.my мини-сайты'
+        : ' - Mini-site on LinkMAX.my';
     description = description + suffix;
   }
 
@@ -319,7 +319,7 @@ export function generateSchemas(
   // Main entity (Person or Organization)
   const mainEntity: any = {
     '@type': profile.type,
-    name: profile.name || 'lnkmx User',
+    name: profile.name || 'LinkMAX User',
     url: pageUrl,
   };
 
@@ -349,12 +349,12 @@ export function generateSchemas(
     },
     isPartOf: {
       '@type': 'WebSite',
-      name: 'lnkmx',
+      name: 'LinkMAX',
       url: getAppDomain(),
     },
     provider: {
       '@type': 'Organization',
-      name: 'lnkmx',
+      name: 'LinkMAX',
       url: getAppDomain(),
     },
   };
@@ -367,7 +367,7 @@ export function generateSchemas(
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'lnkmx',
+        name: 'LinkMAX',
         item: getAppDomain(),
       },
       {
@@ -485,7 +485,7 @@ export function generateSourceContext(
   versionId?: string
 ): string {
   const context = [
-    `This page is managed by its owner on lnkmx.`,
+    `This page is managed by its owner on LinkMAX.`,
     `Last updated: ${new Date(updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`,
   ];
 

@@ -39,7 +39,7 @@ export default function PaymentFail() {
                     <Button
                         variant="outline"
                         className="w-full"
-                        onClick={() => window.open('https://t.me/lnkmx_support', '_blank')}
+                        onClick={() => window.open('https://t.me/LinkMAX_support', '_blank')}
                     >
                         <MessageCircle className="mr-2 w-4 h-4" />
                         Написать в поддержку

@@ -12,26 +12,26 @@ const Privacy = () => {
   const canonical = `${getAppDomain()}/privacy`;
   const seoTitle =
     lang === 'ru'
-      ? 'Политика конфиденциальности — lnkmx'
+      ? 'Политика конфиденциальности — LinkMAX'
       : lang === 'kk'
-        ? 'Құпиялылық саясаты — lnkmx'
-        : 'Privacy Policy — lnkmx';
+        ? 'Құпиялылық саясаты — LinkMAX'
+        : 'Privacy Policy — LinkMAX';
   const seoDescription =
     lang === 'ru'
-      ? 'Политика конфиденциальности lnkmx: какие данные обрабатываются и как они защищаются.'
+      ? 'Политика конфиденциальности LinkMAX: какие данные обрабатываются и как они защищаются.'
       : lang === 'kk'
-        ? 'lnkmx құпиялылық саясаты: қандай деректер өңделеді және қалай қорғалады.'
-        : 'Privacy policy for lnkmx: what data is processed and how it is protected.';
+        ? 'LinkMAX құпиялылық саясаты: қандай деректер өңделеді және қалай қорғалады.'
+        : 'Privacy policy for LinkMAX: what data is processed and how it is protected.';
 
   const getPrivacyContent = () => {
     if (lang === 'en') {
       return (
         <>
-          <h1 className="text-3xl font-bold mb-6">lnkmx.my Platform Privacy Policy</h1>
+          <h1 className="text-3xl font-bold mb-6">LinkMAX.my Platform Privacy Policy</h1>
           <p className="mb-6 text-muted-foreground">Version: 1.0</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. General Provisions</h2>
-          <p className="mb-2">1.1. This Privacy Policy (hereinafter - "Policy") defines the procedure for processing and protecting personal data when using the lnkmx.my platform (hereinafter - "Platform", "lnkmx.my").</p>
+          <p className="mb-2">1.1. This Privacy Policy (hereinafter - "Policy") defines the procedure for processing and protecting personal data when using the LinkMAX.my platform (hereinafter - "Platform", "LinkMAX.my").</p>
           <p className="mb-2">1.2. The Policy applies to data of Platform Users, as well as data of third parties (leads/clients) that the User collects through pages, forms, and mini CRM (hereinafter - "Client Data/Leads").</p>
           <p className="mb-4">1.3. By using the Platform, the User confirms familiarity and agreement with the Policy (to the extent required by law and product settings).</p>
 
@@ -90,11 +90,11 @@ const Privacy = () => {
     if (lang === 'kk') {
       return (
         <>
-          <h1 className="text-3xl font-bold mb-6">lnkmx.my платформасының құпиялылық саясаты</h1>
+          <h1 className="text-3xl font-bold mb-6">LinkMAX.my платформасының құпиялылық саясаты</h1>
           <p className="mb-6 text-muted-foreground">Нұсқа: 1.0</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Жалпы ережелер</h2>
-          <p className="mb-2">1.1. Осы Құпиялылық саясаты (бұдан әрі - «Саясат») lnkmx.my платформасын (бұдан әрі - «Платформа», «lnkmx.my») пайдалану кезінде дербес деректерді өңдеу және қорғау тәртібін анықтайды.</p>
+          <p className="mb-2">1.1. Осы Құпиялылық саясаты (бұдан әрі - «Саясат») LinkMAX.my платформасын (бұдан әрі - «Платформа», «LinkMAX.my») пайдалану кезінде дербес деректерді өңдеу және қорғау тәртібін анықтайды.</p>
           <p className="mb-2">1.2. Саясат Платформа Пайдаланушыларының деректеріне, сондай-ақ Пайдаланушы беттер, нысандар және mini CRM арқылы жинайтын үшінші тараптардың (лидтердің/клиенттердің) деректеріне (бұдан әрі - «Клиенттік деректер/Лидтер») қолданылады.</p>
           <p className="mb-4">1.3. Платформаны пайдалана отырып, Пайдаланушы Саясатпен танысқанын және келіскенін растайды.</p>
 
@@ -112,11 +112,11 @@ const Privacy = () => {
     // Default: Russian
     return (
       <>
-        <h1 className="text-3xl font-bold mb-6">Политика конфиденциальности платформы lnkmx.my</h1>
+        <h1 className="text-3xl font-bold mb-6">Политика конфиденциальности платформы LinkMAX.my</h1>
         <p className="mb-6 text-muted-foreground">Версия: 1.0</p>
         
         <h2 className="text-2xl font-semibold mt-8 mb-4">1. Общие положения</h2>
-        <p className="mb-2">1.1. Настоящая Политика конфиденциальности (далее - «Политика») определяет порядок обработки и защиты персональных данных при использовании платформы lnkmx.my (далее - «Платформа», «lnkmx.my»).</p>
+        <p className="mb-2">1.1. Настоящая Политика конфиденциальности (далее - «Политика») определяет порядок обработки и защиты персональных данных при использовании платформы LinkMAX.my (далее - «Платформа», «LinkMAX.my»).</p>
         <p className="mb-2">1.2. Политика действует в отношении данных Пользователей Платформы, а также данных третьих лиц (лидов/клиентов), которые Пользователь собирает через страницы, формы и mini CRM (далее - «Клиентские данные/Лиды»).</p>
         <p className="mb-4">1.3. Используя Платформу, Пользователь подтверждает ознакомление и согласие с Политикой (в части, требуемой законом и настройками продукта).</p>
 

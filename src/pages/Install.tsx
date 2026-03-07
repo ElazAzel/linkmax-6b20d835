@@ -21,8 +21,8 @@ export default function Install() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const canonical = `${getAppDomain()}/install`;
-  const seoTitle = t('install.seo.title', 'Install lnkmx');
-  const seoDescription = t('install.seo.description', 'Install lnkmx as a PWA for quick access.');
+  const seoTitle = t('install.seo.title', 'Install LinkMAX');
+  const seoDescription = t('install.seo.description', 'Install LinkMAX as a PWA for quick access.');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [platform, setPlatform] = useState<'ios' | 'android' | 'desktop'>('desktop');
@@ -107,7 +107,7 @@ export default function Install() {
           <div className="h-20 w-20 rounded-2xl bg-primary/10 mx-auto flex items-center justify-center">
             <Download className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold">Установить lnkmx.my</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold">Установить LinkMAX.my</h1>
           <p className="text-muted-foreground text-lg">
             Добавьте приложение на главный экран для лучшего опыта
           </p>
@@ -134,7 +134,7 @@ export default function Install() {
               <div>
                 <h3 className="font-semibold text-lg mb-2">Приложение установлено!</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  lnkmx.my готов к работе. Найдите иконку на главном экране.
+                  LinkMAX.my готов к работе. Найдите иконку на главном экране.
                 </p>
               </div>
               <Button onClick={() => navigate('/dashboard')} className="w-full sm:w-auto">
@@ -148,7 +148,7 @@ export default function Install() {
                 <div className="text-center space-y-4">
                   <h3 className="font-semibold text-lg">Готово к установке</h3>
                   <p className="text-sm text-muted-foreground">
-                    Нажмите кнопку ниже, чтобы установить lnkmx.my на устройство
+                    Нажмите кнопку ниже, чтобы установить LinkMAX.my на устройство
                   </p>
                   <Button onClick={handleInstall} className="w-full" size="lg">
                     <Download className="h-5 w-5 mr-2" />
@@ -205,7 +205,7 @@ export default function Install() {
                   <h3 className="font-semibold text-lg text-center">Инструкция для Desktop</h3>
                   <p className="text-sm text-muted-foreground text-center">
                     В адресной строке браузера найдите иконку установки <Monitor className="inline h-4 w-4" /> 
-                    {' '}или в меню браузера выберите "Установить lnkmx.my"
+                    {' '}или в меню браузера выберите "Установить LinkMAX.my"
                   </p>
                 </div>
               )}

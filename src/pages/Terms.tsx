@@ -13,26 +13,26 @@ const Terms = () => {
   const canonical = `${getAppDomain()}/terms`;
   const seoTitle =
     lang === 'ru'
-      ? 'Пользовательское соглашение — lnkmx'
+      ? 'Пользовательское соглашение — LinkMAX'
       : lang === 'kk'
-        ? 'Пайдаланушы келісімі — lnkmx'
-        : 'Terms of Service — lnkmx';
+        ? 'Пайдаланушы келісімі — LinkMAX'
+        : 'Terms of Service — LinkMAX';
   const seoDescription =
     lang === 'ru'
-      ? 'Условия использования платформы lnkmx: права, обязанности и порядок работы сервиса.'
+      ? 'Условия использования платформы LinkMAX: права, обязанности и порядок работы сервиса.'
       : lang === 'kk'
-        ? 'lnkmx платформасын пайдалану шарттары: құқықтар, міндеттер және қызмет тәртібі.'
-        : 'Terms of Service for lnkmx: user rights, responsibilities, and service usage rules.';
+        ? 'LinkMAX платформасын пайдалану шарттары: құқықтар, міндеттер және қызмет тәртібі.'
+        : 'Terms of Service for LinkMAX: user rights, responsibilities, and service usage rules.';
 
   const getTermsContent = () => {
     if (lang === 'en') {
       return (
         <>
-          <h1 className="text-3xl font-bold mb-6">lnkmx.my Platform User Agreement</h1>
+          <h1 className="text-3xl font-bold mb-6">LinkMAX.my Platform User Agreement</h1>
           <p className="mb-6 text-muted-foreground">Version: 1.0 | Effective: January 5, 2026</p>
           
           <p className="mb-6">
-            The lnkmx.my Platform User Agreement (hereinafter - "Agreement") governs access to and use of the lnkmx.my web platform and related services (hereinafter - "Platform"), including the website, subdomains, PWA, and API. By using the Platform and/or creating an account, the User confirms that they have read and accept this Agreement, the Privacy Policy, and applicable Payment Terms.
+            The LinkMAX.my Platform User Agreement (hereinafter - "Agreement") governs access to and use of the LinkMAX.my web platform and related services (hereinafter - "Platform"), including the website, subdomains, PWA, and API. By using the Platform and/or creating an account, the User confirms that they have read and accept this Agreement, the Privacy Policy, and applicable Payment Terms.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Rights Holder Details</h2>
@@ -42,8 +42,8 @@ const Terms = () => {
           <p className="mb-4">Email: {COMPANY_DETAILS.email}, Phone: {COMPANY_DETAILS.phone}.</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Terms and Definitions</h2>
-          <p className="mb-2">2.1. lnkmx.my - an online platform for creating personal mini-sites (link-in-bio pages/micro-landings), analytics, and lead management, including AI-based features.</p>
-          <p className="mb-2">{`2.2. Platform - the website ${getAppDomain()}, subdomains, API, PWA, and other interfaces for accessing lnkmx.my services.`}</p>
+          <p className="mb-2">2.1. LinkMAX.my - an online platform for creating personal mini-sites (link-in-bio pages/micro-landings), analytics, and lead management, including AI-based features.</p>
+          <p className="mb-2">{`2.2. Platform - the website ${getAppDomain()}, subdomains, API, PWA, and other interfaces for accessing LinkMAX.my services.`}</p>
           <p className="mb-2">2.3. User - a legally capable individual and/or representative of a legal entity/sole proprietor using the Platform.</p>
           <p className="mb-2">2.4. Account - User's account (email/password, social logins, Telegram ID, etc.) for authentication.</p>
           <p className="mb-2">2.5. User Content - any materials posted by the User (texts, images, videos, links, products, forms, files, etc.).</p>
@@ -60,7 +60,7 @@ const Terms = () => {
           <p className="mb-2">4.1. Registration is possible via email/password and/or third-party login methods (e.g., Google/Apple) and/or Telegram verification (if available).</p>
           <p className="mb-2">4.2. The User agrees to provide accurate information and keep it up to date.</p>
           <p className="mb-2">4.3. The User is responsible for the security of access credentials and all actions performed in the Account.</p>
-          <p className="mb-4">4.4. Certain features (e.g., notifications, mini CRM) may require linking a Telegram account through the official lnkmx.my bot (if the feature is included in the product).</p>
+          <p className="mb-4">4.4. Certain features (e.g., notifications, mini CRM) may require linking a Telegram account through the official LinkMAX.my bot (if the feature is included in the product).</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">5. Usage Rules and Prohibitions</h2>
           <p className="mb-2">5.1. The User agrees to use the Platform only legally and not to violate third-party rights.</p>
@@ -107,11 +107,11 @@ const Terms = () => {
     if (lang === 'kk') {
       return (
         <>
-          <h1 className="text-3xl font-bold mb-6">lnkmx.my платформасының пайдаланушы келісімі</h1>
+          <h1 className="text-3xl font-bold mb-6">LinkMAX.my платформасының пайдаланушы келісімі</h1>
           <p className="mb-6 text-muted-foreground">Нұсқа: 1.0 | Күшіне енеді: 2026 жылғы 5 қаңтар</p>
           
           <p className="mb-6">
-            lnkmx.my платформасының пайдаланушы келісімі (бұдан әрі - «Келісім») lnkmx.my веб-платформасына және байланысты қызметтерге (бұдан әрі - «Платформа»), соның ішінде веб-сайтқа, қосалқы домендерге, PWA және API-ға қол жеткізу мен пайдалану тәртібін реттейді. Платформаны пайдалана бастау және/немесе аккаунт жасау арқылы Пайдаланушы осы Келісімді, Құпиялылық саясатын және қолданылатын Төлем шарттарын оқығанын және қабылдағанын растайды.
+            LinkMAX.my платформасының пайдаланушы келісімі (бұдан әрі - «Келісім») LinkMAX.my веб-платформасына және байланысты қызметтерге (бұдан әрі - «Платформа»), соның ішінде веб-сайтқа, қосалқы домендерге, PWA және API-ға қол жеткізу мен пайдалану тәртібін реттейді. Платформаны пайдалана бастау және/немесе аккаунт жасау арқылы Пайдаланушы осы Келісімді, Құпиялылық саясатын және қолданылатын Төлем шарттарын оқығанын және қабылдағанын растайды.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Құқық иесінің деректемелері</h2>
@@ -129,11 +129,11 @@ const Terms = () => {
     // Default: Russian
     return (
       <>
-        <h1 className="text-3xl font-bold mb-6">Пользовательское соглашение платформы lnkmx.my</h1>
+        <h1 className="text-3xl font-bold mb-6">Пользовательское соглашение платформы LinkMAX.my</h1>
         <p className="mb-6 text-muted-foreground">Версия: 1.0 | Дата вступления в силу: 05.01.2026</p>
         
         <p className="mb-6">
-          Пользовательское соглашение платформы lnkmx.my (далее - «Соглашение») регулирует порядок доступа и использования веб-платформы lnkmx.my и связанных сервисов (далее - «Платформа»), включая сайт, поддомены, PWA и API. Начиная использование Платформы и/или создавая аккаунт, Пользователь подтверждает, что прочитал и принимает настоящее Соглашение, Политику конфиденциальности и применимые условия оплаты (Payment Terms).
+          Пользовательское соглашение платформы LinkMAX.my (далее - «Соглашение») регулирует порядок доступа и использования веб-платформы LinkMAX.my и связанных сервисов (далее - «Платформа»), включая сайт, поддомены, PWA и API. Начиная использование Платформы и/или создавая аккаунт, Пользователь подтверждает, что прочитал и принимает настоящее Соглашение, Политику конфиденциальности и применимые условия оплаты (Payment Terms).
         </p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">1. Реквизиты правообладателя</h2>
@@ -143,8 +143,8 @@ const Terms = () => {
         <p className="mb-4">Email: {COMPANY_DETAILS.email}, телефон: {COMPANY_DETAILS.phone}.</p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">2. Термины и определения</h2>
-        <p className="mb-2">2.1. lnkmx.my - онлайн-платформа для создания персональных мини-сайтов (link-in-bio страниц/микролендингов), аналитики и управления лидами, включая функции на базе ИИ.</p>
-        <p className="mb-2">{`2.2. Платформа - сайт ${getAppDomain()}, поддомены, API, PWA и иные интерфейсы доступа к сервисам lnkmx.my.`}</p>
+        <p className="mb-2">2.1. LinkMAX.my - онлайн-платформа для создания персональных мини-сайтов (link-in-bio страниц/микролендингов), аналитики и управления лидами, включая функции на базе ИИ.</p>
+        <p className="mb-2">{`2.2. Платформа - сайт ${getAppDomain()}, поддомены, API, PWA и иные интерфейсы доступа к сервисам LinkMAX.my.`}</p>
         <p className="mb-2">2.3. Пользователь - дееспособное физическое лицо и/или представитель юрлица/ИП, использующий Платформу.</p>
         <p className="mb-2">2.4. Аккаунт - учётная запись Пользователя (email/пароль, соц. логины, Telegram ID и пр.) для аутентификации.</p>
         <p className="mb-2">2.5. Контент Пользователя - любые материалы, размещаемые Пользователем (тексты, изображения, видео, ссылки, товары, формы, файлы и др.).</p>
@@ -161,7 +161,7 @@ const Terms = () => {
         <p className="mb-2">4.1. Регистрация возможна через email/пароль и/или сторонние методы входа (например, Google/Apple) и/или Telegram верификацию (если доступна).</p>
         <p className="mb-2">4.2. Пользователь обязуется указывать достоверные данные и поддерживать их актуальность.</p>
         <p className="mb-2">4.3. Пользователь несёт ответственность за сохранность данных доступа и за все действия, совершенные в Аккаунте.</p>
-        <p className="mb-4">4.4. Для отдельных функций (например, уведомления, mini CRM) может требоваться привязка Telegram аккаунта через официального бота lnkmx.my (если функция включена в продукт).</p>
+        <p className="mb-4">4.4. Для отдельных функций (например, уведомления, mini CRM) может требоваться привязка Telegram аккаунта через официального бота LinkMAX.my (если функция включена в продукт).</p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-4">5. Правила использования и запреты</h2>
         <p className="mb-2">5.1. Пользователь обязуется использовать Платформу только законным способом и не нарушать права третьих лиц.</p>

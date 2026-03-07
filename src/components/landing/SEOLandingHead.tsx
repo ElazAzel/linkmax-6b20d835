@@ -13,15 +13,15 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const isRussian = currentLanguage === 'ru';
     const isKazakh = currentLanguage === 'kk';
     const locale = isRussian ? 'ru_RU' : isKazakh ? 'kk_KZ' : 'en_US';
-    
+
     // New positioning: Micro-Business OS - page builder + CRM + analytics
     const title = t(
       'seo.landing.title',
       isRussian
-        ? 'lnkmx - операционная система для микробизнеса | Конструктор страниц + CRM'
+        ? 'LinkMAX - операционная система для микробизнеса | Конструктор страниц + CRM'
         : isKazakh
-          ? 'lnkmx - микробизнеске арналған операциялық жүйе | Бет конструкторы + CRM'
-          : 'lnkmx - The Micro-Business OS | Page Builder + CRM + Analytics'
+          ? 'LinkMAX - микробизнеске арналған операциялық жүйе | Бет конструкторы + CRM'
+          : 'LinkMAX - The Micro-Business OS | Page Builder + CRM + Analytics'
     );
     document.title = title;
 
@@ -39,7 +39,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
 
     // Helper to create link tag
     const setLinkTag = (rel: string, href: string, hreflang?: string) => {
-      const selector = hreflang 
+      const selector = hreflang
         ? `link[rel="${rel}"][hreflang="${hreflang}"]`
         : `link[rel="${rel}"]:not([hreflang])`;
       let link = document.querySelector(selector) as HTMLLinkElement;
@@ -56,10 +56,10 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const description = t(
       'seo.landing.description',
       isRussian
-        ? 'lnkmx - операционная система для микробизнеса. Конструктор страниц, мини-CRM, аналитика и AI-генерация. Создайте сайт, принимайте заявки и управляйте клиентами в одном месте.'
+        ? 'LinkMAX - операционная система для микробизнеса. Конструктор страниц, мини-CRM, аналитика и AI-генерация. Создайте сайт, принимайте заявки и управляйте клиентами в одном месте.'
         : isKazakh
-          ? 'lnkmx - микробизнеске арналған операциялық жүйе. Бет конструкторы, мини-CRM, аналитика және AI. Сайт жасаңыз, өтінімдер алыңыз және клиенттерді бір жерде басқарыңыз.'
-          : 'lnkmx - The Micro-Business OS. Page builder, mini-CRM, analytics, and AI generation. Build your site, capture leads, and manage clients in one place.'
+          ? 'LinkMAX - микробизнеске арналған операциялық жүйе. Бет конструкторы, мини-CRM, аналитика және AI. Сайт жасаңыз, өтінімдер алыңыз және клиенттерді бір жерде басқарыңыз.'
+          : 'LinkMAX - The Micro-Business OS. Page builder, mini-CRM, analytics, and AI generation. Build your site, capture leads, and manage clients in one place.'
     );
     setMetaTag('description', description);
 
@@ -79,18 +79,18 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     setMetaTag('googlebot', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
     setMetaTag('bingbot', 'index, follow');
 
-    // Author and publisher - use lnkmx branding
-    setMetaTag('author', 'lnkmx');
-    setMetaTag('publisher', 'lnkmx');
-    setMetaTag('application-name', 'lnkmx');
-    
+    // Author and publisher - use LinkMAX branding
+    setMetaTag('author', 'LinkMAX');
+    setMetaTag('publisher', 'LinkMAX');
+    setMetaTag('application-name', 'LinkMAX');
+
     // Additional SEO meta tags
     setMetaTag('theme-color', '#0080ff');
     setMetaTag('format-detection', 'telephone=no');
     setMetaTag('mobile-web-app-capable', 'yes');
     setMetaTag('apple-mobile-web-app-capable', 'yes');
     setMetaTag('apple-mobile-web-app-status-bar-style', 'default');
-    setMetaTag('apple-mobile-web-app-title', 'lnkmx');
+    setMetaTag('apple-mobile-web-app-title', 'LinkMAX');
 
     // Font preload for performance
     const preloadFont = document.querySelector('link[rel="preload"][as="font"]');
@@ -118,40 +118,40 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
 
     // OG Image
     const ogImageUrl = `${getAppDomain()}/og-image.png`;
-    
+
     // Open Graph optimized for social sharing
     setMetaTag('og:type', 'website', true);
     setMetaTag('og:url', `${getAppDomain()}/`, true);
     setMetaTag('og:title', title, true);
     setMetaTag('og:description', description, true);
-    setMetaTag('og:site_name', 'lnkmx', true);
+    setMetaTag('og:site_name', 'LinkMAX', true);
     setMetaTag('og:locale', locale, true);
     setMetaTag('og:locale:alternate', isRussian ? 'en_US' : 'ru_RU', true);
-    
+
     // OG Image with proper dimensions
     setMetaTag('og:image', ogImageUrl, true);
     setMetaTag('og:image:secure_url', ogImageUrl, true);
     setMetaTag('og:image:type', 'image/png', true);
     setMetaTag('og:image:width', '1200', true);
     setMetaTag('og:image:height', '630', true);
-    setMetaTag('og:image:alt', isRussian 
-      ? 'lnkmx - операционная система для микробизнеса' 
-      : isKazakh 
-        ? 'lnkmx - микробизнеске арналған ОЖ'
-        : 'lnkmx - The Micro-Business OS', true);
+    setMetaTag('og:image:alt', isRussian
+      ? 'LinkMAX - операционная система для микробизнеса'
+      : isKazakh
+        ? 'LinkMAX - микробизнеске арналған ОЖ'
+        : 'LinkMAX - The Micro-Business OS', true);
 
     // Twitter Cards
     setMetaTag('twitter:card', 'summary_large_image');
     setMetaTag('twitter:title', title);
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', ogImageUrl);
-    setMetaTag('twitter:image:alt', isRussian 
-      ? 'lnkmx - операционная система для микробизнеса' 
-      : isKazakh 
-        ? 'lnkmx - микробизнеске арналған ОЖ'
-        : 'lnkmx - The Micro-Business OS');
-    setMetaTag('twitter:site', '@lnkmx_app');
-    setMetaTag('twitter:creator', '@lnkmx_app');
+    setMetaTag('twitter:image:alt', isRussian
+      ? 'LinkMAX - операционная система для микробизнеса'
+      : isKazakh
+        ? 'LinkMAX - микробизнеске арналған ОЖ'
+        : 'LinkMAX - The Micro-Business OS');
+    setMetaTag('twitter:site', '@LinkMAX_app');
+    setMetaTag('twitter:creator', '@LinkMAX_app');
 
     // JSON-LD Structured Data
     const existingJsonLd = document.querySelectorAll('script[type="application/ld+json"].seo-schema');
@@ -163,8 +163,8 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       '@id': `${getAppDomain()}/#organization`,
-      name: 'lnkmx',
-      alternateName: ['lnkmx.my', 'The Micro-Business OS'],
+      name: 'LinkMAX',
+      alternateName: ['LinkMAX.my', 'The Micro-Business OS'],
       url: `${getAppDomain()}/`,
       logo: {
         '@type': 'ImageObject',
@@ -172,11 +172,11 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         width: 512,
         height: 512,
       },
-      sameAs: ['https://t.me/lnkmx_app'],
+      sameAs: ['https://t.me/LinkMAX_app'],
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer support',
-        email: 'admin@lnkmx.my',
+        email: 'admin@LinkMAX.my',
         availableLanguage: ['ru', 'en', 'kk'],
       },
     };
@@ -185,7 +185,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       '@id': `${getAppDomain()}/#website`,
-      name: 'lnkmx - The Micro-Business OS',
+      name: 'LinkMAX - The Micro-Business OS',
       url: `${getAppDomain()}/`,
       inLanguage: ['ru', 'en', 'kk'],
       potentialAction: {
@@ -205,7 +205,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const softwareAppSchema = {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      name: 'lnkmx - The Micro-Business OS',
+      name: 'LinkMAX - The Micro-Business OS',
       url: `${getAppDomain()}/`,
       applicationCategory: 'BusinessApplication',
       applicationSubCategory: [
@@ -217,23 +217,23 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
       operatingSystem: 'Web',
       inLanguage: pageLanguage,
       description: description,
-      featureList: isRussian 
+      featureList: isRussian
         ? [
-            'Конструктор страниц с AI',
-            'Мини-CRM для управления заявками',
-            'Аналитика кликов и конверсий',
-            'Онлайн-бронирование',
-            'Telegram-уведомления',
-            '25+ готовых блоков',
-          ]
+          'Конструктор страниц с AI',
+          'Мини-CRM для управления заявками',
+          'Аналитика кликов и конверсий',
+          'Онлайн-бронирование',
+          'Telegram-уведомления',
+          '25+ готовых блоков',
+        ]
         : [
-            'AI-powered page builder',
-            'Mini-CRM for lead management',
-            'Click and conversion analytics',
-            'Online booking system',
-            'Telegram notifications',
-            '25+ ready-to-use blocks',
-          ],
+          'AI-powered page builder',
+          'Mini-CRM for lead management',
+          'Click and conversion analytics',
+          'Online booking system',
+          'Telegram notifications',
+          '25+ ready-to-use blocks',
+        ],
       offers: [
         {
           '@type': 'Offer',
@@ -291,9 +291,9 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
     const serviceSchema = {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: isRussian 
-        ? 'lnkmx - Операционная система для микробизнеса'
-        : 'lnkmx - The Micro-Business Operating System',
+      name: isRussian
+        ? 'LinkMAX - Операционная система для микробизнеса'
+        : 'LinkMAX - The Micro-Business Operating System',
       serviceType: [
         isRussian ? 'Конструктор сайтов' : 'Website Builder',
         isRussian ? 'CRM система' : 'CRM System',
@@ -371,7 +371,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'lnkmx',
+          name: 'LinkMAX',
           item: `${getAppDomain()}/`,
         },
         {
@@ -409,7 +409,7 @@ export function SEOLandingHead({ currentLanguage }: SEOLandingHeadProps) {
 
     // Cleanup
     return () => {
-      document.title = 'lnkmx - The Micro-Business OS';
+      document.title = 'LinkMAX - The Micro-Business OS';
       const schemasToRemove = document.querySelectorAll('script.seo-schema');
       schemasToRemove.forEach(el => el.remove());
     };

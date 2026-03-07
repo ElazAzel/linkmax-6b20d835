@@ -27,7 +27,7 @@ export const DEFAULT_THEME: PageTheme = {
 
 // Default SEO settings
 export const DEFAULT_SEO = {
-  title: 'My lnkmx.my Page',
+  title: 'My LinkMAX.my Page',
   description: 'Check out my links',
   keywords: [] as string[],
 };
@@ -45,9 +45,9 @@ export { PREMIUM_BLOCK_TYPES } from '@/lib/blocks/block-registry';
 
 // App config
 export const APP_CONFIG = {
-  name: 'lnkmx.my',
+  name: 'LinkMAX.my',
   whatsappNumber: '77051097664',
-  whatsappMessage: 'Hi, I want to purchase a premium lnkmx.my',
+  whatsappMessage: 'Hi, I want to purchase a premium LinkMAX.my',
   autoSaveDebounce: 2000,
   undoTimeout: 5000,
   maxFileSize: 15 * 1024 * 1024, // 15MB
