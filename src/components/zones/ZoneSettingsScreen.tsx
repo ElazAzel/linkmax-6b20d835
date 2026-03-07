@@ -28,6 +28,8 @@ import { toast } from 'sonner';
 import type { Zone, ZoneMember, ZoneInvite, ZoneMemberRole } from '@/types/zones';
 import { ZONE_PLANS, getPlanByCode, getMemberLimitFromPlan } from '@/types/zones';
 import { ZonePlanSelector } from './ZonePlanSelector';
+import { ZonePipelineSettings } from './settings/ZonePipelineSettings';
+import Layers from 'lucide-react/dist/esm/icons/layers';
 
 interface ZoneSettingsScreenProps {
   zone: Zone;
@@ -198,9 +200,10 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       <h1 className="text-2xl font-bold">{zone.name} — {t('zones.settings.title', 'Settings')}</h1>
 
       <Tabs defaultValue="members">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="members" className="gap-1"><Users className="h-4 w-4" />{t('zones.settings.members', 'Members')}</TabsTrigger>
           <TabsTrigger value="billing" className="gap-1"><CreditCard className="h-4 w-4" />{t('zones.settings.billing', 'Billing')}</TabsTrigger>
+          <TabsTrigger value="pipelines" className="gap-1"><Layers className="h-4 w-4" />{t('zones.settings.pipelinesTab', 'Воронки')}</TabsTrigger>
           <TabsTrigger value="general" className="gap-1"><Shield className="h-4 w-4" />{t('zones.settings.general', 'General')}</TabsTrigger>
         </TabsList>
 
@@ -348,6 +351,19 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
                 <p className="text-sm font-medium mb-3">{t('zones.settings.managePlan', 'Upgrade or Change Plan')}</p>
                 <ZonePlanSelector zone={zone} onRefetch={onRefetch} />
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Pipelines Tab */}
+        <TabsContent value="pipelines" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">{t('zones.settings.pipelines.title', 'Управление воронками продаж')}</CardTitle>
+              <CardDescription>{t('zones.settings.pipelines.desc', 'Создавайте и настраивайте воронки для разных процессов.')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ZonePipelineSettings zoneId={zone.id} />
             </CardContent>
           </Card>
         </TabsContent>

@@ -3,7 +3,7 @@
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import type { ZoneDeal, ZoneDealStage, ZoneDealActivity } from '@/types/zones';
+import type { ZoneDeal, ZoneDealStage, ZoneDealActivity, ZonePipeline } from '@/types/zones';
 
 // ─── Query Keys ───
 export const zoneDealsKeys = {
@@ -13,6 +13,7 @@ export const zoneDealsKeys = {
   activities: (zoneId: string, dealId: string) => ['zone-deal-activities', zoneId, dealId] as const,
   dealProducts: (zoneId: string, dealId: string) => ['zone-deal-products', zoneId, dealId] as const,
   products: (zoneId: string) => ['zone-products', zoneId] as const,
+  pipelines: (zoneId: string) => ['zone-pipelines', zoneId] as const,
 };
 
 // ─── Fetch functions ───
@@ -24,6 +25,16 @@ async function fetchStages(zoneId: string): Promise<ZoneDealStage[]> {
     .order('order_index');
   if (error) throw error;
   return (data || []) as unknown as ZoneDealStage[];
+}
+
+async function fetchPipelines(zoneId: string): Promise<ZonePipeline[]> {
+  const { data, error } = await (supabase
+    .from('zone_pipelines' as any)
+    .select('*')
+    .eq('zone_id', zoneId)
+    .order('order_index') as any);
+  if (error) throw error;
+  return (data || []) as ZonePipeline[];
 }
 
 async function fetchDeals(zoneId: string): Promise<ZoneDeal[]> {
@@ -75,6 +86,13 @@ export function useZoneDeals(zoneId: string | null) {
   const queryClient = useQueryClient();
   const safeZoneId = zoneId || '';
 
+  const { data: pipelines = [] } = useQuery({
+    queryKey: zoneDealsKeys.pipelines(safeZoneId),
+    queryFn: () => fetchPipelines(safeZoneId),
+    enabled: !!zoneId,
+    staleTime: 60_000,
+  });
+
   const { data: stages = [] } = useQuery({
     queryKey: zoneDealsKeys.stages(safeZoneId),
     queryFn: () => fetchStages(safeZoneId),
@@ -114,6 +132,38 @@ export function useZoneDeals(zoneId: string | null) {
       return data as unknown as ZoneDeal;
     },
     onSuccess: invalidateDeals,
+  });
+
+  const createPipelineMutation = useMutation({
+    mutationFn: async (pipeline: Partial<ZonePipeline>) => {
+      const { data, error } = await (supabase
+        .from('zone_pipelines' as any)
+        .insert({ ...pipeline, zone_id: zoneId } as any)
+        .select()
+        .single() as any);
+      if (error) throw error;
+      return data as ZonePipeline;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
+  });
+
+  const updatePipelineMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZonePipeline> }) => {
+      const { error } = await (supabase.from('zone_pipelines' as any).update(updates as any).eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
+  });
+
+  const deletePipelineMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase.from('zone_pipelines' as any).delete().eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) });
+      invalidateDeals();
+    },
   });
 
   const updateDealMutation = useMutation({
@@ -181,6 +231,7 @@ export function useZoneDeals(zoneId: string | null) {
   });
 
   return {
+    pipelines,
     deals,
     stages,
     activities,
@@ -191,7 +242,11 @@ export function useZoneDeals(zoneId: string | null) {
     addActivity: (dealId: string, type: string, summary: string) => addActivityMutation.mutateAsync({ dealId, type, summary }),
     deleteDeal: (id: string) => deleteMutation.mutateAsync(id),
     refetch: invalidateDeals,
+    refetchPipelines: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
     refetchStages: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId) }),
+    createPipeline: (pipeline: Partial<ZonePipeline>) => createPipelineMutation.mutateAsync(pipeline),
+    updatePipeline: (id: string, updates: Partial<ZonePipeline>) => updatePipelineMutation.mutateAsync({ id, updates }),
+    deletePipeline: (id: string) => deletePipelineMutation.mutateAsync(id),
   };
 }
 

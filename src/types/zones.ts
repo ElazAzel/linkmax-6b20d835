@@ -122,9 +122,19 @@ export interface ZoneContactNote {
   created_at: string;
 }
 
+export interface ZonePipeline {
+  id: string;
+  zone_id: string;
+  name: string;
+  is_default: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
 export interface ZoneDealStage {
   id: string;
   zone_id: string;
+  pipeline_id: string;
   name: string;
   color: string;
   order_index: number;
@@ -135,6 +145,7 @@ export interface ZoneDeal {
   id: string;
   zone_id: string;
   contact_id: string | null;
+  pipeline_id: string | null;
   title: string;
   stage_id: string | null;
   value_amount: number;
@@ -148,6 +159,7 @@ export interface ZoneDeal {
   created_at: string;
   updated_at: string;
   // Joined
+  pipeline?: ZonePipeline;
   contact?: ZoneContact;
   stage?: ZoneDealStage;
   products?: ZoneDealProduct[];
@@ -278,7 +290,7 @@ export interface ZoneDocument {
   created_at: string;
   updated_at: string;
   created_by: string | null;
-  
+
   // Joined
   template?: ZoneDocumentTemplate;
   contact?: ZoneContact;

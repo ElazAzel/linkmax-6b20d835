@@ -45,7 +45,25 @@ interface DealsFilterPreset {
 export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDealsScreenProps) {
   const { t } = useTranslation();
   const { members } = useZoneContext();
-  const { deals, stages, loading, createDeal, updateDeal, moveDealToStage, addActivity } = useZoneDeals(zoneId);
+  const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity } = useZoneDeals(zoneId);
+  const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
+
+  useEffect(() => {
+    if (!selectedPipelineId && pipelines.length > 0) {
+      const def = pipelines.find(p => p.is_default) || pipelines[0];
+      if (def) setSelectedPipelineId(def.id);
+    }
+  }, [pipelines, selectedPipelineId]);
+
+  const currentStages = useMemo(() => {
+    if (!selectedPipelineId) return stages;
+    return stages.filter(s => s.pipeline_id === selectedPipelineId);
+  }, [stages, selectedPipelineId]);
+
+  const currentDeals = useMemo(() => {
+    if (!selectedPipelineId) return deals;
+    return deals.filter(d => d.pipeline_id === selectedPipelineId || !d.pipeline_id);
+  }, [deals, selectedPipelineId]);
   const { contacts } = useZoneContacts(zoneId);
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedDeal, setSelectedDeal] = useState<ZoneDeal | null>(null);
@@ -146,8 +164,8 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   // Group deals by stage (with all filters)
   const dealsByStage = useMemo(() => {
     const map = new Map<string, ZoneDeal[]>();
-    stages.forEach((s) => map.set(s.id, []));
-    const openDeals = deals.filter((d) => {
+    currentStages.forEach((s) => map.set(s.id, []));
+    const openDeals = currentDeals.filter((d) => {
       if (d.status !== 'open') return false;
       if (filterOverdue && (!d.next_step_at || new Date(d.next_step_at) >= new Date())) return false;
       if (filterAssignee && d.assigned_to !== filterAssignee) return false;
@@ -161,14 +179,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     openDeals.forEach((d) => {
       if (d.stage_id && map.has(d.stage_id)) {
         map.get(d.stage_id)!.push(d);
-      } else if (stages.length > 0) {
-        const first = stages[0];
+      } else if (currentStages.length > 0) {
+        const first = currentStages[0];
         if (!map.has(first.id)) map.set(first.id, []);
         map.get(first.id)!.push(d);
       }
     });
     return map;
-  }, [deals, stages, filterOverdue, filterAssignee, filterDateFrom, filterDateTo, filterValueMin, filterValueMax]);
+  }, [currentDeals, currentStages, filterOverdue, filterAssignee, filterDateFrom, filterDateTo, filterValueMin, filterValueMax]);
 
   const handleDragStart = useCallback((event: any) => {
     const deal = event.active.data.current?.deal as ZoneDeal | undefined;
@@ -182,10 +200,10 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
     const dealId = active.id as string;
     const targetStageId = over.id as string;
-    const deal = deals.find((d) => d.id === dealId);
+    const deal = currentDeals.find((d) => d.id === dealId);
     if (!deal || deal.stage_id === targetStageId) return;
 
-    const lastStage = stages.length > 0 ? stages[stages.length - 1] : null;
+    const lastStage = currentStages.length > 0 ? currentStages[currentStages.length - 1] : null;
     const isLastStage = lastStage && targetStageId === lastStage.id;
 
     if (isLastStage) {
@@ -195,14 +213,14 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
 
     try {
       await moveDealToStage(dealId, targetStageId);
-      const stage = stages.find((s) => s.id === targetStageId);
+      const stage = currentStages.find((s) => s.id === targetStageId);
       if (stage) {
         await addActivity(dealId, 'stage_change', `Moved to ${stage.name}`);
       }
     } catch (err: any) {
       toast.error(err.message);
     }
-  }, [deals, stages, moveDealToStage, addActivity]);
+  }, [currentDeals, currentStages, moveDealToStage, addActivity]);
 
   const handleConfirmWon = useCallback(async () => {
     if (!pendingWonLost) return;
@@ -237,10 +255,11 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const handleCreate = async () => {
     if (!newDeal.title.trim()) return;
     try {
-      const defaultStage = stages.find((s) => s.is_default) || stages[0];
+      const defaultStage = currentStages.find((s) => s.is_default) || currentStages[0];
       await createDeal({
         title: newDeal.title,
         contact_id: newDeal.contact_id || null,
+        pipeline_id: selectedPipelineId || null,
         value_amount: newDeal.value_amount,
         next_step: newDeal.next_step || null,
         stage_id: defaultStage?.id || null,
@@ -255,11 +274,10 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     }
   };
 
-  // Keep selectedDeal in sync with latest data
   const currentSelectedDeal = useMemo(() => {
     if (!selectedDeal) return null;
-    return deals.find((d) => d.id === selectedDeal.id) || selectedDeal;
-  }, [selectedDeal, deals]);
+    return currentDeals.find((d) => d.id === selectedDeal.id) || selectedDeal;
+  }, [selectedDeal, currentDeals]);
 
   if (loading) {
     return (
@@ -277,7 +295,21 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       <div className="p-4 md:p-6 space-y-4 flex-1 overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <h1 className="text-2xl font-bold">{t('zones.deals.title', 'Deals Pipeline')}</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold">{t('zones.deals.title', 'Deals Pipeline')}</h1>
+            {pipelines.length > 0 && (
+              <Select value={selectedPipelineId} onValueChange={setSelectedPipelineId}>
+                <SelectTrigger className="w-[200px] h-9">
+                  <SelectValue placeholder="Выберите воронку" />
+                </SelectTrigger>
+                <SelectContent>
+                  {pipelines.map(p => (
+                    <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
           <div className="flex gap-2 flex-wrap items-center">
             <Popover open={filterOpen} onOpenChange={setFilterOpen}>
               <PopoverTrigger asChild>
@@ -442,23 +474,23 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
         {/* Summary stats */}
         <div className="flex gap-3 flex-wrap">
           <Badge variant="outline" className="text-sm py-1 px-3">
-            {deals.filter((d) => d.status === 'open').length} {t('zones.deals.open', 'open')}
+            {currentDeals.filter((d) => d.status === 'open').length} {t('zones.deals.open', 'open')}
           </Badge>
           <Badge variant="outline" className="text-sm py-1 px-3 border-green-500/30 text-green-600">
-            {deals.filter((d) => d.status === 'won').length} {t('zones.deals.won', 'won')}
+            {currentDeals.filter((d) => d.status === 'won').length} {t('zones.deals.won', 'won')}
           </Badge>
           <Badge variant="outline" className="text-sm py-1 px-3 border-red-500/30 text-red-600">
-            {deals.filter((d) => d.status === 'lost').length} {t('zones.deals.lost', 'lost')}
+            {currentDeals.filter((d) => d.status === 'lost').length} {t('zones.deals.lost', 'lost')}
           </Badge>
           <Badge variant="outline" className="text-sm py-1 px-3 text-primary">
-            {deals
+            {currentDeals
               .filter((d) => d.status === 'open')
               .reduce((sum, d) => sum + (d.value_amount || 0), 0)
               .toLocaleString()}{' '}
             KZT
           </Badge>
         </div>
-        {deals.filter((d) => d.status === 'open').length === 0 && (
+        {currentDeals.filter((d) => d.status === 'open').length === 0 && (
           <p className="text-sm text-muted-foreground mt-2">
             {t('phaseB.whyLnkmx.emptyDeals', 'CRM за 15 минут — без внедрения. Добавьте первую сделку.')}
           </p>
@@ -467,7 +499,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
         {/* Kanban Board with DnD */}
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
           <div className="flex gap-4 overflow-x-auto pb-4 min-h-[360px] md:min-h-[420px]">
-            {stages.map((stage) => (
+            {currentStages.map((stage) => (
               <DealKanbanColumn
                 key={stage.id}
                 stage={stage}
@@ -572,7 +604,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       {/* Deal Detail Sheet */}
       <DealDetailSheet
         deal={currentSelectedDeal}
-        stages={stages}
+        stages={currentStages}
         open={!!selectedDeal}
         onOpenChange={(open) => !open && setSelectedDeal(null)}
         onMoveDealToStage={moveDealToStage}
