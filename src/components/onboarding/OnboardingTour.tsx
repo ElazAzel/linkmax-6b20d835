@@ -156,8 +156,8 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-muted-foreground">{step.description}</p>
+              <h3 className="text-lg font-semibold mb-2">{t(step.titleKey)}</h3>
+              <p className="text-sm text-muted-foreground">{t(step.descKey)}</p>
             </div>
             <Button
               variant="ghost"
