@@ -5703,5 +5703,16 @@
     "back": "Back",
     "next": "Next",
     "start": "Start"
+  },
+  "home": {
+    "incoming": {
+      "title": "Incoming",
+      "empty": "No incoming yet",
+      "emptyHint": "Share your page to get the first leads",
+      "share": "Share",
+      "viewAll": "All",
+      "lead": "Lead",
+      "booking": "Booking"
+    }
   }
 }
