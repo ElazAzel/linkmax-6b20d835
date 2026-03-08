@@ -349,14 +349,37 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const jsonLd = buildProfileSchemaGraph(page, blocks, services, faqItems, socialLinks, knowsAbout, lang);
   const location = page.city || extractLocationFromBlocks(blocks, null);
 
-  // Services HTML with child page links
+  // Services HTML with child page links — uses service_slugs mapping
   let servicesHtml = '';
   if (services.length > 0) {
     const svcLabel = lang === 'ru' ? 'Услуги' : lang === 'kk' ? 'Қызметтер' : 'Services';
     servicesHtml = `<section id="services"><h2>${svcLabel}</h2><ul>\n`;
+    
+    // Build a lookup from item name to slug via service_slugs
+    const slugsByTitle: Map<string, string> = new Map();
+    const activeStates: Map<string, string> = new Map();
+    const svcSlugs = (page as PageData).service_slugs;
+    if (svcSlugs && typeof svcSlugs === 'object') {
+      for (const [, entry] of Object.entries(svcSlugs)) {
+        if (entry && typeof entry === 'object' && entry.slug && entry.title) {
+          slugsByTitle.set(entry.title, entry.slug);
+          activeStates.set(entry.slug, entry.state || 'active');
+        }
+      }
+    }
+    
     for (const s of services) {
-      const serviceSlug = s.name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
-      const hasChildPage = s.name.length > 0 && ((s.description && s.description.length >= 30) || s.price);
+      // Try to find slug from service_slugs mapping first, then legacy slugify
+      let serviceSlug = slugsByTitle.get(s.name);
+      let isActive = serviceSlug ? activeStates.get(serviceSlug) === 'active' : false;
+      
+      if (!serviceSlug) {
+        // Legacy fallback for pages not yet re-saved
+        serviceSlug = s.name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
+        isActive = s.name.length > 0 && ((s.description && s.description.length >= 30) || !!s.price);
+      }
+      
+      const hasChildPage = isActive;
       servicesHtml += `<li itemscope itemtype="https://schema.org/Service">
         <strong itemprop="name">${hasChildPage ? `<a href="${BASE_URL}/${slug}/services/${serviceSlug}">${escapeHtml(s.name)}</a>` : escapeHtml(s.name)}</strong>
         ${s.description ? `<p itemprop="description">${escapeHtml(s.description)}</p>` : ''}
