@@ -171,7 +171,7 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
 
           {/* Progress dots */}
           <div className="flex items-center justify-center gap-1.5">
-            {steps.map((_, index) => (
+            {stepDefs.map((_, index) => (
               <div
                 key={index}
                 className={cn(
