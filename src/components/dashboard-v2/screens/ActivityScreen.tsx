@@ -306,7 +306,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                         <div className="space-y-2">
                           {dateLeads.map((lead) => (
                             <motion.div key={lead.id} variants={itemVariants}>
-                              <LeadCard lead={lead} onClick={() => setSelectedLead(lead)} />
+                              <LeadCard lead={lead} onClick={() => setSelectedLead(lead)} onQuickReply={quickReply} />
                             </motion.div>
                           ))}
                         </div>
