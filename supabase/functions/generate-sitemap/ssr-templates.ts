@@ -530,4 +530,157 @@ export function buildGalleryHtml(lang: LanguageKey, baseUrl: string, items: Gall
 </html>`;
 }
 
-export { LANDING_CONTENT, GALLERY_CONTENT };
+// ============ MARKETING PAGE CONTENT ============
+
+type MarketingPageContent = {
+  title: string;
+  description: string;
+  h1: string;
+  body: string;
+};
+
+const MARKETING_PAGES: Record<string, Record<LanguageKey, MarketingPageContent>> = {
+  pricing: {
+    ru: {
+      title: 'Тарифы LinkMAX — бесплатный и Pro планы',
+      description: 'Сравните тарифы LinkMAX: бесплатный план с базовыми функциями и Pro с расширенной аналитикой, CRM и премиум-блоками.',
+      h1: 'Тарифы LinkMAX',
+      body: 'LinkMAX предлагает гибкие тарифы для любого этапа бизнеса. Бесплатный план включает конструктор страниц, базовую аналитику и 1 страницу. Pro открывает расширенную CRM, Telegram-уведомления, приоритетную поддержку и до 6 страниц.',
+    },
+    en: {
+      title: 'LinkMAX Pricing — Free and Pro Plans',
+      description: 'Compare LinkMAX plans: free tier with core features and Pro with advanced analytics, CRM, and premium blocks.',
+      h1: 'LinkMAX Pricing',
+      body: 'LinkMAX offers flexible pricing for every stage of your business. The free plan includes a page builder, basic analytics, and 1 page. Pro unlocks advanced CRM, Telegram notifications, priority support, and up to 6 pages.',
+    },
+    kk: {
+      title: 'LinkMAX тарифтері — тегін және Pro жоспарлар',
+      description: 'LinkMAX тарифтерін салыстырыңыз: негізгі мүмкіндіктері бар тегін тариф және кеңейтілген аналитика мен CRM бар Pro.',
+      h1: 'LinkMAX тарифтері',
+      body: 'LinkMAX бизнестің кез келген кезеңіне арналған тарифтер ұсынады. Тегін тариф бет конструкторын, базалық аналитиканы және 1 бетті қамтиды. Pro кеңейтілген CRM, Telegram хабарламалар, басымдық қолдау және 6 бетке дейін ашады.',
+    },
+  },
+  alternatives: {
+    ru: {
+      title: 'LinkMAX vs Linktree, Taplink — сравнение альтернатив',
+      description: 'Сравнение LinkMAX с Linktree, Taplink и другими конструкторами. Встроенная CRM, AI-генерация, аналитика — всё в одном месте.',
+      h1: 'LinkMAX vs альтернативы',
+      body: 'LinkMAX — это не просто link in bio, а полноценная операционная система для микробизнеса. В отличие от Linktree и Taplink, LinkMAX включает встроенную CRM, AI-генерацию контента, онлайн-бронирование и расширенную аналитику.',
+    },
+    en: {
+      title: 'LinkMAX vs Linktree, Taplink — Alternatives Comparison',
+      description: 'Compare LinkMAX with Linktree, Taplink and other builders. Built-in CRM, AI generation, analytics — all in one place.',
+      h1: 'LinkMAX vs Alternatives',
+      body: 'LinkMAX is not just a link in bio — it\'s a full micro-business OS. Unlike Linktree and Taplink, LinkMAX includes built-in CRM, AI content generation, online booking, and advanced analytics.',
+    },
+    kk: {
+      title: 'LinkMAX vs Linktree, Taplink — баламаларды салыстыру',
+      description: 'LinkMAX-ті Linktree, Taplink және басқа конструкторлармен салыстырыңыз.',
+      h1: 'LinkMAX vs баламалар',
+      body: 'LinkMAX — бұл жай link in bio емес, микробизнеске арналған толыққанды операциялық жүйе. Linktree мен Taplink-тен айырмашылығы, LinkMAX ішкі CRM, AI контент генерациясы, онлайн жазылу және кеңейтілген аналитиканы қамтиды.',
+    },
+  },
+  terms: {
+    ru: { title: 'Условия использования — LinkMAX', description: 'Условия использования платформы LinkMAX.', h1: 'Условия использования', body: 'Полные условия использования платформы LinkMAX. Ознакомьтесь с правилами, ответственностью сторон и порядком использования сервиса.' },
+    en: { title: 'Terms of Service — LinkMAX', description: 'Terms of service for the LinkMAX platform.', h1: 'Terms of Service', body: 'Complete terms of service for the LinkMAX platform. Review the rules, responsibilities, and service usage guidelines.' },
+    kk: { title: 'Пайдалану шарттары — LinkMAX', description: 'LinkMAX платформасының пайдалану шарттары.', h1: 'Пайдалану шарттары', body: 'LinkMAX платформасының толық пайдалану шарттары.' },
+  },
+  privacy: {
+    ru: { title: 'Политика конфиденциальности — LinkMAX', description: 'Политика конфиденциальности и защиты данных LinkMAX.', h1: 'Политика конфиденциальности', body: 'LinkMAX серьёзно относится к защите ваших данных. Ознакомьтесь с нашей политикой конфиденциальности.' },
+    en: { title: 'Privacy Policy — LinkMAX', description: 'Privacy and data protection policy for LinkMAX.', h1: 'Privacy Policy', body: 'LinkMAX takes your data protection seriously. Review our privacy policy.' },
+    kk: { title: 'Құпиялылық саясаты — LinkMAX', description: 'LinkMAX деректерді қорғау саясаты.', h1: 'Құпиялылық саясаты', body: 'LinkMAX сіздің деректеріңізді қорғауға байыпты қарайды.' },
+  },
+  'payment-terms': {
+    ru: { title: 'Условия оплаты — LinkMAX', description: 'Условия оплаты и возврата средств на платформе LinkMAX.', h1: 'Условия оплаты', body: 'Подробные условия оплаты, возврата средств и работы с подписками на платформе LinkMAX.' },
+    en: { title: 'Payment Terms — LinkMAX', description: 'Payment and refund terms for the LinkMAX platform.', h1: 'Payment Terms', body: 'Detailed payment, refund, and subscription terms for the LinkMAX platform.' },
+    kk: { title: 'Төлем шарттары — LinkMAX', description: 'LinkMAX платформасындағы төлем және қайтару шарттары.', h1: 'Төлем шарттары', body: 'LinkMAX платформасындағы толық төлем, қайтару және жазылу шарттары.' },
+  },
+  'for-masters': {
+    ru: { title: 'LinkMAX для мастеров — конструктор страниц для специалистов', description: 'Создайте профессиональный мини-сайт с онлайн-бронированием, каталогом услуг и CRM. Для мастеров красоты, фитнес-тренеров, консультантов.', h1: 'LinkMAX для мастеров', body: 'Идеальное решение для мастеров красоты, фитнес-тренеров, репетиторов и консультантов. Создайте страницу с каталогом услуг, онлайн-бронированием и сбором заявок за 2 минуты.' },
+    en: { title: 'LinkMAX for Professionals — page builder for experts', description: 'Build a professional mini-site with online booking, service catalog, and CRM. For beauty experts, fitness trainers, consultants.', h1: 'LinkMAX for Professionals', body: 'The perfect solution for beauty experts, fitness trainers, tutors, and consultants. Create a page with service catalog, online booking, and lead capture in 2 minutes.' },
+    kk: { title: 'LinkMAX шеберлерге — мамандарға арналған бет конструкторы', description: 'Онлайн жазылу, қызмет каталогы және CRM бар кәсіби мини-сайт жасаңыз.', h1: 'LinkMAX шеберлерге', body: 'Сұлулық шеберлеріне, фитнес-тренерлерге, репетиторларға және кеңесшілерге тамаша шешім.' },
+  },
+  'seo-landing': {
+    ru: { title: 'LinkMAX — AI-платформа для микробизнеса', description: 'LinkMAX объединяет AI конструктор страниц, CRM, аналитику и финтех в одной платформе. Запуск за 2 минуты.', h1: 'LinkMAX — AI-платформа для микробизнеса', body: 'LinkMAX — это операционная система нового поколения для микробизнеса. AI конструктор страниц, Business Zones (CRM), финтех-ядро и аналитика — всё в одном месте.' },
+    en: { title: 'LinkMAX — AI Platform for Micro-Business', description: 'LinkMAX combines AI page builder, CRM, analytics and fintech in one platform. Launch in 2 minutes.', h1: 'LinkMAX — AI Platform for Micro-Business', body: 'LinkMAX is the next-generation operating system for micro-business. AI page builder, Business Zones (CRM), fintech core, and analytics — all in one place.' },
+    kk: { title: 'LinkMAX — микробизнеске арналған AI платформа', description: 'LinkMAX AI бет конструкторын, CRM, аналитика және финтехті бір платформада біріктіреді.', h1: 'LinkMAX — микробизнеске арналған AI платформа', body: 'LinkMAX — микробизнеске арналған жаңа буын операциялық жүйе.' },
+  },
+};
+
+export function buildMarketingPageHtml(lang: LanguageKey, pageKey: string): string {
+  const pageContent = MARKETING_PAGES[pageKey];
+  if (!pageContent) {
+    return `<!DOCTYPE html><html><head><title>404</title></head><body><p>Page not found</p></body></html>`;
+  }
+  const content = pageContent[lang] || pageContent.ru;
+  const locale = getOgLocale(lang);
+  const canonical = `${BASE_URL}/${pageKey}`;
+  const hreflangLinks = buildHreflangLinks(BASE_URL, `/${pageKey}`, ['ru', 'en', 'kk']);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': canonical,
+    name: content.title,
+    description: content.description,
+    url: canonical,
+    inLanguage: lang,
+    isPartOf: { '@type': 'WebSite', name: 'LinkMAX', url: `${BASE_URL}/` },
+  };
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(content.title)}</title>
+  <meta name="description" content="${escapeHtml(content.description)}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <link rel="canonical" href="${canonical}">
+  ${hreflangLinks}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtml(content.title)}">
+  <meta property="og:description" content="${escapeHtml(content.description)}">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:image" content="${DEFAULT_OG_IMAGE}">
+  <meta property="og:locale" content="${locale}">
+  <meta property="og:site_name" content="LinkMAX">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtml(content.title)}">
+  <meta name="twitter:description" content="${escapeHtml(content.description)}">
+  <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
+  <meta name="twitter:site" content="@LinkMAX_app">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; color: #111; background: #fff; line-height: 1.6; }
+    main { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; line-height: 1.2; }
+    p { font-size: 1.05rem; }
+    nav { margin-top: 2rem; }
+    nav a { color: #0f62fe; text-decoration: none; margin-right: 1.5rem; font-weight: 500; }
+    nav a:hover { text-decoration: underline; }
+    footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee; text-align: center; color: #666; }
+  </style>
+</head>
+<body>
+  <main>
+    <nav aria-label="Breadcrumb">
+      <a href="${BASE_URL}/">LinkMAX</a> → <span>${escapeHtml(content.h1)}</span>
+    </nav>
+    <h1>${escapeHtml(content.h1)}</h1>
+    <p>${escapeHtml(content.body)}</p>
+    <nav aria-label="Site navigation">
+      <a href="${BASE_URL}/">Home</a>
+      <a href="${BASE_URL}/pricing">Pricing</a>
+      <a href="${BASE_URL}/gallery">Gallery</a>
+      <a href="${BASE_URL}/experts">Experts</a>
+    </nav>
+    <footer>
+      <p><a href="${BASE_URL}/">LinkMAX</a> - Micro-Business OS</p>
+    </footer>
+  </main>
+</body>
+</html>`;
+}
+
+export { LANDING_CONTENT, GALLERY_CONTENT, MARKETING_PAGES };
