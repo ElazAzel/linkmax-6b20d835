@@ -201,7 +201,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     ],
     submitEmail: '',
     buttonText: 'Send',
-    isPremium: true,
     ...overrides,
   }),
 
