@@ -32,6 +32,10 @@ export type ActivationEventType =
   | 'booking_payment_confirmed'
   | 'booking_completed'
   // Retention events
+  | 'booking_marked_completed'
+  | 'repeat_followup_sent'
+  | 'repeat_opportunity_shown'
+  | 'repeat_booking_started'
   | 'post_service_followup_sent'
   | 'repeat_booking_detected'
   | 'creator_returned_after_gap'

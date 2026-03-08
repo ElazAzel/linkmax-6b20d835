@@ -66,7 +66,7 @@ export const BookingCard = memo(function BookingCard({
         <Avatar className="h-10 w-10 rounded-xl shrink-0">
           <AvatarFallback className={cn(
             'rounded-xl text-sm font-bold',
-            isPending ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white'
+            isPending ? 'bg-amber-500 text-white' : isCompleted ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'
           )}>
             {booking.client_name.charAt(0).toUpperCase()}
           </AvatarFallback>
