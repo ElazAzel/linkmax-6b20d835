@@ -82,6 +82,16 @@ async function fetchDealProducts(zoneId: string, dealId: string) {
   return (data || []) as any[];
 }
 
+async function fetchDealComments(zoneId: string, dealId: string) {
+  const { data, error } = await (supabase
+    .from('zone_deal_comments' as any)
+    .select('*, user:user_id(email, raw_user_meta_data)')
+    .eq('deal_id', dealId)
+    .order('created_at', { ascending: true }) as any);
+  if (error) throw error;
+  return data || [];
+}
+
 // ─── Hooks ───
 export function useZoneDeals(zoneId: string | null) {
   const queryClient = useQueryClient();
