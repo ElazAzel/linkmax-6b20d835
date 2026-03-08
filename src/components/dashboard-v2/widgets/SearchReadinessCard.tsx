@@ -144,7 +144,15 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         )}
         {childCount > 0 && isIndexable && (
           <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary bg-primary/5">
-            {childCount} {childCount === 1 ? 'услуга' : 'услуг'}
+            {childSummary
+              ? `${childSummary.eligible} из ${childSummary.total - childSummary.removed} услуг в поиске`
+              : `${childCount} ${childCount === 1 ? 'услуга' : 'услуг'}`
+            }
+          </Badge>
+        )}
+        {childSummary && childSummary.excluded_thin > 0 && (
+          <Badge variant="outline" className="text-[10px] gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+            {childSummary.excluded_thin} услуг без описания
           </Badge>
         )}
         {lastIndexNow && (
