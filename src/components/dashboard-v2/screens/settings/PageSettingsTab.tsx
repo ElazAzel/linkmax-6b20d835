@@ -192,6 +192,20 @@ export const PageSettingsTab = memo(function PageSettingsTab({
         }
     };
 
+    const handleSaveEntityFields = () => {
+        if (onUpdateEntityFields) {
+            onUpdateEntityFields({
+                profession: professionInput || undefined,
+                city: cityInput || undefined,
+                entity_type: entityTypeInput || undefined,
+                contact_email: contactEmailInput || undefined,
+                contact_phone: contactPhoneInput || undefined,
+                contact_whatsapp: contactWhatsappInput || undefined,
+            });
+            toast.success(t('common.saved', 'Сохранено'));
+        }
+    };
+
     const handleToggleIndexable = (checked: boolean) => {
         onToggleIndexable?.(checked);
         toast.success(t('common.saved', 'Сохранено'));
