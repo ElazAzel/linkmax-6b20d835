@@ -76,7 +76,6 @@ export const BlockPreview = memo(function BlockPreview({ blockType }: BlockPrevi
       type: 'custom_code',
       html: t('blockPreview.customCodeHtml', '<div style="padding: 20px; text-align: center;">Кастомный HTML</div>'),
       css: '',
-      isPremium: true,
     },
     form: {
       id: 'preview-form',
