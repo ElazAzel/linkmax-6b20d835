@@ -82,6 +82,7 @@ interface PageData {
   contact_whatsapp: string | null;
   quality_score: number | null;
   is_indexable: boolean | null;
+  service_slugs?: Record<string, { slug: string; state: string; title: string }> | null;
 }
 
 interface BlockData {
