@@ -3,9 +3,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/user/useAuth';
 import { logger } from '@/lib/utils/logger';
 import { useUserPage, useSavePageMutation, usePublishPageMutation, pageQueryKeys } from '@/hooks/page/usePageCache';
-import { updatePageNiche } from '@/services/pages';
+import { updatePageNiche, updatePageEntityFields } from '@/services/pages';
 import { deleteEventBlock, syncEventBlock } from '@/services/events';
 import { ensureBlockIds, deduplicateBlocks } from '@/lib/blocks/block-utils';
+import { supabase } from '@/platform/supabase/client';
+import { computeQualityScore } from '@/lib/seo/quality-score';
 import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
@@ -13,6 +15,10 @@ import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
+
+// IndexNow throttle: Map<slug, timestamp>
+const indexNowLastSent = new Map<string, number>();
+const INDEXNOW_THROTTLE_MS = 5 * 60 * 1000; // 5 minutes
 
 interface UseCloudPageStateOptions {
   onPublish?: (pageData: PageData) => void;
