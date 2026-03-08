@@ -472,7 +472,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   </main>
   
   <footer>
-    <p>${lang === 'ru' ? 'Создано на' : lang === 'kk' ? 'Жасалған' : 'Created with'} <a href="${BASE_URL}/">lnkmx.my</a></p>
+    <p>${lang === 'ru' ? 'Создано на' : lang === 'kk' ? 'Жасалған' : 'Created with'} <a href="${BASE_URL}/">LinkMAX</a></p>
   </footer>
 </body>
 </html>`;
