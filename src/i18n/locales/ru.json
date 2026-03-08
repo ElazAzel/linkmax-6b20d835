@@ -3519,7 +3519,13 @@
       "converted": "Конвертирован",
       "lost": "Потерян"
     },
-    "source": "Источник",
+    "source": {
+      "form": "Форма",
+      "messenger": "Мессенджер",
+      "manual": "Вручную",
+      "pageView": "Просмотр",
+      "other": "Другое"
+    },
     "addLeadDescription": "Заполните форму, чтобы добавить новый лид в вашу CRM",
     "namePlaceholder": "Имя клиента",
     "phone": "Телефон",
