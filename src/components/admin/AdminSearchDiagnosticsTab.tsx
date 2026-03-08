@@ -1,6 +1,6 @@
 /**
  * AdminSearchDiagnosticsTab — Support/admin view for page search status
- * Shows quality scores, indexability, exclusion reasons, IndexNow status
+ * Shows quality scores, indexability, exclusion reasons, IndexNow submission logs
  */
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -11,10 +11,13 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Globe from 'lucide-react/dist/esm/icons/globe';
 import FileX from 'lucide-react/dist/esm/icons/file-x';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Eye from 'lucide-react/dist/esm/icons/eye';
 import { cn } from '@/lib/utils/utils';
 
 interface DiagnosticPage {
@@ -32,6 +35,18 @@ interface DiagnosticPage {
   niche: string | null;
   view_count: number | null;
   updated_at: string | null;
+}
+
+interface IndexingSubmission {
+  id: string;
+  target_url: string;
+  provider: string;
+  action_type: string;
+  submission_status: string;
+  skip_reason: string | null;
+  http_status: number | null;
+  batch_id: string | null;
+  created_at: string;
 }
 
 const EXCLUSION_LABELS: Record<string, string> = {
@@ -56,6 +71,91 @@ async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
 
   if (error) throw error;
   return (data || []) as DiagnosticPage[];
+}
+
+async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmission[]> {
+  const { data, error } = await supabase
+    .from('indexing_submissions')
+    .select('id, target_url, provider, action_type, submission_status, skip_reason, http_status, batch_id, created_at')
+    .eq('page_id', pageId)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (error) throw error;
+  return (data || []) as IndexingSubmission[];
+}
+
+function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string }) {
+  const { data: submissions, isLoading } = useQuery({
+    queryKey: ['admin', 'indexing-submissions', pageId],
+    queryFn: () => fetchSubmissionsForPage(pageId),
+    enabled: true,
+  });
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
+          <Eye className="h-3 w-3" />
+          Логи
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="font-mono text-sm">Indexing logs: /{slug}</DialogTitle>
+        </DialogHeader>
+        {isLoading ? (
+          <Skeleton className="h-32" />
+        ) : !submissions?.length ? (
+          <p className="text-sm text-muted-foreground py-4">Нет записей индексации</p>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-xs">URL</TableHead>
+                <TableHead className="text-xs">Provider</TableHead>
+                <TableHead className="text-xs">Action</TableHead>
+                <TableHead className="text-xs">Status</TableHead>
+                <TableHead className="text-xs">HTTP</TableHead>
+                <TableHead className="text-xs">Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {submissions.map(s => (
+                <TableRow key={s.id}>
+                  <TableCell className="font-mono text-[10px] max-w-[200px] truncate">{s.target_url}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-[9px]">{s.provider}</Badge>
+                  </TableCell>
+                  <TableCell className="text-[10px]">{s.action_type}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        'text-[9px]',
+                        s.submission_status === 'sent' && 'border-emerald-500/30 text-emerald-600',
+                        s.submission_status === 'failed' && 'border-red-500/30 text-red-500',
+                        s.submission_status === 'skipped' && 'border-amber-500/30 text-amber-600',
+                      )}
+                    >
+                      {s.submission_status}
+                    </Badge>
+                    {s.skip_reason && (
+                      <span className="text-[9px] text-muted-foreground ml-1">({s.skip_reason})</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-[10px] tabular-nums">{s.http_status || '—'}</TableCell>
+                  <TableCell className="text-[10px] text-muted-foreground">
+                    {new Date(s.created_at).toLocaleString('ru', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 export function AdminSearchDiagnosticsTab() {
@@ -142,6 +242,7 @@ export function AdminSearchDiagnosticsTab() {
               <TableHead>Entity</TableHead>
               <TableHead>Services</TableHead>
               <TableHead>IndexNow</TableHead>
+              <TableHead>Logs</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -233,6 +334,9 @@ export function AdminSearchDiagnosticsTab() {
                     ) : (
                       <span className="text-xs text-muted-foreground">—</span>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <SubmissionLogDialog pageId={page.id} slug={page.slug} />
                   </TableCell>
                 </TableRow>
               );
