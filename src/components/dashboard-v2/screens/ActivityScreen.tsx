@@ -233,9 +233,41 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2 }}
           >
+            {/* Lead Limit Banner for free users */}
+            {!isPremium && monthlyLeadCount !== null && (
+              <div className={cn(
+                "mx-5 mb-3 p-3 rounded-xl flex items-center justify-between text-sm",
+                monthlyLeadCount >= 50
+                  ? "bg-destructive/10 border border-destructive/20"
+                  : monthlyLeadCount >= 40
+                    ? "bg-amber-500/10 border border-amber-500/20"
+                    : "bg-muted/50"
+              )}>
+                <div className="flex items-center gap-2">
+                  {monthlyLeadCount >= 40 && <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />}
+                  <span className={cn(
+                    "font-medium",
+                    monthlyLeadCount >= 50 ? "text-destructive" : ""
+                  )}>
+                    {monthlyLeadCount >= 50
+                      ? t('crm.leadLimit.reached', 'Лимит заявок достигнут')
+                      : t('crm.leadLimit.used', '{{used}} из {{max}} заявок', { used: monthlyLeadCount, max: 50 })
+                    }
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs font-bold text-primary"
+                  onClick={() => navigate('/pricing')}
+                >
+                  {t('crm.leadLimit.upgrade', 'Снять лимит →')}
+                </Button>
+              </div>
+            )}
+
             {/* Status Pills */}
             <div className="px-5 py-3 overflow-x-auto scrollbar-hide">
-              <div className="flex gap-2 min-w-max">
                 <button
                   onClick={() => setStatusFilter('all')}
                   className={cn(
