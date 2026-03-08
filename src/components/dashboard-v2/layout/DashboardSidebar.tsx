@@ -86,7 +86,8 @@ const SECTIONS: SidebarSection[] = [
     titleKey: 'dashboard.sidebar.zone',
     defaultTitle: 'Бизнес-зона',
     items: [
-      { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Аналитика' },
+      { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Дашборд' },
+      { id: 'zone-analytics', icon: FileText, labelKey: 'dashboard.sidebar.zoneAnalytics', defaultLabel: 'Отчёты' },
       { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки' },
       { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты' },
       { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь' },
