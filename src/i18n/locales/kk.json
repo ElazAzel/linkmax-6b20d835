@@ -4984,7 +4984,22 @@
     "useCamera": "Камера",
     "manual": "Қолмен",
     "recentScans": "Соңғы сканерлеулер",
-    "noScansYet": "Сканерленген билеттер осы жерде пайда болады"
+    "noScansYet": "Сканерленген билеттер осы жерде пайда болады",
+    "regStatus": {
+      "pending": "Күтуде",
+      "confirmed": "Расталды",
+      "rejected": "Қабылданбады",
+      "cancelled": "Тоқтатылды"
+    },
+    "ticketStatus": {
+      "valid": "Белсенді",
+      "used": "Қолданылған",
+      "cancelled": "Тоқтатылды"
+    },
+    "csvName": "Аты",
+    "csvPhone": "Телефон",
+    "csvStatus": "Күй",
+    "csvDate": "Тіркелу күні"
   },
   "insights": {
     "lowViews": {
