@@ -263,7 +263,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
         applicationCategory: 'BusinessApplication',
         operatingSystem: 'Web',
         description: content.description,
-        sameAs: ['https://t.me/lnkmx_app'],
+        sameAs: ['https://t.me/lnkmx_app', 'https://instagram.com/lnkmx_app'],
       },
       {
         '@type': 'SoftwareApplication',
