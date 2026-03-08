@@ -162,6 +162,7 @@ export function useDashboard(options?: UseDashboardOptions) {
     reorderBlocks: cloudState.reorderBlocks,
     updatePageDataPartial: cloudState.updatePageDataPartial,
     updateNiche: cloudState.updateNiche,
+    updateEntityFields: cloudState.updateEntityFields,
 
     // Sub-state hooks
     blockEditor,
