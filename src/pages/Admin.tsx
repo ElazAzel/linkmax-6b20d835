@@ -97,6 +97,7 @@ export default function Admin() {
     { value: 'partners', label: t('admin.partners.title', 'Партнёры'), icon: Handshake },
     { value: 'templates', label: t('admin.templates', 'Templates'), icon: FileText },
     { value: 'fintech', label: t('admin.fintech', 'Финансы'), icon: Banknote },
+    { value: 'seo', label: 'SEO', icon: Search },
   ];
 
   return (
