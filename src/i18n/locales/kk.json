@@ -4685,9 +4685,12 @@
     "months": "айлар",
     "savingsText": "Сақтау",
     "popular": "Танымал",
-    "basicDesc": "Тегін бастаңыз",
+    "basicDesc": "Бет + жазылу + CRM тегін",
     "proDesc": "Барлығы кәсіпқойлар мен бизнес үшін",
     "businessDesc": "CRM, команда және бизнес аймақтары",
+    "businessNote": "Командалық CRM, аймақтар және рөлдер қажет пе?",
+    "businessLink": "BUSINESS тарифі туралы білу →",
+    "freeForever": "Мәңгі тегін",
     "new": "Жаңа",
     "free": {
       "title": "Тегін"

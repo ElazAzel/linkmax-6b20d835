@@ -4686,9 +4686,12 @@
     "months": "months",
     "savingsText": "Saving",
     "popular": "Popular",
-    "basicDesc": "Get started for free",
+    "basicDesc": "Page + bookings + CRM for free",
     "proDesc": "Everything for professionals and business",
     "businessDesc": "CRM, team & zones for business",
+    "businessNote": "Need team CRM, zones, and roles?",
+    "businessLink": "Learn about the BUSINESS plan →",
+    "freeForever": "Free forever",
     "new": "New",
     "free": {
       "title": "For free"

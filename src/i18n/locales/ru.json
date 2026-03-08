@@ -4735,9 +4735,12 @@
     "months": "мес",
     "savingsText": "Экономия",
     "popular": "Популярный",
-    "basicDesc": "Начните бесплатно",
+    "basicDesc": "Страница + запись + CRM бесплатно",
     "proDesc": "Всё для профессионалов и бизнеса",
     "businessDesc": "CRM, команда и зоны для бизнеса",
+    "businessNote": "Нужна командная CRM, зоны и роли?",
+    "businessLink": "Узнать о тарифе BUSINESS →",
+    "freeForever": "Бесплатно навсегда",
     "new": "Новинка",
     "free": {
       "title": "Бесплатно"
