@@ -134,8 +134,9 @@ function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string })
                       className={cn(
                         'text-[9px]',
                         s.submission_status === 'sent' && 'border-emerald-500/30 text-emerald-600',
+                        s.submission_status === 'provider_failed' && 'border-red-500/30 text-red-500',
                         s.submission_status === 'failed' && 'border-red-500/30 text-red-500',
-                        s.submission_status === 'skipped' && 'border-amber-500/30 text-amber-600',
+                        s.submission_status.startsWith('skipped') && 'border-amber-500/30 text-amber-600',
                       )}
                     >
                       {s.submission_status}
