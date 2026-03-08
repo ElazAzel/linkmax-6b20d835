@@ -32,6 +32,7 @@ export function GalleryPageCard({
   onCopy,
   onView,
   onLike,
+  onUseTemplate,
   isLiked = false,
   featured = false
 }: GalleryPageCardProps) {
