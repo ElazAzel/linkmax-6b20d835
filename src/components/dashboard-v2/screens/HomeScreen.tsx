@@ -97,6 +97,15 @@ export const HomeScreen = memo(function HomeScreen({
   const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
+  // Context-aware tip
+  const dynamicTip = useMemo(() => {
+    if (!avatarUrl) return t('activation.tips.addAvatar', 'Добавьте фото профиля — страницы с аватаром получают на 60% больше доверия');
+    if (!hasContent) return t('activation.tips.addBlock', 'Добавьте первый блок — ссылку, товар или видео');
+    if (!isPublished) return t('activation.tips.publish', 'Опубликуйте страницу, чтобы она стала доступна по ссылке');
+    if (viewCount < 10) return t('activation.tips.share', 'Поделитесь ссылкой в соцсетях, чтобы получить первых посетителей');
+    return t('activation.tips.pricing', 'Добавьте блок с ценами, чтобы увеличить конверсию на 40%');
+  }, [avatarUrl, hasContent, isPublished, viewCount, t]);
+
   // Real stats from props
   const weeklyStats = {
     views: viewCount,
