@@ -251,9 +251,10 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
       {
         '@type': 'Organization',
         '@id': `${baseUrl}/#organization`,
-        name: 'lnkmx',
+        name: 'LinkMAX',
+        alternateName: 'lnkmx',
         url: `${baseUrl}/`,
-        logo: `${baseUrl}/favicon.jpg`,
+        logo: `${baseUrl}/favicon.png`,
         areaServed: content.whereList,
       },
       {
