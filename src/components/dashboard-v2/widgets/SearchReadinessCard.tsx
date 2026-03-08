@@ -57,6 +57,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
   const isIndexable = hasServerData ? serverDiag.is_indexable : preview.isIndexable;
   const inSitemap = hasServerData ? serverDiag.included_in_sitemap : preview.isIndexable;
   const childCount = hasServerData ? serverDiag.child_page_count : preview.serviceCount;
+  const childSummary: ChildSummary | null = hasServerData ? serverDiag.child_summary : null;
   const lastIndexNow = hasServerData ? serverDiag.last_indexnow_at : null;
 
   const failedChecks = preview.checks.filter(c => !c.passed);
