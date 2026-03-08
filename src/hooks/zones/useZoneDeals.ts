@@ -325,3 +325,64 @@ export function useZoneDealProducts(zoneId: string | null, dealId: string | null
     removeProduct: (id: string) => removeProduct.mutateAsync(id)
   };
 }
+
+// ─── Hook: Deal Comments ───
+export function useZoneDealComments(zoneId: string | null, dealId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+  const safeDealId = dealId || '';
+
+  const { data: comments = [], isLoading: loading } = useQuery({
+    queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId),
+    queryFn: () => fetchDealComments(safeZoneId, safeDealId),
+    enabled: !!zoneId && !!dealId,
+    staleTime: 30_000,
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: async (content: string) => {
+      if (!zoneId || !dealId) throw new Error('No zone or deal selected');
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const { error } = await (supabase
+        .from('zone_deal_comments' as any)
+        .insert({
+          zone_id: zoneId,
+          deal_id: dealId,
+          user_id: userId,
+          content,
+        }) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
+  });
+
+  const updateCommentMutation = useMutation({
+    mutationFn: async ({ id, content }: { id: string; content: string }) => {
+      const { error } = await (supabase
+        .from('zone_deal_comments' as any)
+        .update({ content })
+        .eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase
+        .from('zone_deal_comments' as any)
+        .delete()
+        .eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
+  });
+
+  return {
+    comments: comments as any[],
+    loading,
+    addComment: async (content: string) => addCommentMutation.mutateAsync(content),
+    updateComment: async (id: string, content: string) => updateCommentMutation.mutateAsync({ id, content }),
+    deleteComment: async (id: string) => deleteCommentMutation.mutateAsync(id),
+  };
+}
