@@ -1,7 +1,7 @@
 /**
  * ActivityScreen - Unified inbox for leads, bookings, messages
  */
-import { memo, useState, useCallback, useMemo } from 'react';
+import { memo, useState, useCallback, useMemo, useEffect } from 'react';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,7 @@ import CheckCheck from 'lucide-react/dist/esm/icons/check-check';
 import X from 'lucide-react/dist/esm/icons/x';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -43,6 +44,9 @@ import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { exportLeadsToExcel } from '@/lib/export/excel-export-leads';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface ActivityScreenProps {
   isPremium: boolean;
