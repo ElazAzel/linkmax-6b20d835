@@ -231,10 +231,10 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
           <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
             <div className="px-6">
               <TabsList className="w-full grid grid-cols-4">
-                <TabsTrigger value="timeline" className="text-[10px]">{t('zones.contacts.notes', 'Timeline')}</TabsTrigger>
-                <TabsTrigger value="deals" className="text-[10px]">{t('zones.deals.title', 'Deals')} ({linkedDeals.length})</TabsTrigger>
-                <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
-                <TabsTrigger value="details" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
+                <TabsTrigger value="timeline" className="text-xs min-h-11">{t('zones.contacts.notes', 'Timeline')}</TabsTrigger>
+                <TabsTrigger value="deals" className="text-xs min-h-11">{t('zones.deals.title', 'Deals')} ({linkedDeals.length})</TabsTrigger>
+                <TabsTrigger value="tasks" className="text-xs min-h-11">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+                <TabsTrigger value="details" className="text-xs min-h-11">{t('common.details', 'Info')}</TabsTrigger>
               </TabsList>
             </div>
 
