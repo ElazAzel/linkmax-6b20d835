@@ -190,6 +190,8 @@ const router = createBrowserRouter([
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
+      { path: ":slug/services/:serviceSlug", element: <PublicServicePage /> },
+      { path: ":slug/events/:eventId", element: <PublicEventPage /> },
       { path: ":slug", element: <PublicPage /> },
       {
         path: "*",
