@@ -9,6 +9,7 @@
 
 | Кому | Документ |
 | :--- | :--- |
+| **Полное описание платформы** | [PLATFORM_DESCRIPTION.md](PLATFORM_DESCRIPTION.md) — структура, цели, модули, пользовательские пути, архитектура, всё в одном. |
 | **Новый разработчик** | [getting-started/DEVELOPER-QUICKSTART.md](getting-started/DEVELOPER-QUICKSTART.md) — установка, команды, структура проекта. |
 | **Обзор продукта и архитектуры** | [architecture/COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md) — видение, модули, стек, блоки. |
 | **Текущее состояние системы** | [audits/PLATFORM_SNAPSHOT.md](audits/PLATFORM_SNAPSHOT.md) — единый источник истины по платформе. |
