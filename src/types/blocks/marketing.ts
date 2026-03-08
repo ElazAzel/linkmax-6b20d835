@@ -40,7 +40,7 @@ export interface CountdownBlock {
     showHours?: boolean;
     showMinutes?: boolean;
     showSeconds?: boolean;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }

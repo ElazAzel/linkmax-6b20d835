@@ -54,7 +54,7 @@ export interface ScratchBlock {
     revealText: string | I18nText | MultilingualString;
     scratchImage?: string;
     backgroundColor?: string;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }

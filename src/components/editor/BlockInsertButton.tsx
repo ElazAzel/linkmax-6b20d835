@@ -127,7 +127,7 @@ const ALL_BLOCKS: BlockConfig[] = [
 
   // Social - Community
   { type: 'community', label: 'blockTypes.community', Icon: () => <span className="text-xl">👥</span>, color: 'bg-indigo-400', tier: 'pro' },
-  { type: 'search', label: 'blockTypes.search', Icon: Search, color: 'bg-slate-400', tier: 'pro' },
+  
 ];
 
 export const BlockInsertButton = memo(function BlockInsertButton({

@@ -116,7 +116,7 @@ export interface BookingBlock {
     // Google Calendar Sync
     gcalSyncEnabled?: boolean;
     buttonText?: string | I18nText | MultilingualString;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
