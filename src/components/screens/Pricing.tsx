@@ -252,7 +252,7 @@ export default function Pricing() {
               <span>{t('pricing.whyLnkmx.noSetup', 'CRM за 15 минут — без внедрения')}</span>
             </li>
             <li className="flex flex-col items-center gap-1">
-              <MessageCircle className="h-5 w-5 text-primary" />
+              <Sparkles className="h-5 w-5 text-primary" />
               <span>{t('pricing.whyLnkmx.mobile', 'Вся работа со смартфона')}</span>
             </li>
             <li className="flex flex-col items-center gap-1">
