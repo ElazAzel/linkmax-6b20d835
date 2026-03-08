@@ -360,6 +360,11 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </Card>
 
+        {/* Search Readiness Card */}
+        {isPublished && pageData && (
+          <SearchReadinessCard pageData={pageData} />
+        )}
+
         {/* Quick Actions Grid */}
         <div className="space-y-3">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">

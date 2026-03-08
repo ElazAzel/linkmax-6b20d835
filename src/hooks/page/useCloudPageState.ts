@@ -454,6 +454,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     updateEditorMode,
     updatePageDataPartial,
     updateNiche,
+    updateEntityFields,
     refresh
   ]);
 }
