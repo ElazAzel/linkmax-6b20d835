@@ -135,7 +135,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   isPremium = false,
   currentBlockCount = 0,
   className,
-  currentTier = 'free',
+  currentTier = 'identity',
   pageNiche,
   existingBlocks = [],
   isOpen: externalIsOpen,

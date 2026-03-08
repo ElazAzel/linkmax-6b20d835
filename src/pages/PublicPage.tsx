@@ -112,7 +112,7 @@ export default function PublicPage() {
   });
 
   const isOwnerPremium = ownerPremiumStatus?.isPremium || false;
-  const ownerTier = ownerPremiumStatus?.tier || 'free';
+  const ownerTier = (ownerPremiumStatus?.tier || 'identity') as 'identity' | 'starter' | 'pro' | 'business';
   // Watermark always shows UNLESS premium/business user explicitly enabled hideBranding
   const showWatermark = !(isOwnerPremium && pageData?.hideBranding);
 

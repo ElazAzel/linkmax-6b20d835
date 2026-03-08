@@ -49,7 +49,7 @@ export const EditorScreen = memo(function EditorScreen({
   pageData,
   loading,
   isPremium,
-  currentTier = 'free',
+  currentTier = 'identity',
   premiumTier,
   onInsertBlock,
   onEditBlock,
