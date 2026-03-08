@@ -128,7 +128,7 @@ export function BookingsPanel() {
   const handleCompleteBooking = async (booking: Booking) => {
     const { error } = await supabase
       .from('bookings')
-      .update({ status: 'completed' })
+      .update({ status: 'completed', completed_at: new Date().toISOString() } as any)
       .eq('id', booking.id);
 
     if (error) {
