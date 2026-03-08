@@ -43,6 +43,7 @@ export const BookingCard = memo(function BookingCard({
   const { t, i18n } = useTranslation();
   const locale = localeMap[i18n.language] || enUS;
   const isPending = booking.status === 'pending';
+  const isCompleted = booking.status === 'completed';
 
   const dateLabel = (() => {
     try {
