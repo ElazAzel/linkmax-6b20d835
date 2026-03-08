@@ -62,6 +62,15 @@ interface SettingsScreenProps {
   onUpdateBranding?: (branding: { faviconUrl?: string; hideBranding?: boolean }) => void;
   onUpgradePage?: () => void;
 
+  // Entity fields
+  city?: string;
+  profession?: string;
+  entityType?: 'person' | 'organization';
+  contactEmail?: string;
+  contactPhone?: string;
+  contactWhatsapp?: string;
+  onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string }) => void;
+
   // Actions
   onSignOut: () => void;
   onOpenFriends: () => void;
