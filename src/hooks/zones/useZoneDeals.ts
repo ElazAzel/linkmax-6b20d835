@@ -14,6 +14,7 @@ export const zoneDealsKeys = {
   dealProducts: (zoneId: string, dealId: string) => ['zone-deal-products', zoneId, dealId] as const,
   products: (zoneId: string) => ['zone-products', zoneId] as const,
   pipelines: (zoneId: string) => ['zone-pipelines', zoneId] as const,
+  comments: (zoneId: string, dealId: string) => ['zone-deal-comments', zoneId, dealId] as const,
 };
 
 // ─── Fetch functions ───
