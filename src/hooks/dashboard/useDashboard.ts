@@ -185,6 +185,7 @@ export function useDashboard(options?: UseDashboardOptions) {
     cloudState.reorderBlocks,
     cloudState.updatePageDataPartial,
     cloudState.updateNiche,
+    cloudState.updateEntityFields,
     profileBlock,
     handleUpdateProfile,
     userProfile,
