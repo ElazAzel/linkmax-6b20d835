@@ -79,7 +79,7 @@ serve(async (req) => {
         const isValid = await crypto.subtle.verify(
             "HMAC",
             key,
-            sigBytes as ArrayBuffer,
+            sigBytes.buffer as ArrayBuffer,
             encoder.encode(dataToVerify)
         );
 

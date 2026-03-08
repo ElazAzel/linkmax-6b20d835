@@ -20,6 +20,7 @@ import Zap from 'lucide-react/dist/esm/icons/zap';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import Package from 'lucide-react/dist/esm/icons/package';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';

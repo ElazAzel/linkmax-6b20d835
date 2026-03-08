@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,23 +17,16 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 type StatusFilter = 'all' | DocumentStatus;
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; dotColor: string }> = {
-    draft: { label: 'Черновик', color: 'bg-muted/50 text-muted-foreground border-border', dotColor: 'bg-muted-foreground' },
-    sent: { label: 'Отправлен', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', dotColor: 'bg-blue-400' },
-    signed: { label: 'Подписан', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', dotColor: 'bg-emerald-400' },
-    cancelled: { label: 'Отменён', color: 'bg-destructive/10 text-destructive border-destructive/20', dotColor: 'bg-destructive' },
-    archived: { label: 'Архив', color: 'bg-muted/30 text-muted-foreground/70 border-border/50', dotColor: 'bg-muted-foreground/50' },
+const STATUS_KEYS: Record<string, { labelKey: string; defaultLabel: string; color: string; dotColor: string }> = {
+    draft: { labelKey: 'zones.documents.status.draft', defaultLabel: 'Draft', color: 'bg-muted/50 text-muted-foreground border-border', dotColor: 'bg-muted-foreground' },
+    sent: { labelKey: 'zones.documents.status.sent', defaultLabel: 'Sent', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', dotColor: 'bg-blue-400' },
+    signed: { labelKey: 'zones.documents.status.signed', defaultLabel: 'Signed', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', dotColor: 'bg-emerald-400' },
+    cancelled: { labelKey: 'zones.documents.status.cancelled', defaultLabel: 'Cancelled', color: 'bg-destructive/10 text-destructive border-destructive/20', dotColor: 'bg-destructive' },
+    archived: { labelKey: 'zones.documents.status.archived', defaultLabel: 'Archived', color: 'bg-muted/30 text-muted-foreground/70 border-border/50', dotColor: 'bg-muted-foreground/50' },
 };
 
-const FILTER_TABS: { value: StatusFilter; label: string }[] = [
-    { value: 'all', label: 'Все' },
-    { value: 'draft', label: 'Черновики' },
-    { value: 'sent', label: 'Отправленные' },
-    { value: 'signed', label: 'Подписанные' },
-    { value: 'archived', label: 'Архив' },
-];
-
 export const ZoneDocumentsScreen = () => {
+    const { t } = useTranslation();
     const { currentZone, isReadOnly } = useZoneContext();
     const zoneId = currentZone?.id || null;
     const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId, { isReadOnly });
@@ -40,6 +34,14 @@ export const ZoneDocumentsScreen = () => {
     const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+
+    const FILTER_TABS: { value: StatusFilter; labelKey: string; defaultLabel: string }[] = [
+        { value: 'all', labelKey: 'zones.documents.filter.all', defaultLabel: 'All' },
+        { value: 'draft', labelKey: 'zones.documents.filter.drafts', defaultLabel: 'Drafts' },
+        { value: 'sent', labelKey: 'zones.documents.filter.sent', defaultLabel: 'Sent' },
+        { value: 'signed', labelKey: 'zones.documents.filter.signed', defaultLabel: 'Signed' },
+        { value: 'archived', labelKey: 'zones.documents.filter.archived', defaultLabel: 'Archived' },
+    ];
 
     const filteredDocuments = useMemo(() => {
         if (!documents) return [];
@@ -63,7 +65,10 @@ export const ZoneDocumentsScreen = () => {
         return counts;
     }, [documents]);
 
-    const getStatus = (status: string) => STATUS_CONFIG[status] || STATUS_CONFIG.draft;
+    const getStatus = (status: string) => {
+        const cfg = STATUS_KEYS[status] || STATUS_KEYS.draft;
+        return { ...cfg, label: t(cfg.labelKey, cfg.defaultLabel) };
+    };
 
     return (
         <TooltipProvider>
@@ -75,10 +80,10 @@ export const ZoneDocumentsScreen = () => {
                             <div className="p-2 rounded-xl bg-primary/10">
                                 <FileText className="w-5 h-5 text-primary" />
                             </div>
-                            Документы
+                            {t('zones.documents.title', 'Documents')}
                         </h2>
                         <p className="text-muted-foreground text-sm mt-1.5 ml-[44px]">
-                            Управление документами, шаблонами и электронным документооборотом
+                            {t('zones.documents.subtitle', 'Manage documents, templates and digital workflow')}
                         </p>
                     </div>
 
@@ -90,7 +95,7 @@ export const ZoneDocumentsScreen = () => {
                             onClick={() => setIsTemplatesOpen(true)}
                         >
                             <Settings className="w-4 h-4 mr-2" />
-                            Шаблоны
+                            {t('zones.documents.templates', 'Templates')}
                         </Button>
                         {!isReadOnly && (
                             <Button
@@ -99,7 +104,7 @@ export const ZoneDocumentsScreen = () => {
                                 className="bg-primary text-primary-foreground hover:bg-primary/90"
                             >
                                 <Plus className="w-4 h-4 mr-2" />
-                                Новый документ
+                                {t('zones.documents.newDocument', 'New document')}
                             </Button>
                         )}
                     </div>
@@ -110,7 +115,7 @@ export const ZoneDocumentsScreen = () => {
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <Input
-                            placeholder="Поиск по названию, номеру, контакту или сделке..."
+                            placeholder={t('zones.documents.searchPlaceholder', 'Search by title, number, contact or deal...')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 bg-card border-border text-foreground placeholder:text-muted-foreground"
@@ -133,7 +138,7 @@ export const ZoneDocumentsScreen = () => {
                                         }
                                     `}
                                 >
-                                    {tab.label}
+                                    {t(tab.labelKey, tab.defaultLabel)}
                                     {count > 0 && (
                                         <span className={`
                                             px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none
@@ -170,25 +175,29 @@ export const ZoneDocumentsScreen = () => {
                             </div>
                             {documents?.length === 0 ? (
                                 <>
-                                    <h3 className="text-lg font-semibold text-foreground mb-1.5">Нет документов</h3>
+                                    <h3 className="text-lg font-semibold text-foreground mb-1.5">
+                                        {t('zones.documents.empty.title', 'No documents')}
+                                    </h3>
                                     <p className="text-muted-foreground text-sm max-w-sm mb-6">
-                                        Создайте первый документ на основе шаблона. Привяжите его к сделке или контакту для автозаполнения.
+                                        {t('zones.documents.empty.description', 'Create your first document from a template. Link it to a deal or contact for autofill.')}
                                     </p>
                                     {!isReadOnly && (
                                         <Button onClick={() => setIsCreatorOpen(true)} className="bg-primary text-primary-foreground">
                                             <Plus className="w-4 h-4 mr-2" />
-                                            Создать документ
+                                            {t('zones.documents.createDocument', 'Create document')}
                                         </Button>
                                     )}
                                 </>
                             ) : (
                                 <>
-                                    <h3 className="text-lg font-semibold text-foreground mb-1.5">Ничего не найдено</h3>
+                                    <h3 className="text-lg font-semibold text-foreground mb-1.5">
+                                        {t('zones.documents.notFound.title', 'Nothing found')}
+                                    </h3>
                                     <p className="text-muted-foreground text-sm max-w-sm mb-4">
-                                        Попробуйте изменить параметры поиска или фильтра.
+                                        {t('zones.documents.notFound.description', 'Try adjusting your search or filter parameters.')}
                                     </p>
                                     <Button variant="outline" onClick={() => { setSearchQuery(''); setStatusFilter('all'); }}>
-                                        Сбросить фильтры
+                                        {t('zones.documents.resetFilters', 'Reset filters')}
                                     </Button>
                                 </>
                             )}
@@ -261,7 +270,7 @@ export const ZoneDocumentsScreen = () => {
                                                                     <Eye className="w-3.5 h-3.5" />
                                                                 </Button>
                                                             </TooltipTrigger>
-                                                            <TooltipContent side="bottom">Просмотр</TooltipContent>
+                                                            <TooltipContent side="bottom">{t('zones.documents.actions.view', 'View')}</TooltipContent>
                                                         </Tooltip>
                                                         <Tooltip>
                                                             <TooltipTrigger asChild>
@@ -281,7 +290,7 @@ export const ZoneDocumentsScreen = () => {
                                                                     <Download className="w-3.5 h-3.5" />
                                                                 </Button>
                                                             </TooltipTrigger>
-                                                            <TooltipContent side="bottom">Скачать</TooltipContent>
+                                                            <TooltipContent side="bottom">{t('zones.documents.actions.download', 'Download')}</TooltipContent>
                                                         </Tooltip>
                                                     </>
                                                 )}
@@ -293,7 +302,7 @@ export const ZoneDocumentsScreen = () => {
                                                                 size="icon"
                                                                 className="h-8 w-8 text-muted-foreground hover:text-destructive"
                                                                 onClick={() => {
-                                                                    if (confirm('Вы уверены, что хотите удалить этот документ?')) {
+                                                                    if (confirm(t('zones.documents.confirmDelete', 'Are you sure you want to delete this document?'))) {
                                                                         deleteDocument(doc.id);
                                                                     }
                                                                 }}
@@ -302,7 +311,7 @@ export const ZoneDocumentsScreen = () => {
                                                                 <Trash className="w-3.5 h-3.5" />
                                                             </Button>
                                                         </TooltipTrigger>
-                                                        <TooltipContent side="bottom">Удалить</TooltipContent>
+                                                        <TooltipContent side="bottom">{t('zones.documents.actions.delete', 'Delete')}</TooltipContent>
                                                     </Tooltip>
                                                 )}
                                             </div>
@@ -319,7 +328,7 @@ export const ZoneDocumentsScreen = () => {
                                                         {doc.file_url && (
                                                             <>
                                                                 <DropdownMenuItem onClick={() => window.open(doc.file_url!, '_blank')}>
-                                                                    <Eye className="w-4 h-4 mr-2" /> Просмотр
+                                                                    <Eye className="w-4 h-4 mr-2" /> {t('zones.documents.actions.view', 'View')}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuItem onClick={() => {
                                                                     const link = document.createElement('a');
@@ -329,7 +338,7 @@ export const ZoneDocumentsScreen = () => {
                                                                     link.click();
                                                                     document.body.removeChild(link);
                                                                 }}>
-                                                                    <Download className="w-4 h-4 mr-2" /> Скачать
+                                                                    <Download className="w-4 h-4 mr-2" /> {t('zones.documents.actions.download', 'Download')}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuSeparator />
                                                             </>
@@ -338,10 +347,10 @@ export const ZoneDocumentsScreen = () => {
                                                             <DropdownMenuItem
                                                                 className="text-destructive focus:text-destructive"
                                                                 onClick={() => {
-                                                                    if (confirm('Удалить документ?')) deleteDocument(doc.id);
+                                                                    if (confirm(t('zones.documents.confirmDelete', 'Are you sure you want to delete this document?'))) deleteDocument(doc.id);
                                                                 }}
                                                             >
-                                                                <Trash className="w-4 h-4 mr-2" /> Удалить
+                                                                <Trash className="w-4 h-4 mr-2" /> {t('zones.documents.actions.delete', 'Delete')}
                                                             </DropdownMenuItem>
                                                         )}
                                                     </DropdownMenuContent>
@@ -360,8 +369,8 @@ export const ZoneDocumentsScreen = () => {
                     <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
                         <span>
                             {filteredDocuments.length === documents.length
-                                ? `Всего: ${documents.length}`
-                                : `Показано ${filteredDocuments.length} из ${documents.length}`
+                                ? t('zones.documents.totalCount', 'Total: {{count}}', { count: documents.length })
+                                : t('zones.documents.filteredCount', 'Showing {{shown}} of {{total}}', { shown: filteredDocuments.length, total: documents.length })
                             }
                         </span>
                     </div>
