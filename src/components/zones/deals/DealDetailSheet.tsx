@@ -538,6 +538,16 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                         {t('zones.deals.lose', 'Lost')}
                       </Button>
                     </div>
+                    
+                    {/* Kaspi QR Button */}
+                    <Button
+                      variant="outline"
+                      className="w-full mt-2 h-10 text-sm border-[#F14635]/30 text-[#F14635] hover:bg-[#F14635]/10"
+                      onClick={() => setShowKaspiQR(true)}
+                    >
+                      <Smartphone className="h-4 w-4 mr-2" />
+                      {t('kaspi.generateQR', 'Kaspi QR Payment')}
+                    </Button>
                   </div>
                 )}
 
