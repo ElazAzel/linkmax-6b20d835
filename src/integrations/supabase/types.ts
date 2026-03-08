@@ -3706,6 +3706,10 @@ export type Database = {
         }[]
       }
       get_user_org_ids: { Args: { p_user_id: string }; Returns: string[] }
+      get_user_org_ids_for_members: {
+        Args: { p_user_id: string }
+        Returns: string[]
+      }
       get_user_pages: { Args: { p_user_id: string }; Returns: Json }
       get_user_zone_ids: { Args: { p_user_id: string }; Returns: string[] }
       get_zone_invite_by_token: { Args: { p_token: string }; Returns: Json }
