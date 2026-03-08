@@ -69,8 +69,8 @@ export default function Pricing() {
       pricesUsd: { 3: 0, 6: 0, 12: 0 },
       totalKzt: { 3: 0, 6: 0, 12: 0 },
       totalUsd: { 3: 0, 6: 0, 12: 0 },
-      features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
-      limitations: [t('pricing.limitations.watermark', 'Водяной знак LinkMAX.my'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
+      features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicViewStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
+      limitations: [t('pricing.limitations.watermark', 'Водяной знак LinkMAX.my')]
     },
     pro: {
       name: 'PRO',
