@@ -130,7 +130,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
               {index > 0 && (
                 <div className="absolute -top-4 left-10 flex items-center gap-1.5 py-1 px-2 rounded-full bg-destructive/10 text-[10px] font-bold text-destructive border border-destructive/20 z-10">
                   <TrendingDown className="h-3 w-3" />
-                  {stage.dropOff && stage.dropOff > 0 ? `${stage.dropOff}% потерь` : 'удержание'}
+                  {stage.dropOff && stage.dropOff > 0 ? `${stage.dropOff}% ${t('analytics.funnel.dropOff', 'потерь')}` : t('analytics.funnel.retention', 'удержание')}
                 </div>
               )}
 

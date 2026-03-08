@@ -44,25 +44,25 @@ interface ActivityScreenProps {
   isPremium: boolean;
 }
 
-const STATUS_CONFIG: Record<LeadStatus, {
+const STATUS_CONFIG_KEYS: Record<LeadStatus, {
   bg: string;
   text: string;
-  label: string;
+  i18nKey: string;
   icon: React.ComponentType<{ className?: string }>;
 }> = {
-  new: { bg: 'bg-blue-500', text: 'text-white', label: 'Новый', icon: Sparkles },
-  contacted: { bg: 'bg-amber-500', text: 'text-white', label: 'В работе', icon: Send },
-  qualified: { bg: 'bg-purple-500', text: 'text-white', label: 'Квалиф.', icon: CheckCheck },
-  converted: { bg: 'bg-emerald-500', text: 'text-white', label: 'Сделка', icon: CheckCheck },
-  lost: { bg: 'bg-gray-400', text: 'text-white', label: 'Потерян', icon: X },
+  new: { bg: 'bg-blue-500', text: 'text-white', i18nKey: 'crm.status.new', icon: Sparkles },
+  contacted: { bg: 'bg-amber-500', text: 'text-white', i18nKey: 'crm.status.contacted', icon: Send },
+  qualified: { bg: 'bg-purple-500', text: 'text-white', i18nKey: 'crm.status.qualified', icon: CheckCheck },
+  converted: { bg: 'bg-emerald-500', text: 'text-white', i18nKey: 'crm.status.converted', icon: CheckCheck },
+  lost: { bg: 'bg-gray-400', text: 'text-white', i18nKey: 'crm.status.lost', icon: X },
 };
 
-const SOURCE_ICONS: Record<string, { emoji: string; label: string }> = {
-  form: { emoji: '📝', label: 'Форма' },
-  messenger: { emoji: '💬', label: 'Мессенджер' },
-  manual: { emoji: '✏️', label: 'Вручную' },
-  page_view: { emoji: '👁️', label: 'Просмотр' },
-  other: { emoji: '📌', label: 'Другое' },
+const SOURCE_ICONS_KEYS: Record<string, { emoji: string; i18nKey: string }> = {
+  form: { emoji: '📝', i18nKey: 'crm.source.form' },
+  messenger: { emoji: '💬', i18nKey: 'crm.source.messenger' },
+  manual: { emoji: '✏️', i18nKey: 'crm.source.manual' },
+  page_view: { emoji: '👁️', i18nKey: 'crm.source.pageView' },
+  other: { emoji: '📌', i18nKey: 'crm.source.other' },
 };
 
 const containerVariants = {

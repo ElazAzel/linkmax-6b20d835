@@ -278,7 +278,7 @@ export function EventRegistrationsList({
                           </Badge>
                           {ticketStatusConfig && (
                             <Badge variant="outline" className={`${ticketStatusConfig.bg} ${ticketStatusConfig.text} text-[10px]`}>
-                              {ticketStatusConfig.label}
+                              {t(ticketStatusConfig.i18nKey)}
                             </Badge>
                           )}
                         </div>

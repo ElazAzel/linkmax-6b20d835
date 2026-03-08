@@ -142,7 +142,7 @@ export const BlockPerformance = memo(function BlockPerformance({
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium truncate">{block.blockTitle}</span>
                   <Badge variant="outline" className="text-[10px] px-1.5">
-                    {blockTypeLabels[block.blockType] || block.blockType}
+                    {t(blockTypeI18nKeys[block.blockType] || '', block.blockType)}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-3 mt-0.5">

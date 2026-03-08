@@ -41,7 +41,7 @@ export const TrafficSourcesChart = memo(function TrafficSourcesChart({
   const chartData = sources.map(source => {
     const config = sourceConfig[source.source] || sourceConfig.unknown;
     return {
-      name: config.label,
+      name: t(config.i18nKey, source.source),
       value: source.count,
       percentage: source.percentage,
       color: config.color,

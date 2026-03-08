@@ -199,7 +199,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
         .in('registration_id', (data || []).map(r => r.attendee_email)); // We'll match by registration later
 
       // Create CSV
-      const headers = ['Имя', 'Email', 'Телефон', 'Статус', 'Дата регистрации'];
+      const headers = [t('events.csvName', 'Имя'), 'Email', t('events.csvPhone', 'Телефон'), t('events.csvStatus', 'Статус'), t('events.csvDate', 'Дата регистрации')];
       const rows = (data || []).map(r => [
         r.attendee_name,
         r.attendee_email,
