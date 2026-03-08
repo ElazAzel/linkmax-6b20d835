@@ -134,6 +134,8 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
   const navigate = useNavigate();
   const [showVerification, setShowVerification] = useState(false);
   const [showTelegramVerification, setShowTelegramVerification] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [showBillingSheet, setShowBillingSheet] = useState(false);
 
   return (
     <div className="min-h-screen safe-area-top">
