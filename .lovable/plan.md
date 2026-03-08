@@ -47,6 +47,17 @@
 
 ---
 
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
+
+---
+
 # Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
 ## Текущее состояние LinkMAX Business Zones
