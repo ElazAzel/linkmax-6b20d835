@@ -185,7 +185,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
           <SheetTitle className="flex items-center gap-2">
             <span className="truncate">{deal.title}</span>
             {deal.status !== 'open' && (
-              <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-[10px]">
+              <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-xs">
                 {deal.status === 'won' ? `✓ ${t('zones.deals.win', 'Won')}` : `✗ ${t('zones.deals.lose', 'Lost')}`}
               </Badge>
             )}
