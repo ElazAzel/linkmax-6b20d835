@@ -132,7 +132,13 @@ export const fintechService = {
                 .eq('user_id', userId)
                 .single();
 
-            if (walletError) throw walletError;
+            // Gracefully handle missing table (feature not launched yet)
+            if (walletError) {
+                if (walletError.code === 'PGRST205' || walletError.code === '42P01') {
+                    return { wallet: null, transactions: [], pendingGMV: 0 };
+                }
+                throw walletError;
+            }
 
             const { data: transactions, error: txError } = await (supabase as any)
                 .from('wallet_transactions')

@@ -156,7 +156,12 @@ export function useZoneInbox(zoneId: string | null) {
         })
         .select()
         .single();
-      if (error) throw error;
+      if (error) {
+        if (error.code === '42501') {
+          throw new Error('У вас нет доступа к этой зоне. Убедитесь, что вы являетесь активным участником.');
+        }
+        throw error;
+      }
       return data as ZoneConversation;
     },
     onSuccess: () => {
