@@ -51,7 +51,7 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
 
   const addItem = () => {
     const newItem: PricingItem = {
-      id: `price-${Date.now()}`,
+      id: crypto.randomUUID ? `price-${crypto.randomUUID()}` : `price-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       name: createMultilingualString(''),
       description: createMultilingualString(''),
       price: 0,

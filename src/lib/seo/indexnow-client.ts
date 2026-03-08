@@ -59,9 +59,10 @@ export async function fetchPageSearchDiagnostics(pageId: string) {
 }
 
 export interface ChildEntityDetail {
+  id: string;
   title: string;
   slug: string;
-  state: 'eligible' | 'excluded_thin' | 'removed' | 'parent_not_indexable';
+  state: 'eligible' | 'excluded_thin' | 'removed' | 'parent_not_indexable' | 'active' | 'thin';
   url: string;
 }
 
@@ -73,6 +74,9 @@ export interface ChildSummary {
   parent_not_indexable: number;
 }
 
+/** New id-keyed format: { [itemId]: { slug, state, title } } */
+export type ServiceSlugsMap = Record<string, { slug: string; state: string; title: string }>;
+
 export interface SearchDiagnostics {
   page_id: string;
   slug: string;
@@ -83,7 +87,7 @@ export interface SearchDiagnostics {
   is_indexable: boolean;
   included_in_sitemap: boolean;
   last_indexnow_at: string | null;
-  service_slugs: Record<string, string> | null;
+  service_slugs: ServiceSlugsMap | null;
   child_page_count: number;
   child_summary: ChildSummary | null;
   child_details: ChildEntityDetail[] | null;

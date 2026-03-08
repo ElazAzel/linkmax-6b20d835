@@ -385,8 +385,13 @@ export function AdminSearchDiagnosticsTab() {
                               {children.map(child => {
                                 const stateInfo = CHILD_STATE_LABELS[child.state] || { label: child.state, color: '' };
                                 return (
-                                  <TableRow key={child.slug}>
-                                    <TableCell className="text-xs max-w-[150px] truncate">{child.title}</TableCell>
+                                  <TableRow key={child.id || child.slug}>
+                                    <TableCell className="text-xs max-w-[150px] truncate">
+                                      {child.title}
+                                      {child.id?.startsWith('legacy-') && (
+                                        <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">legacy</Badge>
+                                      )}
+                                    </TableCell>
                                     <TableCell className="font-mono text-[10px]">{child.slug}</TableCell>
                                     <TableCell>
                                       <Badge variant="outline" className={cn('text-[9px]', stateInfo.color)}>
