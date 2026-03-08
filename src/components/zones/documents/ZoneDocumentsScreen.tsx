@@ -33,6 +33,8 @@ export const ZoneDocumentsScreen = () => {
     const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId, { isReadOnly });
     const [isCreatorOpen, setIsCreatorOpen] = useState(false);
     const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
+    const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
+    const [selectedDocument, setSelectedDocument] = useState<ZoneDocument | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
