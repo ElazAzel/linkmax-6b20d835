@@ -23,6 +23,7 @@ import Coins from 'lucide-react/dist/esm/icons/coins';
 import Languages from 'lucide-react/dist/esm/icons/languages';
 import Handshake from 'lucide-react/dist/esm/icons/handshake';
 import Banknote from 'lucide-react/dist/esm/icons/banknote';
+import Search from 'lucide-react/dist/esm/icons/search';
 
 // Lazy load heavy tab components
 const AdminOverviewTab = lazy(() => import('@/components/admin/AdminOverviewTab').then(m => ({ default: m.AdminOverviewTab })));
