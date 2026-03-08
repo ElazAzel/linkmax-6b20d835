@@ -252,7 +252,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     <div key={dp.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 border border-muted group">
                       <div className="min-w-0">
                         <p className="text-sm font-medium truncate">{dp.zone_products?.name || 'Product'}</p>
-                        <p className="text-[10px] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           {dp.quantity} x {dp.unit_price?.toLocaleString()} {deal.currency}
                         </p>
                       </div>
