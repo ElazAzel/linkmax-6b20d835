@@ -260,6 +260,25 @@ export const ZoneDocumentsScreen = () => {
 
                                             {/* Desktop actions */}
                                             <div className="hidden sm:flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                {/* Generate PDF button */}
+                                                {doc.template_id && (
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-muted-foreground hover:text-primary"
+                                                                onClick={() => {
+                                                                    setSelectedDocument(doc);
+                                                                    setIsGeneratorOpen(true);
+                                                                }}
+                                                            >
+                                                                <Sparkles className="w-3.5 h-3.5" />
+                                                            </Button>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent side="bottom">{t('zones.documents.actions.generate', 'Generate PDF')}</TooltipContent>
+                                                    </Tooltip>
+                                                )}
                                                 {doc.file_url && (
                                                     <>
                                                         <Tooltip>
