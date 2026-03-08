@@ -289,10 +289,15 @@ export type Database = {
           client_name: string
           client_notes: string | null
           client_phone: string | null
+          confirmed_at: string | null
           created_at: string
           id: string
           owner_id: string
           page_id: string
+          payment_amount: number | null
+          payment_method: string | null
+          payment_status: string
+          reminder_sent: boolean
           slot_date: string
           slot_end_time: string | null
           slot_time: string
@@ -307,10 +312,15 @@ export type Database = {
           client_name: string
           client_notes?: string | null
           client_phone?: string | null
+          confirmed_at?: string | null
           created_at?: string
           id?: string
           owner_id: string
           page_id: string
+          payment_amount?: number | null
+          payment_method?: string | null
+          payment_status?: string
+          reminder_sent?: boolean
           slot_date: string
           slot_end_time?: string | null
           slot_time: string
@@ -325,10 +335,15 @@ export type Database = {
           client_name?: string
           client_notes?: string | null
           client_phone?: string | null
+          confirmed_at?: string | null
           created_at?: string
           id?: string
           owner_id?: string
           page_id?: string
+          payment_amount?: number | null
+          payment_method?: string | null
+          payment_status?: string
+          reminder_sent?: boolean
           slot_date?: string
           slot_end_time?: string | null
           slot_time?: string
