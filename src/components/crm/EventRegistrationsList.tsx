@@ -251,8 +251,8 @@ export function EventRegistrationsList({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <span className="font-medium text-sm truncate">{reg.attendee_name}</span>
-                        <Badge variant="outline" className={`${statusConfig.bg} ${statusConfig.text} text-[10px]`}>
-                          {t(`events.status.${reg.status}`, statusConfig.label)}
+                      <Badge variant="outline" className={`${statusConfig.bg} ${statusConfig.text} text-[10px]`}>
+                          {t(statusConfig.i18nKey)}
                         </Badge>
                       </div>
 
