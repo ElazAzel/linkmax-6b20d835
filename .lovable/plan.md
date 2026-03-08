@@ -1,209 +1,108 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+# Retention & Repeat Revenue Layer — Implementation Plan
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+## Verdict
 
-### Новая тарифная модель (ADR 0026)
+Activation and booking/payment are solid. The product now risks being **single-use**: creator publishes, gets a few bookings, and has no reason to return. End-customers book once and disappear. There is no post-service loop, no repeat booking nudge, no stale creator reactivation, and no operator summary that creates a daily habit.
 
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+## What We Build (P0 — This Iteration)
 
----
+### Task 1: Daily Operator Summary Widget on HomeScreen
 
-## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
+**Problem:** After IncomingWidget shows 0 new items, HomeScreen becomes static. No reason to check daily.
 
-| Задача | Статус |
-|--------|--------|
-| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
-| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
-| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
-| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
-| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
+**Solution:** New `OperatorSummaryWidget` below IncomingWidget showing:
+- Today's upcoming bookings (count + next one)
+- Unanswered leads count with aging alert
+- This week's stats vs last week (views, leads, bookings delta)
+- "Stale page" alert if no edits in 14+ days
 
----
+**Files:**
+- `src/components/dashboard-v2/widgets/OperatorSummaryWidget.tsx` — **create**
+- `src/components/dashboard-v2/screens/HomeScreen.tsx` — add widget after IncomingWidget
 
-## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
+### Task 2: Post-Service Follow-Up Prompt
 
-| Задача | Статус |
-|--------|--------|
-| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
-| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
-| Добавить Team Performance section (метрики по assignee) | ✅ |
-| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
-| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
+**Problem:** After a booking is completed (date passed), nothing happens. No prompt to follow up, no repeat booking nudge.
 
----
+**Solution:** In `IncomingWidget` and `ActivityScreen`, show "completed yesterday" bookings with:
+- One-tap "Send follow-up" (WhatsApp pre-filled: "Спасибо за визит! Как вам? Запишетесь снова?")
+- Badge "Follow-up" on completed bookings without interaction
+- Track `post_service_followup_sent` event
 
-## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+**Files:**
+- `src/components/dashboard-v2/widgets/IncomingWidget.tsx` — add completed bookings section
+- `src/components/dashboard-v2/screens/ActivityScreen.tsx` — follow-up CTA on completed bookings
+- `src/lib/activation-events.ts` — add retention events
 
-| Задача | Статус |
-|--------|--------|
-| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
-| Увеличить touch targets до 44px (min-h-11) | ✅ |
-| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
-| Улучшить Empty States с CTA | ✅ |
+### Task 3: Repeat Booking Detection & Nudge
 
----
+**Problem:** No way to identify returning customers or prompt repeat bookings.
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+**Solution:** 
+- In `BookingBlock.tsx` confirmation screen, detect if `client_phone` has previous bookings (query bookings table)
+- If returning customer: show "Добро пожаловать снова!" badge
+- For owner: in ActivityScreen, tag leads/bookings from repeat customers with a "Повторный" badge
+- New hook `useRepeatCustomers` that identifies phones/emails with 2+ bookings
 
-## Текущее состояние LinkMAX Business Zones
+**Files:**
+- `src/hooks/crm/useRepeatCustomers.ts` — **create**
+- `src/components/dashboard-v2/screens/ActivityScreen.tsx` — repeat customer badge
+- `src/components/blocks/BookingBlock.tsx` — returning customer detection in confirmation
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+### Task 4: Stale Creator Reactivation Alerts
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+**Problem:** Creator stops logging in. No in-product mechanism to surface this.
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+**Solution:**
+- On HomeScreen, if `last_active_date` is 7+ days ago AND there are unprocessed leads/bookings, show alert card: "У вас X необработанных заявок за последнюю неделю"
+- Extend `send-weekly-digest` edge function to include: unprocessed leads count, upcoming bookings, repeat customer count
+- Add `creator_reactivated` event when returning after 7+ day gap
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+**Files:**
+- `src/components/dashboard-v2/widgets/OperatorSummaryWidget.tsx` — stale alert section
+- `supabase/functions/send-weekly-digest/index.ts` — enhance with CRM data
+- `src/lib/activation-events.ts` — retention events
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+### Task 5: Retention Event Tracking
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+**Problem:** No instrumentation for post-first-booking lifecycle.
 
-### Фаза 3: Tasks -- закрытие пробелов (P1)
+**Solution:** Expand `activation-events.ts` with:
+- `post_service_followup_sent` — owner sent follow-up after service
+- `repeat_booking_detected` — same phone/email booked again
+- `creator_returned_after_gap` — returned after 3+ days
+- `stale_leads_alert_shown` — stale alert displayed
+- `weekly_digest_sent` — digest delivered
+- `booking_completed` — service date passed (already in type but not tracked)
 
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+**Files:**
+- `src/lib/activation-events.ts` — add types + helpers
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+### Task 6: i18n Keys for Retention Layer
 
-### Фаза 4: Аналитика Зоны (P1)
-
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+**Files:**
+- `src/i18n/locales/ru.json` — operator summary, follow-up, repeat customer, stale alerts
+- `src/i18n/locales/en.json` — same
+- `src/i18n/locales/kk.json` — same
 
 ---
 
-## Что НЕ нужно копировать из Bitrix24
+## What We Do NOT Build Now
 
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+- Automated email/Telegram follow-up sequences (P1)
+- Loyalty points / packages / bundles (P2)
+- AI-suggested follow-up messages (P2)
+- Customer-facing "book again" reminders via SMS/WhatsApp (P1 — requires explicit consent flow)
+- Kanban/pipeline for repeat customers (Zone CRM scope)
+- Churn prediction / ML scoring (P2)
 
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+## Expected Outcome
 
----
+- Creator sees daily operator summary → habit loop
+- Completed bookings trigger follow-up prompt → post-service engagement
+- Repeat customers are identified and tagged → revenue signal
+- Stale creators get contextual alerts → reactivation
+- All retention events tracked → measurable
 
-## Приоритезация (RICE)
-
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
-
----
-
-## Технический план реализации
-
-### DB миграции (новые таблицы/колонки)
-
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
-
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
-
----
-
-## Рекомендуемый порядок реализации
-
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
-
----
-
-## Post-Roadmap: Teamwork & Integrations (Март 2026)
-
-| Задача | Статус |
-|--------|--------|
-| Documents MVP (генерация договоров, PDF) | ✅ |
-| Deal Comments (zone_deal_comments) | ✅ |
-| @Mentions в комментариях к сделкам | ✅ |
-| MentionInput компонент с автоподсказкой | ✅ |
-| Telegram уведомления при @mention | ✅ |
-| Excel Export (Contacts + Deals + Воронка) | ✅ |
-| mentioned_user_ids колонка в zone_deal_comments | ✅ |
