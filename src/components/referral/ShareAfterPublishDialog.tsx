@@ -26,11 +26,30 @@ interface ShareAfterPublishDialogProps {
   niche?: string | null;
 }
 
+// Niche-specific share messages
+function getNicheShareText(niche: string | null | undefined, url: string): string {
+  switch (niche) {
+    case 'beauty':
+      return `Записаться ко мне онлайн: ${url}`;
+    case 'fitness':
+      return `Запишись на тренировку: ${url}`;
+    case 'health':
+      return `Записаться на приём: ${url}`;
+    case 'education':
+      return `Записаться на занятие: ${url}`;
+    case 'food':
+      return `Забронировать столик / заказать: ${url}`;
+    default:
+      return `Мои услуги и запись: ${url}`;
+  }
+}
+
 export function ShareAfterPublishDialog({
   open,
   onOpenChange,
   userId,
   publishedUrl,
+  niche,
 }: ShareAfterPublishDialogProps) {
   const { t } = useTranslation();
   const { stats, shareLink, copyCode } = useReferral(userId);
