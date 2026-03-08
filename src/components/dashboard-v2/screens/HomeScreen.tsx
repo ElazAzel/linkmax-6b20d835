@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * HomeScreen - Dashboard overview with primary page card and quick actions
- * Now includes PageSwitcher in the header for multi-page context
+ * HomeScreen v2.0 - Activation hub with outcome-based checklist
+ * Moves checklist above page card, removes "Why LinkMAX", adds celebration + dynamic CTAs
  */
 import { memo, useMemo, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +31,7 @@ import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
-import { ActivationChecklist } from '@/components/onboarding/ActivationChecklist';
+import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 
 interface HomeScreenProps {
@@ -68,11 +68,16 @@ export const HomeScreen = memo(function HomeScreen({
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  // Activation checklist
+  const viewCount = pageData?.viewCount || 0;
+
+  // Activation checklist with outcome-based data
   const activation = useActivationChecklist({
     pageData,
     onOpenEditor,
     onShare,
+    viewCount,
+    leadsCount: realLeadsCount,
+    totalClicks: 0, // TODO: pass real click count when available
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
 
@@ -89,7 +94,6 @@ export const HomeScreen = memo(function HomeScreen({
     : t('dashboard.home.myPage', 'Моя страница');
   const avatarUrl = profileBlock?.avatar || '';
   const blockCount = pageData.blocks.length;
-  const viewCount = pageData.viewCount || 0;
   const isPublished = pageData.isPublished || false;
   const slug = pageData.slug || 'mypage';
 
@@ -97,14 +101,22 @@ export const HomeScreen = memo(function HomeScreen({
   const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
-  // Context-aware tip
+  // Context-aware tip — outcome-focused, not cosmetic
   const dynamicTip = useMemo(() => {
-    if (!avatarUrl) return t('activation.tips.addAvatar', 'Добавьте фото профиля — страницы с аватаром получают на 60% больше доверия');
-    if (!hasContent) return t('activation.tips.addBlock', 'Добавьте первый блок — ссылку, товар или видео');
-    if (!isPublished) return t('activation.tips.publish', 'Опубликуйте страницу, чтобы она стала доступна по ссылке');
-    if (viewCount < 10) return t('activation.tips.share', 'Поделитесь ссылкой в соцсетях, чтобы получить первых посетителей');
-    return t('activation.tips.pricing', 'Добавьте блок с ценами, чтобы увеличить конверсию на 40%');
-  }, [avatarUrl, hasContent, isPublished, viewCount, t]);
+    if (!isPublished && hasContent) {
+      return t('activation.tips.publish', 'Опубликуйте страницу, чтобы она стала доступна по ссылке');
+    }
+    if (isPublished && viewCount === 0) {
+      return t('activation.tips.shareForVisitor', 'Поделитесь ссылкой — 5 из 10 пользователей получают первого посетителя в первый час');
+    }
+    if (isPublished && viewCount > 0 && realLeadsCount === 0) {
+      return t('activation.tips.addForm', 'Добавьте форму сбора контактов — каждая 5-я страница с формой получает лиды');
+    }
+    if (!hasContent) {
+      return t('activation.tips.addBlock', 'Добавьте первый блок — ссылку, товар или видео');
+    }
+    return t('activation.tips.growTraffic', 'Поделитесь ссылкой в соцсетях, чтобы привлечь больше посетителей');
+  }, [hasContent, isPublished, viewCount, realLeadsCount, t]);
 
   // Real stats from props
   const weeklyStats = {
@@ -121,6 +133,26 @@ export const HomeScreen = memo(function HomeScreen({
       />
 
       <div className="px-5 py-6 space-y-6">
+        {/* Activation Checklist — ABOVE page card for visibility */}
+        {activation.isVisible && !checklistDismissed && (
+          <ActivationChecklist
+            steps={activation.steps}
+            completedCount={activation.completedCount}
+            totalCount={activation.totalCount}
+            progress={activation.progress}
+            canDismiss={activation.canDismiss}
+            onDismiss={() => {
+              activation.dismiss();
+              setChecklistDismissed(true);
+            }}
+          />
+        )}
+
+        {/* Celebration card when all steps complete */}
+        {activation.showCelebration && (
+          <ActivationCelebration onDismiss={activation.dismissCelebration} />
+        )}
+
         {/* Primary Page Card */}
         <Card className="p-6 space-y-5 glass-card border-white/20 shadow-glass-lg relative overflow-hidden group">
           <div className="absolute inset-0 bg-liquid-mesh opacity-10 -z-10 pointer-events-none" />
@@ -180,36 +212,69 @@ export const HomeScreen = memo(function HomeScreen({
             </button>
           </div>
 
-          {/* Primary Actions */}
+          {/* Primary Actions — Dynamic CTA based on state */}
           <div className="flex gap-3">
-            <Button
-              size="lg"
-              className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold shadow-lg shadow-primary/25"
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                onOpenEditor();
-              }}
-            >
-              <PenTool className="h-5 w-5 mr-2 shrink-0" />
-              {t('dashboard.home.edit', 'Редактировать')}
-            </Button>
-            <Button
-              size="lg"
-              variant={isPublished ? 'secondary' : 'default'}
-              className={cn(
-                "h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold",
-                !isPublished && "bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25"
-              )}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                onShare();
-              }}
-            >
-              <Share2 className="h-5 w-5 mr-2 shrink-0" />
-              {isPublished ? t('dashboard.home.share', 'Поделиться') : t('dashboard.home.publish', 'Опубликовать')}
-            </Button>
+            {!isPublished ? (
+              <>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
+                >
+                  <PenTool className="h-5 w-5 mr-2 shrink-0" />
+                  {t('dashboard.home.edit', 'Редактировать')}
+                </Button>
+                <Button
+                  size="lg"
+                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
+                >
+                  <Share2 className="h-5 w-5 mr-2 shrink-0" />
+                  {t('dashboard.home.publish', 'Опубликовать')}
+                </Button>
+              </>
+            ) : viewCount === 0 ? (
+              <>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
+                >
+                  <PenTool className="h-5 w-5 mr-2 shrink-0" />
+                  {t('dashboard.home.edit', 'Редактировать')}
+                </Button>
+                <Button
+                  size="lg"
+                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold shadow-lg shadow-primary/25"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
+                >
+                  <Share2 className="h-5 w-5 mr-2 shrink-0" />
+                  {t('dashboard.home.share', 'Поделиться')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  size="lg"
+                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold shadow-lg shadow-primary/25"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
+                >
+                  <PenTool className="h-5 w-5 mr-2 shrink-0" />
+                  {t('dashboard.home.edit', 'Редактировать')}
+                </Button>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
+                >
+                  <Share2 className="h-5 w-5 mr-2 shrink-0" />
+                  {t('dashboard.home.share', 'Поделиться')}
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Secondary Actions */}
@@ -229,21 +294,6 @@ export const HomeScreen = memo(function HomeScreen({
             )}
           </div>
         </Card>
-
-        {/* Activation Checklist */}
-        {activation.isVisible && !checklistDismissed && (
-          <ActivationChecklist
-            steps={activation.steps}
-            completedCount={activation.completedCount}
-            totalCount={activation.totalCount}
-            progress={activation.progress}
-            canDismiss={activation.canDismiss}
-            onDismiss={() => {
-              activation.dismiss();
-              setChecklistDismissed(true);
-            }}
-          />
-        )}
 
         {/* Quick Actions Grid */}
         <div className="space-y-3">
@@ -296,7 +346,7 @@ export const HomeScreen = memo(function HomeScreen({
               iconBg="bg-pink-500/20"
               iconColor="text-pink-600"
               title={t('dashboard.home.gallery', 'Галерея')}
-              description={t('dashboard.home.galleryDesc', 'Вдохновение')}
+              description={t('dashboard.home.galleryDesc', 'Вдохновление')}
               onClick={() => navigate('/gallery')}
               gradient="from-pink-500/15 to-rose-500/15"
               border="border-pink-500/20"
@@ -317,7 +367,7 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </div>
 
-        {/* AI Recommendation */}
+        {/* Contextual Tip — outcome-focused */}
         <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
           <div className="flex items-start gap-4">
             <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
@@ -332,26 +382,7 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </Card>
 
-        {/* Phase B: Why LinkMAX — value props */}
-        <Card className="p-5 border-border/40 bg-card/50">
-          <h4 className="font-bold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
-            {t('phaseB.whyLnkmx.title', 'Почему LinkMAX')}
-          </h4>
-          <ul className="space-y-2 text-sm">
-            <li className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-              {t('phaseB.whyLnkmx.noSetup', 'CRM за 15 минут — без внедрения')}
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-              {t('phaseB.whyLnkmx.mobile', 'Вся работа со смартфона')}
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-              {t('phaseB.whyLnkmx.premium', 'Дизайн премиум из коробки')}
-            </li>
-          </ul>
-        </Card>
+        {/* "Why LinkMAX" card REMOVED — user already converted, this is landing copy */}
       </div>
     </div>
   );
