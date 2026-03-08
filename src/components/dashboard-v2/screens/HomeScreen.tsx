@@ -154,6 +154,15 @@ export const HomeScreen = memo(function HomeScreen({
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
         )}
 
+        {/* Operator Widget — incoming leads + bookings (after activation) */}
+        {(checklistDismissed || activation.showCelebration || !activation.isVisible) && isPublished && (
+          <IncomingWidget
+            pageId={pageData?.id}
+            onOpenActivity={onOpenActivity}
+            onShare={onShare}
+          />
+        )}
+
         {/* Primary Page Card */}
         <Card className="p-6 space-y-5 glass-card border-white/20 shadow-glass-lg relative overflow-hidden group">
           <div className="absolute inset-0 bg-liquid-mesh opacity-10 -z-10 pointer-events-none" />

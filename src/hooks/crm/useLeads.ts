@@ -189,6 +189,7 @@ export function useLeads() {
     createLead,
     updateLead,
     deleteLead,
+    quickReply,
     refreshLeads: fetchLeads,
     getLeadStats,
   };
