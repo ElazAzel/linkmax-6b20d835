@@ -797,7 +797,7 @@ function buildStaticSitemap(): string {
 async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<string> {
   const { data } = await supabase
     .from('pages')
-    .select('slug, updated_at, avatar_url, title, quality_score')
+    .select('slug, updated_at, avatar_url, title, quality_score, service_slugs')
     .eq('is_published', true)
     .gte('quality_score', QUALITY_THRESHOLD)
     .not('slug', 'is', null)
@@ -823,6 +823,16 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
       xml += `    <image:image><image:loc>${escapeXml(page.avatar_url)}</image:loc><image:title>${escapeXml(page.title || page.slug)}</image:title></image:image>\n`;
     }
     xml += `  </url>\n`;
+
+    // Emit service child URLs from service_slugs mapping
+    const svcSlugs = page.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
+    if (svcSlugs && typeof svcSlugs === 'object') {
+      for (const [, entry] of Object.entries(svcSlugs)) {
+        if (entry && typeof entry === 'object' && entry.state === 'active' && entry.slug) {
+          xml += `  <url><loc>${BASE_URL}/${escapedSlug}/services/${escapeXml(entry.slug)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.4</priority></url>\n`;
+        }
+      }
+    }
   }
 
   xml += `</urlset>`;
