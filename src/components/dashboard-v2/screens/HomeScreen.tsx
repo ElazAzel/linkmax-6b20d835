@@ -68,6 +68,14 @@ export const HomeScreen = memo(function HomeScreen({
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  // Activation checklist
+  const activation = useActivationChecklist({
+    pageData,
+    onOpenEditor,
+    onShare,
+  });
+  const [checklistDismissed, setChecklistDismissed] = useState(false);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
