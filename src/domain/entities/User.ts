@@ -166,10 +166,10 @@ export const FREE_TIER_LIMITS: FreemiumLimits = {
   canUseAdvancedThemes: false,
 };
 
-// Pro tier includes ALL premium features
+// Pro tier includes ALL premium features (AI capped at 10/mo)
 export const PRO_TIER_LIMITS: FreemiumLimits = {
   maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: 5,
+  maxAIPageGenerationsPerMonth: 10,
   canUseAnalytics: true,
   canUseCRM: true,
   showWatermark: false,

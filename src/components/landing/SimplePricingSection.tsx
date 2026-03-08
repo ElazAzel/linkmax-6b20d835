@@ -198,7 +198,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
               <Button
                 size="lg"
                 className="w-full rounded-xl py-5 shadow-lg shadow-primary/25"
-                onClick={openPremiumPurchase}
+                onClick={() => navigate('/pricing')}
               >
                 <Crown className="mr-2 h-4 w-4" />
                 {t('landing.simplePricing.premium.cta', 'Получить Premium')}

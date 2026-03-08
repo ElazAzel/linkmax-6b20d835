@@ -41,13 +41,6 @@ export default function Pricing() {
     tier,
     isLoading
   } = usePremiumStatus();
-  const {
-    balance,
-    canAffordPremium,
-    premiumCost,
-    buyPremiumDay,
-    converting
-  } = useTokens();
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(12);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
