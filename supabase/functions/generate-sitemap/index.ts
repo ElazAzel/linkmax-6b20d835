@@ -286,7 +286,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
       'name': `${page.title || '@' + slug} - ${primaryOfferOrBio} | LinkMAX`,
       'description': metaDesc,
       'inLanguage': lang,
-      'isPartOf': { '@type': 'WebSite', 'name': 'lnkmx', 'url': BASE_URL },
+      'isPartOf': { '@type': 'WebSite', 'name': 'LinkMAX', 'url': BASE_URL },
       'mainEntity': { '@id': entityId },
       'dateModified': page.updated_at || new Date().toISOString(),
     },
