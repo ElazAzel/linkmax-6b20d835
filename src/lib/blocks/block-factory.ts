@@ -252,7 +252,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     title: 'Scratch to Reveal',
     revealText: 'You won a prize!',
     backgroundColor: '#FFD700',
-    isPremium: true,
     ...overrides,
   }),
 
