@@ -31,7 +31,7 @@ import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import type { ZoneDeal, ZoneDealStage } from '@/types/zones';
-import { useZoneDealActivities, useZoneDealProducts } from '@/hooks/zones/useZoneDeals';
+import { useZoneDealActivities, useZoneDealProducts, useZoneDealComments } from '@/hooks/zones/useZoneDeals';
 import { useZoneDealFields } from '@/hooks/zones/useZoneDealFields';
 import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
