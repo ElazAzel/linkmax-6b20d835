@@ -349,9 +349,9 @@ function MetricCard({ icon, label, value, sub, trend }: { icon: React.ReactNode;
             {icon}
           </div>
           {trend && (
-            <Badge variant="outline" className="text-[10px] font-bold text-green-500 bg-green-500/5 border-green-500/20">
-              {trend}
-            </Badge>
+          <Badge variant="outline" className="text-xs font-bold text-green-500 bg-green-500/5 border-green-500/20">
+            {trend}
+          </Badge>
           )}
         </div>
         <div className="space-y-0.5">
