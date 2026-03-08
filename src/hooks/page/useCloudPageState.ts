@@ -154,19 +154,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         // Then auto-publish
         await publishPageMutation.mutateAsync();
 
-        // IndexNow notification (fire-and-forget, throttled)
+        // IndexNow notification (fire-and-forget, throttled, quality-gated)
         const slug = sanitizedData.slug;
         if (slug) {
           const { score } = computeQualityScore(sanitizedData);
-          if (score >= 40) {
-            const lastSent = indexNowLastSent.get(slug) || 0;
-            if (Date.now() - lastSent > INDEXNOW_THROTTLE_MS) {
-              indexNowLastSent.set(slug, Date.now());
-              supabase.functions.invoke('notify-indexnow', {
-                body: { urls: [`https://lnkmx.my/${slug}`] }
-              }).catch(() => {});
-            }
-          }
+          notifyIndexNow(slug, score, !!sanitizedData.isPublished).catch(() => {});
         }
 
         setSaveStatus('saved');
