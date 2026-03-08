@@ -132,6 +132,8 @@ const Experts = lazy(() => import("./pages/Experts"));
 const EventScanner = lazy(() => import("./pages/EventScanner"));
 const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
+const ForMasters = lazy(() => import("./pages/ForMasters"));
+const FromPage = lazy(() => import("./pages/FromPage"));
 
 // Create router with optimized code splitting
 const router = createBrowserRouter([
