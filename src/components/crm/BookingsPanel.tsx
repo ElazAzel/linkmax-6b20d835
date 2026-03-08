@@ -58,6 +58,7 @@ const statusColors: Record<string, string> = {
 
 export function BookingsPanel() {
   const { t, i18n } = useTranslation();
+  const { isRepeatCustomer } = useRepeatCustomers();
   const { user } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
