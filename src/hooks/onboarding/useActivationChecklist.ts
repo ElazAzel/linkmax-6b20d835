@@ -33,6 +33,7 @@ export function useActivationChecklist({
   onShare,
   viewCount = 0,
   leadsCount = 0,
+  bookingsCount = 0,
   totalClicks = 0,
 }: UseActivationChecklistOptions) {
   const { t } = useTranslation();
