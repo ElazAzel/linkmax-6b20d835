@@ -276,7 +276,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                   <div className="text-2xl font-black text-warning mb-1">
                     {new Intl.NumberFormat('ru-KZ', { style: 'currency', currency: 'KZT', maximumFractionDigits: 0 }).format(metrics.pendingAmount)}
                   </div>
-                  <p className="text-[10px] text-muted-foreground">{t('zones.dashboard.pendingPaymentsDesc', 'Сумма всех активных инвойсов')}</p>
+                  <p className="text-xs text-muted-foreground">{t('zones.dashboard.pendingPaymentsDesc', 'Сумма всех активных инвойсов')}</p>
                 </CardContent>
               </Card>
 
