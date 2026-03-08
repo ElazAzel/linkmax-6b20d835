@@ -5377,6 +5377,32 @@
     "name": "Аймақ атауы",
     "created": "Аймақ жасалды!",
     "createError": "Аймақты жасау мүмкін болмады",
+    "nav": {
+      "dashboard": "Басты бет",
+      "deals": "Мәмілелер",
+      "contacts": "Байланыстар",
+      "tasks": "Тапсырмалар",
+      "inbox": "Кіріс хабарлар",
+      "invoices": "Шоттар",
+      "calendar": "Күнтізбе",
+      "automations": "Автоматтандыру",
+      "products": "Тауарлар",
+      "events": "Іс-шаралар",
+      "documents": "Құжаттар",
+      "settings": "Баптаулар"
+    },
+    "search": {
+      "placeholder": "Іздеу...",
+      "noResults": "Нәтиже табылмады",
+      "contacts": "Байланыстар",
+      "deals": "Мәмілелер",
+      "tasks": "Тапсырмалар",
+      "quickActions": "Жылдам әрекеттер",
+      "newDeal": "Мәміле жасау",
+      "newContact": "Байланыс қосу",
+      "newTask": "Тапсырма жасау",
+      "navigation": "Навигация"
+    },
     "dashboard": {
       "title": "Бизнес талдау",
       "period7d": "7 күн",
