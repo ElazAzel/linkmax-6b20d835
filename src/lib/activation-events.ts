@@ -30,7 +30,13 @@ export type ActivationEventType =
   | 'booking_prepayment_initiated'
   | 'booking_cancelled'
   | 'booking_payment_confirmed'
-  | 'booking_completed';
+  | 'booking_completed'
+  // Retention events
+  | 'post_service_followup_sent'
+  | 'repeat_booking_detected'
+  | 'creator_returned_after_gap'
+  | 'stale_leads_alert_shown'
+  | 'weekly_digest_sent';
 
 /**
  * Track an activation event to the analytics table
