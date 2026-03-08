@@ -1,209 +1,216 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+# P1-B/C: Creator-Facing Search Readiness & Publish Governance
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+## 1. Technical Verdict
 
-### Новая тарифная модель (ADR 0026)
+**Bottleneck**: Entity fields exist in DB (`city`, `profession`, `entity_type`, `contact_*`) but zero UI surfaces them. `quality_score` is computed but invisible to creators. `notify-indexnow` edge function exists but is never called from client code. Creators have no idea why their page is or isn't indexed.
 
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+**Why hidden quality_score fails**: A score that only affects sitemap inclusion without creator visibility creates a black box. Users publish incomplete pages, wonder why they don't appear in search, and blame the platform.
+
+**P1-B/C principle**: Search readiness must be a visible, actionable product feature — not hidden backend logic.
 
 ---
 
-## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
+## 2. Implementation Plan
 
-| Задача | Статус |
-|--------|--------|
-| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
-| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
-| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
-| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
-| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
+### P1-B1: Entity Data Capture + Quality Score UI (~4 changes)
 
----
+**A. Add entity fields to PageSettingsTab**
 
-## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
+In `src/components/dashboard-v2/screens/settings/PageSettingsTab.tsx`, add a new "Search Identity" section between the existing "SEO" and "Category" sections:
+- `profession` (text input): "Ваша профессия / специализация"
+- `city` (text input): "Город"
+- `entity_type` (select: person/organization): "Тип профиля"
+- `contact_email` (text input, optional): "Публичный email"
+- `contact_phone` (text input, optional): "Публичный телефон"
+- `contact_whatsapp` (text input, optional): "WhatsApp"
 
-| Задача | Статус |
-|--------|--------|
-| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
-| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
-| Добавить Team Performance section (метрики по assignee) | ✅ |
-| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
-| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
+These save to the `pages` table via a new `onUpdateEntityFields` callback.
 
----
+**Props flow**: `DashboardV2.tsx` → `SettingsScreen` → `PageSettingsTab` → new `EntityFieldsSection` component.
 
-## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+**B. Surface quality_score as "Search Readiness" card**
 
-| Задача | Статус |
-|--------|--------|
-| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
-| Увеличить touch targets до 44px (min-h-11) | ✅ |
-| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
-| Улучшить Empty States с CTA | ✅ |
+New component: `src/components/dashboard-v2/widgets/SearchReadinessCard.tsx`
 
----
+Shows:
+- Score as progress bar (0-100)
+- Status label: "Готово к поиску" (≥40) / "Почти готово" (20-39) / "Не готово" (<20)
+- Checklist of missing items (computed client-side from pageData):
+  - "Добавьте профессию" (if no profession)
+  - "Укажите город" (if no city)
+  - "Заполните описание (от 50 символов)" (if bio < 50 chars)
+  - "Добавьте хотя бы одну услугу" (if no pricing block)
+  - "Загрузите фото профиля" (if no avatar)
+  - "Добавьте ссылки на соцсети" (if no socials block)
+  - "Настройте запись или контакт" (if no booking/contact)
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+Place this card on `HomeScreen` below the page card and in `PageSettingsTab` SEO section.
 
-## Текущее состояние LinkMAX Business Zones
+**C. Fetch entity fields from DB**
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+Update `src/services/pages.ts` (or `SupabasePageRepository`) to include `city`, `profession`, `entity_type`, `contact_email`, `contact_phone`, `contact_whatsapp` in the page load query and expose them in `PageData`.
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+Update `src/types/page.ts` `PageData` interface to include these fields.
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+**D. Save entity fields**
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+New service function `updatePageEntityFields(pageId, fields)` that updates the `pages` table directly. Called from `PageSettingsTab` on blur/save.
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
-
-### Фаза 3: Tasks -- закрытие пробелов (P1)
-
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
-
-### Фаза 4: Аналитика Зоны (P1)
-
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+**Files changed**:
+- `src/types/page.ts` — add entity fields to PageData
+- `src/services/pages.ts` — add entity fields to load/save
+- `src/repositories/implementations/SupabasePageRepository.ts` — include entity fields in queries
+- `src/components/dashboard-v2/screens/settings/PageSettingsTab.tsx` — add EntityFieldsSection
+- New: `src/components/dashboard-v2/widgets/SearchReadinessCard.tsx`
+- `src/components/dashboard-v2/screens/HomeScreen.tsx` — add SearchReadinessCard
+- `src/hooks/page/useCloudPageState.ts` — expose entity fields in state
 
 ---
 
-## Что НЕ нужно копировать из Bitrix24
+### P1-B2: IndexNow Wiring (~2 changes)
 
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+**A. Wire notify-indexnow into publish flow**
 
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+In `src/hooks/page/useCloudPageState.ts`, after successful `publishPageMutation.mutateAsync()` in both `autoSaveAndPublish` and `publish`, add:
 
----
+```ts
+// Fire-and-forget IndexNow notification
+if (slug && pageData?.isPublished) {
+  const pageUrl = `https://lnkmx.my/${slug}`;
+  supabase.functions.invoke('notify-indexnow', {
+    body: { urls: [pageUrl] }
+  }).catch(() => {}); // Silent fail
+}
+```
 
-## Приоритезация (RICE)
+**B. Deduplicate**: Add a simple throttle — don't send IndexNow more than once per slug per 5 minutes. Use a module-level `Map<string, number>` with last-sent timestamps.
 
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+**C. Don't send for noindex pages**: Check `quality_score >= 40` before sending. If quality_score isn't loaded client-side yet, skip the check (SSR will handle noindex anyway).
 
----
-
-## Технический план реализации
-
-### DB миграции (новые таблицы/колонки)
-
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
-
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
+**Files changed**:
+- `src/hooks/page/useCloudPageState.ts` — add IndexNow call after publish
+- `src/hooks/page/usePageCache.ts` — ensure slug is returned from publish mutation
 
 ---
 
-## Рекомендуемый порядок реализации
+### P1-B3: Publish Governance Warnings (~1 change)
 
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+**A. Publish warning in autoSave flow**
+
+Not blocking — LinkMAX auto-publishes on every edit. Instead, show a non-intrusive toast when page transitions from noindex to indexable or vice versa:
+
+- When quality_score crosses 40 upward: toast.success("Ваша страница теперь видна в поиске")
+- When quality_score drops below 40: toast.info("Страница пока не готова для поиска — заполните профиль")
+
+Compute quality_score client-side using the same rubric as the DB function, after each save.
+
+**B. New helper**: `src/lib/seo/quality-score.ts`
+
+```ts
+export function computeQualityScore(pageData: PageData): number {
+  let score = 0;
+  if (pageData.seo?.title || profileBlock?.name) score += 15;
+  if (pageData.avatar_url || profileBlock?.avatarUrl) score += 10;
+  // ... same rubric as save_page_blocks
+  return score;
+}
+```
+
+**Files changed**:
+- New: `src/lib/seo/quality-score.ts`
+- `src/hooks/page/useCloudPageState.ts` — compute and track score transitions
 
 ---
 
-## Post-Roadmap: Teamwork & Integrations (Март 2026)
+### P1-C1: Stable Child Page Slugs (~2 changes)
 
-| Задача | Статус |
-|--------|--------|
-| Documents MVP (генерация договоров, PDF) | ✅ |
-| Deal Comments (zone_deal_comments) | ✅ |
-| @Mentions в комментариях к сделкам | ✅ |
-| MentionInput компонент с автоподсказкой | ✅ |
-| Telegram уведомления при @mention | ✅ |
-| Excel Export (Contacts + Deals + Воронка) | ✅ |
-| mentioned_user_ids колонка в zone_deal_comments | ✅ |
+**Problem**: Service child pages derive slugs from service names at SSR time. If user renames a service, the URL changes → broken links, lost indexing.
+
+**Solution**: Add a `service_slugs` JSONB column to `pages` table. When SSR generates a service child page, it checks this map. When a new service name appears without a slug, one is generated and persisted.
+
+**Migration**:
+```sql
+ALTER TABLE public.pages ADD COLUMN IF NOT EXISTS service_slugs jsonb DEFAULT '{}'::jsonb;
+```
+
+Format: `{ "Маникюр гель-лак": "manikur-gel-lak", "Педикюр": "pedikur" }`
+
+**SSR behavior**: When building service child pages in `generate-sitemap/index.ts`:
+1. Load `service_slugs` from page record
+2. For each pricing item, check if slug exists in map
+3. If not, generate slug from name, check for collisions, store back to DB
+4. Use stable slug for URL
+
+**Slug persistence**: Add a lightweight `UPDATE pages SET service_slugs = $1 WHERE id = $2` call in the SSR handler when new slugs are generated.
+
+**Files changed**:
+- DB migration: add `service_slugs` jsonb to `pages`
+- `supabase/functions/generate-sitemap/index.ts` — use stable slugs for service child pages, persist new ones
+
+---
+
+### P1-C2: Sitemap Inclusion Governance (~1 change)
+
+Already mostly implemented in `generate-sitemap/index.ts` via `isPageIndexable()`. Tighten:
+
+- Add `service_slugs` check: only include service child URLs if slug exists in `service_slugs` map
+- Add event freshness check: exclude events older than 30 days
+- Add `<lastmod>` from actual `updated_at`, not current date (verify this is already correct)
+
+**Files changed**:
+- `supabase/functions/generate-sitemap/index.ts` — minor tightening of inclusion rules
+
+---
+
+## 3. Copy & States
+
+| State | Label (RU) | Where shown |
+|-------|-----------|-------------|
+| score ≥ 40 | ✅ Готово к поиску | HomeScreen card, Settings |
+| score 20-39 | ⚠️ Почти готово | HomeScreen card |
+| score < 20 | 🔴 Не готово для поиска | HomeScreen card |
+| Missing profession | Укажите профессию | Checklist item |
+| Missing city | Укажите город | Checklist item |
+| Missing bio | Добавьте описание (от 50 символов) | Checklist item |
+| Missing services | Добавьте хотя бы одну услугу | Checklist item |
+| Missing avatar | Загрузите фото профиля | Checklist item |
+| Missing socials | Добавьте ссылки на соцсети | Checklist item |
+| IndexNow sent | Отправлено в поисковые системы | Toast (once) |
+| Score crossed 40↑ | Страница готова к индексации | Toast |
+| Score dropped <40 | Заполните профиль для видимости в поиске | Toast |
+
+---
+
+## 4. What NOT to Do
+
+- Don't block publishing based on quality score — auto-publish must keep working
+- Don't build a full SEO audit panel — one card with checklist is enough
+- Don't gamify the score (no badges, no leaderboard)
+- Don't send IndexNow on every keystroke — throttle to 5min per slug
+- Don't create child pages for services without stable persisted slugs
+- Don't show creator raw JSON-LD or canonical URLs — keep it human
+
+---
+
+## 5. Priority Order
+
+1. **P1-B1** (entity fields in UI + SearchReadinessCard) — highest UX impact, unblocks data collection
+2. **P1-B2** (IndexNow wiring) — completes the indexing pipeline
+3. **P1-C1** (stable service slugs) — prevents URL drift
+4. **P1-B3** (quality transitions + client-side scoring) — polish layer
+5. **P1-C2** (sitemap tightening) — minor governance
+
+---
+
+## 6. Final Recommendation
+
+**Architecture in one phrase**: Make search readiness a visible, actionable product feature with entity field capture in settings, a quality checklist on home screen, IndexNow wired into publish flow, and stable child page slugs.
+
+**Main bottleneck**: Entity fields exist in DB but have zero UI — creators can't fill what they can't see.
+
+**Main change**: `SearchReadinessCard` + entity fields in `PageSettingsTab` — turns hidden scoring into an actionable creator tool.
+
+**First phase**: P1-B1 — add entity field inputs to settings and the readiness card to home screen. Everything else depends on creators actually having a way to fill these fields.
+
