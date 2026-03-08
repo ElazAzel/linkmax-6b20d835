@@ -239,8 +239,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                         return (
                           <div key={stage.name} className="group">
                             <div className="flex justify-between items-center mb-1 px-1">
-                              <span className="text-[10px] font-medium text-muted-foreground">{stage.name}</span>
-                              <span className="text-[10px] font-bold">{stage.value}</span>
+                              <span className="text-xs font-medium text-muted-foreground">{stage.name}</span>
+                              <span className="text-xs font-bold">{stage.value}</span>
                             </div>
                             <div className="h-6 bg-muted/20 rounded-lg overflow-hidden border border-border/10">
                               <div
