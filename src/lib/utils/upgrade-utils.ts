@@ -1,9 +1,9 @@
-// WhatsApp number and message for premium purchases
-const WHATSAPP_NUMBER = '77051097664';
-const PREMIUM_MESSAGE = 'Hi, I want to purchase a premium lnkmx.my';
+/**
+ * Upgrade utils — navigates user to /pricing for standardized upgrade flow.
+ * No more WhatsApp redirect. Single payment path via Robokassa on /pricing.
+ */
 
 export function openPremiumPurchase(): void {
-  const encodedMessage = encodeURIComponent(PREMIUM_MESSAGE);
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-  window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  // Navigate to pricing page — works from any context
+  window.location.href = '/pricing';
 }

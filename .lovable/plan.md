@@ -1,340 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# LinkMAX Pricing / Packaging Audit
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
----
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-## 1. Verdict
+### Новая тарифная модель (ADR 0026)
 
-The pricing structure is **70% coherent, 30% confused**.
-
-**Where it works:**
-- Free tier now correctly includes booking + form + CRM (50 inbound/mo). This aligns perfectly with core thesis.
-- 2-card pricing layout (Free vs Pro) is the right simplification.
-- Pro at ~3,045₸/mo ($6) annual is aggressively competitive for the KZ market.
-- Server-side inbound limit enforcement exists.
-
-**Where it breaks:**
-- **Starter tier exists in code but is invisible on pricing page.** `usePremiumStatus` maps it, `useFreemiumLimits` gives it PRO_LIMITS, ADR 0026 defines 7% commission — but the user never sees "Starter" anywhere. It's a ghost tier that will cause support confusion.
-- **Business tier is half-visible.** The pricing page shows a tiny link ("Узнать о тарифе BUSINESS →"), but clicking it calls `handleSelectPlan('business')` which does nothing useful (no Robokassa flow for business). Dead end.
-- **Token/Linkkon system competes with subscription.** "100 Linkkon = 1 day Premium" on the pricing page creates a parallel payment rail that confuses the value prop. Users see: subscription OR tokens OR WhatsApp purchase. Three ways to pay = no clarity.
-- **`openPremiumPurchase()` still sends to WhatsApp** in multiple places (`SimplePricingSection`, `FreemiumAILimit`, `MobileSettingsSheet`), while the pricing page uses Robokassa. Two payment paths coexist.
-- **FREE_LIMITS says `maxBlocks: Infinity`** but pricing page card says "10 блоков максимум". Contradiction.
-
-**Danger level:** Medium. The core freemium→Pro path works, but the noise from tokens, WhatsApp, ghost Starter tier, and contradictory limits will erode trust as traffic scales.
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## 2. What LinkMAX Can Charge For
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-**Free-worthy (core thesis, must stay free):**
-- 1 page with all basic blocks
-- Booking block + form block
-- CRM-light with 50 inbound/mo
-- WhatsApp/Kaspi prepayment options
-- Basic view stats
-- QR code
-- "Powered by LinkMAX" watermark
-- 1 AI generation/mo
-
-**Pay-worthy (proven value acceleration):**
-- Remove watermark (vanity + professionalism)
-- Unlimited inbound (growth scaling)
-- Advanced analytics (click heatmaps, funnels)
-- Export to Excel/CSV (operator efficiency)
-- Automation/notifications (Telegram alerts, auto follow-up)
-- Custom domain
-- Multi-page (up to 6)
-- Premium blocks (video, carousel, catalog, countdown, testimonials)
-- Premium themes/frames
-- Scheduler (block visibility timing)
-
-**Too early to monetize:**
-- Chatbot (not proven usage)
-- Pixel proxy (niche)
-- Verification badge (no social proof of demand)
-- Token economy as payment method (creates confusion)
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## 3. Product Thesis vs Pricing Alignment
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-The thesis: `social traffic → page → booking → prepayment → CRM → repeat`
-
-**Current alignment:** ✅ Strong. Free tier lets a user complete the full loop up to 50 times/month. This is correct.
-
-**Remaining conflicts:**
-1. Pricing page says "10 блоков максимум" for free, but `FREE_LIMITS.maxBlocks = Infinity`. If 10 is real, it may block users from adding enough booking/form blocks. If Infinity is real, the pricing page lies.
-2. `canUsePayments: false` in FREE_LIMITS — but booking prepayment (WhatsApp/Kaspi) works on free tier. This flag name is misleading; it likely means "advanced payment integration" but reads as "can't take payments."
-3. `canUseAnalytics: false` on free — users can't even see basic click stats. For a "prove value first" model, hiding ALL analytics before upgrade is too aggressive. Users need to see that their page gets traffic to feel motivated.
-
----
-
-## 4. ICP Fit
-
-For KZ/CIS service solopreneurs:
-- 3,045₸/mo ($6) annual is **psychologically strong** — cheaper than a business lunch
-- Monthly 4,350₸ ($8.90) is still accessible
-- **BUT**: Robokassa checkout + KZT pricing + annual commitment creates friction for mobile-first users who think in weekly/daily costs
-- Token system adds cognitive overhead that this audience doesn't need
-- "Business" tier at 6,930₸-9,900₸/mo is premature — solo users don't think in "business zones"
-
-**Key insight:** This ICP pays when they feel they're losing money by NOT paying. The best trigger is "your 50 leads ran out and customers can't reach you."
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## 5. Free Tier Audit
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-| Area | Current | Assessment |
-|------|---------|------------|
-| Page | 1 page, unlimited blocks (code) / 10 blocks (copy) | **Fix the contradiction.** Unlimited blocks is correct — don't artificially limit. |
-| Booking | Free ✅ | Correct |
-| Form | Free ✅ | Correct |
-| CRM | 50 inbound/mo, server-enforced ✅ | Correct |
-| Analytics | Completely locked | **Too aggressive.** Give basic view count. Lock click analytics, funnels, heatmaps. |
-| Watermark | Yes ✅ | Correct — this is the #1 visual nudge |
-| Export | Locked ✅ | Correct |
-| Automation | Locked ✅ | Correct |
-| AI gen | 1/mo ✅ | Fine |
-
-**Verdict:** Free tier is almost right. Fix the block limit contradiction, give basic view stats, and it's solid.
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## 6. Pro Plan Audit
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-**Current Pro at 3,045₸/mo (annual):**
+## Текущее состояние LinkMAX Business Zones
 
-The feature list is a wall of 13 items. Too many. The user can't parse what matters.
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-**What should be the TOP 3 reasons to upgrade:**
-1. **Unlimited inbound** — "Больше клиентов без лимита"
-2. **No watermark** — "Ваш бренд, не наш"
-3. **Advanced analytics + export** — "Видьте, что работает"
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-Everything else (premium blocks, themes, scheduler, multi-page, custom domain, notifications) is bonus, not headline.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
-**What's missing from Pro narrative:** A clear ROI statement. "Pro окупается с 1 дополнительной записи в месяц" — this is the line that should be on the card.
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-**What's unnecessary in Pro:** `canUseChatbot`, `canUsePixels`, `canUseVerificationBadge` — these are feature-flag ghosts. Don't list what doesn't work yet.
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
----
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-## 7. Business Plan Audit
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-**Should Business be a public tier right now? No.**
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-Reasons:
-- Business Zones (Kanban, team CRM, roles) are built but serve a fundamentally different user (team lead, not solopreneur)
-- Listing it on pricing confuses the solo ICP
-- The "Узнать о тарифе BUSINESS →" link goes nowhere useful
-- At 6,930-9,900₸/mo it's 2-3x Pro with no clear value bridge
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-**Recommendation:** Keep Business as an internal/hidden tier. Show it only when a user actively tries to invite team members or create a zone. "Для команд — напишите нам" is sufficient.
+### Фаза 4: Аналитика Зоны (P1)
 
----
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-## 8. Recommended Packaging
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-**Public tiers: 2 (Free + Pro)**
+### Фаза 5: Автоматизации -- MVP (P2)
 
-No Starter. No Business on pricing page. No token purchase section.
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
 
-```
-FREE                          PRO
-─────────────────────         ─────────────────────
-0₸ навсегда                   от 3,045₸/мес (год)
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
 
-1 страница                    До 6 страниц
-Все базовые блоки             Все 25+ блоков
-Запись + форма + CRM          Безлимитные обращения
-50 обращений/мес              Расширенная аналитика
-Базовая статистика            Экспорт и автоматизации
-Водяной знак LinkMAX          Без водяного знака
-1 AI-генерация                Безлимитные AI-генерации
-                              Свой домен
-                              Telegram-уведомления
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
 
-[Текущий]                     [Подписаться — PRO]
-```
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
 
-**Business:** Hidden. Accessible via "Нужна команда? Напишите нам" link below cards.
+### Фаза 6: Инвойсы и оплата (P2)
 
-**Starter tier (ADR 0026):** Remove from code or keep as internal alias for free. The 7% transaction fee model is not implemented in payment infrastructure — it's vaporware. Don't show it.
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
 
-**Tokens:** Remove from pricing page entirely. Keep token economy as a gamification/engagement layer in dashboard, not as a payment method on pricing.
-
----
-
-## 9. Pricing Model
-
-**Recommended: Pure subscription (Free + Pro monthly/annual)**
-
-Kill the hybrid complexity:
-- Remove transaction fee tier (Starter 7%) — not implemented, not enforceable
-- Remove token-to-premium conversion from pricing page
-- Remove WhatsApp purchase path — use only Robokassa
-- Keep token economy for engagement (daily quests, referrals) but separate from billing
-
-**Why:** Your ICP needs one decision: "Do I pay 3,045₸/mo or not?" Three payment rails = zero clarity.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## 10. Limits Audit
+## Что НЕ нужно копировать из Bitrix24
 
-| Limit | Type | Current | Recommendation |
-|-------|------|---------|----------------|
-| Inbound/mo | Usage | 50 | ✅ Keep |
-| Blocks | Feature | Infinity (code) / 10 (copy) | Fix: unlimited for all |
-| Pages | Feature | 1 free / 6 pro | ✅ Keep |
-| AI gen | Usage | 1 free / ∞ pro | Change pro to 10/mo (∞ is unsustainable) |
-| Analytics | Feature | Off/On | Change: basic views free, advanced pro |
-| Export | Feature | Pro only | ✅ Keep |
-| Custom domain | Feature | Pro only | ✅ Keep |
-| Watermark | Feature | Free=on, Pro=off | ✅ Keep |
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-**Remove from limit system:** `canUseChatbot`, `canUsePixels`, `canUseVerificationBadge` — don't gate features that aren't production-ready.
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
 ---
 
-## 11. Upgrade Trigger Audit
+## Приоритезация (RICE)
 
-| Trigger | Natural? | Value-based? | Recommendation |
-|---------|----------|--------------|----------------|
-| 50 inbound limit hit | ✅ Yes | ✅ Yes | **Best trigger.** Customer can't reach you = real pain. |
-| Want to remove watermark | ✅ Yes | Moderate | Good secondary. |
-| Need export | ✅ Yes | ✅ Yes | Good for operators. |
-| Want analytics | Moderate | ✅ Yes | Good after first 50 views. |
-| Need custom domain | Moderate | Moderate | Niche but clear. |
-| Want more pages | Moderate | Moderate | Clear for multi-service users. |
-| Premium blocks | Weak | Weak | Most users don't know they need video/carousel upfront. |
-
-**Best upgrade moment:** When free user hits 40/50 inbound, show: "У вас осталось 10 обращений. Снимите лимит, чтобы не терять клиентов."
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
 ---
 
-## 12. Pricing Page Fixes Needed
+## Технический план реализации
 
-**Remove:**
-- Token purchase section (lines 449-474)
-- Business tier data from `pricingPlans` object (lines 98-115)
-- Block limit "10 блоков максимум" from basic limitations (line 73)
+### DB миграции (новые таблицы/колонки)
 
-**Fix:**
-- Add basic view stats to free features list
-- Simplify Pro features to 7-8 items max (not 13)
-- Add ROI line: "Окупается с 1 записи" or similar
-- Make Business a simple text link, not a plan object
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
 
-**Add:**
-- Social proof: "X пользователей уже на Pro"
-- Concrete use case: "Мастер маникюра Алматы получает 120 записей/мес на Pro"
+### Новые файлы
 
----
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
 
-## 13. Monetization Risks
+### Модифицируемые файлы
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| Token system confuses billing | High | Remove from pricing page |
-| WhatsApp + Robokassa dual path | High | Standardize on Robokassa only |
-| Starter ghost tier | Medium | Remove or hide completely |
-| Business dead-end link | Medium | Replace with "contact us" |
-| Free block limit contradiction | Medium | Fix copy to match code (unlimited) |
-| `canUseAnalytics: false` kills proof | Medium | Add basic view stats to free |
-| Pro AI gen = Infinity | Low (for now) | Cap at 10/mo before scaling |
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
 
 ---
 
-## 14. Competitive Context
+## Рекомендуемый порядок реализации
 
-| Competitor | Free | Paid | LinkMAX advantage |
-|------------|------|------|-------------------|
-| Taplink | Limited blocks | $5-16/mo | LinkMAX: Free CRM + booking |
-| Linktree | Limited | $5-24/mo | LinkMAX: Full page builder + payments |
-| Bitrix24 CRM | Very limited | $49+/mo | LinkMAX: 100x simpler, mobile-first |
-| Amo CRM | No free | $15+/mo | LinkMAX: Free entry + page builder |
-
-**LinkMAX wins on:** "Free CRM that actually works for micro-business, with a page attached." No competitor offers page + booking + CRM at $0. This is the moat.
-
-**Don't compete on:** Feature count, enterprise features, team collaboration.
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
 
 ---
 
-## 15. Final Recommended Structure
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
 
-**2 public tiers. 1 hidden.**
-
-- **FREE**: Full core workflow (page + booking + form + CRM 50/mo + basic stats + watermark). Named "BASIC" or just "Бесплатный".
-- **PRO**: ~3,045₸/mo annual. Unlimited inbound, no watermark, analytics, export, automation, premium blocks, multi-page, custom domain. Named "PRO".
-- **BUSINESS**: Hidden. Shown only contextually (team invite, zone creation). Named "Для команд".
-
-**No Starter tier. No token billing. No transaction fee model (yet).**
-
----
-
-## 16. Copy Recommendations
-
-**Free card headline:** "Начните бизнес бесплатно"
-**Free card subtitle:** "Страница + запись + CRM — всё, чтобы получить первых клиентов"
-
-**Pro card headline:** "Растите без ограничений"  
-**Pro card subtitle:** "Окупается с первой дополнительной записи"
-
-**Upgrade banner (at 40/50):** "Осталось {{remaining}} обращений. Снимите лимит →"
-**Upgrade banner (at 50/50):** "Лимит обращений достигнут. Новые клиенты не смогут записаться."
-**Upgrade CTA:** "Перейти на PRO"
-**End-customer block:** "Запись временно недоступна. Свяжитесь напрямую."
-
----
-
-## 17. Implementation Plan
-
-### P0 — Fix contradictions (this sprint)
-
-1. **Remove block limit "10 блоков максимум" from pricing page** — it contradicts `maxBlocks: Infinity`
-2. **Remove token purchase section from pricing page** (lines 449-474)
-3. **Replace all `openPremiumPurchase()` WhatsApp calls** with navigation to `/pricing` — standardize payment path
-4. **Remove Starter tier references** from pricing page and simplify `useFreemiumLimits` (Starter → treat as identity)
-5. **Fix Business link** — replace `handleSelectPlan('business')` with WhatsApp/contact link or remove
-
-### P1 — Strengthen Pro value (next sprint)
-
-6. **Add basic view stats to free tier** — set `canUseAnalytics` to a granular model (basic views free, advanced pro)
-7. **Simplify Pro feature list** on pricing page to 7-8 items grouped by value
-8. **Add ROI copy** to Pro card
-9. **Cap AI generations at 10/mo for Pro** (not Infinity)
-
-### P2 — Clean up code
-
-10. **Remove `canUseChatbot`, `canUsePixels`, `canUseVerificationBadge`** from feature flags (or keep but don't expose in UI)
-11. **Remove Starter/commission logic** from `User.ts` (`getTierCommissionRate`) until transaction fee infra is built
-12. **Audit all 25 files** that reference `openPremiumPurchase` — ensure consistent upgrade path
-
----
-
-## 18. What NOT to Do
-
-- **Don't add Starter as a visible tier.** Transaction fee model needs payment infra that doesn't exist yet.
-- **Don't keep tokens on the pricing page.** Gamification ≠ billing.
-- **Don't add per-feature add-ons.** "Analytics add-on $2/mo" is enterprise SaaS thinking, not micro-business UX.
-- **Don't show Business prominently.** It's for <1% of current users.
-- **Don't gate basic page views behind Pro.** Users need to see their page works before paying.
-- **Don't create a "comparison table" with 30 rows.** Your ICP won't read it.
-- **Don't add annual-only pricing.** Keep 3/6/12 month options — KZ users think short-term.
-
----
-
-## 19. Final Recommendation
-
-**One model: Free (full core loop, 50 inbound/mo, watermark) + Pro (unlimited, clean, automated).**
-
-**Why it's best:**
-- Matches core thesis exactly — free proves value, Pro removes friction
-- Simplest possible decision for ICP
-- Watermark + 50 limit = two natural organic upgrade triggers
-- No confusion from ghost tiers, tokens, or dual payment paths
-
-**First pricing decision to make:**
-Remove the token purchase section and WhatsApp payment path from the pricing page. One payment method. One upgrade path. Today.
-
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

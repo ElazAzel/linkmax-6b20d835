@@ -14,12 +14,8 @@ import Zap from 'lucide-react/dist/esm/icons/zap';
 import Star from 'lucide-react/dist/esm/icons/star';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Shield from 'lucide-react/dist/esm/icons/shield';
-import Coins from 'lucide-react/dist/esm/icons/coins';
-import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
-import { useTokens } from '@/hooks/user/useTokens';
-import { redirectToTokenPurchase } from '@/lib/token-purchase-helper';
 import { toast } from 'sonner';
 import { useRobokassa } from '@/hooks/useRobokassa';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
@@ -43,13 +39,6 @@ export default function Pricing() {
     tier,
     isLoading
   } = usePremiumStatus();
-  const {
-    balance,
-    canAffordPremium,
-    premiumCost,
-    buyPremiumDay,
-    converting
-  } = useTokens();
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(12);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
@@ -69,8 +58,8 @@ export default function Pricing() {
       pricesUsd: { 3: 0, 6: 0, 12: 0 },
       totalKzt: { 3: 0, 6: 0, 12: 0 },
       totalUsd: { 3: 0, 6: 0, 12: 0 },
-      features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
-      limitations: [t('pricing.limitations.watermark', 'Водяной знак LinkMAX.my'), t('pricing.limitations.limitedBlocks', '10 блоков максимум')]
+      features: [t('pricing.features.basicThemes', 'Базовые темы оформления'), t('pricing.features.basicCustomization', 'Базовая настройка (цвета, шрифты)'), t('pricing.features.unlimitedLinks', 'Неограниченные ссылки'), t('pricing.features.basicBlocks', 'Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)'), t('pricing.features.messengers', 'Мессенджеры и соцсети'), t('pricing.features.maps', 'Карты (адрес + карта)'), t('pricing.features.basicViewStats', 'Базовая статистика просмотров'), t('pricing.features.qrCode', 'QR-код страницы'), t('pricing.features.aiMonthly', '1 AI-генерация в месяц')],
+      limitations: [t('pricing.limitations.watermark', 'Водяной знак LinkMAX.my')]
     },
     pro: {
       name: 'PRO',
@@ -93,26 +82,18 @@ export default function Pricing() {
         6: +(BASE_PRICES_USD[6] * 6).toFixed(2),
         12: +(BASE_PRICES_USD[12] * 12).toFixed(2)
       },
-      features: [t('pricing.features.allBasic', 'Всё из BASIC, плюс:'), t('pricing.features.allBlocks', 'Все 25+ типов блоков без ограничений'), t('pricing.features.proThemes', 'Профессиональные темы и анимации'), t('pricing.features.media', 'Медиа: изображения, видео, карусели'), t('pricing.features.priceLists', 'Прайс-листы и каталоги товаров'), t('pricing.features.scheduler', 'Планировщик блоков'), t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'), t('pricing.features.fullCRM', 'Полноценная CRM для лидов'), t('pricing.features.telegramNotifications', 'Telegram-уведомления о заявках'), t('pricing.features.forms', 'Формы сбора заявок'), t('pricing.features.faq', 'FAQ и отзывы блоки'), t('pricing.features.timers', 'Таймеры обратного отсчёта'), t('pricing.features.aiMonthlyPro', '5 AI-генераций в месяц')]
-    },
-    business: {
-      name: 'BUSINESS',
-      icon: Sparkles,
-      color: 'from-amber-500 to-orange-600',
-      pricesKzt: { 3: 9900, 6: 8415, 12: 6930 },
-      pricesUsd: { 3: 19.90, 6: 16.90, 12: 13.90 },
-      totalKzt: { 3: 29700, 6: 50490, 12: 83160 },
-      totalUsd: { 3: 59.70, 6: 101.40, 12: 166.80 },
       features: [
-        t('pricing.features.allPro', 'Всё из PRO, плюс:'),
-        t('pricing.features.businessZones', 'Бизнес-зоны (рабочие пространства)'),
-        t('pricing.features.teamCRM', 'Командная CRM и Kanban'),
-        t('pricing.features.teamInbox', 'Командный чат и задачи'),
-        t('pricing.features.teamRoles', 'Роли и разграничение доступа'),
-        t('pricing.features.teamMembers', 'До 5 участников команды'),
-        t('pricing.features.prioritySupport', 'Приоритетная поддержка')
+        t('pricing.features.unlimitedInbound', 'Безлимитные обращения клиентов'),
+        t('pricing.features.noWatermark', 'Без водяного знака — ваш бренд'),
+        t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'),
+        t('pricing.features.exportAndAutomation', 'Экспорт + Telegram-уведомления'),
+        t('pricing.features.allBlocks', 'Все 25+ типов блоков'),
+        t('pricing.features.multiPage', 'До 6 страниц'),
+        t('pricing.features.customDomain', 'Свой домен'),
+        t('pricing.features.aiMonthlyPro', '10 AI-генераций в месяц'),
       ]
-    }
+    },
+  
   };
   const getSavingsPercent = (period: BillingPeriod): number => {
     if (period === 12) return 30;
@@ -271,7 +252,7 @@ export default function Pricing() {
               <span>{t('pricing.whyLnkmx.noSetup', 'CRM за 15 минут — без внедрения')}</span>
             </li>
             <li className="flex flex-col items-center gap-1">
-              <MessageCircle className="h-5 w-5 text-primary" />
+              <Sparkles className="h-5 w-5 text-primary" />
               <span>{t('pricing.whyLnkmx.mobile', 'Вся работа со смартфона')}</span>
             </li>
             <li className="flex flex-col items-center gap-1">
@@ -300,7 +281,7 @@ export default function Pricing() {
                       <Badge variant="secondary" className="ml-2">{t('pricing.currentPlan', 'Текущий')}</Badge>
                     )}
                   </CardTitle>
-                  <CardDescription>{t('pricing.basicDesc', 'Страница + запись + CRM бесплатно')}</CardDescription>
+                  <CardDescription>{t('pricing.basicDesc', 'Страница + запись + CRM — получите первых клиентов')}</CardDescription>
                 </div>
               </div>
               <div className="mt-4">
@@ -376,7 +357,7 @@ export default function Pricing() {
                         {plan.name}
                         {isCurrentPlan && <Badge variant="secondary" className="ml-2">{t('pricing.currentPlan', 'Текущий')}</Badge>}
                       </CardTitle>
-                      <CardDescription>{t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}</CardDescription>
+                      <CardDescription>{t('pricing.proDesc', 'Растите без ограничений')}</CardDescription>
                     </div>
                   </div>
                   <div className="mt-4">
@@ -431,47 +412,20 @@ export default function Pricing() {
           })()}
         </div>
 
-        {/* Business tier — secondary mention */}
+        {/* Business tier — contact link */}
         <div className="text-center mb-12">
-          <p className="text-sm text-muted-foreground mb-2">
-            {t('pricing.businessNote', 'Нужна командная CRM, зоны и роли?')}
+          <p className="text-sm text-muted-foreground">
+            {t('pricing.businessNote', 'Нужна командная CRM, зоны и роли?')}{' '}
+            <a
+              href="https://wa.me/77051097664?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D1%82%D0%B0%D1%80%D0%B8%D1%84%20Business"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary font-bold hover:underline"
+            >
+              {t('pricing.businessLink', 'Напишите нам →')}
+            </a>
           </p>
-          <Button
-            variant="link"
-            className="text-muted-foreground hover:text-primary transition-colors h-auto p-0 font-bold"
-            onClick={() => handleSelectPlan('business')}
-          >
-            {t('pricing.businessLink', 'Узнать о тарифе BUSINESS →')}
-          </Button>
         </div>
-
-
-        {/* Token Purchase Section */}
-        <Card className="max-w-lg mx-auto mb-12 p-6 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-2">
-              <Coins className="h-6 w-6 text-amber-500" />
-              <h3 className="text-xl font-bold">{t('pricing.tokens.title', 'Или платите Linkkon токенами')}</h3>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {t('pricing.tokens.balanceDescription', '100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов', {
-                balance: balance?.balance?.toFixed(0) || 0
-              })}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button onClick={buyPremiumDay} disabled={!canAffordPremium || converting} className="bg-gradient-to-r from-violet-500 to-purple-600">
-                <Crown className="h-4 w-4 mr-2" />
-                {converting ? t('pricing.tokens.converting', 'Конвертация...') : t('pricing.tokens.buyDay', 'Купить 1 день за {{cost}} Linkkon', {
-                  cost: premiumCost
-                })}
-              </Button>
-              <Button variant="outline" onClick={() => redirectToTokenPurchase(100, 'Premium')}>
-                <MessageCircle className="h-4 w-4 mr-2" />
-                {t('pricing.tokens.buyTokens', 'Купить токены')}
-              </Button>
-            </div>
-          </div>
-        </Card>
 
         {/* Trust Section */}
         <div className="text-center py-8 border-t border-border/50">

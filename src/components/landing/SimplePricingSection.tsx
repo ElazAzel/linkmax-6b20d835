@@ -9,7 +9,6 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import X from 'lucide-react/dist/esm/icons/x';
-import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface SimplePricingSectionProps {
   isVisible: boolean;
@@ -36,19 +35,19 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
     { text: t('landing.simplePricing.free.f2_v2', 'AI-генерация (1 раз/месяц)'), included: true },
     { text: t('landing.simplePricing.free.f3_v2', 'Базовая статистика просмотров'), included: true },
     { text: t('landing.simplePricing.free.f4_v2', 'QR-код страницы'), included: true },
-    { text: t('landing.simplePricing.free.f5_v2', 'Mini-CRM и Telegram-уведомления'), included: false },
+    { text: t('landing.simplePricing.free.f5_booking', 'Запись + форма + CRM (50/мес)'), included: true },
     { text: t('landing.simplePricing.free.f6_v2', 'Расширенная аналитика'), included: false },
-    { text: t('landing.simplePricing.free.f7_v2', 'AI-генерация (5 раз/месяц)'), included: false },
+    { text: t('landing.simplePricing.free.f7_v2', 'Безлимитные обращения'), included: false },
   ];
 
   const premiumFeatures = [
-    { text: t('landing.simplePricing.premium.f1_v2', 'Все 25+ типов блоков'), included: true },
-    { text: t('landing.simplePricing.premium.f2_v2', 'Mini-CRM - все заявки в одном месте'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f3_v2', 'Telegram-уведомления о лидах'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f4_v2', 'AI-генерация (5 раз/месяц)'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f5_v2', 'Расширенная аналитика кликов'), included: true, highlight: true },
-    { text: t('landing.simplePricing.premium.f6_v2', 'Премиум-темы и анимации'), included: true },
-    { text: t('landing.simplePricing.premium.f7_v2', 'Планировщик блоков'), included: true },
+    { text: t('landing.simplePricing.premium.f1_v3', 'Безлимитные обращения клиентов'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f2_v3', 'Без водяного знака — ваш бренд'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f3_v3', 'Расширенная аналитика кликов'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f4_v3', 'Экспорт + Telegram-уведомления'), included: true, highlight: true },
+    { text: t('landing.simplePricing.premium.f5_v3', 'Все 25+ типов блоков'), included: true },
+    { text: t('landing.simplePricing.premium.f6_v3', 'До 6 страниц + свой домен'), included: true },
+    { text: t('landing.simplePricing.premium.f7_v3', '10 AI-генераций в месяц'), included: true },
   ];
 
   return (
@@ -199,7 +198,7 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
               <Button
                 size="lg"
                 className="w-full rounded-xl py-5 shadow-lg shadow-primary/25"
-                onClick={openPremiumPurchase}
+                onClick={() => navigate('/pricing')}
               >
                 <Crown className="mr-2 h-4 w-4" />
                 {t('landing.simplePricing.premium.cta', 'Получить Premium')}

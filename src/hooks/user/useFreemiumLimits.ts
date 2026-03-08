@@ -69,10 +69,10 @@ export const FREE_LIMITS: TierFeatures = {
   canUseBusinessZone: false,
 };
 
-// Pro tier includes ALL premium features (business merged)
+// Pro tier includes ALL premium features (AI capped at 10/mo)
 export const PRO_LIMITS: TierFeatures = {
   maxBlocks: Infinity,
-  maxAIPageGenerationsPerMonth: Infinity,
+  maxAIPageGenerationsPerMonth: 10,
   showWatermark: false,
   allowedBlocks: [...FREE_BLOCKS, ...PRO_BLOCKS, ...PRO_EXTENDED_BLOCKS] as unknown as string[],
   premiumBlocks: [] as string[],
