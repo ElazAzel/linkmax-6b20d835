@@ -80,10 +80,11 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
             await exportAnalyticsToExcel({
                 pageViews,
                 blockStats: metrics.deals.funnel.map(f => ({
-                    id: f.stageName,
-                    type: 'stage',
-                    title: f.stageName,
+                    blockId: f.stageName,
+                    blockType: 'stage',
+                    views: 0,
                     clicks: f.count,
+                    ctr: 0,
                 })),
                 dateRange: period,
             });
