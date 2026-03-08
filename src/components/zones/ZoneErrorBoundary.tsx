@@ -16,8 +16,8 @@ interface State {
   hasError: boolean;
 }
 
-class ZoneErrorBoundaryInner extends Component<Props & { t: (key: string, fallback?: string) => string }, State> {
-  constructor(props: Props & { t: (key: string, fallback?: string) => string }) {
+class ZoneErrorBoundaryInner extends Component<Props & { t: (key: string, fallback: string) => string }, State> {
+  constructor(props: Props & { t: (key: string, fallback: string) => string }) {
     super(props);
     this.state = { hasError: false };
   }
