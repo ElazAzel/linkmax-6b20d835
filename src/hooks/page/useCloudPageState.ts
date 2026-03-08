@@ -155,10 +155,12 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         await publishPageMutation.mutateAsync();
 
         // IndexNow notification (fire-and-forget, throttled, quality-gated)
+        // Passes page ID so edge function logs the submission server-side
         const slug = sanitizedData.slug;
+        const pageIdForIndexing = savedPageId || sanitizedData.id;
         if (slug) {
           const { score } = computeQualityScore(sanitizedData);
-          notifyIndexNow(slug, score, !!sanitizedData.isPublished).catch(() => {});
+          notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
         }
 
         setSaveStatus('saved');
