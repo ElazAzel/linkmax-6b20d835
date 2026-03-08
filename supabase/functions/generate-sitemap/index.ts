@@ -244,7 +244,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const nicheLabel = niche && niche !== 'other' ? niche : '';
   const answerSummary = cleanDesc 
     ? `${displayName}${nicheLabel ? ` - ${nicheLabel}` : ''}: ${truncate(cleanDesc, 150)}${location ? `. ${lang === 'ru' ? 'Локация' : lang === 'kk' ? 'Орналасуы' : 'Location'}: ${location}` : ''}`
-    : `${displayName}${nicheLabel ? ` - ${nicheLabel}` : ''}${location ? ` (${location})` : ''} ${lang === 'ru' ? 'на lnkmx.my' : lang === 'kk' ? 'lnkmx.my сайтында' : 'on lnkmx.my'}`;
+    : `${displayName}${nicheLabel ? ` - ${nicheLabel}` : ''}${location ? ` (${location})` : ''} ${lang === 'ru' ? 'на LinkMAX' : lang === 'kk' ? 'LinkMAX сайтында' : 'on LinkMAX'}`;
 
   // Schema.org
   const schemaType = niche === 'business' || niche === 'consulting' || services.length > 0 ? 'Organization' : 'Person';
