@@ -10,7 +10,7 @@ export interface CustomCodeBlock {
     javascript?: string;
     height?: 'auto' | 'small' | 'medium' | 'large' | 'full';
     enableInteraction?: boolean;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts, not in type interface
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
