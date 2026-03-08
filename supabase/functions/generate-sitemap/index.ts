@@ -732,6 +732,39 @@ serve(async (req) => {
       if (ssrTarget === 'gallery') {
         return await handleGallerySSR(supabase, lang, niche);
       }
+      // Handle /experts/{tag} SSR
+      if (ssrTarget.startsWith('experts/')) {
+        const expertTag = ssrTarget.slice('experts/'.length);
+        if (expertTag) {
+          return await handleGallerySSR(supabase, lang, expertTag);
+        }
+        return await handleGallerySSR(supabase, lang, null);
+      }
+      if (ssrTarget === 'experts') {
+        return await handleGallerySSR(supabase, lang, null);
+      }
+      // Handle marketing pages SSR
+      const MARKETING_SSR_PAGES: Record<string, (lang: LanguageKey) => string> = {
+        'pricing': (l) => buildMarketingPageHtml(l, 'pricing'),
+        'alternatives': (l) => buildMarketingPageHtml(l, 'alternatives'),
+        'terms': (l) => buildMarketingPageHtml(l, 'terms'),
+        'privacy': (l) => buildMarketingPageHtml(l, 'privacy'),
+        'payment-terms': (l) => buildMarketingPageHtml(l, 'payment-terms'),
+        'for-masters': (l) => buildMarketingPageHtml(l, 'for-masters'),
+        'seo-landing': (l) => buildMarketingPageHtml(l, 'seo-landing'),
+      };
+      if (MARKETING_SSR_PAGES[ssrTarget]) {
+        const html = MARKETING_SSR_PAGES[ssrTarget](lang);
+        return new Response(html, {
+          status: 200,
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'text/html; charset=utf-8',
+            'X-Robots-Tag': 'index, follow',
+            'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        });
+      }
       return await handleProfileSSR(supabase, ssrTarget, lang);
     }
 
