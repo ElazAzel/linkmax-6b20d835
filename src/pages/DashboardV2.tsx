@@ -422,7 +422,7 @@ function DashboardV2Inner() {
                   pageData={dashboard.pageData}
                   loading={dashboard.loading}
                   isPremium={dashboard.isPremium}
-                  currentTier={dashboard.isPremium ? 'pro' : 'free'}
+                  currentTier={dashboard.isPremium ? 'pro' : 'identity'}
                   premiumTier={dashboard.currentTier}
                   onInsertBlock={dashboard.blockEditor.handleInsertBlock}
                   onEditBlock={dashboard.blockEditor.handleEditBlock}

@@ -134,7 +134,9 @@ export default function Pricing() {
     }
   };
   const getCurrentPlanBadge = (planKey: string) => {
-    if (tier === planKey || tier === 'free' && planKey === 'basic') {
+    // Map identity to basic for display purposes
+    const currentPlan = tier === 'identity' ? 'basic' : tier;
+    if (currentPlan === planKey) {
       return <Badge variant="secondary" className="ml-2">
         {t('pricing.currentPlan', 'Текущий')}
       </Badge>;
