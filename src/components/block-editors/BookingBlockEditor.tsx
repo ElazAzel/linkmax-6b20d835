@@ -359,7 +359,7 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
             <div className="space-y-0.5">
               <Label>{t('bookingBlock.requirePrepayment', 'Требовать предоплату')}</Label>
               <p className="text-xs text-muted-foreground">
-                {t('bookingBlock.prepaymentDesc', 'После записи клиент перейдёт в WhatsApp для оплаты')}
+                {t('bookingBlock.prepaymentDesc', 'Клиент увидит способ оплаты после записи')}
               </p>
             </div>
             <Switch
@@ -370,18 +370,55 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
 
           {block.requirePrepayment && (
             <>
+              {/* Prepayment method selector */}
               <div className="space-y-2">
-                <Label>{t('bookingBlock.prepaymentPhone', 'WhatsApp для оплаты')}</Label>
-                <Input
-                  value={block.prepaymentPhone || ''}
-                  onChange={e => handleChange({ prepaymentPhone: e.target.value })}
-                  placeholder="+7 777 123 45 67"
-                  type="tel"
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t('bookingBlock.phoneHint', 'Номер телефона с WhatsApp для приёма оплаты')}
-                </p>
+                <Label>{t('bookingBlock.prepaymentMethod', 'Способ оплаты')}</Label>
+                <Select
+                  value={block.prepaymentMethod || 'whatsapp'}
+                  onValueChange={(v: string) => handleChange({ prepaymentMethod: v as any })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="whatsapp">{t('bookingBlock.methodWhatsApp', 'WhatsApp (перевод)')}</SelectItem>
+                    <SelectItem value="kaspi">{t('bookingBlock.methodKaspi', 'Kaspi (QR/перевод)')}</SelectItem>
+                    <SelectItem value="robokassa">{t('bookingBlock.methodRobokassa', 'Robokassa (карта)')}</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+
+              {/* WhatsApp phone */}
+              {(block.prepaymentMethod === 'whatsapp' || !block.prepaymentMethod) && (
+                <div className="space-y-2">
+                  <Label>{t('bookingBlock.prepaymentPhone', 'WhatsApp для оплаты')}</Label>
+                  <Input
+                    value={block.prepaymentPhone || ''}
+                    onChange={e => handleChange({ prepaymentPhone: e.target.value })}
+                    placeholder="+7 777 123 45 67"
+                    type="tel"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {t('bookingBlock.phoneHint', 'Номер телефона с WhatsApp для приёма оплаты')}
+                  </p>
+                </div>
+              )}
+
+              {/* Kaspi phone */}
+              {block.prepaymentMethod === 'kaspi' && (
+                <div className="space-y-2">
+                  <Label>{t('bookingBlock.kaspiPhone', 'Kaspi номер')}</Label>
+                  <Input
+                    value={block.kaspiPhone || ''}
+                    onChange={e => handleChange({ kaspiPhone: e.target.value })}
+                    placeholder="+7 777 123 45 67"
+                    type="tel"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {t('bookingBlock.kaspiHint', 'Номер для перевода через Kaspi')}
+                  </p>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">

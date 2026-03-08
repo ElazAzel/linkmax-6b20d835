@@ -88,6 +88,8 @@ export interface BookingSlot {
     endTime: string;
 }
 
+export type PrepaymentMethod = 'whatsapp' | 'kaspi' | 'robokassa';
+
 export interface BookingBlock {
     id: string;
     type: 'booking';
@@ -102,16 +104,18 @@ export interface BookingBlock {
     requirePhone?: boolean;
     requireEmail?: boolean;
     requirePrepayment?: boolean;
+    prepaymentMethod?: PrepaymentMethod;
     prepaymentPhone?: string; // WhatsApp phone for payment
+    kaspiPhone?: string; // Kaspi phone for QR payment
     prepaymentAmount?: number;
     prepaymentCurrency?: Currency;
     // Telegram notification settings
-    dailyReminderEnabled?: boolean; // Send daily reminder about today's bookings
-    dailyReminderTime?: string; // Time for daily reminder in HH:MM format (default: 08:50)
-    weeklyMotivationEnabled?: boolean; // Send weekly motivation on Mondays at 9:00
+    dailyReminderEnabled?: boolean;
+    dailyReminderTime?: string;
+    weeklyMotivationEnabled?: boolean;
     // Google Calendar Sync
-    gcalSyncEnabled?: boolean; // Connect and sync with Google Calendar
-    buttonText?: string | I18nText | MultilingualString; // Custom button text
+    gcalSyncEnabled?: boolean;
+    buttonText?: string | I18nText | MultilingualString;
     isPremium: true;
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;

@@ -22,7 +22,15 @@ export type ActivationEventType =
   | 'lead_status_changed'
   | 'booking_confirmed'
   | 'first_lead_reply'
-  | 'lead_stale_24h';
+  | 'lead_stale_24h'
+  // Booking funnel events
+  | 'booking_slot_selected'
+  | 'booking_form_opened'
+  | 'booking_submitted'
+  | 'booking_prepayment_initiated'
+  | 'booking_cancelled'
+  | 'booking_payment_confirmed'
+  | 'booking_completed';
 
 /**
  * Track an activation event to the analytics table
