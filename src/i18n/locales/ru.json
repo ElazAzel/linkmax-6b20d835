@@ -3567,7 +3567,31 @@
     "confirmDelete": "Удалить этот интерес?",
     "deleteWarning": "Это действие невозможно отменить. Все взаимодействия также будут удалены.",
     "openPanel": "Открыть CRM",
-    "upgradeToPremium": "Получить Premium"
+    "upgradeToPremium": "Получить Premium",
+    "responseTime": {
+      "justNow": "только что",
+      "minutesAgo": "{{count}} мин назад",
+      "hoursAgo": "{{count}} ч назад — ответьте!",
+      "missed": "пропущено"
+    },
+    "quickReply": {
+      "template": "Здравствуйте, {{name}}! Спасибо за заявку. Чем могу помочь?",
+      "call": "Позвонить",
+      "done": "Готово"
+    },
+    "bookingStatus": {
+      "pending": "Ожидает",
+      "confirmed": "Подтв."
+    },
+    "booking": {
+      "confirm": "Подтвердить",
+      "cancel": "Отклонить"
+    },
+    "aging": {
+      "stale": "Остывает",
+      "missed": "Пропущено",
+      "needsFollowup": "Нужен follow-up"
+    }
   },
   "pagination": {
     "previous": "Назад",
