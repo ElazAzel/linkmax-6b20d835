@@ -1,376 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# P1: Entity-First Public Architecture for LinkMAX
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## 1. Technical Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-**Main bottleneck after P0**: SSR exists but only for bots. Humans still get empty SPA shell on all public pages. Profile pages lack entity-grade data — `pages` table has `title`, `description`, `niche`, `avatar_url` but no `city`, `profession`, `sameAs`, `contactPoint`. There are no child page URLs for services/events at all. The `events` table exists but has zero public route. Services live only inside block JSON (`pricing` block `content.items`) with no dedicated table or URL. Sitemap is a single flat XML file approaching scale limits.
+### Новая тарифная модель (ADR 0026)
 
-**Why bot-SSR on some routes isn't a win**: Google increasingly devalues dynamic rendering as a workaround. Bot-only SSR creates a "two versions" problem where schema/content can drift from SPA output. Social preview bots get SSR but actual users clicking those links get a blank shell for 2-3 seconds. This hurts engagement signals which hurts ranking.
-
-**P1 architectural principle**: Every public indexable URL must return the **same** complete HTML to all user agents. SSR output becomes the primary document; React hydrates on top for interactivity. No more bot/human split.
-
----
-
-## 2. Public Route Map
-
-### A. Marketing surfaces (already SSR for bots — need universal SSR)
-| Route | Schema | Canonical | Sitemap | Index |
-|-------|--------|-----------|---------|-------|
-| `/` | WebSite + Organization + SoftwareApp | `https://lnkmx.my/` | yes | yes |
-| `/pricing` | WebPage | `https://lnkmx.my/pricing` | yes | yes |
-| `/alternatives` | WebPage | `https://lnkmx.my/alternatives` | yes | yes |
-| `/for-masters` | WebPage | `https://lnkmx.my/for-masters` | yes | yes |
-| `/seo-landing` | WebPage | `https://lnkmx.my/seo-landing` | yes | yes |
-| `/experts` | CollectionPage + ItemList | `https://lnkmx.my/experts` | yes | yes |
-| `/experts/:tag` | CollectionPage + ItemList | `https://lnkmx.my/experts/{tag}` | yes, if ≥3 profiles | yes |
-| `/gallery` | CollectionPage + ItemList | `https://lnkmx.my/gallery` | yes | yes |
-| `/terms`, `/privacy`, `/payment-terms` | WebPage | canonical self | yes | yes (low priority) |
-
-### B. Entity surfaces
-| Route | Schema | Canonical | Sitemap | Index rule |
-|-------|--------|-----------|---------|------------|
-| `/:slug` | ProfilePage + Person/Org | `https://lnkmx.my/{slug}` | yes if passes quality gate | yes if published + quality ≥ 40 |
-| Custom domain | ProfilePage + Person/Org | `https://custom-domain/` | separate sitemap entry | yes if published + quality ≥ 40 |
-
-### C. Child entity surfaces (NEW)
-| Route | Schema | Canonical | Sitemap | Index rule |
-|-------|--------|-----------|---------|------------|
-| `/:slug/services/:serviceSlug` | Service + Offer | self | yes if content sufficient | name + desc ≥ 30 chars + price |
-| `/:slug/events/:eventId` | Event | self | yes if future or < 30d past | title + date + desc ≥ 30 chars |
-
-### D. Non-indexable (no SSR, no sitemap)
-`/dashboard/*`, `/auth`, `/admin/*`, `/editor/*`, `/crm`, `/settings`, `/install`, `/team/*`, `/join/*`, `/invites/*`, `/p/:compressed`, `/from/:slug`, `/collab/*`, `gallery?niche=X&sort=Y` (multi-param filter combos)
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## 3. Unified Public SSR Architecture
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-### Target architecture
-```text
-User/Bot → Cloudflare Worker → checks route type:
-  ├── Static asset (.js,.css,.png) → origin CDN
-  ├── Blacklisted (/dashboard,/auth) → origin SPA (add X-Robots-Tag: noindex)
-  ├── Public route → Edge Function SSR → complete HTML response
-  │     └── React SPA hydrates on top (same HTML structure)
-  └── Sitemap → Edge Function → XML
-```
-
-### How it works
-1. **CF Worker**: For ALL public routes (marketing, profiles, child pages, gallery), proxy to SSR Edge Function regardless of user agent. Remove the `isBot()` check for public routes entirely. Bot detection only remains for analytics tagging (`X-Bot-Request: true` header).
-
-2. **SSR Edge Function** (`generate-sitemap` or split into `seo-ssr`): Returns full HTML with `<div id="root">` containing server-rendered content + `<script>` tags loading the Vite SPA bundle. The SPA hydrates over the server HTML.
-
-3. **Cache**: CF Worker caches SSR responses at edge:
-   - Marketing pages: `s-maxage=3600`
-   - Profile pages: `s-maxage=600, stale-while-revalidate=3600`
-   - Child pages: `s-maxage=600, stale-while-revalidate=3600`
-   - Gallery: `s-maxage=300`
-   - Invalidation via `Cache-Tag` + purge API on publish/update
-
-4. **Hydration approach**: SSR HTML includes a `<script type="module" src="/assets/index-[hash].js"></script>` tag. The React app detects pre-rendered content and hydrates instead of full re-render. This is the key architectural shift — SSR is no longer a separate "bot page" but the actual initial page load for everyone.
-
-5. **Dashboard/editor**: Zero change. CF Worker continues to serve origin SPA for all `/dashboard/*`, `/auth`, `/admin/*` paths. These remain pure CSR.
-
-### Implementation reality check
-Full universal SSR with hydration is a P2 effort (requires the SSR templates to exactly match React component DOM structure). **For P1, the pragmatic approach**:
-- Serve SSR HTML to ALL user agents (not just bots) for public routes
-- SSR HTML includes a redirect/bootstrap script that loads the SPA
-- SPA replaces SSR content on mount (not true hydration, but users get instant content + fast FCP)
-- This eliminates the bot/human split immediately without requiring DOM-perfect hydration
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## 4. Entity-First Profile Architecture
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-### Current `pages` table entity fields
-Has: `title`, `description`, `niche`, `avatar_url`, `slug`, `custom_domain`, `is_published`, `is_indexable`, `quality_score`
-
-### Missing entity-grade fields (add to `pages`)
-| Field | Type | Purpose |
-|-------|------|---------|
-| `city` | text | PostalAddress.addressLocality |
-| `country_code` | text | ISO 3166-1 alpha-2 |
-| `profession` | text | jobTitle / role (more specific than niche) |
-| `entity_type` | text | 'person' or 'organization' (default 'person') |
-| `contact_email` | text | public contact (opt-in) |
-| `contact_phone` | text | public contact (opt-in) |
-| `contact_whatsapp` | text | public WhatsApp link |
-
-### Fields derivable from blocks (compute at SSR time, don't store)
-- `sameAs` → extracted from `socials` block `content.platforms[].url`
-- `knowsAbout` → extracted from `pricing` block service names
-- `services list` → from `pricing` blocks
-- `bio/description` → from `text` blocks or `profile` block
-- `booking availability` → from `booking` block existence
-- `FAQ` → from `faq` block
-
-### Minimum entity profile for indexation (quality gate)
-Score 0-100, computed on save:
-- Has title/display name: 15pts
-- Has avatar: 10pts
-- Has bio > 50 chars (text/profile block): 15pts
-- Has niche set (not 'other'): 10pts
-- Has ≥ 1 service/pricing item: 15pts
-- Has city: 10pts
-- Has ≥ 1 social link: 10pts
-- Has booking or contact method: 15pts
-
-**Indexable threshold: ≥ 40 points**. Below 40 → `noindex`, excluded from sitemap.
-
-The existing `quality_score` column on `pages` will store this. Recompute on every `save_page_blocks` call.
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## 5. Child Page Architecture
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-### Services
-- **Data source**: `pricing` block `content.items[]` — each item has `name`, `description`, `price`, `currency`
-- **No new table needed** for P1. Services are extracted from block JSON at SSR time.
-- **Child URL**: `/:slug/services/:serviceIndex` (using 0-based index as ID since items don't have stable IDs)
-  - Better: generate a slug from service name: `/:slug/services/manikur-gel`
-- **Quality gate**: name present + (description ≥ 30 chars OR price present). If not met → no child page, stays inline.
-- **Schema**: `Service` with `provider` → parent `Person/Organization`
-
-### Events
-- **Data source**: `events` table (already exists with `title_i18n_json`, `description_i18n_json`, `start_at`, `location_value`, `price_amount`, `page_id`)
-- **Child URL**: `/:slug/events/:eventId`
-- **Quality gate**: has title + start_at + (description length ≥ 30 chars OR is_paid). Future events or within last 30 days.
-- **Schema**: `Event` with `organizer` → parent entity
-
-### Canonical rules
-- Child page canonical = self (`https://lnkmx.my/{slug}/services/{serviceSlug}`)
-- If child page too thin → canonical to parent `https://lnkmx.my/{slug}`
-- Parent profile page links to all qualifying child pages
-
-### Breadcrumbs
-`Home → [Experts/{niche} | Gallery] → {Profile Name} → {Service/Event Name}`
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## 6. Data Model Changes
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-### Migration 1: Add entity fields to `pages`
-```sql
-ALTER TABLE public.pages 
-  ADD COLUMN IF NOT EXISTS city text,
-  ADD COLUMN IF NOT EXISTS country_code text DEFAULT 'KZ',
-  ADD COLUMN IF NOT EXISTS profession text,
-  ADD COLUMN IF NOT EXISTS entity_type text DEFAULT 'person',
-  ADD COLUMN IF NOT EXISTS contact_email text,
-  ADD COLUMN IF NOT EXISTS contact_phone text,
-  ADD COLUMN IF NOT EXISTS contact_whatsapp text;
-```
+## Текущее состояние LinkMAX Business Zones
 
-### Migration 2: Add `slug` to events for URL-friendly child pages
-```sql
-ALTER TABLE public.events 
-  ADD COLUMN IF NOT EXISTS slug text;
-```
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-### No new tables for services
-Services are extracted from block JSON. If a dedicated services table is needed later (P2), it can be added then. For P1, SSR extracts from `blocks` where `type = 'pricing'`.
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-### Quality score recomputation
-Update the `save_page_blocks` function to also recompute `quality_score` based on the scoring rubric. Or add a separate trigger.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
----
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-## 7. Metadata Engine v2
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-### Title formulas
-| Page type | Formula |
-|-----------|---------|
-| Profile | `{displayName} — {profession\|niche} в {city} \| LinkMAX` |
-| Profile (no city) | `{displayName} — {profession\|niche} \| LinkMAX` |
-| Service child | `{serviceName} — {displayName} \| LinkMAX` |
-| Event child | `{eventTitle}, {date} — {displayName} \| LinkMAX` |
-| Gallery | `Галерея LinkMAX — примеры страниц {niche?}` |
-| Experts | `Эксперты {tag} — LinkMAX` |
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-### Meta description formulas
-- Profile: First 155 chars of bio/description + ". Услуги: {top 2-3 service names}. {city}."
-- Service: Service description truncated to 155 chars + ". {price} {currency}."
-- Event: Event description + ". {date}, {location}."
-- Fallback: "{displayName} на LinkMAX — {niche}"
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-### Canonical
-- All pages: self-referencing canonical
-- `?lang=X` is NOT a separate canonical (same content, different language)
-- `?niche=X` on gallery: canonicalize to `/experts/{niche}` instead (gallery filter params → noindex or canonical to experts)
-- Custom domains: canonical = custom domain URL
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-### Hreflang
-Keep current `?lang=ru|en|kk` + `x-default` pattern. Applied in SSR HTML.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
----
+### Фаза 4: Аналитика Зоны (P1)
 
-## 8. Structured Data Engine v2
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-### Unified schema builder in Edge Function
-Create `buildSchemaGraph(pageType, data)` function that returns JSON-LD `@graph` array:
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-- **Profile**: `[ProfilePage, Person|Organization, BreadcrumbList, ?FAQPage, ?ItemList(services)]`
-- **Service child**: `[WebPage, Service, BreadcrumbList, ?Offer]`
-- **Event child**: `[WebPage, Event, BreadcrumbList, ?Offer]`
-- **Gallery/Experts**: `[CollectionPage, ItemList, BreadcrumbList]`
-- **Marketing**: `[WebPage, ?FAQPage, Organization(LinkMAX)]`
+### Фаза 5: Автоматизации -- MVP (P2)
 
-Rules:
-- `aggregateRating` only if real reviews exist (currently: never)
-- `sameAs` only from verified social links
-- `image` from avatar_url, never a placeholder
-- `address` only if city is set
-- `offers.price` only if real price exists
-- All schema fields must have visible HTML counterpart
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## 9. Indexability Governance
+## Что НЕ нужно копировать из Bitrix24
 
-### Rules engine (computed in SSR + sitemap generator)
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-```
-isIndexable(page) =
-  page.is_published === true
-  AND page.quality_score >= 40
-  AND page.slug NOT IN reserved_slugs
-  AND (page.is_indexable IS NULL OR page.is_indexable = true)
-
-isChildPageIndexable(service) =
-  service.name is not empty
-  AND (service.description?.length >= 30 OR service.price exists)
-
-isEventIndexable(event) =
-  event.title is not empty
-  AND event.start_at is not null
-  AND (event.start_at > now() - 30 days)
-  AND event.description?.length >= 30
-```
-
-Pages failing quality gate: `<meta name="robots" content="noindex, follow">` + excluded from sitemap.
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
 ---
 
-## 10. Sitemap Index Architecture
+## Приоритезация (RICE)
 
-### Target structure
-```
-GET /sitemap.xml → Sitemap Index:
-  - /sitemap-static.xml (marketing + legal pages)
-  - /sitemap-profiles.xml (published profiles passing quality gate)
-  - /sitemap-experts.xml (expert niche pages)
-  - /sitemap-events.xml (future/recent events with child URLs)
-```
-
-Service child pages go into `sitemap-profiles.xml` alongside their parent (as additional `<url>` entries) since they share the same data source query.
-
-### Pagination
-If profiles > 10K → `sitemap-profiles-1.xml`, `sitemap-profiles-2.xml` etc.
-
-### lastmod
-Use actual `pages.updated_at` and `events.updated_at`, never `today`.
-
-### Regeneration
-On each request with 1h cache. The Edge Function already uses ETag + stale-while-revalidate. This is sufficient for P1.
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
 ---
 
-## 11. Publish/Update/Delete Indexing Pipeline
+## Технический план реализации
 
-### New Edge Function: `notify-indexnow`
-Accepts `{ urls: string[] }` body. Submits to IndexNow API (Bing/Yandex).
+### DB миграции (новые таблицы/колонки)
 
-### Triggers
-| Event | Action |
-|-------|--------|
-| Page published | Purge CF cache for `/{slug}`, submit to IndexNow |
-| Page updated (save_page_blocks) | Recompute quality_score, purge CF cache |
-| Page unpublished | Purge CF cache, URL returns 404 on next crawl |
-| Event created | If indexable → submit `/{slug}/events/{eventId}` to IndexNow |
-| Event deleted/cancelled | Purge cache |
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
 
-### Client-side hook
-After successful `save_page_blocks` or publish toggle:
-```ts
-await supabase.functions.invoke('notify-indexnow', { 
-  body: { urls: [`https://lnkmx.my/${slug}`] } 
-});
-```
+### Новые файлы
 
----
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
 
-## 12. Internal Linking
+### Модифицируемые файлы
 
-### In SSR output
-- **Profile page** → links to each qualifying service child page, each event child page
-- **Profile page** → breadcrumb link to `/experts/{niche}`
-- **Gallery SSR** → each profile card is an `<a href="/{slug}">`
-- **Experts SSR** → links to top profiles in niche + link to `/gallery`
-- **Landing SSR** → links to `/gallery`, `/experts`, `/pricing`
-- **Child pages** → back-link to parent profile
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
 
-### Breadcrumb schema on every page
-Rendered both as visible HTML and BreadcrumbList schema.
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
 
 ---
 
-## 13. Implementation Roadmap
+## Рекомендуемый порядок реализации
 
-### P1-A: Universal SSR + Quality Score (highest impact)
-**Files**:
-- `cloudflare-worker/prerender-worker.js` — Remove `isBot()` check for public routes. ALL public routes → SSR Edge Function. Include SPA bundle script tags in SSR response.
-- `supabase/functions/generate-sitemap/index.ts` — Update `handleProfileSSR` to include `<script src="/assets/...">` for SPA bootstrap
-- `supabase/functions/generate-sitemap/ssr-templates.ts` — Add SPA bootstrap script to all templates
-- DB migration: Add entity fields to `pages` table
-- DB migration: Update `save_page_blocks` to recompute `quality_score`
-
-**Risk**: CF Worker serving SSR to all users means SSR latency affects everyone. Mitigate with aggressive edge caching (s-maxage=600).
-
-### P1-B: Child Pages + CF Worker Routing
-**Files**:
-- `src/main.tsx` — Add routes: `/:slug/services/:serviceSlug`, `/:slug/events/:eventId`
-- New: `src/pages/PublicServicePage.tsx` — Client-side service page
-- New: `src/pages/PublicEventPage.tsx` — Client-side event page
-- `cloudflare-worker/prerender-worker.js` — Route `/:slug/services/*` and `/:slug/events/*` to SSR
-- `supabase/functions/generate-sitemap/index.ts` — Add `handleServiceSSR` and `handleEventSSR`
-- `supabase/functions/generate-sitemap/ssr-templates.ts` — Add `buildServicePageHtml` and `buildEventPageHtml`
-
-**Risk**: Service items lack stable IDs (they're JSON array items). Use name-based slugs with collision handling.
-
-### P1-C: Sitemap Index + IndexNow
-**Files**:
-- `supabase/functions/generate-sitemap/index.ts` — Rewrite `handleSitemap` to return sitemap index, add sub-sitemap handlers
-- New: `supabase/functions/notify-indexnow/index.ts` — IndexNow submission
-- Client hooks: Call `notify-indexnow` on publish/update
-
-**Risk**: Low. Sitemap rewrite is contained in one function.
-
-### P1-D: Monitoring
-- New: `supabase/functions/seo-health-check/index.ts` — Validate top profiles return 200, check sitemap XML
-- Schema validation in SSR templates (ensure JSON-LD is valid)
-- Log quality_score distribution
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
 
 ---
 
-## 14. What NOT to Do
-- Don't implement full React SSR hydration (P2 at earliest — too complex for P1)
-- Don't create child pages for every pricing item regardless of content
-- Don't index `gallery?niche=X` separately from `/experts/X` (pick one canonical)
-- Don't add entity fields users won't fill (keep it to city, profession, entity_type)
-- Don't schema-markup data that isn't visible on the page
-- Don't remove the existing SPA rendering — SSR enhances, doesn't replace
-- Don't try to SSR dashboard/editor routes
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
 
----
-
-## 15. Final Recommendation
-
-**Target P1 architecture in one phrase**: Every public URL returns complete HTML with entity-grade metadata and schema to all user agents, with child pages for services/events expanding the indexable surface per user.
-
-**Main radical change**: Removing the bot/human SSR split — CF Worker sends ALL public traffic through SSR, turning LinkMAX from "SPA with bot workaround" into "HTML-first platform with SPA enhancement".
-
-**Key engineering decision**: Whether to serve SSR HTML to all users in P1 (with SPA bootstrap script) or defer to P2. Recommendation: **do it in P1** — the SSR templates already exist and work. Adding `<script>` tags for SPA bootstrap is ~20 lines of change. The performance win (instant content) and SEO win (no more two-version problem) justify the effort.
-
-**First implementation phase**: **P1-A** — universal SSR routing + entity fields + quality score. This single phase eliminates the bot/human split and establishes the quality gate. Everything else builds on top.
-
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

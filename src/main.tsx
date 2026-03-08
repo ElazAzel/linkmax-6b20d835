@@ -114,6 +114,8 @@ window.addEventListener('load', () => {
 const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const Dashboard = lazy(() => import("./pages/DashboardV2"));
 const PublicPage = lazy(() => import("./pages/PublicPage"));
+const PublicServicePage = lazy(() => import("./pages/PublicServicePage"));
+const PublicEventPage = lazy(() => import("./pages/PublicEventPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Install = lazy(() => import("./pages/Install"));
 const Gallery = lazy(() => import("./pages/Gallery"));
@@ -190,6 +192,8 @@ const router = createBrowserRouter([
       { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
+      { path: ":slug/services/:serviceSlug", element: <PublicServicePage /> },
+      { path: ":slug/events/:eventId", element: <PublicEventPage /> },
       { path: ":slug", element: <PublicPage /> },
       {
         path: "*",

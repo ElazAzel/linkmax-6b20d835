@@ -1,24 +1,35 @@
 /**
- * Cloudflare Worker for SEO/AEO/GEO Bot Routing
+ * Cloudflare Worker for Universal SSR Routing (P1)
  * 
- * Routes search engine bots and AI crawlers to SSR Edge Function
- * while serving the normal SPA to human users.
- * 
- * Architecture:
- * - WHITELIST: Marketing pages (not slugs)
- * - BLACKLIST: Private pages (never SSR, never index)
- * - SLUG: Single-segment paths not in whitelist/blacklist -> SSR for bots
- * - SITEMAP: /sitemap.xml -> proxy to generate-sitemap
+ * ALL public routes get SSR for both humans and bots.
+ * Dashboard/auth/editor remain pure CSR.
+ * Bot detection only for analytics tagging.
  */
 
-// Supabase Edge Function URL (combined sitemap + SSR)
-// Constants derived from env in handleRequest
-// const SUPABASE_PROJECT = env.SUPABASE_PROJECT;
-// const FUNCTION_URL = `https://${env.SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
+// BLACKLIST: Private pages - never SSR, never index
+const BLACKLIST_PREFIXES = [
+  'auth',
+  'dashboard',
+  'dashboard-v2',
+  'editor',
+  'crm',
+  'admin',
+  'api',
+  'settings',
+  'install',
+  'team',
+  'join',
+  'invites',
+  'collab',
+  'from',
+  'p',  // compressed preview
+];
 
-// WHITELIST: Marketing/static pages - NOT treated as slugs
-// These pages have their own SPA routes and get SSR for bots
-const WHITELIST_PAGES = new Set([
+// Known SPA-only routes that should NOT be SSR'd
+const SPA_ONLY_PREFIXES = new Set(BLACKLIST_PREFIXES);
+
+// Public routes that get SSR (marketing + entity + child pages)
+const SSR_MARKETING_PAGES = new Set([
   '',           // root /
   'pricing',
   'gallery',
@@ -32,192 +43,108 @@ const WHITELIST_PAGES = new Set([
   'payment-terms',
 ]);
 
-// Marketing pages that should get SSR for bots (subset of WHITELIST)
-const SSR_MARKETING_PAGES = new Set([
-  'pricing',
-  'alternatives',
-  'terms',
-  'privacy',
-  'for-masters',
-  'seo-landing',
-  'payment-terms',
-]);
-
-// BLACKLIST: Private pages - never SSR, never index
-// These should return SPA as-is, worker doesn't touch them
-const BLACKLIST_PREFIXES = [
-  'auth',
-  'dashboard',
-  'dashboard-v2',
-  'editor',
-  'crm',
-  'admin',
-  'api',
-  'settings',
-  'install',
-  'team',
-];
-
-// Bot User-Agent patterns for SSR routing
-// Comprehensive list of search engines, AI crawlers, and social media bots
+// Bot patterns for analytics tagging only
 const BOT_PATTERNS = [
-  // Search Engine Crawlers
-  'googlebot',
-  'bingbot',
-  'yandexbot',
-  'duckduckbot',
-  'baiduspider',
-  'sogou',
-  'exabot',
-  'facebot',
-  'ia_archiver',
-
-  // AI/LLM Crawlers (Critical for AEO)
-  'gptbot',
-  'chatgpt-user',
-  'oai-searchbot',
-  'perplexitybot',
-  'claude-web',
-  'anthropic-ai',
-  'cohere-ai',
-  'meta-externalagent',
-  'meta-externalfetcher',
-  'bytespider',
-  'amazonbot',
-  'ai2bot',
-  'diffbot',
-  'omgilibot',
-  'omgili',
-  'ccbot',
-  'youbot',
-
-  // Social Media & Preview Bots
-  'applebot',
-  'twitterbot',
-  'linkedinbot',
-  'slackbot',
-  'telegrambot',
-  'whatsapp',
-  'discordbot',
-  'pinterestbot',
-  'redditbot',
-
-  // SEO & Monitoring Tools
-  'ahrefs',
-  'semrush',
-  'mj12bot',
-  'dotbot',
-  'petalbot',
-  'seznambot',
-  'rogerbot',
-  'screaming frog',
+  'googlebot', 'bingbot', 'yandexbot', 'duckduckbot', 'baiduspider',
+  'gptbot', 'chatgpt-user', 'oai-searchbot', 'perplexitybot', 'claude-web',
+  'anthropic-ai', 'bytespider', 'amazonbot', 'ccbot',
+  'applebot', 'twitterbot', 'linkedinbot', 'slackbot', 'telegrambot',
+  'whatsapp', 'discordbot', 'facebot', 'facebookexternalhit',
+  'ahrefs', 'semrush', 'mj12bot', 'petalbot',
 ];
 
 // Static file extensions - never process
 const STATIC_EXTENSIONS = new Set([
   '.js', '.css', '.xml', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif',
   '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.map', '.json',
-  '.pdf', '.zip', '.mp3', '.mp4', '.webm', '.wasm',
+  '.pdf', '.zip', '.mp3', '.mp4', '.webm', '.wasm', '.txt',
 ]);
 
-/**
- * Check if User-Agent is a bot
- */
 function isBot(userAgent) {
   if (!userAgent) return false;
   const ua = userAgent.toLowerCase();
-  return BOT_PATTERNS.some(pattern => ua.includes(pattern));
+  return BOT_PATTERNS.some(p => ua.includes(p));
 }
 
-/**
- * Parse pathname into segments
- */
-function parsePathname(pathname) {
-  // Remove leading/trailing slashes and split
-  const clean = pathname.replace(/^\/+|\/+$/g, '');
-  if (!clean) return { segments: [], first: '' };
-  const segments = clean.split('/');
-  return { segments, first: segments[0].toLowerCase() };
-}
-
-/**
- * Check if path is a static file
- */
 function isStaticFile(pathname) {
   const lastDot = pathname.lastIndexOf('.');
   if (lastDot === -1) return false;
-  const ext = pathname.substring(lastDot).toLowerCase();
-  return STATIC_EXTENSIONS.has(ext);
+  return STATIC_EXTENSIONS.has(pathname.substring(lastDot).toLowerCase());
 }
 
-/**
- * Check if path is blacklisted (private)
- */
 function isBlacklisted(firstSegment) {
-  return BLACKLIST_PREFIXES.includes(firstSegment);
+  return SPA_ONLY_PREFIXES.has(firstSegment);
 }
 
 /**
- * Check if path is whitelisted (marketing page)
+ * Determine SSR target from pathname.
+ * Returns null if route should not be SSR'd.
  */
-function isWhitelisted(firstSegment) {
-  return WHITELIST_PAGES.has(firstSegment);
+function getSSRTarget(pathname) {
+  const clean = pathname.replace(/^\/+|\/+$/g, '');
+  if (!clean) return 'landing'; // root
+
+  const segments = clean.split('/');
+  const first = segments[0].toLowerCase();
+
+  // Blacklisted → no SSR
+  if (isBlacklisted(first)) return null;
+
+  // Marketing pages
+  if (segments.length === 1 && SSR_MARKETING_PAGES.has(first)) {
+    if (first === '') return 'landing';
+    if (first === 'gallery') return 'gallery';
+    if (first === 'experts') return 'experts';
+    return first; // pricing, alternatives, etc.
+  }
+
+  // /experts/:tag
+  if (first === 'experts' && segments.length === 2) {
+    return `experts/${segments[1]}`;
+  }
+
+  // /:slug/services/:serviceSlug (child page)
+  if (segments.length === 3 && segments[1] === 'services') {
+    return `${segments[0]}/services/${segments[2]}`;
+  }
+
+  // /:slug/events/:eventId (child page)
+  if (segments.length === 3 && segments[1] === 'events') {
+    return `${segments[0]}/events/${segments[2]}`;
+  }
+
+  // Single segment = user profile slug
+  if (segments.length === 1 && !first.includes('.')) {
+    return first;
+  }
+
+  return null;
 }
 
-/**
- * Check if path is a valid slug (single segment, not whitelist/blacklist)
- */
-function isSlug(segments, firstSegment) {
-  // Must be exactly one segment
-  if (segments.length !== 1) return false;
-  // Must not be empty
-  if (!firstSegment) return false;
-  // Must not be whitelist or blacklist
-  if (isWhitelisted(firstSegment)) return false;
-  if (isBlacklisted(firstSegment)) return false;
-  // Must not look like a file
-  if (firstSegment.includes('.')) return false;
-  return true;
-}
-
-/**
- * Main request handler
- */
 async function handleRequest(request, env) {
   const SUPABASE_PROJECT = env.SUPABASE_PROJECT;
   if (!SUPABASE_PROJECT) {
-    console.error('[Worker] Missing SUPABASE_PROJECT env var');
     return fetch(request);
   }
 
   const FUNCTION_URL = `https://${SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
-  const SSR_FUNCTION_URL = FUNCTION_URL;
-  const SITEMAP_FUNCTION_URL = FUNCTION_URL;
   const url = new URL(request.url);
   const pathname = url.pathname;
   const userAgent = request.headers.get('User-Agent') || '';
   const queryString = url.search || '';
   const hostname = url.hostname;
 
-  // 0. Custom Domain Check
-  // If hostname is NOT main platform domain (lnkmx.my, localhost, etc)
+  // Custom Domain handling
   const isPlatformDomain = hostname.includes('lnkmx.my') || hostname.includes('localhost') || hostname.includes('127.0.0.1') || hostname.includes('workers.dev');
 
   if (!isPlatformDomain) {
-    // It's a custom domain (e.g. user.com)
-    // We need to resolve it to a slug
-    // We'll call a dedicated Edge Function or existing API to resolve
-    // optimize: Use Cache API to store domain->slug mapping
-
+    // Custom domain → resolve slug, SSR for all agents
     const resolveUrl = `${FUNCTION_URL}/resolve-domain?domain=${hostname}`;
     let slug = null;
-
     try {
-      // Check cache first (todo)
       const resolveRes = await fetch(resolveUrl, {
         headers: { 'Authorization': `Bearer ${env.SUPABASE_ANON_KEY}` }
       });
-
       if (resolveRes.ok) {
         const data = await resolveRes.json();
         slug = data.slug;
@@ -227,25 +154,7 @@ async function handleRequest(request, env) {
     }
 
     if (slug) {
-      // Rewrites the request to the platform's handle logic
-      // But we need to be careful not to loop.
-      // Easiest is to pretend the URL is lnkmx.my/[slug]
-      // But let's just use the slug logic below
-
-      // Force treating this as a bot/user visit to a specific slug
-      // If it's a bot, we SSR. If it's a user, we serve index.html but maybe need to inject config
-
-      // CRITICAL: For SPA to work, it needs to know it's on a custom domain 
-      // or we serve the root index.html and let client fetching handle it?
-      // Client needs to fetch page by domain, NOT by slug from URL.
-
-      // For now, let's implement the Bot SSR part which is critical for SEO.
-      // Human users will just get the index.html (fallback) and the App.tsx needs to handle "window.location.hostname" lookup.
-    }
-
-    // For now, if it's a bot on a custom domain, we proxy the SSR
-    if (slug && isBot(userAgent)) {
-      const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${encodeURIComponent(slug)}${queryString}`;
+      const ssrUrl = `${FUNCTION_URL}/ssr/${encodeURIComponent(slug)}${queryString}`;
       try {
         const ssrResponse = await fetch(ssrUrl, {
           method: 'GET',
@@ -257,6 +166,7 @@ async function handleRequest(request, env) {
         const responseHeaders = new Headers(ssrResponse.headers);
         responseHeaders.set('X-SSR-Rendered', 'true');
         responseHeaders.set('X-Custom-Domain', hostname);
+        if (isBot(userAgent)) responseHeaders.set('X-Bot-Request', 'true');
         responseHeaders.delete('set-cookie');
         return new Response(ssrResponse.body, {
           status: ssrResponse.status,
@@ -266,148 +176,58 @@ async function handleRequest(request, env) {
         console.error('[Worker] Custom domain SSR error:', e);
       }
     }
-
-    // If not a bot, or resolution failed, we just fall through to serve index.html (origin)
-    // The React app MUST handle "if domain != lnkmx.my, fetch page by domain"
+    return fetch(request);
   }
 
-  // 1. Handle /sitemap.xml specially - proxy to generate-sitemap
-  // This must be BEFORE isStaticFile check to override public/sitemap.xml
-  if (pathname === '/sitemap.xml') {
+  // Sitemap proxy
+  if (pathname === '/sitemap.xml' || pathname.startsWith('/sitemap-')) {
     try {
-      const sitemapResponse = await fetch(SITEMAP_FUNCTION_URL, {
+      // Forward sub-sitemap requests too
+      const sitemapPath = pathname === '/sitemap.xml' ? '' : pathname;
+      const sitemapResponse = await fetch(`${FUNCTION_URL}${sitemapPath}`, {
         method: 'GET',
-        headers: {
-          'Accept': 'application/xml',
-          'User-Agent': userAgent,
-        },
+        headers: { 'Accept': 'application/xml', 'User-Agent': userAgent },
       });
-
       if (sitemapResponse.ok) {
         const headers = new Headers(sitemapResponse.headers);
         headers.set('Content-Type', 'application/xml; charset=utf-8');
-        headers.set('Cache-Control', 'public, max-age=21600, stale-while-revalidate=86400');
-        headers.delete('set-cookie'); // Remove Supabase cookies
-
-        return new Response(sitemapResponse.body, {
-          status: 200,
-          headers,
-        });
+        headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+        headers.delete('set-cookie');
+        return new Response(sitemapResponse.body, { status: 200, headers });
       }
     } catch (error) {
       console.error('[Worker] Sitemap proxy error:', error);
     }
-    // Fallback to origin static sitemap handled by isStaticFile below
   }
 
-  // 2. Skip static files - always origin
+  // Static files → origin
   if (isStaticFile(pathname)) {
     return fetch(request);
   }
 
-  // 3. Handle /robots.txt - origin
-  if (pathname === '/robots.txt') {
+  // robots.txt → origin
+  if (pathname === '/robots.txt' || pathname === '/llms.txt') {
     return fetch(request);
   }
 
-  // 4. Bot-friendly SSR for landing, gallery, and marketing pages
-  if (isBot(userAgent)) {
-    let ssrTarget = null;
-    
-    if (pathname === '/') ssrTarget = 'landing';
-    else if (pathname === '/gallery') ssrTarget = 'gallery';
-    else if (pathname === '/experts') ssrTarget = 'experts';
-    
-    // Marketing pages SSR
-    if (!ssrTarget) {
-      const cleanFirst = pathname.replace(/^\/+/, '').split('/')[0];
-      if (SSR_MARKETING_PAGES.has(cleanFirst) && pathname.split('/').filter(Boolean).length === 1) {
-        ssrTarget = cleanFirst;
-      }
-    }
-    
-    // /experts/:tag SSR
-    if (!ssrTarget && pathname.startsWith('/experts/')) {
-      const tag = pathname.replace('/experts/', '').replace(/\/+$/, '');
-      if (tag && !tag.includes('/')) {
-        ssrTarget = `experts/${tag}`;
-      }
-    }
-    
-    if (ssrTarget) {
-      const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${ssrTarget}${queryString}`;
-      try {
-        const ssrResponse = await fetch(ssrUrl, {
-          method: 'GET',
-          headers: {
-            'Accept': 'text/html',
-            'User-Agent': userAgent,
-            'Accept-Language': request.headers.get('Accept-Language') || '',
-          },
-        });
-        const responseHeaders = new Headers(ssrResponse.headers);
-        responseHeaders.set('X-SSR-Rendered', 'true');
-        responseHeaders.set('X-SSR-Target', ssrTarget);
-        responseHeaders.delete('set-cookie');
-        return new Response(ssrResponse.body, {
-          status: ssrResponse.status,
-          statusText: ssrResponse.statusText,
-          headers: responseHeaders,
-        });
-      } catch (error) {
-        console.error('[Worker] SSR error:', ssrTarget, error);
-        return fetch(request);
-      }
-    }
-  }
+  // Determine SSR target
+  const ssrTarget = getSSRTarget(pathname);
 
-  // 5. Parse path
-  const { segments, first } = parsePathname(pathname);
-
-  // 6. Blacklisted paths - always origin (never SSR)
-  if (isBlacklisted(first)) {
+  if (!ssrTarget) {
+    // Not an SSR route → serve SPA from origin
     const response = await fetch(request);
-    if (isBot(userAgent)) {
+    // Add noindex for blacklisted routes
+    const clean = pathname.replace(/^\/+/, '').split('/')[0];
+    if (isBlacklisted(clean) && isBot(userAgent)) {
       const headers = new Headers(response.headers);
       headers.set('X-Robots-Tag', 'noindex, nofollow');
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers,
-      });
+      return new Response(response.body, { status: response.status, headers });
     }
     return response;
   }
 
-  // 7. Whitelisted marketing pages - origin for humans (bots already handled above)
-  if (isWhitelisted(first)) {
-    return fetch(request);
-  }
-
-  // 8. Multi-segment paths (e.g., /experts/beauty) - origin for humans (bots handled above)
-  if (segments.length > 1) {
-    return fetch(request);
-  }
-
-  // 9. Check if this is a slug
-  if (!isSlug(segments, first)) {
-    return fetch(request);
-  }
-
-  // 10. It's a slug! Check if bot
-  const isBotRequest = isBot(userAgent);
-
-  // For humans, serve SPA
-  if (!isBotRequest) {
-    return fetch(request);
-  }
-
-  // 11. Bot + Slug = SSR
-  const slug = first;
-
-  console.log(`[Worker] SSR for bot: slug=${slug}, ua=${userAgent.substring(0, 50)}`);
-
-  const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${encodeURIComponent(slug)}${queryString}`;
+  // Universal SSR: serve to ALL user agents
+  const ssrUrl = `${FUNCTION_URL}/ssr/${encodeURIComponent(ssrTarget)}${queryString}`;
 
   try {
     const ssrResponse = await fetch(ssrUrl, {
@@ -419,11 +239,11 @@ async function handleRequest(request, env) {
       },
     });
 
-    // Return SSR response with proper status (including 404)
     const responseHeaders = new Headers(ssrResponse.headers);
     responseHeaders.set('X-SSR-Rendered', 'true');
-    responseHeaders.set('X-SSR-Slug', slug);
-    responseHeaders.delete('set-cookie'); // Remove Supabase cookies
+    responseHeaders.set('X-SSR-Target', ssrTarget);
+    if (isBot(userAgent)) responseHeaders.set('X-Bot-Request', 'true');
+    responseHeaders.delete('set-cookie');
 
     return new Response(ssrResponse.body, {
       status: ssrResponse.status,
@@ -432,17 +252,14 @@ async function handleRequest(request, env) {
     });
   } catch (error) {
     console.error('[Worker] SSR error:', error);
-    // On error, fallback to origin SPA
     return fetch(request);
   }
 }
 
-// Legacy event listener
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request, globalThis));
 });
 
-// ES modules export
 export default {
   async fetch(request, env, ctx) {
     return handleRequest(request, env);
