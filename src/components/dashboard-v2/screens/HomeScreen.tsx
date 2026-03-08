@@ -4,7 +4,7 @@
  * HomeScreen - Dashboard overview with primary page card and quick actions
  * Now includes PageSwitcher in the header for multi-page context
  */
-import { memo, ReactNode } from 'react';
+import { memo, useMemo, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
