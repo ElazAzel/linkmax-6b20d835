@@ -283,7 +283,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
       '@type': 'ProfilePage',
       '@id': canonical,
       'url': canonical,
-      'name': `${page.title || '@' + slug} - ${primaryOfferOrBio} | lnkmx`,
+      'name': `${page.title || '@' + slug} - ${primaryOfferOrBio} | LinkMAX`,
       'description': metaDesc,
       'inLanguage': lang,
       'isPartOf': { '@type': 'WebSite', 'name': 'lnkmx', 'url': BASE_URL },
