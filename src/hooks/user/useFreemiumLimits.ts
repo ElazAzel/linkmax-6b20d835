@@ -100,10 +100,10 @@ export const BUSINESS_LIMITS: TierFeatures = {
 
 // Helper to get block tier
 export function getBlockTier(blockType: string): FreeTier {
-  if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'free';
+  if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'identity';
   if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
   if ((PRO_EXTENDED_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
-  return 'free';
+  return 'identity';
 }
 
 export function useFreemiumLimits() {
