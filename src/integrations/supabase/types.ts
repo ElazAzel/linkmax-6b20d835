@@ -715,6 +715,7 @@ export type Database = {
           price_amount: number | null
           registration_closes_at: string | null
           settings_json: Json | null
+          slug: string | null
           start_at: string | null
           status: string
           timezone: string | null
@@ -739,6 +740,7 @@ export type Database = {
           price_amount?: number | null
           registration_closes_at?: string | null
           settings_json?: Json | null
+          slug?: string | null
           start_at?: string | null
           status?: string
           timezone?: string | null
@@ -763,6 +765,7 @@ export type Database = {
           price_amount?: number | null
           registration_closes_at?: string | null
           settings_json?: Json | null
+          slug?: string | null
           start_at?: string | null
           status?: string
           timezone?: string | null
@@ -1339,10 +1342,16 @@ export type Database = {
         Row: {
           avatar_style: Json | null
           avatar_url: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_whatsapp: string | null
+          country_code: string | null
           created_at: string | null
           custom_domain: string | null
           description: string | null
           editor_mode: string
+          entity_type: string | null
           favicon_url: string | null
           gallery_featured_at: string | null
           gallery_likes: number | null
@@ -1360,6 +1369,7 @@ export type Database = {
           organization_id: string | null
           page_type: string | null
           preview_url: string | null
+          profession: string | null
           quality_score: number | null
           seo_meta: Json | null
           slug: string
@@ -1372,10 +1382,16 @@ export type Database = {
         Insert: {
           avatar_style?: Json | null
           avatar_url?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_whatsapp?: string | null
+          country_code?: string | null
           created_at?: string | null
           custom_domain?: string | null
           description?: string | null
           editor_mode?: string
+          entity_type?: string | null
           favicon_url?: string | null
           gallery_featured_at?: string | null
           gallery_likes?: number | null
@@ -1393,6 +1409,7 @@ export type Database = {
           organization_id?: string | null
           page_type?: string | null
           preview_url?: string | null
+          profession?: string | null
           quality_score?: number | null
           seo_meta?: Json | null
           slug: string
@@ -1405,10 +1422,16 @@ export type Database = {
         Update: {
           avatar_style?: Json | null
           avatar_url?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_whatsapp?: string | null
+          country_code?: string | null
           created_at?: string | null
           custom_domain?: string | null
           description?: string | null
           editor_mode?: string
+          entity_type?: string | null
           favicon_url?: string | null
           gallery_featured_at?: string | null
           gallery_likes?: number | null
@@ -1426,6 +1449,7 @@ export type Database = {
           organization_id?: string | null
           page_type?: string | null
           preview_url?: string | null
+          profession?: string | null
           quality_score?: number | null
           seo_meta?: Json | null
           slug?: string
