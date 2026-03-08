@@ -3364,6 +3364,37 @@
       "clicks": "кликов",
       "andMore": "и ещё {{count}} блоков"
     },
+    "blockTypes": {
+      "link": "Ссылка",
+      "social": "Соцсети",
+      "button": "Кнопка",
+      "booking": "Бронирование",
+      "contactForm": "Форма",
+      "pricing": "Цены",
+      "product": "Товар",
+      "gallery": "Галерея",
+      "video": "Видео",
+      "event": "Событие",
+      "messenger": "Мессенджер"
+    },
+    "tooltipClicks": "Клики",
+    "traffic": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter/X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "vkontakte": "ВКонтакте",
+      "linkedin": "LinkedIn",
+      "google": "Google",
+      "yandex": "Яндекс",
+      "bing": "Bing",
+      "direct": "Прямой",
+      "referral": "Реферал",
+      "unknown": "Другое"
+    },
     "funnel": {
       "views": "Просмотры",
       "clicks": "Клики",
@@ -3374,7 +3405,11 @@
       "insights": "Анализ конверсии",
       "clickRate": "Клики / Просмотры",
       "conversionRate": "Конверсии / Просмотры",
-      "avgPerDay": "Среднее в день"
+      "avgPerDay": "Среднее в день",
+      "dropOff": "потерь",
+      "retention": "удержание",
+      "overallLabel": "Итоговая конверсия",
+      "subtitle": "Путь посетителя до покупки"
     },
     "engagement": {
       "ctr": "CTR",
