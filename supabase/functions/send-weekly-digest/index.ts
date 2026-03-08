@@ -227,6 +227,33 @@ serve(async (req) => {
                               💡 <strong>Tip:</strong> Share your page more often to get more visitors and leads!
                             </p>
                           </div>
+
+                          ${unprocessedLeads > 0 || upcomingBookingsCount > 0 || repeatCustomersCount > 0 ? `
+                          <!-- Operator Summary -->
+                          <div style="margin-bottom: 24px;">
+                            <h2 style="margin: 0 0 12px; color: #18181b; font-size: 18px; font-weight: 600;">⚡ Action Items</h2>
+                            <table role="presentation" style="width: 100%;">
+                              ${unprocessedLeads > 0 ? `
+                              <tr>
+                                <td style="padding: 8px 0; font-size: 14px; color: #dc2626;">
+                                  🔴 ${unprocessedLeads} unprocessed lead${unprocessedLeads > 1 ? 's' : ''} waiting for response
+                                </td>
+                              </tr>` : ''}
+                              ${upcomingBookingsCount > 0 ? `
+                              <tr>
+                                <td style="padding: 8px 0; font-size: 14px; color: #2563eb;">
+                                  📅 ${upcomingBookingsCount} upcoming booking${upcomingBookingsCount > 1 ? 's' : ''} this week
+                                </td>
+                              </tr>` : ''}
+                              ${repeatCustomersCount > 0 ? `
+                              <tr>
+                                <td style="padding: 8px 0; font-size: 14px; color: #7c3aed;">
+                                  🔁 ${repeatCustomersCount} repeat customer${repeatCustomersCount > 1 ? 's' : ''} detected
+                                </td>
+                              </tr>` : ''}
+                            </table>
+                          </div>
+                          ` : ''}
                           
                           <p style="color: #71717a; font-size: 14px; line-height: 1.5; margin: 0;">
                             Keep growing your audience! 🚀
