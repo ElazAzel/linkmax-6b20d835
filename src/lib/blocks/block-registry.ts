@@ -22,6 +22,8 @@ export const FREE_BLOCK_TYPES = [
   'image',
   'map',
   'faq',
+  'booking',
+  'form',
 ] as const;
 
 /**
