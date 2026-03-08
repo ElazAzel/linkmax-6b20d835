@@ -5377,6 +5377,32 @@
     "slug": "Slug",
     "name": "Zone Name",
     "created": "Zone created!",
+    "nav": {
+      "dashboard": "Dashboard",
+      "deals": "Deals",
+      "contacts": "Contacts",
+      "tasks": "Tasks",
+      "inbox": "Inbox",
+      "invoices": "Invoices",
+      "calendar": "Calendar",
+      "automations": "Automations",
+      "products": "Products",
+      "events": "Events",
+      "documents": "Documents",
+      "settings": "Settings"
+    },
+    "search": {
+      "placeholder": "Search...",
+      "noResults": "No results",
+      "contacts": "Contacts",
+      "deals": "Deals",
+      "tasks": "Tasks",
+      "quickActions": "Quick actions",
+      "newDeal": "Create deal",
+      "newContact": "Add contact",
+      "newTask": "Create task",
+      "navigation": "Navigation"
+    },
     "createError": "Failed to create zone",
     "dashboard": {
       "title": "Business Analytics",
