@@ -287,7 +287,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-black text-destructive mb-1">{metrics.overdueTasks}</div>
-                  <p className="text-[10px] text-muted-foreground">{t('zones.dashboard.overdueTasksDesc', 'Требуют немедленного внимания')}</p>
+                  <p className="text-xs text-muted-foreground">{t('zones.dashboard.overdueTasksDesc', 'Требуют немедленного внимания')}</p>
                 </CardContent>
               </Card>
             </div>
