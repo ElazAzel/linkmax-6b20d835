@@ -16,7 +16,7 @@ export const PRO_EXTENDED_BLOCKS = [
   'download', 'form', 'countdown', 'booking', 'community'
 ] as const;
 
-export type FreeTier = 'free' | 'pro' | 'business';
+export type FreeTier = 'identity' | 'starter' | 'pro' | 'business';
 
 // Feature flags for each tier
 export interface TierFeatures {
