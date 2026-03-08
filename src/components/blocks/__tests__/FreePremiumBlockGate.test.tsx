@@ -1,5 +1,6 @@
 /**
- * FreePremiumBlockGate Tests - v1.2
+ * FreePremiumBlockGate Tests - v1.3
+ * Updated to match current free/premium split from block-registry
  */
 import { describe, it, expect } from 'vitest';
 import { FREE_BLOCK_TYPES, PREMIUM_BLOCK_TYPES, FreeBlockType, PremiumBlockType } from '../FreePremiumBlockGate';
@@ -13,6 +14,8 @@ describe('FreePremiumBlockGate', () => {
     expect(FREE_BLOCK_TYPES).toContain('socials');
     expect(FREE_BLOCK_TYPES).toContain('separator');
     expect(FREE_BLOCK_TYPES).toContain('faq');
+    expect(FREE_BLOCK_TYPES).toContain('booking');
+    expect(FREE_BLOCK_TYPES).toContain('form');
   });
 
   it('defines premium block types including event', () => {
@@ -20,12 +23,11 @@ describe('FreePremiumBlockGate', () => {
   });
 
   it('defines premium block types', () => {
-    expect(PREMIUM_BLOCK_TYPES).toContain('booking');
     expect(PREMIUM_BLOCK_TYPES).toContain('catalog');
     expect(PREMIUM_BLOCK_TYPES).toContain('product');
-    expect(PREMIUM_BLOCK_TYPES).toContain('form');
-    expect(PREMIUM_BLOCK_TYPES).toContain('pricing');
     expect(PREMIUM_BLOCK_TYPES).toContain('newsletter');
+    expect(PREMIUM_BLOCK_TYPES).toContain('video');
+    expect(PREMIUM_BLOCK_TYPES).toContain('carousel');
   });
 
   it('has no overlap between free and premium blocks', () => {
