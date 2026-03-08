@@ -93,7 +93,7 @@ export function useZoneAnalytics(zoneId: string | null) {
         const byAssignee: Record<string, { total: number; completed: number; closeTimes: number[] }> = {};
 
         tasks.forEach(task => {
-            const assignee = task.assignee_user_id || 'unassigned';
+            const assignee = task.assigned_to || 'unassigned';
             if (!byAssignee[assignee]) {
                 byAssignee[assignee] = { total: 0, completed: 0, closeTimes: [] };
             }

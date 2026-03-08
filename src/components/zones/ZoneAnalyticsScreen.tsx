@@ -6,10 +6,11 @@ import { useZoneAnalytics } from '@/hooks/zones/useZoneAnalytics';
 import { useZoneDeals } from '@/hooks/zones/useZoneDeals';
 import { useZoneInvoices } from '@/hooks/zones/useZoneInvoices';
 import { useZoneContacts } from '@/hooks/zones/useZoneContacts';
-import { Target, TrendingUp, Filter, CheckCircle2, Clock, DollarSign, ListTodo, FileText, Users, Table, BarChart3 } from 'lucide-react';
+import { useZoneContext } from '@/contexts/ZoneContext';
+import { Target, TrendingUp, TrendingDown, Filter, CheckCircle2, Clock, DollarSign, ListTodo, FileText, Users, Table, BarChart3, FileDown } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, LineChart, Line, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, LineChart, Line, CartesianGrid, AreaChart, Area } from 'recharts';
 import { toast } from 'sonner';
 import { subDays, isAfter, format, startOfDay } from 'date-fns';
 
@@ -30,10 +31,11 @@ const FUNNEL_COLORS = ['#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#
 
 export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
     const { t } = useTranslation();
-    const { metrics, loading } = useZoneAnalytics(zoneId);
+    const { metrics, teamMetrics, conversionTrend, loading } = useZoneAnalytics(zoneId);
     const { deals } = useZoneDeals(zoneId);
     const { invoices } = useZoneInvoices(zoneId);
     const { contacts } = useZoneContacts(zoneId);
+    const { currentZone } = useZoneContext();
     const [period, setPeriod] = useState<Period>('30d');
 
     const periodStart = useMemo(() => {
@@ -94,6 +96,32 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
         }
     }, [revenueTimeline, metrics, period, t]);
 
+    // Export to PDF
+    const handlePDFExport = useCallback(async () => {
+        try {
+            const { exportAnalyticsToPDF } = await import('@/lib/export/pdf-export-analytics');
+            await exportAnalyticsToPDF({
+                zoneName: currentZone?.name || 'Zone',
+                period,
+                metrics,
+                teamMetrics,
+                conversionTrend,
+            });
+            toast.success(t('zones.analytics.exportSuccess', 'PDF exported successfully'));
+        } catch {
+            toast.error(t('zones.analytics.exportError', 'Export failed'));
+        }
+    }, [currentZone?.name, period, metrics, teamMetrics, conversionTrend, t]);
+
+    // Conversion trend direction
+    const trendDirection = useMemo(() => {
+        if (conversionTrend.length < 2) return null;
+        const recent = conversionTrend.slice(-2);
+        const prevRate = recent[0].won + recent[0].lost > 0 ? recent[0].won / (recent[0].won + recent[0].lost) : 0;
+        const currRate = recent[1].won + recent[1].lost > 0 ? recent[1].won / (recent[1].won + recent[1].lost) : 0;
+        return currRate > prevRate ? 'up' : currRate < prevRate ? 'down' : null;
+    }, [conversionTrend]);
+
     if (loading) {
         return (
             <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto">
@@ -146,6 +174,10 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     <Button variant="outline" size="sm" onClick={handleExport} className="gap-2">
                         <Table className="h-4 w-4" />
                         <span className="hidden sm:inline">Excel</span>
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={handlePDFExport} className="gap-2">
+                        <FileDown className="h-4 w-4" />
+                        <span className="hidden sm:inline">PDF</span>
                     </Button>
                 </div>
             </div>
@@ -223,6 +255,35 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                 </Card>
             </div>
 
+            {/* P&L Summary Card */}
+            <Card className="bg-gradient-to-r from-green-500/5 to-yellow-500/5 border-green-500/20">
+                <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                        <DollarSign className="h-5 w-5" />
+                        {t('zones.analytics.plSummary', 'Revenue Summary')}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="p-4 bg-green-500/10 rounded-xl">
+                            <p className="text-xs text-muted-foreground">{t('zones.analytics.grossRevenue', 'Gross Revenue')}</p>
+                            <p className="text-2xl font-bold text-green-600">{invoiceMetrics.totalPaidAmount.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground">{invoiceMetrics.paid} {t('zones.analytics.paidInvoices', 'paid invoices')}</p>
+                        </div>
+                        <div className="p-4 bg-yellow-500/10 rounded-xl">
+                            <p className="text-xs text-muted-foreground">{t('zones.analytics.pendingRevenue', 'Pending Revenue')}</p>
+                            <p className="text-2xl font-bold text-yellow-600">{invoiceMetrics.totalPendingAmount.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground">{invoiceMetrics.pending} {t('zones.analytics.awaitingPayment', 'awaiting payment')}</p>
+                        </div>
+                        <div className="p-4 bg-muted/30 rounded-xl">
+                            <p className="text-xs text-muted-foreground">{t('zones.analytics.wonDealsValue', 'Won Deals Value')}</p>
+                            <p className="text-2xl font-bold">{dealMetrics.totalWonValue.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground">{dealMetrics.won} {t('zones.analytics.closedDeals', 'closed deals')}</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
             {/* Charts Row */}
             <div className="grid lg:grid-cols-2 gap-6">
                 {/* Funnel Chart */}
@@ -298,6 +359,102 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Conversion Trend */}
+            {conversionTrend.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            {trendDirection === 'up' ? (
+                                <TrendingUp className="h-5 w-5 text-green-500" />
+                            ) : trendDirection === 'down' ? (
+                                <TrendingDown className="h-5 w-5 text-destructive" />
+                            ) : (
+                                <Target className="h-5 w-5" />
+                            )}
+                            {t('zones.analytics.conversionTrend', 'Conversion Trend')}
+                            {trendDirection === 'up' && <span className="text-xs text-green-500 font-normal ml-2">↑ {t('zones.analytics.improving', 'Improving')}</span>}
+                            {trendDirection === 'down' && <span className="text-xs text-destructive font-normal ml-2">↓ {t('zones.analytics.declining', 'Declining')}</span>}
+                        </CardTitle>
+                        <CardDescription>{t('zones.analytics.conversionTrendDesc', 'Won vs. lost deals over time.')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={200}>
+                            <AreaChart data={conversionTrend} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                <XAxis dataKey="period" tick={{ fontSize: 11 }} />
+                                <YAxis tick={{ fontSize: 11 }} width={30} />
+                                <RechartsTooltip
+                                    contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                />
+                                <Area type="monotone" dataKey="won" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name={t('zones.analytics.won', 'Won')} />
+                                <Area type="monotone" dataKey="lost" stackId="1" stroke="#ef4444" fill="#ef4444" fillOpacity={0.4} name={t('zones.analytics.lost', 'Lost')} />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            )}
+
+            {/* Team Performance */}
+            {teamMetrics.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                            <Users className="h-5 w-5" />
+                            {t('zones.analytics.teamPerformance', 'Team Performance')}
+                        </CardTitle>
+                        <CardDescription>{t('zones.analytics.teamPerformanceDesc', 'Task completion by team member.')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid lg:grid-cols-2 gap-6">
+                            {/* Table */}
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="border-b">
+                                            <th className="text-left py-2 px-2 font-medium">{t('zones.analytics.member', 'Member')}</th>
+                                            <th className="text-center py-2 px-2 font-medium">{t('zones.analytics.tasks', 'Tasks')}</th>
+                                            <th className="text-center py-2 px-2 font-medium">{t('zones.analytics.done', 'Done')}</th>
+                                            <th className="text-center py-2 px-2 font-medium">%</th>
+                                            <th className="text-center py-2 px-2 font-medium">{t('zones.analytics.avgClose', 'Avg. Close')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {teamMetrics.map((m, i) => (
+                                            <tr key={m.userId} className={i % 2 === 0 ? 'bg-muted/30' : ''}>
+                                                <td className="py-2 px-2 font-medium">{m.name}</td>
+                                                <td className="py-2 px-2 text-center">{m.total}</td>
+                                                <td className="py-2 px-2 text-center text-green-600">{m.completed}</td>
+                                                <td className="py-2 px-2 text-center">
+                                                    <span className={m.completionRate >= 70 ? 'text-green-600' : m.completionRate >= 40 ? 'text-yellow-600' : 'text-destructive'}>
+                                                        {m.completionRate}%
+                                                    </span>
+                                                </td>
+                                                <td className="py-2 px-2 text-center text-muted-foreground">{m.avgDaysToClose}d</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {/* Bar Chart */}
+                            <div className="h-64">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={teamMetrics} layout="vertical" margin={{ left: 0, right: 16 }}>
+                                        <XAxis type="number" hide />
+                                        <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 11 }} />
+                                        <RechartsTooltip
+                                            formatter={(value: number, name: string) => [value, name === 'completed' ? t('zones.analytics.completed', 'Completed') : t('zones.analytics.total', 'Total')]}
+                                            contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                        />
+                                        <Bar dataKey="total" fill="hsl(var(--muted-foreground))" radius={[0, 4, 4, 0]} name="total" />
+                                        <Bar dataKey="completed" fill="#10b981" radius={[0, 4, 4, 0]} name="completed" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
 
             {/* Task Metrics */}
             <Card className="border-primary/10">
