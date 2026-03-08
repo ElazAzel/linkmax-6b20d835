@@ -187,7 +187,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                   Checklist
                 </Label>
                 {checklist.length > 0 && (
-                  <span className="text-[10px] font-bold text-muted-foreground">{checklistProgress}%</span>
+                  <span className="text-xs font-bold text-muted-foreground">{checklistProgress}%</span>
                 )}
               </div>
 
