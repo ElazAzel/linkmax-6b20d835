@@ -444,6 +444,85 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                 </Card>
             </div>
 
+            {/* Search Identity — Entity Fields */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    Видимость в поиске
+                </h3>
+                <Card className="p-4 space-y-4">
+                    <div className="space-y-2">
+                        <Label>Профессия / специализация</Label>
+                        <Input
+                            value={professionInput}
+                            onChange={(e) => setProfessionInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="Nail-мастер, фотограф, коуч..."
+                            className="h-12 rounded-xl"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Город</Label>
+                        <Input
+                            value={cityInput}
+                            onChange={(e) => setCityInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="Алматы, Астана, Москва..."
+                            className="h-12 rounded-xl"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Тип профиля</Label>
+                        <select
+                            value={entityTypeInput}
+                            onChange={(e) => {
+                                setEntityTypeInput(e.target.value);
+                                if (onUpdateEntityFields) {
+                                    onUpdateEntityFields({ entity_type: e.target.value });
+                                    toast.success(t('common.saved', 'Сохранено'));
+                                }
+                            }}
+                            className="flex w-full h-12 rounded-xl border border-border/50 bg-background/60 px-4 text-base"
+                        >
+                            <option value="person">Личный профиль</option>
+                            <option value="organization">Организация</option>
+                        </select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Публичный email (необязательно)</Label>
+                        <Input
+                            value={contactEmailInput}
+                            onChange={(e) => setContactEmailInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="hello@example.com"
+                            className="h-12 rounded-xl"
+                            type="email"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Публичный телефон (необязательно)</Label>
+                        <Input
+                            value={contactPhoneInput}
+                            onChange={(e) => setContactPhoneInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="+7 777 123 4567"
+                            className="h-12 rounded-xl"
+                            type="tel"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>WhatsApp (необязательно)</Label>
+                        <Input
+                            value={contactWhatsappInput}
+                            onChange={(e) => setContactWhatsappInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="+7 777 123 4567"
+                            className="h-12 rounded-xl"
+                            type="tel"
+                        />
+                    </div>
+                </Card>
+            </div>
+
             {/* Category / Niche */}
             <div className="space-y-2">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
