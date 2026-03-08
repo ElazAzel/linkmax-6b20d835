@@ -3501,9 +3501,9 @@
     "analytics": "Analytics",
     "premiumRequired": "Premium feature",
     "leadLimit": {
-      "used": "{{used}} of {{max}} leads this month",
-      "warning": "{{remaining}} leads remaining",
-      "reached": "Lead limit reached",
+      "used": "{{used}} of {{max}} submissions this month",
+      "warning": "{{remaining}} submissions remaining",
+      "reached": "Submission limit reached",
       "upgrade": "Remove limit →"
     },
     "premiumDescription": "Upgrade to Premium for CRM access and lead tracking",

@@ -117,6 +117,13 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
 
 // ============= Freemium Limits =============
 
+/**
+ * Unified CRM inbound limit for free tier.
+ * "Inbound" = leads + bookings + event registrations created by end-customers.
+ * Scope: per owner user_id, per calendar month (UTC).
+ */
+export const CRM_FREE_INBOUND_LIMIT = 50;
+
 export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
 
 export interface FreemiumLimits {

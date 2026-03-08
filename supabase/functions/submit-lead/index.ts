@@ -104,34 +104,13 @@ serve(async (req: Request) => {
             throw new Error('Page not found');
         }
 
-        // 2. Check lead limit for free-tier users
-        const { data: ownerProfile } = await supabase
-            .from('user_profiles')
-            .select('premium_tier, is_premium, trial_ends_at')
-            .eq('id', pageData.user_id)
-            .single();
-
-        const tier = ownerProfile?.premium_tier || 'free';
-        const isPremium = ownerProfile?.is_premium || 
-            (ownerProfile?.trial_ends_at && new Date(ownerProfile.trial_ends_at) > new Date());
-
-        if (!isPremium && (tier === 'free' || !tier)) {
-            const monthStart = new Date();
-            monthStart.setDate(1);
-            monthStart.setHours(0, 0, 0, 0);
-
-            const { count: monthlyLeads } = await supabase
-                .from('leads')
-                .select('*', { count: 'exact', head: true })
-                .eq('page_id', pageId)
-                .gte('created_at', monthStart.toISOString());
-
-            if ((monthlyLeads || 0) >= 50) {
-                return new Response(
-                    JSON.stringify({ success: false, error: 'lead_limit_reached' }),
-                    { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-                );
-            }
+        // 2. Check unified inbound limit (leads + bookings + registrations, per user_id)
+        const limitResult = await checkInboundLimit(supabase, pageData.user_id);
+        if (!limitResult.allowed) {
+            return new Response(
+                JSON.stringify({ success: false, error: 'inbound_limit_reached', used: limitResult.used, limit: limitResult.limit }),
+                { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
         }
 
         // 3. Insert lead into the leads table

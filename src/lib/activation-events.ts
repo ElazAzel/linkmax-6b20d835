@@ -36,7 +36,12 @@ export type ActivationEventType =
   | 'repeat_booking_detected'
   | 'creator_returned_after_gap'
   | 'stale_leads_alert_shown'
-  | 'weekly_digest_sent';
+  | 'weekly_digest_sent'
+  // Inbound limit events
+  | 'inbound_limit_warning'
+  | 'inbound_limit_reached'
+  | 'inbound_blocked_submission'
+  | 'upgrade_from_limit';
 
 /**
  * Track an activation event to the analytics table

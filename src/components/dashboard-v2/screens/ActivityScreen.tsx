@@ -275,8 +275,8 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                     monthlyLeadCount >= 50 ? "text-destructive" : ""
                   )}>
                     {monthlyLeadCount >= 50
-                      ? t('crm.leadLimit.reached', 'Лимит заявок достигнут')
-                      : t('crm.leadLimit.used', '{{used}} из {{max}} заявок', { used: monthlyLeadCount, max: 50 })
+                      ? t('crm.leadLimit.reached', 'Лимит обращений достигнут')
+                      : t('crm.leadLimit.used', '{{used}} из {{max}} обращений', { used: monthlyLeadCount, max: 50 })
                     }
                   </span>
                 </div>
