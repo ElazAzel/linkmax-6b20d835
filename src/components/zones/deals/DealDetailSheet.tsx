@@ -345,13 +345,13 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           <FileSignature className="h-4 w-4 shrink-0 text-primary" />
                           <div className="min-w-0">
                             <span className="text-sm font-medium truncate block">{doc.title}</span>
-                            <span className="text-[10px] text-muted-foreground block">
+                            <span className="text-xs text-muted-foreground block">
                               {format(new Date(doc.created_at), 'd MMM yyyy', { locale: ru })}
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Badge variant="outline" className="text-[10px] bg-primary/10 mr-1">
+                          <Badge variant="outline" className="text-xs bg-primary/10 mr-1">
                             {doc.status}
                           </Badge>
                           {doc.file_url && (

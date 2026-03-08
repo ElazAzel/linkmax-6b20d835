@@ -355,9 +355,9 @@ function MetricCard({ icon, label, value, sub, trend }: { icon: React.ReactNode;
           )}
         </div>
         <div className="space-y-0.5">
-          <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{label}</p>
+          <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{label}</p>
           <p className="text-2xl font-black">{value}</p>
-          <p className="text-[10px] text-muted-foreground font-medium">{sub}</p>
+          <p className="text-xs text-muted-foreground font-medium">{sub}</p>
         </div>
       </CardContent>
     </Card>
