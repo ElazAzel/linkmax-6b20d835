@@ -27,7 +27,7 @@ export interface FormBlock {
     }>;
     submitEmail: string;
     buttonText: string | I18nText | MultilingualString;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
