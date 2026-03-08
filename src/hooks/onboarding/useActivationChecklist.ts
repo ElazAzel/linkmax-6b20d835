@@ -23,6 +23,7 @@ interface UseActivationChecklistOptions {
   onShare: () => void;
   viewCount?: number;
   leadsCount?: number;
+  bookingsCount?: number;
   totalClicks?: number;
 }
 
