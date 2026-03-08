@@ -55,7 +55,7 @@ export async function fetchPageSearchDiagnostics(pageId: string) {
     p_page_id: pageId,
   });
   if (error) throw error;
-  return data as SearchDiagnostics;
+  return data as unknown as SearchDiagnostics;
 }
 
 export interface ChildEntityDetail {
