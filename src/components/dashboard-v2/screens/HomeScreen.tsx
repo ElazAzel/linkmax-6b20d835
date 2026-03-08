@@ -31,6 +31,8 @@ import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
+import { ActivationChecklist } from '@/components/onboarding/ActivationChecklist';
+import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 
 interface HomeScreenProps {
   pageData: PageData | null;
