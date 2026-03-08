@@ -84,7 +84,7 @@ async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
     .limit(200);
 
   if (error) throw error;
-  return (data || []) as DiagnosticPage[];
+  return (data || []) as unknown as DiagnosticPage[];
 }
 
 async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmission[]> {
