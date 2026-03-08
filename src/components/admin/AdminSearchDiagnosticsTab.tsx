@@ -40,6 +40,7 @@ interface DiagnosticPage {
 interface IndexingSubmission {
   id: string;
   target_url: string;
+  child_type: string | null;
   provider: string;
   action_type: string;
   submission_status: string;
@@ -48,6 +49,13 @@ interface IndexingSubmission {
   batch_id: string | null;
   created_at: string;
 }
+
+const CHILD_STATE_LABELS: Record<string, { label: string; color: string }> = {
+  eligible: { label: 'В поиске', color: 'border-emerald-500/30 text-emerald-600' },
+  excluded_thin: { label: 'Нет описания', color: 'border-amber-500/30 text-amber-600' },
+  removed: { label: 'Удалена', color: 'border-red-500/30 text-red-500' },
+  parent_not_indexable: { label: 'Родитель не индексируется', color: 'border-muted-foreground/30 text-muted-foreground' },
+};
 
 const EXCLUSION_LABELS: Record<string, string> = {
   missing_name: 'Нет имени',
@@ -76,13 +84,32 @@ async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
 async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmission[]> {
   const { data, error } = await supabase
     .from('indexing_submissions')
-    .select('id, target_url, provider, action_type, submission_status, skip_reason, http_status, batch_id, created_at')
+    .select('id, target_url, child_type, provider, action_type, submission_status, skip_reason, http_status, batch_id, created_at')
     .eq('page_id', pageId)
     .order('created_at', { ascending: false })
     .limit(20);
 
   if (error) throw error;
   return (data || []) as IndexingSubmission[];
+}
+
+/** Parse service_slugs JSONB into child entity details */
+function parseChildEntities(serviceSlugs: Record<string, string> | null, pageSlug: string, isPageIndexable: boolean) {
+  if (!serviceSlugs) return [];
+  return Object.entries(serviceSlugs).map(([title, val]) => {
+    let slug = val;
+    let state = 'eligible';
+    if (val.endsWith('::removed')) {
+      slug = val.replace('::removed', '');
+      state = 'removed';
+    } else if (val.endsWith('::thin')) {
+      slug = val.replace('::thin', '');
+      state = 'excluded_thin';
+    } else if (!isPageIndexable) {
+      state = 'parent_not_indexable';
+    }
+    return { title, slug, state, url: `/${pageSlug}/services/${slug}` };
+  });
 }
 
 function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string }) {
@@ -251,7 +278,10 @@ export function AdminSearchDiagnosticsTab() {
               const score = page.quality_score || 0;
               const isIndexable = page.is_published && score >= 40;
               const exclusions = page.index_exclusion_reasons || [];
-              const serviceCount = page.service_slugs ? Object.keys(page.service_slugs).length : 0;
+              const children = parseChildEntities(page.service_slugs, page.slug, isIndexable);
+              const activeChildren = children.filter(c => c.state !== 'removed');
+              const eligibleChildren = children.filter(c => c.state === 'eligible');
+              const thinChildren = children.filter(c => c.state === 'excluded_thin');
 
               return (
                 <TableRow key={page.id}>
@@ -321,8 +351,48 @@ export function AdminSearchDiagnosticsTab() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {serviceCount > 0 ? (
-                      <span className="text-sm font-medium">{serviceCount}</span>
+                    {activeChildren.length > 0 ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button className="text-left">
+                            <span className="text-sm font-medium">{eligibleChildren.length}</span>
+                            <span className="text-[10px] text-muted-foreground">/{activeChildren.length}</span>
+                            {thinChildren.length > 0 && (
+                              <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">{thinChildren.length} thin</Badge>
+                            )}
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-lg max-h-[70vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle className="font-mono text-sm">Child URLs: /{page.slug}</DialogTitle>
+                          </DialogHeader>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead className="text-xs">Услуга</TableHead>
+                                <TableHead className="text-xs">Slug</TableHead>
+                                <TableHead className="text-xs">Статус</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {children.map(child => {
+                                const stateInfo = CHILD_STATE_LABELS[child.state] || { label: child.state, color: '' };
+                                return (
+                                  <TableRow key={child.slug}>
+                                    <TableCell className="text-xs max-w-[150px] truncate">{child.title}</TableCell>
+                                    <TableCell className="font-mono text-[10px]">{child.slug}</TableCell>
+                                    <TableCell>
+                                      <Badge variant="outline" className={cn('text-[9px]', stateInfo.color)}>
+                                        {stateInfo.label}
+                                      </Badge>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </DialogContent>
+                      </Dialog>
                     ) : (
                       <span className="text-xs text-muted-foreground">—</span>
                     )}

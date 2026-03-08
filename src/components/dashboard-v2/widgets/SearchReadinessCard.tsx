@@ -14,7 +14,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
 import { computeQualityScore, getSearchReadinessStatus, type QualityBreakdown } from '@/lib/seo/quality-score';
-import { fetchPageSearchDiagnostics } from '@/lib/seo/indexnow-client';
+import { fetchPageSearchDiagnostics, type SearchDiagnostics, type ChildSummary } from '@/lib/seo/indexnow-client';
 import Search from 'lucide-react/dist/esm/icons/search';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Circle from 'lucide-react/dist/esm/icons/circle';
@@ -57,6 +57,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
   const isIndexable = hasServerData ? serverDiag.is_indexable : preview.isIndexable;
   const inSitemap = hasServerData ? serverDiag.included_in_sitemap : preview.isIndexable;
   const childCount = hasServerData ? serverDiag.child_page_count : preview.serviceCount;
+  const childSummary: ChildSummary | null = hasServerData ? serverDiag.child_summary : null;
   const lastIndexNow = hasServerData ? serverDiag.last_indexnow_at : null;
 
   const failedChecks = preview.checks.filter(c => !c.passed);
@@ -143,7 +144,15 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         )}
         {childCount > 0 && isIndexable && (
           <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary bg-primary/5">
-            {childCount} {childCount === 1 ? 'услуга' : 'услуг'}
+            {childSummary
+              ? `${childSummary.eligible} из ${childSummary.total - childSummary.removed} услуг в поиске`
+              : `${childCount} ${childCount === 1 ? 'услуга' : 'услуг'}`
+            }
+          </Badge>
+        )}
+        {childSummary && childSummary.excluded_thin > 0 && (
+          <Badge variant="outline" className="text-[10px] gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+            {childSummary.excluded_thin} услуг без описания
           </Badge>
         )}
         {lastIndexNow && (
