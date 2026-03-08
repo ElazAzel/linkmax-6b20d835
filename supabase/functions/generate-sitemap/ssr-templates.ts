@@ -523,7 +523,7 @@ export function buildGalleryHtml(lang: LanguageKey, baseUrl: string, items: Gall
     </section>
 
     <footer>
-      <p><a href="${baseUrl}/">lnkmx.my</a></p>
+      <p><a href="${baseUrl}/">LinkMAX</a></p>
     </footer>
   </main>
 </body>
