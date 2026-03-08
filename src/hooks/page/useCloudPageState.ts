@@ -163,6 +163,13 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
           notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
         }
 
+        // Invalidate server diagnostics so SearchReadinessCard refetches
+        if (savedPageId || sanitizedData.id) {
+          queryClient.invalidateQueries({
+            queryKey: ['search-diagnostics', savedPageId || sanitizedData.id],
+          });
+        }
+
         setSaveStatus('saved');
       } catch (error) {
         // Silent fail for auto-save/publish
