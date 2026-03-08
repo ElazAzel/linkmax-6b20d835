@@ -385,6 +385,28 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     }
   }, [user, pageData]);
 
+  const updateEntityFields = useCallback(async (fields: {
+    city?: string;
+    profession?: string;
+    entity_type?: string;
+    contact_email?: string;
+    contact_phone?: string;
+    contact_whatsapp?: string;
+  }) => {
+    if (!user || !pageData) return;
+
+    // Update local state immediately
+    const newPageData = { ...pageData, ...fields };
+    setPageData(newPageData as PageData);
+
+    // Save to database
+    const { error } = await updatePageEntityFields(user.id, fields);
+    if (error) {
+      toast.error('Failed to update');
+      setPageData(pageData);
+    }
+  }, [user, pageData]);
+
   const refresh = useCallback(async () => {
     if (user?.id) {
       await queryClient.invalidateQueries({
