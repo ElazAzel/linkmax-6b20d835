@@ -142,18 +142,18 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
         </div>
         <div className="flex gap-1 p-1 bg-muted/30 rounded-lg">
           {periodOptions.map(p => (
-            <Button
-              key={p.value}
-              size="sm"
-              variant={period === p.value ? 'secondary' : 'ghost'}
-              className={cn(
-                "text-[10px] h-6 px-2 rounded-md transition-all",
-                period === p.value ? "shadow-sm bg-background" : "text-muted-foreground"
-              )}
-              onClick={() => setPeriod(p.value)}
-            >
-              {p.label}
-            </Button>
+              <Button
+                key={p.value}
+                size="sm"
+                variant={period === p.value ? 'secondary' : 'ghost'}
+                className={cn(
+                  "text-xs min-h-11 px-3 rounded-md transition-all",
+                  period === p.value ? "shadow-sm bg-background" : "text-muted-foreground"
+                )}
+                onClick={() => setPeriod(p.value)}
+              >
+                {p.label}
+              </Button>
           ))}
         </div>
       </div>
