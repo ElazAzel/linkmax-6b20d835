@@ -24,7 +24,6 @@ interface UseActivationChecklistOptions {
   viewCount?: number;
   leadsCount?: number;
   bookingsCount?: number;
-  totalClicks?: number;
 }
 
 export function useActivationChecklist({
@@ -34,7 +33,6 @@ export function useActivationChecklist({
   viewCount = 0,
   leadsCount = 0,
   bookingsCount = 0,
-  totalClicks = 0,
 }: UseActivationChecklistOptions) {
   const { t } = useTranslation();
   const [celebrationDismissed, setCelebrationDismissed] = useState(
