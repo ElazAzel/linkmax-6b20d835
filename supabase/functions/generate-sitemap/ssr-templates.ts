@@ -239,7 +239,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
       {
         '@type': 'WebSite',
         '@id': `${baseUrl}/#website`,
-        name: 'lnkmx',
+        name: 'LinkMAX',
         url: `${baseUrl}/`,
         inLanguage: lang,
         potentialAction: {
