@@ -117,7 +117,6 @@ export const mockCustomCodeBlock: CustomCodeBlock = {
   title: 'Custom Widget',
   html: '<div class="test">Hello</div>',
   css: '.test { color: red; }',
-  isPremium: true,
 };
 
 export const mockMessengerBlock: MessengerBlock = {
