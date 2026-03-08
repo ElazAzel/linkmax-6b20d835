@@ -22,7 +22,15 @@ export type ActivationEventType =
   | 'lead_status_changed'
   | 'booking_confirmed'
   | 'first_lead_reply'
-  | 'lead_stale_24h';
+  | 'lead_stale_24h'
+  // Booking funnel events
+  | 'booking_slot_selected'
+  | 'booking_form_opened'
+  | 'booking_submitted'
+  | 'booking_prepayment_initiated'
+  | 'booking_cancelled'
+  | 'booking_payment_confirmed'
+  | 'booking_completed';
 
 /**
  * Track an activation event to the analytics table
@@ -104,4 +112,36 @@ export function trackBookingConfirmed(pageId: string, bookingId: string): void {
 /** First ever lead reply (milestone) */
 export function trackFirstLeadReply(pageId: string): void {
   trackActivationEvent(pageId, 'first_lead_reply');
+}
+
+// ──────────── Booking funnel event helpers ────────────
+
+/** Booking slot selected by customer */
+export function trackBookingSlotSelected(pageId: string, blockId: string, date: string, time: string): void {
+  trackActivationEvent(pageId, 'booking_slot_selected', { blockId, date, time });
+}
+
+/** Booking form opened */
+export function trackBookingFormOpened(pageId: string, blockId: string): void {
+  trackActivationEvent(pageId, 'booking_form_opened', { blockId });
+}
+
+/** Booking submitted */
+export function trackBookingSubmitted(pageId: string, bookingId: string, hasPrepayment: boolean): void {
+  trackActivationEvent(pageId, 'booking_submitted', { bookingId, hasPrepayment: String(hasPrepayment) });
+}
+
+/** Prepayment initiated (customer clicked pay button) */
+export function trackBookingPrepaymentInitiated(pageId: string, bookingId: string, method: string): void {
+  trackActivationEvent(pageId, 'booking_prepayment_initiated', { bookingId, method });
+}
+
+/** Owner confirmed payment */
+export function trackBookingPaymentConfirmed(pageId: string, bookingId: string): void {
+  trackActivationEvent(pageId, 'booking_payment_confirmed', { bookingId });
+}
+
+/** Booking cancelled */
+export function trackBookingCancelled(pageId: string, bookingId: string, by: string): void {
+  trackActivationEvent(pageId, 'booking_cancelled', { bookingId, cancelledBy: by });
 }

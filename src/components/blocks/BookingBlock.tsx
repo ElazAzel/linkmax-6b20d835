@@ -20,9 +20,12 @@ import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import Info from 'lucide-react/dist/esm/icons/info';
+import Copy from 'lucide-react/dist/esm/icons/copy';
+import CalendarPlus from 'lucide-react/dist/esm/icons/calendar-plus';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import { supabase } from '@/platform/supabase/client';
 import { fintechService } from '@/services/fintech';
-import { useRobokassa } from '@/hooks/useRobokassa';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
@@ -51,6 +54,20 @@ interface BookingFormData {
   notes: string;
 }
 
+interface BookingConfirmation {
+  date: string;
+  time: string;
+  endTime?: string;
+  name: string;
+  bookingId: string;
+  requiresPrepayment: boolean;
+  prepaymentAmount?: number;
+  prepaymentCurrency?: string;
+  prepaymentMethod?: string;
+  ownerPhone?: string;
+  kaspiPhone?: string;
+}
+
 export const BookingBlock = memo(function BookingBlockComponent({
   block,
   pageOwnerId,
@@ -63,14 +80,14 @@ export const BookingBlock = memo(function BookingBlockComponent({
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showOptionalFields, setShowOptionalFields] = useState(false);
+  const [confirmation, setConfirmation] = useState<BookingConfirmation | null>(null);
   const [formData, setFormData] = useState<BookingFormData>({
     name: '',
     phone: '',
     email: '',
     notes: ''
   });
-
-  const { initiatePayment } = useRobokassa();
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : undefined;
 
@@ -83,7 +100,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
       const dayOfWeek = date.getDay();
       const dateStr = format(date, 'yyyy-MM-dd');
 
-      // Fetch slot templates for this day
       const { data: slotTemplates } = await supabase
         .from('booking_slots')
         .select('*')
@@ -92,7 +108,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
         .eq('is_available', true)
         .or(`day_of_week.eq.${dayOfWeek},specific_date.eq.${dateStr}`);
 
-      // Fetch existing bookings for this date
       const { data: bookings } = await supabase
         .from('bookings')
         .select('*')
@@ -101,35 +116,24 @@ export const BookingBlock = memo(function BookingBlockComponent({
         .eq('slot_date', dateStr)
         .neq('status', 'cancelled');
 
-      // Generate slots from templates
       const generatedSlots: TimeSlot[] = [];
 
-      // Call Edge Function to check Google Calendar availability if enabled
       let gcalBlockedSlots: string[] = [];
       if (block.gcalSyncEnabled && pageOwnerId) {
         try {
           const { data, error } = await supabase.functions.invoke('google-calendar-sync', {
-            body: {
-              action: 'check_availability',
-              owner_id: pageOwnerId,
-              date: dateStr
-            }
+            body: { action: 'check_availability', owner_id: pageOwnerId, date: dateStr }
           });
-
-          if (!error && data?.blocked_slots) {
-            gcalBlockedSlots = data.blocked_slots;
-          }
+          if (!error && data?.blocked_slots) gcalBlockedSlots = data.blocked_slots;
         } catch (err) {
           console.error('Failed to sync with Google Calendar:', err);
         }
       }
 
-      // If block has custom slots defined
       if (block.slots && block.slots.length > 0) {
         block.slots.forEach(slot => {
           const isBookedLocally = bookings?.some(b => b.slot_time === slot.startTime);
           const isBookedGcal = gcalBlockedSlots.includes(slot.startTime);
-
           generatedSlots.push({
             time: slot.startTime,
             endTime: slot.endTime,
@@ -141,7 +145,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
         slotTemplates.forEach(template => {
           const isBookedLocally = bookings?.some(b => b.slot_time === template.start_time);
           const isBookedGcal = gcalBlockedSlots.includes(template.start_time);
-
           generatedSlots.push({
             time: template.start_time,
             endTime: template.end_time,
@@ -150,19 +153,14 @@ export const BookingBlock = memo(function BookingBlockComponent({
           });
         });
       } else {
-        // Generate default slots from block settings
         const startHour = block.workingHoursStart ?? 9;
         const endHour = block.workingHoursEnd ?? 18;
         const duration = block.slotDuration || 60;
-
-        // Calculate total minutes from start to end
         const startMinutes = startHour * 60;
         const endMinutes = endHour * 60;
 
-        // Generate slots based on duration
         for (let slotStart = startMinutes; slotStart + duration <= endMinutes; slotStart += duration) {
           const slotEnd = slotStart + duration;
-
           const startHr = Math.floor(slotStart / 60);
           const startMin = slotStart % 60;
           const endHr = Math.floor(slotEnd / 60);
@@ -211,7 +209,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
     try {
       const { data: session } = await supabase.auth.getSession();
 
-      const { error } = await supabase
+      const hasPrepayment = block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0;
+      const paymentStatus = hasPrepayment ? 'pending' : 'none';
+      const paymentMethod = hasPrepayment ? (block.prepaymentMethod || 'whatsapp') : null;
+
+      const { data: bookingData, error } = await supabase
         .from('bookings')
         .insert({
           page_id: pageId,
@@ -225,27 +227,33 @@ export const BookingBlock = memo(function BookingBlockComponent({
           client_phone: formData.phone || null,
           client_email: formData.email || null,
           client_notes: formData.notes || null,
-        });
+          payment_status: paymentStatus,
+          payment_amount: hasPrepayment ? block.prepaymentAmount : 0,
+          payment_method: paymentMethod,
+        })
+        .select('id')
+        .single();
 
       if (error) throw error;
 
-      // Record in Fintech Ledger (Phase 1)
-      try {
-        await fintechService.recordPendingIncome({
-          userId: pageOwnerId,
-          amount: block.prepaymentAmount || 0,
-          description: `Бронирование: ${formData.name} (${format(selectedDate, 'dd.MM.yyyy')} ${selectedSlot.time.substring(0, 5)})`,
-          relatedEntityId: block.id,
-          relatedEntityType: 'booking',
-          metadata: {
-            client_name: formData.name,
-            slot_date: format(selectedDate, 'yyyy-MM-dd'),
-            slot_time: selectedSlot.time
-          }
-        });
-      } catch (fintechErr) {
-        console.error('Failed to record fintech transaction', fintechErr);
-        // Don't block the main flow
+      // Record in Fintech Ledger
+      if (hasPrepayment) {
+        try {
+          await fintechService.recordPendingIncome({
+            userId: pageOwnerId,
+            amount: block.prepaymentAmount || 0,
+            description: `Бронирование: ${formData.name} (${format(selectedDate, 'dd.MM.yyyy')} ${selectedSlot.time.substring(0, 5)})`,
+            relatedEntityId: block.id,
+            relatedEntityType: 'booking',
+            metadata: {
+              client_name: formData.name,
+              slot_date: format(selectedDate, 'yyyy-MM-dd'),
+              slot_time: selectedSlot.time
+            }
+          });
+        } catch (fintechErr) {
+          console.error('Failed to record fintech transaction', fintechErr);
+        }
       }
 
       // Send notification to owner
@@ -264,7 +272,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
         // Notification failed but booking succeeded
       }
 
-      // Add event to Google Calendar if sync is enabled
+      // Google Calendar sync
       if (block.gcalSyncEnabled && pageOwnerId) {
         try {
           await supabase.functions.invoke('google-calendar-sync', {
@@ -286,26 +294,23 @@ export const BookingBlock = memo(function BookingBlockComponent({
         }
       }
 
-      // If prepayment is required, redirect to Robokassa
-      if (block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0) {
-        const amount = block.prepaymentAmount;
-        const description = t('booking.payment_desc', 'Запись на {{date}} {{time}}', {
-          date: format(selectedDate, 'dd.MM.yyyy'),
-          time: selectedSlot.time.substring(0, 5)
-        });
+      // Show confirmation screen instead of toast
+      setConfirmation({
+        date: format(selectedDate, 'd MMMM, EEEE', { locale }),
+        time: selectedSlot.time.substring(0, 5),
+        endTime: selectedSlot.endTime?.substring(0, 5),
+        name: formData.name,
+        bookingId: bookingData?.id || '',
+        requiresPrepayment: !!hasPrepayment,
+        prepaymentAmount: block.prepaymentAmount,
+        prepaymentCurrency: block.prepaymentCurrency || 'KZT',
+        prepaymentMethod: block.prepaymentMethod || 'whatsapp',
+        ownerPhone: block.prepaymentPhone,
+        kaspiPhone: block.kaspiPhone,
+      });
 
-        // initiatePayment will redirect to Robokassa
-        await initiatePayment(amount, description, block.id);
-      } else {
-        toast.success(t('booking.success', 'Вы успешно записались!'));
-        setShowForm(false);
-        setSelectedSlot(null);
-        setFormData({ name: '', phone: '', email: '', notes: '' });
-      }
-
+      setShowForm(false);
       setFormData({ name: '', phone: '', email: '', notes: '' });
-
-      // Refresh slots
       fetchSlots(selectedDate);
     } catch (error) {
       console.error('Booking error:', error);
@@ -315,21 +320,13 @@ export const BookingBlock = memo(function BookingBlockComponent({
     }
   };
 
-  const formatTime = (time: string) => {
-    return time.substring(0, 5);
-  };
+  const formatTime = (time: string) => time.substring(0, 5);
 
   const disabledDays = (date: Date) => {
-    // Disable past dates
     if (isBefore(startOfDay(date), startOfDay(new Date()))) return true;
-
-    // Disable dates beyond max booking days
     const maxDays = block.maxBookingDays || 30;
     if (isBefore(addDays(new Date(), maxDays), date)) return true;
-
-    // Disable specific weekdays if configured
     if (block.disabledWeekdays?.includes(date.getDay())) return true;
-
     return false;
   };
 
@@ -341,24 +338,162 @@ export const BookingBlock = memo(function BookingBlockComponent({
     ? getI18nText(block.description, i18n.language as SupportedLanguage)
     : block.description;
 
-  // Calculate stats for the selected date
   const availableCount = slots.filter(s => s.available).length;
   const bookedCount = slots.filter(s => !s.available).length;
   const totalCount = slots.length;
 
-  // Format date label
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return t('booking.today', 'Сегодня');
     if (isTomorrow(date)) return t('booking.tomorrow', 'Завтра');
     return format(date, 'd MMMM, EEEE', { locale });
   };
 
-  // Get working hours display
   const getWorkingHours = () => {
     const start = block.workingHoursStart || 9;
     const end = block.workingHoursEnd || 18;
     return `${start.toString().padStart(2, '0')}:00 — ${end.toString().padStart(2, '0')}:00`;
   };
+
+  const handleWhatsAppPrepayment = () => {
+    if (!block.prepaymentPhone || !confirmation) return;
+    const phone = block.prepaymentPhone.replace(/\D/g, '');
+    const message = t('booking.whatsapp.greeting', 'Здравствуйте! Я записался(ась) на {{date}} в {{time}}.', { date: confirmation.date, time: confirmation.time })
+      + '\n' + t('booking.whatsapp.name', 'Имя: {{name}}', { name: confirmation.name })
+      + '\n' + t('booking.whatsapp.prepayment', 'Сумма предоплаты: {{amount}} {{currency}}', { amount: confirmation.prepaymentAmount, currency: getCurrencySymbol(confirmation.prepaymentCurrency || 'KZT') })
+      + '\n' + t('booking.whatsapp.pay', 'Хочу оплатить запись.');
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleKaspiPrepayment = () => {
+    if (!block.kaspiPhone || !confirmation) return;
+    const phone = block.kaspiPhone.replace(/\D/g, '');
+    const amount = confirmation.prepaymentAmount || 0;
+    window.open(`https://kaspi.kz/pay/${phone}?amount=${amount}`, '_blank');
+  };
+
+  const handleCopyBookingId = () => {
+    if (!confirmation) return;
+    navigator.clipboard.writeText(confirmation.bookingId.substring(0, 8).toUpperCase());
+    toast.success(t('booking.confirmation.copied', 'Скопировано'));
+  };
+
+  // Reset confirmation when user wants to book again
+  const handleBookAgain = () => {
+    setConfirmation(null);
+    setSelectedSlot(null);
+    setSelectedDate(undefined);
+  };
+
+  // If we have a confirmation, show it
+  if (confirmation) {
+    return (
+      <div className="w-full rounded-2xl overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass">
+        <div className="p-6 text-center space-y-5">
+          {/* Success icon */}
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center animate-in zoom-in duration-300">
+            <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+          </div>
+
+          <div className="space-y-1">
+            <h3 className="text-xl font-bold text-gradient">
+              {t('booking.confirmation.title', 'Вы записаны!')}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {t('booking.confirmation.subtitle', 'Детали вашей записи')}
+            </p>
+          </div>
+
+          {/* Booking details card */}
+          <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 text-left space-y-3">
+            <div className="flex items-center gap-3">
+              <CalendarDays className="h-4 w-4 text-primary shrink-0" />
+              <span className="text-sm font-bold">{confirmation.date}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Clock className="h-4 w-4 text-primary shrink-0" />
+              <span className="text-sm font-bold">
+                {confirmation.time}
+                {confirmation.endTime && ` — ${confirmation.endTime}`}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <User className="h-4 w-4 text-primary shrink-0" />
+              <span className="text-sm">{confirmation.name}</span>
+            </div>
+            {/* Booking reference */}
+            <div className="flex items-center justify-between pt-2 border-t border-primary/10">
+              <span className="text-xs text-muted-foreground">{t('booking.confirmation.ref', 'Номер записи')}</span>
+              <button onClick={handleCopyBookingId} className="flex items-center gap-1 text-xs font-mono font-bold text-primary hover:underline">
+                {confirmation.bookingId.substring(0, 8).toUpperCase()}
+                <Copy className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+
+          {/* Prepayment section */}
+          {confirmation.requiresPrepayment && (
+            <div className="space-y-3">
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <Wallet className="h-4 w-4 text-amber-600" />
+                  <span className="text-sm font-bold text-amber-700">
+                    {t('booking.confirmation.prepaymentRequired', 'Предоплата для подтверждения')}
+                  </span>
+                </div>
+                <p className="text-lg font-black text-amber-700">
+                  {confirmation.prepaymentAmount} {getCurrencySymbol(confirmation.prepaymentCurrency || 'KZT')}
+                </p>
+                <p className="text-xs text-amber-600/70 mt-1">
+                  {t('booking.confirmation.prepaymentHint', 'Оплатите для гарантии записи. Возвращается при отмене за 24ч.')}
+                </p>
+              </div>
+
+              {/* Payment buttons */}
+              <div className="space-y-2">
+                {(confirmation.prepaymentMethod === 'whatsapp' || !confirmation.prepaymentMethod) && confirmation.ownerPhone && (
+                  <Button
+                    onClick={handleWhatsAppPrepayment}
+                    className="w-full h-12 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/25"
+                  >
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    {t('booking.confirmation.payWhatsApp', 'Оплатить через WhatsApp')}
+                  </Button>
+                )}
+                {(confirmation.prepaymentMethod === 'kaspi' || (confirmation.kaspiPhone && confirmation.prepaymentMethod !== 'robokassa')) && confirmation.kaspiPhone && (
+                  <Button
+                    onClick={handleKaspiPrepayment}
+                    variant="outline"
+                    className="w-full h-12 rounded-xl font-bold border-red-500/30 text-red-600 hover:bg-red-500/5"
+                  >
+                    <Wallet className="h-5 w-5 mr-2" />
+                    {t('booking.confirmation.payKaspi', 'Оплатить через Kaspi')}
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Non-prepayment confirmation */}
+          {!confirmation.requiresPrepayment && (
+            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              <p className="text-sm text-emerald-700 font-medium">
+                {t('booking.confirmation.awaitConfirm', 'Ожидайте подтверждения от специалиста')}
+              </p>
+            </div>
+          )}
+
+          {/* Book again button */}
+          <Button
+            variant="ghost"
+            onClick={handleBookAgain}
+            className="w-full h-10 rounded-xl text-sm font-medium"
+          >
+            {t('booking.confirmation.bookAgain', 'Записаться ещё раз')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full rounded-2xl overflow-hidden glass-card backdrop-blur-md border-white/10 shadow-glass">
@@ -375,15 +510,26 @@ export const BookingBlock = memo(function BookingBlockComponent({
         {blockDescription && (
           <p className="text-sm text-muted-foreground/80 mt-2 line-clamp-2">{blockDescription}</p>
         )}
-        {/* Working hours - premium style */}
-        <div className="flex items-center gap-1.5 text-xs font-medium text-primary mt-3 bg-primary/5 w-fit px-2 py-1 rounded-lg">
-          <Clock className="h-3 w-3" />
-          <span>{getWorkingHours()}</span>
+        <div className="flex items-center gap-3 mt-3">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/5 w-fit px-2 py-1 rounded-lg">
+            <Clock className="h-3 w-3" />
+            <span>{getWorkingHours()}</span>
+          </div>
+          {/* Price badge visible upfront */}
+          {block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0 && (
+            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-500/10 w-fit px-2.5 py-1 rounded-lg border border-amber-500/20">
+              <Wallet className="h-3 w-3" />
+              <span>{t('booking.prepaymentBadge', 'Предоплата {{amount}} {{currency}}', {
+                amount: block.prepaymentAmount,
+                currency: getCurrencySymbol(block.prepaymentCurrency || 'KZT')
+              })}</span>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="p-5 sm:p-6 pt-2 space-y-6">
-        {/* Step indicator - Premium */}
+        {/* Step indicator */}
         <div className="flex items-center gap-2 text-xs font-semibold">
           <div className={cn(
             "flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-300",
@@ -410,7 +556,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
           )}
         </div>
 
-        {/* Calendar - optimized with glass feel */}
+        {/* Calendar */}
         <div className="flex justify-center -mx-2 bg-primary/5 rounded-2xl p-2 border border-white/5">
           <Calendar
             mode="single"
@@ -440,10 +586,9 @@ export const BookingBlock = memo(function BookingBlockComponent({
           />
         </div>
 
-        {/* Time slots section - mobile optimized */}
+        {/* Time slots section */}
         {selectedDate && (
           <div className="space-y-3">
-            {/* Date header with stats - glass style */}
             <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
@@ -480,16 +625,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
                   <Info className="h-8 w-8" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold">
-                    {t('booking.noSlotsTitle', 'Нет доступных окон')}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t('booking.noSlotsHint', 'Попробуйте выбрать другую дату')}
-                  </p>
+                  <p className="text-sm font-bold">{t('booking.noSlotsTitle', 'Нет доступных окон')}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t('booking.noSlotsHint', 'Попробуйте выбрать другую дату')}</p>
                 </div>
               </div>
             ) : (
-              /* Time slots grid - premium glass buttons */
               <div className="grid grid-cols-3 gap-2 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
                 {slots.map((slot, idx) => (
                   <button
@@ -521,7 +661,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
               </div>
             )}
 
-            {/* Selected slot confirmation - Premium Floating style */}
+            {/* Selected slot confirmation with price */}
             {selectedSlot && (
               <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 shadow-lg shadow-primary/10 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="flex items-center justify-between gap-4">
@@ -545,13 +685,23 @@ export const BookingBlock = memo(function BookingBlockComponent({
                     {t('booking.continue', 'Далее')}
                   </Button>
                 </div>
+                {/* Inline prepayment info */}
+                {block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0 && (
+                  <p className="text-xs text-primary/70 mt-2 flex items-center gap-1.5">
+                    <Wallet className="h-3 w-3" />
+                    {t('booking.slotPrepaymentHint', 'Предоплата {{amount}} {{currency}} · гарантирует бронь', {
+                      amount: block.prepaymentAmount,
+                      currency: getCurrencySymbol(block.prepaymentCurrency || 'KZT')
+                    })}
+                  </p>
+                )}
               </div>
             )}
           </div>
         )}
       </div>
 
-      {/* Legend - Premium subtle style */}
+      {/* Legend */}
       <div className="flex items-center justify-center gap-6 py-4 px-6 bg-black/5 border-t border-white/5">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full border border-primary/40 bg-white/5" />
@@ -563,7 +713,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
         </div>
       </div>
 
-      {/* Booking Form Dialog - Premium Styles */}
+      {/* Booking Form Dialog — Reduced friction */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="sm:max-w-md glass-card backdrop-blur-xl border-white/10 shadow-2xl p-0 overflow-hidden">
           <div className="p-6 pb-4 border-b border-white/5">
@@ -594,12 +744,26 @@ export const BookingBlock = memo(function BookingBlockComponent({
                       </div>
                     </div>
                   )}
+
+                  {/* Prepayment callout in form */}
+                  {block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0 && (
+                    <div className="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
+                      <Wallet className="h-4 w-4 text-amber-600 shrink-0" />
+                      <span className="text-xs font-bold text-amber-700">
+                        {t('booking.formPrepaymentNote', 'Предоплата {{amount}} {{currency}} после записи', {
+                          amount: block.prepaymentAmount,
+                          currency: getCurrencySymbol(block.prepaymentCurrency || 'KZT')
+                        })}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </DialogDescription>
             </DialogHeader>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            {/* Required fields: Name + Phone */}
             <div className="space-y-2">
               <Label htmlFor="name" className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider ml-1">
                 <User className="h-3.5 w-3.5" />
@@ -615,53 +779,66 @@ export const BookingBlock = memo(function BookingBlockComponent({
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider ml-1">
-                  <Phone className="h-3.5 w-3.5" />
-                  {t('booking.phone', 'Телефон')}
-                  {block.requirePhone && ' *'}
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  placeholder="+7 (___) ___-__-__"
-                  required={block.requirePhone}
-                  className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider ml-1">
-                  <Mail className="h-3.5 w-3.5" />
-                  {t('booking.email', 'Email')}
-                  {block.requireEmail && ' *'}
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="email@example.com"
-                  required={block.requireEmail}
-                  className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
-                />
-              </div>
-            </div>
-
             <div className="space-y-2">
-              <Label htmlFor="notes" className="text-xs font-bold text-primary uppercase tracking-wider ml-1">{t('booking.notes', 'Комментарий')}</Label>
-              <Textarea
-                id="notes"
-                value={formData.notes}
-                onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                placeholder={t('booking.notesPlaceholder', 'Дополнительная информация...')}
-                rows={3}
-                className="rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium resize-none"
+              <Label htmlFor="phone" className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider ml-1">
+                <Phone className="h-3.5 w-3.5" />
+                {t('booking.phone', 'Телефон')} *
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                placeholder="+7 (___) ___-__-__"
+                required
+                className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
               />
             </div>
+
+            {/* Optional fields — collapsed by default */}
+            {!showOptionalFields ? (
+              <button
+                type="button"
+                onClick={() => setShowOptionalFields(true)}
+                className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1"
+              >
+                <ChevronDown className="h-3.5 w-3.5" />
+                {t('booking.addDetails', 'Добавить email или комментарий')}
+              </button>
+            ) : (
+              <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider ml-1">
+                    <Mail className="h-3.5 w-3.5" />
+                    {t('booking.email', 'Email')}
+                    {block.requireEmail && ' *'}
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    placeholder="email@example.com"
+                    required={block.requireEmail}
+                    className="h-12 rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="notes" className="text-xs font-bold text-primary uppercase tracking-wider ml-1">
+                    {t('booking.notes', 'Комментарий')}
+                  </Label>
+                  <Textarea
+                    id="notes"
+                    value={formData.notes}
+                    onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                    placeholder={t('booking.notesPlaceholder', 'Дополнительная информация...')}
+                    rows={2}
+                    className="rounded-xl glass-input border-white/5 focus:border-primary/50 transition-all font-medium resize-none"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="flex gap-3 pt-2">
               <Button
@@ -675,8 +852,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
               <Button type="submit" disabled={submitting} className="flex-[2] h-12 rounded-xl font-bold shadow-lg shadow-primary/30 hover:scale-[1.02] transition-transform">
                 {submitting ? (
                   <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                ) : block.requirePrepayment ? (
-                  <MessageCircle className="h-5 w-5 mr-2" />
                 ) : (
                   <Check className="h-5 w-5 mr-2" />
                 )}
@@ -686,13 +861,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
                 }
               </Button>
             </div>
-
-            {block.requirePrepayment && block.prepaymentAmount && (
-              <p className="text-[10px] font-bold text-muted-foreground/60 text-center uppercase tracking-widest px-4">
-                {t('booking.prepaymentNote', 'После записи вы будете перенаправлены в WhatsApp для оплаты')}
-                {' '}({block.prepaymentAmount} {getCurrencySymbol(block.prepaymentCurrency || 'KZT')})
-              </p>
-            )}
           </form>
         </DialogContent>
       </Dialog>
