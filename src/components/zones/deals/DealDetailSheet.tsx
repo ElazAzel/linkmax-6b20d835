@@ -195,11 +195,11 @@ export const DealDetailSheet = memo(function DealDetailSheet({
         <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
           <div className="px-6">
             <TabsList className="w-full grid grid-cols-4">
-              <TabsTrigger value="timeline" className="text-[10px]">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
-              <TabsTrigger value="products" className="text-[10px]">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
-              <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
-              <TabsTrigger value="docs" className="text-[10px]">Документы ({linkedDocs.length})</TabsTrigger>
-              <TabsTrigger value="info" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
+              <TabsTrigger value="timeline" className="text-xs min-h-11">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
+              <TabsTrigger value="products" className="text-xs min-h-11">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
+              <TabsTrigger value="tasks" className="text-xs min-h-11">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+              <TabsTrigger value="docs" className="text-xs min-h-11">Документы ({linkedDocs.length})</TabsTrigger>
+              <TabsTrigger value="info" className="text-xs min-h-11">{t('common.details', 'Info')}</TabsTrigger>
             </TabsList>
           </div>
 
