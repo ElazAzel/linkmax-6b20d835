@@ -23,6 +23,7 @@ interface ShareAfterPublishDialogProps {
   onOpenChange: (open: boolean) => void;
   userId: string | undefined;
   publishedUrl: string;
+  niche?: string | null;
 }
 
 export function ShareAfterPublishDialog({
