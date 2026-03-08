@@ -84,13 +84,32 @@ async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
 async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmission[]> {
   const { data, error } = await supabase
     .from('indexing_submissions')
-    .select('id, target_url, provider, action_type, submission_status, skip_reason, http_status, batch_id, created_at')
+    .select('id, target_url, child_type, provider, action_type, submission_status, skip_reason, http_status, batch_id, created_at')
     .eq('page_id', pageId)
     .order('created_at', { ascending: false })
     .limit(20);
 
   if (error) throw error;
   return (data || []) as IndexingSubmission[];
+}
+
+/** Parse service_slugs JSONB into child entity details */
+function parseChildEntities(serviceSlugs: Record<string, string> | null, pageSlug: string, isPageIndexable: boolean) {
+  if (!serviceSlugs) return [];
+  return Object.entries(serviceSlugs).map(([title, val]) => {
+    let slug = val;
+    let state = 'eligible';
+    if (val.endsWith('::removed')) {
+      slug = val.replace('::removed', '');
+      state = 'removed';
+    } else if (val.endsWith('::thin')) {
+      slug = val.replace('::thin', '');
+      state = 'excluded_thin';
+    } else if (!isPageIndexable) {
+      state = 'parent_not_indexable';
+    }
+    return { title, slug, state, url: `/${pageSlug}/services/${slug}` };
+  });
 }
 
 function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string }) {
