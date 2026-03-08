@@ -63,21 +63,6 @@ const NICHE_TAGS = [
 ];
 
 const GALLERY_FILTERS = [
-  'beauty',
-  'fitness',
-  'food',
-  'education',
-  'art',
-  'music',
-  'tech',
-  'business',
-  'health',
-  'fashion',
-  'travel',
-  'realestate',
-  'events',
-  'services',
-  'other',
   'beauty', 'fitness', 'food', 'education', 'art', 'music',
   'tech', 'business', 'health', 'fashion', 'travel', 'realestate',
   'events', 'services', 'other',
