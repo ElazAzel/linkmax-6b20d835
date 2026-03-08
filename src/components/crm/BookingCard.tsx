@@ -31,7 +31,7 @@ interface BookingCardProps {
   compact?: boolean;
 }
 
-const localeMap: Record<string, Locale> = { ru, kk, en: enUS };
+const localeMap: Record<string, typeof enUS> = { ru, kk, en: enUS };
 
 export const BookingCard = memo(function BookingCard({
   booking,
