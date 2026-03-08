@@ -268,6 +268,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
 
             {/* Status Pills */}
             <div className="px-5 py-3 overflow-x-auto scrollbar-hide">
+              <div className="flex gap-2 min-w-max">
                 <button
                   onClick={() => setStatusFilter('all')}
                   className={cn(
