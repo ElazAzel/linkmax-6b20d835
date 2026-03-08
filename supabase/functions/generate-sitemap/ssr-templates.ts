@@ -300,7 +300,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
   <meta property="og:url" content="${baseUrl}/">
   <meta property="og:image" content="${DEFAULT_OG_IMAGE}">
   <meta property="og:locale" content="${locale}">
-  <meta property="og:site_name" content="lnkmx">
+  <meta property="og:site_name" content="LinkMAX">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(content.title)}">
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
