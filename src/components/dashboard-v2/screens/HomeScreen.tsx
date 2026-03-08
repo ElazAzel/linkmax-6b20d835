@@ -4,7 +4,7 @@
  * HomeScreen - Dashboard overview with primary page card and quick actions
  * Now includes PageSwitcher in the header for multi-page context
  */
-import { memo, ReactNode } from 'react';
+import { memo, useMemo, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
@@ -31,6 +31,8 @@ import { cn } from '@/lib/utils/utils';
 import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
+import { ActivationChecklist } from '@/components/onboarding/ActivationChecklist';
+import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 
 interface HomeScreenProps {
   pageData: PageData | null;
@@ -66,6 +68,14 @@ export const HomeScreen = memo(function HomeScreen({
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  // Activation checklist
+  const activation = useActivationChecklist({
+    pageData,
+    onOpenEditor,
+    onShare,
+  });
+  const [checklistDismissed, setChecklistDismissed] = useState(false);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
@@ -86,6 +96,15 @@ export const HomeScreen = memo(function HomeScreen({
   // Page has content if it has more than just a profile block
   const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
+
+  // Context-aware tip
+  const dynamicTip = useMemo(() => {
+    if (!avatarUrl) return t('activation.tips.addAvatar', 'Добавьте фото профиля — страницы с аватаром получают на 60% больше доверия');
+    if (!hasContent) return t('activation.tips.addBlock', 'Добавьте первый блок — ссылку, товар или видео');
+    if (!isPublished) return t('activation.tips.publish', 'Опубликуйте страницу, чтобы она стала доступна по ссылке');
+    if (viewCount < 10) return t('activation.tips.share', 'Поделитесь ссылкой в соцсетях, чтобы получить первых посетителей');
+    return t('activation.tips.pricing', 'Добавьте блок с ценами, чтобы увеличить конверсию на 40%');
+  }, [avatarUrl, hasContent, isPublished, viewCount, t]);
 
   // Real stats from props
   const weeklyStats = {
@@ -211,6 +230,20 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </Card>
 
+        {/* Activation Checklist */}
+        {activation.isVisible && !checklistDismissed && (
+          <ActivationChecklist
+            steps={activation.steps}
+            completedCount={activation.completedCount}
+            totalCount={activation.totalCount}
+            progress={activation.progress}
+            onDismiss={() => {
+              activation.dismiss();
+              setChecklistDismissed(true);
+            }}
+          />
+        )}
+
         {/* Quick Actions Grid */}
         <div className="space-y-3">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
@@ -292,7 +325,7 @@ export const HomeScreen = memo(function HomeScreen({
             <div className="flex-1">
               <h4 className="font-bold mb-1">{t('dashboard.home.tip', 'Совет')}</h4>
               <p className="text-sm text-muted-foreground">
-                {t('dashboard.home.tipContent', 'Добавьте блок с ценами, чтобы увеличить конверсию на 40%')}
+                {dynamicTip}
               </p>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import X from 'lucide-react/dist/esm/icons/x';
@@ -8,48 +9,18 @@ import { cn } from '@/lib/utils/utils';
 
 interface OnboardingStep {
   target: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descKey: string;
   position: 'top' | 'bottom' | 'left' | 'right' | 'center';
 }
 
-const steps: OnboardingStep[] = [
-  {
-    target: 'welcome',
-    title: 'Добро пожаловать в lnkmx.my! 👋',
-    description: 'Сейчас мы покажем вам основы работы с редактором. Это займет всего минуту.',
-    position: 'center',
-  },
-  {
-    target: '[data-onboarding="profile-block"]',
-    title: 'Ваш профиль',
-    description: 'Кликните на блок профиля, чтобы изменить имя, био и аватар.',
-    position: 'bottom',
-  },
-  {
-    target: '[data-onboarding="add-block"]',
-    title: 'Добавление блоков',
-    description: 'Нажмите на кнопку +, чтобы добавить новый блок. Доступны ссылки, товары, видео и многое другое.',
-    position: 'top',
-  },
-  {
-    target: '[data-onboarding="block-edit"]',
-    title: 'Редактирование блоков',
-    description: 'Наведите на любой блок, чтобы увидеть кнопки редактирования, удаления и перетаскивания.',
-    position: 'right',
-  },
-  {
-    target: '[data-onboarding="share-button"]',
-    title: 'Публикация страницы',
-    description: 'Когда закончите, нажмите "Share", чтобы получить публичную ссылку для социальных сетей.',
-    position: 'bottom',
-  },
-  {
-    target: 'complete',
-    title: 'Готово! 🎉',
-    description: 'Теперь вы знаете основы. Начните создавать свою страницу!',
-    position: 'center',
-  },
+const stepDefs: OnboardingStep[] = [
+  { target: 'welcome', titleKey: 'onboardingTour.welcome.title', descKey: 'onboardingTour.welcome.desc', position: 'center' },
+  { target: '[data-onboarding="profile-block"]', titleKey: 'onboardingTour.profile.title', descKey: 'onboardingTour.profile.desc', position: 'bottom' },
+  { target: '[data-onboarding="add-block"]', titleKey: 'onboardingTour.addBlock.title', descKey: 'onboardingTour.addBlock.desc', position: 'top' },
+  { target: '[data-onboarding="block-edit"]', titleKey: 'onboardingTour.editBlock.title', descKey: 'onboardingTour.editBlock.desc', position: 'right' },
+  { target: '[data-onboarding="share-button"]', titleKey: 'onboardingTour.share.title', descKey: 'onboardingTour.share.desc', position: 'bottom' },
+  { target: 'complete', titleKey: 'onboardingTour.complete.title', descKey: 'onboardingTour.complete.desc', position: 'center' },
 ];
 
 interface OnboardingTourProps {
@@ -58,12 +29,13 @@ interface OnboardingTourProps {
 }
 
 export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [highlightPosition, setHighlightPosition] = useState<DOMRect | null>(null);
 
-  const step = steps[currentStep];
+  const step = stepDefs[currentStep];
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === steps.length - 1;
+  const isLastStep = currentStep === stepDefs.length - 1;
   const isCenterStep = step.position === 'center';
 
   useEffect(() => {
@@ -72,8 +44,6 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
       if (element) {
         const rect = element.getBoundingClientRect();
         setHighlightPosition(rect);
-        
-        // Scroll element into view
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     } else {
@@ -186,8 +156,8 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-muted-foreground">{step.description}</p>
+              <h3 className="text-lg font-semibold mb-2">{t(step.titleKey)}</h3>
+              <p className="text-sm text-muted-foreground">{t(step.descKey)}</p>
             </div>
             <Button
               variant="ghost"
@@ -201,7 +171,7 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
 
           {/* Progress dots */}
           <div className="flex items-center justify-center gap-1.5">
-            {steps.map((_, index) => (
+            {stepDefs.map((_, index) => (
               <div
                 key={index}
                 className={cn(
@@ -222,7 +192,7 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
               onClick={onSkip}
               className="text-muted-foreground"
             >
-              Пропустить
+              {t('onboardingTour.skip', 'Пропустить')}
             </Button>
             
             <div className="flex items-center gap-2">
@@ -233,11 +203,11 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
                   onClick={handlePrev}
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />
-                  Назад
+                  {t('onboardingTour.back', 'Назад')}
                 </Button>
               )}
               <Button size="sm" onClick={handleNext}>
-                {isLastStep ? 'Начать' : 'Далее'}
+                {isLastStep ? t('onboardingTour.start', 'Начать') : t('onboardingTour.next', 'Далее')}
                 {!isLastStep && <ChevronRight className="h-4 w-4 ml-1" />}
               </Button>
             </div>
