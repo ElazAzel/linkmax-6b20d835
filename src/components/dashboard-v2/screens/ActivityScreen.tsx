@@ -4,6 +4,8 @@
 import { memo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
+import { ResponseTimeTag } from '@/components/crm/ResponseTimeTag';
+import { trackLeadReplied } from '@/lib/activation-events';
 import { formatDateShort, getLocale } from '@/lib/utils/format';
 import { toast } from 'sonner';
 import Search from 'lucide-react/dist/esm/icons/search';
