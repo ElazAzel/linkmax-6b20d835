@@ -177,7 +177,7 @@ export const mockScratchBlock: ScratchBlock = {
   title: 'Scratch to reveal',
   revealText: 'You won a prize!',
   backgroundColor: '#C0C0C0',
-  isPremium: true,
+  
 };
 
 export const mockMapBlock: MapBlock = {
