@@ -48,7 +48,7 @@ export default function PublicServicePage() {
 
   const resolution = pricingItems
     ? resolveServiceBySlug(
-        page?.service_slugs as ServiceSlugsMap | null,
+        page?.service_slugs as unknown as ServiceSlugsMap | null,
         pricingItems,
         serviceSlug || ''
       )
