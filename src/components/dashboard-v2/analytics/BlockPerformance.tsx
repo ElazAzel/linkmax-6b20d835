@@ -21,18 +21,18 @@ interface BlockPerformanceProps {
   showChart?: boolean;
 }
 
-const blockTypeLabels: Record<string, string> = {
-  link: 'Ссылка',
-  social: 'Соцсети',
-  button: 'Кнопка',
-  booking: 'Бронирование',
-  contact_form: 'Форма',
-  pricing: 'Цены',
-  product: 'Товар',
-  gallery: 'Галерея',
-  video: 'Видео',
-  event: 'Событие',
-  messenger: 'Мессенджер',
+const blockTypeI18nKeys: Record<string, string> = {
+  link: 'analytics.blockTypes.link',
+  social: 'analytics.blockTypes.social',
+  button: 'analytics.blockTypes.button',
+  booking: 'analytics.blockTypes.booking',
+  contact_form: 'analytics.blockTypes.contactForm',
+  pricing: 'analytics.blockTypes.pricing',
+  product: 'analytics.blockTypes.product',
+  gallery: 'analytics.blockTypes.gallery',
+  video: 'analytics.blockTypes.video',
+  event: 'analytics.blockTypes.event',
+  messenger: 'analytics.blockTypes.messenger',
 };
 
 export const BlockPerformance = memo(function BlockPerformance({
