@@ -3364,6 +3364,37 @@
       "clicks": "басады",
       "andMore": "және басқа {{count}} блок"
     },
+    "blockTypes": {
+      "link": "Сілтеме",
+      "social": "Әлеуметтік желі",
+      "button": "Түйме",
+      "booking": "Брондау",
+      "contactForm": "Форма",
+      "pricing": "Бағалар",
+      "product": "Өнім",
+      "gallery": "Галерея",
+      "video": "Бейне",
+      "event": "Оқиға",
+      "messenger": "Мессенджер"
+    },
+    "tooltipClicks": "Басулар",
+    "traffic": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter/X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "vkontakte": "ВКонтакте",
+      "linkedin": "LinkedIn",
+      "google": "Google",
+      "yandex": "Яндекс",
+      "bing": "Bing",
+      "direct": "Тікелей",
+      "referral": "Реферал",
+      "unknown": "Басқа"
+    },
     "funnel": {
       "views": "Көрулер",
       "clicks": "Басулар",
@@ -3374,7 +3405,11 @@
       "insights": "Конверсиялық талдау",
       "clickRate": "Басулар/көрулер",
       "conversionRate": "Түрлендірулер/Көрулер",
-      "avgPerDay": "Күніне орташа"
+      "avgPerDay": "Күніне орташа",
+      "dropOff": "жоғалту",
+      "retention": "ұстау",
+      "overallLabel": "Жалпы конверсия",
+      "subtitle": "Келушінің сатып алуға дейінгі жолы"
     },
     "engagement": {
       "ctr": "CTR",
