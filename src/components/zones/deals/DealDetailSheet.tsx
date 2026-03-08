@@ -318,7 +318,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                         </Badge>
                       </div>
                       {task.due_date && (
-                        <p className="text-[10px] text-muted-foreground mt-1 ml-6">
+                        <p className="text-xs text-muted-foreground mt-1 ml-6">
                           {t('zones.tasks.due', 'Due:')} {new Date(task.due_date).toLocaleDateString()}
                         </p>
                       )}
