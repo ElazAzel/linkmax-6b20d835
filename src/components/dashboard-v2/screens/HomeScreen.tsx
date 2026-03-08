@@ -237,6 +237,7 @@ export const HomeScreen = memo(function HomeScreen({
             completedCount={activation.completedCount}
             totalCount={activation.totalCount}
             progress={activation.progress}
+            canDismiss={activation.canDismiss}
             onDismiss={() => {
               activation.dismiss();
               setChecklistDismissed(true);

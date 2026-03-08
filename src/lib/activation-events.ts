@@ -27,11 +27,11 @@ export async function trackActivationEvent(
   try {
     const { error } = await supabase
       .from('analytics')
-      .insert({
+      .insert([{
         page_id: pageId,
         event_type: `activation:${eventType}`,
         metadata: metadata || {},
-      });
+      }]);
 
     if (error) {
       logger.error('Failed to track activation event', error, { context: 'activation-events' });
