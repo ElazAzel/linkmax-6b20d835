@@ -574,6 +574,13 @@ export const DealDetailSheet = memo(function DealDetailSheet({
           defaultDealId={deal?.id}
           defaultContactId={deal?.contact_id || undefined}
         />
+        <KaspiQRGenerator
+          open={showKaspiQR}
+          onOpenChange={setShowKaspiQR}
+          defaultAmount={deal?.value_amount || dealTotal || 0}
+          dealTitle={deal?.title || ''}
+          currency={deal?.currency || 'KZT'}
+        />
       </SheetContent>
     </Sheet>
   );
