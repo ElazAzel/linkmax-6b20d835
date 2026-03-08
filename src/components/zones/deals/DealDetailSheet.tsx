@@ -246,6 +246,70 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                 </div>
               </TabsContent>
 
+              {/* Comments Tab */}
+              <TabsContent value="comments" className="space-y-4 m-0">
+                <div className="flex gap-2">
+                  <Input
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder={t('zones.deals.addComment', 'Write a comment...')}
+                    className="text-sm h-9"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && newComment.trim()) {
+                        addComment(newComment.trim()).then(() => setNewComment(''));
+                      }
+                    }}
+                  />
+                  <Button 
+                    size="icon" 
+                    variant="ghost" 
+                    onClick={() => {
+                      if (newComment.trim()) {
+                        addComment(newComment.trim()).then(() => setNewComment(''));
+                      }
+                    }}
+                    disabled={!newComment.trim() || commentsLoading}
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="space-y-3">
+                  {comments.map((comment: any) => {
+                    const displayName = comment.user?.raw_user_meta_data?.display_name || comment.user?.email?.split('@')[0] || 'User';
+                    return (
+                      <div key={comment.id} className="p-3 rounded-lg bg-muted/30 border border-muted group">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                              <span className="text-xs font-bold text-primary">{displayName.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <span className="text-xs font-medium">{displayName}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(comment.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                            </span>
+                          </div>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-destructive"
+                            onClick={() => deleteComment(comment.id)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <p className="text-sm pl-8">{comment.content}</p>
+                      </div>
+                    );
+                  })}
+                  {comments.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-8 italic">
+                      {t('zones.deals.noComments', 'No comments yet')}
+                    </p>
+                  )}
+                </div>
+              </TabsContent>
+
               {/* Products Tab */}
               <TabsContent value="products" className="space-y-4 m-0">
                 <div className="flex items-center justify-between">
