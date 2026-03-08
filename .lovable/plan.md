@@ -1,172 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# LinkMAX Block System — Full Technical & Product Audit
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## 1. Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-The block system is **functional but architecturally sprawling**. It works today because the team knows where everything is. It will break the moment a second developer tries to add a block, or the catalog passes 35 types.
+### Новая тарифная модель (ADR 0026)
 
-**Strong**: Good lazy-loading in BlockRenderer, consistent i18n approach (`I18nText | MultilingualString`), working grid layout, sensible free/pro split for core conversion path.
-
-**Dangerous**: Triple source of truth for block definitions (types, domain entity, registry), two live editor components doing the same job (BlockEditor + BlockEditorV2), ghost block type (`search` — registered but has no renderer/editor), no schema validation at any layer, no compile-time guarantee that adding a block type updates all required files. The switch statements in BlockRenderer (449 lines), BlockEditor (396 lines), and BlockEditorV2 (423 lines) are ~1300 lines of nearly identical routing code maintained in parallel.
-
-**Product fit**: 29 block types for a "service solopreneur revenue tool" is too many. ~10 blocks do the core job. ~8 are reasonable extensions. ~11 are noise that increases cognitive load in the editor without meaningfully serving the primary ICP.
-
----
-
-## 2. Architecture Model
-
-Current reality:
-
-```text
-BlockType (base.ts)          ← string literal union, 29 types
-    ↕ (manual sync)
-Block union (index.ts)       ← discriminated union of 28 interfaces (search missing)
-    ↕ (manual sync)
-Domain entity (Block.ts)     ← DUPLICATE BlockType + BLOCK_CATEGORIES + isPremiumBlockType()
-    ↕ (manual sync)
-Registry (block-registry.ts) ← DUPLICATE categories + premium flags + metadata
-    ↕ (manual sync)
-block-editor-types.ts        ← DUPLICATE BLOCK_CATEGORIES constant
-    ↕ (manual sync)
-BlockRenderer.tsx             ← giant switch (29 cases)
-BlockEditor.tsx               ← giant switch (28 cases) 
-BlockEditorV2.tsx             ← giant switch (28 cases)
-BlockInsertButton.tsx         ← hardcoded block list with icons/colors
-FreePremiumBlockGate.ts       ← re-exports from registry
-```
-
-**There is no single source of truth.** Premium flags exist in: registry, domain entity, individual type interfaces (`isPremium: true` on CatalogBlock, BookingBlock, etc.), and FreePremiumBlockGate. They can and will drift.
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## 3. Critical Findings
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-### 3.1 Ghost block: `search`
-- In `BlockType` union, in registry, in `BlockInsertButton` — but **no SearchBlock renderer**, **no SearchBlockEditor**, **no type interface**. Inserting it crashes silently (BlockRenderer returns `null` from default case).
-
-### 3.2 Three switch statements maintained in parallel
-- `BlockRenderer.tsx` (449 LOC) — public rendering
-- `BlockEditor.tsx` (396 LOC) — editor v1
-- `BlockEditorV2.tsx` (423 LOC) — editor v2
-- Each has its own lazy imports and switch. Adding a block requires touching all three + types + registry + domain entity = minimum 6 files, no compile error if you miss one.
-
-### 3.3 Duplicate domain layer
-- `src/domain/entities/Block.ts` duplicates `BlockType`, `BLOCK_CATEGORIES`, `PREMIUM_BLOCK_TYPES`, and `getBlockCategory()` from `src/types/blocks/base.ts` and `src/lib/blocks/block-registry.ts`. Same for `src/types/block-editor-types.ts`. Three competing definitions of the same data.
-
-### 3.4 No schema validation
-- Blocks are persisted as `content: Json` in the DB. Loaded via `save_page_blocks` RPC. There is zero runtime validation that loaded JSON matches the TypeScript interface. A malformed block will cause a runtime crash in the renderer, caught only by BlockErrorBoundary (silent failure = invisible broken page for the visitor).
-
-### 3.5 Editor props are `any`
-- `BlockEditorWrapper.BaseBlockEditorProps` uses `formData: any, onChange: (updates: any) => void`. Every editor receives and emits untyped data. Type safety between editor input and renderer expectation is **zero at the contract level**.
-
-### 3.6 Premium flag inconsistency
-- Some blocks have `isPremium: true` hardcoded in their **type interface** (CatalogBlock, BookingBlock, FormBlock, etc.) — this is a data concern baked into a type definition. Others rely purely on the registry. The `FormBlock` type says `isPremium: true` but `block-registry.ts` lists `form` as FREE. This is a live contradiction.
-
-### 3.7 Two editor components coexist
-- `BlockEditor.tsx` and `BlockEditorV2.tsx` both exist and are likely both imported somewhere. V2 adds autosave and preview. But V1 isn't deleted. This is dead weight or a hidden code path.
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## 4. Product Value Audit (29 blocks)
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-### Must-have (core revenue path): 6
-`profile`, `pricing`, `booking`, `form`, `messenger`, `socials`
-
-### Strong conversion/trust: 5
-`link`, `button`, `faq`, `testimonial`, `image`
-
-### Useful extensions: 5
-`text`, `map`, `video`, `before_after`, `carousel`
-
-### Niche/situational: 5
-`event`, `catalog`, `product`, `download`, `community`
-
-### Decorative/low-impact: 5
-`avatar`, `separator`, `countdown`, `shoutout`, `newsletter`
-
-### Questionable/premature: 3
-`custom_code`, `scratch`, `search` (ghost)
-
-**Verdict**: For the beauty/service master ICP, only ~11 blocks matter. The remaining 18 add catalog weight without serving the core flow.
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## 5. ICP Fit
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-For a nail master in Almaty who wants "booking page in 5 minutes":
-- **Needs**: profile, pricing, booking, messenger, faq, image/before_after
-- **Maybe**: socials, map, testimonial
-- **Doesn't need and won't understand**: custom_code, scratch, newsletter, countdown, shoutout, community, catalog, event, download, search
-
-The block picker shows all 29 types. This creates decision paralysis. The recommendation system exists (`block-recommendations.ts`) but maps beauty → "freelancer" which is semantically wrong and likely gives suboptimal recommendations.
-
----
-
-## 6. Recommended Architecture Changes
-
-### P0 — Critical (week 1-2)
-
-1. **Delete `search` block type** from all files or implement it. Currently a landmine.
-
-2. **Kill BlockEditor.tsx (v1)**. Audit usages, migrate to V2, delete. Stop maintaining two identical switch files.
-
-3. **Create a block manifest** — single `BLOCK_MANIFEST` record that defines: type, TypeScript interface reference, renderer lazy import, editor lazy import, premium flag, category, icon, default data factory. Replace all three switch statements with a single registry-driven lookup.
-
-4. **Remove `isPremium: true` from type interfaces** (CatalogBlock, BookingBlock, FormBlock, etc.). Premium is a gating concern, not a data shape concern. Registry is the source of truth.
-
-5. **Resolve FormBlock premium contradiction** — type says premium, registry says free. Pick one.
-
-### P1 — Strong improvements (week 3-4)
-
-6. **Delete `src/domain/entities/Block.ts`** or make it import from `src/types/blocks/base.ts`. One source of truth for BlockType.
-
-7. **Delete `BLOCK_CATEGORIES` from `src/types/block-editor-types.ts`**. Use registry.
-
-8. **Add Zod schemas for top 6 blocks** (profile, pricing, booking, form, messenger, socials). Validate on load. Log malformed blocks instead of crashing.
-
-9. **Type the editor props** — replace `formData: any` with generic `formData: T` where T is the block type. Even partial typing (top 6 blocks) eliminates the most dangerous runtime mismatches.
-
-10. **Simplify block picker for beauty niche** — show 8-10 recommended blocks prominently, collapse the rest into "More blocks". Reduce decision fatigue.
-
-### P2 — Scale improvements (month 2+)
-
-11. **Block schema versioning** — add `_schemaVersion: number` to block content JSON. Write migration functions per block type. Future-proof against schema changes.
-
-12. **Registry-driven tests** — iterate BLOCK_MANIFEST, assert every type has renderer, editor, default factory, and icon. Run in CI. Prevents ghost blocks and missing implementations.
-
-13. **Reduce block count** — consider merging `link` + `button` (they differ only in styling), `avatar` into `profile`, `product` into `pricing`. Target: 20-22 block types.
-
-### Never now
-
-- Don't build a plugin system for third-party blocks
-- Don't add more block types before fixing the architecture
-- Don't build a visual block schema editor
-- Don't abstract the block system into a separate package
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## 7. Performance Notes
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-- Lazy loading via `React.lazy` in BlockRenderer is correct and effective.
-- `framer-motion` stagger animation on every block in GridBlocksRenderer adds layout cost on pages with 10+ blocks. Consider removing stagger for pages > 8 blocks.
-- `BlockEditorV2` uses `useDeferredValue` which is good but `formData` is untyped `any` — React can't optimize diffs on unstructured objects.
+## Текущее состояние LinkMAX Business Zones
+
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+
+### Фаза 3: Tasks -- закрытие пробелов (P1)
+
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+
+### Фаза 4: Аналитика Зоны (P1)
+
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## 8. Security Concern
+## Что НЕ нужно копировать из Bitrix24
 
-- `CustomCodeBlock` renders user HTML/CSS/JS. The `enableInteraction` flag suggests JS execution. If this isn't sandboxed in an iframe with `sandbox` attribute, it's an XSS vector. Needs verification.
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
 ---
 
-## 9. Final Recommendation
+## Приоритезация (RICE)
 
-**Main structural problem**: No single source of truth. Block definitions are scattered across 6+ files with manual sync. Adding or modifying a block type is error-prone and unverifiable at compile time.
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
-**Main opportunity**: A single `BLOCK_MANIFEST` record that drives everything — rendering, editing, insertion, gating, analytics, testing. This one refactor eliminates ~800 lines of duplicated switch statements, prevents ghost blocks, and makes the system extensible without fear.
+---
 
-**Single best next step**: Create `src/lib/blocks/block-manifest.ts` with a typed record mapping `BlockType → { renderer, editor, icon, category, isPremium, defaultFactory }`. Refactor `BlockRenderer.tsx` to use it (replacing the 250-line switch). Then do the same for BlockEditorV2. Then delete BlockEditor v1.
+## Технический план реализации
 
-This is ~2 days of focused work for a massive architectural improvement.
+### DB миграции (новые таблицы/колонки)
 
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

@@ -45,7 +45,6 @@ export const PREMIUM_BLOCK_TYPES = [
   'shoutout',
   'community',
   'event',
-  'search',
 ] as const;
 
 /**
@@ -125,7 +124,6 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
 
   // Advanced
   newsletter: { type: 'newsletter', category: 'advanced', isPremium: true, icon: 'mail', labelKey: 'blockTypes.newsletter' },
-  search: { type: 'search', category: 'advanced', isPremium: true, icon: 'search', labelKey: 'blockTypes.search' },
 };
 
 /**

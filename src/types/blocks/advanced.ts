@@ -10,7 +10,7 @@ export interface CustomCodeBlock {
     javascript?: string;
     height?: 'auto' | 'small' | 'medium' | 'large' | 'full';
     enableInteraction?: boolean;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts, not in type interface
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
@@ -27,7 +27,7 @@ export interface FormBlock {
     }>;
     submitEmail: string;
     buttonText: string | I18nText | MultilingualString;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
@@ -54,7 +54,7 @@ export interface ScratchBlock {
     revealText: string | I18nText | MultilingualString;
     scratchImage?: string;
     backgroundColor?: string;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }

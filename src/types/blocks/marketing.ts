@@ -8,7 +8,7 @@ export interface NewsletterBlock {
     description?: string | I18nText | MultilingualString;
     buttonText: string | I18nText | MultilingualString;
     apiEndpoint?: string;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
@@ -24,7 +24,7 @@ export interface TestimonialBlock {
         avatar?: string;
         role?: string | I18nText | MultilingualString;
     }>;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }
@@ -40,7 +40,7 @@ export interface CountdownBlock {
     showHours?: boolean;
     showMinutes?: boolean;
     showSeconds?: boolean;
-    isPremium: true;
+    // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
     blockStyle?: BlockStyle;
 }

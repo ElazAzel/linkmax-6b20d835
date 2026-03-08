@@ -150,7 +150,7 @@ export function createDefaultPage<TBlock extends BaseBlock = BaseBlock>(
  * Check if page has premium content
  */
 export function hasPremiumContent(page: Page): boolean {
-  const PREMIUM_TYPES: BlockType[] = ['video', 'carousel', 'custom_code', 'form', 'newsletter', 'testimonial', 'scratch', 'search', 'catalog', 'countdown'];
+  const PREMIUM_TYPES: BlockType[] = ['video', 'carousel', 'custom_code', 'form', 'newsletter', 'testimonial', 'scratch', 'catalog', 'countdown'];
   return page.blocks.some(block => PREMIUM_TYPES.includes(block.type));
 }
 

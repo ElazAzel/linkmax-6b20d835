@@ -52,7 +52,7 @@ const createBookingBlock = (): BookingBlock => ({
   id: 'booking-1',
   type: 'booking',
   title: { ru: 'Записаться', en: 'Book', kk: 'Жазылу' },
-  isPremium: true,
+  
 });
 
 describe('Answer Block Generator', () => {

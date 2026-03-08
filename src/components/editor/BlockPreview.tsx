@@ -76,7 +76,6 @@ export const BlockPreview = memo(function BlockPreview({ blockType }: BlockPrevi
       type: 'custom_code',
       html: t('blockPreview.customCodeHtml', '<div style="padding: 20px; text-align: center;">Кастомный HTML</div>'),
       css: '',
-      isPremium: true,
     },
     form: {
       id: 'preview-form',
@@ -88,7 +87,6 @@ export const BlockPreview = memo(function BlockPreview({ blockType }: BlockPrevi
       ],
       buttonText: t('blockPreview.formButton', 'Отправить'),
       submitEmail: 'example@email.com',
-      isPremium: true,
     },
     newsletter: {
       id: 'preview-newsletter',
@@ -96,7 +94,6 @@ export const BlockPreview = memo(function BlockPreview({ blockType }: BlockPrevi
       title: t('blockPreview.newsletterTitle', 'Подпишитесь на рассылку'),
       description: t('blockPreview.newsletterDescription', 'Получайте новости первыми'),
       buttonText: t('blockPreview.newsletterButton', 'Подписаться'),
-      isPremium: true,
     },
     testimonial: {
       id: 'preview-testimonial',

@@ -174,7 +174,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     javascript: '',
     height: 'auto',
     enableInteraction: true,
-    isPremium: true,
     ...overrides,
   }),
 
@@ -202,7 +201,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     ],
     submitEmail: '',
     buttonText: 'Send',
-    isPremium: true,
     ...overrides,
   }),
 
@@ -226,7 +224,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     title: 'Subscribe to Newsletter',
     description: 'Get the latest updates',
     buttonText: 'Subscribe',
-    isPremium: true,
     ...overrides,
   }),
 
@@ -239,7 +236,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
       { name: 'Алина К.', text: 'Отличный сервис! Очень рекомендую.', rating: 5, role: 'Клиент' },
       { name: 'Дмитрий М.', text: 'Профессиональный подход к делу.', rating: 5, role: 'Клиент' },
     ],
-    isPremium: true,
     blockStyle: {
       padding: 'lg',
       borderRadius: 'lg',
@@ -256,7 +252,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     title: 'Scratch to Reveal',
     revealText: 'You won a prize!',
     backgroundColor: '#FFD700',
-    isPremium: true,
     ...overrides,
   }),
 
@@ -304,7 +299,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     layout: 'grid',
     showPrices: true,
     currency: 'KZT',
-    isPremium: true,
     ...overrides,
   }),
 
@@ -353,7 +347,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     showHours: true,
     showMinutes: true,
     showSeconds: true,
-    isPremium: true,
     ...overrides,
   }),
 
@@ -390,7 +383,7 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     slotDuration: 60,
     maxBookingDays: 30,
     disabledWeekdays: [0, 6],
-    isPremium: true,
+    
     ...overrides,
   }),
 

@@ -9,7 +9,7 @@ import type { MultilingualString } from '@/lib/i18n-helpers';
 
 export type BlockType = 
   | 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' 
-  | 'product' | 'video' | 'carousel' | 'search' | 'custom_code' 
+  | 'product' | 'video' | 'carousel' | 'custom_code' 
   | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' 
   | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' 
   | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';
@@ -51,7 +51,7 @@ export interface GridLayoutData {
 export const BLOCK_CATEGORIES = {
   basic: ['link', 'button', 'text', 'separator', 'avatar'],
   media: ['image', 'video', 'carousel', 'before_after'],
-  interactive: ['form', 'messenger', 'map', 'faq', 'scratch', 'search'],
+  interactive: ['form', 'messenger', 'map', 'faq', 'scratch'],
   commerce: ['product', 'catalog', 'pricing', 'download'],
   advanced: ['custom_code', 'newsletter', 'testimonial', 'countdown', 'socials'],
   social: ['shoutout', 'community'],

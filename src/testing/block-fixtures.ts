@@ -117,7 +117,6 @@ export const mockCustomCodeBlock: CustomCodeBlock = {
   title: 'Custom Widget',
   html: '<div class="test">Hello</div>',
   css: '.test { color: red; }',
-  isPremium: true,
 };
 
 export const mockMessengerBlock: MessengerBlock = {
@@ -141,7 +140,6 @@ export const mockFormBlock: FormBlock = {
   ],
   submitEmail: 'test@example.com',
   buttonText: 'Submit',
-  isPremium: true,
 };
 
 export const mockDownloadBlock: DownloadBlock = {
@@ -161,7 +159,6 @@ export const mockNewsletterBlock: NewsletterBlock = {
   title: 'Subscribe',
   description: 'Get weekly updates',
   buttonText: 'Subscribe',
-  isPremium: true,
 };
 
 export const mockTestimonialBlock: TestimonialBlock = {
@@ -172,7 +169,6 @@ export const mockTestimonialBlock: TestimonialBlock = {
     { name: 'John Doe', text: 'Great service!', rating: 5, role: 'CEO' },
     { name: 'Jane Smith', text: 'Highly recommended', rating: 4 },
   ],
-  isPremium: true,
 };
 
 export const mockScratchBlock: ScratchBlock = {
@@ -181,7 +177,7 @@ export const mockScratchBlock: ScratchBlock = {
   title: 'Scratch to reveal',
   revealText: 'You won a prize!',
   backgroundColor: '#C0C0C0',
-  isPremium: true,
+  
 };
 
 export const mockMapBlock: MapBlock = {
