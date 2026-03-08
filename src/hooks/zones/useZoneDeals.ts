@@ -340,7 +340,7 @@ export function useZoneDealComments(zoneId: string | null, dealId: string | null
   });
 
   const addCommentMutation = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async ({ content, mentionedUserIds }: { content: string; mentionedUserIds?: string[] }) => {
       if (!zoneId || !dealId) throw new Error('No zone or deal selected');
       const userId = (await supabase.auth.getUser()).data.user?.id;
       const { error } = await (supabase
@@ -350,8 +350,25 @@ export function useZoneDealComments(zoneId: string | null, dealId: string | null
           deal_id: dealId,
           user_id: userId,
           content,
+          mentioned_user_ids: mentionedUserIds || [],
         }) as any);
       if (error) throw error;
+      
+      // Send Telegram notification to mentioned users
+      if (mentionedUserIds && mentionedUserIds.length > 0) {
+        supabase.functions.invoke('send-zone-notification', {
+          body: {
+            type: 'deal_comment_mention',
+            zone_id: zoneId,
+            data: {
+              deal_id: dealId,
+              mentioned_user_ids: mentionedUserIds,
+              comment_preview: content.slice(0, 100),
+              commenter_name: 'User',
+            },
+          },
+        }).catch(() => {});
+      }
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
   });
