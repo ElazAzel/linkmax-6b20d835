@@ -16,7 +16,7 @@ export function usePremiumStatus() {
   useEffect(() => {
     if (!user) {
       setIsPremium(false);
-      setTier('free');
+      setTier('identity');
       setInTrial(false);
       setTrialEndsAt(null);
       setIsLoading(false);
