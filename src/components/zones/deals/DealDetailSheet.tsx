@@ -38,6 +38,7 @@ import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { ZoneDocumentCreator } from '../documents/ZoneDocumentCreator';
 import { KaspiQRGenerator } from './KaspiQRGenerator';
+import { MentionInput, extractMentions, formatMentionsForDisplay } from '../shared/MentionInput';
 import FileSignature from 'lucide-react/dist/esm/icons/file-signature';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Download from 'lucide-react/dist/esm/icons/download';
