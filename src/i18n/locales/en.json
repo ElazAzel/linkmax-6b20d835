@@ -3364,6 +3364,37 @@
       "clicks": "clicks",
       "andMore": "and another {{count}} blocks"
     },
+    "blockTypes": {
+      "link": "Link",
+      "social": "Social",
+      "button": "Button",
+      "booking": "Booking",
+      "contactForm": "Form",
+      "pricing": "Pricing",
+      "product": "Product",
+      "gallery": "Gallery",
+      "video": "Video",
+      "event": "Event",
+      "messenger": "Messenger"
+    },
+    "tooltipClicks": "Clicks",
+    "traffic": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter/X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "vkontakte": "VKontakte",
+      "linkedin": "LinkedIn",
+      "google": "Google",
+      "yandex": "Yandex",
+      "bing": "Bing",
+      "direct": "Direct",
+      "referral": "Referral",
+      "unknown": "Other"
+    },
     "funnel": {
       "views": "Views",
       "clicks": "Clicks",
@@ -3374,7 +3405,11 @@
       "insights": "Conversion Analysis",
       "clickRate": "Clicks/Views",
       "conversionRate": "Conversions/Views",
-      "avgPerDay": "Average per day"
+      "avgPerDay": "Average per day",
+      "dropOff": "drop-off",
+      "retention": "retained",
+      "overallLabel": "Overall conversion",
+      "subtitle": "Visitor journey to purchase"
     },
     "engagement": {
       "ctr": "CTR",
