@@ -20,6 +20,12 @@ import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import { cn } from '@/lib/utils/utils';
 
+interface ServiceSlugEntry {
+  slug: string;
+  state: string;
+  title: string;
+}
+
 interface DiagnosticPage {
   id: string;
   slug: string;
@@ -29,7 +35,7 @@ interface DiagnosticPage {
   quality_breakdown: Record<string, { passed: boolean; points: number }> | null;
   index_exclusion_reasons: string[] | null;
   last_indexnow_at: string | null;
-  service_slugs: Record<string, string> | null;
+  service_slugs: Record<string, ServiceSlugEntry> | null;
   city: string | null;
   profession: string | null;
   niche: string | null;
