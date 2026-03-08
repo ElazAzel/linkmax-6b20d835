@@ -497,7 +497,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
 async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, serviceSlug: string, lang: LanguageKey): Promise<Response> {
   const { data: pageData } = await supabase
     .from('pages')
-    .select('id, slug, title, avatar_url, niche, city, profession, entity_type')
+    .select('id, slug, title, avatar_url, niche, city, profession, entity_type, service_slugs, is_indexable, quality_score')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
@@ -512,31 +512,69 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
     .eq('page_id', pageData.id)
     .eq('type', 'pricing');
 
-  // Find the matching service
-  let matchedService: { name: string; description?: string; price?: string; currency?: string } | null = null;
+  // Collect all pricing items
+  const pricingItems: Array<Record<string, unknown>> = [];
   for (const block of (blocksData || [])) {
     const items = (block.content as Record<string, unknown>)?.items;
     if (Array.isArray(items)) {
-      for (const item of items) {
-        const name = String((item as Record<string, unknown>).name || '');
-        const itemSlug = name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
-        if (itemSlug === serviceSlug) {
+      for (const item of items) pricingItems.push(item as Record<string, unknown>);
+    }
+  }
+
+  // === CANONICAL RESOLUTION via service_slugs ===
+  let matchedService: { name: string; description?: string; price?: string; currency?: string } | null = null;
+  let resolvedState: string = 'active';
+  const svcSlugs = pageData.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
+
+  if (svcSlugs && typeof svcSlugs === 'object') {
+    for (const [itemId, entry] of Object.entries(svcSlugs)) {
+      if (entry && typeof entry === 'object' && entry.slug === serviceSlug) {
+        resolvedState = entry.state || 'active';
+        
+        // Removed → 301 to parent
+        if (resolvedState === 'removed') {
+          return new Response(null, { status: 301, headers: { ...corsHeaders, 'Location': `${BASE_URL}/${slug}` } });
+        }
+        
+        // Find pricing item by id
+        const item = pricingItems.find(i => (i as Record<string, unknown>).id === itemId);
+        if (item) {
+          const name = String((item as Record<string, unknown>).name || entry.title || '');
           matchedService = {
             name,
             description: (item as Record<string, unknown>).description ? String((item as Record<string, unknown>).description) : undefined,
             price: (item as Record<string, unknown>).price ? String((item as Record<string, unknown>).price) : undefined,
             currency: (item as Record<string, unknown>).currency ? String((item as Record<string, unknown>).currency) : 'KZT',
           };
-          break;
+        } else {
+          // Orphan: mapping exists but item gone — use title from mapping
+          matchedService = { name: entry.title };
         }
+        break;
       }
     }
-    if (matchedService) break;
+  }
+
+  // Legacy fallback: for pages not yet re-saved (TEMPORARY)
+  if (!matchedService) {
+    for (const item of pricingItems) {
+      const name = String((item as Record<string, unknown>).name || '');
+      const itemSlug = name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
+      if (itemSlug === serviceSlug) {
+        console.warn(`[SSR] Legacy fallback for service slug "${serviceSlug}" on page "${slug}"`);
+        matchedService = {
+          name,
+          description: (item as Record<string, unknown>).description ? String((item as Record<string, unknown>).description) : undefined,
+          price: (item as Record<string, unknown>).price ? String((item as Record<string, unknown>).price) : undefined,
+          currency: (item as Record<string, unknown>).currency ? String((item as Record<string, unknown>).currency) : 'KZT',
+        };
+        break;
+      }
+    }
   }
 
   if (!matchedService) {
-    // Redirect to parent profile
-    return new Response(null, { status: 301, headers: { ...corsHeaders, 'Location': `${BASE_URL}/${slug}` } });
+    return new Response(null, { status: 404, headers: { ...corsHeaders, 'Content-Type': 'text/plain' } });
   }
 
   const canonical = `${BASE_URL}/${slug}/services/${serviceSlug}`;
@@ -544,6 +582,8 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
   const displayName = pageData.title || '@' + slug;
   const title = `${matchedService.name} — ${displayName} | LinkMAX`;
   const desc = matchedService.description ? truncate(matchedService.description, 155) : `${matchedService.name} — ${displayName}`;
+  const isThin = resolvedState === 'thin';
+  const robotsTag = isThin ? 'noindex, follow' : 'index, follow';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -573,7 +613,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(desc)}">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="${robotsTag}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="website"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(desc)}"><meta property="og:url" content="${canonical}">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
@@ -594,7 +634,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
 
   return new Response(html, {
     status: 200,
-    headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600' }
+    headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': robotsTag, 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600' }
   });
 }
 
