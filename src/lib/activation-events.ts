@@ -1,6 +1,7 @@
 /**
- * Activation Events — Server-side tracking for activation funnel
- * Tracks key milestones: wizard_completed, page_published, page_shared, first_external_view
+ * Activation & CRM Events — Server-side tracking for activation + conversion funnel
+ * Activation: wizard_completed, page_published, page_shared, first_external_view
+ * CRM: lead_seen, lead_replied, lead_status_changed, booking_confirmed, first_lead_reply, lead_stale_24h
  */
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
@@ -14,7 +15,14 @@ export type ActivationEventType =
   | 'first_external_view'
   | 'first_block_click'
   | 'first_lead_captured'
-  | 'dashboard_return';
+  | 'dashboard_return'
+  // CRM-layer events
+  | 'lead_seen'
+  | 'lead_replied'
+  | 'lead_status_changed'
+  | 'booking_confirmed'
+  | 'first_lead_reply'
+  | 'lead_stale_24h';
 
 /**
  * Track an activation event to the analytics table
@@ -69,4 +77,31 @@ export function trackWizardCompleted(pageId: string, niche: string): void {
  */
 export function trackPagePublished(pageId: string): void {
   trackActivationEvent(pageId, 'page_published');
+}
+
+// ──────────── CRM-layer event helpers ────────────
+
+/** User opened lead details */
+export function trackLeadSeen(pageId: string, leadId: string): void {
+  trackActivationEvent(pageId, 'lead_seen', { leadId });
+}
+
+/** User replied via WhatsApp/Telegram/call */
+export function trackLeadReplied(pageId: string, leadId: string, channel: string): void {
+  trackActivationEvent(pageId, 'lead_replied', { leadId, channel });
+}
+
+/** Lead status changed */
+export function trackLeadStatusChanged(pageId: string, leadId: string, from: string, to: string): void {
+  trackActivationEvent(pageId, 'lead_status_changed', { leadId, from, to });
+}
+
+/** Booking confirmed */
+export function trackBookingConfirmed(pageId: string, bookingId: string): void {
+  trackActivationEvent(pageId, 'booking_confirmed', { bookingId });
+}
+
+/** First ever lead reply (milestone) */
+export function trackFirstLeadReply(pageId: string): void {
+  trackActivationEvent(pageId, 'first_lead_reply');
 }
