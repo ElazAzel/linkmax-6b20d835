@@ -14,22 +14,22 @@ interface TrafficSourcesChartProps {
 }
 
 // Source icons/colors
-const sourceConfig: Record<string, { label: string; color: string; icon: string }> = {
-  instagram: { label: 'Instagram', color: '#E1306C', icon: '📸' },
-  facebook: { label: 'Facebook', color: '#4267B2', icon: '📘' },
-  twitter: { label: 'Twitter/X', color: '#1DA1F2', icon: '🐦' },
-  tiktok: { label: 'TikTok', color: '#000000', icon: '🎵' },
-  youtube: { label: 'YouTube', color: '#FF0000', icon: '📺' },
-  telegram: { label: 'Telegram', color: '#0088cc', icon: '✈️' },
-  whatsapp: { label: 'WhatsApp', color: '#25D366', icon: '💬' },
-  vkontakte: { label: 'ВКонтакте', color: '#4A76A8', icon: '🔵' },
-  linkedin: { label: 'LinkedIn', color: '#0077B5', icon: '💼' },
-  google: { label: 'Google', color: '#4285F4', icon: '🔍' },
-  yandex: { label: 'Яндекс', color: '#FF0000', icon: '🔎' },
-  bing: { label: 'Bing', color: '#00809D', icon: '🔍' },
-  direct: { label: 'Прямой', color: 'hsl(var(--primary))', icon: '🔗' },
-  referral: { label: 'Реферал', color: '#9333EA', icon: '🔗' },
-  unknown: { label: 'Другое', color: '#6B7280', icon: '❓' },
+const sourceConfig: Record<string, { i18nKey: string; color: string; icon: string }> = {
+  instagram: { i18nKey: 'analytics.traffic.instagram', color: '#E1306C', icon: '📸' },
+  facebook: { i18nKey: 'analytics.traffic.facebook', color: '#4267B2', icon: '📘' },
+  twitter: { i18nKey: 'analytics.traffic.twitter', color: '#1DA1F2', icon: '🐦' },
+  tiktok: { i18nKey: 'analytics.traffic.tiktok', color: '#000000', icon: '🎵' },
+  youtube: { i18nKey: 'analytics.traffic.youtube', color: '#FF0000', icon: '📺' },
+  telegram: { i18nKey: 'analytics.traffic.telegram', color: '#0088cc', icon: '✈️' },
+  whatsapp: { i18nKey: 'analytics.traffic.whatsapp', color: '#25D366', icon: '💬' },
+  vkontakte: { i18nKey: 'analytics.traffic.vkontakte', color: '#4A76A8', icon: '🔵' },
+  linkedin: { i18nKey: 'analytics.traffic.linkedin', color: '#0077B5', icon: '💼' },
+  google: { i18nKey: 'analytics.traffic.google', color: '#4285F4', icon: '🔍' },
+  yandex: { i18nKey: 'analytics.traffic.yandex', color: '#FF0000', icon: '🔎' },
+  bing: { i18nKey: 'analytics.traffic.bing', color: '#00809D', icon: '🔍' },
+  direct: { i18nKey: 'analytics.traffic.direct', color: 'hsl(var(--primary))', icon: '🔗' },
+  referral: { i18nKey: 'analytics.traffic.referral', color: '#9333EA', icon: '🔗' },
+  unknown: { i18nKey: 'analytics.traffic.unknown', color: '#6B7280', icon: '❓' },
 };
 
 export const TrafficSourcesChart = memo(function TrafficSourcesChart({
@@ -41,7 +41,7 @@ export const TrafficSourcesChart = memo(function TrafficSourcesChart({
   const chartData = sources.map(source => {
     const config = sourceConfig[source.source] || sourceConfig.unknown;
     return {
-      name: config.label,
+      name: t(config.i18nKey, source.source),
       value: source.count,
       percentage: source.percentage,
       color: config.color,

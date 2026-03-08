@@ -3364,6 +3364,37 @@
       "clicks": "басады",
       "andMore": "және басқа {{count}} блок"
     },
+    "blockTypes": {
+      "link": "Сілтеме",
+      "social": "Әлеуметтік желі",
+      "button": "Түйме",
+      "booking": "Брондау",
+      "contactForm": "Форма",
+      "pricing": "Бағалар",
+      "product": "Өнім",
+      "gallery": "Галерея",
+      "video": "Бейне",
+      "event": "Оқиға",
+      "messenger": "Мессенджер"
+    },
+    "tooltipClicks": "Басулар",
+    "traffic": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter/X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "vkontakte": "ВКонтакте",
+      "linkedin": "LinkedIn",
+      "google": "Google",
+      "yandex": "Яндекс",
+      "bing": "Bing",
+      "direct": "Тікелей",
+      "referral": "Реферал",
+      "unknown": "Басқа"
+    },
     "funnel": {
       "views": "Көрулер",
       "clicks": "Басулар",
@@ -3374,7 +3405,11 @@
       "insights": "Конверсиялық талдау",
       "clickRate": "Басулар/көрулер",
       "conversionRate": "Түрлендірулер/Көрулер",
-      "avgPerDay": "Күніне орташа"
+      "avgPerDay": "Күніне орташа",
+      "dropOff": "жоғалту",
+      "retention": "ұстау",
+      "overallLabel": "Жалпы конверсия",
+      "subtitle": "Келушінің сатып алуға дейінгі жолы"
     },
     "engagement": {
       "ctr": "CTR",
@@ -3484,7 +3519,13 @@
       "converted": "Түрлендірілген",
       "lost": "Жоғалған"
     },
-    "source": "Дереккөз",
+    "source": {
+      "form": "Форма",
+      "messenger": "Мессенджер",
+      "manual": "Қолмен",
+      "pageView": "Қарау",
+      "other": "Басқа"
+    },
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Клиент аты",
     "phone": "Phone",
@@ -4943,7 +4984,22 @@
     "useCamera": "Камера",
     "manual": "Қолмен",
     "recentScans": "Соңғы сканерлеулер",
-    "noScansYet": "Сканерленген билеттер осы жерде пайда болады"
+    "noScansYet": "Сканерленген билеттер осы жерде пайда болады",
+    "regStatus": {
+      "pending": "Күтуде",
+      "confirmed": "Расталды",
+      "rejected": "Қабылданбады",
+      "cancelled": "Тоқтатылды"
+    },
+    "ticketStatus": {
+      "valid": "Белсенді",
+      "used": "Қолданылған",
+      "cancelled": "Тоқтатылды"
+    },
+    "csvName": "Аты",
+    "csvPhone": "Телефон",
+    "csvStatus": "Күй",
+    "csvDate": "Тіркелу күні"
   },
   "insights": {
     "lowViews": {

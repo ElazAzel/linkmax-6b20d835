@@ -3364,6 +3364,37 @@
       "clicks": "кликов",
       "andMore": "и ещё {{count}} блоков"
     },
+    "blockTypes": {
+      "link": "Ссылка",
+      "social": "Соцсети",
+      "button": "Кнопка",
+      "booking": "Бронирование",
+      "contactForm": "Форма",
+      "pricing": "Цены",
+      "product": "Товар",
+      "gallery": "Галерея",
+      "video": "Видео",
+      "event": "Событие",
+      "messenger": "Мессенджер"
+    },
+    "tooltipClicks": "Клики",
+    "traffic": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter/X",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "vkontakte": "ВКонтакте",
+      "linkedin": "LinkedIn",
+      "google": "Google",
+      "yandex": "Яндекс",
+      "bing": "Bing",
+      "direct": "Прямой",
+      "referral": "Реферал",
+      "unknown": "Другое"
+    },
     "funnel": {
       "views": "Просмотры",
       "clicks": "Клики",
@@ -3374,7 +3405,11 @@
       "insights": "Анализ конверсии",
       "clickRate": "Клики / Просмотры",
       "conversionRate": "Конверсии / Просмотры",
-      "avgPerDay": "Среднее в день"
+      "avgPerDay": "Среднее в день",
+      "dropOff": "потерь",
+      "retention": "удержание",
+      "overallLabel": "Итоговая конверсия",
+      "subtitle": "Путь посетителя до покупки"
     },
     "engagement": {
       "ctr": "CTR",
@@ -3484,7 +3519,13 @@
       "converted": "Конвертирован",
       "lost": "Потерян"
     },
-    "source": "Источник",
+    "source": {
+      "form": "Форма",
+      "messenger": "Мессенджер",
+      "manual": "Вручную",
+      "pageView": "Просмотр",
+      "other": "Другое"
+    },
     "addLeadDescription": "Заполните форму, чтобы добавить новый лид в вашу CRM",
     "namePlaceholder": "Имя клиента",
     "phone": "Телефон",
@@ -4943,7 +4984,22 @@
     "useCamera": "Камера",
     "manual": "Вручную",
     "recentScans": "Последние сканы",
-    "noScansYet": "Отсканированные билеты появятся здесь"
+    "noScansYet": "Отсканированные билеты появятся здесь",
+    "regStatus": {
+      "pending": "Ожидает",
+      "confirmed": "Подтверждён",
+      "rejected": "Отклонён",
+      "cancelled": "Отменён"
+    },
+    "ticketStatus": {
+      "valid": "Активен",
+      "used": "Использован",
+      "cancelled": "Отменён"
+    },
+    "csvName": "Имя",
+    "csvPhone": "Телефон",
+    "csvStatus": "Статус",
+    "csvDate": "Дата регистрации"
   },
   "insights": {
     "lowViews": {

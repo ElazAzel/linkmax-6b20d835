@@ -3401,7 +3401,13 @@
       "converted": "O'zgartirilgan",
       "lost": "Yo'qotilgan"
     },
-    "source": "Manba",
+    "source": {
+      "form": "Shakl",
+      "messenger": "Messenjer",
+      "manual": "Qoʻlda",
+      "pageView": "Koʻrish",
+      "other": "Boshqa"
+    },
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Mijoz ismi",
     "phone": "Telefon",
@@ -4845,7 +4851,22 @@
     "useCamera": "Kamera",
     "manual": "Qo'lda",
     "recentScans": "Eng so'nggi skanerlar",
-    "noScansYet": "Skanerlangan chiptalar shu yerda paydo bo'ladi"
+    "noScansYet": "Skanerlangan chiptalar shu yerda paydo bo'ladi",
+    "regStatus": {
+      "pending": "Kutilmoqda",
+      "confirmed": "Tasdiqlangan",
+      "rejected": "Rad etilgan",
+      "cancelled": "Bekor qilingan"
+    },
+    "ticketStatus": {
+      "valid": "Faol",
+      "used": "Ishlatilgan",
+      "cancelled": "Bekor qilingan"
+    },
+    "csvName": "Ism",
+    "csvPhone": "Telefon",
+    "csvStatus": "Holat",
+    "csvDate": "Ro'yxatdan o'tish sanasi"
   },
   "insights": {
     "lowViews": {

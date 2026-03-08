@@ -65,16 +65,16 @@ interface EventRegistrationsListProps {
 }
 
 const STATUS_CONFIG = {
-  pending: { bg: 'bg-yellow-500/20', text: 'text-yellow-500', icon: AlertCircle, label: 'Ожидает' },
-  confirmed: { bg: 'bg-green-500/20', text: 'text-green-500', icon: CheckCircle2, label: 'Подтвержден' },
-  rejected: { bg: 'bg-red-500/20', text: 'text-red-500', icon: XCircle, label: 'Отклонен' },
-  cancelled: { bg: 'bg-gray-500/20', text: 'text-gray-500', icon: X, label: 'Отменен' },
+  pending: { bg: 'bg-yellow-500/20', text: 'text-yellow-500', icon: AlertCircle, i18nKey: 'events.regStatus.pending' },
+  confirmed: { bg: 'bg-green-500/20', text: 'text-green-500', icon: CheckCircle2, i18nKey: 'events.regStatus.confirmed' },
+  rejected: { bg: 'bg-red-500/20', text: 'text-red-500', icon: XCircle, i18nKey: 'events.regStatus.rejected' },
+  cancelled: { bg: 'bg-gray-500/20', text: 'text-gray-500', icon: X, i18nKey: 'events.regStatus.cancelled' },
 };
 
 const TICKET_STATUS_CONFIG = {
-  valid: { bg: 'bg-green-500/20', text: 'text-green-500', label: 'Активен' },
-  used: { bg: 'bg-blue-500/20', text: 'text-blue-500', label: 'Использован' },
-  cancelled: { bg: 'bg-gray-500/20', text: 'text-gray-500', label: 'Отменен' },
+  valid: { bg: 'bg-green-500/20', text: 'text-green-500', i18nKey: 'events.ticketStatus.valid' },
+  used: { bg: 'bg-blue-500/20', text: 'text-blue-500', i18nKey: 'events.ticketStatus.used' },
+  cancelled: { bg: 'bg-gray-500/20', text: 'text-gray-500', i18nKey: 'events.ticketStatus.cancelled' },
 };
 
 export function EventRegistrationsList({
@@ -251,8 +251,8 @@ export function EventRegistrationsList({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <span className="font-medium text-sm truncate">{reg.attendee_name}</span>
-                        <Badge variant="outline" className={`${statusConfig.bg} ${statusConfig.text} text-[10px]`}>
-                          {t(`events.status.${reg.status}`, statusConfig.label)}
+                      <Badge variant="outline" className={`${statusConfig.bg} ${statusConfig.text} text-[10px]`}>
+                          {t(statusConfig.i18nKey)}
                         </Badge>
                       </div>
 
@@ -278,7 +278,7 @@ export function EventRegistrationsList({
                           </Badge>
                           {ticketStatusConfig && (
                             <Badge variant="outline" className={`${ticketStatusConfig.bg} ${ticketStatusConfig.text} text-[10px]`}>
-                              {ticketStatusConfig.label}
+                              {t(ticketStatusConfig.i18nKey)}
                             </Badge>
                           )}
                         </div>

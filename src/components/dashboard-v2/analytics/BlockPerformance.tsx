@@ -21,18 +21,18 @@ interface BlockPerformanceProps {
   showChart?: boolean;
 }
 
-const blockTypeLabels: Record<string, string> = {
-  link: 'Ссылка',
-  social: 'Соцсети',
-  button: 'Кнопка',
-  booking: 'Бронирование',
-  contact_form: 'Форма',
-  pricing: 'Цены',
-  product: 'Товар',
-  gallery: 'Галерея',
-  video: 'Видео',
-  event: 'Событие',
-  messenger: 'Мессенджер',
+const blockTypeI18nKeys: Record<string, string> = {
+  link: 'analytics.blockTypes.link',
+  social: 'analytics.blockTypes.social',
+  button: 'analytics.blockTypes.button',
+  booking: 'analytics.blockTypes.booking',
+  contact_form: 'analytics.blockTypes.contactForm',
+  pricing: 'analytics.blockTypes.pricing',
+  product: 'analytics.blockTypes.product',
+  gallery: 'analytics.blockTypes.gallery',
+  video: 'analytics.blockTypes.video',
+  event: 'analytics.blockTypes.event',
+  messenger: 'analytics.blockTypes.messenger',
 };
 
 export const BlockPerformance = memo(function BlockPerformance({
@@ -109,8 +109,8 @@ export const BlockPerformance = memo(function BlockPerformance({
                   fontSize: '12px',
                 }}
                 formatter={(value?: number | string | Array<number | string>, name?: string | number) => [
-                  name === 'clicks' ? `${value ?? 0} кликов` : `${Number(value ?? 0).toFixed(1)}%`,
-                  name === 'clicks' ? 'Клики' : 'CTR',
+                  name === 'clicks' ? `${value ?? 0} ${t('analytics.blocks.clicks', 'кликов')}` : `${Number(value ?? 0).toFixed(1)}%`,
+                  name === 'clicks' ? t('analytics.tooltipClicks', 'Клики') : 'CTR',
                 ]}
               />
               <Bar
@@ -142,7 +142,7 @@ export const BlockPerformance = memo(function BlockPerformance({
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium truncate">{block.blockTitle}</span>
                   <Badge variant="outline" className="text-[10px] px-1.5">
-                    {blockTypeLabels[block.blockType] || block.blockType}
+                    {t(blockTypeI18nKeys[block.blockType] || '', block.blockType)}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-3 mt-0.5">
