@@ -14,6 +14,15 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer';
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -21,6 +30,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import UserPlus from 'lucide-react/dist/esm/icons/user-plus';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface AddLeadDialogProps {
   open: boolean;
@@ -30,6 +40,7 @@ interface AddLeadDialogProps {
 export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
   const { t } = useTranslation();
   const { createLead, saving } = useLeads();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,110 +73,147 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
   const sources: LeadSource[] = ['manual', 'page_view', 'form', 'messenger', 'other'];
   const statuses: LeadStatus[] = ['new', 'contacted', 'qualified', 'converted', 'lost'];
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5" />
-            {t('crm.addLead', 'Add Lead')}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            {t('crm.addLeadDescription', 'Fill in the form to add a new lead to your CRM')}
-          </DialogDescription>
-        </DialogHeader>
+  const FormContent = (
+    <form onSubmit={handleSubmit} className="px-4 md:px-0 space-y-4">
+      <div>
+        <Label>{t('fields.name', 'Name')} *</Label>
+        <Input
+          value={formData.name}
+          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+          placeholder={t('crm.namePlaceholder', 'Client name')}
+          required
+        />
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label>{t('fields.name', 'Name')} *</Label>
-            <Input
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              placeholder={t('crm.namePlaceholder', 'Client name')}
-              required
-            />
-          </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>{t('fields.email', 'Email')}</Label>
+          <Input
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+            placeholder="email@example.com"
+          />
+        </div>
+        <div>
+          <Label>{t('crm.phone', 'Phone')}</Label>
+          <Input
+            type="tel"
+            value={formData.phone}
+            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+            placeholder="+7 999 123 45 67"
+          />
+        </div>
+      </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>{t('fields.email', 'Email')}</Label>
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="email@example.com"
-              />
-            </div>
-            <div>
-              <Label>{t('crm.phone', 'Phone')}</Label>
-              <Input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="+7 999 123 45 67"
-              />
-            </div>
-          </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>{t('crm.source', 'Source')}</Label>
+          <Select
+            value={formData.source}
+            onValueChange={(value: LeadSource) => setFormData(prev => ({ ...prev, source: value }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {sources.map(source => (
+                <SelectItem key={source} value={source}>
+                  {t(`crm.sources.${source}`, source)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>{t('crm.status.label', 'Status')}</Label>
+          <Select
+            value={formData.status}
+            onValueChange={(value: LeadStatus) => setFormData(prev => ({ ...prev, status: value }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {statuses.map(status => (
+                <SelectItem key={status} value={status}>
+                  {t(`crm.status.${status}`, status)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>{t('crm.source', 'Source')}</Label>
-              <Select
-                value={formData.source}
-                onValueChange={(value: LeadSource) => setFormData(prev => ({ ...prev, source: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {sources.map(source => (
-                    <SelectItem key={source} value={source}>
-                      {t(`crm.sources.${source}`, source)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>{t('crm.status.label', 'Status')}</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(value: LeadStatus) => setFormData(prev => ({ ...prev, status: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {statuses.map(status => (
-                    <SelectItem key={status} value={status}>
-                      {t(`crm.status.${status}`, status)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+      <div>
+        <Label>{t('crm.notes', 'Notes')}</Label>
+        <Textarea
+          value={formData.notes}
+          onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+          placeholder={t('crm.notesPlaceholder', 'Additional notes about this lead...')}
+          rows={3}
+        />
+      </div>
 
-          <div>
-            <Label>{t('crm.notes', 'Notes')}</Label>
-            <Textarea
-              value={formData.notes}
-              onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-              placeholder={t('crm.notesPlaceholder', 'Additional notes about this lead...')}
-              rows={3}
-            />
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+      {isDesktop ? (
+        <DialogFooter className="pt-4">
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            {t('editor.cancel', 'Cancel')}
+          </Button>
+          <Button type="submit" disabled={saving || !formData.name.trim()}>
+            {saving ? t('messages.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
+          </Button>
+        </DialogFooter>
+      ) : (
+        <DrawerFooter className="px-0 pt-6">
+          <Button type="submit" disabled={saving || !formData.name.trim()}>
+            {saving ? t('messages.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
+          </Button>
+          <DrawerClose asChild>
+            <Button type="button" variant="outline">
               {t('editor.cancel', 'Cancel')}
             </Button>
-            <Button type="submit" disabled={saving || !formData.name.trim()}>
-              {saving ? t('messages.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+          </DrawerClose>
+        </DrawerFooter>
+      )}
+    </form>
+  );
+
+  if (isDesktop) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <UserPlus className="h-5 w-5" />
+              {t('crm.addLead', 'Add Lead')}
+            </DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('crm.addLeadDescription', 'Fill in the form to add a new lead to your CRM')}
+            </DialogDescription>
+          </DialogHeader>
+          {FormContent}
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent>
+        <DrawerHeader className="text-left px-4">
+          <DrawerTitle className="flex items-center gap-2">
+            <UserPlus className="h-5 w-5" />
+            {t('crm.addLead', 'Add Lead')}
+          </DrawerTitle>
+          <DrawerDescription className="sr-only">
+            {t('crm.addLeadDescription', 'Fill in the form to add a new lead to your CRM')}
+          </DrawerDescription>
+        </DrawerHeader>
+        <div className="overflow-y-auto max-h-[80vh] pb-4">
+          {FormContent}
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 }

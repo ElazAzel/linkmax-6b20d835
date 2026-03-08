@@ -267,7 +267,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               <div className="flex gap-1.5 sm:gap-2 p-3 sm:p-4 border-b overflow-x-auto scrollbar-hide">
                 <button
                   onClick={() => setSourceFilter('all')}
-                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
+                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
                     }`}
                 >
                   {t('crm.allSources', 'All')} ({stats.total})
@@ -302,13 +302,24 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                 <Button variant="outline" size="icon" onClick={exportToCSV} title={t('crm.export', 'Export CSV')} className="h-9 w-9 sm:h-10 sm:w-10">
                   <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </Button>
-                <Button size="icon" onClick={() => setAddDialogOpen(true)} className="h-9 w-9 sm:h-10 sm:w-10">
+                <Button size="icon" onClick={() => setAddDialogOpen(true)} className="hidden sm:flex h-9 w-9 sm:h-10 sm:w-10">
                   <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </Button>
               </div>
 
+              {/* Mobile FAB for adding leads */}
+              <div className="fixed bottom-6 right-4 sm:right-6 z-[60] sm:hidden">
+                <Button
+                  size="icon"
+                  className="h-14 w-14 rounded-full shadow-lg shadow-black/20"
+                  onClick={() => setAddDialogOpen(true)}
+                >
+                  <Plus className="h-6 w-6" />
+                </Button>
+              </div>
+
               {/* Leads List */}
-              <ScrollArea className="h-[calc(100vh-320px)] sm:h-[calc(100vh-300px)]">
+              <ScrollArea className="h-[calc(100vh-320px)] sm:h-[calc(100vh-300px)] px-3 sm:px-0 bg-accent/20 sm:bg-transparent">
                 {loading ? (
                   <div className="p-8 text-center text-muted-foreground text-sm">
                     {t('messages.loading', 'Loading...')}
@@ -321,48 +332,50 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                     }
                   </div>
                 ) : (
-                  <div className="divide-y">
+                  <div className="space-y-2 py-2 sm:py-0 sm:space-y-0 sm:divide-y">
                     {filteredLeads.map(lead => (
                       <button
                         key={lead.id}
                         onClick={() => setSelectedLead(lead)}
-                        className="w-full p-3 sm:p-4 text-left hover:bg-accent/50 transition-colors active:bg-accent/70"
+                        className="w-full text-left transition-all active:scale-[0.98] sm:hover:bg-accent/50 group"
                       >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5 sm:gap-2">
-                              <span className="text-xs sm:text-sm">{sourceIcons[lead.source]}</span>
-                              <span className="font-medium text-sm sm:text-base truncate">{lead.name}</span>
-                            </div>
-                            <div className="flex items-center gap-2 sm:gap-3 mt-1 text-xs sm:text-sm text-muted-foreground">
-                              {lead.email && (
-                                <span className="flex items-center gap-1 truncate max-w-[120px] sm:max-w-none">
-                                  <Mail className="h-3 w-3 shrink-0" />
-                                  <span className="truncate">{lead.email}</span>
-                                </span>
-                              )}
-                              {lead.phone && (
-                                <span className="flex items-center gap-1 shrink-0">
-                                  <Phone className="h-3 w-3" />
-                                  <span className="hidden sm:inline">{lead.phone}</span>
-                                  <span className="sm:hidden">{lead.phone.slice(-4)}</span>
-                                </span>
-                              )}
-                            </div>
-                            {lead.notes && (
-                              <div className="text-[10px] sm:text-xs text-muted-foreground mt-1 truncate max-w-[200px]">
-                                {lead.notes}
+                        <div className="bg-background sm:bg-transparent rounded-xl sm:rounded-none border sm:border-0 p-3 sm:p-4 shadow-sm sm:shadow-none shadow-black/5 glass-card sm:glass-card-none">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5 sm:gap-2">
+                                <span className="text-xs sm:text-sm">{sourceIcons[lead.source]}</span>
+                                <span className="font-medium text-sm sm:text-base truncate">{lead.name}</span>
                               </div>
-                            )}
-                          </div>
-                          <div className="flex flex-col items-end gap-0.5 sm:gap-1 shrink-0">
-                            <Badge variant="outline" className={`${statusColors[lead.status]} text-[10px] sm:text-xs px-1.5 sm:px-2`}>
-                              {t(`crm.status.${lead.status}`, lead.status)}
-                            </Badge>
-                            <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1">
-                              <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                              {formatDate(lead.created_at)}
-                            </span>
+                              <div className="flex items-center gap-2 sm:gap-3 mt-1 text-xs sm:text-sm text-muted-foreground">
+                                {lead.email && (
+                                  <span className="flex items-center gap-1 truncate max-w-[120px] sm:max-w-none">
+                                    <Mail className="h-3 w-3 shrink-0" />
+                                    <span className="truncate">{lead.email}</span>
+                                  </span>
+                                )}
+                                {lead.phone && (
+                                  <span className="flex items-center gap-1 shrink-0">
+                                    <Phone className="h-3 w-3" />
+                                    <span className="hidden sm:inline">{lead.phone}</span>
+                                    <span className="sm:hidden">{lead.phone.slice(-4)}</span>
+                                  </span>
+                                )}
+                              </div>
+                              {lead.notes && (
+                                <div className="text-[10px] sm:text-xs text-muted-foreground mt-1 truncate max-w-[200px]">
+                                  {lead.notes}
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex flex-col items-end gap-0.5 sm:gap-1 shrink-0">
+                              <Badge variant="outline" className={`${statusColors[lead.status]} text-[10px] sm:text-xs px-1.5 sm:px-2`}>
+                                {t(`crm.status.${lead.status}`, lead.status)}
+                              </Badge>
+                              <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1">
+                                <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                                {formatDate(lead.created_at)}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </button>
