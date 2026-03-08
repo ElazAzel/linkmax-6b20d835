@@ -4984,7 +4984,22 @@
     "useCamera": "Камера",
     "manual": "Вручную",
     "recentScans": "Последние сканы",
-    "noScansYet": "Отсканированные билеты появятся здесь"
+    "noScansYet": "Отсканированные билеты появятся здесь",
+    "regStatus": {
+      "pending": "Ожидает",
+      "confirmed": "Подтверждён",
+      "rejected": "Отклонён",
+      "cancelled": "Отменён"
+    },
+    "ticketStatus": {
+      "valid": "Активен",
+      "used": "Использован",
+      "cancelled": "Отменён"
+    },
+    "csvName": "Имя",
+    "csvPhone": "Телефон",
+    "csvStatus": "Статус",
+    "csvDate": "Дата регистрации"
   },
   "insights": {
     "lowViews": {
