@@ -215,7 +215,7 @@ export function useFreemiumLimits() {
   const getMaxLeads = () => limits.maxLeadsPerMonth;
 
   return {
-    isPremium: currentTier !== 'free',
+    isPremium: currentTier !== 'identity',
     currentTier,
     isLoading,
     limits,
