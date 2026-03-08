@@ -3519,7 +3519,13 @@
       "converted": "Түрлендірілген",
       "lost": "Жоғалған"
     },
-    "source": "Дереккөз",
+    "source": {
+      "form": "Форма",
+      "messenger": "Мессенджер",
+      "manual": "Қолмен",
+      "pageView": "Қарау",
+      "other": "Басқа"
+    },
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Клиент аты",
     "phone": "Phone",
