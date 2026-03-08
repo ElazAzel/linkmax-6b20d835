@@ -286,7 +286,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     </div>
                     <div className="flex gap-2">
                       <div className="flex-1 space-y-1">
-                        <Label className="text-[10px]">{t('zones.deals.qty', 'Qty')}</Label>
+                        <Label className="text-xs">{t('zones.deals.qty', 'Qty')}</Label>
                         <Input type="number" value={newProdQty} onChange={e => setNewProdQty(Number(e.target.value))} className="h-8" />
                       </div>
                       <div className="flex items-end gap-1">
