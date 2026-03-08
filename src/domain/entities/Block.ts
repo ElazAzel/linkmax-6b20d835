@@ -1,18 +1,22 @@
 /**
  * Block Entity - Core domain model for page blocks
  * Pure business logic, no external dependencies
+ * 
+ * BlockType, categories, and premium flags are defined in:
+ * - @/types/blocks/base (BlockType union)
+ * - @/lib/blocks/block-manifest.ts (BLOCK_MANIFEST — single source of truth)
  */
 
 import type { MultilingualString } from '@/lib/i18n-helpers';
 
-// ============= Value Objects =============
+// Re-export BlockType from canonical source
+export type { BlockType } from '@/types/blocks/base';
+import type { BlockType } from '@/types/blocks/base';
 
-export type BlockType = 
-  | 'profile' | 'link' | 'button' | 'socials' | 'text' | 'image' 
-  | 'product' | 'video' | 'carousel' | 'custom_code' 
-  | 'messenger' | 'form' | 'download' | 'newsletter' | 'testimonial' 
-  | 'scratch' | 'map' | 'avatar' | 'separator' | 'catalog' 
-  | 'before_after' | 'faq' | 'countdown' | 'pricing' | 'shoutout' | 'booking' | 'community' | 'event';
+// Re-export manifest helpers for backward compat
+export { isBlockPremium as isPremiumBlockType, getBlockCategory } from '@/lib/blocks/block-manifest';
+
+// ============= Value Objects =============
 
 export type Currency = 
   | 'KZT' | 'RUB' | 'BYN' | 'AMD' | 'AZN' | 'KGS' | 'TJS' | 'TMT' | 'UZS' 
@@ -46,23 +50,6 @@ export interface GridLayoutData {
   gridHeight?: number;
 }
 
-// ============= Block Categories =============
-
-export const BLOCK_CATEGORIES = {
-  basic: ['link', 'button', 'text', 'separator', 'avatar'],
-  media: ['image', 'video', 'carousel', 'before_after'],
-  interactive: ['form', 'messenger', 'map', 'faq', 'scratch'],
-  commerce: ['product', 'catalog', 'pricing', 'download'],
-  advanced: ['custom_code', 'newsletter', 'testimonial', 'countdown', 'socials'],
-  social: ['shoutout', 'community'],
-} as const;
-
-export const PREMIUM_BLOCK_TYPES: readonly BlockType[] = [
-  'video', 'carousel', 'custom_code', 'form', 'newsletter', 
-  'testimonial', 'scratch', 'catalog', 'countdown', 'booking',
-  'before_after', 'download', 'product', 'pricing', 'shoutout', 'community', 'event',
-];
-
 // ============= Base Block Interface =============
 
 export interface BaseBlock {
@@ -75,25 +62,6 @@ export interface BaseBlock {
 }
 
 // ============= Domain Logic =============
-
-/**
- * Check if block type requires premium
- */
-export function isPremiumBlockType(type: BlockType): boolean {
-  return PREMIUM_BLOCK_TYPES.includes(type);
-}
-
-/**
- * Get block category
- */
-export function getBlockCategory(type: BlockType): keyof typeof BLOCK_CATEGORIES {
-  for (const [category, types] of Object.entries(BLOCK_CATEGORIES)) {
-    if ((types as readonly string[]).includes(type)) {
-      return category as keyof typeof BLOCK_CATEGORIES;
-    }
-  }
-  return 'basic';
-}
 
 /**
  * Check if block is currently scheduled to be visible

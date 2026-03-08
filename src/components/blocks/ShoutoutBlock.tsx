@@ -8,7 +8,11 @@ import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import { supabase } from '@/platform/supabase/client';
 
 interface ShoutoutBlockProps {
-  userId: string;
+  /** Accepts full block object (manifest-driven) or legacy individual props */
+  block?: { userId: string; message?: string | { ru?: string; en?: string; kk?: string }; blockStyle?: any };
+  /** @deprecated Use block prop instead */
+  userId?: string;
+  /** @deprecated Use block prop instead */
   message?: string | { ru?: string; en?: string; kk?: string };
   style?: {
     backgroundColor?: string;
@@ -22,10 +26,14 @@ interface UserInfo {
   avatar_url: string | null;
 }
 
-export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
+export function ShoutoutBlock({ block, userId: legacyUserId, message: legacyMessage, style }: ShoutoutBlockProps) {
   const { t, i18n } = useTranslation();
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Support both manifest-driven (block prop) and legacy (individual props)
+  const userId = block?.userId ?? legacyUserId ?? '';
+  const message = block?.message ?? legacyMessage;
 
   useEffect(() => {
     async function loadUser() {
@@ -65,7 +73,6 @@ export function ShoutoutBlock({ userId, message, style }: ShoutoutBlockProps) {
     );
   }
 
-  // If user not found, show fallback with provided data
   if (!user) {
     return (
       <Card 

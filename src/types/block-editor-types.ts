@@ -1,5 +1,7 @@
 /**
  * Block-related types for editor operations
+ * 
+ * NOTE: Block categories and getBlockCategory are now in @/lib/blocks/block-manifest.ts
  */
 import type { Block, BlockType } from './page';
 
@@ -66,29 +68,5 @@ export interface BlockRegistryEntry {
   label: string;
   icon: string;
   isPremium: boolean;
-  category: 'basic' | 'media' | 'interactive' | 'commerce' | 'advanced';
-}
-
-/**
- * Block categories for organization
- */
-export const BLOCK_CATEGORIES = {
-  basic: ['link', 'button', 'text', 'separator', 'avatar'],
-  media: ['image', 'video', 'carousel', 'before_after'],
-  interactive: ['form', 'messenger', 'map', 'faq', 'scratch', 'event'],
-  // NOTE: BLOCK_CATEGORIES here is deprecated. Use BLOCK_MANIFEST from block-manifest.ts instead.
-  commerce: ['product', 'catalog', 'pricing', 'download'],
-  advanced: ['custom_code', 'newsletter', 'testimonial', 'countdown', 'socials'],
-} as const;
-
-/**
- * Get block category
- */
-export function getBlockCategory(type: BlockType): keyof typeof BLOCK_CATEGORIES {
-  for (const [category, types] of Object.entries(BLOCK_CATEGORIES)) {
-    if ((types as readonly string[]).includes(type)) {
-      return category as keyof typeof BLOCK_CATEGORIES;
-    }
-  }
-  return 'basic';
+  category: 'basic' | 'media' | 'interactive' | 'commerce' | 'advanced' | 'social';
 }
