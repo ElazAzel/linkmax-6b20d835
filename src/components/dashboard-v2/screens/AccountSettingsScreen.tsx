@@ -400,6 +400,18 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
           </div>
         </div>
       )}
+
+      {/* Password Change Dialog */}
+      <ChangePasswordDialog
+        open={showPasswordDialog}
+        onOpenChange={setShowPasswordDialog}
+      />
+
+      {/* Billing History Sheet */}
+      <BillingHistorySheet
+        open={showBillingSheet}
+        onOpenChange={setShowBillingSheet}
+      />
     </div>
   );
 });
