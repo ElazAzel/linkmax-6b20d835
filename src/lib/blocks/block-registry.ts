@@ -22,6 +22,8 @@ export const FREE_BLOCK_TYPES = [
   'image',
   'map',
   'faq',
+  'booking',
+  'form',
 ] as const;
 
 /**
@@ -31,7 +33,6 @@ export const PREMIUM_BLOCK_TYPES = [
   'video',
   'carousel',
   'custom_code',
-  'form',
   'newsletter',
   'testimonial',
   'scratch',
@@ -43,7 +44,6 @@ export const PREMIUM_BLOCK_TYPES = [
   'pricing',
   'shoutout',
   'community',
-  'booking',
   'event',
   'search',
 ] as const;
@@ -105,7 +105,7 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   // Interactive
   map: { type: 'map', category: 'interactive', isPremium: false, icon: 'map-pin', labelKey: 'blockTypes.map' },
   faq: { type: 'faq', category: 'interactive', isPremium: false, icon: 'help-circle', labelKey: 'blockTypes.faq' },
-  form: { type: 'form', category: 'interactive', isPremium: true, icon: 'clipboard', labelKey: 'blockTypes.form' },
+  form: { type: 'form', category: 'interactive', isPremium: false, icon: 'clipboard', labelKey: 'blockTypes.form' },
   scratch: { type: 'scratch', category: 'interactive', isPremium: true, icon: 'gift', labelKey: 'blockTypes.scratch' },
   countdown: { type: 'countdown', category: 'interactive', isPremium: true, icon: 'clock', labelKey: 'blockTypes.countdown' },
   custom_code: { type: 'custom_code', category: 'interactive', isPremium: true, icon: 'code', labelKey: 'blockTypes.customCode' },
@@ -115,7 +115,7 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   catalog: { type: 'catalog', category: 'commerce', isPremium: true, icon: 'grid', labelKey: 'blockTypes.catalog' },
   pricing: { type: 'pricing', category: 'commerce', isPremium: true, icon: 'tag', labelKey: 'blockTypes.pricing' },
   download: { type: 'download', category: 'commerce', isPremium: true, icon: 'download', labelKey: 'blockTypes.download' },
-  booking: { type: 'booking', category: 'commerce', isPremium: true, icon: 'calendar', labelKey: 'blockTypes.booking' },
+  booking: { type: 'booking', category: 'commerce', isPremium: false, icon: 'calendar', labelKey: 'blockTypes.booking' },
 
   // Social
   shoutout: { type: 'shoutout', category: 'social', isPremium: true, icon: 'megaphone', labelKey: 'blockTypes.shoutout' },

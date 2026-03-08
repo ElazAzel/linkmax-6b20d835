@@ -2,8 +2,10 @@ import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { storage } from '@/lib/storage';
 
 // Block tiers based on pricing plans (Free + Pro only)
+// booking + form moved to FREE to enable core thesis: social traffic → booking → prepayment
 export const FREE_BLOCKS = [
-  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'faq'
+  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'faq',
+  'booking', 'form'
 ] as const;
 
 export const PRO_BLOCKS = [
@@ -13,7 +15,7 @@ export const PRO_BLOCKS = [
 
 // Business blocks merged into Pro
 export const PRO_EXTENDED_BLOCKS = [
-  'download', 'form', 'countdown', 'booking', 'community'
+  'download', 'countdown', 'community'
 ] as const;
 
 export type FreeTier = 'identity' | 'starter' | 'pro' | 'business';
@@ -49,9 +51,9 @@ export const FREE_LIMITS: TierFeatures = {
   showWatermark: true,
   allowedBlocks: [...FREE_BLOCKS] as string[],
   premiumBlocks: [...PRO_BLOCKS, ...PRO_EXTENDED_BLOCKS] as unknown as string[],
-  maxLeadsPerMonth: 0,
+  maxLeadsPerMonth: 50,
   canUseAnalytics: false,
-  canUseCRM: false,
+  canUseCRM: true,
   canUseScheduler: false,
   canUsePixels: false,
   canUseCustomDomain: false,
