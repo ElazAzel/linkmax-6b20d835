@@ -40,6 +40,7 @@ interface DiagnosticPage {
 interface IndexingSubmission {
   id: string;
   target_url: string;
+  child_type: string | null;
   provider: string;
   action_type: string;
   submission_status: string;
@@ -48,6 +49,13 @@ interface IndexingSubmission {
   batch_id: string | null;
   created_at: string;
 }
+
+const CHILD_STATE_LABELS: Record<string, { label: string; color: string }> = {
+  eligible: { label: 'В поиске', color: 'border-emerald-500/30 text-emerald-600' },
+  excluded_thin: { label: 'Нет описания', color: 'border-amber-500/30 text-amber-600' },
+  removed: { label: 'Удалена', color: 'border-red-500/30 text-red-500' },
+  parent_not_indexable: { label: 'Родитель не индексируется', color: 'border-muted-foreground/30 text-muted-foreground' },
+};
 
 const EXCLUSION_LABELS: Record<string, string> = {
   missing_name: 'Нет имени',
