@@ -416,20 +416,74 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </div>
 
-        {/* Contextual Tip — outcome-focused */}
-        <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
-          <div className="flex items-start gap-4">
-            <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
-              <Sparkles className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <h4 className="font-bold mb-1">{t('dashboard.home.tip', 'Совет')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {dynamicTip}
-              </p>
-            </div>
-          </div>
-        </Card>
+        {/* Lifecycle Nudge — data-driven contextual tip */}
+        {(() => {
+          // Lifecycle-aware nudge replaces static tip
+          if (isPublished && viewCount > 0 && realLeadsCount === 0) {
+            return (
+              <Card className="p-5 bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-500/10">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-amber-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold mb-1">{t('lifecycle.trafficNoLeads.title', 'Есть трафик, но нет заявок')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('lifecycle.trafficNoLeads.hint', 'Добавьте форму сбора контактов или блок записи — каждая 5-я страница с формой получает заявки')}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          if (repeatCount > 0) {
+            return (
+              <Card className="p-5 bg-gradient-to-br from-violet-500/5 to-purple-500/5 border-violet-500/10">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-violet-500/15 flex items-center justify-center shrink-0">
+                    <Repeat className="h-5 w-5 text-violet-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold mb-1">{t('lifecycle.repeatCustomers.title', 'Постоянные клиенты')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('lifecycle.repeatCustomers.hint', 'У вас {{count}} постоянных клиентов — отличная работа! 🎉', { count: repeatCount })}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          if (isPublished && realLeadsCount > 0) {
+            return (
+              <Card className="p-5 bg-gradient-to-br from-emerald-500/5 to-green-500/5 border-emerald-500/10">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0">
+                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold mb-1">{t('lifecycle.hasLeads.title', 'Заявки поступают')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('lifecycle.hasLeads.hint', 'Напишите клиентам после визита — это повышает возврат на 30%')}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          return (
+            <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
+              <div className="flex items-start gap-4">
+                <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold mb-1">{t('dashboard.home.tip', 'Совет')}</h4>
+                  <p className="text-sm text-muted-foreground">{dynamicTip}</p>
+                </div>
+              </div>
+            </Card>
+          );
+        })()}
 
         {/* "Why LinkMAX" card REMOVED — user already converted, this is landing copy */}
       </div>

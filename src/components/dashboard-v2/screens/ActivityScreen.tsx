@@ -432,6 +432,12 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
           <div className="flex items-center justify-between gap-2 mb-1">
             <div className="flex items-center gap-2 min-w-0">
               <span className="font-bold truncate">{lead.name}</span>
+              {isRepeat && (
+                <Badge className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-[10px] font-bold border-violet-500/20 shrink-0">
+                  <Repeat className="h-3 w-3 mr-0.5" />
+                  {t('operator.repeat.badge', 'Повторный')}
+                </Badge>
+              )}
               {lead.status === 'new' && (
                 <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0 animate-pulse" />
               )}

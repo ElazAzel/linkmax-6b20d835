@@ -328,6 +328,12 @@ END:VCALENDAR`;
                       <div className="flex items-center gap-2 text-sm font-medium">
                         <User className="h-3.5 w-3.5 text-muted-foreground" />
                         {booking.client_name}
+                        {isRepeatCustomer(booking.client_phone, booking.client_email) && (
+                          <Badge variant="outline" className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-[10px] font-bold border-violet-500/20">
+                            <Repeat className="h-3 w-3 mr-0.5" />
+                            {t('operator.repeat.badge', 'Повторный')}
+                          </Badge>
+                        )}
                       </div>
                       {booking.client_phone && (
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
