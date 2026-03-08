@@ -281,52 +281,104 @@ export default function Pricing() {
           </ul>
         </Card>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
-          {(['pro', 'business'] as const).map((planKey) => {
-            const plan = pricingPlans[planKey];
-            const Icon = plan.icon;
-            const isCurrentPlan = tier === planKey;
+        {/* Pricing Cards — 2 main tiers */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+          {/* FREE Card */}
+          <Card className={cn(
+            "relative overflow-hidden transition-all duration-300",
+            (tier === 'identity' || tier === 'starter') && "ring-2 ring-primary"
+          )}>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-slate-500 to-slate-600 flex items-center justify-center">
+                  <Zap className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="flex items-center">
+                    {pricingPlans.basic.name}
+                    {(tier === 'identity' || tier === 'starter') && (
+                      <Badge variant="secondary" className="ml-2">{t('pricing.currentPlan', 'Текущий')}</Badge>
+                    )}
+                  </CardTitle>
+                  <CardDescription>{t('pricing.basicDesc', 'Страница + запись + CRM бесплатно')}</CardDescription>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold">0₸</span>
+                  <span className="text-muted-foreground">/{t('pricing.month', 'мес')}</span>
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">{t('pricing.freeForever', 'Бесплатно навсегда')}</div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <ul className="grid grid-cols-1 gap-2">
+                {pricingPlans.basic.features.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+                {/* Highlight booking + CRM in free */}
+                <li className="flex items-start gap-2 text-sm font-medium text-primary">
+                  <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>{t('pricing.features.freeBooking', 'Запись клиентов + предоплата')}</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm font-medium text-primary">
+                  <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>{t('pricing.features.freeCRM', 'CRM до 50 заявок/мес')}</span>
+                </li>
+              </ul>
+              {pricingPlans.basic.limitations && (
+                <ul className="grid grid-cols-1 gap-1">
+                  {pricingPlans.basic.limitations.map((lim, index) => (
+                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <span className="mt-0.5">—</span>
+                      <span>{lim}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <Button
+                variant="outline"
+                className="w-full h-12 text-lg font-bold rounded-xl"
+                disabled={tier === 'identity' || tier === 'starter'}
+                onClick={() => handleSelectPlan('basic')}
+              >
+                {(tier === 'identity' || tier === 'starter') ? t('pricing.currentPlan', 'Текущий план') : t('pricing.startFree', 'Попробовать бесплатно')}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* PRO Card */}
+          {(() => {
+            const plan = pricingPlans.pro;
+            const isCurrentPlan = tier === 'pro';
             const monthlyKzt = plan.pricesKzt[billingPeriod];
             const monthlyUsd = plan.pricesUsd[billingPeriod];
             const totalKzt = plan.totalKzt[billingPeriod];
             const totalUsd = plan.totalUsd[billingPeriod];
-            const isPopular = 'popular' in plan && plan.popular;
-
             return (
-              <Card key={planKey} className={cn(
-                "relative overflow-hidden transition-all duration-300 hover:scale-[1.01]",
-                isPopular && "border-primary shadow-lg shadow-primary/20",
-                planKey === 'business' && "border-amber-500/50 shadow-lg shadow-amber-500/10",
+              <Card className={cn(
+                "relative overflow-hidden transition-all duration-300 hover:scale-[1.01] border-primary shadow-lg shadow-primary/20",
                 isCurrentPlan && "ring-2 ring-primary"
               )}>
-                {isPopular && (
-                  <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-bl-xl">
-                    {t('pricing.popular', 'Популярный')}
-                  </div>
-                )}
-                {planKey === 'business' && (
-                  <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
-                    {t('pricing.new', 'Новинка')}
-                  </div>
-                )}
-
+                <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold rounded-bl-xl">
+                  {t('pricing.popular', 'Популярный')}
+                </div>
                 <CardHeader className="pb-4">
                   <div className="flex items-center gap-3">
-                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center`}>
-                      <Icon className="h-6 w-6 text-white" />
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+                      <Crown className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <CardTitle className="flex items-center">
                         {plan.name}
-                        {getCurrentPlanBadge(planKey)}
+                        {isCurrentPlan && <Badge variant="secondary" className="ml-2">{t('pricing.currentPlan', 'Текущий')}</Badge>}
                       </CardTitle>
-                      <CardDescription>
-                        {planKey === 'pro' ? t('pricing.proDesc', 'Всё для профессионалов и бизнеса') : t('pricing.businessDesc', 'CRM, команда и зоны для бизнеса')}
-                      </CardDescription>
+                      <CardDescription>{t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}</CardDescription>
                     </div>
                   </div>
-
                   <div className="mt-4">
                     {isKztPrimary ? (
                       <>
@@ -357,7 +409,6 @@ export default function Pricing() {
                     )}
                   </div>
                 </CardHeader>
-
                 <CardContent className="space-y-6">
                   <ul className="grid grid-cols-1 gap-2">
                     {plan.features.map((feature, index) => (
@@ -367,32 +418,30 @@ export default function Pricing() {
                       </li>
                     ))}
                   </ul>
-
                   <Button
-                    className={cn(
-                      "w-full h-12 text-lg font-bold rounded-xl shadow-lg",
-                      planKey === 'pro' && "shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600",
-                      planKey === 'business' && "shadow-amber-500/20 bg-gradient-to-r from-amber-500 to-orange-600"
-                    )}
+                    className="w-full h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600"
                     disabled={isCurrentPlan || isLoading}
-                    onClick={() => handleSelectPlan(planKey)}
+                    onClick={() => handleSelectPlan('pro')}
                   >
                     {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
                   </Button>
                 </CardContent>
               </Card>
             );
-          })}
+          })()}
         </div>
 
-        {/* Try for free link */}
+        {/* Business tier — secondary mention */}
         <div className="text-center mb-12">
+          <p className="text-sm text-muted-foreground mb-2">
+            {t('pricing.businessNote', 'Нужна командная CRM, зоны и роли?')}
+          </p>
           <Button
             variant="link"
-            className="text-muted-foreground hover:text-primary transition-colors h-auto p-0"
-            onClick={() => handleSelectPlan('basic')}
+            className="text-muted-foreground hover:text-primary transition-colors h-auto p-0 font-bold"
+            onClick={() => handleSelectPlan('business')}
           >
-            {t('pricing.startFree', 'Попробовать бесплатно')}
+            {t('pricing.businessLink', 'Узнать о тарифе BUSINESS →')}
           </Button>
         </div>
 

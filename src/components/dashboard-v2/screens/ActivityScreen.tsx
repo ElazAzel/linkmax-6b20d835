@@ -97,27 +97,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
 
   const stats = getLeadStats();
 
-  // Premium gate
-  <div className="min-h-screen flex items-center justify-center p-6 safe-area-top bg-liquid-mesh">
-    <div className="text-center max-w-sm glass-card p-8 border-white/20 shadow-glass-xl relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent -z-1" />
-      <div className="h-24 w-24 rounded-[32px] bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/30 animate-float">
-        <Crown className="h-12 w-12 text-white" />
-      </div>
-      <h2 className="text-2xl font-black mb-3 text-gradient-amber">{t('dashboard.activity.premiumRequired', 'Для Premium')}</h2>
-      <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-        {t('dashboard.activity.premiumDescription', 'Управляйте заявками как в мессенджере. Telegram-уведомления, статусы и история.')}
-      </p>
-      <Button
-        size="lg"
-        className="w-full h-14 px-8 rounded-2xl text-base font-bold shadow-xl shadow-amber-500/25 bg-gradient-to-r from-amber-500 to-orange-500 hover:scale-[1.02] active:scale-[0.98] transition-all"
-        onClick={openPremiumPurchase}
-      >
-        <Crown className="h-5 w-5 mr-2" />
-        {t('dashboard.activity.upgradeToPremium', 'Получить Premium')}
-      </Button>
-    </div>
-  </div>
+  // CRM is now available to all users (basic CRM free, premium for export/automation)
 
   const filteredLeads = leads.filter((lead) => {
     const matchesSearch =

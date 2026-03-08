@@ -48,6 +48,7 @@ export function useActivationChecklist({
     const isPublished = pageData.isPublished || false;
     const hasFirstView = (pageData.viewCount || viewCount) >= 1;
     const hasFirstConversion = leadsCount >= 1 || totalClicks >= 1;
+    const hasFirstBooking = bookingsCount >= 1;
 
     return [
       {
@@ -72,6 +73,12 @@ export function useActivationChecklist({
         id: 'first-conversion',
         labelKey: 'activation.steps.firstConversion',
         completed: hasFirstConversion,
+        action: onOpenEditor,
+      },
+      {
+        id: 'first-booking',
+        labelKey: 'activation.steps.firstBooking',
+        completed: hasFirstBooking,
         action: onOpenEditor,
       },
     ];

@@ -5662,7 +5662,8 @@
       "createPage": "Create your page",
       "publish": "Publish",
       "firstVisitor": "Get your first visitor",
-      "firstConversion": "Get your first response"
+      "firstConversion": "Get your first response",
+      "firstBooking": "Get your first booking"
     },
     "tips": {
       "addBlock": "Add your first block — a link, product, or video",
