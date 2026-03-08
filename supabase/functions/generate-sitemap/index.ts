@@ -267,7 +267,7 @@ function isPageIndexable(page: PageData): boolean {
 async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lang: LanguageKey): Promise<Response> {
   const { data: pageData, error: pageError } = await supabase
     .from('pages')
-    .select('id, slug, title, description, avatar_url, updated_at, niche, city, country_code, profession, entity_type, contact_email, contact_phone, contact_whatsapp, quality_score, is_indexable')
+    .select('id, slug, title, description, avatar_url, updated_at, niche, city, country_code, profession, entity_type, contact_email, contact_phone, contact_whatsapp, quality_score, is_indexable, service_slugs')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
