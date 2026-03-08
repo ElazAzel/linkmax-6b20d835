@@ -1,143 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# Repeat Booking / Retention Growth Loop
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-The product has a working acquisition-to-first-booking path but **zero systematic post-service retention**. The OperatorSummaryWidget has a rudimentary "write to yesterday's clients" feature, but:
-- There's no `completed` status being set automatically — owners must manually mark bookings
-- The follow-up message is generic and doesn't include a rebook link
-- There's no rebooking timing logic
-- The client never receives a direct "book again" URL
-- Repeat customer detection exists (`useRepeatCustomers`) but isn't actionable
+### Новая тарифная модель (ADR 0026)
 
-This is the single highest-ROI layer to build now because repeat bookings cost zero acquisition effort and directly increase revenue per user — which is the Pro upgrade trigger (50 inbound limit).
-
-## Implementation — 6 Tasks
-
-### Task 1: DB Migration — Add `completed_at` and `followup_sent_at` to bookings
-
-The `bookings` table already has `status` (with `completed` in `statusColors`) and `handleCompleteBooking` exists in `BookingsPanel.tsx`. But there's no `completed_at` timestamp or `followup_sent_at` tracking.
-
-```sql
-ALTER TABLE public.bookings 
-  ADD COLUMN IF NOT EXISTS completed_at timestamptz,
-  ADD COLUMN IF NOT EXISTS followup_sent_at timestamptz;
-
--- Auto-complete bookings where slot_date is yesterday and status is 'confirmed'
--- This runs as a lightweight trigger approach: when owner opens dashboard,
--- past confirmed bookings auto-transition. But we also add a simple function
--- that can be called to batch-complete.
-CREATE OR REPLACE FUNCTION public.auto_complete_past_bookings(p_owner_id uuid)
-RETURNS integer
-LANGUAGE plpgsql SECURITY DEFINER SET search_path = 'public'
-AS $$
-DECLARE v_count integer;
-BEGIN
-  UPDATE public.bookings
-  SET status = 'completed', completed_at = now(), updated_at = now()
-  WHERE owner_id = p_owner_id
-    AND status = 'confirmed'
-    AND slot_date < CURRENT_DATE
-  RETURNING 1;
-  GET DIAGNOSTICS v_count = ROW_COUNT;
-  RETURN v_count;
-END;
-$$;
-```
-
-### Task 2: Auto-complete logic on dashboard load + manual complete button
-
-**In `BookingsPanel.tsx`** — call `auto_complete_past_bookings` RPC on mount so confirmed bookings from past dates automatically move to `completed`. Also update `handleCompleteBooking` to set `completed_at`.
-
-**In `OperatorSummaryWidget.tsx`** — change the "yesterday's completed" query: instead of filtering by `status = 'confirmed' AND slot_date = yesterday`, query `status = 'completed' AND followup_sent_at IS NULL AND slot_date < today` (recently completed, no follow-up sent yet). This surfaces follow-up opportunities for the last 3 days, not just yesterday.
-
-### Task 3: Enhanced follow-up with rebook link
-
-Update `OperatorSummaryWidget.tsx` follow-up handler:
-
-1. The WhatsApp message template should include a **direct rebook link**: the page's public URL (e.g., `lnkmx.my/{slug}`)
-2. After sending, mark `followup_sent_at = now()` on the booking record
-3. Show "Отправлено ✓" state instead of the button after marking
-
-**3 niche-specific message templates** (selected based on page niche or default):
-
-- **Beauty**: "Здравствуйте, {{name}}! Спасибо за визит 💅 Как вам результат? Записаться снова: {{url}}"
-- **Wellness/Massage**: "{{name}}, спасибо за визит! Для повторной записи: {{url}} 🙏"
-- **Default**: "{{name}}, спасибо! Записаться снова можно здесь: {{url}}"
-
-Pass `pageSlug` (already available via pageData) to construct the URL.
-
-### Task 4: "Repeat Opportunities" section in OperatorSummaryWidget
-
-Add a new section below the follow-up section that shows clients who:
-- Had their last completed booking 2-4 weeks ago (configurable later)
-- Haven't booked again since
-- Have a phone number
-
-This uses the existing `useRepeatCustomers` data + a new query for "clients due for rebooking":
-
-```typescript
-// New query in OperatorSummaryWidget
-const { data: rebookCandidates } = await supabase
-  .from('bookings')
-  .select('client_name, client_phone, slot_date, page_id')
-  .eq('owner_id', user.id)
-  .eq('status', 'completed')
-  .gte('slot_date', format(subDays(new Date(), 35), 'yyyy-MM-dd'))
-  .lte('slot_date', format(subDays(new Date(), 14), 'yyyy-MM-dd'))
-  .order('slot_date', { ascending: false });
-```
-
-Then filter out those who already have a newer booking. Show as cards with "Напомнить о записи" button that opens WhatsApp with a rebook message.
-
-**UI**: Purple-tinted card (matching repeat customer theme), icon `Repeat`, max 3 shown.
-
-### Task 5: BookingCard + BookingsPanel — completed state + follow-up indicators
-
-**BookingCard.tsx**: Add `completed` status rendering (blue checkmark badge, like the `statusColors` map already defines). Currently BookingCard only shows pending/confirmed.
-
-**BookingsPanel.tsx**: 
-- For completed bookings, show a "Написать" (follow-up) button instead of confirm/cancel actions
-- Show a green checkmark if `followup_sent_at` is set
-- Add repeat customer badge (already exists inline, just verify it renders for completed bookings too)
-
-### Task 6: Analytics events + DB constraint update
-
-Add new event types to `activation-events.ts`:
-- `booking_marked_completed`
-- `repeat_followup_sent` (distinct from generic `post_service_followup_sent` — includes rebook URL)
-- `repeat_opportunity_shown`
-- `repeat_booking_started` (when client clicks rebook link from follow-up — tracked via UTM on page URL)
-
-DB migration to expand analytics constraint with these new types.
-
-Track:
-- In `handleCompleteBooking`: track `booking_marked_completed`
-- In enhanced follow-up handler: track `repeat_followup_sent` with `{ bookingId, hasRebookLink: true }`
-- In rebook opportunity cards: track `repeat_opportunity_shown` on render
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## What NOT to Do
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-- No automated WhatsApp sending — always manual tap (avoids spam, keeps trust)
-- No loyalty points or gamification
-- No client-side portal or client accounts
-- No complex rebooking timing engine — simple 14-28 day window is enough
-- No push notifications infrastructure
-- No email follow-up system (WhatsApp is the channel for KZ/CIS)
-- Don't add a separate "Retention" tab — keep everything in existing OperatorSummary + BookingsPanel
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-## Priority Order
+---
 
-1. **DB migration** (completed_at, followup_sent_at, auto_complete function) — foundation
-2. **Auto-complete + enhanced follow-up with rebook link** — highest immediate value, turns existing widget into retention engine
-3. **Rebook opportunity cards** — surfaces dormant revenue
-4. **BookingsPanel completed state** — operational clarity
-5. **Analytics** — measurement
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-## Fastest ROI Surface
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-**Enhanced follow-up message with rebook link** (Task 3). It requires minimal code change to an existing feature (OperatorSummaryWidget already has the button), but transforms a generic "how was it?" message into a direct revenue-generating action. Every follow-up becomes a rebooking opportunity.
+---
 
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
+
+---
+
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+
+## Текущее состояние LinkMAX Business Zones
+
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+
+### Фаза 3: Tasks -- закрытие пробелов (P1)
+
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+
+### Фаза 4: Аналитика Зоны (P1)
+
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+
+---
+
+## Что НЕ нужно копировать из Bitrix24
+
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

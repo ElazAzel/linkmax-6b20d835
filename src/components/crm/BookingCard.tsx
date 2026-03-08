@@ -43,6 +43,7 @@ export const BookingCard = memo(function BookingCard({
   const { t, i18n } = useTranslation();
   const locale = localeMap[i18n.language] || enUS;
   const isPending = booking.status === 'pending';
+  const isCompleted = booking.status === 'completed';
 
   const dateLabel = (() => {
     try {
@@ -65,7 +66,7 @@ export const BookingCard = memo(function BookingCard({
         <Avatar className="h-10 w-10 rounded-xl shrink-0">
           <AvatarFallback className={cn(
             'rounded-xl text-sm font-bold',
-            isPending ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white'
+            isPending ? 'bg-amber-500 text-white' : isCompleted ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'
           )}>
             {booking.client_name.charAt(0).toUpperCase()}
           </AvatarFallback>
@@ -76,9 +77,9 @@ export const BookingCard = memo(function BookingCard({
             <span className="font-bold text-sm truncate">{booking.client_name}</span>
             <Badge className={cn(
               'text-[10px] font-bold h-5 px-1.5 border-0 shrink-0',
-              isPending ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white'
+              isPending ? 'bg-amber-500 text-white' : isCompleted ? 'bg-blue-500 text-white' : 'bg-emerald-500 text-white'
             )}>
-              {isPending ? t('crm.bookingStatus.pending', 'Ожидает') : t('crm.bookingStatus.confirmed', 'Подтв.')}
+              {isPending ? t('crm.bookingStatus.pending', 'Ожидает') : isCompleted ? t('crm.bookingStatus.completed', 'Выполнено') : t('crm.bookingStatus.confirmed', 'Подтв.')}
             </Badge>
           </div>
 

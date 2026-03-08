@@ -88,8 +88,14 @@ export function BookingsPanel() {
     setLoading(false);
   };
 
+  // Auto-complete past confirmed bookings on mount
   useEffect(() => {
-    fetchBookings();
+    if (!user) return;
+    const autoComplete = async () => {
+      await supabase.rpc('auto_complete_past_bookings', { p_owner_id: user.id });
+      fetchBookings();
+    };
+    autoComplete();
   }, [user]);
 
   const handleCancelBooking = async () => {
@@ -128,7 +134,7 @@ export function BookingsPanel() {
   const handleCompleteBooking = async (booking: Booking) => {
     const { error } = await supabase
       .from('bookings')
-      .update({ status: 'completed' })
+      .update({ status: 'completed', completed_at: new Date().toISOString() } as any)
       .eq('id', booking.id);
 
     if (error) {

@@ -289,8 +289,10 @@ export type Database = {
           client_name: string
           client_notes: string | null
           client_phone: string | null
+          completed_at: string | null
           confirmed_at: string | null
           created_at: string
+          followup_sent_at: string | null
           id: string
           owner_id: string
           page_id: string
@@ -312,8 +314,10 @@ export type Database = {
           client_name: string
           client_notes?: string | null
           client_phone?: string | null
+          completed_at?: string | null
           confirmed_at?: string | null
           created_at?: string
+          followup_sent_at?: string | null
           id?: string
           owner_id: string
           page_id: string
@@ -335,8 +339,10 @@ export type Database = {
           client_name?: string
           client_notes?: string | null
           client_phone?: string | null
+          completed_at?: string | null
           confirmed_at?: string | null
           created_at?: string
+          followup_sent_at?: string | null
           id?: string
           owner_id?: string
           page_id?: string
@@ -3620,6 +3626,10 @@ export type Database = {
       apply_referral: {
         Args: { p_code: string; p_referred_user_id: string }
         Returns: Json
+      }
+      auto_complete_past_bookings: {
+        Args: { p_owner_id: string }
+        Returns: number
       }
       check_email_registered_for_event: {
         Args: { p_email: string; p_event_id: string }
