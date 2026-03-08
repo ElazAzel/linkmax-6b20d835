@@ -197,12 +197,15 @@ export const DealDetailSheet = memo(function DealDetailSheet({
 
         <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
           <div className="px-6">
-            <TabsList className="w-full grid grid-cols-4">
+            <TabsList className="w-full grid grid-cols-5">
               <TabsTrigger value="timeline" className="text-xs min-h-11">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
+              <TabsTrigger value="comments" className="text-xs min-h-11">
+                <MessageSquare className="w-3.5 h-3.5 mr-1.5" />
+                {comments.length > 0 && <span className="ml-1">({comments.length})</span>}
+              </TabsTrigger>
               <TabsTrigger value="products" className="text-xs min-h-11">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
               <TabsTrigger value="tasks" className="text-xs min-h-11">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
               <TabsTrigger value="docs" className="text-xs min-h-11">Документы ({linkedDocs.length})</TabsTrigger>
-              <TabsTrigger value="info" className="text-xs min-h-11">{t('common.details', 'Info')}</TabsTrigger>
             </TabsList>
           </div>
 
