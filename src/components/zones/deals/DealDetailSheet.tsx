@@ -228,7 +228,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       </div>
                       <div className="flex flex-col">
                         <p className="text-sm font-medium leading-tight">{activity.summary}</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {new Date(activity.happened_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                         </p>
                       </div>
