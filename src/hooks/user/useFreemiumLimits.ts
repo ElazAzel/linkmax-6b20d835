@@ -2,8 +2,10 @@ import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { storage } from '@/lib/storage';
 
 // Block tiers based on pricing plans (Free + Pro only)
+// booking + form moved to FREE to enable core thesis: social traffic → booking → prepayment
 export const FREE_BLOCKS = [
-  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'faq'
+  'profile', 'link', 'text', 'image', 'button', 'socials', 'separator', 'messenger', 'map', 'avatar', 'faq',
+  'booking', 'form'
 ] as const;
 
 export const PRO_BLOCKS = [
