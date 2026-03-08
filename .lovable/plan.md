@@ -1,182 +1,103 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+# План Недели 3: Отчёты и Бизнес-Аналитика
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+## Текущее состояние
 
-### Новая тарифная модель (ADR 0026)
+**ZoneAnalyticsScreen уже содержит:**
+- 5 KPI-карточек (Open Deals Value, Win Rate, Tasks Completed, Paid Invoices, New Contacts)
+- Воронка продаж (BarChart по стадиям)
+- Timeline выручки (LineChart по оплаченным инвойсам)
+- Метрики задач (completed/pending/overdue)
+- Фильтр периода + Excel export
 
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+**Чего не хватает:**
+1. **P&L отчет** — нет модели расходов, можно показать только доходы (paid invoices)
+2. **Метрики команды** — задачи по assignee_user_id (данные есть в zone_tasks)
+3. **PDF-экспорт** — использовать существующий паттерн из `pdf-export-invoice.ts`
+4. **Конверсия сделок** — показать won/lost по периодам с трендом
 
 ---
 
-## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
+## План реализации
 
-| Задача | Статус |
-|--------|--------|
-| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
-| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
-| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
-| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
-| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
+### Task 1: Расширить useZoneAnalytics — метрики команды
 
----
+Добавить в `useZoneAnalytics.ts`:
+```typescript
+// Team metrics by assignee
+const teamMetrics = useMemo(() => {
+  const byAssignee: Record<string, { name: string; total: number; completed: number; avgTime: number }> = {};
+  // Group tasks by assignee_user_id, calculate completion rate
+}, [tasks, members]);
+```
 
-## ⏳ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика
+### Task 2: Добавить секцию Team Performance в ZoneAnalyticsScreen
 
-- [ ] Добавить P&L отчет (доходы vs расходы по инвойсам)
-- [ ] Добавить воронку конверсии сделок по стадиям
-- [ ] Добавить метрики команды (задачи по исполнителям)
-- [ ] PDF-экспорт отчетов
-- [ ] Метрики биллинга: конверсия Starter→Pro, GMV
+- Таблица: Исполнитель | Всего задач | Выполнено | % | Avg. время закрытия
+- Горизонтальный BarChart по исполнителям
+- Использовать данные из `zone_tasks.assignee_user_id` + `zone_members` для имен
 
----
+### Task 3: Добавить P&L Summary Card
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+Поскольку расходов нет в системе, показываем:
+- Gross Revenue (оплаченные инвойсы)
+- Pending Revenue (ожидающие инвойсы)
+- Опционально: комиссия платформы (7%/1%/0% по тиру)
 
-## Текущее состояние LinkMAX Business Zones
+### Task 4: Добавить Conversion Trend
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+- Won vs Lost deals по неделям/месяцам
+- AreaChart с двумя линиями (won/lost)
+- Показать тренд: ↑ улучшение / ↓ ухудшение
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+### Task 5: PDF-экспорт отчета
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+Создать `src/lib/export/pdf-export-analytics.ts`:
+- Использовать паттерн из `pdf-export-invoice.ts`
+- Включить: KPI summary, Funnel данные, Team metrics, Revenue timeline
+- Transliteration для Cyrillic (jsPDF ограничение)
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+### Task 6: Интегрировать PDF кнопку в ZoneAnalyticsScreen
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
-
-### Фаза 3: Tasks -- закрытие пробелов (P1)
-
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
-
-### Фаза 4: Аналитика Зоны (P1)
-
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+- Добавить кнопку "PDF" рядом с "Excel"
+- Вызывать новую функцию экспорта
 
 ---
 
-## Что НЕ нужно копировать из Bitrix24
+## Файлы для изменения
 
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
-
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
-
----
-
-## Приоритезация (RICE)
-
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+| Файл | Изменение |
+|------|-----------|
+| `src/hooks/zones/useZoneAnalytics.ts` | Добавить teamMetrics, conversionTrend |
+| `src/components/zones/ZoneAnalyticsScreen.tsx` | Добавить Team Performance section, P&L card, Conversion chart, PDF button |
+| `src/lib/export/pdf-export-analytics.ts` | **Создать** — экспорт аналитики в PDF |
+| `src/i18n/locales/*.json` | Новые ключи для метрик команды |
+| `.lovable/plan.md` | Обновить статус Недели 3 |
 
 ---
 
-## Технический план реализации
+## Технические детали
 
-### DB миграции (новые таблицы/колонки)
+**Team Metrics Query:**
+```typescript
+// Группировка задач по assignee
+tasks.reduce((acc, task) => {
+  const assignee = task.assignee_user_id || 'unassigned';
+  if (!acc[assignee]) acc[assignee] = { total: 0, completed: 0, times: [] };
+  acc[assignee].total++;
+  if (task.status === 'done') {
+    acc[assignee].completed++;
+    // Calculate time from created_at to updated_at
+  }
+  return acc;
+}, {});
+```
 
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
+**PDF Structure:**
+1. Header: Zone name, Period, Generated date
+2. KPI Summary table
+3. Funnel breakdown
+4. Team performance table
+5. Revenue timeline (text summary, not chart)
 
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
-
----
-
-## Рекомендуемый порядок реализации
-
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
