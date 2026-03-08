@@ -25,10 +25,9 @@ export async function exportContactsToExcel(
     { header: 'Компания', key: 'company', width: 25 },
     { header: 'Должность', key: 'position', width: 20 },
     { header: 'Telegram', key: 'telegram', width: 20 },
-    { header: 'Instagram', key: 'instagram', width: 20 },
-    { header: 'WhatsApp', key: 'whatsapp', width: 20 },
     { header: 'Теги', key: 'tags', width: 30 },
     { header: 'Создан', key: 'created_at', width: 20 },
+  ];
   ];
 
   // Style header row
