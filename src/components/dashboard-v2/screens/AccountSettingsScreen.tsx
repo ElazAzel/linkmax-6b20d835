@@ -346,7 +346,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
                 iconBg="bg-slate-500/15"
                 iconColor="text-slate-500"
                 label={t('dashboard.accountSettings.billingHistory', 'Billing History')}
-                onClick={() => {/* TODO: Open billing history */ }}
+                onClick={() => setShowBillingSheet(true)}
               />
             )}
           </Card>
