@@ -1,170 +1,118 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
+# План Недели 2: Платежи и Биллинг
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+## Текущее состояние
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+**Что есть:**
+- Edge Functions `create-payment-session` и `robokassa-webhook` существуют с полной логикой Robokassa
+- `zone_subscriptions` таблица есть в БД для зон
+- `AccountSettingsScreen.tsx` содержит TODO: `{/* TODO: Open billing history */}` и `{/* TODO: Open password change */}`
+- `DealDetailSheet.tsx` уже есть с кнопками контактов (Call, Email, WhatsApp)
 
-### Новая тарифная модель (ADR 0026)
-
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+**Чего не хватает:**
+1. Таблицы `orders` — на неё ссылаются Edge Functions, но её нет в БД
+2. Таблицы `billing_history` для истории платежей пользователя
+3. UI смены пароля в AccountSettings
+4. UI истории биллинга в AccountSettings
+5. Интеграции Kaspi QR в карточку сделки
 
 ---
 
-## ⏳ Неделя 2 (16-22 марта): Платежи и биллинг
+## План реализации
 
-- [ ] Доработать `create-payment-session` Edge Function
-- [ ] Реализовать `robokassa-webhook` 
-- [ ] Создать таблицу `billing_history`
-- [ ] Реализовать смену пароля в AccountSettings
-- [ ] Интегрировать Kaspi QR в карточку сделки
+### Task 1: Создать таблицы `orders` и `billing_history`
+**DB Migration:**
+```sql
+-- Orders table (for payment processing)
+CREATE TABLE public.orders (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  zone_id uuid REFERENCES public.zones(id) ON DELETE SET NULL,
+  amount numeric NOT NULL,
+  currency text NOT NULL DEFAULT 'KZT',
+  provider text NOT NULL DEFAULT 'robokassa',
+  description text,
+  status text NOT NULL DEFAULT 'pending', -- pending, completed, failed, cancelled
+  metadata jsonb DEFAULT '{}',
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
 
----
+-- Billing history (human-readable records)
+CREATE TABLE public.billing_history (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  order_id uuid REFERENCES public.orders(id) ON DELETE SET NULL,
+  type text NOT NULL, -- 'subscription', 'zone_upgrade', 'payment', 'refund'
+  amount numeric NOT NULL,
+  currency text NOT NULL DEFAULT 'KZT',
+  description text,
+  status text NOT NULL DEFAULT 'completed',
+  created_at timestamptz DEFAULT now()
+);
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+-- RLS policies
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.billing_history ENABLE ROW LEVEL SECURITY;
 
-## Текущее состояние LinkMAX Business Zones
+-- Users can view their own orders/billing
+CREATE POLICY "Users view own orders" ON public.orders FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "Users view own billing" ON public.billing_history FOR SELECT USING (user_id = auth.uid());
+```
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+### Task 2: Обновить `robokassa-webhook` для записи в `billing_history`
+После успешной оплаты добавить INSERT в `billing_history`:
+```typescript
+// После обновления статуса order на 'completed':
+await supabase.from('billing_history').insert({
+  user_id: shp_user,
+  order_id: invId,
+  type: shp_type || 'subscription',
+  amount: parseFloat(outSum),
+  currency: 'KZT',
+  description: `Payment completed via Robokassa`,
+  status: 'completed'
+});
+```
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+### Task 3: Реализовать UI смены пароля
+**Файл:** `src/components/settings/ChangePasswordDialog.tsx`
+- Dialog с полями: current password, new password, confirm password
+- Валидация: минимум 8 символов, совпадение паролей
+- Вызов `supabase.auth.updateUser({ password })`
+- Локализация на 4 языка
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+### Task 4: Реализовать UI истории биллинга
+**Файл:** `src/components/settings/BillingHistorySheet.tsx`
+- Sheet с таблицей: дата, описание, сумма, статус
+- Запрос к `billing_history` по `user_id`
+- Empty state если нет записей
+- Локализация
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+### Task 5: Интегрировать в `AccountSettingsScreen.tsx`
+- Импортировать `ChangePasswordDialog` и `BillingHistorySheet`
+- Заменить TODO на реальные onClick handlers
+- Добавить state для открытия диалогов
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
-
-### Фаза 3: Tasks -- закрытие пробелов (P1)
-
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
-
-### Фаза 4: Аналитика Зоны (P1)
-
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
-
----
-
-## Что НЕ нужно копировать из Bitrix24
-
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
-
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+### Task 6: Добавить Kaspi QR в `DealDetailSheet.tsx`
+**Файл:** `src/components/zones/deals/KaspiQRGenerator.tsx`
+- Компонент генерации QR-кода для оплаты через Kaspi
+- Использует `qrcode.react` (уже установлен)
+- Формат deeplink: `https://kaspi.kz/pay?merchantId=...&amount=...`
+- Кнопка "Kaspi QR" в карточке сделки рядом с Contact actions
 
 ---
 
-## Приоритезация (RICE)
+## Файлы для создания
+- `src/components/settings/ChangePasswordDialog.tsx`
+- `src/components/settings/BillingHistorySheet.tsx`
+- `src/components/zones/deals/KaspiQRGenerator.tsx`
 
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+## Файлы для изменения
+- `supabase/functions/robokassa-webhook/index.ts` — добавить billing_history insert
+- `src/components/dashboard-v2/screens/AccountSettingsScreen.tsx` — подключить диалоги
+- `src/components/zones/deals/DealDetailSheet.tsx` — добавить Kaspi QR кнопку
+- `src/i18n/locales/*.json` — новые ключи для billing/password
 
----
-
-## Технический план реализации
-
-### DB миграции (новые таблицы/колонки)
-
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
-
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
-
----
-
-## Рекомендуемый порядок реализации
-
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+## Миграция БД
+- `orders` и `billing_history` таблицы с RLS
