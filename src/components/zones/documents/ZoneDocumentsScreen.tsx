@@ -347,6 +347,17 @@ export const ZoneDocumentsScreen = () => {
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="bg-popover border-border">
+                                                        {doc.template_id && (
+                                                            <>
+                                                                <DropdownMenuItem onClick={() => {
+                                                                    setSelectedDocument(doc);
+                                                                    setIsGeneratorOpen(true);
+                                                                }}>
+                                                                    <Sparkles className="w-4 h-4 mr-2" /> {t('zones.documents.actions.generate', 'Generate PDF')}
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuSeparator />
+                                                            </>
+                                                        )}
                                                         {doc.file_url && (
                                                             <>
                                                                 <DropdownMenuItem onClick={() => window.open(doc.file_url!, '_blank')}>
