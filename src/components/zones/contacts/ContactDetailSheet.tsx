@@ -295,7 +295,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <span className="font-medium text-sm truncate">{deal.title}</span>
                           {getStatusBadge(deal.status)}
                         </div>
-                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           {deal.stage && (
                             <span className="flex items-center gap-1">
                               <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: deal.stage.color }} />
