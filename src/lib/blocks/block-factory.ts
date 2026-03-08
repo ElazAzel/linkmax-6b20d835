@@ -236,7 +236,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
       { name: 'Алина К.', text: 'Отличный сервис! Очень рекомендую.', rating: 5, role: 'Клиент' },
       { name: 'Дмитрий М.', text: 'Профессиональный подход к делу.', rating: 5, role: 'Клиент' },
     ],
-    isPremium: true,
     blockStyle: {
       padding: 'lg',
       borderRadius: 'lg',
