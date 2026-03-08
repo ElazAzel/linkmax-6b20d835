@@ -272,11 +272,11 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <div className="absolute left-0 top-1 w-[24px] h-[24px] rounded-full bg-background border-2 border-primary flex items-center justify-center z-10">
                             <Badge className="p-0 bg-primary h-1.5 w-1.5 rounded-full" />
                           </div>
-                          <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
-                            <div className="flex justify-between items-start">
-                              <span className="text-[10px] uppercase font-bold text-muted-foreground">{note.type}</span>
-                              <span className="text-[10px] text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
-                            </div>
+                            <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
+                              <div className="flex justify-between items-start">
+                                <span className="text-xs uppercase font-bold text-muted-foreground">{note.type}</span>
+                                <span className="text-xs text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                              </div>
                             <p className="text-sm whitespace-pre-wrap">{note.content}</p>
                           </div>
                         </div>
