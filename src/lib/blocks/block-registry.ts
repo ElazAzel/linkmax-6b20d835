@@ -31,7 +31,6 @@ export const PREMIUM_BLOCK_TYPES = [
   'video',
   'carousel',
   'custom_code',
-  'form',
   'newsletter',
   'testimonial',
   'scratch',
@@ -43,7 +42,6 @@ export const PREMIUM_BLOCK_TYPES = [
   'pricing',
   'shoutout',
   'community',
-  'booking',
   'event',
   'search',
 ] as const;
