@@ -185,7 +185,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
           <SheetTitle className="flex items-center gap-2">
             <span className="truncate">{deal.title}</span>
             {deal.status !== 'open' && (
-              <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-[10px]">
+              <Badge variant={deal.status === 'won' ? 'default' : 'destructive'} className="text-xs">
                 {deal.status === 'won' ? `✓ ${t('zones.deals.win', 'Won')}` : `✗ ${t('zones.deals.lose', 'Lost')}`}
               </Badge>
             )}
@@ -195,11 +195,11 @@ export const DealDetailSheet = memo(function DealDetailSheet({
         <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
           <div className="px-6">
             <TabsList className="w-full grid grid-cols-4">
-              <TabsTrigger value="timeline" className="text-[10px]">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
-              <TabsTrigger value="products" className="text-[10px]">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
-              <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
-              <TabsTrigger value="docs" className="text-[10px]">Документы ({linkedDocs.length})</TabsTrigger>
-              <TabsTrigger value="info" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
+              <TabsTrigger value="timeline" className="text-xs min-h-11">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
+              <TabsTrigger value="products" className="text-xs min-h-11">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
+              <TabsTrigger value="tasks" className="text-xs min-h-11">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+              <TabsTrigger value="docs" className="text-xs min-h-11">Документы ({linkedDocs.length})</TabsTrigger>
+              <TabsTrigger value="info" className="text-xs min-h-11">{t('common.details', 'Info')}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -228,7 +228,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       </div>
                       <div className="flex flex-col">
                         <p className="text-sm font-medium leading-tight">{activity.summary}</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {new Date(activity.happened_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                         </p>
                       </div>
@@ -252,7 +252,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     <div key={dp.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 border border-muted group">
                       <div className="min-w-0">
                         <p className="text-sm font-medium truncate">{dp.zone_products?.name || 'Product'}</p>
-                        <p className="text-[10px] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           {dp.quantity} x {dp.unit_price?.toLocaleString()} {deal.currency}
                         </p>
                       </div>
@@ -274,7 +274,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                 {isAddingProduct ? (
                   <div className="p-3 rounded-lg border bg-muted/20 space-y-3">
                     <div className="space-y-1">
-                      <Label className="text-[10px]">{t('zones.deals.selectProduct', 'Select Product')}</Label>
+                      <Label className="text-xs">{t('zones.deals.selectProduct', 'Select Product')}</Label>
                       <Select value={selectedProductId} onValueChange={setSelectedProductId}>
                         <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={t('zones.deals.selectPlaceholder', 'Select...')} /></SelectTrigger>
                         <SelectContent>
@@ -286,7 +286,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     </div>
                     <div className="flex gap-2">
                       <div className="flex-1 space-y-1">
-                        <Label className="text-[10px]">{t('zones.deals.qty', 'Qty')}</Label>
+                        <Label className="text-xs">{t('zones.deals.qty', 'Qty')}</Label>
                         <Input type="number" value={newProdQty} onChange={e => setNewProdQty(Number(e.target.value))} className="h-8" />
                       </div>
                       <div className="flex items-end gap-1">
@@ -313,12 +313,12 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           <CheckSquare className={cn("h-4 w-4 shrink-0", task.status === 'done' ? "text-green-600" : "text-muted-foreground")} />
                           <span className="text-sm font-medium truncate">{task.title}</span>
                         </div>
-                        <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-[10px]">
+                        <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-xs">
                           {task.status}
                         </Badge>
                       </div>
                       {task.due_date && (
-                        <p className="text-[10px] text-muted-foreground mt-1 ml-6">
+                        <p className="text-xs text-muted-foreground mt-1 ml-6">
                           {t('zones.tasks.due', 'Due:')} {new Date(task.due_date).toLocaleDateString()}
                         </p>
                       )}
@@ -345,13 +345,13 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           <FileSignature className="h-4 w-4 shrink-0 text-primary" />
                           <div className="min-w-0">
                             <span className="text-sm font-medium truncate block">{doc.title}</span>
-                            <span className="text-[10px] text-muted-foreground block">
+                            <span className="text-xs text-muted-foreground block">
                               {format(new Date(doc.created_at), 'd MMM yyyy', { locale: ru })}
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Badge variant="outline" className="text-[10px] bg-primary/10 mr-1">
+                          <Badge variant="outline" className="text-xs bg-primary/10 mr-1">
                             {doc.status}
                           </Badge>
                           {doc.file_url && (

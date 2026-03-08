@@ -142,18 +142,18 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
         </div>
         <div className="flex gap-1 p-1 bg-muted/30 rounded-lg">
           {periodOptions.map(p => (
-            <Button
-              key={p.value}
-              size="sm"
-              variant={period === p.value ? 'secondary' : 'ghost'}
-              className={cn(
-                "text-[10px] h-6 px-2 rounded-md transition-all",
-                period === p.value ? "shadow-sm bg-background" : "text-muted-foreground"
-              )}
-              onClick={() => setPeriod(p.value)}
-            >
-              {p.label}
-            </Button>
+              <Button
+                key={p.value}
+                size="sm"
+                variant={period === p.value ? 'secondary' : 'ghost'}
+                className={cn(
+                  "text-xs min-h-11 px-3 rounded-md transition-all",
+                  period === p.value ? "shadow-sm bg-background" : "text-muted-foreground"
+                )}
+                onClick={() => setPeriod(p.value)}
+              >
+                {p.label}
+              </Button>
           ))}
         </div>
       </div>
@@ -239,8 +239,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                         return (
                           <div key={stage.name} className="group">
                             <div className="flex justify-between items-center mb-1 px-1">
-                              <span className="text-[10px] font-medium text-muted-foreground">{stage.name}</span>
-                              <span className="text-[10px] font-bold">{stage.value}</span>
+                              <span className="text-xs font-medium text-muted-foreground">{stage.name}</span>
+                              <span className="text-xs font-bold">{stage.value}</span>
                             </div>
                             <div className="h-6 bg-muted/20 rounded-lg overflow-hidden border border-border/10">
                               <div
@@ -276,7 +276,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                   <div className="text-2xl font-black text-warning mb-1">
                     {new Intl.NumberFormat('ru-KZ', { style: 'currency', currency: 'KZT', maximumFractionDigits: 0 }).format(metrics.pendingAmount)}
                   </div>
-                  <p className="text-[10px] text-muted-foreground">{t('zones.dashboard.pendingPaymentsDesc', 'Сумма всех активных инвойсов')}</p>
+                  <p className="text-xs text-muted-foreground">{t('zones.dashboard.pendingPaymentsDesc', 'Сумма всех активных инвойсов')}</p>
                 </CardContent>
               </Card>
 
@@ -287,7 +287,7 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-black text-destructive mb-1">{metrics.overdueTasks}</div>
-                  <p className="text-[10px] text-muted-foreground">{t('zones.dashboard.overdueTasksDesc', 'Требуют немедленного внимания')}</p>
+                  <p className="text-xs text-muted-foreground">{t('zones.dashboard.overdueTasksDesc', 'Требуют немедленного внимания')}</p>
                 </CardContent>
               </Card>
             </div>
@@ -316,8 +316,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                           <div className="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-primary bg-background z-10" />
 
                           <div className="space-y-1">
-                            <p className="text-[11px] font-bold group-hover:text-primary transition-colors line-clamp-2">{act.summary}</p>
-                            <p className="text-[10px] text-muted-foreground">
+                            <p className="text-xs font-bold group-hover:text-primary transition-colors line-clamp-2">{act.summary}</p>
+                            <p className="text-xs text-muted-foreground">
                               {formatRelativeTime(act.happened_at, 'ru')}
                             </p>
                           </div>
@@ -349,15 +349,15 @@ function MetricCard({ icon, label, value, sub, trend }: { icon: React.ReactNode;
             {icon}
           </div>
           {trend && (
-            <Badge variant="outline" className="text-[10px] font-bold text-green-500 bg-green-500/5 border-green-500/20">
-              {trend}
-            </Badge>
+          <Badge variant="outline" className="text-xs font-bold text-green-500 bg-green-500/5 border-green-500/20">
+            {trend}
+          </Badge>
           )}
         </div>
         <div className="space-y-0.5">
-          <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{label}</p>
+          <p className="text-xs uppercase font-bold text-muted-foreground tracking-widest">{label}</p>
           <p className="text-2xl font-black">{value}</p>
-          <p className="text-[10px] text-muted-foreground font-medium">{sub}</p>
+          <p className="text-xs text-muted-foreground font-medium">{sub}</p>
         </div>
       </CardContent>
     </Card>

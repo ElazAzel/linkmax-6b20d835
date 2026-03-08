@@ -187,7 +187,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                   Checklist
                 </Label>
                 {checklist.length > 0 && (
-                  <span className="text-[10px] font-bold text-muted-foreground">{checklistProgress}%</span>
+                  <span className="text-xs font-bold text-muted-foreground">{checklistProgress}%</span>
                 )}
               </div>
 
@@ -328,7 +328,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                 </select>
               </div>
 
-              <div className="pt-2 text-[10px] text-muted-foreground space-y-0.5">
+              <div className="pt-2 text-xs text-muted-foreground space-y-0.5">
                 <p>{t('tasks.createdAt', 'Created')}: {format(new Date(task.created_at), 'PPp')}</p>
                 {task.updated_at !== task.created_at && (
                   <p>Last update: {format(new Date(task.updated_at), 'PPp')}</p>
@@ -352,7 +352,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                       <span className="font-semibold text-xs text-primary">
                         {c.user?.raw_user_meta_data?.display_name || c.user?.email || t('common.unknownUser', 'Unknown')}
                       </span>
-                      <span className="text-[10px] text-muted-foreground">{format(new Date(c.created_at), 'HH:mm dd.MM')}</span>
+                      <span className="text-xs text-muted-foreground">{format(new Date(c.created_at), 'HH:mm dd.MM')}</span>
                     </div>
                     <p className="whitespace-pre-wrap">{c.content}</p>
                     <Button

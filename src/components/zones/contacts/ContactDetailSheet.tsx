@@ -149,9 +149,9 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'won': return <Badge className="bg-green-600 text-white text-[10px]">{t('zones.deals.won', 'Won')}</Badge>;
-      case 'lost': return <Badge variant="destructive" className="text-[10px]">{t('zones.deals.lost', 'Lost')}</Badge>;
-      default: return <Badge variant="outline" className="text-[10px]">{t('zones.deals.open', 'Open')}</Badge>;
+      case 'won': return <Badge className="bg-green-600 text-white text-xs">{t('zones.deals.won', 'Won')}</Badge>;
+      case 'lost': return <Badge variant="destructive" className="text-xs">{t('zones.deals.lost', 'Lost')}</Badge>;
+      default: return <Badge variant="outline" className="text-xs">{t('zones.deals.open', 'Open')}</Badge>;
     }
   };
 
@@ -231,10 +231,10 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
           <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
             <div className="px-6">
               <TabsList className="w-full grid grid-cols-4">
-                <TabsTrigger value="timeline" className="text-[10px]">{t('zones.contacts.notes', 'Timeline')}</TabsTrigger>
-                <TabsTrigger value="deals" className="text-[10px]">{t('zones.deals.title', 'Deals')} ({linkedDeals.length})</TabsTrigger>
-                <TabsTrigger value="tasks" className="text-[10px]">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
-                <TabsTrigger value="details" className="text-[10px]">{t('common.details', 'Info')}</TabsTrigger>
+                <TabsTrigger value="timeline" className="text-xs min-h-11">{t('zones.contacts.notes', 'Timeline')}</TabsTrigger>
+                <TabsTrigger value="deals" className="text-xs min-h-11">{t('zones.deals.title', 'Deals')} ({linkedDeals.length})</TabsTrigger>
+                <TabsTrigger value="tasks" className="text-xs min-h-11">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
+                <TabsTrigger value="details" className="text-xs min-h-11">{t('common.details', 'Info')}</TabsTrigger>
               </TabsList>
             </div>
 
@@ -272,11 +272,11 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <div className="absolute left-0 top-1 w-[24px] h-[24px] rounded-full bg-background border-2 border-primary flex items-center justify-center z-10">
                             <Badge className="p-0 bg-primary h-1.5 w-1.5 rounded-full" />
                           </div>
-                          <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
-                            <div className="flex justify-between items-start">
-                              <span className="text-[10px] uppercase font-bold text-muted-foreground">{note.type}</span>
-                              <span className="text-[10px] text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
-                            </div>
+                            <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
+                              <div className="flex justify-between items-start">
+                                <span className="text-xs uppercase font-bold text-muted-foreground">{note.type}</span>
+                                <span className="text-xs text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                              </div>
                             <p className="text-sm whitespace-pre-wrap">{note.content}</p>
                           </div>
                         </div>
@@ -295,7 +295,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <span className="font-medium text-sm truncate">{deal.title}</span>
                           {getStatusBadge(deal.status)}
                         </div>
-                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           {deal.stage && (
                             <span className="flex items-center gap-1">
                               <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: deal.stage.color }} />
@@ -317,12 +317,12 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium truncate">{task.title}</span>
-                          <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-[10px]">
+                          <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-xs">
                             {task.status}
                           </Badge>
                         </div>
                         {task.due_date && (
-                          <p className="text-[10px] text-muted-foreground mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {t('zones.tasks.due', 'Due:')} {new Date(task.due_date).toLocaleDateString()}
                           </p>
                         )}

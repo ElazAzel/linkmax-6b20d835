@@ -363,7 +363,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
                   <div className="flex items-center gap-2">
                     <p className="font-medium truncate">{contact.name}</p>
                     {contact.company && (
-                      <Badge variant="outline" className="text-[10px] font-normal py-0">
+                      <Badge variant="outline" className="text-xs font-normal py-0">
                         {contact.company}
                       </Badge>
                     )}
@@ -383,10 +383,10 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
                 {contact.tags && contact.tags.length > 0 && (
                   <div className="flex gap-1 flex-wrap">
                     {contact.tags.slice(0, 2).map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-[10px] px-1.5">{tag}</Badge>
+                      <Badge key={tag} variant="secondary" className="text-xs px-1.5">{tag}</Badge>
                     ))}
                     {contact.tags.length > 2 && (
-                      <Badge variant="secondary" className="text-[10px] px-1.5">+{contact.tags.length - 2}</Badge>
+                      <Badge variant="secondary" className="text-xs px-1.5">+{contact.tags.length - 2}</Badge>
                     )}
                   </div>
                 )}
