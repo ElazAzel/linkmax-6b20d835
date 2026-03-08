@@ -5293,19 +5293,17 @@
     "status": "Статус"
   },
   "streak": {
-    "title": "Полоса",
+    "title": "Серия",
     "keepGoing": "Продолжайте в том же духе!",
-    "days": "дни",
-    "nextMilestone": "Следующая веха",
-    "bonusDays": "бонусные дни",
-    "best": "Лучший",
-    "earned": "Заработано",
-    "milestoneReached": "Веха достигнута!",
-    "milestoneDescription": "Поздравляем с достижением новой вехи в серии!",
-    "bonusEarned": "Ты",
-    "bonusTrialDays": "бонусные пробные дни!",
-    "awesome": "Потрясающий!",
-    "milestones": "Вехи серии"
+    "days": "дн.",
+    "currentStreak": "Текущая серия",
+    "longestStreak": "Лучшая серия",
+    "streakFrozen": "Серия заморожена",
+    "loginTomorrow": "Зайдите завтра, чтобы продолжить серию!",
+    "bonusDays": "бонусных дней!",
+    "bonusTrialDays": "бонусных пробных дней!",
+    "awesome": "Отлично!",
+    "milestones": "Достижения серии"
   },
   "structure": {
     "title": "Структура",
