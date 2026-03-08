@@ -45,7 +45,6 @@ export const PREMIUM_BLOCK_TYPES = [
   'shoutout',
   'community',
   'event',
-  'search',
 ] as const;
 
 /**
