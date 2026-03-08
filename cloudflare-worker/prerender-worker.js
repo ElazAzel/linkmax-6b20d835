@@ -379,12 +379,12 @@ async function handleRequest(request, env) {
     return response;
   }
 
-  // 7. Whitelisted marketing pages - always origin
+  // 7. Whitelisted marketing pages - origin for humans (bots already handled above)
   if (isWhitelisted(first)) {
     return fetch(request);
   }
 
-  // 8. Multi-segment paths (e.g., /experts/beauty) - origin
+  // 8. Multi-segment paths (e.g., /experts/beauty) - origin for humans (bots handled above)
   if (segments.length > 1) {
     return fetch(request);
   }

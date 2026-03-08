@@ -33,7 +33,7 @@ import {
   truncate,
   buildHreflangLinks,
 } from './seo-helpers.ts';
-import { buildGalleryHtml, buildLandingHtml, type GalleryItem, type LanguageKey } from './ssr-templates.ts';
+import { buildGalleryHtml, buildLandingHtml, buildMarketingPageHtml, type GalleryItem, type LanguageKey } from './ssr-templates.ts';
 
 const BASE_URL = 'https://lnkmx.my';
 const LANGUAGES = ['ru', 'en', 'kk'] as const;
