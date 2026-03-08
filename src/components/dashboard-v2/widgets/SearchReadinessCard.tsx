@@ -1,12 +1,20 @@
 /**
- * SearchReadinessCard — shows search readiness score + actionable checklist + diagnostics
+ * SearchReadinessCard — shows search readiness score + actionable checklist + server diagnostics
+ * 
+ * State model:
+ * 1. Instant: client-side preview (computeQualityScore) — shown immediately as user edits
+ * 2. Confirmed: server diagnostics (get_page_search_diagnostics) — fetched after save/publish
+ * 
+ * Preview is labeled "предпросмотр", confirmed is labeled "проверено"
  */
-import { memo, useMemo, useState } from 'react';
+import { memo, useMemo, useState, useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
-import { computeQualityScore, getSearchReadinessStatus, EXCLUSION_LABELS, type ExclusionReason } from '@/lib/seo/quality-score';
+import { computeQualityScore, getSearchReadinessStatus, type QualityBreakdown } from '@/lib/seo/quality-score';
+import { fetchPageSearchDiagnostics } from '@/lib/seo/indexnow-client';
 import Search from 'lucide-react/dist/esm/icons/search';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Circle from 'lucide-react/dist/esm/icons/circle';
@@ -14,6 +22,7 @@ import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Globe from 'lucide-react/dist/esm/icons/globe';
 import FileX from 'lucide-react/dist/esm/icons/file-x';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import RefreshCw from 'lucide-react/dist/esm/icons/refresh-cw';
 import type { PageData } from '@/types/page';
 
 interface SearchReadinessCardProps {
@@ -21,17 +30,47 @@ interface SearchReadinessCardProps {
 }
 
 export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData }: SearchReadinessCardProps) {
-  const breakdown = useMemo(() => computeQualityScore(pageData), [pageData]);
-  const { label, color } = useMemo(() => getSearchReadinessStatus(breakdown.score), [breakdown.score]);
+  // 1. Client-side preview (instant, on every keystroke)
+  const preview = useMemo(() => computeQualityScore(pageData), [pageData]);
+  
+  // 2. Server diagnostics (fetched after save, authoritative)
+  const pageId = pageData.id;
+  const { data: serverDiag, isLoading: diagLoading, dataUpdatedAt } = useQuery({
+    queryKey: ['search-diagnostics', pageId],
+    queryFn: () => fetchPageSearchDiagnostics(pageId),
+    enabled: !!pageId,
+    staleTime: 30_000, // 30s — refetch naturally after saves
+    refetchOnWindowFocus: false,
+  });
+
+  // Determine which source to display
+  const hasServerData = !!serverDiag && !('error' in serverDiag);
+  const serverScore = hasServerData ? serverDiag.quality_score : null;
+  const isServerStale = hasServerData && Math.abs((serverScore ?? 0) - preview.score) > 5;
+  
+  // Use server score when available and fresh, preview otherwise
+  const displayScore = hasServerData && !isServerStale ? serverScore! : preview.score;
+  const { label, color } = useMemo(() => getSearchReadinessStatus(displayScore), [displayScore]);
+
+  // Server-authoritative statuses
+  const isPublished = hasServerData ? serverDiag.is_published : !!pageData.isPublished;
+  const isIndexable = hasServerData ? serverDiag.is_indexable : preview.isIndexable;
+  const inSitemap = hasServerData ? serverDiag.included_in_sitemap : preview.isIndexable;
+  const childCount = hasServerData ? serverDiag.child_page_count : preview.serviceCount;
+  const lastIndexNow = hasServerData ? serverDiag.last_indexnow_at : null;
+
+  const failedChecks = preview.checks.filter(c => !c.passed);
+  const passedCount = preview.checks.filter(c => c.passed).length;
   const [expanded, setExpanded] = useState(false);
 
-  const failedChecks = breakdown.checks.filter(c => !c.passed);
-  const passedCount = breakdown.checks.filter(c => c.passed).length;
-
-  // Derive sitemap/index status
-  const isPublished = !!pageData.isPublished;
-  const isIndexable = breakdown.isIndexable;
-  const inSitemap = isIndexable; // Same rule: published + score >= 40
+  // Source indicator
+  const sourceLabel = hasServerData && !isServerStale
+    ? 'Проверено сервером'
+    : isServerStale
+      ? 'Изменения ещё не пересчитаны'
+      : diagLoading
+        ? 'Проверка...'
+        : 'Предпросмотр';
 
   return (
     <Card className="p-5 space-y-4 glass-card border-white/10 shadow-glass">
@@ -62,10 +101,21 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
             </p>
           </div>
         </div>
-        <span className="text-lg font-black tabular-nums">{breakdown.score}<span className="text-xs text-muted-foreground font-medium">/100</span></span>
+        <div className="text-right">
+          <span className="text-lg font-black tabular-nums">{displayScore}<span className="text-xs text-muted-foreground font-medium">/100</span></span>
+          <div className="flex items-center gap-1 justify-end">
+            {diagLoading && <RefreshCw className="h-2.5 w-2.5 text-muted-foreground animate-spin" />}
+            <span className={cn(
+              'text-[9px]',
+              hasServerData && !isServerStale ? 'text-emerald-600' : 'text-muted-foreground'
+            )}>
+              {sourceLabel}
+            </span>
+          </div>
+        </div>
       </div>
 
-      <Progress value={breakdown.score} className="h-2" />
+      <Progress value={displayScore} className="h-2" />
 
       {/* Status badges */}
       <div className="flex flex-wrap gap-1.5">
@@ -91,18 +141,23 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
             В sitemap
           </Badge>
         )}
-        {breakdown.serviceCount > 0 && isIndexable && (
+        {childCount > 0 && isIndexable && (
           <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary bg-primary/5">
-            {breakdown.serviceCount} {breakdown.serviceCount === 1 ? 'услуга' : 'услуг'}
+            {childCount} {childCount === 1 ? 'услуга' : 'услуг'}
+          </Badge>
+        )}
+        {lastIndexNow && (
+          <Badge variant="outline" className="text-[10px] gap-1 border-muted-foreground/20 text-muted-foreground">
+            IndexNow: {new Date(lastIndexNow).toLocaleDateString('ru')}
           </Badge>
         )}
       </div>
 
-      {/* Failed checks */}
+      {/* Failed checks (always from client preview for instant feedback) */}
       {failedChecks.length > 0 && (
         <div className="space-y-2">
           <p className="text-xs text-muted-foreground font-medium">
-            Заполнено {passedCount} из {breakdown.checks.length}
+            Заполнено {passedCount} из {preview.checks.length}
           </p>
           <ul className="space-y-1.5">
             {failedChecks.slice(0, expanded ? failedChecks.length : 3).map(check => (

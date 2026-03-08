@@ -2,6 +2,14 @@
  * IndexNow notification Edge Function
  * Submits URLs to search engines and logs every submission to indexing_submissions table.
  * Accepts: { urls: string[], page_id?: string, action_type?: string, child_type?: string }
+ * 
+ * Status semantics:
+ * - sent: provider responded 2xx
+ * - provider_failed: provider responded non-2xx or network error
+ * - skipped_throttled: client indicated throttle (logged but not sent)
+ * - skipped_not_indexable: page below quality threshold
+ * - skipped_unpublished: page not published
+ * - skipped_missing_url: no valid URLs provided
  */
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
@@ -18,8 +26,9 @@ const HOST = 'lnkmx.my';
 interface SubmitRequest {
   urls?: string[];
   page_id?: string;
-  action_type?: string;  // publish | update | unpublish | delete
-  child_type?: string;   // null | service | event
+  action_type?: string;
+  child_type?: string;
+  skip_reason?: string; // Client can pass skip reason for logging without sending
 }
 
 serve(async (req: Request) => {
@@ -33,9 +42,22 @@ serve(async (req: Request) => {
 
   try {
     const body = await req.json() as SubmitRequest;
-    const { urls, page_id, action_type = 'update', child_type } = body;
+    const { urls, page_id, action_type = 'update', child_type, skip_reason } = body;
 
     if (!urls || !Array.isArray(urls) || urls.length === 0) {
+      // Log skip if page_id provided
+      if (page_id && skip_reason) {
+        await db.from('indexing_submissions').insert({
+          page_id,
+          target_url: `https://${HOST}/unknown`,
+          child_type: child_type || null,
+          action_type,
+          provider: 'none',
+          submission_status: `skipped_${skip_reason}`,
+          skip_reason,
+          batch_id: crypto.randomUUID().slice(0, 8),
+        });
+      }
       return new Response(JSON.stringify({ error: 'urls array required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -63,10 +85,12 @@ serve(async (req: Request) => {
       { name: 'yandex', url: 'https://yandex.com/indexnow' },
     ];
 
-    const results: { provider: string; status: number }[] = [];
+    const results: { provider: string; status: number; submission_status: string }[] = [];
 
     for (const prov of providers) {
       let httpStatus = 0;
+      let submissionStatus = 'provider_failed';
+      
       try {
         const res = await fetch(prov.url, {
           method: 'POST',
@@ -74,12 +98,15 @@ serve(async (req: Request) => {
           body: JSON.stringify(payload),
         });
         httpStatus = res.status;
+        submissionStatus = httpStatus >= 200 && httpStatus < 300 ? 'sent' : 'provider_failed';
       } catch (e) {
         console.error(`[IndexNow] ${prov.name} error:`, e);
+        submissionStatus = 'provider_failed';
       }
-      results.push({ provider: prov.name, status: httpStatus });
+      
+      results.push({ provider: prov.name, status: httpStatus, submission_status: submissionStatus });
 
-      // Log each provider submission per URL
+      // Log each provider submission
       if (page_id) {
         const rows = validUrls.map(url => ({
           page_id,
@@ -87,7 +114,7 @@ serve(async (req: Request) => {
           child_type: child_type || null,
           action_type,
           provider: prov.name,
-          submission_status: httpStatus >= 200 && httpStatus < 300 ? 'sent' : httpStatus === 0 ? 'failed' : 'sent',
+          submission_status: submissionStatus,
           http_status: httpStatus || null,
           batch_id: batchId,
         }));
