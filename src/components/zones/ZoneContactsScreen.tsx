@@ -363,7 +363,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
                   <div className="flex items-center gap-2">
                     <p className="font-medium truncate">{contact.name}</p>
                     {contact.company && (
-                      <Badge variant="outline" className="text-[10px] font-normal py-0">
+                      <Badge variant="outline" className="text-xs font-normal py-0">
                         {contact.company}
                       </Badge>
                     )}
