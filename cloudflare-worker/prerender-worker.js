@@ -17,7 +17,7 @@
 // const FUNCTION_URL = `https://${env.SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
 
 // WHITELIST: Marketing/static pages - NOT treated as slugs
-// These pages have their own SPA routes
+// These pages have their own SPA routes and get SSR for bots
 const WHITELIST_PAGES = new Set([
   '',           // root /
   'pricing',
@@ -27,6 +27,20 @@ const WHITELIST_PAGES = new Set([
   'terms',
   'privacy',
   'contact',
+  'for-masters',
+  'seo-landing',
+  'payment-terms',
+]);
+
+// Marketing pages that should get SSR for bots (subset of WHITELIST)
+const SSR_MARKETING_PAGES = new Set([
+  'pricing',
+  'alternatives',
+  'terms',
+  'privacy',
+  'for-masters',
+  'seo-landing',
+  'payment-terms',
 ]);
 
 // BLACKLIST: Private pages - never SSR, never index
