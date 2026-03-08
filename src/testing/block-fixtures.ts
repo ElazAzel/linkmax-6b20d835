@@ -140,7 +140,6 @@ export const mockFormBlock: FormBlock = {
   ],
   submitEmail: 'test@example.com',
   buttonText: 'Submit',
-  isPremium: true,
 };
 
 export const mockDownloadBlock: DownloadBlock = {
