@@ -33,7 +33,7 @@ import {
   truncate,
   buildHreflangLinks,
 } from './seo-helpers.ts';
-import { buildGalleryHtml, buildLandingHtml, type GalleryItem, type LanguageKey } from './ssr-templates.ts';
+import { buildGalleryHtml, buildLandingHtml, buildMarketingPageHtml, type GalleryItem, type LanguageKey } from './ssr-templates.ts';
 
 const BASE_URL = 'https://lnkmx.my';
 const LANGUAGES = ['ru', 'en', 'kk'] as const;
@@ -63,21 +63,6 @@ const NICHE_TAGS = [
 ];
 
 const GALLERY_FILTERS = [
-  'beauty',
-  'fitness',
-  'food',
-  'education',
-  'art',
-  'music',
-  'tech',
-  'business',
-  'health',
-  'fashion',
-  'travel',
-  'realestate',
-  'events',
-  'services',
-  'other',
   'beauty', 'fitness', 'food', 'education', 'art', 'music',
   'tech', 'business', 'health', 'fashion', 'travel', 'realestate',
   'events', 'services', 'other',
@@ -139,7 +124,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${c.title} - lnkmx</title>
+  <title>${c.title} - LinkMAX</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="${c.body}">
   <style>
@@ -259,7 +244,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const nicheLabel = niche && niche !== 'other' ? niche : '';
   const answerSummary = cleanDesc 
     ? `${displayName}${nicheLabel ? ` - ${nicheLabel}` : ''}: ${truncate(cleanDesc, 150)}${location ? `. ${lang === 'ru' ? 'Локация' : lang === 'kk' ? 'Орналасуы' : 'Location'}: ${location}` : ''}`
-    : `${displayName}${nicheLabel ? ` - ${nicheLabel}` : ''}${location ? ` (${location})` : ''} ${lang === 'ru' ? 'на lnkmx.my' : lang === 'kk' ? 'lnkmx.my сайтында' : 'on lnkmx.my'}`;
+    : `${displayName}${nicheLabel ? ` - ${nicheLabel}` : ''}${location ? ` (${location})` : ''} ${lang === 'ru' ? 'на LinkMAX' : lang === 'kk' ? 'LinkMAX сайтында' : 'on LinkMAX'}`;
 
   // Schema.org
   const schemaType = niche === 'business' || niche === 'consulting' || services.length > 0 ? 'Organization' : 'Person';
@@ -298,10 +283,10 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
       '@type': 'ProfilePage',
       '@id': canonical,
       'url': canonical,
-      'name': `${page.title || '@' + slug} - ${primaryOfferOrBio} | lnkmx`,
+      'name': `${page.title || '@' + slug} - ${primaryOfferOrBio} | LinkMAX`,
       'description': metaDesc,
       'inLanguage': lang,
-      'isPartOf': { '@type': 'WebSite', 'name': 'lnkmx', 'url': BASE_URL },
+      'isPartOf': { '@type': 'WebSite', 'name': 'LinkMAX', 'url': BASE_URL },
       'mainEntity': { '@id': entityId },
       'dateModified': page.updated_at || new Date().toISOString(),
     },
@@ -411,7 +396,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${displayName} - ${escapeHtml(primaryOfferOrBio)} | lnkmx</title>
+  <title>${displayName} - ${escapeHtml(primaryOfferOrBio)} | LinkMAX</title>
   <meta name="description" content="${metaDesc}">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="${canonical}">
@@ -422,8 +407,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   <meta property="og:description" content="${metaDesc}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${avatar}">
-  <meta property="og:site_name" content="lnkmx.my">
-  <meta property="og:site_name" content="lnkmx">
+  <meta property="og:site_name" content="LinkMAX">
   <meta property="og:locale" content="${getOgLocale(lang)}">
   
   <meta name="twitter:card" content="summary_large_image">
@@ -488,7 +472,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   </main>
   
   <footer>
-    <p>${lang === 'ru' ? 'Создано на' : lang === 'kk' ? 'Жасалған' : 'Created with'} <a href="${BASE_URL}/">lnkmx.my</a></p>
+    <p>${lang === 'ru' ? 'Создано на' : lang === 'kk' ? 'Жасалған' : 'Created with'} <a href="${BASE_URL}/">LinkMAX</a></p>
   </footer>
 </body>
 </html>`;
@@ -746,6 +730,39 @@ serve(async (req) => {
       }
       if (ssrTarget === 'gallery') {
         return await handleGallerySSR(supabase, lang, niche);
+      }
+      // Handle /experts/{tag} SSR
+      if (ssrTarget.startsWith('experts/')) {
+        const expertTag = ssrTarget.slice('experts/'.length);
+        if (expertTag) {
+          return await handleGallerySSR(supabase, lang, expertTag);
+        }
+        return await handleGallerySSR(supabase, lang, null);
+      }
+      if (ssrTarget === 'experts') {
+        return await handleGallerySSR(supabase, lang, null);
+      }
+      // Handle marketing pages SSR
+      const MARKETING_SSR_PAGES: Record<string, (lang: LanguageKey) => string> = {
+        'pricing': (l) => buildMarketingPageHtml(l, 'pricing'),
+        'alternatives': (l) => buildMarketingPageHtml(l, 'alternatives'),
+        'terms': (l) => buildMarketingPageHtml(l, 'terms'),
+        'privacy': (l) => buildMarketingPageHtml(l, 'privacy'),
+        'payment-terms': (l) => buildMarketingPageHtml(l, 'payment-terms'),
+        'for-masters': (l) => buildMarketingPageHtml(l, 'for-masters'),
+        'seo-landing': (l) => buildMarketingPageHtml(l, 'seo-landing'),
+      };
+      if (MARKETING_SSR_PAGES[ssrTarget]) {
+        const html = MARKETING_SSR_PAGES[ssrTarget](lang);
+        return new Response(html, {
+          status: 200,
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'text/html; charset=utf-8',
+            'X-Robots-Tag': 'index, follow',
+            'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        });
       }
       return await handleProfileSSR(supabase, ssrTarget, lang);
     }

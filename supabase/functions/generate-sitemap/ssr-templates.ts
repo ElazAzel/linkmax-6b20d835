@@ -49,13 +49,13 @@ type GalleryContent = {
 
 const LANDING_CONTENT: Record<LanguageKey, LandingContent> = {
   ru: {
-    title: 'lnkmx — Micro-Business OS | Конструктор страниц + CRM',
+    title: 'LinkMAX — Micro-Business OS | Конструктор страниц + CRM',
     description: 'Операционная система для микро-бизнеса: AI-конструктор страниц, встроенная CRM, формы заявок и Telegram-уведомления. Запуск за 2 минуты без кода.',
     h1: 'Micro-Business OS для микро-бизнеса',
     subtitle: 'Мини-сайт, CRM и заявки в одном месте — без кода и сложной настройки.',
     cta: 'Создать бесплатно',
-    aboutTitle: 'Что такое lnkmx',
-    aboutBody: 'lnkmx — это конструктор страниц и CRM, который превращает соцсети в полноценную точку продаж. Создайте страницу, принимайте заявки, управляйте клиентами и получайте аналитику.',
+    aboutTitle: 'Что такое LinkMAX',
+    aboutBody: 'LinkMAX — это конструктор страниц и CRM, который превращает соцсети в полноценную точку продаж. Создайте страницу, принимайте заявки, управляйте клиентами и получайте аналитику.',
     forTitle: 'Для кого подходит',
     forList: ['Эксперты и консультанты', 'Малый бизнес и салоны', 'Блогеры и создатели курсов', 'Организаторы событий'],
     whereTitle: 'Где используют',
@@ -81,16 +81,16 @@ const LANDING_CONTENT: Record<LanguageKey, LandingContent> = {
       'Поддержка RU/EN/KK языков',
       'Аналитика просмотров и кликов',
     ],
-    answerBlock: 'lnkmx — это операционная система для микро-бизнеса, объединяющая AI-конструктор страниц, CRM и аналитику. Позволяет создать профессиональный мини-сайт за 2 минуты без кода, принимать заявки и управлять клиентами.',
+    answerBlock: 'LinkMAX — это операционная система для микро-бизнеса, объединяющая AI-конструктор страниц, CRM и аналитику. Позволяет создать профессиональный мини-сайт за 2 минуты без кода, принимать заявки и управлять клиентами.',
   },
   en: {
-    title: 'lnkmx — Micro-Business OS | Page Builder + CRM',
+    title: 'LinkMAX — Micro-Business OS | Page Builder + CRM',
     description: 'Operating system for micro-business: AI page builder, built-in CRM, lead forms and Telegram notifications. Launch in 2 minutes with no code.',
     h1: 'Micro-Business OS for creators & small business',
     subtitle: 'Landing page, CRM, and lead capture in one place — no code needed.',
     cta: 'Start free',
-    aboutTitle: 'What is lnkmx',
-    aboutBody: 'lnkmx is a page builder with CRM that turns social traffic into sales. Build a page, collect leads, manage clients, and track analytics.',
+    aboutTitle: 'What is LinkMAX',
+    aboutBody: 'LinkMAX is a page builder with CRM that turns social traffic into sales. Build a page, collect leads, manage clients, and track analytics.',
     forTitle: 'Who it is for',
     forList: ['Experts & consultants', 'Small businesses & studios', 'Creators and course makers', 'Event organizers'],
     whereTitle: 'Where it works best',
@@ -116,16 +116,16 @@ const LANDING_CONTENT: Record<LanguageKey, LandingContent> = {
       'RU/EN/KK language support',
       'Views and clicks analytics',
     ],
-    answerBlock: 'lnkmx is a micro-business operating system combining AI page builder, CRM, and analytics. Create a professional mini-site in 2 minutes without code, collect leads, and manage clients.',
+    answerBlock: 'LinkMAX is a micro-business operating system combining AI page builder, CRM, and analytics. Create a professional mini-site in 2 minutes without code, collect leads, and manage clients.',
   },
   kk: {
-    title: 'lnkmx — Micro-Business OS | Бет конструкторы + CRM',
+    title: 'LinkMAX — Micro-Business OS | Бет конструкторы + CRM',
     description: 'Микро-бизнеске арналған операциялық жүйе: AI бет конструкторы, ішкі CRM, өтінім формалары және Telegram хабарламалары. 2 минутта кодсыз іске қосыңыз.',
     h1: 'Микро-бизнеске арналған Micro-Business OS',
     subtitle: 'Мини-сайт, CRM және өтінімдер — бір жерде, кодсыз.',
     cta: 'Тегін бастау',
-    aboutTitle: 'lnkmx деген не',
-    aboutBody: 'lnkmx — парақша құрастырушы және CRM. Әлеуметтік желідегі трафикті сатылымға айналдырып, өтінімдерді жинап, клиенттерді басқаруға көмектеседі.',
+    aboutTitle: 'LinkMAX деген не',
+    aboutBody: 'LinkMAX — парақша құрастырушы және CRM. Әлеуметтік желідегі трафикті сатылымға айналдырып, өтінімдерді жинап, клиенттерді басқаруға көмектеседі.',
     forTitle: 'Кімге арналған',
     forList: ['Сарапшылар мен кеңесшілер', 'Шағын бизнес пен салондар', 'Креаторлар мен курс авторлары', 'Іс-шара ұйымдастырушылар'],
     whereTitle: 'Қай жерде қолданады',
@@ -151,7 +151,7 @@ const LANDING_CONTENT: Record<LanguageKey, LandingContent> = {
       'RU/EN/KK тілдерін қолдау',
       'Көрулер мен басулар аналитикасы',
     ],
-    answerBlock: 'lnkmx — AI бет конструкторы, CRM және аналитиканы біріктіретін микро-бизнес операциялық жүйесі. 2 минутта кодсыз кәсіби мини-сайт жасап, өтінімдерді жинап, клиенттерді басқарыңыз.',
+    answerBlock: 'LinkMAX — AI бет конструкторы, CRM және аналитиканы біріктіретін микро-бизнес операциялық жүйесі. 2 минутта кодсыз кәсіби мини-сайт жасап, өтінімдерді жинап, клиенттерді басқарыңыз.',
   },
 };
 
@@ -159,9 +159,9 @@ const LANDING_CONTENT: Record<LanguageKey, LandingContent> = {
 
 const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
   ru: {
-    title: 'Галерея lnkmx — примеры link in bio и мини-сайтов',
-    description: 'Подборка лучших страниц lnkmx: ниши, шаблоны, идеи. Посмотрите, как выглядят реальные профили.',
-    h1: 'Галерея страниц lnkmx',
+    title: 'Галерея LinkMAX — примеры link in bio и мини-сайтов',
+    description: 'Подборка лучших страниц LinkMAX: ниши, шаблоны, идеи. Посмотрите, как выглядят реальные профили.',
+    h1: 'Галерея страниц LinkMAX',
     subtitle: 'Смотрите реальные профили, вдохновляйтесь нишами и копируйте решения.',
     highlightsTitle: 'Что вы найдёте в галерее',
     highlights: ['Топовые страницы по лайкам', 'Примеры по нишам: beauty, education, consulting', 'Готовые структуры блоков'],
@@ -170,12 +170,12 @@ const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
     topProfilesTitle: 'Популярные профили',
     keyFactsTitle: 'Ключевые факты о галерее',
     keyFacts: ['Сотни реальных примеров', '15+ категорий ниш', 'Фильтрация по популярности', 'Примеры из Казахстана и СНГ'],
-    answerBlock: 'Галерея lnkmx — это коллекция реальных link in bio страниц от экспертов, бизнесов и креаторов.',
+    answerBlock: 'Галерея LinkMAX — это коллекция реальных link in bio страниц от экспертов, бизнесов и креаторов.',
   },
   en: {
-    title: 'lnkmx Gallery — link in bio examples and templates',
-    description: 'Discover top lnkmx pages: niches, templates, and inspiration.',
-    h1: 'lnkmx Gallery',
+    title: 'LinkMAX Gallery — link in bio examples and templates',
+    description: 'Discover top LinkMAX pages: niches, templates, and inspiration.',
+    h1: 'LinkMAX Gallery',
     subtitle: 'Browse real profiles, explore niches, and copy proven layouts.',
     highlightsTitle: 'What you get inside',
     highlights: ['Top pages by likes and views', 'Niche examples: beauty, education, consulting', 'Ready-to-use block structures'],
@@ -184,12 +184,12 @@ const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
     topProfilesTitle: 'Top profiles',
     keyFactsTitle: 'Key facts about gallery',
     keyFacts: ['Hundreds of real page examples', '15+ niche categories', 'Filter by popularity', 'Examples from Kazakhstan and CIS'],
-    answerBlock: 'lnkmx Gallery is a collection of real link in bio pages from experts, businesses, and creators.',
+    answerBlock: 'LinkMAX Gallery is a collection of real link in bio pages from experts, businesses, and creators.',
   },
   kk: {
-    title: 'lnkmx галереясы — link in bio мысалдары мен мини-сайттар',
-    description: 'lnkmx үздік парақшалары: нишалар, шаблондар, идеялар.',
-    h1: 'lnkmx парақшалар галереясы',
+    title: 'LinkMAX галереясы — link in bio мысалдары мен мини-сайттар',
+    description: 'LinkMAX үздік парақшалары: нишалар, шаблондар, идеялар.',
+    h1: 'LinkMAX парақшалар галереясы',
     subtitle: 'Нақты профильдерді қарап, нишалардан шабыт алыңыз.',
     highlightsTitle: 'Галереядан не табасыз',
     highlights: ['Лайк пен қаралымы көп үздік беттер', 'Beauty, education, consulting сияқты нишалар', 'Дайын блок құрылымдары'],
@@ -198,7 +198,7 @@ const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
     topProfilesTitle: 'Танымал профильдер',
     keyFactsTitle: 'Галерея туралы негізгі фактілер',
     keyFacts: ['Жүздеген нақты бет мысалдары', '15+ ниша санаттары', 'Танымалдылығы бойынша сүзу', 'Қазақстан мен ТМД елдерінен мысалдар'],
-    answerBlock: 'lnkmx галереясы — бұл сарапшылар, бизнестер және креаторлардан нақты link in bio беттерінің жинағы.',
+    answerBlock: 'LinkMAX галереясы — бұл сарапшылар, бизнестер және креаторлардан нақты link in bio беттерінің жинағы.',
   },
 };
 
@@ -239,7 +239,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
       {
         '@type': 'WebSite',
         '@id': `${baseUrl}/#website`,
-        name: 'lnkmx',
+        name: 'LinkMAX',
         url: `${baseUrl}/`,
         inLanguage: lang,
         potentialAction: {
@@ -251,23 +251,24 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
       {
         '@type': 'Organization',
         '@id': `${baseUrl}/#organization`,
-        name: 'lnkmx',
+        name: 'LinkMAX',
+        alternateName: 'lnkmx',
         url: `${baseUrl}/`,
-        logo: `${baseUrl}/favicon.jpg`,
+        logo: `${baseUrl}/favicon.png`,
         areaServed: content.whereList,
       },
       {
         '@type': 'SoftwareApplication',
-        name: 'lnkmx - Micro-Business OS',
+        name: 'LinkMAX - Micro-Business OS',
         applicationCategory: 'BusinessApplication',
         operatingSystem: 'Web',
         description: content.description,
-        sameAs: ['https://t.me/lnkmx_app'],
+        sameAs: ['https://t.me/lnkmx_app', 'https://instagram.com/lnkmx_app'],
       },
       {
         '@type': 'SoftwareApplication',
         '@id': `${baseUrl}/#software`,
-        name: 'lnkmx - Micro-Business OS',
+        name: 'LinkMAX - Micro-Business OS',
         applicationCategory: 'BusinessApplication',
         applicationSubCategory: 'Business Operating System',
         operatingSystem: 'Web',
@@ -299,12 +300,12 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
   <meta property="og:url" content="${baseUrl}/">
   <meta property="og:image" content="${DEFAULT_OG_IMAGE}">
   <meta property="og:locale" content="${locale}">
-  <meta property="og:site_name" content="lnkmx">
+  <meta property="og:site_name" content="LinkMAX">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(content.title)}">
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
   <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
-  <meta name="twitter:site" content="@lnkmx_app">
+  <meta name="twitter:site" content="@LinkMAX_app">
   <meta name="ai-summary" content="${escapeHtml(content.answerBlock)}">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
   <style>
@@ -383,7 +384,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
     </section>
 
     <footer>
-      <p><a href="${baseUrl}/">lnkmx.my</a> - Micro-Business OS</p>
+      <p><a href="${baseUrl}/">LinkMAX</a> - Micro-Business OS</p>
       <p><small>${lang === 'ru' ? 'Платформа для микро-бизнеса' : lang === 'kk' ? 'Микро-бизнес платформасы' : 'Platform for micro-business'}</small></p>
     </footer>
   </main>
@@ -451,7 +452,7 @@ export function buildGalleryHtml(lang: LanguageKey, baseUrl: string, items: Gall
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:image" content="${DEFAULT_OG_IMAGE}">
   <meta property="og:locale" content="${locale}">
-  <meta property="og:site_name" content="lnkmx">
+  <meta property="og:site_name" content="LinkMAX">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
@@ -522,11 +523,164 @@ export function buildGalleryHtml(lang: LanguageKey, baseUrl: string, items: Gall
     </section>
 
     <footer>
-      <p><a href="${baseUrl}/">lnkmx.my</a></p>
+      <p><a href="${baseUrl}/">LinkMAX</a></p>
     </footer>
   </main>
 </body>
 </html>`;
 }
 
-export { LANDING_CONTENT, GALLERY_CONTENT };
+// ============ MARKETING PAGE CONTENT ============
+
+type MarketingPageContent = {
+  title: string;
+  description: string;
+  h1: string;
+  body: string;
+};
+
+const MARKETING_PAGES: Record<string, Record<LanguageKey, MarketingPageContent>> = {
+  pricing: {
+    ru: {
+      title: 'Тарифы LinkMAX — бесплатный и Pro планы',
+      description: 'Сравните тарифы LinkMAX: бесплатный план с базовыми функциями и Pro с расширенной аналитикой, CRM и премиум-блоками.',
+      h1: 'Тарифы LinkMAX',
+      body: 'LinkMAX предлагает гибкие тарифы для любого этапа бизнеса. Бесплатный план включает конструктор страниц, базовую аналитику и 1 страницу. Pro открывает расширенную CRM, Telegram-уведомления, приоритетную поддержку и до 6 страниц.',
+    },
+    en: {
+      title: 'LinkMAX Pricing — Free and Pro Plans',
+      description: 'Compare LinkMAX plans: free tier with core features and Pro with advanced analytics, CRM, and premium blocks.',
+      h1: 'LinkMAX Pricing',
+      body: 'LinkMAX offers flexible pricing for every stage of your business. The free plan includes a page builder, basic analytics, and 1 page. Pro unlocks advanced CRM, Telegram notifications, priority support, and up to 6 pages.',
+    },
+    kk: {
+      title: 'LinkMAX тарифтері — тегін және Pro жоспарлар',
+      description: 'LinkMAX тарифтерін салыстырыңыз: негізгі мүмкіндіктері бар тегін тариф және кеңейтілген аналитика мен CRM бар Pro.',
+      h1: 'LinkMAX тарифтері',
+      body: 'LinkMAX бизнестің кез келген кезеңіне арналған тарифтер ұсынады. Тегін тариф бет конструкторын, базалық аналитиканы және 1 бетті қамтиды. Pro кеңейтілген CRM, Telegram хабарламалар, басымдық қолдау және 6 бетке дейін ашады.',
+    },
+  },
+  alternatives: {
+    ru: {
+      title: 'LinkMAX vs Linktree, Taplink — сравнение альтернатив',
+      description: 'Сравнение LinkMAX с Linktree, Taplink и другими конструкторами. Встроенная CRM, AI-генерация, аналитика — всё в одном месте.',
+      h1: 'LinkMAX vs альтернативы',
+      body: 'LinkMAX — это не просто link in bio, а полноценная операционная система для микробизнеса. В отличие от Linktree и Taplink, LinkMAX включает встроенную CRM, AI-генерацию контента, онлайн-бронирование и расширенную аналитику.',
+    },
+    en: {
+      title: 'LinkMAX vs Linktree, Taplink — Alternatives Comparison',
+      description: 'Compare LinkMAX with Linktree, Taplink and other builders. Built-in CRM, AI generation, analytics — all in one place.',
+      h1: 'LinkMAX vs Alternatives',
+      body: 'LinkMAX is not just a link in bio — it\'s a full micro-business OS. Unlike Linktree and Taplink, LinkMAX includes built-in CRM, AI content generation, online booking, and advanced analytics.',
+    },
+    kk: {
+      title: 'LinkMAX vs Linktree, Taplink — баламаларды салыстыру',
+      description: 'LinkMAX-ті Linktree, Taplink және басқа конструкторлармен салыстырыңыз.',
+      h1: 'LinkMAX vs баламалар',
+      body: 'LinkMAX — бұл жай link in bio емес, микробизнеске арналған толыққанды операциялық жүйе. Linktree мен Taplink-тен айырмашылығы, LinkMAX ішкі CRM, AI контент генерациясы, онлайн жазылу және кеңейтілген аналитиканы қамтиды.',
+    },
+  },
+  terms: {
+    ru: { title: 'Условия использования — LinkMAX', description: 'Условия использования платформы LinkMAX.', h1: 'Условия использования', body: 'Полные условия использования платформы LinkMAX. Ознакомьтесь с правилами, ответственностью сторон и порядком использования сервиса.' },
+    en: { title: 'Terms of Service — LinkMAX', description: 'Terms of service for the LinkMAX platform.', h1: 'Terms of Service', body: 'Complete terms of service for the LinkMAX platform. Review the rules, responsibilities, and service usage guidelines.' },
+    kk: { title: 'Пайдалану шарттары — LinkMAX', description: 'LinkMAX платформасының пайдалану шарттары.', h1: 'Пайдалану шарттары', body: 'LinkMAX платформасының толық пайдалану шарттары.' },
+  },
+  privacy: {
+    ru: { title: 'Политика конфиденциальности — LinkMAX', description: 'Политика конфиденциальности и защиты данных LinkMAX.', h1: 'Политика конфиденциальности', body: 'LinkMAX серьёзно относится к защите ваших данных. Ознакомьтесь с нашей политикой конфиденциальности.' },
+    en: { title: 'Privacy Policy — LinkMAX', description: 'Privacy and data protection policy for LinkMAX.', h1: 'Privacy Policy', body: 'LinkMAX takes your data protection seriously. Review our privacy policy.' },
+    kk: { title: 'Құпиялылық саясаты — LinkMAX', description: 'LinkMAX деректерді қорғау саясаты.', h1: 'Құпиялылық саясаты', body: 'LinkMAX сіздің деректеріңізді қорғауға байыпты қарайды.' },
+  },
+  'payment-terms': {
+    ru: { title: 'Условия оплаты — LinkMAX', description: 'Условия оплаты и возврата средств на платформе LinkMAX.', h1: 'Условия оплаты', body: 'Подробные условия оплаты, возврата средств и работы с подписками на платформе LinkMAX.' },
+    en: { title: 'Payment Terms — LinkMAX', description: 'Payment and refund terms for the LinkMAX platform.', h1: 'Payment Terms', body: 'Detailed payment, refund, and subscription terms for the LinkMAX platform.' },
+    kk: { title: 'Төлем шарттары — LinkMAX', description: 'LinkMAX платформасындағы төлем және қайтару шарттары.', h1: 'Төлем шарттары', body: 'LinkMAX платформасындағы толық төлем, қайтару және жазылу шарттары.' },
+  },
+  'for-masters': {
+    ru: { title: 'LinkMAX для мастеров — конструктор страниц для специалистов', description: 'Создайте профессиональный мини-сайт с онлайн-бронированием, каталогом услуг и CRM. Для мастеров красоты, фитнес-тренеров, консультантов.', h1: 'LinkMAX для мастеров', body: 'Идеальное решение для мастеров красоты, фитнес-тренеров, репетиторов и консультантов. Создайте страницу с каталогом услуг, онлайн-бронированием и сбором заявок за 2 минуты.' },
+    en: { title: 'LinkMAX for Professionals — page builder for experts', description: 'Build a professional mini-site with online booking, service catalog, and CRM. For beauty experts, fitness trainers, consultants.', h1: 'LinkMAX for Professionals', body: 'The perfect solution for beauty experts, fitness trainers, tutors, and consultants. Create a page with service catalog, online booking, and lead capture in 2 minutes.' },
+    kk: { title: 'LinkMAX шеберлерге — мамандарға арналған бет конструкторы', description: 'Онлайн жазылу, қызмет каталогы және CRM бар кәсіби мини-сайт жасаңыз.', h1: 'LinkMAX шеберлерге', body: 'Сұлулық шеберлеріне, фитнес-тренерлерге, репетиторларға және кеңесшілерге тамаша шешім.' },
+  },
+  'seo-landing': {
+    ru: { title: 'LinkMAX — AI-платформа для микробизнеса', description: 'LinkMAX объединяет AI конструктор страниц, CRM, аналитику и финтех в одной платформе. Запуск за 2 минуты.', h1: 'LinkMAX — AI-платформа для микробизнеса', body: 'LinkMAX — это операционная система нового поколения для микробизнеса. AI конструктор страниц, Business Zones (CRM), финтех-ядро и аналитика — всё в одном месте.' },
+    en: { title: 'LinkMAX — AI Platform for Micro-Business', description: 'LinkMAX combines AI page builder, CRM, analytics and fintech in one platform. Launch in 2 minutes.', h1: 'LinkMAX — AI Platform for Micro-Business', body: 'LinkMAX is the next-generation operating system for micro-business. AI page builder, Business Zones (CRM), fintech core, and analytics — all in one place.' },
+    kk: { title: 'LinkMAX — микробизнеске арналған AI платформа', description: 'LinkMAX AI бет конструкторын, CRM, аналитика және финтехті бір платформада біріктіреді.', h1: 'LinkMAX — микробизнеске арналған AI платформа', body: 'LinkMAX — микробизнеске арналған жаңа буын операциялық жүйе.' },
+  },
+};
+
+export function buildMarketingPageHtml(lang: LanguageKey, pageKey: string): string {
+  const pageContent = MARKETING_PAGES[pageKey];
+  if (!pageContent) {
+    return `<!DOCTYPE html><html><head><title>404</title></head><body><p>Page not found</p></body></html>`;
+  }
+  const content = pageContent[lang] || pageContent.ru;
+  const locale = getOgLocale(lang);
+  const canonical = `${BASE_URL}/${pageKey}`;
+  const hreflangLinks = buildHreflangLinks(BASE_URL, `/${pageKey}`, ['ru', 'en', 'kk']);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': canonical,
+    name: content.title,
+    description: content.description,
+    url: canonical,
+    inLanguage: lang,
+    isPartOf: { '@type': 'WebSite', name: 'LinkMAX', url: `${BASE_URL}/` },
+  };
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(content.title)}</title>
+  <meta name="description" content="${escapeHtml(content.description)}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <link rel="canonical" href="${canonical}">
+  ${hreflangLinks}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtml(content.title)}">
+  <meta property="og:description" content="${escapeHtml(content.description)}">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:image" content="${DEFAULT_OG_IMAGE}">
+  <meta property="og:locale" content="${locale}">
+  <meta property="og:site_name" content="LinkMAX">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtml(content.title)}">
+  <meta name="twitter:description" content="${escapeHtml(content.description)}">
+  <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
+  <meta name="twitter:site" content="@LinkMAX_app">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; color: #111; background: #fff; line-height: 1.6; }
+    main { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; line-height: 1.2; }
+    p { font-size: 1.05rem; }
+    nav { margin-top: 2rem; }
+    nav a { color: #0f62fe; text-decoration: none; margin-right: 1.5rem; font-weight: 500; }
+    nav a:hover { text-decoration: underline; }
+    footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #eee; text-align: center; color: #666; }
+  </style>
+</head>
+<body>
+  <main>
+    <nav aria-label="Breadcrumb">
+      <a href="${BASE_URL}/">LinkMAX</a> → <span>${escapeHtml(content.h1)}</span>
+    </nav>
+    <h1>${escapeHtml(content.h1)}</h1>
+    <p>${escapeHtml(content.body)}</p>
+    <nav aria-label="Site navigation">
+      <a href="${BASE_URL}/">Home</a>
+      <a href="${BASE_URL}/pricing">Pricing</a>
+      <a href="${BASE_URL}/gallery">Gallery</a>
+      <a href="${BASE_URL}/experts">Experts</a>
+    </nav>
+    <footer>
+      <p><a href="${BASE_URL}/">LinkMAX</a> - Micro-Business OS</p>
+    </footer>
+  </main>
+</body>
+</html>`;
+}
+
+export { LANDING_CONTENT, GALLERY_CONTENT, MARKETING_PAGES };

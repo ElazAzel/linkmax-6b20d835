@@ -17,7 +17,7 @@
 // const FUNCTION_URL = `https://${env.SUPABASE_PROJECT}.supabase.co/functions/v1/generate-sitemap`;
 
 // WHITELIST: Marketing/static pages - NOT treated as slugs
-// These pages have their own SPA routes
+// These pages have their own SPA routes and get SSR for bots
 const WHITELIST_PAGES = new Set([
   '',           // root /
   'pricing',
@@ -27,6 +27,20 @@ const WHITELIST_PAGES = new Set([
   'terms',
   'privacy',
   'contact',
+  'for-masters',
+  'seo-landing',
+  'payment-terms',
+]);
+
+// Marketing pages that should get SSR for bots (subset of WHITELIST)
+const SSR_MARKETING_PAGES = new Set([
+  'pricing',
+  'alternatives',
+  'terms',
+  'privacy',
+  'for-masters',
+  'seo-landing',
+  'payment-terms',
 ]);
 
 // BLACKLIST: Private pages - never SSR, never index
@@ -296,31 +310,54 @@ async function handleRequest(request, env) {
     return fetch(request);
   }
 
-  // 4. Bot-friendly SSR for landing + gallery
-  if (isBot(userAgent) && (pathname === '/' || pathname === '/gallery')) {
-    const target = pathname === '/' ? 'landing' : 'gallery';
-    const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${target}${queryString}`;
-    try {
-      const ssrResponse = await fetch(ssrUrl, {
-        method: 'GET',
-        headers: {
-          'Accept': 'text/html',
-          'User-Agent': userAgent,
-          'Accept-Language': request.headers.get('Accept-Language') || '',
-        },
-      });
-      const responseHeaders = new Headers(ssrResponse.headers);
-      responseHeaders.set('X-SSR-Rendered', 'true');
-      responseHeaders.set('X-SSR-Target', target);
-      responseHeaders.delete('set-cookie');
-      return new Response(ssrResponse.body, {
-        status: ssrResponse.status,
-        statusText: ssrResponse.statusText,
-        headers: responseHeaders,
-      });
-    } catch (error) {
-      console.error('[Worker] SSR error (landing/gallery):', error);
-      return fetch(request);
+  // 4. Bot-friendly SSR for landing, gallery, and marketing pages
+  if (isBot(userAgent)) {
+    let ssrTarget = null;
+    
+    if (pathname === '/') ssrTarget = 'landing';
+    else if (pathname === '/gallery') ssrTarget = 'gallery';
+    else if (pathname === '/experts') ssrTarget = 'experts';
+    
+    // Marketing pages SSR
+    if (!ssrTarget) {
+      const cleanFirst = pathname.replace(/^\/+/, '').split('/')[0];
+      if (SSR_MARKETING_PAGES.has(cleanFirst) && pathname.split('/').filter(Boolean).length === 1) {
+        ssrTarget = cleanFirst;
+      }
+    }
+    
+    // /experts/:tag SSR
+    if (!ssrTarget && pathname.startsWith('/experts/')) {
+      const tag = pathname.replace('/experts/', '').replace(/\/+$/, '');
+      if (tag && !tag.includes('/')) {
+        ssrTarget = `experts/${tag}`;
+      }
+    }
+    
+    if (ssrTarget) {
+      const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${ssrTarget}${queryString}`;
+      try {
+        const ssrResponse = await fetch(ssrUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'text/html',
+            'User-Agent': userAgent,
+            'Accept-Language': request.headers.get('Accept-Language') || '',
+          },
+        });
+        const responseHeaders = new Headers(ssrResponse.headers);
+        responseHeaders.set('X-SSR-Rendered', 'true');
+        responseHeaders.set('X-SSR-Target', ssrTarget);
+        responseHeaders.delete('set-cookie');
+        return new Response(ssrResponse.body, {
+          status: ssrResponse.status,
+          statusText: ssrResponse.statusText,
+          headers: responseHeaders,
+        });
+      } catch (error) {
+        console.error('[Worker] SSR error:', ssrTarget, error);
+        return fetch(request);
+      }
     }
   }
 
@@ -342,12 +379,12 @@ async function handleRequest(request, env) {
     return response;
   }
 
-  // 7. Whitelisted marketing pages - always origin
+  // 7. Whitelisted marketing pages - origin for humans (bots already handled above)
   if (isWhitelisted(first)) {
     return fetch(request);
   }
 
-  // 8. Multi-segment paths (e.g., /experts/beauty) - origin
+  // 8. Multi-segment paths (e.g., /experts/beauty) - origin for humans (bots handled above)
   if (segments.length > 1) {
     return fetch(request);
   }
