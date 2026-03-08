@@ -1372,6 +1372,7 @@ export type Database = {
           profession: string | null
           quality_score: number | null
           seo_meta: Json | null
+          service_slugs: Json | null
           slug: string
           theme_settings: Json | null
           title: string | null
@@ -1412,6 +1413,7 @@ export type Database = {
           profession?: string | null
           quality_score?: number | null
           seo_meta?: Json | null
+          service_slugs?: Json | null
           slug: string
           theme_settings?: Json | null
           title?: string | null
@@ -1452,6 +1454,7 @@ export type Database = {
           profession?: string | null
           quality_score?: number | null
           seo_meta?: Json | null
+          service_slugs?: Json | null
           slug?: string
           theme_settings?: Json | null
           title?: string | null
