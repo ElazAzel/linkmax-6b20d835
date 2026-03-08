@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import X from 'lucide-react/dist/esm/icons/x';
@@ -8,48 +9,18 @@ import { cn } from '@/lib/utils/utils';
 
 interface OnboardingStep {
   target: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descKey: string;
   position: 'top' | 'bottom' | 'left' | 'right' | 'center';
 }
 
-const steps: OnboardingStep[] = [
-  {
-    target: 'welcome',
-    title: 'Добро пожаловать в lnkmx.my! 👋',
-    description: 'Сейчас мы покажем вам основы работы с редактором. Это займет всего минуту.',
-    position: 'center',
-  },
-  {
-    target: '[data-onboarding="profile-block"]',
-    title: 'Ваш профиль',
-    description: 'Кликните на блок профиля, чтобы изменить имя, био и аватар.',
-    position: 'bottom',
-  },
-  {
-    target: '[data-onboarding="add-block"]',
-    title: 'Добавление блоков',
-    description: 'Нажмите на кнопку +, чтобы добавить новый блок. Доступны ссылки, товары, видео и многое другое.',
-    position: 'top',
-  },
-  {
-    target: '[data-onboarding="block-edit"]',
-    title: 'Редактирование блоков',
-    description: 'Наведите на любой блок, чтобы увидеть кнопки редактирования, удаления и перетаскивания.',
-    position: 'right',
-  },
-  {
-    target: '[data-onboarding="share-button"]',
-    title: 'Публикация страницы',
-    description: 'Когда закончите, нажмите "Share", чтобы получить публичную ссылку для социальных сетей.',
-    position: 'bottom',
-  },
-  {
-    target: 'complete',
-    title: 'Готово! 🎉',
-    description: 'Теперь вы знаете основы. Начните создавать свою страницу!',
-    position: 'center',
-  },
+const stepDefs: OnboardingStep[] = [
+  { target: 'welcome', titleKey: 'onboardingTour.welcome.title', descKey: 'onboardingTour.welcome.desc', position: 'center' },
+  { target: '[data-onboarding="profile-block"]', titleKey: 'onboardingTour.profile.title', descKey: 'onboardingTour.profile.desc', position: 'bottom' },
+  { target: '[data-onboarding="add-block"]', titleKey: 'onboardingTour.addBlock.title', descKey: 'onboardingTour.addBlock.desc', position: 'top' },
+  { target: '[data-onboarding="block-edit"]', titleKey: 'onboardingTour.editBlock.title', descKey: 'onboardingTour.editBlock.desc', position: 'right' },
+  { target: '[data-onboarding="share-button"]', titleKey: 'onboardingTour.share.title', descKey: 'onboardingTour.share.desc', position: 'bottom' },
+  { target: 'complete', titleKey: 'onboardingTour.complete.title', descKey: 'onboardingTour.complete.desc', position: 'center' },
 ];
 
 interface OnboardingTourProps {
