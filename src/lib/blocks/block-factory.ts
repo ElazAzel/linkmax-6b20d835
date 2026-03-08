@@ -299,7 +299,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     layout: 'grid',
     showPrices: true,
     currency: 'KZT',
-    isPremium: true,
     ...overrides,
   }),
 
