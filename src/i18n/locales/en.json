@@ -5632,22 +5632,23 @@
     }
   },
   "activation": {
-    "title": "Set up your page",
+    "title": "Launch your page",
     "progress": "{{done}} of {{total}}",
     "steps": {
-      "register": "Create an account",
-      "avatar": "Add a profile photo",
-      "firstBlock": "Add your first block",
-      "publish": "Publish your page",
-      "share": "Share the link"
+      "createPage": "Create your page",
+      "publish": "Publish",
+      "firstVisitor": "Get your first visitor",
+      "firstConversion": "Get your first response"
     },
     "tips": {
-      "addAvatar": "Add a profile photo — pages with avatars get 60% more trust",
       "addBlock": "Add your first block — a link, product, or video",
       "publish": "Publish your page to make it available via link",
-      "share": "Share your link on social media to get your first visitors",
-      "pricing": "Add a pricing block to increase conversions by 40%"
-    }
+      "shareForVisitor": "Share your link — 5 out of 10 users get their first visitor within an hour",
+      "addForm": "Add a contact form — every 5th page with a form gets leads",
+      "growTraffic": "Share your link on social media to attract more visitors"
+    },
+    "celebrationTitle": "🎉 Congratulations!",
+    "celebrationDesc": "Your page is live and delivering results"
   },
   "onboardingTour": {
     "welcome": {

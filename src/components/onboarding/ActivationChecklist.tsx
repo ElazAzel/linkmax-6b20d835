@@ -1,6 +1,6 @@
 /**
- * ActivationChecklist - Visual progress widget for new user activation
- * Shows on HomeScreen until all steps completed or dismissed
+ * ActivationChecklist v2.0 - Outcome-based progress widget
+ * Shows 4 value-driven steps, celebration state on completion
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Circle from 'lucide-react/dist/esm/icons/circle';
 import X from 'lucide-react/dist/esm/icons/x';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import PartyPopper from 'lucide-react/dist/esm/icons/party-popper';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -19,6 +20,7 @@ interface ActivationChecklistProps {
   completedCount: number;
   totalCount: number;
   progress: number;
+  canDismiss: boolean;
   onDismiss: () => void;
 }
 
@@ -27,6 +29,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
   completedCount,
   totalCount,
   progress,
+  canDismiss,
   onDismiss,
 }: ActivationChecklistProps) {
   const { t } = useTranslation();
@@ -41,21 +44,23 @@ export const ActivationChecklist = memo(function ActivationChecklist({
           </div>
           <div>
             <h3 className="font-bold text-sm">
-              {t('activation.title', 'Настройте страницу')}
+              {t('activation.title', 'Запустите страницу')}
             </h3>
             <p className="text-xs text-muted-foreground">
               {t('activation.progress', '{{done}} из {{total}}', { done: completedCount, total: totalCount })}
             </p>
           </div>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-7 w-7"
-          onClick={onDismiss}
-        >
-          <X className="h-3.5 w-3.5" />
-        </Button>
+        {canDismiss && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={onDismiss}
+          >
+            <X className="h-3.5 w-3.5" />
+          </Button>
+        )}
       </div>
 
       {/* Progress bar */}
@@ -87,6 +92,40 @@ export const ActivationChecklist = memo(function ActivationChecklist({
             </span>
           </button>
         ))}
+      </div>
+    </Card>
+  );
+});
+
+/** Celebration card shown when all steps are complete */
+interface CelebrationCardProps {
+  onDismiss: () => void;
+}
+
+export const ActivationCelebration = memo(function ActivationCelebration({
+  onDismiss,
+}: CelebrationCardProps) {
+  const { t } = useTranslation();
+
+  return (
+    <Card className="p-5 bg-gradient-to-br from-emerald-500/10 to-primary/10 border-emerald-500/20">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-emerald-500/15 flex items-center justify-center">
+            <PartyPopper className="h-5 w-5 text-emerald-600" />
+          </div>
+          <div>
+            <h3 className="font-bold text-sm">
+              {t('activation.celebrationTitle', '🎉 Поздравляем!')}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {t('activation.celebrationDesc', 'Ваша страница работает и приносит результаты')}
+            </p>
+          </div>
+        </div>
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onDismiss}>
+          <X className="h-3.5 w-3.5" />
+        </Button>
       </div>
     </Card>
   );

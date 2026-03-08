@@ -26,6 +26,7 @@ import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import User from 'lucide-react/dist/esm/icons/user';
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
@@ -96,6 +97,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   const [selectedTemplate, setSelectedTemplate] = useState<DBTemplate | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
 
   // Reset state when dialog opens
   useEffect(() => {
@@ -224,18 +226,8 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
         bio: userInfo.bio || `${userInfo.services || ''}`,
       };
 
+      setGeneratedBlocks(finalBlocks);
       setStep('complete');
-
-      // Brief delay for animation, then complete
-      setTimeout(() => {
-        onComplete(profile, finalBlocks, selectedNiche);
-        // Mark as completed
-        storage.set('ai_builder_used', 'true');
-        storage.set('niche_onboarding_completed', 'true');
-        storage.set('onboarding_completed', 'true');
-        toast.success(t('aiBuilder.success', '✨ Страница создана!'));
-        onClose();
-      }, 1500);
     } catch (err) {
       console.error('AI Builder error:', err);
       toast.error(t('aiBuilder.error', 'Ошибка генерации. Попробуйте ещё раз.'));
@@ -307,13 +299,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               </div>
             </ScrollArea>
 
-            {isOnboarding && (
-              <div className="pt-2 flex justify-center">
-                <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground">
-                  {t('common.skip', 'Пропустить')}
-                </Button>
-              </div>
-            )}
+            {/* Skip removed for new users — niche selection drives activation */}
           </div>
         )}
 
@@ -633,33 +619,59 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
         {step === 'complete' && (
           <div className="p-6 py-12 text-center relative overflow-hidden flex flex-col items-center justify-center min-h-[400px]">
             {/* Background decoration */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-amber-500/10 pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 blur-[80px] rounded-full pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-emerald-500/10 pointer-events-none" />
 
-            {/* Certificate Container */}
-            <div className="relative z-10 animate-in zoom-in duration-700 spring-bounce border-[6px] border-double border-primary/20 bg-card p-8 rounded-2xl shadow-2xl max-w-sm w-full outline outline-1 outline-primary/10">
-
-              <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 ring-4 ring-primary/20 animate-pulse">
-                <Sparkles className="h-8 w-8 text-primary" />
+            <div className="relative z-10 animate-in zoom-in duration-700 max-w-sm w-full text-center">
+              <div className="mx-auto w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-6 ring-4 ring-emerald-500/20">
+                <Check className="h-8 w-8 text-emerald-500" />
               </div>
 
-              <h3 className="text-sm font-bold tracking-widest text-primary/60 uppercase mb-2">
-                {t('aiBuilder.cert.subtitle', 'Официальный Сертификат')}
-              </h3>
-              <h2 className="text-2xl font-black mb-4 leading-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-                {t('aiBuilder.cert.title', 'Страница Успешно Создана!')}
+              <h2 className="text-2xl font-black mb-2">
+                {t('aiBuilder.complete.title', '✨ Страница готова!')}
               </h2>
-
-              <div className="py-4 border-y border-border/50 mb-6">
-                <p className="text-sm text-muted-foreground mb-1">{t('aiBuilder.cert.owner', 'Владелец:')}</p>
-                <p className="text-xl font-bold font-serif text-primary italic">
-                  {userInfo.name}
-                </p>
-              </div>
-
-              <p className="text-sm text-muted-foreground">
-                {t('aiBuilder.cert.desc', 'Теперь вы можете редактировать цвета, шрифты и блоки в панели управления.')}
+              <p className="text-muted-foreground mb-6">
+                {t('aiBuilder.complete.desc', 'Опубликуйте её, чтобы получить ссылку и первых посетителей')}
               </p>
+
+              <div className="space-y-3">
+                <Button
+                  size="lg"
+                  className="w-full h-14 rounded-2xl font-black text-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/25"
+                  onClick={() => {
+                    onComplete(
+                      { name: userInfo.name, bio: userInfo.bio || '' },
+                      generatedBlocks,
+                      selectedNiche!
+                    );
+                    storage.set('ai_builder_used', 'true');
+                    storage.set('niche_onboarding_completed', 'true');
+                    storage.set('onboarding_completed', 'true');
+                    storage.set('wizard_wants_publish', 'true');
+                    toast.success(t('aiBuilder.success', '✨ Страница создана!'));
+                    onClose();
+                  }}
+                >
+                  <Share2 className="h-5 w-5 mr-2" />
+                  {t('aiBuilder.complete.publishNow', 'Опубликовать сейчас')}
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full h-12 rounded-xl text-muted-foreground"
+                  onClick={() => {
+                    onComplete(
+                      { name: userInfo.name, bio: userInfo.bio || '' },
+                      generatedBlocks,
+                      selectedNiche!
+                    );
+                    storage.set('ai_builder_used', 'true');
+                    storage.set('niche_onboarding_completed', 'true');
+                    storage.set('onboarding_completed', 'true');
+                    onClose();
+                  }}
+                >
+                  {t('aiBuilder.complete.editFirst', 'Сначала отредактировать')}
+                </Button>
+              </div>
             </div>
           </div>
         )}

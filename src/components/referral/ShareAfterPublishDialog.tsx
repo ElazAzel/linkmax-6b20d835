@@ -100,8 +100,29 @@ export function ShareAfterPublishDialog({
                 {copiedPage ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
               </Button>
             </div>
+            <div className="flex gap-2">
+              <Button
+                className="flex-1 rounded-xl bg-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,40%)] text-white"
+                onClick={() => {
+                  const msg = encodeURIComponent(`${t('share.prefilled', 'Смотри мою страницу!')} ${publishedUrl}`);
+                  window.open(`https://wa.me/?text=${msg}`, '_blank');
+                }}
+              >
+                WhatsApp
+              </Button>
+              <Button
+                className="flex-1 rounded-xl bg-[hsl(200,80%,50%)] hover:bg-[hsl(200,80%,45%)] text-white"
+                onClick={() => {
+                  const msg = encodeURIComponent(`${t('share.prefilled', 'Смотри мою страницу!')} ${publishedUrl}`);
+                  window.open(`https://t.me/share/url?url=${encodeURIComponent(publishedUrl)}&text=${msg}`, '_blank');
+                }}
+              >
+                Telegram
+              </Button>
+            </div>
             <Button 
-              className="w-full mt-2 rounded-xl" 
+              variant="outline"
+              className="w-full rounded-xl" 
               onClick={handleShare}
             >
               <Share2 className="h-4 w-4 mr-2" />
