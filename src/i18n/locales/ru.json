@@ -5377,6 +5377,32 @@
     "name": "Название зоны",
     "created": "Зона создана!",
     "createError": "Не удалось создать зону",
+    "nav": {
+      "dashboard": "Главная",
+      "deals": "Сделки",
+      "contacts": "Контакты",
+      "tasks": "Задачи",
+      "inbox": "Входящие",
+      "invoices": "Счета",
+      "calendar": "Календарь",
+      "automations": "Автоматизации",
+      "products": "Товары",
+      "events": "Мероприятия",
+      "documents": "Документы",
+      "settings": "Настройки"
+    },
+    "search": {
+      "placeholder": "Поиск...",
+      "noResults": "Ничего не найдено",
+      "contacts": "Контакты",
+      "deals": "Сделки",
+      "tasks": "Задачи",
+      "quickActions": "Быстрые действия",
+      "newDeal": "Создать сделку",
+      "newContact": "Добавить контакт",
+      "newTask": "Создать задачу",
+      "navigation": "Навигация"
+    },
     "dashboard": {
       "title": "Аналитика Бизнеса",
       "period7d": "7 дней",
