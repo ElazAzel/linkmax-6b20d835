@@ -305,7 +305,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
   <meta name="twitter:title" content="${escapeHtml(content.title)}">
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
   <meta name="twitter:image" content="${DEFAULT_OG_IMAGE}">
-  <meta name="twitter:site" content="@lnkmx_app">
+  <meta name="twitter:site" content="@LinkMAX_app">
   <meta name="ai-summary" content="${escapeHtml(content.answerBlock)}">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
   <style>
