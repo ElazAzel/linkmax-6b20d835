@@ -104,19 +104,44 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
 
   const stats = getLeadStats();
 
-  // Fetch monthly lead count for limit banner (free users)
+  // Fetch unified monthly inbound count (leads + bookings + registrations) for limit banner
   useEffect(() => {
     if (isPremium || !user?.id) return;
     const monthStart = new Date();
-    monthStart.setDate(1);
-    monthStart.setHours(0, 0, 0, 0);
+    monthStart.setUTCDate(1);
+    monthStart.setUTCHours(0, 0, 0, 0);
+    const monthStartISO = monthStart.toISOString();
     (async () => {
-      const { count } = await supabase
+      // Get all page IDs for this user
+      const { data: pages } = await supabase.from('pages').select('id').eq('user_id', user.id);
+      const pageIds = (pages || []).map((p: any) => p.id);
+
+      // Count leads
+      const { count: leadsC } = await supabase
         .from('leads')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id)
-        .gte('created_at', monthStart.toISOString());
-      setMonthlyLeadCount(count || 0);
+        .gte('created_at', monthStartISO);
+
+      let bookingsC = 0;
+      let regsC = 0;
+      if (pageIds.length > 0) {
+        const { count: bC } = await supabase
+          .from('bookings')
+          .select('*', { count: 'exact', head: true })
+          .in('page_id', pageIds)
+          .gte('created_at', monthStartISO);
+        bookingsC = bC || 0;
+
+        const { count: rC } = await supabase
+          .from('event_registrations')
+          .select('*', { count: 'exact', head: true })
+          .in('page_id', pageIds)
+          .gte('created_at', monthStartISO);
+        regsC = rC || 0;
+      }
+
+      setMonthlyLeadCount((leadsC || 0) + bookingsC + regsC);
     })();
   }, [isPremium, user?.id, leads.length]);
 
@@ -250,8 +275,8 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                     monthlyLeadCount >= 50 ? "text-destructive" : ""
                   )}>
                     {monthlyLeadCount >= 50
-                      ? t('crm.leadLimit.reached', 'Лимит заявок достигнут')
-                      : t('crm.leadLimit.used', '{{used}} из {{max}} заявок', { used: monthlyLeadCount, max: 50 })
+                      ? t('crm.leadLimit.reached', 'Лимит обращений достигнут')
+                      : t('crm.leadLimit.used', '{{used}} из {{max}} обращений', { used: monthlyLeadCount, max: 50 })
                     }
                   </span>
                 </div>

@@ -213,28 +213,36 @@ export const BookingBlock = memo(function BookingBlockComponent({
       const paymentStatus = hasPrepayment ? 'pending' : 'none';
       const paymentMethod = hasPrepayment ? (block.prepaymentMethod || 'whatsapp') : null;
 
-      const { data: bookingData, error } = await supabase
-        .from('bookings')
-        .insert({
-          page_id: pageId,
-          block_id: block.id,
-          owner_id: pageOwnerId,
-          user_id: session?.session?.user?.id || null,
-          slot_date: format(selectedDate, 'yyyy-MM-dd'),
-          slot_time: selectedSlot.time,
-          slot_end_time: selectedSlot.endTime || null,
-          client_name: formData.name,
-          client_phone: formData.phone || null,
-          client_email: formData.email || null,
-          client_notes: formData.notes || null,
-          payment_status: paymentStatus,
-          payment_amount: hasPrepayment ? block.prepaymentAmount : 0,
-          payment_method: paymentMethod,
-        })
-        .select('id')
-        .single();
+      const { data: fnResponse, error: fnError } = await supabase.functions.invoke('submit-booking', {
+        body: {
+          pageId,
+          blockId: block.id,
+          slotDate: format(selectedDate, 'yyyy-MM-dd'),
+          slotTime: selectedSlot.time,
+          slotEndTime: selectedSlot.endTime || null,
+          clientName: formData.name,
+          clientPhone: formData.phone || null,
+          clientEmail: formData.email || null,
+          clientNotes: formData.notes || null,
+          paymentStatus,
+          paymentAmount: hasPrepayment ? block.prepaymentAmount : 0,
+          paymentMethod,
+          userId: session?.session?.user?.id || null,
+        }
+      });
 
-      if (error) throw error;
+      if (fnError) throw fnError;
+
+      // Handle inbound limit reached
+      if (fnResponse && !fnResponse.success && fnResponse.error === 'inbound_limit_reached') {
+        toast.error(t('booking.limitReached.customer', 'Запись временно недоступна. Свяжитесь напрямую.'));
+        setSubmitting(false);
+        return;
+      }
+
+      if (fnResponse && !fnResponse.success) throw new Error(fnResponse.error);
+
+      const bookingData = fnResponse?.booking;
 
       // Record in Fintech Ledger
       if (hasPrepayment) {

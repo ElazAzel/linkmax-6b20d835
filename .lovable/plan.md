@@ -1,185 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# Unified CRM Limit Model — Implementation Plan
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## 1. Current State & Core Problems
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-**Three critical inconsistencies found:**
+### Новая тарифная модель (ADR 0026)
 
-1. **Backend counts per `page_id`, UI counts per `user_id`**: `submit-lead/index.ts` line 125 filters `.eq('page_id', pageId)` — meaning a multi-page user gets 50 leads PER PAGE. `ActivityScreen.tsx` line 117 counts `.eq('user_id', user.id)` — showing aggregate. The owner sees "42/50" but actually has capacity for 50 × N pages.
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
-2. **Bookings have ZERO limit enforcement**: `BookingBlock.tsx` line 216 inserts directly into `bookings` via client-side Supabase with no limit check. A free user can receive unlimited bookings. This makes the "50 inbound/month" limit meaningless — the customer just books instead of filling a form.
+---
 
-3. **Domain entity, frontend hook, and edge function all define "50" independently**: `User.ts` line 148, `useFreemiumLimits.ts` line 54, `submit-lead/index.ts` line 128 — three hardcoded `50`s with no shared source of truth.
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-## 2. Recommended CRM Usage Unit
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-**Decision: Count leads + bookings + event registrations as one unified "inbound" count, per user_id, per calendar month.**
+---
 
-Why:
-- All three are inbound commercial actions from the same funnel
-- If only leads count, users bypass limits by using booking blocks
-- Simple for the user: "50 заявок в месяц" = 50 times someone reached out
-- Simple to implement: one query across 3 tables
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-What does NOT count:
-- Manual leads added by owner (via AddLeadDialog)
-- Status changes, notes, replies
-- Page views, clicks
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-## 3. Scope: Per User, Not Per Page
+---
 
-The limit must be **per `user_id`** (page owner), not per `page_id`. Reasons:
-- Multi-page users shouldn't get N × 50 for free
-- Fair: one account = one quota
-- Matches how ActivityScreen already displays it
-- Matches billing (subscription is per user, not per page)
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-## 4. Final Model
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
-```text
-┌─────────────────────────────────────────────┐
-│  FREE TIER CRM LIMIT                        │
-│                                             │
-│  Unit: "inbound" = lead + booking + event   │
-│         registration created by end-customer│
-│  Scope: per owner user_id                   │
-│  Limit: 50 / calendar month (UTC)           │
-│  Reset: 1st of each month, 00:00 UTC        │
-│                                             │
-│  On limit reached:                          │
-│  - New form submissions: blocked server-side│
-│  - New bookings: blocked server-side        │
-│  - New event regs: blocked server-side      │
-│  - Existing data: fully accessible          │
-│  - CRM features: fully accessible           │
-│  - Reply/status/export: unaffected          │
-│                                             │
-│  PRO: unlimited inbound, no cap             │
-└─────────────────────────────────────────────┘
-```
+---
 
-## 5. Source of Truth Architecture
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-```text
-Single constant: CRM_INBOUND_LIMIT = 50
+## Текущее состояние LinkMAX Business Zones
 
-Lives in: src/domain/entities/User.ts (exported)
-Consumed by:
-  - useFreemiumLimits.ts (imports from User.ts)
-  - submit-lead edge function (hardcoded — unavoidable for edge fn, but matches)
-  - booking RLS/edge function (same)
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-Usage count: computed at runtime via DB query
-  - Backend: COUNT(*) across leads + bookings + event_registrations 
-    WHERE owner's user_id, created_at >= month start
-  - Frontend: same query for display
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-NOT duplicated in: billing copy, pricing page, banner text
-  → All UI reads from useFreemiumLimits().limits.maxLeadsPerMonth
-```
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
-## 6. Implementation Plan
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-### P0 — Fix the three critical inconsistencies
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-**Task 1: Create `check-inbound-limit` shared helper for edge functions**
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-Create `supabase/functions/_shared/check-inbound-limit.ts` with a reusable function:
-- Input: `supabaseClient`, `userId: string`
-- Logic: Count leads + bookings + event_registrations for this user_id this month
-- Output: `{ used: number, limit: number, allowed: boolean }`
-- Hardcode limit = 50, check premium_tier to skip for paid users
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-**Task 2: Fix `submit-lead` to count per `user_id` across all inbound types**
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-Update `supabase/functions/submit-lead/index.ts`:
-- Replace the current `page_id`-scoped leads-only count (lines 118-133)
-- Use the shared helper to count all inbound objects for `pageData.user_id`
-- Return same `429 lead_limit_reached` error
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-**Task 3: Create `submit-booking` edge function with limit enforcement**
+### Фаза 4: Аналитика Зоны (P1)
 
-Currently bookings insert directly from client (`BookingBlock.tsx` line 216). This is the biggest hole.
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-Create `supabase/functions/submit-booking/index.ts`:
-- Accept: `pageId, blockId, slotDate, slotTime, slotEndTime, clientName, clientPhone, clientEmail, clientNotes, paymentStatus, paymentAmount, paymentMethod`
-- Look up page owner → check inbound limit using shared helper
-- If over limit → return `429 { error: 'inbound_limit_reached' }`
-- If allowed → insert into `bookings` table (same fields as current client insert)
-- Call `send-booking-notification` logic or invoke it
-- Return booking data
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-Update `BookingBlock.tsx`:
-- Replace direct `supabase.from('bookings').insert(...)` with `supabase.functions.invoke('submit-booking', { body: ... })`
-- Handle `429` response: show graceful "owner's form is temporarily unavailable" message to end-customer
+### Фаза 5: Автоматизации -- MVP (P2)
 
-**Task 4: Fix ActivityScreen count to match unified model**
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
 
-Update `ActivityScreen.tsx` lines 108-121:
-- Count leads + bookings + event_registrations for `user_id` this month (not just leads)
-- This makes the banner accurate
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
 
-**Task 5: Sync domain constants**
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
 
-In `src/domain/entities/User.ts`, rename `maxLeadsPerMonth` → keep name but update comment to clarify it means "all inbound objects". Export the constant `CRM_FREE_INBOUND_LIMIT = 50` for reuse.
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
 
-### P1 — UX improvements
+### Фаза 6: Инвойсы и оплата (P2)
 
-**Task 6: End-customer graceful error state**
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
 
-In `BookingBlock.tsx`, when `submit-booking` returns 429:
-- Show: "К сожалению, запись временно недоступна. Свяжитесь с мастером напрямую." 
-- Do NOT mention limits, tiers, or pricing to the end-customer
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
-In form submission handler (wherever submit-lead 429 is handled):
-- Same pattern: graceful message, no platform internals exposed
+---
 
-**Task 7: Upgrade nudges**
+## Что НЕ нужно копировать из Bitrix24
 
-Update HomeScreen lifecycle nudge to include limit proximity:
-- At 40/50: amber nudge "У вас осталось {{remaining}} заявок в этом месяце"
-- At 50/50: red nudge with upgrade CTA
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-**Task 8: i18n keys**
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
-Add to ru/en/kk:
-- `crm.inboundLimit.used`: "{{used}} из {{max}} обращений"
-- `crm.inboundLimit.warning`: "Осталось {{remaining}} обращений до лимита"  
-- `crm.inboundLimit.reached`: "Лимит обращений достигнут"
-- `crm.inboundLimit.upgrade`: "Снять лимит →"
-- `booking.limitReached.customer`: "Запись временно недоступна. Свяжитесь напрямую."
-- `form.limitReached.customer`: "Форма временно недоступна."
+---
 
-### P2 — Analytics
+## Приоритезация (RICE)
 
-**Task 9: Instrumentation events**
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
-Add events to `activation-events.ts`:
-- `inbound_limit_warning` (fired at 40/50)
-- `inbound_limit_reached` (fired at 50/50)
-- `inbound_blocked_submission` (fired when 429 returned)
-- `upgrade_from_limit` (fired when user clicks upgrade from limit banner)
+---
 
-## Files Summary
+## Технический план реализации
 
-| File | Action |
-|------|--------|
-| `supabase/functions/_shared/check-inbound-limit.ts` | NEW — shared limit checker |
-| `supabase/functions/submit-lead/index.ts` | Fix: count per user_id, all inbound types |
-| `supabase/functions/submit-booking/index.ts` | NEW — server-side booking with limit |
-| `src/components/blocks/BookingBlock.tsx` | Replace direct insert with edge function call |
-| `src/components/dashboard-v2/screens/ActivityScreen.tsx` | Fix count to include bookings+registrations |
-| `src/domain/entities/User.ts` | Export CRM_FREE_INBOUND_LIMIT constant |
-| `src/i18n/locales/ru.json`, `en.json`, `kk.json` | New inbound limit keys |
-| `src/lib/activation-events.ts` | New limit events |
+### DB миграции (новые таблицы/колонки)
 
-## What NOT to Do
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
 
-- Do NOT create a separate `inbound_usage` tracking table — query at runtime
-- Do NOT add per-page quotas — user-level only
-- Do NOT gate existing CRM data access on limit — only new submissions
-- Do NOT show platform billing language to end-customers
-- Do NOT add granular per-type limits (X leads + Y bookings) — one number
-- Do NOT build a billing/entitlement microservice — constants + DB query is enough
+### Новые файлы
 
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

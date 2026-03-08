@@ -100,3 +100,10 @@ verify_jwt = false # Public: experts listing accessible without auth
 
 [functions.pixel-proxy]
 verify_jwt = false # Public: tracking pixel, no auth required
+
+# --- CRM inbound (public, no auth — end-customers submit bookings) ---
+[functions.submit-booking]
+verify_jwt = false # Public: accepts bookings from public pages without auth
+
+[functions.submit-lead]
+verify_jwt = false # Public: accepts leads from public pages without auth
