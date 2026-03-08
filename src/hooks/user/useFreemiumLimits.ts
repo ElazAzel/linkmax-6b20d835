@@ -15,7 +15,7 @@ export const PRO_BLOCKS = [
 
 // Business blocks merged into Pro
 export const PRO_EXTENDED_BLOCKS = [
-  'download', 'form', 'countdown', 'booking', 'community'
+  'download', 'countdown', 'community'
 ] as const;
 
 export type FreeTier = 'identity' | 'starter' | 'pro' | 'business';
