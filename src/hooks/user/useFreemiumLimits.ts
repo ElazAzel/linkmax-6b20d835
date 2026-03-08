@@ -107,17 +107,18 @@ export function getBlockTier(blockType: string): FreeTier {
 }
 
 export function useFreemiumLimits() {
-  const { isPremium, isLoading, tier = 'free' } = usePremiumStatus();
+  const { isPremium, isLoading, tier = 'identity' } = usePremiumStatus();
 
   // Determine current tier limits
   const getCurrentLimits = () => {
     if (tier === 'business') return BUSINESS_LIMITS;
     if (tier === 'pro' || isPremium) return PRO_LIMITS;
+    if (tier === 'starter') return PRO_LIMITS; // Starter has full access but with commission
     return FREE_LIMITS;
   };
 
   const limits = getCurrentLimits();
-  const currentTier: FreeTier = tier === 'business' ? 'business' : (tier === 'pro' || isPremium) ? 'pro' : 'free';
+  const currentTier: FreeTier = tier === 'business' ? 'business' : tier === 'pro' || isPremium ? 'pro' : tier === 'starter' ? 'starter' : 'identity';
 
   const canAddBlock = (currentBlockCount: number) => {
     return currentBlockCount < limits.maxBlocks;
