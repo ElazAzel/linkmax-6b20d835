@@ -20,6 +20,7 @@ import Zap from 'lucide-react/dist/esm/icons/zap';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import Package from 'lucide-react/dist/esm/icons/package';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
@@ -74,11 +75,12 @@ const TABS: NavTab[] = [
 ];
 
 const MORE_ITEMS: NavTab[] = [
-  { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Аналитика', path: '' },
+  { id: 'zone-dashboard', icon: BarChart3, labelKey: 'dashboard.sidebar.zoneDashboard', defaultLabel: 'Дашборд', path: '' },
+  { id: 'zone-analytics', icon: FileText, labelKey: 'dashboard.sidebar.zoneAnalytics', defaultLabel: 'Отчёты', path: '' },
   { id: 'zone-deals', icon: Kanban, labelKey: 'dashboard.sidebar.zonePipeline', defaultLabel: 'Сделки', path: '' },
   { id: 'zone-contacts', icon: Contact, labelKey: 'dashboard.sidebar.zoneContacts', defaultLabel: 'Контакты', path: '' },
   { id: 'zone-calendar', icon: Calendar, labelKey: 'dashboard.sidebar.zoneCalendar', defaultLabel: 'Календарь', path: '' },
-  { id: 'zone-events', icon: Calendar, labelKey: 'dashboard.sidebar.zoneEvents', defaultLabel: 'Ивенты', path: '' },
+  { id: 'zone-events', icon: CalendarDays, labelKey: 'dashboard.sidebar.zoneEvents', defaultLabel: 'Ивенты', path: '' },
   { id: 'zone-inbox', icon: MessageCircle, labelKey: 'dashboard.sidebar.zoneInbox', defaultLabel: 'Входящие', path: '' },
   { id: 'zone-tasks', icon: ListTodo, labelKey: 'dashboard.sidebar.zoneTasks', defaultLabel: 'Задачи', path: '' },
   { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации', path: '' },
@@ -86,6 +88,7 @@ const MORE_ITEMS: NavTab[] = [
   { id: 'zone-products', icon: Package, labelKey: 'dashboard.sidebar.zoneProducts', defaultLabel: 'Продукты', path: '' },
   { id: 'zone-documents', icon: FileText, labelKey: 'dashboard.sidebar.zoneDocuments', defaultLabel: 'Документы', path: '' },
   { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона', path: '' },
+  { id: 'leads', icon: Contact, labelKey: 'dashboard.nav.leads', defaultLabel: 'Лиды', path: '' },
   { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
   { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда', path: '' },
   { id: 'settings', icon: Settings, labelKey: 'dashboard.nav.settings', defaultLabel: 'Настройки', path: '' },

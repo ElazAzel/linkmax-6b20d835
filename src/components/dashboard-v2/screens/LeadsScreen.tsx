@@ -23,16 +23,16 @@ export const LeadsScreen = memo(function LeadsScreen() {
     useEffect(() => {
         async function fetchLeads() {
             try {
-                const { data: pageData } = await (supabase as any).from('pages').select('id').eq('is_primary', true).single();
-                if (pageData?.id) {
-                    const { data, error } = await (supabase as any)
-                        .from('leads')
-                        .select('*')
-                        .eq('page_id', pageData.id)
-                        .order('created_at', { ascending: false });
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) { setLoading(false); return; }
 
-                    if (data) setLeads(data as any[]);
-                }
+                const { data, error } = await (supabase as any)
+                    .from('leads')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+
+                if (data) setLeads(data as any[]);
             } catch (e) {
                 console.error("Error fetching leads", e);
             } finally {

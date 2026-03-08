@@ -154,7 +154,7 @@ const router = createBrowserRouter([
       { path: "dashboard/events/:eventId/scanner", element: <EventScanner /> },
       { path: "dashboard/zone-dashboard", element: <Dashboard /> },
       { path: "dashboard/zone-analytics", element: <Dashboard /> },
-      { path: "dashboard/zone-analytics", element: <Dashboard /> },
+      { path: "dashboard/leads", element: <Dashboard /> },
       { path: "dashboard/zone-deals", element: <Dashboard /> },
       { path: "dashboard/zone-contacts", element: <Dashboard /> },
       { path: "dashboard/zone-inbox", element: <Dashboard /> },
