@@ -176,8 +176,8 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const inTrial = trialEndsAt ? trialEndsAt > now : false;
     const premiumActive = premiumExpiresAt ? premiumExpiresAt > now : false;
     
-    // Determine tier
-    let tier: 'free' | 'pro' | 'business' = 'free';
+    // Determine tier based on profile data
+    let tier: 'identity' | 'starter' | 'pro' | 'business' = 'identity';
     let isPremium = false;
     
     // Check if user has active premium
@@ -185,16 +185,25 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
     const isPremiumFlagValid = data.is_premium && (!premiumExpiresAt || premiumActive);
     const hasActivePremium = premiumActive || isPremiumFlagValid || inTrial;
     
+    // Map tier from profile
+    const profileTier = (data as { premium_tier?: string }).premium_tier;
+    
     if (hasActivePremium) {
       isPremium = true;
-      // Check if user has business tier
-      const profileTier = (data as { premium_tier?: string }).premium_tier;
-      tier = profileTier === 'business' ? 'business' : 'pro';
+      // Map to new tier system
+      if (profileTier === 'business') tier = 'business';
+      else if (profileTier === 'pro') tier = 'pro';
+      else if (profileTier === 'starter') tier = 'starter';
+      else tier = 'pro'; // Default for legacy premium users
+    } else if (profileTier === 'starter') {
+      // Starter is free tier with commission-based monetization
+      tier = 'starter';
+      isPremium = false; // Starter is not "premium" but has CRM access
     }
 
     return { isPremium, tier, trialEndsAt: data.trial_ends_at, inTrial };
   } catch (error) {
-    return { isPremium: false, tier: 'free', trialEndsAt: null, inTrial: false };
+    return { isPremium: false, tier: 'identity', trialEndsAt: null, inTrial: false };
   }
 }
 

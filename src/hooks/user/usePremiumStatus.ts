@@ -32,13 +32,15 @@ export function usePremiumStatus() {
     try {
       const status = await checkPremiumStatusService(user.id);
       setIsPremium(status.isPremium);
-      setTier(status.tier || (status.isPremium ? 'pro' : 'free'));
+      // Map tier correctly: identity/starter/pro/business
+      const mappedTier = status.tier || (status.isPremium ? 'pro' : 'identity');
+      setTier(mappedTier as PremiumTier);
       setInTrial(status.inTrial);
       setTrialEndsAt(status.trialEndsAt);
     } catch (error) {
       logger.error('Error checking premium status', error, { context: 'usePremiumStatus' });
       setIsPremium(false);
-      setTier('free');
+      setTier('identity');
       setInTrial(false);
     } finally {
       setIsLoading(false);
