@@ -80,7 +80,7 @@ export function useActivationChecklist({
         action: onOpenEditor,
       },
     ];
-  }, [pageData, viewCount, leadsCount, totalClicks, onOpenEditor, onShare]);
+  }, [pageData, viewCount, leadsCount, bookingsCount, onOpenEditor, onShare]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;
