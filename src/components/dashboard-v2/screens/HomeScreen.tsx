@@ -165,7 +165,7 @@ export const HomeScreen = memo(function HomeScreen({
             />
             <OperatorSummaryWidget
               pageId={pageData?.id}
-              pageUpdatedAt={null}
+              pageUpdatedAt={pageData?.updatedAt}
               onOpenActivity={onOpenActivity}
               onOpenEditor={onOpenEditor}
             />
