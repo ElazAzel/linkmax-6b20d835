@@ -274,7 +274,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                 {isAddingProduct ? (
                   <div className="p-3 rounded-lg border bg-muted/20 space-y-3">
                     <div className="space-y-1">
-                      <Label className="text-[10px]">{t('zones.deals.selectProduct', 'Select Product')}</Label>
+                      <Label className="text-xs">{t('zones.deals.selectProduct', 'Select Product')}</Label>
                       <Select value={selectedProductId} onValueChange={setSelectedProductId}>
                         <SelectTrigger className="h-8 text-xs"><SelectValue placeholder={t('zones.deals.selectPlaceholder', 'Select...')} /></SelectTrigger>
                         <SelectContent>
