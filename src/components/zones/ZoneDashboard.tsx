@@ -316,8 +316,8 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                           <div className="absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 border-primary bg-background z-10" />
 
                           <div className="space-y-1">
-                            <p className="text-[11px] font-bold group-hover:text-primary transition-colors line-clamp-2">{act.summary}</p>
-                            <p className="text-[10px] text-muted-foreground">
+                            <p className="text-xs font-bold group-hover:text-primary transition-colors line-clamp-2">{act.summary}</p>
+                            <p className="text-xs text-muted-foreground">
                               {formatRelativeTime(act.happened_at, 'ru')}
                             </p>
                           </div>
