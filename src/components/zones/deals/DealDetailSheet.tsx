@@ -38,6 +38,7 @@ import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { ZoneDocumentCreator } from '../documents/ZoneDocumentCreator';
 import { KaspiQRGenerator } from './KaspiQRGenerator';
+import { MentionInput, extractMentions, formatMentionsForDisplay } from '../shared/MentionInput';
 import FileSignature from 'lucide-react/dist/esm/icons/file-signature';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -249,23 +250,27 @@ export const DealDetailSheet = memo(function DealDetailSheet({
               {/* Comments Tab */}
               <TabsContent value="comments" className="space-y-4 m-0">
                 <div className="flex gap-2">
-                  <Input
+                  <MentionInput
+                    zoneId={deal.zone_id}
                     value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder={t('zones.deals.addComment', 'Write a comment...')}
-                    className="text-sm h-9"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && newComment.trim()) {
-                        addComment(newComment.trim()).then(() => setNewComment(''));
-                      }
+                    onChange={setNewComment}
+                    onSubmit={async (text, mentionedIds) => {
+                      await addComment(text, mentionedIds);
+                      setNewComment('');
                     }}
+                    placeholder={t('zones.deals.addComment', 'Write a comment... (use @ to mention)')}
+                    disabled={commentsLoading}
+                    className="flex-1"
                   />
                   <Button 
                     size="icon" 
                     variant="ghost" 
-                    onClick={() => {
+                    onClick={async () => {
                       if (newComment.trim()) {
-                        addComment(newComment.trim()).then(() => setNewComment(''));
+                        const mentionedIds = extractMentions(newComment);
+                        const displayText = formatMentionsForDisplay(newComment);
+                        await addComment(displayText.trim(), mentionedIds);
+                        setNewComment('');
                       }
                     }}
                     disabled={!newComment.trim() || commentsLoading}

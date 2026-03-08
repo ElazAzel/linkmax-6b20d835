@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 interface NotificationPayload {
-    type: 'new_deal' | 'invoice_paid' | 'task_overdue';
+    type: 'new_deal' | 'invoice_paid' | 'task_overdue' | 'deal_comment_mention';
     zone_id: string;
     data: Record<string, unknown>;
 }
@@ -110,6 +110,19 @@ serve(async (req: Request) => {
                         message = `⚠️ <b>Мерзімі өткен тапсырма</b> ${zoneName}\n\n📋 ${taskTitle}\n📅 Мерзімі: ${dueDate}`;
                     } else {
                         message = `⚠️ <b>Overdue task</b> in ${zoneName}\n\n📋 ${taskTitle}\n📅 Due: ${dueDate}`;
+                    }
+                    break;
+                }
+                case 'deal_comment_mention': {
+                    const dealTitle = data.deal_title || '';
+                    const commenterName = data.commenter_name || '';
+                    const commentPreview = data.comment_preview || '';
+                    if (lang === 'ru') {
+                        message = `💬 <b>Упоминание в комментарии</b>\n\n📋 Сделка: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
+                    } else if (lang === 'kk') {
+                        message = `💬 <b>Пікірде аталды</b>\n\n📋 Мәміле: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
+                    } else {
+                        message = `💬 <b>Mentioned in comment</b>\n\n📋 Deal: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
                     }
                     break;
                 }

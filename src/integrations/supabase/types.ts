@@ -2614,6 +2614,7 @@ export type Database = {
           created_at: string | null
           deal_id: string
           id: string
+          mentioned_user_ids: string[] | null
           updated_at: string | null
           user_id: string
           zone_id: string
@@ -2623,6 +2624,7 @@ export type Database = {
           created_at?: string | null
           deal_id: string
           id?: string
+          mentioned_user_ids?: string[] | null
           updated_at?: string | null
           user_id: string
           zone_id: string
@@ -2632,6 +2634,7 @@ export type Database = {
           created_at?: string | null
           deal_id?: string
           id?: string
+          mentioned_user_ids?: string[] | null
           updated_at?: string | null
           user_id?: string
           zone_id?: string
