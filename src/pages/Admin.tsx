@@ -36,6 +36,7 @@ const AdminTokensTab = lazy(() => import('@/components/admin/AdminTokensTab').th
 const AdminPartnersTab = lazy(() => import('@/components/admin/AdminPartnersTab').then(m => ({ default: m.AdminPartnersTab })));
 const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTab').then(m => ({ default: m.AdminTemplatesTab })));
 const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
+const AdminSearchDiagnosticsTab = lazy(() => import('@/components/admin/AdminSearchDiagnosticsTab').then(m => ({ default: m.AdminSearchDiagnosticsTab })));
 
 function TabLoader() {
   return (
