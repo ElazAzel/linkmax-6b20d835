@@ -192,7 +192,7 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
               onClick={onSkip}
               className="text-muted-foreground"
             >
-              Пропустить
+              {t('onboardingTour.skip', 'Пропустить')}
             </Button>
             
             <div className="flex items-center gap-2">
@@ -203,11 +203,11 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
                   onClick={handlePrev}
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />
-                  Назад
+                  {t('onboardingTour.back', 'Назад')}
                 </Button>
               )}
               <Button size="sm" onClick={handleNext}>
-                {isLastStep ? 'Начать' : 'Далее'}
+                {isLastStep ? t('onboardingTour.start', 'Начать') : t('onboardingTour.next', 'Далее')}
                 {!isLastStep && <ChevronRight className="h-4 w-4 ml-1" />}
               </Button>
             </div>
