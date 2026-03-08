@@ -41,6 +41,14 @@ interface PageSettingsTabProps {
     faviconUrl?: string;
     hideBranding?: boolean;
 
+    // Entity fields
+    city?: string;
+    profession?: string;
+    entityType?: 'person' | 'organization';
+    contactEmail?: string;
+    contactPhone?: string;
+    contactWhatsapp?: string;
+
     // Profile info
     avatarUrl?: string;
     displayName: string;
@@ -52,6 +60,7 @@ interface PageSettingsTabProps {
     onUpdateBranding?: (branding: { faviconUrl?: string; hideBranding?: boolean }) => void;
     onToggleIndexable?: (indexable: boolean) => void;
     onNicheChange: (niche: Niche) => void;
+    onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string }) => void;
     onUpgradePage?: () => void;
     onOpenTheme?: () => void;
     onOpenTemplates?: () => void;
