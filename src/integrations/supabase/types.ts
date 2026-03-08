@@ -960,6 +960,63 @@ export type Database = {
         }
         Relationships: []
       }
+      indexing_submissions: {
+        Row: {
+          action_type: string
+          batch_id: string | null
+          child_type: string | null
+          created_at: string
+          http_status: number | null
+          id: string
+          page_id: string | null
+          provider: string
+          skip_reason: string | null
+          submission_status: string
+          target_url: string
+        }
+        Insert: {
+          action_type?: string
+          batch_id?: string | null
+          child_type?: string | null
+          created_at?: string
+          http_status?: number | null
+          id?: string
+          page_id?: string | null
+          provider: string
+          skip_reason?: string | null
+          submission_status?: string
+          target_url: string
+        }
+        Update: {
+          action_type?: string
+          batch_id?: string | null
+          child_type?: string | null
+          created_at?: string
+          http_status?: number | null
+          id?: string
+          page_id?: string | null
+          provider?: string
+          skip_reason?: string | null
+          submission_status?: string
+          target_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "indexing_submissions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "indexing_submissions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "public_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_interactions: {
         Row: {
           content: string
@@ -3711,6 +3768,10 @@ export type Database = {
       get_event_registration_count: {
         Args: { p_event_id: string }
         Returns: number
+      }
+      get_page_search_diagnostics: {
+        Args: { p_page_id: string }
+        Returns: Json
       }
       get_page_version: {
         Args: { p_slug: string; p_version_id?: string }
