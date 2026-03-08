@@ -224,7 +224,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     title: 'Subscribe to Newsletter',
     description: 'Get the latest updates',
     buttonText: 'Subscribe',
-    isPremium: true,
     ...overrides,
   }),
 
