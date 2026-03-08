@@ -124,7 +124,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${c.title} - lnkmx</title>
+  <title>${c.title} - LinkMAX</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="${c.body}">
   <style>
