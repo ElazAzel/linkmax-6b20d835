@@ -104,24 +104,7 @@ export default function Pricing() {
         t('pricing.features.aiMonthlyPro', '10 AI-генераций в месяц'),
       ]
     },
-    business: {
-      name: 'BUSINESS',
-      icon: Sparkles,
-      color: 'from-amber-500 to-orange-600',
-      pricesKzt: { 3: 9900, 6: 8415, 12: 6930 },
-      pricesUsd: { 3: 19.90, 6: 16.90, 12: 13.90 },
-      totalKzt: { 3: 29700, 6: 50490, 12: 83160 },
-      totalUsd: { 3: 59.70, 6: 101.40, 12: 166.80 },
-      features: [
-        t('pricing.features.allPro', 'Всё из PRO, плюс:'),
-        t('pricing.features.businessZones', 'Бизнес-зоны (рабочие пространства)'),
-        t('pricing.features.teamCRM', 'Командная CRM и Kanban'),
-        t('pricing.features.teamInbox', 'Командный чат и задачи'),
-        t('pricing.features.teamRoles', 'Роли и разграничение доступа'),
-        t('pricing.features.teamMembers', 'До 5 участников команды'),
-        t('pricing.features.prioritySupport', 'Приоритетная поддержка')
-      ]
-    }
+  
   };
   const getSavingsPercent = (period: BillingPeriod): number => {
     if (period === 12) return 30;
