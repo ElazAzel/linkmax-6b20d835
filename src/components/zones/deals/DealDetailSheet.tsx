@@ -313,7 +313,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           <CheckSquare className={cn("h-4 w-4 shrink-0", task.status === 'done' ? "text-green-600" : "text-muted-foreground")} />
                           <span className="text-sm font-medium truncate">{task.title}</span>
                         </div>
-                        <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-[10px]">
+                        <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-xs">
                           {task.status}
                         </Badge>
                       </div>
