@@ -383,7 +383,7 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     slotDuration: 60,
     maxBookingDays: 30,
     disabledWeekdays: [0, 6],
-    isPremium: true,
+    
     ...overrides,
   }),
 

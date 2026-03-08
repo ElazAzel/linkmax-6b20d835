@@ -94,7 +94,6 @@ export const BlockPreview = memo(function BlockPreview({ blockType }: BlockPrevi
       title: t('blockPreview.newsletterTitle', 'Подпишитесь на рассылку'),
       description: t('blockPreview.newsletterDescription', 'Получайте новости первыми'),
       buttonText: t('blockPreview.newsletterButton', 'Подписаться'),
-      isPremium: true,
     },
     testimonial: {
       id: 'preview-testimonial',
