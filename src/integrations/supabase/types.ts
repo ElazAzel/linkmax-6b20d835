@@ -1358,18 +1358,21 @@ export type Database = {
           grid_config: Json | null
           hide_branding: boolean | null
           id: string
+          index_exclusion_reasons: string[] | null
           integrations: Json | null
           is_in_gallery: boolean | null
           is_indexable: boolean | null
           is_paid: boolean | null
           is_primary_paid: boolean | null
           is_published: boolean | null
+          last_indexnow_at: string | null
           last_snapshot_at: string | null
           niche: string | null
           organization_id: string | null
           page_type: string | null
           preview_url: string | null
           profession: string | null
+          quality_breakdown: Json | null
           quality_score: number | null
           seo_meta: Json | null
           service_slugs: Json | null
@@ -1399,18 +1402,21 @@ export type Database = {
           grid_config?: Json | null
           hide_branding?: boolean | null
           id?: string
+          index_exclusion_reasons?: string[] | null
           integrations?: Json | null
           is_in_gallery?: boolean | null
           is_indexable?: boolean | null
           is_paid?: boolean | null
           is_primary_paid?: boolean | null
           is_published?: boolean | null
+          last_indexnow_at?: string | null
           last_snapshot_at?: string | null
           niche?: string | null
           organization_id?: string | null
           page_type?: string | null
           preview_url?: string | null
           profession?: string | null
+          quality_breakdown?: Json | null
           quality_score?: number | null
           seo_meta?: Json | null
           service_slugs?: Json | null
@@ -1440,18 +1446,21 @@ export type Database = {
           grid_config?: Json | null
           hide_branding?: boolean | null
           id?: string
+          index_exclusion_reasons?: string[] | null
           integrations?: Json | null
           is_in_gallery?: boolean | null
           is_indexable?: boolean | null
           is_paid?: boolean | null
           is_primary_paid?: boolean | null
           is_published?: boolean | null
+          last_indexnow_at?: string | null
           last_snapshot_at?: string | null
           niche?: string | null
           organization_id?: string | null
           page_type?: string | null
           preview_url?: string | null
           profession?: string | null
+          quality_breakdown?: Json | null
           quality_score?: number | null
           seo_meta?: Json | null
           service_slugs?: Json | null
