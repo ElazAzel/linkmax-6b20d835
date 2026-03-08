@@ -84,13 +84,26 @@ export const HomeScreen = memo(function HomeScreen({
   const viewCount = pageData?.viewCount || 0;
 
   // Activation checklist with outcome-based data
+  // Fetch bookings count for activation milestone
+  const [bookingsCount, setBookingsCount] = useState(0);
+  useEffect(() => {
+    if (!pageData?.id) return;
+    (async () => {
+      const { count } = await supabase
+        .from('bookings')
+        .select('*', { count: 'exact', head: true })
+        .eq('page_id', pageData.id);
+      setBookingsCount(count || 0);
+    })();
+  }, [pageData?.id]);
+
   const activation = useActivationChecklist({
     pageData,
     onOpenEditor,
     onShare,
     viewCount,
     leadsCount: realLeadsCount,
-    totalClicks: 0, // TODO: pass real click count when available
+    bookingsCount,
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
 

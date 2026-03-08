@@ -1,7 +1,7 @@
 /**
  * ActivityScreen - Unified inbox for leads, bookings, messages
  */
-import { memo, useState, useCallback, useMemo } from 'react';
+import { memo, useState, useCallback, useMemo, useEffect } from 'react';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,7 @@ import CheckCheck from 'lucide-react/dist/esm/icons/check-check';
 import X from 'lucide-react/dist/esm/icons/x';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Inbox from 'lucide-react/dist/esm/icons/inbox';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -43,6 +44,9 @@ import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { exportLeadsToExcel } from '@/lib/export/excel-export-leads';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface ActivityScreenProps {
   isPremium: boolean;
@@ -88,14 +92,33 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const { t, i18n } = useTranslation();
   const { leads, loading, getLeadStats, refreshLeads, quickReply } = useLeads();
   const { isRepeatCustomer } = useRepeatCustomers();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [activeTab, setActiveTab] = useState<'leads' | 'bookings'>('leads');
+  const [monthlyLeadCount, setMonthlyLeadCount] = useState<number | null>(null);
 
   const stats = getLeadStats();
+
+  // Fetch monthly lead count for limit banner (free users)
+  useEffect(() => {
+    if (isPremium || !user?.id) return;
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+    (async () => {
+      const { count } = await supabase
+        .from('leads')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .gte('created_at', monthStart.toISOString());
+      setMonthlyLeadCount(count || 0);
+    })();
+  }, [isPremium, user?.id, leads.length]);
 
   // CRM is now available to all users (basic CRM free, premium for export/automation)
 
@@ -210,6 +233,39 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.2 }}
           >
+            {/* Lead Limit Banner for free users */}
+            {!isPremium && monthlyLeadCount !== null && (
+              <div className={cn(
+                "mx-5 mb-3 p-3 rounded-xl flex items-center justify-between text-sm",
+                monthlyLeadCount >= 50
+                  ? "bg-destructive/10 border border-destructive/20"
+                  : monthlyLeadCount >= 40
+                    ? "bg-amber-500/10 border border-amber-500/20"
+                    : "bg-muted/50"
+              )}>
+                <div className="flex items-center gap-2">
+                  {monthlyLeadCount >= 40 && <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />}
+                  <span className={cn(
+                    "font-medium",
+                    monthlyLeadCount >= 50 ? "text-destructive" : ""
+                  )}>
+                    {monthlyLeadCount >= 50
+                      ? t('crm.leadLimit.reached', 'Лимит заявок достигнут')
+                      : t('crm.leadLimit.used', '{{used}} из {{max}} заявок', { used: monthlyLeadCount, max: 50 })
+                    }
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs font-bold text-primary"
+                  onClick={() => navigate('/pricing')}
+                >
+                  {t('crm.leadLimit.upgrade', 'Снять лимит →')}
+                </Button>
+              </div>
+            )}
+
             {/* Status Pills */}
             <div className="px-5 py-3 overflow-x-auto scrollbar-hide">
               <div className="flex gap-2 min-w-max">

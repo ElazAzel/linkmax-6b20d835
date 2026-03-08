@@ -3500,6 +3500,12 @@
     "bookings": "Жазбалар",
     "analytics": "Аналитика",
     "premiumRequired": "Премиум мүмкіндік",
+    "leadLimit": {
+      "used": "Осы айда {{used}} / {{max}} өтінім",
+      "warning": "Лимитке дейін {{remaining}} өтінім қалды",
+      "reached": "Өтінім лимитіне жеттіңіз",
+      "upgrade": "Лимитті алып тастау →"
+    },
     "premiumDescription": "CRM қатынасы және ықтимал тұтынушыларды қадағалау үшін Premium нұсқасына жаңартыңыз",
     "noLeadsToExport": "Экспортқа әкелмейді",
     "exportSuccess": "Экспортталатын жетекшілер",

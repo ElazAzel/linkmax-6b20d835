@@ -24,7 +24,6 @@ interface UseActivationChecklistOptions {
   viewCount?: number;
   leadsCount?: number;
   bookingsCount?: number;
-  totalClicks?: number;
 }
 
 export function useActivationChecklist({
@@ -34,7 +33,6 @@ export function useActivationChecklist({
   viewCount = 0,
   leadsCount = 0,
   bookingsCount = 0,
-  totalClicks = 0,
 }: UseActivationChecklistOptions) {
   const { t } = useTranslation();
   const [celebrationDismissed, setCelebrationDismissed] = useState(
@@ -47,7 +45,7 @@ export function useActivationChecklist({
     const hasPage = pageData.blocks.length > 0;
     const isPublished = pageData.isPublished || false;
     const hasFirstView = (pageData.viewCount || viewCount) >= 1;
-    const hasFirstConversion = leadsCount >= 1 || totalClicks >= 1;
+    const hasFirstConversion = leadsCount >= 1 || bookingsCount >= 1;
     const hasFirstBooking = bookingsCount >= 1;
 
     return [
@@ -82,7 +80,7 @@ export function useActivationChecklist({
         action: onOpenEditor,
       },
     ];
-  }, [pageData, viewCount, leadsCount, totalClicks, onOpenEditor, onShare]);
+  }, [pageData, viewCount, leadsCount, bookingsCount, onOpenEditor, onShare]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;

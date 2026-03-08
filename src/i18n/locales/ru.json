@@ -3528,6 +3528,12 @@
     "bookings": "Записи",
     "analytics": "Аналитика",
     "premiumRequired": "Премиум функция",
+    "leadLimit": {
+      "used": "{{used}} из {{max}} заявок в этом месяце",
+      "warning": "Осталось {{remaining}} заявок до лимита",
+      "reached": "Лимит заявок достигнут",
+      "upgrade": "Снять лимит →"
+    },
     "premiumDescription": "Обновитесь до Premium для доступа к CRM и отслеживания лидов",
     "noLeadsToExport": "Нет лидов для экспорта",
     "exportSuccess": "Лиды экспортированы",
