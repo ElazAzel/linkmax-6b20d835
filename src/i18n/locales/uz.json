@@ -3401,7 +3401,13 @@
       "converted": "O'zgartirilgan",
       "lost": "Yo'qotilgan"
     },
-    "source": "Manba",
+    "source": {
+      "form": "Shakl",
+      "messenger": "Messenjer",
+      "manual": "Qoʻlda",
+      "pageView": "Koʻrish",
+      "other": "Boshqa"
+    },
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Mijoz ismi",
     "phone": "Telefon",
