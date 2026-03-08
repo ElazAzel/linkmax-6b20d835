@@ -33,6 +33,7 @@ import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
+import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 
 interface HomeScreenProps {
   pageData: PageData | null;
