@@ -149,9 +149,9 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'won': return <Badge className="bg-green-600 text-white text-[10px]">{t('zones.deals.won', 'Won')}</Badge>;
-      case 'lost': return <Badge variant="destructive" className="text-[10px]">{t('zones.deals.lost', 'Lost')}</Badge>;
-      default: return <Badge variant="outline" className="text-[10px]">{t('zones.deals.open', 'Open')}</Badge>;
+      case 'won': return <Badge className="bg-green-600 text-white text-xs">{t('zones.deals.won', 'Won')}</Badge>;
+      case 'lost': return <Badge variant="destructive" className="text-xs">{t('zones.deals.lost', 'Lost')}</Badge>;
+      default: return <Badge variant="outline" className="text-xs">{t('zones.deals.open', 'Open')}</Badge>;
     }
   };
 
