@@ -31,7 +31,7 @@ import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import type { ZoneDeal, ZoneDealStage } from '@/types/zones';
-import { useZoneDealActivities, useZoneDealProducts } from '@/hooks/zones/useZoneDeals';
+import { useZoneDealActivities, useZoneDealProducts, useZoneDealComments } from '@/hooks/zones/useZoneDeals';
 import { useZoneDealFields } from '@/hooks/zones/useZoneDealFields';
 import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
@@ -82,6 +82,9 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const { products } = useZoneProducts(deal?.zone_id || null);
   const { tasks } = useZoneTasks(deal?.zone_id || null);
   const { documents } = useZoneDocuments(deal?.zone_id || null, { dealId: deal?.id });
+  const { comments, addComment, deleteComment, loading: commentsLoading } = useZoneDealComments(deal?.zone_id || null, deal?.id || null);
+  
+  const [newComment, setNewComment] = useState('');
 
   const linkedTasks = useMemo(() => tasks.filter(t => t.deal_id === deal?.id), [tasks, deal?.id]);
   const linkedDocs = useMemo(() => documents?.filter(d => d.deal_id === deal?.id) || [], [documents, deal?.id]);
@@ -194,12 +197,15 @@ export const DealDetailSheet = memo(function DealDetailSheet({
 
         <Tabs defaultValue="timeline" className="flex-1 flex flex-col overflow-hidden">
           <div className="px-6">
-            <TabsList className="w-full grid grid-cols-4">
+            <TabsList className="w-full grid grid-cols-5">
               <TabsTrigger value="timeline" className="text-xs min-h-11">{t('zones.deals.activities', 'Activity')}</TabsTrigger>
+              <TabsTrigger value="comments" className="text-xs min-h-11">
+                <MessageSquare className="w-3.5 h-3.5 mr-1.5" />
+                {comments.length > 0 && <span className="ml-1">({comments.length})</span>}
+              </TabsTrigger>
               <TabsTrigger value="products" className="text-xs min-h-11">{t('zones.invoices.items', 'Products')} ({dealProducts.length})</TabsTrigger>
               <TabsTrigger value="tasks" className="text-xs min-h-11">{t('zones.tasks.title', 'Tasks')} ({linkedTasks.length})</TabsTrigger>
               <TabsTrigger value="docs" className="text-xs min-h-11">Документы ({linkedDocs.length})</TabsTrigger>
-              <TabsTrigger value="info" className="text-xs min-h-11">{t('common.details', 'Info')}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -236,6 +242,70 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                   ))}
                   {activities.length === 0 && (
                     <p className="text-sm text-muted-foreground text-center py-8 italic">{t('zones.deals.noActivities', 'No activities yet')}</p>
+                  )}
+                </div>
+              </TabsContent>
+
+              {/* Comments Tab */}
+              <TabsContent value="comments" className="space-y-4 m-0">
+                <div className="flex gap-2">
+                  <Input
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder={t('zones.deals.addComment', 'Write a comment...')}
+                    className="text-sm h-9"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && newComment.trim()) {
+                        addComment(newComment.trim()).then(() => setNewComment(''));
+                      }
+                    }}
+                  />
+                  <Button 
+                    size="icon" 
+                    variant="ghost" 
+                    onClick={() => {
+                      if (newComment.trim()) {
+                        addComment(newComment.trim()).then(() => setNewComment(''));
+                      }
+                    }}
+                    disabled={!newComment.trim() || commentsLoading}
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="space-y-3">
+                  {comments.map((comment: any) => {
+                    const displayName = comment.user?.raw_user_meta_data?.display_name || comment.user?.email?.split('@')[0] || 'User';
+                    return (
+                      <div key={comment.id} className="p-3 rounded-lg bg-muted/30 border border-muted group">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                              <span className="text-xs font-bold text-primary">{displayName.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <span className="text-xs font-medium">{displayName}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(comment.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                            </span>
+                          </div>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-destructive"
+                            onClick={() => deleteComment(comment.id)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <p className="text-sm pl-8">{comment.content}</p>
+                      </div>
+                    );
+                  })}
+                  {comments.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center py-8 italic">
+                      {t('zones.deals.noComments', 'No comments yet')}
+                    </p>
                   )}
                 </div>
               </TabsContent>

@@ -14,6 +14,7 @@ export const zoneDealsKeys = {
   dealProducts: (zoneId: string, dealId: string) => ['zone-deal-products', zoneId, dealId] as const,
   products: (zoneId: string) => ['zone-products', zoneId] as const,
   pipelines: (zoneId: string) => ['zone-pipelines', zoneId] as const,
+  comments: (zoneId: string, dealId: string) => ['zone-deal-comments', zoneId, dealId] as const,
 };
 
 // ─── Fetch functions ───
@@ -79,6 +80,16 @@ async function fetchDealProducts(zoneId: string, dealId: string) {
     .eq('deal_id', dealId) as any);
   if (error) throw error;
   return (data || []) as any[];
+}
+
+async function fetchDealComments(zoneId: string, dealId: string) {
+  const { data, error } = await (supabase
+    .from('zone_deal_comments' as any)
+    .select('*, user:user_id(email, raw_user_meta_data)')
+    .eq('deal_id', dealId)
+    .order('created_at', { ascending: true }) as any);
+  if (error) throw error;
+  return data || [];
 }
 
 // ─── Hooks ───
@@ -312,5 +323,66 @@ export function useZoneDealProducts(zoneId: string | null, dealId: string | null
     loading,
     addProduct: (p: { productId: string; quantity: number; unitPrice: number }) => addProduct.mutateAsync(p),
     removeProduct: (id: string) => removeProduct.mutateAsync(id)
+  };
+}
+
+// ─── Hook: Deal Comments ───
+export function useZoneDealComments(zoneId: string | null, dealId: string | null) {
+  const queryClient = useQueryClient();
+  const safeZoneId = zoneId || '';
+  const safeDealId = dealId || '';
+
+  const { data: comments = [], isLoading: loading } = useQuery({
+    queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId),
+    queryFn: () => fetchDealComments(safeZoneId, safeDealId),
+    enabled: !!zoneId && !!dealId,
+    staleTime: 30_000,
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: async (content: string) => {
+      if (!zoneId || !dealId) throw new Error('No zone or deal selected');
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      const { error } = await (supabase
+        .from('zone_deal_comments' as any)
+        .insert({
+          zone_id: zoneId,
+          deal_id: dealId,
+          user_id: userId,
+          content,
+        }) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
+  });
+
+  const updateCommentMutation = useMutation({
+    mutationFn: async ({ id, content }: { id: string; content: string }) => {
+      const { error } = await (supabase
+        .from('zone_deal_comments' as any)
+        .update({ content })
+        .eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase
+        .from('zone_deal_comments' as any)
+        .delete()
+        .eq('id', id) as any);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.comments(safeZoneId, safeDealId) }),
+  });
+
+  return {
+    comments: comments as any[],
+    loading,
+    addComment: async (content: string) => addCommentMutation.mutateAsync(content),
+    updateComment: async (id: string, content: string) => updateCommentMutation.mutateAsync({ id, content }),
+    deleteComment: async (id: string) => deleteCommentMutation.mutateAsync(id),
   };
 }

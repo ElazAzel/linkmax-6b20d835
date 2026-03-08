@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { FileText, Plus, FileSignature, Download, Trash, Eye, Settings, Search, Filter, MoreHorizontal, Calendar, User, Briefcase, Hash } from 'lucide-react';
+import { FileText, Plus, FileSignature, Download, Trash, Eye, Settings, Search, Filter, MoreHorizontal, Calendar, User, Briefcase, Hash, Sparkles } from 'lucide-react';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ZoneDocument, DocumentStatus } from '@/types/zones';
 import { ZoneDocumentCreator } from './ZoneDocumentCreator';
+import { ZoneDocumentGenerator } from './ZoneDocumentGenerator';
 import { useZoneContext } from '@/contexts/ZoneContext';
 import { ZoneDocumentTemplatesSettings } from './ZoneDocumentTemplatesSettings';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -32,6 +33,8 @@ export const ZoneDocumentsScreen = () => {
     const { documents, isLoading, deleteDocument, isDeleting } = useZoneDocuments(zoneId, { isReadOnly });
     const [isCreatorOpen, setIsCreatorOpen] = useState(false);
     const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
+    const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
+    const [selectedDocument, setSelectedDocument] = useState<ZoneDocument | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
@@ -257,6 +260,25 @@ export const ZoneDocumentsScreen = () => {
 
                                             {/* Desktop actions */}
                                             <div className="hidden sm:flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                {/* Generate PDF button */}
+                                                {doc.template_id && (
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-muted-foreground hover:text-primary"
+                                                                onClick={() => {
+                                                                    setSelectedDocument(doc);
+                                                                    setIsGeneratorOpen(true);
+                                                                }}
+                                                            >
+                                                                <Sparkles className="w-3.5 h-3.5" />
+                                                            </Button>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent side="bottom">{t('zones.documents.actions.generate', 'Generate PDF')}</TooltipContent>
+                                                    </Tooltip>
+                                                )}
                                                 {doc.file_url && (
                                                     <>
                                                         <Tooltip>
@@ -325,6 +347,17 @@ export const ZoneDocumentsScreen = () => {
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end" className="bg-popover border-border">
+                                                        {doc.template_id && (
+                                                            <>
+                                                                <DropdownMenuItem onClick={() => {
+                                                                    setSelectedDocument(doc);
+                                                                    setIsGeneratorOpen(true);
+                                                                }}>
+                                                                    <Sparkles className="w-4 h-4 mr-2" /> {t('zones.documents.actions.generate', 'Generate PDF')}
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuSeparator />
+                                                            </>
+                                                        )}
                                                         {doc.file_url && (
                                                             <>
                                                                 <DropdownMenuItem onClick={() => window.open(doc.file_url!, '_blank')}>
@@ -378,6 +411,12 @@ export const ZoneDocumentsScreen = () => {
 
                 <ZoneDocumentCreator open={isCreatorOpen} onOpenChange={setIsCreatorOpen} />
                 <ZoneDocumentTemplatesSettings open={isTemplatesOpen} onOpenChange={setIsTemplatesOpen} />
+                <ZoneDocumentGenerator 
+                    open={isGeneratorOpen} 
+                    onOpenChange={setIsGeneratorOpen} 
+                    document={selectedDocument}
+                    onGenerated={() => setSelectedDocument(null)}
+                />
             </div>
         </TooltipProvider>
     );
