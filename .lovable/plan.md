@@ -1,15 +1,41 @@
+# План развития платформы lnkmx — Март-Апрель 2026
+
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
+
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+
+### Новая тарифная модель (ADR 0026)
+
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+
+---
+
+## ⏳ Неделя 2 (16-22 марта): Платежи и биллинг
+
+- [ ] Доработать `create-payment-session` Edge Function
+- [ ] Реализовать `robokassa-webhook` 
+- [ ] Создать таблицу `billing_history`
+- [ ] Реализовать смену пароля в AccountSettings
+- [ ] Интегрировать Kaspi QR в карточку сделки
+
+---
 
 # Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
 ## Текущее состояние LinkMAX Business Zones
-
-Реализовано 6 модулей: Deals (Kanban), Contacts (список), Inbox (realtime чат), Tasks (Kanban), Invoices (RoboKassa), Settings (участники, биллинг). Есть RLS, зоны, роли, инвайты, grace-period. Это примерно **25-30% функциональности Bitrix24 Professional** для микро-команд.
-
----
-
-## Что есть у Bitrix24, чего критически не хватает LinkMAX
-
-Анализ строится от реальных use-cases клиентов (салон красоты, коуч, агентство), а не от полного набора Bitrix24.
 
 ### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
