@@ -5630,5 +5630,53 @@
       "sendError": "Failed to send message",
       "createError": "Failed to create conversation"
     }
+  },
+  "activation": {
+    "title": "Set up your page",
+    "progress": "{{done}} of {{total}}",
+    "steps": {
+      "register": "Create an account",
+      "avatar": "Add a profile photo",
+      "firstBlock": "Add your first block",
+      "publish": "Publish your page",
+      "share": "Share the link"
+    },
+    "tips": {
+      "addAvatar": "Add a profile photo — pages with avatars get 60% more trust",
+      "addBlock": "Add your first block — a link, product, or video",
+      "publish": "Publish your page to make it available via link",
+      "share": "Share your link on social media to get your first visitors",
+      "pricing": "Add a pricing block to increase conversions by 40%"
+    }
+  },
+  "onboardingTour": {
+    "welcome": {
+      "title": "Welcome to LinkMAX! 👋",
+      "desc": "Let us show you the basics. It will only take a minute."
+    },
+    "profile": {
+      "title": "Your Profile",
+      "desc": "Click on the profile block to change your name, bio, and avatar."
+    },
+    "addBlock": {
+      "title": "Adding Blocks",
+      "desc": "Press the + button to add a new block. Links, products, videos, and more are available."
+    },
+    "editBlock": {
+      "title": "Editing Blocks",
+      "desc": "Hover over any block to see edit, delete, and drag buttons."
+    },
+    "share": {
+      "title": "Publishing Your Page",
+      "desc": "When done, click \"Share\" to get a public link for social media."
+    },
+    "complete": {
+      "title": "All done! 🎉",
+      "desc": "Now you know the basics. Start building your page!"
+    },
+    "skip": "Skip",
+    "back": "Back",
+    "next": "Next",
+    "start": "Start"
   }
 }
