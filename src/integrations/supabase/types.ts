@@ -2608,6 +2608,51 @@ export type Database = {
           },
         ]
       }
+      zone_deal_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          deal_id: string
+          id: string
+          updated_at: string | null
+          user_id: string
+          zone_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          deal_id: string
+          id?: string
+          updated_at?: string | null
+          user_id: string
+          zone_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          deal_id?: string
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+          zone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zone_deal_comments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "zone_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zone_deal_comments_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zone_deal_fields: {
         Row: {
           created_at: string
