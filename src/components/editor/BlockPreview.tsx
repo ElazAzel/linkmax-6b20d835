@@ -87,7 +87,6 @@ export const BlockPreview = memo(function BlockPreview({ blockType }: BlockPrevi
       ],
       buttonText: t('blockPreview.formButton', 'Отправить'),
       submitEmail: 'example@email.com',
-      isPremium: true,
     },
     newsletter: {
       id: 'preview-newsletter',
