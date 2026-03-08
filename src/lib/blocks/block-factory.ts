@@ -347,7 +347,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     showHours: true,
     showMinutes: true,
     showSeconds: true,
-    isPremium: true,
     ...overrides,
   }),
 
