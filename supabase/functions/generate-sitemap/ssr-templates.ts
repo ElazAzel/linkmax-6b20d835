@@ -268,7 +268,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
       {
         '@type': 'SoftwareApplication',
         '@id': `${baseUrl}/#software`,
-        name: 'lnkmx - Micro-Business OS',
+        name: 'LinkMAX - Micro-Business OS',
         applicationCategory: 'BusinessApplication',
         applicationSubCategory: 'Business Operating System',
         operatingSystem: 'Web',
