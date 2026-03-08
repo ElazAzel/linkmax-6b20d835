@@ -297,7 +297,7 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
 export const GridEditor = memo(function GridEditor({
   blocks,
   isPremium,
-  currentTier = 'free',
+  currentTier = 'identity',
   premiumTier,
   gridConfig,
   onInsertBlock,

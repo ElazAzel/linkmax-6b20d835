@@ -117,7 +117,7 @@ export function isTrialExpiringSoon(status: PremiumStatus): boolean {
 
 // ============= Freemium Limits =============
 
-export type PremiumTier = 'free' | 'pro' | 'business';
+export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
 
 export interface FreemiumLimits {
   maxBlocks: number;
@@ -193,7 +193,22 @@ export function getUserLimits(status: PremiumStatus & { tier?: PremiumTier }): F
  */
 export function getTierDisplayName(tier: PremiumTier): string {
   switch (tier) {
+    case 'business': return 'BUSINESS';
     case 'pro': return 'PRO';
-    default: return 'BASIC';
+    case 'starter': return 'STARTER';
+    default: return 'IDENTITY';
+  }
+}
+
+/**
+ * Get commission rate based on tier (per ADR 0026)
+ * Starter: 7%, Pro: 1%, Business: 0%
+ */
+export function getTierCommissionRate(tier: PremiumTier): number {
+  switch (tier) {
+    case 'business': return 0;
+    case 'pro': return 0.01;
+    case 'starter': return 0.07;
+    default: return 0; // Identity tier has no transactions
   }
 }

@@ -133,8 +133,8 @@ export function useDashboard(options?: UseDashboardOptions) {
     navigate('/');
   }, [navigate]);
 
-  // Current tier string
-  const currentTier = isPremium ? (tier || 'pro') : 'free';
+  // Current tier string (using new 4-tier model)
+  const currentTier = isPremium ? (tier || 'pro') : 'identity';
 
   return useMemo(() => ({
     // Auth

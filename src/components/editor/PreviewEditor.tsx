@@ -22,7 +22,7 @@ interface PreviewEditorProps {
 export const PreviewEditor = memo(function PreviewEditor({
   blocks,
   isPremium,
-  currentTier = 'free',
+  currentTier = 'identity',
   premiumTier,
   gridConfig,
   onInsertBlock,

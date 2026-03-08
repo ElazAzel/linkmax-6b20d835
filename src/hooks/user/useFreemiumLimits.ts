@@ -16,7 +16,7 @@ export const PRO_EXTENDED_BLOCKS = [
   'download', 'form', 'countdown', 'booking', 'community'
 ] as const;
 
-export type FreeTier = 'free' | 'pro' | 'business';
+export type FreeTier = 'identity' | 'starter' | 'pro' | 'business';
 
 // Feature flags for each tier
 export interface TierFeatures {
@@ -100,24 +100,25 @@ export const BUSINESS_LIMITS: TierFeatures = {
 
 // Helper to get block tier
 export function getBlockTier(blockType: string): FreeTier {
-  if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'free';
+  if ((FREE_BLOCKS as readonly string[]).includes(blockType)) return 'identity';
   if ((PRO_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
   if ((PRO_EXTENDED_BLOCKS as readonly string[]).includes(blockType)) return 'pro';
-  return 'free';
+  return 'identity';
 }
 
 export function useFreemiumLimits() {
-  const { isPremium, isLoading, tier = 'free' } = usePremiumStatus();
+  const { isPremium, isLoading, tier = 'identity' } = usePremiumStatus();
 
   // Determine current tier limits
   const getCurrentLimits = () => {
     if (tier === 'business') return BUSINESS_LIMITS;
     if (tier === 'pro' || isPremium) return PRO_LIMITS;
+    if (tier === 'starter') return PRO_LIMITS; // Starter has full access but with commission
     return FREE_LIMITS;
   };
 
   const limits = getCurrentLimits();
-  const currentTier: FreeTier = tier === 'business' ? 'business' : (tier === 'pro' || isPremium) ? 'pro' : 'free';
+  const currentTier: FreeTier = tier === 'business' ? 'business' : tier === 'pro' || isPremium ? 'pro' : tier === 'starter' ? 'starter' : 'identity';
 
   const canAddBlock = (currentBlockCount: number) => {
     return currentBlockCount < limits.maxBlocks;
@@ -214,7 +215,7 @@ export function useFreemiumLimits() {
   const getMaxLeads = () => limits.maxLeadsPerMonth;
 
   return {
-    isPremium: currentTier !== 'free',
+    isPremium: currentTier !== 'identity',
     currentTier,
     isLoading,
     limits,

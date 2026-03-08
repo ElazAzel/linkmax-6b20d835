@@ -57,7 +57,7 @@ interface RequiredTierProps {
 }
 
 export function RequiredTier({ tier, inline = false }: RequiredTierProps) {
-  if (tier === 'free') return null;
+  if (tier === 'identity') return null;
 
   const config = {
     label: 'PRO',

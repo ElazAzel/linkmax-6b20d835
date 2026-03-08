@@ -118,10 +118,11 @@ export interface PublishPageResult {
 
 /**
  * Premium status result
+ * ADR 0026: Identity/Starter/Pro/Business tiers
  */
 export interface PremiumStatusResult {
   isPremium: boolean;
-  tier: 'free' | 'pro' | 'business';
+  tier: 'identity' | 'starter' | 'pro' | 'business';
   trialEndsAt: string | null;
   inTrial: boolean;
 }

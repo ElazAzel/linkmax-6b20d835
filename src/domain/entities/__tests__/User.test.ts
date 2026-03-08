@@ -151,7 +151,7 @@ describe('User Entity', () => {
     });
 
     it('should return free limits for non-premium users', () => {
-      const limits = getUserLimits({ isPremium: false, inTrial: false, trialEndsAt: null, tier: 'free' });
+      const limits = getUserLimits({ isPremium: false, inTrial: false, trialEndsAt: null, tier: 'identity' });
       expect(limits).toEqual(FREE_TIER_LIMITS);
     });
   });

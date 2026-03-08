@@ -134,7 +134,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
   };
 
   const blockTier = getBlockTier(block.type);
-  const isPremiumBlock = blockTier !== 'free';
+  const isPremiumBlock = blockTier !== 'identity';
 
   const isFirst = index === 0;
   const isLast = index === totalCount - 1;

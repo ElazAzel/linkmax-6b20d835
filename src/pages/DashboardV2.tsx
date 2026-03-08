@@ -422,7 +422,7 @@ function DashboardV2Inner() {
                   pageData={dashboard.pageData}
                   loading={dashboard.loading}
                   isPremium={dashboard.isPremium}
-                  currentTier={dashboard.isPremium ? 'pro' : 'free'}
+                  currentTier={dashboard.isPremium ? 'pro' : 'identity'}
                   premiumTier={dashboard.currentTier}
                   onInsertBlock={dashboard.blockEditor.handleInsertBlock}
                   onEditBlock={dashboard.blockEditor.handleEditBlock}
@@ -521,7 +521,7 @@ function DashboardV2Inner() {
               <ScreenErrorBoundary screenName="Monetize">
                 <MonetizeScreen
                   isPremium={dashboard.isPremium}
-                  tier={dashboard.isPremium ? 'pro' : 'free'}
+                  tier={dashboard.isPremium ? 'pro' : 'identity'}
                   limits={{
                     pagesUsed: multiPage.limits?.currentPages || 1,
                     pagesLimit: multiPage.limits?.maxPages || 1,
