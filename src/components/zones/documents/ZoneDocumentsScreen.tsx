@@ -400,6 +400,12 @@ export const ZoneDocumentsScreen = () => {
 
                 <ZoneDocumentCreator open={isCreatorOpen} onOpenChange={setIsCreatorOpen} />
                 <ZoneDocumentTemplatesSettings open={isTemplatesOpen} onOpenChange={setIsTemplatesOpen} />
+                <ZoneDocumentGenerator 
+                    open={isGeneratorOpen} 
+                    onOpenChange={setIsGeneratorOpen} 
+                    document={selectedDocument}
+                    onGenerated={() => setSelectedDocument(null)}
+                />
             </div>
         </TooltipProvider>
     );
