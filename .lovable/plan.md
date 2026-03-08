@@ -1,209 +1,119 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+# Growth Package: Niche Acquisition Surfaces for LinkMAX
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+## 0. Critical Build Fix (P0 — before anything else)
 
-### Новая тарифная модель (ADR 0026)
-
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+`index.html` line 9 has a **duplicated CSP meta tag** — the `content="..."` attribute appears twice on the same tag, breaking the HTML parser. The entire CSP string was doubled during the previous telegram.org edit. Must be fixed to a single valid `content` attribute.
 
 ---
 
-## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
+## 1. Verdict
 
-| Задача | Статус |
-|--------|--------|
-| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
-| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
-| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
-| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
-| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
+LinkMAX has a complete product loop but zero dedicated acquisition surfaces. Every visitor lands on a generic "Micro-Business OS" homepage. The watermark links to the homepage. The gallery has no signup CTA beyond a generic "Создать" button. Share messages say "Смотри мою страницу!" — meaningless to cold traffic.
+
+This growth package creates **4 new conversion surfaces** that turn existing traffic (watermark clicks, gallery browsing, share messages) into signups and published pages. No paid ads needed — this amplifies traffic that already exists but currently bounces.
 
 ---
 
-## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
+## 2. Implementation Scope — 8 Tasks
 
-| Задача | Статус |
-|--------|--------|
-| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
-| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
-| Добавить Team Performance section (метрики по assignee) | ✅ |
-| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
-| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
+### Task 1: Fix CSP build error
+Fix `index.html` line 8-9 — remove the duplicated `content=` attribute, keeping one valid CSP string with `https://telegram.org` included.
 
----
+### Task 2: Niche landing page `/for-masters`
+Create a new page component `src/pages/ForMasters.tsx` and route it in `main.tsx`.
 
-## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+**Structure:**
+- Hero: "Онлайн-запись для мастеров — бесплатно, за 5 минут"
+- Subheadline: "Клиенты записываются прямо из Instagram. Без звонков, без переписки."
+- 3 value props with icons: (1) Ссылка для записи в bio, (2) Клиент видит цену и свободные слоты, (3) Вы видите все заявки в одном месте
+- Social proof: gallery cards from `beauty` niche (reuse `getGalleryPages('beauty')`)
+- Objection block: "Бесплатно навсегда до 50 записей/мес. Без карты. Без скрытых платежей."
+- Primary CTA: "Создать страницу записи →" → `/auth?niche=beauty&from=masters-landing`
+- Secondary CTA: "Посмотреть примеры →" → `/gallery?niche=beauty`
+- Mobile-first, single-column, no 3D/heavy animations
+- SEO: indexable, `<title>` = "Онлайн-запись для мастеров красоты — бесплатно | lnkmx"
 
-| Задача | Статус |
-|--------|--------|
-| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
-| Увеличить touch targets до 44px (min-h-11) | ✅ |
-| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
-| Улучшить Empty States с CTA | ✅ |
+### Task 3: Watermark conversion landing `/from/[slug]`
+Create `src/pages/FromPage.tsx` routed as `/from/:slug`.
 
----
+**Flow:** When user clicks "Made with lnkmx" watermark → instead of homepage, go to `/from/[slug]`.
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+**Page structure:**
+- Fetch referring page data: `supabase.from('pages').select('title, avatar_url, preview_url, niche, slug').eq('slug', slug).eq('is_published', true).single()`
+- Show: "Эта страница создана на lnkmx" + preview card of the referring page
+- Headline: "Создайте такую же — бесплатно за 5 минут"
+- CTA: "Создать свою страницу →" → `/auth?from=watermark&ref_slug=[slug]&niche=[niche]`
+- If page not found or not published → redirect to `/`
+- Privacy: only show public data (title, avatar, niche). Never show owner contact info.
 
-## Текущее состояние LinkMAX Business Zones
+**Watermark change:** Update `FreemiumWatermark.tsx` href from `getAppDomain()` to `getAppDomain() + '/from/' + slug` (pass `slug` as new prop).
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+### Task 4: Gallery "Use this template" CTA
+Modify `GalleryPageCard.tsx`:
+- Replace the Copy button with "Создать такую же" button
+- On click: navigate to `/auth?from=gallery&ref_slug=[slug]&niche=[niche]`
+- Keep View and Like buttons as-is
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+Add a banner at top of Gallery grid for unauthenticated users:
+- "Нравится страница? Создайте похожую за 5 минут →"
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+### Task 5: Niche-specific share copy
+Update `ShareAfterPublishDialog.tsx`:
+- Replace generic "Смотри мою страницу!" with niche-aware messages
+- Beauty: "Записаться ко мне онлайн: {url}"
+- Fitness: "Запишись на тренировку: {url}"
+- Default: "Мои услуги и запись: {url}"
+- Pass `niche` prop from dashboard context
+- WhatsApp and Telegram buttons use the niche-specific text
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+### Task 6: Auth flow — pass source & niche params
+Update `Auth.tsx` to read URL params (`from`, `niche`, `ref_slug`) and:
+- Store in sessionStorage for post-auth redirect
+- After signup, pass `niche` to the wizard/onboarding so it's pre-selected
+- Track `signup_source` in the activation event metadata
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+### Task 7: Growth analytics events
+Add new event types to `activation-events.ts`:
+- `niche_landing_view`, `niche_landing_cta_click`
+- `watermark_landing_view`, `watermark_landing_cta_click`
+- `gallery_template_click`
+- `signup_from_niche_landing`, `signup_from_watermark`, `signup_from_gallery`
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+Update the analytics constraint in a new migration to include these events.
 
-### Фаза 3: Tasks -- закрытие пробелов (P1)
+Track on each new surface:
+- `ForMasters.tsx`: track `niche_landing_view` on mount, `niche_landing_cta_click` on CTA
+- `FromPage.tsx`: track `watermark_landing_view` on mount
+- `GalleryPageCard.tsx`: track `gallery_template_click` on "Use template" click
 
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
-
-### Фаза 4: Аналитика Зоны (P1)
-
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+### Task 8: Route registration
+Add to `main.tsx`:
+```
+{ path: "for-masters", element: <ForMasters /> }
+{ path: "from/:slug", element: <FromPage /> }
+```
 
 ---
 
-## Что НЕ нужно копировать из Bitrix24
+## 3. What NOT to do
 
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
-
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
-
----
-
-## Приоритезация (RICE)
-
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+- Don't rebuild the landing page — this is a separate niche page
+- Don't add a comparison table or feature grid to the niche landing
+- Don't mention "AI", "Micro-Business OS", or "экосистема" on growth surfaces
+- Don't add social login, comments, or "community" features to gallery
+- Don't gate template copying behind auth — let the CTA go to `/auth` with params
+- Don't build separate pages for every niche now — start with beauty only
 
 ---
 
-## Технический план реализации
+## 4. Priority Order
 
-### DB миграции (новые таблицы/колонки)
+1. **Fix CSP** (unblocks build)
+2. **Watermark landing** `/from/[slug]` + FreemiumWatermark href update (highest traffic potential — every page view generates watermark impressions)
+3. **Niche landing** `/for-masters` (needed for any outreach or content)
+4. **Share copy** update (quick win, improves every share)
+5. **Gallery CTA** update (converts browsing to signups)
+6. **Auth params + analytics** (instrumentation)
 
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
-
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
-
----
-
-## Рекомендуемый порядок реализации
-
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
-
----
-
-## Post-Roadmap: Teamwork & Integrations (Март 2026)
-
-| Задача | Статус |
-|--------|--------|
-| Documents MVP (генерация договоров, PDF) | ✅ |
-| Deal Comments (zone_deal_comments) | ✅ |
-| @Mentions в комментариях к сделкам | ✅ |
-| MentionInput компонент с автоподсказкой | ✅ |
-| Telegram уведомления при @mention | ✅ |
-| Excel Export (Contacts + Deals + Воронка) | ✅ |
-| mentioned_user_ids колонка в zone_deal_comments | ✅ |
