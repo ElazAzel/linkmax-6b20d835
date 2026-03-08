@@ -437,7 +437,15 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       hideBranding: pg.hide_branding || false,
       organization_id: pg.organization_id || undefined,
       updatedAt: pg.updated_at || null,
-      experiments
+      experiments,
+      // Entity fields
+      city: pg.city || undefined,
+      profession: pg.profession || undefined,
+      entity_type: pg.entity_type === 'organization' ? 'organization' : 'person',
+      contact_email: pg.contact_email || undefined,
+      contact_phone: pg.contact_phone || undefined,
+      contact_whatsapp: pg.contact_whatsapp || undefined,
+      quality_score: pg.quality_score ?? undefined,
     };
 
     // Extract chatbot context
