@@ -84,7 +84,7 @@ const itemVariants = {
 
 export const ActivityScreen = memo(function ActivityScreen({ isPremium }: ActivityScreenProps) {
   const { t, i18n } = useTranslation();
-  const { leads, loading, getLeadStats, refreshLeads } = useLeads();
+  const { leads, loading, getLeadStats, refreshLeads, quickReply } = useLeads();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
