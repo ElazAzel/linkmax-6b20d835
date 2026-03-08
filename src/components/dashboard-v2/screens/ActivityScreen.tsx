@@ -365,9 +365,10 @@ interface LeadCardProps {
   lead: Lead;
   onClick: () => void;
   onQuickReply?: (id: string) => Promise<boolean>;
+  isRepeat?: boolean;
 }
 
-function LeadCard({ lead, onClick, onQuickReply }: LeadCardProps) {
+function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
   const { t, i18n } = useTranslation();
   const statusConfig = STATUS_CONFIG_KEYS[lead.status];
   const sourceInfo = SOURCE_ICONS_KEYS[lead.source] || SOURCE_ICONS_KEYS.other;
