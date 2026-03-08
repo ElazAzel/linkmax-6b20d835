@@ -93,7 +93,16 @@ export default function Pricing() {
         6: +(BASE_PRICES_USD[6] * 6).toFixed(2),
         12: +(BASE_PRICES_USD[12] * 12).toFixed(2)
       },
-      features: [t('pricing.features.allBasic', 'Всё из BASIC, плюс:'), t('pricing.features.allBlocks', 'Все 25+ типов блоков без ограничений'), t('pricing.features.proThemes', 'Профессиональные темы и анимации'), t('pricing.features.media', 'Медиа: изображения, видео, карусели'), t('pricing.features.priceLists', 'Прайс-листы и каталоги товаров'), t('pricing.features.scheduler', 'Планировщик блоков'), t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'), t('pricing.features.fullCRM', 'Полноценная CRM для лидов'), t('pricing.features.telegramNotifications', 'Telegram-уведомления о заявках'), t('pricing.features.forms', 'Формы сбора заявок'), t('pricing.features.faq', 'FAQ и отзывы блоки'), t('pricing.features.timers', 'Таймеры обратного отсчёта'), t('pricing.features.aiMonthlyPro', '5 AI-генераций в месяц')]
+      features: [
+        t('pricing.features.unlimitedInbound', 'Безлимитные обращения клиентов'),
+        t('pricing.features.noWatermark', 'Без водяного знака — ваш бренд'),
+        t('pricing.features.advancedAnalytics', 'Расширенная аналитика кликов'),
+        t('pricing.features.exportAndAutomation', 'Экспорт + Telegram-уведомления'),
+        t('pricing.features.allBlocks', 'Все 25+ типов блоков'),
+        t('pricing.features.multiPage', 'До 6 страниц'),
+        t('pricing.features.customDomain', 'Свой домен'),
+        t('pricing.features.aiMonthlyPro', '10 AI-генераций в месяц'),
+      ]
     },
     business: {
       name: 'BUSINESS',
