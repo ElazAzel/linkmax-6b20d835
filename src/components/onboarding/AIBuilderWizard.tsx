@@ -307,13 +307,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
               </div>
             </ScrollArea>
 
-            {isOnboarding && (
-              <div className="pt-2 flex justify-center">
-                <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground">
-                  {t('common.skip', 'Пропустить')}
-                </Button>
-              </div>
-            )}
+            {/* Skip removed for new users — niche selection drives activation */}
           </div>
         )}
 
