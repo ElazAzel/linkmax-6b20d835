@@ -109,8 +109,8 @@ export const BlockPerformance = memo(function BlockPerformance({
                   fontSize: '12px',
                 }}
                 formatter={(value?: number | string | Array<number | string>, name?: string | number) => [
-                  name === 'clicks' ? `${value ?? 0} кликов` : `${Number(value ?? 0).toFixed(1)}%`,
-                  name === 'clicks' ? 'Клики' : 'CTR',
+                  name === 'clicks' ? `${value ?? 0} ${t('analytics.blocks.clicks', 'кликов')}` : `${Number(value ?? 0).toFixed(1)}%`,
+                  name === 'clicks' ? t('analytics.tooltipClicks', 'Клики') : 'CTR',
                 ]}
               />
               <Bar
