@@ -99,23 +99,24 @@ async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmissi
   return (data || []) as IndexingSubmission[];
 }
 
-/** Parse service_slugs JSONB into child entity details */
-function parseChildEntities(serviceSlugs: Record<string, string> | null, pageSlug: string, isPageIndexable: boolean) {
+/** Parse id-keyed service_slugs into child entity details */
+function parseChildEntities(serviceSlugs: Record<string, ServiceSlugEntry> | null, pageSlug: string, isPageIndexable: boolean) {
   if (!serviceSlugs) return [];
-  return Object.entries(serviceSlugs).map(([title, val]) => {
-    let slug = val;
-    let state = 'eligible';
-    if (val.endsWith('::removed')) {
-      slug = val.replace('::removed', '');
+  return Object.entries(serviceSlugs).map(([itemId, entry]) => {
+    if (typeof entry !== 'object' || !entry) return null;
+    const { slug, state: rawState, title } = entry;
+    let state = rawState;
+    if (state === 'removed') {
       state = 'removed';
-    } else if (val.endsWith('::thin')) {
-      slug = val.replace('::thin', '');
+    } else if (state === 'thin') {
       state = 'excluded_thin';
     } else if (!isPageIndexable) {
       state = 'parent_not_indexable';
+    } else {
+      state = 'eligible';
     }
-    return { title, slug, state, url: `/${pageSlug}/services/${slug}` };
-  });
+    return { id: itemId, title, slug, state, url: `/${pageSlug}/services/${slug}` };
+  }).filter(Boolean) as Array<{ id: string; title: string; slug: string; state: string; url: string }>;
 }
 
 function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string }) {
