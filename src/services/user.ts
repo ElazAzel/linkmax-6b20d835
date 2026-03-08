@@ -164,7 +164,7 @@ export async function checkPremiumStatus(userId: string): Promise<PremiumStatusR
       .maybeSingle();
 
     if (error || !data) {
-      return { isPremium: false, tier: 'free', trialEndsAt: null, inTrial: false };
+      return { isPremium: false, tier: 'identity', trialEndsAt: null, inTrial: false };
     }
 
     const now = new Date();
