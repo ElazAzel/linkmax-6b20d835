@@ -8,7 +8,7 @@ export type PremiumTier = 'identity' | 'starter' | 'pro' | 'business';
 export function usePremiumStatus() {
   const { user } = useAuth();
   const [isPremium, setIsPremium] = useState(false);
-  const [tier, setTier] = useState<PremiumTier>('free');
+  const [tier, setTier] = useState<PremiumTier>('identity');
   const [inTrial, setInTrial] = useState(false);
   const [trialEndsAt, setTrialEndsAt] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
