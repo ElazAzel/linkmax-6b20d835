@@ -26,6 +26,7 @@ import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Check from 'lucide-react/dist/esm/icons/check';
+import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import User from 'lucide-react/dist/esm/icons/user';
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
