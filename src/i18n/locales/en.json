@@ -3540,7 +3540,31 @@
     "confirmDelete": "Delete this lead?",
     "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
     "openPanel": "Open CRM",
-    "upgradeToPremium": "Get Premium"
+    "upgradeToPremium": "Get Premium",
+    "responseTime": {
+      "justNow": "just now",
+      "minutesAgo": "{{count}} min ago",
+      "hoursAgo": "{{count}}h ago — reply!",
+      "missed": "missed"
+    },
+    "quickReply": {
+      "template": "Hello, {{name}}! Thanks for your request. How can I help?",
+      "call": "Call",
+      "done": "Done"
+    },
+    "bookingStatus": {
+      "pending": "Pending",
+      "confirmed": "Confirmed"
+    },
+    "booking": {
+      "confirm": "Confirm",
+      "cancel": "Decline"
+    },
+    "aging": {
+      "stale": "Getting cold",
+      "missed": "Missed",
+      "needsFollowup": "Needs follow-up"
+    }
   },
   "pagination": {
     "previous": "Back",
@@ -5679,5 +5703,16 @@
     "back": "Back",
     "next": "Next",
     "start": "Start"
+  },
+  "home": {
+    "incoming": {
+      "title": "Incoming",
+      "empty": "No incoming yet",
+      "emptyHint": "Share your page to get the first leads",
+      "share": "Share",
+      "viewAll": "All",
+      "lead": "Lead",
+      "booking": "Booking"
+    }
   }
 }

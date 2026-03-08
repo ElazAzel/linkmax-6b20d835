@@ -3539,7 +3539,31 @@
     "confirmDelete": "Delete this lead?",
     "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
     "openPanel": "Open CRM",
-    "upgradeToPremium": "Premium алыңыз"
+    "upgradeToPremium": "Premium алыңыз",
+    "responseTime": {
+      "justNow": "жаңа ғана",
+      "minutesAgo": "{{count}} мин бұрын",
+      "hoursAgo": "{{count}} сағ бұрын — жауап беріңіз!",
+      "missed": "жіберілді"
+    },
+    "quickReply": {
+      "template": "Сәлеметсіз бе, {{name}}! Өтінішіңіз үшін рахмет. Қалай көмектесе аламын?",
+      "call": "Қоңырау шалу",
+      "done": "Дайын"
+    },
+    "bookingStatus": {
+      "pending": "Күтілуде",
+      "confirmed": "Расталды"
+    },
+    "booking": {
+      "confirm": "Растау",
+      "cancel": "Бас тарту"
+    },
+    "aging": {
+      "stale": "Суынып барады",
+      "missed": "Жіберілді",
+      "needsFollowup": "Follow-up қажет"
+    }
   },
   "pagination": {
     "previous": "Артқа",
@@ -5678,5 +5702,16 @@
     "back": "Артқа",
     "next": "Келесі",
     "start": "Бастау"
+  },
+  "home": {
+    "incoming": {
+      "title": "Кіріс",
+      "empty": "Әзірге кіріс жоқ",
+      "emptyHint": "Алғашқы өтінімдерді алу үшін бетіңізді бөлісіңіз",
+      "share": "Бөлісу",
+      "viewAll": "Барлығы",
+      "lead": "Өтінім",
+      "booking": "Жазба"
+    }
   }
 }

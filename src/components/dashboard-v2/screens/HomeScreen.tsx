@@ -33,6 +33,7 @@ import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
+import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 
 interface HomeScreenProps {
   pageData: PageData | null;
@@ -151,6 +152,15 @@ export const HomeScreen = memo(function HomeScreen({
         {/* Celebration card when all steps complete */}
         {activation.showCelebration && (
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
+        )}
+
+        {/* Operator Widget — incoming leads + bookings (after activation) */}
+        {(checklistDismissed || activation.showCelebration || !activation.isVisible) && isPublished && (
+          <IncomingWidget
+            pageId={pageData?.id}
+            onOpenActivity={onOpenActivity}
+            onShare={onShare}
+          />
         )}
 
         {/* Primary Page Card */}

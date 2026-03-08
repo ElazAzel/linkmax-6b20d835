@@ -1,161 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# CRM-Light & Post-Publish Conversion Workflow
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## Вердикт текущего состояния
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-**Activation 2.0 решил:** путь signup → publish → first visitor → first response отслеживается и подсвечен. HomeScreen динамически реагирует на состояние.
+### Новая тарифная модель (ADR 0026)
 
-**Главный пост-активационный риск:** после первого лида пользователь попадает в ActivityScreen, где:
-- Лиды, бронирования и регистрации на события живут в **разных системах** без единого потока
-- Нет индикации urgency (новый лид = тот же UI что и старый)
-- Нет follow-up системы (нет reminders, нет aging, нет "ты не ответил")
-- HomeScreen после activation celebration возвращается к тому же виду — нет "operator mode"
-- BookingsPanel — отдельный tab внутри ActivityScreen (Sheet), не интегрирован в основной поток
-- EventRegistrations вообще отдельный экран, не видный из главного inbox
-
-**Где теряется лид:** новый лид появляется → пользователь не видит push/badge → открывает dashboard через часы → лид уже "остыл" → нет one-tap действия для ответа
-
----
-
-## План реализации (P0 — эта итерация)
-
-### Task 1: Unified Activity Feed на HomeScreen (operator mode)
-
-**Файл:** `src/components/dashboard-v2/screens/HomeScreen.tsx`
-
-После завершения activation checklist (или dismiss), вместо пустого места показать **Operator Widget** — последние 3-5 входящих (leads + bookings), с badge count и quick actions.
-
-Конкретно:
-- Новый компонент `IncomingWidget` между page card и quick actions
-- Показывает: имя, тип (лид/бронь/регистрация), время, one-tap WhatsApp/Telegram
-- Badge на иконке Activity в навигации с количеством `status=new` лидов + `status=pending` bookings
-- Если нет входящих — показать empty state "Поделитесь страницей, чтобы получить первые заявки"
-
-**Файлы:**
-- `src/components/dashboard-v2/screens/HomeScreen.tsx` — добавить IncomingWidget
-- `src/components/dashboard-v2/widgets/IncomingWidget.tsx` — **создать**
-- `src/components/dashboard-v2/layout/DashboardNavigation.tsx` (или аналог) — badge на Activity tab
-
-### Task 2: Response Time Indicator на Lead Cards
-
-**Файл:** `src/components/dashboard-v2/screens/ActivityScreen.tsx`
-
-На каждой lead card показать время с момента создания для `status=new`:
-- < 5 min: зелёный "только что"
-- 5-60 min: жёлтый "X мин назад"  
-- > 1h: красный "X ч назад — ответьте!"
-- > 24h: серый "пропущено"
-
-Добавить в LeadCard компонент `ResponseTimeTag`.
-
-**Файлы:**
-- `src/components/dashboard-v2/screens/ActivityScreen.tsx` — LeadCard update
-- `src/components/crm/ResponseTimeTag.tsx` — **создать**
-
-### Task 3: One-Tap Quick Reply на Lead Cards
-
-**Файл:** `src/components/dashboard-v2/screens/ActivityScreen.tsx`
-
-Для `status=new` лидов показать inline quick actions прямо на карточке (без открытия details):
-- WhatsApp (если phone) — с pre-filled "Здравствуйте, {name}! Спасибо за заявку..."
-- Telegram (если phone)
-- Позвонить (если phone)
-- Email (если email)
-- "Отметить как обработано" → status = contacted (one tap)
-
-При нажатии WhatsApp/Telegram — auto-change status to `contacted`.
-
-**Файлы:**
-- `src/components/dashboard-v2/screens/ActivityScreen.tsx`
-- `src/hooks/crm/useLeads.ts` — добавить `quickReply` method (update status + track event)
-
-### Task 4: Bookings Integration в Activity Feed
-
-Сейчас bookings показываются в отдельном tab внутри ActivityScreen. Нужно:
-- В основном feed (tab "Заявки") показывать также **pending bookings** как карточки рядом с лидами, отсортированные по дате
-- Отдельный booking card с: имя, дата/время, confirm/cancel quick actions
-- Tab "Записи" оставить для полного списка
-
-**Файлы:**
-- `src/components/dashboard-v2/screens/ActivityScreen.tsx` — merge bookings into unified feed
-- `src/components/crm/BookingCard.tsx` — **создать** компактный booking card для feed
-
-### Task 5: Lead Aging & Stale Alerts
-
-**Файл:** `src/hooks/crm/useLeadAging.ts` — **создать**
-
-Хук для определения "остывших" лидов:
-- `new` + > 4h = `stale` (показать предупреждение)
-- `new` + > 24h = `missed` (показать alert)
-- `contacted` + > 3 days без interaction = `needs_followup`
-
-На HomeScreen IncomingWidget показать count stale лидов с красным badge.
-
-**Файлы:**
-- `src/hooks/crm/useLeadAging.ts` — **создать**
-- Интеграция в IncomingWidget и ActivityScreen
-
-### Task 6: Post-Activation Events Tracking
-
-**Файл:** `src/lib/activation-events.ts` — расширить
-
-Добавить CRM-layer события:
-- `lead_seen` — пользователь открыл lead details
-- `lead_replied` — нажал WhatsApp/Telegram/call
-- `lead_status_changed` — изменил статус
-- `booking_confirmed` — подтвердил бронирование
-- `first_lead_reply` — первый ответ на лид (milestone)
-- `lead_stale_24h` — лид не обработан 24ч
-
-**Файлы:**
-- `src/lib/activation-events.ts`
-- Вызовы из ActivityScreen, LeadDetails, BookingsPanel
-
-### Task 7: i18n для новых компонентов
-
-Добавить ключи в ru/en/kk:
-- `crm.responseTime.*` (justNow, minutesAgo, hoursAgo, missed)
-- `crm.quickReply.*` (template messages)
-- `home.incoming.*` (widget titles, empty states)
-- `crm.aging.*` (stale, needsFollowup)
-
-**Файлы:**
-- `src/i18n/locales/ru.json`
-- `src/i18n/locales/en.json`
-- `src/i18n/locales/kk.json`
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## Файлы для изменения
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-| Файл | Действие |
-|------|----------|
-| `src/components/dashboard-v2/widgets/IncomingWidget.tsx` | **Создать** — unified incoming feed на HomeScreen |
-| `src/components/crm/ResponseTimeTag.tsx` | **Создать** — urgency indicator |
-| `src/components/crm/BookingCard.tsx` | **Создать** — compact booking card для feed |
-| `src/hooks/crm/useLeadAging.ts` | **Создать** — stale/missed lead detection |
-| `src/components/dashboard-v2/screens/HomeScreen.tsx` | Добавить IncomingWidget после activation |
-| `src/components/dashboard-v2/screens/ActivityScreen.tsx` | Quick reply, response time, unified feed |
-| `src/hooks/crm/useLeads.ts` | Добавить quickReply method |
-| `src/lib/activation-events.ts` | CRM events |
-| `src/i18n/locales/ru.json` | Новые ключи |
-| `src/i18n/locales/en.json` | Новые ключи |
-| `src/i18n/locales/kk.json` | Новые ключи |
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-## Что НЕ делаем сейчас
+---
 
-- Не добавляем follow-up reminders / snooze (P1)
-- Не мержим с Zone CRM (это enterprise layer, отдельный контекст)
-- Не добавляем email/push notifications (P1)
-- Не строим pipeline/kanban view (это Zone Deals)
-- Не добавляем AI-suggested replies (P2)
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-## Ожидаемый результат
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-- После activation пользователь видит входящие прямо на HomeScreen
-- Каждый новый лид имеет urgency cue и one-tap reply
-- Bookings видны в основном потоке рядом с лидами
-- "Остывшие" лиды подсвечены
-- Серверные события позволяют измерить time-to-first-reply
+---
 
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
+
+---
+
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+
+## Текущее состояние LinkMAX Business Zones
+
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+
+### Фаза 3: Tasks -- закрытие пробелов (P1)
+
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+
+### Фаза 4: Аналитика Зоны (P1)
+
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+
+---
+
+## Что НЕ нужно копировать из Bitrix24
+
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

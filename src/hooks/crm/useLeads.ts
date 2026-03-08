@@ -125,6 +125,26 @@ export function useLeads() {
     }
   };
 
+  /** Quick reply: auto-set status to contacted (silent, no toast) */
+  const quickReply = async (id: string) => {
+    if (!user) return false;
+    try {
+      const { error } = await supabase
+        .from('leads')
+        .update({ status: 'contacted' as LeadStatus })
+        .eq('id', id)
+        .eq('user_id', user.id);
+      if (error) throw error;
+      setLeads(prev => prev.map(lead =>
+        lead.id === id ? { ...lead, status: 'contacted' as LeadStatus } : lead
+      ));
+      return true;
+    } catch (error) {
+      logger.error('Error quick-replying lead', error, { context: 'useLeads', data: { leadId: id } });
+      return false;
+    }
+  };
+
   const deleteLead = async (id: string) => {
     if (!user) return false;
 
@@ -169,6 +189,7 @@ export function useLeads() {
     createLead,
     updateLead,
     deleteLead,
+    quickReply,
     refreshLeads: fetchLeads,
     getLeadStats,
   };
