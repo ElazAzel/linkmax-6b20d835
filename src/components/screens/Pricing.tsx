@@ -292,7 +292,7 @@ export default function Pricing() {
                       <Badge variant="secondary" className="ml-2">{t('pricing.currentPlan', 'Текущий')}</Badge>
                     )}
                   </CardTitle>
-                  <CardDescription>{t('pricing.basicDesc', 'Страница + запись + CRM бесплатно')}</CardDescription>
+                  <CardDescription>{t('pricing.basicDesc', 'Страница + запись + CRM — получите первых клиентов')}</CardDescription>
                 </div>
               </div>
               <div className="mt-4">
