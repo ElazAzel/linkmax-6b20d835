@@ -1,13 +1,14 @@
 /**
- * useActivationChecklist - Tracks user activation progress
- * Computes step completion from current page/profile state
+ * useActivationChecklist v2.0 - Outcome-based activation tracking
+ * 4 steps focused on real value delivery, not UI actions
  */
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { storage } from '@/lib/storage';
-import type { PageData, ProfileBlock } from '@/types/page';
+import type { PageData } from '@/types/page';
 
 const STORAGE_KEY = 'activation_checklist_dismissed';
+const CELEBRATION_KEY = 'activation_celebration_shown';
 
 export interface ActivationStep {
   id: string;
@@ -20,40 +21,37 @@ interface UseActivationChecklistOptions {
   pageData: PageData | null;
   onOpenEditor: () => void;
   onShare: () => void;
+  viewCount?: number;
+  leadsCount?: number;
+  totalClicks?: number;
 }
 
 export function useActivationChecklist({
   pageData,
   onOpenEditor,
   onShare,
+  viewCount = 0,
+  leadsCount = 0,
+  totalClicks = 0,
 }: UseActivationChecklistOptions) {
   const { t } = useTranslation();
+  const [celebrationDismissed, setCelebrationDismissed] = useState(
+    () => !!storage.get(CELEBRATION_KEY)
+  );
 
   const steps = useMemo((): ActivationStep[] => {
     if (!pageData) return [];
 
-    const profileBlock = pageData.blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
-    const hasAvatar = !!(profileBlock?.avatar);
-    const hasContentBlock = pageData.blocks.some(b => b.type !== 'profile');
+    const hasPage = pageData.blocks.length > 0;
     const isPublished = pageData.isPublished || false;
-    const hasShared = !!storage.get('has_shared_page');
+    const hasFirstView = (pageData.viewCount || viewCount) >= 1;
+    const hasFirstConversion = leadsCount >= 1 || totalClicks >= 1;
 
     return [
       {
-        id: 'register',
-        labelKey: 'activation.steps.register',
-        completed: true, // always done
-      },
-      {
-        id: 'avatar',
-        labelKey: 'activation.steps.avatar',
-        completed: hasAvatar,
-        action: onOpenEditor,
-      },
-      {
-        id: 'first-block',
-        labelKey: 'activation.steps.firstBlock',
-        completed: hasContentBlock,
+        id: 'create-page',
+        labelKey: 'activation.steps.createPage',
+        completed: hasPage,
         action: onOpenEditor,
       },
       {
@@ -63,26 +61,46 @@ export function useActivationChecklist({
         action: onShare,
       },
       {
-        id: 'share',
-        labelKey: 'activation.steps.share',
-        completed: hasShared,
+        id: 'first-visitor',
+        labelKey: 'activation.steps.firstVisitor',
+        completed: hasFirstView,
         action: onShare,
       },
+      {
+        id: 'first-conversion',
+        labelKey: 'activation.steps.firstConversion',
+        completed: hasFirstConversion,
+        action: onOpenEditor,
+      },
     ];
-  }, [pageData, onOpenEditor, onShare]);
+  }, [pageData, viewCount, leadsCount, totalClicks, onOpenEditor, onShare]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;
   const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
   const isComplete = completedCount === totalCount;
+
+  // Published = step 2 done → can dismiss after that
+  const isPublished = steps.find(s => s.id === 'publish')?.completed || false;
   const isDismissed = !!storage.get(STORAGE_KEY);
 
   const dismiss = useCallback(() => {
     storage.set(STORAGE_KEY, 'true');
   }, []);
 
-  // Visible only if not all done and not dismissed
-  const isVisible = totalCount > 0 && !isComplete && !isDismissed;
+  const dismissCelebration = useCallback(() => {
+    storage.set(CELEBRATION_KEY, 'true');
+    setCelebrationDismissed(true);
+  }, []);
+
+  // Show celebration when all complete and not yet dismissed
+  const showCelebration = isComplete && !celebrationDismissed;
+
+  // Visible: has steps, not all done, and either not dismissed or not yet published
+  const isVisible = totalCount > 0 && !isComplete && (!isDismissed || !isPublished);
+
+  // Can dismiss only after publish
+  const canDismiss = isPublished;
 
   return {
     steps,
@@ -91,6 +109,9 @@ export function useActivationChecklist({
     progress,
     isComplete,
     isVisible,
+    showCelebration,
+    canDismiss,
     dismiss,
+    dismissCelebration,
   };
 }
