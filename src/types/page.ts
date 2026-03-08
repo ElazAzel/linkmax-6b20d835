@@ -93,4 +93,12 @@ export interface PageData {
   previewUrl?: string; // Custom preview image for gallery
   organization_id?: string;
   experiments?: PageExperiment[];
+  // Entity fields for search visibility
+  city?: string;
+  profession?: string;
+  entity_type?: 'person' | 'organization';
+  contact_email?: string;
+  contact_phone?: string;
+  contact_whatsapp?: string;
+  quality_score?: number;
 }
