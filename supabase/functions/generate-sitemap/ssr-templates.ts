@@ -452,7 +452,7 @@ export function buildGalleryHtml(lang: LanguageKey, baseUrl: string, items: Gall
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:image" content="${DEFAULT_OG_IMAGE}">
   <meta property="og:locale" content="${locale}">
-  <meta property="og:site_name" content="lnkmx">
+  <meta property="og:site_name" content="LinkMAX">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(content.description)}">
