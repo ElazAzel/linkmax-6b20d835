@@ -420,10 +420,10 @@ function LeadCard({ lead, onClick }: LeadCardProps) {
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <span>{sourceInfo.emoji}</span>
-              {sourceInfo.label}
+              {t(sourceInfo.i18nKey)}
             </span>
             <Badge className={cn("text-xs font-bold h-6 px-2", statusConfig.bg, statusConfig.text, "border-0")}>
-              {statusConfig.label}
+              {t(statusConfig.i18nKey)}
             </Badge>
           </div>
         </div>
