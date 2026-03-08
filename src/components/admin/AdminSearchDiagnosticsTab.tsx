@@ -20,6 +20,12 @@ import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import { cn } from '@/lib/utils/utils';
 
+interface ServiceSlugEntry {
+  slug: string;
+  state: string;
+  title: string;
+}
+
 interface DiagnosticPage {
   id: string;
   slug: string;
@@ -29,7 +35,7 @@ interface DiagnosticPage {
   quality_breakdown: Record<string, { passed: boolean; points: number }> | null;
   index_exclusion_reasons: string[] | null;
   last_indexnow_at: string | null;
-  service_slugs: Record<string, string> | null;
+  service_slugs: Record<string, ServiceSlugEntry> | null;
   city: string | null;
   profession: string | null;
   niche: string | null;
@@ -78,7 +84,7 @@ async function fetchDiagnosticPages(): Promise<DiagnosticPage[]> {
     .limit(200);
 
   if (error) throw error;
-  return (data || []) as DiagnosticPage[];
+  return (data || []) as unknown as DiagnosticPage[];
 }
 
 async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmission[]> {
@@ -93,23 +99,24 @@ async function fetchSubmissionsForPage(pageId: string): Promise<IndexingSubmissi
   return (data || []) as IndexingSubmission[];
 }
 
-/** Parse service_slugs JSONB into child entity details */
-function parseChildEntities(serviceSlugs: Record<string, string> | null, pageSlug: string, isPageIndexable: boolean) {
+/** Parse id-keyed service_slugs into child entity details */
+function parseChildEntities(serviceSlugs: Record<string, ServiceSlugEntry> | null, pageSlug: string, isPageIndexable: boolean) {
   if (!serviceSlugs) return [];
-  return Object.entries(serviceSlugs).map(([title, val]) => {
-    let slug = val;
-    let state = 'eligible';
-    if (val.endsWith('::removed')) {
-      slug = val.replace('::removed', '');
+  return Object.entries(serviceSlugs).map(([itemId, entry]) => {
+    if (typeof entry !== 'object' || !entry) return null;
+    const { slug, state: rawState, title } = entry;
+    let state = rawState;
+    if (state === 'removed') {
       state = 'removed';
-    } else if (val.endsWith('::thin')) {
-      slug = val.replace('::thin', '');
+    } else if (state === 'thin') {
       state = 'excluded_thin';
     } else if (!isPageIndexable) {
       state = 'parent_not_indexable';
+    } else {
+      state = 'eligible';
     }
-    return { title, slug, state, url: `/${pageSlug}/services/${slug}` };
-  });
+    return { id: itemId, title, slug, state, url: `/${pageSlug}/services/${slug}` };
+  }).filter(Boolean) as Array<{ id: string; title: string; slug: string; state: string; url: string }>;
 }
 
 function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string }) {
@@ -378,8 +385,13 @@ export function AdminSearchDiagnosticsTab() {
                               {children.map(child => {
                                 const stateInfo = CHILD_STATE_LABELS[child.state] || { label: child.state, color: '' };
                                 return (
-                                  <TableRow key={child.slug}>
-                                    <TableCell className="text-xs max-w-[150px] truncate">{child.title}</TableCell>
+                                  <TableRow key={child.id || child.slug}>
+                                    <TableCell className="text-xs max-w-[150px] truncate">
+                                      {child.title}
+                                      {child.id?.startsWith('legacy-') && (
+                                        <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">legacy</Badge>
+                                      )}
+                                    </TableCell>
                                     <TableCell className="font-mono text-[10px]">{child.slug}</TableCell>
                                     <TableCell>
                                       <Badge variant="outline" className={cn('text-[9px]', stateInfo.color)}>
