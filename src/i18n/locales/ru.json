@@ -2284,6 +2284,14 @@
       "bonus": "Зарегистрируйтесь и получите +3 дня Premium",
       "success": "🎉 +{{days}} дней Premium по реферальному коду!"
     },
+    "validation": {
+      "email": "Введите корректный email",
+      "emailMax": "Email должен быть не более 255 символов",
+      "passwordMin": "Пароль должен содержать минимум 8 символов",
+      "passwordUppercase": "Пароль должен содержать хотя бы одну заглавную букву",
+      "passwordLowercase": "Пароль должен содержать хотя бы одну строчную букву",
+      "passwordNumber": "Пароль должен содержать хотя бы одну цифру"
+    },
     "telegram": {
       "invalidChatId": "Введите корректный Telegram Chat ID",
       "notFound": "Аккаунт с этим Telegram не найден",
