@@ -4985,7 +4985,22 @@
     "useCamera": "Camera",
     "manual": "Manually",
     "recentScans": "Latest scans",
-    "noScansYet": "Scanned tickets will appear here"
+    "noScansYet": "Scanned tickets will appear here",
+    "regStatus": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "ticketStatus": {
+      "valid": "Active",
+      "used": "Used",
+      "cancelled": "Cancelled"
+    },
+    "csvName": "Name",
+    "csvPhone": "Phone",
+    "csvStatus": "Status",
+    "csvDate": "Registration date"
   },
   "insights": {
     "lowViews": {
