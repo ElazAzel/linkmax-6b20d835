@@ -13,9 +13,9 @@ import {
 } from '@/domain/entities/Block';
 
 describe('Block Entity', () => {
-  describe('isPremiumBlockType', () => {
+  describe('isPremiumBlockType (delegated to manifest)', () => {
     it('should return true for premium block types', () => {
-      const premiumTypes: BlockType[] = ['video', 'carousel', 'custom_code', 'form', 'newsletter'];
+      const premiumTypes: BlockType[] = ['video', 'carousel', 'custom_code', 'newsletter'];
       premiumTypes.forEach((type) => {
         expect(isPremiumBlockType(type)).toBe(true);
       });
@@ -29,7 +29,7 @@ describe('Block Entity', () => {
     });
   });
 
-  describe('getBlockCategory', () => {
+  describe('getBlockCategory (delegated to manifest)', () => {
     it('should return correct category for basic blocks', () => {
       expect(getBlockCategory('link')).toBe('basic');
       expect(getBlockCategory('button')).toBe('basic');
@@ -62,7 +62,7 @@ describe('Block Entity', () => {
     });
 
     it('should return false when start date is in the future', () => {
-      const futureDate = new Date(Date.now() + 86400000).toISOString(); // tomorrow
+      const futureDate = new Date(Date.now() + 86400000).toISOString();
       const block: BaseBlock = {
         id: '1',
         type: 'link',
@@ -72,7 +72,7 @@ describe('Block Entity', () => {
     });
 
     it('should return false when end date is in the past', () => {
-      const pastDate = new Date(Date.now() - 86400000).toISOString(); // yesterday
+      const pastDate = new Date(Date.now() - 86400000).toISOString();
       const block: BaseBlock = {
         id: '1',
         type: 'link',
