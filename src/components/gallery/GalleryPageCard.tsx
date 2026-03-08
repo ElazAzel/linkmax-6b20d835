@@ -20,6 +20,7 @@ interface GalleryPageCardProps {
   onCopy?: () => void;
   onView?: () => void;
   onLike?: (pageId: string) => Promise<void> | void;
+  onUseTemplate?: (slug: string, niche: string | null) => void;
 
   // Legacy props (compat)
   isLiked?: boolean;
