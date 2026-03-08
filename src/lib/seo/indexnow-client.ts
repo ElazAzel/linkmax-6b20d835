@@ -55,29 +55,50 @@ export async function fetchPageSearchDiagnostics(pageId: string) {
     p_page_id: pageId,
   });
   if (error) throw error;
-  return data as {
-    page_id: string;
-    slug: string;
-    is_published: boolean;
-    quality_score: number;
-    quality_breakdown: Record<string, { passed: boolean; points: number }> | null;
-    index_exclusion_reasons: string[] | null;
-    is_indexable: boolean;
-    included_in_sitemap: boolean;
-    last_indexnow_at: string | null;
-    service_slugs: Record<string, string> | null;
-    child_page_count: number;
-    canonical_url: string;
-    recent_submissions: Array<{
-      id: string;
-      target_url: string;
-      provider: string;
-      action_type: string;
-      status: string;
-      skip_reason: string | null;
-      http_status: number | null;
-      created_at: string;
-    }>;
-    diagnostics_at: string;
-  };
+  return data as SearchDiagnostics;
+}
+
+export interface ChildEntityDetail {
+  title: string;
+  slug: string;
+  state: 'eligible' | 'excluded_thin' | 'removed' | 'parent_not_indexable';
+  url: string;
+}
+
+export interface ChildSummary {
+  total: number;
+  eligible: number;
+  excluded_thin: number;
+  removed: number;
+  parent_not_indexable: number;
+}
+
+export interface SearchDiagnostics {
+  page_id: string;
+  slug: string;
+  is_published: boolean;
+  quality_score: number;
+  quality_breakdown: Record<string, { passed: boolean; points: number }> | null;
+  index_exclusion_reasons: string[] | null;
+  is_indexable: boolean;
+  included_in_sitemap: boolean;
+  last_indexnow_at: string | null;
+  service_slugs: Record<string, string> | null;
+  child_page_count: number;
+  child_summary: ChildSummary | null;
+  child_details: ChildEntityDetail[] | null;
+  canonical_url: string;
+  recent_submissions: Array<{
+    id: string;
+    target_url: string;
+    child_type: string | null;
+    provider: string;
+    action_type: string;
+    status: string;
+    skip_reason: string | null;
+    http_status: number | null;
+    created_at: string;
+  }>;
+  diagnostics_at: string;
+}
 }
