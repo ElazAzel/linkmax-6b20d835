@@ -368,7 +368,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               iconBg="bg-destructive/15"
               iconColor="text-destructive"
               label={t('dashboard.accountSettings.changePassword', 'Change Password')}
-              onClick={() => {/* TODO: Open password change */ }}
+              onClick={() => setShowPasswordDialog(true)}
             />
           </Card>
         </motion.div>
