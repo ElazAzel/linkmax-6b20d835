@@ -26,19 +26,22 @@ import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
 
-const authSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .email('Please enter a valid email address')
-    .max(255, 'Email must be less than 255 characters'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number'),
-});
+// Zod schema is created inside the component to access t()
+// We define a factory function here
+const createAuthSchema = (t: (key: string, fallback: string) => string) =>
+  z.object({
+    email: z
+      .string()
+      .trim()
+      .email(t('auth.validation.email', 'Please enter a valid email address'))
+      .max(255, t('auth.validation.emailMax', 'Email must be less than 255 characters')),
+    password: z
+      .string()
+      .min(8, t('auth.validation.passwordMin', 'Password must be at least 8 characters'))
+      .regex(/[A-Z]/, t('auth.validation.passwordUppercase', 'Password must contain at least one uppercase letter'))
+      .regex(/[a-z]/, t('auth.validation.passwordLowercase', 'Password must contain at least one lowercase letter'))
+      .regex(/[0-9]/, t('auth.validation.passwordNumber', 'Password must contain at least one number')),
+  });
 
 type AuthMode = 'signin' | 'signup' | 'reset' | 'reset-telegram' | 'update-password';
 type TelegramResetStep = 'request' | 'verify';
