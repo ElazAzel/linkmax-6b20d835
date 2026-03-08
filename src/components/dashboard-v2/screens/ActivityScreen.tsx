@@ -240,7 +240,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   {t('dashboard.activity.all', 'Все')}
                   <span className="text-xs opacity-70">({stats.total})</span>
                 </button>
-                {Object.entries(STATUS_CONFIG).map(([status, config]) => {
+                {Object.entries(STATUS_CONFIG_KEYS).map(([status, config]) => {
                   const count = stats[status as LeadStatus];
                   if (count === 0) return null;
                   const StatusIcon = config.icon;
@@ -256,7 +256,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                       )}
                     >
                       <StatusIcon className="h-3.5 w-3.5" />
-                      {config.label}
+                      {t(config.i18nKey)}
                       <span className="text-xs opacity-70">({count})</span>
                     </button>
                   );
