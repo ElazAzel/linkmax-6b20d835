@@ -30,7 +30,7 @@ export async function trackActivationEvent(
       .insert([{
         page_id: pageId,
         event_type: `activation:${eventType}`,
-        metadata: metadata || {},
+        metadata: (metadata || {}) as Record<string, string>,
       }]);
 
     if (error) {
