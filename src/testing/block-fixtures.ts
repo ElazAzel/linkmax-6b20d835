@@ -159,7 +159,6 @@ export const mockNewsletterBlock: NewsletterBlock = {
   title: 'Subscribe',
   description: 'Get weekly updates',
   buttonText: 'Subscribe',
-  isPremium: true,
 };
 
 export const mockTestimonialBlock: TestimonialBlock = {
