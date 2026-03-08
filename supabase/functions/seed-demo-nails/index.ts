@@ -7,15 +7,17 @@ const corsHeaders = {
 
 const DEMO_USER_ID = '6a7bbf2e-0db9-49d3-9f17-32c15a764e63'
 const DEMO_PAGE_ID = '3229befa-752c-4032-9eac-4e4f63e7ade0'
+const AVATAR_URL = 'https://pphdcfxucfndmwulpfwv.supabase.co/storage/v1/object/public/user-media/6a7bbf2e-0db9-49d3-9f17-32c15a764e63%2Favatar.jpg'
 
 const PAGE_UPDATE = {
   slug: 'demo_nails',
   title: 'Айгерим · Маникюр Алматы',
-  description: 'Маникюр, покрытие гель-лак, укрепление. Запись онлайн 💅',
+  description: 'Маникюр, гель-лак, укрепление, дизайн. Онлайн-запись за 30 секунд 💅',
   niche: 'beauty',
   is_published: true,
   is_in_gallery: true,
   editor_mode: 'grid',
+  avatar_url: AVATAR_URL,
   theme_settings: {
     backgroundColor: '#FFF5F7',
     textColor: '#1a1a2e',
@@ -25,17 +27,20 @@ const PAGE_UPDATE = {
   },
   seo_meta: {
     title: 'Айгерим · Маникюр Алматы — Запись онлайн',
-    description: 'Маникюр, покрытие гель-лак, укрепление ногтей в Алматы. Запись онлайн без звонков.',
-    keywords: ['маникюр алматы', 'гель-лак', 'nail master', 'запись онлайн'],
+    description: 'Аппаратный маникюр, гель-лак, дизайн ногтей в Алматы. Прозрачные цены, онлайн-запись без звонков.',
+    keywords: ['маникюр алматы', 'гель-лак алматы', 'nail master', 'запись онлайн', 'маникюр цены'],
   },
 }
 
 const PROFILE_UPDATE = {
   display_name: 'Айгерим · Маникюр',
-  bio: '💅 Маникюр и покрытие в Алматы\n📍 Алмалинский район\n⏰ Пн-Пт 10:00–19:00, Сб 10:00–16:00',
+  bio: '💅 Аппаратный маникюр и покрытие в Алматы\n📍 Алмалинский район\n🏆 4 года опыта · 1200+ клиентов\n⏰ Пн–Пт 10–19, Сб 10–16',
+  avatar_url: AVATAR_URL,
+  is_verified: true,
 }
 
 const BLOCKS = [
+  // 0 — Profile
   {
     type: 'profile',
     position: 0,
@@ -44,45 +49,70 @@ const BLOCKS = [
       id: 'profile-demo-nails',
       type: 'profile',
       name: 'Айгерим · Маникюр Алматы',
-      bio: '💅 Маникюр и покрытие в Алматы\n📍 Алмалинский район\n⏰ Пн–Пт 10:00–19:00, Сб 10:00–16:00\n\nЗаписывайтесь онлайн — без звонков и DM 👇',
+      bio: '💅 Аппаратный маникюр и покрытие\n📍 Алмалинский район, Алматы\n🏆 4 года · 1200+ довольных клиентов\n\nВыбирайте услугу, время — и записывайтесь 👇\nБез звонков. Без DM. За 30 секунд.',
       blockSize: 'full',
+      avatarUrl: AVATAR_URL,
     },
     style: {},
     is_premium: false,
   },
+
+  // 1 — Social links
+  {
+    type: 'socials',
+    position: 1,
+    title: null,
+    content: {
+      id: 'socials-demo-nails',
+      type: 'socials',
+      blockSize: 'full',
+      links: [
+        { platform: 'instagram', url: 'https://instagram.com/aigerim.nails', label: '@aigerim.nails' },
+        { platform: 'tiktok', url: 'https://tiktok.com/@aigerim.nails', label: 'TikTok' },
+      ],
+    },
+    style: {},
+    is_premium: false,
+  },
+
+  // 2 — Pricing (improved)
   {
     type: 'pricing',
-    position: 1,
+    position: 2,
     title: 'Услуги и цены',
     content: {
       id: 'pricing-demo-nails',
       type: 'pricing',
       blockSize: 'full',
       title: 'Услуги и цены',
+      subtitle: 'Все цены фиксированные — без доплат',
       currency: 'KZT',
       items: [
-        { name: 'Маникюр без покрытия', price: '3 000 ₸', description: 'Аппаратный маникюр' },
-        { name: 'Маникюр + гель-лак', price: '5 500 ₸', description: 'Однотонное покрытие' },
-        { name: 'Маникюр + дизайн', price: '7 000 ₸', description: 'До 4 ногтей с дизайном' },
-        { name: 'Укрепление гелем', price: '6 500 ₸', description: 'Маникюр + укрепление + покрытие' },
-        { name: 'Снятие чужого покрытия', price: '2 000 ₸', description: 'Аппаратное снятие' },
-        { name: 'Комплекс «Всё включено»', price: '12 000 ₸', description: 'Маникюр + педикюр + покрытие' },
+        { name: 'Маникюр без покрытия', price: '3 000 ₸', description: 'Аппаратный, 45 мин' },
+        { name: 'Маникюр + гель-лак', price: '5 500 ₸', description: 'Однотонное покрытие, 60 мин' },
+        { name: 'Маникюр + дизайн', price: '7 000 ₸', description: 'До 4 ногтей с дизайном, 75 мин' },
+        { name: 'Укрепление гелем', price: '6 500 ₸', description: 'Маникюр + укрепление + покрытие, 75 мин' },
+        { name: 'Снятие чужого покрытия', price: '2 000 ₸', description: 'Аппаратное снятие, 30 мин' },
+        { name: 'Комплекс «Руки + Ноги»', price: '12 000 ₸', description: 'Маникюр + педикюр + покрытие, 2 часа' },
+        { name: 'Ремонт ногтя', price: '1 000 ₸', description: 'Восстановление одного ногтя, 15 мин' },
       ],
     },
     style: {},
     is_premium: true,
   },
+
+  // 3 — Booking
   {
     type: 'booking',
-    position: 2,
+    position: 3,
     title: 'Записаться онлайн',
     content: {
       id: 'booking-demo-nails',
       type: 'booking',
       blockSize: 'full',
-      title: 'Записаться онлайн',
-      subtitle: 'Выберите удобное время — подтверждение придёт сразу',
-      ctaText: 'Записаться онлайн',
+      title: '📅 Записаться онлайн',
+      subtitle: 'Выберите дату и время — подтверждение моментально',
+      ctaText: 'Выбрать время',
       slotDuration: 90,
       requirePrepayment: false,
       schedule: {
@@ -98,9 +128,28 @@ const BLOCKS = [
     style: {},
     is_premium: true,
   },
+
+  // 4 — Text block — social proof line
+  {
+    type: 'text',
+    position: 4,
+    title: null,
+    content: {
+      id: 'text-proof-demo-nails',
+      type: 'text',
+      blockSize: 'full',
+      content: '✨ 1200+ процедур · 4.9 средний рейтинг · 87% клиентов возвращаются',
+      style: 'body',
+      alignment: 'center',
+    },
+    style: {},
+    is_premium: false,
+  },
+
+  // 5 — Testimonial (master's own story — NOT fake client review)
   {
     type: 'testimonial',
-    position: 3,
+    position: 5,
     title: 'Почему онлайн-запись',
     content: {
       id: 'testimonial-demo-nails',
@@ -110,7 +159,7 @@ const BLOCKS = [
         {
           name: 'Айгерим',
           role: 'мастер маникюра',
-          text: 'Раньше вела запись через DM — путалась, забывала, теряла клиентов. Сейчас клиенты записываются сами, я вижу расписание и ничего не теряю. Это экономит мне час в день.',
+          text: 'Раньше клиенты писали в Direct, и я тратила час в день только на переписку. Теперь они видят цены, выбирают время и записываются сами. Я ни одного клиента не потеряла с тех пор, как перешла на онлайн-запись.',
           rating: 5,
         },
       ],
@@ -118,9 +167,11 @@ const BLOCKS = [
     style: {},
     is_premium: true,
   },
+
+  // 6 — FAQ (expanded)
   {
     type: 'faq',
-    position: 4,
+    position: 6,
     title: 'Частые вопросы',
     content: {
       id: 'faq-demo-nails',
@@ -129,31 +180,42 @@ const BLOCKS = [
       items: [
         {
           question: 'Как записаться?',
-          answer: 'Нажмите кнопку «Записаться онлайн» выше, выберите дату и время. Подтверждение придёт сразу.',
+          answer: 'Нажмите «Выбрать время» выше → выберите дату и слот → введите имя и телефон. Подтверждение придёт моментально.',
         },
         {
-          question: 'Можно ли отменить запись?',
-          answer: 'Да, отмена бесплатна за 4 часа до визита. Напишите в WhatsApp или отмените в подтверждении.',
+          question: 'Можно ли отменить или перенести?',
+          answer: 'Да, бесплатно за 4 часа до визита. Напишите в WhatsApp — перенесу на удобное время.',
         },
         {
           question: 'Где вы находитесь?',
-          answer: 'Алматы, Алмалинский район. Точный адрес отправлю после подтверждения записи.',
+          answer: 'Алматы, Алмалинский район. Точный адрес отправлю в WhatsApp после подтверждения записи.',
+        },
+        {
+          question: 'Нужна ли предоплата?',
+          answer: 'Нет, предоплата не требуется. Оплата на месте — наличные или Kaspi.',
+        },
+        {
+          question: 'Какие материалы используете?',
+          answer: 'Работаю на Luxio, Kodi, E.Mi — только сертифицированные гипоаллергенные материалы.',
         },
       ],
     },
     style: {},
     is_premium: false,
   },
+
+  // 7 — Messenger fallback
   {
     type: 'messenger',
-    position: 5,
-    title: 'Написать в WhatsApp',
+    position: 7,
+    title: 'Есть вопрос?',
     content: {
       id: 'messenger-demo-nails',
       type: 'messenger',
-      blockSize: 'half',
+      blockSize: 'full',
       messengers: [
-        { platform: 'whatsapp', username: '+77001234567', label: 'Написать в WhatsApp' },
+        { platform: 'whatsapp', username: '+77001234567', label: '💬 Написать в WhatsApp' },
+        { platform: 'telegram', username: 'aigerim_nails', label: '✈️ Telegram' },
       ],
     },
     style: {},
@@ -179,7 +241,7 @@ Deno.serve(async (req) => {
 
     if (profileError) throw new Error(`Profile update failed: ${profileError.message}`)
 
-    // 2. Update page metadata
+    // 2. Update page metadata + avatar
     const { error: pageError } = await supabase
       .from('pages')
       .update(PAGE_UPDATE)
@@ -216,9 +278,10 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'demo-nails page seeded successfully',
+        message: 'demo-nails page v2 seeded successfully',
         page_url: '/demo_nails',
         blocks_count: BLOCKS.length,
+        avatar: AVATAR_URL,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     )
