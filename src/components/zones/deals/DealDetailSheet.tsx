@@ -27,6 +27,7 @@ import CheckSquare from 'lucide-react/dist/esm/icons/check-square';
 import Package from 'lucide-react/dist/esm/icons/package';
 import Tag from 'lucide-react/dist/esm/icons/tag';
 import Send from 'lucide-react/dist/esm/icons/send';
+import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import type { ZoneDeal, ZoneDealStage } from '@/types/zones';
@@ -36,6 +37,7 @@ import { useZoneProducts } from '@/hooks/zones/useZoneProducts';
 import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import { useZoneDocuments } from '@/hooks/zones/useZoneDocuments';
 import { ZoneDocumentCreator } from '../documents/ZoneDocumentCreator';
+import { KaspiQRGenerator } from './KaspiQRGenerator';
 import FileSignature from 'lucide-react/dist/esm/icons/file-signature';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -68,6 +70,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [newProdQty, setNewProdQty] = useState(1);
+  const [showKaspiQR, setShowKaspiQR] = useState(false);
 
   // Custom fields state
   const { fields: dealFields } = useZoneDealFields(deal?.zone_id || null);
@@ -535,6 +538,16 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                         {t('zones.deals.lose', 'Lost')}
                       </Button>
                     </div>
+                    
+                    {/* Kaspi QR Button */}
+                    <Button
+                      variant="outline"
+                      className="w-full mt-2 h-10 text-sm border-[#F14635]/30 text-[#F14635] hover:bg-[#F14635]/10"
+                      onClick={() => setShowKaspiQR(true)}
+                    >
+                      <Smartphone className="h-4 w-4 mr-2" />
+                      {t('kaspi.generateQR', 'Kaspi QR Payment')}
+                    </Button>
                   </div>
                 )}
 
@@ -570,6 +583,13 @@ export const DealDetailSheet = memo(function DealDetailSheet({
           onOpenChange={setIsCreatorOpen}
           defaultDealId={deal?.id}
           defaultContactId={deal?.contact_id || undefined}
+        />
+        <KaspiQRGenerator
+          open={showKaspiQR}
+          onOpenChange={setShowKaspiQR}
+          defaultAmount={deal?.value_amount || dealTotal || 0}
+          dealTitle={deal?.title || ''}
+          currency={deal?.currency || 'KZT'}
         />
       </SheetContent>
     </Sheet>

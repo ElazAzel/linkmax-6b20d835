@@ -71,8 +71,21 @@ serve(async (req: Request) => {
         // Update Order status
         await supabase
             .from('orders')
-            .update({ status: 'completed' })
+            .update({ status: 'completed', updated_at: new Date().toISOString() })
             .eq('id', invId);
+
+        // Record billing history
+        await supabase
+            .from('billing_history')
+            .insert({
+                user_id: shp_user,
+                order_id: invId,
+                type: shp_type || 'subscription',
+                amount: parseFloat(outSum),
+                currency: 'KZT',
+                description: `Payment completed via Robokassa (InvId: ${invId})`,
+                status: 'completed'
+            });
 
         if (shp_type === 'subscription' || !shp_type) {
             const months = parseInt(shp_period || "0", 10);

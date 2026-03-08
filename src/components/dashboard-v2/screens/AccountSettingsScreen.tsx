@@ -38,6 +38,8 @@ import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { TelegramVerification } from '@/components/auth/TelegramVerification';
 import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';
+import { ChangePasswordDialog } from '@/components/settings/ChangePasswordDialog';
+import { BillingHistorySheet } from '@/components/settings/BillingHistorySheet';
 import { cn } from '@/lib/utils/utils';
 import type { ProfileBlock } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
@@ -132,6 +134,8 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
   const navigate = useNavigate();
   const [showVerification, setShowVerification] = useState(false);
   const [showTelegramVerification, setShowTelegramVerification] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [showBillingSheet, setShowBillingSheet] = useState(false);
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -342,7 +346,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
                 iconBg="bg-slate-500/15"
                 iconColor="text-slate-500"
                 label={t('dashboard.accountSettings.billingHistory', 'Billing History')}
-                onClick={() => {/* TODO: Open billing history */ }}
+                onClick={() => setShowBillingSheet(true)}
               />
             )}
           </Card>
@@ -364,7 +368,7 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               iconBg="bg-destructive/15"
               iconColor="text-destructive"
               label={t('dashboard.accountSettings.changePassword', 'Change Password')}
-              onClick={() => {/* TODO: Open password change */ }}
+              onClick={() => setShowPasswordDialog(true)}
             />
           </Card>
         </motion.div>
@@ -396,6 +400,18 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
           </div>
         </div>
       )}
+
+      {/* Password Change Dialog */}
+      <ChangePasswordDialog
+        open={showPasswordDialog}
+        onOpenChange={setShowPasswordDialog}
+      />
+
+      {/* Billing History Sheet */}
+      <BillingHistorySheet
+        open={showBillingSheet}
+        onOpenChange={setShowBillingSheet}
+      />
     </div>
   );
 });
