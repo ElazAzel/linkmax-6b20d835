@@ -174,7 +174,6 @@ const BLOCK_GENERATORS: Record<string, BlockGenerator> = {
     javascript: '',
     height: 'auto',
     enableInteraction: true,
-    isPremium: true,
     ...overrides,
   }),
 
