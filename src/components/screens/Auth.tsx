@@ -50,6 +50,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
+  const authSchema = createAuthSchema(t);
   const canonical = `${getAppDomain()}/auth`;
   const seoTitle = t('auth.seo.title', 'Sign in to LinkMAX');
   const seoDescription = t(
