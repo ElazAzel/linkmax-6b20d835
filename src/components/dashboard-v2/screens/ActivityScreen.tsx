@@ -1,7 +1,9 @@
 /**
  * ActivityScreen - Unified inbox for leads, bookings, messages
  */
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
+import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
+import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useTranslation } from 'react-i18next';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
 import { ResponseTimeTag } from '@/components/crm/ResponseTimeTag';
