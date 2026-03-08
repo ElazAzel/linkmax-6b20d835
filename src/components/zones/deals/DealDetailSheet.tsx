@@ -70,6 +70,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [newProdQty, setNewProdQty] = useState(1);
+  const [showKaspiQR, setShowKaspiQR] = useState(false);
 
   // Custom fields state
   const { fields: dealFields } = useZoneDealFields(deal?.zone_id || null);
