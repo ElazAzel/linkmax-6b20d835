@@ -115,7 +115,7 @@ export const BLOCK_METADATA: Record<BlockType, BlockMetadata> = {
   catalog: { type: 'catalog', category: 'commerce', isPremium: true, icon: 'grid', labelKey: 'blockTypes.catalog' },
   pricing: { type: 'pricing', category: 'commerce', isPremium: true, icon: 'tag', labelKey: 'blockTypes.pricing' },
   download: { type: 'download', category: 'commerce', isPremium: true, icon: 'download', labelKey: 'blockTypes.download' },
-  booking: { type: 'booking', category: 'commerce', isPremium: true, icon: 'calendar', labelKey: 'blockTypes.booking' },
+  booking: { type: 'booking', category: 'commerce', isPremium: false, icon: 'calendar', labelKey: 'blockTypes.booking' },
 
   // Social
   shoutout: { type: 'shoutout', category: 'social', isPremium: true, icon: 'megaphone', labelKey: 'blockTypes.shoutout' },
