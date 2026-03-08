@@ -155,13 +155,21 @@ export const HomeScreen = memo(function HomeScreen({
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
         )}
 
-        {/* Operator Widget — incoming leads + bookings (after activation) */}
+        {/* Operator Widgets — incoming leads + bookings + summary (after activation) */}
         {(checklistDismissed || activation.showCelebration || !activation.isVisible) && isPublished && (
-          <IncomingWidget
-            pageId={pageData?.id}
-            onOpenActivity={onOpenActivity}
-            onShare={onShare}
-          />
+          <>
+            <IncomingWidget
+              pageId={pageData?.id}
+              onOpenActivity={onOpenActivity}
+              onShare={onShare}
+            />
+            <OperatorSummaryWidget
+              pageId={pageData?.id}
+              pageUpdatedAt={pageData?.updatedAt || null}
+              onOpenActivity={onOpenActivity}
+              onOpenEditor={onOpenEditor}
+            />
+          </>
         )}
 
         {/* Primary Page Card */}
