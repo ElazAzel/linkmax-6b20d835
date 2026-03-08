@@ -20,6 +20,7 @@ import Zap from 'lucide-react/dist/esm/icons/zap';
 import Receipt from 'lucide-react/dist/esm/icons/receipt';
 import Package from 'lucide-react/dist/esm/icons/package';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Users from 'lucide-react/dist/esm/icons/users';
 import { cn } from '@/lib/utils/utils';
 import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
@@ -83,6 +84,7 @@ const MORE_ITEMS: NavTab[] = [
   { id: 'zone-automations', icon: Zap, labelKey: 'dashboard.sidebar.zoneAutomations', defaultLabel: 'Автоматизации', path: '' },
   { id: 'zone-invoices', icon: Receipt, labelKey: 'dashboard.sidebar.zoneInvoices', defaultLabel: 'Инвойсы', path: '' },
   { id: 'zone-products', icon: Package, labelKey: 'dashboard.sidebar.zoneProducts', defaultLabel: 'Продукты', path: '' },
+  { id: 'zone-documents', icon: FileText, labelKey: 'dashboard.sidebar.zoneDocuments', defaultLabel: 'Документы', path: '' },
   { id: 'zone-settings', icon: Building2, labelKey: 'dashboard.sidebar.zoneSettings', defaultLabel: 'Зона', path: '' },
   { id: 'events', icon: Calendar, labelKey: 'dashboard.nav.events', defaultLabel: 'События', path: '' },
   { id: 'team', icon: Users, labelKey: 'dashboard.sidebar.team', defaultLabel: 'Команда', path: '' },
