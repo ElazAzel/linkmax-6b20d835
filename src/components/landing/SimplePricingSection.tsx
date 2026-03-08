@@ -9,7 +9,6 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import X from 'lucide-react/dist/esm/icons/x';
-import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 
 interface SimplePricingSectionProps {
   isVisible: boolean;
