@@ -82,6 +82,7 @@ interface PageData {
   contact_whatsapp: string | null;
   quality_score: number | null;
   is_indexable: boolean | null;
+  service_slugs?: Record<string, { slug: string; state: string; title: string }> | null;
 }
 
 interface BlockData {
@@ -266,7 +267,7 @@ function isPageIndexable(page: PageData): boolean {
 async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lang: LanguageKey): Promise<Response> {
   const { data: pageData, error: pageError } = await supabase
     .from('pages')
-    .select('id, slug, title, description, avatar_url, updated_at, niche, city, country_code, profession, entity_type, contact_email, contact_phone, contact_whatsapp, quality_score, is_indexable')
+    .select('id, slug, title, description, avatar_url, updated_at, niche, city, country_code, profession, entity_type, contact_email, contact_phone, contact_whatsapp, quality_score, is_indexable, service_slugs')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
@@ -348,14 +349,37 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const jsonLd = buildProfileSchemaGraph(page, blocks, services, faqItems, socialLinks, knowsAbout, lang);
   const location = page.city || extractLocationFromBlocks(blocks, null);
 
-  // Services HTML with child page links
+  // Services HTML with child page links — uses service_slugs mapping
   let servicesHtml = '';
   if (services.length > 0) {
     const svcLabel = lang === 'ru' ? 'Услуги' : lang === 'kk' ? 'Қызметтер' : 'Services';
     servicesHtml = `<section id="services"><h2>${svcLabel}</h2><ul>\n`;
+    
+    // Build a lookup from item name to slug via service_slugs
+    const slugsByTitle: Map<string, string> = new Map();
+    const activeStates: Map<string, string> = new Map();
+    const svcSlugs = (page as PageData).service_slugs;
+    if (svcSlugs && typeof svcSlugs === 'object') {
+      for (const [, entry] of Object.entries(svcSlugs)) {
+        if (entry && typeof entry === 'object' && entry.slug && entry.title) {
+          slugsByTitle.set(entry.title, entry.slug);
+          activeStates.set(entry.slug, entry.state || 'active');
+        }
+      }
+    }
+    
     for (const s of services) {
-      const serviceSlug = s.name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
-      const hasChildPage = s.name.length > 0 && ((s.description && s.description.length >= 30) || s.price);
+      // Try to find slug from service_slugs mapping first, then legacy slugify
+      let serviceSlug = slugsByTitle.get(s.name);
+      let isActive = serviceSlug ? activeStates.get(serviceSlug) === 'active' : false;
+      
+      if (!serviceSlug) {
+        // Legacy fallback for pages not yet re-saved
+        serviceSlug = s.name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
+        isActive = s.name.length > 0 && ((s.description && s.description.length >= 30) || !!s.price);
+      }
+      
+      const hasChildPage = isActive;
       servicesHtml += `<li itemscope itemtype="https://schema.org/Service">
         <strong itemprop="name">${hasChildPage ? `<a href="${BASE_URL}/${slug}/services/${serviceSlug}">${escapeHtml(s.name)}</a>` : escapeHtml(s.name)}</strong>
         ${s.description ? `<p itemprop="description">${escapeHtml(s.description)}</p>` : ''}
@@ -473,7 +497,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
 async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, serviceSlug: string, lang: LanguageKey): Promise<Response> {
   const { data: pageData } = await supabase
     .from('pages')
-    .select('id, slug, title, avatar_url, niche, city, profession, entity_type')
+    .select('id, slug, title, avatar_url, niche, city, profession, entity_type, service_slugs, is_indexable, quality_score')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
@@ -488,31 +512,69 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
     .eq('page_id', pageData.id)
     .eq('type', 'pricing');
 
-  // Find the matching service
-  let matchedService: { name: string; description?: string; price?: string; currency?: string } | null = null;
+  // Collect all pricing items
+  const pricingItems: Array<Record<string, unknown>> = [];
   for (const block of (blocksData || [])) {
     const items = (block.content as Record<string, unknown>)?.items;
     if (Array.isArray(items)) {
-      for (const item of items) {
-        const name = String((item as Record<string, unknown>).name || '');
-        const itemSlug = name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
-        if (itemSlug === serviceSlug) {
+      for (const item of items) pricingItems.push(item as Record<string, unknown>);
+    }
+  }
+
+  // === CANONICAL RESOLUTION via service_slugs ===
+  let matchedService: { name: string; description?: string; price?: string; currency?: string } | null = null;
+  let resolvedState: string = 'active';
+  const svcSlugs = pageData.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
+
+  if (svcSlugs && typeof svcSlugs === 'object') {
+    for (const [itemId, entry] of Object.entries(svcSlugs)) {
+      if (entry && typeof entry === 'object' && entry.slug === serviceSlug) {
+        resolvedState = entry.state || 'active';
+        
+        // Removed → 301 to parent
+        if (resolvedState === 'removed') {
+          return new Response(null, { status: 301, headers: { ...corsHeaders, 'Location': `${BASE_URL}/${slug}` } });
+        }
+        
+        // Find pricing item by id
+        const item = pricingItems.find(i => (i as Record<string, unknown>).id === itemId);
+        if (item) {
+          const name = String((item as Record<string, unknown>).name || entry.title || '');
           matchedService = {
             name,
             description: (item as Record<string, unknown>).description ? String((item as Record<string, unknown>).description) : undefined,
             price: (item as Record<string, unknown>).price ? String((item as Record<string, unknown>).price) : undefined,
             currency: (item as Record<string, unknown>).currency ? String((item as Record<string, unknown>).currency) : 'KZT',
           };
-          break;
+        } else {
+          // Orphan: mapping exists but item gone — use title from mapping
+          matchedService = { name: entry.title };
         }
+        break;
       }
     }
-    if (matchedService) break;
+  }
+
+  // Legacy fallback: for pages not yet re-saved (TEMPORARY)
+  if (!matchedService) {
+    for (const item of pricingItems) {
+      const name = String((item as Record<string, unknown>).name || '');
+      const itemSlug = name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
+      if (itemSlug === serviceSlug) {
+        console.warn(`[SSR] Legacy fallback for service slug "${serviceSlug}" on page "${slug}"`);
+        matchedService = {
+          name,
+          description: (item as Record<string, unknown>).description ? String((item as Record<string, unknown>).description) : undefined,
+          price: (item as Record<string, unknown>).price ? String((item as Record<string, unknown>).price) : undefined,
+          currency: (item as Record<string, unknown>).currency ? String((item as Record<string, unknown>).currency) : 'KZT',
+        };
+        break;
+      }
+    }
   }
 
   if (!matchedService) {
-    // Redirect to parent profile
-    return new Response(null, { status: 301, headers: { ...corsHeaders, 'Location': `${BASE_URL}/${slug}` } });
+    return new Response(null, { status: 404, headers: { ...corsHeaders, 'Content-Type': 'text/plain' } });
   }
 
   const canonical = `${BASE_URL}/${slug}/services/${serviceSlug}`;
@@ -520,6 +582,8 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
   const displayName = pageData.title || '@' + slug;
   const title = `${matchedService.name} — ${displayName} | LinkMAX`;
   const desc = matchedService.description ? truncate(matchedService.description, 155) : `${matchedService.name} — ${displayName}`;
+  const isThin = resolvedState === 'thin';
+  const robotsTag = isThin ? 'noindex, follow' : 'index, follow';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -549,7 +613,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(desc)}">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="${robotsTag}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="website"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(desc)}"><meta property="og:url" content="${canonical}">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
@@ -570,7 +634,7 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
 
   return new Response(html, {
     status: 200,
-    headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600' }
+    headers: { ...corsHeaders, 'Content-Type': 'text/html; charset=utf-8', 'X-Robots-Tag': robotsTag, 'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=3600' }
   });
 }
 
@@ -733,7 +797,7 @@ function buildStaticSitemap(): string {
 async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<string> {
   const { data } = await supabase
     .from('pages')
-    .select('slug, updated_at, avatar_url, title, quality_score')
+    .select('slug, updated_at, avatar_url, title, quality_score, service_slugs')
     .eq('is_published', true)
     .gte('quality_score', QUALITY_THRESHOLD)
     .not('slug', 'is', null)
@@ -759,6 +823,16 @@ async function buildProfilesSitemap(supabase: SupabaseClient<any>): Promise<stri
       xml += `    <image:image><image:loc>${escapeXml(page.avatar_url)}</image:loc><image:title>${escapeXml(page.title || page.slug)}</image:title></image:image>\n`;
     }
     xml += `  </url>\n`;
+
+    // Emit service child URLs from service_slugs mapping
+    const svcSlugs = page.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
+    if (svcSlugs && typeof svcSlugs === 'object') {
+      for (const [, entry] of Object.entries(svcSlugs)) {
+        if (entry && typeof entry === 'object' && entry.state === 'active' && entry.slug) {
+          xml += `  <url><loc>${BASE_URL}/${escapedSlug}/services/${escapeXml(entry.slug)}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.4</priority></url>\n`;
+        }
+      }
+    }
   }
 
   xml += `</urlset>`;

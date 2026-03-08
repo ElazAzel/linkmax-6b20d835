@@ -47,7 +47,13 @@ export function PricingBlockEditor({ formData, onChange }: PricingBlockEditorPro
     { value: 120, labelKey: 'pricingBlock.hours2' },
   ];
 
-  const items = formData.items || [];
+  // Normalize: ensure all items have stable IDs (backfill missing ones on load)
+  const items = (formData.items || []).map(item => {
+    if (!item.id || item.id.length < 2) {
+      return { ...item, id: `price-${crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2, 8)}` };
+    }
+    return item;
+  });
 
   const addItem = () => {
     const newItem: PricingItem = {

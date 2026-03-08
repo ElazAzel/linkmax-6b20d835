@@ -1,153 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# P2.7: Service Resolution Layer — Migrate to item-id-keyed Truth Model
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## 1. Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-**Bottleneck**: `service_slugs` is correctly maintained in `save_page_blocks` as `{itemId: {slug, state, title}}`, but zero resolution paths use it. All three consumers — client `PublicServicePage`, SSR `handleServiceSSR`, and profile SSR service links — still `slugify(item.name)` at resolution time. A single service rename breaks the child URL despite the mapping being stable in DB. The entire P2.6 refactor is dead code from a routing perspective.
+### Новая тарифная модель (ADR 0026)
 
-**Principle**: Resolution must go `routeSlug → service_slugs → itemId → pricing item`. Title-derived slug generation is allowed only at creation time inside `save_page_blocks`.
-
----
-
-## 2. Resolution Contract
-
-New shared helper returns:
-
-```ts
-interface ServiceResolution {
-  found: boolean;
-  itemId?: string;
-  slug?: string;
-  state?: 'active' | 'thin' | 'removed';
-  title?: string;
-  pricingItem?: { name: string; description?: string; price?: number; currency?: string };
-  notFoundReason?: 'no_mapping' | 'item_missing' | 'removed' | 'parent_unpublished';
-}
-```
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## 3. Behavior Matrix
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-| State | SSR | Client | Sitemap | Robots |
-|-------|-----|--------|---------|--------|
-| active | 200 | render | include | index |
-| thin | 200, noindex | render | exclude | noindex |
-| removed | 301 → parent | redirect | exclude | — |
-| no mapping match | 404 | "not found" | — | — |
-| item exists but no mapping | 404 | "not found" | — | — |
-
----
-
-## 4. Changes
-
-### Phase A — Resolution helpers + client fix
-
-**New file**: `src/lib/seo/service-resolver.ts`
-- `resolveServiceBySlug(serviceSlugs, pricingItems, routeSlug)` → `ServiceResolution`
-- Works with both new id-keyed format and legacy entries
-- Single source of resolution truth for client code
-
-**Refactor**: `src/components/screens/PublicServicePage.tsx`
-- Fetch `service_slugs` from `pages` table alongside page data
-- Fetch pricing blocks as before
-- Call `resolveServiceBySlug()` instead of inline slugify loop
-- Handle `removed` state → redirect to parent
-- Handle `thin` state → render but no canonical boost
-
-### Phase B — SSR fix
-
-**Refactor**: `supabase/functions/generate-sitemap/index.ts`
-
-1. **`handleServiceSSR()`** (lines 473-515): 
-   - Add `service_slugs` to the page query SELECT
-   - Replace the slugify-loop with: iterate `service_slugs` entries, find entry where `entry.slug === serviceSlug`, then find pricing item by `itemId`
-   - Handle states: `removed` → 301 to parent, `thin` → 200 with `noindex`, `active` → 200 with `index`
-   - Legacy fallback: if no `service_slugs` match found, try old slugify loop (temporary, for pages not yet re-saved)
-
-2. **Profile SSR service links** (lines 352-365):
-   - Add `service_slugs` to page query
-   - When building service links in profile HTML, use slug from `service_slugs` mapping instead of `slugify(name)`
-   - Match items to mapping entries by item `id` field
-   - Only link services with `state === 'active'`
-
-### Phase C — Sitemap service child URLs
-
-Currently no service child sitemap exists. Add to `buildProfilesSitemap()`:
-- Fetch `service_slugs` alongside page data
-- For each page with service_slugs, emit child URLs where `state === 'active'`
-- Use the stable slug from the mapping, not title-derived
-
-Or: add a `sitemap-services.xml` segment to the sitemap index. Either approach works; embedding in profiles sitemap is simpler for now.
-
-### Phase D — Missing ID normalization
-
-**Problem**: Old pricing items may lack `id`. These items won't appear in `service_slugs` at all (the `save_page_blocks` function skips items with `length(id) < 2`).
-
-**Fix**: In `PricingBlockEditor.tsx`, the `addItem` already generates UUID ids. Add normalization on block load:
-- In the pricing block content loading path, if any item lacks `id`, assign `price-${crypto.randomUUID()}` before first render
-- This ensures next save will create a proper `service_slugs` entry
-
-**Server safeguard**: In `save_page_blocks`, for items without id, generate one server-side instead of skipping:
-```sql
-IF length(v_item_id) < 2 THEN
-  v_item_id := 'auto-' || gen_random_uuid()::text;
-END IF;
-```
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## 5. Files to Change
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-| File | Change |
-|------|--------|
-| **New**: `src/lib/seo/service-resolver.ts` | Shared resolution helper |
-| `src/components/screens/PublicServicePage.tsx` | Use resolver, fetch service_slugs |
-| `supabase/functions/generate-sitemap/index.ts` | SSR resolution + profile links + sitemap child URLs |
-| `src/components/block-editors/PricingBlockEditor.tsx` | Normalize missing IDs on load |
-| Migration SQL | Update `save_page_blocks` to auto-generate IDs for items without one |
-
----
-
-## 6. Migration
-
-One migration to update `save_page_blocks`: remove the `IF length(v_item_id) < 2 THEN CONTINUE` and replace with auto-id generation. No schema changes needed.
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## 7. Legacy Fallback
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-SSR keeps a temporary fallback: if `service_slugs` is null/empty (page never re-saved after migration), fall back to old slugify loop. This fallback:
-- Is clearly commented as temporary
-- Logs a warning when triggered
-- Will be removed after all pages have been re-saved (or a batch backfill runs)
-
-Client `PublicServicePage` gets the same fallback.
-
----
-
-## 8. What NOT to Do
-
-- Do not slugify title for lookup anywhere except inside `save_page_blocks` at creation time
-- Do not create a separate services table — the JSONB model is sufficient
-- Do not add manual slug editing UI in this phase
-- Do not remove legacy fallback yet — pages that haven't been re-saved still need it
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## 9. Priority Order
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-1. **Phase A** (resolver + client) — immediate, highest impact on URL stability
-2. **Phase B** (SSR) — critical for bots seeing correct pages after rename  
-3. **Phase D** (missing ID normalization) — prevents orphan items
-4. **Phase C** (sitemap child URLs) — completes the loop
+## Текущее состояние LinkMAX Business Zones
+
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+
+### Фаза 3: Tasks -- закрытие пробелов (P1)
+
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+
+### Фаза 4: Аналитика Зоны (P1)
+
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## 10. Risk
+## Что НЕ нужно копировать из Bitrix24
 
-**Main risk**: Pages never re-saved after P2.6 migration have legacy-N keys in `service_slugs` that don't match actual pricing item IDs. The legacy fallback handles this, but a future batch re-save or backfill migration should be planned.
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-**One-sentence architecture**: Every service child URL resolves through the `service_slugs` mapping as the single lookup index, never through title slugification.
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |
