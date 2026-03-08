@@ -97,6 +97,39 @@ serve(async (req) => {
         const clicksThisWeek = analytics?.filter(a => a.event_type === 'click').length || 0;
         const newLeadsCount = leads?.length || 0;
 
+        // Get unprocessed leads (still 'new' status)
+        const unprocessedLeads = leads?.filter(l => l.status === 'new').length || 0;
+
+        // Get upcoming bookings this week
+        const todayStr = now.toISOString().split('T')[0];
+        const nextWeekStr = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        const { data: upcomingBookings } = await supabase
+          .from('bookings')
+          .select('id')
+          .eq('owner_id', user.id)
+          .gte('slot_date', todayStr)
+          .lte('slot_date', nextWeekStr)
+          .neq('status', 'cancelled');
+
+        const upcomingBookingsCount = upcomingBookings?.length || 0;
+
+        // Detect repeat customers (phones with 2+ bookings)
+        const { data: allBookings } = await supabase
+          .from('bookings')
+          .select('client_phone')
+          .eq('owner_id', user.id)
+          .neq('status', 'cancelled')
+          .not('client_phone', 'is', null);
+
+        const phoneCounts = new Map<string, number>();
+        for (const b of allBookings || []) {
+          if (b.client_phone) {
+            const p = b.client_phone.replace(/\D/g, '');
+            phoneCounts.set(p, (phoneCounts.get(p) || 0) + 1);
+          }
+        }
+        const repeatCustomersCount = Array.from(phoneCounts.values()).filter(c => c >= 2).length;
+
         // Skip if no activity this week
         if (viewsThisWeek === 0 && clicksThisWeek === 0 && newLeadsCount === 0) {
           console.log(`Skipping user ${user.id}: no activity this week`);
@@ -194,6 +227,33 @@ serve(async (req) => {
                               💡 <strong>Tip:</strong> Share your page more often to get more visitors and leads!
                             </p>
                           </div>
+
+                          ${unprocessedLeads > 0 || upcomingBookingsCount > 0 || repeatCustomersCount > 0 ? `
+                          <!-- Operator Summary -->
+                          <div style="margin-bottom: 24px;">
+                            <h2 style="margin: 0 0 12px; color: #18181b; font-size: 18px; font-weight: 600;">⚡ Action Items</h2>
+                            <table role="presentation" style="width: 100%;">
+                              ${unprocessedLeads > 0 ? `
+                              <tr>
+                                <td style="padding: 8px 0; font-size: 14px; color: #dc2626;">
+                                  🔴 ${unprocessedLeads} unprocessed lead${unprocessedLeads > 1 ? 's' : ''} waiting for response
+                                </td>
+                              </tr>` : ''}
+                              ${upcomingBookingsCount > 0 ? `
+                              <tr>
+                                <td style="padding: 8px 0; font-size: 14px; color: #2563eb;">
+                                  📅 ${upcomingBookingsCount} upcoming booking${upcomingBookingsCount > 1 ? 's' : ''} this week
+                                </td>
+                              </tr>` : ''}
+                              ${repeatCustomersCount > 0 ? `
+                              <tr>
+                                <td style="padding: 8px 0; font-size: 14px; color: #7c3aed;">
+                                  🔁 ${repeatCustomersCount} repeat customer${repeatCustomersCount > 1 ? 's' : ''} detected
+                                </td>
+                              </tr>` : ''}
+                            </table>
+                          </div>
+                          ` : ''}
                           
                           <p style="color: #71717a; font-size: 14px; line-height: 1.5; margin: 0;">
                             Keep growing your audience! 🚀

@@ -30,7 +30,13 @@ export type ActivationEventType =
   | 'booking_prepayment_initiated'
   | 'booking_cancelled'
   | 'booking_payment_confirmed'
-  | 'booking_completed';
+  | 'booking_completed'
+  // Retention events
+  | 'post_service_followup_sent'
+  | 'repeat_booking_detected'
+  | 'creator_returned_after_gap'
+  | 'stale_leads_alert_shown'
+  | 'weekly_digest_sent';
 
 /**
  * Track an activation event to the analytics table
@@ -144,4 +150,26 @@ export function trackBookingPaymentConfirmed(pageId: string, bookingId: string):
 /** Booking cancelled */
 export function trackBookingCancelled(pageId: string, bookingId: string, by: string): void {
   trackActivationEvent(pageId, 'booking_cancelled', { bookingId, cancelledBy: by });
+}
+
+// ──────────── Retention event helpers ────────────
+
+/** Owner sent follow-up after service */
+export function trackPostServiceFollowUp(pageId: string, bookingId: string, channel: string): void {
+  trackActivationEvent(pageId, 'post_service_followup_sent', { bookingId, channel });
+}
+
+/** Repeat booking detected (same phone/email booked again) */
+export function trackRepeatBookingDetected(pageId: string, bookingId: string, phone?: string): void {
+  trackActivationEvent(pageId, 'repeat_booking_detected', { bookingId, phone: phone || '' });
+}
+
+/** Creator returned after 3+ day gap */
+export function trackCreatorReturnedAfterGap(pageId: string, daysSinceLastVisit: number): void {
+  trackActivationEvent(pageId, 'creator_returned_after_gap', { daysSinceLastVisit: String(daysSinceLastVisit) });
+}
+
+/** Stale leads alert shown */
+export function trackStaleLeadsAlertShown(pageId: string, count: number): void {
+  trackActivationEvent(pageId, 'stale_leads_alert_shown', { count: String(count) });
 }
