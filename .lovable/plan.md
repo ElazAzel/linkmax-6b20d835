@@ -1,144 +1,58 @@
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-## Текущее состояние LinkMAX Business Zones
+## Analysis & Improvement Plan for Business Zone + Platform
 
-Реализовано 6 модулей: Deals (Kanban), Contacts (список), Inbox (realtime чат), Tasks (Kanban), Invoices (RoboKassa), Settings (участники, биллинг). Есть RLS, зоны, роли, инвайты, grace-period. Это примерно **25-30% функциональности Bitrix24 Professional** для микро-команд.
+### Build Error Fix
+The `gcal-callback/index.ts` has a TypeScript error: `sigBytes as ArrayBuffer` fails because `Uint8Array` and `ArrayBuffer` don't overlap. Fix: use `sigBytes.buffer as ArrayBuffer` instead.
 
----
+### Business Zone Issues Found
 
-## Что есть у Bitrix24, чего критически не хватает LinkMAX
+**1. Missing `zone-analytics` route in `main.tsx`**
+The sidebar has `zone-analytics` and `DashboardV2.tsx` renders it, but `main.tsx` does not register `dashboard/zone-analytics` as a route. This causes a 404 on direct URL access/refresh.
 
-Анализ строится от реальных use-cases клиентов (салон красоты, коуч, агентство), а не от полного набора Bitrix24.
+**2. Documents screen - hardcoded Russian labels**
+`ZoneDocumentsScreen.tsx` has hardcoded Russian strings for status labels, filter tabs, and header text instead of using `t()` from i18next. This breaks the RU/EN/KK localization standard.
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+**3. Documents screen - missing `zoneId` prop pattern**
+Unlike other zone screens that receive `zoneId` as a prop, `ZoneDocumentsScreen` uses `useZoneContext()` directly. This is inconsistent but functional. Will leave as-is.
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+**4. `zone-documents` not in bottom nav**
+`DashboardBottomNav.tsx` line 86 is missing `zone-documents` from the mobile nav items array. Documents are unreachable on mobile.
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+**5. Analytics screen is basic**
+`ZoneAnalyticsScreen.tsx` (167 lines) shows simple KPI cards without period filtering, charts, or export. The Dashboard (`ZoneDashboard.tsx`) already has richer analytics. The Analytics page should add value beyond the dashboard with exportable reports and deeper breakdowns.
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+### Implementation Plan
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+#### Task 1: Fix build error in `gcal-callback/index.ts`
+- Change `sigBytes as ArrayBuffer` to `sigBytes.buffer as ArrayBuffer`
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+#### Task 2: Add missing `zone-analytics` route
+- Add `{ path: "dashboard/zone-analytics", element: <Dashboard /> }` to `main.tsx`
 
-### Фаза 3: Tasks -- закрытие пробелов (P1)
+#### Task 3: Localize `ZoneDocumentsScreen.tsx`
+- Replace all hardcoded Russian strings with `t()` calls
+- Apply to STATUS_CONFIG, FILTER_TABS, headers, buttons, empty states
 
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+#### Task 4: Add `zone-documents` to bottom nav
+- Add documents entry to `DashboardBottomNav.tsx` mobile items
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+#### Task 5: Enhance `ZoneAnalyticsScreen.tsx`
+- Add period selector (7d/30d/90d/All) like ZoneDashboard
+- Add deal conversion funnel chart (using recharts)
+- Add revenue timeline (paid invoices over time)
+- Add task completion rate metrics
+- Add export to Excel button (using existing exceljs dependency)
+- Use existing hooks (`useZoneDeals`, `useZoneTasks`, `useZoneInvoices`, `useZoneContacts`)
 
-### Фаза 4: Аналитика Зоны (P1)
+#### Task 6: Polish the overall zone UX consistency
+- Ensure all zone screens use consistent header layout pattern (icon + title + description)
+- Add loading skeletons to screens that don't have them (Automations, Products)
 
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+### Files to Change
+- `supabase/functions/gcal-callback/index.ts` (build fix)
+- `src/main.tsx` (add zone-analytics route)
+- `src/components/zones/documents/ZoneDocumentsScreen.tsx` (localization)
+- `src/components/dashboard-v2/layout/DashboardBottomNav.tsx` (add documents)
+- `src/components/zones/ZoneAnalyticsScreen.tsx` (major enhancement)
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
-
----
-
-## Что НЕ нужно копировать из Bitrix24
-
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
-
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
-
----
-
-## Приоритезация (RICE)
-
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
-
----
-
-## Технический план реализации
-
-### DB миграции (новые таблицы/колонки)
-
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
-
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
-
----
-
-## Рекомендуемый порядок реализации
-
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
