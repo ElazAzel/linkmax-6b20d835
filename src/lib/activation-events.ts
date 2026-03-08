@@ -113,3 +113,35 @@ export function trackBookingConfirmed(pageId: string, bookingId: string): void {
 export function trackFirstLeadReply(pageId: string): void {
   trackActivationEvent(pageId, 'first_lead_reply');
 }
+
+// ──────────── Booking funnel event helpers ────────────
+
+/** Booking slot selected by customer */
+export function trackBookingSlotSelected(pageId: string, blockId: string, date: string, time: string): void {
+  trackActivationEvent(pageId, 'booking_slot_selected', { blockId, date, time });
+}
+
+/** Booking form opened */
+export function trackBookingFormOpened(pageId: string, blockId: string): void {
+  trackActivationEvent(pageId, 'booking_form_opened', { blockId });
+}
+
+/** Booking submitted */
+export function trackBookingSubmitted(pageId: string, bookingId: string, hasPrepayment: boolean): void {
+  trackActivationEvent(pageId, 'booking_submitted', { bookingId, hasPrepayment: String(hasPrepayment) });
+}
+
+/** Prepayment initiated (customer clicked pay button) */
+export function trackBookingPrepaymentInitiated(pageId: string, bookingId: string, method: string): void {
+  trackActivationEvent(pageId, 'booking_prepayment_initiated', { bookingId, method });
+}
+
+/** Owner confirmed payment */
+export function trackBookingPaymentConfirmed(pageId: string, bookingId: string): void {
+  trackActivationEvent(pageId, 'booking_payment_confirmed', { bookingId });
+}
+
+/** Booking cancelled */
+export function trackBookingCancelled(pageId: string, bookingId: string, by: string): void {
+  trackActivationEvent(pageId, 'booking_cancelled', { bookingId, cancelledBy: by });
+}
