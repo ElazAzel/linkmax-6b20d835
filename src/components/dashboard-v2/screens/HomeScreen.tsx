@@ -77,6 +77,9 @@ export const HomeScreen = memo(function HomeScreen({
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { repeatCount } = useRepeatCustomers();
+  const gapDetectedRef = useRef(false);
 
   const viewCount = pageData?.viewCount || 0;
 
@@ -90,6 +93,25 @@ export const HomeScreen = memo(function HomeScreen({
     totalClicks: 0, // TODO: pass real click count when available
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
+
+  // Creator return-after-gap detection
+  useEffect(() => {
+    if (!user || !pageData?.id || gapDetectedRef.current) return;
+    gapDetectedRef.current = true;
+    (async () => {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('last_active_date')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (profile?.last_active_date) {
+        const gap = differenceInDays(new Date(), parseISO(profile.last_active_date));
+        if (gap >= 3) {
+          trackCreatorReturnedAfterGap(pageData.id, gap);
+        }
+      }
+    })();
+  }, [user, pageData?.id]);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
