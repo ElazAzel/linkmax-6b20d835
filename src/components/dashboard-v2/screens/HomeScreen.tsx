@@ -230,6 +230,20 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </Card>
 
+        {/* Activation Checklist */}
+        {activation.isVisible && !checklistDismissed && (
+          <ActivationChecklist
+            steps={activation.steps}
+            completedCount={activation.completedCount}
+            totalCount={activation.totalCount}
+            progress={activation.progress}
+            onDismiss={() => {
+              activation.dismiss();
+              setChecklistDismissed(true);
+            }}
+          />
+        )}
+
         {/* Quick Actions Grid */}
         <div className="space-y-3">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
