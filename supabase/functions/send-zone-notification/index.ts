@@ -113,6 +113,19 @@ serve(async (req: Request) => {
                     }
                     break;
                 }
+                case 'deal_comment_mention': {
+                    const dealTitle = data.deal_title || '';
+                    const commenterName = data.commenter_name || '';
+                    const commentPreview = data.comment_preview || '';
+                    if (lang === 'ru') {
+                        message = `💬 <b>Упоминание в комментарии</b>\n\n📋 Сделка: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
+                    } else if (lang === 'kk') {
+                        message = `💬 <b>Пікірде аталды</b>\n\n📋 Мәміле: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
+                    } else {
+                        message = `💬 <b>Mentioned in comment</b>\n\n📋 Deal: ${dealTitle}\n👤 ${commenterName}:\n"${commentPreview}"`;
+                    }
+                    break;
+                }
             }
 
             if (message && profile.telegram_chat_id) {

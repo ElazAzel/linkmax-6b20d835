@@ -49,10 +49,9 @@ export async function exportContactsToExcel(
       company: contact.company || '',
       position: contact.position || '',
       telegram: contact.telegram_username || '',
-      instagram: contact.instagram_username || '',
-      whatsapp: contact.whatsapp_number || '',
       tags: (contact.tags || []).join(', '),
       created_at: contact.created_at ? new Date(contact.created_at).toLocaleDateString('ru-RU') : '',
+    });
     });
   });
 
