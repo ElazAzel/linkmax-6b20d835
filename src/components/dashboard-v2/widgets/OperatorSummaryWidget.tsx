@@ -1,6 +1,6 @@
 /**
  * OperatorSummaryWidget - Daily operator summary on HomeScreen
- * Shows today's bookings, unanswered leads, week delta, stale page alert, follow-up prompts
+ * Shows today's bookings, unanswered leads, week delta, stale page alert, follow-up prompts, rebook opportunities
  */
 import { memo, useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,10 +23,12 @@ import Users from 'lucide-react/dist/esm/icons/users';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import Phone from 'lucide-react/dist/esm/icons/phone';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
 
 interface OperatorSummaryWidgetProps {
   pageId?: string;
+  pageSlug?: string;
+  pageNiche?: string | null;
   pageUpdatedAt?: string | null;
   onOpenActivity?: () => void;
   onOpenEditor?: () => void;
@@ -47,10 +49,40 @@ interface CompletedBooking {
   client_phone: string | null;
   slot_date: string;
   slot_time: string;
+  followup_sent_at: string | null;
+}
+
+interface RebookCandidate {
+  client_name: string;
+  client_phone: string;
+  slot_date: string;
+}
+
+/** Get the public page URL */
+function getPageUrl(slug?: string): string {
+  return slug ? `https://lnkmx.my/${slug}` : '';
+}
+
+/** Get niche-specific follow-up message with rebook link */
+function getFollowUpMessage(name: string, url: string, niche?: string | null): string {
+  if (niche === 'beauty' || niche === 'nails' || niche === 'lashes' || niche === 'hair') {
+    return `Здравствуйте, ${name}! Спасибо за визит 💅 Как вам результат? Записаться снова: ${url}`;
+  }
+  if (niche === 'massage' || niche === 'wellness' || niche === 'spa') {
+    return `${name}, спасибо за визит! Для повторной записи: ${url} 🙏`;
+  }
+  return `${name}, спасибо! Записаться снова можно здесь: ${url}`;
+}
+
+/** Get niche-specific rebook nudge message */
+function getRebookMessage(name: string, url: string): string {
+  return `${name}, давно не виделись! Записаться снова: ${url}`;
 }
 
 export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
   pageId,
+  pageSlug,
+  pageNiche,
   pageUpdatedAt,
   onOpenActivity,
   onOpenEditor,
@@ -63,16 +95,20 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
 
   const [todayBookings, setTodayBookings] = useState<TodayBooking[]>([]);
   const [completedBookings, setCompletedBookings] = useState<CompletedBooking[]>([]);
+  const [rebookCandidates, setRebookCandidates] = useState<RebookCandidate[]>([]);
   const [weekStats, setWeekStats] = useState<{ thisWeek: number; lastWeek: number }>({ thisWeek: 0, lastWeek: 0 });
+  const [sentFollowups, setSentFollowups] = useState<Set<string>>(new Set());
 
   const today = format(new Date(), 'yyyy-MM-dd');
-  const yesterday = format(subDays(new Date(), 1), 'yyyy-MM-dd');
 
-  // Fetch today's bookings + yesterday's completed (for follow-up)
+  // Fetch today's bookings + recently completed (for follow-up) + rebook candidates
   useEffect(() => {
     if (!user) return;
 
-    const fetchBookings = async () => {
+    const fetchData = async () => {
+      // Auto-complete past bookings first
+      await supabase.rpc('auto_complete_past_bookings', { p_owner_id: user.id });
+
       // Today's upcoming
       const { data: todayData } = await supabase
         .from('bookings')
@@ -84,21 +120,65 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
 
       if (todayData) setTodayBookings(todayData as TodayBooking[]);
 
-      // Yesterday's completed for follow-up
+      // Recently completed, no follow-up sent (last 5 days)
+      const fiveDaysAgo = format(subDays(new Date(), 5), 'yyyy-MM-dd');
       const { data: completedData } = await supabase
         .from('bookings')
-        .select('id, client_name, client_phone, slot_date, slot_time')
+        .select('id, client_name, client_phone, slot_date, slot_time, followup_sent_at')
         .eq('owner_id', user.id)
-        .eq('slot_date', yesterday)
-        .eq('status', 'confirmed')
-        .order('slot_time', { ascending: true })
+        .eq('status', 'completed')
+        .gte('slot_date', fiveDaysAgo)
+        .lt('slot_date', today)
+        .is('followup_sent_at' as any, null)
+        .order('slot_date', { ascending: false })
         .limit(5);
 
       if (completedData) setCompletedBookings(completedData as CompletedBooking[]);
+
+      // Rebook candidates: completed 14-35 days ago
+      const thirtyFiveDaysAgo = format(subDays(new Date(), 35), 'yyyy-MM-dd');
+      const fourteenDaysAgo = format(subDays(new Date(), 14), 'yyyy-MM-dd');
+      const { data: rebookData } = await supabase
+        .from('bookings')
+        .select('client_name, client_phone, slot_date')
+        .eq('owner_id', user.id)
+        .eq('status', 'completed')
+        .gte('slot_date', thirtyFiveDaysAgo)
+        .lte('slot_date', fourteenDaysAgo)
+        .not('client_phone', 'is', null)
+        .order('slot_date', { ascending: false })
+        .limit(20);
+
+      if (rebookData) {
+        // Filter out clients who have a newer booking
+        const { data: recentBookings } = await supabase
+          .from('bookings')
+          .select('client_phone')
+          .eq('owner_id', user.id)
+          .gt('slot_date', fourteenDaysAgo)
+          .neq('status', 'cancelled');
+
+        const recentPhones = new Set(
+          (recentBookings || []).map(b => (b.client_phone || '').replace(/\D/g, '')).filter(Boolean)
+        );
+
+        const candidates = (rebookData as RebookCandidate[])
+          .filter(b => b.client_phone && !recentPhones.has(b.client_phone.replace(/\D/g, '')))
+          // Deduplicate by phone
+          .filter((b, i, arr) => arr.findIndex(x => x.client_phone?.replace(/\D/g, '') === b.client_phone?.replace(/\D/g, '')) === i)
+          .slice(0, 3);
+
+        setRebookCandidates(candidates);
+
+        // Track opportunity shown
+        if (candidates.length > 0 && pageId) {
+          trackActivationEvent(pageId, 'repeat_opportunity_shown', { count: String(candidates.length) });
+        }
+      }
     };
 
-    fetchBookings();
-  }, [user, today, yesterday]);
+    fetchData();
+  }, [user, today, pageId]);
 
   // Fetch week-over-week leads count
   useEffect(() => {
@@ -125,18 +205,36 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
 
   const unansweredLeads = leads.filter(l => l.status === 'new').length;
   const delta = weekStats.thisWeek - weekStats.lastWeek;
-  const hasContent = todayBookings.length > 0 || unansweredLeads > 0 || completedBookings.length > 0 || repeatCount > 0 || pageIsStale;
+  const hasContent = todayBookings.length > 0 || unansweredLeads > 0 || completedBookings.length > 0 || rebookCandidates.length > 0 || repeatCount > 0 || pageIsStale;
 
   if (!hasContent) return null;
 
-  // Follow-up handler
-  const handleFollowUp = (name: string, phone: string) => {
+  const pageUrl = getPageUrl(pageSlug);
+
+  // Follow-up handler with rebook link
+  const handleFollowUp = async (bookingId: string, name: string, phone: string) => {
     const cleanPhone = phone.replace(/\D/g, '');
-    const message = t('operator.followUp.template', 'Здравствуйте, {{name}}! Спасибо за визит! Как вам? Будем рады видеть вас снова 😊', { name });
+    const message = getFollowUpMessage(name, pageUrl, pageNiche);
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+
+    // Mark followup_sent_at
+    await supabase
+      .from('bookings')
+      .update({ followup_sent_at: new Date().toISOString() } as any)
+      .eq('id', bookingId);
+
+    setSentFollowups(prev => new Set(prev).add(bookingId));
+
     if (pageId) {
-      trackActivationEvent(pageId, 'post_service_followup_sent', { channel: 'whatsapp' });
+      trackActivationEvent(pageId, 'repeat_followup_sent', { bookingId, hasRebookLink: 'true' });
     }
+  };
+
+  // Rebook nudge handler
+  const handleRebookNudge = (name: string, phone: string) => {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const message = getRebookMessage(name, pageUrl);
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
@@ -187,38 +285,76 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
           </button>
         )}
 
-        {/* Post-service follow-up */}
+        {/* Post-service follow-up with rebook link */}
         {completedBookings.length > 0 && (
           <div className="space-y-2">
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider px-1">
-              {t('operator.followUp.title', 'Написать отзыв')}
+              {t('operator.followUp.title', 'Написать после визита')}
             </span>
             {completedBookings.slice(0, 3).map(b => (
               <div key={b.id} className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-semibold block truncate">{b.client_name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {t('operator.followUp.visitedYesterday', 'Визит вчера в {{time}}', { time: b.slot_time.substring(0, 5) })}
+                    {t('operator.followUp.completedOn', 'Визит {{date}}', { date: b.slot_date })}
                   </span>
                 </div>
-                {b.client_phone && (
+                {b.client_phone && !sentFollowups.has(b.id) ? (
                   <Button
                     size="sm"
                     className="h-8 rounded-lg px-3 bg-emerald-500 hover:bg-emerald-600 text-white shrink-0"
-                    onClick={() => handleFollowUp(b.client_name, b.client_phone!)}
+                    onClick={() => handleFollowUp(b.id, b.client_name, b.client_phone!)}
                   >
                     <MessageCircle className="h-3.5 w-3.5 mr-1" />
                     {t('operator.followUp.send', 'Написать')}
                   </Button>
-                )}
+                ) : sentFollowups.has(b.id) ? (
+                  <Badge className="h-7 px-2 bg-emerald-500/15 text-emerald-600 text-xs border-0 shrink-0">
+                    <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                    {t('operator.followUp.sent', 'Отправлено')}
+                  </Badge>
+                ) : null}
               </div>
             ))}
           </div>
         )}
 
+        {/* Rebook opportunities — clients due for return visit */}
+        {rebookCandidates.length > 0 && (
+          <div className="space-y-2">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider px-1">
+              {t('operator.rebook.title', 'Пора вернуть клиента')}
+            </span>
+            {rebookCandidates.map((b, idx) => {
+              const daysSince = differenceInDays(new Date(), parseISO(b.slot_date));
+              return (
+                <div key={`${b.client_phone}-${idx}`} className="flex items-center gap-3 p-3 rounded-xl bg-violet-500/5 border border-violet-500/10">
+                  <div className="h-8 w-8 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
+                    <Repeat className="h-3.5 w-3.5 text-violet-500" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-semibold block truncate">{b.client_name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {t('operator.rebook.daysSince', '{{days}} дн. назад', { days: daysSince })}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-8 rounded-lg px-3 border-violet-500/20 text-violet-600 hover:bg-violet-500/10 shrink-0"
+                    onClick={() => handleRebookNudge(b.client_name, b.client_phone)}
+                  >
+                    <MessageCircle className="h-3.5 w-3.5 mr-1" />
+                    {t('operator.rebook.nudge', 'Напомнить')}
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {/* Week stats row */}
         <div className="flex items-center gap-4 px-1">
-          {/* Week delta */}
           <div className="flex items-center gap-1.5 text-xs">
             <Users className="h-3.5 w-3.5 text-muted-foreground" />
             <span className="text-muted-foreground">{t('operator.week.leads', 'За неделю:')}</span>
@@ -231,7 +367,6 @@ export const OperatorSummaryWidget = memo(function OperatorSummaryWidget({
             )}
           </div>
 
-          {/* Repeat customers */}
           {repeatCount > 0 && (
             <div className="flex items-center gap-1.5 text-xs">
               <Repeat className="h-3.5 w-3.5 text-violet-500" />
