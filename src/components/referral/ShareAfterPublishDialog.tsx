@@ -23,6 +23,25 @@ interface ShareAfterPublishDialogProps {
   onOpenChange: (open: boolean) => void;
   userId: string | undefined;
   publishedUrl: string;
+  niche?: string | null;
+}
+
+// Niche-specific share messages
+function getNicheShareText(niche: string | null | undefined, url: string): string {
+  switch (niche) {
+    case 'beauty':
+      return `Записаться ко мне онлайн: ${url}`;
+    case 'fitness':
+      return `Запишись на тренировку: ${url}`;
+    case 'health':
+      return `Записаться на приём: ${url}`;
+    case 'education':
+      return `Записаться на занятие: ${url}`;
+    case 'food':
+      return `Забронировать столик / заказать: ${url}`;
+    default:
+      return `Мои услуги и запись: ${url}`;
+  }
 }
 
 export function ShareAfterPublishDialog({
@@ -30,6 +49,7 @@ export function ShareAfterPublishDialog({
   onOpenChange,
   userId,
   publishedUrl,
+  niche,
 }: ShareAfterPublishDialogProps) {
   const { t } = useTranslation();
   const { stats, shareLink, copyCode } = useReferral(userId);
@@ -104,7 +124,7 @@ export function ShareAfterPublishDialog({
               <Button
                 className="flex-1 rounded-xl bg-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,40%)] text-white"
                 onClick={() => {
-                  const msg = encodeURIComponent(`${t('share.prefilled', 'Смотри мою страницу!')} ${publishedUrl}`);
+                  const msg = encodeURIComponent(getNicheShareText(niche, publishedUrl));
                   window.open(`https://wa.me/?text=${msg}`, '_blank');
                 }}
               >
@@ -113,8 +133,8 @@ export function ShareAfterPublishDialog({
               <Button
                 className="flex-1 rounded-xl bg-[hsl(200,80%,50%)] hover:bg-[hsl(200,80%,45%)] text-white"
                 onClick={() => {
-                  const msg = encodeURIComponent(`${t('share.prefilled', 'Смотри мою страницу!')} ${publishedUrl}`);
-                  window.open(`https://t.me/share/url?url=${encodeURIComponent(publishedUrl)}&text=${msg}`, '_blank');
+                  const shareText = getNicheShareText(niche, '');
+                  window.open(`https://t.me/share/url?url=${encodeURIComponent(publishedUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
                 }}
               >
                 Telegram

@@ -299,7 +299,7 @@ export default function PublicPage() {
               </div>
 
               {/* Freemium Watermark - always show for non-premium, ignore hideBranding for free users */}
-              <FreemiumWatermark show={showWatermark} />
+              <FreemiumWatermark show={showWatermark} slug={slug} />
 
               {/* QR Dialog */}
               <Dialog open={showQR} onOpenChange={setShowQR}>

@@ -41,7 +41,16 @@ export type ActivationEventType =
   | 'inbound_limit_warning'
   | 'inbound_limit_reached'
   | 'inbound_blocked_submission'
-  | 'upgrade_from_limit';
+  | 'upgrade_from_limit'
+  // Growth surface events
+  | 'niche_landing_view'
+  | 'niche_landing_cta_click'
+  | 'watermark_landing_view'
+  | 'watermark_landing_cta_click'
+  | 'gallery_template_click'
+  | 'signup_from_niche_landing'
+  | 'signup_from_watermark'
+  | 'signup_from_gallery';
 
 /**
  * Track an activation event to the analytics table

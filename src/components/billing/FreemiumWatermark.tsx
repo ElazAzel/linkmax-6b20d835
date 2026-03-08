@@ -5,9 +5,10 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface FreemiumWatermarkProps {
   show: boolean;
+  slug?: string;
 }
 
-export const FreemiumWatermark = memo(function FreemiumWatermark({ show }: FreemiumWatermarkProps) {
+export const FreemiumWatermark = memo(function FreemiumWatermark({ show, slug }: FreemiumWatermarkProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export const FreemiumWatermark = memo(function FreemiumWatermark({ show }: Freem
     <AnimatePresence>
       {visible && (
         <motion.a
-          href={getAppDomain()}
+          href={slug ? `${getAppDomain()}/from/${slug}` : getAppDomain()}
           target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0, y: 20, scale: 0.9, x: '-50%' }}

@@ -20,6 +20,7 @@ interface GalleryPageCardProps {
   onCopy?: () => void;
   onView?: () => void;
   onLike?: (pageId: string) => Promise<void> | void;
+  onUseTemplate?: (slug: string, niche: string | null) => void;
 
   // Legacy props (compat)
   isLiked?: boolean;
@@ -31,6 +32,7 @@ export function GalleryPageCard({
   onCopy,
   onView,
   onLike,
+  onUseTemplate,
   isLiked = false,
   featured = false
 }: GalleryPageCardProps) {
@@ -171,22 +173,37 @@ export function GalleryPageCard({
             </div>
           </div>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 rounded-lg hover:bg-primary/10 hover:text-primary ml-auto"
-                onClick={handleCopy}
-              >
-                <Copy className="h-3.5 w-3.5" />
-                <span className="sr-only">{t('common.copy', 'Copy')}</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {t('common.copy', 'Copy Link')}
-            </TooltipContent>
-          </Tooltip>
+          {onUseTemplate ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs rounded-lg hover:bg-primary/10 hover:text-primary ml-auto px-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                onUseTemplate(page.slug, page.niche);
+              }}
+            >
+              <Copy className="h-3 w-3 mr-1" />
+              {t('gallery.useTemplate', 'Создать')}
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 w-7 p-0 rounded-lg hover:bg-primary/10 hover:text-primary ml-auto"
+                  onClick={handleCopy}
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                  <span className="sr-only">{t('common.copy', 'Copy')}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {t('common.copy', 'Copy Link')}
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </CardContent>
     </Card>
