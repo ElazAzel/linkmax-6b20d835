@@ -368,7 +368,7 @@ export default function Pricing() {
                         {plan.name}
                         {isCurrentPlan && <Badge variant="secondary" className="ml-2">{t('pricing.currentPlan', 'Текущий')}</Badge>}
                       </CardTitle>
-                      <CardDescription>{t('pricing.proDesc', 'Всё для профессионалов и бизнеса')}</CardDescription>
+                      <CardDescription>{t('pricing.proDesc', 'Растите без ограничений')}</CardDescription>
                     </div>
                   </div>
                   <div className="mt-4">
