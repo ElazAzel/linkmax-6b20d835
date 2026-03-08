@@ -278,7 +278,10 @@ export function AdminSearchDiagnosticsTab() {
               const score = page.quality_score || 0;
               const isIndexable = page.is_published && score >= 40;
               const exclusions = page.index_exclusion_reasons || [];
-              const serviceCount = page.service_slugs ? Object.keys(page.service_slugs).length : 0;
+              const children = parseChildEntities(page.service_slugs, page.slug, isIndexable);
+              const activeChildren = children.filter(c => c.state !== 'removed');
+              const eligibleChildren = children.filter(c => c.state === 'eligible');
+              const thinChildren = children.filter(c => c.state === 'excluded_thin');
 
               return (
                 <TableRow key={page.id}>
