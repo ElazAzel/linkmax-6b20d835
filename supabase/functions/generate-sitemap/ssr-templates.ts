@@ -384,7 +384,7 @@ export function buildLandingHtml(lang: LanguageKey, baseUrl: string): string {
     </section>
 
     <footer>
-      <p><a href="${baseUrl}/">lnkmx.my</a> - Micro-Business OS</p>
+      <p><a href="${baseUrl}/">LinkMAX</a> - Micro-Business OS</p>
       <p><small>${lang === 'ru' ? 'Платформа для микро-бизнеса' : lang === 'kk' ? 'Микро-бизнес платформасы' : 'Platform for micro-business'}</small></p>
     </footer>
   </main>
