@@ -159,9 +159,9 @@ const LANDING_CONTENT: Record<LanguageKey, LandingContent> = {
 
 const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
   ru: {
-    title: 'Галерея lnkmx — примеры link in bio и мини-сайтов',
-    description: 'Подборка лучших страниц lnkmx: ниши, шаблоны, идеи. Посмотрите, как выглядят реальные профили.',
-    h1: 'Галерея страниц lnkmx',
+    title: 'Галерея LinkMAX — примеры link in bio и мини-сайтов',
+    description: 'Подборка лучших страниц LinkMAX: ниши, шаблоны, идеи. Посмотрите, как выглядят реальные профили.',
+    h1: 'Галерея страниц LinkMAX',
     subtitle: 'Смотрите реальные профили, вдохновляйтесь нишами и копируйте решения.',
     highlightsTitle: 'Что вы найдёте в галерее',
     highlights: ['Топовые страницы по лайкам', 'Примеры по нишам: beauty, education, consulting', 'Готовые структуры блоков'],
@@ -170,12 +170,12 @@ const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
     topProfilesTitle: 'Популярные профили',
     keyFactsTitle: 'Ключевые факты о галерее',
     keyFacts: ['Сотни реальных примеров', '15+ категорий ниш', 'Фильтрация по популярности', 'Примеры из Казахстана и СНГ'],
-    answerBlock: 'Галерея lnkmx — это коллекция реальных link in bio страниц от экспертов, бизнесов и креаторов.',
+    answerBlock: 'Галерея LinkMAX — это коллекция реальных link in bio страниц от экспертов, бизнесов и креаторов.',
   },
   en: {
-    title: 'lnkmx Gallery — link in bio examples and templates',
-    description: 'Discover top lnkmx pages: niches, templates, and inspiration.',
-    h1: 'lnkmx Gallery',
+    title: 'LinkMAX Gallery — link in bio examples and templates',
+    description: 'Discover top LinkMAX pages: niches, templates, and inspiration.',
+    h1: 'LinkMAX Gallery',
     subtitle: 'Browse real profiles, explore niches, and copy proven layouts.',
     highlightsTitle: 'What you get inside',
     highlights: ['Top pages by likes and views', 'Niche examples: beauty, education, consulting', 'Ready-to-use block structures'],
@@ -184,12 +184,12 @@ const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
     topProfilesTitle: 'Top profiles',
     keyFactsTitle: 'Key facts about gallery',
     keyFacts: ['Hundreds of real page examples', '15+ niche categories', 'Filter by popularity', 'Examples from Kazakhstan and CIS'],
-    answerBlock: 'lnkmx Gallery is a collection of real link in bio pages from experts, businesses, and creators.',
+    answerBlock: 'LinkMAX Gallery is a collection of real link in bio pages from experts, businesses, and creators.',
   },
   kk: {
-    title: 'lnkmx галереясы — link in bio мысалдары мен мини-сайттар',
-    description: 'lnkmx үздік парақшалары: нишалар, шаблондар, идеялар.',
-    h1: 'lnkmx парақшалар галереясы',
+    title: 'LinkMAX галереясы — link in bio мысалдары мен мини-сайттар',
+    description: 'LinkMAX үздік парақшалары: нишалар, шаблондар, идеялар.',
+    h1: 'LinkMAX парақшалар галереясы',
     subtitle: 'Нақты профильдерді қарап, нишалардан шабыт алыңыз.',
     highlightsTitle: 'Галереядан не табасыз',
     highlights: ['Лайк пен қаралымы көп үздік беттер', 'Beauty, education, consulting сияқты нишалар', 'Дайын блок құрылымдары'],
@@ -198,7 +198,7 @@ const GALLERY_CONTENT: Record<LanguageKey, GalleryContent> = {
     topProfilesTitle: 'Танымал профильдер',
     keyFactsTitle: 'Галерея туралы негізгі фактілер',
     keyFacts: ['Жүздеген нақты бет мысалдары', '15+ ниша санаттары', 'Танымалдылығы бойынша сүзу', 'Қазақстан мен ТМД елдерінен мысалдар'],
-    answerBlock: 'lnkmx галереясы — бұл сарапшылар, бизнестер және креаторлардан нақты link in bio беттерінің жинағы.',
+    answerBlock: 'LinkMAX галереясы — бұл сарапшылар, бизнестер және креаторлардан нақты link in bio беттерінің жинағы.',
   },
 };
 
