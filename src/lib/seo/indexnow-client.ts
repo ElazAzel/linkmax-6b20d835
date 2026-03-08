@@ -101,4 +101,3 @@ export interface SearchDiagnostics {
   }>;
   diagnostics_at: string;
 }
-}
