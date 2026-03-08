@@ -169,7 +169,6 @@ export const mockTestimonialBlock: TestimonialBlock = {
     { name: 'John Doe', text: 'Great service!', rating: 5, role: 'CEO' },
     { name: 'Jane Smith', text: 'Highly recommended', rating: 4 },
   ],
-  isPremium: true,
 };
 
 export const mockScratchBlock: ScratchBlock = {
