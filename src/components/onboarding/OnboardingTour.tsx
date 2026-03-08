@@ -29,12 +29,13 @@ interface OnboardingTourProps {
 }
 
 export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [highlightPosition, setHighlightPosition] = useState<DOMRect | null>(null);
 
-  const step = steps[currentStep];
+  const step = stepDefs[currentStep];
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === steps.length - 1;
+  const isLastStep = currentStep === stepDefs.length - 1;
   const isCenterStep = step.position === 'center';
 
   useEffect(() => {
@@ -43,8 +44,6 @@ export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {
       if (element) {
         const rect = element.getBoundingClientRect();
         setHighlightPosition(rect);
-        
-        // Scroll element into view
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     } else {
