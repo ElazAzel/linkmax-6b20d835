@@ -71,9 +71,19 @@ export default function Auth() {
   const [telegramChatId, setTelegramChatId] = useState('');
   const [resetToken, setResetToken] = useState('');
 
-  // Get referral code and mode from URL
+  // Get referral code, mode, and growth source from URL
   const refCode = searchParams.get('ref');
   const urlMode = searchParams.get('mode');
+  const fromSource = searchParams.get('from');
+  const nicheParam = searchParams.get('niche');
+  const refSlug = searchParams.get('ref_slug');
+
+  // Store growth source params in sessionStorage for post-auth use
+  useEffect(() => {
+    if (fromSource) sessionStorage.setItem('lnkmx_signup_from', fromSource);
+    if (nicheParam) sessionStorage.setItem('lnkmx_signup_niche', nicheParam);
+    if (refSlug) sessionStorage.setItem('lnkmx_signup_ref_slug', refSlug);
+  }, [fromSource, nicheParam, refSlug]);
 
   // Persistence for deep-linking
   const hashParams = new URL(window.location.href).hash.substring(1);

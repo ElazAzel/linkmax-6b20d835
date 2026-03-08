@@ -186,6 +186,8 @@ const router = createBrowserRouter([
       { path: "payment-terms", element: <PaymentTerms /> },
       { path: "experts", element: <Experts /> },
       { path: "experts/:tag", element: <Experts /> },
+      { path: "for-masters", element: <ForMasters /> },
+      { path: "from/:slug", element: <FromPage /> },
       { path: "collab/:collabSlug", element: <CollabPage /> },
       { path: "p/:compressed", element: <PublicPage /> },
       { path: ":slug", element: <PublicPage /> },
