@@ -423,47 +423,20 @@ export default function Pricing() {
           })()}
         </div>
 
-        {/* Business tier — secondary mention */}
+        {/* Business tier — contact link */}
         <div className="text-center mb-12">
-          <p className="text-sm text-muted-foreground mb-2">
-            {t('pricing.businessNote', 'Нужна командная CRM, зоны и роли?')}
+          <p className="text-sm text-muted-foreground">
+            {t('pricing.businessNote', 'Нужна командная CRM, зоны и роли?')}{' '}
+            <a
+              href="https://wa.me/77051097664?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D1%82%D0%B0%D1%80%D0%B8%D1%84%20Business"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary font-bold hover:underline"
+            >
+              {t('pricing.businessLink', 'Напишите нам →')}
+            </a>
           </p>
-          <Button
-            variant="link"
-            className="text-muted-foreground hover:text-primary transition-colors h-auto p-0 font-bold"
-            onClick={() => handleSelectPlan('business')}
-          >
-            {t('pricing.businessLink', 'Узнать о тарифе BUSINESS →')}
-          </Button>
         </div>
-
-
-        {/* Token Purchase Section */}
-        <Card className="max-w-lg mx-auto mb-12 p-6 bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-2">
-              <Coins className="h-6 w-6 text-amber-500" />
-              <h3 className="text-xl font-bold">{t('pricing.tokens.title', 'Или платите Linkkon токенами')}</h3>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {t('pricing.tokens.balanceDescription', '100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов', {
-                balance: balance?.balance?.toFixed(0) || 0
-              })}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button onClick={buyPremiumDay} disabled={!canAffordPremium || converting} className="bg-gradient-to-r from-violet-500 to-purple-600">
-                <Crown className="h-4 w-4 mr-2" />
-                {converting ? t('pricing.tokens.converting', 'Конвертация...') : t('pricing.tokens.buyDay', 'Купить 1 день за {{cost}} Linkkon', {
-                  cost: premiumCost
-                })}
-              </Button>
-              <Button variant="outline" onClick={() => redirectToTokenPurchase(100, 'Premium')}>
-                <MessageCircle className="h-4 w-4 mr-2" />
-                {t('pricing.tokens.buyTokens', 'Купить токены')}
-              </Button>
-            </div>
-          </div>
-        </Card>
 
         {/* Trust Section */}
         <div className="text-center py-8 border-t border-border/50">
