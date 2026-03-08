@@ -5,9 +5,10 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface FreemiumWatermarkProps {
   show: boolean;
+  slug?: string;
 }
 
-export const FreemiumWatermark = memo(function FreemiumWatermark({ show }: FreemiumWatermarkProps) {
+export const FreemiumWatermark = memo(function FreemiumWatermark({ show, slug }: FreemiumWatermarkProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
