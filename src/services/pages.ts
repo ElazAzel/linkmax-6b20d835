@@ -446,6 +446,13 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       contact_phone: pg.contact_phone || undefined,
       contact_whatsapp: pg.contact_whatsapp || undefined,
       quality_score: pg.quality_score ?? undefined,
+      // Diagnostics fields
+      _diagnostics: {
+        quality_breakdown: pg.quality_breakdown || {},
+        index_exclusion_reasons: pg.index_exclusion_reasons || [],
+        last_indexnow_at: pg.last_indexnow_at || null,
+        service_slugs: pg.service_slugs || {},
+      },
     };
 
     // Extract chatbot context

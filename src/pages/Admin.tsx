@@ -23,6 +23,7 @@ import Coins from 'lucide-react/dist/esm/icons/coins';
 import Languages from 'lucide-react/dist/esm/icons/languages';
 import Handshake from 'lucide-react/dist/esm/icons/handshake';
 import Banknote from 'lucide-react/dist/esm/icons/banknote';
+import Search from 'lucide-react/dist/esm/icons/search';
 
 // Lazy load heavy tab components
 const AdminOverviewTab = lazy(() => import('@/components/admin/AdminOverviewTab').then(m => ({ default: m.AdminOverviewTab })));
@@ -36,6 +37,7 @@ const AdminTokensTab = lazy(() => import('@/components/admin/AdminTokensTab').th
 const AdminPartnersTab = lazy(() => import('@/components/admin/AdminPartnersTab').then(m => ({ default: m.AdminPartnersTab })));
 const AdminTemplatesTab = lazy(() => import('@/components/admin/AdminTemplatesTab').then(m => ({ default: m.AdminTemplatesTab })));
 const AdminFintechTab = lazy(() => import('@/components/admin/AdminFintechTab').then(m => ({ default: m.AdminFintechTab })));
+const AdminSearchDiagnosticsTab = lazy(() => import('@/components/admin/AdminSearchDiagnosticsTab').then(m => ({ default: m.AdminSearchDiagnosticsTab })));
 
 function TabLoader() {
   return (
@@ -96,6 +98,7 @@ export default function Admin() {
     { value: 'partners', label: t('admin.partners.title', 'Партнёры'), icon: Handshake },
     { value: 'templates', label: t('admin.templates', 'Templates'), icon: FileText },
     { value: 'fintech', label: t('admin.fintech', 'Финансы'), icon: Banknote },
+    { value: 'seo', label: 'SEO', icon: Search },
   ];
 
   return (
@@ -208,6 +211,10 @@ export default function Admin() {
 
               <TabsContent value="fintech">
                 <AdminFintechTab />
+              </TabsContent>
+
+              <TabsContent value="seo">
+                <AdminSearchDiagnosticsTab />
               </TabsContent>
             </Suspense>
           </Tabs>

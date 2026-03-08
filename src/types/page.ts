@@ -101,4 +101,11 @@ export interface PageData {
   contact_phone?: string;
   contact_whatsapp?: string;
   quality_score?: number;
+  /** Server-side diagnostics (not for manual editing) */
+  _diagnostics?: {
+    quality_breakdown: Record<string, { passed: boolean; points: number; count?: number }>;
+    index_exclusion_reasons: string[];
+    last_indexnow_at: string | null;
+    service_slugs: Record<string, string>;
+  };
 }

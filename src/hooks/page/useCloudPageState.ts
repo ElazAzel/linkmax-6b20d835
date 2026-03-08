@@ -8,6 +8,7 @@ import { deleteEventBlock, syncEventBlock } from '@/services/events';
 import { ensureBlockIds, deduplicateBlocks } from '@/lib/blocks/block-utils';
 import { supabase } from '@/platform/supabase/client';
 import { computeQualityScore } from '@/lib/seo/quality-score';
+import { notifyIndexNow } from '@/lib/seo/indexnow-client';
 import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
@@ -15,10 +16,6 @@ import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
-
-// IndexNow throttle: Map<slug, timestamp>
-const indexNowLastSent = new Map<string, number>();
-const INDEXNOW_THROTTLE_MS = 5 * 60 * 1000; // 5 minutes
 
 interface UseCloudPageStateOptions {
   onPublish?: (pageData: PageData) => void;
@@ -157,19 +154,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         // Then auto-publish
         await publishPageMutation.mutateAsync();
 
-        // IndexNow notification (fire-and-forget, throttled)
+        // IndexNow notification (fire-and-forget, throttled, quality-gated)
         const slug = sanitizedData.slug;
         if (slug) {
           const { score } = computeQualityScore(sanitizedData);
-          if (score >= 40) {
-            const lastSent = indexNowLastSent.get(slug) || 0;
-            if (Date.now() - lastSent > INDEXNOW_THROTTLE_MS) {
-              indexNowLastSent.set(slug, Date.now());
-              supabase.functions.invoke('notify-indexnow', {
-                body: { urls: [`https://lnkmx.my/${slug}`] }
-              }).catch(() => {});
-            }
-          }
+          notifyIndexNow(slug, score, !!sanitizedData.isPublished).catch(() => {});
         }
 
         setSaveStatus('saved');
