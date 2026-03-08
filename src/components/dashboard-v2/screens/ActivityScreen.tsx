@@ -361,9 +361,10 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
 interface LeadCardProps {
   lead: Lead;
   onClick: () => void;
+  onQuickReply?: (id: string) => Promise<boolean>;
 }
 
-function LeadCard({ lead, onClick }: LeadCardProps) {
+function LeadCard({ lead, onClick, onQuickReply }: LeadCardProps) {
   const { t, i18n } = useTranslation();
   const statusConfig = STATUS_CONFIG_KEYS[lead.status];
   const sourceInfo = SOURCE_ICONS_KEYS[lead.source] || SOURCE_ICONS_KEYS.other;
@@ -371,6 +372,36 @@ function LeadCard({ lead, onClick }: LeadCardProps) {
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleTimeString(getLocale(i18n.language), { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const handleWhatsAppReply = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!lead.phone) return;
+    const message = t('crm.quickReply.template', 'Здравствуйте, {{name}}! Спасибо за заявку. Чем могу помочь?', { name: lead.name });
+    window.open(`https://wa.me/${lead.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`, '_blank');
+    onQuickReply?.(lead.id);
+    trackLeadReplied('', lead.id, 'whatsapp');
+  };
+
+  const handleTelegramReply = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!lead.phone) return;
+    window.open(`https://t.me/${lead.phone.replace(/\D/g, '')}`, '_blank');
+    onQuickReply?.(lead.id);
+    trackLeadReplied('', lead.id, 'telegram');
+  };
+
+  const handleCallReply = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!lead.phone) return;
+    window.open(`tel:${lead.phone}`, '_self');
+    onQuickReply?.(lead.id);
+    trackLeadReplied('', lead.id, 'call');
+  };
+
+  const handleMarkContacted = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onQuickReply?.(lead.id);
   };
 
   return (
@@ -401,7 +432,10 @@ function LeadCard({ lead, onClick }: LeadCardProps) {
                 <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0 animate-pulse" />
               )}
             </div>
-            <span className="text-xs text-muted-foreground shrink-0">{formatTime(lead.created_at)}</span>
+            <div className="flex items-center gap-2 shrink-0">
+              <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
+              <span className="text-xs text-muted-foreground">{formatTime(lead.created_at)}</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
@@ -424,9 +458,44 @@ function LeadCard({ lead, onClick }: LeadCardProps) {
               <span>{sourceInfo.emoji}</span>
               {t(sourceInfo.i18nKey)}
             </span>
-            <Badge className={cn("text-xs font-bold h-6 px-2", statusConfig.bg, statusConfig.text, "border-0")}>
-              {t(statusConfig.i18nKey)}
-            </Badge>
+
+            {/* Quick actions for new leads */}
+            {lead.status === 'new' && lead.phone ? (
+              <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
+                <button
+                  onClick={handleWhatsAppReply}
+                  className="h-7 w-7 rounded-lg bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/25 flex items-center justify-center transition-colors"
+                  title="WhatsApp"
+                >
+                  <MessageCircle className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={handleTelegramReply}
+                  className="h-7 w-7 rounded-lg bg-blue-500/15 text-blue-600 hover:bg-blue-500/25 flex items-center justify-center transition-colors"
+                  title="Telegram"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={handleCallReply}
+                  className="h-7 w-7 rounded-lg bg-violet-500/15 text-violet-600 hover:bg-violet-500/25 flex items-center justify-center transition-colors"
+                  title={t('crm.quickReply.call', 'Позвонить')}
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={handleMarkContacted}
+                  className="h-7 px-2 rounded-lg bg-muted/50 text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors text-[10px] font-semibold"
+                >
+                  <CheckCheck className="h-3.5 w-3.5 mr-0.5" />
+                  {t('crm.quickReply.done', 'Готово')}
+                </button>
+              </div>
+            ) : (
+              <Badge className={cn("text-xs font-bold h-6 px-2", statusConfig.bg, statusConfig.text, "border-0")}>
+                {t(statusConfig.i18nKey)}
+              </Badge>
+            )}
           </div>
         </div>
 
