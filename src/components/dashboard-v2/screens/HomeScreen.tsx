@@ -4,7 +4,7 @@
  * HomeScreen v2.0 - Activation hub with outcome-based checklist
  * Moves checklist above page card, removes "Why LinkMAX", adds celebration + dynamic CTAs
  */
-import { memo, useMemo, ReactNode, useState } from 'react';
+import { memo, useMemo, useEffect, useRef, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
