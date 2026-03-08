@@ -28,7 +28,6 @@ export async function exportContactsToExcel(
     { header: 'Теги', key: 'tags', width: 30 },
     { header: 'Создан', key: 'created_at', width: 20 },
   ];
-  ];
 
   // Style header row
   const headerRow = sheet.getRow(1);
@@ -51,7 +50,6 @@ export async function exportContactsToExcel(
       telegram: contact.telegram_username || '',
       tags: (contact.tags || []).join(', '),
       created_at: contact.created_at ? new Date(contact.created_at).toLocaleDateString('ru-RU') : '',
-    });
     });
   });
 
