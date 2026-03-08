@@ -32,7 +32,7 @@ interface PlanLimits {
 
 interface MonetizeScreenProps {
   isPremium: boolean;
-  tier: 'free' | 'pro';
+  tier: 'identity' | 'starter' | 'pro' | 'business';
   inTrial?: boolean;
   trialEndsAt?: string;
   limits?: PlanLimits;
