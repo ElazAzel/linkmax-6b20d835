@@ -352,7 +352,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                       <span className="font-semibold text-xs text-primary">
                         {c.user?.raw_user_meta_data?.display_name || c.user?.email || t('common.unknownUser', 'Unknown')}
                       </span>
-                      <span className="text-[10px] text-muted-foreground">{format(new Date(c.created_at), 'HH:mm dd.MM')}</span>
+                      <span className="text-xs text-muted-foreground">{format(new Date(c.created_at), 'HH:mm dd.MM')}</span>
                     </div>
                     <p className="whitespace-pre-wrap">{c.content}</p>
                     <Button

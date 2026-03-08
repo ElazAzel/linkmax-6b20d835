@@ -317,12 +317,12 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium truncate">{task.title}</span>
-                          <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-[10px]">
+                          <Badge variant={task.status === 'done' ? 'default' : 'outline'} className="text-xs">
                             {task.status}
                           </Badge>
                         </div>
                         {task.due_date && (
-                          <p className="text-[10px] text-muted-foreground mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {t('zones.tasks.due', 'Due:')} {new Date(task.due_date).toLocaleDateString()}
                           </p>
                         )}
