@@ -398,7 +398,7 @@ export function useZoneDealComments(zoneId: string | null, dealId: string | null
   return {
     comments: comments as any[],
     loading,
-    addComment: async (content: string) => addCommentMutation.mutateAsync(content),
+    addComment: async (content: string, mentionedUserIds?: string[]) => addCommentMutation.mutateAsync({ content, mentionedUserIds }),
     updateComment: async (id: string, content: string) => updateCommentMutation.mutateAsync({ id, content }),
     deleteComment: async (id: string) => deleteCommentMutation.mutateAsync(id),
   };
