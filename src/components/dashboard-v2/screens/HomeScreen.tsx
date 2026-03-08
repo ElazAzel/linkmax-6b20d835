@@ -34,6 +34,7 @@ import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
+import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
 
 interface HomeScreenProps {
   pageData: PageData | null;
