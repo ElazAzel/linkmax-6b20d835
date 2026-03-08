@@ -3520,6 +3520,13 @@
       "lost": "Lost"
     },
     "source": "Source",
+    "source": {
+      "form": "Form",
+      "messenger": "Messenger",
+      "manual": "Manual",
+      "pageView": "Page view",
+      "other": "Other"
+    },
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Client name",
     "phone": "Phone",
