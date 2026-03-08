@@ -362,9 +362,9 @@ interface LeadCardProps {
 }
 
 function LeadCard({ lead, onClick }: LeadCardProps) {
-  const { i18n } = useTranslation();
-  const statusConfig = STATUS_CONFIG[lead.status];
-  const sourceInfo = SOURCE_ICONS[lead.source] || SOURCE_ICONS.other;
+  const { t, i18n } = useTranslation();
+  const statusConfig = STATUS_CONFIG_KEYS[lead.status];
+  const sourceInfo = SOURCE_ICONS_KEYS[lead.source] || SOURCE_ICONS_KEYS.other;
 
   const formatTime = (dateStr: string) => {
     const date = new Date(dateStr);
