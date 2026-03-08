@@ -206,17 +206,7 @@ function DashboardV2Inner() {
   const seoTitle = t('dashboard.seo.title', 'LinkMAX Dashboard');
   const seoDescription = t('dashboard.seo.description', 'Manage your LinkMAX pages, leads, and analytics.');
 
-  // Check for new user quick start - show only for users with 2 or fewer blocks
-  useEffect(() => {
-    // Check using name-spaced key via storage wrapper
-    // Note: onboarding/useDashboardOnboarding uses 'onboarding_completed' key
-    const completed = storage.get('onboarding_completed');
-    const blocksCount = dashboard.pageData?.blocks.length || 0;
-    // Only show quick start for new users with profile block only or just 1 content block
-    if (!completed && blocksCount <= 2) {
-      setShowQuickStart(true);
-    }
-  }, [dashboard.pageData?.blocks.length]);
+  // QuickStartFlow removed — AIBuilderWizard handles all onboarding via useDashboardOnboarding
 
   // Handle tab change - navigate to the proper route
   const handleTabChange = useCallback((tabId: string) => {

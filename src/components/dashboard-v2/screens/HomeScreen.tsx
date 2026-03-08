@@ -311,7 +311,7 @@ export const HomeScreen = memo(function HomeScreen({
             <div className="flex-1">
               <h4 className="font-bold mb-1">{t('dashboard.home.tip', 'Совет')}</h4>
               <p className="text-sm text-muted-foreground">
-                {t('dashboard.home.tipContent', 'Добавьте блок с ценами, чтобы увеличить конверсию на 40%')}
+                {dynamicTip}
               </p>
             </div>
           </div>
