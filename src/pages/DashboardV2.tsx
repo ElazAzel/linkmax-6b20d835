@@ -601,6 +601,13 @@ function DashboardV2Inner() {
                   onUpgradePage={() => {
                     toast.info(t('common.comingSoon', 'Coming soon'));
                   }}
+                  city={dashboard.pageData?.city}
+                  profession={dashboard.pageData?.profession}
+                  entityType={dashboard.pageData?.entity_type}
+                  contactEmail={dashboard.pageData?.contact_email}
+                  contactPhone={dashboard.pageData?.contact_phone}
+                  contactWhatsapp={dashboard.pageData?.contact_whatsapp}
+                  onUpdateEntityFields={dashboard.updateEntityFields}
                 />
               </ScreenErrorBoundary>
             )}

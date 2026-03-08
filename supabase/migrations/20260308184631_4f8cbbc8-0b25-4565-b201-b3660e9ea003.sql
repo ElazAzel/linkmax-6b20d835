@@ -1,0 +1,1 @@
+ALTER TABLE public.pages ADD COLUMN IF NOT EXISTS service_slugs jsonb DEFAULT '{}'::jsonb;

@@ -32,6 +32,7 @@ import { getI18nText } from '@/lib/i18n-helpers';
 import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
+import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchReadinessCard';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
@@ -358,6 +359,11 @@ export const HomeScreen = memo(function HomeScreen({
             )}
           </div>
         </Card>
+
+        {/* Search Readiness Card */}
+        {isPublished && pageData && (
+          <SearchReadinessCard pageData={pageData} />
+        )}
 
         {/* Quick Actions Grid */}
         <div className="space-y-3">

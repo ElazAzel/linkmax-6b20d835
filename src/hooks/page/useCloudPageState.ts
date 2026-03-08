@@ -3,9 +3,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/user/useAuth';
 import { logger } from '@/lib/utils/logger';
 import { useUserPage, useSavePageMutation, usePublishPageMutation, pageQueryKeys } from '@/hooks/page/usePageCache';
-import { updatePageNiche } from '@/services/pages';
+import { updatePageNiche, updatePageEntityFields } from '@/services/pages';
 import { deleteEventBlock, syncEventBlock } from '@/services/events';
 import { ensureBlockIds, deduplicateBlocks } from '@/lib/blocks/block-utils';
+import { supabase } from '@/platform/supabase/client';
+import { computeQualityScore } from '@/lib/seo/quality-score';
 import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
@@ -13,6 +15,10 @@ import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
+
+// IndexNow throttle: Map<slug, timestamp>
+const indexNowLastSent = new Map<string, number>();
+const INDEXNOW_THROTTLE_MS = 5 * 60 * 1000; // 5 minutes
 
 interface UseCloudPageStateOptions {
   onPublish?: (pageData: PageData) => void;
@@ -150,6 +156,21 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
 
         // Then auto-publish
         await publishPageMutation.mutateAsync();
+
+        // IndexNow notification (fire-and-forget, throttled)
+        const slug = sanitizedData.slug;
+        if (slug) {
+          const { score } = computeQualityScore(sanitizedData);
+          if (score >= 40) {
+            const lastSent = indexNowLastSent.get(slug) || 0;
+            if (Date.now() - lastSent > INDEXNOW_THROTTLE_MS) {
+              indexNowLastSent.set(slug, Date.now());
+              supabase.functions.invoke('notify-indexnow', {
+                body: { urls: [`https://lnkmx.my/${slug}`] }
+              }).catch(() => {});
+            }
+          }
+        }
 
         setSaveStatus('saved');
       } catch (error) {
@@ -364,6 +385,28 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     }
   }, [user, pageData]);
 
+  const updateEntityFields = useCallback(async (fields: {
+    city?: string;
+    profession?: string;
+    entity_type?: string;
+    contact_email?: string;
+    contact_phone?: string;
+    contact_whatsapp?: string;
+  }) => {
+    if (!user || !pageData) return;
+
+    // Update local state immediately
+    const newPageData = { ...pageData, ...fields };
+    setPageData(newPageData as PageData);
+
+    // Save to database
+    const { error } = await updatePageEntityFields(user.id, fields);
+    if (error) {
+      toast.error('Failed to update');
+      setPageData(pageData);
+    }
+  }, [user, pageData]);
+
   const refresh = useCallback(async () => {
     if (user?.id) {
       await queryClient.invalidateQueries({
@@ -391,6 +434,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     updateEditorMode,
     updatePageDataPartial,
     updateNiche,
+    updateEntityFields,
     refresh,
   }), [
     pageData,
@@ -410,6 +454,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
     updateEditorMode,
     updatePageDataPartial,
     updateNiche,
+    updateEntityFields,
     refresh
   ]);
 }

@@ -41,6 +41,14 @@ interface PageSettingsTabProps {
     faviconUrl?: string;
     hideBranding?: boolean;
 
+    // Entity fields
+    city?: string;
+    profession?: string;
+    entityType?: 'person' | 'organization';
+    contactEmail?: string;
+    contactPhone?: string;
+    contactWhatsapp?: string;
+
     // Profile info
     avatarUrl?: string;
     displayName: string;
@@ -52,6 +60,7 @@ interface PageSettingsTabProps {
     onUpdateBranding?: (branding: { faviconUrl?: string; hideBranding?: boolean }) => void;
     onToggleIndexable?: (indexable: boolean) => void;
     onNicheChange: (niche: Niche) => void;
+    onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string }) => void;
     onUpgradePage?: () => void;
     onOpenTheme?: () => void;
     onOpenTemplates?: () => void;
@@ -72,6 +81,12 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     niche,
     faviconUrl,
     hideBranding,
+    city,
+    profession,
+    entityType,
+    contactEmail,
+    contactPhone,
+    contactWhatsapp,
     avatarUrl,
     displayName,
     onUpdateSlug,
@@ -80,6 +95,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     onUpdateBranding,
     onToggleIndexable,
     onNicheChange,
+    onUpdateEntityFields,
     onUpgradePage,
     onOpenTheme,
     onOpenTemplates,
@@ -100,6 +116,14 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
     const [faviconInput, setFaviconInput] = useState(faviconUrl || '');
     const [hideBrandingInner, setHideBrandingInner] = useState(hideBranding || false);
+
+    // Entity field local state
+    const [professionInput, setProfessionInput] = useState(profession || '');
+    const [cityInput, setCityInput] = useState(city || '');
+    const [entityTypeInput, setEntityTypeInput] = useState<string>(entityType || 'person');
+    const [contactEmailInput, setContactEmailInput] = useState(contactEmail || '');
+    const [contactPhoneInput, setContactPhoneInput] = useState(contactPhone || '');
+    const [contactWhatsappInput, setContactWhatsappInput] = useState(contactWhatsapp || '');
 
     const handleSaveSlug = async () => {
         if (!onUpdateSlug || slugInput === pageSlug) return;
@@ -163,6 +187,20 @@ export const PageSettingsTab = memo(function PageSettingsTab({
             onUpdateBranding({
                 faviconUrl: faviconInput || undefined,
                 hideBranding: hideBrandingInner,
+            });
+            toast.success(t('common.saved', 'Сохранено'));
+        }
+    };
+
+    const handleSaveEntityFields = () => {
+        if (onUpdateEntityFields) {
+            onUpdateEntityFields({
+                profession: professionInput || undefined,
+                city: cityInput || undefined,
+                entity_type: entityTypeInput || undefined,
+                contact_email: contactEmailInput || undefined,
+                contact_phone: contactPhoneInput || undefined,
+                contact_whatsapp: contactWhatsappInput || undefined,
             });
             toast.success(t('common.saved', 'Сохранено'));
         }
@@ -401,6 +439,85 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                         <Switch
                             checked={isIndexable ?? true}
                             onCheckedChange={handleToggleIndexable}
+                        />
+                    </div>
+                </Card>
+            </div>
+
+            {/* Search Identity — Entity Fields */}
+            <div className="space-y-2">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                    Видимость в поиске
+                </h3>
+                <Card className="p-4 space-y-4">
+                    <div className="space-y-2">
+                        <Label>Профессия / специализация</Label>
+                        <Input
+                            value={professionInput}
+                            onChange={(e) => setProfessionInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="Nail-мастер, фотограф, коуч..."
+                            className="h-12 rounded-xl"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Город</Label>
+                        <Input
+                            value={cityInput}
+                            onChange={(e) => setCityInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="Алматы, Астана, Москва..."
+                            className="h-12 rounded-xl"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Тип профиля</Label>
+                        <select
+                            value={entityTypeInput}
+                            onChange={(e) => {
+                                setEntityTypeInput(e.target.value);
+                                if (onUpdateEntityFields) {
+                                    onUpdateEntityFields({ entity_type: e.target.value });
+                                    toast.success(t('common.saved', 'Сохранено'));
+                                }
+                            }}
+                            className="flex w-full h-12 rounded-xl border border-border/50 bg-background/60 px-4 text-base"
+                        >
+                            <option value="person">Личный профиль</option>
+                            <option value="organization">Организация</option>
+                        </select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Публичный email (необязательно)</Label>
+                        <Input
+                            value={contactEmailInput}
+                            onChange={(e) => setContactEmailInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="hello@example.com"
+                            className="h-12 rounded-xl"
+                            type="email"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Публичный телефон (необязательно)</Label>
+                        <Input
+                            value={contactPhoneInput}
+                            onChange={(e) => setContactPhoneInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="+7 777 123 4567"
+                            className="h-12 rounded-xl"
+                            type="tel"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>WhatsApp (необязательно)</Label>
+                        <Input
+                            value={contactWhatsappInput}
+                            onChange={(e) => setContactWhatsappInput(e.target.value)}
+                            onBlur={handleSaveEntityFields}
+                            placeholder="+7 777 123 4567"
+                            className="h-12 rounded-xl"
+                            type="tel"
                         />
                     </div>
                 </Card>
