@@ -640,13 +640,14 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   onClick={() => {
                     onComplete(
                       { name: userInfo.name, bio: userInfo.bio || '' },
-                      [],
+                      generatedBlocks,
                       selectedNiche!
                     );
                     storage.set('ai_builder_used', 'true');
                     storage.set('niche_onboarding_completed', 'true');
                     storage.set('onboarding_completed', 'true');
                     storage.set('wizard_wants_publish', 'true');
+                    toast.success(t('aiBuilder.success', '✨ Страница создана!'));
                     onClose();
                   }}
                 >
@@ -659,7 +660,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                   onClick={() => {
                     onComplete(
                       { name: userInfo.name, bio: userInfo.bio || '' },
-                      [],
+                      generatedBlocks,
                       selectedNiche!
                     );
                     storage.set('ai_builder_used', 'true');
