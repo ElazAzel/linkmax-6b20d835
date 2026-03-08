@@ -97,6 +97,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
   const [selectedTemplate, setSelectedTemplate] = useState<DBTemplate | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [generatedBlocks, setGeneratedBlocks] = useState<Block[]>([]);
 
   // Reset state when dialog opens
   useEffect(() => {
