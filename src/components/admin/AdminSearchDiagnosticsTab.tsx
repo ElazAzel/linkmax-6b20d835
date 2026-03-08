@@ -351,8 +351,48 @@ export function AdminSearchDiagnosticsTab() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {serviceCount > 0 ? (
-                      <span className="text-sm font-medium">{serviceCount}</span>
+                    {activeChildren.length > 0 ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button className="text-left">
+                            <span className="text-sm font-medium">{eligibleChildren.length}</span>
+                            <span className="text-[10px] text-muted-foreground">/{activeChildren.length}</span>
+                            {thinChildren.length > 0 && (
+                              <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">{thinChildren.length} thin</Badge>
+                            )}
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-lg max-h-[70vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle className="font-mono text-sm">Child URLs: /{page.slug}</DialogTitle>
+                          </DialogHeader>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead className="text-xs">Услуга</TableHead>
+                                <TableHead className="text-xs">Slug</TableHead>
+                                <TableHead className="text-xs">Статус</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {children.map(child => {
+                                const stateInfo = CHILD_STATE_LABELS[child.state] || { label: child.state, color: '' };
+                                return (
+                                  <TableRow key={child.slug}>
+                                    <TableCell className="text-xs max-w-[150px] truncate">{child.title}</TableCell>
+                                    <TableCell className="font-mono text-[10px]">{child.slug}</TableCell>
+                                    <TableCell>
+                                      <Badge variant="outline" className={cn('text-[9px]', stateInfo.color)}>
+                                        {stateInfo.label}
+                                      </Badge>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              })}
+                            </TableBody>
+                          </Table>
+                        </DialogContent>
+                      </Dialog>
                     ) : (
                       <span className="text-xs text-muted-foreground">—</span>
                     )}
