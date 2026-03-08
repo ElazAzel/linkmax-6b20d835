@@ -35,6 +35,14 @@ import { ActivationChecklist, ActivationCelebration } from '@/components/onboard
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
+import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
+import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
+import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
+import { differenceInDays, parseISO } from 'date-fns';
+import Repeat from 'lucide-react/dist/esm/icons/repeat';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 
 interface HomeScreenProps {
   pageData: PageData | null;
