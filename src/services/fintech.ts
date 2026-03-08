@@ -1,6 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { Json } from '@/integrations/supabase/types';
+import { getTierCommissionRate, type PremiumTier } from '@/domain/entities/User';
 
 export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund';
 export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'cancelled';
@@ -25,11 +26,35 @@ export type PayoutMethod = {
     details?: Record<string, unknown>;
 };
 
-const DEFAULT_TAKE_RATE = 0.05; // 5% commission
+// Dynamic commission rates per ADR 0026
+// Starter: 7%, Pro: 1%, Business: 0%, Identity: N/A
+const DEFAULT_TAKE_RATE = 0.07; // Fallback to Starter rate
+
+/**
+ * Get commission rate for a user based on their tier
+ */
+export async function getUserCommissionRate(userId: string): Promise<number> {
+    try {
+        const { data, error } = await supabase
+            .from('user_profiles')
+            .select('premium_tier, is_premium')
+            .eq('id', userId)
+            .single();
+
+        if (error || !data) {
+            return DEFAULT_TAKE_RATE;
+        }
+
+        const tier = (data.premium_tier as PremiumTier) || (data.is_premium ? 'pro' : 'starter');
+        return getTierCommissionRate(tier);
+    } catch {
+        return DEFAULT_TAKE_RATE;
+    }
+}
 
 /**
  * Fintech Service - Handles wallet operations and ledger entries.
- * This is the foundation for the "Fintech Pivot" strategy.
+ * This is the foundation for the "Fintech Pivot" strategy (ADR 0026).
  */
 export const fintechService = {
     async recordPendingIncome(params: {
@@ -41,6 +66,9 @@ export const fintechService = {
         metadata?: Record<string, unknown>;
     }) {
         try {
+            // Get dynamic commission rate based on user's tier
+            const commissionRate = await getUserCommissionRate(params.userId);
+
             const { data: wallet, error: walletError } = await (supabase as any)
                 .from('user_wallets')
                 .select('id')
@@ -70,20 +98,24 @@ export const fintechService = {
 
             if (txError) throw txError;
 
-            const feeAmount = params.amount * DEFAULT_TAKE_RATE;
-            await (supabase as any)
-                .from('wallet_transactions')
-                .insert({
-                    wallet_id: wallet.id,
-                    user_id: params.userId,
-                    amount: -feeAmount,
-                    type: 'fee',
-                    status: 'pending',
-                    description: `Platform fee (5%) for: ${params.description}`,
-                    related_entity_id: transaction.id,
-                    related_entity_type: 'wallet_transaction',
-                    metadata: { parent_tx_id: transaction.id } as Json
-                });
+            // Only create fee transaction if commission > 0
+            if (commissionRate > 0) {
+                const feeAmount = params.amount * commissionRate;
+                const feePercent = Math.round(commissionRate * 100);
+                await (supabase as any)
+                    .from('wallet_transactions')
+                    .insert({
+                        wallet_id: wallet.id,
+                        user_id: params.userId,
+                        amount: -feeAmount,
+                        type: 'fee',
+                        status: 'pending',
+                        description: `Platform fee (${feePercent}%) for: ${params.description}`,
+                        related_entity_id: transaction.id,
+                        related_entity_type: 'wallet_transaction',
+                        metadata: { parent_tx_id: transaction.id, fee_rate: commissionRate } as Json
+                    });
+            }
 
             return transaction;
         } catch (err) {
