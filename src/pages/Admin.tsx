@@ -212,6 +212,10 @@ export default function Admin() {
               <TabsContent value="fintech">
                 <AdminFintechTab />
               </TabsContent>
+
+              <TabsContent value="seo">
+                <AdminSearchDiagnosticsTab />
+              </TabsContent>
             </Suspense>
           </Tabs>
         </main>
