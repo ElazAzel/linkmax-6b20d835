@@ -7,7 +7,7 @@ const corsHeaders = {
 };
 
 interface NotificationPayload {
-    type: 'new_deal' | 'invoice_paid' | 'task_overdue';
+    type: 'new_deal' | 'invoice_paid' | 'task_overdue' | 'deal_comment_mention';
     zone_id: string;
     data: Record<string, unknown>;
 }
