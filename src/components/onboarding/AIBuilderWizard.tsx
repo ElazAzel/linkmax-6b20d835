@@ -226,17 +226,6 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       };
 
       setStep('complete');
-
-      // Brief delay for animation, then complete
-      setTimeout(() => {
-        onComplete(profile, finalBlocks, selectedNiche);
-        // Mark as completed
-        storage.set('ai_builder_used', 'true');
-        storage.set('niche_onboarding_completed', 'true');
-        storage.set('onboarding_completed', 'true');
-        toast.success(t('aiBuilder.success', '✨ Страница создана!'));
-        onClose();
-      }, 1500);
     } catch (err) {
       console.error('AI Builder error:', err);
       toast.error(t('aiBuilder.error', 'Ошибка генерации. Попробуйте ещё раз.'));
