@@ -59,7 +59,7 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
         const email = formData['email'] || formData['Email'] || formData['Почта'] || formData['почта'] || null;
         const phone = formData['phone'] || formData['Phone'] || formData['Телефон'] || formData['телефон'] || null;
 
-        const { error } = await supabase.functions.invoke('submit-lead', {
+        const { data: fnResponse, error } = await supabase.functions.invoke('submit-lead', {
           body: {
             pageId,
             blockId: block.id,
@@ -69,6 +69,10 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
 
         if (error) {
           console.error('Error creating lead:', error);
+        } else if (fnResponse && !fnResponse.success && fnResponse.error === 'inbound_limit_reached') {
+          toast.error(t('form.limitReached.customer', 'Форма временно недоступна.'));
+          setIsSubmitting(false);
+          return;
         } else {
           // Track lead event on success
           trackLead();
