@@ -226,6 +226,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
         bio: userInfo.bio || `${userInfo.services || ''}`,
       };
 
+      setGeneratedBlocks(finalBlocks);
       setStep('complete');
     } catch (err) {
       console.error('AI Builder error:', err);
