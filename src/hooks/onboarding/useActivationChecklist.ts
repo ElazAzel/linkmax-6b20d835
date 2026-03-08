@@ -45,7 +45,7 @@ export function useActivationChecklist({
     const hasPage = pageData.blocks.length > 0;
     const isPublished = pageData.isPublished || false;
     const hasFirstView = (pageData.viewCount || viewCount) >= 1;
-    const hasFirstConversion = leadsCount >= 1 || totalClicks >= 1;
+    const hasFirstConversion = leadsCount >= 1 || bookingsCount >= 1;
     const hasFirstBooking = bookingsCount >= 1;
 
     return [
