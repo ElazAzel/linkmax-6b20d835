@@ -1,7 +1,9 @@
 /**
  * ActivityScreen - Unified inbox for leads, bookings, messages
  */
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useMemo } from 'react';
+import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
+import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import { useTranslation } from 'react-i18next';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
 import { ResponseTimeTag } from '@/components/crm/ResponseTimeTag';
@@ -85,6 +87,7 @@ const itemVariants = {
 export const ActivityScreen = memo(function ActivityScreen({ isPremium }: ActivityScreenProps) {
   const { t, i18n } = useTranslation();
   const { leads, loading, getLeadStats, refreshLeads, quickReply } = useLeads();
+  const { isRepeatCustomer } = useRepeatCustomers();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
@@ -306,7 +309,7 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                         <div className="space-y-2">
                           {dateLeads.map((lead) => (
                             <motion.div key={lead.id} variants={itemVariants}>
-                              <LeadCard lead={lead} onClick={() => setSelectedLead(lead)} onQuickReply={quickReply} />
+                              <LeadCard lead={lead} onClick={() => setSelectedLead(lead)} onQuickReply={quickReply} isRepeat={isRepeatCustomer(lead.phone, lead.email)} />
                             </motion.div>
                           ))}
                         </div>
@@ -362,9 +365,10 @@ interface LeadCardProps {
   lead: Lead;
   onClick: () => void;
   onQuickReply?: (id: string) => Promise<boolean>;
+  isRepeat?: boolean;
 }
 
-function LeadCard({ lead, onClick, onQuickReply }: LeadCardProps) {
+function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
   const { t, i18n } = useTranslation();
   const statusConfig = STATUS_CONFIG_KEYS[lead.status];
   const sourceInfo = SOURCE_ICONS_KEYS[lead.source] || SOURCE_ICONS_KEYS.other;
@@ -428,6 +432,12 @@ function LeadCard({ lead, onClick, onQuickReply }: LeadCardProps) {
           <div className="flex items-center justify-between gap-2 mb-1">
             <div className="flex items-center gap-2 min-w-0">
               <span className="font-bold truncate">{lead.name}</span>
+              {isRepeat && (
+                <Badge className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-[10px] font-bold border-violet-500/20 shrink-0">
+                  <Repeat className="h-3 w-3 mr-0.5" />
+                  {t('operator.repeat.badge', 'Повторный')}
+                </Badge>
+              )}
               {lead.status === 'new' && (
                 <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0 animate-pulse" />
               )}

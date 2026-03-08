@@ -67,6 +67,7 @@ export interface PageExperiment {
 }
 
 export interface PageData {
+  updatedAt?: string | null;
   id: string;
   userId?: string;
   slug?: string;

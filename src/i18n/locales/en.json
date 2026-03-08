@@ -5714,5 +5714,45 @@
       "lead": "Lead",
       "booking": "Booking"
     }
+  },
+  "operator": {
+    "today": {
+      "title": "Bookings today: {{count}}",
+      "next": "Next: {{name}} at {{time}}"
+    },
+    "unanswered": {
+      "title": "Unprocessed: {{count}}",
+      "missed": "{{count}} missed (>24h)"
+    },
+    "followUp": {
+      "title": "Follow-up needed",
+      "visitedYesterday": "Visited yesterday at {{time}}",
+      "send": "Message",
+      "template": "Hello {{name}}! Thanks for visiting! How was it? We'd love to see you again 😊"
+    },
+    "week": {
+      "leads": "This week:"
+    },
+    "repeat": {
+      "label": "Returning:",
+      "badge": "Returning"
+    },
+    "stale": {
+      "page": "Page hasn't been updated in over 2 weeks — refresh your content"
+    }
+  },
+  "lifecycle": {
+    "trafficNoLeads": {
+      "title": "Traffic but no leads",
+      "hint": "Add a contact form or booking block — every 5th page with a form gets leads"
+    },
+    "repeatCustomers": {
+      "title": "Repeat customers",
+      "hint": "You have {{count}} repeat customers — great job! 🎉"
+    },
+    "hasLeads": {
+      "title": "Leads are coming in",
+      "hint": "Follow up with clients after their visit — it improves return rate by 30%"
+    }
   }
 }

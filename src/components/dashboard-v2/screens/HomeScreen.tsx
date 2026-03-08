@@ -4,7 +4,7 @@
  * HomeScreen v2.0 - Activation hub with outcome-based checklist
  * Moves checklist above page card, removes "Why LinkMAX", adds celebration + dynamic CTAs
  */
-import { memo, useMemo, ReactNode, useState } from 'react';
+import { memo, useMemo, useEffect, useRef, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
@@ -35,6 +35,14 @@ import { ActivationChecklist, ActivationCelebration } from '@/components/onboard
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
+import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
+import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
+import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
+import { differenceInDays, parseISO } from 'date-fns';
+import Repeat from 'lucide-react/dist/esm/icons/repeat';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 
 interface HomeScreenProps {
   pageData: PageData | null;
@@ -69,6 +77,9 @@ export const HomeScreen = memo(function HomeScreen({
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { repeatCount } = useRepeatCustomers();
+  const gapDetectedRef = useRef(false);
 
   const viewCount = pageData?.viewCount || 0;
 
@@ -82,6 +93,25 @@ export const HomeScreen = memo(function HomeScreen({
     totalClicks: 0, // TODO: pass real click count when available
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
+
+  // Creator return-after-gap detection
+  useEffect(() => {
+    if (!user || !pageData?.id || gapDetectedRef.current) return;
+    gapDetectedRef.current = true;
+    (async () => {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('last_active_date')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (profile?.last_active_date) {
+        const gap = differenceInDays(new Date(), parseISO(profile.last_active_date));
+        if (gap >= 3) {
+          trackCreatorReturnedAfterGap(pageData.id, gap);
+        }
+      }
+    })();
+  }, [user, pageData?.id]);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
@@ -165,7 +195,7 @@ export const HomeScreen = memo(function HomeScreen({
             />
             <OperatorSummaryWidget
               pageId={pageData?.id}
-              pageUpdatedAt={null}
+              pageUpdatedAt={pageData?.updatedAt}
               onOpenActivity={onOpenActivity}
               onOpenEditor={onOpenEditor}
             />
@@ -386,20 +416,74 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
         </div>
 
-        {/* Contextual Tip — outcome-focused */}
-        <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
-          <div className="flex items-start gap-4">
-            <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
-              <Sparkles className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <h4 className="font-bold mb-1">{t('dashboard.home.tip', 'Совет')}</h4>
-              <p className="text-sm text-muted-foreground">
-                {dynamicTip}
-              </p>
-            </div>
-          </div>
-        </Card>
+        {/* Lifecycle Nudge — data-driven contextual tip */}
+        {(() => {
+          // Lifecycle-aware nudge replaces static tip
+          if (isPublished && viewCount > 0 && realLeadsCount === 0) {
+            return (
+              <Card className="p-5 bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-500/10">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-amber-500/15 flex items-center justify-center shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-amber-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold mb-1">{t('lifecycle.trafficNoLeads.title', 'Есть трафик, но нет заявок')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('lifecycle.trafficNoLeads.hint', 'Добавьте форму сбора контактов или блок записи — каждая 5-я страница с формой получает заявки')}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          if (repeatCount > 0) {
+            return (
+              <Card className="p-5 bg-gradient-to-br from-violet-500/5 to-purple-500/5 border-violet-500/10">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-violet-500/15 flex items-center justify-center shrink-0">
+                    <Repeat className="h-5 w-5 text-violet-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold mb-1">{t('lifecycle.repeatCustomers.title', 'Постоянные клиенты')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('lifecycle.repeatCustomers.hint', 'У вас {{count}} постоянных клиентов — отличная работа! 🎉', { count: repeatCount })}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          if (isPublished && realLeadsCount > 0) {
+            return (
+              <Card className="p-5 bg-gradient-to-br from-emerald-500/5 to-green-500/5 border-emerald-500/10">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0">
+                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold mb-1">{t('lifecycle.hasLeads.title', 'Заявки поступают')}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {t('lifecycle.hasLeads.hint', 'Напишите клиентам после визита — это повышает возврат на 30%')}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          return (
+            <Card className="p-5 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/10">
+              <div className="flex items-start gap-4">
+                <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold mb-1">{t('dashboard.home.tip', 'Совет')}</h4>
+                  <p className="text-sm text-muted-foreground">{dynamicTip}</p>
+                </div>
+              </div>
+            </Card>
+          );
+        })()}
 
         {/* "Why LinkMAX" card REMOVED — user already converted, this is landing copy */}
       </div>

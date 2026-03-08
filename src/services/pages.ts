@@ -436,6 +436,7 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
       organization_id: pg.organization_id || undefined,
+      updatedAt: pg.updated_at || null,
       experiments
     };
 
