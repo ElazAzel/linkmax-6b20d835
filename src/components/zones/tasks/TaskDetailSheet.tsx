@@ -328,7 +328,7 @@ export const TaskDetailSheet = memo(function TaskDetailSheet({
                 </select>
               </div>
 
-              <div className="pt-2 text-[10px] text-muted-foreground space-y-0.5">
+              <div className="pt-2 text-xs text-muted-foreground space-y-0.5">
                 <p>{t('tasks.createdAt', 'Created')}: {format(new Date(task.created_at), 'PPp')}</p>
                 {task.updated_at !== task.created_at && (
                   <p>Last update: {format(new Date(task.updated_at), 'PPp')}</p>
