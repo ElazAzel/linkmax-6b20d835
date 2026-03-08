@@ -81,6 +81,12 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     niche,
     faviconUrl,
     hideBranding,
+    city,
+    profession,
+    entityType,
+    contactEmail,
+    contactPhone,
+    contactWhatsapp,
     avatarUrl,
     displayName,
     onUpdateSlug,
@@ -89,6 +95,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     onUpdateBranding,
     onToggleIndexable,
     onNicheChange,
+    onUpdateEntityFields,
     onUpgradePage,
     onOpenTheme,
     onOpenTemplates,
@@ -109,6 +116,14 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
     const [faviconInput, setFaviconInput] = useState(faviconUrl || '');
     const [hideBrandingInner, setHideBrandingInner] = useState(hideBranding || false);
+
+    // Entity field local state
+    const [professionInput, setProfessionInput] = useState(profession || '');
+    const [cityInput, setCityInput] = useState(city || '');
+    const [entityTypeInput, setEntityTypeInput] = useState<string>(entityType || 'person');
+    const [contactEmailInput, setContactEmailInput] = useState(contactEmail || '');
+    const [contactPhoneInput, setContactPhoneInput] = useState(contactPhone || '');
+    const [contactWhatsappInput, setContactWhatsappInput] = useState(contactWhatsapp || '');
 
     const handleSaveSlug = async () => {
         if (!onUpdateSlug || slugInput === pageSlug) return;
