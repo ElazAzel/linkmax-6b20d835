@@ -310,31 +310,54 @@ async function handleRequest(request, env) {
     return fetch(request);
   }
 
-  // 4. Bot-friendly SSR for landing + gallery
-  if (isBot(userAgent) && (pathname === '/' || pathname === '/gallery')) {
-    const target = pathname === '/' ? 'landing' : 'gallery';
-    const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${target}${queryString}`;
-    try {
-      const ssrResponse = await fetch(ssrUrl, {
-        method: 'GET',
-        headers: {
-          'Accept': 'text/html',
-          'User-Agent': userAgent,
-          'Accept-Language': request.headers.get('Accept-Language') || '',
-        },
-      });
-      const responseHeaders = new Headers(ssrResponse.headers);
-      responseHeaders.set('X-SSR-Rendered', 'true');
-      responseHeaders.set('X-SSR-Target', target);
-      responseHeaders.delete('set-cookie');
-      return new Response(ssrResponse.body, {
-        status: ssrResponse.status,
-        statusText: ssrResponse.statusText,
-        headers: responseHeaders,
-      });
-    } catch (error) {
-      console.error('[Worker] SSR error (landing/gallery):', error);
-      return fetch(request);
+  // 4. Bot-friendly SSR for landing, gallery, and marketing pages
+  if (isBot(userAgent)) {
+    let ssrTarget = null;
+    
+    if (pathname === '/') ssrTarget = 'landing';
+    else if (pathname === '/gallery') ssrTarget = 'gallery';
+    else if (pathname === '/experts') ssrTarget = 'experts';
+    
+    // Marketing pages SSR
+    if (!ssrTarget) {
+      const cleanFirst = pathname.replace(/^\/+/, '').split('/')[0];
+      if (SSR_MARKETING_PAGES.has(cleanFirst) && pathname.split('/').filter(Boolean).length === 1) {
+        ssrTarget = cleanFirst;
+      }
+    }
+    
+    // /experts/:tag SSR
+    if (!ssrTarget && pathname.startsWith('/experts/')) {
+      const tag = pathname.replace('/experts/', '').replace(/\/+$/, '');
+      if (tag && !tag.includes('/')) {
+        ssrTarget = `experts/${tag}`;
+      }
+    }
+    
+    if (ssrTarget) {
+      const ssrUrl = `${SSR_FUNCTION_URL}/ssr/${ssrTarget}${queryString}`;
+      try {
+        const ssrResponse = await fetch(ssrUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'text/html',
+            'User-Agent': userAgent,
+            'Accept-Language': request.headers.get('Accept-Language') || '',
+          },
+        });
+        const responseHeaders = new Headers(ssrResponse.headers);
+        responseHeaders.set('X-SSR-Rendered', 'true');
+        responseHeaders.set('X-SSR-Target', ssrTarget);
+        responseHeaders.delete('set-cookie');
+        return new Response(ssrResponse.body, {
+          status: ssrResponse.status,
+          statusText: ssrResponse.statusText,
+          headers: responseHeaders,
+        });
+      } catch (error) {
+        console.error('[Worker] SSR error:', ssrTarget, error);
+        return fetch(request);
+      }
     }
   }
 
