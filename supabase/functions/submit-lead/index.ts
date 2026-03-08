@@ -92,7 +92,48 @@ serve(async (req: Request) => {
         // Validate and sanitize form data
         const sanitizedFormData = validateAndSanitizeFormData(formData);
 
-        // 1. Insert lead into the leads table
+        // 1. Fetch page owner info for limit check and notification
+        const { data: pageData, error: pageError } = await supabase
+            .from('pages')
+            .select('user_id, slug, title')
+            .eq('id', pageId)
+            .single();
+
+        if (pageError || !pageData?.user_id) {
+            throw new Error('Page not found');
+        }
+
+        // 2. Check lead limit for free-tier users
+        const { data: ownerProfile } = await supabase
+            .from('user_profiles')
+            .select('premium_tier, is_premium, trial_ends_at')
+            .eq('id', pageData.user_id)
+            .single();
+
+        const tier = ownerProfile?.premium_tier || 'free';
+        const isPremium = ownerProfile?.is_premium || 
+            (ownerProfile?.trial_ends_at && new Date(ownerProfile.trial_ends_at) > new Date());
+
+        if (!isPremium && (tier === 'free' || !tier)) {
+            const monthStart = new Date();
+            monthStart.setDate(1);
+            monthStart.setHours(0, 0, 0, 0);
+
+            const { count: monthlyLeads } = await supabase
+                .from('leads')
+                .select('*', { count: 'exact', head: true })
+                .eq('page_id', pageId)
+                .gte('created_at', monthStart.toISOString());
+
+            if ((monthlyLeads || 0) >= 50) {
+                return new Response(
+                    JSON.stringify({ success: false, error: 'lead_limit_reached' }),
+                    { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+                );
+            }
+        }
+
+        // 3. Insert lead into the leads table
         const { data: lead, error: insertError } = await supabase
             .from('leads')
             .insert({
@@ -108,13 +149,6 @@ serve(async (req: Request) => {
             console.error('Error inserting lead:', insertError);
             throw insertError;
         }
-
-        // 2. Fetch page owner's telegram info for notification
-        const { data: pageData, error: pageError } = await supabase
-            .from('pages')
-            .select('user_id, slug, title')
-            .eq('id', pageId)
-            .single();
 
         if (pageData?.user_id) {
             const { data: profile } = await supabase

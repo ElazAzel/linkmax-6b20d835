@@ -92,14 +92,33 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
   const { t, i18n } = useTranslation();
   const { leads, loading, getLeadStats, refreshLeads, quickReply } = useLeads();
   const { isRepeatCustomer } = useRepeatCustomers();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'all'>('all');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [activeTab, setActiveTab] = useState<'leads' | 'bookings'>('leads');
+  const [monthlyLeadCount, setMonthlyLeadCount] = useState<number | null>(null);
 
   const stats = getLeadStats();
+
+  // Fetch monthly lead count for limit banner (free users)
+  useEffect(() => {
+    if (isPremium || !user?.id) return;
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+    (async () => {
+      const { count } = await supabase
+        .from('leads')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .gte('created_at', monthStart.toISOString());
+      setMonthlyLeadCount(count || 0);
+    })();
+  }, [isPremium, user?.id, leads.length]);
 
   // CRM is now available to all users (basic CRM free, premium for export/automation)
 
