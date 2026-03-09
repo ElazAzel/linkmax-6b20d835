@@ -59,7 +59,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
           .single()
           .then(({ data: row }) => {
             if (row?.service_slugs) {
-              previousServiceSlugsRef.current = row.service_slugs as Record<string, ServiceSlugEntryRaw>;
+              previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
             }
           })
           .catch(() => {}); // Non-critical
