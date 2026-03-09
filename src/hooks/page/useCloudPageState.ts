@@ -161,19 +161,20 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         if (slug && pageIdForIndexing) {
           const { score } = computeQualityScore(sanitizedData);
           // Fetch service_slugs (computed server-side by save_page_blocks)
-          supabase
-            .from('pages')
-            .select('service_slugs')
-            .eq('id', pageIdForIndexing)
-            .single()
-            .then(({ data: pageRow }) => {
+          void (async () => {
+            try {
+              const { data: pageRow } = await supabase
+                .from('pages')
+                .select('service_slugs')
+                .eq('id', pageIdForIndexing)
+                .single();
               const svcSlugs = pageRow?.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
-              notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update', svcSlugs).catch(() => {});
-            })
-            .catch(() => {
+              await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update', svcSlugs);
+            } catch {
               // Fallback: send without child URLs
-              notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
-            });
+              await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
+            }
+          })();
         }
 
         // Invalidate server diagnostics so SearchReadinessCard refetches
