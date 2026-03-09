@@ -293,7 +293,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   // Extract content from blocks
   const links: { url: string; title: string }[] = [];
   const faqItems: { q: string; a: string }[] = [];
-  const services: { name: string; description?: string; price?: string }[] = [];
+  const services: { id: string; name: string; description?: string; price?: string }[] = [];
   const socialLinks: string[] = [];
   const knowsAbout: string[] = [];
   let bodyContent = '';
