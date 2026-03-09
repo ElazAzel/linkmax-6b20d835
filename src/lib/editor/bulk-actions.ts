@@ -172,16 +172,6 @@ export function bulkMoveDown(
 }
 
 /**
- * Check if all selected blocks are hidden
- */
-export function areAllHidden(blocks: Block[], selectedIds: Set<string>): boolean {
-  return [...selectedIds].every(id => {
-    const block = blocks.find(b => b.id === id);
-    return block?.isHidden === true;
-  });
-}
-
-/**
  * Check if any selected block is protected (profile)
  */
 export function hasProtectedBlocks(blocks: Block[], selectedIds: Set<string>): boolean {
