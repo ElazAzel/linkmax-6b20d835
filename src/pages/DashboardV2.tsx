@@ -14,6 +14,10 @@ import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { useLeads } from '@/hooks/crm/useLeads';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
+import { EditorCommandPalette } from '@/components/editor/EditorCommandPalette';
+import { EditorKeyboardHandler } from '@/components/editor/EditorKeyboardHandler';
+import { useEditorStore } from '@/store/useEditorStore';
+import type { EditorContext } from '@/lib/editor/editor-commands';
 
 // Zone context
 import { ZoneProvider, useZoneContext } from '@/contexts/ZoneContext';
