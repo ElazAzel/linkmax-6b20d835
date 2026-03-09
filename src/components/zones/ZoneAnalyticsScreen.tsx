@@ -298,21 +298,23 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     <CardContent>
                         {dealMetrics.funnel.length > 0 ? (
                             <div className="space-y-2">
-                                <ResponsiveContainer width="100%" height={220}>
-                                    <BarChart data={dealMetrics.funnel} layout="vertical" margin={{ left: 0, right: 16 }}>
-                                        <XAxis type="number" hide />
-                                        <YAxis type="category" dataKey="stageName" width={100} tick={{ fontSize: 12 }} />
-                                        <RechartsTooltip
-                                            formatter={(value: number) => [value, t('zones.analytics.deals', 'Deals')]}
-                                            contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                                        />
-                                        <Bar dataKey="count" radius={[0, 6, 6, 0]}>
-                                            {dealMetrics.funnel.map((_, idx) => (
-                                                <Cell key={idx} fill={FUNNEL_COLORS[idx % FUNNEL_COLORS.length]} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                <div style={{ width: '100%', minHeight: 220, minWidth: 0 }}>
+                                    <ResponsiveContainer width="100%" height={220}>
+                                        <BarChart data={dealMetrics.funnel} layout="vertical" margin={{ left: 0, right: 16 }}>
+                                            <XAxis type="number" hide />
+                                            <YAxis type="category" dataKey="stageName" width={100} tick={{ fontSize: 12 }} />
+                                            <RechartsTooltip
+                                                formatter={(value: number) => [value, t('zones.analytics.deals', 'Deals')]}
+                                                contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                            />
+                                            <Bar dataKey="count" radius={[0, 6, 6, 0]}>
+                                                {dealMetrics.funnel.map((_, idx) => (
+                                                    <Cell key={idx} fill={FUNNEL_COLORS[idx % FUNNEL_COLORS.length]} />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                                 {/* Value legend */}
                                 <div className="grid grid-cols-2 gap-2 pt-2">
                                     {dealMetrics.funnel.map((stage, idx) => (
