@@ -86,7 +86,7 @@ export function createSection(
 
   const newBlocks = blocks.map(b => {
     if (selectedIds.has(b.id) && b.type !== 'profile') {
-      return { ...b, sectionId } as Block;
+      return { ...b, sectionId };
     }
     return b;
   });
