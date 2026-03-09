@@ -81,50 +81,26 @@ export function bulkDuplicate(
 }
 
 /**
- * Hide multiple blocks
+ * Get block IDs to hide from a selection
  */
-export function bulkHide(
+export function getHideableIds(
   blocks: Block[],
   selectedIds: Set<string>
-): BulkActionResult {
-  const newBlocks = blocks.map(block => {
-    if (selectedIds.has(block.id) && block.type !== 'profile') {
-      return { ...block, isHidden: true } as Block;
-    }
-    return block;
-  });
-
-  const affectedIds = [...selectedIds].filter(id => {
+): string[] {
+  return [...selectedIds].filter(id => {
     const block = blocks.find(b => b.id === id);
     return block && block.type !== 'profile';
   });
-
-  return {
-    success: affectedIds.length > 0,
-    affectedIds,
-    newBlocks,
-  };
 }
 
 /**
- * Show multiple blocks (unhide)
+ * Get block IDs to show from a selection
  */
-export function bulkShow(
-  blocks: Block[],
+export function getShowableIds(
+  _blocks: Block[],
   selectedIds: Set<string>
-): BulkActionResult {
-  const newBlocks = blocks.map(block => {
-    if (selectedIds.has(block.id)) {
-      return { ...block, isHidden: false } as Block;
-    }
-    return block;
-  });
-
-  return {
-    success: selectedIds.size > 0,
-    affectedIds: [...selectedIds],
-    newBlocks,
-  };
+): string[] {
+  return [...selectedIds];
 }
 
 /**
