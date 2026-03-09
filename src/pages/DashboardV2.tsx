@@ -14,6 +14,10 @@ import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { useLeads } from '@/hooks/crm/useLeads';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { usePageVersions } from '@/hooks/page/usePageVersions';
+import { EditorCommandPalette } from '@/components/editor/EditorCommandPalette';
+import { EditorKeyboardHandler } from '@/components/editor/EditorKeyboardHandler';
+import { useEditorStore } from '@/store/useEditorStore';
+import type { EditorContext } from '@/lib/editor/editor-commands';
 
 // Zone context
 import { ZoneProvider, useZoneContext } from '@/contexts/ZoneContext';
@@ -134,21 +138,28 @@ function DashboardV2Inner() {
     }
   }, []);
 
-  // Core state - with onPublish callback for automatic versioning
-  const dashboard = useDashboard({ onPublish: handlePublishVersion });
+  // Editor history — created first so it can be passed to useDashboard
+  const editorHistoryRef = useRef<ReturnType<typeof useEditorHistory> | null>(null);
+
+  // We need a stable reference for the first render
+  const editorHistory = useEditorHistory(
+    [],
+    {
+      onStateChange: (blocks) => {
+        // Will be wired after dashboard is available
+      },
+    }
+  );
+  editorHistoryRef.current = editorHistory;
+
+  // Core state - with onPublish callback for automatic versioning + editorHistory
+  const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
   const multiPage = useMultiPage();
   const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
 
-  // Editor history
-  const editorHistory = useEditorHistory(
-    dashboard.pageData?.blocks || [],
-    {
-      onStateChange: (blocks) => {
-        dashboard.updatePageDataPartial({ blocks });
-      },
-    }
-  );
+  // P2: Editor store (must be before early returns)
+  const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
 
   // Current tab from URL - support both query params and pathname
   const currentTab = useMemo((): TabId => {
@@ -296,6 +307,30 @@ function DashboardV2Inner() {
       window.removeEventListener('openAchievements', handleOpenAchievements);
     };
   }, []);
+
+  // P2: Editor command context for palette + keyboard (must be before early returns)
+  const editorContext = useMemo((): EditorContext => ({
+    blocks: dashboard.pageData?.blocks || [],
+    selectedBlockId,
+    isPremium: dashboard.isPremium,
+    commandPaletteOpen,
+    onInsertBlock: dashboard.blockEditor.handleInsertBlock,
+    onInsertPreset: dashboard.blockEditor.handleInsertPreset,
+    onDeleteBlock: dashboard.blockEditor.handleDeleteBlock,
+    onDuplicateBlock: dashboard.blockEditor.handleDuplicateBlock,
+    onEditBlock: dashboard.blockEditor.handleEditBlock,
+    onUpdateBlock: dashboard.updateBlock,
+    onReorderBlocks: dashboard.reorderBlocks,
+    onUndo: editorHistory.undo,
+    onRedo: editorHistory.redo,
+    canUndo: editorHistory.canUndo,
+    canRedo: editorHistory.canRedo,
+    onOpenTemplates: () => setTemplateGalleryOpen(true),
+    onPreview: () => dashboard.sharingState.handlePreview(),
+    onShare: () => dashboard.sharingState.handleShare(),
+    setSelectedBlockId,
+    setCommandPaletteOpen,
+  }), [dashboard, selectedBlockId, commandPaletteOpen, editorHistory, setSelectedBlockId, setCommandPaletteOpen, setTemplateGalleryOpen]);
 
   // Loading state
   if (dashboard.loading || multiPage.loading) {
@@ -776,6 +811,10 @@ function DashboardV2Inner() {
             onUpgrade={() => navigate('/pricing')}
           />
         </Suspense>
+
+        {/* P2: Command Palette + Keyboard Shortcuts */}
+        <EditorCommandPalette context={editorContext} />
+        <EditorKeyboardHandler context={editorContext} enabled={currentTab === 'editor'} />
       </div>
     </>
   );

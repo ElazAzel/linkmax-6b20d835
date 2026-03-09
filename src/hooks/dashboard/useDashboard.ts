@@ -21,9 +21,11 @@ import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 
 import type { Block, PageData } from '@/types/page';
 import type { Niche } from '@/lib/niches';
+import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
 
 interface UseDashboardOptions {
   onPublish?: (pageData: PageData) => void;
+  editorHistory?: EditorHistoryType;
 }
 
 export function useDashboard(options?: UseDashboardOptions) {
@@ -65,13 +67,14 @@ export function useDashboard(options?: UseDashboardOptions) {
     } as Partial<Block>);
   }, [cloudState]);
 
-  // Block editor
+  // Block editor (with history reference — passed from DashboardV2)
   const blockEditor = useBlockEditor({
     isPremium,
     addBlock: cloudState.addBlock,
     updateBlock: cloudState.updateBlock,
     deleteBlock: cloudState.deleteBlock,
     blocks: cloudState.pageData?.blocks || [],
+    editorHistory: options?.editorHistory,
     playAdd: sounds.playAdd,
     playDelete: sounds.playDelete,
     playError: sounds.playError,
