@@ -8,8 +8,12 @@ import { PREMIUM_BLOCK_TYPES } from '@/lib/blocks/block-registry';
 import { APP_CONFIG } from '@/lib/constants';
 import { incrementChallengeProgress, recordActivity } from '@/services/social';
 import { useEditorStore } from '@/store/useEditorStore';
+import { trackEditorAction } from '@/lib/editor/editor-analytics';
+import { addRecentBlockType, addRecentPreset } from '@/lib/editor/editor-session';
 import type { Block } from '@/types/page';
 import type { DeletedBlockInfo, BlockInsertResult } from '@/types/block-editor-types';
+import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
+import type { BlockPreset } from '@/lib/editor/editor-presets';
 
 interface UseBlockEditorOptions {
   isPremium: boolean;
@@ -17,6 +21,7 @@ interface UseBlockEditorOptions {
   updateBlock: (id: string, updates: Partial<Block>) => void;
   deleteBlock: (id: string) => void;
   blocks: Block[];
+  editorHistory?: EditorHistoryType;
   playAdd?: () => void;
   playDelete?: () => void;
   playError?: () => void;
@@ -27,7 +32,7 @@ interface UseBlockEditorOptions {
 }
 
 /**
- * Hook to manage block editing operations with undo support
+ * Hook to manage block editing operations with undo support and history recording
  */
 export function useBlockEditor({
   isPremium,
@@ -35,6 +40,7 @@ export function useBlockEditor({
   updateBlock,
   deleteBlock,
   blocks,
+  editorHistory,
   playAdd,
   playDelete,
   playError,
@@ -45,7 +51,6 @@ export function useBlockEditor({
 }: UseBlockEditorOptions) {
   const { t } = useTranslation();
 
-  // Zustand store
   const {
     editingBlock,
     editorOpen,
@@ -55,11 +60,10 @@ export function useBlockEditor({
     setEditorOpen,
     setDeletedBlocks,
     setOperationInProgress,
-    closeEditor
+    closeEditor,
+    addRecentBlockType: storeAddRecent,
   } = useEditorStore();
 
-  // Use a local ref for immediate check to avoid stale closures in some fast scenarios,
-  // though Zustand handles most cases well.
   const opRef = useRef(false);
 
   /**
@@ -84,11 +88,22 @@ export function useBlockEditor({
           return { success: false, error: 'Premium required' };
         }
 
+        const previousBlocks = [...blocks];
         const newBlock = createBlock(blockType);
         addBlock(newBlock, position);
         playAdd?.();
         toast.success(t('blocks.added', 'Block added'));
         onBlockHint?.(blockType, newBlock.id);
+
+        // Record to history
+        const newBlocks = [...previousBlocks];
+        newBlocks.splice(position, 0, newBlock);
+        editorHistory?.recordBlockAdd(previousBlocks, newBlocks, blockType, newBlock.id);
+
+        // Track analytics + session
+        trackEditorAction('block_added', { blockType, blockId: newBlock.id, position, source: 'grid' });
+        storeAddRecent(blockType);
+        addRecentBlockType(blockType);
 
         onQuestComplete?.('add_block');
         onClaimBlockToken?.();
@@ -102,7 +117,45 @@ export function useBlockEditor({
         return { success: false, error: 'Block creation failed' };
       }
     },
-    [isPremiumBlock, addBlock, playAdd, playError, onBlockHint, onQuestComplete, onClaimBlockToken, t]
+    [isPremiumBlock, addBlock, blocks, playAdd, playError, onBlockHint, onQuestComplete, onClaimBlockToken, t, editorHistory, storeAddRecent]
+  );
+
+  /**
+   * Insert a preset block (with overrides)
+   */
+  const handleInsertPreset = useCallback(
+    (preset: BlockPreset): BlockInsertResult => {
+      try {
+        if (isPremiumBlock(preset.blockType)) {
+          toast.error(t('blocks.premiumRequired', 'This block requires Premium'));
+          playError?.();
+          return { success: false, error: 'Premium required' };
+        }
+
+        const previousBlocks = [...blocks];
+        const position = blocks.length;
+        const newBlock = createBlock(preset.blockType, preset.overrides);
+        addBlock(newBlock, position);
+        playAdd?.();
+        toast.success(t('blocks.added', 'Block added'));
+
+        const newBlocks = [...previousBlocks, newBlock];
+        editorHistory?.recordBlockAdd(previousBlocks, newBlocks, preset.blockType, newBlock.id);
+
+        trackEditorAction('preset_used', { blockType: preset.blockType, presetId: preset.id, source: 'palette' });
+        storeAddRecent(preset.blockType);
+        addRecentBlockType(preset.blockType);
+        addRecentPreset(preset.id);
+        useEditorStore.getState().addRecentPreset(preset.id);
+
+        return { success: true, blockId: newBlock.id };
+      } catch {
+        toast.error(t('blocks.addFailed', 'Failed to add block'));
+        playError?.();
+        return { success: false, error: 'Preset creation failed' };
+      }
+    },
+    [isPremiumBlock, addBlock, blocks, playAdd, playError, t, editorHistory, storeAddRecent]
   );
 
   /**
@@ -111,6 +164,7 @@ export function useBlockEditor({
   const handleEditBlock = useCallback((block: Block) => {
     setEditingBlock(block);
     setEditorOpen(true);
+    trackEditorAction('full_editor_opened', { blockType: block.type, blockId: block.id });
   }, [setEditingBlock, setEditorOpen]);
 
   /**
@@ -119,10 +173,18 @@ export function useBlockEditor({
   const handleSaveBlock = useCallback(
     (updates: Partial<Block>) => {
       if (editingBlock) {
+        const previousBlocks = [...blocks];
         updateBlock(editingBlock.id, updates);
+
+        // Record history for block update
+        const newBlocks = blocks.map(b =>
+          b.id === editingBlock.id ? { ...b, ...updates } : b
+        );
+        editorHistory?.recordBlockUpdate(previousBlocks, newBlocks, editingBlock.type, editingBlock.id);
+        trackEditorAction('full_editor_saved', { blockType: editingBlock.type, blockId: editingBlock.id });
       }
     },
-    [editingBlock, updateBlock]
+    [editingBlock, updateBlock, blocks, editorHistory]
   );
 
   /**
@@ -140,6 +202,11 @@ export function useBlockEditor({
       setOperationInProgress(true);
       opRef.current = true;
 
+      // Record history before deletion
+      const previousBlocks = [...blocks];
+      const newBlocks = blocks.filter((b) => b.id !== blockId);
+      editorHistory?.recordBlockDelete(previousBlocks, newBlocks, block.type, block.id);
+
       const deletedInfo: DeletedBlockInfo = {
         block,
         position: blockIndex,
@@ -155,6 +222,7 @@ export function useBlockEditor({
 
       deleteBlock(blockId);
       playDelete?.();
+      trackEditorAction('block_deleted', { blockType: block.type, blockId: block.id, position: blockIndex });
 
       setTimeout(() => {
         setOperationInProgress(false);
@@ -190,7 +258,7 @@ export function useBlockEditor({
         { duration: APP_CONFIG.undoTimeout }
       );
     },
-    [operationInProgress, blocks, setOperationInProgress, setDeletedBlocks, deleteBlock, playDelete, t, hapticSuccess, addBlock]
+    [operationInProgress, blocks, setOperationInProgress, setDeletedBlocks, deleteBlock, playDelete, t, hapticSuccess, addBlock, editorHistory]
   );
 
   /**
@@ -226,23 +294,31 @@ export function useBlockEditor({
       if (!block || block.type === 'profile') return;
 
       try {
+        const previousBlocks = [...blocks];
         const cloned = JSON.parse(JSON.stringify(block)) as Block;
         cloned.id = `${block.type}-${Date.now()}`;
         addBlock(cloned, blockIndex + 1);
         playAdd?.();
+
+        const newBlocks = [...previousBlocks];
+        newBlocks.splice(blockIndex + 1, 0, cloned);
+        editorHistory?.recordBlockAdd(previousBlocks, newBlocks, block.type, cloned.id);
+
+        trackEditorAction('block_duplicated', { blockType: block.type, blockId: cloned.id, position: blockIndex + 1 });
         toast.success(t('blocks.duplicated', 'Block duplicated'));
       } catch {
         toast.error(t('blocks.duplicateFailed', 'Failed to duplicate block'));
         playError?.();
       }
     },
-    [blocks, addBlock, playAdd, playError, t]
+    [blocks, addBlock, playAdd, playError, t, editorHistory]
   );
 
   return {
     editingBlock,
     editorOpen,
     handleInsertBlock,
+    handleInsertPreset,
     handleEditBlock,
     handleSaveBlock,
     handleDeleteBlock,
