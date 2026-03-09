@@ -21,9 +21,11 @@ import { useHapticFeedback } from '@/hooks/ui/useHapticFeedback';
 
 import type { Block, PageData } from '@/types/page';
 import type { Niche } from '@/lib/niches';
+import type { EditorHistoryType } from '@/hooks/editor/useEditorHistory';
 
 interface UseDashboardOptions {
   onPublish?: (pageData: PageData) => void;
+  editorHistory?: EditorHistoryType;
 }
 
 export function useDashboard(options?: UseDashboardOptions) {
