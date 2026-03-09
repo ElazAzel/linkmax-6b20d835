@@ -63,8 +63,8 @@ export default function PublicServicePage() {
     );
   }
 
-  // Removed → redirect to parent
-  if (resolution?.notFoundReason === 'removed') {
+  // Removed or orphan → redirect to parent
+  if (resolution?.notFoundReason === 'removed' || resolution?.notFoundReason === 'item_missing') {
     return <Navigate to={`/${slug}`} replace />;
   }
 
