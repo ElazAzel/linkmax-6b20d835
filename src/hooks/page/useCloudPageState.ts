@@ -155,12 +155,25 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         await publishPageMutation.mutateAsync();
 
         // IndexNow notification (fire-and-forget, throttled, quality-gated)
-        // Passes page ID so edge function logs the submission server-side
+        // P2.9: Now also submits eligible child service URLs alongside parent
         const slug = sanitizedData.slug;
         const pageIdForIndexing = savedPageId || sanitizedData.id;
-        if (slug) {
+        if (slug && pageIdForIndexing) {
           const { score } = computeQualityScore(sanitizedData);
-          notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
+          // Fetch service_slugs (computed server-side by save_page_blocks)
+          supabase
+            .from('pages')
+            .select('service_slugs')
+            .eq('id', pageIdForIndexing)
+            .single()
+            .then(({ data: pageRow }) => {
+              const svcSlugs = pageRow?.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
+              notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update', svcSlugs).catch(() => {});
+            })
+            .catch(() => {
+              // Fallback: send without child URLs
+              notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
+            });
         }
 
         // Invalidate server diagnostics so SearchReadinessCard refetches
