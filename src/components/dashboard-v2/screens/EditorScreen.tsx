@@ -99,42 +99,27 @@ export const EditorScreen = memo(function EditorScreen({
   // P5: Friction recovery
   const { signal: frictionSignal, dismiss: dismissFriction, accept: acceptFriction } = useFrictionRecovery();
 
-  if (loading || !pageData) {
-    return <LoadingSkeleton />;
-  }
-
-  const isPublished = pageData.isPublished || false;
-  const blockCount = pageData.blocks.length;
-
-  // Count non-profile blocks to determine if user is experienced
-  const contentBlockCount = pageData.blocks.filter(b => b.type !== 'profile').length;
-
-  // Page has content if it has more than just a profile block
-  const hasContent = pageData.blocks.length > 1 ||
-    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
-
-  // Show AI builder only for new users (less than 2 content blocks)
-  const showAIBuilder = contentBlockCount < 2;
-
   // P5: Section handlers for StructureView
   const handleDissolveSection = useCallback((sectionId: string) => {
+    if (!pageData) return;
     const newBlocks = dissolveSection(pageData.blocks, sectionId);
     onReorderBlocks(newBlocks);
     removeSectionMeta(sectionId);
     trackEditorAction('section_dissolved', { source: 'structure' });
-  }, [pageData.blocks, onReorderBlocks, removeSectionMeta]);
+  }, [pageData, onReorderBlocks, removeSectionMeta]);
 
   const handleDeleteSection = useCallback((sectionId: string) => {
+    if (!pageData) return;
     const newBlocks = deleteSection(pageData.blocks, sectionId);
     onReorderBlocks(newBlocks);
     removeSectionMeta(sectionId);
     trackEditorAction('section_deleted', { source: 'structure' });
-  }, [pageData.blocks, onReorderBlocks, removeSectionMeta]);
+  }, [pageData, onReorderBlocks, removeSectionMeta]);
 
   const handleDuplicateSection = useCallback((sectionId: string) => {
+    if (!pageData) return;
     const result = duplicateSection(pageData.blocks, sectionId);
     onReorderBlocks(result.blocks);
-    // Copy metadata for new section
     const originalMeta = sectionMeta.get(sectionId);
     if (originalMeta) {
       setSectionMeta(result.newSectionId, {
@@ -145,7 +130,7 @@ export const EditorScreen = memo(function EditorScreen({
       });
     }
     trackEditorAction('section_duplicated', { source: 'structure' });
-  }, [pageData.blocks, onReorderBlocks, sectionMeta, setSectionMeta]);
+  }, [pageData, onReorderBlocks, sectionMeta, setSectionMeta]);
 
   const handleRenameSection = useCallback((sectionId: string, label: string) => {
     const existing = sectionMeta.get(sectionId);
@@ -166,6 +151,10 @@ export const EditorScreen = memo(function EditorScreen({
       setReviewMode('problematic');
     }
   }, [frictionSignal, acceptFriction, setReviewMode]);
+
+  if (loading || !pageData) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <div className="min-h-screen safe-area-top">
