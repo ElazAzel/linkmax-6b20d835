@@ -35,6 +35,13 @@ interface EditorState {
     // P4: Structure view
     structureViewFilters: StructureFilter[];
 
+    // P5: Sections
+    sectionMeta: Map<string, SectionMeta>;
+    collapsedSections: Set<string>;
+
+    // P5: Review modes
+    reviewMode: ReviewMode;
+
     // Actions
     setEditingBlock: (block: Block | null) => void;
     setEditorOpen: (open: boolean) => void;
