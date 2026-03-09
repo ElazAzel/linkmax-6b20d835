@@ -32,6 +32,7 @@ interface EditorScreenProps {
   onDeleteBlock: (blockId: string) => void;
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onReorderBlocks: (blocks: Block[]) => void;
+  onDuplicateBlock?: (id: string) => void;
   onPreview: () => void;
   onShare: () => void;
   onOpenTemplates: () => void;
