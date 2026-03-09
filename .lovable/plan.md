@@ -1,301 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
-## A. Verdict
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-### 7 biggest UX problems remaining:
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-1. **No multi-select** — users must delete/duplicate/hide blocks one by one
-2. **No inline quick-edit** — every text edit forces opening the full editor sheet
-3. **Selection state is invisible** — `selectedBlockId` exists in store but GridEditor doesn't show it
-4. **Block toolbar is action-per-hover** — controls appear per-block but not for selected state
-5. **No keyboard navigation between blocks** — arrow keys don't move selection; only shortcuts work on already-selected
-6. **Structure view is passive** — shows blocks but no bulk select, no quality indicators, no filters
-7. **Clipboard is missing** — no copy/paste blocks, no paste-style
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-### Actions still too expensive:
-- Delete 5 blocks = 5 separate delete actions
-- Move text above CTA = drag carefully or 3+ Cmd+Arrow presses
-- Quickly edit a button label = open full sheet, find field, edit, close
+### Новая тарифная модель (ADR 0026)
 
-### Where editor feels like CRUD not editor:
-- No spatial awareness of selection
-- No batch operations
-- Context toolbar = generic action buttons
-- No "review mode" for problematic blocks
-
-### Interaction gaps hurting publish/activation:
-1. Can't fix multiple block issues in batch
-2. Can't quickly inline-edit weak copy
-3. Structure view doesn't surface quality issues
-4. No focus mode for problematic-only blocks
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## B. P4 Scope
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-Implementing priorities 1-7:
-
-1. **Multi-select system** — selection model + bulk actions
-2. **Inline quick edit layer** — click-to-edit for text/button/messenger labels
-3. **Block context toolbar** — unified toolbar for single/multi selection
-4. **Keyboard-first expansion** — arrow navigation, Tab between blocks
-5. **Smart insert flow** — context-aware insert ranking
-6. **Structure view 2.0** — filters, quality badges, bulk select
-7. **Copy/paste engine** — block clipboard with style-only option
-
-Defer to P5: sections/grouping, collapse/focus modes, friction recovery, full analytics layer.
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## C. Architecture
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-### New modules:
-```
-src/lib/editor/
-├── selection-engine.ts      # Multi-select state logic
-├── bulk-actions.ts          # Batch operations
-├── clipboard-engine.ts      # Copy/paste logic
-├── insert-ranker.ts         # Context-aware insert scoring
-└── inline-edit-config.ts    # Per-block inline editable fields
-
-src/components/editor/
-├── BlockSelectionOverlay.tsx   # Visual selection UI
-├── BlockContextToolbar.tsx     # Floating toolbar for selected
-├── InlineTextEditor.tsx        # Quick inline text edit
-└── BulkActionBar.tsx           # Multi-select action bar
-```
-
-### Store expansion (`useEditorStore`):
-```typescript
-interface EditorState {
-  // Existing P2
-  selectedBlockId: string | null;
-  commandPaletteOpen: boolean;
-  
-  // New P4
-  selectedBlockIds: Set<string>;        // Multi-select
-  clipboardBlock: Block | null;         // Copied block
-  clipboardMode: 'block' | 'style';     // Copy type
-  inlineEditingBlockId: string | null;  // Currently inline editing
-  inlineEditField: string | null;       // Which field is being edited
-  structureViewFilters: StructureFilter[];
-}
-```
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## D. Implementation by file
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-### 1. Store expansion (`src/store/useEditorStore.ts`)
-Add:
-- `selectedBlockIds: Set<string>` — for multi-select
-- `toggleBlockSelection(id: string, additive: boolean)` — Cmd+click behavior
-- `selectRange(fromId: string, toId: string)` — Shift+click range
-- `clearSelection()`, `selectAll(blockIds: string[])`
-- `clipboardBlock`, `clipboardMode`, `copyBlock()`, `pasteBlock()`
-- `inlineEditingBlockId`, `setInlineEditing()`
-
-### 2. Selection engine (`src/lib/editor/selection-engine.ts`)
-Pure functions:
-- `toggleSelection(current: Set<string>, id: string, additive: boolean): Set<string>`
-- `selectRange(blocks: Block[], from: string, to: string): Set<string>`
-- `getSelectableBlocks(blocks: Block[]): Block[]` — excludes profile
-- `isValidSelection(ids: Set<string>, blocks: Block[]): boolean`
-
-### 3. Bulk actions engine (`src/lib/editor/bulk-actions.ts`)
-```typescript
-interface BulkActionResult { success: boolean; affectedIds: string[] }
-
-// Available bulk actions
-- bulkDelete(blocks, selectedIds) → Block[]
-- bulkDuplicate(blocks, selectedIds) → Block[]
-- bulkHide(blocks, selectedIds) → Block[]
-- bulkShow(blocks, selectedIds) → Block[]
-- bulkMoveUp(blocks, selectedIds) → Block[]
-- bulkMoveDown(blocks, selectedIds) → Block[]
-```
-
-### 4. Block context toolbar (`src/components/editor/BlockContextToolbar.tsx`)
-Floating toolbar that appears:
-- Above selected block(s)
-- Shows: Edit, Duplicate, Delete, Hide, Move ↑↓, Copy, More...
-- Multi-select shows: "3 selected" + bulk action subset
-- Position: anchored to selection bounds
-
-### 5. Inline text editor (`src/components/editor/InlineTextEditor.tsx`)
-Lightweight overlay for quick field edit:
-- Renders when `inlineEditingBlockId` is set
-- Shows contentEditable span for the field value
-- Blur/Enter saves, Escape cancels
-- Supports: text.content, button.label, messenger.label, pricing item names, faq questions
-
-### 6. Inline edit config (`src/lib/editor/inline-edit-config.ts`)
-Registry of inline-editable fields per block type:
-```typescript
-const INLINE_EDITABLE: Record<BlockType, InlineEditableField[]> = {
-  text: [{ field: 'content', type: 'text' }],
-  button: [{ field: 'label', type: 'short' }],
-  messenger: [{ field: 'customLabel', type: 'short' }],
-  faq: [{ field: 'questions.*.question', type: 'text' }],
-  // ...
-}
-```
-
-### 7. GridEditor updates (`src/components/editor/GridEditor.tsx`)
-- Add visual selection state (ring-2 ring-primary for selected)
-- Handle click → single select
-- Handle Cmd+click → toggle multi-select
-- Handle Shift+click → range select
-- Show `BlockContextToolbar` for selected
-- Double-click → inline edit if supported
-- Track `onBlockSelect` callback
-
-### 8. Keyboard handler expansion (`src/components/editor/EditorKeyboardHandler.tsx`)
-Add:
-- ArrowUp/Down — move selection to prev/next block
-- Shift+Arrow — range select
-- Enter — open inline edit or full editor
-- Tab — cycle through blocks
-- Cmd+A — select all (non-profile)
-- Cmd+C — copy block
-- Cmd+V — paste block
-- Cmd+Shift+C — copy style
-- Cmd+Shift+V — paste style
-
-### 9. Structure view 2.0 (`src/components/editor/StructureView.tsx`)
-Add:
-- Checkbox for multi-select
-- Filter buttons: All | Incomplete | Hidden | CTA/Contact
-- Quality badge per block (from intelligence layer)
-- Bulk action bar when >1 selected
-- "Jump to" behavior scrolls GridEditor
-
-### 10. Insert ranker (`src/lib/editor/insert-ranker.ts`)
-```typescript
-function rankBlocksForInsert(
-  currentBlocks: Block[],
-  position: number,
-  niche: string,
-  recentTypes: string[]
-): RankedBlock[]
-```
-Scoring:
-- +30 if recommended by NBA
-- +20 if fills composition gap
-- +15 if recent
-- +10 if niche-critical
-- Position-aware: after pricing → boost booking/testimonial
-
-### 11. Clipboard engine (`src/lib/editor/clipboard-engine.ts`)
-```typescript
-function copyBlock(block: Block): ClipboardData
-function copyStyle(block: Block): StyleData
-function pasteBlock(clipboard: ClipboardData, position: number): Block
-function pasteStyle(clipboard: StyleData, target: Block): Partial<Block>
-function canPasteStyle(from: Block, to: Block): boolean
-```
-
-### 12. Bulk action bar (`src/components/editor/BulkActionBar.tsx`)
-Fixed bottom bar when >1 block selected:
-- "X selected" label
-- Buttons: Duplicate | Hide | Delete | Deselect
-- Animate in from bottom
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## E. UX Logic
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-### Single-click behavior:
-1. Click on block → select it (deselect others)
-2. Cmd+click → toggle selection (add/remove)
-3. Shift+click → range select from last selected
-4. Click outside → clear selection
+## Текущее состояние LinkMAX Business Zones
 
-### Double-click behavior:
-- If block has inline-editable field → open inline editor
-- Else → open full editor
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-### Keyboard flow:
-- Arrow ↑↓ → move selection
-- Enter → inline edit (if available) or full edit
-- Delete → delete selected
-- Cmd+D → duplicate
-- Cmd+C/V → copy/paste
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-### Multi-select bulk:
-- Delete → confirm dialog if >3 blocks
-- Duplicate → insert duplicates after last selected
-- Hide/Show → toggle all
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
----
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-## F. Why better than AI-heavy
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-| Dimension | This P4 | AI-assisted editor |
-|-----------|---------|-------------------|
-| Cost | 0 API calls | $0.01-0.10 per action |
-| Latency | <5ms | 500-3000ms |
-| Trust | Deterministic | Unpredictable |
-| Edit speed | Instant | Wait for generation |
-| Maintainability | Pure functions | Prompt engineering |
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-All P4 features are deterministic state machines + pure functions.
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
----
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-## G. Verification
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-1. **Build passes** — no TS errors
-2. **Selection correctness** — Cmd+click adds, Shift+click ranges
-3. **Bulk action safety** — profile never bulk-deleted
-4. **History recording** — bulk actions record as single history entry
-5. **Keyboard no-collision** — shortcuts don't fire in inputs
-6. **Mobile fallback** — multi-select via long-press + tap
-7. **Analytics events** — track `bulk_action_used`, `inline_edit_saved`, `selection_count`
+### Фаза 4: Аналитика Зоны (P1)
 
----
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-## H. Summary
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-### Core interaction wins:
-- Multi-select + bulk delete/duplicate/hide
-- Inline quick edit for text/button labels
-- Block context toolbar
-- Full keyboard navigation
-- Copy/paste blocks
-- Structure view with filters + quality badges
+### Фаза 5: Автоматизации -- MVP (P2)
 
-### Adjacent platform wins:
-- Insert ranker using NBA engine
-- Selection state visible in grid
-- Unified selection model (grid ↔ structure)
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
 
-### What stays for P5:
-- Sections/grouping model
-- Collapse/focus/review modes
-- Friction recovery layer
-- Full interaction analytics dashboard
-- Replace/transform engine (button↔link)
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## Decision Tables
+## Что НЕ нужно копировать из Bitrix24
 
-| Improvement | User value | Dev complexity | Runtime cost | Priority |
-|------------|------------|----------------|--------------|----------|
-| Multi-select + bulk | High | Medium | ~0ms | 1 |
-| Inline quick edit | High | Medium | ~0ms | 2 |
-| Block context toolbar | High | Low | ~0ms | 3 |
-| Keyboard navigation | Medium | Low | ~0ms | 4 |
-| Smart insert ranking | Medium | Low | ~0ms | 5 |
-| Structure view 2.0 | High | Medium | ~0ms | 6 |
-| Copy/paste engine | Medium | Low | ~0ms | 7 |
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-| Area | Rules | Heuristics | ML-lite | LLM? | Final choice |
-|------|-------|------------|---------|------|--------------|
-| Selection logic | Yes | — | — | No | Rules |
-| Bulk actions | Yes | — | — | No | Rules |
-| Insert ranking | — | Scoring | — | No | Heuristics |
-| Inline edit config | Yes (registry) | — | — | No | Rules |
-| Clipboard compat | Yes | — | — | No | Rules |
-| Quality badges | Yes | — | — | No | Rules (from P3) |
-| Style paste compat | Yes | — | — | No | Rules |
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

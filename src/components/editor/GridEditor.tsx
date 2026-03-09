@@ -30,8 +30,16 @@ import { Button } from '@/components/ui/button';
 import { BlockRenderer } from '@/components/editor/BlockRenderer';
 import { BlockInsertButton } from './BlockInsertButton';
 import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
+import { InlineTextEditor } from './InlineTextEditor';
+import { BulkActionBar } from './BulkActionBar';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
+import { useEditorStore } from '@/store/useEditorStore';
 import { ExperimentSetupDialog } from '@/components/dashboard-v2/dialogs/ExperimentSetupDialog';
+import { selectRange } from '@/lib/editor/selection-engine';
+import { bulkDelete, bulkDuplicate, bulkMoveUp, bulkMoveDown } from '@/lib/editor/bulk-actions';
+import { copyBlock } from '@/lib/editor/clipboard-engine';
+import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
+import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
@@ -98,6 +106,7 @@ function InsertBetweenDivider({
   );
 }
 
+
 interface GridEditorProps {
   blocks: Block[];
   isPremium: boolean;
@@ -117,11 +126,16 @@ interface SortableGridBlockItemProps {
   onEdit: (block: Block) => void;
   onDelete: (id: string) => void;
   onDuplicate?: (id: string) => void;
+  onUpdateBlock?: (id: string, updates: Partial<Block>) => void;
   isPremium?: boolean;
   premiumTier?: PremiumTier;
   isDragging?: boolean;
   isMobile?: boolean;
+  isSelected?: boolean;
+  isMultiSelected?: boolean;
   onStartExperiment?: (block: Block) => void;
+  onBlockClick?: (block: Block, e: React.MouseEvent) => void;
+  onBlockDoubleClick?: (block: Block) => void;
 }
 
 function SortableGridBlockItem({
@@ -129,10 +143,15 @@ function SortableGridBlockItem({
   onEdit,
   onDelete,
   onDuplicate,
+  onUpdateBlock,
   isPremium,
   premiumTier,
   isMobile = false,
+  isSelected = false,
+  isMultiSelected = false,
   onStartExperiment,
+  onBlockClick,
+  onBlockDoubleClick,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
@@ -159,6 +178,8 @@ function SortableGridBlockItem({
   const manifest = BLOCK_MANIFEST[block.type as BlockType];
   const typeLabel = manifest ? t(manifest.labelKey, block.type) : block.type;
 
+  const selected = isSelected || isMultiSelected;
+
   return (
     <div
       ref={setNodeRef}
@@ -170,7 +191,10 @@ function SortableGridBlockItem({
         rowSpanClass,
         isDragging && 'opacity-50 ring-4 ring-primary/30 scale-95 z-50',
         !isFrameless && 'min-h-[140px]',
-        !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]'
+        !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]',
+        // P4: Selection ring
+        selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
+        isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
       )}
     >
       {/* Drag Handle */}
@@ -202,7 +226,12 @@ function SortableGridBlockItem({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            onEdit(block);
+            onBlockClick?.(block, e);
+          }}
+          onDoubleClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onBlockDoubleClick?.(block);
           }}
           onTouchEnd={(e) => {
             e.stopPropagation();
@@ -212,6 +241,14 @@ function SortableGridBlockItem({
           aria-label={`Edit ${block.type} block`}
         />
       </div>
+
+      {/* Inline editor overlay */}
+      {onUpdateBlock && (
+        <InlineTextEditor
+          block={block}
+          onSave={(id, updates) => onUpdateBlock(id, updates)}
+        />
+      )}
 
       {/* Block type label - bottom-left */}
       <div className="absolute bottom-2 left-2 z-30 pointer-events-none">
@@ -331,6 +368,17 @@ export const GridEditor = memo(function GridEditor({
 
   const dndContextId = useId();
 
+  // P4: Multi-select state
+  const {
+    selectedBlockIds,
+    lastSelectedId,
+    toggleBlockSelection,
+    setSelectedBlockIds,
+    clearSelection,
+    setClipboardContent,
+    setInlineEditing,
+  } = useEditorStore();
+
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
 
@@ -371,13 +419,78 @@ export const GridEditor = memo(function GridEditor({
     onInsertBlock(blockType, pos);
   }, [onInsertBlock, blocks.length]);
 
-  // Build grid items: interleave dividers between blocks
+  // P4: Block click handler with multi-select support
+  const handleBlockClick = useCallback((block: Block, e: React.MouseEvent) => {
+    const meta = e.metaKey || e.ctrlKey;
+    const shift = e.shiftKey;
+
+    if (meta) {
+      // Cmd/Ctrl+click: toggle selection
+      toggleBlockSelection(block.id, true);
+      trackEditorAction('selection_changed', { blockType: block.type, source: 'grid' });
+    } else if (shift && lastSelectedId) {
+      // Shift+click: range select
+      const range = selectRange(blocks, lastSelectedId, block.id);
+      setSelectedBlockIds(range);
+      trackEditorAction('selection_changed', { blockType: block.type, source: 'grid' });
+    } else {
+      // Normal click: single select
+      toggleBlockSelection(block.id, false);
+    }
+  }, [toggleBlockSelection, lastSelectedId, blocks, setSelectedBlockIds]);
+
+  // P4: Double-click handler for inline edit
+  const handleBlockDoubleClick = useCallback((block: Block) => {
+    if (supportsInlineEdit(block.type as BlockType)) {
+      setInlineEditing(block.id);
+      trackEditorAction('inline_edit_opened', { blockType: block.type, source: 'grid' });
+    } else {
+      onEditBlock(block);
+    }
+  }, [setInlineEditing, onEditBlock]);
+
+  // P4: Bulk action handlers
+  const handleBulkDelete = useCallback(() => {
+    const result = bulkDelete(blocks, selectedBlockIds);
+    if (result.success && result.newBlocks) {
+      for (const id of result.affectedIds) {
+        onDeleteBlock(id);
+      }
+      clearSelection();
+      trackEditorAction('bulk_action_used', { source: 'grid' });
+    }
+  }, [blocks, selectedBlockIds, onDeleteBlock, clearSelection]);
+
+  const handleBulkDuplicate = useCallback(() => {
+    for (const id of selectedBlockIds) {
+      const block = blocks.find(b => b.id === id);
+      if (block && block.type !== 'profile') {
+        onDuplicateBlock?.(id);
+      }
+    }
+    trackEditorAction('bulk_action_used', { source: 'grid' });
+  }, [blocks, selectedBlockIds, onDuplicateBlock]);
+
+  const handleBulkMoveUp = useCallback(() => {
+    const result = bulkMoveUp(blocks, selectedBlockIds);
+    if (result.success && result.newBlocks) {
+      onReorderBlocks?.(result.newBlocks);
+    }
+  }, [blocks, selectedBlockIds, onReorderBlocks]);
+
+  const handleBulkMoveDown = useCallback(() => {
+    const result = bulkMoveDown(blocks, selectedBlockIds);
+    if (result.success && result.newBlocks) {
+      onReorderBlocks?.(result.newBlocks);
+    }
+  }, [blocks, selectedBlockIds, onReorderBlocks]);
+
+  // Build grid items
   const gridItems = useMemo(() => {
     const items: React.ReactNode[] = [];
     const profileOffset = profileBlock ? 1 : 0;
 
     contentBlocks.forEach((block, index) => {
-      // Insert divider before each block
       items.push(
         <InsertBetweenDivider
           key={`divider-${block.id}`}
@@ -396,16 +509,21 @@ export const GridEditor = memo(function GridEditor({
           onEdit={onEditBlock}
           onDelete={onDeleteBlock}
           onDuplicate={onDuplicateBlock}
+          onUpdateBlock={onUpdateBlock}
           isPremium={isPremium}
           premiumTier={premiumTier}
           isMobile={isMobile}
+          isSelected={selectedBlockIds.size <= 1 && selectedBlockIds.has(block.id)}
+          isMultiSelected={selectedBlockIds.size > 1 && selectedBlockIds.has(block.id)}
           onStartExperiment={setExperimentBlock}
+          onBlockClick={handleBlockClick}
+          onBlockDoubleClick={handleBlockDoubleClick}
         />
       );
     });
 
     return items;
-  }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, premiumTier]);
+  }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick]);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4 space-y-2 pb-32 md:pb-24">
@@ -491,6 +609,16 @@ export const GridEditor = memo(function GridEditor({
           />
         </motion.div>
       )}
+
+      {/* P4: Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedBlockIds.size}
+        onDuplicate={handleBulkDuplicate}
+        onDelete={handleBulkDelete}
+        onMoveUp={handleBulkMoveUp}
+        onMoveDown={handleBulkMoveDown}
+        onClearSelection={clearSelection}
+      />
 
       {/* Experiment Setup Dialog */}
       {experimentBlock && (
