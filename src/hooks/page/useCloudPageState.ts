@@ -171,13 +171,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         // Then auto-publish
         await publishPageMutation.mutateAsync();
 
-        // IndexNow notification (fire-and-forget, throttled, quality-gated)
-        // P2.9: Now also submits eligible child service URLs alongside parent
+        // P2.11: Diff-based IndexNow — only submit changed child URLs
         const slug = sanitizedData.slug;
         const pageIdForIndexing = savedPageId || sanitizedData.id;
         if (slug && pageIdForIndexing) {
           const { score } = computeQualityScore(sanitizedData);
-          // Fetch service_slugs (computed server-side by save_page_blocks)
           void (async () => {
             try {
               const { data: pageRow } = await supabase
@@ -185,10 +183,19 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
                 .select('service_slugs')
                 .eq('id', pageIdForIndexing)
                 .single();
-              const svcSlugs = pageRow?.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
-              await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update', svcSlugs);
+              const currentSvcSlugs = pageRow?.service_slugs as Record<string, ServiceSlugEntryRaw> | null;
+              const previousSvcSlugs = previousServiceSlugsRef.current;
+              
+              await notifyIndexNow(
+                slug, score, !!sanitizedData.isPublished,
+                pageIdForIndexing, 'update',
+                currentSvcSlugs, previousSvcSlugs,
+              );
+              
+              // Update snapshot for next diff
+              previousServiceSlugsRef.current = currentSvcSlugs;
             } catch {
-              // Fallback: send without child URLs
+              // Fallback: send without diff (treats as first snapshot)
               await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
             }
           })();
