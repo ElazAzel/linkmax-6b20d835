@@ -1,6 +1,7 @@
 /**
  * EditorScreen - Page editor with block management
  * Mobile-first design with GridEditor and block editing capabilities
+ * P5: Structure view, review modes, friction recovery, sections wired
  */
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,14 +13,20 @@ import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
 import Redo2 from 'lucide-react/dist/esm/icons/redo-2';
 import History from 'lucide-react/dist/esm/icons/history';
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb';
+import Layers from 'lucide-react/dist/esm/icons/layers';
 import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { GridEditor } from '@/components/editor/GridEditor';
+import { StructureView } from '@/components/editor/StructureView';
 import { cn } from '@/lib/utils/utils';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
+import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
+import { useEditorStore } from '@/store/useEditorStore';
+import { dissolveSection, deleteSection, duplicateSection } from '@/lib/editor/section-engine';
+import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
@@ -73,9 +80,77 @@ export const EditorScreen = memo(function EditorScreen({
 }: EditorScreenProps) {
   const { t } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
+  const [structureOpen, setStructureOpen] = useState(false);
+
+  // P5: Store state for sections & review
+  const {
+    sectionMeta,
+    collapsedSections,
+    toggleSectionCollapse,
+    setSectionMeta,
+    removeSectionMeta,
+    reviewMode,
+    setReviewMode,
+  } = useEditorStore();
 
   // Intelligence layer — pure computation, <1ms
   const intelligence = usePageIntelligence(pageData, pageData?.niche);
+
+  // P5: Friction recovery
+  const { signal: frictionSignal, dismiss: dismissFriction, accept: acceptFriction } = useFrictionRecovery();
+
+  // P5: Section handlers for StructureView
+  const handleDissolveSection = useCallback((sectionId: string) => {
+    if (!pageData) return;
+    const newBlocks = dissolveSection(pageData.blocks, sectionId);
+    onReorderBlocks(newBlocks);
+    removeSectionMeta(sectionId);
+    trackEditorAction('section_dissolved', { source: 'structure' });
+  }, [pageData, onReorderBlocks, removeSectionMeta]);
+
+  const handleDeleteSection = useCallback((sectionId: string) => {
+    if (!pageData) return;
+    const newBlocks = deleteSection(pageData.blocks, sectionId);
+    onReorderBlocks(newBlocks);
+    removeSectionMeta(sectionId);
+    trackEditorAction('section_deleted', { source: 'structure' });
+  }, [pageData, onReorderBlocks, removeSectionMeta]);
+
+  const handleDuplicateSection = useCallback((sectionId: string) => {
+    if (!pageData) return;
+    const result = duplicateSection(pageData.blocks, sectionId);
+    onReorderBlocks(result.blocks);
+    const originalMeta = sectionMeta.get(sectionId);
+    if (originalMeta) {
+      setSectionMeta(result.newSectionId, {
+        ...originalMeta,
+        id: result.newSectionId,
+        label: `${originalMeta.label} (copy)`,
+        createdAt: Date.now(),
+      });
+    }
+    trackEditorAction('section_duplicated', { source: 'structure' });
+  }, [pageData, onReorderBlocks, sectionMeta, setSectionMeta]);
+
+  const handleRenameSection = useCallback((sectionId: string, label: string) => {
+    const existing = sectionMeta.get(sectionId);
+    if (existing) {
+      setSectionMeta(sectionId, { ...existing, label });
+    } else {
+      setSectionMeta(sectionId, { id: sectionId, label, collapsed: false, createdAt: Date.now() });
+    }
+  }, [sectionMeta, setSectionMeta]);
+
+  // Friction action handler
+  const handleFrictionAction = useCallback(() => {
+    if (!frictionSignal) return;
+    acceptFriction();
+    if (frictionSignal.suggestedActionKey === 'open_structure_view') {
+      setStructureOpen(true);
+    } else if (frictionSignal.suggestedActionKey === 'review_mode') {
+      setReviewMode('problematic');
+    }
+  }, [frictionSignal, acceptFriction, setReviewMode]);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
@@ -83,16 +158,9 @@ export const EditorScreen = memo(function EditorScreen({
 
   const isPublished = pageData.isPublished || false;
   const blockCount = pageData.blocks.length;
-
-  // Count non-profile blocks to determine if user is experienced
   const contentBlockCount = pageData.blocks.filter(b => b.type !== 'profile').length;
-
-  // Page has content if it has more than just a profile block
   const hasContent = pageData.blocks.length > 1 ||
     (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
-
-  // Show AI builder only for new users (less than 2 content blocks)
-  const showAIBuilder = contentBlockCount < 2;
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -188,6 +256,18 @@ export const EditorScreen = memo(function EditorScreen({
             </Button>
           )}
 
+          {/* P5: Structure View button */}
+          {hasContent && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 rounded-xl shrink-0 gap-1.5"
+              onClick={() => setStructureOpen(true)}
+            >
+              <Layers className="h-3.5 w-3.5" />
+              {t('editor.structure', 'Структура')}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -214,6 +294,28 @@ export const EditorScreen = memo(function EditorScreen({
         );
       })()}
 
+      {/* P5: Friction recovery hint */}
+      {frictionSignal && (
+        <div className="mx-4 mt-2 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+          <Lightbulb className="h-4 w-4 text-amber-500 shrink-0" />
+          <span className="text-xs text-foreground/80 flex-1">
+            {t(`friction.${frictionSignal.suggestedActionKey}`, frictionSignal.suggestedAction)}
+          </span>
+          <button
+            onClick={handleFrictionAction}
+            className="text-xs font-semibold text-primary hover:underline shrink-0"
+          >
+            {t('friction.try', 'Попробовать')}
+          </button>
+          <button
+            onClick={dismissFriction}
+            className="p-0.5 rounded hover:bg-muted shrink-0"
+          >
+            <X className="h-3 w-3 text-muted-foreground" />
+          </button>
+        </div>
+      )}
+
       {/* Grid Editor */}
       <div className="pt-4">
         <GridEditor
@@ -230,6 +332,29 @@ export const EditorScreen = memo(function EditorScreen({
           onDuplicateBlock={onDuplicateBlock}
         />
       </div>
+
+      {/* P5: Structure View 2.0 */}
+      <StructureView
+        open={structureOpen}
+        onOpenChange={setStructureOpen}
+        blocks={pageData.blocks}
+        onBlockSelect={(blockId) => {
+          setStructureOpen(false);
+          onEditBlock(pageData.blocks.find(b => b.id === blockId) || pageData.blocks[0]);
+        }}
+        onBlockDuplicate={onDuplicateBlock}
+        onBlockDelete={onDeleteBlock}
+        sectionMeta={sectionMeta}
+        collapsedSections={collapsedSections}
+        onToggleSectionCollapse={toggleSectionCollapse}
+        onDissolveSection={handleDissolveSection}
+        onDeleteSection={handleDeleteSection}
+        onDuplicateSection={handleDuplicateSection}
+        onRenameSection={handleRenameSection}
+        blockQuality={intelligence?.blockQuality}
+        reviewMode={reviewMode}
+        onSetReviewMode={setReviewMode}
+      />
     </div>
   );
 });

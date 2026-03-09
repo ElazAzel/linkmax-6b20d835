@@ -1,126 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# P5 Completion Plan — Wire Everything End-to-End
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## Audit: What's broken/unwired
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-| Module | Status | Used by |
-|--------|--------|---------|
-| `section-engine.ts` | Created | Only type import in store |
-| `transform-engine.ts` | Created | Nothing |
-| `friction-detector.ts` | Created | Nothing |
-| `autosave-batcher.ts` | Created | Nothing |
-| `insert-ranker.ts` | Created | Nothing |
-| `history-compressor.ts` | Created | ✅ wired in useEditorHistory |
-| Store: `sectionMeta`, `collapsedSections`, `reviewMode` | Declared | No component reads them |
-| StructureView | Basic flat list | No sections, no filters, no badges |
+### Новая тарифная модель (ADR 0026)
 
-## Implementation Plan (in priority order)
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
-### 1. StructureView 2.0 — Full rewrite
-**File: `src/components/editor/StructureView.tsx`**
+---
 
-This is the highest-leverage change because it surfaces sections, quality, and review modes.
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-- Add section tree display: group blocks by `sectionId`, show section headers with collapse toggle
-- Add quality badge dots (green/yellow/red) per block from `BlockQualityReport[]` (new prop)
-- Add filter chips: All | Problematic | Hidden | CTA/Contact
-- Add search input filtering by block title/type
-- Add section actions: create from selection, rename, collapse, dissolve, duplicate, delete
-- Accept new props: `blockQuality`, `intelligence`, `selectedBlockIds`, `reviewMode`, `sectionMeta`, `collapsedSections`
-- Section header UI: label, collapse/expand toggle, section action dropdown
-- Wire section operations through new callbacks: `onCreateSection`, `onDissolveSection`, `onRenameSection`, `onToggleSectionCollapse`
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-### 2. GridEditor — Section & review mode integration
-**File: `src/components/editor/GridEditor.tsx`**
+---
 
-- Read `collapsedSections` and `sectionMeta` from store
-- Render section headers between blocks when `sectionId` changes
-- Collapsed sections: render header only, skip block rendering
-- Read `reviewMode` from store; when not 'normal', dim/collapse non-matching blocks
-- Add "Create section" action to BulkActionBar when 2+ blocks selected
-- Section header component: inline label, collapse toggle, quick actions dropdown
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-### 3. EditorScreen — Pass intelligence + section/review state down
-**File: `src/components/dashboard-v2/screens/EditorScreen.tsx`**
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-- Pass `intelligence` (already computed) to StructureView and GridEditor
-- Add Structure View button to toolbar (already exists as `History` button pattern)
-- Add review mode toggle buttons to toolbar
-- Wire section CRUD operations via block array mutations (using section-engine pure functions)
-- Pass section callbacks to GridEditor and StructureView
+---
 
-### 4. Transform engine UI integration
-**File: `src/components/editor/BlockContextToolbar.tsx`**
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-- Import `getTransformTargets` from transform-engine
-- Add "Convert to..." button that shows dropdown of valid targets
-- Show lossy field warnings inline
-- On confirm: call `transformBlock`, update block via `onUpdateBlock`
-- Track `transform_used` analytics event
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
-### 5. Friction recovery wiring
-**New file: `src/hooks/editor/useFrictionRecovery.ts`**
+---
 
-- Create hook that manages `EditorEventBuffer` instance
-- Expose `pushEvent(type, blockType?, blockId?)` function
-- Run `detect()` on each event push
-- Return current `FrictionSignal | null`
-- Wire into EditorScreen: show unobtrusive hint banner (same pattern as intelligence hint)
-- Push events from: add/delete/undo/redo handlers, editor open/close, palette open/close
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-### 6. Autosave batcher — Wrap in hook
-**New file: `src/hooks/editor/useAutosaveBatcher.ts`**
+## Текущее состояние LinkMAX Business Zones
 
-- Create hook wrapping `AutosaveBatcher` class
-- Accept the save callback from dashboard
-- Expose `enqueue(type: MutationType)` 
-- Auto-cleanup on unmount
-- Wire into EditorScreen/dashboard save flow by having the parent pass `onSave` through the batcher
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-### 7. Insert ranker wiring
-**File: `src/components/editor/BlockInsertButton.tsx`**
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-- Import `rankBlocksForInsert` from insert-ranker
-- Use ranked results to sort the "recommended" section instead of current `getRecommendedBlocks`
-- Pass position context (insert-between divider position) for position-aware ranking
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
-### 8. Block add popup close bug check
-**File: `src/components/editor/BlockInsertButton.tsx`**
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-The current flow looks correct: `handleInsert` calls `setIsOpen(false)` synchronously before `onInsert`. But there may be a race if `onInsert` triggers a re-render that resets `isOpen`. Need to verify the `InsertBetweenDivider` in GridEditor properly closes after insert — it uses local `sheetOpen` state and passes `onInsert` without closing. **Bug found**: `InsertBetweenDivider.handleInsert` calls `onInsert(blockType, position)` but does NOT close the sheet — the sheet close happens inside `BlockInsertButton.handleInsert` which calls `setIsOpen(false)`. This should work because `BlockInsertButton` manages `isOpen` via the `externalIsOpen`/`onOpenChange` props. Looks correct, but will verify the sequencing.
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-### 9. Cleanup pass
-- Remove unused imports
-- Verify all new store fields are consumed
-- Verify analytics events are tracked for section/transform/friction actions
-- Memoize section derivation in GridEditor (call `getSections()` once in useMemo)
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-## Key architectural decisions
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-1. **Sections stay flat**: `sectionId` on blocks, metadata in store. No nested tree.
-2. **Review mode = filter function**: A derived selector `getReviewFilteredIds(blocks, reviewMode, intelligence)` determines visible blocks. Non-matching blocks get `opacity-30` + collapsed, not removed.
-3. **Friction recovery = singleton buffer**: One `EditorEventBuffer` per editor session via hook, resets on page change.
-4. **Autosave batcher = optional wrapper**: Wraps existing save, doesn't replace it. Enqueue calls replace direct save calls.
-5. **Transform = in-place block update**: Uses `onUpdateBlock(id, transformedBlock)` — single history entry.
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-## Files to create
-- `src/hooks/editor/useFrictionRecovery.ts`
-- `src/hooks/editor/useAutosaveBatcher.ts`
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-## Files to modify
-- `src/components/editor/StructureView.tsx` — major rewrite
-- `src/components/editor/GridEditor.tsx` — section headers, review mode, create-section in bulk bar
-- `src/components/dashboard-v2/screens/EditorScreen.tsx` — wire intelligence, structure view, review mode, section ops, friction
-- `src/components/editor/BlockContextToolbar.tsx` — add transform action
-- `src/components/editor/BulkActionBar.tsx` — add "Group into section" button
-- `src/components/editor/BlockInsertButton.tsx` — use insert-ranker
-- `src/store/useEditorStore.ts` — minor: export ReviewMode type already done
+### Фаза 4: Аналитика Зоны (P1)
 
-## What stays for next phase
-- Drag-and-drop across sections (complex DnD rework)
-- Section templates/presets
-- Section-level scoring
-- Full friction analytics dashboard
-- ML-based recommendation re-ranking
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+
+---
+
+## Что НЕ нужно копировать из Bitrix24
+
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

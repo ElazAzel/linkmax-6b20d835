@@ -6,6 +6,8 @@ import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import FlaskConical from 'lucide-react/dist/esm/icons/flask-conical';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import FolderOpen from 'lucide-react/dist/esm/icons/folder-open';
 import {
   DndContext,
   DragOverlay,
@@ -40,6 +42,7 @@ import { bulkDelete, bulkDuplicate, bulkMoveUp, bulkMoveDown } from '@/lib/edito
 import { copyBlock } from '@/lib/editor/clipboard-engine';
 import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
+import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
@@ -119,6 +122,8 @@ interface GridEditorProps {
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onReorderBlocks?: (blocks: Block[]) => void;
   onDuplicateBlock?: (id: string) => void;
+  // P5: Section callbacks
+  onCreateSection?: (blocks: Block[], selectedIds: Set<string>, label: string) => void;
 }
 
 interface SortableGridBlockItemProps {
@@ -133,6 +138,7 @@ interface SortableGridBlockItemProps {
   isMobile?: boolean;
   isSelected?: boolean;
   isMultiSelected?: boolean;
+  isDimmed?: boolean;
   onStartExperiment?: (block: Block) => void;
   onBlockClick?: (block: Block, e: React.MouseEvent) => void;
   onBlockDoubleClick?: (block: Block) => void;
@@ -149,6 +155,7 @@ function SortableGridBlockItem({
   isMobile = false,
   isSelected = false,
   isMultiSelected = false,
+  isDimmed = false,
   onStartExperiment,
   onBlockClick,
   onBlockDoubleClick,
@@ -195,6 +202,8 @@ function SortableGridBlockItem({
         // P4: Selection ring
         selected && !isDragging && 'ring-2 ring-primary/60 ring-offset-1 ring-offset-background',
         isMultiSelected && !isDragging && 'ring-2 ring-primary/40',
+        // P5: Review mode dimming
+        isDimmed && 'opacity-30 pointer-events-none',
       )}
     >
       {/* Drag Handle */}
@@ -348,6 +357,33 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
   );
 }
 
+// ─── Section Header in Grid ────────────────────────────────────
+function SectionHeader({
+  label,
+  blockCount,
+  isCollapsed,
+  onToggleCollapse,
+}: {
+  label: string;
+  blockCount: number;
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
+}) {
+  return (
+    <div className="col-span-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/30 border border-border/10">
+      <button onClick={onToggleCollapse} className="p-0.5">
+        <ChevronRight className={cn(
+          'h-4 w-4 text-muted-foreground transition-transform',
+          !isCollapsed && 'rotate-90'
+        )} />
+      </button>
+      <FolderOpen className="h-4 w-4 text-primary shrink-0" />
+      <span className="text-xs font-bold text-foreground flex-1 truncate">{label}</span>
+      <span className="text-[10px] text-muted-foreground">{blockCount}</span>
+    </div>
+  );
+}
+
 export const GridEditor = memo(function GridEditor({
   blocks,
   isPremium,
@@ -360,6 +396,7 @@ export const GridEditor = memo(function GridEditor({
   onUpdateBlock,
   onReorderBlocks,
   onDuplicateBlock,
+  onCreateSection,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -368,7 +405,7 @@ export const GridEditor = memo(function GridEditor({
 
   const dndContextId = useId();
 
-  // P4: Multi-select state
+  // P4: Multi-select state + P5: section/review state
   const {
     selectedBlockIds,
     lastSelectedId,
@@ -377,10 +414,40 @@ export const GridEditor = memo(function GridEditor({
     clearSelection,
     setClipboardContent,
     setInlineEditing,
+    sectionMeta,
+    collapsedSections,
+    toggleSectionCollapse,
+    setSectionMeta,
+    reviewMode,
   } = useEditorStore();
 
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
+
+  // P5: Derive sections for rendering
+  const sections = useMemo(() => getSections(blocks), [blocks]);
+  const sectionBlockIds = useMemo(() => {
+    const set = new Set<string>();
+    sections.forEach(s => s.blockIds.forEach(id => set.add(id)));
+    return set;
+  }, [sections]);
+
+  // P5: Review mode - determine dimmed blocks
+  const reviewDimmedIds = useMemo(() => {
+    if (reviewMode === 'normal') return new Set<string>();
+    const ctaTypes = new Set(['button', 'link', 'messenger', 'form', 'booking', 'newsletter']);
+    const dimmed = new Set<string>();
+    contentBlocks.forEach(b => {
+      if (reviewMode === 'cta_contact' && !ctaTypes.has(b.type)) {
+        dimmed.add(b.id);
+      }
+      // Other review modes can be added here
+    });
+    return dimmed;
+  }, [reviewMode, contentBlocks]);
+
+  // P5: Can create section from current selection
+  const canGroup = useMemo(() => canCreateSection(blocks, selectedBlockIds), [blocks, selectedBlockIds]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -425,16 +492,13 @@ export const GridEditor = memo(function GridEditor({
     const shift = e.shiftKey;
 
     if (meta) {
-      // Cmd/Ctrl+click: toggle selection
       toggleBlockSelection(block.id, true);
       trackEditorAction('selection_changed', { blockType: block.type, source: 'grid' });
     } else if (shift && lastSelectedId) {
-      // Shift+click: range select
       const range = selectRange(blocks, lastSelectedId, block.id);
       setSelectedBlockIds(range);
       trackEditorAction('selection_changed', { blockType: block.type, source: 'grid' });
     } else {
-      // Normal click: single select
       toggleBlockSelection(block.id, false);
     }
   }, [toggleBlockSelection, lastSelectedId, blocks, setSelectedBlockIds]);
@@ -485,12 +549,52 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [blocks, selectedBlockIds, onReorderBlocks]);
 
-  // Build grid items
+  // P5: Create section from selection
+  const handleCreateSection = useCallback(() => {
+    if (!canGroup) return;
+    const label = prompt(t('editor.sectionName', 'Имя секции:'), t('editor.newSection', 'Новая секция'));
+    if (!label) return;
+
+    const result = createSection(blocks, selectedBlockIds, label);
+    // Update blocks via reorder (which replaces entire block array)
+    onReorderBlocks?.(result.blocks);
+    // Store section metadata
+    setSectionMeta(result.section.id, result.section);
+    clearSelection();
+    trackEditorAction('section_created', { source: 'grid' });
+  }, [canGroup, blocks, selectedBlockIds, onReorderBlocks, setSectionMeta, clearSelection, t]);
+
+  // Build grid items with section headers
   const gridItems = useMemo(() => {
     const items: React.ReactNode[] = [];
     const profileOffset = profileBlock ? 1 : 0;
+    let currentSectionId: string | undefined;
 
     contentBlocks.forEach((block, index) => {
+      const blockSectionId = (block as any).sectionId as string | undefined;
+
+      // Insert section header when entering a new section
+      if (blockSectionId && blockSectionId !== currentSectionId) {
+        const meta = sectionMeta.get(blockSectionId);
+        const section = sections.find(s => s.id === blockSectionId);
+        const isCollapsed = collapsedSections.has(blockSectionId);
+        items.push(
+          <SectionHeader
+            key={`section-${blockSectionId}`}
+            label={meta?.label || t('editor.section', 'Секция')}
+            blockCount={section?.blockIds.length || 0}
+            isCollapsed={isCollapsed}
+            onToggleCollapse={() => toggleSectionCollapse(blockSectionId)}
+          />
+        );
+      }
+      currentSectionId = blockSectionId;
+
+      // Skip blocks in collapsed sections
+      if (blockSectionId && collapsedSections.has(blockSectionId)) {
+        return;
+      }
+
       items.push(
         <InsertBetweenDivider
           key={`divider-${block.id}`}
@@ -515,6 +619,7 @@ export const GridEditor = memo(function GridEditor({
           isMobile={isMobile}
           isSelected={selectedBlockIds.size <= 1 && selectedBlockIds.has(block.id)}
           isMultiSelected={selectedBlockIds.size > 1 && selectedBlockIds.has(block.id)}
+          isDimmed={reviewDimmedIds.has(block.id)}
           onStartExperiment={setExperimentBlock}
           onBlockClick={handleBlockClick}
           onBlockDoubleClick={handleBlockDoubleClick}
@@ -523,7 +628,7 @@ export const GridEditor = memo(function GridEditor({
     });
 
     return items;
-  }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick]);
+  }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t]);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4 space-y-2 pb-32 md:pb-24">
@@ -610,7 +715,7 @@ export const GridEditor = memo(function GridEditor({
         </motion.div>
       )}
 
-      {/* P4: Bulk Action Bar */}
+      {/* P4: Bulk Action Bar - P5: with section creation */}
       <BulkActionBar
         selectedCount={selectedBlockIds.size}
         onDuplicate={handleBulkDuplicate}
@@ -618,6 +723,8 @@ export const GridEditor = memo(function GridEditor({
         onMoveUp={handleBulkMoveUp}
         onMoveDown={handleBulkMoveDown}
         onClearSelection={clearSelection}
+        onCreateSection={handleCreateSection}
+        canCreateSection={canGroup}
       />
 
       {/* Experiment Setup Dialog */}
