@@ -301,7 +301,8 @@ export const StructureView = memo(function StructureView({
               const isCollapsed = collapsedSections.has(section.id);
               const sectionBlocks = section.blockIds
                 .map(id => contentBlocks.find(b => b.id === id))
-                .filter((b): b is Block => !!b && filterBlock(b));
+                .filter((b): b is NonNullable<typeof b> => !!b)
+                .filter(b => filterBlock(b));
 
               if (sectionBlocks.length === 0 && searchQuery) return null;
 
