@@ -321,9 +321,9 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
         if (item.question && item.answer) faqItems.push({ q: String(item.question), a: String(item.answer) });
       }
     } else if (b.type === 'pricing' && content?.items && Array.isArray(content.items)) {
-      for (const item of (content.items as Array<{ name?: string; description?: string; price?: number }>).slice(0, 8)) {
+      for (const item of (content.items as Array<{ id?: string; name?: string; description?: string; price?: number }>).slice(0, 8)) {
         if (item.name) {
-          services.push({ name: String(item.name), description: item.description ? String(item.description) : undefined, price: item.price ? String(item.price) : undefined });
+          services.push({ id: String(item.id || ''), name: String(item.name), description: item.description ? String(item.description) : undefined, price: item.price ? String(item.price) : undefined });
           if (!knowsAbout.includes(String(item.name))) knowsAbout.push(String(item.name));
         }
       }
