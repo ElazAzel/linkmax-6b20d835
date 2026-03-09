@@ -70,6 +70,14 @@ interface EditorState {
     setStructureViewFilters: (filters: StructureFilter[]) => void;
     toggleStructureFilter: (filter: StructureFilter) => void;
 
+    // P5 Actions: Sections
+    setSectionMeta: (id: string, meta: SectionMeta) => void;
+    removeSectionMeta: (id: string) => void;
+    toggleSectionCollapse: (id: string) => void;
+
+    // P5 Actions: Review mode
+    setReviewMode: (mode: ReviewMode) => void;
+
     // Helpers
     closeEditor: () => void;
     reset: () => void;
