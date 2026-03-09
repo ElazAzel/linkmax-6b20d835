@@ -1,337 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-## A. Verdict
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-### 8 editor gaps after P4:
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-1. **No sections/groups** — 50-block pages are flat lists with zero semantic structure
-2. **No review/focus modes** — can't filter to only problematic or CTA blocks
-3. **No replace/transform** — clipboard-engine defines `CONVERTIBLE_PAIRS` but no UI or execution path exists
-4. **No friction recovery** — editor doesn't detect stuck users (undo loops, insert/delete cycles)
-5. **Structure view is passive** — no filters, no quality badges, no section tree, no search
-6. **History gets noisy** — rapid inline edits create 7 separate history entries; no compression
-7. **No autosave batching** — every mutation triggers save independently
-8. **No virtualization** — GridEditor renders all blocks + dividers; 50+ blocks = render pain
+### Новая тарифная модель (ADR 0026)
 
-### Where editor still fatigues:
-- Long pages require endless scrolling with no way to collapse regions
-- Can't quickly "show me only what's broken"
-- Replace block type requires delete + re-create + re-fill
-- History fills up with trivial edits, losing important actions
-
----
-
-## B. P5 Scope
-
-Implementing in priority order:
-
-1. **Section model** — lightweight metadata overlay on flat block array
-2. **Structure view 2.0** — filters, quality badges, section tree
-3. **Review/focus modes** — filter blocks by state/role
-4. **Replace/transform engine** — block type conversion with field transfer
-5. **Friction recovery** — event-based stuck detection + suggestions
-6. **Smart autosave batching** — debounce queue with flush triggers
-7. **History compression** — merge rapid same-field edits
-8. **Performance hardening** — memoization, stable selectors, lazy structure view
-9. **Observability upgrades** — new analytics events for P5 features
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## C. Architecture
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-### New files:
-```
-src/lib/editor/
-├── section-engine.ts          # Section CRUD, pure functions
-├── transform-engine.ts        # Block type conversion logic
-├── friction-detector.ts       # Stuck-state detection rules
-├── history-compressor.ts      # History entry merging
-└── autosave-batcher.ts        # Save queue with flush logic
-```
-
-### Modified files:
-```
-src/types/blocks/base.ts         # Add sectionId to block base
-src/store/useEditorStore.ts      # Section state, review mode, collapsed sections
-src/components/editor/StructureView.tsx  # Full rewrite: sections, filters, badges
-src/components/editor/GridEditor.tsx     # Section rendering, collapse support
-src/components/editor/EditorKeyboardHandler.tsx  # Section shortcuts
-src/hooks/editor/useEditorHistory.ts     # Compression integration
-src/lib/editor/editor-analytics.ts       # New P5 events
-```
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## D. Implementation Details
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-### 1. Section Model (`section-engine.ts`)
-
-**Data model choice: flat array + section metadata on blocks.**
-
-This preserves the existing `Block[]` architecture. Each block gets an optional `sectionId?: string`. Sections are derived from contiguous runs of blocks with the same `sectionId`.
-
-```typescript
-// Added to Block base type
-sectionId?: string;
-
-// Section metadata stored in a map (in store, not DB)
-interface SectionMeta {
-  id: string;
-  label: string;
-  collapsed: boolean;
-  createdAt: number;
-}
-```
-
-Pure functions:
-- `createSection(blocks, selectedIds, label)` → assigns sectionId to selected blocks
-- `dissolveSection(blocks, sectionId)` → clears sectionId
-- `mergeSections(blocks, sectionIdA, sectionIdB)` → unifies
-- `moveSection(blocks, sectionId, direction)` → moves all section blocks up/down
-- `duplicateSection(blocks, sectionId)` → deep-copies section blocks
-- `deleteSection(blocks, sectionId)` → removes all blocks in section
-- `getSections(blocks)` → derives ordered section list from block array
-- `getSectionBlocks(blocks, sectionId)` → blocks in a section
-
-**Why flat + sectionId:** No migration needed. Existing pages work unchanged (sectionId undefined = ungrouped). No nested tree complexity. DnD stays on flat array. History stays on flat Block[].
-
-### 2. Structure View 2.0
-
-Full enhancement of existing `StructureView.tsx`:
-
-- **Section tree:** Group blocks by sectionId, show section headers with collapse/expand
-- **Filters:** Filter chips: All | Incomplete | Hidden | CTA/Contact | By Type
-- **Quality badges:** Dot indicator (green/yellow/red) per block from intelligence `blockQuality`
-- **Search:** Text filter matching block title/type
-- **Section actions:** Rename, collapse, dissolve, duplicate, delete, move up/down
-- **Jump to block:** Click scrolls GridEditor to that block
-- **Props expansion:** Accept `blockQuality: BlockQualityReport[]` and `structureFilters` from store
-
-### 3. Review/Focus Modes
-
-Add `reviewMode` to store: `'normal' | 'problematic' | 'cta_contact' | 'hidden' | 'incomplete'`
-
-When active:
-- GridEditor filters displayed blocks (non-matching blocks get collapsed/dimmed)
-- StructureView highlights matching blocks
-- A small review bar shows "Showing X of Y blocks" with exit button
-- Navigation through reviewed blocks via arrow keys
-
-Implementation: derived selector `getFilteredBlockIds(blocks, reviewMode, intelligence)` → Set of visible IDs. GridEditor wraps non-matching blocks in collapsed state.
-
-### 4. Replace/Transform Engine (`transform-engine.ts`)
-
-Extends existing `CONVERTIBLE_PAIRS` from clipboard-engine.
-
-```typescript
-interface TransformResult {
-  success: boolean;
-  newBlock: Block;
-  lostFields: string[];
-  transferredFields: string[];
-}
-
-// Compatibility matrix with field mappings
-const TRANSFORM_MAP: Record<string, {
-  targets: string[];
-  fieldMap: Record<string, string>;  // fromField → toField
-  lossyFields: string[];
-}> = {
-  button: {
-    targets: ['link', 'messenger'],
-    fieldMap: { label: 'label', url: 'url' },
-    lossyFields: ['variant', 'animation'],
-  },
-  link: {
-    targets: ['button'],
-    fieldMap: { title: 'label', url: 'url' },
-    lossyFields: ['description', 'imageUrl'],
-  },
-  // ... etc
-};
-```
-
-Functions:
-- `canTransform(fromType, toType)` → boolean
-- `getTransformTargets(blockType)` → BlockType[]
-- `transformBlock(block, toType)` → TransformResult
-- `getTransformWarning(fromType, toType)` → lossy field list
-
-UI: In BlockContextToolbar, "Convert to..." submenu showing valid targets with lossy warnings.
-
-### 5. Friction Recovery (`friction-detector.ts`)
-
-Event-based detector using a sliding window of recent editor actions.
-
-```typescript
-interface FrictionSignal {
-  type: 'undo_loop' | 'insert_delete_cycle' | 'reorder_chaos' | 'edit_abandon' | 'palette_indecision';
-  confidence: number;
-  suggestedAction: string;
-  suggestedActionKey: string;
-}
-
-function detectFriction(recentEvents: EditorEvent[], pageState: PageData): FrictionSignal | null
-```
-
-Detection rules:
-- `undo_loop`: 3+ undos in 30s → suggest review mode
-- `insert_delete_cycle`: same block type added+deleted 2+ times in 60s → suggest preset
-- `edit_abandon`: 3+ editor opens without save in 60s → suggest inline edit
-- `palette_indecision`: 3+ palette opens without insert in 45s → suggest recommended blocks
-- `reorder_chaos`: 4+ reorders in 30s → suggest structural repair
-
-Cool-down: 120s between suggestions. Dismiss memory in session storage.
-
-Event buffer: last 50 editor actions stored in-memory ring buffer.
-
-### 6. Smart Autosave Batching (`autosave-batcher.ts`)
-
-```typescript
-interface SaveBatcher {
-  enqueue(mutation: BlockMutation): void;
-  flush(): Promise<void>;
-  cancel(): void;
-}
-```
-
-Rules:
-- Inline edits: debounce 1500ms
-- Reorder: debounce 800ms
-- Add/delete: debounce 500ms
-- Bulk actions: debounce 300ms
-- Dangerous (delete all): flush immediately
-- Blur/tab switch/route leave: flush immediately
-- Merge queued mutations of same block into single update
-
-Integration: wrap existing autosave in `useDashboard` with batcher.
-
-### 7. History Compression (`history-compressor.ts`)
-
-```typescript
-function shouldMergeActions(prev: HistoryAction, next: HistoryAction): boolean
-function mergeActions(prev: HistoryAction, next: HistoryAction): HistoryAction
-```
-
-Merge rules:
-- Same blockId + type='update' + within 2000ms → merge (keep first previousState, last newState)
-- Consecutive reorders within 1000ms → merge
-- Bulk action = single entry (already handled)
-- Never merge across different blockIds
-- Never merge add/delete with updates
-
-Integration: call `shouldMergeActions` in `recordAction` before appending.
-
-### 8. Performance Hardening
-
-- **GridEditor:** Memoize `SortableGridBlockItem` with `React.memo` + stable callback refs (already memo'd but deps may be unstable)
-- **Store selectors:** Create derived selectors for `selectedCount`, `hasSelection`, `isBlockSelected(id)` to avoid Set recreation
-- **Structure view:** Lazy render collapsed section contents
-- **Intelligence hook:** Add `useMemo` dependency check — only recompute when blocks array reference changes
-- **Insert ranker:** Cache results until blocks change
-- **DnD:** Use `useId` for stable DndContext key (already done)
-
-### 9. Observability
-
-New analytics events:
-- `section_created`, `section_dissolved`, `section_collapsed`, `section_moved`
-- `review_mode_entered`, `review_mode_exited`
-- `transform_used`, `transform_cancelled`
-- `friction_detected`, `friction_suggestion_accepted`, `friction_suggestion_dismissed`
-- `autosave_batch_flushed` (with batch size)
-- `history_compressed` (with merge count)
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## E. Data Model
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-### Block base extension:
-```typescript
-// In BlockGridProps (base.ts), add:
-sectionId?: string;
-```
-
-### Store additions:
-```typescript
-// useEditorStore
-sectionMeta: Map<string, SectionMeta>;
-collapsedSections: Set<string>;
-reviewMode: 'normal' | 'problematic' | 'cta_contact' | 'hidden' | 'incomplete';
-
-// Actions
-setSectionMeta(id: string, meta: SectionMeta): void;
-removeSectionMeta(id: string): void;
-toggleSectionCollapse(id: string): void;
-setReviewMode(mode: string): void;
-```
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## F. UX Behavior
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-### Section workflow:
-1. Select 3+ blocks → Bulk bar shows "Group into section"
-2. Click → prompted for label → blocks get sectionId
-3. Section header appears in GridEditor with collapse/expand toggle
-4. In StructureView, section appears as collapsible tree node
-5. Cmd+G = keyboard shortcut for group selected
+## Текущее состояние LinkMAX Business Zones
 
-### Review mode workflow:
-1. User clicks filter in StructureView or toolbar
-2. Non-matching blocks dim/collapse in GridEditor
-3. Arrow keys navigate only through matching blocks
-4. "Exit review" button restores normal mode
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-### Transform workflow:
-1. Select block → context toolbar → "Convert to..." 
-2. Shows valid targets with "⚠ loses: animation, variant" warnings
-3. Confirm → block type changes, compatible fields transfer
-4. Single history entry, undo-safe
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+
+### Фаза 3: Tasks -- закрытие пробелов (P1)
+
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+
+### Фаза 4: Аналитика Зоны (P1)
+
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## G. Verification
+## Что НЕ нужно копировать из Bitrix24
 
-1. Build passes — no TS errors from sectionId addition
-2. Existing pages work — undefined sectionId = no sections, zero migration
-3. Section operations are undo-safe — history records full block array
-4. Transform preserves compatible fields and warns on lossy
-5. Friction detector doesn't spam — 120s cooldown enforced
-6. Autosave batcher flushes on blur — no lost edits
-7. History compression preserves undo clarity — cross-block edits never merged
-8. Performance: 50-block page renders under 16ms frame budget
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
 ---
 
-## H. Decision Tables
+## Приоритезация (RICE)
 
-| Improvement | User value | Dev complexity | Runtime cost | Priority |
-|---|---|---|---|---|
-| Section model | High | Medium | ~0ms | 1 |
-| Structure view 2.0 | High | Medium | ~0ms | 2 |
-| Review/focus modes | High | Low | ~0ms | 3 |
-| Replace/transform | Medium | Low | ~0ms | 4 |
-| Friction recovery | Medium | Medium | ~0ms | 5 |
-| Autosave batching | Medium | Low | ~0ms | 6 |
-| History compression | Medium | Low | ~0ms | 7 |
-| Performance hardening | High | Low | ~0ms | 8 |
-| Observability | Low | Low | ~0ms | 9 |
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
-| Area | Rules | Heuristics | ML-lite | LLM? | Choice |
-|---|---|---|---|---|---|
-| Section engine | Yes | — | — | No | Rules |
-| Review mode filtering | Yes | — | — | No | Rules |
-| Transform compatibility | Yes (matrix) | — | — | No | Rules |
-| Friction detection | — | Threshold rules | — | No | Heuristics |
-| Autosave batching | Yes (debounce) | — | — | No | Rules |
-| History compression | Yes (merge rules) | — | — | No | Rules |
-| Structure view filters | Yes | — | — | No | Rules |
+---
 
-| Risk | Where | Why it matters | Mitigation |
-|---|---|---|---|
-| sectionId breaks existing saves | Block serialization | Data loss | Optional field, undefined = ungrouped |
-| History compression loses granularity | Undo flow | User can't undo individual keystrokes | Never merge cross-block; 2s window only |
-| Autosave batcher loses edits on crash | Tab close | Data loss | Flush on beforeunload; keep local draft |
-| Friction detector annoys users | Recovery suggestions | UX spam | 120s cooldown + session dismiss memory |
-| Section DnD breaks ordering | GridEditor | Visual chaos | Section blocks stay contiguous; reorder within section only |
+## Технический план реализации
 
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |

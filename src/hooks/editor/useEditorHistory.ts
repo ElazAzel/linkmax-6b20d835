@@ -6,6 +6,7 @@ import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
+import { shouldMergeActions, mergeActions } from '@/lib/editor/history-compressor';
 
 export interface HistoryAction {
   id: string;
@@ -40,6 +41,7 @@ export function useEditorHistory(
   
   // Ref to track the last action for toast dismissal
   const lastToastIdRef = useRef<string | number | undefined>(undefined);
+  const wasMergedRef = useRef(false);
 
   // Can undo/redo
   const canUndo = currentIndex >= 0;
@@ -65,15 +67,31 @@ export function useEditorHistory(
       blockType,
     };
 
+    wasMergedRef.current = false;
+    
     setHistory((prev) => {
       // Remove any future history if we're not at the end
       const newHistory = prev.slice(0, currentIndex + 1);
+      
+      // P5: Try to merge with last action (history compression)
+      if (newHistory.length > 0) {
+        const lastAction = newHistory[newHistory.length - 1];
+        if (shouldMergeActions(lastAction, action)) {
+          const merged = mergeActions(lastAction, action);
+          wasMergedRef.current = true;
+          return [...newHistory.slice(0, -1), merged].slice(-maxHistorySize);
+        }
+      }
+      
       // Add new action and limit to max size
       const updated = [...newHistory, action].slice(-maxHistorySize);
       return updated;
     });
 
-    setCurrentIndex((prev) => Math.min(prev + 1, maxHistorySize - 1));
+    // Only advance index if we didn't merge
+    if (!wasMergedRef.current) {
+      setCurrentIndex((prev) => Math.min(prev + 1, maxHistorySize - 1));
+    }
     setCurrentBlocks(newState);
     onStateChange?.(newState);
 
