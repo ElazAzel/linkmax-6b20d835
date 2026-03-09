@@ -89,7 +89,7 @@ export function bulkHide(
 ): BulkActionResult {
   const newBlocks = blocks.map(block => {
     if (selectedIds.has(block.id) && block.type !== 'profile') {
-      return { ...block, isHidden: true };
+      return { ...block, isHidden: true } as Block;
     }
     return block;
   });
@@ -115,7 +115,7 @@ export function bulkShow(
 ): BulkActionResult {
   const newBlocks = blocks.map(block => {
     if (selectedIds.has(block.id)) {
-      return { ...block, isHidden: false };
+      return { ...block, isHidden: false } as Block;
     }
     return block;
   });

@@ -3,8 +3,9 @@
  * P4: Block Editor Interaction OS
  */
 import type { Block, BlockType } from '@/types/page';
-import { NICHE_PACKS, getNichePack, mapNicheToPackKey } from '@/lib/intelligence/niche-packs';
+import { getNichePack } from '@/lib/intelligence/niche-packs';
 import { analyzeComposition, getBlockRole } from '@/lib/intelligence/composition-analyzer';
+import type { PageData } from '@/types/page';
 
 export interface RankedBlockType {
   blockType: BlockType;
@@ -18,6 +19,7 @@ interface InsertContext {
   niche?: string;
   recentTypes?: string[];
   isPremium?: boolean;
+  pageData?: PageData;
 }
 
 // Position-based recommendations: what blocks work well after specific types
@@ -74,10 +76,15 @@ const ALL_BLOCK_TYPES: BlockType[] = [
  * Rank block types for insertion at a given position
  */
 export function rankBlocksForInsert(context: InsertContext): RankedBlockType[] {
-  const { blocks, position, niche, recentTypes = [] } = context;
+  const { blocks, position, niche, recentTypes = [], pageData } = context;
   
-  const composition = analyzeComposition(blocks, niche);
-  const nichePack = getNichePack(niche ? mapNicheToPackKey(niche) : undefined);
+  // Create minimal pageData for composition analysis
+  const analysisPageData = pageData || { 
+    id: '', blocks, theme: {} as any, seo: { title: '', description: '', keywords: [] } 
+  } as PageData;
+  
+  const composition = analyzeComposition(blocks, niche, analysisPageData);
+  const nichePack = getNichePack(niche);
   
   // Get the block that will be above the insertion point
   const blockAbove = position > 0 ? blocks[position - 1] : null;
@@ -88,7 +95,7 @@ export function rankBlocksForInsert(context: InsertContext): RankedBlockType[] {
     let reason: string | undefined;
 
     // Base score from niche pack weights
-    const nicheWeight = nichePack.weights[blockType];
+    const nicheWeight = nichePack.blockWeights[blockType];
     if (nicheWeight !== undefined) {
       score += nicheWeight * 10;
     }
@@ -118,7 +125,7 @@ export function rankBlocksForInsert(context: InsertContext): RankedBlockType[] {
       reason = 'fills_offer_gap';
     }
 
-    // Position-based boost (what works well after the block above)
+    // Position-based boost
     if (blockAboveType) {
       const boosts = POSITION_BOOSTS[blockType];
       if (boosts) {
@@ -139,25 +146,20 @@ export function rankBlocksForInsert(context: InsertContext): RankedBlockType[] {
       if (!reason) reason = 'recently_used';
     }
 
-    // Penalize duplicates if page already has the block
+    // Penalize duplicates
     const existingCount = blocks.filter(b => b.type === blockType).length;
     if (existingCount > 0) {
-      // Some blocks are OK to have multiple (text, button, link)
       const multipleAllowed = ['text', 'button', 'link', 'image', 'separator', 'messenger'];
       if (!multipleAllowed.includes(blockType)) {
         score -= existingCount * 10;
       }
     }
 
-    // Penalize profile (can't add more)
-    if (blockType === 'profile') {
-      score = -1000;
-    }
+    if (blockType === 'profile') score = -1000;
 
     return { blockType, score, reason };
   });
 
-  // Sort by score descending
   return scored.sort((a, b) => b.score - a.score);
 }
 
@@ -175,7 +177,6 @@ export function getTopRecommendedBlocks(
  * Get the single best block to insert after a given block type
  */
 export function getBestBlockAfter(blockType: string): BlockType | null {
-  // Find which block types have the highest boost after this type
   let bestType: BlockType | null = null;
   let bestBoost = 0;
 

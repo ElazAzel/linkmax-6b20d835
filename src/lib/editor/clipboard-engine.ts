@@ -42,7 +42,7 @@ export function copyBlock(block: Block): ClipboardData {
  * Copy only the style properties of a block
  */
 export function copyStyle(block: Block): StyleData {
-  const blockAny = block as Record<string, unknown>;
+  const blockAny = block as unknown as Record<string, unknown>;
   
   return {
     type: 'style',
