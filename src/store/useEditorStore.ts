@@ -3,8 +3,10 @@ import { devtools } from 'zustand/middleware';
 import type { Block } from '@/types/page';
 import type { DeletedBlockInfo } from '@/types/block-editor-types';
 import type { ClipboardData, StyleData, ClipboardContent } from '@/lib/editor/clipboard-engine';
+import type { SectionMeta } from '@/lib/editor/section-engine';
 
 type StructureFilter = 'all' | 'incomplete' | 'hidden' | 'cta' | 'contact';
+export type ReviewMode = 'normal' | 'problematic' | 'cta_contact' | 'hidden' | 'incomplete';
 
 interface EditorState {
     // State
