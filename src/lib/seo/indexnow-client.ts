@@ -2,6 +2,8 @@
  * IndexNow client-side helper
  * Handles throttling, quality gate, and passes page_id for server-side logging.
  * All real logging happens server-side in the edge function.
+ * 
+ * P2.9: Now supports child service URL submissions alongside parent URL.
  */
 import { supabase } from '@/platform/supabase/client';
 
@@ -11,16 +13,30 @@ const THROTTLE_MS = 5 * 60 * 1000; // 5 minutes
 
 export type IndexNowResult = 'sent' | 'throttled' | 'not_indexable' | 'no_slug' | 'error';
 
+interface ChildEntry {
+  url: string;
+  item_id: string;
+  slug: string;
+}
+
+/** Shape of a single service_slugs entry */
+interface ServiceSlugEntryRaw {
+  slug: string;
+  state: string;
+  title: string;
+}
+
 /**
- * Send IndexNow notification for a page if it passes quality gate + throttle.
- * Now passes page_id and action_type so the edge function can log submissions.
+ * Send IndexNow notification for a page + its eligible child service URLs.
+ * Passes page_id so the edge function can log submissions with child metadata.
  */
 export async function notifyIndexNow(
   slug: string | undefined,
   qualityScore: number,
   isPublished: boolean,
   pageId?: string,
-  actionType: string = 'update'
+  actionType: string = 'update',
+  serviceSlugs?: Record<string, ServiceSlugEntryRaw> | null,
 ): Promise<IndexNowResult> {
   if (!slug) return 'no_slug';
   if (!isPublished || qualityScore < 40) return 'not_indexable';
@@ -31,12 +47,27 @@ export async function notifyIndexNow(
   try {
     lastSentMap.set(slug, Date.now());
     const pageUrl = `https://lnkmx.my/${slug}`;
+
+    // Build child entries for eligible (active) services
+    const childEntries: ChildEntry[] = [];
+    if (serviceSlugs && typeof serviceSlugs === 'object') {
+      for (const [itemId, entry] of Object.entries(serviceSlugs)) {
+        if (entry && typeof entry === 'object' && entry.state === 'active' && entry.slug) {
+          childEntries.push({
+            url: `https://lnkmx.my/${slug}/services/${entry.slug}`,
+            item_id: itemId,
+            slug: entry.slug,
+          });
+        }
+      }
+    }
     
     await supabase.functions.invoke('notify-indexnow', {
       body: {
         urls: [pageUrl],
         page_id: pageId || undefined,
         action_type: actionType,
+        child_entries: childEntries.length > 0 ? childEntries : undefined,
       }
     });
 
@@ -64,6 +95,8 @@ export interface ChildEntityDetail {
   slug: string;
   state: 'eligible' | 'excluded_thin' | 'removed' | 'parent_not_indexable' | 'active' | 'thin';
   url: string;
+  last_indexnow_at: string | null;
+  last_submission_status: string | null;
 }
 
 export interface ChildSummary {
@@ -96,6 +129,8 @@ export interface SearchDiagnostics {
     id: string;
     target_url: string;
     child_type: string | null;
+    child_item_id: string | null;
+    child_slug: string | null;
     provider: string;
     action_type: string;
     status: string;

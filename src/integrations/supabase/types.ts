@@ -964,6 +964,8 @@ export type Database = {
         Row: {
           action_type: string
           batch_id: string | null
+          child_item_id: string | null
+          child_slug: string | null
           child_type: string | null
           created_at: string
           http_status: number | null
@@ -977,6 +979,8 @@ export type Database = {
         Insert: {
           action_type?: string
           batch_id?: string | null
+          child_item_id?: string | null
+          child_slug?: string | null
           child_type?: string | null
           created_at?: string
           http_status?: number | null
@@ -990,6 +994,8 @@ export type Database = {
         Update: {
           action_type?: string
           batch_id?: string | null
+          child_item_id?: string | null
+          child_slug?: string | null
           child_type?: string | null
           created_at?: string
           http_status?: number | null

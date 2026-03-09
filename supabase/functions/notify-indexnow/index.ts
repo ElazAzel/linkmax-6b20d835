@@ -1,7 +1,12 @@
 /**
  * IndexNow notification Edge Function
  * Submits URLs to search engines and logs every submission to indexing_submissions table.
- * Accepts: { urls: string[], page_id?: string, action_type?: string, child_type?: string }
+ * 
+ * P2.9: Now supports child service URLs with child_item_id and child_slug metadata.
+ * 
+ * Accepts: { urls: string[], page_id?: string, action_type?: string, child_type?: string,
+ *            child_entries?: Array<{ url: string; item_id: string; slug: string }>,
+ *            skip_reason?: string }
  * 
  * Status semantics:
  * - sent: provider responded 2xx
@@ -17,18 +22,25 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 const INDEXNOW_KEY = 'linkmax-indexnow-key-2026';
 const HOST = 'lnkmx.my';
+
+interface ChildEntry {
+  url: string;
+  item_id: string;
+  slug: string;
+}
 
 interface SubmitRequest {
   urls?: string[];
   page_id?: string;
   action_type?: string;
   child_type?: string;
-  skip_reason?: string; // Client can pass skip reason for logging without sending
+  child_entries?: ChildEntry[];
+  skip_reason?: string;
 }
 
 serve(async (req: Request) => {
@@ -42,9 +54,27 @@ serve(async (req: Request) => {
 
   try {
     const body = await req.json() as SubmitRequest;
-    const { urls, page_id, action_type = 'update', child_type, skip_reason } = body;
+    const { urls, page_id, action_type = 'update', child_type, child_entries, skip_reason } = body;
 
-    if (!urls || !Array.isArray(urls) || urls.length === 0) {
+    // Build the child metadata lookup: url → { item_id, slug }
+    const childMeta = new Map<string, { item_id: string; slug: string }>();
+    if (child_entries && Array.isArray(child_entries)) {
+      for (const entry of child_entries) {
+        if (entry.url && entry.item_id) {
+          childMeta.set(entry.url, { item_id: entry.item_id, slug: entry.slug });
+        }
+      }
+    }
+
+    // Merge child URLs into urls array
+    const allUrls = [...(urls || [])];
+    for (const entry of (child_entries || [])) {
+      if (entry.url && !allUrls.includes(entry.url)) {
+        allUrls.push(entry.url);
+      }
+    }
+
+    if (allUrls.length === 0) {
       // Log skip if page_id provided
       if (page_id && skip_reason) {
         await db.from('indexing_submissions').insert({
@@ -64,7 +94,7 @@ serve(async (req: Request) => {
       });
     }
 
-    const validUrls = urls.slice(0, 100).filter(u => u.startsWith('https://'));
+    const validUrls = allUrls.slice(0, 100).filter(u => u.startsWith('https://'));
     if (validUrls.length === 0) {
       return new Response(JSON.stringify({ error: 'no valid URLs' }), {
         status: 400,
@@ -106,18 +136,23 @@ serve(async (req: Request) => {
       
       results.push({ provider: prov.name, status: httpStatus, submission_status: submissionStatus });
 
-      // Log each provider submission
+      // Log each provider submission with child metadata
       if (page_id) {
-        const rows = validUrls.map(url => ({
-          page_id,
-          target_url: url,
-          child_type: child_type || null,
-          action_type,
-          provider: prov.name,
-          submission_status: submissionStatus,
-          http_status: httpStatus || null,
-          batch_id: batchId,
-        }));
+        const rows = validUrls.map(url => {
+          const meta = childMeta.get(url);
+          return {
+            page_id,
+            target_url: url,
+            child_type: meta ? 'service' : (child_type || null),
+            child_item_id: meta?.item_id || null,
+            child_slug: meta?.slug || null,
+            action_type,
+            provider: prov.name,
+            submission_status: submissionStatus,
+            http_status: httpStatus || null,
+            batch_id: batchId,
+          };
+        });
         await db.from('indexing_submissions').insert(rows);
       }
     }
