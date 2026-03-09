@@ -106,6 +106,11 @@ export const useEditorStore = create<EditorState>()(
             inlineEditField: null,
             structureViewFilters: ['all'],
 
+            // P5 Initial State
+            sectionMeta: new Map<string, SectionMeta>(),
+            collapsedSections: new Set<string>(),
+            reviewMode: 'normal' as ReviewMode,
+
             // Actions
             setEditingBlock: (block) => set({ editingBlock: block }, false, 'setEditingBlock'),
 
