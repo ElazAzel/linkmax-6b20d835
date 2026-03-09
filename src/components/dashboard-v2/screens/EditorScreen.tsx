@@ -156,6 +156,12 @@ export const EditorScreen = memo(function EditorScreen({
     return <LoadingSkeleton />;
   }
 
+  const isPublished = pageData.isPublished || false;
+  const blockCount = pageData.blocks.length;
+  const contentBlockCount = pageData.blocks.filter(b => b.type !== 'profile').length;
+  const hasContent = pageData.blocks.length > 1 ||
+    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
+
   return (
     <div className="min-h-screen safe-area-top">
       {/* Header with actions */}
