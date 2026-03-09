@@ -21,9 +21,13 @@ interface UseAnalyticsTrackingOptions {
 export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTrackingOptions) {
   const hasTrackedView = useRef(false);
 
+  // Disable tracking inside dashboard to prevent 403 errors on unpublished pages
+  const isInsideDashboard = typeof window !== 'undefined' && window.location.pathname.includes('/dashboard');
+  const trackingEnabled = enabled && !isInsideDashboard;
+
   // Track page view on mount (only once per session per page)
   useEffect(() => {
-    if (!pageId || !enabled || hasTrackedView.current) return;
+    if (!pageId || !trackingEnabled || hasTrackedView.current) return;
 
     // Check if we've already tracked this page in this session
     const sessionKey = `linkmax_viewed_${pageId}`;
@@ -34,27 +38,27 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
       session.set(sessionKey, 'true');
       hasTrackedView.current = true;
     }
-  }, [pageId, enabled]);
+  }, [pageId, trackingEnabled]);
 
   // Track block click — sends to internal DB + marketing pixels
   const onBlockClick = useCallback(
     (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
-      if (!pageId || !enabled) return;
+      if (!pageId || !trackingEnabled) return;
       // Internal analytics (DB)
       trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
       // Marketing pixels (FB, TikTok, GA4)
       trackClickLink(blockTitle, undefined);
     },
-    [pageId, enabled]
+    [pageId, trackingEnabled]
   );
 
   // Track share
   const onShare = useCallback(
     (method?: string) => {
-      if (!pageId || !enabled) return;
+      if (!pageId || !trackingEnabled) return;
       trackShare(pageId, method);
     },
-    [pageId, enabled]
+    [pageId, trackingEnabled]
   );
 
   return {

@@ -298,21 +298,23 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     <CardContent>
                         {dealMetrics.funnel.length > 0 ? (
                             <div className="space-y-2">
-                                <ResponsiveContainer width="100%" height={220}>
-                                    <BarChart data={dealMetrics.funnel} layout="vertical" margin={{ left: 0, right: 16 }}>
-                                        <XAxis type="number" hide />
-                                        <YAxis type="category" dataKey="stageName" width={100} tick={{ fontSize: 12 }} />
-                                        <RechartsTooltip
-                                            formatter={(value: number) => [value, t('zones.analytics.deals', 'Deals')]}
-                                            contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                                        />
-                                        <Bar dataKey="count" radius={[0, 6, 6, 0]}>
-                                            {dealMetrics.funnel.map((_, idx) => (
-                                                <Cell key={idx} fill={FUNNEL_COLORS[idx % FUNNEL_COLORS.length]} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                <div style={{ width: '100%', minHeight: 220, minWidth: 0 }}>
+                                    <ResponsiveContainer width="100%" height={220}>
+                                        <BarChart data={dealMetrics.funnel} layout="vertical" margin={{ left: 0, right: 16 }}>
+                                            <XAxis type="number" hide />
+                                            <YAxis type="category" dataKey="stageName" width={100} tick={{ fontSize: 12 }} />
+                                            <RechartsTooltip
+                                                formatter={(value: number) => [value, t('zones.analytics.deals', 'Deals')]}
+                                                contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                            />
+                                            <Bar dataKey="count" radius={[0, 6, 6, 0]}>
+                                                {dealMetrics.funnel.map((_, idx) => (
+                                                    <Cell key={idx} fill={FUNNEL_COLORS[idx % FUNNEL_COLORS.length]} />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                                 {/* Value legend */}
                                 <div className="grid grid-cols-2 gap-2 pt-2">
                                     {dealMetrics.funnel.map((stage, idx) => (
@@ -341,18 +343,20 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     </CardHeader>
                     <CardContent>
                         {revenueTimeline.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={250}>
-                                <LineChart data={revenueTimeline} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                                    <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                                    <YAxis tick={{ fontSize: 11 }} width={60} />
-                                    <RechartsTooltip
-                                        formatter={(value: number) => [value.toLocaleString(), t('zones.analytics.revenue', 'Revenue')]}
-                                        contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                                    />
-                                    <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
-                                </LineChart>
-                            </ResponsiveContainer>
+                            <div style={{ width: '100%', minHeight: 250, minWidth: 0 }}>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <LineChart data={revenueTimeline} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                        <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+                                        <YAxis tick={{ fontSize: 11 }} width={60} />
+                                        <RechartsTooltip
+                                            formatter={(value: number) => [value.toLocaleString(), t('zones.analytics.revenue', 'Revenue')]}
+                                            contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                        />
+                                        <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </div>
                         ) : (
                             <p className="text-sm text-muted-foreground py-8 text-center">{t('zones.analytics.noRevenue', 'No revenue data for this period.')}</p>
                         )}
@@ -379,18 +383,20 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                         <CardDescription>{t('zones.analytics.conversionTrendDesc', 'Won vs. lost deals over time.')}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ResponsiveContainer width="100%" height={200}>
-                            <AreaChart data={conversionTrend} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                                <XAxis dataKey="period" tick={{ fontSize: 11 }} />
-                                <YAxis tick={{ fontSize: 11 }} width={30} />
-                                <RechartsTooltip
-                                    contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                                />
-                                <Area type="monotone" dataKey="won" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name={t('zones.analytics.won', 'Won')} />
-                                <Area type="monotone" dataKey="lost" stackId="1" stroke="#ef4444" fill="#ef4444" fillOpacity={0.4} name={t('zones.analytics.lost', 'Lost')} />
-                            </AreaChart>
-                        </ResponsiveContainer>
+                        <div style={{ width: '100%', minHeight: 200, minWidth: 0 }}>
+                            <ResponsiveContainer width="100%" height={200}>
+                                <AreaChart data={conversionTrend} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                    <XAxis dataKey="period" tick={{ fontSize: 11 }} />
+                                    <YAxis tick={{ fontSize: 11 }} width={30} />
+                                    <RechartsTooltip
+                                        contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                    />
+                                    <Area type="monotone" dataKey="won" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name={t('zones.analytics.won', 'Won')} />
+                                    <Area type="monotone" dataKey="lost" stackId="1" stroke="#ef4444" fill="#ef4444" fillOpacity={0.4} name={t('zones.analytics.lost', 'Lost')} />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
                     </CardContent>
                 </Card>
             )}
