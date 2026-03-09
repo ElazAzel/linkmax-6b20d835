@@ -117,14 +117,14 @@ export function resolveServiceBySlug(
         };
       }
 
-      // Mapping exists but item is gone (orphan) — use title from mapping
+      // P2.8: Orphan — mapping exists but item is gone. This is a broken state, NOT a valid page.
       return {
-        found: true,
+        found: false,
         itemId,
         slug: entry.slug,
         state: entry.state,
         title: entry.title,
-        pricingItem: { name: entry.title },
+        notFoundReason: 'item_missing',
       };
     }
   }

@@ -547,8 +547,8 @@ async function handleServiceSSR(supabase: SupabaseClient<any>, slug: string, ser
             currency: (item as Record<string, unknown>).currency ? String((item as Record<string, unknown>).currency) : 'KZT',
           };
         } else {
-          // Orphan: mapping exists but item gone — use title from mapping
-          matchedService = { name: entry.title };
+          // P2.8: Orphan — mapping exists but item gone. Redirect to parent (broken entity, not a valid page).
+          return new Response(null, { status: 301, headers: { ...corsHeaders, 'Location': `${BASE_URL}/${slug}` } });
         }
         break;
       }

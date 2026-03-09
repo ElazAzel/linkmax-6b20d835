@@ -1,95 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# P2.8: Persistence Integrity Hardening — Plan
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## 1. Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-**Critical bug confirmed**: In `save_page_blocks`, blocks are inserted at lines 52-63 **before** the child lifecycle loop (lines 87-152). When an item lacks an ID, `v_item_id` is auto-generated at line 96, used for `service_slugs` — but **never written back** into the stored block content. Result: `service_slugs` references an ID that doesn't exist in `blocks.content.items[]`. The resolver then hits an orphan on every lookup, falls back to mapping title, and renders a false-positive 200 page from stale mapping data instead of real pricing item content.
+### Новая тарифная модель (ADR 0026)
 
-**Second bug**: Orphan resolution (resolver lines 120-128) returns `found: true` with `pricingItem: { name: entry.title }`. This treats a broken entity as a valid service page. A visitor sees a page with no price, no description, no real data — just a title from mapping.
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
-**Principle after this fix**: A child entity is valid if and only if `blocks.content.items[].id === service_slugs[key]` for some key. No match = broken state, not a pseudo-page.
+---
 
-## 2. Changes
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-### Phase A — `save_page_blocks` persistence fix (Migration)
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-Restructure the SQL function so item ID normalization happens **before** block insertion:
+---
 
-1. **Before** inserting blocks: iterate `p_blocks`, find pricing blocks, normalize items — assign `auto-{uuid}` to any item with `length(id) < 2`, write the ID back into the JSONB array element.
-2. Insert the **normalized** `p_blocks` into `blocks` table.
-3. Then run the child lifecycle loop as before (it will now always find matching IDs in stored content).
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-This is a single atomic operation — normalize JSON, insert, then sync `service_slugs`.
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-### Phase B — Resolver orphan state fix
+---
 
-Update `src/lib/seo/service-resolver.ts`:
-- Orphan case (mapping exists, item not found by ID) → return `{ found: false, notFoundReason: 'item_missing' }` instead of `found: true`.
-- Add `notFoundReason: 'item_missing'` to the contract.
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-Update `src/components/screens/PublicServicePage.tsx`:
-- `item_missing` → show "Service not found" (same as `no_mapping`), or redirect to parent. Choose: **redirect to parent** (301 equivalent via `<Navigate>`), since the mapping once existed, meaning there was a real URL — better to redirect than 404 for SEO.
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
-Update `supabase/functions/generate-sitemap/index.ts` `handleServiceSSR`:
-- Orphan case (lines 549-552) → return 301 to parent instead of rendering a hollow page.
+---
 
-### Phase C — Client normalization alignment
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-`PricingBlockEditor` already normalizes IDs on load (lines 50-56). This is correct as a **convenience layer** — it ensures the editor always works with IDs. But it must not be the only defense. After Phase A, the server is the guarantee.
+## Текущее состояние LinkMAX Business Zones
 
-No changes needed here — the existing client normalization is fine as-is.
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-### Phase D — Diagnostics (minimal)
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-Update `get_page_search_diagnostics` RPC to count orphan mappings: items in `service_slugs` where the key doesn't match any item ID in pricing blocks. Expose as `orphan_count` in child_summary. This is a small SQL addition to the existing diagnostics function.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
-## 3. Files to Change
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-| File | Change |
-|------|--------|
-| **New migration SQL** | Rewrite `save_page_blocks` — normalize item IDs in `p_blocks` JSONB before insert |
-| `src/lib/seo/service-resolver.ts` | Orphan → `found: false, notFoundReason: 'item_missing'` |
-| `src/components/screens/PublicServicePage.tsx` | Handle `item_missing` → redirect to parent |
-| `supabase/functions/generate-sitemap/index.ts` | SSR orphan → 301 to parent |
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-## 4. Migration SQL approach
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-The key change in `save_page_blocks`:
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-```text
-1. Declare v_normalized_blocks jsonb := p_blocks
-2. Loop through v_normalized_blocks array elements
-3. For each pricing block, loop through content.items
-4. If item has no id or id too short, set id = 'auto-' || gen_random_uuid()
-5. Write modified item back into v_normalized_blocks via jsonb_set
-6. INSERT blocks FROM v_normalized_blocks (not p_blocks)
-7. Run child lifecycle loop against v_normalized_blocks
-```
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-JSONB array mutation in PL/pgSQL requires rebuilding the array. The approach:
-- For each pricing block, rebuild the items array with normalized IDs
-- Replace the block's content.items with the normalized array
-- Replace the block in the blocks array
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-## 5. Behavior Matrix (updated)
+### Фаза 4: Аналитика Зоны (P1)
 
-| State | SSR | Client | Sitemap |
-|-------|-----|--------|---------|
-| active (item found) | 200 | render | include |
-| thin (item found) | 200 noindex | render | exclude |
-| removed | 301 → parent | redirect | exclude |
-| orphan (mapping, no item) | 301 → parent | redirect | exclude |
-| no mapping | 404 | "not found" | — |
-| legacy fallback | 200 | render | exclude |
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-## 6. Priority
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-**Phase A first** — this is the root cause. Without persisted IDs, everything downstream is broken. Phase B immediately after — stops rendering fake pages. C is already done. D is polish.
+### Фаза 5: Автоматизации -- MVP (P2)
 
-## 7. Risks
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
 
-- JSONB array mutation in PL/pgSQL is verbose but safe. Must test that `jsonb_set` with array indices works correctly for multi-item pricing blocks.
-- Existing pages with orphan mappings will start redirecting instead of showing hollow pages — this is **correct behavior**, not a regression.
-- Legacy fallback in resolver stays for now (pages never re-saved).
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
 
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+
+---
+
+## Что НЕ нужно копировать из Bitrix24
+
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
+
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
+
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |
