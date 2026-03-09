@@ -32,7 +32,28 @@ export type EditorAnalyticsAction =
   | 'block_copied'
   | 'block_pasted'
   | 'bulk_action_used'
-  | 'selection_changed';
+  | 'selection_changed'
+  // P5: Sections
+  | 'section_created'
+  | 'section_dissolved'
+  | 'section_collapsed'
+  | 'section_moved'
+  | 'section_duplicated'
+  | 'section_deleted'
+  | 'section_merged'
+  // P5: Review modes
+  | 'review_mode_entered'
+  | 'review_mode_exited'
+  // P5: Transform
+  | 'transform_used'
+  | 'transform_cancelled'
+  // P5: Friction recovery
+  | 'friction_detected'
+  | 'friction_suggestion_accepted'
+  | 'friction_suggestion_dismissed'
+  // P5: Autosave & history
+  | 'autosave_batch_flushed'
+  | 'history_compressed';
 
 export interface EditorAnalyticsMeta {
   blockType?: string;

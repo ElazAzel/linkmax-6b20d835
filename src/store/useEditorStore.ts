@@ -207,6 +207,31 @@ export const useEditorStore = create<EditorState>()(
                 };
             }, false, 'toggleStructureFilter'),
 
+            // P5: Sections
+            setSectionMeta: (id, meta) => set((state) => {
+                const next = new Map(state.sectionMeta);
+                next.set(id, meta);
+                return { sectionMeta: next };
+            }, false, 'setSectionMeta'),
+
+            removeSectionMeta: (id) => set((state) => {
+                const next = new Map(state.sectionMeta);
+                next.delete(id);
+                const collapsed = new Set(state.collapsedSections);
+                collapsed.delete(id);
+                return { sectionMeta: next, collapsedSections: collapsed };
+            }, false, 'removeSectionMeta'),
+
+            toggleSectionCollapse: (id) => set((state) => {
+                const next = new Set(state.collapsedSections);
+                if (next.has(id)) next.delete(id);
+                else next.add(id);
+                return { collapsedSections: next };
+            }, false, 'toggleSectionCollapse'),
+
+            // P5: Review mode
+            setReviewMode: (mode) => set({ reviewMode: mode }, false, 'setReviewMode'),
+
             closeEditor: () => {
                 set({ editorOpen: false }, false, 'closeEditor');
                 setTimeout(() => {
@@ -229,6 +254,9 @@ export const useEditorStore = create<EditorState>()(
                 inlineEditingBlockId: null,
                 inlineEditField: null,
                 structureViewFilters: ['all'],
+                sectionMeta: new Map(),
+                collapsedSections: new Set<string>(),
+                reviewMode: 'normal' as ReviewMode,
             }, false, 'reset'),
         }),
         { name: 'EditorStore' }
