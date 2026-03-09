@@ -69,6 +69,17 @@ export function useEditorHistory(
     setHistory((prev) => {
       // Remove any future history if we're not at the end
       const newHistory = prev.slice(0, currentIndex + 1);
+      
+      // P5: Try to merge with last action (history compression)
+      if (newHistory.length > 0) {
+        const lastAction = newHistory[newHistory.length - 1];
+        if (shouldMergeActions(lastAction, action)) {
+          const merged = mergeActions(lastAction, action);
+          const compressed = [...newHistory.slice(0, -1), merged].slice(-maxHistorySize);
+          return compressed;
+        }
+      }
+      
       // Add new action and limit to max size
       const updated = [...newHistory, action].slice(-maxHistorySize);
       return updated;
