@@ -352,7 +352,33 @@ function DashboardV2Inner() {
     />
   );
 
-  return (
+  // P2: Editor command context for palette + keyboard
+  const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
+
+  const editorContext = useMemo((): EditorContext => ({
+    blocks: dashboard.pageData?.blocks || [],
+    selectedBlockId,
+    isPremium: dashboard.isPremium,
+    commandPaletteOpen,
+    onInsertBlock: dashboard.blockEditor.handleInsertBlock,
+    onInsertPreset: dashboard.blockEditor.handleInsertPreset,
+    onDeleteBlock: dashboard.blockEditor.handleDeleteBlock,
+    onDuplicateBlock: dashboard.blockEditor.handleDuplicateBlock,
+    onEditBlock: dashboard.blockEditor.handleEditBlock,
+    onUpdateBlock: dashboard.updateBlock,
+    onReorderBlocks: dashboard.reorderBlocks,
+    onUndo: editorHistory.undo,
+    onRedo: editorHistory.redo,
+    canUndo: editorHistory.canUndo,
+    canRedo: editorHistory.canRedo,
+    onOpenTemplates: () => setTemplateGalleryOpen(true),
+    onPreview: () => dashboard.sharingState.handlePreview(),
+    onShare: () => dashboard.sharingState.handleShare(),
+    setSelectedBlockId,
+    setCommandPaletteOpen,
+  }), [dashboard, selectedBlockId, commandPaletteOpen, editorHistory, setSelectedBlockId, setCommandPaletteOpen, setTemplateGalleryOpen]);
+
+
     <>
       <StaticSEOHead
         title={seoTitle}
