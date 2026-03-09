@@ -197,6 +197,7 @@ export const EditorScreen = memo(function EditorScreen({
           onDeleteBlock={onDeleteBlock}
           onUpdateBlock={onUpdateBlock}
           onReorderBlocks={onReorderBlocks}
+          onDuplicateBlock={onDuplicateBlock}
         />
       </div>
     </div>
