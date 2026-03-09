@@ -6,6 +6,7 @@ import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { Block } from '@/types/page';
+import { shouldMergeActions, mergeActions } from '@/lib/editor/history-compressor';
 
 export interface HistoryAction {
   id: string;
