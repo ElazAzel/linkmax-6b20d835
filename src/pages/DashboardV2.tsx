@@ -134,21 +134,22 @@ function DashboardV2Inner() {
     }
   }, []);
 
-  // Core state - with onPublish callback for automatic versioning
-  const dashboard = useDashboard({ onPublish: handlePublishVersion });
-  const multiPage = useMultiPage();
-  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
-  const { leads } = useLeads();
+  // Editor history — created first so it can be passed to useDashboard
+  const editorHistoryRef = useRef<ReturnType<typeof useEditorHistory> | null>(null);
 
-  // Editor history
+  // We need a stable reference for the first render
   const editorHistory = useEditorHistory(
-    dashboard.pageData?.blocks || [],
+    [],
     {
       onStateChange: (blocks) => {
-        dashboard.updatePageDataPartial({ blocks });
+        // Will be wired after dashboard is available
       },
     }
   );
+  editorHistoryRef.current = editorHistory;
+
+  // Core state - with onPublish callback for automatic versioning + editorHistory
+  const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
 
   // Current tab from URL - support both query params and pathname
   const currentTab = useMemo((): TabId => {
