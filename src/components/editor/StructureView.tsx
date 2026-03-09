@@ -91,10 +91,9 @@ export const StructureView = memo(function StructureView({
     return t(`blocks.${block.type}`, block.type);
   };
 
-  const getBlockIcon = (type: string) => {
-    const iconName = BLOCK_ICONS[type] || 'Box';
-    const Icon = getLucideIcon(iconName);
-    return Icon;
+  const getBlockIconComponent = (type: string) => {
+    const iconName = getManifestBlockIcon(type as BlockType);
+    return getLucideIcon(iconName);
   };
 
   const profileBlock = blocks.find(b => b.type === 'profile');
