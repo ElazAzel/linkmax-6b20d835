@@ -57,6 +57,7 @@ export const EditorScreen = memo(function EditorScreen({
   onDeleteBlock,
   onUpdateBlock,
   onReorderBlocks,
+  onDuplicateBlock,
   onPreview,
   onShare,
   onOpenTemplates,
