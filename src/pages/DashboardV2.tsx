@@ -355,9 +355,6 @@ function DashboardV2Inner() {
     />
   );
 
-  // P2: Editor command context for palette + keyboard
-  const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
-
   const editorContext = useMemo((): EditorContext => ({
     blocks: dashboard.pageData?.blocks || [],
     selectedBlockId,
