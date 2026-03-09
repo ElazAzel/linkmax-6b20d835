@@ -811,6 +811,10 @@ function DashboardV2Inner() {
             onUpgrade={() => navigate('/pricing')}
           />
         </Suspense>
+
+        {/* P2: Command Palette + Keyboard Shortcuts */}
+        <EditorCommandPalette context={editorContext} />
+        <EditorKeyboardHandler context={editorContext} enabled={currentTab === 'editor'} />
       </div>
     </>
   );
