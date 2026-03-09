@@ -124,7 +124,7 @@ export function detectAntiPatterns(blocks: Block[], niche?: string): StructuralS
 
   // 7. missing_hero — first non-profile block is filler
   const firstNonProfile = types.findIndex((t) => t !== 'profile');
-  if (firstNonProfile >= 0 && FILLER_TYPES.has(types[firstNonProfile])) {
+  if (firstNonProfile >= 0 && FILLER_TYPES.has(types[firstNonProfile] as string)) {
     suggestions.push({
       id: 'missing_hero',
       pattern: 'missing_hero',
