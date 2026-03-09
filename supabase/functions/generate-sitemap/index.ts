@@ -349,32 +349,30 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const jsonLd = buildProfileSchemaGraph(page, blocks, services, faqItems, socialLinks, knowsAbout, lang);
   const location = page.city || extractLocationFromBlocks(blocks, null);
 
-  // Services HTML with child page links — uses service_slugs mapping
+  // Services HTML with child page links — uses item ID → service_slugs mapping
   let servicesHtml = '';
   if (services.length > 0) {
     const svcLabel = lang === 'ru' ? 'Услуги' : lang === 'kk' ? 'Қызметтер' : 'Services';
     servicesHtml = `<section id="services"><h2>${svcLabel}</h2><ul>\n`;
     
-    // Build a lookup from item name to slug via service_slugs
-    const slugsByTitle: Map<string, string> = new Map();
-    const activeStates: Map<string, string> = new Map();
+    // Build item ID → slug lookup from service_slugs (canonical, rename-safe)
+    const itemIdToSlug: Map<string, string> = new Map();
     const svcSlugs = (page as PageData).service_slugs;
     if (svcSlugs && typeof svcSlugs === 'object') {
-      for (const [, entry] of Object.entries(svcSlugs)) {
-        if (entry && typeof entry === 'object' && entry.slug && entry.title) {
-          slugsByTitle.set(entry.title, entry.slug);
-          activeStates.set(entry.slug, entry.state || 'active');
+      for (const [itemId, entry] of Object.entries(svcSlugs)) {
+        if (entry && typeof entry === 'object' && entry.slug && entry.state === 'active') {
+          itemIdToSlug.set(itemId, entry.slug);
         }
       }
     }
     
     for (const s of services) {
-      // Try to find slug from service_slugs mapping first, then legacy slugify
-      let serviceSlug = slugsByTitle.get(s.name);
-      let isActive = serviceSlug ? activeStates.get(serviceSlug) === 'active' : false;
+      // Primary: match by item ID (stable across renames)
+      let serviceSlug = s.id ? itemIdToSlug.get(s.id) : undefined;
+      let isActive = !!serviceSlug;
       
       if (!serviceSlug) {
-        // Legacy fallback for pages not yet re-saved
+        // Legacy fallback for pages not yet re-saved (no item.id persisted)
         serviceSlug = s.name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
         isActive = s.name.length > 0 && ((s.description && s.description.length >= 30) || !!s.price);
       }
