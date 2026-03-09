@@ -183,7 +183,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
                 .select('service_slugs')
                 .eq('id', pageIdForIndexing)
                 .single();
-              const currentSvcSlugs = pageRow?.service_slugs as Record<string, ServiceSlugEntryRaw> | null;
+              const currentSvcSlugs = pageRow?.service_slugs as unknown as Record<string, ServiceSlugEntryRaw> | null;
               const previousSvcSlugs = previousServiceSlugsRef.current;
               
               await notifyIndexNow(
