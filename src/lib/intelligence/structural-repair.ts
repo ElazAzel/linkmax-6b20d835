@@ -61,7 +61,7 @@ export function detectAntiPatterns(blocks: Block[], niche?: string): StructuralS
   const firstCTA = firstIndex(CTA_TYPES);
   if (firstCTA >= 0 && firstCTA <= 1) {
     const hasContextAbove = types.slice(0, firstCTA).some(
-      (t) => OFFER_TYPES.has(t) || t === 'text' || t === 'image' || t === 'video'
+      (t) => OFFER_TYPES.has(t as string) || t === 'text' || t === 'image' || t === 'video'
     );
     if (!hasContextAbove) {
       suggestions.push({
