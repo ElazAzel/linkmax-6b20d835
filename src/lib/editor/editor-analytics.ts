@@ -68,12 +68,12 @@ export function trackEditorAction(
     import('@/platform/supabase/client').then(({ supabase }) => {
       supabase
         .from('analytics')
-        .insert({
+        .insert([{
           event_type: `editor.${action}`,
-          metadata: meta as Record<string, unknown> ?? null,
+          metadata: (meta as Record<string, unknown>) ?? null,
           page_id: null,
           block_id: meta?.blockId ?? null,
-        })
+        }])
         .then(() => {});
     });
   } catch {

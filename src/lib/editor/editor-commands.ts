@@ -210,7 +210,7 @@ export function buildEditorCommands(): EditorCommand[] {
       execute: (ctx) => {
         const b = getSelectedBlock(ctx);
         if (b) {
-          ctx.onUpdateBlock(b.id, { hidden: !b.hidden } as Partial<Block>);
+          ctx.onUpdateBlock(b.id, { hidden: !(b as any).hidden } as Partial<Block>);
           ctx.setCommandPaletteOpen(false);
         }
       },
