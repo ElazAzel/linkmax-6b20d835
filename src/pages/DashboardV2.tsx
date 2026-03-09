@@ -158,6 +158,9 @@ function DashboardV2Inner() {
   const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
   const { leads } = useLeads();
 
+  // P2: Editor store (must be before early returns)
+  const { selectedBlockId, setSelectedBlockId, commandPaletteOpen, setCommandPaletteOpen } = useEditorStore();
+
   // Current tab from URL - support both query params and pathname
   const currentTab = useMemo((): TabId => {
     // Check for events routes first
