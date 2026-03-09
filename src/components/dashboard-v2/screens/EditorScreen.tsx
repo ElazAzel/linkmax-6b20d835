@@ -11,12 +11,15 @@ import LayoutTemplate from 'lucide-react/dist/esm/icons/layout-template';
 import Undo2 from 'lucide-react/dist/esm/icons/undo-2';
 import Redo2 from 'lucide-react/dist/esm/icons/redo-2';
 import History from 'lucide-react/dist/esm/icons/history';
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { GridEditor } from '@/components/editor/GridEditor';
 import { cn } from '@/lib/utils/utils';
+import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
@@ -69,6 +72,10 @@ export const EditorScreen = memo(function EditorScreen({
   onOpenVersions,
 }: EditorScreenProps) {
   const { t } = useTranslation();
+  const [dismissedHint, setDismissedHint] = useState<string | null>(null);
+
+  // Intelligence layer — pure computation, <1ms
+  const intelligence = usePageIntelligence(pageData, pageData?.niche);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
@@ -183,6 +190,29 @@ export const EditorScreen = memo(function EditorScreen({
 
         </div>
       </div>
+
+      {/* Intelligence hint banner */}
+      {intelligence && intelligence.nextActions.length > 0 && (() => {
+        const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
+        if (!top) return null;
+        return (
+          <div className="mx-4 mt-3 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2">
+            <Lightbulb className="h-4 w-4 text-primary shrink-0" />
+            <span className="text-xs text-foreground/80 flex-1 truncate">
+              {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
+            </span>
+            <Badge variant="outline" className="text-[9px] shrink-0">
+              {top.priority}
+            </Badge>
+            <button
+              onClick={() => setDismissedHint(top.id)}
+              className="p-0.5 rounded hover:bg-muted"
+            >
+              <X className="h-3 w-3 text-muted-foreground" />
+            </button>
+          </div>
+        );
+      })()}
 
       {/* Grid Editor */}
       <div className="pt-4">

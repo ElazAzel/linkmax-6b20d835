@@ -1,306 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-## A. Verdict
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-### What already works algorithmically:
-- **Block recommendations** — niche-based weight tables with missing-need bonuses (block-recommendations.ts)
-- **Quality score** — 8-check deterministic scoring rubric for search readiness (quality-score.ts)
-- **Block validators** — per-type validation functions (block-validators.ts)
-- **Editor analytics** — event tracking with debounce (editor-analytics.ts)
-- **Presets** — 15 starter presets (editor-presets.ts)
-- **Block summaries** — per-type human-readable labels (editor-summaries.ts)
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-### Where platform still depends on manual actions instead of algorithms:
-1. **No composition analysis** — system doesn't know page has pricing without CTA, or trust blocks in wrong position
-2. **No next-best-action** — user must figure out what to do next; quality score only covers search readiness
-3. **No block quality evaluation** — validators are pass/fail, no "this is weak" detection
-4. **No structural anti-pattern detection** — no reorder suggestions
-5. **No publish/activation readiness** — only search readiness exists; no "ready to get first booking" engine
+### Новая тарифная модель (ADR 0026)
 
-### 5 zones improvable with algorithms, zero tokens:
-1. **Page composition gaps** — deterministic rules detect missing CTA, trust, contact paths
-2. **Block ordering** — scoring ideal position vs actual, detect anti-patterns
-3. **Next-best-action ranking** — weighted scoring of all possible actions by impact/effort
-4. **Block quality grading** — content thinness, missing fields, weak labels — all rule-based
-5. **Niche-specific ideal stacks** — config-driven, not ML
-
-### Where ML-lite is justified vs overkill:
-- **Justified later (P4):** recommendation re-ranking from accept/dismiss data, preset performance scoring
-- **Overkill now:** anything requiring training data we don't have yet; all P3 targets are solvable with rules+scoring
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
 ---
 
-## B. P3 Scope
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-Implementing priorities 1-7 from the prompt:
-
-1. **Next-Best-Action Engine** — ranked suggestions with reasons
-2. **Page Composition Analyzer** — coverage, gaps, structural report
-3. **Block Quality Evaluator** — per-block weakness detection
-4. **Structural Repair Engine** — anti-pattern detection + reorder suggestions
-5. **Publish/Activation/Conversion Readiness** — three readiness models
-6. **Niche Heuristic Packs** — 7 niche configs driving all engines
-7. **Smart Preset Selection** — niche-aware preset recommendations
-
-Deferred to P4: personalization/reranking, friction prediction, admin insights dashboards.
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
 ---
 
-## C. Architecture
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-New module: `src/lib/intelligence/`
-
-```text
-src/lib/intelligence/
-├── types.ts                    # Shared types for all engines
-├── niche-packs.ts              # 7 niche heuristic configurations
-├── composition-analyzer.ts     # Page composition report
-├── block-quality-evaluator.ts  # Per-block quality grading
-├── structural-repair.ts        # Anti-pattern detection + reorder suggestions
-├── readiness-engines.ts        # Publish / Activation / Conversion readiness
-├── next-best-action.ts         # NBA engine (consumes all above)
-└── preset-recommender.ts       # Niche-aware preset selection
-```
-
-All engines are **pure functions**: `(pageData, niche, context) => result`. Zero network calls. Zero tokens. Run on every relevant render via `useMemo`.
-
-### Integration surface:
-- New hook: `src/hooks/editor/usePageIntelligence.ts` — memoized composition of all engines
-- Consumed by: EditorScreen (hint banner), StructureView (block quality badges), Command Palette (smart suggestions)
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
 ---
 
-## D. Implementation Details
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-### 1. `types.ts` — Shared contracts
-
-```typescript
-export type SuggestionPriority = 'critical' | 'high' | 'medium' | 'low';
-export type SuggestionEffort = 'instant' | 'quick' | 'moderate';
-export type SuggestionCategory = 'add_block' | 'fix_block' | 'reorder' | 'fill_field' | 'publish' | 'share' | 'settings';
-
-export interface Suggestion {
-  id: string;
-  titleKey: string;
-  reasonKey: string;
-  priority: SuggestionPriority;
-  effort: SuggestionEffort;
-  category: SuggestionCategory;
-  impactScore: number;    // 0-100
-  targetBlockId?: string;
-  targetBlockType?: string;
-  actionType: string;     // e.g. 'insert_booking', 'reorder', 'fill_pricing'
-  meta?: Record<string, unknown>;
-}
-
-export interface BlockQualityReport {
-  blockId: string;
-  blockType: string;
-  score: number;          // 0-100
-  issues: BlockIssue[];
-}
-
-export interface BlockIssue {
-  key: string;
-  severity: 'error' | 'warning' | 'info';
-  messageKey: string;
-}
-
-export interface CompositionReport {
-  coverage: Record<string, boolean>;  // e.g. { hasCTA: true, hasTrust: false }
-  missingEssentials: string[];
-  weakSpots: string[];
-  structuralScore: number;
-  conversionReadiness: number;
-  suggestions: Suggestion[];
-}
-
-export interface ReadinessResult {
-  ready: boolean;
-  score: number;
-  blockers: string[];
-  improvements: string[];
-}
-```
-
-### 2. `niche-packs.ts` — 7 niche configurations
-
-Each pack defines:
-- `idealStack: BlockType[]` — ordered ideal block sequence
-- `criticalBlocks: BlockType[]` — must-have for this niche
-- `trustBlocks: BlockType[]` — trust signals
-- `ctaBlocks: BlockType[]` — conversion actions
-- `antiPatterns: AntiPattern[]` — specific structural rules
-- `presetIds: string[]` — recommended presets
-
-Packs for: `beauty`, `expert`, `freelancer`, `local_business`, `education`, `events`, `commerce`. Mapped from existing 15 niches via `mapNicheToPageNiche`.
-
-### 3. `composition-analyzer.ts`
-
-Pure function `analyzeComposition(blocks, niche, pageData)`:
-- Classifies blocks into roles: `identity`, `offer`, `trust`, `cta`, `contact`, `content`, `filler`
-- Checks coverage: hasIdentity, hasOffer, hasTrust, hasCTA, hasContact, hasContent
-- Detects: duplicate roles, missing paths (offer without CTA), content thinness
-- Returns `CompositionReport` with structural score (0-100)
-
-Block role mapping (deterministic):
-```
-identity: profile, avatar
-offer: pricing, product, catalog, booking
-trust: testimonial, before_after, community
-cta: button, messenger, form, newsletter
-contact: messenger, form, booking, map
-content: text, image, video, carousel, faq, event
-filler: separator, socials, link, download, shoutout
-```
-
-### 4. `block-quality-evaluator.ts`
-
-Registry of evaluators per block type. Each returns `BlockQualityReport`.
-
-Examples:
-- **text:** `content.length < 20` → warning "too short"; `content.length > 500` → warning "wall of text"
-- **pricing:** `items.length === 0` → error "no services"; items without price → warning
-- **button:** label is generic ("Click here") → warning; no URL → error
-- **messenger:** no username filled → error
-- **booking:** no title → warning
-- **faq:** fewer than 2 questions → warning; generic questions → info
-- **testimonial:** text shorter than 15 chars → warning
-- **form:** more than 6 fields → warning "too many fields"
-- **profile:** no bio or bio < 30 chars → warning
-
-### 5. `structural-repair.ts`
-
-Detects anti-patterns and suggests reorders:
-
-Anti-pattern rules (each is a scored check):
-- `booking_too_low` — booking below 70% of page → suggest moving up
-- `cta_without_context` — CTA in top 2 positions without offer block above → suggest adding context
-- `trust_before_offer` — testimonial appears before any offer block → suggest moving after
-- `pricing_after_faq` — FAQ above pricing → suggest swapping
-- `consecutive_text_blocks` — 3+ text blocks in a row → suggest breaking with visual/action
-- `socials_above_cta` — socials higher than primary CTA → suggest moving down
-- `missing_hero` — first non-profile block is filler → suggest better first block
-- `action_without_offer` — messenger/form without pricing/text above → suggest adding context
-
-Output: `StructuralSuggestion[]` with `fromIndex`, `toIndex`, `reason`.
-
-### 6. `readiness-engines.ts`
-
-Three engines, all pure functions:
-
-**A. Publish Readiness** `(pageData) => ReadinessResult`
-- Blockers: no profile block, no content blocks, page has 0 non-profile blocks
-- Improvements: add CTA, fill empty blocks
-
-**B. Activation Readiness** `(pageData, niche) => ReadinessResult`
-- Will page get first visitor → first response → first booking?
-- Checks: has shareable content, has CTA, has contact method, has offer clarity
-- Score based on weighted checks
-
-**C. Conversion Readiness** `(pageData, niche) => ReadinessResult`
-- Checks: offer clarity (pricing/text), trust (testimonial/before_after), CTA path, no friction sinks, visible next step
-- Missing answer blocks check (has booking but no FAQ)
-
-All reuse `computeQualityScore` for search readiness (already exists).
-
-### 7. `next-best-action.ts`
-
-The main engine. Consumes outputs from all other engines:
-
-```typescript
-function getNextBestActions(
-  pageData: PageData,
-  niche: string | undefined,
-  options?: { maxResults?: number; isPremium?: boolean }
-): Suggestion[]
-```
-
-Algorithm:
-1. Run `analyzeComposition` → get coverage gaps
-2. Run `evaluateAllBlocks` → get block issues
-3. Run `detectAntiPatterns` → get structural problems
-4. Run all readiness engines → get blockers
-5. Generate candidate suggestions from all sources
-6. Score each: `impactScore = baseWeight * nicheMultiplier * urgencyBoost - effortPenalty`
-7. Deduplicate (same target block + same action)
-8. Sort by impactScore descending
-9. Return top N (default 5)
-
-Scoring weights:
-- Missing critical block for niche: base 80
-- Empty/broken existing block: base 70
-- Structural anti-pattern: base 60
-- Missing nice-to-have block: base 40
-- Minor quality issue: base 20
-- Publish action (if ready): base 90
-- Share action (if published): base 85
-
-### 8. `preset-recommender.ts`
-
-`getRecommendedPresets(blocks, niche, maxResults)` — returns presets sorted by relevance to current page state. Uses niche pack's `presetIds` + composition gaps to boost relevant presets.
-
-### 9. `usePageIntelligence.ts` hook
-
-```typescript
-function usePageIntelligence(pageData: PageData | null, niche?: string) {
-  return useMemo(() => {
-    if (!pageData) return null;
-    const composition = analyzeComposition(pageData.blocks, niche, pageData);
-    const blockQuality = evaluateAllBlocks(pageData.blocks);
-    const structural = detectAntiPatterns(pageData.blocks, niche);
-    const publishReady = checkPublishReadiness(pageData);
-    const activationReady = checkActivationReadiness(pageData, niche);
-    const conversionReady = checkConversionReadiness(pageData, niche);
-    const nextActions = getNextBestActions(pageData, niche);
-    return { composition, blockQuality, structural, publishReady, activationReady, conversionReady, nextActions };
-  }, [pageData, niche]);
-}
-```
-
-### 10. UI Integration (minimal)
-
-- **EditorScreen**: Show top suggestion as a dismissible banner below toolbar
-- **StructureView**: Show quality badge (green/yellow/red dot) per block
-- **Command Palette**: Add "Suggested" group at top with NBA results
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
 ---
 
-## E. Why this is better than AI
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-| Dimension | Algorithmic (this plan) | LLM-based |
-|-----------|------------------------|-----------|
-| Cost | 0 tokens, 0 API calls | ~$0.01-0.05 per page analysis |
-| Latency | <1ms (pure JS) | 500-3000ms per call |
-| Explainability | Every suggestion has coded reason | Black box |
-| Robustness | Deterministic, testable | Non-deterministic |
-| Maintainability | Config-driven, type-safe | Prompt engineering |
-| UX | Instant, always available | Loading states, failures |
+## Текущее состояние LinkMAX Business Zones
+
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+
+### Фаза 3: Tasks -- закрытие пробелов (P1)
+
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+
+### Фаза 4: Аналитика Зоны (P1)
+
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+
+### Фаза 5: Автоматизации -- MVP (P2)
+
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
+
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+
+### Фаза 6: Инвойсы и оплата (P2)
+
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
 ---
 
-## F. Decision Tables
+## Что НЕ нужно копировать из Bitrix24
 
-| Area | Deterministic rules | Heuristics | ML-lite | LLM needed? | Choice |
-|------|-------------------|------------|---------|-------------|--------|
-| Composition analysis | Yes | — | — | No | Rules |
-| Block quality eval | Yes | — | — | No | Rules |
-| Anti-pattern detection | Yes | — | — | No | Rules |
-| Next-best-action | Yes | Scoring weights | — | No | Rules + scoring |
-| Readiness engines | Yes | — | — | No | Rules |
-| Niche packs | Yes (config) | — | — | No | Config |
-| Preset selection | — | Scoring | — | No | Heuristic ranking |
-| Reorder suggestions | Yes | Position scoring | — | No | Rules + scoring |
-| Personalization (P4) | — | — | Bandit | Optional | Deferred |
-| Friction prediction (P4) | — | Session patterns | — | No | Deferred |
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-| Improvement | Expected UX gain | Dev complexity | Runtime cost | Priority |
-|------------|-----------------|---------------|-------------|----------|
-| Next-best-action engine | High — guides every session | Medium | ~0ms | 1 |
-| Composition analyzer | High — reveals gaps instantly | Medium | ~0ms | 2 |
-| Block quality evaluator | Medium — prevents weak blocks | Low | ~0ms | 3 |
-| Structural repair | Medium — fixes ordering issues | Medium | ~0ms | 4 |
-| Readiness engines | High — drives publish/activation | Low | ~0ms | 5 |
-| Niche heuristic packs | High — makes all engines smarter | Low | ~0ms | 6 |
-| Smart preset selection | Medium — faster block assembly | Low | ~0ms | 7 |
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
+---
+
+## Приоритезация (RICE)
+
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+
+---
+
+## Технический план реализации
+
+### DB миграции (новые таблицы/колонки)
+
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
+
+### Новые файлы
+
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |
