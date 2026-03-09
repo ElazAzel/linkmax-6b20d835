@@ -62,7 +62,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
               previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
             }
           })
-          .catch(() => {}); // Non-critical
+          .catch?.(() => {}); // Non-critical
       }
     }
   }, [userData]);
