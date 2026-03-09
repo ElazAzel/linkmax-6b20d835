@@ -34,6 +34,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   const hasLocalChangesRef = useRef<boolean>(false);
   // Track initial load to only sync from cache once
   const initialLoadDoneRef = useRef<boolean>(false);
+  // P2.11: Track previous service_slugs snapshot for diff-based IndexNow
+  const previousServiceSlugsRef = useRef<Record<string, ServiceSlugEntryRaw> | null>(null);
 
   // Use React Query for cached page loading
   const { data: userData, isLoading: loading, refetch } = useUserPage(user?.id);
