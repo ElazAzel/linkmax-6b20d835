@@ -117,7 +117,7 @@ export function mergeSections(
 ): Block[] {
   return blocks.map(b => {
     if ((b as any).sectionId === mergeSectionId) {
-      return { ...b, sectionId: keepSectionId } as Block;
+      return { ...b, sectionId: keepSectionId };
     }
     return b;
   });
