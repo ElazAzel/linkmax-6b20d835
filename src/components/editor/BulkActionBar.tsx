@@ -1,6 +1,7 @@
 /**
  * BulkActionBar - Fixed bottom bar for multi-select bulk operations
  * P4: Block Editor Interaction OS
+ * P5: Section grouping action
  */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +12,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import ChevronUp from 'lucide-react/dist/esm/icons/chevron-up';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import X from 'lucide-react/dist/esm/icons/x';
+import FolderPlus from 'lucide-react/dist/esm/icons/folder-plus';
 
 interface BulkActionBarProps {
   selectedCount: number;
@@ -19,6 +21,8 @@ interface BulkActionBarProps {
   onMoveUp: () => void;
   onMoveDown: () => void;
   onClearSelection: () => void;
+  onCreateSection?: () => void;
+  canCreateSection?: boolean;
 }
 
 export const BulkActionBar = memo(function BulkActionBar({
@@ -28,6 +32,8 @@ export const BulkActionBar = memo(function BulkActionBar({
   onMoveUp,
   onMoveDown,
   onClearSelection,
+  onCreateSection,
+  canCreateSection = false,
 }: BulkActionBarProps) {
   const { t } = useTranslation();
 
@@ -76,6 +82,18 @@ export const BulkActionBar = memo(function BulkActionBar({
           >
             <Copy className="h-4 w-4" />
           </Button>
+
+          {canCreateSection && onCreateSection && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-8 w-8 p-0 text-primary hover:text-primary"
+              onClick={onCreateSection}
+              title={t('editor.createSection', 'Group into section')}
+            >
+              <FolderPlus className="h-4 w-4" />
+            </Button>
+          )}
 
           <Button
             size="sm"
