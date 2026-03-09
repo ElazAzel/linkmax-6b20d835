@@ -74,6 +74,7 @@ export function useDashboard(options?: UseDashboardOptions) {
     updateBlock: cloudState.updateBlock,
     deleteBlock: cloudState.deleteBlock,
     blocks: cloudState.pageData?.blocks || [],
+    editorHistory: options?.editorHistory,
     playAdd: sounds.playAdd,
     playDelete: sounds.playDelete,
     playError: sounds.playError,
