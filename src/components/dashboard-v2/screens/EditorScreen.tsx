@@ -72,6 +72,10 @@ export const EditorScreen = memo(function EditorScreen({
   onOpenVersions,
 }: EditorScreenProps) {
   const { t } = useTranslation();
+  const [dismissedHint, setDismissedHint] = useState<string | null>(null);
+
+  // Intelligence layer — pure computation, <1ms
+  const intelligence = usePageIntelligence(pageData, pageData?.niche);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
