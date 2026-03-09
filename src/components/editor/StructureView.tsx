@@ -34,7 +34,8 @@ import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import X from 'lucide-react/dist/esm/icons/x';
 import { cn } from '@/lib/utils/utils';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
-import type { Block } from '@/types/page';
+import { getBlockIcon as getManifestBlockIcon } from '@/lib/blocks/block-manifest';
+import type { Block, BlockType } from '@/types/page';
 
 interface StructureViewProps {
   open: boolean;
@@ -48,38 +49,6 @@ interface StructureViewProps {
   onBlockMoveDown?: (blockId: string) => void;
   hiddenBlockIds?: Set<string>;
 }
-
-// Block type to icon mapping
-const BLOCK_ICONS: Record<string, string> = {
-  profile: 'User',
-  link: 'Link',
-  button: 'MousePointer2',
-  text: 'Type',
-  image: 'Image',
-  video: 'Video',
-  carousel: 'Images',
-  product: 'ShoppingBag',
-  form: 'FileText',
-  messenger: 'MessageCircle',
-  socials: 'Share2',
-  separator: 'Minus',
-  avatar: 'UserCircle',
-  catalog: 'Grid3X3',
-  booking: 'Calendar',
-  faq: 'HelpCircle',
-  pricing: 'CreditCard',
-  testimonial: 'Quote',
-  countdown: 'Clock',
-  map: 'MapPin',
-  download: 'Download',
-  newsletter: 'Mail',
-  custom_code: 'Code',
-  search: 'Search',
-  before_after: 'ArrowLeftRight',
-  community: 'Users',
-  shoutout: 'Megaphone',
-  scratch: 'Gift',
-};
 
 export const StructureView = memo(function StructureView({
   open,
