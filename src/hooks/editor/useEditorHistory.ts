@@ -41,6 +41,7 @@ export function useEditorHistory(
   
   // Ref to track the last action for toast dismissal
   const lastToastIdRef = useRef<string | number | undefined>(undefined);
+  const wasMergedRef = useRef(false);
 
   // Can undo/redo
   const canUndo = currentIndex >= 0;
