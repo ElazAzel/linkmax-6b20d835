@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { Block } from '@/types/page';
 import type { DeletedBlockInfo } from '@/types/block-editor-types';
+import type { ClipboardData, StyleData, ClipboardContent } from '@/lib/editor/clipboard-engine';
+
+type StructureFilter = 'all' | 'incomplete' | 'hidden' | 'cta' | 'contact';
 
 interface EditorState {
     // State
@@ -16,6 +19,20 @@ interface EditorState {
     recentBlockTypes: string[];
     recentPresets: string[];
 
+    // P4: Multi-select
+    selectedBlockIds: Set<string>;
+    lastSelectedId: string | null;
+
+    // P4: Clipboard
+    clipboardContent: ClipboardContent | null;
+
+    // P4: Inline edit
+    inlineEditingBlockId: string | null;
+    inlineEditField: string | null;
+
+    // P4: Structure view
+    structureViewFilters: StructureFilter[];
+
     // Actions
     setEditingBlock: (block: Block | null) => void;
     setEditorOpen: (open: boolean) => void;
@@ -27,6 +44,22 @@ interface EditorState {
     setCommandPaletteOpen: (open: boolean) => void;
     addRecentBlockType: (blockType: string) => void;
     addRecentPreset: (presetId: string) => void;
+
+    // P4 Actions: Multi-select
+    toggleBlockSelection: (id: string, additive: boolean) => void;
+    setSelectedBlockIds: (ids: Set<string>) => void;
+    clearSelection: () => void;
+    selectAllBlocks: (blockIds: string[]) => void;
+
+    // P4 Actions: Clipboard
+    setClipboardContent: (content: ClipboardContent | null) => void;
+
+    // P4 Actions: Inline edit
+    setInlineEditing: (blockId: string | null, field?: string | null) => void;
+
+    // P4 Actions: Structure view
+    setStructureViewFilters: (filters: StructureFilter[]) => void;
+    toggleStructureFilter: (filter: StructureFilter) => void;
 
     // Helpers
     closeEditor: () => void;
@@ -48,6 +81,14 @@ export const useEditorStore = create<EditorState>()(
             recentBlockTypes: [],
             recentPresets: [],
 
+            // P4 Initial State
+            selectedBlockIds: new Set<string>(),
+            lastSelectedId: null,
+            clipboardContent: null,
+            inlineEditingBlockId: null,
+            inlineEditField: null,
+            structureViewFilters: ['all'],
+
             // Actions
             setEditingBlock: (block) => set({ editingBlock: block }, false, 'setEditingBlock'),
 
@@ -60,7 +101,11 @@ export const useEditorStore = create<EditorState>()(
             setOperationInProgress: (inProgress) => set({ operationInProgress: inProgress }, false, 'setOperationInProgress'),
 
             // P2
-            setSelectedBlockId: (id) => set({ selectedBlockId: id }, false, 'setSelectedBlockId'),
+            setSelectedBlockId: (id) => set({ 
+                selectedBlockId: id,
+                selectedBlockIds: id ? new Set([id]) : new Set<string>(),
+                lastSelectedId: id,
+            }, false, 'setSelectedBlockId'),
 
             setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }, false, 'setCommandPaletteOpen'),
 
@@ -71,6 +116,74 @@ export const useEditorStore = create<EditorState>()(
             addRecentPreset: (presetId) => set((state) => ({
                 recentPresets: [presetId, ...state.recentPresets.filter(p => p !== presetId)].slice(0, MAX_RECENT)
             }), false, 'addRecentPreset'),
+
+            // P4: Multi-select
+            toggleBlockSelection: (id, additive) => set((state) => {
+                if (additive) {
+                    const next = new Set(state.selectedBlockIds);
+                    if (next.has(id)) {
+                        next.delete(id);
+                    } else {
+                        next.add(id);
+                    }
+                    return { 
+                        selectedBlockIds: next, 
+                        selectedBlockId: next.size === 1 ? [...next][0] : null,
+                        lastSelectedId: id,
+                    };
+                }
+                return { 
+                    selectedBlockIds: new Set([id]), 
+                    selectedBlockId: id,
+                    lastSelectedId: id,
+                };
+            }, false, 'toggleBlockSelection'),
+
+            setSelectedBlockIds: (ids) => set({ 
+                selectedBlockIds: ids,
+                selectedBlockId: ids.size === 1 ? [...ids][0] : null,
+                lastSelectedId: ids.size > 0 ? [...ids][ids.size - 1] : null,
+            }, false, 'setSelectedBlockIds'),
+
+            clearSelection: () => set({ 
+                selectedBlockIds: new Set<string>(), 
+                selectedBlockId: null,
+                lastSelectedId: null,
+                inlineEditingBlockId: null,
+                inlineEditField: null,
+            }, false, 'clearSelection'),
+
+            selectAllBlocks: (blockIds) => set({ 
+                selectedBlockIds: new Set(blockIds),
+                selectedBlockId: null,
+                lastSelectedId: blockIds[blockIds.length - 1] ?? null,
+            }, false, 'selectAllBlocks'),
+
+            // P4: Clipboard
+            setClipboardContent: (content) => set({ clipboardContent: content }, false, 'setClipboardContent'),
+
+            // P4: Inline edit
+            setInlineEditing: (blockId, field = null) => set({ 
+                inlineEditingBlockId: blockId, 
+                inlineEditField: field 
+            }, false, 'setInlineEditing'),
+
+            // P4: Structure view filters
+            setStructureViewFilters: (filters) => set({ structureViewFilters: filters }, false, 'setStructureViewFilters'),
+
+            toggleStructureFilter: (filter) => set((state) => {
+                if (filter === 'all') {
+                    return { structureViewFilters: ['all'] as StructureFilter[] };
+                }
+                const current = state.structureViewFilters.filter(f => f !== 'all');
+                const hasFilter = current.includes(filter);
+                const next = hasFilter 
+                    ? current.filter(f => f !== filter)
+                    : [...current, filter];
+                return { 
+                    structureViewFilters: next.length === 0 ? ['all'] as StructureFilter[] : next as StructureFilter[]
+                };
+            }, false, 'toggleStructureFilter'),
 
             closeEditor: () => {
                 set({ editorOpen: false }, false, 'closeEditor');
@@ -88,6 +201,12 @@ export const useEditorStore = create<EditorState>()(
                 commandPaletteOpen: false,
                 recentBlockTypes: [],
                 recentPresets: [],
+                selectedBlockIds: new Set<string>(),
+                lastSelectedId: null,
+                clipboardContent: null,
+                inlineEditingBlockId: null,
+                inlineEditField: null,
+                structureViewFilters: ['all'],
             }, false, 'reset'),
         }),
         { name: 'EditorStore' }
