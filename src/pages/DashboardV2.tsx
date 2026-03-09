@@ -150,6 +150,9 @@ function DashboardV2Inner() {
 
   // Core state - with onPublish callback for automatic versioning + editorHistory
   const dashboard = useDashboard({ onPublish: handlePublishVersion, editorHistory });
+  const multiPage = useMultiPage();
+  const { canUseCustomPageBackground, limits: freemiumLimits, getAIPageGenerationsThisMonth, canUseBusinessZone } = useFreemiumLimits();
+  const { leads } = useLeads();
 
   // Current tab from URL - support both query params and pathname
   const currentTab = useMemo((): TabId => {
