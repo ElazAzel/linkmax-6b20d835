@@ -9,6 +9,7 @@ import { ensureBlockIds, deduplicateBlocks } from '@/lib/blocks/block-utils';
 import { supabase } from '@/platform/supabase/client';
 import { computeQualityScore } from '@/lib/seo/quality-score';
 import { notifyIndexNow } from '@/lib/seo/indexnow-client';
+import type { ServiceSlugEntryRaw } from '@/lib/seo/indexnow-client';
 import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
