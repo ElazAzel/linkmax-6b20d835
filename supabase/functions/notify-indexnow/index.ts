@@ -2,19 +2,20 @@
  * IndexNow notification Edge Function
  * Submits URLs to search engines and logs every submission to indexing_submissions table.
  * 
- * P2.9: Now supports child service URLs with child_item_id and child_slug metadata.
+ * P2.11: Diff-based orchestration — accepts transition metadata per child entry,
+ *        logs skip entries for non-submitted transitions, stores diff_summary.
  * 
  * Accepts: { urls: string[], page_id?: string, action_type?: string, child_type?: string,
- *            child_entries?: Array<{ url: string; item_id: string; slug: string }>,
+ *            child_entries?: Array<{ url, item_id, slug, transition? }>,
+ *            skip_entries?: Array<{ item_id, slug, transition }>,
+ *            diff_summary?: { total, submitted, skipped, is_first_snapshot },
  *            skip_reason?: string }
  * 
  * Status semantics:
  * - sent: provider responded 2xx
  * - provider_failed: provider responded non-2xx or network error
- * - skipped_throttled: client indicated throttle (logged but not sent)
- * - skipped_not_indexable: page below quality threshold
- * - skipped_unpublished: page not published
- * - skipped_missing_url: no valid URLs provided
+ * - skipped_no_change: child intentionally not submitted (unchanged or non-submittable transition)
+ * - skipped_transition: child state changed but doesn't require submission
  */
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
@@ -32,6 +33,20 @@ interface ChildEntry {
   url: string;
   item_id: string;
   slug: string;
+  transition?: string;
+}
+
+interface SkipEntry {
+  item_id: string;
+  slug: string;
+  transition: string;
+}
+
+interface DiffSummary {
+  total: number;
+  submitted: number;
+  skipped: number;
+  is_first_snapshot: boolean;
 }
 
 interface SubmitRequest {
@@ -40,6 +55,8 @@ interface SubmitRequest {
   action_type?: string;
   child_type?: string;
   child_entries?: ChildEntry[];
+  skip_entries?: SkipEntry[];
+  diff_summary?: DiffSummary;
   skip_reason?: string;
 }
 
@@ -54,14 +71,14 @@ serve(async (req: Request) => {
 
   try {
     const body = await req.json() as SubmitRequest;
-    const { urls, page_id, action_type = 'update', child_type, child_entries, skip_reason } = body;
+    const { urls, page_id, action_type = 'update', child_type, child_entries, skip_entries, diff_summary, skip_reason } = body;
 
-    // Build the child metadata lookup: url → { item_id, slug }
-    const childMeta = new Map<string, { item_id: string; slug: string }>();
+    // Build the child metadata lookup: url → { item_id, slug, transition }
+    const childMeta = new Map<string, { item_id: string; slug: string; transition?: string }>();
     if (child_entries && Array.isArray(child_entries)) {
       for (const entry of child_entries) {
         if (entry.url && entry.item_id) {
-          childMeta.set(entry.url, { item_id: entry.item_id, slug: entry.slug });
+          childMeta.set(entry.url, { item_id: entry.item_id, slug: entry.slug, transition: entry.transition });
         }
       }
     }
@@ -74,7 +91,7 @@ serve(async (req: Request) => {
       }
     }
 
-    if (allUrls.length === 0) {
+    if (allUrls.length === 0 && (!skip_entries || skip_entries.length === 0)) {
       // Log skip if page_id provided
       if (page_id && skip_reason) {
         await db.from('indexing_submissions').insert({
@@ -94,15 +111,44 @@ serve(async (req: Request) => {
       });
     }
 
+    const batchId = crypto.randomUUID().slice(0, 8);
+
+    // P2.11: Log skipped child transitions (no HTTP call, just observability)
+    if (page_id && skip_entries && skip_entries.length > 0) {
+      const skipRows = skip_entries.map(entry => ({
+        page_id,
+        target_url: `https://${HOST}/${urls?.[0]?.split('/')[3] || 'unknown'}/services/${entry.slug}`,
+        child_type: 'service',
+        child_item_id: entry.item_id,
+        child_slug: entry.slug,
+        action_type: entry.transition || 'skip',
+        provider: 'none',
+        submission_status: 'skipped_transition',
+        skip_reason: entry.transition,
+        batch_id: batchId,
+      }));
+      await db.from('indexing_submissions').insert(skipRows);
+    }
+
     const validUrls = allUrls.slice(0, 100).filter(u => u.startsWith('https://'));
     if (validUrls.length === 0) {
+      // All URLs were skipped but skip_entries were logged
+      if (skip_entries && skip_entries.length > 0) {
+        const summary = diff_summary
+          ? `Diff: ${diff_summary.total} total, ${diff_summary.submitted} submitted, ${diff_summary.skipped} skipped`
+          : `${skip_entries.length} children skipped`;
+        console.log(`[IndexNow] No URLs to submit. ${summary}. Batch: ${batchId}`);
+        return new Response(JSON.stringify({ success: true, submitted: 0, skipped: skip_entries.length, batch_id: batchId }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
       return new Response(JSON.stringify({ error: 'no valid URLs' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const batchId = crypto.randomUUID().slice(0, 8);
     const payload = {
       host: HOST,
       key: INDEXNOW_KEY,
@@ -136,7 +182,7 @@ serve(async (req: Request) => {
       
       results.push({ provider: prov.name, status: httpStatus, submission_status: submissionStatus });
 
-      // Log each provider submission with child metadata
+      // Log each provider submission with child metadata + transition
       if (page_id) {
         const rows = validUrls.map(url => {
           const meta = childMeta.get(url);
@@ -146,7 +192,7 @@ serve(async (req: Request) => {
             child_type: meta ? 'service' : (child_type || null),
             child_item_id: meta?.item_id || null,
             child_slug: meta?.slug || null,
-            action_type,
+            action_type: meta?.transition || action_type,
             provider: prov.name,
             submission_status: submissionStatus,
             http_status: httpStatus || null,
@@ -162,9 +208,19 @@ serve(async (req: Request) => {
       await db.from('pages').update({ last_indexnow_at: new Date().toISOString() }).eq('id', page_id);
     }
 
-    console.log('[IndexNow] Submitted', validUrls.length, 'URLs. Batch:', batchId, 'Results:', results);
+    const diffLog = diff_summary
+      ? ` Diff: ${diff_summary.total} total, ${diff_summary.submitted} submitted, ${diff_summary.skipped} skipped, first=${diff_summary.is_first_snapshot}`
+      : '';
+    console.log(`[IndexNow] Submitted ${validUrls.length} URLs. Batch: ${batchId}.${diffLog} Results:`, results);
 
-    return new Response(JSON.stringify({ success: true, submitted: validUrls.length, batch_id: batchId, results }), {
+    return new Response(JSON.stringify({
+      success: true,
+      submitted: validUrls.length,
+      skipped: skip_entries?.length || 0,
+      batch_id: batchId,
+      results,
+      diff_summary: diff_summary || null,
+    }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

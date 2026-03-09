@@ -9,6 +9,7 @@ import { ensureBlockIds, deduplicateBlocks } from '@/lib/blocks/block-utils';
 import { supabase } from '@/platform/supabase/client';
 import { computeQualityScore } from '@/lib/seo/quality-score';
 import { notifyIndexNow } from '@/lib/seo/indexnow-client';
+import type { ServiceSlugEntryRaw } from '@/lib/seo/indexnow-client';
 import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
@@ -33,6 +34,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   const hasLocalChangesRef = useRef<boolean>(false);
   // Track initial load to only sync from cache once
   const initialLoadDoneRef = useRef<boolean>(false);
+  // P2.11: Track previous service_slugs snapshot for diff-based IndexNow
+  const previousServiceSlugsRef = useRef<Record<string, ServiceSlugEntryRaw> | null>(null);
 
   // Use React Query for cached page loading
   const { data: userData, isLoading: loading, refetch } = useUserPage(user?.id);
@@ -47,6 +50,23 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       setChatbotContext(userData.chatbotContext || '');
       initialLoadDoneRef.current = true;
       hasLocalChangesRef.current = false;
+      // P2.11: Seed previous service_slugs on initial load
+      if (userData.pageData?.id) {
+        void (async () => {
+          try {
+            const { data: row } = await supabase
+              .from('pages')
+              .select('service_slugs')
+              .eq('id', userData.pageData.id)
+              .single();
+            if (row?.service_slugs) {
+              previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
+            }
+          } catch {
+            // Non-critical
+          }
+        })();
+      }
     }
   }, [userData]);
 
@@ -154,13 +174,11 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         // Then auto-publish
         await publishPageMutation.mutateAsync();
 
-        // IndexNow notification (fire-and-forget, throttled, quality-gated)
-        // P2.9: Now also submits eligible child service URLs alongside parent
+        // P2.11: Diff-based IndexNow — only submit changed child URLs
         const slug = sanitizedData.slug;
         const pageIdForIndexing = savedPageId || sanitizedData.id;
         if (slug && pageIdForIndexing) {
           const { score } = computeQualityScore(sanitizedData);
-          // Fetch service_slugs (computed server-side by save_page_blocks)
           void (async () => {
             try {
               const { data: pageRow } = await supabase
@@ -168,10 +186,19 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
                 .select('service_slugs')
                 .eq('id', pageIdForIndexing)
                 .single();
-              const svcSlugs = pageRow?.service_slugs as Record<string, { slug: string; state: string; title: string }> | null;
-              await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update', svcSlugs);
+              const currentSvcSlugs = pageRow?.service_slugs as unknown as Record<string, ServiceSlugEntryRaw> | null;
+              const previousSvcSlugs = previousServiceSlugsRef.current;
+              
+              await notifyIndexNow(
+                slug, score, !!sanitizedData.isPublished,
+                pageIdForIndexing, 'update',
+                currentSvcSlugs, previousSvcSlugs,
+              );
+              
+              // Update snapshot for next diff
+              previousServiceSlugsRef.current = currentSvcSlugs;
             } catch {
-              // Fallback: send without child URLs
+              // Fallback: send without diff (treats as first snapshot)
               await notifyIndexNow(slug, score, !!sanitizedData.isPublished, pageIdForIndexing, 'update').catch(() => {});
             }
           })();

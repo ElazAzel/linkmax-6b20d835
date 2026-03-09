@@ -1,162 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# P2.11: Diff-Based Child Indexing Orchestration
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## 1. Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-Current behavior: every save/publish fetches `service_slugs`, builds child entries for ALL active services, and sends them ALL to IndexNow. If a page has 10 services and a user edits their bio, 10 child URLs + 1 parent URL get re-submitted. This creates: (1) noisy submission logs where support can't distinguish real changes from no-ops, (2) wasted IndexNow quota, (3) no visibility into what actually changed. The system knows states but doesn't track transitions.
+### Новая тарифная модель (ADR 0026)
 
-**Principle**: IndexNow should fire only when a search entity's discoverable state actually changed.
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
-## 2. Architecture
+---
 
-The diff runs **client-side in `useCloudPageState`** by comparing the previous `service_slugs` snapshot (fetched after last save) with the new one (fetched after current save). This is the simplest approach: no new tables, no SQL changes, no edge function changes. The client already fetches `service_slugs` post-save — it just needs to remember the previous fetch.
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-### Snapshot shape
-```ts
-type ChildSnapshot = Record<string, { slug: string; state: string }>;
-// keyed by itemId
-```
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-### Transitions computed
-Compare `old[itemId]` vs `new[itemId]`:
-- **new_active**: not in old, in new with state=active → submit child
-- **restored**: old state=removed, new state=active → submit child  
-- **thin_to_active**: old state=thin, new state=active → submit child
-- **active_to_thin**: old state=active, new state=thin → skip (log only)
-- **active_to_removed**: old state=active, new state=removed → skip (log only)
-- **unchanged_active**: same state=active, same slug → no-op (don't submit)
-- **slug_changed**: same itemId, state=active, different slug → submit child (new URL)
-- **parent_blocked**: parent qualityScore < 40 or not published → suppress all
+---
 
-### Parent submission rule
-Submit parent URL only if:
-- First publish ever (no old snapshot)
-- Parent was not indexable → became indexable
-- NOT on every save when only children changed
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-## 3. Changes
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-### Phase A — Client-side diff engine + selective submission
+---
 
-**File: `src/lib/seo/indexnow-client.ts`**
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-New helper:
-```ts
-export type ChildTransition = 'new_active' | 'restored' | 'thin_to_active' | 
-  'active_to_thin' | 'active_to_removed' | 'unchanged_active' | 'slug_changed' | 'unchanged_other';
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
-export interface ChildDiffResult {
-  itemId: string;
-  slug: string;
-  transition: ChildTransition;
-  shouldSubmit: boolean;
-}
+---
 
-export function computeChildDiff(
-  oldSlugs: Record<string, ServiceSlugEntryRaw> | null,
-  newSlugs: Record<string, ServiceSlugEntryRaw> | null,
-): ChildDiffResult[]
-```
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-Update `notifyIndexNow` signature to accept `previousServiceSlugs` parameter. Internally:
-1. Compute diff
-2. Build `child_entries` only from items where `shouldSubmit === true`
-3. Pass `transition` as metadata to edge function for logging
-4. If no children changed AND parent unchanged → return `'no_changes'` (new result type)
+## Текущее состояние LinkMAX Business Zones
 
-**File: `src/hooks/page/useCloudPageState.ts`**
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-Add `previousServiceSlugsRef = useRef<Record<...> | null>(null)` to track last-known service_slugs.
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-In the post-save IndexNow block (lines 157-178):
-1. Fetch new `service_slugs` (already done)
-2. Call `notifyIndexNow` with both `previousServiceSlugsRef.current` and new slugs
-3. Update `previousServiceSlugsRef.current = newSlugs`
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
-On initial load (when `userData` arrives), seed `previousServiceSlugsRef` by fetching current `service_slugs` once.
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-### Phase B — Edge function logging enrichment
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-**File: `supabase/functions/notify-indexnow/index.ts`**
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-Extend `ChildEntry` to include optional `transition` field:
-```ts
-interface ChildEntry {
-  url: string;
-  item_id: string;
-  slug: string;
-  transition?: string; // 'new_active' | 'restored' | 'thin_to_active' | 'slug_changed'
-}
-```
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-When logging to `indexing_submissions`, store `transition` in the `action_type` field (or a new dedicated field if schema allows). This way support sees WHY each child was submitted.
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-Also: log skip entries for children that were intentionally not submitted (e.g., `active_to_thin`, `active_to_removed`) with `submission_status: 'skipped_no_change'` or `'skipped_transition'`.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-### Phase C — Add `IndexNowResult` type `'no_changes'`
+### Фаза 4: Аналитика Зоны (P1)
 
-When diff shows zero actionable transitions: don't invoke the edge function at all. Return `'no_changes'` from `notifyIndexNow`. This eliminates empty submissions entirely.
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-## 4. Files to Change
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-| File | Change |
-|------|--------|
-| `src/lib/seo/indexnow-client.ts` | Add `computeChildDiff()`, update `notifyIndexNow` to accept old/new slugs, add `'no_changes'` result |
-| `src/hooks/page/useCloudPageState.ts` | Add `previousServiceSlugsRef`, seed on load, pass to `notifyIndexNow` |
-| `supabase/functions/notify-indexnow/index.ts` | Accept `transition` in child entries, log it |
+### Фаза 5: Автоматизации -- MVP (P2)
 
-## 5. What NOT changes
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
 
-- No new DB tables or columns
-- No migration needed
-- No changes to `save_page_blocks`
-- No changes to resolver, SSR, or sitemap
-- Diagnostics RPC unchanged (submission logs become more meaningful automatically)
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
 
-## 6. Behavior examples
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
 
-**User edits bio, 5 active services unchanged**:
-- Diff: 5x `unchanged_active` → 0 child submissions
-- Parent: already indexed, no structural change → skip parent too
-- Result: `'no_changes'`, no edge function call
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
 
-**User adds new pricing item (6th service)**:
-- Diff: 5x `unchanged_active` + 1x `new_active`
-- Submit: only the new child URL
-- Parent: not resubmitted (no parent change)
+### Фаза 6: Инвойсы и оплата (P2)
 
-**User deletes a service (removed)**:
-- Diff: 1x `active_to_removed` + 4x `unchanged_active`  
-- Submit: nothing (removed services don't get submitted)
-- Log: skip entry for the removed child
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
 
-**User restores thin service with description**:
-- Diff: 1x `thin_to_active`
-- Submit: that one child URL
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
-## 7. Risks
+---
 
-- **First save after deploy**: `previousServiceSlugsRef` is null → treats all active children as `new_active` → submits all. This is correct behavior (same as current) and only happens once per session.
-- **Race condition**: Two rapid saves could have stale `previousServiceSlugsRef`. Mitigated by existing debounce (1500ms) and save versioning.
+## Что НЕ нужно копировать из Bitrix24
 
-## 8. Adjacent improvements
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-**P0 adjacent**: None — this change is self-contained.
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
-**P1 adjacent**: The `indexing_submissions` table could benefit from a `transition_reason` column to store the diff reason separately from `action_type`. But storing it in existing fields works for now.
+---
 
-**P2 adjacent**: Creator-facing "2 services submitted, 3 unchanged" toast after publish. Pure UI, no backend.
+## Приоритезация (RICE)
 
-## 9. Priority
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
-Phase A is the entire deliverable. Phase B is a small enhancement to logging. Phase C is a one-line optimization. All can ship together.
+---
 
-**One-sentence architecture**: IndexNow fires only for child entities whose search state actually transitioned, determined by diffing the previous and current `service_slugs` snapshots client-side.
+## Технический план реализации
 
-**Main bottleneck**: Every save re-submits all active children regardless of change.
+### DB миграции (новые таблицы/колонки)
 
-**Most important refactor**: `computeChildDiff()` — the pure function that compares old vs new snapshots and returns only actionable transitions.
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
 
-**First phase**: Phase A — diff engine + selective submission in the client.
+### Новые файлы
 
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+
+### Модифицируемые файлы
+
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+
+### Зависимости
+
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |
