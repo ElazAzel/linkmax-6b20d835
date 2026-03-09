@@ -383,18 +383,20 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                         <CardDescription>{t('zones.analytics.conversionTrendDesc', 'Won vs. lost deals over time.')}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ResponsiveContainer width="100%" height={200}>
-                            <AreaChart data={conversionTrend} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                                <XAxis dataKey="period" tick={{ fontSize: 11 }} />
-                                <YAxis tick={{ fontSize: 11 }} width={30} />
-                                <RechartsTooltip
-                                    contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                                />
-                                <Area type="monotone" dataKey="won" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name={t('zones.analytics.won', 'Won')} />
-                                <Area type="monotone" dataKey="lost" stackId="1" stroke="#ef4444" fill="#ef4444" fillOpacity={0.4} name={t('zones.analytics.lost', 'Lost')} />
-                            </AreaChart>
-                        </ResponsiveContainer>
+                        <div style={{ width: '100%', minHeight: 200, minWidth: 0 }}>
+                            <ResponsiveContainer width="100%" height={200}>
+                                <AreaChart data={conversionTrend} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                    <XAxis dataKey="period" tick={{ fontSize: 11 }} />
+                                    <YAxis tick={{ fontSize: 11 }} width={30} />
+                                    <RechartsTooltip
+                                        contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                    />
+                                    <Area type="monotone" dataKey="won" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name={t('zones.analytics.won', 'Won')} />
+                                    <Area type="monotone" dataKey="lost" stackId="1" stroke="#ef4444" fill="#ef4444" fillOpacity={0.4} name={t('zones.analytics.lost', 'Lost')} />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
                     </CardContent>
                 </Card>
             )}

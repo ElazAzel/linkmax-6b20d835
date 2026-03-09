@@ -199,24 +199,26 @@ export const ZoneDashboard = memo(function ZoneDashboard({ zoneId }: Props) {
                 </CardHeader>
                 <CardContent>
                   {stageBarData.some(d => d.count > 0) ? (
-                    <ResponsiveContainer width="100%" height={220}>
-                      <BarChart data={stageBarData} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-                        <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
-                        <YAxis tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} allowDecimals={false} />
-                        <Tooltip
-                          contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: '12px', border: '1px solid hsl(var(--border)/0.5)' }}
-                          formatter={(value: number, name: string) => [
-                            name === 'count' ? t('zones.dashboard.dealsCount', '{{count}} сделок', { count: value }) : `${formatCurrencyValue(value)} ₸`,
-                            name === 'count' ? t('common.quantity', 'Количество') : t('common.amount', 'Сумма')
-                          ]}
-                        />
-                        <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={32}>
-                          {stageBarData.map((entry, index) => (
-                            <Cell key={index} fill={entry.color || 'hsl(var(--primary))'} fillOpacity={0.8} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
+                    <div style={{ width: '100%', minHeight: 220, minWidth: 0 }}>
+                      <ResponsiveContainer width="100%" height={220}>
+                        <BarChart data={stageBarData} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
+                          <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} allowDecimals={false} />
+                          <Tooltip
+                            contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: '12px', border: '1px solid hsl(var(--border)/0.5)' }}
+                            formatter={(value: number, name: string) => [
+                              name === 'count' ? t('zones.dashboard.dealsCount', '{{count}} сделок', { count: value }) : `${formatCurrencyValue(value)} ₸`,
+                              name === 'count' ? t('common.quantity', 'Количество') : t('common.amount', 'Сумма')
+                            ]}
+                          />
+                          <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={32}>
+                            {stageBarData.map((entry, index) => (
+                              <Cell key={index} fill={entry.color || 'hsl(var(--primary))'} fillOpacity={0.8} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
                   ) : (
                     <div className="h-[220px] flex items-center justify-center text-muted-foreground text-xs italic">
                       {t('zones.dashboard.noDataForPeriod', 'Нет данных за период')}

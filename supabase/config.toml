@@ -92,6 +92,9 @@ verify_jwt = false # Public: SSR pages must be accessible without auth
 [functions.gcal-callback]
 verify_jwt = false  # OAuth callback from Google, no JWT
 
+[functions.google-calendar-sync]
+verify_jwt = false  # Handles auth internally via supabaseClient.auth.getUser()
+
 [functions.google-forms-parser]
 verify_jwt = false # Webhook: called by Google Forms
 

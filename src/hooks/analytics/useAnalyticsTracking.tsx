@@ -43,22 +43,22 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
   // Track block click — sends to internal DB + marketing pixels
   const onBlockClick = useCallback(
     (blockId: string, blockType?: string, blockTitle?: string, experimentId?: string, variantLabel?: string) => {
-      if (!pageId || !enabled) return;
+      if (!pageId || !trackingEnabled) return;
       // Internal analytics (DB)
       trackBlockClick(pageId, blockId, blockType, blockTitle, experimentId, variantLabel);
       // Marketing pixels (FB, TikTok, GA4)
       trackClickLink(blockTitle, undefined);
     },
-    [pageId, enabled]
+    [pageId, trackingEnabled]
   );
 
   // Track share
   const onShare = useCallback(
     (method?: string) => {
-      if (!pageId || !enabled) return;
+      if (!pageId || !trackingEnabled) return;
       trackShare(pageId, method);
     },
-    [pageId, enabled]
+    [pageId, trackingEnabled]
   );
 
   return {
