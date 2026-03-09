@@ -70,7 +70,7 @@ export function trackEditorAction(
         .from('analytics')
         .insert([{
           event_type: `editor.${action}`,
-          metadata: (meta as Record<string, unknown>) ?? null,
+          metadata: (meta ? JSON.parse(JSON.stringify(meta)) : null),
           page_id: null,
           block_id: meta?.blockId ?? null,
         }])
