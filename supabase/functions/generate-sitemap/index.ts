@@ -293,7 +293,7 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   // Extract content from blocks
   const links: { url: string; title: string }[] = [];
   const faqItems: { q: string; a: string }[] = [];
-  const services: { name: string; description?: string; price?: string }[] = [];
+  const services: { id: string; name: string; description?: string; price?: string }[] = [];
   const socialLinks: string[] = [];
   const knowsAbout: string[] = [];
   let bodyContent = '';
@@ -321,9 +321,9 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
         if (item.question && item.answer) faqItems.push({ q: String(item.question), a: String(item.answer) });
       }
     } else if (b.type === 'pricing' && content?.items && Array.isArray(content.items)) {
-      for (const item of (content.items as Array<{ name?: string; description?: string; price?: number }>).slice(0, 8)) {
+      for (const item of (content.items as Array<{ id?: string; name?: string; description?: string; price?: number }>).slice(0, 8)) {
         if (item.name) {
-          services.push({ name: String(item.name), description: item.description ? String(item.description) : undefined, price: item.price ? String(item.price) : undefined });
+          services.push({ id: String(item.id || ''), name: String(item.name), description: item.description ? String(item.description) : undefined, price: item.price ? String(item.price) : undefined });
           if (!knowsAbout.includes(String(item.name))) knowsAbout.push(String(item.name));
         }
       }
@@ -349,32 +349,30 @@ async function handleProfileSSR(supabase: SupabaseClient<any>, slug: string, lan
   const jsonLd = buildProfileSchemaGraph(page, blocks, services, faqItems, socialLinks, knowsAbout, lang);
   const location = page.city || extractLocationFromBlocks(blocks, null);
 
-  // Services HTML with child page links — uses service_slugs mapping
+  // Services HTML with child page links — uses item ID → service_slugs mapping
   let servicesHtml = '';
   if (services.length > 0) {
     const svcLabel = lang === 'ru' ? 'Услуги' : lang === 'kk' ? 'Қызметтер' : 'Services';
     servicesHtml = `<section id="services"><h2>${svcLabel}</h2><ul>\n`;
     
-    // Build a lookup from item name to slug via service_slugs
-    const slugsByTitle: Map<string, string> = new Map();
-    const activeStates: Map<string, string> = new Map();
+    // Build item ID → slug lookup from service_slugs (canonical, rename-safe)
+    const itemIdToSlug: Map<string, string> = new Map();
     const svcSlugs = (page as PageData).service_slugs;
     if (svcSlugs && typeof svcSlugs === 'object') {
-      for (const [, entry] of Object.entries(svcSlugs)) {
-        if (entry && typeof entry === 'object' && entry.slug && entry.title) {
-          slugsByTitle.set(entry.title, entry.slug);
-          activeStates.set(entry.slug, entry.state || 'active');
+      for (const [itemId, entry] of Object.entries(svcSlugs)) {
+        if (entry && typeof entry === 'object' && entry.slug && entry.state === 'active') {
+          itemIdToSlug.set(itemId, entry.slug);
         }
       }
     }
     
     for (const s of services) {
-      // Try to find slug from service_slugs mapping first, then legacy slugify
-      let serviceSlug = slugsByTitle.get(s.name);
-      let isActive = serviceSlug ? activeStates.get(serviceSlug) === 'active' : false;
+      // Primary: match by item ID (stable across renames)
+      let serviceSlug = s.id ? itemIdToSlug.get(s.id) : undefined;
+      let isActive = !!serviceSlug;
       
       if (!serviceSlug) {
-        // Legacy fallback for pages not yet re-saved
+        // Legacy fallback for pages not yet re-saved (no item.id persisted)
         serviceSlug = s.name.toLowerCase().replace(/[^a-zа-яёәіңғүұқөһ0-9]+/gi, '-').replace(/^-|-$/g, '').substring(0, 60);
         isActive = s.name.length > 0 && ((s.description && s.description.length >= 30) || !!s.price);
       }
