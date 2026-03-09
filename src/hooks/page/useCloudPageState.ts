@@ -52,17 +52,20 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       hasLocalChangesRef.current = false;
       // P2.11: Seed previous service_slugs on initial load
       if (userData.pageData?.id) {
-        supabase
-          .from('pages')
-          .select('service_slugs')
-          .eq('id', userData.pageData.id)
-          .single()
-          .then(({ data: row }) => {
+        void (async () => {
+          try {
+            const { data: row } = await supabase
+              .from('pages')
+              .select('service_slugs')
+              .eq('id', userData.pageData.id)
+              .single();
             if (row?.service_slugs) {
               previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
             }
-          })
-          .catch?.(() => {}); // Non-critical
+          } catch {
+            // Non-critical
+          }
+        })();
       }
     }
   }, [userData]);
