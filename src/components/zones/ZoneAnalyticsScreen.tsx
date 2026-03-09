@@ -343,18 +343,20 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     </CardHeader>
                     <CardContent>
                         {revenueTimeline.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={250}>
-                                <LineChart data={revenueTimeline} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                                    <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                                    <YAxis tick={{ fontSize: 11 }} width={60} />
-                                    <RechartsTooltip
-                                        formatter={(value: number) => [value.toLocaleString(), t('zones.analytics.revenue', 'Revenue')]}
-                                        contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                                    />
-                                    <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
-                                </LineChart>
-                            </ResponsiveContainer>
+                            <div style={{ width: '100%', minHeight: 250, minWidth: 0 }}>
+                                <ResponsiveContainer width="100%" height={250}>
+                                    <LineChart data={revenueTimeline} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                                        <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+                                        <YAxis tick={{ fontSize: 11 }} width={60} />
+                                        <RechartsTooltip
+                                            formatter={(value: number) => [value.toLocaleString(), t('zones.analytics.revenue', 'Revenue')]}
+                                            contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
+                                        />
+                                        <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </div>
                         ) : (
                             <p className="text-sm text-muted-foreground py-8 text-center">{t('zones.analytics.noRevenue', 'No revenue data for this period.')}</p>
                         )}
