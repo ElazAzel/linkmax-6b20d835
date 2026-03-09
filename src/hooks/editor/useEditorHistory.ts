@@ -67,6 +67,8 @@ export function useEditorHistory(
       blockType,
     };
 
+    wasMergedRef.current = false;
+    
     setHistory((prev) => {
       // Remove any future history if we're not at the end
       const newHistory = prev.slice(0, currentIndex + 1);
@@ -76,8 +78,8 @@ export function useEditorHistory(
         const lastAction = newHistory[newHistory.length - 1];
         if (shouldMergeActions(lastAction, action)) {
           const merged = mergeActions(lastAction, action);
-          const compressed = [...newHistory.slice(0, -1), merged].slice(-maxHistorySize);
-          return compressed;
+          wasMergedRef.current = true;
+          return [...newHistory.slice(0, -1), merged].slice(-maxHistorySize);
         }
       }
       
@@ -86,7 +88,10 @@ export function useEditorHistory(
       return updated;
     });
 
-    setCurrentIndex((prev) => Math.min(prev + 1, maxHistorySize - 1));
+    // Only advance index if we didn't merge
+    if (!wasMergedRef.current) {
+      setCurrentIndex((prev) => Math.min(prev + 1, maxHistorySize - 1));
+    }
     setCurrentBlocks(newState);
     onStateChange?.(newState);
 
