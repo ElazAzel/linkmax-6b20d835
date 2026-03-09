@@ -25,8 +25,8 @@ export function detectAntiPatterns(blocks: Block[], niche?: string): StructuralS
   const len = types.length;
 
   // Helper: first index of any type in set
-  const firstIndex = (set: Set<string>) => types.findIndex((t) => set.has(t));
-  const firstOfType = (t: string) => types.indexOf(t);
+  const firstIndex = (set: Set<string>) => types.findIndex((t) => set.has(t as string));
+  const firstOfType = (t: string) => types.indexOf(t as any);
 
   // 1. booking_too_low — booking in bottom 30%
   const bookingIdx = firstOfType('booking');
