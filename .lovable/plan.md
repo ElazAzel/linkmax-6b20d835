@@ -1,209 +1,122 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+# P2.10: Child Search Control Plane — Assessment & Plan
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+## 1. Verdict
 
-### Новая тарифная модель (ADR 0026)
+After P2.8, the **entity integrity layer is solid**: IDs persist, orphans redirect, resolver is canonical. The next real bottleneck is that **service child pages have no observable search lifecycle**. "Active" in `service_slugs` ≠ "actually in sitemap" ≠ "actually submitted to IndexNow". There's no way for creator, admin, or diagnostics to know where a child URL stands in the search pipeline. The system does things but doesn't know what it did.
 
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+**Principle**: Every child URL must have a deterministic, observable search state — not inferred from `service_slugs.state`, but tracked as a fact.
 
----
+## 2. What's Already Working (skip)
 
-## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
+- `service_slugs` item-id-keyed ✓
+- Canonical resolver ✓
+- SSR/client/sitemap use mapping ✓
+- Persistence hardening ✓
+- `indexing_submissions` has `child_item_id`, `child_slug` ✓
+- `notify-indexnow` logs child metadata ✓
+- Client sends child entries after save ✓
 
-| Задача | Статус |
-|--------|--------|
-| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
-| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
-| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
-| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
-| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
+## 3. Remaining Problem: SSR Profile Service Links (P0 Adjacent)
 
----
+**Lines 352-389 in generate-sitemap/index.ts** still use title-based lookup (`slugsByTitle`) to generate service links in profile SSR HTML. This means if a service is renamed, the SSR profile page will generate a dead link because it matches on `entry.title` not `item.id`. This is a leftover from P2.7 that should have been caught.
 
-## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
+**Fix**: Change the profile SSR service links to use item ID matching. The pricing items array already has `id` fields (persisted since P2.8). Match `pricingItem.id` → `service_slugs[itemId]` directly.
 
-| Задача | Статус |
-|--------|--------|
-| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
-| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
-| Добавить Team Performance section (метрики по assignee) | ✅ |
-| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
-| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
+## 4. Core Changes
 
----
+### Phase A — Fix SSR profile service links (P0)
 
-## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+**File**: `supabase/functions/generate-sitemap/index.ts` lines 352-389
 
-| Задача | Статус |
-|--------|--------|
-| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
-| Увеличить touch targets до 44px (min-h-11) | ✅ |
-| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
-| Улучшить Empty States с CTA | ✅ |
+Current broken flow:
+```
+for entry in service_slugs → slugsByTitle.set(entry.title, entry.slug)
+for service in services → serviceSlug = slugsByTitle.get(s.name)
+```
 
----
+New correct flow:
+```
+Build itemIdToSlug map: service_slugs[itemId].slug (only active)
+When rendering services, each pricing item has item.id
+serviceSlug = itemIdToSlug.get(item.id)
+```
 
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
+This requires carrying `item.id` through the services array in the SSR rendering loop. Currently `services` is built at line 323-329 without preserving item ID. Need to add `id` to the services collection.
 
-## Текущее состояние LinkMAX Business Zones
+### Phase B — Diagnostics: child search state enrichment
 
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
+**Expand `get_page_search_diagnostics` RPC** to join child entries with their latest `indexing_submissions` row per (child_item_id, provider). This already partially exists but should be formalized:
 
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
+For each child in `service_slugs`:
+- `last_indexnow_at`: MAX created_at from submissions where child_item_id matches and status = 'sent'
+- `last_submission_status`: latest status
+- `is_in_sitemap`: derived from state = 'active' AND parent quality >= 40
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
+No new table needed. The `indexing_submissions` table already has `child_item_id` and `child_slug`. Diagnostics just needs to query it properly.
 
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
+### Phase C — Creator-facing child search summary
 
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
+Update `SearchReadinessCard` (or wherever creator sees diagnostics) to show:
+- "N services visible in search"
+- "N services excluded (add description)"
+- "N services removed"
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
+This is a UI-only change using existing `child_summary` data from diagnostics.
 
-### Фаза 3: Tasks -- закрытие пробелов (P1)
+## 5. Files to Change
 
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
+| File | Change |
+|------|--------|
+| `supabase/functions/generate-sitemap/index.ts` | Fix profile SSR service links: use item.id → service_slugs mapping instead of title-based lookup |
+| `supabase/functions/generate-sitemap/index.ts` | Deploy after fix |
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
+## 6. Detailed SSR Fix
 
-### Фаза 4: Аналитика Зоны (P1)
+Lines 323-329 currently build services array as `{ name, description, price }`. Change to also capture `id`:
+```ts
+services.push({ id: String(item.id || ''), name: ..., description: ..., price: ... });
+```
 
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
+Lines 358-369 replace `slugsByTitle` with `itemIdToSlug`:
+```ts
+const itemIdToSlug: Map<string, string> = new Map();
+if (svcSlugs && typeof svcSlugs === 'object') {
+  for (const [itemId, entry] of Object.entries(svcSlugs)) {
+    if (entry && entry.state === 'active' && entry.slug) {
+      itemIdToSlug.set(itemId, entry.slug);
+    }
+  }
+}
+```
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
+Lines 371-388 replace title lookup with ID lookup:
+```ts
+let serviceSlug = s.id ? itemIdToSlug.get(s.id) : undefined;
+let isActive = !!serviceSlug;
+// Legacy fallback unchanged for pages not yet re-saved
+```
 
-### Фаза 5: Автоматизации -- MVP (P2)
+## 7. What NOT to Do
 
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
+- No new tables — `indexing_submissions` already covers child tracking
+- No new edge functions — existing `notify-indexnow` handles child submissions
+- No materialized views — diagnostics RPC is sufficient
+- No client-side search state tracking — server is the truth
 
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
+## 8. Adjacent Platform Improvements
 
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
+### P0 adjacent — SSR profile service links (included above)
+Title-based lookup in profile SSR is the last remaining title-dependent resolution path. Without fixing it, renamed services get dead links in bot-facing HTML. **This is the primary deliverable.**
 
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
+### P1 adjacent — Diagnostics child submission history
+The `get_page_search_diagnostics` RPC should join `indexing_submissions` by `child_item_id` to show last submission time/status per child. Currently child_details exist but may not reflect actual submission history. Low-risk SQL expansion.
 
-### Фаза 6: Инвойсы и оплата (P2)
+### P2 adjacent — Stale emission detection
+Add a check: if a child URL was in sitemap last week but state changed to `removed`, and no IndexNow was sent for the removal, flag it. This is polish — not blocking.
 
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
+## 9. Priority
 
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+**Phase A is the only critical change**. It's a surgical fix to ~30 lines in the SSR function. Everything else is incremental improvement on an already-functional pipeline.
 
----
-
-## Что НЕ нужно копировать из Bitrix24
-
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
-
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
-
----
-
-## Приоритезация (RICE)
-
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
-
----
-
-## Технический план реализации
-
-### DB миграции (новые таблицы/колонки)
-
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
-
-### Новые файлы
-
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
-
-### Модифицируемые файлы
-
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
-
-### Зависимости
-
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
-
----
-
-## Рекомендуемый порядок реализации
-
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
-
----
-
-## Post-Roadmap: Teamwork & Integrations (Март 2026)
-
-| Задача | Статус |
-|--------|--------|
-| Documents MVP (генерация договоров, PDF) | ✅ |
-| Deal Comments (zone_deal_comments) | ✅ |
-| @Mentions в комментариях к сделкам | ✅ |
-| MentionInput компонент с автоподсказкой | ✅ |
-| Telegram уведомления при @mention | ✅ |
-| Excel Export (Contacts + Deals + Воронка) | ✅ |
-| mentioned_user_ids колонка в zone_deal_comments | ✅ |
