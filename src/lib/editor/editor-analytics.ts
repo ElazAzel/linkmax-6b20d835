@@ -24,7 +24,15 @@ export type EditorAnalyticsAction =
   | 'validation_error_seen'
   | 'preset_used'
   | 'template_used'
-  | 'block_insert_search_used';
+  | 'block_insert_search_used'
+  // P4: Multi-select & interaction
+  | 'keyboard_navigate'
+  | 'inline_edit_opened'
+  | 'select_all'
+  | 'block_copied'
+  | 'block_pasted'
+  | 'bulk_action_used'
+  | 'selection_changed';
 
 export interface EditorAnalyticsMeta {
   blockType?: string;
