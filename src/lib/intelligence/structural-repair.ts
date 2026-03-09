@@ -9,9 +9,9 @@ import type { StructuralSuggestion } from './types';
 import { getNichePack } from './niche-packs';
 
 // Sets for role checking
-const OFFER_TYPES = new Set(['pricing', 'product', 'catalog', 'booking']);
-const CTA_TYPES = new Set(['button', 'messenger', 'form', 'newsletter', 'booking']);
-const TRUST_TYPES = new Set(['testimonial', 'before_after', 'community']);
+const OFFER_TYPES: Set<string> = new Set(['pricing', 'product', 'catalog', 'booking']);
+const CTA_TYPES: Set<string> = new Set(['button', 'messenger', 'form', 'newsletter', 'booking']);
+const TRUST_TYPES: Set<string> = new Set(['testimonial', 'before_after', 'community']);
 const FILLER_TYPES = new Set(['separator', 'socials', 'link', 'download', 'shoutout', 'scratch']);
 
 export function detectAntiPatterns(blocks: Block[], niche?: string): StructuralSuggestion[] {
