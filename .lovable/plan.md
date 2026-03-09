@@ -1,209 +1,170 @@
-# План развития платформы lnkmx — Март-Апрель 2026
 
-## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
+## Full Audit After P0
 
-**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
+### What's already good:
+- P0 delivered: insert-between dividers ✓, block type labels ✓, duplicate buttons ✓, manifest-driven insert ✓, StructureView uses manifest icons ✓
+- `useBlockEditor` has `handleDuplicateBlock` ✓
+- `GridEditor` has `SortableGridBlockItem` with type label + duplicate + drag handle ✓
+- `MobileBlockActions` has comprehensive action sheet with move up/down/top/bottom, duplicate, hide ✓
+- `BlockInsertButton` is fully manifest-driven with recommendations ✓
+- DnD is stable with proper event propagation guards ✓
 
-| Задача | Статус |
-|--------|--------|
-| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
-| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
-| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
-| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
-| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
+### What's still weak (honest verdict):
 
-### Новая тарифная модель (ADR 0026)
+**3 biggest friction points:**
+1. **No block completeness/validation signal** — empty pricing, button without URL, text without content — all look identical on cards. Users have no feedback loop until they preview.
+2. **No collapse/expand** — 10+ blocks = vertical wall. No way to reduce cognitive load or scroll distance.
+3. **StructureView is passive** — it's a view-only panel that doesn't reflect incomplete state, hidden state visually on card, or let you jump to a block. Move up/down work but onBlockSelect doesn't close the sheet + scroll to block.
 
-| Тир | Комиссия | Цена | Возможности |
-|-----|----------|------|-------------|
-| Identity | — | 0₸ | Link-in-bio, базовые блоки |
-| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
-| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
-| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
+**One underpowered system layer:** Block validation / completeness — there's no shared helper that can determine whether a block is empty/incomplete. Each rendering component handles its own empty state (e.g., PricingBlock has its own empty check). The editor layer has no awareness of this.
 
 ---
 
-## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
+## P1 Plan
 
-| Задача | Статус |
-|--------|--------|
-| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
-| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
-| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
-| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
-| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
+### What will be implemented in this pass:
 
----
+**1. Block completeness validator** — `src/lib/blocks/block-completeness.ts`
+A pure function `getBlockCompleteness(block: Block): 'complete' | 'incomplete' | 'empty'` covering the 10 most common block types. Logic:
+- `text`: empty if `content` is empty string/object with no values
+- `button`: incomplete if no `url` or no `title`; empty if both missing
+- `link`: same as button
+- `messenger`: empty if `messengers.length === 0` or no valid username
+- `pricing`: empty if `items.length === 0`; incomplete if any item has no name
+- `faq`: empty if `items.length === 0`
+- `image`: empty if no `url`
+- `booking`: incomplete if no meaningful booking config
+- `profile`: never incomplete (always has something)
+- `separator`, `socials`, `avatar`, etc.: always `complete` (self-sufficient)
 
-## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
+**2. Completeness badge on GridEditor cards** — `src/components/editor/GridEditor.tsx`
+Add a small dot indicator to `SortableGridBlockItem`: orange dot = incomplete, red dot = empty. Positioned at top-left, next to drag handle (not overlapping). Only shown when relevant.
 
-| Задача | Статус |
-|--------|--------|
-| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
-| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
-| Добавить Team Performance section (метрики по assignee) | ✅ |
-| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
-| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
+**3. Collapse/expand per block** — `src/components/editor/GridEditor.tsx`
+Add `collapsedBlocks` state (`Set<string>`) in `GridEditor`. Pass `isCollapsed` + `onToggleCollapse` to each `SortableGridBlockItem`.
+- Collapsed state: shows icon + type label + completeness badge + brief summary text. Height fixed ~56px. 
+- Summary text: derived from `getBlockSummary(block)` helper function (also in `block-completeness.ts`).
+- Expand/collapse button on card (ChevronDown/ChevronUp) always visible, not hover-only.
+- Full block preview shows when expanded (current behavior).
+- `collapsedBlocks` stored in `sessionStorage` keyed by page ID to persist across tab switches.
 
----
+**4. Move up/down on grid cards** — `src/components/editor/GridEditor.tsx`
+Add up/down arrow buttons to `SortableGridBlockItem` quick action area. Currently only edit+duplicate+delete exist. Add `onMoveUp` / `onMoveDown` props to grid editor and wire through from EditorScreen/useDashboard. Profile block gets no move buttons. First/last blocks get disabled state.
 
-## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
+**5. StructureView: incomplete marker + selected block highlight** — `src/components/editor/StructureView.tsx`
+- Accept `selectedBlockId?: string` prop — highlight the currently-selected/editing block in the list
+- Accept `incompleteBlockIds?: Set<string>` prop — show an orange dot on incomplete blocks
+- onBlockSelect closes the sheet AND the parent calls `onEditBlock` — the sheet should close on select
 
-| Задача | Статус |
-|--------|--------|
-| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
-| Увеличить touch targets до 44px (min-h-11) | ✅ |
-| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
-| Улучшить Empty States с CTA | ✅ |
+**6. EditorScreen: wire move up/down from dashboard** — connect reorder ops
+`useDashboard` / `EditorScreen` already has `reorderBlocks` from cloudState. Add `handleMoveBlock(id, direction)` in `useDashboard` or directly in `EditorScreen` that finds the block index and calls `reorderBlocks` with array swapped. Pass as `onMoveUpBlock` / `onMoveDownBlock` to `GridEditor` and `StructureView`.
 
----
-
-# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
-
-## Текущее состояние LinkMAX Business Zones
-
-### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
-
-**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
-| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
-| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
-| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
-| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
-
-### Фаза 2: Contacts -- из списка в мини-CRM (P0)
-
-**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
-| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
-| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
-| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
-
-### Фаза 3: Tasks -- закрытие пробелов (P1)
-
-**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
-| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
-| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
-| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
-
-### Фаза 4: Аналитика Зоны (P1)
-
-**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
-| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
-| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
-
-### Фаза 5: Автоматизации -- MVP (P2)
-
-**Bitrix24 Reference**: Роботы и триггеры в CRM.
-
-Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
-
-| Триггер | Действие | Реализация |
-| :--- | :--- | :--- |
-| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
-| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
-| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
-
-**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
-
-### Фаза 6: Инвойсы и оплата (P2)
-
-**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
-
-| Задача | Суть | Effort |
-| :--- | :--- | :--- |
-| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
-| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
-| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
+**7. StructureView: incomplete block count in header** — minor improvement
+Show "3 блока неполных" alongside block count if there are incomplete blocks.
 
 ---
 
-## Что НЕ нужно копировать из Bitrix24
+## Files to Change
 
-Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
-
-- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
-- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
-- HR-модуль -- не тот сегмент
-- Документооборот -- микро-бизнес не работает с документами
-- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
-
----
-
-## Приоритезация (RICE)
-
-| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
-| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
-| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
-| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
-| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
-| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
+| File | Change |
+|------|--------|
+| `src/lib/blocks/block-completeness.ts` | **NEW** — `getBlockCompleteness()`, `getBlockSummary()` |
+| `src/components/editor/GridEditor.tsx` | Add collapse, completeness badge, move up/down buttons, wiring |
+| `src/components/editor/StructureView.tsx` | Add `selectedBlockId`, `incompleteBlockIds`, close-on-select |
+| `src/components/dashboard-v2/screens/EditorScreen.tsx` | Add `onMoveUpBlock` / `onMoveDownBlock` props, wire |
+| `src/hooks/dashboard/useDashboard.ts` | Add `handleMoveBlock` helper, expose to EditorScreen |
 
 ---
 
-## Технический план реализации
+## Implementation Details
 
-### DB миграции (новые таблицы/колонки)
+### `block-completeness.ts` (new file)
 
-- `zone_automations` (для Фазы 5)
-- Остальные таблицы уже существуют и покрывают Фазы 1-4
+```ts
+export type BlockCompletion = 'complete' | 'incomplete' | 'empty';
 
-### Новые файлы
+export function getBlockCompleteness(block: Block): BlockCompletion
+export function getBlockSummary(block: Block): string
+```
 
-- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
-- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
-- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
-- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
-- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
+`getBlockSummary` returns a short human-readable string:
+- text → first 40 chars of content
+- link/button → title (truncated)
+- messenger → platform name + username
+- pricing → "N услуг"
+- faq → "N вопросов"
+- image → has URL ? "Изображение" : "Нет фото"
+- booking → "Бронирование активно" / "Не настроено"
+- separator → style name
+- default → block type label
 
-### Модифицируемые файлы
+### `GridEditor.tsx` changes
 
-- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
-- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
-- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
-- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
+- Add `collapsedBlocks: Set<string>` state, initialized from `sessionStorage`
+- Add `onMoveUp?: (id: string) => void` and `onMoveDown?: (id: string) => void` to `GridEditorProps`
+- `SortableGridBlockItem` gets:
+  - `isCollapsed: boolean`
+  - `onToggleCollapse: () => void`  
+  - `completeness: BlockCompletion`
+  - `summary: string`
+  - `onMoveUp?: (id: string) => void`
+  - `onMoveDown?: (id: string) => void`
+  - `isFirst: boolean`
+  - `isLast: boolean`
+- Collapsed rendering: `min-h-[56px]` fixed, show icon + typeLabel + summary + completeness dot + ChevronDown
+- Expanded rendering: existing card with additionally a ChevronUp button + completeness dot
+- Move up/down: small buttons rendered in expanded controls cluster (between drag handle and edit button on desktop), always rendered on mobile (in the card header row)
 
-### Зависимости
+### `StructureView.tsx` changes
 
-- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
-- Новых зависимостей не требуется
+- Add `selectedBlockId?: string` to `StructureViewProps`
+- Add `incompleteBlockIds?: Set<string>` to `StructureViewProps`  
+- `BlockListItem` gets `isSelected: boolean` — highlighted with `ring-2 ring-primary/50`
+- `BlockListItem` gets `isIncomplete: boolean` — orange dot next to icon
+- `onSelect` callback should also call `onOpenChange(false)` — wire this inside StructureView
+
+### `EditorScreen.tsx` changes
+
+- Add `onMoveUpBlock?: (id: string) => void`
+- Add `onMoveDownBlock?: (id: string) => void`
+- Pass these to `GridEditor`
+
+### `useDashboard.ts` changes
+
+- Add `handleMoveBlock(id: string, direction: 'up' | 'down')` using `cloudState.reorderBlocks`
+- Expose `handleMoveBlock` (or split into handleMoveUp / handleMoveDown)
 
 ---
 
-## Рекомендуемый порядок реализации
+## Risks
 
-1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
-2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
-3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
-4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
-5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+- **Collapse + DnD**: When a block is collapsed, its DOM height is fixed. DnD sortable handles still work — just the card renders smaller. No DnD logic changes needed.
+- **sessionStorage**: Collapsed state keyed by `pageData.id`. If pageData.id is undefined (new page), use `'new'` as key. Read on mount, write on toggle.
+- **Move up/down**: Just calls `arrayMove` on the blocks array and calls `reorderBlocks`. Profile block is always first (protected in `addBlock` logic already).
 
 ---
 
-## Post-Roadmap: Teamwork & Integrations (Март 2026)
+## Adjacent improvements included
 
-| Задача | Статус |
-|--------|--------|
-| Documents MVP (генерация договоров, PDF) | ✅ |
-| Deal Comments (zone_deal_comments) | ✅ |
-| @Mentions в комментариях к сделкам | ✅ |
-| MentionInput компонент с автоподсказкой | ✅ |
-| Telegram уведомления при @mention | ✅ |
-| Excel Export (Contacts + Deals + Воронка) | ✅ |
-| mentioned_user_ids колонка в zone_deal_comments | ✅ |
+**Core editor:**
+- block-completeness.ts (new utility)
+- collapse/expand per block
+- completeness badge on grid cards + structure view
+- move up/down on grid cards
+
+**Adjacent (editor-adjacent only):**
+- `useDashboard`: `handleMoveBlock` (wiring layer, not UX change)
+- `StructureView`: selected-block highlight (UX coherence with editor state)
+
+**NOT included (out of scope):**
+- Inline editing (would need per-block form rendering inside the card — P2, more complex)
+- Command palette (P2)
+- Analytics telemetry (P2)
+
+---
+
+## 3 Strongest UX Wins
+
+1. **Completeness badge** — users finally know which blocks need content before publishing. No more silent empty pricing blocks.
+2. **Collapse/expand** — 15-block pages become manageable. Users can collapse finished sections and focus on what's left.
+3. **Move up/down on grid cards** — drag is unreliable on mobile; having explicit arrow buttons makes reorder accessible without the actions sheet.
