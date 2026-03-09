@@ -1,35 +1,12 @@
 'use client';
 
 import { useNavigate } from 'react-router-dom';
-
 import { memo, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
-import Type from 'lucide-react/dist/esm/icons/type';
-import Video from 'lucide-react/dist/esm/icons/video';
-import Link2 from 'lucide-react/dist/esm/icons/link-2';
-import File from 'lucide-react/dist/esm/icons/file';
-import ListOrdered from 'lucide-react/dist/esm/icons/list-ordered';
-import Image from 'lucide-react/dist/esm/icons/image';
-import ShoppingBag from 'lucide-react/dist/esm/icons/shopping-bag';
-import Code from 'lucide-react/dist/esm/icons/code';
-import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
-import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
-import Star from 'lucide-react/dist/esm/icons/star';
-import Gift from 'lucide-react/dist/esm/icons/gift';
-import Compass from 'lucide-react/dist/esm/icons/compass';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
-import Clock from 'lucide-react/dist/esm/icons/clock';
-import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
-import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
-import FormInput from 'lucide-react/dist/esm/icons/form-input';
-import Mail from 'lucide-react/dist/esm/icons/mail';
-import HelpCircle from 'lucide-react/dist/esm/icons/help-circle';
-import Layers from 'lucide-react/dist/esm/icons/layers';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -51,6 +28,8 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
+import { BLOCK_MANIFEST, type BlockManifestEntry } from '@/lib/blocks/block-manifest';
+import { getLucideIcon } from '@/lib/utils/icon-utils';
 
 import { getRecommendedBlocks, type BlockRecommendation } from '@/lib/blocks/block-recommendations';
 import type { Niche } from '@/lib/niches';
@@ -62,73 +41,58 @@ interface BlockInsertButtonProps {
   currentBlockCount?: number;
   className?: string;
   currentTier?: FreeTier;
-  /** Page niche for recommendations */
   pageNiche?: Niche | string;
-  /** Existing blocks on page */
   existingBlocks?: BlockType[];
-  /** Control sheet externally (for inline mode) */
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  /** Hide FAB button (for inline mode) */
   hideTrigger?: boolean;
 }
 
 type BlockTier = 'free' | 'pro';
 
-interface BlockConfig {
-  type: string;
-  label: string;
-  Icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  tier: BlockTier;
-}
+// Color mapping by block type for the insert panel icons
+const BLOCK_COLORS: Record<string, string> = {
+  profile: 'bg-cyan-500',
+  text: 'bg-slate-500',
+  link: 'bg-blue-500',
+  button: 'bg-red-500',
+  image: 'bg-emerald-500',
+  separator: 'bg-gray-400',
+  avatar: 'bg-cyan-500',
+  socials: 'bg-pink-500',
+  messenger: 'bg-green-500',
+  video: 'bg-rose-500',
+  carousel: 'bg-violet-500',
+  before_after: 'bg-cyan-600',
+  map: 'bg-green-600',
+  faq: 'bg-blue-400',
+  form: 'bg-purple-500',
+  scratch: 'bg-red-400',
+  countdown: 'bg-orange-400',
+  custom_code: 'bg-slate-600',
+  product: 'bg-amber-500',
+  catalog: 'bg-teal-500',
+  pricing: 'bg-lime-500',
+  download: 'bg-indigo-500',
+  booking: 'bg-fuchsia-500',
+  shoutout: 'bg-orange-500',
+  community: 'bg-indigo-400',
+  event: 'bg-emerald-600',
+  testimonial: 'bg-yellow-500',
+  newsletter: 'bg-sky-500',
+};
 
-// Blocks with colorful icons like competitors - labels are translation keys
-const ALL_BLOCKS: BlockConfig[] = [
-  // Basic
-  { type: 'text', label: 'blockTypes.text', Icon: Type, color: 'bg-slate-500', tier: 'free' },
-  { type: 'link', label: 'blockTypes.link', Icon: Link2, color: 'bg-blue-500', tier: 'free' },
-  { type: 'button', label: 'blockTypes.button', Icon: () => <span className="text-xl font-black">▶</span>, color: 'bg-red-500', tier: 'free' },
-  { type: 'image', label: 'blockTypes.image', Icon: Image, color: 'bg-emerald-500', tier: 'free' },
-
-  // Media
-  { type: 'video', label: 'blockTypes.video', Icon: Video, color: 'bg-rose-500', tier: 'pro' },
-  { type: 'carousel', label: 'blockTypes.carousel', Icon: Layers, color: 'bg-violet-500', tier: 'pro' },
-  { type: 'avatar', label: 'blockTypes.avatar', Icon: () => <span className="text-xl">👤</span>, color: 'bg-cyan-500', tier: 'free' },
-  { type: 'separator', label: 'blockTypes.separator', Icon: () => <span className="text-xl">—</span>, color: 'bg-gray-400', tier: 'free' },
-
-  // Social
-  { type: 'socials', label: 'blockTypes.socials', Icon: () => <span className="text-xl">@</span>, color: 'bg-pink-500', tier: 'free' },
-  { type: 'messenger', label: 'blockTypes.messenger', Icon: MessageCircle, color: 'bg-green-500', tier: 'free' },
-  { type: 'shoutout', label: 'blockTypes.shoutout', Icon: Megaphone, color: 'bg-orange-500', tier: 'pro' },
-
-  // Business (now pro tier)
-  { type: 'product', label: 'blockTypes.product', Icon: ShoppingBag, color: 'bg-amber-500', tier: 'pro' },
-  { type: 'catalog', label: 'blockTypes.catalog', Icon: ListOrdered, color: 'bg-teal-500', tier: 'pro' },
-  { type: 'pricing', label: 'blockTypes.pricing', Icon: DollarSign, color: 'bg-lime-500', tier: 'pro' },
-  { type: 'download', label: 'blockTypes.download', Icon: File, color: 'bg-indigo-500', tier: 'pro' },
-
-  // Forms (now pro tier)
-  { type: 'form', label: 'blockTypes.form', Icon: FormInput, color: 'bg-purple-500', tier: 'pro' },
-  { type: 'newsletter', label: 'blockTypes.newsletter', Icon: Mail, color: 'bg-sky-500', tier: 'pro' },
-  { type: 'booking', label: 'blockTypes.booking', Icon: Calendar, color: 'bg-fuchsia-500', tier: 'pro' },
-  { type: 'event', label: 'blockTypes.event', Icon: CalendarDays, color: 'bg-emerald-600', tier: 'pro' },
-
-  // Interactive (now pro tier)
-  { type: 'testimonial', label: 'blockTypes.testimonial', Icon: Star, color: 'bg-yellow-500', tier: 'pro' },
-  { type: 'scratch', label: 'blockTypes.scratch', Icon: Gift, color: 'bg-red-400', tier: 'pro' },
-  { type: 'faq', label: 'blockTypes.faq', Icon: HelpCircle, color: 'bg-blue-400', tier: 'free' },
-  { type: 'countdown', label: 'blockTypes.countdown', Icon: Clock, color: 'bg-orange-400', tier: 'pro' },
-
-  // Other
-  { type: 'map', label: 'blockTypes.map', Icon: MapPin, color: 'bg-green-600', tier: 'free' },
-  { type: 'before_after', label: 'blockTypes.beforeAfter', Icon: Compass, color: 'bg-cyan-600', tier: 'pro' },
-  { type: 'custom_code', label: 'blockTypes.customCode', Icon: Code, color: 'bg-slate-600', tier: 'pro' },
-
-  // Social - Community
-  { type: 'community', label: 'blockTypes.community', Icon: () => <span className="text-xl">👥</span>, color: 'bg-indigo-400', tier: 'pro' },
-  
-];
+// Derive block list from manifest (single source of truth)
+// Exclude 'profile' since it's auto-added and not insertable
+const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
+  .filter((entry) => entry.type !== 'profile')
+  .map((entry) => ({
+    type: entry.type,
+    labelKey: entry.labelKey,
+    icon: entry.icon,
+    color: BLOCK_COLORS[entry.type] || 'bg-muted',
+    tier: (entry.isPremium ? 'pro' : 'free') as BlockTier,
+  }));
 
 export const BlockInsertButton = memo(function BlockInsertButton({
   onInsert,
@@ -148,19 +112,16 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Support both controlled and uncontrolled modes
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = onOpenChange || setInternalIsOpen;
 
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
   const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
 
-  // Get niche-based recommendations
   const recommendations = useMemo(() => {
     return getRecommendedBlocks(pageNiche, existingBlocks);
   }, [pageNiche, existingBlocks]);
 
-  // Create a set for quick lookup
   const recommendedBlockTypes = useMemo(() => {
     return new Set(recommendations.filter(r => r.isRelevant).map(r => r.block));
   }, [recommendations]);
@@ -176,19 +137,17 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return tierLevel(currentTier) >= tierLevel(blockTier);
   };
 
-  const filteredBlocks = ALL_BLOCKS.filter(block =>
-    t(block.label, block.type).toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredBlocks = MANIFEST_BLOCKS.filter(block =>
+    t(block.labelKey, block.type).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Split blocks into recommended and others
   const { recommendedBlocks, otherBlocks } = useMemo(() => {
     if (searchQuery) {
-      // If searching, don't split
-      return { recommendedBlocks: [], otherBlocks: filteredBlocks };
+      return { recommendedBlocks: [] as typeof MANIFEST_BLOCKS, otherBlocks: filteredBlocks };
     }
 
-    const recommended: BlockConfig[] = [];
-    const others: BlockConfig[] = [];
+    const recommended: typeof MANIFEST_BLOCKS = [];
+    const others: typeof MANIFEST_BLOCKS = [];
 
     filteredBlocks.forEach(block => {
       if (recommendedBlockTypes.has(block.type as BlockType)) {
@@ -198,7 +157,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       }
     });
 
-    // Sort recommended by score (use order from recommendations)
     recommended.sort((a, b) => {
       const scoreA = recommendations.find(r => r.block === a.type)?.score || 0;
       const scoreB = recommendations.find(r => r.block === b.type)?.score || 0;
@@ -229,16 +187,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     setSearchQuery('');
   };
 
-  // Get reason tooltip for a block
   const getReasonTooltip = (blockType: string): string | null => {
     const rec = recommendations.find(r => r.block === blockType);
     return rec ? t(rec.reason, '') : null;
   };
 
-  // Render block item
-  const renderBlockItem = (block: BlockConfig, showRelevantBadge: boolean = false) => {
+  const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
     const isLocked = !canUseBlock(block.tier);
-    const IconComponent = block.Icon;
+    const IconComponent = getLucideIcon(block.icon);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
 
     const blockButton = (
@@ -253,7 +209,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             : "hover:bg-muted/50 active:scale-95"
         )}
       >
-        {/* Colorful icon square - LARGER */}
         <div className={cn(
           "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg",
           block.color
@@ -261,12 +216,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <IconComponent className="h-7 w-7" />
         </div>
 
-        {/* Label */}
         <span className="text-sm font-bold text-center leading-tight">
-          {t(block.label, block.type)}
+          {t(block.labelKey, block.type)}
         </span>
 
-        {/* Relevant badge */}
         {showRelevantBadge && !isLocked && (
           <div className="absolute -top-1 -left-1">
             <Badge
@@ -279,7 +232,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           </div>
         )}
 
-        {/* Lock/Crown badge */}
         {isLocked && (
           <div className="absolute top-2 right-2">
             <Lock className="h-4 w-4 text-muted-foreground" />
@@ -293,7 +245,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       </button>
     );
 
-    // Wrap with tooltip on desktop if we have a reason
     if (reasonTooltip && !isMobile) {
       return (
         <TooltipProvider key={block.type}>
@@ -312,11 +263,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return blockButton;
   };
 
-
-  // Mobile & Desktop - Premium app-like sheet
   return (
     <div className={cn("flex items-center justify-center", className)}>
-      {/* FAB Button - hidden when using external control */}
       {!hideTrigger && (
         <Button
           variant="default"
@@ -334,18 +282,15 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         </Button>
       )}
 
-      {/* Premium App-Like Sheet */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent
           side="bottom"
           className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px]"
         >
-          {/* Handle bar */}
           <div className="flex justify-center pt-4 pb-2">
             <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
           </div>
 
-          {/* Header */}
           <SheetHeader className="px-6 pt-2 pb-5 border-b border-border/10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
@@ -361,7 +306,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
           </SheetHeader>
 
-          {/* Search - Larger for mobile */}
           <div className="px-6 py-5 border-b border-border/10 bg-muted/20">
             <div className="relative">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
@@ -374,9 +318,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             </div>
           </div>
 
-          {/* Blocks with Recommendations */}
           <div className="overflow-y-auto px-5 py-5" style={{ height: 'calc(100% - 180px)' }}>
-            {/* Recommended Section - Only show when not searching */}
             {recommendedBlocks.length > 0 && !searchQuery && (
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4 px-1">
@@ -391,7 +333,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               </div>
             )}
 
-            {/* All Blocks Section */}
             {otherBlocks.length > 0 && (
               <div>
                 {recommendedBlocks.length > 0 && !searchQuery && (

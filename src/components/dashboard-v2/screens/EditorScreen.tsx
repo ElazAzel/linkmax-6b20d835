@@ -32,6 +32,7 @@ interface EditorScreenProps {
   onDeleteBlock: (blockId: string) => void;
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onReorderBlocks: (blocks: Block[]) => void;
+  onDuplicateBlock?: (id: string) => void;
   onPreview: () => void;
   onShare: () => void;
   onOpenTemplates: () => void;
@@ -56,6 +57,7 @@ export const EditorScreen = memo(function EditorScreen({
   onDeleteBlock,
   onUpdateBlock,
   onReorderBlocks,
+  onDuplicateBlock,
   onPreview,
   onShare,
   onOpenTemplates,
@@ -195,6 +197,7 @@ export const EditorScreen = memo(function EditorScreen({
           onDeleteBlock={onDeleteBlock}
           onUpdateBlock={onUpdateBlock}
           onReorderBlocks={onReorderBlocks}
+          onDuplicateBlock={onDuplicateBlock}
         />
       </div>
     </div>

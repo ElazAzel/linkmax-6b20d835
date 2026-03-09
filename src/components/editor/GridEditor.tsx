@@ -4,7 +4,7 @@ import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import Plus from 'lucide-react/dist/esm/icons/plus';
-import GripHorizontal from 'lucide-react/dist/esm/icons/grip-horizontal';
+import Copy from 'lucide-react/dist/esm/icons/copy';
 import FlaskConical from 'lucide-react/dist/esm/icons/flask-conical';
 import {
   DndContext,
@@ -33,14 +33,14 @@ import { InlineProfileEditor } from '../blocks/InlineProfileEditor';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { ExperimentSetupDialog } from '@/components/dashboard-v2/dialogs/ExperimentSetupDialog';
 import { cn } from '@/lib/utils/utils';
-import type { Block, ProfileBlock, GridConfig } from '@/types/page';
+import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
+import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
 import { BLOCK_SIZE_DIMENSIONS } from '@/types/blocks/base';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // ─── Insert-Between Divider ────────────────────────────────────────
-// Shows a "+" button between blocks to insert at a specific position
 function InsertBetweenDivider({
   position,
   onInsert,
@@ -63,8 +63,7 @@ function InsertBetweenDivider({
   }, [onInsert, position]);
 
   return (
-    <div className="relative group/divider py-1">
-      {/* Line + button */}
+    <div className="relative group/divider py-1 col-span-2">
       <div className={cn(
         "flex items-center gap-2 transition-all duration-300",
         isMobile ? "opacity-100" : "opacity-0 group-hover/divider:opacity-100"
@@ -86,7 +85,6 @@ function InsertBetweenDivider({
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
 
-      {/* Block picker sheet (externally controlled) */}
       <BlockInsertButton
         onInsert={handleInsert}
         isPremium={isPremium}
@@ -111,12 +109,14 @@ interface GridEditorProps {
   onDeleteBlock: (id: string) => void;
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onReorderBlocks?: (blocks: Block[]) => void;
+  onDuplicateBlock?: (id: string) => void;
 }
 
 interface SortableGridBlockItemProps {
   block: Block;
   onEdit: (block: Block) => void;
   onDelete: (id: string) => void;
+  onDuplicate?: (id: string) => void;
   isPremium?: boolean;
   premiumTier?: PremiumTier;
   isDragging?: boolean;
@@ -128,11 +128,13 @@ function SortableGridBlockItem({
   block,
   onEdit,
   onDelete,
+  onDuplicate,
   isPremium,
   premiumTier,
   isMobile = false,
   onStartExperiment,
 }: SortableGridBlockItemProps) {
+  const { t } = useTranslation();
   const {
     attributes,
     listeners,
@@ -147,16 +149,15 @@ function SortableGridBlockItem({
     transition,
   };
 
-  // Determine grid span based on block size
   const blockSize = block.blockSize || 'small';
   const dimensions = BLOCK_SIZE_DIMENSIONS[blockSize] || BLOCK_SIZE_DIMENSIONS['small'];
-
-  // Map dimensions to Tailwind classes
   const colSpanClass = dimensions.gridCols === 2 ? 'col-span-2' : 'col-span-1';
   const rowSpanClass = dimensions.gridRows === 2 ? 'row-span-2' : 'row-span-1';
-
-  // Blocks that render without card frame
   const isFrameless = block.type === 'separator' || block.type === 'socials';
+
+  // Get block type label from manifest
+  const manifest = BLOCK_MANIFEST[block.type as BlockType];
+  const typeLabel = manifest ? t(manifest.labelKey, block.type) : block.type;
 
   return (
     <div
@@ -172,7 +173,7 @@ function SortableGridBlockItem({
         !isFrameless && dimensions.gridRows === 2 && 'min-h-[296px]'
       )}
     >
-      {/* Drag Handle - top-left on mobile, visible; top-left on desktop, hover */}
+      {/* Drag Handle */}
       <div
         className={cn(
           "absolute top-2 left-2 z-40 touch-none",
@@ -195,7 +196,7 @@ function SortableGridBlockItem({
           <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
         </div>
 
-        {/* Click Overlay - captures taps/clicks to open editor */}
+        {/* Click Overlay */}
         <div
           className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10"
           onClick={(e) => {
@@ -204,7 +205,6 @@ function SortableGridBlockItem({
             onEdit(block);
           }}
           onTouchEnd={(e) => {
-            // Ensure tap works on mobile even with DnD sensors
             e.stopPropagation();
           }}
           role="button"
@@ -213,7 +213,14 @@ function SortableGridBlockItem({
         />
       </div>
 
-      {/* Edit/Delete Controls - top-right, visible on mobile too */}
+      {/* Block type label - bottom-left */}
+      <div className="absolute bottom-2 left-2 z-30 pointer-events-none">
+        <span className="inline-block px-2 py-0.5 rounded-md bg-background/70 backdrop-blur-sm text-[10px] font-bold text-muted-foreground uppercase tracking-wider border border-border/10">
+          {typeLabel}
+        </span>
+      </div>
+
+      {/* Controls - top-right */}
       <div className={cn(
         "absolute top-2 right-2 flex gap-1.5 z-30 transition-opacity",
         isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
@@ -227,12 +234,25 @@ function SortableGridBlockItem({
             e.preventDefault();
             onEdit(block);
           }}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
-          }}
+          onTouchEnd={(e) => { e.stopPropagation(); }}
         >
           <Edit2 className="h-4 w-4" />
         </Button>
+        {block.type !== 'profile' && (
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-8 w-8 p-0 rounded-lg shadow-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onDuplicate?.(block.id);
+            }}
+            onTouchEnd={(e) => { e.stopPropagation(); }}
+          >
+            <Copy className="h-4 w-4" />
+          </Button>
+        )}
         {isPremium && block.type !== 'profile' && (
           <Button
             size="sm"
@@ -256,9 +276,7 @@ function SortableGridBlockItem({
             e.preventDefault();
             onDelete(block.id);
           }}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
-          }}
+          onTouchEnd={(e) => { e.stopPropagation(); }}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -284,7 +302,6 @@ function DragOverlayBlockItem({ block, isPremium, premiumTier }: { block: Block;
       <div className="w-full h-full overflow-hidden opacity-80">
         <BlockRenderer block={block} isPreview isOwnerPremium={isPremium} ownerTier={premiumTier} />
       </div>
-      {/* Show handle in overlay to indicate dragging state */}
       <div className="absolute top-0 right-0 z-40 p-3 pt-3 pr-3">
         <div className="bg-primary/20 backdrop-blur-md p-2 rounded-xl">
           <GripVertical className="h-5 w-5 text-primary" />
@@ -305,6 +322,7 @@ export const GridEditor = memo(function GridEditor({
   onDeleteBlock,
   onUpdateBlock,
   onReorderBlocks,
+  onDuplicateBlock,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -316,20 +334,12 @@ export const GridEditor = memo(function GridEditor({
   const profileBlock = blocks.find(b => b.type === 'profile') as ProfileBlock | undefined;
   const contentBlocks = blocks.filter(b => b.type !== 'profile');
 
-  // Note: blockIdsKey removed from DndContext key to prevent full remounts on block changes
-  // SortableContext items prop handles reconciliation naturally
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5 // Minimal distance to detect drag vs click on the handle
-      }
+      activationConstraint: { distance: 5 }
     }),
     useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 200, // Give onClick time to fire before drag activates
-        tolerance: 8
-      }
+      activationConstraint: { delay: 200, tolerance: 8 }
     }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
@@ -361,6 +371,42 @@ export const GridEditor = memo(function GridEditor({
     onInsertBlock(blockType, pos);
   }, [onInsertBlock, blocks.length]);
 
+  // Build grid items: interleave dividers between blocks
+  const gridItems = useMemo(() => {
+    const items: React.ReactNode[] = [];
+    const profileOffset = profileBlock ? 1 : 0;
+
+    contentBlocks.forEach((block, index) => {
+      // Insert divider before each block
+      items.push(
+        <InsertBetweenDivider
+          key={`divider-${block.id}`}
+          position={index + profileOffset}
+          onInsert={onInsertBlock}
+          isPremium={isPremium}
+          currentTier={currentTier}
+          currentBlockCount={blocks.length}
+          isMobile={isMobile}
+        />
+      );
+      items.push(
+        <SortableGridBlockItem
+          key={block.id}
+          block={block}
+          onEdit={onEditBlock}
+          onDelete={onDeleteBlock}
+          onDuplicate={onDuplicateBlock}
+          isPremium={isPremium}
+          premiumTier={premiumTier}
+          isMobile={isMobile}
+          onStartExperiment={setExperimentBlock}
+        />
+      );
+    });
+
+    return items;
+  }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, premiumTier]);
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-4 space-y-2 pb-32 md:pb-24">
       {/* Profile block */}
@@ -386,18 +432,7 @@ export const GridEditor = memo(function GridEditor({
           strategy={verticalListSortingStrategy}
         >
           <div className="grid grid-cols-2 gap-3 grid-flow-row-dense">
-            {contentBlocks.map((block) => (
-              <SortableGridBlockItem
-                key={block.id}
-                block={block}
-                onEdit={onEditBlock}
-                onDelete={onDeleteBlock}
-                isPremium={isPremium}
-                premiumTier={premiumTier}
-                isMobile={isMobile}
-                onStartExperiment={setExperimentBlock}
-              />
-            ))}
+            {gridItems}
           </div>
         </SortableContext>
 
@@ -467,6 +502,5 @@ export const GridEditor = memo(function GridEditor({
         />
       )}
     </div>
-
   );
 });

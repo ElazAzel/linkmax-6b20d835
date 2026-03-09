@@ -215,6 +215,30 @@ export function useBlockEditor({
     }, 100);
   }, [operationInProgress, deletedBlocks, setOperationInProgress, setDeletedBlocks, addBlock, hapticSuccess, t]);
 
+  /**
+   * Duplicate a block (deep clone + insert at position + 1)
+   */
+  const handleDuplicateBlock = useCallback(
+    (blockId: string) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      const block = blocks.find((b) => b.id === blockId);
+
+      if (!block || block.type === 'profile') return;
+
+      try {
+        const cloned = JSON.parse(JSON.stringify(block)) as Block;
+        cloned.id = `${block.type}-${Date.now()}`;
+        addBlock(cloned, blockIndex + 1);
+        playAdd?.();
+        toast.success(t('blocks.duplicated', 'Block duplicated'));
+      } catch {
+        toast.error(t('blocks.duplicateFailed', 'Failed to duplicate block'));
+        playError?.();
+      }
+    },
+    [blocks, addBlock, playAdd, playError, t]
+  );
+
   return {
     editingBlock,
     editorOpen,
@@ -222,6 +246,7 @@ export function useBlockEditor({
     handleEditBlock,
     handleSaveBlock,
     handleDeleteBlock,
+    handleDuplicateBlock,
     closeEditor,
     deletedBlocks,
     undoLastDelete,

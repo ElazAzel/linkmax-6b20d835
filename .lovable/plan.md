@@ -1,150 +1,209 @@
+# План развития платформы lnkmx — Март-Апрель 2026
 
+## ✅ Неделя 1 (9-15 марта): Тарифная модель — ЗАВЕРШЕНО
 
-# Block Editor UX Overhaul — Plan
+**Цель:** Привести код в соответствие со стратегией Identity/Starter/Pro/Business.
 
-## A. Verdict
+| Задача | Статус |
+|--------|--------|
+| Обновить `PremiumTier`: `'identity' \| 'starter' \| 'pro' \| 'business'` | ✅ |
+| Обновить `useFreemiumLimits.ts`: добавить лимиты Starter | ✅ |
+| Обновить `checkPremiumStatus` в `services/user.ts` | ✅ |
+| Обновить `MonetizeScreen.tsx`: показывать 4 тарифа | ✅ |
+| Обновить `fintech.ts`: динамическая комиссия (7%/1%/0%) | ✅ |
 
-**What's strong:**
-- Solid manifest-driven architecture (`BLOCK_MANIFEST` → renderer + editor + icon + category). Single source of truth works.
-- `BlockEditorShell` is a good unified container with autosave, tabs, preview, Cmd+S.
-- `EditorSection` / `EditorField` give consistent structure inside editors.
-- `withBlockEditor` HOC adds advanced settings (style, animation, schedule, paid content) uniformly.
-- Undo/redo history exists (7-step, `useEditorHistory`).
-- Mobile: swipe gestures, long-press actions sheet, haptic feedback, FAB.
-- Insert-between dividers exist in `GridEditor`.
+### Новая тарифная модель (ADR 0026)
 
-**What's weak:**
+| Тир | Комиссия | Цена | Возможности |
+|-----|----------|------|-------------|
+| Identity | — | 0₸ | Link-in-bio, базовые блоки |
+| Starter | 7% | 0₸ | Все блоки, CRM, уведомления |
+| Pro | 1% | ~3,045₸/мес | Custom domain, аналитика |
+| Business | 0% | ~6,930₸/мес | Бизнес-зоны, команда |
 
-1. **No insert-between on grid**: `InsertBetweenDivider` is defined but never rendered in the grid layout. The grid only has a bottom "+" and mobile FAB. Users can't insert blocks between existing ones in the primary editor view.
+---
 
-2. **GridEditor block cards have no block type label or content summary.** Cards show a preview render behind `pointer-events-none` overlay + edit/delete buttons. User can't quickly identify what a block contains without clicking.
+## ✅ Неделя 2 (16-22 марта): Платежи и биллинг — ЗАВЕРШЕНО
 
-3. **Duplicate action missing from GridEditor.** `MobileBlockActions` supports duplicate, but `GridEditor.SortableGridBlockItem` doesn't wire it. No duplicate button on the card.
+| Задача | Статус |
+|--------|--------|
+| Создать таблицы `orders` и `billing_history` с RLS | ✅ |
+| Обновить `robokassa-webhook` для записи в `billing_history` | ✅ |
+| Реализовать `ChangePasswordDialog` в AccountSettings | ✅ |
+| Реализовать `BillingHistorySheet` в AccountSettings | ✅ |
+| Интегрировать `KaspiQRGenerator` в карточку сделки | ✅ |
 
-4. **Two parallel block list UIs**: `GridEditor` (grid view, primary) and `DraggableBlockList` (list view, used by StructureView). `DraggableBlockList` has hardcoded Russian titles (`getBlockTitle`), duplicates icon mapping, and is a separate interaction model from the grid.
+---
 
-5. **BlockInsertButton has duplicate block config.** `ALL_BLOCKS` in `BlockInsertButton.tsx` is a separate copy of block metadata from `BLOCK_MANIFEST` and `BLOCK_REGISTRY`. Icons, tiers, and categories are maintained in 3 places.
+## ✅ Неделя 3 (23-29 марта): Отчеты и бизнес-аналитика — ЗАВЕРШЕНО
 
-6. **Click-to-edit is the only interaction.** Every block edit requires opening the full editor drawer/dialog. No quick edit for simple fields (text content, link URL, button label).
+| Задача | Статус |
+|--------|--------|
+| Добавить P&L Summary Card (Gross Revenue / Pending Revenue) | ✅ |
+| Добавить Conversion Trend chart (won vs lost deals) | ✅ |
+| Добавить Team Performance section (метрики по assignee) | ✅ |
+| PDF-экспорт отчетов (`pdf-export-analytics.ts`) | ✅ |
+| Расширить `useZoneAnalytics` с teamMetrics и conversionTrend | ✅ |
 
-7. **Block completeness is invisible.** No indicator on the grid card showing whether a block has empty required fields, missing content, or is publish-ready.
+---
 
-8. **StructureView has its own icon map** (`BLOCK_ICONS`) separate from manifest, creating drift risk.
+## ✅ Неделя 4 (30 марта - 5 апреля): Мобильный UX — ЗАВЕРШЕНО
 
-## B. P0 / P1 / P2 Roadmap
+| Задача | Статус |
+|--------|--------|
+| Увеличить минимальный размер текста до 12px (text-xs) | ✅ |
+| Увеличить touch targets до 44px (min-h-11) | ✅ |
+| Создать ZoneErrorBoundary для обработки ошибок | ✅ |
+| Улучшить Empty States с CTA | ✅ |
 
-### P0 — Ship immediately (biggest UX impact)
+---
 
-| # | Change | Impact |
-|---|--------|--------|
-| 1 | **Insert-between in GridEditor** | Currently impossible to add blocks between existing ones in the grid |
-| 2 | **Block type label on grid cards** | Show small type badge (e.g., "Ссылка", "Текст") on each card so users can identify blocks without opening them |
-| 3 | **Duplicate button on grid cards** | Add duplicate action next to edit/delete on each card |
-| 4 | **Unify BlockInsertButton with BLOCK_MANIFEST** | Remove duplicate `ALL_BLOCKS` config, derive from manifest |
-| 5 | **Unify StructureView icons with manifest** | Remove duplicate `BLOCK_ICONS`, use `getBlockIcon()` from manifest |
+# Roadmap: Business Zones -- Gap Analysis vs Bitrix24
 
-### P1 — Strong improvements (next sprint)
+## Текущее состояние LinkMAX Business Zones
 
-| # | Change |
-|---|--------|
-| 6 | Block completeness indicator (dot/badge on card for empty blocks) |
-| 7 | Quick inline edit for text/link/button blocks (click-to-edit title/URL without opening full editor) |
-| 8 | Keyboard shortcuts (Cmd+Z, Cmd+Shift+Z wired globally in editor) |
-| 9 | Last-used blocks section in insert panel |
-| 10 | Better empty state with niche-aware starter suggestions |
+### Фаза 1: Deals Pipeline -- доведение до рабочего уровня (P0)
 
-### P2 — Advanced
+**Текущая проблема**: Deals есть, но нет drag-and-drop между стадиями, нет деталей сделки, нет истории активности в UI.
 
-| # | Change |
-|---|--------|
-| 11 | Command palette for blocks/actions |
-| 12 | Block collapse mode in grid |
-| 13 | Editor analytics telemetry events |
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Drag-and-drop Kanban | Использовать уже установленный `@dnd-kit/sortable` для перетаскивания карточек между стадиями | 1 день |
+| Deal Detail Sheet | Боковая панель (Sheet) с полной информацией о сделке: контакт, сумма, история активностей, следующий шаг, файлы | 1-2 дня |
+| Activity Timeline | Отображение `zone_deal_activities` в UI (таблица уже есть в БД, хук `addActivity` уже написан) | 0.5 дня |
+| Won/Lost flow | При перетаскивании на последнюю стадию -- диалог "Выиграна/Проиграна" с причиной | 0.5 дня |
+| Фильтры Pipeline | Фильтрация сделок по: ответственный, дата, сумма, просроченные | 0.5 дня |
 
-## C. Implementation Plan — P0
+### Фаза 2: Contacts -- из списка в мини-CRM (P0)
 
-### Change 1: Insert-between in GridEditor
+**Текущая проблема**: Контакты -- плоский список без связи с deals/tasks/conversations.
 
-**File:** `src/components/editor/GridEditor.tsx`
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Contact Detail Page | Карточка контакта: все сделки, задачи, диалоги, инвойсы этого контакта (JOIN по `contact_id`) | 1 день |
+| Contact Edit/Delete | Inline-редактирование и удаление (хуки `updateContact`, `deleteContact` уже есть, UI нет) | 0.5 дня |
+| Tags фильтрация | Филтьр по тегам + добавление тегов при создании | 0.5 дня |
+| Import CSV | Массовый импорт контактов из CSV/Excel (`exceljs` уже в зависимостях) | 1 день |
 
-Add `InsertBetweenDivider` between each `SortableGridBlockItem` in the grid. Since the grid uses `grid-cols-2`, we need to render dividers as full-width rows between logical block rows. Approach: render blocks in a flat list (not CSS grid) with dividers between each block. Alternative: switch to a single-column vertical list of block cards with insert points between them. 
+### Фаза 3: Tasks -- закрытие пробелов (P1)
 
-The simplest approach: render dividers **outside** the CSS grid, between groups of blocks. Actually, the cleanest: wrap each block + its insert divider in a fragment, but since it's a 2-col grid, dividers need `col-span-2`. Add an `InsertBetweenDivider` before each block that spans full width.
+**Текущая проблема**: Нет описания задачи, нет привязки к сделке/контакту, нет due_date в UI создания.
 
-Implementation: After every 2 blocks (or at the end of a row), insert a divider row. Actually simpler: just add an `InsertBetweenDivider` with `col-span-2` before each block in the grid render. On mobile they'll always show; on desktop on hover. This is acceptable since the divider is already designed for this.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Task Detail / Edit | Полная форма: описание, due_date, привязка к deal/contact | 0.5 дня |
+| Task DnD | Drag-and-drop между колонками (todo/in_progress/done) через `@dnd-kit` | 0.5 дня |
+| Overdue highlighting | Визуальная индикация просроченных задач (поле `due_date` есть в БД) | 0.5 дня |
+| My Tasks filter | Быстрый фильтр "Мои задачи" / "Все задачи" | 0.5 дня |
 
-### Change 2: Block type label on grid cards
+### Фаза 4: Аналитика Зоны (P1)
 
-**File:** `src/components/editor/GridEditor.tsx` — `SortableGridBlockItem`
+**Bitrix24 Reference**: Dashboard с воронкой продаж и ключевыми метриками.
 
-Add a small label badge at bottom-left of each card showing the translated block type name from manifest (`t(manifest.labelKey)`). Style: semi-transparent pill, `text-[10px]`, always visible.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Zone Dashboard | Экран-сводка: кол-во сделок по стадиям, сумма pipeline, won/lost ratio, просроченные задачи, открытые диалоги | 1 день |
+| Funnel Chart | Визуализация воронки через `recharts` (уже в зависимостях) | 0.5 дня |
+| Period filter | Фильтр по периоду (неделя/месяц/квартал) | 0.5 дня |
 
-### Change 3: Duplicate button on grid cards
+### Фаза 5: Автоматизации -- MVP (P2)
 
-**File:** `src/components/editor/GridEditor.tsx`
+**Bitrix24 Reference**: Роботы и триггеры в CRM.
 
-- Add `onDuplicateBlock` prop to `GridEditorProps`
-- Add duplicate icon button next to edit/delete in `SortableGridBlockItem`
-- Wire through from `EditorScreen`
+Для LinkMAX достаточно 3-5 базовых триггеров, реализуемых через DB triggers + Edge Functions:
 
-This requires adding a `handleDuplicateBlock` to `useBlockEditor` hook. Looking at the hook, it doesn't have duplicate. We'll add it: copy the block, generate new ID, insert at position+1.
+| Триггер | Действие | Реализация |
+| :--- | :--- | :--- |
+| Сделка перешла на стадию X | Создать задачу ответственному | DB trigger на `zone_deals.stage_id` UPDATE |
+| Просрочен `next_step_at` | Уведомление владельцу (запись в `zone_messages`) | Cron Edge Function (ежечасный) |
+| Новый контакт создан | Создать сделку в первой стадии | DB trigger на `zone_contacts` INSERT |
 
-**Files:** 
-- `src/hooks/editor/useBlockEditor.tsx` — add `handleDuplicateBlock`
-- `src/components/editor/GridEditor.tsx` — add button + prop
-- `src/components/dashboard-v2/screens/EditorScreen.tsx` — wire prop
+**DB schema change**: новая таблица `zone_automations` (zone_id, trigger_type, action_type, config jsonb, is_active).
 
-### Change 4: Unify BlockInsertButton with BLOCK_MANIFEST
+### Фаза 6: Инвойсы и оплата (P2)
 
-**File:** `src/components/editor/BlockInsertButton.tsx`
+**Текущая проблема**: Таблица `zone_invoices` есть в БД, но UI отсутствует.
 
-Replace `ALL_BLOCKS` array with derivation from `BLOCK_MANIFEST`. Each entry can compute `Icon` from the manifest icon string using `getLucideIcon()`, `label` from `manifest.labelKey`, `tier` from `manifest.isPremium`. The only thing manifest doesn't have is the colorful `color` class — we add a `color` mapping by category or block type.
+| Задача | Суть | Effort |
+| :--- | :--- | :--- |
+| Invoice List + Create | Экран инвойсов привязанных к сделкам/контактам | 1 день |
+| Robokassa payment link | Генерация ссылки на оплату (хук `useRobokassa` уже есть) | 0.5 дня |
+| Invoice status tracking | Webhook для обновления статуса оплаты | 1 день |
 
-### Change 5: Unify StructureView icons
+---
 
-**File:** `src/components/editor/StructureView.tsx`
+## Что НЕ нужно копировать из Bitrix24
 
-Remove `BLOCK_ICONS` constant. Replace `getBlockIcon` function to use `getBlockIcon()` from `block-manifest.ts` + `getLucideIcon()`. ~5 line change.
+Эти фичи избыточны для микро-бизнеса и противоречат принципу "3 клика":
 
-## D. Exact file changes
+- Бизнес-процессы (BPMN) -- слишком сложно для целевой аудитории
+- Телефония (SIP) -- не релевантно, аудитория в мессенджерах
+- HR-модуль -- не тот сегмент
+- Документооборот -- микро-бизнес не работает с документами
+- Marketing automation (email-рассылки, сегменты) -- преждевременно до 1000+ бизнес-пользователей
 
-### Phase 1: Manifest-driven insert button (Change 4)
+---
 
-`src/components/editor/BlockInsertButton.tsx`:
-- Remove `ALL_BLOCKS` array (~45 lines)
-- Add `BLOCK_COLORS: Record<BlockType, string>` mapping (~28 entries)
-- Derive block list from `Object.values(BLOCK_MANIFEST)` with color lookup
-- Keep existing rendering logic, just change data source
+## Приоритезация (RICE)
 
-### Phase 2: StructureView icon unification (Change 5)
+| Фаза | Reach | Impact | Confidence | Effort | Score | Приоритет |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1. Deals DnD + Detail | High | High | High | 3d | 90 | **P0** |
+| 2. Contact Detail + Edit | High | High | High | 3d | 85 | **P0** |
+| 3. Tasks polish | Med | Med | High | 2d | 60 | **P1** |
+| 4. Zone Analytics | Med | High | High | 2d | 70 | **P1** |
+| 5. Automations MVP | Med | High | Med | 3d | 55 | **P2** |
+| 6. Invoices UI | Low | High | High | 2.5d | 45 | **Completed** |
 
-`src/components/editor/StructureView.tsx`:
-- Remove `BLOCK_ICONS` constant (lines 53-82)
-- Import `getBlockIcon` from `block-manifest`
-- Update local `getBlockIcon` function to use manifest
+---
 
-### Phase 3: Grid UX — type labels + duplicate + insert-between (Changes 1-3)
+## Технический план реализации
 
-`src/hooks/editor/useBlockEditor.tsx`:
-- Add `handleDuplicateBlock(blockId: string)` — find block, clone with new ID, insert at position+1
+### DB миграции (новые таблицы/колонки)
 
-`src/components/editor/GridEditor.tsx`:
-- Add `onDuplicateBlock` to `GridEditorProps`
-- In `SortableGridBlockItem`: add type label badge, add duplicate button (Copy icon)
-- In grid render: intersperse `InsertBetweenDivider` components between blocks (col-span-2)
+- `zone_automations` (для Фазы 5)
+- Остальные таблицы уже существуют и покрывают Фазы 1-4
 
-`src/components/dashboard-v2/screens/EditorScreen.tsx`:
-- Pass `onDuplicateBlock` prop through
+### Новые файлы
 
-## E. Risks
+- `src/components/zones/DealDetailSheet.tsx` -- боковая панель сделки
+- `src/components/zones/ContactDetailScreen.tsx` -- карточка контакта
+- `src/components/zones/ZoneDashboard.tsx` -- аналитика зоны
+- `src/components/zones/ZoneInvoicesScreen.tsx` -- инвойсы
+- `src/components/zones/ZoneAutomationsScreen.tsx` -- настройка автоматизаций
 
-- **Insert-between in 2-col grid**: CSS grid with `col-span-2` dividers between arbitrary blocks may cause layout reflow. Mitigation: use `col-span-2` on the divider element, test with 1-10 blocks.
-- **Manifest-driven insert button**: Losing custom icons (some blocks use emoji components like `() => <span>👤</span>`). Mitigation: map these to lucide icons or keep a small override map.
-- **Duplicate block**: Need to deep-clone block content including nested objects/arrays. Use `structuredClone()` or `JSON.parse(JSON.stringify())`.
+### Модифицируемые файлы
 
-## F. Three strongest UX wins
+- `ZoneDealsScreen.tsx` -- DnD, фильтры, won/lost flow
+- `ZoneContactsScreen.tsx` -- edit/delete UI, теги, импорт
+- `ZoneTasksScreen.tsx` -- DnD, detail form, due_date
+- `DashboardSidebar.tsx` -- добавить пункты "Аналитика", "Инвойсы"
 
-1. **Insert-between blocks** — currently impossible, unlocks non-linear page building
-2. **Manifest-driven insert panel** — eliminates data drift between 3 sources of truth, reduces maintenance surface
-3. **Duplicate on grid cards** — saves 5+ clicks vs manually recreating similar blocks
+### Зависимости
 
+- Все необходимые пакеты уже установлены (`@dnd-kit`, `recharts`, `exceljs`, `date-fns`)
+- Новых зависимостей не требуется
+
+---
+
+## Рекомендуемый порядок реализации
+
+1. **Фаза 1** (Deals DnD + Detail) -- немедленно, это ядро CRM
+2. **Фаза 2** (Contacts CRM) -- сразу после, связанная логика
+3. **Фаза 4** (Analytics) -- даёт видимую ценность Business-подписки
+4. **Фаза 3** (Tasks polish) -- параллельно с аналитикой
+5. **Фаза 5-6** (Automations + Invoices) -- следующий спринт
+
+---
+
+## Post-Roadmap: Teamwork & Integrations (Март 2026)
+
+| Задача | Статус |
+|--------|--------|
+| Documents MVP (генерация договоров, PDF) | ✅ |
+| Deal Comments (zone_deal_comments) | ✅ |
+| @Mentions в комментариях к сделкам | ✅ |
+| MentionInput компонент с автоподсказкой | ✅ |
+| Telegram уведомления при @mention | ✅ |
+| Excel Export (Contacts + Deals + Воронка) | ✅ |
+| mentioned_user_ids колонка в zone_deal_comments | ✅ |
