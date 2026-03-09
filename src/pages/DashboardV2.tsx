@@ -308,6 +308,30 @@ function DashboardV2Inner() {
     };
   }, []);
 
+  // P2: Editor command context for palette + keyboard (must be before early returns)
+  const editorContext = useMemo((): EditorContext => ({
+    blocks: dashboard.pageData?.blocks || [],
+    selectedBlockId,
+    isPremium: dashboard.isPremium,
+    commandPaletteOpen,
+    onInsertBlock: dashboard.blockEditor.handleInsertBlock,
+    onInsertPreset: dashboard.blockEditor.handleInsertPreset,
+    onDeleteBlock: dashboard.blockEditor.handleDeleteBlock,
+    onDuplicateBlock: dashboard.blockEditor.handleDuplicateBlock,
+    onEditBlock: dashboard.blockEditor.handleEditBlock,
+    onUpdateBlock: dashboard.updateBlock,
+    onReorderBlocks: dashboard.reorderBlocks,
+    onUndo: editorHistory.undo,
+    onRedo: editorHistory.redo,
+    canUndo: editorHistory.canUndo,
+    canRedo: editorHistory.canRedo,
+    onOpenTemplates: () => setTemplateGalleryOpen(true),
+    onPreview: () => dashboard.sharingState.handlePreview(),
+    onShare: () => dashboard.sharingState.handleShare(),
+    setSelectedBlockId,
+    setCommandPaletteOpen,
+  }), [dashboard, selectedBlockId, commandPaletteOpen, editorHistory, setSelectedBlockId, setCommandPaletteOpen, setTemplateGalleryOpen]);
+
   // Loading state
   if (dashboard.loading || multiPage.loading) {
     return <LoadingState />;
@@ -355,30 +379,7 @@ function DashboardV2Inner() {
     />
   );
 
-  const editorContext = useMemo((): EditorContext => ({
-    blocks: dashboard.pageData?.blocks || [],
-    selectedBlockId,
-    isPremium: dashboard.isPremium,
-    commandPaletteOpen,
-    onInsertBlock: dashboard.blockEditor.handleInsertBlock,
-    onInsertPreset: dashboard.blockEditor.handleInsertPreset,
-    onDeleteBlock: dashboard.blockEditor.handleDeleteBlock,
-    onDuplicateBlock: dashboard.blockEditor.handleDuplicateBlock,
-    onEditBlock: dashboard.blockEditor.handleEditBlock,
-    onUpdateBlock: dashboard.updateBlock,
-    onReorderBlocks: dashboard.reorderBlocks,
-    onUndo: editorHistory.undo,
-    onRedo: editorHistory.redo,
-    canUndo: editorHistory.canUndo,
-    canRedo: editorHistory.canRedo,
-    onOpenTemplates: () => setTemplateGalleryOpen(true),
-    onPreview: () => dashboard.sharingState.handlePreview(),
-    onShare: () => dashboard.sharingState.handleShare(),
-    setSelectedBlockId,
-    setCommandPaletteOpen,
-  }), [dashboard, selectedBlockId, commandPaletteOpen, editorHistory, setSelectedBlockId, setCommandPaletteOpen, setTemplateGalleryOpen]);
-
-
+  return (
     <>
       <StaticSEOHead
         title={seoTitle}
