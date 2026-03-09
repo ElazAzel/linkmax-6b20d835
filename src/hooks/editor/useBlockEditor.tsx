@@ -179,7 +179,7 @@ export function useBlockEditor({
         // Record history for block update
         const newBlocks = blocks.map(b =>
           b.id === editingBlock.id ? { ...b, ...updates } : b
-        );
+        ) as Block[];
         editorHistory?.recordBlockUpdate(previousBlocks, newBlocks, editingBlock.type, editingBlock.id);
         trackEditorAction('full_editor_saved', { blockType: editingBlock.type, blockId: editingBlock.id });
       }
