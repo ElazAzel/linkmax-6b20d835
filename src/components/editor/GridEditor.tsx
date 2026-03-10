@@ -401,6 +401,7 @@ export const GridEditor = memo(function GridEditor({
   onReorderBlocks,
   onDuplicateBlock,
   onCreateSection,
+  onTransform,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
