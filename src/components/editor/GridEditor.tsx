@@ -676,6 +676,18 @@ export const GridEditor = memo(function GridEditor({
           onStartExperiment={setExperimentBlock}
           onBlockClick={handleBlockClick}
           onBlockDoubleClick={handleBlockDoubleClick}
+          onTransform={handleTransform}
+          onCopy={handleCopyBlock}
+          isFirst={index === 0}
+          isLast={index === contentBlocks.length - 1}
+          onMoveUp={index > 0 ? () => {
+            const reordered = arrayMove(contentBlocks, index, index - 1);
+            onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+          } : undefined}
+          onMoveDown={index < contentBlocks.length - 1 ? () => {
+            const reordered = arrayMove(contentBlocks, index, index + 1);
+            onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+          } : undefined}
         />
       );
     });
