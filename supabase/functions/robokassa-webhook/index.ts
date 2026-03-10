@@ -140,18 +140,61 @@ serve(async (req: Request) => {
                     .eq('id', zoneInv.id);
             }
 
-            const { data: txData, error: txError } = await supabase.rpc('record_wallet_income', {
-                p_user_id: shp_user,
-                p_amount: amount,
-                p_description: `Payment confirmed (InvId: ${invId})`,
-                p_related_entity_type: 'payment',
-                p_related_entity_id: shp_related_id,
-                p_internal_ref: invId
-            });
+            // --- Q2 Success-First Fee Logic ---
+            // 1. Get user profile for tier
+            const { data: profile } = await supabase
+                .from('user_profiles')
+                .select('is_premium')
+                .eq('id', shp_user)
+                .single();
 
-            if (txError) {
-                console.error("Failed to record fintech income", txError);
-                return new Response("DB ERROR", { status: 500 });
+            const feeRate = profile?.is_premium ? 0.01 : 0.07;
+            const grossAmount = amount;
+            const feeAmount = Number((grossAmount * feeRate).toFixed(2));
+            const netAmount = grossAmount - feeAmount;
+
+            // 2. Insert into wallet_transactions using new Q2 schema
+            const { data: wallet } = await supabase
+                .from('user_wallets')
+                .select('id, balance')
+                .eq('user_id', shp_user)
+                .single();
+
+            if (wallet) {
+                const { error: txError } = await supabase
+                    .from('wallet_transactions')
+                    .insert({
+                        wallet_id: wallet.id,
+                        user_id: shp_user,
+                        gross_amount: grossAmount,
+                        fee_amount: feeAmount,
+                        net_amount: netAmount,
+                        type: 'payment',
+                        status: 'completed',
+                        description: `Payment confirmed (InvId: ${invId})`,
+                        related_entity_id: shp_related_id || null,
+                        related_entity_type: 'payment',
+                        metadata: {
+                            internal_ref: invId,
+                            fee_rate: feeRate,
+                            gateway: 'robokassa'
+                        },
+                        completed_at: new Date().toISOString()
+                    });
+
+                if (txError) {
+                    console.error("Failed to record fintech transaction", txError);
+                    return new Response("TX ERROR", { status: 500 });
+                }
+
+                // 3. Update wallet balance
+                await supabase
+                    .from('user_wallets')
+                    .update({
+                        balance: Number(wallet.balance) + netAmount,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', wallet.id);
             }
         }
 

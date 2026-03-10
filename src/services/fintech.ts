@@ -10,8 +10,10 @@ export interface WalletTransaction {
     id: string;
     wallet_id: string;
     user_id: string;
-    amount: number;
-    type: TransactionType;
+    gross_amount: number;
+    fee_amount: number;
+    net_amount: number;
+    type: TransactionType | string;
     status: TransactionStatus;
     description: string;
     metadata: Record<string, unknown>;
@@ -69,6 +71,11 @@ export const fintechService = {
             // Get dynamic commission rate based on user's tier
             const commissionRate = await getUserCommissionRate(params.userId);
 
+            // Calculate amounts per Q2 "Starter Tier" logic
+            const grossAmount = params.amount;
+            const feeAmount = Number((grossAmount * commissionRate).toFixed(2));
+            const netAmount = grossAmount - feeAmount;
+
             const { data: wallet, error: walletError } = await (supabase as any)
                 .from('user_wallets')
                 .select('id')
@@ -80,13 +87,16 @@ export const fintechService = {
                 throw new Error('Wallet not found');
             }
 
+            // Single insert with gross/fee/net per modern schema
             const { data: transaction, error: txError } = await (supabase as any)
                 .from('wallet_transactions')
                 .insert({
                     wallet_id: wallet.id,
                     user_id: params.userId,
-                    amount: params.amount,
-                    type: 'income',
+                    gross_amount: grossAmount,
+                    fee_amount: feeAmount,
+                    net_amount: netAmount,
+                    type: 'payment',
                     status: 'pending',
                     description: params.description,
                     related_entity_id: params.relatedEntityId,
@@ -97,25 +107,6 @@ export const fintechService = {
                 .single();
 
             if (txError) throw txError;
-
-            // Only create fee transaction if commission > 0
-            if (commissionRate > 0) {
-                const feeAmount = params.amount * commissionRate;
-                const feePercent = Math.round(commissionRate * 100);
-                await (supabase as any)
-                    .from('wallet_transactions')
-                    .insert({
-                        wallet_id: wallet.id,
-                        user_id: params.userId,
-                        amount: -feeAmount,
-                        type: 'fee',
-                        status: 'pending',
-                        description: `Platform fee (${feePercent}%) for: ${params.description}`,
-                        related_entity_id: transaction.id,
-                        related_entity_type: 'wallet_transaction',
-                        metadata: { parent_tx_id: transaction.id, fee_rate: commissionRate } as Json
-                    });
-            }
 
             return transaction;
         } catch (err) {
@@ -151,12 +142,12 @@ export const fintechService = {
 
             const { data: pendingData } = await (supabase as any)
                 .from('wallet_transactions')
-                .select('amount')
+                .select('gross_amount, net_amount')
                 .eq('user_id', userId)
-                .eq('type', 'income')
+                .eq('type', 'payment')
                 .eq('status', 'pending');
 
-            const pendingGMV = (pendingData || []).reduce((acc: number, curr: any) => acc + Number(curr.amount), 0);
+            const pendingGMV = (pendingData || []).reduce((acc: number, curr: any) => acc + Number(curr.gross_amount || 0), 0);
 
             return {
                 wallet,

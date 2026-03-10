@@ -33,6 +33,7 @@ import type { PageData, ProfileBlock } from '@/types/page';
 import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchReadinessCard';
+import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
@@ -214,6 +215,10 @@ export const HomeScreen = memo(function HomeScreen({
               pageUpdatedAt={pageData?.updatedAt}
               onOpenActivity={onOpenActivity}
               onOpenEditor={onOpenEditor}
+            />
+            <KaspiQRWidget
+              ownerId={pageData?.userId || ''}
+              className="glass-card border-white/20"
             />
           </>
         )}
