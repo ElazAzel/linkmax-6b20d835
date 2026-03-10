@@ -126,6 +126,8 @@ interface GridEditorProps {
   onDuplicateBlock?: (id: string) => void;
   // P5: Section callbacks
   onCreateSection?: (blocks: Block[], selectedIds: Set<string>, label: string) => void;
+  // P5: Transform callback
+  onTransform?: (block: Block, toType: BlockType) => void;
 }
 
 interface SortableGridBlockItemProps {
