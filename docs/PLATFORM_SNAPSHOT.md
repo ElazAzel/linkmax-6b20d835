@@ -11,10 +11,10 @@
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Liquid Glass"** aesthetic (glassmorphism, premium micro-animations, and depth) to provide a high-end look by default.
-2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking.
+2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking. Optimized for mobile via **Bottom Sheet (Drawer)** UX patterns.
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
 4. **Team Collaboration & Business Zones** — RBAC-based organization management and multi-tenant workspaces with CRM Kanban and Team Inbox.
-5. **Fintech Core** — Integrated ledger, sequential invoicing, and transaction tracking with a **"Step-by-Growth"** monetization model.
+5. **Fintech Core & Auth** — Telegram Mini App integration, Telegram Web Login, an integrated ledger with **Kaspi QR Sandbox** support, sequential invoicing, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
 
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
 
@@ -256,8 +256,13 @@ Supported platforms (Visitor tracking):
 **Entities displayed:**
 
 - **Leads** — Form submissions with status pipeline (new, contacted, qualified, converted)
-- **Bookings** — Appointment requests with date/time/status
+- **Bookings** — Appointment requests with date/time/status, enhanced with robust timezone handling (`date-fns-tz`)
 - **Event Registrations** — Attendees with ticket codes
+
+**Mobile UX/UI Hardening:**
+
+- The CRM interface is optimized for mobile using full **Bottom Sheet (Drawer)** patterns.
+- High-contrast typography (`text-xs` base for data tables) and minimum `44x44px` touch targets for all interactive actions in the Business Zone.
 
 **Lead status flow:**
 
@@ -288,7 +293,7 @@ new -> contacted -> qualified -> won/lost
 ### Backend
 
 - Supabase (Postgres, Auth, Storage)
-- **Native Auth Implementation**: Direct integration with Supabase Auth (Google/Apple OAuth) without third-party wrappers.
+- **Native Auth Implementation**: Direct integration with Supabase Auth (Google/Apple OAuth) and Telegram Web Login / Telegram Mini App validation via edge functions (`validate-telegram`, `validate-telegram-miniapp`).
 - 28 Edge Functions for AI, notifications, SEO, and analytics
 - Row Level Security for data isolation
 - pg_cron for scheduled jobs (warm-up, digests, reminders)
@@ -359,8 +364,8 @@ LinkMAX использует гибридную модель, направлен
 | План | Цена (KZT/мес) | Описание |
 | :--- | :--- | :--- |
 | **Identity (Free)** | 0 | 1 страница, виральность через вотермарку. |
-| **Starter (Transaction)** | 0 + 7% комиссия | Доступ к CRM и Payments без абонплаты. Платите только когда зарабатываете. |
-| **Pro (Business)** | ~3,045 (annual) | White-label, 6 страниц, полная CRM, комиссия 0-1%. |
+| **Starter (Transaction)** | 0 + 7% комиссия | Доступ к CRM и Payments без абонплаты. Интеграция с Kaspi QR и Robokassa. Удержание 7% комиссии. |
+| **Pro (Business)** | ~3,045 (annual) | White-label, 6 страниц, полная CRM, комиссия 1%. |
 
 ### Plan Checking
 
@@ -445,7 +450,7 @@ LinkMAX использует гибридную модель, направлен
 - `zone_conversations`: team inbox conversations (Telegram, etc.).
 - `zone_messages`: realtime messages within conversations.
 - `zone_tasks`: collaborative task management with priorities, assignments, and **checklists**.
-- `zone_invoices`: invoice tracking per deal/contact with **multi-item support**, automatic sequential numbering, and `robokassa_invoice_id` for payment reconciliation.
+- `zone_invoices`: invoice tracking per deal/contact with **multi-item support**, automatic sequential numbering, `robokassa_invoice_id` tracking, and **Kaspi QR Sandbox** simulation components for transaction verification.
 - `zone_invites`: invite tokens for onboarding new members.
 - `zone_automations`: advanced rule-based CRM engine (triggers: invoice paid, stage change, etc.).
 - `zone_document_templates`: customizable HTML templates for Acts/Invoices/Contracts generation.
@@ -491,7 +496,9 @@ LinkMAX использует гибридную модель, направлен
 | `process-crm-automations` | Cron | CRM follow-up automation |
 | `telegram-bot-webhook` | Telegram | Bot command handling |
 | `telegram-password-reset` | Auth | Password reset via Telegram |
-| `validate-telegram` | Auth | Telegram login verification |
+| `validate-telegram` | Auth | Telegram login verification (Web widget) |
+| `validate-telegram-miniapp` | Auth | Telegram Mini App `initData` verification |
+| `process-transaction-fee` | Webhook | Automates Kaspi/Robokassa fee deductions and balance updates |
 | `send-collab-notification` | Collaboration | Collaboration alerts |
 | `send-friend-notification` | Friends | Friend request alerts |
 | `send-social-notification` | Social | Social activity alerts |

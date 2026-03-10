@@ -16,6 +16,7 @@
 ## ✨ Features
 
 ### 🎨 **AI-Powered Page Builder**
+
 - **28+ Block Types**: Profile, links, products, forms, bookings, events, carousels, scratch cards, and more.
 - **Drag & Drop**: Intuitive mobile-first editor (dnd-kit).
 - **AI Generation**: Create entire pages or write copy with one click (Gemini).
@@ -23,6 +24,7 @@
 - **Multi-Page**: Up to 6 pages per user (Pro); each with its own slug and SEO.
 
 ### 📈 **Business Zone & Analytics**
+
 - **Mini-CRM**: Leads with status pipeline (New → Contacted → Won/Lost), notes, and history.
 - **Kanban**: Deals pipeline with drag-and-drop stages.
 - **Tasks**: Task board with priorities, assignees, due dates, linked contacts and deals.
@@ -32,10 +34,12 @@
 - **Notifications**: Instant alerts via Telegram for new leads and bookings.
 
 ### 🌐 **Localization & SEO**
+
 - **16 Languages**: RU, EN, KK (primary); DE, UK, UZ, BE, ES, FR, IT, PT, ZH, TR, JA, KO, AR (lazy-loaded).
 - **SEO/SSR**: Bot detection, pre-rendered landing/gallery/profiles via Cloudflare Worker + Supabase Edge Functions; dynamic sitemap; JSON-LD and GEO schemas.
 
 ### 🔗 **Social & Growth**
+
 - **Smart Links**: Messenger shortcuts (WhatsApp, Telegram), social icons.
 - **Monetization**: Sell products, tickets, and digital goods; Robokassa integration (platform layer).
 - **PWA**: Installable app, offline fallback, shortcuts (Dashboard, Create page).
@@ -45,18 +49,21 @@
 
 ## 🛠 Tech Stack
 
-**Core**
+### Core
+
 - **Framework**: [Vite 6](https://vitejs.dev/) with [React 18.3](https://react.dev/)
 - **Language**: [TypeScript 5.8](https://www.typescriptlang.org/)
 - **Routing**: [React Router 6](https://reactrouter.com/) (lazy-loaded routes)
 
-**Styling & UI**
+### Styling & UI
+
 - **CSS**: [TailwindCSS 3](https://tailwindcss.com/)
 - **Components**: [shadcn/ui](https://ui.shadcn.com/) (Radix UI)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
-**Backend & Infra**
+### Backend & Infra
+
 - **Platform**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage)
 - **Compute**: Supabase Edge Functions (Deno) — 28+ functions
 - **SSR/Bots**: Cloudflare Worker (prerender, sitemap)
@@ -64,7 +71,8 @@
 - **Payments**: Robokassa (platform layer)
 - **Monitoring**: Sentry, Web Vitals
 
-**Mobile**
+### Mobile
+
 - **Capacitor**: 8.1 (iOS/Android)
 
 ---
@@ -72,46 +80,55 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js v18+ (v20 recommended)
 - npm v9+
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/ElazAzel/inkmax.git
    cd inkmax
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Configure Environment**
    Copy `.env.example` to `.env` and set:
+
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
    VITE_SUPABASE_PROJECT_ID=your_project_id
    VITE_APP_DOMAIN=https://lnkmx.my
    ```
+
    *(Ask the team lead for credentials if you don't have them)*
 
 4. **Start Development Server**
+
    ```bash
    npm run dev
    ```
-   App runs at **http://localhost:8080**
+
+   App runs at **<http://localhost:8080>**
 
 ### Подключение npm (если команда `npm` не найдена)
 
 - Установите [Node.js](https://nodejs.org/) (LTS, v18+) — в комплекте идёт npm.
 - Либо используйте [nvm-windows](https://github.com/coreybutler/nvm-windows): `nvm install 20` → `nvm use 20`. В проекте есть `.nvmrc` (рекомендуемая версия).
 - Откройте **новый** терминал (Cursor/VS Code: Terminal → New Terminal), чтобы подхватился PATH, затем:
+
   ```bash
   npm install
   ```
+
 - Или из PowerShell в корне проекта: `.\scripts\install-deps.ps1`
 
 ---
@@ -147,14 +164,15 @@ lnkmx/
 
 ## 📖 Documentation
 
-- **[Docs overview](docs/README.md)**: Entry point and navigation.
+- **[Docs overview](docs/README.md)**: Entry point and unified index.
+- **[Platform Snapshot](docs/PLATFORM_SNAPSHOT.md)**: Single source of truth for architecture and features.
+- **[Changelog](docs/CHANGELOG.md)**: Version history.
 - **[Developer Quickstart](docs/getting-started/DEVELOPER-QUICKSTART.md)**: Get running in minutes.
 - **[Comprehensive Platform Guide](docs/architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)**: Product vision, modules, and roadmap.
 - **[Architecture](docs/architecture/architecture.md)**: High-level system design.
 - **[Stack References](docs/architecture/STACK_REFERENCES.md)**: Libraries and best practices.
 - **[API & Backend](docs/implementation/API.md)**: Edge Functions and RPCs.
 - **[Testing](docs/testing/TESTING.md)**: Unit and E2E tests.
-- **[Documentation Index](docs/DOCUMENTATION-INDEX-FULL.md)**: Full doc catalog.
 - **[Contributing](CONTRIBUTING.md)**: Guidelines for contributing.
 
 ---
