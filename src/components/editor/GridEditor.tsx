@@ -146,6 +146,12 @@ interface SortableGridBlockItemProps {
   onStartExperiment?: (block: Block) => void;
   onBlockClick?: (block: Block, e: React.MouseEvent) => void;
   onBlockDoubleClick?: (block: Block) => void;
+  onTransform?: (block: Block, toType: BlockType) => void;
+  onCopy?: (block: Block) => void;
+  isFirst?: boolean;
+  isLast?: boolean;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 }
 
 function SortableGridBlockItem({
