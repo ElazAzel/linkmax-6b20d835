@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { getAppDomain } from '@/lib/utils/url-helpers';
 
 interface TelegramLoginButtonProps {
     botName: string;
@@ -16,8 +17,21 @@ export function TelegramLoginButton({
     requestAccess = 'write',
 }: TelegramLoginButtonProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isValidDomain, setIsValidDomain] = useState(true);
 
     useEffect(() => {
+        try {
+            const appHost = new URL(getAppDomain()).hostname;
+            const currentHost = window.location.hostname;
+            // Prevent "Bot domain invalid" by strictly matching hostname
+            if (appHost !== currentHost) {
+                setIsValidDomain(false);
+                return;
+            }
+        } catch (e) {
+            console.warn('Failed to parse app domain for Telegram widget validation:', e);
+        }
+
         // Expose callback to global window object for the script to call
         (window as any).onTelegramAuth = onAuth;
 
@@ -46,6 +60,10 @@ export function TelegramLoginButton({
             // but it's generally safe.
         };
     }, [botName, buttonSize, cornerRadius, requestAccess, onAuth]);
+
+    if (!isValidDomain) {
+        return null;
+    }
 
     return <div ref={containerRef} className="flex justify-center w-full min-h-[40px]" />;
 }
