@@ -29,6 +29,7 @@
     "i18n:export": "node scripts/i18n-export.mjs",
     "i18n:import": "node scripts/i18n-import.mjs",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "typecheck:strict": "tsc -p tsconfig.strict.json --noEmit",
     "mobile:sync": "npm run build && npx cap sync",

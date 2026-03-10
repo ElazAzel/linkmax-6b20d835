@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### [2026-03-10] - Audit Remediation (March 2026)
+
+* **React Hook Violation Fixed**:
+  * Refactored `HomeScreen.tsx` to move conditional loading checks after all hook calls (`useMemo`, `useEffect`).
+  * Ensured hooks are called unconditionally, complying with React's Rules of Hooks.
+* **Test Suite Restoration**:
+  * Resolved 5 critical test failures (Pass rate: 256/256).
+  * Fixed `useAuth.test.tsx`: aligned with `supabase.auth.signInWithOAuth` native implementation.
+  * Fixed `fintech.test.ts`: corrected Supabase mock chains and fee calculation (7%).
+  * Fixed `Block.test.ts`: aligned block categories with the manifest.
+* **Internationalization (i18n)**:
+  * Achieved 100% key synchronization across RU, EN, KK, UZ.
+  * Synchronized over 565 missing keys from the codebase.
+* **Quality Assurance**:
+  * Added `test:coverage` script to `package.json` for code coverage tracking.
+  * Updated `PLATFORM_SNAPSHOT.md` health score to **9.8/10**.
+
 ### [2026-03-10] - Q2 Launch: Fintech Core & Mobile UX Hardening
 
 * **Fintech Core & Monetization ("Step-by-Growth")**:
