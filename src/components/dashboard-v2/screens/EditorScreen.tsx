@@ -3,7 +3,7 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
@@ -14,6 +14,8 @@ import Redo2 from 'lucide-react/dist/esm/icons/redo-2';
 import History from 'lucide-react/dist/esm/icons/history';
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb';
 import Layers from 'lucide-react/dist/esm/icons/layers';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import MousePointerClick from 'lucide-react/dist/esm/icons/mouse-pointer-click';
 import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
