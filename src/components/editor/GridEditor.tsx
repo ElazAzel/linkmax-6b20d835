@@ -597,6 +597,26 @@ export const GridEditor = memo(function GridEditor({
     trackEditorAction('section_created', { source: 'grid' });
   }, [canGroup, blocks, selectedBlockIds, onReorderBlocks, setSectionMeta, clearSelection, t]);
 
+  // P5: Transform handler
+  const handleTransform = useCallback((block: Block, toType: BlockType) => {
+    if (onTransform) {
+      onTransform(block, toType);
+    } else {
+      const result = transformBlock(block, toType);
+      if (result.success) {
+        onUpdateBlock(block.id, result.newBlock);
+        trackEditorAction('block_transformed', { source: 'grid', blockType: `${block.type}->${toType}` });
+      }
+    }
+  }, [onTransform, onUpdateBlock]);
+
+  // P5: Copy handler for context toolbar
+  const handleCopyBlock = useCallback((block: Block) => {
+    copyBlock(block);
+    setClipboardContent(block);
+    trackEditorAction('block_copied', { blockType: block.type, source: 'grid' });
+  }, [setClipboardContent]);
+
   // Build grid items with section headers
   const gridItems = useMemo(() => {
     const items: React.ReactNode[] = [];
