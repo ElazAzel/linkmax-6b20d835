@@ -1,0 +1,8 @@
+﻿ЁЯУК i18n Status (Base: ru, Target: en, kk, uz)
+Total Keys: 4647
+[31mEN: 58 missing (run prep)[0m
+   Missing keys found (first 10): landing.demo.step1Title, landing.demo.step1Desc, landing.demo.step2Title, landing.demo.step2Desc, landing.demo.step3Title, landing.demo.step3Desc, landing.demo.iAmA, landing.demo.nicheCreator, landing.demo.nicheFitness, landing.demo.nicheCrypto
+[31mKK: 47 missing (run prep)[0m
+   Missing keys found (first 10): landing.demo.step1Title, landing.demo.step1Desc, landing.demo.step2Title, landing.demo.step2Desc, landing.demo.step3Title, landing.demo.step3Desc, landing.demo.iAmA, landing.demo.nicheCreator, landing.demo.nicheFitness, landing.demo.nicheCrypto
+[31mUZ: 250 missing (run prep)[0m
+   Missing keys found (first 10): landing.testimonials.title, landing.testimonials.count, landing.testimonials.suffix, landing.testimonials.subtitle, landing.testimonials.role1, landing.testimonials.review1, landing.testimonials.role2, landing.testimonials.review2, landing.testimonials.role3, landing.testimonials.review3
