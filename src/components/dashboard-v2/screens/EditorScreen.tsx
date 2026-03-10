@@ -99,7 +99,51 @@ export const EditorScreen = memo(function EditorScreen({
   const intelligence = usePageIntelligence(pageData, pageData?.niche);
 
   // P5: Friction recovery
-  const { signal: frictionSignal, dismiss: dismissFriction, accept: acceptFriction } = useFrictionRecovery();
+  const { signal: frictionSignal, pushEvent: pushFrictionEvent, dismiss: dismissFriction, accept: acceptFriction } = useFrictionRecovery();
+
+  // P5: Wrapped handlers that feed friction detector
+  const handleInsertBlockWithFriction = useCallback((blockType: string, position: number) => {
+    const result = onInsertBlock(blockType, position);
+    pushFrictionEvent('block_added', blockType);
+    return result;
+  }, [onInsertBlock, pushFrictionEvent]);
+
+  const handleDeleteBlockWithFriction = useCallback((blockId: string) => {
+    const block = pageData?.blocks.find(b => b.id === blockId);
+    onDeleteBlock(blockId);
+    pushFrictionEvent('block_deleted', block?.type);
+  }, [onDeleteBlock, pushFrictionEvent, pageData]);
+
+  const handleUndoWithFriction = useCallback(() => {
+    onUndo?.();
+    pushFrictionEvent('undo');
+  }, [onUndo, pushFrictionEvent]);
+
+  const handleRedoWithFriction = useCallback(() => {
+    onRedo?.();
+    pushFrictionEvent('redo');
+  }, [onRedo, pushFrictionEvent]);
+
+  // P5: Block move handlers for StructureView
+  const handleBlockMoveUp = useCallback((blockId: string) => {
+    if (!pageData) return;
+    const idx = pageData.blocks.findIndex(b => b.id === blockId);
+    if (idx <= 0) return;
+    // Don't swap past profile block
+    if (pageData.blocks[idx - 1].type === 'profile') return;
+    const newBlocks = [...pageData.blocks];
+    [newBlocks[idx - 1], newBlocks[idx]] = [newBlocks[idx], newBlocks[idx - 1]];
+    onReorderBlocks(newBlocks);
+  }, [pageData, onReorderBlocks]);
+
+  const handleBlockMoveDown = useCallback((blockId: string) => {
+    if (!pageData) return;
+    const idx = pageData.blocks.findIndex(b => b.id === blockId);
+    if (idx < 0 || idx >= pageData.blocks.length - 1) return;
+    const newBlocks = [...pageData.blocks];
+    [newBlocks[idx], newBlocks[idx + 1]] = [newBlocks[idx + 1], newBlocks[idx]];
+    onReorderBlocks(newBlocks);
+  }, [pageData, onReorderBlocks]);
 
   // P5: Section handlers for StructureView
   const handleDissolveSection = useCallback((sectionId: string) => {
@@ -142,6 +186,12 @@ export const EditorScreen = memo(function EditorScreen({
       setSectionMeta(sectionId, { id: sectionId, label, collapsed: false, createdAt: Date.now() });
     }
   }, [sectionMeta, setSectionMeta]);
+
+  // P5: Review mode toggle
+  const toggleReviewMode = useCallback((mode: 'problematic' | 'cta_contact') => {
+    setReviewMode(reviewMode === mode ? 'normal' : mode);
+    trackEditorAction(reviewMode === mode ? 'review_mode_exited' : 'review_mode_entered', { source: 'toolbar' });
+  }, [reviewMode, setReviewMode]);
 
   // Friction action handler
   const handleFrictionAction = useCallback(() => {
