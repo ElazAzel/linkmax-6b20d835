@@ -320,6 +320,30 @@ export const EditorScreen = memo(function EditorScreen({
               {t('editor.structure', 'Структура')}
             </Button>
           )}
+
+          {/* P5: Review mode filter chips */}
+          {hasContent && (
+            <>
+              <Button
+                variant={reviewMode === 'problematic' ? 'default' : 'outline'}
+                size="sm"
+                className="h-8 rounded-xl shrink-0 gap-1.5"
+                onClick={() => toggleReviewMode('problematic')}
+              >
+                <AlertCircle className="h-3.5 w-3.5" />
+                {t('editor.problematic', 'Проблемные')}
+              </Button>
+              <Button
+                variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
+                size="sm"
+                className="h-8 rounded-xl shrink-0 gap-1.5"
+                onClick={() => toggleReviewMode('cta_contact')}
+              >
+                <MousePointerClick className="h-3.5 w-3.5" />
+                {t('editor.cta', 'CTA')}
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
