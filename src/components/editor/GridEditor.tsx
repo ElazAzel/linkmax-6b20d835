@@ -169,6 +169,12 @@ function SortableGridBlockItem({
   onStartExperiment,
   onBlockClick,
   onBlockDoubleClick,
+  onTransform,
+  onCopy,
+  isFirst = false,
+  isLast = false,
+  onMoveUp,
+  onMoveDown,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
