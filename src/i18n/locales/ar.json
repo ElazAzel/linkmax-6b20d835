@@ -129,7 +129,22 @@
     "toHome": "الرئيسية",
     "collapse": "طي",
     "generating": "جاري التوليد...",
-    "generate": "توليد"
+    "generate": "توليد",
+    "active": "",
+    "configuring": "",
+    "verify": "",
+    "guide": "",
+    "coming_soon": "",
+    "details": "",
+    "actions": "",
+    "unknownUser": "",
+    "allTime": "",
+    "quantity": "",
+    "amount": "",
+    "untitled": "",
+    "name": "",
+    "status": "",
+    "date": ""
   },
   "fields": {
     "name": "الاسم",
@@ -348,7 +363,10 @@
     "success": "تم إرسال النموذج بنجاح!",
     "error": "خطأ في إرسال النموذج",
     "enterPlaceholder": "إدخال",
-    "submitting": "جاري الإرسال..."
+    "submitting": "جاري الإرسال...",
+    "limitReached": {
+      "customer": ""
+    }
   },
   "newsletter": {
     "alreadySubscribed": "أنت مشترك مسبقاً!",
@@ -674,7 +692,10 @@
       "linkFailed": "",
       "unlinkFailed": "",
       "unlinkSuccess": "",
-      "cannotUnlinkLast": ""
+      "cannotUnlinkLast": "",
+      "linkFailedReason": "",
+      "identityNotFound": "",
+      "primaryIdentity": ""
     },
     "integrations": {
       "title": "",
@@ -688,7 +709,15 @@
       "fbHint": "",
       "ttHint": "",
       "ga4Hint": "",
-      "yandexHint": ""
+      "yandexHint": "",
+      "gcalConnected": "",
+      "gcalFailed": "",
+      "gcalNotConfigured": "",
+      "gcalRedirecting": "",
+      "gcalDisconnectFailed": "",
+      "gcalDisconnected": "",
+      "active": "",
+      "gcalDesc": ""
     },
     "pageBackground": "",
     "backgroundType": "",
@@ -704,7 +733,21 @@
     "saveAsTemplate": "",
     "myTemplates": "",
     "openVerification": "",
-    "pageBackgroundLocked": ""
+    "pageBackgroundLocked": "",
+    "password": {
+      "required": "",
+      "minLength": "",
+      "confirmRequired": "",
+      "mismatch": "",
+      "success": "",
+      "error": "",
+      "title": "",
+      "description": "",
+      "newPassword": "",
+      "confirmPassword": "",
+      "hint": "",
+      "submit": ""
+    }
   },
   "niche": {
     "barber": "Barber",
@@ -765,7 +808,17 @@
     "completeDescription": ""
   },
   "landing": {
-    "ticker": { "title": "يثق بنا المبدعون حول العالم", "creators": "مبدعون", "coaches": "مدربون", "designers": "مصممون", "startups": "شركات ناشئة", "agencies": "وكالات", "clinics": "عيادات", "studios": "استوديوهات", "experts": "خبراء" },
+    "ticker": {
+      "title": "يثق بنا المبدعون حول العالم",
+      "creators": "مبدعون",
+      "coaches": "مدربون",
+      "designers": "مصممون",
+      "startups": "شركات ناشئة",
+      "agencies": "وكالات",
+      "clinics": "عيادات",
+      "studios": "استوديوهات",
+      "experts": "خبراء"
+    },
     "bento": {
       "sectionTitle": "كل ما تحتاجه للنمو",
       "sectionDesc": "منشئ مواقع + CRM + تحليلات. منصة واحدة بدلاً من عشر أدوات.",
@@ -790,6 +843,87 @@
       "bookingTitle": "الحجز عبر الإنترنت",
       "bookingDesc": "دع العملاء يحجزون المواعيد مباشرة. تقويم آلي، بدون مكالمات.",
       "bookingSlot": "متاح"
+    },
+    "testimonials": {
+      "title": "",
+      "count": "",
+      "suffix": "",
+      "subtitle": "",
+      "role1": "",
+      "review1": "",
+      "role2": "",
+      "review2": "",
+      "role3": "",
+      "review3": "",
+      "role4": "",
+      "review4": ""
+    },
+    "pricing": {
+      "title": "Pricing",
+      "titleHighlight": "",
+      "subtitle": "Start free and upgrade to Pro when you need more",
+      "monthly": "",
+      "yearly": "",
+      "save": "",
+      "popular": "",
+      "proName": "",
+      "aiPowered": "",
+      "perMonth": "",
+      "billedYearly": "",
+      "f1": "",
+      "f2": "",
+      "f3": "",
+      "f4": "",
+      "f5": "",
+      "f6": "",
+      "proCta": "",
+      "freeCta": "",
+      "newBadge": "",
+      "businessName": "",
+      "teamLabel": "",
+      "businessCta": "",
+      "b1": "",
+      "b2": "",
+      "b3": "",
+      "b4": "",
+      "b5": "",
+      "b6": "",
+      "month": "",
+      "total": "",
+      "billedOnce": ""
+    },
+    "demo": {
+      "title": "",
+      "step1Title": "",
+      "step1Desc": "",
+      "step2Title": "",
+      "step2Desc": "",
+      "step3Title": "",
+      "step3Desc": "",
+      "iAmA": "",
+      "nicheCreator": "",
+      "nicheFitness": "",
+      "nicheCrypto": "",
+      "nicheBeauty": "",
+      "nicheMusic": "",
+      "nicheTutor": "",
+      "aiGenerating": "",
+      "chatMsg1": "",
+      "chatMsg2": "",
+      "leadCaptured": "",
+      "badge": "",
+      "subtitle": "",
+      "profile": "",
+      "addBlocks": "",
+      "link": "",
+      "text": "",
+      "image": "",
+      "socials": "",
+      "yourBlocks": "",
+      "dragToReorder": "",
+      "noBlocks": "",
+      "livePreview": "",
+      "addBlocksHint": ""
     },
     "v6": {
       "hero": {
@@ -1210,7 +1344,11 @@
       "item4": "No understanding: what actually gets clicked and where attention is lost",
       "solution": "lnkmx creates one clear page where visitors quickly understand who you are, how you help, how much it costs, and where to click to book. And you see leads and analytics in one place."
     },
-    "howItWorks": "",
+    "howItWorks": {
+      "badge": "",
+      "title": "",
+      "cta": ""
+    },
     "features": {
       "title": "What you get in the first version",
       "ai": {
@@ -1323,29 +1461,29 @@
     "socialProof": {
       "title": "Example pages"
     },
-    "pricing": {
-      "title": "Pricing",
-      "subtitle": "Start free and upgrade to Pro when you need more",
-      "forever": "Forever",
-      "bestValue": "Best value",
-      "freeAction": "Start free",
-      "viewPlans": "Choose Pro",
-      "otherPlans": "Other options:",
-      "annualPriceKzt": "36,540 ₸ for 12 months",
-      "annualPriceUsd": "$71/year",
-      "otherPlansSix": "6 months: 3,698 ₸/mo (-15%)",
-      "otherPlansThree": "3 months: 4,350 ₸/mo",
+    "pricingLegacy": {
+      "title": "",
+      "subtitle": "",
+      "forever": "",
+      "bestValue": "",
+      "freeAction": "",
+      "viewPlans": "",
+      "otherPlans": "",
+      "annualPriceKzt": "",
+      "annualPriceUsd": "",
+      "otherPlansSix": "",
+      "otherPlansThree": "",
       "free": {
-        "item1": "6 basic blocks",
-        "item2": "1 AI generation/month",
-        "item3": "Basic analytics"
+        "item1": "",
+        "item2": "",
+        "item3": ""
       },
       "pro": {
-        "item1": "Unlimited blocks and templates",
-        "item2": "5 AI generations/month",
-        "item3": "CRM + Telegram notifications",
-        "item4": "Advanced analytics",
-        "item5": "No watermark"
+        "item1": "",
+        "item2": "",
+        "item3": "",
+        "item4": "",
+        "item5": ""
       },
       "month": "",
       "total": "",
@@ -1422,22 +1560,6 @@
         "answer": "Yes, Pro includes custom domains and branding."
       }
     },
-    "demo": {
-      "badge": "",
-      "title": "",
-      "subtitle": "",
-      "profile": "",
-      "addBlocks": "",
-      "link": "",
-      "text": "",
-      "image": "",
-      "socials": "",
-      "yourBlocks": "",
-      "dragToReorder": "",
-      "noBlocks": "",
-      "livePreview": "",
-      "addBlocksHint": ""
-    },
     "featured": {
       "badge": "",
       "title": "",
@@ -1484,7 +1606,8 @@
         "f7_v2": "",
         "title": "",
         "subtitle": "",
-        "cta": ""
+        "cta": "",
+        "f5_booking": ""
       },
       "premium": {
         "f1_v2": "",
@@ -1497,7 +1620,14 @@
         "badge": "",
         "title": "",
         "subtitle": "",
-        "cta": ""
+        "cta": "",
+        "f1_v3": "",
+        "f2_v3": "",
+        "f3_v3": "",
+        "f4_v3": "",
+        "f5_v3": "",
+        "f6_v3": "",
+        "f7_v3": ""
       },
       "badge": "",
       "title": ""
@@ -1656,7 +1786,8 @@
       "pages": "Pages",
       "activity": "Inbox",
       "insights": "Analytics",
-      "settings": "Settings"
+      "settings": "Settings",
+      "more": ""
     },
     "sidebar": {
       "tools": "Tools",
@@ -1717,7 +1848,11 @@
       "searchPlaceholder": "Search by name, phone...",
       "noResults": "Nothing found",
       "noLeads": "No leads yet",
-      "noLeadsHint": "Leads will appear here when visitors fill out forms on your page"
+      "noLeadsHint": "Leads will appear here when visitors fill out forms on your page",
+      "exporting": "",
+      "exportSuccess": "",
+      "exportError": "",
+      "export": ""
     },
     "insights": {
       "title": "Analytics",
@@ -1816,7 +1951,10 @@
         "page_limit_exceeded": "Page limit reached",
         "slug_taken": "This URL is taken",
         "invalid_slug": "Invalid URL"
-      }
+      },
+      "duplicated": "",
+      "deleteConfirm": "",
+      "deleted": ""
     },
     "multiPage": {
       "switchPage": "Switch Page",
@@ -1859,6 +1997,11 @@
       "templatesDesc": "Ready-made page designs",
       "marketplace": "Marketplace",
       "marketplaceDesc": "Community templates",
+      "faviconUrl": "",
+      "faviconHint": "",
+      "hideBranding": "",
+      "hideBrandingHint": "",
+      "whiteLabel": "",
       "errors": {
         "slug_taken": "This URL is taken",
         "invalid_slug": "Invalid URL"
@@ -1882,7 +2025,8 @@
       "yourDomainExample": "",
       "dnsType": "",
       "dnsName": "",
-      "dnsValue": ""
+      "dnsValue": "",
+      "dnsHint": ""
     },
     "accountSettings": {
       "title": "Account Settings",
@@ -1970,7 +2114,44 @@
         "feature5": "Advanced analytics",
         "feature6": "No watermark",
         "feature7": "Priority support"
-      }
+      },
+      "identity": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": ""
+      },
+      "starter": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "feature6": ""
+      },
+      "business": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "feature6": ""
+      },
+      "businessPlan": "",
+      "starterPlan": "",
+      "identityPlan": "",
+      "commissionRate": "",
+      "upgradeToStarter": "",
+      "upgradeToPro": "",
+      "unlockCRM": "",
+      "reduceFees": "",
+      "starterDescription": "",
+      "proDescription": "",
+      "activateStarter": "",
+      "yourBenefits": "",
+      "lowCommission": "",
+      "starterCommission": "",
+      "freeTier": ""
     },
     "createPage": {
       "titleRequired": "",
@@ -2003,7 +2184,12 @@
       "title": "",
       "search": "",
       "emptyTitle": "",
-      "emptyDesc": ""
+      "emptyDesc": "",
+      "updateError": "",
+      "exporting": "",
+      "exportError": "",
+      "export": "",
+      "filterAll": ""
     },
     "addFirstBlock": "",
     "templateApplied": ""
@@ -2157,7 +2343,9 @@
     "addFailed": "Failed to add block",
     "premiumRequired": "This block is PRO only",
     "limitReached": "Block limit reached. Upgrade to Premium.",
-    "proOnly": ""
+    "proOnly": "",
+    "duplicated": "",
+    "duplicateFailed": ""
   },
   "auth": {
     "signIn": "Sign In",
@@ -2204,6 +2392,14 @@
       "bonus": "Sign up and get +3 days Premium",
       "success": "🎉 +{{days}} days Premium for referral code!"
     },
+    "validation": {
+      "email": "",
+      "emailMax": "",
+      "passwordMin": "",
+      "passwordUppercase": "",
+      "passwordLowercase": "",
+      "passwordNumber": ""
+    },
     "telegram": {
       "invalidChatId": "Enter a valid Telegram Chat ID",
       "notFound": "Account with this Telegram not found",
@@ -2232,7 +2428,8 @@
     "required": "",
     "loginRequired": "",
     "signupEmailSent": "",
-    "login": ""
+    "login": "",
+    "oauthError": ""
   },
   "gallery": {
     "title": "Page Gallery",
@@ -2310,7 +2507,11 @@
     "tabLeaderboard": "",
     "allPages": "",
     "noPages": "",
-    "tryAnotherFilter": ""
+    "tryAnotherFilter": "",
+    "useTemplate": "",
+    "sortPopular": "",
+    "sortViews": "",
+    "sortRecent": ""
   },
   "errors": {
     "general": "An error occurred",
@@ -2634,7 +2835,9 @@
     "hidden": "",
     "noTemplatesFound": "",
     "editUserTierDescription": "",
-    "roleAdmin": ""
+    "roleAdmin": "",
+    "fintech": "",
+    "category": ""
   },
   "adminCharts": {
     "userGrowth": "User growth",
@@ -2849,7 +3052,8 @@
       "title": "",
       "placeholder": "",
       "button": "",
-      "hint": ""
+      "hint": "",
+      "generating": ""
     },
     "captureError": "",
     "captured": "",
@@ -2913,7 +3117,9 @@
     "noPurchased": "",
     "browseMk": "",
     "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
-    "purchaseTemplate": "Покупка шаблона: {{name}}"
+    "purchaseTemplate": "Покупка шаблона: {{name}}",
+    "chosen": "",
+    "use": ""
   },
   "alternatives": {
     "seo": {
@@ -3030,6 +3236,34 @@
       "signIn": "Sign In",
       "company": "ARchitecKZ • BIN: 190540008684",
       "address": "Almaty, Sholokhov St., 20"
+    },
+    "bitrix24": {
+      "title": "",
+      "intro": "",
+      "rowSimplicity": "",
+      "rowTime": "",
+      "rowMobile": "",
+      "rowPrice": "",
+      "LinkMAXSimple": "",
+      "bitrixComplex": "",
+      "LinkMAX15min": "",
+      "bitrixWeeks": "",
+      "LinkMAXMobile": "",
+      "bitrixWeak": "",
+      "LinkMAXPrice": "",
+      "bitrixPrice": "",
+      "positioning": "",
+      "cta": ""
+    }
+  },
+  "phaseB": {
+    "whyLnkmx": {
+      "title": "",
+      "noSetup": "",
+      "mobile": "",
+      "premium": "",
+      "emptyDeals": "",
+      "emptyContacts": ""
     }
   },
   "blockPreview": {
@@ -3267,7 +3501,10 @@
     "export": {
       "button": "",
       "summary": "",
-      "daily": ""
+      "daily": "",
+      "success": "",
+      "error": "",
+      "excel": ""
     },
     "blocks": {
       "title": "",
@@ -3275,6 +3512,37 @@
       "avgCtr": "",
       "clicks": "",
       "andMore": "и ещё {{count}} блоков"
+    },
+    "blockTypes": {
+      "link": "",
+      "social": "",
+      "button": "",
+      "booking": "",
+      "contactForm": "",
+      "pricing": "",
+      "product": "",
+      "gallery": "",
+      "video": "",
+      "event": "",
+      "messenger": ""
+    },
+    "tooltipClicks": "",
+    "traffic": {
+      "instagram": "",
+      "facebook": "",
+      "twitter": "",
+      "tiktok": "",
+      "youtube": "",
+      "telegram": "",
+      "whatsapp": "",
+      "vkontakte": "",
+      "linkedin": "",
+      "google": "",
+      "yandex": "",
+      "bing": "",
+      "direct": "",
+      "referral": "",
+      "unknown": ""
     },
     "funnel": {
       "views": "",
@@ -3286,7 +3554,11 @@
       "insights": "",
       "clickRate": "",
       "conversionRate": "",
-      "avgPerDay": ""
+      "avgPerDay": "",
+      "dropOff": "",
+      "retention": "",
+      "overallLabel": "",
+      "subtitle": ""
     },
     "engagement": {
       "ctr": "",
@@ -3309,7 +3581,8 @@
       "overview": "",
       "traffic": "",
       "blocks": "",
-      "funnel": ""
+      "funnel": "",
+      "experiments": ""
     },
     "chart": {
       "title": ""
@@ -3368,7 +3641,30 @@
     "discard": "",
     "saveAndClose": "",
     "selectBlock": "",
-    "searchBlocks": ""
+    "searchBlocks": "",
+    "problematic": "",
+    "cta": "",
+    "edit": "",
+    "moveUp": "",
+    "moveDown": "",
+    "copy": "",
+    "duplicate": "",
+    "transform": "",
+    "selected": "",
+    "createSection": "",
+    "clearSelection": "",
+    "experiment": "",
+    "experimentCreated": "",
+    "setupABTest": "",
+    "abTestDesc": "",
+    "experimentName": "",
+    "trafficSplit": "",
+    "howItWorks": "",
+    "abTestInstructions": "",
+    "startExperiment": "",
+    "sectionName": "",
+    "newSection": "",
+    "section": ""
   },
   "crm": {
     "title": "CRM",
@@ -3377,6 +3673,12 @@
     "bookings": "Bookings",
     "analytics": "Analytics",
     "premiumRequired": "Premium Feature",
+    "leadLimit": {
+      "used": "",
+      "warning": "",
+      "reached": "",
+      "upgrade": ""
+    },
     "premiumDescription": "Upgrade to Premium to access CRM and track your leads",
     "noLeadsToExport": "No leads to export",
     "exportSuccess": "Leads exported successfully",
@@ -3394,7 +3696,8 @@
       "contacted": "Contacted",
       "qualified": "Qualified",
       "converted": "Converted",
-      "lost": "Lost"
+      "lost": "Lost",
+      "": ""
     },
     "source": "",
     "addLeadDescription": "",
@@ -3410,7 +3713,32 @@
     "confirmDelete": "",
     "deleteWarning": "",
     "openPanel": "",
-    "upgradeToPremium": ""
+    "upgradeToPremium": "",
+    "responseTime": {
+      "justNow": "",
+      "minutesAgo": "",
+      "hoursAgo": "",
+      "missed": ""
+    },
+    "quickReply": {
+      "template": "",
+      "call": "",
+      "done": ""
+    },
+    "bookingStatus": {
+      "pending": "",
+      "confirmed": "",
+      "completed": ""
+    },
+    "booking": {
+      "confirm": "",
+      "cancel": ""
+    },
+    "aging": {
+      "stale": "",
+      "missed": "",
+      "needsFollowup": ""
+    }
   },
   "pagination": {
     "previous": "Previous",
@@ -3858,8 +4186,14 @@
     "prepayment": "Prepayment",
     "requirePrepayment": "Require prepayment",
     "prepaymentDesc": "After booking, client will be redirected to WhatsApp for payment",
+    "prepaymentMethod": "",
+    "methodWhatsApp": "",
+    "methodKaspi": "",
+    "methodRobokassa": "",
     "prepaymentPhone": "WhatsApp for payment",
     "phoneHint": "WhatsApp phone number for receiving payments",
+    "kaspiPhone": "",
+    "kaspiHint": "",
     "prepaymentAmount": "Prepayment amount",
     "currency": "Currency",
     "notifications": "Telegram notifications",
@@ -3869,7 +4203,9 @@
     "weeklyMotivation": "Weekly motivation",
     "weeklyMotivationDesc": "Monday at 9:00 AM - personal inspiration",
     "buttonText": "Button text",
-    "buttonTextPlaceholder": "Book Now"
+    "buttonTextPlaceholder": "Book Now",
+    "gcalSync": "",
+    "gcalSyncDesc": ""
   },
   "mapBlock": {
     "address": "Address",
@@ -3901,13 +4237,32 @@
     "prepaymentNote": "After booking you will be redirected to WhatsApp for payment",
     "success": "You have successfully booked!",
     "error": "Booking error. Please try again.",
+    "addDetails": "",
+    "prepaymentBadge": "",
+    "slotPrepaymentHint": "",
+    "formPrepaymentNote": "",
+    "confirmation": {
+      "title": "",
+      "subtitle": "",
+      "ref": "",
+      "copied": "",
+      "prepaymentRequired": "",
+      "prepaymentHint": "",
+      "payWhatsApp": "",
+      "payKaspi": "",
+      "awaitConfirm": "",
+      "bookAgain": ""
+    },
     "whatsapp": {
       "greeting": "Здравствуйте! Я записался(ась) на {{date}} в {{time}}.\\n",
       "name": "Имя: {{name}}\\n",
       "prepayment": "Сумма предоплаты: {{amount}} {{currency}}",
       "pay": ""
     },
-    "selectedTime": ""
+    "selectedTime": "",
+    "limitReached": {
+      "customer": ""
+    }
   },
   "days": {
     "sunday": "Sun",
@@ -4534,6 +4889,11 @@
     "popular": "Popular",
     "basicDesc": "Start for free",
     "proDesc": "Everything for professionals and business",
+    "businessDesc": "",
+    "businessNote": "",
+    "businessLink": "",
+    "freeForever": "",
+    "new": "",
     "free": {
       "title": "Free"
     },
@@ -4559,6 +4919,12 @@
       "addressLine": "Almaty, st. Sholokhov, 20"
     },
     "paymentNote": "Payment via RoboKassa",
+    "whyLnkmx": {
+      "title": "",
+      "noSetup": "",
+      "mobile": "",
+      "premium": ""
+    },
     "features": {
       "basicThemes": "Basic themes",
       "basicCustomization": "Basic customization (colors, fonts)",
@@ -4581,7 +4947,22 @@
       "forms": "Lead forms",
       "faq": "FAQ and review blocks",
       "timers": "Countdown timers",
-      "aiMonthlyPro": "5 AI generations/month"
+      "aiMonthlyPro": "5 AI generations/month",
+      "allPro": "",
+      "businessZones": "",
+      "teamCRM": "",
+      "teamInbox": "",
+      "teamRoles": "",
+      "teamMembers": "",
+      "prioritySupport": "",
+      "basicViewStats": "",
+      "unlimitedInbound": "",
+      "noWatermark": "",
+      "exportAndAutomation": "",
+      "multiPage": "",
+      "customDomain": "",
+      "freeBooking": "",
+      "freeCRM": ""
     },
     "limitations": {
       "watermark": "lnkmx.my watermark",
@@ -4711,6 +5092,12 @@
       "title": "",
       "owner": "",
       "desc": ""
+    },
+    "complete": {
+      "title": "",
+      "desc": "",
+      "publishNow": "",
+      "editFirst": ""
     }
   },
   "funnel": {
@@ -4840,7 +5227,22 @@
     "useCamera": "الكاميرا",
     "manual": "يدوياً",
     "recentScans": "آخر المسوح",
-    "noScansYet": "التذاكر الممسوحة ستظهر هنا"
+    "noScansYet": "التذاكر الممسوحة ستظهر هنا",
+    "regStatus": {
+      "pending": "",
+      "confirmed": "",
+      "rejected": "",
+      "cancelled": ""
+    },
+    "ticketStatus": {
+      "valid": "",
+      "used": "",
+      "cancelled": ""
+    },
+    "csvName": "",
+    "csvPhone": "",
+    "csvStatus": "",
+    "csvDate": ""
   },
   "insights": {
     "lowViews": {
@@ -5117,16 +5519,20 @@
     "title": "",
     "keepGoing": "",
     "days": "",
-    "nextMilestone": "",
+    "currentStreak": "",
+    "longestStreak": "",
+    "streakFrozen": "",
+    "loginTomorrow": "",
     "bonusDays": "",
+    "bonusTrialDays": "",
+    "awesome": "",
+    "milestones": "",
+    "nextMilestone": "",
     "best": "",
     "earned": "",
     "milestoneReached": "",
     "milestoneDescription": "",
-    "bonusEarned": "",
-    "bonusTrialDays": "",
-    "awesome": "",
-    "milestones": ""
+    "bonusEarned": ""
   },
   "structure": {
     "title": "",
@@ -5138,7 +5544,21 @@
     "show": "",
     "hide": "",
     "duplicate": "",
-    "delete": ""
+    "delete": "",
+    "filterAll": "",
+    "filterProblematic": "",
+    "filterHidden": "",
+    "filterCTA": "",
+    "sections": "",
+    "search": "",
+    "reviewMode": "",
+    "exitReview": "",
+    "untitledSection": "",
+    "renameSection": "",
+    "rename": "",
+    "dissolve": "",
+    "deleteSection": "",
+    "ungrouped": ""
   },
   "url": {
     "external": "",
@@ -5207,7 +5627,12 @@
     "noDeal": "لا توجد صفقة",
     "createdAt": "تاريخ الإنشاء",
     "completedAt": "تاريخ الإكمال",
-    "save": "حفظ"
+    "save": "حفظ",
+    "recurrenceLabel": "",
+    "recurrenceUntil": "",
+    "comments": "",
+    "noComments": "",
+    "commentPlaceholder": ""
   },
   "zones": {
     "selectOrCreate": "اختر أو أنشئ منطقة",
@@ -5295,7 +5720,36 @@
       "confirmDelete": "حذف جهة الاتصال؟",
       "deleteWarning": "سيتم حذف {{name}} نهائيًا.",
       "updated": "تم تحديث جهة الاتصال",
-      "deleted": "تم حذف جهة الاتصال"
+      "deleted": "تم حذف جهة الاتصال",
+      "call": "",
+      "sendEmail": "",
+      "notes": "",
+      "additionalInfo": "",
+      "emptyFile": "",
+      "noNameColumn": "",
+      "parseError": "",
+      "unsupportedFormat": "",
+      "imported": "",
+      "importDescription": "",
+      "uploadFile": "",
+      "requiredColumns": "",
+      "rows": "",
+      "andMore": "",
+      "importing": "",
+      "importButton": "",
+      "created": "",
+      "exportSuccess": "",
+      "export": "",
+      "presets": {
+        "label": "",
+        "none": "",
+        "saveCurrent": "",
+        "createFromCurrent": "",
+        "saveTitle": "",
+        "saveDescription": "",
+        "nameLabel": "",
+        "namePlaceholder": ""
+      }
     },
     "deals": {
       "title": "خط أنابيب المبيعات",
@@ -5337,7 +5791,31 @@
       "winQuestion": "هل تريد التحديد كفوز أو خسارة؟",
       "dealTitle": "العنوان",
       "contact": "جهة الاتصال",
-      "valueKzt": "القيمة (KZT)"
+      "valueKzt": "القيمة (KZT)",
+      "addComment": "",
+      "noComments": "",
+      "customFieldsBlock": "",
+      "noStages": "",
+      "created": "",
+      "dateFrom": "",
+      "dateTo": "",
+      "valueMin": "",
+      "valueMax": "",
+      "presets": {
+        "placeholder": "",
+        "none": "",
+        "saveCurrent": "",
+        "saveTitle": "",
+        "saveDescription": "",
+        "nameLabel": "",
+        "namePlaceholder": ""
+      },
+      "exportSuccess": "",
+      "export": "",
+      "newDealDescription": "",
+      "selectContact": "",
+      "nextStepPlaceholder": "",
+      "markAsWonOrLost": ""
     },
     "tasks": {
       "title": "المهام",
@@ -5351,7 +5829,15 @@
       "assignee": "المسؤول",
       "unassigned": "غير مسند",
       "contact": "جهة الاتصال",
-      "deal": "الصفقة"
+      "deal": "الصفقة",
+      "overdue": "",
+      "mine": "",
+      "new": "",
+      "taskTitle": "",
+      "taskTitlePlaceholder": "",
+      "description": "",
+      "descriptionPlaceholder": "",
+      "dueDate": ""
     },
     "invoices": {
       "title": "المالية",
@@ -5391,7 +5877,11 @@
       "noItemsSpecified": "لم يتم تحديد عناصر",
       "payLink": "رابط الدفع",
       "markPaid": "تحديد كمدفوع",
-      "cancelPayment": "إلغاء الدفع"
+      "cancelPayment": "إلغاء الدفع",
+      "urlGenerated": "",
+      "generatePayLink": "",
+      "downloadPDF": "",
+      "pdfSuccess": ""
     },
     "settings": {
       "title": "الإعدادات",
@@ -5408,7 +5898,84 @@
       "leaveDesc": "ستفقد الوصول إلى جميع البيانات.",
       "confirmLeave": "تأكيد المغادرة",
       "removeMember": "إزالة العضو؟",
-      "emailLabel": "البريد الإلكتروني"
+      "emailLabel": "البريد الإلكتروني",
+      "fields": {
+        "created": "",
+        "updated": "",
+        "deleted": "",
+        "typeText": "",
+        "typeNumber": "",
+        "typeDate": "",
+        "typeBoolean": "",
+        "title": "",
+        "description": "",
+        "add": "",
+        "empty": "",
+        "required": "",
+        "addTitle": "",
+        "editTitle": "",
+        "nameLabel": "",
+        "namePlaceholder": "",
+        "typeLabel": "",
+        "requiredLabel": "",
+        "deleteTitle": "",
+        "deleteWarning": ""
+      },
+      "dealFields": {
+        "created": "",
+        "updated": "",
+        "deleted": "",
+        "title": "",
+        "description": "",
+        "empty": "",
+        "addTitle": "",
+        "editTitle": "",
+        "deleteTitle": ""
+      },
+      "pipelines": {
+        "created": "",
+        "updated": "",
+        "lastOne": "",
+        "cannotDeleteDefault": "",
+        "confirmDelete": "",
+        "deleted": "",
+        "newPlaceholder": "",
+        "empty": "",
+        "title": "",
+        "desc": ""
+      },
+      "memberLimitReached": "",
+      "inviteSent": "",
+      "linkCopied": "",
+      "inviteRevoked": "",
+      "leftZone": "",
+      "memberRemoved": "",
+      "roleUpdated": "",
+      "saved": "",
+      "members": "",
+      "billing": "",
+      "pipelinesTab": "",
+      "fieldsTab": "",
+      "general": "",
+      "membersCount": "",
+      "invite": "",
+      "pendingInvites": "",
+      "expires": "",
+      "currentPlan": "",
+      "planDesc": "",
+      "plan": "",
+      "cycle": "",
+      "renewsAt": "",
+      "price": "",
+      "managePlan": "",
+      "dangerZone": "",
+      "ownerCannotLeave": "",
+      "role": "",
+      "leaveConfirmTitle": "",
+      "leaveConfirmDesc": "",
+      "removeMemberTitle": "",
+      "removeMemberDesc": "",
+      "confirmRemove": ""
     },
     "automations": {
       "title": "الأتمتة",
@@ -5452,7 +6019,20 @@
         "change_stage": "تغيير المرحلة",
         "notify_owner": "إشعار المالك",
         "create_deal": "إنشاء صفقة جديدة"
-      }
+      },
+      "created": "",
+      "createError": "",
+      "presets": {
+        "overdueTaskName": "",
+        "invoicePaidName": "",
+        "overdueTaskChip": "",
+        "invoicePaidChip": ""
+      },
+      "emptyTitle": "",
+      "emptyDesc": "",
+      "tryFirst": "",
+      "configParams": "",
+      "changeToStage": ""
     },
     "inbox": {
       "title": "البريد الوارد",
@@ -5469,6 +6049,396 @@
       "titlePlaceholder": "الموضوع",
       "sendError": "فشل إرسال الرسالة",
       "createError": "فشل إنشاء المحادثة"
+    },
+    "documents": {
+      "generated": "",
+      "generateError": "",
+      "generateDocument": "",
+      "preview": "",
+      "variables": "",
+      "unreplacedWarning": "",
+      "availableVariables": "",
+      "customVariables": "",
+      "customVariablesHint": "",
+      "enterValue": "",
+      "allVariablesFilled": "",
+      "downloadPDF": "",
+      "title": "",
+      "subtitle": "",
+      "templates": "",
+      "newDocument": "",
+      "searchPlaceholder": "",
+      "empty": {
+        "title": "",
+        "description": ""
+      },
+      "createDocument": "",
+      "notFound": {
+        "title": "",
+        "description": ""
+      },
+      "resetFilters": "",
+      "actions": {
+        "generate": "",
+        "view": "",
+        "download": "",
+        "delete": ""
+      },
+      "confirmDelete": "",
+      "totalCount": "",
+      "filteredCount": ""
+    },
+    "analytics": {
+      "exportSuccess": "",
+      "exportError": "",
+      "title": "",
+      "subtitle": "",
+      "activeValue": "",
+      "dealsOpen": "",
+      "winRate": "",
+      "tasksDone": "",
+      "overdue": "",
+      "noOverdue": "",
+      "paidValue": "",
+      "pendingAmount": "",
+      "newContacts": "",
+      "totalContacts": "",
+      "plSummary": "",
+      "grossRevenue": "",
+      "paidInvoices": "",
+      "pendingRevenue": "",
+      "awaitingPayment": "",
+      "wonDealsValue": "",
+      "closedDeals": "",
+      "funnel": "",
+      "funnelDesc": "",
+      "deals": "",
+      "funnelEmpty": "",
+      "revenueTimeline": "",
+      "revenueTimelineDesc": "",
+      "revenue": "",
+      "noRevenue": "",
+      "conversionTrend": "",
+      "improving": "",
+      "declining": "",
+      "conversionTrendDesc": "",
+      "won": "",
+      "lost": "",
+      "teamPerformance": "",
+      "teamPerformanceDesc": "",
+      "member": "",
+      "tasks": "",
+      "done": "",
+      "avgClose": "",
+      "completed": "",
+      "total": "",
+      "taskMetrics": "",
+      "pending": "",
+      "completionRate": ""
+    },
+    "calendar": {
+      "title": "",
+      "subtitle": "",
+      "today": "",
+      "upcoming": "",
+      "todayBtn": "",
+      "day": "",
+      "week": "",
+      "month": "",
+      "bookingDetail": "",
+      "feedCopied": "",
+      "export": "",
+      "downloadICS": "",
+      "copyFeedUrl": "",
+      "addToCalendar": "",
+      "fromPage": ""
+    },
+    "error": {
+      "title": "",
+      "description": "",
+      "retry": ""
+    },
+    "events": {
+      "title": "",
+      "subtitle": "",
+      "totalEvents": "",
+      "published": "",
+      "totalRegistrations": "",
+      "revenue": "",
+      "draft": "",
+      "closed": "",
+      "empty": "",
+      "registered": "",
+      "maxCapacity": "",
+      "registrations": "",
+      "noRegistrations": ""
+    },
+    "plans": {
+      "monthly": "",
+      "yearly": ""
+    },
+    "invites": {
+      "accepted": "",
+      "invalid": "",
+      "invalidDesc": "",
+      "title": "",
+      "roleLabel": "",
+      "emailNotice": "",
+      "loginRequired": "",
+      "join": ""
     }
+  },
+  "activation": {
+    "title": "",
+    "progress": "",
+    "steps": {
+      "createPage": "",
+      "publish": "",
+      "firstVisitor": "",
+      "firstConversion": "",
+      "firstBooking": ""
+    },
+    "tips": {
+      "addBlock": "",
+      "publish": "",
+      "shareForVisitor": "",
+      "addForm": "",
+      "growTraffic": ""
+    },
+    "celebrationTitle": "",
+    "celebrationDesc": ""
+  },
+  "onboardingTour": {
+    "welcome": {
+      "title": "",
+      "desc": ""
+    },
+    "profile": {
+      "title": "",
+      "desc": ""
+    },
+    "addBlock": {
+      "title": "",
+      "desc": ""
+    },
+    "editBlock": {
+      "title": "",
+      "desc": ""
+    },
+    "share": {
+      "title": "",
+      "desc": ""
+    },
+    "complete": {
+      "title": "",
+      "desc": ""
+    },
+    "skip": "",
+    "back": "",
+    "next": "",
+    "start": ""
+  },
+  "home": {
+    "incoming": {
+      "title": "",
+      "empty": "",
+      "emptyHint": "",
+      "share": "",
+      "viewAll": "",
+      "lead": "",
+      "booking": ""
+    }
+  },
+  "operator": {
+    "today": {
+      "title": "",
+      "next": ""
+    },
+    "unanswered": {
+      "title": "",
+      "missed": ""
+    },
+    "followUp": {
+      "title": "",
+      "visitedYesterday": "",
+      "send": "",
+      "template": "",
+      "completedOn": "",
+      "sent": ""
+    },
+    "week": {
+      "leads": ""
+    },
+    "repeat": {
+      "label": "",
+      "badge": ""
+    },
+    "stale": {
+      "page": ""
+    },
+    "rebook": {
+      "title": "",
+      "daysSince": "",
+      "nudge": ""
+    }
+  },
+  "lifecycle": {
+    "trafficNoLeads": {
+      "title": "",
+      "hint": ""
+    },
+    "repeatCustomers": {
+      "title": "",
+      "hint": ""
+    },
+    "hasLeads": {
+      "title": "",
+      "hint": ""
+    }
+  },
+  "experiments": {
+    "confirmDelete": "",
+    "deleteSuccess": "",
+    "confirmWinner": "",
+    "winnerSet": "",
+    "empty": {
+      "title": "",
+      "desc": ""
+    },
+    "started": "",
+    "ended": "",
+    "actions": {
+      "start": "",
+      "stop": "",
+      "pickWinner": ""
+    },
+    "label": {
+      "original": "",
+      "variant": ""
+    },
+    "leading": "",
+    "insight": {
+      "title": "",
+      "desc": ""
+    },
+    "defaultName": "",
+    "error": {
+      "nameRequired": "",
+      "starting": ""
+    },
+    "success": {
+      "started": ""
+    },
+    "setup": {
+      "title": "",
+      "description": "",
+      "nameLabel": "",
+      "namePlaceholder": "",
+      "variants": "",
+      "variantsCount": "",
+      "variantA": "",
+      "variantB": "",
+      "hideEditor": "",
+      "configure": "",
+      "tipTitle": "",
+      "tipDesc": "",
+      "start": "",
+      "editFields": ""
+    }
+  },
+  "friction": {
+    "try": ""
+  },
+  "commands": {
+    "searchPlaceholder": "",
+    "noResults": ""
+  },
+  "billing": {
+    "types": {
+      "subscription": "",
+      "zoneUpgrade": "",
+      "payment": "",
+      "refund": ""
+    },
+    "history": {
+      "title": "",
+      "empty": "",
+      "emptyDesc": ""
+    }
+  },
+  "kaspi": {
+    "generateQR": "",
+    "invalidAmount": "",
+    "paymentSimulated": "",
+    "linkCopied": "",
+    "title": "",
+    "description": "",
+    "amount": "",
+    "comment": "",
+    "commentPlaceholder": "",
+    "scanHint": "",
+    "copyLink": "",
+    "downloadQR": "",
+    "simulateMock": "",
+    "disclaimer": ""
+  },
+  "zone": {
+    "notifications": {
+      "title": "",
+      "markAllRead": "",
+      "empty": ""
+    },
+    "products": {
+      "nameRequired": "",
+      "updated": "",
+      "created": "",
+      "confirmDelete": "",
+      "deleted": "",
+      "title": "",
+      "add": "",
+      "empty": "",
+      "emptyHint": "",
+      "inactive": "",
+      "per": "",
+      "edit": "",
+      "create": "",
+      "name": "",
+      "namePlaceholder": "",
+      "description": "",
+      "price": "",
+      "currency": "",
+      "unit": "",
+      "active": ""
+    }
+  },
+  "forMasters": {
+    "badge": "",
+    "headline": "",
+    "subheadline": "",
+    "cta": "",
+    "ctaSecondary": "",
+    "val1Title": "",
+    "val1Desc": "",
+    "val2Title": "",
+    "val2Desc": "",
+    "val3Title": "",
+    "val3Desc": "",
+    "examplesTitle": "",
+    "freeTitle": "",
+    "freeDesc": "",
+    "finalCta": "",
+    "trustLine": ""
+  },
+  "from": {
+    "seoTitle": "",
+    "seoDesc": "",
+    "madeWith": "",
+    "headline": "",
+    "subheadline": "",
+    "val1": "",
+    "val2": "",
+    "val3": "",
+    "cta": "",
+    "free": ""
   }
 }

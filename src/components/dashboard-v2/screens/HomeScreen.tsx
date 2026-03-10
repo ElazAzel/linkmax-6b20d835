@@ -127,25 +127,10 @@ export const HomeScreen = memo(function HomeScreen({
     })();
   }, [user, pageData?.id]);
 
-  if (loading || !pageData) {
-    return <LoadingSkeleton />;
-  }
-
-  const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
-  const rawName = profileBlock?.name;
-  const name = rawName
-    ? typeof rawName === 'object'
-      ? getI18nText(rawName, i18n.language as 'ru' | 'en' | 'kk') || t('dashboard.home.myPage', 'Моя страница')
-      : rawName
-    : t('dashboard.home.myPage', 'Моя страница');
-  const avatarUrl = profileBlock?.avatar || '';
-  const blockCount = pageData.blocks.length;
-  const isPublished = pageData.isPublished || false;
-  const slug = pageData.slug || 'mypage';
-
-  // Page has content if it has more than just a profile block
-  const hasContent = pageData.blocks.length > 1 ||
-    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
+  // Page state flags (safe with optional chaining)
+  const isPublished = pageData?.isPublished || false;
+  const hasContent = (pageData?.blocks?.length || 0) > 1 ||
+    (pageData?.blocks?.length === 1 && pageData?.blocks[0].type !== 'profile');
 
   // Context-aware tip — outcome-focused, not cosmetic
   const dynamicTip = useMemo(() => {
@@ -163,6 +148,21 @@ export const HomeScreen = memo(function HomeScreen({
     }
     return t('activation.tips.growTraffic', 'Поделитесь ссылкой в соцсетях, чтобы привлечь больше посетителей');
   }, [hasContent, isPublished, viewCount, realLeadsCount, t]);
+
+  if (loading || !pageData) {
+    return <LoadingSkeleton />;
+  }
+
+  const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
+  const rawName = profileBlock?.name;
+  const name = rawName
+    ? typeof rawName === 'object'
+      ? getI18nText(rawName, i18n.language as 'ru' | 'en' | 'kk') || t('dashboard.home.myPage', 'Моя страница')
+      : rawName
+    : t('dashboard.home.myPage', 'Моя страница');
+  const avatarUrl = profileBlock?.avatar || '';
+  const blockCount = pageData.blocks.length;
+  const slug = pageData.slug || 'mypage';
 
   // Real stats from props
   const weeklyStats = {

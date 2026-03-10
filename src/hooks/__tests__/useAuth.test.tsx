@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/hooks/user/useAuth';
 // Mock supabase
 const mockSignUp = vi.fn();
 const mockSignInWithPassword = vi.fn();
+const mockSignInWithOAuth = vi.fn();
 const mockSignOut = vi.fn();
 const mockGetSession = vi.fn();
 const mockOnAuthStateChange = vi.fn();
@@ -18,6 +19,7 @@ vi.mock('@/platform/supabase/client', () => ({
         auth: {
             signUp: (...args: unknown[]) => mockSignUp(...args),
             signInWithPassword: (...args: unknown[]) => mockSignInWithPassword(...args),
+            signInWithOAuth: (...args: unknown[]) => mockSignInWithOAuth(...args),
             signOut: () => mockSignOut(),
             getSession: () => mockGetSession(),
             onAuthStateChange: (callback: (event: string, session: unknown) => void) => {
@@ -29,15 +31,8 @@ vi.mock('@/platform/supabase/client', () => ({
             update: vi.fn().mockReturnThis(),
             eq: vi.fn().mockResolvedValue({ error: null }),
         })),
-    },
-}));
-
-// Mock lovable
-const mockLovableSignInWithOAuth = vi.fn();
-vi.mock('@/integrations/lovable/index', () => ({
-    lovable: {
-        auth: {
-            signInWithOAuth: (...args: unknown[]) => mockLovableSignInWithOAuth(...args),
+        functions: {
+            invoke: vi.fn().mockResolvedValue({ data: { valid: true }, error: null }),
         },
     },
 }));
@@ -188,8 +183,8 @@ describe('useAuth', () => {
     });
 
     describe('signInWithGoogle', () => {
-        it('calls lovable signInWithOAuth with google provider', async () => {
-            mockLovableSignInWithOAuth.mockResolvedValueOnce({ error: null });
+        it('calls supabase signInWithOAuth with google provider', async () => {
+            mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -202,15 +197,18 @@ describe('useAuth', () => {
                 expect(error).toBeNull();
             });
 
-            expect(mockLovableSignInWithOAuth).toHaveBeenCalledWith('google', {
-                redirect_uri: window.location.origin,
+            expect(mockSignInWithOAuth).toHaveBeenCalledWith({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin,
+                },
             });
         });
     });
 
     describe('signInWithApple', () => {
-        it('calls lovable signInWithOAuth with apple provider', async () => {
-            mockLovableSignInWithOAuth.mockResolvedValueOnce({ error: null });
+        it('calls supabase signInWithOAuth with apple provider', async () => {
+            mockSignInWithOAuth.mockResolvedValueOnce({ error: null });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -223,11 +221,15 @@ describe('useAuth', () => {
                 expect(error).toBeNull();
             });
 
-            expect(mockLovableSignInWithOAuth).toHaveBeenCalledWith('apple', {
-                redirect_uri: window.location.origin,
+            expect(mockSignInWithOAuth).toHaveBeenCalledWith({
+                provider: 'apple',
+                options: {
+                    redirectTo: window.location.origin,
+                },
             });
         });
     });
+
 
     describe('signOut', () => {
         it('calls supabase signOut', async () => {

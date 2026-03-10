@@ -1,0 +1,189 @@
+﻿
+> vite_react_shadcn_ts@0.0.0 test
+> vitest --run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/i.azelkhanov/Documents/inkmax[39m
+
+ [32mтЬУ[39m src/services/__tests__/fintech.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32mтЬУ[39m src/domain/entities/__tests__/Block.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+powershell : [90mstderr[2m | src/hooks/__tests__/useAuth.test.tsx[2m > [22m[2museAuth[2m > [22m[2minitializatio
+n[2m > [22m[2mthrows error when used outside AuthProvider
+строка:1 знак:1
++ powershell -ExecutionPolicy Bypass -Command "npm run test -- --run" > ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m...de AuthProvider:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mError: useAuth must be used within an AuthProvider
+    at Module.useAuth (C:\Users\i.azelkhanov\Documents\inkmax\src\hooks\user\useAuth.tsx:190:11)
+    at C:\Users\i.azelkhanov\Documents\inkmax\src\hooks\__tests__\useAuth.test.tsx:67:34
+    at TestComponent (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\@testing-library\react\dist\pure.js:309:27)
+    at renderWithHooks (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.development.js:1548
+6:18)
+    at mountIndeterminateComponent (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.develop
+ment.js:20103:13)
+    at beginWork (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.dev
+elopment.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\jsdom\lib\js
+dom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\jsdom\lib\jsdom\living\events\Eve
+ntTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\jsdom\lib\jsdom\living\events\EventTar
+get-impl.js:296:3)
+Error: useAuth must be used within an AuthProvider
+    at Module.useAuth (C:\Users\i.azelkhanov\Documents\inkmax\src\hooks\user\useAuth.tsx:190:11)
+    at C:\Users\i.azelkhanov\Documents\inkmax\src\hooks\__tests__\useAuth.test.tsx:67:34
+    at TestComponent (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\@testing-library\react\dist\pure.js:309:27)
+    at renderWithHooks (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.development.js:1548
+6:18)
+    at mountIndeterminateComponent (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.develop
+ment.js:20103:13)
+    at beginWork (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\react-dom\cjs\react-dom.dev
+elopment.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\jsdom\lib\js
+dom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\jsdom\lib\jsdom\living\events\Eve
+ntTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\jsdom\lib\jsdom\living\events\EventTar
+get-impl.js:296:3)
+The above error occurred in the <TestComponent> component:
+
+    at TestComponent (C:\Users\i.azelkhanov\Documents\inkmax\node_modules\@testing-library\react\dist\pure.js:307:5)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/hooks/__tests__/useAuth.test.tsx[2m > [22m[2museAuth[2m > [22m[2minitialization[2m > [22m
+[2mstarts with loading state
+[22m[39mWarning: An update to AuthProvider inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link
+/wrap-tests-with-act
+    at AuthProvider (C:\Users\i.azelkhanov\Documents\inkmax\src\hooks\user\useAuth.tsx:9:25)
+    at wrapper (C:\Users\i.azelkhanov\Documents\inkmax\src\hooks\__tests__\useAuth.test.tsx:62:20)
+
+ [32mтЬУ[39m src/hooks/admin/__tests__/useAdminTranslations.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 352[2mms[22m[39m
+ [32mтЬУ[39m src/hooks/__tests__/useAuth.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1015[2mms[22m[39m
+ [32mтЬУ[39m src/components/layout/__tests__/AppTabBar.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 876[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AppTabBar[2m > [22mrenders all 6 tabs [33m 615[2mms[22m[39m
+[90mstderr[2m | src/pages/__tests__/PublicPage.test.tsx[2m > [22m[2mPublicPage[2m > [22m[2mloading state[2m > 
+[22m[2mshows skeleton while loading
+[22m[39mтЪая╕П React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransi
+tion` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactr
+outer.com/v6/upgrading/future#v7_starttransition.
+тЪая╕П React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use t
+he `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/f
+uture#v7_relativesplatpath.
+
+ [32mтЬУ[39m src/lib/seo/__tests__/seo.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 379[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Key Facts Generator[2m > [22mshould extract key facts from blocks [33m 354[2mms[22m[39m
+[90mstderr[2m | src/components/blocks/__tests__/blocks.test.tsx[2m > [22m[2mBlock Components[2m > [22m[2mProfil
+eBlock[2m > [22m[2mrenders profile name and bio
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link
+/wrap-tests-with-act
+
+[90mstderr[2m | src/components/blocks/__tests__/blocks.test.tsx[2m > [22m[2mBlock Components[2m > [22m[2mProfil
+eBlock[2m > [22m[2mshows verified badge when verified
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link
+/wrap-tests-with-act
+
+[90mstderr[2m | src/components/blocks/__tests__/blocks.test.tsx[2m > [22m[2mBlock Components[2m > [22m[2mProfil
+eBlock[2m > [22m[2mrenders avatar fallback when no image
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link
+/wrap-tests-with-act
+
+[90mstderr[2m | src/pages/__tests__/Gallery.test.tsx[2m > [22m[2mGallery[2m > [22m[2mrenders gallery header
+[22m[39mтЪая╕П React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransi
+tion` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactr
+outer.com/v6/upgrading/future#v7_starttransition.
+тЪая╕П React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use t
+he `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/f
+uture#v7_relativesplatpath.
+
+ [32mтЬУ[39m src/hooks/crm/__tests__/useLeads.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+ [32mтЬУ[39m src/pages/__tests__/Gallery.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 2823[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Gallery[2m > [22mrenders gallery header [33m 2672[2mms[22m[39m
+ [32mтЬУ[39m src/pages/__tests__/PublicPage.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3200[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m PublicPage[2m > [22mloading state[2m > [22mshows skeleton while loading [33m 2075[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m PublicPage[2m > [22msuccessful render[2m > [22mrenders share button [33m 624[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m PublicPage[2m > [22msuccessful render[2m > [22mrenders QR code button [33m 332[2mms[22m[39m
+[90mstderr[2m | src/components/blocks/__tests__/blocks.test.tsx[2m > [22m[2mMultilingual Support[2m > [22m[2mha
+ndles multilingual string in profile name
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link
+/wrap-tests-with-act
+
+ [32mтЬУ[39m src/components/blocks/__tests__/blocks.test.tsx [2m([22m[2m37 tests[22m[2m)[22m[33m 1393[2mms[22m[39m
+ [32mтЬУ[39m src/testing/security.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32mтЬУ[39m src/lib/blocks/__tests__/block-factory.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32mтЬУ[39m src/components/blocks/__tests__/EventBlock.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 483[2mms[22m[39m
+ [32mтЬУ[39m src/platform/robokassa/__tests__/Signature.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32mтЬУ[39m src/components/blocks/__tests__/FintechIntegration.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 622[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Fintech integration in Blocks[2m > [22mFormBlock[2m > [22mshould call recordPendingIncome on form submission [33m 353[2mms[22m[39m
+ [32mтЬУ[39m src/components/blocks/__tests__/BlocksSmoke.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32mтЬУ[39m src/domain/value-objects/__tests__/Result.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32mтЬУ[39m src/domain/entities/__tests__/User.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32mтЬУ[39m src/lib/__tests__/i18n-db-backend.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mтЬУ[39m src/components/blocks/__tests__/BlocksRendering.test.tsx [2m([22m[2m27 tests[22m[2m)[22m[33m 6161[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m BlockRenderer Smoke Tests[2m > [22mrenders 'profile' block without crashing [33m 638[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m BlockRenderer Smoke Tests[2m > [22mrenders 'booking' block without crashing [33m 3505[2mms[22m[39m
+ [32mтЬУ[39m src/use-cases/user/__tests__/UpdateUsernameUseCase.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32mтЬУ[39m src/telegram/__tests__/deep-link-router.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32mтЬУ[39m src/domain/entities/__tests__/Page.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mтЬУ[39m src/use-cases/page/__tests__/SavePageUseCase.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32mтЬУ[39m src/components/blocks/__tests__/FreePremiumBlockGate.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32mтЬУ[39m src/lib/errors/__tests__/app-error-normalizer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32mтЬУ[39m src/lib/seo/__tests__/geo-schemas.repro.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32mтЬУ[39m src/pages/__tests__/Dashboard.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32mтЬУ[39m src/pages/__tests__/Index.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+[2m      Tests [22m [1m[32m256 passed[39m[22m[90m (256)[39m
+[2m   Start at [22m 17:15:55
+[2m   Duration [22m 15.93s[2m (transform 6.79s, setup 11.42s, collect 31.00s, tests 17.86s, environment 73.24s, prepare 9.90s)[22m
+

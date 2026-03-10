@@ -129,7 +129,22 @@
     "toHome": "Үй",
     "collapse": "Жыйрату",
     "generating": "Жасалуда...",
-    "generate": "Жасау"
+    "generate": "Жасау",
+    "active": "",
+    "configuring": "",
+    "verify": "",
+    "guide": "",
+    "coming_soon": "",
+    "details": "",
+    "actions": "",
+    "unknownUser": "",
+    "allTime": "",
+    "quantity": "",
+    "amount": "",
+    "untitled": "",
+    "name": "",
+    "status": "",
+    "date": ""
   },
   "fields": {
     "name": "Аты",
@@ -348,7 +363,10 @@
     "success": "Пішін сәтті жіберілді!",
     "error": "Пішінді жіберу қатесі",
     "enterPlaceholder": "Енгізіңіз",
-    "submitting": "Жіберілуде..."
+    "submitting": "Жіберілуде...",
+    "limitReached": {
+      "customer": ""
+    }
   },
   "newsletter": {
     "alreadySubscribed": "Сіз әлдеқашан жазылғансыз!",
@@ -674,7 +692,10 @@
       "linkFailed": "Есептік жазба қосылмады",
       "unlinkFailed": "Есептік жазба өшірілмеді",
       "unlinkSuccess": "Есептік жазба өшірілді",
-      "cannotUnlinkLast": "Сіз кем дегенде бір кіру әдісін қалдыруыңыз керек"
+      "cannotUnlinkLast": "Сіз кем дегенде бір кіру әдісін қалдыруыңыз керек",
+      "linkFailedReason": "",
+      "identityNotFound": "",
+      "primaryIdentity": ""
     },
     "integrations": {
       "title": "Интеграциялар және аналитика",
@@ -688,7 +709,15 @@
       "fbHint": "Events Manager → Деректер көздері → Pixel ID",
       "ttHint": "TikTok жарнамалары → Активтер → Оқиғалар → Пиксель коды",
       "ga4Hint": "GA4 → Әкімші → Деректер ағындары → Өлшем идентификаторы",
-      "yandexHint": "Метрика → Параметрлер → Есептегіш нөмірі"
+      "yandexHint": "Метрика → Параметрлер → Есептегіш нөмірі",
+      "gcalConnected": "",
+      "gcalFailed": "",
+      "gcalNotConfigured": "",
+      "gcalRedirecting": "",
+      "gcalDisconnectFailed": "",
+      "gcalDisconnected": "",
+      "active": "",
+      "gcalDesc": ""
     },
     "pageBackground": "Бет фоны",
     "backgroundType": "Фон түрі",
@@ -704,7 +733,21 @@
     "saveAsTemplate": "Үлгі ретінде сақтау",
     "myTemplates": "Менің үлгілерім",
     "openVerification": "Тексеруден өтіңіз",
-    "pageBackgroundLocked": "Теңшелетін бет фоны тек Бизнес жоспарда қолжетімді. Бет фоны ретінде түс, градиент, кескін немесе GIF орнатыңыз."
+    "pageBackgroundLocked": "Теңшелетін бет фоны тек Бизнес жоспарда қолжетімді. Бет фоны ретінде түс, градиент, кескін немесе GIF орнатыңыз.",
+    "password": {
+      "required": "",
+      "minLength": "",
+      "confirmRequired": "",
+      "mismatch": "",
+      "success": "",
+      "error": "",
+      "title": "",
+      "description": "",
+      "newPassword": "",
+      "confirmPassword": "",
+      "hint": "",
+      "submit": ""
+    }
   },
   "niche": {
     "barber": "Шаштараз",
@@ -844,11 +887,31 @@
       "b3": "Командалық CRM және Kanban",
       "b4": "Командалық чат пен тапсырмалар",
       "b5": "Рөлдер және қол жеткізуді басқару",
-      "b6": "5 команда мүшесіне дейін"
+      "b6": "5 команда мүшесіне дейін",
+      "month": "",
+      "total": "",
+      "billedOnce": ""
     },
     "demo": {
-      "badge": "Қазір көріңіз",
       "title": "Сиқырды сезін.",
+      "step1Title": "",
+      "step1Desc": "",
+      "step2Title": "",
+      "step2Desc": "",
+      "step3Title": "",
+      "step3Desc": "",
+      "iAmA": "",
+      "nicheCreator": "",
+      "nicheFitness": "",
+      "nicheCrypto": "",
+      "nicheBeauty": "",
+      "nicheMusic": "",
+      "nicheTutor": "",
+      "aiGenerating": "",
+      "chatMsg1": "",
+      "chatMsg2": "",
+      "leadCaptured": "",
+      "badge": "Қазір көріңіз",
       "subtitle": "Редактормен дәл осы жерде ойнаңыз. Блоктарды қосыңыз, мазмұнды өзгертіңіз және нақты уақытта өзгерістерді көріңіз.",
       "profile": "Профиль",
       "addBlocks": "Блоктарды қосыңыз",
@@ -1281,7 +1344,11 @@
       "item4": "Түсіну жоқ: адамдар нені басады және назар қайда жоғалады",
       "solution": "LinkMAX келуші сіздің кім екеніңізді, қаншалықты пайдалы екеніңізді, қанша тұратынын және өтініш беру үшін қайда басу керектігін тез түсінетін бір нақты бет жасайды. Сіз көшбасшылар мен аналитиканы бір жерден көресіз."
     },
-    "howItWorks": "Ол қалай жұмыс істейді",
+    "howItWorks": {
+      "badge": "",
+      "title": "",
+      "cta": ""
+    },
     "features": {
       "title": "Бірінші нұсқада не аласыз",
       "ai": {
@@ -1539,7 +1606,8 @@
         "f7_v2": "AI генерациясы (айына 5 рет)",
         "title": "Тегін",
         "subtitle": "Мәңгілік, жасырын төлемдер жоқ",
-        "cta": "Тегін бастаңыз"
+        "cta": "Тегін бастаңыз",
+        "f5_booking": ""
       },
       "premium": {
         "f1_v2": "Барлық 25+ блок түрлері",
@@ -1552,7 +1620,14 @@
         "badge": "Біз ұсынамыз",
         "title": "Premium",
         "subtitle": "Барлығы бизнестің өсуі үшін",
-        "cta": "Premium алыңыз"
+        "cta": "Premium алыңыз",
+        "f1_v3": "",
+        "f2_v3": "",
+        "f3_v3": "",
+        "f4_v3": "",
+        "f5_v3": "",
+        "f6_v3": "",
+        "f7_v3": ""
       },
       "badge": "Қарапайым тарифтер",
       "title": "Тегін немесе премиум"
@@ -1711,7 +1786,8 @@
       "pages": "Беттер",
       "activity": "Кіріс жәшігі",
       "insights": "Аналитика",
-      "settings": "Параметрлер"
+      "settings": "Параметрлер",
+      "more": ""
     },
     "sidebar": {
       "tools": "Құралдар",
@@ -1772,7 +1848,11 @@
       "searchPlaceholder": "Аты, телефоны бойынша іздеу...",
       "noResults": "Ештеңе табылмады",
       "noLeads": "Әлі қолданбалар жоқ",
-      "noLeadsHint": "Келушілер сіздің бетіңіздегі пішіндерді толтырған кезде қолданбалар осы жерде пайда болады"
+      "noLeadsHint": "Келушілер сіздің бетіңіздегі пішіндерді толтырған кезде қолданбалар осы жерде пайда болады",
+      "exporting": "",
+      "exportSuccess": "",
+      "exportError": "",
+      "export": ""
     },
     "insights": {
       "title": "Аналитика",
@@ -1871,7 +1951,10 @@
         "page_limit_exceeded": "Бет шегіне жетті",
         "slug_taken": "Бұл URL әлдеқашан алынған",
         "invalid_slug": "Қате URL"
-      }
+      },
+      "duplicated": "",
+      "deleteConfirm": "",
+      "deleted": ""
     },
     "multiPage": {
       "switchPage": "Бетті таңдаңыз",
@@ -1942,7 +2025,8 @@
       "yourDomainExample": "ivan.ru",
       "dnsType": "Түр",
       "dnsName": "Аты",
-      "dnsValue": "Мән"
+      "dnsValue": "Мән",
+      "dnsHint": ""
     },
     "accountSettings": {
       "title": "Есеп жазбасын түзету",
@@ -2030,7 +2114,44 @@
         "feature5": "Жетілдірілген аналитика",
         "feature6": "Су белгісі жоқ",
         "feature7": "Басымдық қолдау"
-      }
+      },
+      "identity": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": ""
+      },
+      "starter": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "feature6": ""
+      },
+      "business": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "feature6": ""
+      },
+      "businessPlan": "",
+      "starterPlan": "",
+      "identityPlan": "",
+      "commissionRate": "",
+      "upgradeToStarter": "",
+      "upgradeToPro": "",
+      "unlockCRM": "",
+      "reduceFees": "",
+      "starterDescription": "",
+      "proDescription": "",
+      "activateStarter": "",
+      "yourBenefits": "",
+      "lowCommission": "",
+      "starterCommission": "",
+      "freeTier": ""
     },
     "createPage": {
       "titleRequired": "Бет тақырыбын енгізіңіз",
@@ -2063,7 +2184,12 @@
       "title": "Жетекшілер (CRM)",
       "search": "Жетекшілер бойынша іздеу...",
       "emptyTitle": "Әлі жетекшілер жоқ",
-      "emptyDesc": "Клиенттеріңіздің қосымшалары осы жерде беттегі пішіндер мен викториналар арқылы пайда болады."
+      "emptyDesc": "Клиенттеріңіздің қосымшалары осы жерде беттегі пішіндер мен викториналар арқылы пайда болады.",
+      "updateError": "",
+      "exporting": "",
+      "exportError": "",
+      "export": "",
+      "filterAll": ""
     },
     "addFirstBlock": "Бірінші блокты қосу үшін + түймесін басыңыз",
     "templateApplied": "Template applied!"
@@ -2217,7 +2343,9 @@
     "addFailed": "Блок қосу мүмкін болмады",
     "premiumRequired": "Бұл блок тек PRO жүйесінде қол жетімді",
     "limitReached": "Блоктау шегіне жетті. Premium нұсқасына жаңартыңыз.",
-    "proOnly": "Бұл блок тек PRO жүйесінде қол жетімді"
+    "proOnly": "Бұл блок тек PRO жүйесінде қол жетімді",
+    "duplicated": "",
+    "duplicateFailed": ""
   },
   "auth": {
     "signIn": "Жүйеге кіру",
@@ -2264,6 +2392,14 @@
       "bonus": "Тіркеліп, +3 күндік премиум алыңыз",
       "success": "🎉 Реферал кодын пайдаланып +{{days}} күн Premium!"
     },
+    "validation": {
+      "email": "",
+      "emailMax": "",
+      "passwordMin": "",
+      "passwordUppercase": "",
+      "passwordLowercase": "",
+      "passwordNumber": ""
+    },
     "telegram": {
       "invalidChatId": "Дұрыс Telegram чат идентификаторын енгізіңіз",
       "notFound": "Осы Telegram арқылы тіркелгі табылмады",
@@ -2292,7 +2428,8 @@
     "required": "Кіріңіз",
     "loginRequired": "Тіркелгіңізге кіріңіз",
     "signupEmailSent": "We sent a confirmation link to your email",
-    "login": "Жүйеге кіру"
+    "login": "Жүйеге кіру",
+    "oauthError": ""
   },
   "gallery": {
     "title": "Беттердің галереясы",
@@ -2370,7 +2507,11 @@
     "tabLeaderboard": "Рейтинг",
     "allPages": "Барлық беттер",
     "noPages": "Ешбір бет табылмады",
-    "tryAnotherFilter": "Басқа сүзгіні қолданып көріңіз"
+    "tryAnotherFilter": "Басқа сүзгіні қолданып көріңіз",
+    "useTemplate": "",
+    "sortPopular": "",
+    "sortViews": "",
+    "sortRecent": ""
   },
   "errors": {
     "general": "Қате орын алды",
@@ -2694,7 +2835,9 @@
     "hidden": "Жасырын",
     "noTemplatesFound": "Үлгілер табылмады",
     "editUserTierDescription": "Пайдаланушыға кіру деңгейін өзгерту",
-    "roleAdmin": "Админ"
+    "roleAdmin": "Админ",
+    "fintech": "",
+    "category": ""
   },
   "adminCharts": {
     "userGrowth": "Пайдаланушының өсуі",
@@ -2909,7 +3052,8 @@
       "title": "AI Smart автотолтыру",
       "placeholder": "Мысалы: Мен Алматыда фитнес жаттықтырушысымын...",
       "button": "Жасау",
-      "hint": "Сіздің бизнесіңізді сипаттаңыз, біз ең жақсы үлгіні таңдап, толтырамыз."
+      "hint": "Сіздің бизнесіңізді сипаттаңыз, біз ең жақсы үлгіні таңдап, толтырамыз.",
+      "generating": ""
     },
     "captureError": "Алдын ала қарау табылмады",
     "captured": "Алдын ала қарау түсірілді!",
@@ -2973,7 +3117,9 @@
     "noPurchased": "Сатып алынған үлгілер жоқ",
     "browseMk": "Үлгі нарығын қараңыз",
     "notEnoughTokens": "Токендер жеткіліксіз. Тағы {{amount}} Linkkon қажет.",
-    "purchaseTemplate": "Үлгіні сатып алу: {{name}}"
+    "purchaseTemplate": "Үлгіні сатып алу: {{name}}",
+    "chosen": "",
+    "use": ""
   },
   "alternatives": {
     "seo": {
@@ -3355,7 +3501,10 @@
     "export": {
       "button": "Экспорттау",
       "summary": "Қорытынды (CSV)",
-      "daily": "Күні бойынша (CSV)"
+      "daily": "Күні бойынша (CSV)",
+      "success": "",
+      "error": "",
+      "excel": ""
     },
     "blocks": {
       "title": "Блок тиімділігі",
@@ -3432,7 +3581,8 @@
       "overview": "Қарау",
       "traffic": "Жол қозғалысы",
       "blocks": "Блоктар",
-      "funnel": "Шұңқыр"
+      "funnel": "Шұңқыр",
+      "experiments": ""
     },
     "chart": {
       "title": "Кезеңге арналған динамика"
@@ -3491,7 +3641,30 @@
     "discard": "Қалпына келтіру",
     "saveAndClose": "Сақтау",
     "selectBlock": "Қосылатын блокты таңдаңыз",
-    "searchBlocks": "Блоктар ізделуде..."
+    "searchBlocks": "Блоктар ізделуде...",
+    "problematic": "",
+    "cta": "",
+    "edit": "",
+    "moveUp": "",
+    "moveDown": "",
+    "copy": "",
+    "duplicate": "",
+    "transform": "",
+    "selected": "",
+    "createSection": "",
+    "clearSelection": "",
+    "experiment": "",
+    "experimentCreated": "",
+    "setupABTest": "",
+    "abTestDesc": "",
+    "experimentName": "",
+    "trafficSplit": "",
+    "howItWorks": "",
+    "abTestInstructions": "",
+    "startExperiment": "",
+    "sectionName": "",
+    "newSection": "",
+    "section": ""
   },
   "crm": {
     "title": "CRM",
@@ -3523,15 +3696,10 @@
       "contacted": "Байланысты",
       "qualified": "Білікті",
       "converted": "Түрлендірілген",
-      "lost": "Жоғалған"
+      "lost": "Жоғалған",
+      "": ""
     },
-    "source": {
-      "form": "Форма",
-      "messenger": "Мессенджер",
-      "manual": "Қолмен",
-      "pageView": "Қарау",
-      "other": "Басқа"
-    },
+    "source": "",
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Клиент аты",
     "phone": "Phone",
@@ -3559,7 +3727,8 @@
     },
     "bookingStatus": {
       "pending": "Күтілуде",
-      "confirmed": "Расталды"
+      "confirmed": "Расталды",
+      "completed": ""
     },
     "booking": {
       "confirm": "Растау",
@@ -4017,8 +4186,14 @@
     "prepayment": "Алдын ала төлем",
     "requirePrepayment": "Алдын ала төлемді талап ету",
     "prepaymentDesc": "Жазудан кейін клиент WhatsApp-қа төлем жасау үшін барады",
+    "prepaymentMethod": "",
+    "methodWhatsApp": "",
+    "methodKaspi": "",
+    "methodRobokassa": "",
     "prepaymentPhone": "Төлем үшін WhatsApp",
     "phoneHint": "Төлемді қабылдау үшін WhatsApp телефон нөмірі",
+    "kaspiPhone": "",
+    "kaspiHint": "",
     "prepaymentAmount": "Алдын ала төлем сомасы",
     "currency": "Валюта",
     "notifications": "Telegram-дағы хабарландырулар",
@@ -4028,7 +4203,9 @@
     "weeklyMotivation": "Апталық мотивация",
     "weeklyMotivationDesc": "Дүйсенбі 9:00 - жеке шабыт",
     "buttonText": "Түйме мәтіні",
-    "buttonTextPlaceholder": "Тіркелу"
+    "buttonTextPlaceholder": "Тіркелу",
+    "gcalSync": "",
+    "gcalSyncDesc": ""
   },
   "mapBlock": {
     "address": "Мекенжай",
@@ -4060,13 +4237,32 @@
     "prepaymentNote": "Тіркелгеннен кейін төлем үшін WhatsApp-қа қайта бағытталасыз",
     "success": "Сіз сәтті тіркелдіңіз!",
     "error": "Жазу кезінде қате. Қайтадан байқап көріңіз.",
+    "addDetails": "",
+    "prepaymentBadge": "",
+    "slotPrepaymentHint": "",
+    "formPrepaymentNote": "",
+    "confirmation": {
+      "title": "",
+      "subtitle": "",
+      "ref": "",
+      "copied": "",
+      "prepaymentRequired": "",
+      "prepaymentHint": "",
+      "payWhatsApp": "",
+      "payKaspi": "",
+      "awaitConfirm": "",
+      "bookAgain": ""
+    },
     "whatsapp": {
       "greeting": "Сәлем! Мен кездесуді {{date}} күні, {{time}} уақытына белгіледім.\\n",
       "name": "Аты: {{name}}\\n",
       "prepayment": "Алдын ала төлем сомасы: {{amount}} {{currency}}",
       "pay": "Жазу үшін ақша төлегім келеді."
     },
-    "selectedTime": "Уақыт таңдалды"
+    "selectedTime": "Уақыт таңдалды",
+    "limitReached": {
+      "customer": ""
+    }
   },
   "days": {
     "sunday": "Күн",
@@ -4758,7 +4954,15 @@
       "teamInbox": "Командалық чат пен тапсырмалар",
       "teamRoles": "Рөлдер және қол жеткізуді басқару",
       "teamMembers": "5 команда мүшесіне дейін",
-      "prioritySupport": "Басым қолдау"
+      "prioritySupport": "Басым қолдау",
+      "basicViewStats": "",
+      "unlimitedInbound": "",
+      "noWatermark": "",
+      "exportAndAutomation": "",
+      "multiPage": "",
+      "customDomain": "",
+      "freeBooking": "",
+      "freeCRM": ""
     },
     "limitations": {
       "watermark": "Су таңбасы LinkMAX.my",
@@ -4888,6 +5092,12 @@
       "title": "Бет сәтті жасалды!",
       "owner": "Иесі:",
       "desc": "Енді басқару тақтасында түстерді, қаріптерді және блоктарды өңдеуге болады."
+    },
+    "complete": {
+      "title": "",
+      "desc": "",
+      "publishNow": "",
+      "editFirst": ""
     }
   },
   "funnel": {
@@ -5309,16 +5519,20 @@
     "title": "Streak",
     "keepGoing": "Keep it going!",
     "days": "days",
-    "nextMilestone": "Келесі кезең",
+    "currentStreak": "",
+    "longestStreak": "",
+    "streakFrozen": "",
+    "loginTomorrow": "",
     "bonusDays": "bonus days",
+    "bonusTrialDays": "bonus trial days!",
+    "awesome": "Awesome!",
+    "milestones": "Streak Milestones",
+    "nextMilestone": "Келесі кезең",
     "best": "Best",
     "earned": "Earned",
     "milestoneReached": "Milestone Reached!",
     "milestoneDescription": "Congratulations on reaching a new streak milestone!",
-    "bonusEarned": "You",
-    "bonusTrialDays": "bonus trial days!",
-    "awesome": "Awesome!",
-    "milestones": "Streak Milestones"
+    "bonusEarned": "You"
   },
   "structure": {
     "title": "Құрылымы",
@@ -5330,7 +5544,21 @@
     "show": "Көрсету",
     "hide": "Жасыру",
     "duplicate": "Көшірме",
-    "delete": "Жою"
+    "delete": "Жою",
+    "filterAll": "",
+    "filterProblematic": "",
+    "filterHidden": "",
+    "filterCTA": "",
+    "sections": "",
+    "search": "",
+    "reviewMode": "",
+    "exitReview": "",
+    "untitledSection": "",
+    "renameSection": "",
+    "rename": "",
+    "dissolve": "",
+    "deleteSection": "",
+    "ungrouped": ""
   },
   "url": {
     "external": "Сыртқы сілтеме",
@@ -5399,7 +5627,12 @@
     "noDeal": "Келісім жоқ",
     "createdAt": "Жасалған",
     "completedAt": "Орындалған",
-    "save": "Сақтау"
+    "save": "Сақтау",
+    "recurrenceLabel": "",
+    "recurrenceUntil": "",
+    "comments": "",
+    "noComments": "",
+    "commentPlaceholder": ""
   },
   "zones": {
     "selectOrCreate": "Аймақты таңдаңыз немесе жасаңыз",
@@ -5487,7 +5720,36 @@
       "confirmDelete": "Контактіні өшіру?",
       "deleteWarning": "Бұл {{name}} контактісін толықтай өшіреді. Байланысқан мәмілелер мен тапсырмалар сақталады.",
       "updated": "Контакт жаңартылды",
-      "deleted": "Контакт өшірілді"
+      "deleted": "Контакт өшірілді",
+      "call": "",
+      "sendEmail": "",
+      "notes": "",
+      "additionalInfo": "",
+      "emptyFile": "",
+      "noNameColumn": "",
+      "parseError": "",
+      "unsupportedFormat": "",
+      "imported": "",
+      "importDescription": "",
+      "uploadFile": "",
+      "requiredColumns": "",
+      "rows": "",
+      "andMore": "",
+      "importing": "",
+      "importButton": "",
+      "created": "",
+      "exportSuccess": "",
+      "export": "",
+      "presets": {
+        "label": "",
+        "none": "",
+        "saveCurrent": "",
+        "createFromCurrent": "",
+        "saveTitle": "",
+        "saveDescription": "",
+        "nameLabel": "",
+        "namePlaceholder": ""
+      }
     },
     "deals": {
       "title": "Мәмілелер воронкасы",
@@ -5529,7 +5791,31 @@
       "winQuestion": "Мәміле белгісі: Ұтыс па әлде Ұтылыс па?",
       "dealTitle": "Мәміле атауы",
       "contact": "Контакт",
-      "valueKzt": "Сомасы (KZT)"
+      "valueKzt": "Сомасы (KZT)",
+      "addComment": "",
+      "noComments": "",
+      "customFieldsBlock": "",
+      "noStages": "",
+      "created": "",
+      "dateFrom": "",
+      "dateTo": "",
+      "valueMin": "",
+      "valueMax": "",
+      "presets": {
+        "placeholder": "",
+        "none": "",
+        "saveCurrent": "",
+        "saveTitle": "",
+        "saveDescription": "",
+        "nameLabel": "",
+        "namePlaceholder": ""
+      },
+      "exportSuccess": "",
+      "export": "",
+      "newDealDescription": "",
+      "selectContact": "",
+      "nextStepPlaceholder": "",
+      "markAsWonOrLost": ""
     },
     "tasks": {
       "title": "Тапсырмалар",
@@ -5543,7 +5829,15 @@
       "assignee": "Жауапты",
       "unassigned": "Тағайындалмаған",
       "contact": "Контакт",
-      "deal": "Мәміле"
+      "deal": "Мәміле",
+      "overdue": "",
+      "mine": "",
+      "new": "",
+      "taskTitle": "",
+      "taskTitlePlaceholder": "",
+      "description": "",
+      "descriptionPlaceholder": "",
+      "dueDate": ""
     },
     "invoices": {
       "title": "Қаржы",
@@ -5583,7 +5877,11 @@
       "noItemsSpecified": "Позициялар көрсетілмеген",
       "payLink": "Төлем сілтемесі",
       "markPaid": "Төленді деп белгілеу",
-      "cancelPayment": "Төлемді болдырмау"
+      "cancelPayment": "Төлемді болдырмау",
+      "urlGenerated": "",
+      "generatePayLink": "",
+      "downloadPDF": "",
+      "pdfSuccess": ""
     },
     "settings": {
       "title": "Баптаулар",
@@ -5600,7 +5898,84 @@
       "leaveDesc": "Сіз осы аймақтағы барлық деректерге қол жетімділіктен айырыласыз.",
       "confirmLeave": "Шығуды растау",
       "removeMember": "Қатысушыны өшіру керек пе?",
-      "emailLabel": "Email"
+      "emailLabel": "Email",
+      "fields": {
+        "created": "",
+        "updated": "",
+        "deleted": "",
+        "typeText": "",
+        "typeNumber": "",
+        "typeDate": "",
+        "typeBoolean": "",
+        "title": "",
+        "description": "",
+        "add": "",
+        "empty": "",
+        "required": "",
+        "addTitle": "",
+        "editTitle": "",
+        "nameLabel": "",
+        "namePlaceholder": "",
+        "typeLabel": "",
+        "requiredLabel": "",
+        "deleteTitle": "",
+        "deleteWarning": ""
+      },
+      "dealFields": {
+        "created": "",
+        "updated": "",
+        "deleted": "",
+        "title": "",
+        "description": "",
+        "empty": "",
+        "addTitle": "",
+        "editTitle": "",
+        "deleteTitle": ""
+      },
+      "pipelines": {
+        "created": "",
+        "updated": "",
+        "lastOne": "",
+        "cannotDeleteDefault": "",
+        "confirmDelete": "",
+        "deleted": "",
+        "newPlaceholder": "",
+        "empty": "",
+        "title": "",
+        "desc": ""
+      },
+      "memberLimitReached": "",
+      "inviteSent": "",
+      "linkCopied": "",
+      "inviteRevoked": "",
+      "leftZone": "",
+      "memberRemoved": "",
+      "roleUpdated": "",
+      "saved": "",
+      "members": "",
+      "billing": "",
+      "pipelinesTab": "",
+      "fieldsTab": "",
+      "general": "",
+      "membersCount": "",
+      "invite": "",
+      "pendingInvites": "",
+      "expires": "",
+      "currentPlan": "",
+      "planDesc": "",
+      "plan": "",
+      "cycle": "",
+      "renewsAt": "",
+      "price": "",
+      "managePlan": "",
+      "dangerZone": "",
+      "ownerCannotLeave": "",
+      "role": "",
+      "leaveConfirmTitle": "",
+      "leaveConfirmDesc": "",
+      "removeMemberTitle": "",
+      "removeMemberDesc": "",
+      "confirmRemove": ""
     },
     "automations": {
       "title": "Автоматтандыру",
@@ -5644,7 +6019,20 @@
         "change_stage": "Мәміле кезеңін өзгерту",
         "notify_owner": "Иесіне хабарлау",
         "create_deal": "Жаңа мәміле жасау"
-      }
+      },
+      "created": "",
+      "createError": "",
+      "presets": {
+        "overdueTaskName": "",
+        "invoicePaidName": "",
+        "overdueTaskChip": "",
+        "invoicePaidChip": ""
+      },
+      "emptyTitle": "",
+      "emptyDesc": "",
+      "tryFirst": "",
+      "configParams": "",
+      "changeToStage": ""
     },
     "inbox": {
       "title": "Кіріс жәшігі",
@@ -5661,6 +6049,143 @@
       "titlePlaceholder": "Диалог тақырыбы",
       "sendError": "Хабарлама жіберу мүмкін болмады",
       "createError": "Диалог жасау мүмкін болмады"
+    },
+    "documents": {
+      "generated": "",
+      "generateError": "",
+      "generateDocument": "",
+      "preview": "",
+      "variables": "",
+      "unreplacedWarning": "",
+      "availableVariables": "",
+      "customVariables": "",
+      "customVariablesHint": "",
+      "enterValue": "",
+      "allVariablesFilled": "",
+      "downloadPDF": "",
+      "title": "",
+      "subtitle": "",
+      "templates": "",
+      "newDocument": "",
+      "searchPlaceholder": "",
+      "empty": {
+        "title": "",
+        "description": ""
+      },
+      "createDocument": "",
+      "notFound": {
+        "title": "",
+        "description": ""
+      },
+      "resetFilters": "",
+      "actions": {
+        "generate": "",
+        "view": "",
+        "download": "",
+        "delete": ""
+      },
+      "confirmDelete": "",
+      "totalCount": "",
+      "filteredCount": ""
+    },
+    "analytics": {
+      "exportSuccess": "",
+      "exportError": "",
+      "title": "",
+      "subtitle": "",
+      "activeValue": "",
+      "dealsOpen": "",
+      "winRate": "",
+      "tasksDone": "",
+      "overdue": "",
+      "noOverdue": "",
+      "paidValue": "",
+      "pendingAmount": "",
+      "newContacts": "",
+      "totalContacts": "",
+      "plSummary": "",
+      "grossRevenue": "",
+      "paidInvoices": "",
+      "pendingRevenue": "",
+      "awaitingPayment": "",
+      "wonDealsValue": "",
+      "closedDeals": "",
+      "funnel": "",
+      "funnelDesc": "",
+      "deals": "",
+      "funnelEmpty": "",
+      "revenueTimeline": "",
+      "revenueTimelineDesc": "",
+      "revenue": "",
+      "noRevenue": "",
+      "conversionTrend": "",
+      "improving": "",
+      "declining": "",
+      "conversionTrendDesc": "",
+      "won": "",
+      "lost": "",
+      "teamPerformance": "",
+      "teamPerformanceDesc": "",
+      "member": "",
+      "tasks": "",
+      "done": "",
+      "avgClose": "",
+      "completed": "",
+      "total": "",
+      "taskMetrics": "",
+      "pending": "",
+      "completionRate": ""
+    },
+    "calendar": {
+      "title": "",
+      "subtitle": "",
+      "today": "",
+      "upcoming": "",
+      "todayBtn": "",
+      "day": "",
+      "week": "",
+      "month": "",
+      "bookingDetail": "",
+      "feedCopied": "",
+      "export": "",
+      "downloadICS": "",
+      "copyFeedUrl": "",
+      "addToCalendar": "",
+      "fromPage": ""
+    },
+    "error": {
+      "title": "",
+      "description": "",
+      "retry": ""
+    },
+    "events": {
+      "title": "",
+      "subtitle": "",
+      "totalEvents": "",
+      "published": "",
+      "totalRegistrations": "",
+      "revenue": "",
+      "draft": "",
+      "closed": "",
+      "empty": "",
+      "registered": "",
+      "maxCapacity": "",
+      "registrations": "",
+      "noRegistrations": ""
+    },
+    "plans": {
+      "monthly": "",
+      "yearly": ""
+    },
+    "invites": {
+      "accepted": "",
+      "invalid": "",
+      "invalidDesc": "",
+      "title": "",
+      "roleLabel": "",
+      "emailNotice": "",
+      "loginRequired": "",
+      "join": ""
     }
   },
   "activation": {
@@ -5737,7 +6262,9 @@
       "title": "Кері байланыс қажет",
       "visitedYesterday": "Кеше {{time}} келді",
       "send": "Жазу",
-      "template": "Сәлеметсіз бе, {{name}}! Келгеніңізге рахмет! Қалай болды? Сізді қайта көруге қуаныштымыз 😊"
+      "template": "Сәлеметсіз бе, {{name}}! Келгеніңізге рахмет! Қалай болды? Сізді қайта көруге қуаныштымыз 😊",
+      "completedOn": "",
+      "sent": ""
     },
     "week": {
       "leads": "Осы аптада:"
@@ -5748,6 +6275,11 @@
     },
     "stale": {
       "page": "Бет 2 аптадан астам жаңартылмаған — мазмұнды жаңартыңыз"
+    },
+    "rebook": {
+      "title": "",
+      "daysSince": "",
+      "nudge": ""
     }
   },
   "lifecycle": {
@@ -5763,5 +6295,150 @@
       "title": "Өтінімдер түсуде",
       "hint": "Визиттен кейін клиенттерге жазыңыз — бұл қайтару көрсеткішін 30%-ға арттырады"
     }
+  },
+  "experiments": {
+    "confirmDelete": "",
+    "deleteSuccess": "",
+    "confirmWinner": "",
+    "winnerSet": "",
+    "empty": {
+      "title": "",
+      "desc": ""
+    },
+    "started": "",
+    "ended": "",
+    "actions": {
+      "start": "",
+      "stop": "",
+      "pickWinner": ""
+    },
+    "label": {
+      "original": "",
+      "variant": ""
+    },
+    "leading": "",
+    "insight": {
+      "title": "",
+      "desc": ""
+    },
+    "defaultName": "",
+    "error": {
+      "nameRequired": "",
+      "starting": ""
+    },
+    "success": {
+      "started": ""
+    },
+    "setup": {
+      "title": "",
+      "description": "",
+      "nameLabel": "",
+      "namePlaceholder": "",
+      "variants": "",
+      "variantsCount": "",
+      "variantA": "",
+      "variantB": "",
+      "hideEditor": "",
+      "configure": "",
+      "tipTitle": "",
+      "tipDesc": "",
+      "start": "",
+      "editFields": ""
+    }
+  },
+  "friction": {
+    "try": ""
+  },
+  "commands": {
+    "searchPlaceholder": "",
+    "noResults": ""
+  },
+  "billing": {
+    "types": {
+      "subscription": "",
+      "zoneUpgrade": "",
+      "payment": "",
+      "refund": ""
+    },
+    "history": {
+      "title": "",
+      "empty": "",
+      "emptyDesc": ""
+    }
+  },
+  "kaspi": {
+    "generateQR": "",
+    "invalidAmount": "",
+    "paymentSimulated": "",
+    "linkCopied": "",
+    "title": "",
+    "description": "",
+    "amount": "",
+    "comment": "",
+    "commentPlaceholder": "",
+    "scanHint": "",
+    "copyLink": "",
+    "downloadQR": "",
+    "simulateMock": "",
+    "disclaimer": ""
+  },
+  "zone": {
+    "notifications": {
+      "title": "",
+      "markAllRead": "",
+      "empty": ""
+    },
+    "products": {
+      "nameRequired": "",
+      "updated": "",
+      "created": "",
+      "confirmDelete": "",
+      "deleted": "",
+      "title": "",
+      "add": "",
+      "empty": "",
+      "emptyHint": "",
+      "inactive": "",
+      "per": "",
+      "edit": "",
+      "create": "",
+      "name": "",
+      "namePlaceholder": "",
+      "description": "",
+      "price": "",
+      "currency": "",
+      "unit": "",
+      "active": ""
+    }
+  },
+  "forMasters": {
+    "badge": "",
+    "headline": "",
+    "subheadline": "",
+    "cta": "",
+    "ctaSecondary": "",
+    "val1Title": "",
+    "val1Desc": "",
+    "val2Title": "",
+    "val2Desc": "",
+    "val3Title": "",
+    "val3Desc": "",
+    "examplesTitle": "",
+    "freeTitle": "",
+    "freeDesc": "",
+    "finalCta": "",
+    "trustLine": ""
+  },
+  "from": {
+    "seoTitle": "",
+    "seoDesc": "",
+    "madeWith": "",
+    "headline": "",
+    "subheadline": "",
+    "val1": "",
+    "val2": "",
+    "val3": "",
+    "cta": "",
+    "free": ""
   }
 }

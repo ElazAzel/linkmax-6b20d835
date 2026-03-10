@@ -27,6 +27,15 @@ describe('fintechService', () => {
 
         it('should throw error if wallet not found', async () => {
             const mockFrom = vi.mocked(supabase.from);
+
+            // 1. getUserCommissionRate calls user_profiles
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: { premium_tier: 'starter' }, error: null })
+            } as any);
+
+            // 2. recordPendingIncome calls user_wallets
             mockFrom.mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
@@ -40,24 +49,32 @@ describe('fintechService', () => {
         it('should create transaction and fee record on success', async () => {
             const mockWallet = { id: 'wallet-789' };
             const mockTransaction = { id: 'tx-001', amount: 1000 };
+            const mockProfile = { premium_tier: 'starter' };
 
             const mockFrom = vi.mocked(supabase.from);
 
-            // Chain for wallet lookup
+            // 1. getUserCommissionRate calls user_profiles
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: mockProfile, error: null })
+            } as any);
+
+            // 2. recordPendingIncome calls user_wallets
             mockFrom.mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
                 single: vi.fn().mockResolvedValue({ data: mockWallet, error: null })
             } as any);
 
-            // Chain for main transaction creation
+            // 3. Chain for main transaction creation (insert)
             mockFrom.mockReturnValueOnce({
                 insert: vi.fn().mockReturnThis(),
                 select: vi.fn().mockReturnThis(),
                 single: vi.fn().mockResolvedValue({ data: mockTransaction, error: null })
             } as any);
 
-            // Chain for fee transaction creation
+            // 4. Chain for fee transaction creation (insert)
             mockFrom.mockReturnValueOnce({
                 insert: vi.fn().mockResolvedValue({ data: null, error: null })
             } as any);
@@ -65,13 +82,14 @@ describe('fintechService', () => {
             const result = await fintechService.recordPendingIncome(mockParams);
 
             expect(result).toEqual(mockTransaction);
+            expect(mockFrom).toHaveBeenCalledWith('user_profiles');
             expect(mockFrom).toHaveBeenCalledWith('user_wallets');
             expect(mockFrom).toHaveBeenCalledWith('wallet_transactions');
 
-            // Verify fee calculation (5% of 1000 = 50)
-            const feeCall = vi.mocked(mockFrom).mock.results[2].value.insert;
+            // Verify fee calculation (Starter tier: 7% of 1000 = 70)
+            const feeCall = vi.mocked(mockFrom).mock.results[3].value.insert;
             expect(feeCall).toHaveBeenCalledWith(expect.objectContaining({
-                amount: -50,
+                amount: -70,
                 type: 'fee'
             }));
         });

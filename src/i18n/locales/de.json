@@ -129,7 +129,22 @@
     "toHome": "Startseite",
     "collapse": "Einklappen",
     "generating": "Wird erstellt...",
-    "generate": "Erstellen"
+    "generate": "Erstellen",
+    "active": "",
+    "configuring": "",
+    "verify": "",
+    "guide": "",
+    "coming_soon": "",
+    "details": "",
+    "actions": "",
+    "unknownUser": "",
+    "allTime": "",
+    "quantity": "",
+    "amount": "",
+    "untitled": "",
+    "name": "",
+    "status": "",
+    "date": ""
   },
   "fields": {
     "name": "Name",
@@ -348,7 +363,10 @@
     "success": "Formular erfolgreich gesendet!",
     "error": "Fehler beim Senden des Formulars",
     "enterPlaceholder": "Eingeben",
-    "submitting": "Wird gesendet..."
+    "submitting": "Wird gesendet...",
+    "limitReached": {
+      "customer": ""
+    }
   },
   "newsletter": {
     "alreadySubscribed": "Sie sind bereits abonniert!",
@@ -674,7 +692,10 @@
       "linkFailed": "",
       "unlinkFailed": "",
       "unlinkSuccess": "",
-      "cannotUnlinkLast": ""
+      "cannotUnlinkLast": "",
+      "linkFailedReason": "",
+      "identityNotFound": "",
+      "primaryIdentity": ""
     },
     "integrations": {
       "title": "",
@@ -688,7 +709,15 @@
       "fbHint": "",
       "ttHint": "",
       "ga4Hint": "",
-      "yandexHint": ""
+      "yandexHint": "",
+      "gcalConnected": "",
+      "gcalFailed": "",
+      "gcalNotConfigured": "",
+      "gcalRedirecting": "",
+      "gcalDisconnectFailed": "",
+      "gcalDisconnected": "",
+      "active": "",
+      "gcalDesc": ""
     },
     "pageBackground": "",
     "backgroundType": "",
@@ -704,7 +733,21 @@
     "saveAsTemplate": "",
     "myTemplates": "",
     "openVerification": "",
-    "pageBackgroundLocked": ""
+    "pageBackgroundLocked": "",
+    "password": {
+      "required": "",
+      "minLength": "",
+      "confirmRequired": "",
+      "mismatch": "",
+      "success": "",
+      "error": "",
+      "title": "",
+      "description": "",
+      "newPassword": "",
+      "confirmPassword": "",
+      "hint": "",
+      "submit": ""
+    }
   },
   "niche": {
     "barber": "Барбер",
@@ -765,7 +808,17 @@
     "completeDescription": ""
   },
   "landing": {
-    "ticker": { "title": "Vertraut von Kreativen weltweit", "creators": "Kreative", "coaches": "Coaches", "designers": "Designer", "startups": "Startups", "agencies": "Agenturen", "clinics": "Kliniken", "studios": "Studios", "experts": "Experten" },
+    "ticker": {
+      "title": "Vertraut von Kreativen weltweit",
+      "creators": "Kreative",
+      "coaches": "Coaches",
+      "designers": "Designer",
+      "startups": "Startups",
+      "agencies": "Agenturen",
+      "clinics": "Kliniken",
+      "studios": "Studios",
+      "experts": "Experten"
+    },
     "bento": {
       "sectionTitle": "Alles, was Sie zum Wachstum brauchen",
       "sectionDesc": "Website-Builder + CRM + Analytics. Eine Plattform statt zehn Tools.",
@@ -790,6 +843,87 @@
       "bookingTitle": "Online-Buchung",
       "bookingDesc": "Kunden buchen Slots direkt. Automatischer Kalender, keine Anrufe.",
       "bookingSlot": "Verfügbar"
+    },
+    "testimonials": {
+      "title": "",
+      "count": "",
+      "suffix": "",
+      "subtitle": "",
+      "role1": "",
+      "review1": "",
+      "role2": "",
+      "review2": "",
+      "role3": "",
+      "review3": "",
+      "role4": "",
+      "review4": ""
+    },
+    "pricing": {
+      "title": "Tarife",
+      "titleHighlight": "",
+      "subtitle": "Starten Sie kostenlos und aktivieren Sie Pro, wenn Sie mehr brauchen",
+      "monthly": "",
+      "yearly": "",
+      "save": "",
+      "popular": "",
+      "proName": "",
+      "aiPowered": "",
+      "perMonth": "",
+      "billedYearly": "",
+      "f1": "",
+      "f2": "",
+      "f3": "",
+      "f4": "",
+      "f5": "",
+      "f6": "",
+      "proCta": "",
+      "freeCta": "",
+      "newBadge": "",
+      "businessName": "",
+      "teamLabel": "",
+      "businessCta": "",
+      "b1": "",
+      "b2": "",
+      "b3": "",
+      "b4": "",
+      "b5": "",
+      "b6": "",
+      "month": "",
+      "total": "",
+      "billedOnce": ""
+    },
+    "demo": {
+      "title": "",
+      "step1Title": "",
+      "step1Desc": "",
+      "step2Title": "",
+      "step2Desc": "",
+      "step3Title": "",
+      "step3Desc": "",
+      "iAmA": "",
+      "nicheCreator": "",
+      "nicheFitness": "",
+      "nicheCrypto": "",
+      "nicheBeauty": "",
+      "nicheMusic": "",
+      "nicheTutor": "",
+      "aiGenerating": "",
+      "chatMsg1": "",
+      "chatMsg2": "",
+      "leadCaptured": "",
+      "badge": "",
+      "subtitle": "",
+      "profile": "",
+      "addBlocks": "",
+      "link": "",
+      "text": "",
+      "image": "",
+      "socials": "",
+      "yourBlocks": "",
+      "dragToReorder": "",
+      "noBlocks": "",
+      "livePreview": "",
+      "addBlocksHint": ""
     },
     "v6": {
       "hero": {
@@ -1210,7 +1344,11 @@
       "item4": "Keine Klarheit: was wirklich geklickt wird und wo Aufmerksamkeit verloren geht",
       "solution": "lnkmx macht eine klare Seite, auf der Besucher schnell verstehen, wer Sie sind, wie Sie helfen, was es kostet und wohin man klicken muss. Und Sie sehen Leads und Analytics an einem Ort."
     },
-    "howItWorks": "",
+    "howItWorks": {
+      "badge": "",
+      "title": "",
+      "cta": ""
+    },
     "features": {
       "title": "Was Sie in der ersten Version bekommen",
       "ai": {
@@ -1323,29 +1461,29 @@
     "socialProof": {
       "title": "Beispiele für Seiten"
     },
-    "pricing": {
-      "title": "Tarife",
-      "subtitle": "Starten Sie kostenlos und aktivieren Sie Pro, wenn Sie mehr brauchen",
-      "forever": "Für immer",
-      "bestValue": "Bestes Preis-Leistungs-Verhältnis",
-      "freeAction": "Kostenlos starten",
-      "viewPlans": "Pro wählen",
-      "otherPlans": "Andere Optionen:",
-      "annualPriceKzt": "36 540 ₸ für 12 Monate",
-      "annualPriceUsd": "$71/Jahr",
-      "otherPlansSix": "6 Mon.: 3 698 ₸/Monat (-15%)",
-      "otherPlansThree": "3 Mon.: 4 350 ₸/Monat",
+    "pricingLegacy": {
+      "title": "",
+      "subtitle": "",
+      "forever": "",
+      "bestValue": "",
+      "freeAction": "",
+      "viewPlans": "",
+      "otherPlans": "",
+      "annualPriceKzt": "",
+      "annualPriceUsd": "",
+      "otherPlansSix": "",
+      "otherPlansThree": "",
       "free": {
-        "item1": "6 Basis-Blöcke",
-        "item2": "1 KI-Generierung/Monat",
-        "item3": "Basis-Analytics"
+        "item1": "",
+        "item2": "",
+        "item3": ""
       },
       "pro": {
-        "item1": "Unbegrenzte Blöcke und Vorlagen",
-        "item2": "5 KI-Generierungen/Monat",
-        "item3": "CRM + Telegram-Benachrichtigungen",
-        "item4": "Erweiterte Analytics",
-        "item5": "Ohne Wasserzeichen"
+        "item1": "",
+        "item2": "",
+        "item3": "",
+        "item4": "",
+        "item5": ""
       },
       "month": "",
       "total": "",
@@ -1422,22 +1560,6 @@
         "answer": "Ja, in Pro sind eigene Domains und Branding verfügbar."
       }
     },
-    "demo": {
-      "badge": "",
-      "title": "",
-      "subtitle": "",
-      "profile": "",
-      "addBlocks": "",
-      "link": "",
-      "text": "",
-      "image": "",
-      "socials": "",
-      "yourBlocks": "",
-      "dragToReorder": "",
-      "noBlocks": "",
-      "livePreview": "",
-      "addBlocksHint": ""
-    },
     "featured": {
       "badge": "",
       "title": "",
@@ -1484,7 +1606,8 @@
         "f7_v2": "",
         "title": "",
         "subtitle": "",
-        "cta": ""
+        "cta": "",
+        "f5_booking": ""
       },
       "premium": {
         "f1_v2": "",
@@ -1497,7 +1620,14 @@
         "badge": "",
         "title": "",
         "subtitle": "",
-        "cta": ""
+        "cta": "",
+        "f1_v3": "",
+        "f2_v3": "",
+        "f3_v3": "",
+        "f4_v3": "",
+        "f5_v3": "",
+        "f6_v3": "",
+        "f7_v3": ""
       },
       "badge": "",
       "title": ""
@@ -1656,7 +1786,8 @@
       "pages": "Seiten",
       "activity": "Posteingang",
       "insights": "Analytics",
-      "settings": "Einstellungen"
+      "settings": "Einstellungen",
+      "more": ""
     },
     "sidebar": {
       "tools": "Tools",
@@ -1717,7 +1848,11 @@
       "searchPlaceholder": "Suche nach Name, Telefon…",
       "noResults": "Nichts gefunden",
       "noLeads": "Noch keine Anfragen",
-      "noLeadsHint": "Anfragen erscheinen hier, wenn Besucher Formulare auf Ihrer Seite ausfüllen"
+      "noLeadsHint": "Anfragen erscheinen hier, wenn Besucher Formulare auf Ihrer Seite ausfüllen",
+      "exporting": "",
+      "exportSuccess": "",
+      "exportError": "",
+      "export": ""
     },
     "insights": {
       "title": "Analytics",
@@ -1816,7 +1951,10 @@
         "page_limit_exceeded": "Seitenlimit erreicht",
         "slug_taken": "Diese URL ist bereits vergeben",
         "invalid_slug": "Ungültige URL"
-      }
+      },
+      "duplicated": "",
+      "deleteConfirm": "",
+      "deleted": ""
     },
     "multiPage": {
       "switchPage": "Seite auswählen",
@@ -1859,6 +1997,11 @@
       "templatesDesc": "Fertige Seiten-Designs",
       "marketplace": "Marktplatz",
       "marketplaceDesc": "Vorlagen aus der Community",
+      "faviconUrl": "",
+      "faviconHint": "",
+      "hideBranding": "",
+      "hideBrandingHint": "",
+      "whiteLabel": "",
       "errors": {
         "slug_taken": "Diese URL ist bereits vergeben",
         "invalid_slug": "Ungültige URL"
@@ -1882,7 +2025,8 @@
       "yourDomainExample": "",
       "dnsType": "",
       "dnsName": "",
-      "dnsValue": ""
+      "dnsValue": "",
+      "dnsHint": ""
     },
     "accountSettings": {
       "title": "Kontoeinstellungen",
@@ -1970,7 +2114,44 @@
         "feature5": "Erweiterte Analytics",
         "feature6": "Ohne Wasserzeichen",
         "feature7": "Priorisierter Support"
-      }
+      },
+      "identity": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": ""
+      },
+      "starter": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "feature6": ""
+      },
+      "business": {
+        "feature1": "",
+        "feature2": "",
+        "feature3": "",
+        "feature4": "",
+        "feature5": "",
+        "feature6": ""
+      },
+      "businessPlan": "",
+      "starterPlan": "",
+      "identityPlan": "",
+      "commissionRate": "",
+      "upgradeToStarter": "",
+      "upgradeToPro": "",
+      "unlockCRM": "",
+      "reduceFees": "",
+      "starterDescription": "",
+      "proDescription": "",
+      "activateStarter": "",
+      "yourBenefits": "",
+      "lowCommission": "",
+      "starterCommission": "",
+      "freeTier": ""
     },
     "createPage": {
       "titleRequired": "",
@@ -2003,7 +2184,12 @@
       "title": "",
       "search": "",
       "emptyTitle": "",
-      "emptyDesc": ""
+      "emptyDesc": "",
+      "updateError": "",
+      "exporting": "",
+      "exportError": "",
+      "export": "",
+      "filterAll": ""
     },
     "addFirstBlock": "",
     "templateApplied": ""
@@ -2157,7 +2343,9 @@
     "addFailed": "Block konnte nicht hinzugefügt werden",
     "premiumRequired": "Dieser Block ist nur in PRO verfügbar",
     "limitReached": "Blocklimit erreicht. Wechseln Sie zu Premium.",
-    "proOnly": ""
+    "proOnly": "",
+    "duplicated": "",
+    "duplicateFailed": ""
   },
   "auth": {
     "signIn": "Anmelden",
@@ -2204,6 +2392,14 @@
       "bonus": "Registrieren Sie sich und erhalten Sie +3 Tage Premium",
       "success": "🎉 +{{days}} Tage Premium per Referral-Code!"
     },
+    "validation": {
+      "email": "",
+      "emailMax": "",
+      "passwordMin": "",
+      "passwordUppercase": "",
+      "passwordLowercase": "",
+      "passwordNumber": ""
+    },
     "telegram": {
       "invalidChatId": "Bitte eine gültige Telegram Chat-ID eingeben",
       "notFound": "Konto mit diesem Telegram wurde nicht gefunden",
@@ -2232,7 +2428,8 @@
     "required": "",
     "loginRequired": "",
     "signupEmailSent": "",
-    "login": ""
+    "login": "",
+    "oauthError": ""
   },
   "gallery": {
     "title": "Seiten-Galerie",
@@ -2310,7 +2507,11 @@
     "tabLeaderboard": "",
     "allPages": "",
     "noPages": "",
-    "tryAnotherFilter": ""
+    "tryAnotherFilter": "",
+    "useTemplate": "",
+    "sortPopular": "",
+    "sortViews": "",
+    "sortRecent": ""
   },
   "errors": {
     "general": "Ein Fehler ist aufgetreten",
@@ -2634,7 +2835,9 @@
     "hidden": "",
     "noTemplatesFound": "",
     "editUserTierDescription": "",
-    "roleAdmin": ""
+    "roleAdmin": "",
+    "fintech": "",
+    "category": ""
   },
   "adminCharts": {
     "userGrowth": "Рост пользователей",
@@ -2849,7 +3052,8 @@
       "title": "",
       "placeholder": "",
       "button": "",
-      "hint": ""
+      "hint": "",
+      "generating": ""
     },
     "captureError": "",
     "captured": "",
@@ -2913,7 +3117,9 @@
     "noPurchased": "",
     "browseMk": "",
     "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
-    "purchaseTemplate": "Покупка шаблона: {{name}}"
+    "purchaseTemplate": "Покупка шаблона: {{name}}",
+    "chosen": "",
+    "use": ""
   },
   "alternatives": {
     "seo": {
@@ -3030,6 +3236,34 @@
       "signIn": "Anmelden",
       "company": "ARchitecKZ • БИН: 190540008684",
       "address": "г. Алматы, ул. Шолохова, д. 20"
+    },
+    "bitrix24": {
+      "title": "",
+      "intro": "",
+      "rowSimplicity": "",
+      "rowTime": "",
+      "rowMobile": "",
+      "rowPrice": "",
+      "LinkMAXSimple": "",
+      "bitrixComplex": "",
+      "LinkMAX15min": "",
+      "bitrixWeeks": "",
+      "LinkMAXMobile": "",
+      "bitrixWeak": "",
+      "LinkMAXPrice": "",
+      "bitrixPrice": "",
+      "positioning": "",
+      "cta": ""
+    }
+  },
+  "phaseB": {
+    "whyLnkmx": {
+      "title": "",
+      "noSetup": "",
+      "mobile": "",
+      "premium": "",
+      "emptyDeals": "",
+      "emptyContacts": ""
     }
   },
   "blockPreview": {
@@ -3267,7 +3501,10 @@
     "export": {
       "button": "",
       "summary": "",
-      "daily": ""
+      "daily": "",
+      "success": "",
+      "error": "",
+      "excel": ""
     },
     "blocks": {
       "title": "",
@@ -3275,6 +3512,37 @@
       "avgCtr": "",
       "clicks": "",
       "andMore": "и ещё {{count}} блоков"
+    },
+    "blockTypes": {
+      "link": "",
+      "social": "",
+      "button": "",
+      "booking": "",
+      "contactForm": "",
+      "pricing": "",
+      "product": "",
+      "gallery": "",
+      "video": "",
+      "event": "",
+      "messenger": ""
+    },
+    "tooltipClicks": "",
+    "traffic": {
+      "instagram": "",
+      "facebook": "",
+      "twitter": "",
+      "tiktok": "",
+      "youtube": "",
+      "telegram": "",
+      "whatsapp": "",
+      "vkontakte": "",
+      "linkedin": "",
+      "google": "",
+      "yandex": "",
+      "bing": "",
+      "direct": "",
+      "referral": "",
+      "unknown": ""
     },
     "funnel": {
       "views": "",
@@ -3286,7 +3554,11 @@
       "insights": "",
       "clickRate": "",
       "conversionRate": "",
-      "avgPerDay": ""
+      "avgPerDay": "",
+      "dropOff": "",
+      "retention": "",
+      "overallLabel": "",
+      "subtitle": ""
     },
     "engagement": {
       "ctr": "",
@@ -3309,7 +3581,8 @@
       "overview": "",
       "traffic": "",
       "blocks": "",
-      "funnel": ""
+      "funnel": "",
+      "experiments": ""
     },
     "chart": {
       "title": ""
@@ -3368,7 +3641,30 @@
     "discard": "",
     "saveAndClose": "",
     "selectBlock": "",
-    "searchBlocks": ""
+    "searchBlocks": "",
+    "problematic": "",
+    "cta": "",
+    "edit": "",
+    "moveUp": "",
+    "moveDown": "",
+    "copy": "",
+    "duplicate": "",
+    "transform": "",
+    "selected": "",
+    "createSection": "",
+    "clearSelection": "",
+    "experiment": "",
+    "experimentCreated": "",
+    "setupABTest": "",
+    "abTestDesc": "",
+    "experimentName": "",
+    "trafficSplit": "",
+    "howItWorks": "",
+    "abTestInstructions": "",
+    "startExperiment": "",
+    "sectionName": "",
+    "newSection": "",
+    "section": ""
   },
   "crm": {
     "title": "CRM",
@@ -3377,6 +3673,12 @@
     "bookings": "Записи",
     "analytics": "Аналитика",
     "premiumRequired": "Премиум функция",
+    "leadLimit": {
+      "used": "",
+      "warning": "",
+      "reached": "",
+      "upgrade": ""
+    },
     "premiumDescription": "Обновитесь до Premium для доступа к CRM и отслеживания лидов",
     "noLeadsToExport": "Нет лидов для экспорта",
     "exportSuccess": "Лиды экспортированы",
@@ -3394,7 +3696,8 @@
       "contacted": "Связались",
       "qualified": "Квалифицирован",
       "converted": "Конвертирован",
-      "lost": "Потерян"
+      "lost": "Потерян",
+      "": ""
     },
     "source": "",
     "addLeadDescription": "",
@@ -3410,7 +3713,32 @@
     "confirmDelete": "",
     "deleteWarning": "",
     "openPanel": "",
-    "upgradeToPremium": ""
+    "upgradeToPremium": "",
+    "responseTime": {
+      "justNow": "",
+      "minutesAgo": "",
+      "hoursAgo": "",
+      "missed": ""
+    },
+    "quickReply": {
+      "template": "",
+      "call": "",
+      "done": ""
+    },
+    "bookingStatus": {
+      "pending": "",
+      "confirmed": "",
+      "completed": ""
+    },
+    "booking": {
+      "confirm": "",
+      "cancel": ""
+    },
+    "aging": {
+      "stale": "",
+      "missed": "",
+      "needsFollowup": ""
+    }
   },
   "pagination": {
     "previous": "Назад",
@@ -3858,8 +4186,14 @@
     "prepayment": "Предоплата",
     "requirePrepayment": "Требовать предоплату",
     "prepaymentDesc": "После записи клиент перейдёт в WhatsApp для оплаты",
+    "prepaymentMethod": "",
+    "methodWhatsApp": "",
+    "methodKaspi": "",
+    "methodRobokassa": "",
     "prepaymentPhone": "WhatsApp для оплаты",
     "phoneHint": "Номер телефона с WhatsApp для приёма оплаты",
+    "kaspiPhone": "",
+    "kaspiHint": "",
     "prepaymentAmount": "Сумма предоплаты",
     "currency": "Валюта",
     "notifications": "Уведомления в Telegram",
@@ -3869,7 +4203,9 @@
     "weeklyMotivation": "Мотивация на неделю",
     "weeklyMotivationDesc": "Понедельник в 9:00 - персональное вдохновение",
     "buttonText": "Текст кнопки",
-    "buttonTextPlaceholder": "Записаться"
+    "buttonTextPlaceholder": "Записаться",
+    "gcalSync": "",
+    "gcalSyncDesc": ""
   },
   "mapBlock": {
     "address": "Адрес",
@@ -3901,13 +4237,32 @@
     "prepaymentNote": "После записи вы будете перенаправлены в WhatsApp для оплаты",
     "success": "Вы успешно записались!",
     "error": "Ошибка при записи. Попробуйте снова.",
+    "addDetails": "",
+    "prepaymentBadge": "",
+    "slotPrepaymentHint": "",
+    "formPrepaymentNote": "",
+    "confirmation": {
+      "title": "",
+      "subtitle": "",
+      "ref": "",
+      "copied": "",
+      "prepaymentRequired": "",
+      "prepaymentHint": "",
+      "payWhatsApp": "",
+      "payKaspi": "",
+      "awaitConfirm": "",
+      "bookAgain": ""
+    },
     "whatsapp": {
       "greeting": "Здравствуйте! Я записался(ась) на {{date}} в {{time}}.\\n",
       "name": "Имя: {{name}}\\n",
       "prepayment": "Сумма предоплаты: {{amount}} {{currency}}",
       "pay": ""
     },
-    "selectedTime": ""
+    "selectedTime": "",
+    "limitReached": {
+      "customer": ""
+    }
   },
   "days": {
     "sunday": "Вс",
@@ -4534,6 +4889,11 @@
     "popular": "",
     "basicDesc": "",
     "proDesc": "",
+    "businessDesc": "",
+    "businessNote": "",
+    "businessLink": "",
+    "freeForever": "",
+    "new": "",
     "free": {
       "title": "Free"
     },
@@ -4559,6 +4919,12 @@
       "addressLine": "г. Алматы, ул. Шолохова, д. 20"
     },
     "paymentNote": "",
+    "whyLnkmx": {
+      "title": "",
+      "noSetup": "",
+      "mobile": "",
+      "premium": ""
+    },
     "features": {
       "basicThemes": "",
       "basicCustomization": "",
@@ -4581,7 +4947,22 @@
       "forms": "",
       "faq": "",
       "timers": "",
-      "aiMonthlyPro": ""
+      "aiMonthlyPro": "",
+      "allPro": "",
+      "businessZones": "",
+      "teamCRM": "",
+      "teamInbox": "",
+      "teamRoles": "",
+      "teamMembers": "",
+      "prioritySupport": "",
+      "basicViewStats": "",
+      "unlimitedInbound": "",
+      "noWatermark": "",
+      "exportAndAutomation": "",
+      "multiPage": "",
+      "customDomain": "",
+      "freeBooking": "",
+      "freeCRM": ""
     },
     "limitations": {
       "watermark": "",
@@ -4711,6 +5092,12 @@
       "title": "",
       "owner": "",
       "desc": ""
+    },
+    "complete": {
+      "title": "",
+      "desc": "",
+      "publishNow": "",
+      "editFirst": ""
     }
   },
   "funnel": {
@@ -4840,7 +5227,22 @@
     "useCamera": "",
     "manual": "",
     "recentScans": "",
-    "noScansYet": ""
+    "noScansYet": "",
+    "regStatus": {
+      "pending": "",
+      "confirmed": "",
+      "rejected": "",
+      "cancelled": ""
+    },
+    "ticketStatus": {
+      "valid": "",
+      "used": "",
+      "cancelled": ""
+    },
+    "csvName": "",
+    "csvPhone": "",
+    "csvStatus": "",
+    "csvDate": ""
   },
   "insights": {
     "lowViews": {
@@ -5117,16 +5519,20 @@
     "title": "",
     "keepGoing": "",
     "days": "",
-    "nextMilestone": "",
+    "currentStreak": "",
+    "longestStreak": "",
+    "streakFrozen": "",
+    "loginTomorrow": "",
     "bonusDays": "",
+    "bonusTrialDays": "",
+    "awesome": "",
+    "milestones": "",
+    "nextMilestone": "",
     "best": "",
     "earned": "",
     "milestoneReached": "",
     "milestoneDescription": "",
-    "bonusEarned": "",
-    "bonusTrialDays": "",
-    "awesome": "",
-    "milestones": ""
+    "bonusEarned": ""
   },
   "structure": {
     "title": "",
@@ -5138,7 +5544,21 @@
     "show": "",
     "hide": "",
     "duplicate": "",
-    "delete": ""
+    "delete": "",
+    "filterAll": "",
+    "filterProblematic": "",
+    "filterHidden": "",
+    "filterCTA": "",
+    "sections": "",
+    "search": "",
+    "reviewMode": "",
+    "exitReview": "",
+    "untitledSection": "",
+    "renameSection": "",
+    "rename": "",
+    "dissolve": "",
+    "deleteSection": "",
+    "ungrouped": ""
   },
   "url": {
     "external": "",
@@ -5207,7 +5627,12 @@
     "noDeal": "Kein Deal",
     "createdAt": "Erstellt",
     "completedAt": "Abgeschlossen",
-    "save": "Speichern"
+    "save": "Speichern",
+    "recurrenceLabel": "",
+    "recurrenceUntil": "",
+    "comments": "",
+    "noComments": "",
+    "commentPlaceholder": ""
   },
   "zones": {
     "selectOrCreate": "Zone auswählen oder erstellen",
@@ -5295,7 +5720,36 @@
       "confirmDelete": "Kontakt löschen?",
       "deleteWarning": "{{name}} wird dauerhaft gelöscht. Verknüpfte Deals und Aufgaben bleiben erhalten.",
       "updated": "Kontakt aktualisiert",
-      "deleted": "Kontakt gelöscht"
+      "deleted": "Kontakt gelöscht",
+      "call": "",
+      "sendEmail": "",
+      "notes": "",
+      "additionalInfo": "",
+      "emptyFile": "",
+      "noNameColumn": "",
+      "parseError": "",
+      "unsupportedFormat": "",
+      "imported": "",
+      "importDescription": "",
+      "uploadFile": "",
+      "requiredColumns": "",
+      "rows": "",
+      "andMore": "",
+      "importing": "",
+      "importButton": "",
+      "created": "",
+      "exportSuccess": "",
+      "export": "",
+      "presets": {
+        "label": "",
+        "none": "",
+        "saveCurrent": "",
+        "createFromCurrent": "",
+        "saveTitle": "",
+        "saveDescription": "",
+        "nameLabel": "",
+        "namePlaceholder": ""
+      }
     },
     "deals": {
       "title": "Deal-Pipeline",
@@ -5337,7 +5791,31 @@
       "winQuestion": "Deal als Gewonnen oder Verloren markieren?",
       "dealTitle": "Deal-Titel",
       "contact": "Kontakt",
-      "valueKzt": "Wert (KZT)"
+      "valueKzt": "Wert (KZT)",
+      "addComment": "",
+      "noComments": "",
+      "customFieldsBlock": "",
+      "noStages": "",
+      "created": "",
+      "dateFrom": "",
+      "dateTo": "",
+      "valueMin": "",
+      "valueMax": "",
+      "presets": {
+        "placeholder": "",
+        "none": "",
+        "saveCurrent": "",
+        "saveTitle": "",
+        "saveDescription": "",
+        "nameLabel": "",
+        "namePlaceholder": ""
+      },
+      "exportSuccess": "",
+      "export": "",
+      "newDealDescription": "",
+      "selectContact": "",
+      "nextStepPlaceholder": "",
+      "markAsWonOrLost": ""
     },
     "tasks": {
       "title": "Aufgaben",
@@ -5351,7 +5829,15 @@
       "assignee": "Zuständig",
       "unassigned": "Nicht zugewiesen",
       "contact": "Kontakt",
-      "deal": "Deal"
+      "deal": "Deal",
+      "overdue": "",
+      "mine": "",
+      "new": "",
+      "taskTitle": "",
+      "taskTitlePlaceholder": "",
+      "description": "",
+      "descriptionPlaceholder": "",
+      "dueDate": ""
     },
     "invoices": {
       "title": "Finanzen",
@@ -5391,7 +5877,11 @@
       "noItemsSpecified": "Keine Positionen angegeben",
       "payLink": "Zahlungslink",
       "markPaid": "Als bezahlt markieren",
-      "cancelPayment": "Zahlung stornieren"
+      "cancelPayment": "Zahlung stornieren",
+      "urlGenerated": "",
+      "generatePayLink": "",
+      "downloadPDF": "",
+      "pdfSuccess": ""
     },
     "settings": {
       "title": "Einstellungen",
@@ -5408,7 +5898,84 @@
       "leaveDesc": "Sie verlieren den Zugriff auf alle Daten in dieser Zone.",
       "confirmLeave": "Verlassen bestätigen",
       "removeMember": "Mitglied entfernen?",
-      "emailLabel": "E-Mail"
+      "emailLabel": "E-Mail",
+      "fields": {
+        "created": "",
+        "updated": "",
+        "deleted": "",
+        "typeText": "",
+        "typeNumber": "",
+        "typeDate": "",
+        "typeBoolean": "",
+        "title": "",
+        "description": "",
+        "add": "",
+        "empty": "",
+        "required": "",
+        "addTitle": "",
+        "editTitle": "",
+        "nameLabel": "",
+        "namePlaceholder": "",
+        "typeLabel": "",
+        "requiredLabel": "",
+        "deleteTitle": "",
+        "deleteWarning": ""
+      },
+      "dealFields": {
+        "created": "",
+        "updated": "",
+        "deleted": "",
+        "title": "",
+        "description": "",
+        "empty": "",
+        "addTitle": "",
+        "editTitle": "",
+        "deleteTitle": ""
+      },
+      "pipelines": {
+        "created": "",
+        "updated": "",
+        "lastOne": "",
+        "cannotDeleteDefault": "",
+        "confirmDelete": "",
+        "deleted": "",
+        "newPlaceholder": "",
+        "empty": "",
+        "title": "",
+        "desc": ""
+      },
+      "memberLimitReached": "",
+      "inviteSent": "",
+      "linkCopied": "",
+      "inviteRevoked": "",
+      "leftZone": "",
+      "memberRemoved": "",
+      "roleUpdated": "",
+      "saved": "",
+      "members": "",
+      "billing": "",
+      "pipelinesTab": "",
+      "fieldsTab": "",
+      "general": "",
+      "membersCount": "",
+      "invite": "",
+      "pendingInvites": "",
+      "expires": "",
+      "currentPlan": "",
+      "planDesc": "",
+      "plan": "",
+      "cycle": "",
+      "renewsAt": "",
+      "price": "",
+      "managePlan": "",
+      "dangerZone": "",
+      "ownerCannotLeave": "",
+      "role": "",
+      "leaveConfirmTitle": "",
+      "leaveConfirmDesc": "",
+      "removeMemberTitle": "",
+      "removeMemberDesc": "",
+      "confirmRemove": ""
     },
     "automations": {
       "title": "Automatisierungen",
@@ -5452,7 +6019,20 @@
         "change_stage": "Deal-Phase ändern",
         "notify_owner": "Eigentümer benachrichtigen",
         "create_deal": "Neuen Deal erstellen"
-      }
+      },
+      "created": "",
+      "createError": "",
+      "presets": {
+        "overdueTaskName": "",
+        "invoicePaidName": "",
+        "overdueTaskChip": "",
+        "invoicePaidChip": ""
+      },
+      "emptyTitle": "",
+      "emptyDesc": "",
+      "tryFirst": "",
+      "configParams": "",
+      "changeToStage": ""
     },
     "inbox": {
       "title": "Posteingang",
@@ -5469,6 +6049,396 @@
       "titlePlaceholder": "Betreff",
       "sendError": "Nachricht konnte nicht gesendet werden",
       "createError": "Konversation konnte nicht erstellt werden"
+    },
+    "documents": {
+      "generated": "",
+      "generateError": "",
+      "generateDocument": "",
+      "preview": "",
+      "variables": "",
+      "unreplacedWarning": "",
+      "availableVariables": "",
+      "customVariables": "",
+      "customVariablesHint": "",
+      "enterValue": "",
+      "allVariablesFilled": "",
+      "downloadPDF": "",
+      "title": "",
+      "subtitle": "",
+      "templates": "",
+      "newDocument": "",
+      "searchPlaceholder": "",
+      "empty": {
+        "title": "",
+        "description": ""
+      },
+      "createDocument": "",
+      "notFound": {
+        "title": "",
+        "description": ""
+      },
+      "resetFilters": "",
+      "actions": {
+        "generate": "",
+        "view": "",
+        "download": "",
+        "delete": ""
+      },
+      "confirmDelete": "",
+      "totalCount": "",
+      "filteredCount": ""
+    },
+    "analytics": {
+      "exportSuccess": "",
+      "exportError": "",
+      "title": "",
+      "subtitle": "",
+      "activeValue": "",
+      "dealsOpen": "",
+      "winRate": "",
+      "tasksDone": "",
+      "overdue": "",
+      "noOverdue": "",
+      "paidValue": "",
+      "pendingAmount": "",
+      "newContacts": "",
+      "totalContacts": "",
+      "plSummary": "",
+      "grossRevenue": "",
+      "paidInvoices": "",
+      "pendingRevenue": "",
+      "awaitingPayment": "",
+      "wonDealsValue": "",
+      "closedDeals": "",
+      "funnel": "",
+      "funnelDesc": "",
+      "deals": "",
+      "funnelEmpty": "",
+      "revenueTimeline": "",
+      "revenueTimelineDesc": "",
+      "revenue": "",
+      "noRevenue": "",
+      "conversionTrend": "",
+      "improving": "",
+      "declining": "",
+      "conversionTrendDesc": "",
+      "won": "",
+      "lost": "",
+      "teamPerformance": "",
+      "teamPerformanceDesc": "",
+      "member": "",
+      "tasks": "",
+      "done": "",
+      "avgClose": "",
+      "completed": "",
+      "total": "",
+      "taskMetrics": "",
+      "pending": "",
+      "completionRate": ""
+    },
+    "calendar": {
+      "title": "",
+      "subtitle": "",
+      "today": "",
+      "upcoming": "",
+      "todayBtn": "",
+      "day": "",
+      "week": "",
+      "month": "",
+      "bookingDetail": "",
+      "feedCopied": "",
+      "export": "",
+      "downloadICS": "",
+      "copyFeedUrl": "",
+      "addToCalendar": "",
+      "fromPage": ""
+    },
+    "error": {
+      "title": "",
+      "description": "",
+      "retry": ""
+    },
+    "events": {
+      "title": "",
+      "subtitle": "",
+      "totalEvents": "",
+      "published": "",
+      "totalRegistrations": "",
+      "revenue": "",
+      "draft": "",
+      "closed": "",
+      "empty": "",
+      "registered": "",
+      "maxCapacity": "",
+      "registrations": "",
+      "noRegistrations": ""
+    },
+    "plans": {
+      "monthly": "",
+      "yearly": ""
+    },
+    "invites": {
+      "accepted": "",
+      "invalid": "",
+      "invalidDesc": "",
+      "title": "",
+      "roleLabel": "",
+      "emailNotice": "",
+      "loginRequired": "",
+      "join": ""
     }
+  },
+  "activation": {
+    "title": "",
+    "progress": "",
+    "steps": {
+      "createPage": "",
+      "publish": "",
+      "firstVisitor": "",
+      "firstConversion": "",
+      "firstBooking": ""
+    },
+    "tips": {
+      "addBlock": "",
+      "publish": "",
+      "shareForVisitor": "",
+      "addForm": "",
+      "growTraffic": ""
+    },
+    "celebrationTitle": "",
+    "celebrationDesc": ""
+  },
+  "onboardingTour": {
+    "welcome": {
+      "title": "",
+      "desc": ""
+    },
+    "profile": {
+      "title": "",
+      "desc": ""
+    },
+    "addBlock": {
+      "title": "",
+      "desc": ""
+    },
+    "editBlock": {
+      "title": "",
+      "desc": ""
+    },
+    "share": {
+      "title": "",
+      "desc": ""
+    },
+    "complete": {
+      "title": "",
+      "desc": ""
+    },
+    "skip": "",
+    "back": "",
+    "next": "",
+    "start": ""
+  },
+  "home": {
+    "incoming": {
+      "title": "",
+      "empty": "",
+      "emptyHint": "",
+      "share": "",
+      "viewAll": "",
+      "lead": "",
+      "booking": ""
+    }
+  },
+  "operator": {
+    "today": {
+      "title": "",
+      "next": ""
+    },
+    "unanswered": {
+      "title": "",
+      "missed": ""
+    },
+    "followUp": {
+      "title": "",
+      "visitedYesterday": "",
+      "send": "",
+      "template": "",
+      "completedOn": "",
+      "sent": ""
+    },
+    "week": {
+      "leads": ""
+    },
+    "repeat": {
+      "label": "",
+      "badge": ""
+    },
+    "stale": {
+      "page": ""
+    },
+    "rebook": {
+      "title": "",
+      "daysSince": "",
+      "nudge": ""
+    }
+  },
+  "lifecycle": {
+    "trafficNoLeads": {
+      "title": "",
+      "hint": ""
+    },
+    "repeatCustomers": {
+      "title": "",
+      "hint": ""
+    },
+    "hasLeads": {
+      "title": "",
+      "hint": ""
+    }
+  },
+  "experiments": {
+    "confirmDelete": "",
+    "deleteSuccess": "",
+    "confirmWinner": "",
+    "winnerSet": "",
+    "empty": {
+      "title": "",
+      "desc": ""
+    },
+    "started": "",
+    "ended": "",
+    "actions": {
+      "start": "",
+      "stop": "",
+      "pickWinner": ""
+    },
+    "label": {
+      "original": "",
+      "variant": ""
+    },
+    "leading": "",
+    "insight": {
+      "title": "",
+      "desc": ""
+    },
+    "defaultName": "",
+    "error": {
+      "nameRequired": "",
+      "starting": ""
+    },
+    "success": {
+      "started": ""
+    },
+    "setup": {
+      "title": "",
+      "description": "",
+      "nameLabel": "",
+      "namePlaceholder": "",
+      "variants": "",
+      "variantsCount": "",
+      "variantA": "",
+      "variantB": "",
+      "hideEditor": "",
+      "configure": "",
+      "tipTitle": "",
+      "tipDesc": "",
+      "start": "",
+      "editFields": ""
+    }
+  },
+  "friction": {
+    "try": ""
+  },
+  "commands": {
+    "searchPlaceholder": "",
+    "noResults": ""
+  },
+  "billing": {
+    "types": {
+      "subscription": "",
+      "zoneUpgrade": "",
+      "payment": "",
+      "refund": ""
+    },
+    "history": {
+      "title": "",
+      "empty": "",
+      "emptyDesc": ""
+    }
+  },
+  "kaspi": {
+    "generateQR": "",
+    "invalidAmount": "",
+    "paymentSimulated": "",
+    "linkCopied": "",
+    "title": "",
+    "description": "",
+    "amount": "",
+    "comment": "",
+    "commentPlaceholder": "",
+    "scanHint": "",
+    "copyLink": "",
+    "downloadQR": "",
+    "simulateMock": "",
+    "disclaimer": ""
+  },
+  "zone": {
+    "notifications": {
+      "title": "",
+      "markAllRead": "",
+      "empty": ""
+    },
+    "products": {
+      "nameRequired": "",
+      "updated": "",
+      "created": "",
+      "confirmDelete": "",
+      "deleted": "",
+      "title": "",
+      "add": "",
+      "empty": "",
+      "emptyHint": "",
+      "inactive": "",
+      "per": "",
+      "edit": "",
+      "create": "",
+      "name": "",
+      "namePlaceholder": "",
+      "description": "",
+      "price": "",
+      "currency": "",
+      "unit": "",
+      "active": ""
+    }
+  },
+  "forMasters": {
+    "badge": "",
+    "headline": "",
+    "subheadline": "",
+    "cta": "",
+    "ctaSecondary": "",
+    "val1Title": "",
+    "val1Desc": "",
+    "val2Title": "",
+    "val2Desc": "",
+    "val3Title": "",
+    "val3Desc": "",
+    "examplesTitle": "",
+    "freeTitle": "",
+    "freeDesc": "",
+    "finalCta": "",
+    "trustLine": ""
+  },
+  "from": {
+    "seoTitle": "",
+    "seoDesc": "",
+    "madeWith": "",
+    "headline": "",
+    "subheadline": "",
+    "val1": "",
+    "val2": "",
+    "val3": "",
+    "cta": "",
+    "free": ""
   }
 }

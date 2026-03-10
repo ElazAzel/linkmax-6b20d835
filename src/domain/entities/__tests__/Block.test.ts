@@ -34,6 +34,7 @@ describe('Block Entity', () => {
       expect(getBlockCategory('link')).toBe('basic');
       expect(getBlockCategory('button')).toBe('basic');
       expect(getBlockCategory('text')).toBe('basic');
+      expect(getBlockCategory('messenger')).toBe('basic');
     });
 
     it('should return correct category for media blocks', () => {
@@ -44,7 +45,6 @@ describe('Block Entity', () => {
 
     it('should return correct category for interactive blocks', () => {
       expect(getBlockCategory('form')).toBe('interactive');
-      expect(getBlockCategory('messenger')).toBe('interactive');
       expect(getBlockCategory('map')).toBe('interactive');
     });
 
