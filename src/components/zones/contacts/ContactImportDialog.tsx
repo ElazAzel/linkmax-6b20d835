@@ -11,6 +11,7 @@ import Upload from 'lucide-react/dist/esm/icons/upload';
 import FileSpreadsheet from 'lucide-react/dist/esm/icons/file-spreadsheet';
 import { toast } from 'sonner';
 import type { ZoneContact } from '@/types/zones';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ContactImportDialogProps {
   open: boolean;
@@ -32,6 +33,7 @@ export const ContactImportDialog = memo(function ContactImportDialog({
   onImport,
 }: ContactImportDialogProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const fileRef = useRef<HTMLInputElement>(null);
   const [rows, setRows] = useState<ParsedRow[]>([]);
   const [importing, setImporting] = useState(false);
@@ -139,7 +141,7 @@ export const ContactImportDialog = memo(function ContactImportDialog({
       setFileName('');
       onOpenChange(false);
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     } finally {
       setImporting(false);
     }

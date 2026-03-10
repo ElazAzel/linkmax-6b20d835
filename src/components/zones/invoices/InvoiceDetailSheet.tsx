@@ -23,6 +23,7 @@ import { generateRoboKassaUrl } from '@/services/zones/robokassa';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useState } from 'react';
+import { useAppError } from '@/hooks/useAppError';
 
 // Status config moved inside component to use translation hook safely
 
@@ -46,6 +47,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
     deals,
 }: InvoiceDetailSheetProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const { items, loading: itemsLoading } = useZoneInvoiceItems(invoice?.zone_id || null, invoice?.id || null);
     const [generatingUrl, setGeneratingUrl] = useState(false);
 
@@ -80,7 +82,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
             // For now, simpler: we just tell useZoneInvoices to refetch if needed, but here we just update DB.
         } catch (err: any) {
             console.error(err);
-            toast.error(err.message || 'Failed to generate link');
+            handleError(err, 'Failed to generate link');
         } finally {
             setGeneratingUrl(false);
         }

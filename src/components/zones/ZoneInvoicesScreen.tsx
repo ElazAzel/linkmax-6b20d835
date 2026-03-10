@@ -28,6 +28,7 @@ import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import FileDown from 'lucide-react/dist/esm/icons/file-down';
 import type { ZoneInvoice, ZoneInvoiceItem } from '@/types/zones';
+import { useAppError } from '@/hooks/useAppError';
 
 // Status config moved inside component to use translation hook safely
 
@@ -44,6 +45,7 @@ interface NewInvoiceItem {
 
 export function ZoneInvoicesScreen({ zoneId }: Props) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const { invoices, loading, createWithItems, updateStatus } = useZoneInvoices(zoneId);
   const { contacts } = useZoneContacts(zoneId);
   const { deals } = useZoneDeals(zoneId);
@@ -118,9 +120,9 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
       setShowCreate(false);
       resetForm();
       toast.success(t('zones.invoices.created', 'Инвойс успешно создан'));
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error(t('zones.invoices.createError', 'Ошибка при создании инвойса'));
+      handleError(err, t('zones.invoices.createError', 'Ошибка при создании инвойса'));
     }
   };
 
@@ -264,7 +266,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                           });
                           toast.success(t('zones.invoices.pdfSuccess', 'PDF saved'));
                         } catch (err: any) {
-                          toast.error(err.message || 'PDF export failed');
+                          handleError(err, 'PDF export failed');
                         }
                       }}
                     >

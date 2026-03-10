@@ -15,6 +15,7 @@ import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { useAppError } from '@/hooks/useAppError';
 
 interface InviteData {
     id: string;
@@ -40,6 +41,7 @@ export default function AcceptInvite() {
     const { token } = useParams<{ token: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
@@ -67,7 +69,7 @@ export default function AcceptInvite() {
             navigate('/dashboard/zone-dashboard');
         },
         onError: (err: any) => {
-            toast.error(err.message || t('common.error', 'Failed to accept invite'));
+            handleError(err, t('common.error', 'Failed to accept invite'));
         }
     });
 

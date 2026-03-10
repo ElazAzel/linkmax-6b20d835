@@ -24,6 +24,7 @@ import type { ZoneContact } from '@/types/zones';
 import { generateId } from '@/lib/utils/generateId';
 import { ContactDetailSheet } from './contacts/ContactDetailSheet';
 import { ContactImportDialog } from './contacts/ContactImportDialog';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneContactsScreenProps {
   zoneId: string;
@@ -38,6 +39,7 @@ interface ContactsFilterPreset {
 
 export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: ZoneContactsScreenProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const { contacts, loading, createContact, updateContact, deleteContact, bulkImport } = useZoneContacts(zoneId);
   const { fields } = useZoneContactFields(zoneId);
   const [createOpen, setCreateOpen] = useState(false);
@@ -154,7 +156,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
       setNewContact({ name: '', phone: '', email: '', telegram_username: '', tags: '', company: '', position: '', custom_fields: {} });
       toast.success(t('zones.contacts.created', 'Contact created'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -175,7 +177,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
               await exportContactsToExcel({ contacts: filtered });
               toast.success(t('zones.contacts.exportSuccess', 'Contacts exported'));
             } catch (err: any) {
-              toast.error(err.message || 'Export failed');
+              handleError(err, 'Export failed');
             }
           }}>
             <Download className="h-4 w-4 mr-1" />

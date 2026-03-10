@@ -18,6 +18,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import { toast } from 'sonner';
 import type { ZoneDealFieldType, ZoneDealField } from '@/types/zones';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneDealFieldsSettingsProps {
     zoneId: string;
@@ -25,6 +26,7 @@ interface ZoneDealFieldsSettingsProps {
 
 export function ZoneDealFieldsSettings({ zoneId }: ZoneDealFieldsSettingsProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const { fields, loading, createField, updateField, deleteField } = useZoneDealFields(zoneId);
     const [createOpen, setCreateOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -65,7 +67,7 @@ export function ZoneDealFieldsSettings({ zoneId }: ZoneDealFieldsSettingsProps) 
             setCreateOpen(false);
             toast.success(t('zones.settings.dealFields.created', 'Deal field created successfully'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 
@@ -80,7 +82,7 @@ export function ZoneDealFieldsSettings({ zoneId }: ZoneDealFieldsSettingsProps) 
             setEditOpen(false);
             toast.success(t('zones.settings.dealFields.updated', 'Deal field updated successfully'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 
@@ -91,7 +93,7 @@ export function ZoneDealFieldsSettings({ zoneId }: ZoneDealFieldsSettingsProps) 
             setDeleteOpen(false);
             toast.success(t('zones.settings.dealFields.deleted', 'Deal field deleted successfully'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 

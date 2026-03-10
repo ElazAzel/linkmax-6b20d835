@@ -26,6 +26,7 @@ import { useZoneDealFields } from '@/hooks/zones/useZoneDealFields';
 import { DealKanbanColumn } from './deals/DealKanbanColumn';
 import { DealCard } from './deals/DealCard';
 import { DealDetailSheet } from './deals/DealDetailSheet';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneDealsScreenProps {
   zoneId: string;
@@ -46,6 +47,7 @@ interface DealsFilterPreset {
 
 export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDealsScreenProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const { members } = useZoneContext();
   const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity } = useZoneDeals(zoneId);
   const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
@@ -221,7 +223,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
         await addActivity(dealId, 'stage_change', `Moved to ${stage.name}`);
       }
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   }, [currentDeals, currentStages, moveDealToStage, addActivity]);
 
@@ -234,7 +236,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       await addActivity(deal.id, 'status_change', 'Deal marked as Won');
       toast.success(t('zones.deals.markedWon', 'Deal marked as won!'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
     setPendingWonLost(null);
   }, [pendingWonLost, moveDealToStage, updateDeal, addActivity, t]);
@@ -248,7 +250,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       await addActivity(deal.id, 'status_change', `Deal lost: ${pendingLostReason.trim() || 'No reason'}`);
       toast.info(t('zones.deals.markedLost', 'Deal marked as lost'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
     setPendingWonLost(null);
     setPendingLostReason('');
@@ -281,7 +283,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
       setNewDeal({ title: '', contact_id: '', value_amount: 0, next_step: '', custom_fields: {} });
       toast.success(t('zones.deals.created', 'Deal created'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -469,7 +471,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                 await exportDealsToExcel({ deals });
                 toast.success(t('zones.deals.exportSuccess', 'Deals exported'));
               } catch (err: any) {
-                toast.error(err.message || 'Export failed');
+                handleError(err, 'Export failed');
               }
             }}>
               <Download className="h-4 w-4 mr-1" />

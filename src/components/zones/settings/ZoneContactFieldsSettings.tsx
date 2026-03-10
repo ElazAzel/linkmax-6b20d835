@@ -18,6 +18,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import GripVertical from 'lucide-react/dist/esm/icons/grip-vertical';
 import { toast } from 'sonner';
 import type { ZoneContactFieldType, ZoneContactField } from '@/types/zones';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneContactFieldsSettingsProps {
     zoneId: string;
@@ -25,6 +26,7 @@ interface ZoneContactFieldsSettingsProps {
 
 export function ZoneContactFieldsSettings({ zoneId }: ZoneContactFieldsSettingsProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const { fields, loading, createField, updateField, deleteField, reorderFields } = useZoneContactFields(zoneId);
     const [createOpen, setCreateOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -65,7 +67,7 @@ export function ZoneContactFieldsSettings({ zoneId }: ZoneContactFieldsSettingsP
             setCreateOpen(false);
             toast.success(t('zones.settings.fields.created', 'Field created successfully'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 
@@ -80,7 +82,7 @@ export function ZoneContactFieldsSettings({ zoneId }: ZoneContactFieldsSettingsP
             setEditOpen(false);
             toast.success(t('zones.settings.fields.updated', 'Field updated successfully'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 
@@ -91,7 +93,7 @@ export function ZoneContactFieldsSettings({ zoneId }: ZoneContactFieldsSettingsP
             setDeleteOpen(false);
             toast.success(t('zones.settings.fields.deleted', 'Field deleted successfully'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 

@@ -19,6 +19,7 @@ import Split from 'lucide-react/dist/esm/icons/split';
 import { createExperiment } from '@/services/experiments';
 import { toast } from 'sonner';
 import type { Block } from '@/types/page';
+import { useAppError } from '@/hooks/useAppError';
 
 interface BlockExperimentDialogProps {
     open: boolean;
@@ -36,6 +37,7 @@ export function BlockExperimentDialog({
     onCreated,
 }: BlockExperimentDialogProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const [name, setName] = useState(`${t('editor.experiment', 'Эксперимент')}: ${block.type}`);
     const [variantBLabel, setVariantBLabel] = useState('Variant B');
     const [trafficA, setTrafficA] = useState(50);
@@ -70,7 +72,7 @@ export function BlockExperimentDialog({
             onCreated();
             onOpenChange(false);
         } catch (err: any) {
-            toast.error(err.message || 'Failed to create experiment');
+            handleError(err, 'Failed to create experiment');
         } finally {
             setSaving(false);
         }

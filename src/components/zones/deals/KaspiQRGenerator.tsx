@@ -20,6 +20,7 @@ import Smartphone from 'lucide-react/dist/esm/icons/smartphone';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import Download from 'lucide-react/dist/esm/icons/download';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 
 interface KaspiQRGeneratorProps {
   open: boolean;
@@ -39,6 +40,7 @@ export const KaspiQRGenerator = memo(function KaspiQRGenerator({
   ownerId,
 }: KaspiQRGeneratorProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [amount, setAmount] = useState(defaultAmount);
   const [comment, setComment] = useState(dealTitle);
   const [isSimulating, setIsSimulating] = useState(false);
@@ -67,7 +69,7 @@ export const KaspiQRGenerator = memo(function KaspiQRGenerator({
       onOpenChange(false);
     } catch (err: any) {
       console.error('Error simulating payment:', err);
-      toast.error(err.message || 'Failed to simulate payment');
+      handleError(err, 'Failed to simulate payment');
     } finally {
       setIsSimulating(false);
     }

@@ -33,6 +33,7 @@ import { ZoneContactFieldsSettings } from './settings/ZoneContactFieldsSettings'
 import { ZoneDealFieldsSettings } from './settings/ZoneDealFieldsSettings';
 import Layers from 'lucide-react/dist/esm/icons/layers';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneSettingsScreenProps {
   zone: Zone;
@@ -49,6 +50,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
 }: ZoneSettingsScreenProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { handleError } = useAppError();
   const navigate = useNavigate();
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
@@ -101,7 +103,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       setInviteEmail('');
       fetchInvites();
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     } finally {
       setInviting(false);
     }
@@ -120,7 +122,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       toast.success(t('zones.settings.inviteRevoked', 'Invite revoked'));
       fetchInvites();
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -135,7 +137,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       await onRefetch();
       navigate('/dashboard');
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     } finally {
       setLeaving(false);
       setLeaveOpen(false);
@@ -156,7 +158,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       toast.success(t('zones.settings.memberRemoved', 'Member removed'));
       await onRefetch();
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     } finally {
       setRemoving(false);
       setRemoveMember(null);
@@ -176,7 +178,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       toast.success(t('zones.settings.roleUpdated', 'Role updated'));
       await onRefetch();
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -192,7 +194,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
       toast.success(t('zones.settings.saved', 'Settings saved'));
       await onRefetch();
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     } finally {
       setSaving(false);
     }

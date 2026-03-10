@@ -45,6 +45,7 @@ import Download from 'lucide-react/dist/esm/icons/download';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useAuth } from '@/hooks/user/useAuth';
+import { useAppError } from '@/hooks/useAppError';
 
 interface DealDetailSheetProps {
   deal: ZoneDeal | null;
@@ -67,6 +68,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
 }: DealDetailSheetProps) {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [newActivity, setNewActivity] = useState('');
   const [lostReason, setLostReason] = useState('');
   const [showLostDialog, setShowLostDialog] = useState(false);
@@ -115,7 +117,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
       await onAddActivity(deal.id, 'note', newActivity.trim());
       setNewActivity('');
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -126,7 +128,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
       onOpenChange(false);
       toast.success(t('zones.deals.markedWon', 'Deal marked as won!'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -139,7 +141,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
       onOpenChange(false);
       toast.info(t('zones.deals.markedLost', 'Deal marked as lost'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -150,7 +152,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
       await onMoveDealToStage(deal.id, nextStage.id);
       await onAddActivity(deal.id, 'stage_change', `Moved to ${nextStage.name}`);
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -171,7 +173,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
       setSelectedProductId('');
       setNewProdQty(1);
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 

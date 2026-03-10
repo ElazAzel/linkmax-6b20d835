@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { logger } from '@/lib/utils/logger';
+import { useAppError } from '@/hooks/useAppError';
 import {
   Collaboration,
   Team,
@@ -27,6 +28,7 @@ import {
 
 export function useCollaboration(userId: string | undefined) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [collaborations, setCollaborations] = useState<Collaboration[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [shoutouts, setShoutouts] = useState<Shoutout[]>([]);
@@ -67,7 +69,7 @@ export function useCollaboration(userId: string | undefined) {
       toast.success(t('toasts.collaboration.requestSent'));
       await loadData();
     } else {
-      toast.error(result.error || t('toasts.collaboration.requestError'));
+      handleError(result.error, t('toasts.collaboration.requestError'));
     }
     return result.success;
   }, [loadData, t]);
@@ -78,7 +80,7 @@ export function useCollaboration(userId: string | undefined) {
       toast.success(accept ? t('toasts.collaboration.accepted') : t('toasts.collaboration.rejected'));
       await loadData();
     } else {
-      toast.error(result.error || t('toasts.collaboration.error'));
+      handleError(result.error, t('toasts.collaboration.error'));
     }
     return result.success;
   }, [loadData, t]);
@@ -99,7 +101,7 @@ export function useCollaboration(userId: string | undefined) {
       toast.success(t('toasts.team.created'));
       await loadData();
     } else {
-      toast.error(result.error || t('toasts.team.createError'));
+      handleError(result.error, t('toasts.team.createError'));
     }
     return result;
   }, [loadData, t]);
@@ -109,7 +111,7 @@ export function useCollaboration(userId: string | undefined) {
     if (result.success) {
       toast.success(t('toasts.team.memberInvited'));
     } else {
-      toast.error(result.error || t('toasts.team.inviteError'));
+      handleError(result.error, t('toasts.team.inviteError'));
     }
     return result.success;
   }, [t]);
@@ -134,7 +136,12 @@ export function useCollaboration(userId: string | undefined) {
         'Already a member of this team': t('toasts.team.alreadyMember', 'Вы уже участник этой команды'),
         'Not authenticated': t('toasts.team.notAuth', 'Необходима авторизация'),
       };
-      toast.error(errorMessages[result.error || ''] || result.error || t('toasts.team.joinError', 'Ошибка при присоединении'));
+      const errorMessage = errorMessages[result.error || ''];
+      if (errorMessage) {
+        toast.error(errorMessage);
+      } else {
+        handleError(result.error, t('toasts.team.joinError', 'Ошибка при присоединении'));
+      }
     }
     return result;
   }, [loadData, t]);
@@ -159,7 +166,7 @@ export function useCollaboration(userId: string | undefined) {
       toast.success(t('toasts.shoutout.added'));
       await loadData();
     } else {
-      toast.error(result.error || t('toasts.shoutout.error'));
+      handleError(result.error, t('toasts.shoutout.error'));
     }
     return result.success;
   }, [loadData, t]);

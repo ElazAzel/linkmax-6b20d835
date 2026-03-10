@@ -22,6 +22,7 @@ import Check from 'lucide-react/dist/esm/icons/check';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import type { Zone } from '@/types/zones';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZoneSwitcherProps {
   zones: Zone[];
@@ -39,6 +40,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
   collapsed = false,
 }: ZoneSwitcherProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [createOpen, setCreateOpen] = useState(false);
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
@@ -55,7 +57,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
       setSlug('');
       toast.success(t('zones.created', 'Zone created!'));
     } catch (err: any) {
-      toast.error(err.message || t('zones.createError', 'Failed to create zone'));
+      handleError(err, t('zones.createError', 'Failed to create zone'));
     } finally {
       setCreating(false);
     }

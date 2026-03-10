@@ -8,6 +8,7 @@ import { Check, Loader2 } from 'lucide-react';
 import { ZONE_PLANS, Zone } from '@/types/zones';
 import { PaymentService } from '@/services/payment-service';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZonePlanSelectorProps {
     zone: Zone;
@@ -16,6 +17,7 @@ interface ZonePlanSelectorProps {
 
 export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const [cycle, setCycle] = useState<'monthly' | 'yearly'>('monthly');
     const [loading, setLoading] = useState<string | null>(null);
 
@@ -36,7 +38,7 @@ export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
 
             onRefetch?.();
         } catch (err: any) {
-            toast.error(err.message || 'Payment initialization failed');
+            handleError(err, 'Payment initialization failed');
         } finally {
             setLoading(null);
         }

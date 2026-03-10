@@ -32,6 +32,7 @@ import { useZoneTasks } from '@/hooks/zones/useZoneTasks';
 import { useZoneContacts, useZoneContactNotes } from '@/hooks/zones/useZoneContacts';
 import { useZoneContactFields } from '@/hooks/zones/useZoneContactFields';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ContactDetailSheetProps {
   contact: ZoneContact | null;
@@ -51,6 +52,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
   onDeleteContact,
 }: ContactDetailSheetProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState({
     name: '',
@@ -119,7 +121,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
       setEditing(false);
       toast.success(t('zones.contacts.updated', 'Contact updated'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -129,7 +131,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
       await addNote('note', newNote.trim());
       setNewNote('');
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -141,7 +143,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
       onOpenChange(false);
       toast.success(t('zones.contacts.deleted', 'Contact deleted'));
     } catch (err: any) {
-      toast.error(err.message);
+      handleError(err);
     }
   };
 
@@ -272,11 +274,11 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <div className="absolute left-0 top-1 w-[24px] h-[24px] rounded-full bg-background border-2 border-primary flex items-center justify-center z-10">
                             <Badge className="p-0 bg-primary h-1.5 w-1.5 rounded-full" />
                           </div>
-                            <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
-                              <div className="flex justify-between items-start">
-                                <span className="text-xs uppercase font-bold text-muted-foreground">{note.type}</span>
-                                <span className="text-xs text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
-                              </div>
+                          <div className="p-3 rounded-lg bg-muted/40 border space-y-1">
+                            <div className="flex justify-between items-start">
+                              <span className="text-xs uppercase font-bold text-muted-foreground">{note.type}</span>
+                              <span className="text-xs text-muted-foreground">{new Date(note.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                            </div>
                             <p className="text-sm whitespace-pre-wrap">{note.content}</p>
                           </div>
                         </div>

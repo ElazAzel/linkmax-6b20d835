@@ -12,6 +12,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Check from 'lucide-react/dist/esm/icons/check';
 import X from 'lucide-react/dist/esm/icons/x';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import { useAppError } from '@/hooks/useAppError';
 
 interface ZonePipelineSettingsProps {
     zoneId: string;
@@ -19,6 +20,7 @@ interface ZonePipelineSettingsProps {
 
 export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId }: ZonePipelineSettingsProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const { pipelines, createPipeline, updatePipeline, deletePipeline, refetchPipelines } = useZoneDeals(zoneId);
     const [newPipelineName, setNewPipelineName] = useState('');
     const [adding, setAdding] = useState(false);
@@ -33,7 +35,7 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
             setNewPipelineName('');
             toast.success(t('zones.settings.pipelines.created', 'Pipeline created'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         } finally {
             setAdding(false);
         }
@@ -53,7 +55,7 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
             setEditingId(null);
             toast.success(t('zones.settings.pipelines.updated', 'Pipeline updated'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 
@@ -72,7 +74,7 @@ export const ZonePipelineSettings = memo(function ZonePipelineSettings({ zoneId 
             await deletePipeline(id);
             toast.success(t('zones.settings.pipelines.deleted', 'Pipeline deleted'));
         } catch (err: any) {
-            toast.error(err.message);
+            handleError(err);
         }
     };
 
