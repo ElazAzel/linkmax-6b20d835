@@ -419,7 +419,9 @@ export const EditorScreen = memo(function EditorScreen({
           onEditBlock(pageData.blocks.find(b => b.id === blockId) || pageData.blocks[0]);
         }}
         onBlockDuplicate={onDuplicateBlock}
-        onBlockDelete={onDeleteBlock}
+        onBlockDelete={handleDeleteBlockWithFriction}
+        onBlockMoveUp={handleBlockMoveUp}
+        onBlockMoveDown={handleBlockMoveDown}
         sectionMeta={sectionMeta}
         collapsedSections={collapsedSections}
         onToggleSectionCollapse={toggleSectionCollapse}
