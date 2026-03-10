@@ -29,6 +29,7 @@ import { fintechService } from '@/services/fintech';
 import { getCurrencySymbol } from '@/components/form-fields/CurrencySelect';
 import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
+import { useTimezone } from '@/hooks/useTimezone';
 import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { ru, kk } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
@@ -74,6 +75,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
   pageId
 }: BookingBlockProps) {
   const { t, i18n } = useTranslation();
+  const { userTimezone } = useTimezone();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [slots, setSlots] = useState<TimeSlot[]>([]);
@@ -523,7 +525,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
             <Clock className="h-3 w-3" />
             <span>{getWorkingHours()}</span>
           </div>
-          {/* Price badge visible upfront */}
           {block.requirePrepayment && block.prepaymentAmount && block.prepaymentAmount > 0 && (
             <div className="flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-500/10 w-fit px-2.5 py-1 rounded-lg border border-amber-500/20">
               <Wallet className="h-3 w-3" />
@@ -531,6 +532,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
                 amount: block.prepaymentAmount,
                 currency: getCurrencySymbol(block.prepaymentCurrency || 'KZT')
               })}</span>
+            </div>
+          )}
+          {block.timezone && (
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-tighter font-bold text-muted-foreground bg-muted/20 w-fit px-2 py-0.5 rounded-full border border-border/50">
+              {block.timezone} {block.timezone !== userTimezone && t('booking.timezoneHint', '(Местное время)')}
             </div>
           )}
         </div>
@@ -872,6 +878,6 @@ export const BookingBlock = memo(function BookingBlockComponent({
           </form>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 });

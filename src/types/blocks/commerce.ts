@@ -115,6 +115,7 @@ export interface BookingBlock {
     weeklyMotivationEnabled?: boolean;
     // Google Calendar Sync
     gcalSyncEnabled?: boolean;
+    timezone?: string; // e.g., 'Asia/Almaty'
     buttonText?: string | I18nText | MultilingualString;
     // isPremium is now managed by block-manifest.ts
     schedule?: BlockSchedule;
