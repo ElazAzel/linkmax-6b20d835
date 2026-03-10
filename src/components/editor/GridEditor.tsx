@@ -43,6 +43,8 @@ import { copyBlock } from '@/lib/editor/clipboard-engine';
 import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
+import { BlockContextToolbar } from './BlockContextToolbar';
+import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
