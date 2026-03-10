@@ -254,7 +254,7 @@ export const StructureView = memo(function StructureView({
           {/* Review mode */}
           {onSetReviewMode && reviewMode !== 'normal' && (
             <div className="flex items-center gap-2 px-1">
-              <Badge variant="secondary" className="text-[10px]">
+              <Badge variant="secondary" className="text-xs">
                 {t('structure.reviewMode', 'Режим проверки')}
               </Badge>
               <button
@@ -323,7 +323,7 @@ export const StructureView = memo(function StructureView({
                     <span className="text-xs font-bold text-foreground flex-1 truncate">
                       {label}
                     </span>
-                    <Badge variant="outline" className="text-[9px]">
+                    <Badge variant="outline" className="text-xs">
                       {section.blockIds.length}
                     </Badge>
                     <DropdownMenu>
@@ -504,7 +504,7 @@ function BlockRow({
         className="flex-1 text-left min-w-0"
       >
         <div className="font-semibold text-sm truncate">{typeof title === 'string' ? title : String(title || '')}</div>
-        <div className="text-[10px] text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
           {t(`blocks.${block.type}`, block.type)}
         </div>
       </button>

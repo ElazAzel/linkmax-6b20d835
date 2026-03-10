@@ -173,7 +173,7 @@ export const BillingHistorySheet = memo(function BillingHistorySheet({
                         <span>
                           {format(new Date(record.created_at), 'd MMM yyyy, HH:mm', { locale })}
                         </span>
-                        <Badge variant={getStatusVariant(record.status)} className="text-[10px]">
+                        <Badge variant={getStatusVariant(record.status)} className="text-xs">
                           {t(`billing.status.${record.status}`, record.status)}
                         </Badge>
                       </div>

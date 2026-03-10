@@ -475,14 +475,14 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     <div className="flex gap-2 items-start text-sm">
                       <Tag className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                       <div className="space-y-0.5">
-                        <p className="text-[10px] text-muted-foreground leading-none">{t('zones.deals.value', 'Value')}</p>
+                        <p className="text-xs text-muted-foreground leading-none">{t('zones.deals.value', 'Value')}</p>
                         <p className="font-bold">{deal.value_amount.toLocaleString()} {deal.currency}</p>
                       </div>
                     </div>
                     <div className="flex gap-2 items-start text-sm">
                       <Clock className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                       <div className="space-y-0.5">
-                        <p className="text-[10px] text-muted-foreground leading-none">{t('zones.deals.nextStep', 'Next step')}</p>
+                        <p className="text-xs text-muted-foreground leading-none">{t('zones.deals.nextStep', 'Next step')}</p>
                         <p className={cn("font-medium", isOverdue && "text-destructive")}>{deal.next_step || '—'}</p>
                       </div>
                     </div>
@@ -553,7 +553,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                           </div>
                           <div>
                             <p className="text-xs font-bold leading-none">{deal.contact.name}</p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">{t('zones.deals.linkedContact', 'Linked Contact')}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{t('zones.deals.linkedContact', 'Linked Contact')}</p>
                           </div>
                         </div>
                         <div className="pt-2 flex flex-col gap-2">
@@ -562,7 +562,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="flex-1 h-8 gap-1.5 text-[10px]"
+                                className="flex-1 h-8 gap-1.5 text-xs"
                                 onClick={() => window.open(`tel:${deal.contact.phone}`, '_self')}
                               >
                                 <Phone className="h-3 w-3" />
@@ -573,7 +573,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="flex-1 h-8 gap-1.5 text-[10px]"
+                                className="flex-1 h-8 gap-1.5 text-xs"
                                 onClick={() => window.open(`mailto:${deal.contact.email}`, '_blank')}
                               >
                                 <Mail className="h-3 w-3" />
@@ -585,7 +585,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                             <Button
                               variant="outline"
                               size="sm"
-                              className="w-full h-8 gap-1.5 text-[10px] text-blue-500 border-blue-500/20 hover:bg-blue-500/10 dark:bg-blue-500/5"
+                              className="w-full h-8 gap-1.5 text-xs text-blue-500 border-blue-500/20 hover:bg-blue-500/10 dark:bg-blue-500/5"
                               onClick={() => window.open(`https://t.me/${deal.contact.telegram_username}`, '_blank')}
                             >
                               <Send className="h-3 w-3" />
@@ -645,7 +645,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
 
                 {deal.lost_reason && (
                   <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                    <p className="text-[10px] text-destructive font-bold uppercase mb-1">{t('zones.deals.lostReason', 'Lost Reason')}</p>
+                    <p className="text-xs text-destructive font-bold uppercase mb-1">{t('zones.deals.lostReason', 'Lost Reason')}</p>
                     <p className="text-sm">{deal.lost_reason}</p>
                   </div>
                 )}

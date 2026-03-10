@@ -37,7 +37,7 @@ export const ZoneNotificationBell = memo(function ZoneNotificationBell({ zoneId 
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
             <Badge
-              className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] px-1 text-[9px] font-bold bg-destructive text-destructive-foreground border-0"
+              className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] px-1 text-xs font-bold bg-destructive text-destructive-foreground border-0"
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </Badge>
@@ -51,7 +51,7 @@ export const ZoneNotificationBell = memo(function ZoneNotificationBell({ zoneId 
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 text-[10px] gap-1 text-muted-foreground"
+              className="h-6 text-xs gap-1 text-muted-foreground"
               onClick={() => markAllRead()}
             >
               <CheckCheck className="h-3 w-3" />
@@ -85,8 +85,8 @@ export const ZoneNotificationBell = memo(function ZoneNotificationBell({ zoneId 
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className={cn("text-xs truncate", !n.is_read ? "font-bold" : "font-medium")}>{n.title}</p>
-                      {n.body && <p className="text-[10px] text-muted-foreground truncate">{n.body}</p>}
-                      <p className="text-[9px] text-muted-foreground mt-0.5">
+                      {n.body && <p className="text-xs text-muted-foreground truncate">{n.body}</p>}
+                      <p className="text-xs text-muted-foreground mt-0.5">
                         {formatRelativeTime(n.created_at, 'ru')}
                       </p>
                     </div>

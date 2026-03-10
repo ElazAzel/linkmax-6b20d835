@@ -80,7 +80,7 @@ export function AchievementNotification({ achievement, onDismiss }: AchievementN
               <Trophy className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-[10px] font-medium opacity-80 uppercase tracking-wide">
+              <div className="text-xs font-medium opacity-80 uppercase tracking-wide">
                 {t(`achievements.rarity.${achievement.rarity}`)}
               </div>
               <div className="text-sm font-bold">{t('achievements.newAchievement', 'Новое достижение!')}</div>

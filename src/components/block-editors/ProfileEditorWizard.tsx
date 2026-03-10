@@ -361,7 +361,7 @@ export const ProfileEditorWizard = memo(function ProfileEditorWizard({
                 size.value === 'large' && 'h-10 w-10',
                 size.value === 'xlarge' && 'h-12 w-12'
               )} />
-              <span className="text-[10px] font-medium">{t(size.label)}</span>
+              <span className="text-xs font-medium">{t(size.label)}</span>
             </button>
           ))}
         </div>

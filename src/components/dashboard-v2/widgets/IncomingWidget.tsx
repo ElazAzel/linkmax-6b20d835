@@ -182,7 +182,7 @@ export const IncomingWidget = memo(function IncomingWidget({
                 <span>{booking.slot_date} · {booking.slot_time}</span>
               </div>
             </div>
-            <Badge className="text-[10px] font-bold h-5 px-1.5 bg-amber-500 text-white border-0 shrink-0">
+            <Badge className="text-xs font-bold h-5 px-1.5 bg-amber-500 text-white border-0 shrink-0">
               {t('crm.bookingStatus.pending', 'Ожидает')}
             </Badge>
           </button>

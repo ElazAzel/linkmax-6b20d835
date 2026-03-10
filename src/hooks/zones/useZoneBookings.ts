@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { toZonedTime, formatInTimeZone } from 'date-fns-tz';
 
 export interface ZoneBooking {
   id: string;
@@ -16,9 +17,12 @@ export interface ZoneBooking {
   status: string;
   created_at: string;
   updated_at: string;
+  timezone?: string;
   // joined
   page_title?: string;
   page_slug?: string;
+  viewer_formatted_date?: string;
+  viewer_formatted_time?: string;
 }
 
 export const zoneBookingsKeys = {
@@ -47,11 +51,32 @@ async function fetchZoneBookings(zoneId: string): Promise<ZoneBooking[]> {
 
   if (error) throw error;
 
-  return (bookings || []).map(b => ({
-    ...b,
-    page_title: pageMap.get(b.page_id)?.title || '',
-    page_slug: pageMap.get(b.page_id)?.slug || '',
-  })) as ZoneBooking[];
+  // Retrieve the local timezone of the viewer to normalize the display
+  const viewerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  return (bookings || []).map(b => {
+    // If the booking has no timezone info, default to viewer's timezone
+    // @ts-ignore - timezone will be added in the upcoming db migration
+    const bookingTz = b.timezone || viewerTimeZone;
+
+    // Create a date object in UTC for the exact booked string
+    // This allows accurate cross-timezone rendering in the UI layer
+    const slotDateTimeStr = `${b.slot_date}T${b.slot_time}`;
+    let viewDateObj = new Date(slotDateTimeStr);
+
+    // if a slot is provided but we are looking at it from a different timezone:
+    if (viewerTimeZone !== bookingTz) {
+      viewDateObj = toZonedTime(slotDateTimeStr, viewerTimeZone);
+    }
+
+    return {
+      ...b,
+      viewer_formatted_date: formatInTimeZone(viewDateObj, viewerTimeZone, 'yyyy-MM-dd'),
+      viewer_formatted_time: formatInTimeZone(viewDateObj, viewerTimeZone, 'HH:mm:ss'),
+      page_title: pageMap.get(b.page_id)?.title || '',
+      page_slug: pageMap.get(b.page_id)?.slug || '',
+    };
+  }) as ZoneBooking[];
 }
 
 export function useZoneBookings(zoneId: string | null) {

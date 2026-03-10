@@ -194,7 +194,7 @@ export const TemplateGallery = memo(function TemplateGallery({
                 )}
               </Button>
             </div>
-            <p className="text-[10px] sm:text-xs text-muted-foreground">
+            <p className="text-xs sm:text-xs text-muted-foreground">
               {t('templates.smartMatch.hint', 'Describe who you are, and AI will pick the best template and fill it with content.')}
             </p>
           </div>
@@ -236,19 +236,19 @@ export const TemplateGallery = memo(function TemplateGallery({
                 <div className="relative aspect-[4/3] bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-4xl sm:text-5xl group-hover:scale-105 transition-transform duration-300">
                   {template.preview}
                   {template.isPremium && (
-                    <Badge className="absolute top-2 right-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-[10px]">
+                    <Badge className="absolute top-2 right-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-xs">
                       PREMIUM
                     </Badge>
                   )}
                 </div>
                 <div className="flex flex-col flex-1 p-3 sm:p-4">
                   <h3 className="font-bold text-sm sm:text-base leading-tight mb-1">{template.name}</h3>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground mb-4 line-clamp-2">
+                  <p className="text-xs sm:text-xs text-muted-foreground mb-4 line-clamp-2">
                     {template.description}
                   </p>
                   <div className="mt-auto flex items-center gap-2">
                     <Button
-                      className="flex-1 text-[10px] sm:text-xs h-8 sm:h-9"
+                      className="flex-1 text-xs sm:text-xs h-8 sm:h-9"
                       onClick={() => handleSelect(template)}
                     >
                       {copiedId === template.id ? (

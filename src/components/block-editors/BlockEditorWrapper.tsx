@@ -288,7 +288,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
           <div className="flex-1 text-left">
             <span className="text-sm font-semibold">{t('blockEditor.advancedSettings', 'Дополнительные настройки')}</span>
             {advancedCount > 0 && (
-              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px] rounded-full bg-primary/10 text-primary border-0">
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs rounded-full bg-primary/10 text-primary border-0">
                 {advancedCount}
               </Badge>
             )}
@@ -364,7 +364,7 @@ export function withBlockEditor<P extends BaseBlockEditorProps>(
                             )}
                           >
                             <span className={cn("text-lg leading-none", getFontClass(font.value))}>{font.preview}</span>
-                            <span className="text-[10px] font-medium truncate w-full text-center">{font.label}</span>
+                            <span className="text-xs font-medium truncate w-full text-center">{font.label}</span>
                           </button>
                         ))}
                       </div>

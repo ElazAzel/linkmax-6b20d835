@@ -202,7 +202,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                 <Badge
                   variant="outline"
                   className={cn(
-                    "text-[10px] h-5 px-1.5 ml-2 shrink-0",
+                    "text-xs h-5 px-1.5 ml-2 shrink-0",
                     item.badgeVariant === 'premium'
                       ? "bg-amber-500/20 text-amber-600 border-amber-500/30"
                       : "bg-primary/20 text-primary border-primary/30"
@@ -243,7 +243,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                 lnkmx
               </span>
               {isPremium && (
-                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-[10px] px-1.5 py-0 h-5">
+                <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5 py-0 h-5">
                   <Crown className="h-3 w-3 mr-1" />
                   PRO
                 </Badge>
@@ -283,7 +283,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
+                  <div className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
                     <span>{t(section.titleKey, section.defaultTitle)}</span>
                   </div>
                 </motion.div>

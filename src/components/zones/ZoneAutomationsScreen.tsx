@@ -191,7 +191,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                   <div className="flex-1 space-y-4">
                     <div className="flex items-center gap-2">
                       <span className="text-lg font-bold truncate tracking-tight">{a.name}</span>
-                      <Badge variant={a.is_active ? 'default' : 'secondary'} className="text-[10px] uppercase font-black px-1.5 py-0">
+                      <Badge variant={a.is_active ? 'default' : 'secondary'} className="text-xs uppercase font-black px-1.5 py-0">
                         {a.is_active ? t('zones.automations.active', 'ACTIVE') : t('zones.automations.paused', 'PAUSED')}
                       </Badge>
                     </div>

@@ -135,7 +135,7 @@ export function ExperimentSetupDialog({
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <Label className="text-base font-bold">{t('experiments.setup.variants', 'Варианты и трафик')}</Label>
-                            <Badge variant="outline" className="text-[10px] font-black uppercase tracking-wider">
+                            <Badge variant="outline" className="text-xs font-black uppercase tracking-wider">
                                 {variants.length} {t('experiments.setup.variantsCount', 'варианта')}
                             </Badge>
                         </div>
@@ -146,7 +146,7 @@ export function ExperimentSetupDialog({
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
                                             <div className={cn(
-                                                "h-6 w-6 rounded-full flex items-center justify-center text-[10px] font-black",
+                                                "h-6 w-6 rounded-full flex items-center justify-center text-xs font-black",
                                                 v.variant_label === 'A' ? "bg-primary text-primary-foreground" : "bg-violet-500 text-white"
                                             )}>
                                                 {v.variant_label}

@@ -100,7 +100,7 @@ export function FrameGridSelector({ value, onChange, avatarUrl }: FrameGridSelec
             onClick={() => onChange(option.value)}
             avatarUrl={avatarUrl}
           />
-          <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[48px] truncate">
+          <span className="text-xs text-muted-foreground text-center leading-tight max-w-[48px] truncate">
             {option.label}
           </span>
         </div>

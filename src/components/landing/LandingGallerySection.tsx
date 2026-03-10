@@ -101,7 +101,7 @@ export function LandingGallerySection() {
               className="rounded-full text-xs sm:text-sm"
             >
               {t('gallery.all')}
-              <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5">
+              <Badge variant="secondary" className="ml-1.5 text-xs px-1.5">
                 {Object.values(nicheCounts).reduce((a, b) => a + b, 0)}
               </Badge>
             </Button>
@@ -116,7 +116,7 @@ export function LandingGallerySection() {
               >
                 <span className="mr-1">{NICHE_ICONS[niche]}</span>
                 {t(`niches.${niche}`, niche)}
-                <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5">
+                <Badge variant="secondary" className="ml-1.5 text-xs px-1.5">
                   {nicheCounts[niche] || 0}
                 </Badge>
               </Button>
@@ -152,7 +152,7 @@ export function LandingGallerySection() {
                   {/* Premium Badge */}
                   {page.is_premium && (
                     <div className="absolute top-2 right-2 z-10">
-                      <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-semibold shadow-sm">
+                      <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-xs font-semibold shadow-sm">
                         <Crown className="h-2.5 w-2.5" />
                       </div>
                     </div>
@@ -179,14 +179,14 @@ export function LandingGallerySection() {
 
                   {page.niche && (
                     <div className="flex justify-center mb-2">
-                      <Badge variant="secondary" className="text-[9px] sm:text-[10px] px-1.5 py-0">
+                      <Badge variant="secondary" className="text-xs sm:text-xs px-1.5 py-0">
                         {NICHE_ICONS[page.niche as Niche]} {t(`niches.${page.niche}`, page.niche)}
                       </Badge>
                     </div>
                   )}
 
                   {/* Stats */}
-                  <div className="flex items-center justify-center gap-3 text-[10px] sm:text-xs text-muted-foreground">
+                  <div className="flex items-center justify-center gap-3 text-xs sm:text-xs text-muted-foreground">
                     <span className="flex items-center gap-0.5">
                       <Eye className="h-3 w-3" />
                       {page.view_count || 0}

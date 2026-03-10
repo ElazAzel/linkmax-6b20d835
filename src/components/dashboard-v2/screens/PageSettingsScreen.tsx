@@ -346,7 +346,7 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                         href="https://docs.lnkmx.my/domains"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[10px] text-primary hover:underline flex items-center gap-1"
+                        className="text-xs text-primary hover:underline flex items-center gap-1"
                       >
                         {t('common.guide', 'Guide')}
                         <ExternalLink className="h-2.5 w-2.5" />
@@ -361,21 +361,21 @@ export const PageSettingsScreen = memo(function PageSettingsScreen({
                       <div className="grid grid-cols-[60px_1fr_auto] gap-2 items-center font-mono bg-background/80 p-2.5 rounded-lg border border-border/40">
                         <span className="text-muted-foreground">Type</span>
                         <span className="font-bold text-foreground">CNAME</span>
-                        <Badge variant="outline" className="text-[9px] h-4 px-1 opacity-50">copy</Badge>
+                        <Badge variant="outline" className="text-xs h-4 px-1 opacity-50">copy</Badge>
                       </div>
                       <div className="grid grid-cols-[60px_1fr_auto] gap-2 items-center font-mono bg-background/80 p-2.5 rounded-lg border border-border/40">
                         <span className="text-muted-foreground">Host</span>
                         <span className="font-bold text-foreground">@</span>
-                        <Badge variant="outline" className="text-[9px] h-4 px-1 opacity-50">copy</Badge>
+                        <Badge variant="outline" className="text-xs h-4 px-1 opacity-50">copy</Badge>
                       </div>
                       <div className="grid grid-cols-[60px_1fr_auto] gap-2 items-center font-mono bg-background/80 p-2.5 rounded-lg border border-border/40">
                         <span className="text-muted-foreground">Value</span>
                         <span className="font-bold text-foreground">lnkmx.my</span>
-                        <Badge variant="outline" className="text-[9px] h-4 px-1 opacity-50">copy</Badge>
+                        <Badge variant="outline" className="text-xs h-4 px-1 opacity-50">copy</Badge>
                       </div>
                     </div>
 
-                    <p className="text-[10px] italic">
+                    <p className="text-xs italic">
                       {t('dashboard.pageSettings.dnsHint', 'Note: DNS changes can take up to 24 hours to propagate globally.')}
                     </p>
                   </div>

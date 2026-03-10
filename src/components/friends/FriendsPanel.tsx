@@ -155,7 +155,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
             <TabsTrigger value="requests" className="rounded-lg text-xs px-2 relative">
               {t('friends.requests', 'Requests')}
               {pendingCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
                   {pendingCount}
                 </Badge>
               )}
@@ -219,17 +219,17 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                   <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl p-3 text-center">
                     <Users className="h-5 w-5 mx-auto mb-1 text-blue-500" />
                     <p className="text-lg font-bold">{friends.length}</p>
-                    <p className="text-[10px] text-muted-foreground">{t('friends.title', 'Friends')}</p>
+                    <p className="text-xs text-muted-foreground">{t('friends.title', 'Friends')}</p>
                   </div>
                   <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-3 text-center">
                     <Trophy className="h-5 w-5 mx-auto mb-1 text-amber-500" />
                     <p className="text-lg font-bold">{Math.floor(friends.length / 5)}</p>
-                    <p className="text-[10px] text-muted-foreground">{t('friends.rewards', 'Rewards')}</p>
+                    <p className="text-xs text-muted-foreground">{t('friends.rewards', 'Rewards')}</p>
                   </div>
                   <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl p-3 text-center">
                     <Sparkles className="h-5 w-5 mx-auto mb-1 text-green-500" />
                     <p className="text-lg font-bold">+{friends.length * 2}h</p>
-                    <p className="text-[10px] text-muted-foreground">{t('friends.bonuses', 'Bonuses')}</p>
+                    <p className="text-xs text-muted-foreground">{t('friends.bonuses', 'Bonuses')}</p>
                   </div>
                 </div>
 
@@ -316,7 +316,7 @@ export function FriendsPanel({ onClose }: FriendsPanelProps) {
                 <UserCard
                   key={request.id}
                   user={request.friend_profile}
-                  badge={<Badge variant="secondary" className="text-[10px]">{t('friends.pending', 'Pending')}</Badge>}
+                  badge={<Badge variant="secondary" className="text-xs">{t('friends.pending', 'Pending')}</Badge>}
                   action={
                     <Button
                       variant="ghost"

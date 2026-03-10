@@ -76,7 +76,7 @@ export const CountdownBlock = React.memo(function CountdownBlock({ block }: Coun
           {value.toString().padStart(2, '0')}
         </span>
       </div>
-      <span className="text-[10px] sm:text-xs md:text-sm text-muted-foreground mt-1">{label}</span>
+      <span className="text-xs sm:text-xs md:text-sm text-muted-foreground mt-1">{label}</span>
     </div>
   );
 

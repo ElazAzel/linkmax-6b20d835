@@ -78,7 +78,7 @@ export function ZonePlanSelector({ zone, onRefetch }: ZonePlanSelectorProps) {
                                 }`}
                         >
                             {isActive && (
-                                <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
+                                <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 text-xs font-bold uppercase tracking-wider">
                                     Current
                                 </div>
                             )}

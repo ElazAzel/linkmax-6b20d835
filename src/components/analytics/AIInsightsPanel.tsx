@@ -343,7 +343,7 @@ export const AIInsightsPanel = memo(function AIInsightsPanel({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h4 className="font-bold truncate">{insight.title}</h4>
-                          <Badge variant="outline" className={cn("shrink-0 text-[10px]", priorityColors[insight.priority])}>
+                          <Badge variant="outline" className={cn("shrink-0 text-xs", priorityColors[insight.priority])}>
                             {insight.priority === 'high' ? t('insights.priority.high', 'Важно') : 
                              insight.priority === 'medium' ? t('insights.priority.medium', 'Средне') : 
                              t('insights.priority.low', 'Низко')}

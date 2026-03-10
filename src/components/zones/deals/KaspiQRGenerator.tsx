@@ -173,7 +173,7 @@ export const KaspiQRGenerator = memo(function KaspiQRGenerator({
           </div>
 
           {/* Kaspi Branding */}
-          <p className="text-[10px] text-center text-muted-foreground">
+          <p className="text-xs text-center text-muted-foreground">
             {t('kaspi.disclaimer', 'Powered by Kaspi.kz payment system')}
           </p>
         </div>

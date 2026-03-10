@@ -107,7 +107,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           <div className="flex items-center gap-1 justify-end">
             {diagLoading && <RefreshCw className="h-2.5 w-2.5 text-muted-foreground animate-spin" />}
             <span className={cn(
-              'text-[9px]',
+              'text-xs',
               hasServerData && !isServerStale ? 'text-emerald-600' : 'text-muted-foreground'
             )}>
               {sourceLabel}
@@ -121,29 +121,29 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
       {/* Status badges */}
       <div className="flex flex-wrap gap-1.5">
         {isIndexable ? (
-          <Badge variant="outline" className="text-[10px] gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
             <Globe className="h-3 w-3" />
             В поисковых системах
           </Badge>
         ) : isPublished ? (
-          <Badge variant="outline" className="text-[10px] gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
             <FileX className="h-3 w-3" />
             Не в поиске
           </Badge>
         ) : (
-          <Badge variant="outline" className="text-[10px] gap-1 border-muted-foreground/30 text-muted-foreground">
+          <Badge variant="outline" className="text-xs gap-1 border-muted-foreground/30 text-muted-foreground">
             <FileX className="h-3 w-3" />
             Черновик
           </Badge>
         )}
         {inSitemap && (
-          <Badge variant="outline" className="text-[10px] gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-emerald-500/30 text-emerald-600 bg-emerald-500/5">
             <MapPin className="h-3 w-3" />
             В sitemap
           </Badge>
         )}
         {childCount > 0 && isIndexable && (
-          <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary bg-primary/5">
+          <Badge variant="outline" className="text-xs gap-1 border-primary/30 text-primary bg-primary/5">
             {childSummary
               ? `${childSummary.eligible} из ${childSummary.total - childSummary.removed} услуг в поиске`
               : `${childCount} ${childCount === 1 ? 'услуга' : 'услуг'}`
@@ -151,12 +151,12 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           </Badge>
         )}
         {childSummary && childSummary.excluded_thin > 0 && (
-          <Badge variant="outline" className="text-[10px] gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
+          <Badge variant="outline" className="text-xs gap-1 border-amber-500/30 text-amber-600 bg-amber-500/5">
             {childSummary.excluded_thin} услуг без описания
           </Badge>
         )}
         {lastIndexNow && (
-          <Badge variant="outline" className="text-[10px] gap-1 border-muted-foreground/20 text-muted-foreground">
+          <Badge variant="outline" className="text-xs gap-1 border-muted-foreground/20 text-muted-foreground">
             IndexNow: {new Date(lastIndexNow).toLocaleDateString('ru')}
           </Badge>
         )}
@@ -173,7 +173,7 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
               <li key={check.key} className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Circle className="h-3.5 w-3.5 shrink-0 opacity-40" />
                 <span>{check.label}</span>
-                <span className="text-[10px] opacity-50">+{check.points}</span>
+                <span className="text-xs opacity-50">+{check.points}</span>
               </li>
             ))}
           </ul>

@@ -140,7 +140,7 @@ export function GalleryPageCard({
             <div className="flex items-center gap-1.5">
               <span className="font-bold text-sm truncate">{page.title || t('gallery.untitled', 'Untitled')}</span>
               {featured && (
-                <Badge variant="default" className="bg-primary/90 text-[10px] h-4 px-1">
+                <Badge variant="default" className="bg-primary/90 text-xs h-4 px-1">
                   ⭐
                 </Badge>
               )}

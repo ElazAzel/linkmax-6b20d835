@@ -131,7 +131,7 @@ export const ZoneDocumentTemplatesSettings = ({ open, onOpenChange }: { open: bo
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <Label>Текст шаблона (HTML/Text)</Label>
-                                        <div className="flex items-center gap-1 text-[10px] text-primary/70">
+                                        <div className="flex items-center gap-1 text-xs text-primary/70">
                                             <Info className="w-3 h-3" />
                                             Поддерживаются переменные: {'{{name}}'}, {'{{company}}'}, {'{{amount}}'}
                                         </div>

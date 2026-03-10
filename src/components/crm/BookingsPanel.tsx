@@ -273,19 +273,19 @@ END:VCALENDAR`;
       <div className="grid grid-cols-4 gap-2 p-3 border-b">
         <div className="text-center p-2 rounded-lg bg-primary/10">
           <div className="text-lg font-bold text-primary">{stats.total}</div>
-          <div className="text-[10px] text-muted-foreground">{t('bookings.total', 'Total')}</div>
+          <div className="text-xs text-muted-foreground">{t('bookings.total', 'Total')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-green-500/10">
           <div className="text-lg font-bold text-green-500">{stats.upcoming}</div>
-          <div className="text-[10px] text-muted-foreground">{t('bookings.upcoming', 'Upcoming')}</div>
+          <div className="text-xs text-muted-foreground">{t('bookings.upcoming', 'Upcoming')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-yellow-500/10">
           <div className="text-lg font-bold text-yellow-500">{stats.today}</div>
-          <div className="text-[10px] text-muted-foreground">{t('bookings.today', 'Today')}</div>
+          <div className="text-xs text-muted-foreground">{t('bookings.today', 'Today')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-blue-500/10">
           <div className="text-lg font-bold text-blue-500">{stats.confirmed}</div>
-          <div className="text-[10px] text-muted-foreground">{t('bookings.confirmed', 'Confirmed')}</div>
+          <div className="text-xs text-muted-foreground">{t('bookings.confirmed', 'Confirmed')}</div>
         </div>
       </div>
 
@@ -335,7 +335,7 @@ END:VCALENDAR`;
                         <User className="h-3.5 w-3.5 text-muted-foreground" />
                         {booking.client_name}
                         {isRepeatCustomer(booking.client_phone, booking.client_email) && (
-                          <Badge variant="outline" className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-[10px] font-bold border-violet-500/20">
+                          <Badge variant="outline" className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-xs font-bold border-violet-500/20">
                             <Repeat className="h-3 w-3 mr-0.5" />
                             {t('operator.repeat.badge', 'Повторный')}
                           </Badge>
@@ -368,7 +368,7 @@ END:VCALENDAR`;
 
                   {/* Status & Actions */}
                   <div className="flex flex-col items-end gap-2">
-                    <Badge variant="outline" className={`${statusColors[booking.status]} text-[10px]`}>
+                    <Badge variant="outline" className={`${statusColors[booking.status]} text-xs`}>
                       {t(`bookings.status.${booking.status}`, booking.status)}
                     </Badge>
 

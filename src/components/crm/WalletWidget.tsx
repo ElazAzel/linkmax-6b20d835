@@ -124,11 +124,11 @@ export const WalletWidget = () => {
                 {/* Balance Cards */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Доступно</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Доступно</p>
                         <p className="text-2xl font-bold text-gradient">{balance.toLocaleString()} ₸</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">В ожидании (GMV)</p>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">В ожидании (GMV)</p>
                         <p className="text-2xl font-bold text-emerald-400">+{pendingGMV.toLocaleString()} ₸</p>
                     </div>
                 </div>
@@ -159,7 +159,7 @@ export const WalletWidget = () => {
                                             </div>
                                             <div className="min-w-0">
                                                 <p className="text-sm font-bold truncate">{tx.description}</p>
-                                                <p className="text-[10px] text-muted-foreground uppercase font-medium">
+                                                <p className="text-xs text-muted-foreground uppercase font-medium">
                                                     {format(new Date(tx.created_at), 'dd MMM, HH:mm')}
                                                 </p>
                                             </div>
@@ -209,7 +209,7 @@ export const WalletWidget = () => {
                                     placeholder="Например: 5000"
                                     className="bg-white/5 border-white/10"
                                 />
-                                <p className="text-[10px] text-muted-foreground">
+                                <p className="text-xs text-muted-foreground">
                                     Доступно: <span className="text-primary font-bold">{(data?.wallet?.balance || 0).toLocaleString()} ₸</span>
                                 </p>
                             </div>

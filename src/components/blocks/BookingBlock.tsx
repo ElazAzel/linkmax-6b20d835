@@ -660,7 +660,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                       {formatTime(slot.time)}
                     </span>
                     {slot.endTime && (
-                      <span className="block text-[10px] opacity-40 mt-1 font-medium">
+                      <span className="block text-xs opacity-40 mt-1 font-medium">
                         – {formatTime(slot.endTime)}
                       </span>
                     )}
@@ -678,7 +678,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
                       <Check className="h-6 w-6" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold text-primary uppercase tracking-wider">{t('booking.selectedTime', 'Выбрано время')}</p>
+                      <p className="text-xs font-bold text-primary uppercase tracking-wider">{t('booking.selectedTime', 'Выбрано время')}</p>
                       <p className="text-sm font-bold truncate">
                         {formatTime(selectedSlot.time)}
                         {selectedSlot.endTime && ` – ${formatTime(selectedSlot.endTime)}`}
@@ -713,11 +713,11 @@ export const BookingBlock = memo(function BookingBlockComponent({
       <div className="flex items-center justify-center gap-6 py-4 px-6 bg-black/5 border-t border-white/5">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full border border-primary/40 bg-white/5" />
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t('booking.available', 'Свободно')}</span>
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t('booking.available', 'Свободно')}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-          <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{t('booking.booked', 'Занято')}</span>
+          <span className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">{t('booking.booked', 'Занято')}</span>
         </div>
       </div>
 

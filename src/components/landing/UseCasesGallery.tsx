@@ -175,7 +175,7 @@ export function UseCasesGallery() {
                   {useCase.links.slice(0, 2).map((link, linkIndex) => (
                     <div
                       key={linkIndex}
-                      className="py-2 sm:py-2.5 px-2 sm:px-4 rounded-lg sm:rounded-xl bg-muted/50 hover:bg-muted text-[10px] sm:text-xs lg:text-sm font-medium transition-colors cursor-default truncate"
+                      className="py-2 sm:py-2.5 px-2 sm:px-4 rounded-lg sm:rounded-xl bg-muted/50 hover:bg-muted text-xs sm:text-xs lg:text-sm font-medium transition-colors cursor-default truncate"
                     >
                       {link}
                     </div>

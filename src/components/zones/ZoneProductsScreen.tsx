@@ -112,7 +112,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
             <Package className="h-4 w-4 text-primary" />
           </div>
           <h1 className="text-lg font-bold">{t('zone.products.title', 'Каталог продуктов')}</h1>
-          <Badge variant="secondary" className="text-[10px]">{products.length}</Badge>
+          <Badge variant="secondary" className="text-xs">{products.length}</Badge>
         </div>
         <div className="flex items-center gap-2">
           <div className="relative">
@@ -160,7 +160,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-bold truncate">{product.name}</p>
                         {!product.is_active && (
-                          <Badge variant="outline" className="text-[9px] text-muted-foreground">{t('zone.products.inactive', 'Неактивен')}</Badge>
+                          <Badge variant="outline" className="text-xs text-muted-foreground">{t('zone.products.inactive', 'Неактивен')}</Badge>
                         )}
                       </div>
                       {product.description && (
@@ -173,7 +173,7 @@ export const ZoneProductsScreen = memo(function ZoneProductsScreen({ zoneId }: P
                       <p className="text-sm font-bold">
                         {new Intl.NumberFormat('ru-KZ').format(product.unit_price)} {product.currency === 'KZT' ? '₸' : product.currency}
                       </p>
-                      <p className="text-[10px] text-muted-foreground">{t('zone.products.per', 'за')} {product.unit}</p>
+                      <p className="text-xs text-muted-foreground">{t('zone.products.per', 'за')} {product.unit}</p>
                     </div>
                     <Button
                       size="icon"

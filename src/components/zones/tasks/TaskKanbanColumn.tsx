@@ -49,7 +49,7 @@ export const TaskKanbanColumn = memo(function TaskKanbanColumn({
       <div className="flex items-center gap-2 mb-3 px-1">
         <Icon className={cn("h-4 w-4", config.color)} />
         <span className="text-sm font-semibold">{t(config.labelKey)}</span>
-        <Badge variant="outline" className="text-[10px] ml-auto">{tasks.length}</Badge>
+        <Badge variant="outline" className="text-xs ml-auto">{tasks.length}</Badge>
       </div>
 
       <ScrollArea className="flex-1">

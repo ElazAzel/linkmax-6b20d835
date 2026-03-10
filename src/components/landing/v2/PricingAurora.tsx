@@ -90,7 +90,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                             <Switch id="billing-mode" checked={isYearly} onCheckedChange={setIsYearly} />
                             <Label htmlFor="billing-mode" className={cn("text-sm font-medium cursor-pointer", isYearly && "text-primary")}>
                                 {t('landing.pricing.yearly', 'Yearly')}{' '}
-                                <Badge variant="secondary" className="ml-1 bg-primary/10 text-primary hover:bg-primary/20 text-[10px] uppercase">
+                                <Badge variant="secondary" className="ml-1 bg-primary/10 text-primary hover:bg-primary/20 text-xs uppercase">
                                     {t('landing.pricing.save', '-30%')}
                                 </Badge>
                             </Label>

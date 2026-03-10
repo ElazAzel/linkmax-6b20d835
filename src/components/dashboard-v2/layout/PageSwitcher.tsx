@@ -52,7 +52,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
 
   if (page.isPrimaryPaid) {
     return (
-      <Badge variant="secondary" className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-[10px] px-1.5">
+      <Badge variant="secondary" className="bg-amber-500/20 text-amber-600 border-amber-500/30 text-xs px-1.5">
         <Crown className="h-2.5 w-2.5 mr-0.5" />
         {t('dashboard.pageSwitcher.included', 'Incl.')}
       </Badge>
@@ -61,7 +61,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
 
   if (page.isPaid) {
     return (
-      <Badge variant="secondary" className="bg-violet-500/20 text-violet-600 border-violet-500/30 text-[10px] px-1.5">
+      <Badge variant="secondary" className="bg-violet-500/20 text-violet-600 border-violet-500/30 text-xs px-1.5">
         <Sparkles className="h-2.5 w-2.5 mr-0.5" />
         {t('dashboard.pageSwitcher.addon', 'Add-on')}
       </Badge>
@@ -69,7 +69,7 @@ function PageStatusBadge({ page }: { page: UserPage }) {
   }
 
   return (
-    <Badge variant="outline" className="text-[10px] px-1.5 text-muted-foreground">
+    <Badge variant="outline" className="text-xs px-1.5 text-muted-foreground">
       {t('dashboard.pageSwitcher.free', 'Free')}
     </Badge>
   );

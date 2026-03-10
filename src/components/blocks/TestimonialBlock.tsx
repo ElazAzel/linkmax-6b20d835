@@ -79,7 +79,7 @@ export const TestimonialBlock = memo(function TestimonialBlock({ block }: Testim
                     <div className="min-w-0">
                       <div className="font-bold text-sm truncate text-foreground">{name}</div>
                       {role && (
-                        <div className="text-[10px] font-bold text-primary/60 uppercase tracking-widest truncate">{role}</div>
+                        <div className="text-xs font-bold text-primary/60 uppercase tracking-widest truncate">{role}</div>
                       )}
                     </div>
                     {testimonial.rating && renderStars(testimonial.rating)}

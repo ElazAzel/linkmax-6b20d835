@@ -323,7 +323,7 @@ function MonthView({
                       key={b.id}
                       onClick={() => onSelectBooking(b)}
                       className={cn(
-                        'w-full text-left text-[10px] px-1 py-0.5 rounded truncate cursor-pointer transition-colors',
+                        'w-full text-left text-xs px-1 py-0.5 rounded truncate cursor-pointer transition-colors',
                         STATUS_COLORS[b.status] || 'bg-muted'
                       )}
                     >
@@ -331,7 +331,7 @@ function MonthView({
                     </button>
                   ))}
                   {dayBookings.length > 3 && (
-                    <div className="text-[10px] text-muted-foreground px-1">
+                    <div className="text-xs text-muted-foreground px-1">
                       +{dayBookings.length - 3} {t('common.more', 'ещё')}
                     </div>
                   )}
@@ -400,7 +400,7 @@ function WeekDayView({
                     minHeight: '48px',
                   }}
                 >
-                  <div className="p-1 border-r text-[10px] text-muted-foreground text-right pr-2 pt-0">
+                  <div className="p-1 border-r text-xs text-muted-foreground text-right pr-2 pt-0">
                     {String(hour).padStart(2, '0')}:00
                   </div>
                   {days.map((day, di) => {
@@ -418,7 +418,7 @@ function WeekDayView({
                             key={b.id}
                             onClick={() => onSelectBooking(b)}
                             className={cn(
-                              'w-full text-left text-[10px] px-1.5 py-1 rounded mb-0.5 cursor-pointer transition-all hover:scale-[1.02]',
+                              'w-full text-left text-xs px-1.5 py-1 rounded mb-0.5 cursor-pointer transition-all hover:scale-[1.02]',
                               STATUS_COLORS[b.status] || 'bg-muted'
                             )}
                           >

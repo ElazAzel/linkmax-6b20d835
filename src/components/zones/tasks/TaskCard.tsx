@@ -67,7 +67,7 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
             )}>
               {task.title}
             </p>
-            <Badge variant={priorityConf.variant} className="text-[9px] shrink-0 h-4 px-1.5 uppercase font-bold tracking-wider">
+            <Badge variant={priorityConf.variant} className="text-xs shrink-0 h-4 px-1.5 uppercase font-bold tracking-wider">
               {task.priority === 'urgent' && <AlertCircle className="h-2.5 w-2.5 mr-0.5" />}
               {t(priorityConf.labelKey)}
             </Badge>
@@ -86,14 +86,14 @@ export const TaskCard = memo(function TaskCard({ task, onClick, getMemberName, i
                   <div className="h-4 w-4 rounded-full bg-primary/20 flex items-center justify-center text-[8px] font-bold text-primary shrink-0">
                     {assigneeName[0].toUpperCase()}
                   </div>
-                  <span className="text-[10px] text-muted-foreground truncate">{assigneeName}</span>
+                  <span className="text-xs text-muted-foreground truncate">{assigneeName}</span>
                 </div>
               )}
             </div>
 
             {task.due_date && (
               <span className={cn(
-                "text-[10px] flex items-center gap-1 shrink-0 px-1.5 py-0.5 rounded-full bg-muted/40",
+                "text-xs flex items-center gap-1 shrink-0 px-1.5 py-0.5 rounded-full bg-muted/40",
                 isOverdue ? "text-destructive font-bold bg-destructive/10" : isDueToday ? "text-warning font-bold bg-warning/10" : "text-muted-foreground"
               )}>
                 <Calendar className="h-2.5 w-2.5" />

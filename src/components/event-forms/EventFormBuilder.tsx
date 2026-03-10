@@ -147,7 +147,7 @@ function SortableFieldCard({ field, index, isExpanded, onToggle, onUpdate, onRem
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium truncate">{fieldLabel}</span>
                 {field.required && <span className="text-destructive text-xs">*</span>}
-                {isProField && <Badge variant="secondary" className="text-[10px] h-4"><Crown className="h-2.5 w-2.5 mr-0.5" />Pro</Badge>}
+                {isProField && <Badge variant="secondary" className="text-xs h-4"><Crown className="h-2.5 w-2.5 mr-0.5" />Pro</Badge>}
               </div>
               <span className="text-xs text-muted-foreground">{t(fieldConfig?.labelKey || '', fieldConfig?.label || '')}</span>
             </div>
@@ -200,7 +200,7 @@ function SortableFieldCard({ field, index, isExpanded, onToggle, onUpdate, onRem
                       }, {} as Record<string, typeof FIELD_TYPES>)
                     ).map(([category, types]) => (
                       <div key={category}>
-                        <div className="px-2 py-1 text-[10px] text-muted-foreground uppercase font-medium">
+                        <div className="px-2 py-1 text-xs text-muted-foreground uppercase font-medium">
                           {t(`eventFields.category.${category}`, category)}
                         </div>
                         {types.map((ft) => {
@@ -214,7 +214,7 @@ function SortableFieldCard({ field, index, isExpanded, onToggle, onUpdate, onRem
                               <div className="flex items-center gap-2">
                                 <Icon className="h-4 w-4" />
                                 {t(ft.labelKey, ft.label)}
-                                {ft.proOnly && <Badge variant="secondary" className="text-[10px] h-4 ml-1">Pro</Badge>}
+                                {ft.proOnly && <Badge variant="secondary" className="text-xs h-4 ml-1">Pro</Badge>}
                               </div>
                             </SelectItem>
                           );

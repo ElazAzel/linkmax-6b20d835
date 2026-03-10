@@ -453,17 +453,17 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
           <div className="flex items-center gap-2 mb-1">
             <h4 className="font-medium truncate">{reg.attendeeName}</h4>
             {reg.status === 'pending' && (
-              <Badge variant="outline" className="text-[10px] text-amber-600 border-amber-300">
+              <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">
                 {t('events.pendingApproval', 'Ожидает')}
               </Badge>
             )}
             {reg.status === 'cancelled' && (
-              <Badge variant="outline" className="text-[10px] text-destructive border-destructive/30">
+              <Badge variant="outline" className="text-xs text-destructive border-destructive/30">
                 {t('events.cancelled', 'Отменён')}
               </Badge>
             )}
             {reg.ticketStatus === 'used' && (
-              <Badge className="text-[10px] bg-emerald-500/10 text-emerald-600">
+              <Badge className="text-xs bg-emerald-500/10 text-emerald-600">
                 <UserCheck className="h-3 w-3 mr-1" />
                 {t('events.checkedInLabel', 'Отмечен')}
               </Badge>
@@ -590,19 +590,19 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
           <div className="grid grid-cols-4 gap-2 mb-3">
             <Card className="p-2 text-center">
               <div className="text-lg font-bold">{stats.total}</div>
-              <div className="text-[10px] text-muted-foreground">{t('events.total', 'Всего')}</div>
+              <div className="text-xs text-muted-foreground">{t('events.total', 'Всего')}</div>
             </Card>
             <Card className="p-2 text-center">
               <div className="text-lg font-bold text-emerald-600">{stats.confirmed}</div>
-              <div className="text-[10px] text-muted-foreground">{t('events.confirmed', 'Подтв.')}</div>
+              <div className="text-xs text-muted-foreground">{t('events.confirmed', 'Подтв.')}</div>
             </Card>
             <Card className="p-2 text-center">
               <div className="text-lg font-bold text-amber-600">{stats.pending}</div>
-              <div className="text-[10px] text-muted-foreground">{t('events.pendingShort', 'Ожид.')}</div>
+              <div className="text-xs text-muted-foreground">{t('events.pendingShort', 'Ожид.')}</div>
             </Card>
             <Card className="p-2 text-center">
               <div className="text-lg font-bold text-primary">{stats.checkedIn}</div>
-              <div className="text-[10px] text-muted-foreground">{t('events.checkedInShort', 'Чекин')}</div>
+              <div className="text-xs text-muted-foreground">{t('events.checkedInShort', 'Чекин')}</div>
             </Card>
           </div>
 

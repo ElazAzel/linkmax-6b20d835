@@ -324,7 +324,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         {t('dashboard.pageSettings.customDomain', 'Custom Domain')}
                     </h3>
-                    {!isPremium && <Badge variant="secondary" className="text-[10px] uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                    {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
 
                 <Card className={cn("p-4 space-y-4", !isPremium && "opacity-60 cursor-not-allowed relative")}>
@@ -622,7 +622,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         White-label
                     </h3>
-                    {!isPremium && <Badge variant="secondary" className="text-[10px] uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                    {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
                 </div>
                 <Card className={cn("p-4 space-y-4 glass-card border-white/10 shadow-glass", !isPremium && "opacity-60 cursor-not-allowed relative")}>
                     {!isPremium && (
@@ -642,7 +642,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             className="h-12 rounded-xl"
                             disabled={!isPremium}
                         />
-                        <p className="text-[10px] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                             {t('dashboard.pageSettings.faviconHint', 'PNG or ICO link. Recommended size 64x64.')}
                         </p>
                     </div>

@@ -110,7 +110,7 @@ export function LandingFeaturedPages() {
                   )}
 
                   {/* Stats */}
-                  <div className="flex items-center justify-center gap-2 text-[10px] sm:text-xs text-muted-foreground pt-1">
+                  <div className="flex items-center justify-center gap-2 text-xs sm:text-xs text-muted-foreground pt-1">
                     <span className="flex items-center gap-0.5">
                       <Eye className="h-3 w-3" />
                       {page.view_count || 0}

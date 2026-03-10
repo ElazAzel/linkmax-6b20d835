@@ -169,7 +169,7 @@ export const ZoneDocumentGenerator = ({
                 <Info className="w-4 h-4 mr-2" />
                 {t('zones.documents.variables', 'Переменные')}
                 {unreplacedVars.length > 0 && (
-                  <Badge variant="destructive" className="ml-2 h-5 px-1.5 text-[10px]">
+                  <Badge variant="destructive" className="ml-2 h-5 px-1.5 text-xs">
                     {unreplacedVars.length}
                   </Badge>
                 )}

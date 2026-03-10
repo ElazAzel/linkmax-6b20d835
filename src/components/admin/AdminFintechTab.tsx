@@ -149,7 +149,7 @@ export const AdminFintechTab = () => {
                                             <Badge variant="outline" className="bg-primary/5">
                                                 {req.payment_method || 'Другое'}
                                             </Badge>
-                                            <p className="text-[10px] mt-1 text-muted-foreground truncate max-w-[150px]">
+                                            <p className="text-xs mt-1 text-muted-foreground truncate max-w-[150px]">
                                                 {req.payment_details?.notes || ''}
                                             </p>
                                         </TableCell>

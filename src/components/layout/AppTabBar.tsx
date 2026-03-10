@@ -132,7 +132,7 @@ export const AppTabBar = memo(({ activeTab, onTabChange, crmBadge }: AppTabBarPr
 
                   {/* Badge */}
                   {tab.badge && tab.badge > 0 && (
-                    <span className="absolute -top-1 -right-1 min-w-4 h-4 px-0.5 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold">
+                    <span className="absolute -top-1 -right-1 min-w-4 h-4 px-0.5 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-xs font-bold">
                       {tab.badge > 99 ? '99+' : tab.badge}
                     </span>
                   )}
@@ -140,7 +140,7 @@ export const AppTabBar = memo(({ activeTab, onTabChange, crmBadge }: AppTabBarPr
 
                 {/* Label - truncated */}
                 <span className={cn(
-                  "text-[9px] font-medium leading-none truncate max-w-full px-0.5",
+                  "text-xs font-medium leading-none truncate max-w-full px-0.5",
                   isActive && "font-semibold"
                 )}>
                   {tab.label}

@@ -706,7 +706,7 @@ export default function EventScanner() {
                         {scan.message}
                       </div>
                     </div>
-                    <Badge variant="outline" className="font-mono text-[10px]">
+                    <Badge variant="outline" className="font-mono text-xs">
                       {scan.ticketCode}
                     </Badge>
                   </Card>

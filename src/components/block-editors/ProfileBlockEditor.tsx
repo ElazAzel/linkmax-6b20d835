@@ -146,7 +146,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
             <span className="flex items-center gap-2">
               {t('fields.avatarFrame', 'Avatar Frame Style')}
               {!canUsePremiumFrames() && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-violet-500 text-violet-500">
+                <Badge variant="outline" className="text-xs px-1.5 py-0 border-violet-500 text-violet-500">
                   <Crown className="h-2.5 w-2.5 mr-0.5" />
                   PRO
                 </Badge>
@@ -222,7 +222,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         <div className="flex items-center justify-between">
           <Label className="font-medium">{t('fields.verificationBadge', 'Verification Badge')}</Label>
           {!canUseVerificationBadge() && (
-            <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-violet-500 text-violet-500">
+            <Badge variant="outline" className="text-xs px-1.5 py-0 border-violet-500 text-violet-500">
               <Crown className="h-2.5 w-2.5 mr-0.5" />
               PRO
             </Badge>
@@ -375,7 +375,7 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       <div className="space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
           <Label className="font-medium">{t('fields.proofOfHuman', 'Proof of Human')}</Label>
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-green-500 text-green-600">
+          <Badge variant="outline" className="text-xs px-1.5 py-0 border-green-500 text-green-600">
             {t('fields.boostTrust', '📈 +Trust')}
           </Badge>
         </div>

@@ -138,17 +138,17 @@ export function TeamsTab({
           <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl p-3 text-center">
             <Users className="h-4 w-4 mx-auto mb-1 text-blue-500" />
             <p className="text-lg font-bold">{teams.length}</p>
-            <p className="text-[10px] text-muted-foreground">{t('teams.total', 'Команд')}</p>
+            <p className="text-xs text-muted-foreground">{t('teams.total', 'Команд')}</p>
           </div>
           <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl p-3 text-center">
             <Crown className="h-4 w-4 mx-auto mb-1 text-amber-500" />
             <p className="text-lg font-bold">{ownedTeams.length}</p>
-            <p className="text-[10px] text-muted-foreground">{t('teams.owned', 'Владею')}</p>
+            <p className="text-xs text-muted-foreground">{t('teams.owned', 'Владею')}</p>
           </div>
           <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl p-3 text-center">
             <UserPlus className="h-4 w-4 mx-auto mb-1 text-green-500" />
             <p className="text-lg font-bold">{memberTeams.length}</p>
-            <p className="text-[10px] text-muted-foreground">{t('teams.member', 'Участник')}</p>
+            <p className="text-xs text-muted-foreground">{t('teams.member', 'Участник')}</p>
           </div>
         </div>
       )}
@@ -188,7 +188,7 @@ export function TeamsTab({
                         <div className="flex items-center gap-2">
                           <p className="font-medium">{team.name}</p>
                           {team.owner_id === userId && (
-                            <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                            <Badge variant="secondary" className="text-xs px-1.5 py-0">
                               <Crown className="h-3 w-3 mr-0.5" />
                               {t('teams.owner', 'Владелец')}
                             </Badge>

@@ -27,12 +27,12 @@ const buttonVariants = cva(
           "bg-gradient-to-r from-primary via-blue-500 to-violet-600 text-primary-foreground shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] animate-gradient-x bg-[length:200%_auto]",
       },
       size: {
-        default: "h-12 px-6 py-3",
-        sm: "h-10 rounded-xl px-4 text-sm",
-        lg: "h-14 rounded-2xl px-8 text-base",
-        xl: "h-16 rounded-2xl px-10 text-lg",
-        "2xl": "h-18 rounded-3xl px-12 text-xl",
-        icon: "h-12 w-12 rounded-xl",
+        default: "h-12 min-h-[44px] px-6 py-3",
+        sm: "h-11 min-h-[44px] rounded-xl px-4 text-sm",
+        lg: "h-14 min-h-[44px] rounded-2xl px-8 text-base",
+        xl: "h-16 min-h-[44px] rounded-2xl px-10 text-lg",
+        "2xl": "h-18 min-h-[44px] rounded-3xl px-12 text-xl",
+        icon: "h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl",
       },
     },
     defaultVariants: {
@@ -44,7 +44,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
 }

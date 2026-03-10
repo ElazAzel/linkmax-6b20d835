@@ -348,7 +348,7 @@ export const EventFormRenderer = memo(function EventFormRenderer({
             step={1}
             disabled={disabled}
           />
-          <div className="flex justify-between text-[10px] text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground">
             {Array.from({ length: max - min + 1 }, (_, i) => min + i).map((n) => (
               <span key={n} className="w-4 text-center">{n}</span>
             ))}

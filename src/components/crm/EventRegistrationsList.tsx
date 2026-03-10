@@ -180,19 +180,19 @@ export function EventRegistrationsList({
       <div className="grid grid-cols-4 gap-2 p-3 border-b">
         <div className="text-center p-2 rounded-lg bg-primary/10">
           <div className="text-lg font-bold text-primary">{stats.total}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.total', 'Всего')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.total', 'Всего')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-green-500/10">
           <div className="text-lg font-bold text-green-500">{stats.confirmed}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.confirmed', 'Подтв.')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.confirmed', 'Подтв.')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-yellow-500/10">
           <div className="text-lg font-bold text-yellow-500">{stats.pending}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.pending', 'Ожидают')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.pending', 'Ожидают')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-blue-500/10">
           <div className="text-lg font-bold text-blue-500">{stats.checkedIn}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.checkedIn', 'Отмечены')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.checkedIn', 'Отмечены')}</div>
         </div>
       </div>
 
@@ -251,7 +251,7 @@ export function EventRegistrationsList({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <span className="font-medium text-sm truncate">{reg.attendee_name}</span>
-                      <Badge variant="outline" className={`${statusConfig.bg} ${statusConfig.text} text-[10px]`}>
+                      <Badge variant="outline" className={`${statusConfig.bg} ${statusConfig.text} text-xs`}>
                           {t(statusConfig.i18nKey)}
                         </Badge>
                       </div>
@@ -272,12 +272,12 @@ export function EventRegistrationsList({
                       {/* Ticket info */}
                       {ticket && (
                         <div className="flex items-center gap-2 mt-2">
-                          <Badge variant="outline" className="text-[10px] font-mono">
+                          <Badge variant="outline" className="text-xs font-mono">
                             <Ticket className="h-3 w-3 mr-1" />
                             {ticket.ticket_code}
                           </Badge>
                           {ticketStatusConfig && (
-                            <Badge variant="outline" className={`${ticketStatusConfig.bg} ${ticketStatusConfig.text} text-[10px]`}>
+                            <Badge variant="outline" className={`${ticketStatusConfig.bg} ${ticketStatusConfig.text} text-xs`}>
                               {t(ticketStatusConfig.i18nKey)}
                             </Badge>
                           )}

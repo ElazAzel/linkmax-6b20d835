@@ -128,7 +128,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
             <motion.div key={stage.id} variants={item} className="relative">
               {/* Drop-off indicator */}
               {index > 0 && (
-                <div className="absolute -top-4 left-10 flex items-center gap-1.5 py-1 px-2 rounded-full bg-destructive/10 text-[10px] font-bold text-destructive border border-destructive/20 z-10">
+                <div className="absolute -top-4 left-10 flex items-center gap-1.5 py-1 px-2 rounded-full bg-destructive/10 text-xs font-bold text-destructive border border-destructive/20 z-10">
                   <TrendingDown className="h-3 w-3" />
                   {stage.dropOff && stage.dropOff > 0 ? `${stage.dropOff}% ${t('analytics.funnel.dropOff', 'потерь')}` : t('analytics.funnel.retention', 'удержание')}
                 </div>
@@ -145,10 +145,10 @@ export const ConversionFunnel = memo(function ConversionFunnel({
                   <div className="flex items-center gap-3">
                     <span className="text-lg font-black">{stage.count.toLocaleString()}</span>
                     <div className="flex flex-col items-end">
-                      <span className="text-[10px] text-muted-foreground uppercase font-bold leading-none mb-1">
+                      <span className="text-xs text-muted-foreground uppercase font-bold leading-none mb-1">
                         {index === 0 ? 'Base' : 'Conv.'}
                       </span>
-                      <Badge variant="outline" className={cn("text-[10px] font-black h-5", stage.textColor, "bg-background/50 backdrop-blur-sm")}>
+                      <Badge variant="outline" className={cn("text-xs font-black h-5", stage.textColor, "bg-background/50 backdrop-blur-sm")}>
                         {stage.percentage}%
                       </Badge>
                     </div>
@@ -191,7 +191,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
               <UserCheck className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
-              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+              <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">
                 {t('analytics.funnel.overallLabel', 'Итоговая конверсия')}
               </p>
               <h4 className="font-black text-xl leading-tight">
@@ -201,7 +201,7 @@ export const ConversionFunnel = memo(function ConversionFunnel({
           </div>
 
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">
+            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">
               Efficiency
             </p>
             <div className="flex items-center gap-1 justify-end">

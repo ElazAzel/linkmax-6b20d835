@@ -56,7 +56,7 @@ export function UserSearchResults({ users, mode, onCollabRequest, onShoutout }: 
             <div>
               <p className="text-sm font-medium">{user.display_name || user.username}</p>
               {user.niche && (
-                <Badge variant="secondary" className="text-[10px] mt-0.5">
+                <Badge variant="secondary" className="text-xs mt-0.5">
                   {NICHE_ICONS[user.niche as Niche]} {t(`niches.${user.niche}`, user.niche)}
                 </Badge>
               )}

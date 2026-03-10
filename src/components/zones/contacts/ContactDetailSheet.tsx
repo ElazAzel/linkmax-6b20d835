@@ -395,7 +395,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <div className="flex gap-2 items-start text-sm">
                             <Phone className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                             <div className="space-y-0.5">
-                              <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.phone', 'Phone')}</p>
+                              <p className="text-xs text-muted-foreground leading-none">{t('zones.contacts.phone', 'Phone')}</p>
                               <p className="font-medium">{contact.phone || '—'}</p>
                             </div>
                           </div>
@@ -415,7 +415,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <div className="flex gap-2 items-start text-sm">
                             <Mail className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                             <div className="space-y-0.5">
-                              <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.email', 'Email')}</p>
+                              <p className="text-xs text-muted-foreground leading-none">{t('zones.contacts.email', 'Email')}</p>
                               <p className="font-medium">{contact.email || '—'}</p>
                             </div>
                           </div>
@@ -433,21 +433,21 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                         <div className="flex gap-2 items-start text-sm">
                           <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                           <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.company', 'Company')}</p>
+                            <p className="text-xs text-muted-foreground leading-none">{t('zones.contacts.company', 'Company')}</p>
                             <p className="font-medium">{contact.company || '—'}</p>
                           </div>
                         </div>
                         <div className="flex gap-2 items-start text-sm">
                           <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                           <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.position', 'Position')}</p>
+                            <p className="text-xs text-muted-foreground leading-none">{t('zones.contacts.position', 'Position')}</p>
                             <p className="font-medium">{contact.position || '—'}</p>
                           </div>
                         </div>
                         <div className="flex gap-2 items-start text-sm">
                           <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                           <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground leading-none">{t('zones.contacts.address', 'Address')}</p>
+                            <p className="text-xs text-muted-foreground leading-none">{t('zones.contacts.address', 'Address')}</p>
                             <p className="font-medium">{contact.address || '—'}</p>
                           </div>
                         </div>
@@ -455,7 +455,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                           <div className="flex gap-2 items-start text-sm">
                             <Send className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
                             <div className="space-y-0.5">
-                              <p className="text-[10px] text-muted-foreground leading-none">Telegram</p>
+                              <p className="text-xs text-muted-foreground leading-none">Telegram</p>
                               <p className="font-medium">{contact.telegram_username ? `@${contact.telegram_username}` : '—'}</p>
                             </div>
                           </div>
@@ -475,7 +475,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                             <Tag className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                             <div className="flex gap-1 flex-wrap">
                               {contact.tags.map(tag => (
-                                <Badge key={tag} variant="secondary" className="text-[10px] py-0 px-1.5">{tag}</Badge>
+                                <Badge key={tag} variant="secondary" className="text-xs py-0 px-1.5">{tag}</Badge>
                               ))}
                             </div>
                           </div>
@@ -483,7 +483,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
 
                         {fields.length > 0 && fields.some(f => contact.custom_fields?.[f.id]) && (
                           <div className="mt-6 pt-4 border-t space-y-3">
-                            <p className="text-[10px] text-muted-foreground font-bold uppercase">{t('zones.contacts.additionalInfo', 'Дополнительная информация')}</p>
+                            <p className="text-xs text-muted-foreground font-bold uppercase">{t('zones.contacts.additionalInfo', 'Дополнительная информация')}</p>
                             {fields.map(f => {
                               const val = contact.custom_fields?.[f.id];
                               if (val === undefined || val === null || val === '') return null;
@@ -491,7 +491,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
                                 <div key={f.id} className="flex gap-2 items-start text-sm">
                                   <Tag className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0 opacity-50" />
                                   <div className="space-y-0.5">
-                                    <p className="text-[10px] text-muted-foreground leading-none">{f.name}</p>
+                                    <p className="text-xs text-muted-foreground leading-none">{f.name}</p>
                                     <p className="font-medium">
                                       {f.type === 'boolean' ? (val ? 'Да' : 'Нет') : val}
                                     </p>
@@ -504,7 +504,7 @@ export const ContactDetailSheet = memo(function ContactDetailSheet({
 
                         {contact.notes && (
                           <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
-                            <p className="text-[10px] text-primary font-bold uppercase mb-1">{t('zones.contacts.generalNotes', 'General Notes')}</p>
+                            <p className="text-xs text-primary font-bold uppercase mb-1">{t('zones.contacts.generalNotes', 'General Notes')}</p>
                             <p className="text-sm whitespace-pre-wrap">{contact.notes}</p>
                           </div>
                         )}

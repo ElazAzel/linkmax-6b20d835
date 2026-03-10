@@ -111,7 +111,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
                 <SheetHeader className="p-6 pb-2">
                     <div className="flex items-center gap-2 mb-2">
                         <Receipt className="h-5 w-5 text-primary" />
-                        <Badge variant="outline" className="text-[10px] font-mono uppercase tracking-widest">
+                        <Badge variant="outline" className="text-xs font-mono uppercase tracking-widest">
                             #{invoice.invoice_number ? `INV-${invoice.invoice_number.toString().padStart(3, '0')}` : invoice.id.slice(0, 8).toUpperCase()}
                         </Badge>
                     </div>
@@ -131,12 +131,12 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
                         {/* Summary */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
-                                <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.issueDate', 'Дата выставления')}</p>
+                                <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.issueDate', 'Дата выставления')}</p>
                                 <p className="text-sm font-medium">{format(new Date(invoice.created_at), 'd MMMM yyyy', { locale: ru })}</p>
                             </div>
                             {invoice.paid_at && (
                                 <div className="space-y-1">
-                                    <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.paymentDate', 'Дата оплаты')}</p>
+                                    <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.paymentDate', 'Дата оплаты')}</p>
                                     <p className="text-sm font-medium">{format(new Date(invoice.paid_at), 'd MMMM yyyy', { locale: ru })}</p>
                                 </div>
                             )}
@@ -148,7 +148,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
                         <div className="space-y-4">
                             {contact && (
                                 <div className="space-y-1">
-                                    <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.client', 'Клиент')}</p>
+                                    <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.client', 'Клиент')}</p>
                                     <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/30 border border-border/40">
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                                             {contact.name[0]}
@@ -163,7 +163,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
 
                             {deal && (
                                 <div className="space-y-1">
-                                    <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.deal', 'Сделка')}</p>
+                                    <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.deal', 'Сделка')}</p>
                                     <div className="p-2 rounded-lg bg-muted/30 border border-border/40">
                                         <p className="text-sm font-semibold truncate">{deal.title}</p>
                                         <p className="text-xs text-muted-foreground">{t('zones.invoices.dealStatus', 'Статус')}: {deal.status}</p>
@@ -176,7 +176,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
 
                         {/* Items */}
                         <div className="space-y-3">
-                            <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.items', 'Позиции')}</p>
+                            <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.items', 'Позиции')}</p>
                             {itemsLoading ? (
                                 <div className="space-y-2">
                                     <div className="h-10 bg-muted/20 animate-pulse rounded" />
@@ -209,7 +209,7 @@ export const InvoiceDetailSheet = memo(function InvoiceDetailSheet({
                             <>
                                 <Separator className="bg-border/50" />
                                 <div className="space-y-1">
-                                    <p className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.noteLabel', 'Примечание')}</p>
+                                    <p className="text-xs uppercase text-muted-foreground font-bold tracking-wider">{t('zones.invoices.noteLabel', 'Примечание')}</p>
                                     <p className="text-sm text-muted-foreground">{invoice.description}</p>
                                 </div>
                             </>

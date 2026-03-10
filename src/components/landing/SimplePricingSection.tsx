@@ -84,12 +84,12 @@ export function SimplePricingSection({ isVisible, sectionRef }: SimplePricingSec
                 >
                   {t(`landing.pricing.months${period}`, `${period} мес`)}
                   {period === '12' && (
-                    <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
+                    <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-emerald-500 text-white text-xs font-bold">
                       -30%
                     </span>
                   )}
                   {period === '6' && (
-                    <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[10px] font-bold">
+                    <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-xs font-bold">
                       -15%
                     </span>
                   )}

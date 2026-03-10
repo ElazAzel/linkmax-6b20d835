@@ -150,19 +150,19 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                         <div className="flex flex-col items-center gap-1 group">
                             <Layers className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={28} suffix="+" /></span>
-                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust1', 'Smart Blocks')}</span>
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust1', 'Smart Blocks')}</span>
                         </div>
                         <div className="w-px h-10 bg-border/20" />
                         <div className="flex flex-col items-center gap-1 group">
                             <Users className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2000} suffix="+" /></span>
-                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust2', 'Creators')}</span>
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust2', 'Creators')}</span>
                         </div>
                         <div className="w-px h-10 bg-border/20" />
                         <div className="flex flex-col items-center gap-1 group">
                             <Globe className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
                             <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={40} suffix="+" /></span>
-                            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust3', 'Languages')}</span>
+                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust3', 'Languages')}</span>
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 style={opacityStyle}
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground/50">{t('landing.v4.hero.scroll', 'Scroll')}</span>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground/50">{t('landing.v4.hero.scroll', 'Scroll')}</span>
                 <div className="w-[1px] h-12 bg-gradient-to-b from-primary/50 to-transparent animate-pulse" />
             </div>
 

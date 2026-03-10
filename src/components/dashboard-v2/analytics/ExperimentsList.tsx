@@ -114,7 +114,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-bold text-lg">{exp.name}</h3>
                                         <Badge className={cn(
-                                            "uppercase text-[10px] font-black tracking-widest px-2 py-0.5",
+                                            "uppercase text-xs font-black tracking-widest px-2 py-0.5",
                                             exp.status === 'running' ? "bg-emerald-500 hover:bg-emerald-600" :
                                                 exp.status === 'ended' ? "bg-slate-500 hover:bg-slate-600" :
                                                     "bg-amber-500 hover:bg-amber-600"
@@ -171,7 +171,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-2">
                                                     <div className={cn(
-                                                        "h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-black",
+                                                        "h-7 w-7 rounded-full flex items-center justify-center text-xs font-black",
                                                         variant.variant_label === 'A' ? "bg-primary text-primary-foreground" : "bg-violet-500 text-white"
                                                     )}>
                                                         {variant.variant_label}
@@ -181,7 +181,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                                     </span>
                                                 </div>
                                                 {isLeading && (
-                                                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 border-emerald-500/20 gap-1 h-5 text-[9px] font-black">
+                                                    <Badge variant="secondary" className="bg-emerald-500/20 text-emerald-600 border-emerald-500/20 gap-1 h-5 text-xs font-black">
                                                         <TrendingUp className="h-3 w-3" />
                                                         {t('experiments.leading', 'ЛИДИРУЕТ')}
                                                     </Badge>
@@ -191,15 +191,15 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
                                             <div className="grid grid-cols-3 gap-2 py-2">
                                                 <div className="text-center">
                                                     <div className="text-lg font-black">{variant.stats.views}</div>
-                                                    <div className="text-[10px] uppercase text-muted-foreground font-bold tracking-tight">{t('analytics.views', 'Просмотры')}</div>
+                                                    <div className="text-xs uppercase text-muted-foreground font-bold tracking-tight">{t('analytics.views', 'Просмотры')}</div>
                                                 </div>
                                                 <div className="text-center border-x border-white/5">
                                                     <div className="text-lg font-black">{variant.stats.clicks}</div>
-                                                    <div className="text-[10px] uppercase text-muted-foreground font-bold tracking-tight">{t('analytics.clicks', 'Клики')}</div>
+                                                    <div className="text-xs uppercase text-muted-foreground font-bold tracking-tight">{t('analytics.clicks', 'Клики')}</div>
                                                 </div>
                                                 <div className="text-center">
                                                     <div className="text-lg font-black text-primary">{variant.stats.ctr.toFixed(1)}%</div>
-                                                    <div className="text-[10px] uppercase text-muted-foreground font-bold tracking-tight">CTR</div>
+                                                    <div className="text-xs uppercase text-muted-foreground font-bold tracking-tight">CTR</div>
                                                 </div>
                                             </div>
 

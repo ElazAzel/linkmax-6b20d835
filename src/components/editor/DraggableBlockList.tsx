@@ -180,7 +180,7 @@ function SortableBlockItem({ block, index, totalCount, onDelete, onEdit, onMoveU
               {isViewOnly && (
                 <Tooltip>
                   <TooltipTrigger>
-                    <Badge variant="outline" className="text-[10px] px-1 py-0 border-amber-500 text-amber-600">
+                    <Badge variant="outline" className="text-xs px-1 py-0 border-amber-500 text-amber-600">
                       <Eye className="h-2.5 w-2.5 mr-0.5" />
                       {t('freemium.viewOnly', 'Просмотр')}
                     </Badge>

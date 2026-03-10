@@ -94,7 +94,7 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
                 <div className="flex items-center gap-2">
                   <h4 className="font-bold text-sm truncate">{name}</h4>
                   {item.featured && (
-                    <Badge variant="default" className="text-[10px] h-5 px-2 bg-primary animate-pulse shadow-lg shadow-primary/30">
+                    <Badge variant="default" className="text-xs h-5 px-2 bg-primary animate-pulse shadow-lg shadow-primary/30">
                       <Star className="h-2.5 w-2.5 mr-0.5 fill-current" />
                       {t('blocks.pricing.hit', 'Хит')}
                     </Badge>
@@ -111,7 +111,7 @@ export const PricingBlock = React.memo(function PricingBlock({ block }: PricingB
                   {formatPrice(item.price, item.currency || block.currency || 'KZT')}
                 </span>
                 {period && (
-                  <p className="text-[10px] text-muted-foreground font-medium">{period}</p>
+                  <p className="text-xs text-muted-foreground font-medium">{period}</p>
                 )}
               </div>
             </div>

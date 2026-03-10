@@ -287,9 +287,9 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-medium truncate">{invite.email}</p>
-                        <Badge variant="outline" className="text-[10px] h-4">{invite.role}</Badge>
+                        <Badge variant="outline" className="text-xs h-4">{invite.role}</Badge>
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                      <p className="text-xs text-muted-foreground mt-0.5">
                         {t('zones.settings.expires', 'Expires')}: {new Date(invite.expires_at).toLocaleDateString()}
                       </p>
                     </div>

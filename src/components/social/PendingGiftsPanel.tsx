@@ -76,7 +76,7 @@ export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
                     <p className="font-semibold text-sm truncate">
                       {sender?.display_name || sender?.username || t('common.friend', 'Друг')}
                     </p>
-                    <Badge className="h-5 bg-gradient-to-r from-amber-500 to-orange-500 text-[10px]">
+                    <Badge className="h-5 bg-gradient-to-r from-amber-500 to-orange-500 text-xs">
                       <Crown className="h-3 w-3 mr-1" />
                       {t('social.pendingGifts.days', { count: gift.days_gifted })}
                     </Badge>
@@ -89,7 +89,7 @@ export function PendingGiftsPanel({ onClose }: PendingGiftsPanelProps) {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(gift.created_at), { 
                         addSuffix: true, 
                         locale 

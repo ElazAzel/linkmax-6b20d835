@@ -101,7 +101,7 @@ export const PageVersionsDialog = memo(function PageVersionsDialog({
                           {t('versions.version', 'Версия')} {versions.length - index}
                         </span>
                         {index === 0 && (
-                          <Badge variant="secondary" className="text-[10px] px-1.5">
+                          <Badge variant="secondary" className="text-xs px-1.5">
                             {t('versions.current', 'Текущая')}
                           </Badge>
                         )}

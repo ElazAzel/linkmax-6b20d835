@@ -162,7 +162,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
           {formatShortDate(lead.created_at)}
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className={`${sourceColors[lead.source]} text-[10px] sm:text-xs`}>
+          <Badge variant="outline" className={`${sourceColors[lead.source]} text-xs sm:text-xs`}>
             {sourceIcons[lead.source]} {t(`crm.source.${lead.source}`, lead.source)}
           </Badge>
         </div>
@@ -178,7 +178,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
           <div className="space-y-1.5 sm:space-y-2">
             {Object.entries(lead.metadata).map(([key, value]) => (
               <div key={key} className="flex flex-col gap-0.5 p-2 bg-accent/50 rounded-lg">
-                <span className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase">{key}</span>
+                <span className="text-xs sm:text-xs font-medium text-muted-foreground uppercase">{key}</span>
                 <span className="text-xs sm:text-sm break-words">{String(value)}</span>
               </div>
             ))}
@@ -192,7 +192,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
         <Select value={status} onValueChange={handleStatusChange}>
           <SelectTrigger className="mt-1 h-9 sm:h-10">
             <SelectValue>
-              <Badge variant="outline" className={`${statusColors[status]} text-[10px] sm:text-xs`}>
+              <Badge variant="outline" className={`${statusColors[status]} text-xs sm:text-xs`}>
                 {t(`crm.status.${status}`, status)}
               </Badge>
             </SelectValue>
@@ -200,7 +200,7 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
           <SelectContent>
             {statuses.map(s => (
               <SelectItem key={s} value={s}>
-                <Badge variant="outline" className={`${statusColors[s]} text-[10px] sm:text-xs`}>
+                <Badge variant="outline" className={`${statusColors[s]} text-xs sm:text-xs`}>
                   {t(`crm.status.${s}`, s)}
                 </Badge>
               </SelectItem>
@@ -287,10 +287,10 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                      <span className="text-[10px] sm:text-xs font-medium text-muted-foreground">
+                      <span className="text-xs sm:text-xs font-medium text-muted-foreground">
                         {t(`crm.interactionTypes.${interaction.type}`, interaction.type)}
                       </span>
-                      <span className="text-[10px] sm:text-xs text-muted-foreground">
+                      <span className="text-xs sm:text-xs text-muted-foreground">
                         {formatShortDate(interaction.created_at)}
                       </span>
                     </div>

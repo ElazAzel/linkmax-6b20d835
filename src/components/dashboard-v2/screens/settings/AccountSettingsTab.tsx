@@ -102,7 +102,7 @@ function SettingsItem({
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                     <span className="font-bold tracking-tight">{label}</span>
-                    {badge && <Badge className="text-[10px] font-black uppercase bg-primary text-primary-foreground">{badge}</Badge>}
+                    {badge && <Badge className="text-xs font-black uppercase bg-primary text-primary-foreground">{badge}</Badge>}
                 </div>
                 {description && <p className="text-xs font-medium text-muted-foreground/70 truncate">{description}</p>}
             </div>
@@ -168,7 +168,7 @@ export const AccountSettingsTab = memo(function AccountSettingsTab({
 
                 {/* Username Input */}
                 <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/80 flex items-center gap-2 px-1">
+                    <label className="text-xs font-black uppercase tracking-widest text-muted-foreground/80 flex items-center gap-2 px-1">
                         <Link2 className="h-3 w-3" />
                         {t('dashboard.accountSettings.username', 'Username')}
                     </label>

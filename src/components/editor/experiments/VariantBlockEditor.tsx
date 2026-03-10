@@ -88,7 +88,7 @@ export function VariantBlockEditor({ block, onChange }: VariantBlockEditorProps)
 
   return (
     <div className="space-y-3">
-      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
+      <p className="text-xs uppercase tracking-wider font-bold text-muted-foreground">
         {t('experiments.setup.editFields', 'Редактировать контент варианта')}
       </p>
       {fields.map((field) => (

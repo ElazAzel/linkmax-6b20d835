@@ -98,7 +98,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
                       {currentZone?.name || t('zones.selectZone', 'Select zone')}
                     </span>
                     {currentZone && (
-                      <Badge variant="outline" className="text-[9px] px-1 h-4 shrink-0">
+                      <Badge variant="outline" className="text-xs px-1 h-4 shrink-0">
                         {currentZone.plan_status === 'active' ? 'BIZ' : currentZone.plan_status.toUpperCase()}
                       </Badge>
                     )}

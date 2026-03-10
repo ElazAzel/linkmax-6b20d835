@@ -135,7 +135,7 @@ export function InteractiveDemo() {
                   onClick={() => addBlock('link')}
                 >
                   <Link2 className="h-4 w-4 sm:h-5 sm:w-5 mb-0.5 sm:mb-1 text-primary" />
-                  <span className="text-[10px] sm:text-xs">{t('landing.demo.link', 'Link')}</span>
+                  <span className="text-xs sm:text-xs">{t('landing.demo.link', 'Link')}</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -143,7 +143,7 @@ export function InteractiveDemo() {
                   onClick={() => addBlock('text')}
                 >
                   <Type className="h-4 w-4 sm:h-5 sm:w-5 mb-0.5 sm:mb-1 text-primary" />
-                  <span className="text-[10px] sm:text-xs">{t('landing.demo.text', 'Text')}</span>
+                  <span className="text-xs sm:text-xs">{t('landing.demo.text', 'Text')}</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -151,7 +151,7 @@ export function InteractiveDemo() {
                   onClick={() => addBlock('image')}
                 >
                   <Image className="h-4 w-4 sm:h-5 sm:w-5 mb-0.5 sm:mb-1 text-primary" />
-                  <span className="text-[10px] sm:text-xs">{t('landing.demo.image', 'Image')}</span>
+                  <span className="text-xs sm:text-xs">{t('landing.demo.image', 'Image')}</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -159,7 +159,7 @@ export function InteractiveDemo() {
                   onClick={() => addBlock('socials')}
                 >
                   <Instagram className="h-4 w-4 sm:h-5 sm:w-5 mb-0.5 sm:mb-1 text-primary" />
-                  <span className="text-[10px] sm:text-xs">{t('landing.demo.socials', 'Socials')}</span>
+                  <span className="text-xs sm:text-xs">{t('landing.demo.socials', 'Socials')}</span>
                 </Button>
               </div>
             </div>
@@ -229,7 +229,7 @@ export function InteractiveDemo() {
           <div className="flex justify-center order-1 lg:order-2 lg:sticky lg:top-24">
             <div className="relative">
               {/* Live badge */}
-              <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-emerald-500 text-white text-[10px] sm:text-xs font-medium shadow-lg">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-emerald-500 text-white text-xs sm:text-xs font-medium shadow-lg">
                 <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>

@@ -242,11 +242,11 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-semibold truncate">{event.title}</h3>
-              <Badge className={cn('text-[10px]', statusColors[event.status])}>
+              <Badge className={cn('text-xs', statusColors[event.status])}>
                 {t(`events.status.${event.status}`, event.status)}
               </Badge>
               {event.isPaid && (
-                <Badge variant="outline" className="text-[10px]">
+                <Badge variant="outline" className="text-xs">
                   {event.price} {event.currency}
                 </Badge>
               )}

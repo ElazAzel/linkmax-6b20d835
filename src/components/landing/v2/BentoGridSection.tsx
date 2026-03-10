@@ -107,7 +107,7 @@ const CRMVisual = () => {
           style={{ transitionDelay: `${i * 150}ms` }}
         >
           <div className={cn("w-2 h-2 rounded-full", s.color)} />
-          <span className="text-[10px] font-medium text-muted-foreground">{s.label}</span>
+          <span className="text-xs font-medium text-muted-foreground">{s.label}</span>
           <span className="text-lg font-bold text-foreground">{s.count}</span>
         </div>
       ))}

@@ -251,19 +251,19 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
       <div className="grid grid-cols-4 gap-2 p-3 border-b">
         <div className="text-center p-2 rounded-lg bg-primary/10">
           <div className="text-lg font-bold text-primary">{stats.total}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.total', 'Всего')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.total', 'Всего')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-green-500/10">
           <div className="text-lg font-bold text-green-500">{stats.published}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.active', 'Активных')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.active', 'Активных')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-yellow-500/10">
           <div className="text-lg font-bold text-yellow-500">{stats.draft}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.drafts', 'Черновики')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.drafts', 'Черновики')}</div>
         </div>
         <div className="text-center p-2 rounded-lg bg-blue-500/10">
           <div className="text-lg font-bold text-blue-500">{stats.totalRegistrations}</div>
-          <div className="text-[10px] text-muted-foreground">{t('events.registrations', 'Заявок')}</div>
+          <div className="text-xs text-muted-foreground">{t('events.registrations', 'Заявок')}</div>
         </div>
       </div>
 
@@ -346,7 +346,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
                             <Clock className="h-3 w-3" />
                             {format(new Date(event.start_at), 'd MMM yyyy, HH:mm', { locale })}
                             {isEventPast && (
-                              <Badge variant="outline" className="ml-1 text-[10px] h-4">
+                              <Badge variant="outline" className="ml-1 text-xs h-4">
                                 {t('events.past', 'Прошел')}
                               </Badge>
                             )}
@@ -370,7 +370,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
                           )}
                         </div>
                         {event.is_paid && event.price_amount && (
-                          <Badge variant="secondary" className="text-[10px] h-5">
+                          <Badge variant="secondary" className="text-xs h-5">
                             {event.price_amount} {event.currency || 'KZT'}
                           </Badge>
                         )}

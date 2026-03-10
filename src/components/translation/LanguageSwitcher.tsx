@@ -387,7 +387,7 @@ export function LanguageSwitcher({
                     <span key={code} className="text-xs">{getLanguageInfo(code).flag}</span>
                   ))}
                   {targetTranslationLanguages.length > 3 && (
-                    <Badge variant="secondary" className="text-[10px] h-4 px-1">
+                    <Badge variant="secondary" className="text-xs h-4 px-1">
                       +{targetTranslationLanguages.length - 3}
                     </Badge>
                   )}

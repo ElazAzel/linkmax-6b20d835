@@ -157,16 +157,16 @@ function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string })
             <TableBody>
               {submissions.map(s => (
                 <TableRow key={s.id}>
-                  <TableCell className="font-mono text-[10px] max-w-[200px] truncate">{s.target_url}</TableCell>
+                  <TableCell className="font-mono text-xs max-w-[200px] truncate">{s.target_url}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="text-[9px]">{s.provider}</Badge>
+                    <Badge variant="outline" className="text-xs">{s.provider}</Badge>
                   </TableCell>
-                  <TableCell className="text-[10px]">{s.action_type}</TableCell>
+                  <TableCell className="text-xs">{s.action_type}</TableCell>
                   <TableCell>
                     <Badge
                       variant="outline"
                       className={cn(
-                        'text-[9px]',
+                        'text-xs',
                         s.submission_status === 'sent' && 'border-emerald-500/30 text-emerald-600',
                         s.submission_status === 'provider_failed' && 'border-red-500/30 text-red-500',
                         s.submission_status === 'failed' && 'border-red-500/30 text-red-500',
@@ -176,11 +176,11 @@ function SubmissionLogDialog({ pageId, slug }: { pageId: string; slug: string })
                       {s.submission_status}
                     </Badge>
                     {s.skip_reason && (
-                      <span className="text-[9px] text-muted-foreground ml-1">({s.skip_reason})</span>
+                      <span className="text-xs text-muted-foreground ml-1">({s.skip_reason})</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-[10px] tabular-nums">{s.http_status || '—'}</TableCell>
-                  <TableCell className="text-[10px] text-muted-foreground">
+                  <TableCell className="text-xs tabular-nums">{s.http_status || '—'}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">
                     {new Date(s.created_at).toLocaleString('ru', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                   </TableCell>
                 </TableRow>
@@ -318,17 +318,17 @@ export function AdminSearchDiagnosticsTab() {
                   </TableCell>
                   <TableCell>
                     {isIndexable ? (
-                      <Badge variant="outline" className="gap-1 text-[10px] border-emerald-500/30 text-emerald-600">
+                      <Badge variant="outline" className="gap-1 text-xs border-emerald-500/30 text-emerald-600">
                         <Globe className="h-3 w-3" />
                         Indexable
                       </Badge>
                     ) : page.is_published ? (
-                      <Badge variant="outline" className="gap-1 text-[10px] border-amber-500/30 text-amber-600">
+                      <Badge variant="outline" className="gap-1 text-xs border-amber-500/30 text-amber-600">
                         <AlertTriangle className="h-3 w-3" />
                         NoIndex
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="gap-1 text-[10px] border-muted-foreground/30">
+                      <Badge variant="outline" className="gap-1 text-xs border-muted-foreground/30">
                         <FileX className="h-3 w-3" />
                         Draft
                       </Badge>
@@ -338,12 +338,12 @@ export function AdminSearchDiagnosticsTab() {
                     {exclusions.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
                         {exclusions.slice(0, 3).map(r => (
-                          <Badge key={r} variant="secondary" className="text-[9px] px-1.5 py-0">
+                          <Badge key={r} variant="secondary" className="text-xs px-1.5 py-0">
                             {EXCLUSION_LABELS[r] || r}
                           </Badge>
                         ))}
                         {exclusions.length > 3 && (
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">+{exclusions.length - 3}</Badge>
+                          <Badge variant="secondary" className="text-xs px-1.5 py-0">+{exclusions.length - 3}</Badge>
                         )}
                       </div>
                     ) : (
@@ -363,7 +363,7 @@ export function AdminSearchDiagnosticsTab() {
                         <DialogTrigger asChild>
                           <button className="text-left">
                             <span className="text-sm font-medium">{eligibleChildren.length}</span>
-                            <span className="text-[10px] text-muted-foreground">/{activeChildren.length}</span>
+                            <span className="text-xs text-muted-foreground">/{activeChildren.length}</span>
                             {thinChildren.length > 0 && (
                               <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">{thinChildren.length} thin</Badge>
                             )}
@@ -392,9 +392,9 @@ export function AdminSearchDiagnosticsTab() {
                                         <Badge variant="secondary" className="text-[8px] px-1 py-0 ml-1">legacy</Badge>
                                       )}
                                     </TableCell>
-                                    <TableCell className="font-mono text-[10px]">{child.slug}</TableCell>
+                                    <TableCell className="font-mono text-xs">{child.slug}</TableCell>
                                     <TableCell>
-                                      <Badge variant="outline" className={cn('text-[9px]', stateInfo.color)}>
+                                      <Badge variant="outline" className={cn('text-xs', stateInfo.color)}>
                                         {stateInfo.label}
                                       </Badge>
                                     </TableCell>
@@ -411,7 +411,7 @@ export function AdminSearchDiagnosticsTab() {
                   </TableCell>
                   <TableCell>
                     {page.last_indexnow_at ? (
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {new Date(page.last_indexnow_at).toLocaleDateString('ru')}
                       </span>
                     ) : (

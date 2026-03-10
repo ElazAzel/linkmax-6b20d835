@@ -101,13 +101,13 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-card/50 rounded-xl p-3 text-center border border-border/30">
           <p className="text-lg font-bold text-primary">{stats.completedChallenges}</p>
-          <p className="text-[10px] text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {t('social.weeklyChallenges.stats.completed', 'Выполнено')}
           </p>
         </div>
         <div className="bg-card/50 rounded-xl p-3 text-center border border-border/30">
           <p className="text-lg font-bold text-amber-500">{stats.unclaimedRewards}</p>
-          <p className="text-[10px] text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {t('social.weeklyChallenges.stats.rewards', 'Награды')}
           </p>
         </div>
@@ -115,7 +115,7 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
           <p className="text-lg font-bold text-green-500">
             {t('social.weeklyChallenges.rewardHoursShort', '+{{count}}ч', { count: stats.totalRewardHours })}
           </p>
-          <p className="text-[10px] text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {t('social.weeklyChallenges.stats.toClaim', 'К получению')}
           </p>
         </div>
@@ -159,7 +159,7 @@ export function WeeklyChallengesPanel({ compact }: WeeklyChallengesPanelProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-semibold text-sm">{challenge.title}</h4>
-                    <Badge variant="secondary" className="text-[10px] h-5">
+                    <Badge variant="secondary" className="text-xs h-5">
                       {t('social.weeklyChallenges.rewardHoursShort', '+{{count}}ч', { count: challenge.reward_hours })}
                     </Badge>
                   </div>

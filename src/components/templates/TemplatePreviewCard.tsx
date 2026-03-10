@@ -32,13 +32,13 @@ interface TemplatePreviewCardProps {
 const BLOCK_ICONS: Record<string, { icon: React.ElementType; color: string }> = {
   profile: { icon: User, color: 'bg-blue-500' },
   link: { icon: Link2, color: 'bg-sky-500' },
-  button: { icon: () => <span className="text-[10px] font-bold">▶</span>, color: 'bg-red-500' },
+  button: { icon: () => <span className="text-xs font-bold">▶</span>, color: 'bg-red-500' },
   text: { icon: Type, color: 'bg-slate-500' },
   image: { icon: Image, color: 'bg-emerald-500' },
   video: { icon: Video, color: 'bg-rose-500' },
   product: { icon: ShoppingBag, color: 'bg-amber-500' },
   messenger: { icon: MessageCircle, color: 'bg-green-500' },
-  socials: { icon: () => <span className="text-[10px]">@</span>, color: 'bg-pink-500' },
+  socials: { icon: () => <span className="text-xs">@</span>, color: 'bg-pink-500' },
   carousel: { icon: Layers, color: 'bg-violet-500' },
   form: { icon: FormInput, color: 'bg-purple-500' },
   testimonial: { icon: Star, color: 'bg-yellow-500' },
@@ -53,7 +53,7 @@ const BLOCK_ICONS: Record<string, { icon: React.ElementType; color: string }> = 
   shoutout: { icon: Megaphone, color: 'bg-orange-500' },
   event: { icon: CalendarDays, color: 'bg-emerald-600' },
   avatar: { icon: User, color: 'bg-cyan-500' },
-  separator: { icon: () => <span className="text-[10px]">—</span>, color: 'bg-gray-400' },
+  separator: { icon: () => <span className="text-xs">—</span>, color: 'bg-gray-400' },
 };
 
 /**
@@ -165,7 +165,7 @@ export const TemplatePreviewCard = memo(function TemplatePreviewCard({
           {/* More blocks indicator */}
           {blocksArray.length > 9 && (
             <div className="text-center py-0.5">
-              <span className="text-[8px] sm:text-[9px] text-muted-foreground">
+              <span className="text-[8px] sm:text-xs text-muted-foreground">
                 +{blocksArray.length - 9}
               </span>
             </div>
@@ -176,7 +176,7 @@ export const TemplatePreviewCard = memo(function TemplatePreviewCard({
       {/* Block count badge */}
       {showBlockCount && blocksArray.length > 0 && (
         <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
-          <div className="bg-background/90 backdrop-blur-sm rounded-full px-1.5 py-0.5 text-[8px] sm:text-[9px] font-medium text-muted-foreground border border-border/50">
+          <div className="bg-background/90 backdrop-blur-sm rounded-full px-1.5 py-0.5 text-[8px] sm:text-xs font-medium text-muted-foreground border border-border/50">
             {blocksArray.length} блоков
           </div>
         </div>

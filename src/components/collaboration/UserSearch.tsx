@@ -104,7 +104,7 @@ export function UserSearch({ mode, placeholder, onCollabRequest, onShoutout, onT
                       <p className="text-xs text-muted-foreground">@{user.username}</p>
                     )}
                     {user.niche && (
-                      <Badge variant="secondary" className="text-[10px] mt-1">
+                      <Badge variant="secondary" className="text-xs mt-1">
                         {t(`niches.${user.niche}`, user.niche)}
                       </Badge>
                     )}

@@ -370,22 +370,22 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
           <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v)}>
             <TabsList className="grid w-full grid-cols-4 h-8 sm:h-10">
-              <TabsTrigger value="popular" className="text-[10px] sm:text-sm px-1 sm:px-3">
+              <TabsTrigger value="popular" className="text-xs sm:text-sm px-1 sm:px-3">
                 <TrendingUp className="h-3 w-3 mr-0.5 sm:mr-1" />
                 <span className="hidden xs:inline">{t('templates.popular', 'Популярные')}</span>
                 <span className="xs:hidden">🔥</span>
               </TabsTrigger>
-              <TabsTrigger value="new" className="text-[10px] sm:text-sm px-1 sm:px-3">
+              <TabsTrigger value="new" className="text-xs sm:text-sm px-1 sm:px-3">
                 <Clock className="h-3 w-3 mr-0.5 sm:mr-1" />
                 <span className="hidden xs:inline">{t('templates.new', 'Новые')}</span>
                 <span className="xs:hidden">🆕</span>
               </TabsTrigger>
-              <TabsTrigger value="free" className="text-[10px] sm:text-sm px-1 sm:px-3">
+              <TabsTrigger value="free" className="text-xs sm:text-sm px-1 sm:px-3">
                 <Star className="h-3 w-3 mr-0.5 sm:mr-1" />
                 <span className="hidden xs:inline">{t('templates.free', 'Бесплатные')}</span>
                 <span className="xs:hidden">✨</span>
               </TabsTrigger>
-              <TabsTrigger value="premium" className="text-[10px] sm:text-sm px-1 sm:px-3">
+              <TabsTrigger value="premium" className="text-xs sm:text-sm px-1 sm:px-3">
                 <ShoppingCart className="h-3 w-3 mr-0.5 sm:mr-1" />
                 <span className="hidden xs:inline">{t('templates.premium', 'Платные')}</span>
                 <span className="xs:hidden">💎</span>
@@ -439,7 +439,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
                       {/* Price badge */}
                       {template.is_for_sale && (
-                        <Badge className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-[9px] sm:text-xs px-1.5 sm:px-2 shadow-lg">
+                        <Badge className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-xs sm:text-xs px-1.5 sm:px-2 shadow-lg">
                           {formatPrice(template.price, template.currency)}
                         </Badge>
                       )}
@@ -447,7 +447,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                       {/* Block count badge for templates with preview images */}
                       {template.preview_url && Array.isArray(template.blocks) && (
                         <div className="absolute bottom-1 left-1 sm:bottom-2 sm:left-2">
-                          <Badge variant="secondary" className="text-[8px] sm:text-[10px] px-1 sm:px-1.5 bg-background/80 backdrop-blur-sm">
+                          <Badge variant="secondary" className="text-[8px] sm:text-xs px-1 sm:px-1.5 bg-background/80 backdrop-blur-sm">
                             <Layers className="h-2 w-2 sm:h-2.5 sm:w-2.5 mr-0.5" />
                             {(template.blocks as any[]).length}
                           </Badge>
@@ -456,7 +456,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
                       {/* Purchased badge */}
                       {purchasedTemplates.includes(template.id) && (
-                        <Badge className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-green-500 text-[9px] sm:text-xs px-1 sm:px-2">
+                        <Badge className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-green-500 text-xs sm:text-xs px-1 sm:px-2">
                           ✓
                         </Badge>
                       )}
@@ -481,7 +481,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                         </Button>
 
                         {/* Quick stats on hover */}
-                        <div className="flex items-center gap-2 text-white/80 text-[10px] sm:text-xs">
+                        <div className="flex items-center gap-2 text-white/80 text-xs sm:text-xs">
                           <span className="flex items-center gap-0.5">
                             <Heart className="h-2.5 w-2.5" />
                             {template.likes_count}
@@ -496,12 +496,12 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
 
                     <div className="p-2 sm:p-3">
                       <h4 className="font-semibold text-[11px] sm:text-sm truncate">{template.name}</h4>
-                      <p className="text-[9px] sm:text-xs text-muted-foreground line-clamp-2 mt-0.5 sm:mt-1 min-h-[2em] sm:min-h-[2.5em]">
+                      <p className="text-xs sm:text-xs text-muted-foreground line-clamp-2 mt-0.5 sm:mt-1 min-h-[2em] sm:min-h-[2.5em]">
                         {template.description || t('templates.noDescription', 'Без описания')}
                       </p>
 
                       {/* Author info - hidden on very small screens */}
-                      <div className="hidden xs:flex items-center gap-2 mt-1.5 sm:mt-2 text-[9px] sm:text-xs text-muted-foreground">
+                      <div className="hidden xs:flex items-center gap-2 mt-1.5 sm:mt-2 text-xs sm:text-xs text-muted-foreground">
                         <Avatar className="h-3 w-3 sm:h-4 sm:w-4">
                           <AvatarImage src={template.author?.avatar_url || undefined} />
                           <AvatarFallback className="text-[6px] sm:text-[8px]">
@@ -516,7 +516,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                           {getTemplateCategoryLabel(t, template.category)}
                         </Badge>
 
-                        <div className="flex items-center gap-2 sm:gap-3 text-[9px] sm:text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-xs text-muted-foreground">
                           <button
                             className="flex items-center gap-0.5 sm:gap-1 hover:text-red-500 transition-colors"
                             onClick={(e) => {

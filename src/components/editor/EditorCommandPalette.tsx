@@ -111,7 +111,7 @@ export const EditorCommandPalette = memo(function EditorCommandPalette({
                       {t(cmd.labelKey, cmd.label)}
                     </span>
                     {cmd.shortcut && (
-                      <Badge variant="outline" className="ml-2 text-[10px] font-mono">
+                      <Badge variant="outline" className="ml-2 text-xs font-mono">
                         {cmd.shortcut}
                       </Badge>
                     )}

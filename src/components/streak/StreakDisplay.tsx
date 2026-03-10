@@ -67,7 +67,7 @@ export function StreakDisplay({ userId, compact = false }: StreakDisplayProps) {
                 <span className="text-muted-foreground">{t('streak.nextMilestone', 'Next milestone')}</span>
                 <span className="font-medium">
                   {nextMilestone.days} {t('streak.days', 'days')}
-                  <Badge variant="secondary" className="ml-1.5 text-[10px] px-1.5 py-0">
+                  <Badge variant="secondary" className="ml-1.5 text-xs px-1.5 py-0">
                     +{nextMilestone.bonus} {t('streak.bonusDays', 'bonus days')}
                   </Badge>
                 </span>
@@ -135,8 +135,8 @@ export function StreakMilestones() {
             className="text-center p-2 rounded-lg bg-background/50 border border-border/30"
           >
             <div className="text-sm font-bold">{milestone.days}</div>
-            <div className="text-[10px] text-muted-foreground">{t('streak.days', 'days')}</div>
-            <Badge variant="secondary" className="mt-1 text-[9px] px-1">
+            <div className="text-xs text-muted-foreground">{t('streak.days', 'days')}</div>
+            <Badge variant="secondary" className="mt-1 text-xs px-1">
               +{milestone.bonus}
             </Badge>
           </div>

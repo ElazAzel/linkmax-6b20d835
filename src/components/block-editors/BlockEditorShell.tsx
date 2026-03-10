@@ -371,7 +371,7 @@ export const BlockEditorShell = memo(function BlockEditorShell({
                                         {tab.icon}
                                         <span>{tab.label}</span>
                                         {tab.badge !== undefined && tab.badge > 0 && (
-                                            <Badge variant="secondary" className="h-4 px-1 text-[10px] rounded-full">
+                                            <Badge variant="secondary" className="h-4 px-1 text-xs rounded-full">
                                                 {tab.badge}
                                             </Badge>
                                         )}

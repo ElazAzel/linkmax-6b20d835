@@ -381,7 +381,7 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
                   </Badge>
                 )}
                 {account.provider === 'apple' && !account.linked && (
-                  <Badge variant="secondary" className="text-[10px] h-4 px-1.5 uppercase tracking-wider font-bold opacity-70">
+                  <Badge variant="secondary" className="text-xs h-4 px-1.5 uppercase tracking-wider font-bold opacity-70">
                     {t('common.coming_soon', 'Скоро')}
                   </Badge>
                 )}

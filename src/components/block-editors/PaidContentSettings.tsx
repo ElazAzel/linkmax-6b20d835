@@ -38,7 +38,7 @@ export function PaidContentSettings({ blockStyle, onChange }: PaidContentSetting
         <div className="flex items-center gap-2">
           <Lock className="h-4 w-4 text-primary" />
           <span className="text-sm font-semibold">{t('paidContent.title', 'Платный контент')}</span>
-          <Badge variant="secondary" className="gap-1 text-[10px] h-5 rounded-full bg-amber-500/10 text-amber-600 border-0">
+          <Badge variant="secondary" className="gap-1 text-xs h-5 rounded-full bg-amber-500/10 text-amber-600 border-0">
             <Coins className="h-3 w-3" />
             Linkkon
           </Badge>

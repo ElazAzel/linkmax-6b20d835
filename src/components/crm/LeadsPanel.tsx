@@ -197,25 +197,25 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
           {/* Tabs for Leads / Analytics */}
           <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as typeof activeTab)} className="w-full">
             <TabsList className="grid w-full grid-cols-5 mx-0 rounded-none border-b bg-transparent h-10 sm:h-11">
-              <TabsTrigger value="leads" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5">
+              <TabsTrigger value="leads" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
                 <Users className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline ml-1">{t('crm.leads', 'Leads')}</span>
               </TabsTrigger>
-              <TabsTrigger value="bookings" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5">
+              <TabsTrigger value="bookings" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
                 <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline ml-1">{t('crm.bookings', 'Bookings')}</span>
               </TabsTrigger>
-              <TabsTrigger value="analytics" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5">
+              <TabsTrigger value="analytics" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
                 <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline ml-1">{t('analytics.title', 'Stats')}</span>
               </TabsTrigger>
-              <TabsTrigger value="funnel" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5">
+              <TabsTrigger value="funnel" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
                 <svg className="h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
                 </svg>
                 <span className="hidden sm:inline ml-1">{t('funnel.short', 'Funnel')}</span>
               </TabsTrigger>
-              <TabsTrigger value="heatmap" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5">
+              <TabsTrigger value="heatmap" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
                 <svg className="h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" />
                   <circle cx="12" cy="12" r="6" />
@@ -255,7 +255,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                         } ${statusColors[status]}`}
                     >
                       <div className="text-base sm:text-lg font-bold">{stats[status]}</div>
-                      <div className="text-[8px] sm:text-[10px] uppercase opacity-70 truncate">
+                      <div className="text-[8px] sm:text-xs uppercase opacity-70 truncate">
                         {t(`crm.status.${status}`, status)}
                       </div>
                     </button>
@@ -267,7 +267,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               <div className="flex gap-1.5 sm:gap-2 p-3 sm:p-4 border-b overflow-x-auto scrollbar-hide">
                 <button
                   onClick={() => setSourceFilter('all')}
-                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
+                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
                     }`}
                 >
                   {t('crm.allSources', 'All')} ({stats.total})
@@ -277,7 +277,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                     <button
                       key={source}
                       onClick={() => setSourceFilter(sourceFilter === source ? 'all' : source)}
-                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1 shrink-0 ${sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
+                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1 shrink-0 ${sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
                         } ${sourceColors[source]}`}
                     >
                       <span>{sourceIcons[source]}</span>
@@ -362,16 +362,16 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                                 )}
                               </div>
                               {lead.notes && (
-                                <div className="text-[10px] sm:text-xs text-muted-foreground mt-1 truncate max-w-[200px]">
+                                <div className="text-xs sm:text-xs text-muted-foreground mt-1 truncate max-w-[200px]">
                                   {lead.notes}
                                 </div>
                               )}
                             </div>
                             <div className="flex flex-col items-end gap-0.5 sm:gap-1 shrink-0">
-                              <Badge variant="outline" className={`${statusColors[lead.status]} text-[10px] sm:text-xs px-1.5 sm:px-2`}>
+                              <Badge variant="outline" className={`${statusColors[lead.status]} text-xs sm:text-xs px-1.5 sm:px-2`}>
                                 {t(`crm.status.${lead.status}`, lead.status)}
                               </Badge>
-                              <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1">
+                              <span className="text-xs sm:text-xs text-muted-foreground flex items-center gap-1">
                                 <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                                 {formatDate(lead.created_at)}
                               </span>

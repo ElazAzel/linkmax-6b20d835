@@ -95,7 +95,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
             <CalendarDays className="h-5 w-5 text-primary" />
             <div>
               <div className="text-lg font-bold">{stats.total}</div>
-              <div className="text-[10px] text-muted-foreground">{t('zones.events.totalEvents', 'Всего')}</div>
+              <div className="text-xs text-muted-foreground">{t('zones.events.totalEvents', 'Всего')}</div>
             </div>
           </CardContent>
         </Card>
@@ -104,7 +104,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
             <Eye className="h-5 w-5 text-primary/70" />
             <div>
               <div className="text-lg font-bold">{stats.published}</div>
-              <div className="text-[10px] text-muted-foreground">{t('zones.events.published', 'Активных')}</div>
+              <div className="text-xs text-muted-foreground">{t('zones.events.published', 'Активных')}</div>
             </div>
           </CardContent>
         </Card>
@@ -113,7 +113,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
             <Ticket className="h-5 w-5 text-primary/60" />
             <div>
               <div className="text-lg font-bold">{stats.totalRegs}</div>
-              <div className="text-[10px] text-muted-foreground">{t('zones.events.totalRegistrations', 'Регистраций')}</div>
+              <div className="text-xs text-muted-foreground">{t('zones.events.totalRegistrations', 'Регистраций')}</div>
             </div>
           </CardContent>
         </Card>
@@ -122,7 +122,7 @@ export const ZoneEventsScreen = memo(function ZoneEventsScreen({ zoneId }: Props
             <TrendingUp className="h-5 w-5 text-primary/50" />
             <div>
               <div className="text-lg font-bold">{stats.totalRevenue > 0 ? stats.totalRevenue.toLocaleString() : '—'}</div>
-              <div className="text-[10px] text-muted-foreground">{t('zones.events.revenue', 'Выручка')}</div>
+              <div className="text-xs text-muted-foreground">{t('zones.events.revenue', 'Выручка')}</div>
             </div>
           </CardContent>
         </Card>
@@ -200,7 +200,7 @@ function EventCard({ event, lang, locale, t, onSelect }: {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-semibold truncate">{title || t('common.untitled', 'Без названия')}</h3>
-            <Badge className={cn('shrink-0 text-[10px]', STATUS_BADGE[event.status] || 'bg-muted')}>
+            <Badge className={cn('shrink-0 text-xs', STATUS_BADGE[event.status] || 'bg-muted')}>
               {t(`zones.events.status.${event.status}`, event.status)}
             </Badge>
           </div>
@@ -230,7 +230,7 @@ function EventCard({ event, lang, locale, t, onSelect }: {
             )}
           </div>
           {event.page_title && (
-            <div className="text-[10px] text-muted-foreground mt-1.5">
+            <div className="text-xs text-muted-foreground mt-1.5">
               {t('zones.calendar.fromPage', 'Со страницы')}: {event.page_title}
             </div>
           )}
@@ -302,7 +302,7 @@ function EventDetail({ event, lang, locale, t }: {
                     <TableCell className="text-xs font-medium">{r.attendee_name}</TableCell>
                     <TableCell className="text-xs">{r.attendee_email}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="text-[10px]">
+                      <Badge variant="outline" className="text-xs">
                         {t(`zones.events.regStatus.${r.status}`, r.status)}
                       </Badge>
                     </TableCell>

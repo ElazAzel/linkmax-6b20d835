@@ -112,7 +112,7 @@ export function GiftPremiumDialog({ open, onOpenChange, recipient }: GiftPremium
                   )}
                 >
                   {option.popular && (
-                    <Badge className="absolute -top-2 -right-2 text-[10px] bg-gradient-to-r from-amber-500 to-orange-500">
+                    <Badge className="absolute -top-2 -right-2 text-xs bg-gradient-to-r from-amber-500 to-orange-500">
                       <Sparkles className="h-3 w-3 mr-1" />
                       {t('gift.popular', 'Популярно')}
                     </Badge>

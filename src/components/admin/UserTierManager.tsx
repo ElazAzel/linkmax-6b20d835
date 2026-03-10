@@ -291,7 +291,7 @@ export function UserTierManager() {
                           <div className="font-medium flex items-center gap-1.5">
                             {user.display_name || user.username || 'No name'}
                             {user.isAdmin && (
-                              <Badge variant="outline" className="text-[10px] px-1 py-0 h-4 border-yellow-500 text-yellow-500">
+                              <Badge variant="outline" className="text-xs px-1 py-0 h-4 border-yellow-500 text-yellow-500">
                                 {t('admin.roleAdmin', 'Admin')}
                               </Badge>
                             )}

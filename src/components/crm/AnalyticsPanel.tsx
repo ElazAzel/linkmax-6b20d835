@@ -77,16 +77,16 @@ export function AnalyticsPanel() {
         <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
           <Tabs value={period} onValueChange={(v: string) => setPeriod(v as TimePeriod)}>
             <TabsList className="grid w-full min-w-[280px] grid-cols-4">
-              <TabsTrigger value="day" className="text-[10px] sm:text-xs px-2">
+              <TabsTrigger value="day" className="text-xs sm:text-xs px-2">
                 {t('analytics.today', 'Today')}
               </TabsTrigger>
-              <TabsTrigger value="week" className="text-[10px] sm:text-xs px-2">
+              <TabsTrigger value="week" className="text-xs sm:text-xs px-2">
                 {t('analytics.week', 'Week')}
               </TabsTrigger>
-              <TabsTrigger value="month" className="text-[10px] sm:text-xs px-2">
+              <TabsTrigger value="month" className="text-xs sm:text-xs px-2">
                 {t('analytics.month', 'Month')}
               </TabsTrigger>
-              <TabsTrigger value="all" className="text-[10px] sm:text-xs px-2">
+              <TabsTrigger value="all" className="text-xs sm:text-xs px-2">
                 {t('analytics.all', 'All')}
               </TabsTrigger>
             </TabsList>
@@ -128,7 +128,7 @@ export function AnalyticsPanel() {
             </div>
             <div className="text-right">
               <div className="text-lg sm:text-2xl font-bold">{analytics.avgViewsPerDay}</div>
-              <div className="text-[10px] sm:text-xs text-muted-foreground">
+              <div className="text-xs sm:text-xs text-muted-foreground">
                 {t('analytics.viewsPerDay', 'views / day')}
               </div>
             </div>
@@ -201,7 +201,7 @@ export function AnalyticsPanel() {
             </ResponsiveContainer>
           </div>
           {/* Legend */}
-          <div className="flex justify-center gap-4 mt-2 text-[10px] sm:text-xs">
+          <div className="flex justify-center gap-4 mt-2 text-xs sm:text-xs">
             <div className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-primary" />
               <span className="text-muted-foreground">{t('analytics.views', 'Views')}</span>
@@ -222,20 +222,20 @@ export function AnalyticsPanel() {
             <div className="space-y-2">
               {analytics.topBlocks.slice(0, 5).map((block, index) => (
                 <div key={block.blockId} className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary/10 text-primary text-[10px] sm:text-xs flex items-center justify-center font-medium shrink-0">
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary/10 text-primary text-xs sm:text-xs flex items-center justify-center font-medium shrink-0">
                     {index + 1}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs sm:text-sm font-medium truncate">
                       {block.blockTitle}
                     </div>
-                    <div className="text-[10px] sm:text-xs text-muted-foreground">
+                    <div className="text-xs sm:text-xs text-muted-foreground">
                       {block.blockType}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     <div className="text-xs sm:text-sm font-medium">{block.clicks}</div>
-                    <div className="text-[10px] sm:text-xs text-muted-foreground">
+                    <div className="text-xs sm:text-xs text-muted-foreground">
                       {block.ctr.toFixed(1)}%
                     </div>
                   </div>
@@ -396,12 +396,12 @@ function StatCard({ icon: Icon, label, value, change }: StatCardProps) {
     <Card className="p-2.5 sm:p-3">
       <div className="flex items-center gap-1.5 text-muted-foreground mb-0.5 sm:mb-1">
         <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-        <span className="text-[10px] sm:text-xs truncate">{label}</span>
+        <span className="text-xs sm:text-xs truncate">{label}</span>
       </div>
       <div className="flex items-baseline gap-1.5">
         <span className="text-lg sm:text-2xl font-bold">{value.toLocaleString()}</span>
         {showChange && (
-          <span className={`text-[10px] sm:text-xs flex items-center gap-0.5 ${isPositive ? 'text-green-500' : 'text-red-500'
+          <span className={`text-xs sm:text-xs flex items-center gap-0.5 ${isPositive ? 'text-green-500' : 'text-red-500'
             }`}>
             {isPositive ? <TrendingUp className="h-2.5 w-2.5 sm:h-3 sm:w-3" /> : <TrendingDown className="h-2.5 w-2.5 sm:h-3 sm:w-3" />}
             {Math.abs(change).toFixed(0)}%

@@ -212,7 +212,7 @@ export const BlockManager = memo(function BlockManager({
             {/* Profile block (fixed at top) */}
             {profileBlock && (
               <div className="mb-3">
-                <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest px-2 mb-1.5">
+                <div className="text-xs font-bold text-muted-foreground/70 uppercase tracking-widest px-2 mb-1.5">
                   {t('blockManager.profile', 'Профиль')}
                 </div>
                 <BlockItem
@@ -236,7 +236,7 @@ export const BlockManager = memo(function BlockManager({
             )}
 
             {/* Content blocks */}
-            <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest px-2 mb-1.5">
+            <div className="text-xs font-bold text-muted-foreground/70 uppercase tracking-widest px-2 mb-1.5">
               {t('blockManager.content', 'Контент')}
             </div>
 
@@ -362,7 +362,7 @@ function BlockItem({
         className="flex-1 text-left min-w-0 py-1"
       >
         <div className="font-semibold text-sm truncate">{title}</div>
-        <div className="text-[10px] text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
           {t(`blocks.${block.type}`, block.type)}
         </div>
       </button>

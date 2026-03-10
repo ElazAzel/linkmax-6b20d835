@@ -28,7 +28,7 @@ export function TierBadge({ tier, size = 'md', showIcon = true }: TierBadgeProps
   const Icon = config.icon;
 
   const sizeClasses = {
-    sm: 'text-[10px] px-1.5 py-0.5',
+    sm: 'text-xs px-1.5 py-0.5',
     md: 'text-xs px-2 py-0.5',
     lg: 'text-sm px-3 py-1',
   };
@@ -71,7 +71,7 @@ export function RequiredTier({ tier, inline = false }: RequiredTierProps) {
     return (
       <span className={`inline-flex items-center gap-0.5 ${config.className}`}>
         <Icon className="h-3 w-3" />
-        <span className="text-[10px] font-bold">{config.label}</span>
+        <span className="text-xs font-bold">{config.label}</span>
       </span>
     );
   }

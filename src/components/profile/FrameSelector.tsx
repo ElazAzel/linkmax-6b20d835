@@ -89,7 +89,7 @@ const FramePreviewItem = memo(function FramePreviewItem({
         )}
       </div>
       
-      <span className="text-[10px] text-muted-foreground text-center leading-tight max-w-[56px] truncate">
+      <span className="text-xs text-muted-foreground text-center leading-tight max-w-[56px] truncate">
         {option.emoji ? `${option.emoji} ` : ''}{t(option.labelKey, option.label)}
       </span>
     </div>

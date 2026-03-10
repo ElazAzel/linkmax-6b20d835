@@ -135,7 +135,7 @@ export function ZoneDealFieldsSettings({ zoneId }: ZoneDealFieldsSettingsProps) 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2">
                                         <span className="font-medium text-sm truncate">{field.name}</span>
-                                        {field.is_required && <Badge variant="secondary" className="text-[10px]">{t('zones.settings.fields.required', 'Required')}</Badge>}
+                                        {field.is_required && <Badge variant="secondary" className="text-xs">{t('zones.settings.fields.required', 'Required')}</Badge>}
                                     </div>
                                     <p className="text-xs text-muted-foreground">{getTypeLabel(field.type)}</p>
                                 </div>

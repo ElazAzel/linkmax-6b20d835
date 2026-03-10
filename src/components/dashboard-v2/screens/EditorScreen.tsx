@@ -227,7 +227,7 @@ export const EditorScreen = memo(function EditorScreen({
               </h1>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+                <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
                   {blockCount} {t('dashboard.editor.blocks', 'блоков')}
                 </p>
               </div>
@@ -357,7 +357,7 @@ export const EditorScreen = memo(function EditorScreen({
             <span className="text-xs text-foreground/80 flex-1 truncate">
               {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
             </span>
-            <Badge variant="outline" className="text-[9px] shrink-0">
+            <Badge variant="outline" className="text-xs shrink-0">
               {top.priority}
             </Badge>
             <button

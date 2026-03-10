@@ -277,7 +277,7 @@ function SortableGridBlockItem({
 
       {/* Block type label - bottom-left */}
       <div className="absolute bottom-2 left-2 z-30 pointer-events-none">
-        <span className="inline-block px-2 py-0.5 rounded-md bg-background/70 backdrop-blur-sm text-[10px] font-bold text-muted-foreground uppercase tracking-wider border border-border/10">
+        <span className="inline-block px-2 py-0.5 rounded-md bg-background/70 backdrop-blur-sm text-xs font-bold text-muted-foreground uppercase tracking-wider border border-border/10">
           {typeLabel}
         </span>
       </div>
@@ -411,7 +411,7 @@ function SectionHeader({
       </button>
       <FolderOpen className="h-4 w-4 text-primary shrink-0" />
       <span className="text-xs font-bold text-foreground flex-1 truncate">{label}</span>
-      <span className="text-[10px] text-muted-foreground">{blockCount}</span>
+      <span className="text-xs text-muted-foreground">{blockCount}</span>
     </div>
   );
 }

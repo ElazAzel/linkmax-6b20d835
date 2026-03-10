@@ -430,13 +430,13 @@ export function AdminAnalyticsDashboard() {
                           <span className="text-muted-foreground font-mono text-xs md:text-sm w-5 md:w-6 shrink-0">#{index + 1}</span>
                           <div className="min-w-0 flex-1">
                             <p className="font-medium text-xs md:text-sm truncate">/{page.slug}</p>
-                            <div className="flex gap-2 md:gap-4 text-[10px] md:text-xs text-muted-foreground">
+                            <div className="flex gap-2 md:gap-4 text-xs md:text-xs text-muted-foreground">
                               <span>{formatNumber(page.views)} {t('admin.viewsShort')}</span>
                               <span>{formatNumber(page.clicks)} {t('admin.clicksShort')}</span>
                             </div>
                           </div>
                         </div>
-                        <Badge variant={page.ctr >= 10 ? 'default' : 'secondary'} className="text-[10px] md:text-xs shrink-0 ml-2">
+                        <Badge variant={page.ctr >= 10 ? 'default' : 'secondary'} className="text-xs md:text-xs shrink-0 ml-2">
                           {page.ctr}%
                         </Badge>
                       </div>
@@ -461,7 +461,7 @@ export function AdminAnalyticsDashboard() {
                       <div key={block.block_id} className="flex items-center justify-between py-1.5 md:py-2 border-b border-border/50 last:border-0">
                         <div className="flex items-center gap-2 md:gap-3">
                           <span className="text-muted-foreground font-mono text-xs md:text-sm w-5 md:w-6">#{index + 1}</span>
-                          <Badge variant="outline" className="text-[10px] md:text-xs">{block.type}</Badge>
+                          <Badge variant="outline" className="text-xs md:text-xs">{block.type}</Badge>
                         </div>
                         <span className="font-medium text-xs md:text-sm">{formatNumber(block.clicks)}</span>
                       </div>

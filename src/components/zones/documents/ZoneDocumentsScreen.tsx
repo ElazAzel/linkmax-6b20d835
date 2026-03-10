@@ -144,7 +144,7 @@ export const ZoneDocumentsScreen = () => {
                                     {t(tab.labelKey, tab.defaultLabel)}
                                     {count > 0 && (
                                         <span className={`
-                                            px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none
+                                            px-1.5 py-0.5 rounded-full text-xs font-bold leading-none
                                             ${isActive ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'}
                                         `}>
                                             {count}

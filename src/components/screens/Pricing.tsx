@@ -225,10 +225,10 @@ export default function Pricing() {
             {([3, 6, 12] as BillingPeriod[]).map(period => <button key={period} onClick={() => setBillingPeriod(period)} className={`relative px-2 sm:px-6 py-3 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-1 ${billingPeriod === period ? 'bg-card text-foreground shadow-glass' : 'text-muted-foreground hover:text-foreground'}`}>
               <span className="text-base font-bold sm:font-medium sm:text-sm">{period}</span>
               <span>{t('pricing.months', 'мес')}</span>
-              {period === 12 && <span className="absolute -top-3 -right-1 sm:-top-2 sm:-right-2 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold shadow-sm z-10">
+              {period === 12 && <span className="absolute -top-3 -right-1 sm:-top-2 sm:-right-2 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold shadow-sm z-10">
                 -30%
               </span>}
-              {period === 6 && <span className="absolute -top-3 -right-1 sm:-top-2 sm:-right-2 bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold shadow-sm z-10">-15%</span>}
+              {period === 6 && <span className="absolute -top-3 -right-1 sm:-top-2 sm:-right-2 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold shadow-sm z-10">-15%</span>}
             </button>)}
           </div>
         </div>

@@ -29,7 +29,7 @@ export const DealKanbanColumn = memo(function DealKanbanColumn({
       <div className="flex items-center gap-2 mb-3 px-1">
         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stage.color }} />
         <span className="font-semibold text-sm">{stage.name}</span>
-        <Badge variant="secondary" className="text-[10px] h-5 px-1.5">
+        <Badge variant="secondary" className="text-xs h-5 px-1.5">
           {deals.length}
         </Badge>
       </div>

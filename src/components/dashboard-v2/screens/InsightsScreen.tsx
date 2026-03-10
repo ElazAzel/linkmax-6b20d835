@@ -434,17 +434,17 @@ export const InsightsScreen = memo(function InsightsScreen({
                       <Card className="p-3 text-center">
                         <Smartphone className="h-5 w-5 mx-auto mb-1.5 text-blue-500" />
                         <div className="text-xl font-black">{devicePercentages.mobile}%</div>
-                        <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
+                        <div className="text-xs text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
                       </Card>
                       <Card className="p-3 text-center">
                         <Monitor className="h-5 w-5 mx-auto mb-1.5 text-emerald-500" />
                         <div className="text-xl font-black">{devicePercentages.desktop}%</div>
-                        <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.desktop', 'Компьютер')}</div>
+                        <div className="text-xs text-muted-foreground">{t('dashboard.insights.desktop', 'Компьютер')}</div>
                       </Card>
                       <Card className="p-3 text-center">
                         <Globe className="h-5 w-5 mx-auto mb-1.5 text-violet-500" />
                         <div className="text-xl font-black">{devicePercentages.tablet}%</div>
-                        <div className="text-[10px] text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
+                        <div className="text-xs text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
                       </Card>
                     </div>
                   </motion.div>

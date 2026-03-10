@@ -118,7 +118,7 @@ export function HeatmapVisualization() {
             ))}
 
             {/* Legend */}
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-background/90 px-2 py-1 rounded text-[10px]">
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-background/90 px-2 py-1 rounded text-xs">
               <span className="text-muted-foreground">{t('heatmap.cold', 'Холодно')}</span>
               <div className="flex">
                 <div className="w-3 h-2 bg-blue-500/60 rounded-l" />
@@ -148,7 +148,7 @@ export function HeatmapVisualization() {
                         {t('heatmap.position', 'Позиция')}: {Math.round(click.y)}% {t('heatmap.fromTop', 'сверху')}
                       </span>
                     </div>
-                    <Badge variant="secondary" className="text-[10px]">
+                    <Badge variant="secondary" className="text-xs">
                       {click.count} {t('heatmap.clicks', 'клик', { count: click.count })}
                     </Badge>
                   </div>

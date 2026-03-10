@@ -224,7 +224,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <div className="absolute -top-1 -left-1">
             <Badge
               variant="default"
-              className="text-[9px] px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0"
+              className="text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0"
             >
               <Sparkles className="h-2.5 w-2.5 mr-0.5" />
               {t('recommendations.relevant', 'Актуально')}
