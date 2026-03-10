@@ -43,6 +43,8 @@ import { copyBlock } from '@/lib/editor/clipboard-engine';
 import { supportsInlineEdit } from '@/lib/editor/inline-edit-config';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import { canCreateSection, createSection, getSections, type SectionMeta } from '@/lib/editor/section-engine';
+import { BlockContextToolbar } from './BlockContextToolbar';
+import { transformBlock } from '@/lib/editor/transform-engine';
 import { cn } from '@/lib/utils/utils';
 import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import type { Block, ProfileBlock, GridConfig, BlockType } from '@/types/page';
@@ -124,6 +126,8 @@ interface GridEditorProps {
   onDuplicateBlock?: (id: string) => void;
   // P5: Section callbacks
   onCreateSection?: (blocks: Block[], selectedIds: Set<string>, label: string) => void;
+  // P5: Transform callback
+  onTransform?: (block: Block, toType: BlockType) => void;
 }
 
 interface SortableGridBlockItemProps {
@@ -142,6 +146,12 @@ interface SortableGridBlockItemProps {
   onStartExperiment?: (block: Block) => void;
   onBlockClick?: (block: Block, e: React.MouseEvent) => void;
   onBlockDoubleClick?: (block: Block) => void;
+  onTransform?: (block: Block, toType: BlockType) => void;
+  onCopy?: (block: Block) => void;
+  isFirst?: boolean;
+  isLast?: boolean;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 }
 
 function SortableGridBlockItem({
@@ -159,6 +169,12 @@ function SortableGridBlockItem({
   onStartExperiment,
   onBlockClick,
   onBlockDoubleClick,
+  onTransform,
+  onCopy,
+  isFirst = false,
+  isLast = false,
+  onMoveUp,
+  onMoveDown,
 }: SortableGridBlockItemProps) {
   const { t } = useTranslation();
   const {
@@ -327,6 +343,22 @@ function SortableGridBlockItem({
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* P5: Context toolbar for single-selected block */}
+      {isSelected && !isMultiSelected && !isDragging && (
+        <BlockContextToolbar
+          block={block}
+          onEdit={onEdit}
+          onDuplicate={(id) => onDuplicate?.(id)}
+          onDelete={onDelete}
+          onCopy={(b) => onCopy?.(b)}
+          onMoveUp={onMoveUp}
+          onMoveDown={onMoveDown}
+          onTransform={onTransform}
+          isFirst={isFirst}
+          isLast={isLast}
+        />
+      )}
     </div>
   );
 }
@@ -397,6 +429,7 @@ export const GridEditor = memo(function GridEditor({
   onReorderBlocks,
   onDuplicateBlock,
   onCreateSection,
+  onTransform,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -564,6 +597,26 @@ export const GridEditor = memo(function GridEditor({
     trackEditorAction('section_created', { source: 'grid' });
   }, [canGroup, blocks, selectedBlockIds, onReorderBlocks, setSectionMeta, clearSelection, t]);
 
+  // P5: Transform handler
+  const handleTransform = useCallback((block: Block, toType: BlockType) => {
+    if (onTransform) {
+      onTransform(block, toType);
+    } else {
+      const result = transformBlock(block, toType);
+      if (result.success) {
+        onUpdateBlock(block.id, result.newBlock);
+        trackEditorAction('transform_used', { source: 'grid', blockType: `${block.type}->${toType}` });
+      }
+    }
+  }, [onTransform, onUpdateBlock]);
+
+  // P5: Copy handler for context toolbar
+  const handleCopyBlock = useCallback((block: Block) => {
+    const clipData = copyBlock(block);
+    setClipboardContent(clipData);
+    trackEditorAction('block_copied', { blockType: block.type, source: 'grid' });
+  }, [setClipboardContent]);
+
   // Build grid items with section headers
   const gridItems = useMemo(() => {
     const items: React.ReactNode[] = [];
@@ -623,6 +676,18 @@ export const GridEditor = memo(function GridEditor({
           onStartExperiment={setExperimentBlock}
           onBlockClick={handleBlockClick}
           onBlockDoubleClick={handleBlockDoubleClick}
+          onTransform={handleTransform}
+          onCopy={handleCopyBlock}
+          isFirst={index === 0}
+          isLast={index === contentBlocks.length - 1}
+          onMoveUp={index > 0 ? () => {
+            const reordered = arrayMove(contentBlocks, index, index - 1);
+            onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+          } : undefined}
+          onMoveDown={index < contentBlocks.length - 1 ? () => {
+            const reordered = arrayMove(contentBlocks, index, index + 1);
+            onReorderBlocks?.(profileBlock ? [profileBlock, ...reordered] : reordered);
+          } : undefined}
         />
       );
     });
