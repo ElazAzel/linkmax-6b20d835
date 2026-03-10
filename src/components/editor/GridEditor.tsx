@@ -605,15 +605,15 @@ export const GridEditor = memo(function GridEditor({
       const result = transformBlock(block, toType);
       if (result.success) {
         onUpdateBlock(block.id, result.newBlock);
-        trackEditorAction('block_transformed', { source: 'grid', blockType: `${block.type}->${toType}` });
+        trackEditorAction('transform_used', { source: 'grid', blockType: `${block.type}->${toType}` });
       }
     }
   }, [onTransform, onUpdateBlock]);
 
   // P5: Copy handler for context toolbar
   const handleCopyBlock = useCallback((block: Block) => {
-    copyBlock(block);
-    setClipboardContent(block);
+    const clipData = copyBlock(block);
+    setClipboardContent(clipData);
     trackEditorAction('block_copied', { blockType: block.type, source: 'grid' });
   }, [setClipboardContent]);
 
