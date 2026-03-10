@@ -239,7 +239,7 @@ export const EditorScreen = memo(function EditorScreen({
                 variant="ghost"
                 size="sm"
                 className="h-9 w-9 p-0 rounded-xl"
-                onClick={onUndo}
+                onClick={handleUndoWithFriction}
                 disabled={!canUndo}
               >
                 <Undo2 className="h-4 w-4" />
@@ -248,7 +248,7 @@ export const EditorScreen = memo(function EditorScreen({
                 variant="ghost"
                 size="sm"
                 className="h-9 w-9 p-0 rounded-xl"
-                onClick={onRedo}
+                onClick={handleRedoWithFriction}
                 disabled={!canRedo}
               >
                 <Redo2 className="h-4 w-4" />
