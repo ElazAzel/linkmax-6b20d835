@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AdminService, PartnerFormData } from '@/services/admin';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import { useTranslation } from 'react-i18next';
 
 export function useAdminStats(days = 14) {
@@ -38,6 +39,7 @@ export function useAdminStats(days = 14) {
 export function usePartners() {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
+    const { handleError } = useAppError();
 
     const query = useQuery({
         queryKey: ['admin-partners'],
@@ -52,7 +54,7 @@ export function usePartners() {
             toast.success(t('admin.partners.created', 'Партнёр добавлен'));
         },
         onError: (error: Error) => {
-            toast.error(error.message);
+            handleError(error);
         }
     });
 
@@ -65,7 +67,7 @@ export function usePartners() {
             toast.success(t('admin.partners.updated', 'Партнёр обновлён'));
         },
         onError: (error: Error) => {
-            toast.error(error.message);
+            handleError(error);
         }
     });
 
@@ -77,7 +79,7 @@ export function usePartners() {
             toast.success(t('admin.partners.deleted', 'Партнёр удалён'));
         },
         onError: (error: Error) => {
-            toast.error(error.message);
+            handleError(error);
         }
     });
 

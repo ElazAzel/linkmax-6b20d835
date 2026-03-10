@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### [2026-03-10] - Universal Error Normalization & UX Hardening
+
+* **AppErrorNormalizer**:
+  * Внедрен единый слой нормализации ошибок (`src/lib/errors/app-error-normalizer.ts`) для всего приложения.
+  * Все `unknown` ошибки теперь детерминированно классифицируются (network, auth, validation, rate_limit, payment, not_found, unknown).
+  * Извлечение безопасных пользовательских сообщений (`safeMessage`) и ключей локализации (`i18nKey`) для `react-i18next`.
+* **Hooks & Integration**:
+  * Создан глобальный хук `useAppError` для перехвата, логирования (с сохранением контекста) и безопасного отображения ошибок через `sonner` toast.
+  * Рефакторинг критических путей: **Auth** (`Auth.tsx`), **Payments** (`useRobokassa.ts`) и **Collaboration** (`collaboration.ts`).
+  * Полностью устранены технические/сырые сообщения (например, "Bot domain invalid") из UI.
+* **Testing**:
+  * Реализованы юнит-тесты Vitest для проверки всех категорий и граничных случаев нормализатора.
+
 ### [2026-03-07] - Design System Foundation & Shared Components
 
 * **Shared Component Library** (`src/components/shared/`):

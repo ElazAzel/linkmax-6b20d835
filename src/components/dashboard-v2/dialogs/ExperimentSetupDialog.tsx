@@ -20,6 +20,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { createExperiment } from '@/services/experiments';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import type { Block } from '@/types/page';
 import { cn } from '@/lib/utils/utils';
 import { VariantBlockEditor } from '@/components/editor/experiments/VariantBlockEditor';
@@ -40,6 +41,7 @@ export function ExperimentSetupDialog({
     onSuccess,
 }: ExperimentSetupDialogProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const [name, setName] = useState(`${t('experiments.defaultName', 'Тест')} - ${block.type}`);
     const [variants, setVariants] = useState<any[]>([
         {
@@ -98,7 +100,7 @@ export function ExperimentSetupDialog({
             onSuccess?.();
             onOpenChange(false);
         } catch (error: any) {
-            toast.error(error.message || t('experiments.error.starting', 'Ошибка при запуске'));
+            handleError(error, t('experiments.error.starting', 'Ошибка при запуске'));
         } finally {
             setLoading(false);
         }

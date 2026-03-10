@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
@@ -30,6 +31,7 @@ export const ChangePasswordDialog = memo(function ChangePasswordDialog({
   onOpenChange,
 }: ChangePasswordDialogProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -71,7 +73,7 @@ export const ChangePasswordDialog = memo(function ChangePasswordDialog({
       setErrors({});
     } catch (error: any) {
       console.error('Password update error:', error);
-      toast.error(error.message || t('settings.password.error', 'Failed to update password'));
+      handleError(error, t('settings.password.error', 'Failed to update password'));
     } finally {
       setLoading(false);
     }

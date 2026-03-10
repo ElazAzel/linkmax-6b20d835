@@ -283,6 +283,7 @@ new -> contacted -> qualified -> won/lost
 - i18next for RU/EN/KK/UZ (100% synchronized coverage)
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
+- **Universal Error Normalization**: `app-error-normalizer.ts` and `useAppError` pattern maps raw exceptions to safe, localized `react-i18next` messages, abstracting technical details from the UI.
 
 ### Backend
 

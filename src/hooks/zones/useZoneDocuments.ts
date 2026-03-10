@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import { ZoneDocument, ZoneDocumentTemplate } from '@/types/zones';
 
 /**
@@ -16,6 +17,7 @@ export function useZoneDocuments(
 ) {
     const { dealId, contactId, isReadOnly = false } = options;
     const queryClient = useQueryClient();
+    const { handleError } = useAppError();
 
     // 1. Fetch Documents
     const { data: documents, isLoading: isLoadingDocuments } = useQuery({
@@ -102,7 +104,7 @@ export function useZoneDocuments(
             toast.success('Документ создан');
         },
         onError: (error) => {
-            toast.error(`Ошибка создания документа: ${error.message}`);
+            handleError(error, 'Ошибка создания документа');
         }
     });
 
@@ -129,7 +131,7 @@ export function useZoneDocuments(
             toast.success('Статус документа обновлен');
         },
         onError: (error: any) => {
-            toast.error(`Ошибка обновления: ${error.message}`);
+            handleError(error, 'Ошибка обновления');
         }
     });
 
@@ -145,7 +147,7 @@ export function useZoneDocuments(
             toast.success('Документ удален');
         },
         onError: (error: any) => {
-            toast.error(`Ошибка удаления: ${error.message}`);
+            handleError(error, 'Ошибка удаления');
         }
     });
 

@@ -21,6 +21,7 @@ import {
     setWinningVariant
 } from '@/services/experiments';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,6 +32,7 @@ interface ExperimentsListProps {
 
 export const ExperimentsList = memo(function ExperimentsList({ pageId }: ExperimentsListProps) {
     const { t } = useTranslation();
+    const { handleError } = useAppError();
     const { experiments, loading, refresh } = useExperimentAnalytics(pageId);
 
     const handleStatusChange = async (expId: string, status: 'running' | 'ended' | 'paused') => {
@@ -40,7 +42,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
             toast.success(t(`experiments.status.${status}Success`, 'Статус обновлен'));
             refresh();
         } catch (error: any) {
-            toast.error(error.message);
+            handleError(error);
         }
     };
 
@@ -52,7 +54,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
             toast.success(t('experiments.deleteSuccess', 'Эксперимент удален'));
             refresh();
         } catch (error: any) {
-            toast.error(error.message);
+            handleError(error);
         }
     };
 
@@ -64,7 +66,7 @@ export const ExperimentsList = memo(function ExperimentsList({ pageId }: Experim
             toast.success(t('experiments.winnerSet', 'Победитель выбран и применен'));
             refresh();
         } catch (error: any) {
-            toast.error(error.message);
+            handleError(error);
         }
     };
 

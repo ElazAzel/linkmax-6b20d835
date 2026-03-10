@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Link2 from 'lucide-react/dist/esm/icons/link-2';
 import Unlink from 'lucide-react/dist/esm/icons/unlink';
@@ -31,6 +32,7 @@ interface LinkedAccountsSectionProps {
 
 export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps) {
   const { t } = useTranslation();
+  const { handleError } = useAppError();
   const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [linkingProvider, setLinkingProvider] = useState<string | null>(null);
@@ -177,7 +179,7 @@ export function LinkedAccountsSection({ userEmail }: LinkedAccountsSectionProps)
         } else if (error.message?.includes('Manual linking is disabled') || error.status === 422) {
           toast.error('Отвязка и ручная привязка отключены в вашем проекте Supabase. Включите "Manual Linking" в настройках Authentication -> Providers.', { duration: 6000 });
         } else {
-          toast.error(error.message || t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
+          handleError(error, t('settings.linkedAccounts.unlinkFailed', 'Failed to unlink account'));
         }
       } else {
         toast.success(t('settings.linkedAccounts.unlinkSuccess', 'Account unlinked'));

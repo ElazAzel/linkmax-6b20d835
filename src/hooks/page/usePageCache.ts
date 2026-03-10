@@ -3,6 +3,7 @@ import { loadPageBySlug, loadPageByCustomDomain, loadUserPage, savePage, publish
 import type { PageData } from '@/types/page';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { useAppError } from '@/hooks/useAppError';
 import { logger } from '@/lib/utils/logger';
 
 // Query keys for cache management
@@ -68,6 +69,7 @@ export function useUserPage(userId: string | undefined) {
 export function useSavePageMutation(userId: string | undefined) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
+  const { handleError } = useAppError();
 
   return useMutation({
     mutationFn: async ({
@@ -106,7 +108,7 @@ export function useSavePageMutation(userId: string | undefined) {
     onError: (error: Error) => {
       logger.error('Error saving page', error, { context: 'usePageCache' });
       logger.error('Error details', error, { context: 'usePageCache', data: { details: JSON.stringify(error, null, 2) } });
-      toast.error(t('toasts.page.saveError') + `: ${error.message || ''}`);
+      handleError(error, t('toasts.page.saveError'));
     },
   });
 }

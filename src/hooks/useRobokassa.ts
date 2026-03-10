@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 
 interface UseRobokassaProps {
     onSuccess?: () => void;
@@ -9,6 +10,7 @@ interface UseRobokassaProps {
 
 export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
     const [isLoading, setIsLoading] = useState(false);
+    const { handleError } = useAppError();
 
     const buySubscription = async (plan: 'pro', period: 3 | 6 | 12) => {
         try {
@@ -36,7 +38,7 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
             onSuccess?.();
         } catch (error: any) {
             console.error('Payment init error:', error);
-            toast.error("Ошибка при создании платежа: " + error.message);
+            handleError(error, "Ошибка при создании платежа");
             onError?.(error);
         } finally {
             setIsLoading(false);
@@ -70,7 +72,7 @@ export function useRobokassa({ onSuccess, onError }: UseRobokassaProps = {}) {
             onSuccess?.();
         } catch (error: any) {
             console.error('Payment init error:', error);
-            toast.error("Ошибка при создании платежа: " + error.message);
+            handleError(error, "Ошибка при создании платежа");
             onError?.(error);
         } finally {
             setIsLoading(false);

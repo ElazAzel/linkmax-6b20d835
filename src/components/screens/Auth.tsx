@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/user/useAuth';
+import { useAppError } from '@/hooks/useAppError';
 import { useSoundEffects } from '@/hooks/ui/useSoundEffects';
 import Gift from 'lucide-react/dist/esm/icons/gift';
 import Mail from 'lucide-react/dist/esm/icons/mail';
@@ -58,6 +59,7 @@ export default function Auth() {
     'Access your LinkMAX dashboard to build and publish your link in bio page.'
   );
   const { user, signUp, signIn, signInWithGoogle, signInWithApple, signInWithTelegram } = useAuth();
+  const { handleError } = useAppError();
   const { playSuccess, playError } = useSoundEffects();
   const [isLoading, setIsLoading] = useState(false);
   const [isOAuthLoading, setIsOAuthLoading] = useState<'google' | 'apple' | 'telegram' | null>(null);
@@ -169,7 +171,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Signup error:', error, { context: 'Auth' });
-      toast.error(error.message || t('messages.failedToSignUp'));
+      handleError(error, t('messages.failedToSignUp'));
       playError();
       setIsLoading(false);
       return;
@@ -211,7 +213,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Signin error:', error, { context: 'Auth' });
-      toast.error(error.message || t('messages.failedToSignIn'));
+      handleError(error, t('messages.failedToSignIn'));
       playError();
       setIsLoading(false);
       return;
@@ -243,7 +245,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Password reset error:', error, { context: 'Auth' });
-      toast.error(error.message || t('auth.resetFailed', 'Failed to send reset email'));
+      handleError(error, t('auth.resetFailed', 'Failed to send reset email'));
       playError();
       setIsLoading(false);
       return;
@@ -351,7 +353,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Password update error:', error, { context: 'Auth' });
-      toast.error(error.message || t('auth.updateFailed', 'Failed to update password'));
+      handleError(error, t('auth.updateFailed', 'Failed to update password'));
       playError();
       setIsLoading(false);
       return;
@@ -366,7 +368,7 @@ export default function Auth() {
     setIsOAuthLoading('google');
     const { error } = await signInWithGoogle(safeReturnTo);
     if (error) {
-      toast.error(error.message || t('messages.failedToSignIn'));
+      handleError(error, t('messages.failedToSignIn'));
       playError();
     }
     setIsOAuthLoading(null);
@@ -376,7 +378,7 @@ export default function Auth() {
     setIsOAuthLoading('apple');
     const { error } = await signInWithApple(safeReturnTo);
     if (error) {
-      toast.error(error.message || t('messages.failedToSignIn'));
+      handleError(error, t('messages.failedToSignIn'));
       playError();
     }
     setIsOAuthLoading(null);
@@ -386,7 +388,7 @@ export default function Auth() {
     setIsOAuthLoading('telegram');
     const { error } = await signInWithTelegram(telegramData);
     if (error) {
-      toast.error(error.message || t('messages.failedToSignIn'));
+      handleError(error, t('messages.failedToSignIn'));
       playError();
     } else {
       playSuccess();

@@ -1,5 +1,6 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
+import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
 
 export type CollabStatus = 'pending' | 'accepted' | 'rejected';
 
@@ -119,7 +120,7 @@ export async function sendCollabRequest(
     if (error.code === '23505') {
       return { success: false, error: 'Collaboration request already exists' };
     }
-    return { success: false, error: error.message };
+    return { success: false, error: normalizeAppError(error).safeMessage };
   }
 
   // Send notification to target user
@@ -194,7 +195,7 @@ export async function respondToCollab(
     .update(updates)
     .eq('id', collabId);
 
-  if (error) return { success: false, error: error.message };
+  if (error) return { success: false, error: normalizeAppError(error).safeMessage };
 
   // Send notification to requester
   if (collab?.requester_id) {
@@ -246,7 +247,7 @@ export async function createTeam(
     if (error.code === '23505') {
       return { success: false, error: 'Team slug already exists' };
     }
-    return { success: false, error: error.message };
+    return { success: false, error: normalizeAppError(error).safeMessage };
   }
 
   // Add owner as member
@@ -337,7 +338,7 @@ export async function inviteToTeam(
     if (error.code === '23505') {
       return { success: false, error: 'User already in team' };
     }
-    return { success: false, error: error.message };
+    return { success: false, error: normalizeAppError(error).safeMessage };
   }
 
   // Send notification to new member
@@ -418,7 +419,7 @@ export async function removeMemberFromTeam(
     .eq('team_id', teamId)
     .eq('user_id', memberId);
 
-  if (error) return { success: false, error: error.message };
+  if (error) return { success: false, error: normalizeAppError(error).safeMessage };
 
   // Send notification if member has Telegram enabled
   if (memberProfile?.telegram_notifications_enabled && memberProfile?.telegram_chat_id) {
@@ -520,7 +521,7 @@ export async function joinTeamByInviteCode(inviteCode: string): Promise<{ succes
     });
 
   if (joinError) {
-    return { success: false, error: joinError.message };
+    return { success: false, error: normalizeAppError(joinError).safeMessage };
   }
 
   // Get user's display name for notification
@@ -582,7 +583,7 @@ export async function createShoutout(
     if (error.code === '23505') {
       return { success: false, error: 'Shoutout already exists' };
     }
-    return { success: false, error: error.message };
+    return { success: false, error: normalizeAppError(error).safeMessage };
   }
 
   return { success: true };

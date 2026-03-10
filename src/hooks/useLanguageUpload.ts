@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { useAppError } from '@/hooks/useAppError';
 import { logger } from '@/lib/utils/logger';
 
 export interface ValidationError {
@@ -45,6 +46,7 @@ export function useLanguageUpload() {
     const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
     const [languages, setLanguages] = useState<Language[]>([]);
     const [loadingLanguages, setLoadingLanguages] = useState(false);
+    const { handleError } = useAppError();
 
     // Load all languages from database using RPC or edge function
     const loadLanguages = useCallback(async () => {
@@ -164,7 +166,7 @@ export function useLanguageUpload() {
 
         } catch (error) {
             logger.error('Upload error', error, { context: 'useLanguageUpload' });
-            toast.error(error instanceof Error ? error.message : 'Ошибка загрузки файла');
+            handleError(error, 'Ошибка загрузки файла');
             return null;
         } finally {
             setUploading(false);
@@ -219,7 +221,7 @@ export function useLanguageUpload() {
 
         } catch (error) {
             logger.error('Apply error', error, { context: 'useLanguageUpload' });
-            toast.error(error instanceof Error ? error.message : 'Ошибка применения языка');
+            handleError(error, 'Ошибка применения языка');
             return false;
         } finally {
             setUploading(false);
