@@ -343,6 +343,22 @@ function SortableGridBlockItem({
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* P5: Context toolbar for single-selected block */}
+      {isSelected && !isMultiSelected && !isDragging && (
+        <BlockContextToolbar
+          block={block}
+          onEdit={onEdit}
+          onDuplicate={(id) => onDuplicate?.(id)}
+          onDelete={onDelete}
+          onCopy={(b) => onCopy?.(b)}
+          onMoveUp={onMoveUp}
+          onMoveDown={onMoveDown}
+          onTransform={onTransform}
+          isFirst={isFirst}
+          isLast={isLast}
+        />
+      )}
     </div>
   );
 }
