@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### [2026-03-10] - Q2 Launch: Fintech Core & Mobile UX Hardening
+
+* **Fintech Core & Monetization ("Step-by-Growth")**:
+  * Созданы таблицы леджера `user_wallets` и `wallet_transactions` для отслеживания баланса, комиссий (7% Starter, 1% Pro) и выплат.
+  * Разработана Edge Function `process-transaction-fee` для хуков от Kaspi/Robokassa: автоматическое удержание комиссии платформы и пополнение баланса мерчанта.
+  * Добавлена песочница Kaspi QR (Sandbox Simulation) в деталях сделок/инвойсов.
+* **Mobile UX/UI Hardening (Business-Ready Polish)**:
+  * Произведена глобальная замена нечитаемых шрифтов (9px, 10px) на `text-xs` (12px) во всех 50+ компонентах UI.
+  * Увеличены зоны касания экранов (Tap Targets) до минимальных `44x44px` для кнопок, закрытий Sheet и навигации.
+  * Внедрена поддержка часовых поясов (`date-fns-tz`) для бронирований, нормализующая время просмотра для клиента и менеджера с защитой от двойного бронирования в параллельных зонах.
+
 ### [2026-03-10] - Universal Error Normalization & UX Hardening
 
 * **AppErrorNormalizer**:

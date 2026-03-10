@@ -44,6 +44,7 @@ import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Download from 'lucide-react/dist/esm/icons/download';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useAuth } from '@/hooks/user/useAuth';
 
 interface DealDetailSheetProps {
   deal: ZoneDeal | null;
@@ -64,6 +65,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   onUpdateDeal,
   onAddActivity,
 }: DealDetailSheetProps) {
+  const { user } = useAuth();
   const { t } = useTranslation();
   const [newActivity, setNewActivity] = useState('');
   const [lostReason, setLostReason] = useState('');
@@ -84,7 +86,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
   const { tasks } = useZoneTasks(deal?.zone_id || null);
   const { documents } = useZoneDocuments(deal?.zone_id || null, { dealId: deal?.id });
   const { comments, addComment, deleteComment, loading: commentsLoading } = useZoneDealComments(deal?.zone_id || null, deal?.id || null);
-  
+
   const [newComment, setNewComment] = useState('');
 
   const linkedTasks = useMemo(() => tasks.filter(t => t.deal_id === deal?.id), [tasks, deal?.id]);
@@ -262,9 +264,9 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     disabled={commentsLoading}
                     className="flex-1"
                   />
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
+                  <Button
+                    size="icon"
+                    variant="ghost"
                     onClick={async () => {
                       if (newComment.trim()) {
                         const mentionedIds = extractMentions(newComment);
@@ -613,7 +615,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                         {t('zones.deals.lose', 'Lost')}
                       </Button>
                     </div>
-                    
+
                     {/* Kaspi QR Button */}
                     <Button
                       variant="outline"
@@ -665,6 +667,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
           defaultAmount={deal?.value_amount || dealTotal || 0}
           dealTitle={deal?.title || ''}
           currency={deal?.currency || 'KZT'}
+          ownerId={user?.id || ''}
         />
       </SheetContent>
     </Sheet>
