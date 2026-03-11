@@ -18,7 +18,9 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 
 | Function | Auth | Description |
 | :--- | :--- | :--- |
-| `create-lead` | No JWT | Validates and inserts leads from public forms. Rate limited (15/min). Turnstile CAPTCHA |
+| `process-lead` | No JWT | Processes form submissions, creates contacts & deals |
+| `api-leads` | API Key | Public API Endpoint. GET/POST Contacts & Leads (for external integration) |
+| `api-deals` | API Key | Public API Endpoint. GET/POST Deals & Pipelines (for external integration) |
 | `send-lead-notification` | No JWT | Notifies page owner of new leads via Telegram/Email |
 | `process-crm-automations` | No JWT | Cron (hourly) — executes CRM automation rules |
 | `google-forms-parser` | No JWT | Imports Google Forms as lnkmx blocks |

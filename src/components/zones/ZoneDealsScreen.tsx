@@ -49,8 +49,8 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
   const { t } = useTranslation();
   const { handleError } = useAppError();
   const { members } = useZoneContext();
-  const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity } = useZoneDeals(zoneId);
   const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
+  const { deals, stages, pipelines, loading, createDeal, updateDeal, moveDealToStage, addActivity, createPipeline, updatePipeline, deletePipeline } = useZoneDeals(zoneId, selectedPipelineId);
 
   useEffect(() => {
     if (!selectedPipelineId && pipelines.length > 0) {
@@ -68,6 +68,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
     if (!selectedPipelineId) return deals;
     return deals.filter(d => d.pipeline_id === selectedPipelineId || !d.pipeline_id);
   }, [deals, selectedPipelineId]);
+  
   const { contacts } = useZoneContacts(zoneId);
   const { fields: dealFields } = useZoneDealFields(zoneId);
   const [createOpen, setCreateOpen] = useState(false);

@@ -294,9 +294,11 @@ new -> contacted -> qualified -> won/lost
 
 - Supabase (Postgres, Auth, Storage)
 - **Native Auth Implementation**: Direct integration with Supabase Auth (Google/Apple OAuth) and Telegram Web Login / Telegram Mini App validation via edge functions (`validate-telegram`, `validate-telegram-miniapp`).
-- 28 Edge Functions for AI, notifications, SEO, and analytics
-- Row Level Security for data isolation
-- pg_cron for scheduled jobs (warm-up, digests, reminders)
+- 28 Edge Functions
+### 2.3. Platform Logic & Extensibility
+- **Custom Fields (`zone_custom_fields`)**: Allows defining dynamic data points (Text, Number, Date, Boolean) appended to contacts (`zone_contacts.custom_fields`) and deals (`zone_deals.custom_fields`).
+- **Webhooks & API (`user_api_keys`)**: Webhook triggers on events (Leads, Deals, Status changes) and a Public API for external integrations.
+- **Background Jobs**: Supabase pg_cron for scheduled tasks (`cron_jobs` table/docs).ts, reminders)
 
 ### Edge Infrastructure
 
@@ -443,9 +445,16 @@ LinkMAX использует гибридную модель, направлен
 - `zones`: workspace metadata, billing plan, owner.
 - `zone_members`: RBAC membership (owner/admin/member/viewer).
 - `zone_subscriptions`: plan billing cycles and status.
-- `zone_contacts`: shared CRM contacts per zone.
-- `zone_deals`: sales pipeline with Kanban stages.
-- `zone_deal_stages`: customizable pipeline stage definitions.
+-   `process-lead`, `api-leads` (Public API).
+
+#### 2.2.3. Deals & Pipelines (CRM)
+- **Tables**: `zone_deals`, `zone_deal_stages`, `zone_activities`, `zone_pipelines`
+- **Features**: 
+  - Multiple sales pipelines support.
+  - Kanban board (DnD via `@dnd-kit`).
+  - Expected value tracking.
+  - Custom Fields (JSONB) for dynamic data collection.
+- **Edge Functions**: `api-deals` (Public API).
 - `zone_deal_activities`: deal activity log.
 - `zone_conversations`: team inbox conversations (Telegram, etc.).
 - `zone_messages`: realtime messages within conversations.

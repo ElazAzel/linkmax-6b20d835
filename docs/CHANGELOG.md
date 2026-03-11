@@ -4,6 +4,15 @@
 
 ### [2026-03-11] - Global Documentation Sync (v2026.03)
 
+### [2026-03-11] - Public API & Advanced CRM
+
+* **Public API Integration**:
+  * Implemented secure API key generation and management for Zone owners/admins (`user_api_keys`).
+  * Deployed `api-leads` Edge Function for external lead ingestion.
+  * Deployed `api-deals` Edge Function for external deal synchronization.
+* **Advanced CRM Features**:
+  * Added Custom Fields architecture (`zone_custom_fields`). Contacts and Deals dynamically load these fields via JSONB.
+  * Introduced Multiple Pipelines. Users can now create, switch, and edit specialized Deal pipelines per workspace.
 * **Documentation Overhaul & Deprecation**:
   * Cleansed obsolete Next.js 14 architecture references from core index files.
   * Verified `PLATFORM_SNAPSHOT.md` and `README.md` correctly reflect Vite React SPA architecture.

@@ -7,8 +7,8 @@ import type { ZoneDeal, ZoneDealStage, ZoneDealActivity, ZonePipeline } from '@/
 
 // ─── Query Keys ───
 export const zoneDealsKeys = {
-  stages: (zoneId: string) => ['zone-deal-stages', zoneId] as const,
-  all: (zoneId: string) => ['zone-deals', zoneId] as const,
+  stages: (zoneId: string, pipelineId?: string | null) => ['zone-deal-stages', zoneId, pipelineId || 'all'] as const,
+  all: (zoneId: string, pipelineId?: string | null) => ['zone-deals', zoneId, pipelineId || 'all'] as const,
   zoneActivities: (zoneId: string) => ['zone-activities', zoneId] as const,
   activities: (zoneId: string, dealId: string) => ['zone-deal-activities', zoneId, dealId] as const,
   dealProducts: (zoneId: string, dealId: string) => ['zone-deal-products', zoneId, dealId] as const,
@@ -18,12 +18,17 @@ export const zoneDealsKeys = {
 };
 
 // ─── Fetch functions ───
-async function fetchStages(zoneId: string): Promise<ZoneDealStage[]> {
-  const { data, error } = await supabase
+async function fetchStages(zoneId: string, pipelineId?: string | null): Promise<ZoneDealStage[]> {
+  let query = supabase
     .from('zone_deal_stages')
     .select('*')
-    .eq('zone_id', zoneId)
-    .order('order_index');
+    .eq('zone_id', zoneId);
+    
+  if (pipelineId) {
+    query = (query as any).eq('pipeline_id', pipelineId);
+  }
+    
+  const { data, error } = await (query as any).order('order_index');
   if (error) throw error;
   return (data || []) as unknown as ZoneDealStage[];
 }
@@ -38,10 +43,14 @@ async function fetchPipelines(zoneId: string): Promise<ZonePipeline[]> {
   return (data || []) as ZonePipeline[];
 }
 
-async function fetchDeals(zoneId: string): Promise<ZoneDeal[]> {
-  const { data, error } = await supabase
+async function fetchDeals(zoneId: string, pipelineId?: string | null): Promise<ZoneDeal[]> {
+  let query = (supabase
     .from('zone_deals')
-    .select('*, zone_contacts(*), zone_deal_stages(*)')
+    .select('*, zone_contacts(*), zone_deal_stages(*)') as any);
+    
+  if (pipelineId) query = query.eq('pipeline_id', pipelineId);
+
+  const { data, error } = await query
     .eq('zone_id', zoneId)
     .order('created_at', { ascending: false });
   if (error) throw error;
@@ -93,7 +102,7 @@ async function fetchDealComments(zoneId: string, dealId: string) {
 }
 
 // ─── Hooks ───
-export function useZoneDeals(zoneId: string | null) {
+export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) {
   const queryClient = useQueryClient();
   const safeZoneId = zoneId || '';
 
@@ -105,15 +114,15 @@ export function useZoneDeals(zoneId: string | null) {
   });
 
   const { data: stages = [] } = useQuery({
-    queryKey: zoneDealsKeys.stages(safeZoneId),
-    queryFn: () => fetchStages(safeZoneId),
+    queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId),
+    queryFn: () => fetchStages(safeZoneId, pipelineId),
     enabled: !!zoneId,
     staleTime: 60_000,
   });
 
   const { data: deals = [], isLoading: loading } = useQuery({
-    queryKey: zoneDealsKeys.all(safeZoneId),
-    queryFn: () => fetchDeals(safeZoneId),
+    queryKey: zoneDealsKeys.all(safeZoneId, pipelineId),
+    queryFn: () => fetchDeals(safeZoneId, pipelineId),
     enabled: !!zoneId,
     staleTime: 15_000,
   });
@@ -126,7 +135,8 @@ export function useZoneDeals(zoneId: string | null) {
   });
 
   const invalidateDeals = () => {
-    queryClient.invalidateQueries({ queryKey: zoneDealsKeys.all(safeZoneId) });
+    queryClient.invalidateQueries({ queryKey: zoneDealsKeys.all(safeZoneId, pipelineId) });
+    queryClient.invalidateQueries({ queryKey: zoneDealsKeys.all(safeZoneId, 'all') });
     queryClient.invalidateQueries({ queryKey: zoneDealsKeys.zoneActivities(safeZoneId) });
   };
 
@@ -254,7 +264,7 @@ export function useZoneDeals(zoneId: string | null) {
     deleteDeal: (id: string) => deleteMutation.mutateAsync(id),
     refetch: invalidateDeals,
     refetchPipelines: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.pipelines(safeZoneId) }),
-    refetchStages: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId) }),
+    refetchStages: () => queryClient.invalidateQueries({ queryKey: zoneDealsKeys.stages(safeZoneId, pipelineId) }),
     createPipeline: (pipeline: Partial<ZonePipeline>) => createPipelineMutation.mutateAsync(pipeline),
     updatePipeline: (id: string, updates: Partial<ZonePipeline>) => updatePipelineMutation.mutateAsync({ id, updates }),
     deletePipeline: (id: string) => deletePipelineMutation.mutateAsync(id),
