@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### [2026-03-11] - Global Documentation Sync (v2026.03)
+
+* **Documentation Overhaul & Deprecation**:
+  * Cleansed obsolete Next.js 14 architecture references from core index files.
+  * Verified `PLATFORM_SNAPSHOT.md` and `README.md` correctly reflect Vite React SPA architecture.
+  * Updated `API.md` to document new Edge Functions: `process-transaction-fee`, `kaspi-pay`, `robokassa-webhook`, and `google-calendar-sync`.
+  * Removed legacy "Linkkon token" references in `API.md`, standardizing on "lnkmx".
+* **Strategic Roadmap Alignment**:
+  * Verified `STRATEGIC_PLAN_2026.md` and `5_PRODUCT_ROADMAP.md` align with the Q2 "Step-by-Growth" rollout (Monetization pivot to Starter Tier).
+  * Validated `COMPREHENSIVE_PLATFORM_GUIDE.md` against recent Business Zones CRM and Fintech updates.
+* **Status Updates**:
+  * Moved "Business Zones Phase 4 (Analytics Dashboard)" to Completed in `PLATFORM_SNAPSHOT.md` after codebase audit confirmed full implementation.
+  * Moved "Global Documentation Sync" to Completed.
+
 ### [2026-03-10] - Audit Remediation (March 2026)
 
 * **React Hook Violation Fixed**:

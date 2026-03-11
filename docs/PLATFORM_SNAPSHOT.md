@@ -803,23 +803,10 @@ Based on codebase analysis, these are logical next improvements:
 
 2. ~~**White-label mode**~~ — Remove all platform branding for enterprise clients (Completed 2026-02-25)
 
-3. ~~**A/B testing for blocks**~~ — Test different block configurations to optimize conversions (Completed 2026-02-25)
-4. ~~**Advanced booking**~~ — Calendar sync (Google/Outlook), payment integration, reminders (Completed 2026-02-21)
-5. ~~**Fintech Foundation**~~ — Wallets, Ledger, GMV tracking, platform fees, unit tests (Completed 2026-02-22)
-6. **Team Collaboration & Organizations**: RBAC system with multi-user access to pages, organization switching, and member roles. (Completed 2026-02-25)
-7. **Business Zones (Multi-Tenant Workspaces)**: Full CRM pipeline (Kanban deals, contacts), Team Inbox (realtime chat), Task Management (priorities, assignments, checklists), Zone Settings (members, invites, billing). Security via `SECURITY DEFINER` functions (`is_zone_member`, `is_zone_admin`). Plans from 5 to 1000+ members. (Completed 2026-03-03)
-8. **Business Zones Phase 1 (Deals DnD & Detail)**: Implementing drag-and-drop for Kanban and side-panel (Sheet) for deal details. (Completed 2026-03-03)
-9. **Global Documentation Sync**: Updating 100+ files to version 2.5/2026.03. Aligning with Step-by-Growth strategy and Anti-Bitrix positioning. (In Progress)
-10. **Starter Tier Launch**: Implementation of 7% transaction fee logic and Kaspi/Robokassa deep integration. (Completed 2026-03-11)
-11. **Mobile UX/UI Hardening**: Global typography reset for accessibility and date-fns-tz integration for double-booking prevention across timezones. (Completed 2026-03-11)
-11. **Business Zones Phase 2 (CRM Enhancements)**: Advanced contact cards, task checklists, multi-item invoices, and complex automations. (Completed 2026-03-03)
-| 10. **Business Zones Phase 3 (EDO & Document Management)**: Integration of act/contract/invoice generation directly from deals, template management, and document status tracking. (Completed 2026-03-05)
-| 11. **Technical Debt (Phase 2): Template Externalization**: Moved 150KB+ of hardcoded templates to DB. (Completed 2026-03-05)
-| 12. **RoboKassa & Billing Expansion**: Full integration of RoboKassa for Business Zones with transaction tracking and sequential invoice numbering. (Completed 2026-03-07)
 | 13. **CRM Quick Actions**: Prominent "Call", "Email", and "Telegram" buttons in Contact and Deal views for instant communication. (Completed 2026-03-07)
 | 12. **Phase 6: Regional Expansion & Technical Hardening**: Standardized Edge Functions with import maps, implemented manual CRM automations (Auto-Invoice), established Kaspi Pay service bridge, and added E2E CRM workflow verification. (Completed 2026-03-06)
 | 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
-| 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts and performance metrics for zones. (Planned)
+| 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts, revenue timeline, and performance metrics for zones. (Completed)
 12. **API access** — Public API for integrations (Zapier, Make, custom apps)
 13. **Email sequences** — Automated email drip campaigns for leads
 14. **Mobile app** — Native iOS/Android app for page management

@@ -31,7 +31,8 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 | `send-booking-reminder` | No JWT | Sends booking reminders (scheduled) |
 | `send-event-confirmation` | No JWT | Sends ticket/confirmation to event attendees |
 | `send-attendee-email` | No JWT | Sends follow-up emails to event attendees |
-| `google-calendar-sync` | No JWT | Syncs bookings with Google Calendar (OAuth) |
+| `google-calendar-sync` | No JWT | Syncs bookings with Google Calendar (OAuth) handling local user timezones |
+| `submit-booking` | No JWT | Validates time slots, checks for double-bookings, and inserts bookings safely |
 
 ### Fintech & Payments
 
@@ -41,6 +42,7 @@ Stateless server-side functions running on **Deno runtime**. Located in `supabas
 | `kaspi-pay` | No JWT | Integration with Kaspi QR and merchant API |
 | `process-transaction-fee` | Internal | Calculates and splits 7% (Starter) or 1% (Pro) fees |
 | `monetization-webhook` | No JWT | Unified handler for all payment events |
+| `robokassa-webhook` | No JWT | Verifies Robokassa signature and confirms payment in Supabase |
 
 ### Telegram Integration
 
@@ -95,8 +97,7 @@ PostgreSQL functions for atomic operations and secure logic.
 | `check_page_limits` | `user_id` | Verifies if user can create more pages based on tier |
 | `save_page_blocks` | `page_id`, `blocks_json` | Atomically replaces blocks for a page with versioning |
 | `increment_view_count` | `page_id` | Efficiently increments page views +1 |
-| `claim_daily_token_reward` | `user_id` | Awards Linkkon tokens for daily login (**auth.uid() check**) |
-| `upgrade_page_to_paid` | `page_id` | Marks a page as premium |
+| `claim_daily_token_reward` | `user_id` | Awards lnkmx tokens for daily login (**auth.uid() check**) |
 | `get_token_analytics` | — | Returns token economy stats (**admin-only**) |
 | `process_marketplace_purchase` | `buyer_id`, `template_id` | Handles template purchases (**auth.uid() check, self-purchase prevention**) |
 | `export_user_data` | `user_id` | **GDPR**: Returns all user data as JSONB |
