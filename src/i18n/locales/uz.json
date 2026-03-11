@@ -2192,7 +2192,9 @@
       "filterAll": ""
     },
     "addFirstBlock": "Birinchi blokni qo'shish uchun + tugmasini bosing",
-    "templateApplied": "Shablon qo'llanildi!"
+    "templateApplied": "Shablon qo'llanildi!",
+    "kaspi_qr": "",
+    "instant": ""
   },
   "blocks": {
     "profile": "Profil",
@@ -4205,7 +4207,9 @@
     "buttonText": "Tugma matni",
     "buttonTextPlaceholder": "Ro'yxatdan o'tish",
     "gcalSync": "",
-    "gcalSyncDesc": ""
+    "gcalSyncDesc": "",
+    "timezone": "",
+    "timezoneDesc": ""
   },
   "mapBlock": {
     "address": "Manzil",
@@ -4262,7 +4266,8 @@
     "selectedTime": "Vaqt tanlangan",
     "limitReached": {
       "customer": ""
-    }
+    },
+    "timezoneHint": ""
   },
   "days": {
     "sunday": "Quyosh",
@@ -6380,7 +6385,9 @@
     "copyLink": "",
     "downloadQR": "",
     "simulateMock": "",
-    "disclaimer": ""
+    "disclaimer": "",
+    "pay": "",
+    "enter_amount": ""
   },
   "zone": {
     "notifications": {

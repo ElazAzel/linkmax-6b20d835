@@ -222,7 +222,7 @@ serve(async (req) => {
 
         // ─── Create event in Google Calendar ───
         if (action === "create_event") {
-            const { summary, description, start, end, location } = payload;
+            const { summary, description, start, end, location, timezone } = payload;
             const accessToken = await getAccessToken(supabaseAdmin, user.id, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
             if (!accessToken) {
@@ -244,8 +244,8 @@ serve(async (req) => {
                         summary,
                         description,
                         location,
-                        start: { dateTime: start, timeZone: "UTC" },
-                        end: { dateTime: end, timeZone: "UTC" },
+                        start: { dateTime: start, timeZone: timezone || "UTC" },
+                        end: { dateTime: end, timeZone: timezone || "UTC" },
                     }),
                 }
             );

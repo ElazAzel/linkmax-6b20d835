@@ -53,6 +53,29 @@ serve(async (req: Request) => {
       );
     }
 
+    // 2.5 Check for double booking
+    const { data: existingBooking, error: checkError } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('page_id', pageId)
+      .eq('block_id', blockId)
+      .eq('slot_date', sanitize(slotDate, 10))
+      .eq('slot_time', sanitize(slotTime, 8))
+      .neq('status', 'cancelled')
+      .maybeSingle();
+
+    if (checkError) {
+      console.error('Error checking double booking:', checkError);
+      throw new Error('Could not verify availability');
+    }
+
+    if (existingBooking) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'slot_already_booked' }),
+        { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // 3. Insert booking
     const { data: booking, error: insertError } = await supabase
       .from('bookings')
@@ -95,8 +118,8 @@ serve(async (req: Request) => {
           const text = lang === 'en'
             ? `📅 <b>New booking!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">View</a>`
             : lang === 'kk'
-            ? `📅 <b>Жаңа жазба!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Көру</a>`
-            : `📅 <b>Новая запись!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть</a>`;
+              ? `📅 <b>Жаңа жазба!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Көру</a>`
+              : `📅 <b>Новая запись!</b>\n\n▪️ ${sanitize(clientName)}\n▪️ ${sanitize(slotDate)} ${sanitize(slotTime).substring(0, 5)}\n\n👉 <a href="https://lnkmx.my/dashboard">Посмотреть</a>`;
 
           await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
             method: 'POST',

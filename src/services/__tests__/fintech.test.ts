@@ -46,9 +46,9 @@ describe('fintechService', () => {
             expect(logger.error).toHaveBeenCalled();
         });
 
-        it('should create transaction and fee record on success', async () => {
+        it('should create transaction with fee calculation on success (Starter 7%)', async () => {
             const mockWallet = { id: 'wallet-789' };
-            const mockTransaction = { id: 'tx-001', amount: 1000 };
+            const mockTransaction = { id: 'tx-001' };
             const mockProfile = { premium_tier: 'starter' };
 
             const mockFrom = vi.mocked(supabase.from);
@@ -74,11 +74,6 @@ describe('fintechService', () => {
                 single: vi.fn().mockResolvedValue({ data: mockTransaction, error: null })
             } as any);
 
-            // 4. Chain for fee transaction creation (insert)
-            mockFrom.mockReturnValueOnce({
-                insert: vi.fn().mockResolvedValue({ data: null, error: null })
-            } as any);
-
             const result = await fintechService.recordPendingIncome(mockParams);
 
             expect(result).toEqual(mockTransaction);
@@ -86,11 +81,51 @@ describe('fintechService', () => {
             expect(mockFrom).toHaveBeenCalledWith('user_wallets');
             expect(mockFrom).toHaveBeenCalledWith('wallet_transactions');
 
-            // Verify fee calculation (Starter tier: 7% of 1000 = 70)
-            const feeCall = vi.mocked(mockFrom).mock.results[3].value.insert;
-            expect(feeCall).toHaveBeenCalledWith(expect.objectContaining({
-                amount: -70,
-                type: 'fee'
+            const insertCall = vi.mocked(mockFrom).mock.results[2].value.insert;
+            expect(insertCall).toHaveBeenCalledWith(expect.objectContaining({
+                gross_amount: 1000,
+                fee_amount: 70, // 7% of 1000
+                net_amount: 930
+            }));
+        });
+
+        it('should create transaction with fee calculation on success (Pro 1%)', async () => {
+            const mockWallet = { id: 'wallet-789' };
+            const mockTransaction = { id: 'tx-002' };
+            const mockProfile = { premium_tier: 'pro' };
+
+            const mockFrom = vi.mocked(supabase.from);
+
+            // 1. getUserCommissionRate calls user_profiles
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: mockProfile, error: null })
+            } as any);
+
+            // 2. recordPendingIncome calls user_wallets
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: mockWallet, error: null })
+            } as any);
+
+            // 3. Chain for main transaction creation (insert)
+            mockFrom.mockReturnValueOnce({
+                insert: vi.fn().mockReturnThis(),
+                select: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: mockTransaction, error: null })
+            } as any);
+
+            const result = await fintechService.recordPendingIncome(mockParams);
+
+            expect(result).toEqual(mockTransaction);
+
+            const insertCall = vi.mocked(mockFrom).mock.results[2].value.insert;
+            expect(insertCall).toHaveBeenCalledWith(expect.objectContaining({
+                gross_amount: 1000,
+                fee_amount: 10, // 1% of 1000
+                net_amount: 990
             }));
         });
     });
@@ -99,8 +134,8 @@ describe('fintechService', () => {
         it('should return wallet, transactions and pending GMV', async () => {
             const userId = 'user-123';
             const mockWallet = { id: 'w1', balance: 500 };
-            const mockTxs = [{ id: 't1', amount: 100 }];
-            const mockPending = [{ amount: 200 }, { amount: 300 }];
+            const mockTxs = [{ id: 't1', gross_amount: 100 }];
+            const mockPending = [{ gross_amount: 200 }, { gross_amount: 300 }];
 
             const mockFrom = vi.mocked(supabase.from);
 

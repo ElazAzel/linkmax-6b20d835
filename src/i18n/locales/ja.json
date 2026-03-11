@@ -2158,7 +2158,9 @@
       "filterAll": ""
     },
     "addFirstBlock": "",
-    "templateApplied": ""
+    "templateApplied": "",
+    "kaspi_qr": "",
+    "instant": ""
   },
   "blocks": {
     "profile": "Profile",
@@ -4171,7 +4173,9 @@
     "buttonText": "Button text",
     "buttonTextPlaceholder": "Book Now",
     "gcalSync": "",
-    "gcalSyncDesc": ""
+    "gcalSyncDesc": "",
+    "timezone": "",
+    "timezoneDesc": ""
   },
   "mapBlock": {
     "address": "Address",
@@ -4228,7 +4232,8 @@
     "selectedTime": "",
     "limitReached": {
       "customer": ""
-    }
+    },
+    "timezoneHint": ""
   },
   "days": {
     "sunday": "Sun",
@@ -6346,7 +6351,9 @@
     "copyLink": "",
     "downloadQR": "",
     "simulateMock": "",
-    "disclaimer": ""
+    "disclaimer": "",
+    "pay": "",
+    "enter_amount": ""
   },
   "zone": {
     "notifications": {

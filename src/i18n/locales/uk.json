@@ -2192,7 +2192,9 @@
       "filterAll": ""
     },
     "addFirstBlock": "",
-    "templateApplied": ""
+    "templateApplied": "",
+    "kaspi_qr": "",
+    "instant": ""
   },
   "blocks": {
     "profile": "Профіль",
@@ -4205,7 +4207,9 @@
     "buttonText": "Текст кнопки",
     "buttonTextPlaceholder": "Записатися",
     "gcalSync": "",
-    "gcalSyncDesc": ""
+    "gcalSyncDesc": "",
+    "timezone": "",
+    "timezoneDesc": ""
   },
   "mapBlock": {
     "address": "Адрес",
@@ -4262,7 +4266,8 @@
     "selectedTime": "",
     "limitReached": {
       "customer": ""
-    }
+    },
+    "timezoneHint": ""
   },
   "days": {
     "sunday": "Вс",
@@ -6380,7 +6385,9 @@
     "copyLink": "",
     "downloadQR": "",
     "simulateMock": "",
-    "disclaimer": ""
+    "disclaimer": "",
+    "pay": "",
+    "enter_amount": ""
   },
   "zone": {
     "notifications": {

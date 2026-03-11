@@ -369,6 +369,14 @@
     scroll-behavior: smooth;
     overflow-x: clip;
   }
+
+  /* Accessibility reset: enforce minimum readable font size on mobile */
+  @media (max-width: 640px) {
+    .text-xs, .text-\[10px\], .text-[11px] {
+      font-size: 12px !important;
+      line-height: min(1.5, 16px) !important;
+    }
+  }
 }
 
 @layer utilities {

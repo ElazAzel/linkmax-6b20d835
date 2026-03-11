@@ -2192,7 +2192,9 @@
       "filterAll": "Все"
     },
     "addFirstBlock": "Нажмите + чтобы добавить первый блок",
-    "templateApplied": "Шаблон применен!"
+    "templateApplied": "Шаблон применен!",
+    "kaspi_qr": "Kaspi QR",
+    "instant": "МГНОВЕННО"
   },
   "blocks": {
     "profile": "Профиль",
@@ -4205,7 +4207,9 @@
     "buttonText": "Текст кнопки",
     "buttonTextPlaceholder": "Записаться",
     "gcalSync": "Синхронизация Google Календаря",
-    "gcalSyncDesc": "Использовать Google Календарь для проверки доступности и создания событий. (Доступно в профиле)"
+    "gcalSyncDesc": "Использовать Google Календарь для проверки доступности и создания событий. (Доступно в профиле)",
+    "timezone": "Часовой пояс",
+    "timezoneDesc": "Укажите часовой пояс в котором вы работаете. Клиенты увидят время в своем часовом поясе."
   },
   "mapBlock": {
     "address": "Адрес",
@@ -4262,7 +4266,8 @@
     "selectedTime": "Выбрано время",
     "limitReached": {
       "customer": "Запись временно недоступна. Свяжитесь напрямую."
-    }
+    },
+    "timezoneHint": "(Местное время)"
   },
   "days": {
     "sunday": "Вс",
@@ -6380,7 +6385,9 @@
     "copyLink": "Copy Link",
     "downloadQR": "Download QR",
     "simulateMock": "Simulate Payment (Sandbox)",
-    "disclaimer": "Powered by Kaspi.kz payment system"
+    "disclaimer": "Powered by Kaspi.kz payment system",
+    "pay": "Pay",
+    "enter_amount": "Введите сумму для генерации QR"
   },
   "zone": {
     "notifications": {

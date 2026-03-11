@@ -31,6 +31,7 @@ import { cn } from '@/lib/utils/utils';
 import { toast } from 'sonner';
 import { useTimezone } from '@/hooks/useTimezone';
 import { format, addDays, isBefore, startOfDay, isToday, isTomorrow } from 'date-fns';
+import { fromZonedTime, toZonedTime, formatInTimeZone } from 'date-fns-tz';
 import { ru, kk } from 'date-fns/locale';
 import { getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
 import type { BookingBlock as BookingBlockType } from '@/types/page';
@@ -120,11 +121,21 @@ export const BookingBlock = memo(function BookingBlockComponent({
 
       const generatedSlots: TimeSlot[] = [];
 
-      let gcalBlockedSlots: string[] = [];
+      let gcalBlockedSlots: { start: string, end: string }[] = [];
+      const tz = block.timezone || userTimezone || 'UTC';
       if (block.gcalSyncEnabled && pageOwnerId) {
         try {
+          // Send ISO strings for full day in block.timezone or userTimezone
+          const timeMin = fromZonedTime(`${dateStr}T00:00:00`, tz).toISOString();
+          const timeMax = fromZonedTime(`${dateStr}T23:59:59`, tz).toISOString();
+
           const { data, error } = await supabase.functions.invoke('google-calendar-sync', {
-            body: { action: 'check_availability', owner_id: pageOwnerId, date: dateStr }
+            body: {
+              action: 'check_availability',
+              owner_id: pageOwnerId,
+              time_min: timeMin,
+              time_max: timeMax
+            }
           });
           if (!error && data?.blocked_slots) gcalBlockedSlots = data.blocked_slots;
         } catch (err) {
@@ -132,10 +143,34 @@ export const BookingBlock = memo(function BookingBlockComponent({
         }
       }
 
+      const checkGcalConflict = (timeStr: string, endTimeStr?: string) => {
+        if (!gcalBlockedSlots.length) return false;
+
+        let endTStr = endTimeStr;
+        if (!endTStr) {
+          // Add default duration if no end time
+          const durationMins = block.slotDuration || 60;
+          const [h, m] = timeStr.split(':').map(Number);
+          const endTotalMins = h * 60 + m + durationMins;
+          const endH = Math.floor(endTotalMins / 60) % 24;
+          const endM = endTotalMins % 60;
+          endTStr = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}:00`;
+        }
+
+        const start = fromZonedTime(`${dateStr}T${timeStr}`, tz).getTime();
+        const end = fromZonedTime(`${dateStr}T${endTStr}`, tz).getTime();
+
+        return gcalBlockedSlots.some(busy => {
+          const busyStart = new Date(busy.start).getTime();
+          const busyEnd = new Date(busy.end).getTime();
+          return start < busyEnd && end > busyStart; // Overlap check
+        });
+      };
+
       if (block.slots && block.slots.length > 0) {
         block.slots.forEach(slot => {
           const isBookedLocally = bookings?.some(b => b.slot_time === slot.startTime);
-          const isBookedGcal = gcalBlockedSlots.includes(slot.startTime);
+          const isBookedGcal = checkGcalConflict(slot.startTime, slot.endTime);
           generatedSlots.push({
             time: slot.startTime,
             endTime: slot.endTime,
@@ -146,7 +181,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
       } else if (slotTemplates && slotTemplates.length > 0) {
         slotTemplates.forEach(template => {
           const isBookedLocally = bookings?.some(b => b.slot_time === template.start_time);
-          const isBookedGcal = gcalBlockedSlots.includes(template.start_time);
+          const isBookedGcal = checkGcalConflict(template.start_time, template.end_time);
           generatedSlots.push({
             time: template.start_time,
             endTime: template.end_time,
@@ -172,7 +207,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
           const endTimeStr = `${endHr.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}:00`;
 
           const isBookedLocally = bookings?.some(b => b.slot_time === timeStr);
-          const isBookedGcal = gcalBlockedSlots.includes(timeStr);
+          const isBookedGcal = checkGcalConflict(timeStr, endTimeStr);
 
           generatedSlots.push({
             time: timeStr,

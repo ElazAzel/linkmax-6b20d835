@@ -301,6 +301,26 @@ export function BookingBlockEditor({ formData, onChange }: BookingBlockEditorPro
           </div>
 
           <div className="space-y-2 mt-4">
+            <Label>{t('bookingBlock.timezone', 'Часовой пояс')}</Label>
+            <Select
+              value={block.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone}
+              onValueChange={(v: string) => handleChange({ timezone: v })}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="max-h-[200px]">
+                {Intl.supportedValuesOf('timeZone').map(tz => (
+                  <SelectItem key={tz} value={tz}>{tz}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              {t('bookingBlock.timezoneDesc', 'Укажите часовой пояс в котором вы работаете. Клиенты увидят время в своем часовом поясе.')}
+            </p>
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label>{t('bookingBlock.maxDays', 'Максимум дней для записи')}</Label>
             <Select
               value={String(block.maxBookingDays || 30)}
