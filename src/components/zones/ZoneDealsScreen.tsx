@@ -325,6 +325,18 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             )}
           </div>
           <div className="flex gap-2 flex-wrap items-center">
+            <Button variant="outline" size="sm" onClick={async () => {
+              try {
+                const { exportDealsToExcel } = await import('@/lib/export/excel-export-zone');
+                await exportDealsToExcel({ deals: currentDeals });
+                toast.success(t('zones.deals.exportSuccess', 'Deals exported successfully'));
+              } catch (err: any) {
+                handleError(err, 'Export failed');
+              }
+            }}>
+              <Download className="h-4 w-4 mr-1" />
+              {t('zones.deals.export', 'Export')}
+            </Button>
             <Popover open={filterOpen} onOpenChange={setFilterOpen}>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm">

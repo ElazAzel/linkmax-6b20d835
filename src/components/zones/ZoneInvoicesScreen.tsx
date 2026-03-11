@@ -27,6 +27,8 @@ import Plus from 'lucide-react/dist/esm/icons/plus';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import FileDown from 'lucide-react/dist/esm/icons/file-down';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import type { ZoneInvoice, ZoneInvoiceItem } from '@/types/zones';
 import { useAppError } from '@/hooks/useAppError';
 
@@ -252,26 +254,57 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                     >
                       <ExternalLink className="h-5 w-5" />
                     </button>
-                    <button
-                      className="p-2 rounded-full bg-muted/10 text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500 transition-all"
-                      title={t('zones.invoices.downloadPDF', 'Download PDF')}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        try {
-                          const { exportInvoiceToPDF } = await import('@/lib/export/pdf-export-invoice');
-                          await exportInvoiceToPDF({
-                            invoice: inv,
-                            items: (inv as any).items || [],
-                            zoneName: 'Zone',
-                          });
-                          toast.success(t('zones.invoices.pdfSuccess', 'PDF saved'));
-                        } catch (err: any) {
-                          handleError(err, 'PDF export failed');
-                        }
-                      }}
-                    >
-                      <FileDown className="h-4 w-4" />
-                    </button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          className="p-2 rounded-full bg-muted/10 text-muted-foreground hover:bg-blue-500/10 hover:text-blue-500 transition-all"
+                          title={t('zones.invoices.downloadPDF', 'Скачать PDF')}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <FileDown className="h-4 w-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            try {
+                              const { exportInvoiceToPDF } = await import('@/lib/export/pdf-export-invoice');
+                              await exportInvoiceToPDF({
+                                invoice: inv,
+                                items: (inv as any).items || [],
+                                zoneName: 'Zone',
+                              });
+                              toast.success(t('zones.invoices.pdfSuccess', 'Счет сохранен'));
+                            } catch (err: any) {
+                              handleError(err, 'PDF export failed');
+                            }
+                          }}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          {t('zones.invoices.downloadInvoice', 'Счет на оплату')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            try {
+                              const { exportActToPDF } = await import('@/lib/export/pdf-export-act');
+                              await exportActToPDF({
+                                invoice: inv,
+                                items: (inv as any).items || [],
+                                zoneName: 'Zone',
+                              });
+                              toast.success(t('zones.invoices.actSuccess', 'Акт сохранен'));
+                            } catch (err: any) {
+                              handleError(err, 'PDF export failed');
+                            }
+                          }}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          {t('zones.invoices.downloadAct', 'Акт выполненных работ')}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               </CardContent>

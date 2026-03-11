@@ -11,6 +11,7 @@ import { DashboardSidebar } from './DashboardSidebar';
 import { DashboardBottomNav } from './DashboardBottomNav';
 import { cn } from '@/lib/utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GlobalCommandPalette } from './GlobalCommandPalette';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -37,6 +38,7 @@ export const DashboardLayout = memo(function DashboardLayout({
   return (
     <div className="min-h-screen bg-background bg-liquid-mesh flex overflow-hidden lg:animate-grid-morph-1">
       {/* Desktop Sidebar - sticky to stay fixed while content scrolls */}
+      <GlobalCommandPalette />
       {!isMobile && (
         <DashboardSidebar
           activeTab={activeTab}

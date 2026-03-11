@@ -31,18 +31,39 @@ export async function exportContactsToExcel({
         'Дата создания / Created At',
     ];
 
-    const rows = contacts.map(c => [
-        c.name,
-        c.email || '',
-        c.phone || '',
-        c.company || '',
-        c.position || '',
-        c.telegram_username || '',
-        (c.tags || []).join(', '),
-        c.source || '',
-        c.notes || '',
-        c.created_at ? format(new Date(c.created_at), 'dd.MM.yyyy HH:mm') : '',
-    ]);
+    // Extract dynamic custom field keys across all contacts
+    const customFieldKeys = new Set<string>();
+    contacts.forEach(c => {
+        if (c.custom_fields) {
+            Object.keys(c.custom_fields).forEach(key => customFieldKeys.add(key));
+        }
+    });
+    const customFieldsArray = Array.from(customFieldKeys);
+    
+    // Append custom field headers
+    customFieldsArray.forEach(key => headers.push(`CF: ${key}`));
+
+    const rows = contacts.map(c => {
+        const row = [
+            c.name,
+            c.email || '',
+            c.phone || '',
+            c.company || '',
+            c.position || '',
+            c.telegram_username || '',
+            (c.tags || []).join(', '),
+            c.source || '',
+            c.notes || '',
+            c.created_at ? format(new Date(c.created_at), 'dd.MM.yyyy HH:mm') : '',
+        ];
+
+        // Append custom field values
+        customFieldsArray.forEach(key => {
+            row.push(c.custom_fields ? String(c.custom_fields[key] || '') : '');
+        });
+
+        return row;
+    });
 
     const ExcelJS = (await import('exceljs')).default;
     const workbook = new ExcelJS.Workbook();
@@ -116,15 +137,36 @@ export async function exportDealsToExcel({
         'Дата создания / Created At',
     ];
 
-    const rows = deals.map(d => [
-        d.title,
-        d.contact?.name || '',
-        d.stage?.name || '',
-        translateDealStatus(d.status),
-        d.value_amount ?? '',
-        d.currency || 'KZT',
-        d.created_at ? format(new Date(d.created_at), 'dd.MM.yyyy HH:mm') : '',
-    ]);
+    // Extract dynamic custom field keys across all deals
+    const customFieldKeys = new Set<string>();
+    deals.forEach(d => {
+        if (d.custom_fields) {
+            Object.keys(d.custom_fields).forEach(key => customFieldKeys.add(key));
+        }
+    });
+    const customFieldsArray = Array.from(customFieldKeys);
+    
+    // Append custom field headers
+    customFieldsArray.forEach(key => headers.push(`CF: ${key}`));
+
+    const rows = deals.map(d => {
+        const row = [
+            d.title,
+            d.contact?.name || '',
+            d.stage?.name || '',
+            translateDealStatus(d.status),
+            d.value_amount ?? '',
+            d.currency || 'KZT',
+            d.created_at ? format(new Date(d.created_at), 'dd.MM.yyyy HH:mm') : '',
+        ];
+
+        // Append custom field values
+        customFieldsArray.forEach(key => {
+            row.push(d.custom_fields ? String(d.custom_fields[key] || '') : '');
+        });
+
+        return row;
+    });
 
     const ExcelJS = (await import('exceljs')).default;
     const workbook = new ExcelJS.Workbook();

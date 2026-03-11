@@ -11,10 +11,10 @@
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Liquid Glass"** aesthetic (glassmorphism, premium micro-animations, and depth) to provide a high-end look by default.
-2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, and status tracking. Optimized for mobile via **Bottom Sheet (Drawer)** UX patterns.
+2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a global **Cmd+K Command Palette** for deep search across entities, and native **Excel/CSV data export**.
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
 4. **Team Collaboration & Business Zones** — RBAC-based organization management and multi-tenant workspaces with CRM Kanban and Team Inbox.
-5. **Fintech Core & Auth** — Telegram Mini App integration, Telegram Web Login, an integrated ledger with **Kaspi QR Sandbox** support, sequential invoicing, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
+5. **Fintech Core & Auth** — Telegram Mini App integration, Telegram Web Login, integrated ledger with Kaspi QR Sandbox, local **PDF Invoice / Acts generation**, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
 
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
 
@@ -817,8 +817,10 @@ Based on codebase analysis, these are logical next improvements:
 | 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
 | 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts, revenue timeline, and performance metrics for zones. (Completed)
 12. **API access** — Public API for integrations (Zapier, Make, custom apps)
-13. **Email sequences** — Automated email drip campaigns for leads
-14. **Mobile app** — Native iOS/Android app for page management
+13. **Global Command Palette (Cmd+K)** — Quick-select navigation across contacts and deals (Completed 2026-03-11)
+14. **CRM Excel & PDF Exports** — Full native .xlsx generation and local JS-driven PDF Acts/Invoices (Completed 2026-03-11)
+15. **Email sequences** — Automated email drip campaigns for leads
+16. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: Support for RU/EN/KK/UZ. Current status: **100% sync** (Synced March 2026).
 - **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_24.md](FULL_PLATFORM_AUDIT_2026_02_24.md), [EDO_MODULE_AUDIT_2026_03_05.md](EDO_MODULE_AUDIT_2026_03_05.md), and [AUDIT_REPORT_2026_03_10.md](AUDIT_REPORT_2026_03_10.md).

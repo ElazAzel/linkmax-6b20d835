@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### [2026-03-11] - Global Search & Data Export (CRM Depth)
+
+* **Command Palette (Cmd+K)**:
+  * Implemented a global `CommandPalette` in `DashboardV2` accessible via `Cmd+K` / `Ctrl+K`.
+  * Added global text search resolving entities across: `pages`, `zone_contacts`, `zone_deals`, and `zone_tasks`.
+  * Features debounced input processing for performance and a localized UI using `cmdk`.
+* **Data Export (Excel/CSV)**:
+  * Added native `.xlsx` generation via `exceljs` (`src/lib/export/excel-export-zone.ts`).
+  * Extracted JSONB `custom_fields` metadata to map into distinct dynamic columns for Deals and Contacts.
+  * Added "Export" buttons to the `ZoneContactsScreen` and `ZoneDealsScreen` headers.
+* **PDF Document Generation**:
+  * Created `pdf-export-act.ts` for generating native "Act of Performed Work" (Акт выполненных работ) PDFs.
+  * Updated `ZoneInvoicesScreen` with a Dropdown button to generate either PDF Invoices or PDF Acts locally.
+  * Implemented native Cyrillic text transliteration to bypass heavy base64 web font dependencies in standard jsPDF.
+
 ### [2026-03-11] - Global Documentation Sync (v2026.03)
 
 ### [2026-03-11] - Public API & Advanced CRM

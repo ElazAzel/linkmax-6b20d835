@@ -29,6 +29,7 @@ import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import Users from 'lucide-react/dist/esm/icons/users';
 import Kanban from 'lucide-react/dist/esm/icons/kanban';
+import Search from 'lucide-react/dist/esm/icons/search';
 import Contact from 'lucide-react/dist/esm/icons/contact';
 import Building2 from 'lucide-react/dist/esm/icons/building-2';
 import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
@@ -259,6 +260,27 @@ export const DashboardSidebar = memo(function DashboardSidebar({
           onClick={() => onCollapsedChange?.(!collapsed)}
         >
           {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+        </Button>
+      </div>
+
+      <div className="px-3 pb-2 pt-1">
+        <Button 
+          variant="outline" 
+          className={cn(
+            "w-full justify-between text-muted-foreground h-9 bg-card/50",
+            collapsed && "justify-center px-0"
+          )}
+          onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+        >
+          <div className="flex items-center gap-2">
+            <Search className="h-4 w-4" />
+            {!collapsed && <span>Поиск</span>}
+          </div>
+          {!collapsed && (
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+              <span className="text-xs">⌘</span>K
+            </kbd>
+          )}
         </Button>
       </div>
 
