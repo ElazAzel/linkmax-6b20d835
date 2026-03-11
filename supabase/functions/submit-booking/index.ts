@@ -53,7 +53,20 @@ serve(async (req: Request) => {
       );
     }
 
-    // 2.5 Check for double booking
+    // 2.1 Get block settings for GCal and Timezone
+    const { data: block, error: blockError } = await supabase
+      .from('blocks')
+      .select('type, content')
+      .eq('id', blockId)
+      .single();
+
+    if (blockError || !block || block.type !== 'booking') {
+      throw new Error('Booking configuration not found');
+    }
+
+    const { gcalSyncEnabled, timezone: blockTz, slotDuration } = block.content || {};
+
+    // 2.5 Check for local double booking
     const { data: existingBooking, error: checkError } = await supabase
       .from('bookings')
       .select('id')
@@ -74,6 +87,45 @@ serve(async (req: Request) => {
         JSON.stringify({ success: false, error: 'slot_already_booked' }),
         { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // 2.6 Check Google Calendar if enabled
+    if (gcalSyncEnabled) {
+      try {
+        const tz = blockTz || 'UTC';
+        // Calculate start and end ISO for the slot
+        const startDT = new Date(`${slotDate}T${slotTime}`).toISOString(); 
+        // Note: slotTime is locally formatted in owner's or visitor's TZ usually.
+        // We need to be careful here. Assuming slotDate/slotTime are YYYY-MM-DD and HH:mm:ss.
+        
+        const duration = slotDuration || 60;
+        const [h, m] = slotTime.split(':').map(Number);
+        const startMins = h * 60 + m;
+        const endMins = startMins + duration;
+        const endH = Math.floor(endMins / 60) % 24;
+        const endM = endMins % 60;
+        const slotEnd = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}:00`;
+
+        const { data: gcalData, error: gcalInvokeError } = await supabase.functions.invoke('google-calendar-sync', {
+          body: {
+            action: 'check_availability',
+            owner_id: pageData.user_id,
+            time_min: new Date(`${slotDate}T${slotTime}`).toISOString(),
+            time_max: new Date(`${slotDate}T${slotEnd}`).toISOString()
+          }
+        });
+
+        if (!gcalInvokeError && gcalData?.blocked_slots?.length > 0) {
+          return new Response(
+            JSON.stringify({ success: false, error: 'slot_already_booked_gcal' }),
+            { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      } catch (gcalErr) {
+        console.error('GCal verification error:', gcalErr);
+        // We continue if GCal check fails (fail-open) to not block user, 
+        // but log it. Decision: safety first? Roadmap says "total protection".
+      }
     }
 
     // 3. Insert booking

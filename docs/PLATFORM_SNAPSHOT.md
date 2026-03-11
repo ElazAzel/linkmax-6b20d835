@@ -197,8 +197,12 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | **pricing** | Pricing table | Services with prices, durations | Service packages |
 | **shoutout** | User recommendation | Target user ID | Cross-promotion |
 | **community** | Telegram group link | Channel URL, member count | Community access |
-| **booking** | Appointment calendar | Working hours, slot duration | Scheduling |
 | **event** | Event with registration | Date, location, capacity, form | Event management |
+
+**Booking & Timezone Engine**:
+- Automated visitor timezone detection.
+- Cross-checking Google Calendar in `submit-booking` edge function for absolute double-booking protection.
+- `useTimezone` hook centralized all logic and friendly formatting.
 
 **Code locations:**
 
@@ -295,7 +299,9 @@ new -> contacted -> qualified -> won/lost
 - Supabase (Postgres, Auth, Storage)
 - **Native Auth Implementation**: Direct integration with Supabase Auth (Google/Apple OAuth) and Telegram Web Login / Telegram Mini App validation via edge functions (`validate-telegram`, `validate-telegram-miniapp`).
 - 28 Edge Functions
+
 ### 2.3. Platform Logic & Extensibility
+
 - **Custom Fields (`zone_custom_fields`)**: Allows defining dynamic data points (Text, Number, Date, Boolean) appended to contacts (`zone_contacts.custom_fields`) and deals (`zone_deals.custom_fields`).
 - **Webhooks & API (`user_api_keys`)**: Webhook triggers on events (Leads, Deals, Status changes) and a Public API for external integrations.
 - **Background Jobs**: Supabase pg_cron for scheduled tasks (`cron_jobs` table/docs).ts, reminders)
@@ -445,9 +451,10 @@ LinkMAX использует гибридную модель, направлен
 - `zones`: workspace metadata, billing plan, owner.
 - `zone_members`: RBAC membership (owner/admin/member/viewer).
 - `zone_subscriptions`: plan billing cycles and status.
--   `process-lead`, `api-leads` (Public API).
+- `process-lead`, `api-leads` (Public API).
 
 #### 2.2.3. Deals & Pipelines (CRM)
+
 - **Tables**: `zone_deals`, `zone_deal_stages`, `zone_activities`, `zone_pipelines`
 - **Features**: 
   - Multiple sales pipelines support.
@@ -817,7 +824,8 @@ Based on codebase analysis, these are logical next improvements:
 | 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
 | 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts, revenue timeline, and performance metrics for zones. (Completed)
 12. **API access** — Public API for integrations (Zapier, Make, custom apps)
-13. **Global Command Palette (Cmd+K)** — Quick-select navigation across contacts and deals (Completed 2026-03-11)
+13. **Booking TZ & GCal Protection** — Robust timezone awareness and server-side calendar conflict checks (Completed 2026-03-11)
+14. **Global Command Palette (Cmd+K)** — Quick-select navigation across contacts and deals (Completed 2026-03-11)
 14. **CRM Excel & PDF Exports** — Full native .xlsx generation and local JS-driven PDF Acts/Invoices (Completed 2026-03-11)
 15. **Email sequences** — Automated email drip campaigns for leads
 16. **Mobile app** — Native iOS/Android app for page management

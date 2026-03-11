@@ -76,7 +76,7 @@ export const BookingBlock = memo(function BookingBlockComponent({
   pageId
 }: BookingBlockProps) {
   const { t, i18n } = useTranslation();
-  const { userTimezone } = useTimezone();
+  const { userTimezone, getFriendlyTZName } = useTimezone();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [slots, setSlots] = useState<TimeSlot[]>([]);
@@ -571,8 +571,13 @@ export const BookingBlock = memo(function BookingBlockComponent({
           )}
           {block.timezone && (
             <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-tighter font-bold text-muted-foreground bg-muted/20 w-fit px-2 py-0.5 rounded-full border border-border/50">
-              {block.timezone} {block.timezone !== userTimezone && t('booking.timezoneHint', '(Местное время)')}
+              {getFriendlyTZName(block.timezone)}
             </div>
+          )}
+          {userTimezone && userTimezone !== block.timezone && (
+             <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-tighter font-bold text-primary bg-primary/5 w-fit px-2 py-0.5 rounded-full border border-primary/20">
+               {t('booking.yourTimezone', 'Ваш пояс')}: {getFriendlyTZName(userTimezone)}
+             </div>
           )}
         </div>
       </div>

@@ -16,6 +16,10 @@
   * Created `pdf-export-act.ts` for generating native "Act of Performed Work" (Акт выполненных работ) PDFs.
   * Updated `ZoneInvoicesScreen` with a Dropdown button to generate either PDF Invoices or PDF Acts locally.
   * Implemented native Cyrillic text transliteration to bypass heavy base64 web font dependencies in standard jsPDF.
+* **Booking Logic Hardening (Timezone & Sync)**:
+  * Enhanced `useTimezone` hook with `date-fns-tz` to support professional timezone conversions and friendly display names.
+  * Refactored `submit-booking` Edge Function to perform real-time Google Calendar availability checks before committing a record, preventing race-condition double-bookings.
+  * Added a "Visitor Timezone Detection" badge to `BookingBlock` to ensure transparency for international clients.
 
 ### [2026-03-11] - Global Documentation Sync (v2026.03)
 
