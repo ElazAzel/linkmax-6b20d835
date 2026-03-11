@@ -9,3 +9,4 @@ export { PageSettingsScreen } from './PageSettingsScreen';
 export { AccountSettingsScreen } from './AccountSettingsScreen';
 export { EventsScreen } from './EventsScreen';
 export { EventDetailScreen } from './EventDetailScreen';
+export { FinanceScreen } from './FinanceScreen';

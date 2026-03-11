@@ -152,6 +152,7 @@ const router = createBrowserRouter([
       { path: "dashboard/activity", element: <Dashboard /> },
       { path: "dashboard/insights", element: <Dashboard /> },
       { path: "dashboard/monetize", element: <Dashboard /> },
+      { path: "dashboard/finance", element: <Dashboard /> },
       { path: "dashboard/settings", element: <Dashboard /> },
       { path: "dashboard/events", element: <Dashboard /> },
       { path: "dashboard/events/:eventId", element: <Dashboard /> },

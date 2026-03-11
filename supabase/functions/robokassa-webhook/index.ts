@@ -2,6 +2,7 @@ import { serve } from "http/server";
 import { createClient } from "supabase";
 import { crypto } from "crypto";
 import { corsHeaders } from "../_shared/utils.ts";
+import { calculateFintechFee } from "../_shared/fintech-utils.ts";
 
 serve(async (req: Request) => {
     if (req.method === "OPTIONS") {
@@ -144,14 +145,15 @@ serve(async (req: Request) => {
             // 1. Get user profile for tier
             const { data: profile } = await supabase
                 .from('user_profiles')
-                .select('is_premium')
+                .select('is_premium, premium_tier')
                 .eq('id', shp_user)
                 .single();
 
-            const feeRate = profile?.is_premium ? 0.01 : 0.07;
-            const grossAmount = amount;
-            const feeAmount = Number((grossAmount * feeRate).toFixed(2));
-            const netAmount = grossAmount - feeAmount;
+            const { grossAmount, feeAmount, netAmount, rate: feeRate } = calculateFintechFee({
+                amount: parseFloat(outSum),
+                isPremium: !!profile?.is_premium,
+                tier: (profile?.premium_tier as string) || undefined
+            });
 
             // 2. Insert into wallet_transactions using new Q2 schema
             const { data: wallet } = await supabase

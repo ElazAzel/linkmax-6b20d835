@@ -37,6 +37,7 @@ import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
+import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
@@ -215,6 +216,10 @@ export const HomeScreen = memo(function HomeScreen({
               pageUpdatedAt={pageData?.updatedAt}
               onOpenActivity={onOpenActivity}
               onOpenEditor={onOpenEditor}
+            />
+            <WalletOverviewWidget 
+              onViewFinance={() => navigate('/finance')}
+              className="glass-card border-white/20"
             />
             <KaspiQRWidget
               ownerId={pageData?.userId || ''}

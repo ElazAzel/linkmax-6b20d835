@@ -1,11 +1,11 @@
-{
+﻿{
   "2": {
     "5 MB": "5 MB"
   },
   "translation": {
     "selectLanguages": "Select languages",
     "targetLanguages": "Translation languages",
-    "selectDescription": "Select the languages ​​your content will be translated into. English is required.",
+    "selectDescription": "Select the languages вЂ‹вЂ‹your content will be translated into. English is required.",
     "selectAll": "Select all",
     "selectNone": "Deselect",
     "selected": "Selected",
@@ -17,14 +17,14 @@
   },
   "textEffects": {
     "none": "No effect",
-    "shimmer": "✨ Transfusion",
-    "glow": "💡 Glow",
-    "pulse": "💓 Ripple",
-    "blink": "👁 Flashing",
-    "rainbow": "🌈 Rainbow",
-    "neon": "🔮Neon",
-    "typewriter": "⌨️ Typewriter",
-    "gradientFlow": "🌊 Fluid gradient"
+    "shimmer": "вњЁ Transfusion",
+    "glow": "рџ’Ў Glow",
+    "pulse": "рџ’“ Ripple",
+    "blink": "рџ‘Ѓ Flashing",
+    "rainbow": "рџЊ€ Rainbow",
+    "neon": "рџ”®Neon",
+    "typewriter": "вЊЁпёЏ Typewriter",
+    "gradientFlow": "рџЊЉ Fluid gradient"
   },
   "googleForms": {
     "importTitle": "Import from Google Forms",
@@ -242,7 +242,7 @@
     "verifiedColor": "Icon background",
     "verifiedPosition": "Icon position",
     "proofOfHuman": "Proof of Identity",
-    "boostTrust": "📈 +Trust",
+    "boostTrust": "рџ“€ +Trust",
     "proofOfHumanDescription": "Add a short video or audio greeting",
     "introVideo": "Video greeting (max 30s)",
     "introAudio": "Audio greeting",
@@ -257,8 +257,8 @@
     "iconPreview": "Icon preview",
     "noUrl": "Enter URL",
     "iconMode": "Icon source",
-    "iconAuto": "🌐 Auto (site favicon)",
-    "iconManual": "🖼️ Upload yours",
+    "iconAuto": "рџЊђ Auto (site favicon)",
+    "iconManual": "рџ–јпёЏ Upload yours",
     "refreshIcon": "Update icon",
     "customIcon": "Own icon",
     "enterCommaSeparatedColors": "Enter colors separated by commas",
@@ -284,7 +284,7 @@
     "productNamePlaceholder": "Product Name",
     "productDescPlaceholder": "Product description...",
     "scratchRevealPlaceholder": "Scratch to Reveal",
-    "scratchPrizePlaceholder": "🎉 You won't get 20% discount!",
+    "scratchPrizePlaceholder": "рџЋ‰ You won't get 20% discount!",
     "myVideoPlaceholder": "My Video",
     "videoUrlHint": "Supports YouTube and Vimeo URLs",
     "aspectRatio169": "16:9 (Widescreen)",
@@ -294,7 +294,7 @@
   },
   "hints": {
     "bioLinks": "Tip: add links in [text](url) format",
-    "richTextVisual": "Use the 🔗 button to add links. Line breaks are preserved."
+    "richTextVisual": "Use the рџ”— button to add links. Line breaks are preserved."
   },
   "richText": {
     "insertLink": "Insert link",
@@ -321,10 +321,10 @@
     "generate": "Create",
     "generatingTitle": "AI creates the page",
     "generatingDescription": "We select blocks and content specifically for you",
-    "completeTitle": "Ready! 🎉",
+    "completeTitle": "Ready! рџЋ‰",
     "completeDescription": "The page has been created and is ready to edit",
     "title": "Quick start",
-    "description": "Create a page quickly with the AI ​​assistant"
+    "description": "Create a page quickly with the AI вЂ‹вЂ‹assistant"
   },
   "wizard": {
     "back": "Back",
@@ -340,7 +340,7 @@
     "avatar": {
       "title": "Your photo",
       "description": "Add an avatar - it will help people recognize you",
-      "hint": "Recommended: square photo at least 400×400px",
+      "hint": "Recommended: square photo at least 400Г—400px",
       "size": "Avatar size"
     },
     "info": {
@@ -392,7 +392,7 @@
     "send": "Send",
     "buyTokens": "Buy tokens",
     "buyForTokens": "Buy for",
-    "tapToView": "Read more →",
+    "tapToView": "Read more в†’",
     "save": "Save",
     "upgrade": "Upgrade",
     "cancel": "Cancel"
@@ -608,7 +608,7 @@
       "pricing": "Prices for services",
       "form": "Feedback form",
       "download_portfolio": "Download portfolio",
-      "product": "Sell ​​products",
+      "product": "Sell вЂ‹вЂ‹products",
       "catalog": "Product catalog",
       "testimonial_ecommerce": "Customer Reviews",
       "messenger_ecommerce": "Chat consultation",
@@ -661,7 +661,7 @@
     "name": "Name",
     "bio": "Description",
     "chatbotContext": "AI chatbot context",
-    "chatbotPlaceholder": "Add hidden context for the AI ​​chatbot (prices, services, availability...)",
+    "chatbotPlaceholder": "Add hidden context for the AI вЂ‹вЂ‹chatbot (prices, services, availability...)",
     "chatbotHelp": "Helps AI accurately answer visitors' questions",
     "aiTools": "AI tools",
     "seoGenerator": "SEO generator",
@@ -706,10 +706,10 @@
       "yandexMetrika": "ID Yandex Metrics",
       "webhookUrl": "Webhook URL (Pro)",
       "webhookHint": "We will send a POST request with application data",
-      "fbHint": "Events Manager → Data Sources → Pixel ID",
-      "ttHint": "TikTok Ads → Assets → Events → Pixel Code",
-      "ga4Hint": "GA4 → Admin → Data Streams → Measurement ID",
-      "yandexHint": "Metrica → Settings → Counter number",
+      "fbHint": "Events Manager в†’ Data Sources в†’ Pixel ID",
+      "ttHint": "TikTok Ads в†’ Assets в†’ Events в†’ Pixel Code",
+      "ga4Hint": "GA4 в†’ Admin в†’ Data Streams в†’ Measurement ID",
+      "yandexHint": "Metrica в†’ Settings в†’ Counter number",
       "gcalConnected": "",
       "gcalFailed": "",
       "gcalNotConfigured": "",
@@ -825,7 +825,7 @@
       "aiTitle": "AI Page Builder",
       "aiDesc": "Describe your business and AI creates the perfect structure, copy, and layout in seconds.",
       "aiPowered": "AI-Powered",
-      "aiSub": "Structure • Copy • Design",
+      "aiSub": "Structure вЂў Copy вЂў Design",
       "analyticsTitle": "Live Analytics",
       "analyticsDesc": "Track every click, view, and conversion with real-time, privacy-first analytics.",
       "mobileTitle": "Mobile First Editor",
@@ -1055,7 +1055,7 @@
         "description": "Join thousands of creators, experts and small businesses growing with LinkMAX. No credit card.",
         "primary": "Start for free",
         "secondary": "View examples",
-        "note": "Forever Free Plan • Cancel anytime • 24/7 Support"
+        "note": "Forever Free Plan вЂў Cancel anytime вЂў 24/7 Support"
       }
     },
     "gallery": {
@@ -1070,10 +1070,10 @@
     "v4": {
       "hero": {
         "badge": "The Micro-Business OS",
-        "title": "Website, CRM & Analytics — in one place",
+        "title": "Website, CRM & Analytics вЂ” in one place",
         "titleStart": "Website, CRM & Analytics",
         "titleEnd": "in one place",
-        "subtitle": "Page builder, lead management, click analytics. Everything your small business needs — no code required.",
+        "subtitle": "Page builder, lead management, click analytics. Everything your small business needs вЂ” no code required.",
         "cta": "Start for Free",
         "secondary": "See Examples",
         "trust1": "Smart Blocks",
@@ -1094,8 +1094,8 @@
       "problem": {
         "title": "Sound familiar?",
         "item1": "There is a link to WhatsApp in the bio, and clients ask the same thing",
-        "item2": "There is no clear price list - you lose those who don’t want to write",
-        "item3": "It’s unclear which posts and stories actually generate applications",
+        "item2": "There is no clear price list - you lose those who donвЂ™t want to write",
+        "item3": "ItвЂ™s unclear which posts and stories actually generate applications",
         "solution": "- one page where everything is clear: who you are, how you help, how much it costs and where to click."
       },
       "howItWorks": {
@@ -1399,9 +1399,9 @@
         "name": "Boutique Fashion",
         "role": "Clothing store",
         "desc": "Catalog, delivery, promotions",
-        "link1": "👗 Catalog",
-        "link2": "🏷️ Promotions",
-        "link3": "🚚 Delivery"
+        "link1": "рџ‘— Catalog",
+        "link2": "рџЏ·пёЏ Promotions",
+        "link3": "рџљљ Delivery"
       },
       "primaryCta": "Create a page",
       "secondaryCta": "View examples",
@@ -1409,41 +1409,41 @@
         "name": "Alexey Photo",
         "role": "Photographer",
         "desc": "Portfolio, shooting prices, booking",
-        "link1": "🎨 Portfolio",
-        "link2": "💰 Price list",
-        "link3": "📅 Sign up"
+        "link1": "рџЋЁ Portfolio",
+        "link2": "рџ’° Price list",
+        "link3": "рџ“… Sign up"
       },
       "barber": {
         "name": "BarberShop MAX",
         "role": "Barbershop",
         "desc": "Services, prices, online registration",
-        "link1": "✂️ Services",
-        "link2": "📍Address",
-        "link3": "📱 WhatsApp"
+        "link1": "вњ‚пёЏ Services",
+        "link2": "рџ“ЌAddress",
+        "link3": "рџ“± WhatsApp"
       },
       "fitness": {
         "name": "Maria Fitness",
         "role": "Fitness trainer",
         "desc": "Training programs, online courses",
-        "link1": "🏋️ Programs",
-        "link2": "📹 Online course",
-        "link3": "✉️ Telegram"
+        "link1": "рџЏ‹пёЏ Programs",
+        "link2": "рџ“№ Online course",
+        "link3": "вњ‰пёЏ Telegram"
       },
       "psychologist": {
         "name": "Anna Psychologist",
         "role": "Psychologist",
         "desc": "Consultations, areas of work",
-        "link1": "💬 About therapy",
-        "link2": "📋 Sign up",
-        "link3": "📚 Blog"
+        "link1": "рџ’¬ About therapy",
+        "link2": "рџ“‹ Sign up",
+        "link3": "рџ“љ Blog"
       },
       "musician": {
         "name": "DJ Max",
         "role": "Musician",
         "desc": "Music, events, booking",
-        "link1": "🎧 Spotify",
-        "link2": "🎟️ Events",
-        "link3": "📞 Booking"
+        "link1": "рџЋ§ Spotify",
+        "link2": "рџЋџпёЏ Events",
+        "link3": "рџ“ћ Booking"
       },
       "badge": "Examples of use",
       "cta": "View all pages in gallery"
@@ -1469,10 +1469,10 @@
       "freeAction": "Start for free",
       "viewPlans": "Select Pro",
       "otherPlans": "Other options:",
-      "annualPriceKzt": "36,540 ₸ for 12 months",
+      "annualPriceKzt": "36,540 в‚ё for 12 months",
       "annualPriceUsd": "$71/year",
-      "otherPlansSix": "6 months: 3,698 ₸/month (-15%)",
-      "otherPlansThree": "3 months: 4,350 ₸/month",
+      "otherPlansSix": "6 months: 3,698 в‚ё/month (-15%)",
+      "otherPlansThree": "3 months: 4,350 в‚ё/month",
       "free": {
         "item1": "6 base blocks",
         "item2": "1 AI generation/month",
@@ -1496,7 +1496,7 @@
       "secondaryCta": "View examples"
     },
     "footer": {
-      "copyright": "© 2025 LinkMAX",
+      "copyright": "В© 2025 LinkMAX",
       "alternatives": "Comparison"
     },
     "faq": {
@@ -1509,7 +1509,7 @@
       },
       "q2": {
         "question": "How much does it cost to use LinkMAX?",
-        "answer": "The basic plan is free forever. Pro: 3 months - 4,350₸/month, 6 months - 3,698₸/month (-15%), 12 months - 3,045₸/month (-30%). Payment online, refund within 14 days."
+        "answer": "The basic plan is free forever. Pro: 3 months - 4,350в‚ё/month, 6 months - 3,698в‚ё/month (-15%), 12 months - 3,045в‚ё/month (-30%). Payment online, refund within 14 days."
       },
       "q3": {
         "question": "How does AI page generation work?",
@@ -1569,7 +1569,7 @@
     "premiumValue": {
       "crm": {
         "title": "Mini-CRM",
-        "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel."
+        "description": "All requests from the form automatically go into the CRM. Statuses: new в†’ in progress в†’ completed. No more Excel."
       },
       "telegram": {
         "title": "Telegram notifications",
@@ -1593,7 +1593,7 @@
       "subtitle": "Not visual decorations, but tools for making money",
       "bonusTitle": "And also nice bonuses:",
       "cta": "Try Premium",
-      "price": "From 3,045 ₸/month when paid annually (~$6)"
+      "price": "From 3,045 в‚ё/month when paid annually (~$6)"
     },
     "simplePricing": {
       "free": {
@@ -1655,7 +1655,7 @@
         "subtitle": "Psychologists, tutors, consultants",
         "result1": "Portfolio and reviews in a beautiful way",
         "result2": "Leads automatically in Mini-CRM",
-        "result3": "Client statuses: new → in progress → ready"
+        "result3": "Client statuses: new в†’ in progress в†’ ready"
       },
       "business": {
         "title": "Small business",
@@ -1717,7 +1717,7 @@
           "salon": "Beauty Salon Owner"
         },
         "reviews": {
-          "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI ​​just gets it.",
+          "coach": "I set up my page in 3 minutes while at the gym. Got my first client an hour later. The AI вЂ‹вЂ‹just gets it.",
           "artist": "The aesthetics are on another level. It doesn't",
           "crypto": "Direct Telegram leads changed my workflow. No more checking emails. I close deals in the chat.",
           "salon": "My clients love how easy it is to book. And I love the analytics. I finally know where my traffic comes from."
@@ -1773,7 +1773,7 @@
     "loadErrorDesc": "Failed to load page data",
     "tryAgain": "Try again",
     "collabs": "Collabs",
-    "aiBlocksCreated": "✨ {{count}} blocks created using AI",
+    "aiBlocksCreated": "вњЁ {{count}} blocks created using AI",
     "blocksAdded": "{{count}} blocks added",
     "onboardingComplete": "Welcome! Start creating your page.",
     "errors": {
@@ -2392,7 +2392,7 @@
     "referral": {
       "invited": "You've been invited!",
       "bonus": "Register and get +3 days Premium",
-      "success": "🎉 +{{days}} days of Premium using referral code!"
+      "success": "рџЋ‰ +{{days}} days of Premium using referral code!"
     },
     "validation": {
       "email": "",
@@ -2458,7 +2458,7 @@
     "seo": {
       "title": "Gallery LinkMAX - examples of link in bio and mini-sites",
       "description": "Real user pages: templates, niches, ideas for your link in bio.",
-      "nicheTitle": "Gallery LinkMAX — {{niche}}",
+      "nicheTitle": "Gallery LinkMAX вЂ” {{niche}}",
       "nicheDescription": "Examples of LinkMAX pages in the {{niche}} niche: templates, ideas and structure.",
       "imageAlt": "LinkMAX Gallery - Link in Bio Examples",
       "opt": {
@@ -3074,7 +3074,7 @@
     "descPlaceholder": "Describe what this template is suitable for...",
     "makePublic": "Make it public",
     "publicDesc": "The template will be visible in the marketplace",
-    "sellTemplate": "Sell ​​template",
+    "sellTemplate": "Sell вЂ‹вЂ‹template",
     "sellDesc": "Set your purchase price",
     "price": "Price (KZT)",
     "blocks": "blocks",
@@ -3236,7 +3236,7 @@
       "pricing": "Tariffs",
       "gallery": "Gallery",
       "signIn": "Login",
-      "company": "ARchitecKZ • BIN: 190540008684",
+      "company": "ARchitecKZ вЂў BIN: 190540008684",
       "address": "Almaty, st. Sholokhova, 20"
     },
     "bitrix24": {
@@ -3254,7 +3254,7 @@
       "bitrixWeak": "Weak mobile app",
       "LinkMAXPrice": "One Pro plan ~$6.5/mo",
       "bitrixPrice": "Grows with users, per-seat",
-      "positioning": "LinkMAX is the anti-Bitrix for solopreneurs: simple, fast, mobile CRM and landing in 15 minutes—no implementation or developers.",
+      "positioning": "LinkMAX is the anti-Bitrix for solopreneurs: simple, fast, mobile CRM and landing in 15 minutesвЂ”no implementation or developers.",
       "cta": "Create page"
     }
   },
@@ -3320,11 +3320,11 @@
     "useAi": "use of AI",
     "toastEarned": "+{{count}} Linkkon for {{action}}!",
     "insufficientForPremium": "Linkkon is not enough. Need {{count}} tokens.",
-    "premiumGranted": "🎉 You received 1 day of Premium!",
+    "premiumGranted": "рџЋ‰ You received 1 day of Premium!",
     "insufficientTokens": "Not enough tokens",
     "convertError": "Error during conversion",
     "insufficientForPurchase": "Linkkon is not enough. Need {{count}} tokens.",
-    "purchaseSuccess": "✨ Purchase successful!",
+    "purchaseSuccess": "вњЁ Purchase successful!",
     "purchaseError": "Error when purchasing",
     "withdrawalCreated": "The withdrawal request has been created!",
     "withdrawalPremiumRequired": "Withdrawal is available only for Premium users",
@@ -3352,10 +3352,10 @@
       "title": "Use AI",
       "description": "Generate content using AI"
     },
-    "toastDailyVisit": "👋 +{{count}} Linkkon for visiting daily!",
+    "toastDailyVisit": "рџ‘‹ +{{count}} Linkkon for visiting daily!",
     "toastCompleted": "{{icon}} +{{count}} Linkkon for \"{{title}}\"!",
     "panelTitle": "Daily quests",
-    "allCompleted": "🎉 All tasks completed!",
+    "allCompleted": "рџЋ‰ All tasks completed!",
     "tokensEarned": "+{{count}} Linkkon earned"
   },
   "referral": {
@@ -3363,7 +3363,7 @@
     "yourCode": "Your code",
     "invited": "Invited",
     "earned": "Earned",
-    "toastSuccess": "🎉 +{{count}} Premium days for you and a friend!",
+    "toastSuccess": "рџЋ‰ +{{count}} Premium days for you and a friend!",
     "codeCopied": "Code copied!",
     "linkCopied": "Link copied!",
     "errors": {
@@ -3405,13 +3405,13 @@
       "events": "{{count}} events"
     },
     "metadata": {
-      "achievement": "🏆 {{title}}",
+      "achievement": "рџЏ† {{title}}",
       "achievementFallback": "New achievement",
-      "streak": "🔥 {{count}} days in a row",
-      "challenge": "✅ {{title}}",
+      "streak": "рџ”Ґ {{count}} days in a row",
+      "challenge": "вњ… {{title}}",
       "challengeFallback": "Challenge completed",
-      "gift": "💝 +{{count}} days Premium",
-      "boost": "🚀 {{type}} boost",
+      "gift": "рџ’ќ +{{count}} days Premium",
+      "boost": "рџљЂ {{type}} boost",
       "boostFallback": "standard"
     },
     "pendingGifts": {
@@ -3452,7 +3452,7 @@
     "featureRequires": "{{feature}} available in {{tier}}",
     "premiumFramesLocked": "Premium frames require PRO subscription",
     "verificationRequiresPro": "Verification badge is available for PRO users",
-    "upgradeToPro": "Upgrade to PRO →",
+    "upgradeToPro": "Upgrade to PRO в†’",
     "blockLocked": "Premium block",
     "unlockWith": "Unlock this block with a Pro subscription",
     "upgradeToBusiness": "Go to Business"
@@ -3679,7 +3679,7 @@
       "used": "{{used}} of {{max}} submissions this month",
       "warning": "{{remaining}} submissions remaining",
       "reached": "Submission limit reached",
-      "upgrade": "Remove limit →"
+      "upgrade": "Remove limit в†’"
     },
     "premiumDescription": "Upgrade to Premium for CRM access and lead tracking",
     "noLeadsToExport": "No leads to export",
@@ -3719,7 +3719,7 @@
     "responseTime": {
       "justNow": "just now",
       "minutesAgo": "{{count}} min ago",
-      "hoursAgo": "{{count}}h ago — reply!",
+      "hoursAgo": "{{count}}h ago вЂ” reply!",
       "missed": "missed"
     },
     "quickReply": {
@@ -3921,14 +3921,14 @@
     "buyTokens": "Buy tokens",
     "buyFor": "Buy for",
     "buy": "Buy",
-    "tapToView": "Read more →",
+    "tapToView": "Read more в†’",
     "purchaseDescription": "Purchase of goods: {{name}}",
     "purchasing": "Purchase..."
   },
   "paidContent": {
     "title": "Paid content",
     "description": "Unlock this content with Linkkon tokens",
-    "settingsDescription": "Restrict access to block content. Visitors will be able to unlock it for Linkkon tokens (1 token = 1 ₸).",
+    "settingsDescription": "Restrict access to block content. Visitors will be able to unlock it for Linkkon tokens (1 token = 1 в‚ё).",
     "priceLabel": "Price (in Linkkon tokens)",
     "pricePlaceholder": "100",
     "priceHint": "Minimum: 1 token. Recommended: 50-500 tokens.",
@@ -4128,7 +4128,7 @@
     "tipText": "You can insert a full HTML page (including <!DOCTYPE html>, <head> and <body>). All scripts and styles will be automatically extracted and executed in an isolated iframe."
   },
   "pricingBlock": {
-    "servicesHint": "The more detailed the services are described, the more accurately the AI ​​assistant understands your business.",
+    "servicesHint": "The more detailed the services are described, the more accurately the AI вЂ‹вЂ‹assistant understands your business.",
     "defaultCurrency": "Default currency",
     "services": "Services",
     "serviceType": "Service type",
@@ -4566,7 +4566,7 @@
       },
       "events": {
         "title": "Organizers",
-        "problem": "Information is scattered, people don’t get to register",
+        "problem": "Information is scattered, people donвЂ™t get to register",
         "solution": "Date, place, program and form in one place",
         "cta": "Create"
       },
@@ -4625,7 +4625,7 @@
       },
       "noCommission": {
         "title": "0% commission",
-        "description": "Sell ​​- it's all yours"
+        "description": "Sell вЂ‹вЂ‹- it's all yours"
       }
     },
     "pricing": {
@@ -4731,7 +4731,7 @@
       },
       "q2": {
         "question": "What is the price?",
-        "answer": "The basic plan is free forever. Pro - from 3,045 ₸/month when paid annually. 14 days for return."
+        "answer": "The basic plan is free forever. Pro - from 3,045 в‚ё/month when paid annually. 14 days for return."
       },
       "q3": {
         "question": "How does AI work?",
@@ -4751,7 +4751,7 @@
       },
       "q7": {
         "question": "Do you take a commission on sales?",
-        "answer": "No. 0%. If you sell through the page, it’s all yours."
+        "answer": "No. 0%. If you sell through the page, itвЂ™s all yours."
       },
       "q8": {
         "question": "Why is Linktree better?",
@@ -4795,7 +4795,7 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "language": "Language",
-      "copyright": "© {{year}} LinkMAX. Made in Kazakhstan."
+      "copyright": "В© {{year}} LinkMAX. Made in Kazakhstan."
     },
     "floatingCta": "Create"
   },
@@ -4896,7 +4896,7 @@
     "proDesc": "Everything for professionals and business",
     "businessDesc": "CRM, team & zones for business",
     "businessNote": "Need team CRM, zones, and roles?",
-    "businessLink": "Learn about the BUSINESS plan →",
+    "businessLink": "Learn about the BUSINESS plan в†’",
     "freeForever": "Free forever",
     "new": "New",
     "free": {
@@ -4920,7 +4920,7 @@
     "cancelAnytime": "Cancel anytime",
     "moneyBack": "14 day return guarantee",
     "companyDetails": {
-      "nameLine": "ARchitecKZ • BIN: 190540008684",
+      "nameLine": "ARchitecKZ вЂў BIN: 190540008684",
       "addressLine": "Almaty, st. Sholokhova, 20"
     },
     "paymentNote": "Payment via RoboKassa",
@@ -5027,7 +5027,7 @@
   "aiBuilder": {
     "description": "Create a page using AI",
     "selectTemplate": "Select a template",
-    "success": "✨ The page has been created!",
+    "success": "вњЁ The page has been created!",
     "error": "Generation error. Try again.",
     "title": "AI Builder",
     "step": "Step",
@@ -5060,7 +5060,7 @@
     "completeTitle": "Ready!",
     "completeDesc": "Blocks added to your page",
     "nicheQuestions": {
-      "title": "Tell us about yourself ✨",
+      "title": "Tell us about yourself вњЁ",
       "desc": "This data is needed to fill out the blocks. You can skip any step.",
       "nameLabel": "What is your name or what is the name of your project?",
       "nameHint": "This will be your profile title",
@@ -5083,7 +5083,7 @@
       "mediaLabel": "Links to useful materials (Media)",
       "mediaHint": "Links to YouTube, portfolio or pictures (separated by commas)",
       "mediaPlaceholder": "https://youtube.com/watch?v=..., https://my-portfolio.com",
-      "generateBtn": "Generate magic ✨"
+      "generateBtn": "Generate magic вњЁ"
     },
     "gen": {
       "socials": "Connecting social networks...",
@@ -5303,10 +5303,10 @@
     "upgradeToEdit": "Upgrade to {{tier}} for editing"
   },
   "blockSize": {
-    "small": "1×1",
-    "wide": "2×1",
-    "tall": "1×2",
-    "large": "2×2"
+    "small": "1Г—1",
+    "wide": "2Г—1",
+    "tall": "1Г—2",
+    "large": "2Г—2"
   },
   "warnings": {
     "customCodeSecurity": "Warning: Only use trusted code. Custom code runs with full JavaScript capabilities."
@@ -5416,8 +5416,8 @@
     "blocksCount": "blocks"
   },
   "scratch": {
-    "scratchHere": "👆 Scratch here",
-    "revealed": "🎉 Revealed!",
+    "scratchHere": "рџ‘† Scratch here",
+    "revealed": "рџЋ‰ Revealed!",
     "hint": "Scratch the layer to reveal a surprise"
   },
   "guide": {
@@ -6204,18 +6204,18 @@
       "firstBooking": "Get your first booking"
     },
     "tips": {
-      "addBlock": "Add your first block — a link, product, or video",
+      "addBlock": "Add your first block вЂ” a link, product, or video",
       "publish": "Publish your page to make it available via link",
-      "shareForVisitor": "Share your link — 5 out of 10 users get their first visitor within an hour",
-      "addForm": "Add a contact form — every 5th page with a form gets leads",
+      "shareForVisitor": "Share your link вЂ” 5 out of 10 users get their first visitor within an hour",
+      "addForm": "Add a contact form вЂ” every 5th page with a form gets leads",
       "growTraffic": "Share your link on social media to attract more visitors"
     },
-    "celebrationTitle": "🎉 Congratulations!",
+    "celebrationTitle": "рџЋ‰ Congratulations!",
     "celebrationDesc": "Your page is live and delivering results"
   },
   "onboardingTour": {
     "welcome": {
-      "title": "Welcome to LinkMAX! 👋",
+      "title": "Welcome to LinkMAX! рџ‘‹",
       "desc": "Let us show you the basics. It will only take a minute."
     },
     "profile": {
@@ -6235,7 +6235,7 @@
       "desc": "When done, click \"Share\" to get a public link for social media."
     },
     "complete": {
-      "title": "All done! 🎉",
+      "title": "All done! рџЋ‰",
       "desc": "Now you know the basics. Start building your page!"
     },
     "skip": "Skip",
@@ -6267,7 +6267,7 @@
       "title": "Follow-up needed",
       "visitedYesterday": "Visited yesterday at {{time}}",
       "send": "Message",
-      "template": "Hello {{name}}! Thanks for visiting! How was it? We'd love to see you again 😊",
+      "template": "Hello {{name}}! Thanks for visiting! How was it? We'd love to see you again рџЉ",
       "completedOn": "",
       "sent": ""
     },
@@ -6279,7 +6279,7 @@
       "badge": "Returning"
     },
     "stale": {
-      "page": "Page hasn't been updated in over 2 weeks — refresh your content"
+      "page": "Page hasn't been updated in over 2 weeks вЂ” refresh your content"
     },
     "rebook": {
       "title": "",
@@ -6290,15 +6290,15 @@
   "lifecycle": {
     "trafficNoLeads": {
       "title": "Traffic but no leads",
-      "hint": "Add a contact form or booking block — every 5th page with a form gets leads"
+      "hint": "Add a contact form or booking block вЂ” every 5th page with a form gets leads"
     },
     "repeatCustomers": {
       "title": "Repeat customers",
-      "hint": "You have {{count}} repeat customers — great job! 🎉"
+      "hint": "You have {{count}} repeat customers вЂ” great job! рџЋ‰"
     },
     "hasLeads": {
       "title": "Leads are coming in",
-      "hint": "Follow up with clients after their visit — it improves return rate by 30%"
+      "hint": "Follow up with clients after their visit вЂ” it improves return rate by 30%"
     }
   },
   "experiments": {
@@ -6447,5 +6447,30 @@
     "val3": "",
     "cta": "",
     "free": ""
+  }
+,
+  "fintech": {
+    "balance": {
+      "available": "Available",
+      "pending": "Pending"
+    },
+    "gmv": {
+      "title": "Gross Volume (GMV)"
+    },
+    "fees": {
+      "title": "Fees"
+    },
+    "view_finance": "View All Transactions"
+  },
+  "finance": {
+    "title": "Finance",
+    "subtitle": "Transaction history and wallet",
+    "wallet_balance": "Your Balance",
+    "withdrawal_hint": "Funds are available for withdrawal to card",
+    "transactions": "Transaction History",
+    "empty": {
+      "title": "No transactions yet",
+      "desc": "History of your income and fees will appear here"
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
+import { calculateFintechFee } from '../_shared/fintech-utils.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,17 +39,16 @@ serve(async (req) => {
     // Determine user tier to calculate fee
     const { data: profile } = await supabaseClient
       .from('user_profiles')
-      .select('is_premium')
+      .select('is_premium, premium_tier')
       .eq('id', payload.userId)
       .single()
 
-    // Default rate is Starter (7%), Pro is 1%
-    const feeRate = profile?.is_premium ? 0.01 : 0.07;
-
-    // Calculate amounts
-    const grossAmount = Number(payload.amount);
-    const feeAmount = Number((grossAmount * feeRate).toFixed(2));
-    const netAmount = grossAmount - feeAmount;
+    // Calculate amounts using shared logic
+    const { grossAmount, feeAmount, netAmount, rate } = calculateFintechFee({
+        amount: Number(payload.amount),
+        isPremium: !!profile?.is_premium,
+        tier: (profile?.premium_tier as string) || undefined
+    });
 
     // 1. Ensure user has a wallet
     let { data: wallet } = await supabaseClient
@@ -103,7 +103,7 @@ serve(async (req) => {
         success: true,
         transaction,
         new_balance: newBalance,
-        fee_rate: feeRate
+        fee_rate: rate
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

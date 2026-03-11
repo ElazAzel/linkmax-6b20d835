@@ -47,6 +47,7 @@ const EventsScreen = lazy(() => import('@/components/dashboard-v2/screens/Events
 const EventDetailScreen = lazy(() => import('@/components/dashboard-v2/screens/EventDetailScreen').then(m => ({ default: m.EventDetailScreen })));
 const LeadsScreen = lazy(() => import('@/components/dashboard-v2/screens/LeadsScreen').then(m => ({ default: m.LeadsScreen })));
 const TeamManagementScreen = lazy(() => import('@/components/dashboard-v2/screens/TeamManagementScreen').then(m => ({ default: m.TeamManagementScreen })));
+const FinanceScreen = lazy(() => import('@/components/dashboard-v2/screens/FinanceScreen').then(m => ({ default: m.FinanceScreen })));
 
 import {
   ZoneDashboardWrapper,
@@ -112,10 +113,10 @@ const PageVersionsDialogLazy = lazy(() => import('@/components/dashboard-v2/dial
 
 import type { Niche } from '@/lib/niches';
 
-type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics';
+type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' | 'monetize' | 'settings' | 'events' | 'leads' | 'team' | 'zone-dashboard' | 'zone-deals' | 'zone-contacts' | 'zone-inbox' | 'zone-tasks' | 'zone-automations' | 'zone-invoices' | 'zone-documents' | 'zone-calendar' | 'zone-events' | 'zone-products' | 'zone-settings' | 'zone-analytics';
 
 const ZONE_TABS = ['zone-dashboard', 'zone-deals', 'zone-contacts', 'zone-inbox', 'zone-tasks', 'zone-automations', 'zone-invoices', 'zone-documents', 'zone-calendar', 'zone-events', 'zone-products', 'zone-settings', 'zone-analytics'];
-const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
+const ALL_TABS = ['home', 'editor', 'pages', 'activity', 'insights', 'finance', 'monetize', 'settings', 'events', 'leads', 'team', ...ZONE_TABS];
 
 function DashboardV2Inner() {
   const navigate = useNavigate();
@@ -539,6 +540,13 @@ function DashboardV2Inner() {
                     handleTabChange('home');
                   }}
                 />
+              </ScreenErrorBoundary>
+            )}
+
+            {/* Finance Screen */}
+            {currentTab === 'finance' && (
+              <ScreenErrorBoundary screenName="Finance">
+                <FinanceScreen />
               </ScreenErrorBoundary>
             )}
 

@@ -22,6 +22,19 @@ export interface WalletTransaction {
     created_at: string;
 }
 
+export interface WalletOverview {
+    wallet: {
+        id: string;
+        user_id: string;
+        balance: number;
+        currency: string;
+        created_at: string;
+        updated_at: string;
+    } | null;
+    transactions: WalletTransaction[];
+    pendingGMV: number;
+}
+
 export type PayoutMethod = {
     type: 'card' | 'bank' | 'crypto' | string;
     value: string;
@@ -30,7 +43,13 @@ export type PayoutMethod = {
 
 // Dynamic commission rates per ADR 0026
 // Starter: 7%, Pro: 1%, Business: 0%, Identity: N/A
-const DEFAULT_TAKE_RATE = 0.07; // Fallback to Starter rate
+const TIER_RATES = {
+    starter: 0.07,
+    pro: 0.01,
+    business: 0.00,
+} as const;
+
+const DEFAULT_TAKE_RATE = TIER_RATES.starter;
 
 /**
  * Get commission rate for a user based on their tier
