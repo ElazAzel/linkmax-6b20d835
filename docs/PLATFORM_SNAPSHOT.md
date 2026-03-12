@@ -215,6 +215,7 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 | **event** | Event with registration | Date, location, capacity, form | Event management |
 
 **Booking & Timezone Engine**:
+
 - Automated visitor timezone detection.
 - Cross-checking Google Calendar in `submit-booking` edge function for absolute double-booking protection.
 - `useTimezone` hook centralized all logic and friendly formatting.
@@ -481,7 +482,7 @@ LinkMAX использует гибридную модель, направлен
 #### 2.2.3. Deals & Pipelines (CRM)
 
 - **Tables**: `zone_deals`, `zone_deal_stages`, `zone_activities`, `zone_pipelines`
-- **Features**: 
+- **Features**:
   - Multiple sales pipelines support.
   - Kanban board (DnD via `@dnd-kit`).
   - Expected value tracking.
