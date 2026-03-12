@@ -87,7 +87,9 @@ const LoadingState = () => (
     </div>
   </div>
 );
-const BackgroundEffects = () => null;
+// 2026 Living Canvas Background
+const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
+
 import { storage } from '@/lib/storage';
 
 // Lazy load heavy components for better bundle splitting
@@ -397,7 +399,9 @@ function DashboardV2Inner() {
       />
 
       <div className="min-h-screen bg-background relative">
-        <BackgroundEffects />
+        <Suspense fallback={null}>
+          <CanvasBackground />
+        </Suspense>
 
         {/* Migration Notice */}
         {dashboard.user && (

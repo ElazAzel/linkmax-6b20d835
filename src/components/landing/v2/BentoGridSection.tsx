@@ -193,61 +193,63 @@ export function BentoGridSection() {
       title: t('landing.bento.aiTitle', 'AI Page Builder'),
       description: t('landing.bento.aiDesc', 'Describe your business and AI creates the perfect structure, copy, and layout in seconds.'),
       header: <AIBuilderVisual />,
-      icon: <Sparkles className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-2"
+      icon: <Sparkles className="h-5 w-5" />,
+      className: "md:col-span-2 md:row-span-2"
     },
     {
       title: t('landing.bento.analyticsTitle', 'Live Analytics'),
       description: t('landing.bento.analyticsDesc', 'Track every click, view, and conversion with real-time, privacy-first analytics.'),
       header: <AnalyticsVisual />,
-      icon: <BarChart3 className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-1"
+      icon: <BarChart3 className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-1"
     },
     {
-      title: t('landing.bento.mobileTitle', 'Mobile First Editor'),
+      title: t('landing.bento.leadsTitle', 'Instant Leads'),
+      description: t('landing.bento.leadsDesc', 'Get leads delivered straight to Telegram. Never miss a customer.'),
+      header: <LeadsVisual />,
+      icon: <Send className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-2"
+    },
+    {
+      title: t('landing.bento.mobileTitle', 'Mobile First'),
       description: t('landing.bento.mobileDesc', 'Full editing power from your phone. Build and publish on the go.'),
       header: <MobileVisual />,
-      icon: <Smartphone className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-1"
+      icon: <Smartphone className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-1"
     },
     {
       title: t('landing.bento.crmTitle', 'Built-in CRM'),
       description: t('landing.bento.crmDesc', 'Manage leads, deals, and clients from a Kanban pipeline. No extra tools needed.'),
       header: <CRMVisual />,
-      icon: <Kanban className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-1"
-    },
-    {
-      title: t('landing.bento.leadsTitle', 'Instant Leads to Telegram'),
-      description: t('landing.bento.leadsDesc', 'Get leads delivered straight to Telegram. Never miss a customer.'),
-      header: <LeadsVisual />,
-      icon: <Send className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-1"
+      icon: <Kanban className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-1"
     },
     {
       title: t('landing.bento.bookingTitle', 'Online Booking'),
       description: t('landing.bento.bookingDesc', 'Let clients book slots directly. Automated calendar, zero phone calls.'),
       header: <BookingVisual />,
-      icon: <Calendar className="h-4 w-4 text-muted-foreground" />,
-      className: "md:col-span-1"
+      icon: <Calendar className="h-5 w-5" />,
+      className: "md:col-span-1 md:row-span-1"
     },
   ];
 
   return (
-    <SectionWrapper id="features">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
+    <SectionWrapper id="features" className="py-24">
+      {/* Dynamic background glow that follows the canvas */}
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-secondary/5 blur-[100px] pointer-events-none" />
 
       <Reveal>
         <SectionHeading
           title={t('landing.bento.sectionTitle', 'Everything you need to grow')}
           subtitle={t('landing.bento.sectionDesc', 'Website builder + CRM + analytics. One platform instead of ten tools.')}
+          className="mb-16"
         />
       </Reveal>
 
-      <BentoGrid className="max-w-5xl mx-auto">
+      <BentoGrid className="max-w-6xl mx-auto md:auto-rows-[20rem] gap-6">
         {items.map((item, i) => (
-          <Reveal key={i} delay={i * 80}>
+          <Reveal key={i} delay={i * 100}>
             <BentoGridItem
               title={item.title}
               description={item.description}

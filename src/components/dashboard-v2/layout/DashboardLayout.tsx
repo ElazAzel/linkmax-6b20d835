@@ -36,8 +36,7 @@ export const DashboardLayout = memo(function DashboardLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background bg-liquid-mesh flex overflow-hidden lg:animate-grid-morph-1">
-      {/* Desktop Sidebar - sticky to stay fixed while content scrolls */}
+    <div className="min-h-screen bg-transparent flex overflow-hidden translate-z-0">
       <GlobalCommandPalette />
       {!isMobile && (
         <DashboardSidebar
@@ -52,23 +51,28 @@ export const DashboardLayout = memo(function DashboardLayout({
         />
       )}
 
-      {/* Main Content - scrollable independently */}
+      {/* Main Content Area */}
       <main
         className={cn(
-          "flex-1 min-w-0 h-screen overflow-y-auto overflow-x-hidden relative",
-          isMobile && "pb-24 h-auto" // Space for bottom nav, reset height on mobile
+          "flex-1 min-w-0 h-screen overflow-y-auto overflow-x-hidden relative scroll-smooth antialiased",
+          isMobile && "pb-24 h-auto"
         )}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="w-full h-full"
+            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+            transition={{ 
+              duration: 0.5, 
+              ease: [0.22, 1, 0.36, 1] 
+            }}
+            className="w-full h-full p-4 md:p-8"
           >
-            {children}
+            <div className="max-w-7xl mx-auto glass rounded-[2.5rem] min-h-full shadow-glass-lg border border-white/5 overflow-hidden">
+              {children}
+            </div>
           </motion.div>
         </AnimatePresence>
       </main>

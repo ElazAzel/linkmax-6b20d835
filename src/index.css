@@ -188,76 +188,40 @@
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* ========================================
-       LIQUID GLASS SPECIFIC TOKENS
+       2026 LIVING CANVAS TOKENS
        ======================================== */
 
-    /* Glass backgrounds with varying opacity */
-    /* Glass backgrounds with varying opacity - STANDARDIZED */
-    --glass-bg: 0 0% 100% / 0.75;
-    --glass-bg-subtle: 0 0% 100% / 0.40;
-    --glass-bg-strong: 0 0% 100% / 0.90;
+    /* Glass backgrounds with varying opacity - HIGHER REFRACTION */
+    --glass-bg: 0 0% 100% / 0.65;
+    --glass-bg-subtle: 0 0% 100% / 0.35;
+    --glass-bg-strong: 0 0% 100% / 0.85;
 
-    /* Glass borders - subtle white glow */
-    --glass-border: 0 0% 100% / 0.5;
-    --glass-border-subtle: 0 0% 100% / 0.25;
+    /* Prismatic Border Effect */
+    --glass-border: 0 0% 100% / 0.4;
+    --glass-border-subtle: 0 0% 100% / 0.2;
+    --prismatic-glow: linear-gradient(135deg, hsl(211 100% 50% / 0.3), hsl(262 83% 58% / 0.3));
 
-    /* Glass inner glow/highlight */
-    --glass-highlight: 0 0% 100% / 0.6;
-
-    /* Blur amounts */
-    /* Blur amounts - REDUCED PER PERFORMANCE AUDIT */
-    --glass-blur-sm: 12px;
-    --glass-blur: 16px;
-    --glass-blur-lg: 24px;
-    --glass-blur-xl: 40px;
-
-    /* Liquid shadows - soft, diffused, colorful */
+    /* Enhanced Shadows - Editorial & Physical */
     --shadow-glass:
-      0 4px 30px hsl(211 100% 50% / 0.08),
-      0 1px 3px hsl(0 0% 0% / 0.04),
-      inset 0 1px 0 hsl(0 0% 100% / 0.6);
+      0 0 0 1px hsl(0 0% 100% / 0.5),
+      0 4px 20px -2px hsl(211 100% 50% / 0.12),
+      0 12px 40px -8px hsl(0 0% 0% / 0.08);
 
     --shadow-glass-lg:
-      0 8px 40px hsl(211 100% 50% / 0.12),
-      0 4px 20px hsl(262 83% 58% / 0.06),
-      0 2px 8px hsl(0 0% 0% / 0.04),
-      inset 0 1px 0 hsl(0 0% 100% / 0.6);
+      0 0 0 1.5px hsl(0 0% 100% / 0.6),
+      0 12px 40px -4px hsl(211 100% 50% / 0.15),
+      0 24px 60px -12px hsl(262 83% 58% / 0.12);
 
-    --shadow-glass-xl:
-      0 20px 60px hsl(211 100% 50% / 0.15),
-      0 10px 30px hsl(262 83% 58% / 0.08),
-      0 4px 12px hsl(0 0% 0% / 0.05),
-      inset 0 1px 0 hsl(0 0% 100% / 0.7);
+    /* Material simulation */
+    --grain-opacity: 0.04;
+    --canvas-fluidity: 1.2;
+    --radius: 1.75rem; /* Larger, more organic circles */
 
-    /* Soft ambient shadows */
-    --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.02);
-    --shadow-xs: 0 1px 3px 0 hsl(0 0% 0% / 0.03);
-    --shadow-sm: 0 2px 8px 0 hsl(0 0% 0% / 0.04), 0 1px 2px 0 hsl(0 0% 0% / 0.02);
-    --shadow: 0 4px 16px 0 hsl(0 0% 0% / 0.05), 0 2px 4px 0 hsl(0 0% 0% / 0.03);
-    --shadow-md: 0 8px 24px 0 hsl(0 0% 0% / 0.06), 0 4px 8px 0 hsl(0 0% 0% / 0.03);
-    --shadow-lg: 0 16px 40px 0 hsl(0 0% 0% / 0.08), 0 8px 16px 0 hsl(0 0% 0% / 0.04);
-    --shadow-xl: 0 24px 60px 0 hsl(0 0% 0% / 0.10), 0 12px 24px 0 hsl(0 0% 0% / 0.05);
-    --shadow-2xl: 0 32px 80px 0 hsl(0 0% 0% / 0.12);
-
-    /* Spacing */
-    --spacing: 0.25rem;
-
-    /* ========================================
-       SEMANTIC SPACING TOKENS
-       ======================================== */
-    --space-section-y: 4rem;
-    --space-block-gap: 0.75rem;
-    --space-card-p: 1.5rem;
-    --space-input-y: 0.75rem;
-    --space-safe-x: 1rem;
-
-    /* ========================================
-       OPACITY / HIERARCHY TOKENS
-       ======================================== */
+    /* Typography */
+    --font-heading: 'Manrope', 'Inter', system-ui, sans-serif;
     --text-primary: 1;
-    --text-secondary: 0.7;
-    --text-tertiary: 0.5;
-    --text-disabled: 0.35;
+    --text-secondary: 0.8;
+    --text-tertiary: 0.6;
   }
 
   .dark {
@@ -308,46 +272,25 @@
     --chart-4: 142 71% 55%;
     --chart-5: 45 93% 55%;
 
-    /* Dark glass backgrounds */
-    /* Dark glass backgrounds - STANDARDIZED */
-    --glass-bg: 225 20% 12% / 0.75;
-    --glass-bg-subtle: 225 20% 15% / 0.40;
-    --glass-bg-strong: 225 20% 10% / 0.90;
+    /* Living Canvas Dark State */
+    --glass-bg: 225 20% 10% / 0.65;
+    --glass-bg-subtle: 225 20% 12% / 0.35;
+    --glass-bg-strong: 225 20% 8% / 0.85;
 
-    /* Dark glass borders - subtle white glow */
     --glass-border: 0 0% 100% / 0.08;
     --glass-border-subtle: 0 0% 100% / 0.04;
 
-    /* Glass inner highlight */
-    --glass-highlight: 0 0% 100% / 0.05;
-
-    /* Dark liquid shadows */
     --shadow-glass:
-      0 4px 30px hsl(211 100% 60% / 0.12),
-      0 1px 3px hsl(0 0% 0% / 0.3),
-      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+      0 0 0 1px hsl(0 0% 100% / 0.05),
+      0 8px 30px -4px hsl(0 0% 0% / 0.6),
+      0 4px 12px -2px hsl(0 0% 0% / 0.3);
 
     --shadow-glass-lg:
-      0 8px 40px hsl(211 100% 60% / 0.15),
-      0 4px 20px hsl(262 83% 65% / 0.08),
-      0 2px 8px hsl(0 0% 0% / 0.4),
-      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+      0 0 0 1.5px hsl(0 0% 100% / 0.08),
+      0 20px 60px -8px hsl(0 0% 0% / 0.8),
+      0 10px 24px -4px hsl(0 0% 0% / 0.5);
 
-    --shadow-glass-xl:
-      0 20px 60px hsl(211 100% 60% / 0.2),
-      0 10px 30px hsl(262 83% 65% / 0.1),
-      0 4px 12px hsl(0 0% 0% / 0.5),
-      inset 0 1px 0 hsl(0 0% 100% / 0.08);
-
-    /* Dark shadows */
-    --shadow-2xs: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow-xs: 0 1px 3px 0 hsl(0 0% 0% / 0.4);
-    --shadow-sm: 0 2px 8px 0 hsl(0 0% 0% / 0.5), 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow: 0 4px 16px 0 hsl(0 0% 0% / 0.6), 0 2px 4px 0 hsl(0 0% 0% / 0.4);
-    --shadow-md: 0 8px 24px 0 hsl(0 0% 0% / 0.7), 0 4px 8px 0 hsl(0 0% 0% / 0.5);
-    --shadow-lg: 0 16px 40px 0 hsl(0 0% 0% / 0.8), 0 8px 16px 0 hsl(0 0% 0% / 0.6);
-    --shadow-xl: 0 24px 60px 0 hsl(0 0% 0% / 0.85), 0 12px 24px 0 hsl(0 0% 0% / 0.7);
-    --shadow-2xl: 0 32px 80px 0 hsl(0 0% 0% / 0.9);
+    --grain-opacity: 0.08;
   }
 }
 
@@ -372,7 +315,7 @@
 
   /* Accessibility reset: enforce minimum readable font size on mobile */
   @media (max-width: 640px) {
-    .text-xs, .text-\[10px\], .text-[11px] {
+    .text-xs, .text-\[10px\], .text-\[11px\] {
       font-size: 12px !important;
       line-height: min(1.5, 16px) !important;
     }

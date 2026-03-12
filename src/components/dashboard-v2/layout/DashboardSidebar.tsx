@@ -196,10 +196,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
               className="flex-1 text-left flex items-center justify-between overflow-hidden whitespace-nowrap z-10 relative"
             >
               <span className="text-sm truncate">{t(item.labelKey, item.defaultLabel)}</span>
-              {isZoneLocked && (
-                <Lock className="h-3.5 w-3.5 ml-auto shrink-0 text-muted-foreground" />
-              )}
-              {!isZoneLocked && badge !== undefined && (
+              {badge !== undefined && (
                 <Badge
                   variant="outline"
                   className={cn(

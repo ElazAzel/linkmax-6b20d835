@@ -1,6 +1,18 @@
 # Changelog
 
-## [Unreleased]
+### [2026-03-12] - Phase 3: "Living Canvas" UI Transformation
+
+* **Core Design System Evolution**:
+  - Migrated from "Liquid Glass" to **"Living Canvas"** aesthetic.
+  - Standardized **Frosted High-Index Glass** tokens (`glass-subtle`, `glass`).
+  - Implemented **Canvas Engine**: WebGL-powered reactive backgrounds with fluid dynamics.
+* **Dashboard V2 Overhaul**:
+  - Refined **DashboardSidebar** with premium material effects and organic spring animations.
+  - Updated **DashboardHeader** with better mobile accessibility and "Live" status indicators.
+  - Integrated **DashboardLayout** with the dynamic canvas engine.
+* **Landing Page Refresh**:
+  - Updated **HeroSection** and **BentoGrid** with reactive visual metaphors and refined typography.
+  - Fixed various visual regressions in community components.
 
 ### [2026-03-11] - Global Search & Data Export (CRM Depth)
 

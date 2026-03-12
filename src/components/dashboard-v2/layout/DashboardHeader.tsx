@@ -2,74 +2,48 @@
  * DashboardHeader - Screen header with context actions
  * Includes optional page switcher for page-context screens
  */
-import { memo, ReactNode } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { Button } from '@/components/ui/button';
+import Menu from 'lucide-react/dist/esm/icons/menu';
 import { cn } from '@/lib/utils/utils';
 
 interface DashboardHeaderProps {
-  title: string;
-  subtitle?: string;
-  showBack?: boolean;
-  onBack?: () => void;
-  actions?: ReactNode;
-  rightElement?: ReactNode;
-  leftElement?: ReactNode;
-  sticky?: boolean;
-  className?: string;
+  onMenuClick: () => void;
+  activeTab: string;
+  pageSwitcher?: React.ReactNode;
 }
 
 export const DashboardHeader = memo(function DashboardHeader({
-  title,
-  subtitle,
-  showBack,
-  onBack,
-  actions,
-  rightElement,
-  leftElement,
-  sticky = true,
-  className,
+  onMenuClick,
+  activeTab,
+  pageSwitcher,
 }: DashboardHeaderProps) {
   const { t } = useTranslation();
 
   return (
-    <header
-      className={cn(
-        "z-40 px-5 py-4",
-        sticky && "sticky top-0 glass-nav",
-        className
-      )}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 min-w-0">
-          {showBack && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10 rounded-xl shrink-0"
-              onClick={onBack}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          )}
-          {leftElement}
-          {!leftElement && (
-            <div className="min-w-0">
-              <h1 className="text-2xl font-black tracking-tight text-gradient truncate">{title}</h1>
-              {subtitle && (
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest truncate">{subtitle}</p>
-              )}
-            </div>
-          )}
+    <header className="h-16 md:h-20 glass-subtle backdrop-blur-2xl border-b border-white/5 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 shadow-glass-sm translate-z-0">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10 transition-colors"
+          onClick={onMenuClick}
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+        <div className="hidden md:block">
+          {pageSwitcher}
         </div>
+      </div>
 
-        {(actions || rightElement) && (
-          <div className="flex items-center gap-2 shrink-0">
-            {actions}
-            {rightElement}
-          </div>
-        )}
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass-subtle border border-white/5 shadow-inner">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-[0.15em] text-muted-foreground/80">
+            {t('dashboard.header.live', 'Live')}
+          </span>
+        </div>
       </div>
     </header>
   );

@@ -76,71 +76,65 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
     const { style1, style2, style3, opacityStyle } = useScrollParallax();
 
     return (
-        <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden py-20">
-            {/* Background Aurora */}
-            <div className="absolute inset-0 bg-aurora opacity-60 dark:opacity-40" />
+        <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden py-20 px-4">
+            {/* Minimal overlays to let CanvasBackground shine through */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background/60 pointer-events-none" />
 
-            {/* Animated Grid Overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+            {/* Radial glow behind headline - refined for 2026 */}
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-[160px] pointer-events-none" />
 
-            {/* Radial glow behind headline */}
-            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
-
-            {/* Floating Decorative Elements */}
-            <div style={style1} className="absolute left-[5%] top-[20%] w-24 h-24 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float-slow">
-                <Zap className="w-10 h-10 text-yellow-400" />
+            {/* Floating Decorative Elements - Frosted Physicality */}
+            <div style={style1} className="absolute left-[8%] top-[25%] w-24 h-24 rounded-3xl glass backdrop-blur-2xl hidden lg:flex items-center justify-center shadow-glass-lg animate-float-slow transition-transform duration-700">
+                <Zap className="w-10 h-10 text-yellow-400/80 drop-shadow-sm" />
             </div>
-            <div style={style2} className="absolute right-[10%] top-[15%] w-32 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float">
-                <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
+            <div style={style2} className="absolute right-[12%] top-[20%] w-32 h-20 rounded-3xl glass-subtle backdrop-blur-xl hidden lg:flex items-center justify-center shadow-glass-lg animate-float">
+                <div className="flex gap-2.5">
+                    <div className="w-3.5 h-3.5 rounded-full bg-red-400/60 shadow-inner" />
+                    <div className="w-3.5 h-3.5 rounded-full bg-yellow-400/60 shadow-inner" />
+                    <div className="w-3.5 h-3.5 rounded-full bg-green-400/60 shadow-inner" />
                 </div>
             </div>
-            <div style={style3} className="absolute left-[8%] bottom-[25%] w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hidden lg:flex items-center justify-center shadow-glass-lg animate-float">
-                <BarChart3 className="w-8 h-8 text-primary/70" />
-            </div>
 
-            <div className="container relative z-10 px-4 md:px-6 flex flex-col items-center text-center">
+            <div className="container relative z-10 flex flex-col items-center text-center">
 
-                {/* Badge */}
-                <div className="mb-8">
-                    <Badge variant="outline" className="h-8 px-4 py-1 text-sm bg-background/50 backdrop-blur-md border-primary/20 text-primary gap-2 shadow-sm hover:bg-background/80 transition-colors cursor-default">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span className="font-medium">{t('landing.v4.hero.badge', 'The Micro-Business OS')}</span>
+                {/* Badge - Prismatic & Floating */}
+                <div className="mb-10">
+                    <Badge variant="outline" className="h-10 px-5 py-2 text-sm glass backdrop-blur-md border-white/20 text-foreground/80 gap-2.5 shadow-glass-lg hover:bg-white/10 transition-all cursor-default scale-110">
+                        <Sparkles className="w-4 h-4 text-primary" />
+                        <span className="font-semibold tracking-tight">{t('landing.v4.hero.badge', 'The Micro-Business OS')}</span>
                     </Badge>
                 </div>
 
-                {/* Headline */}
-                <h1 className="max-w-4xl text-display mb-6">
-                    <span className="block text-foreground">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
-                    <span className="block mt-2 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-primary/60 animate-[gradient-shift_4s_ease_infinite] bg-[length:200%_auto]">
+                {/* Headline - Editorial Boldness */}
+                <h1 className="max-w-5xl text-display mb-8 tracking-tighter leading-[0.9] text-balance">
+                    <span className="block text-foreground drop-shadow-sm">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
+                    <span className="block mt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/70 to-secondary animate-[gradient-shift_5s_ease_infinite] bg-[length:200%_auto]">
                         {t('landing.v4.hero.titleEnd', 'in one place')}
                     </span>
                 </h1>
 
-                {/* Subtitle */}
-                <p className="max-w-2xl text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed">
+                {/* Subtitle - Refined Contrast */}
+                <p className="max-w-xl text-lg md:text-xl text-muted-foreground/90 mb-12 leading-relaxed font-medium">
                     {t('landing.v4.hero.subtitle', 'Page builder, lead management, click analytics. Everything your small business needs - no code required.')}
                 </p>
 
-                {/* CTA Buttons */}
-                <div className="flex flex-col gap-4 w-full sm:w-auto items-center">
+                {/* CTA Buttons - Physical & Magnetic */}
+                <div className="flex flex-col gap-6 w-full sm:w-auto items-center">
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
-                        className="h-14 px-8 rounded-2xl text-lg font-semibold shadow-xl shadow-primary/20 bg-primary hover:bg-primary/90 min-w-[200px]"
+                        className="h-16 px-10 rounded-[2rem] text-xl font-bold shadow-2xl shadow-primary/30 bg-primary text-primary-foreground hover:scale-105 active:scale-95 transition-all min-w-[240px]"
                     >
                         {t('landing.v4.hero.cta', 'Start for Free')}
-                        <ArrowRight className="w-5 h-5 ml-1" />
+                        <ArrowRight className="w-6 h-6 ml-2" />
                     </MagneticButton>
 
                     <button
                         onClick={onExamples}
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors group"
+                        className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground/70 hover:text-primary transition-all group"
                     >
-                        <Play className="w-3.5 h-3.5 fill-current group-hover:scale-110 transition-transform" />
-                        {t('landing.v4.hero.secondary', 'See Examples')}
+                        <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
+                        <span className="uppercase tracking-widest">{t('landing.v4.hero.secondary', 'See Examples')}</span>
                     </button>
                 </div>
 
