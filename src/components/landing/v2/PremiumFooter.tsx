@@ -31,7 +31,7 @@ export const PremiumFooter = () => {
                 </div>
 
                 {/* Links Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-16 mb-24">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-16 mb-12 sm:mb-24">
                     {/* Brand */}
                     <div className="hidden md:flex flex-col gap-6">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/30">{t('footer.brand', 'Platform')}</h4>
