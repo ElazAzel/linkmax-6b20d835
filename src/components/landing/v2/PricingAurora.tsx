@@ -117,7 +117,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                         </Badge>
                                     </h3>
                                     <div className="flex items-baseline gap-3">
-                                        <span className="text-6xl font-black tabular-nums tracking-tighter drop-shadow-sm">
+                                        <span className="text-4xl sm:text-5xl md:text-6xl font-black tabular-nums tracking-tighter drop-shadow-sm">
                                             {isYearly ? prices.pro.yearly : prices.pro.monthly}
                                         </span>
                                         <span className="text-muted-foreground/60 font-black uppercase tracking-widest text-xs">/ {t('landing.pricing.perMonth', 'mo')}</span>
