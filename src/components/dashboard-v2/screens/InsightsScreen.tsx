@@ -242,7 +242,7 @@ export const InsightsScreen = memo(function InsightsScreen({
         onMenuClick={() => {}}
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={refresh} className="h-9 w-9 glass border-white/10 rounded-xl">
+            <Button variant="ghost" size="icon" onClick={refresh} className="h-10 w-10 glass border-white/20 rounded-xl hover:bg-white/10 active:scale-95 transition-all">
               <RefreshCw className="h-4 w-4" />
             </Button>
             {isPremium && <AnalyticsExport analytics={analytics} period={period} />}
@@ -252,13 +252,13 @@ export const InsightsScreen = memo(function InsightsScreen({
 
       {/* Period Selector */}
       <div className="px-5 pb-5">
-        <div className="flex gap-2 p-1.5 glass-subtle rounded-2xl border-white/5 shadow-inner">
+        <div className="flex gap-2 p-1.5 glass-subtle rounded-[1.5rem] border-white/10 shadow-inner">
           {(['7d', '14d', '30d'] as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => handlePeriodChange(p)}
               className={cn(
-                "flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300",
+                "flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-smooth",
                 period === p
                   ? "bg-white text-primary shadow-glass-lg scale-[1.02]"
                   : "text-muted-foreground/50 hover:text-muted-foreground hover:bg-white/5"
@@ -281,26 +281,26 @@ export const InsightsScreen = memo(function InsightsScreen({
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="grid w-full grid-cols-5 h-11 bg-white/5 border border-white/10 rounded-2xl p-1 items-center gap-1 shadow-inner">
-                <TabsTrigger value="overview" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
-                  <ChartBar className="h-3.5 w-3.5 mr-1" />
+              <TabsList className="grid w-full grid-cols-5 h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1.5 items-center gap-1.5 shadow-inner glass-subtle">
+                <TabsTrigger value="overview" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <ChartBar className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span className="hidden sm:inline">{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
-                  <Globe className="h-3.5 w-3.5 mr-1" />
+                <TabsTrigger value="traffic" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span className="hidden sm:inline">{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
-                  <Target className="h-3.5 w-3.5 mr-1" />
+                <TabsTrigger value="blocks" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <Target className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span className="hidden sm:inline">{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
-                  <TrendingUp className="h-3.5 w-3.5 mr-1" />
+                <TabsTrigger value="funnel" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <TrendingUp className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span className="hidden sm:inline">{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
-                    <FlaskConical className="h-3.5 w-3.5 mr-1" />
+                  <TabsTrigger value="experiments" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                    <FlaskConical className="h-3.5 w-3.5 mr-1 shrink-0" />
                     <span className="hidden sm:inline">{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>
                 )}
@@ -354,7 +354,7 @@ export const InsightsScreen = memo(function InsightsScreen({
 
                   {/* Chart */}
                   {stats.dailyData.length > 0 && (
-                    <motion.div variants={itemVariants} className="glass border-white/10 shadow-glass rounded-[2rem] overflow-hidden p-2">
+                    <motion.div variants={itemVariants} className="glass border-white/20 shadow-glass-lg rounded-[2.5rem] overflow-hidden p-4">
                       <AnalyticsChart
                         data={stats.dailyData}
                         title={t('analytics.chart.title', 'Динамика за период')}
@@ -378,15 +378,15 @@ export const InsightsScreen = memo(function InsightsScreen({
                           <motion.div key={insight.id} variants={itemVariants} custom={i}>
                             <Card
                               className={cn(
-                                "p-5 border-white/10 glass transition-all hover:scale-[1.02] shadow-glass rounded-3xl",
+                                "p-6 border-white/20 glass transition-smooth hover:scale-[1.02] shadow-glass rounded-[2rem]",
                                 insight.impact === 'high'
-                                  ? "shadow-emerald-500/5 group/insight"
+                                  ? "shadow-emerald-500/10 group/insight"
                                   : insight.impact === 'medium'
-                                    ? "shadow-amber-500/5 group/insight"
-                                    : "shadow-blue-500/5 group/insight"
+                                    ? "shadow-amber-500/10 group/insight"
+                                    : "shadow-blue-500/10 group/insight"
                               )}
                             >
-                              <div className="flex items-start gap-4">
+                              <div className="flex items-start gap-5">
                                 <div
                                   className={cn(
                                     "h-10 w-10 rounded-2xl flex items-center justify-center shrink-0 shadow-inner",

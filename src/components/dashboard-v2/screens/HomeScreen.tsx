@@ -177,7 +177,8 @@ export const HomeScreen = memo(function HomeScreen({
       <DashboardHeader
         title={t('dashboard.home.title', 'Главная')}
         subtitle={t('dashboard.home.subtitle', 'Обзор вашей страницы')}
-        rightElement={pageSwitcher}
+        onMenuClick={() => {}}
+        actions={pageSwitcher}
       />
 
       <div className="px-5 py-6 space-y-6">
@@ -231,50 +232,50 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Primary Page Card */}
-        <Card className="p-8 space-y-6 glass border-white/10 shadow-glass-lg relative overflow-hidden group rounded-[2.5rem]">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-violet-500/5 opacity-40 group-hover:opacity-60 transition-opacity duration-700 -z-10" />
+        <Card className="p-8 space-y-6 glass border-white/20 shadow-glass-lg relative overflow-hidden group rounded-[3rem]">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-30 group-hover:opacity-50 transition-opacity duration-1000 -z-10" />
           
           {/* Page Header */}
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-6">
             <div className="relative group/avatar">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-violet-500 rounded-2xl blur opacity-20 group-hover/avatar:opacity-40 transition duration-1000 group-hover/avatar:duration-200" />
-              <Avatar className="h-20 w-20 rounded-2xl border-2 border-white/20 relative">
-                <AvatarImage src={avatarUrl} alt={name} />
-                <AvatarFallback className="rounded-2xl text-2xl font-black bg-white/5 text-primary backdrop-blur-sm">
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-2xl blur-md opacity-20 group-hover/avatar:opacity-40 transition duration-1000 animate-pulse" />
+              <Avatar className="h-24 w-24 rounded-2xl border-2 border-white/30 relative shadow-glass">
+                <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
+                <AvatarFallback className="rounded-2xl text-3xl font-black bg-white/10 text-primary backdrop-blur-xl">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>
             
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1.5">
-                <h2 className="text-2xl font-black tracking-tight truncate">{name}</h2>
+              <div className="flex items-center gap-3 mb-2">
+                <h2 className="text-3xl font-black tracking-tighter truncate text-foreground drop-shadow-sm">{name}</h2>
                 {isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-white border-none shadow-lg shadow-amber-500/20 shrink-0 font-black text-[10px] px-2.5 py-0.5 rounded-full">
-                    <Crown className="h-3 w-3 mr-1" />
+                  <Badge className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-[length:200%_auto] animate-[gradient-shift_3s_ease_infinite] text-white border-none shadow-glass-lg shrink-0 font-black text-[10px] px-3 py-1 rounded-full">
+                    <Crown className="h-3 w-3 mr-1.5" />
                     PRO
                   </Badge>
                 )}
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-xs font-bold text-muted-foreground opacity-60 tracking-wider">lnkmx.my/{slug}</span>
+                <span className="text-sm font-bold text-muted-foreground/70 tracking-tight">lnkmx.my/{slug}</span>
                 <StatusBadge status={isPublished ? 'published' : 'draft'} size="sm" />
               </div>
             </div>
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-4">
-            <button onClick={onOpenEditor} className="text-left transition-all active:scale-95 group/stat">
+          <div className="grid grid-cols-3 gap-5">
+            <button onClick={onOpenEditor} className="text-left transition-smooth active:scale-95 group/stat">
               <StatCard
-                icon={<LayoutGrid className="w-5 h-5 group-hover/stat:scale-110 transition-transform" />}
+                icon={<LayoutGrid className="w-5 h-5 group-hover/stat:scale-110 group-hover/stat:text-primary transition-all" />}
                 value={blockCount}
                 label={t('dashboard.home.blocks', 'блоков')}
                 variant="glass"
                 compact
               />
             </button>
-            <button onClick={onOpenInsights} className="text-left transition-all active:scale-95 group/stat">
+            <button onClick={onOpenInsights} className="text-left transition-smooth active:scale-95 group/stat">
               <StatCard
                 icon={<Eye className="h-5 w-5 text-emerald-500 group-hover/stat:scale-110 transition-transform" />}
                 value={viewCount}
@@ -283,7 +284,7 @@ export const HomeScreen = memo(function HomeScreen({
                 compact
               />
             </button>
-            <button onClick={onOpenActivity} className="text-left transition-all active:scale-95 group/stat">
+            <button onClick={onOpenActivity} className="text-left transition-smooth active:scale-95 group/stat">
               <StatCard
                 icon={<MessageSquare className="h-5 w-5 text-violet-500 group-hover/stat:scale-110 transition-transform" />}
                 value={weeklyStats.leads}
@@ -295,24 +296,24 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
 
           {/* Primary Actions — Premium pill buttons */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 pt-2">
             {!isPublished ? (
               <>
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-14 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/10 transition-all border-white/5"
+                  className="h-16 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/20 transition-all border-white/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
-                  <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70" />
+                  <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
                   {t('dashboard.home.edit', 'Редактировать')}
                 </Button>
                 <Button
                   size="lg"
-                  className="h-14 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/30 transition-all active:scale-[0.98]"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-glass-lg hover:shadow-emerald-500/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
-                  <Share2 className="h-5 w-5 mr-3 shrink-0" />
+                  <Share2 className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
                   {t('dashboard.home.publish', 'Опубликовать')}
                 </Button>
               </>
@@ -320,19 +321,19 @@ export const HomeScreen = memo(function HomeScreen({
               <>
                 <Button
                   size="lg"
-                  className="h-14 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/30 transition-all active:scale-[0.98]"
+                  className="h-16 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-glass-lg hover:shadow-primary/40 transition-all active:scale-[0.98] group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
-                  <PenTool className="h-5 w-5 mr-3 shrink-0" />
+                  <PenTool className="h-5 w-5 mr-3 shrink-0 group-hover/btn:scale-110 transition-transform" />
                   {t('dashboard.home.edit', 'Редактировать')}
                 </Button>
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-14 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/10 transition-all border-white/5"
+                  className="h-16 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/20 transition-all border-white/10 group/btn"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
-                  <Share2 className="h-5 w-5 mr-3 shrink-0 opacity-70" />
+                  <Share2 className="h-5 w-5 mr-3 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
                   {t('dashboard.home.share', 'Поделиться')}
                 </Button>
               </>

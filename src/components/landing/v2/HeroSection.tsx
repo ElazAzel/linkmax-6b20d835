@@ -106,38 +106,42 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
 
                 {/* Headline - Editorial Boldness */}
-                <h1 className="max-w-5xl text-display mb-8 tracking-tighter leading-[0.9] text-balance">
-                    <span className="block text-foreground drop-shadow-sm">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
-                    <span className="block mt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/70 to-secondary animate-[gradient-shift_5s_ease_infinite] bg-[length:200%_auto]">
+                <h1 className="max-w-6xl text-display mb-10 tracking-[-0.04em] leading-[0.85] text-balance">
+                    <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
+                    <span className="block mt-6 pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
                         {t('landing.v4.hero.titleEnd', 'in one place')}
                     </span>
                 </h1>
 
                 {/* Subtitle - Refined Contrast */}
-                <p className="max-w-xl text-lg md:text-xl text-muted-foreground/90 mb-12 leading-relaxed font-medium">
+                <p className="max-w-xl text-xl md:text-2xl text-muted-foreground/80 mb-16 leading-relaxed font-semibold tracking-tight">
                     {t('landing.v4.hero.subtitle', 'Page builder, lead management, click analytics. Everything your small business needs - no code required.')}
                 </p>
 
                 {/* CTA Buttons - Physical & Magnetic */}
-                <div className="flex flex-col gap-6 w-full sm:w-auto items-center mt-12">
+                <div className="flex flex-col gap-8 w-full sm:w-auto items-center mt-6 relative">
+                    <div className="absolute -inset-10 bg-primary/10 blur-[60px] rounded-full opacity-50 pointer-events-none" />
+                    
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
-                        className="h-20 px-14 rounded-[2.5rem] text-xl font-black bg-primary text-primary-foreground shadow-glass-hover hover:scale-[1.03] active:scale-95 transition-all group overflow-hidden relative"
+                        className="h-24 px-16 rounded-[3rem] text-2xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
-                        <span className="relative z-10 flex items-center gap-3 uppercase tracking-widest">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
+                        <span className="relative z-10 flex items-center gap-4 uppercase tracking-[0.2em]">
                             {t('landing.v4.hero.cta', 'Start for Free')}
-                            <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight className="h-7 w-7 group-hover:translate-x-2 transition-transform duration-500" />
                         </span>
                     </MagneticButton>
 
                     <button
                         onClick={onExamples}
-                        className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground/70 hover:text-primary transition-all group"
+                        className="inline-flex items-center gap-3 text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.3em]"
                     >
-                        <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
-                        <span className="uppercase tracking-widest">{t('landing.v4.hero.secondary', 'See Examples')}</span>
+                        <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
+                            <Play className="w-3 h-3 fill-current group-hover:scale-125 transition-transform duration-500" />
+                        </div>
+                        {t('landing.v4.hero.secondary', 'See Examples')}
                     </button>
                 </div>
 

@@ -223,31 +223,29 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
 
       {/* Tabs */}
       <div className="px-5 pb-4">
-        <div className="p-1 glass-subtle rounded-2xl border-white/5 shadow-inner">
-          <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings')}>
-            <TabsList className="grid grid-cols-2 h-11 bg-transparent p-0 gap-1">
-              <TabsTrigger
-                value="leads"
-                className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass font-black text-[10px] uppercase tracking-widest transition-all"
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                {t('dashboard.activity.tabs.leads', 'Заявки')}
-                {stats.new > 0 && (
-                  <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-[10px] font-black border-none ring-offset-0">
-                    {stats.new}
-                  </Badge>
-                )}
-              </TabsTrigger>
-              <TabsTrigger
-                value="bookings"
-                className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass font-black text-[10px] uppercase tracking-widest transition-all"
-              >
-                <Calendar className="h-4 w-4 mr-2" />
-                {t('dashboard.activity.tabs.bookings', 'Записи')}
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
+        <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings')} className="w-full">
+          <TabsList className="grid grid-cols-2 h-12 bg-white/5 backdrop-blur-xl p-1 gap-1 border border-white/10 shadow-glass rounded-2xl">
+            <TabsTrigger
+              value="leads"
+              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-[10px] uppercase tracking-widest transition-all duration-300"
+            >
+              <MessageCircle className="h-4 w-4 mr-2" />
+              {t('dashboard.activity.tabs.leads', 'Заявки')}
+              {stats.new > 0 && (
+                <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-[10px] font-black border-none ring-offset-0 animate-pulse">
+                  {stats.new}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger
+              value="bookings"
+              className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass-lg font-black text-[10px] uppercase tracking-widest transition-all duration-300"
+            >
+              <Calendar className="h-4 w-4 mr-2" />
+              {t('dashboard.activity.tabs.bookings', 'Записи')}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <AnimatePresence mode='wait'>
@@ -332,15 +330,18 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
             </div>
 
             {/* Search */}
-            <div className="px-5 pb-3">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder={t('dashboard.activity.searchPlaceholder', 'Поиск по имени, телефону...')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-11 pl-12 rounded-xl bg-muted/50 border-0 text-base"
-                />
+            <div className="px-5 pb-4">
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500" />
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                  <Input
+                    placeholder={t('dashboard.activity.searchPlaceholder', 'Поиск по имени, телефону...')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-14 pl-12 rounded-2xl bg-white/5 border-white/10 focus:bg-white/10 focus:border-white/20 text-base shadow-glass-sm transition-all placeholder:text-muted-foreground/40"
+                  />
+                </div>
               </div>
             </div>
 
@@ -474,104 +475,113 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
     <button
       onClick={onClick}
       className={cn(
-        "w-full p-5 rounded-3xl glass transition-all duration-500 relative overflow-hidden group border-white/10",
-        "hover:scale-[1.01] hover:bg-white/10 active:scale-[0.98] shadow-glass",
-        lead.status === 'new' && "shadow-blue-500/10 ring-1 ring-blue-500/20"
+        "w-full p-6 rounded-[2rem] glass transition-all duration-500 relative overflow-hidden group border-white/10",
+        "hover:scale-[1.01] hover:bg-white/10 active:scale-[0.98] shadow-glass-lg",
+        lead.status === 'new' && "shadow-blue-500/10 ring-2 ring-blue-500/20"
       )}
     >
       <div className={cn(
-        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-primary/5 via-transparent to-transparent -z-1",
-        lead.status === 'new' && "opacity-10"
+        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-primary/5 via-transparent to-transparent -z-10",
+        lead.status === 'new' && "opacity-[0.05]"
       )} />
-      <div className="flex items-start gap-3">
-        <Avatar className="h-12 w-12 rounded-xl shrink-0">
-          <AvatarFallback className={cn("rounded-xl text-base font-bold", statusConfig.bg, statusConfig.text)}>
-            {lead.name.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+      
+      <div className="flex items-start gap-5">
+        <div className="relative shrink-0">
+          <Avatar className="h-14 w-14 rounded-2xl shadow-glass border border-white/20">
+            <AvatarFallback className={cn("rounded-2xl text-lg font-black", statusConfig.bg, statusConfig.text)}>
+              {lead.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          {lead.status === 'new' && (
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-blue-500 border-2 border-white shadow-[0_0_10px_rgba(59,130,246,0.5)] animate-pulse" />
+          )}
+        </div>
 
-        <div className="flex-1 min-w-0 text-left">
-          <div className="flex items-center justify-between gap-2 mb-1">
+        <div className="flex-1 min-w-0 text-left pt-0.5">
+          <div className="flex items-center justify-between gap-2 mb-1.5">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="font-bold truncate">{lead.name}</span>
+              <span className="text-lg font-black tracking-tight truncate text-foreground/90">{lead.name}</span>
               {isRepeat && (
-                <Badge className="h-5 px-1.5 bg-violet-500/15 text-violet-600 text-xs font-bold border-violet-500/20 shrink-0">
-                  <Repeat className="h-3 w-3 mr-0.5" />
+                <Badge className="h-5 px-2 bg-violet-500/10 text-violet-500 text-[9px] font-black uppercase tracking-wider border-violet-500/20 shrink-0 rounded-full">
+                  <Repeat className="h-3 w-3 mr-1" />
                   {t('operator.repeat.badge', 'Повторный')}
                 </Badge>
               )}
-              {lead.status === 'new' && (
-                <span className="h-2 w-2 rounded-full bg-blue-500 shrink-0 animate-pulse" />
-              )}
             </div>
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex flex-col items-end gap-1 shrink-0">
+              <span className="text-[10px] font-black tabular-nums text-muted-foreground/60 uppercase tracking-widest">{formatTime(lead.created_at)}</span>
               <ResponseTimeTag createdAt={lead.created_at} status={lead.status} />
-              <span className="text-xs text-muted-foreground">{formatTime(lead.created_at)}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
+          <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-muted-foreground/70 mb-4 group-hover:text-foreground/70 transition-colors">
             {lead.phone && (
-              <span className="flex items-center gap-1">
-                <Phone className="h-3 w-3" />
+              <span className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <Phone className="h-3 w-3 text-primary/60" />
                 {lead.phone}
               </span>
             )}
             {lead.email && (
-              <span className="flex items-center gap-1 truncate">
-                <Mail className="h-3 w-3" />
+              <span className="flex items-center gap-1.5 truncate bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <Mail className="h-3 w-3 text-primary/60" />
                 {lead.email}
               </span>
             )}
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <span>{sourceInfo.emoji}</span>
-              {t(sourceInfo.i18nKey)}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-base border border-white/10 shadow-inner">
+                {sourceInfo.emoji}
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors">
+                {t(sourceInfo.i18nKey)}
+              </span>
+            </div>
 
             {/* Quick actions for new leads */}
             {lead.status === 'new' && lead.phone ? (
-              <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={handleWhatsAppReply}
-                  className="h-7 w-7 rounded-lg bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/25 flex items-center justify-center transition-colors"
+                  className="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title="WhatsApp"
                 >
-                  <MessageCircle className="h-3.5 w-3.5" />
+                  <MessageCircle className="h-4 w-4" />
                 </button>
                 <button
                   onClick={handleTelegramReply}
-                  className="h-7 w-7 rounded-lg bg-blue-500/15 text-blue-600 hover:bg-blue-500/25 flex items-center justify-center transition-colors"
+                  className="h-9 w-9 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20 hover:bg-blue-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title="Telegram"
                 >
-                  <Send className="h-3.5 w-3.5" />
+                  <Send className="h-4 w-4" />
                 </button>
                 <button
                   onClick={handleCallReply}
-                  className="h-7 w-7 rounded-lg bg-violet-500/15 text-violet-600 hover:bg-violet-500/25 flex items-center justify-center transition-colors"
+                  className="h-9 w-9 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/20 hover:bg-violet-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title={t('crm.quickReply.call', 'Позвонить')}
                 >
-                  <Phone className="h-3.5 w-3.5" />
+                  <Phone className="h-4 w-4" />
                 </button>
                 <button
                   onClick={handleMarkContacted}
-                  className="h-7 px-2 rounded-lg bg-muted/50 text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors text-xs font-semibold"
+                  className="h-9 px-3 rounded-xl bg-foreground/5 text-foreground/60 border border-foreground/10 hover:bg-foreground/10 flex items-center justify-center transition-all text-[10px] font-black uppercase tracking-widest"
                 >
-                  <CheckCheck className="h-3.5 w-3.5 mr-0.5" />
+                  <CheckCheck className="h-4 w-4 mr-1.5 text-emerald-500" />
                   {t('crm.quickReply.done', 'Готово')}
                 </button>
               </div>
             ) : (
-              <Badge className={cn("text-xs font-bold h-6 px-2", statusConfig.bg, statusConfig.text, "border-0")}>
+              <Badge className={cn("text-[10px] font-black uppercase tracking-widest h-8 px-4 rounded-xl shadow-glass-sm", statusConfig.bg, statusConfig.text, "border-none")}>
                 {t(statusConfig.i18nKey)}
               </Badge>
             )}
           </div>
         </div>
 
-        <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0 self-center" />
+        <div className="self-center h-10 w-10 flex items-center justify-center rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 group-hover:scale-110">
+          <ChevronRight className="h-5 w-5 text-primary/60" />
+        </div>
       </div>
     </button>
   );

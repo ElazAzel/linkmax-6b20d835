@@ -99,107 +99,113 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                 </div>
 
                 <Reveal delay={200}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto px-4">
                         {/* PRO Card */}
-                        <div className="glass backdrop-blur-3xl border-primary/20 rounded-[2.5rem] p-1 relative transition-all duration-500 hover:-translate-y-2 hover:shadow-glass-lg group">
-                            <div className="bg-card/40 backdrop-blur-md rounded-[2.3rem] p-8 md:p-10 h-full flex flex-col relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-black px-6 py-2 rounded-bl-2xl uppercase tracking-widest">
+                        <div className="glass border-primary/30 rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass-lg group">
+                            <div className="bg-white/5 backdrop-blur-[40px] rounded-[3.3rem] p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
+                                <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em] shadow-glass">
                                     {t('landing.pricing.popular', 'POPULAR')}
                                 </div>
+                                
+                                <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 blur-[80px] rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-1000" />
 
-                                <div className="mb-8">
-                                    <h3 className="text-2xl font-black mb-3 flex items-center gap-3">
+                                <div className="mb-10 relative">
+                                    <h3 className="text-3xl font-black mb-4 flex items-center gap-3 tracking-tighter">
                                         {t('landing.pricing.proName', 'Pro')} 
-                                        <span className="text-[10px] bg-primary/20 text-primary px-3 py-1 rounded-full font-black uppercase tracking-widest">
+                                        <Badge className="bg-primary/20 text-primary border-none font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-widest">
                                             {t('landing.pricing.aiPowered', 'AI Powered')}
-                                        </span>
+                                        </Badge>
                                     </h3>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-5xl font-black tabular-nums tracking-tighter">
+                                    <div className="flex items-baseline gap-3">
+                                        <span className="text-6xl font-black tabular-nums tracking-tighter drop-shadow-sm">
                                             {isYearly ? prices.pro.yearly : prices.pro.monthly}
                                         </span>
-                                        <span className="text-muted-foreground font-medium">/ {t('landing.pricing.perMonth', 'month')}</span>
+                                        <span className="text-muted-foreground/60 font-black uppercase tracking-widest text-xs">/ {t('landing.pricing.perMonth', 'mo')}</span>
                                     </div>
                                     {isYearly && (
-                                        <p className="text-xs text-primary mt-2 font-black uppercase tracking-wider">
-                                            {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.pro.totalYearly })}
-                                        </p>
+                                        <div className="mt-4 px-4 py-1.5 bg-primary/10 rounded-full w-fit">
+                                            <p className="text-[10px] text-primary font-black uppercase tracking-wider">
+                                                {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.pro.totalYearly })}
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
 
-                                <ul className="space-y-4 mb-10 flex-1">
+                                <ul className="space-y-6 mb-12 flex-1 relative">
                                     {proFeatures.map((f, i) => (
-                                        <li key={i} className="flex items-center gap-4 text-sm font-medium text-foreground/80">
-                                            <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                                                <Check className="w-3 h-3 text-primary" />
+                                        <li key={i} className="flex items-center gap-4 text-sm font-bold text-foreground/80 group/feat">
+                                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/10 group-hover/feat:scale-110 transition-transform">
+                                                <Check className="w-3.5 h-3.5 text-primary" />
                                             </div>
-                                            <span>{f}</span>
+                                            <span className="group-hover:text-foreground transition-colors">{f}</span>
                                         </li>
                                     ))}
                                 </ul>
 
-                                <MagneticButton className="w-full h-16 rounded-2xl text-lg font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-glass-hover hover:scale-[1.02] transition-all" onClick={() => onPlanSelect('pro')}>
+                                <MagneticButton className="w-full h-20 rounded-2xl text-lg font-black uppercase tracking-[0.2em] bg-primary text-white shadow-glass-lg hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('pro')}>
                                     {t('landing.pricing.proCta', 'Start Pro Trial')}
                                 </MagneticButton>
                             </div>
                         </div>
 
                         {/* BUSINESS Card */}
-                        <div className="glass backdrop-blur-3xl border-white/10 rounded-[2.5rem] p-1 relative transition-all duration-500 hover:-translate-y-2 hover:shadow-glass group">
-                            <div className="bg-card/20 backdrop-blur-md rounded-[2.3rem] p-8 md:p-10 h-full flex flex-col relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-foreground/10 text-foreground/60 text-[10px] font-black px-6 py-2 rounded-bl-2xl uppercase tracking-widest">
+                        <div className="glass border-white/10 rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass group">
+                            <div className="bg-white/5 backdrop-blur-[30px] rounded-[3.3rem] p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
+                                <div className="absolute top-0 right-0 bg-white/10 backdrop-blur-md text-foreground/50 text-[10px] font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em]">
                                     {t('landing.pricing.newBadge', 'NEW')}
                                 </div>
 
-                                <div className="mb-8">
-                                    <h3 className="text-2xl font-black mb-3 flex items-center gap-3">
+                                <div className="mb-10">
+                                    <h3 className="text-3xl font-black mb-4 flex items-center gap-3 tracking-tighter">
                                         {t('landing.pricing.businessName', 'Business')} 
-                                        <span className="text-[10px] bg-foreground/10 text-foreground/60 px-3 py-1 rounded-full font-black uppercase tracking-widest">
+                                        <Badge variant="outline" className="text-foreground/40 border-white/10 font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-widest">
                                             {t('landing.pricing.teamLabel', 'Team')}
-                                        </span>
+                                        </Badge>
                                     </h3>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-5xl font-black tabular-nums tracking-tighter">
+                                    <div className="flex items-baseline gap-3">
+                                        <span className="text-6xl font-black tabular-nums tracking-tighter drop-shadow-sm">
                                             {isYearly ? prices.business.yearly : prices.business.monthly}
                                         </span>
-                                        <span className="text-muted-foreground font-medium">/ {t('landing.pricing.perMonth', 'month')}</span>
+                                        <span className="text-muted-foreground/60 font-black uppercase tracking-widest text-xs">/ {t('landing.pricing.perMonth', 'mo')}</span>
                                     </div>
                                     {isYearly && (
-                                        <p className="text-xs text-muted-foreground mt-2 font-black uppercase tracking-wider">
-                                            {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.business.totalYearly })}
-                                        </p>
+                                        <div className="mt-4 px-4 py-1.5 bg-white/5 rounded-full w-fit">
+                                            <p className="text-[10px] text-muted-foreground/60 font-black uppercase tracking-wider">
+                                                {t('landing.pricing.billedYearly', 'Billed {{price}} yearly', { price: prices.business.totalYearly })}
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
 
-                                <ul className="space-y-4 mb-10 flex-1">
+                                <ul className="space-y-6 mb-12 flex-1">
                                     {businessFeatures.map((f, i) => (
-                                        <li key={i} className="flex items-center gap-4 text-sm font-medium text-foreground/80">
-                                            <div className="w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center shrink-0">
-                                                <Check className="w-3 h-3 text-foreground/60" />
+                                        <li key={i} className="flex items-center gap-4 text-sm font-bold text-foreground/70 group/feat">
+                                            <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10 group-hover/feat:scale-110 transition-transform">
+                                                <Check className="w-3.5 h-3.5 text-foreground/40" />
                                             </div>
-                                            <span>{f}</span>
+                                            <span className="group-hover:text-foreground transition-colors">{f}</span>
                                         </li>
                                     ))}
                                 </ul>
 
-                                <MagneticButton variant="outline" className="w-full h-16 rounded-2xl text-lg font-black uppercase tracking-widest glass hover:bg-white/10 border-white/10 hover:scale-[1.02] transition-all" onClick={() => onPlanSelect('business')}>
+                                <MagneticButton variant="outline" className="w-full h-20 rounded-2xl text-lg font-black uppercase tracking-[0.2em] glass hover:bg-white/10 border-white/10 hover:shadow-glass hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('business')}>
                                     {t('landing.pricing.businessCta', 'Start Business')}
                                 </MagneticButton>
                             </div>
                         </div>
                     </div>
-
-                    {/* Free CTA */}
-                    <div className="text-center mt-6">
-                        <Button
-                            variant="ghost"
-                            className="rounded-xl text-muted-foreground hover:text-primary transition-colors text-sm h-auto py-2"
-                            onClick={() => onPlanSelect('free')}
-                        >
-                            {t('landing.pricing.freeCta', 'Start for free')}
-                        </Button>
-                    </div>
                 </Reveal>
+
+                {/* Free CTA */}
+                <div className="text-center mt-12">
+                    <Button
+                        variant="ghost"
+                        className="rounded-xl text-muted-foreground/60 hover:text-primary transition-colors text-sm h-auto py-2 font-black uppercase tracking-widest opacity-50 hover:opacity-100"
+                        onClick={() => onPlanSelect('free')}
+                    >
+                        {t('landing.pricing.freeCta', 'Start for free')}
+                    </Button>
+                </div>
             </div>
         </SectionWrapper>
     );
