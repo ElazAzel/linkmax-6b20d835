@@ -73,7 +73,7 @@ serve(async (req) => {
     const { data: transaction, error: txError } = await supabaseClient
       .from('wallet_transactions')
       .insert({
-        wallet_id: wallet.id,
+        wallet_id: wallet!.id,
         type: 'deposit',
         status: 'completed',
         gross_amount: grossAmount,
