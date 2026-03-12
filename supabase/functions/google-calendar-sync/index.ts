@@ -85,7 +85,7 @@ serve(async (req) => {
                 sig,
             };
             const stateB64 = base64Encode(
-                encoder.encode(JSON.stringify(stateObj))
+                encoder.encode(JSON.stringify(stateObj)) as unknown as ArrayBuffer
             );
 
             const authUrl = new URL(GOOGLE_AUTH_URL);
