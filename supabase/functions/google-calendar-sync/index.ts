@@ -76,7 +76,7 @@ serve(async (req) => {
                 key,
                 encoder.encode(dataToSign)
             );
-            const sig = base64Encode(new Uint8Array(sigBuffer));
+            const sig = base64Encode(new Uint8Array(sigBuffer) as unknown as ArrayBuffer);
 
             const stateObj = {
                 user_id: user.id,
