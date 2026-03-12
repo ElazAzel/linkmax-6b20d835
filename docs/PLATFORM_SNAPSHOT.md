@@ -10,7 +10,7 @@
 
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
-1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic (frosted high-index glass, reactive WebGL backgrounds, and organic micro-animations) to provide a high-end look by default.
+1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic (frosted high-index glass, reactive WebGL backgrounds, and organic micro-animations) to provide a high-end, 2026-standard look by default.
 2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a global **Cmd+K Command Palette** for deep search across entities, and native **Excel/CSV data export**.
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
 4. **Team Collaboration & Business Zones** — RBAC-based organization management and multi-tenant workspaces with CRM Kanban and Team Inbox.

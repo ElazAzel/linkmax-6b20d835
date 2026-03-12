@@ -57,44 +57,43 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
     const pendingGMV = data?.pendingGMV || 0;
 
     return (
-        <Card className={cn("overflow-hidden border-border/30", className)}>
-            <CardHeader className="pb-2">
+        <Card className={cn("overflow-hidden glass border-white/10 shadow-glass", className)}>
+            <CardHeader className="pb-2 border-b border-white/5">
                 <CardTitle className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                    <div className="flex items-center gap-2.5">
+                        <div className="p-2.5 rounded-2xl bg-primary/10 text-primary">
                             <Wallet className="h-5 w-5" />
                         </div>
-                        <span className="text-sm font-bold">{t('dashboard.fintech.wallet', 'Ваш кошелек')}</span>
+                        <span className="text-sm font-bold tracking-tight">{t('dashboard.fintech.wallet', 'Ваш кошелек')}</span>
                     </div>
                 </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5 pt-6">
                 <div className="flex flex-col">
-                    <span className="text-3xl font-black tracking-tighter">
+                    <span className="text-4xl font-black tracking-tighter text-gradient pb-1">
                         {formatAmount(balance)} {getCurrencySymbol(currency)}
                     </span>
-                    <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-70">
                         {t('dashboard.fintech.net_balance', 'Доступно к выводу')}
                     </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                    <div className="p-3 rounded-2xl bg-muted/30 border border-border/10 space-y-1">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-widest">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 rounded-[1.5rem] glass-subtle border-white/5 space-y-2 group/stat">
+                        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-60">
                             <TrendingUp className="h-3 w-3" />
                             {t('dashboard.fintech.gmv', 'Оборот')}
                         </div>
-                        <div className="text-sm font-bold">
+                        <div className="text-base font-bold tabular-nums">
                             {formatAmount(pendingGMV + balance)} {getCurrencySymbol(currency)}
                         </div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-muted/30 border border-border/10 space-y-1">
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-bold uppercase tracking-widest">
+                    <div className="p-4 rounded-[1.5rem] glass-subtle border-white/5 space-y-2 group/stat">
+                        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-60">
                             <Percent className="h-3 w-3" />
                             {t('dashboard.fintech.fees', 'Комиссия')}
                         </div>
-                        <div className="text-sm font-bold text-destructive/80">
-                            {/* Placeholder for total fees if we track them separately, or just 0 for now */}
+                        <div className="text-base font-bold text-destructive/80 tabular-nums">
                             {formatAmount((pendingGMV + balance) * 0.07)} {getCurrencySymbol(currency)}
                         </div>
                     </div>
@@ -102,11 +101,11 @@ export const WalletOverviewWidget = memo(function WalletOverviewWidget({
 
                 <Button 
                     variant="secondary" 
-                    className="w-full h-11 rounded-xl text-sm font-bold group"
+                    className="w-full h-12 rounded-2xl text-sm font-bold group bg-white/5 hover:bg-white/10 border-white/5 transition-all"
                     onClick={onViewFinance}
                 >
                     {t('dashboard.fintech.view_details', 'Детализация финансов')}
-                    <ChevronRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
             </CardContent>
         </Card>

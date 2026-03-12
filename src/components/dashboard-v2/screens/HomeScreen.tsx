@@ -217,68 +217,75 @@ export const HomeScreen = memo(function HomeScreen({
               onOpenActivity={onOpenActivity}
               onOpenEditor={onOpenEditor}
             />
+            
             <WalletOverviewWidget 
               onViewFinance={() => navigate('/finance')}
-              className="glass-card border-white/20"
+              className="glass border-white/10 shadow-glass"
             />
+            
             <KaspiQRWidget
               ownerId={pageData?.userId || ''}
-              className="glass-card border-white/20"
+              className="glass border-white/10 shadow-glass"
             />
           </>
         )}
 
         {/* Primary Page Card */}
-        <Card className="p-6 space-y-5 glass-card border-white/20 shadow-glass-lg relative overflow-hidden group">
-          <div className="absolute inset-0 bg-liquid-mesh opacity-10 -z-10 pointer-events-none" />
+        <Card className="p-8 space-y-6 glass border-white/10 shadow-glass-lg relative overflow-hidden group rounded-[2.5rem]">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-violet-500/5 opacity-40 group-hover:opacity-60 transition-opacity duration-700 -z-10" />
+          
           {/* Page Header */}
-          <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16 rounded-2xl border-2 border-border">
-              <AvatarImage src={avatarUrl} alt={name} />
-              <AvatarFallback className="rounded-2xl text-xl font-bold bg-primary/10 text-primary">
-                {name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+          <div className="flex items-center gap-5">
+            <div className="relative group/avatar">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-violet-500 rounded-2xl blur opacity-20 group-hover/avatar:opacity-40 transition duration-1000 group-hover/avatar:duration-200" />
+              <Avatar className="h-20 w-20 rounded-2xl border-2 border-white/20 relative">
+                <AvatarImage src={avatarUrl} alt={name} />
+                <AvatarFallback className="rounded-2xl text-2xl font-black bg-white/5 text-primary backdrop-blur-sm">
+                  {name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-xl font-bold truncate">{name}</h2>
+              <div className="flex items-center gap-2 mb-1.5">
+                <h2 className="text-2xl font-black tracking-tight truncate">{name}</h2>
                 {isPremium && (
-                  <Badge className="bg-amber-500/20 text-amber-600 border-amber-500/30 shrink-0">
+                  <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-white border-none shadow-lg shadow-amber-500/20 shrink-0 font-black text-[10px] px-2.5 py-0.5 rounded-full">
                     <Crown className="h-3 w-3 mr-1" />
                     PRO
                   </Badge>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">lnkmx.my/{slug}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold text-muted-foreground opacity-60 tracking-wider">lnkmx.my/{slug}</span>
                 <StatusBadge status={isPublished ? 'published' : 'draft'} size="sm" />
               </div>
             </div>
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-3">
-            <button onClick={onOpenEditor} className="text-left transition-transform active:scale-95">
+          <div className="grid grid-cols-3 gap-4">
+            <button onClick={onOpenEditor} className="text-left transition-all active:scale-95 group/stat">
               <StatCard
-                icon={<LayoutGrid className="w-5 h-5" />}
+                icon={<LayoutGrid className="w-5 h-5 group-hover/stat:scale-110 transition-transform" />}
                 value={blockCount}
                 label={t('dashboard.home.blocks', 'блоков')}
                 variant="glass"
                 compact
               />
             </button>
-            <button onClick={onOpenInsights} className="text-left transition-transform active:scale-95">
+            <button onClick={onOpenInsights} className="text-left transition-all active:scale-95 group/stat">
               <StatCard
-                icon={<Eye className="w-5 h-5 text-emerald-500" />}
+                icon={<Eye className="h-5 w-5 text-emerald-500 group-hover/stat:scale-110 transition-transform" />}
                 value={viewCount}
                 label={t('dashboard.home.views', 'просмотров')}
                 variant="glass"
                 compact
               />
             </button>
-            <button onClick={onOpenActivity} className="text-left transition-transform active:scale-95">
+            <button onClick={onOpenActivity} className="text-left transition-all active:scale-95 group/stat">
               <StatCard
-                icon={<MessageSquare className="w-5 h-5 text-violet-500" />}
+                icon={<MessageSquare className="h-5 w-5 text-violet-500 group-hover/stat:scale-110 transition-transform" />}
                 value={weeklyStats.leads}
                 label={t('dashboard.home.leads', 'заявок')}
                 variant="glass"
@@ -287,65 +294,45 @@ export const HomeScreen = memo(function HomeScreen({
             </button>
           </div>
 
-          {/* Primary Actions — Dynamic CTA based on state */}
-          <div className="flex gap-3">
+          {/* Primary Actions — Premium pill buttons */}
+          <div className="flex gap-4">
             {!isPublished ? (
               <>
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold"
+                  className="h-14 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/10 transition-all border-white/5"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
-                  <PenTool className="h-5 w-5 mr-2 shrink-0" />
+                  <PenTool className="h-5 w-5 mr-3 shrink-0 opacity-70" />
                   {t('dashboard.home.edit', 'Редактировать')}
                 </Button>
                 <Button
                   size="lg"
-                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25"
+                  className="h-14 flex-1 rounded-2xl text-base font-black bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/30 transition-all active:scale-[0.98]"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
-                  <Share2 className="h-5 w-5 mr-2 shrink-0" />
+                  <Share2 className="h-5 w-5 mr-3 shrink-0" />
                   {t('dashboard.home.publish', 'Опубликовать')}
-                </Button>
-              </>
-            ) : viewCount === 0 ? (
-              <>
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold"
-                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
-                >
-                  <PenTool className="h-5 w-5 mr-2 shrink-0" />
-                  {t('dashboard.home.edit', 'Редактировать')}
-                </Button>
-                <Button
-                  size="lg"
-                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold shadow-lg shadow-primary/25"
-                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
-                >
-                  <Share2 className="h-5 w-5 mr-2 shrink-0" />
-                  {t('dashboard.home.share', 'Поделиться')}
                 </Button>
               </>
             ) : (
               <>
                 <Button
                   size="lg"
-                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold shadow-lg shadow-primary/25"
+                  className="h-14 flex-1 rounded-2xl text-base font-black bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/30 transition-all active:scale-[0.98]"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onOpenEditor(); }}
                 >
-                  <PenTool className="h-5 w-5 mr-2 shrink-0" />
+                  <PenTool className="h-5 w-5 mr-3 shrink-0" />
                   {t('dashboard.home.edit', 'Редактировать')}
                 </Button>
                 <Button
                   size="lg"
                   variant="secondary"
-                  className="h-14 flex-1 rounded-2xl text-[13px] sm:text-base font-bold"
+                  className="h-14 flex-1 rounded-2xl text-base font-black glass-subtle hover:bg-white/10 transition-all border-white/5"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onShare(); }}
                 >
-                  <Share2 className="h-5 w-5 mr-2 shrink-0" />
+                  <Share2 className="h-5 w-5 mr-3 shrink-0 opacity-70" />
                   {t('dashboard.home.share', 'Поделиться')}
                 </Button>
               </>
@@ -353,15 +340,15 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
 
           {/* Secondary Actions */}
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex-1 h-12 rounded-xl" onClick={onPreview}>
+          <div className="flex gap-3">
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl glass-subtle border-none hover:bg-white/10 text-xs font-bold uppercase tracking-widest opacity-70 hover:opacity-100" onClick={onPreview}>
               <Eye className="h-4 w-4 mr-2" />
               {t('dashboard.home.preview', 'Предпросмотр')}
             </Button>
             {isPublished && (
               <Button
-                variant="outline"
-                className="h-12 w-12 rounded-xl p-0"
+                variant="ghost"
+                className="h-12 w-12 rounded-xl p-0 glass-subtle border-none hover:bg-white/10 opacity-70 hover:opacity-100"
                 onClick={() => window.open(`/${slug}`, '_blank')}
               >
                 <ExternalLink className="h-4 w-4" />

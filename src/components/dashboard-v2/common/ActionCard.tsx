@@ -32,14 +32,15 @@ export const ActionCard = memo(function ActionCard({
     <button
       onClick={onClick}
       className={cn(
-        "p-5 rounded-3xl text-left transition-all active:scale-[0.98] relative overflow-hidden group",
-        "glass-subtle hover:bg-white/10 hover:translate-y-[-2px] hover:shadow-lg hover:shadow-primary/5",
-        "border border-white/20",
+        "p-5 rounded-[2rem] text-left transition-all active:scale-[0.97] relative overflow-hidden group",
+        "glass hover:bg-white/10 hover:translate-y-[-4px]",
+        "shadow-glass hover:shadow-glass-lg",
+        "border border-white/10",
         className
       )}
     >
-      <div className={cn("absolute inset-0 bg-gradient-to-br opacity-5 group-hover:opacity-10 transition-opacity", gradient)} />
-      <div className={cn("h-12 w-12 rounded-2xl flex items-center justify-center mb-3", iconBg)}>
+      <div className={cn("absolute inset-0 bg-gradient-to-br opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500", gradient)} />
+      <div className={cn("h-12 w-12 rounded-[1.25rem] flex items-center justify-center mb-4 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3", iconBg)}>
         <Icon className={cn("h-6 w-6", iconColor)} />
       </div>
       <p className="font-bold">{title}</p>

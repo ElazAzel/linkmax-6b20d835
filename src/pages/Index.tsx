@@ -6,6 +6,7 @@ import { useMarketingAnalytics } from '@/hooks/analytics/useMarketingAnalytics';
 import { SEOLandingHead } from '@/components/landing/SEOLandingHead';
 import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { getAppDomain } from '@/lib/utils/url-helpers';
+import { LoadingSkeleton } from '@/components/dashboard-v2/common/LoadingSkeleton';
 
 // Critical above-fold components - load eagerly
 import { HeroSection } from '@/components/landing/v2/HeroSection';
@@ -25,6 +26,10 @@ const PremiumFooter = lazy(() => import('@/components/landing/v2/PremiumFooter')
 const GrainOverlay = lazy(() => import('@/components/landing/v2/GrainOverlay').then(m => ({ default: m.GrainOverlay })));
 const LiquidCursor = lazy(() => import('@/components/landing/v2/LiquidCursor').then(m => ({ default: m.LiquidCursor })));
 
+/**
+ * Landing Page Index
+ * Premium "Living Canvas" aesthetic refresh.
+ */
 export default function Index() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -60,82 +65,69 @@ export default function Index() {
 
   return (
     <>
-      {/* SEO & Meta Tags */}
       <SEOLandingHead currentLanguage={i18n.language} />
       <Suspense fallback={null}>
         <SEOMetaEnhancer
           pageUrl={`${getAppDomain()}/`}
-          pageTitle={t('landing.v4.hero.title', 'Build pages that convert')}
-          pageDescription={t('landing.v4.hero.subtitle', 'The all-in-one platform for creators. AI builds the structure, you get the leads.')}
+          pageTitle={t('landing.v4.hero.title', 'LinkMAX - Your AI Page Builder')}
+          pageDescription={t('landing.v4.hero.subtitle', 'Build professional pages in minutes with AI.')}
           imageUrl={`${getAppDomain()}/og-image.png`}
-          imageAlt="LinkMAX - AI Page Builder"
+          imageAlt="LinkMAX"
           type="website"
         />
         <GEOTagging includeOrganization={true} />
-        <AEOOptimizer
-          pageUrl={`${getAppDomain()}/`}
-          type="howto"
-          howToName={t('landing.v4.seo.howToName', 'How to build a landing page with AI')}
-          howToDescription={t('landing.v4.seo.howToDesc', 'Create a professional page in 2 minutes')}
-          howToSteps={[]}
-        />
-        <AISearchOptimizer
-          pageType="homepage"
-          primaryQuestion={t('landing.v4.seo.question', 'What is LinkMAX?')}
-          primaryAnswer={t('landing.v4.seo.answer', 'LinkMAX is an AI-powered page builder for creators.')}
-          entityName="LinkMAX"
-          entityCategory="SaaS"
-        />
+        <AEOOptimizer pageUrl={`${getAppDomain()}/`} type="howto" />
+        <AISearchOptimizer pageType="homepage" entityName="LinkMAX" entityCategory="SaaS" />
       </Suspense>
 
-      <div className="bg-background min-h-screen text-foreground selection:bg-primary/30 relative" style={{ overflowX: 'clip' }}>
-
-        {/* PREMIUM LAYERS - lazy loaded, skip LiquidCursor on mobile */}
+      <div className="bg-background min-h-screen text-foreground selection:bg-primary/30 relative overflow-x-hidden">
+        {/* PREMIUM LAYERS */}
         <Suspense fallback={null}>
           <GrainOverlay />
           {!isMobile && <LiquidCursor />}
         </Suspense>
+        
         <DynamicIslandNav
           onLogin={() => handleNav('/auth', 'nav_login')}
           onSignup={() => handleCreatePage('nav_signup')}
         />
 
-        <div id="hero">
-          <HeroSection
-            onStart={() => handleCreatePage('hero_cta')}
-            onExamples={() => handleNav('/gallery', 'hero_examples')}
-          />
-        </div>
+        <main className="flex-grow">
+          <div id="hero">
+            <HeroSection
+              onStart={() => handleCreatePage('hero_cta')}
+              onExamples={() => handleNav('/gallery', 'hero_examples')}
+            />
+          </div>
 
-        <Suspense fallback={<div className="h-20" />}>
-          <LogoTicker />
+          <Suspense fallback={<div className="h-20" />}>
+            <LogoTicker />
+          </Suspense>
+
+          <Suspense fallback={<div className="h-96" />}>
+            <BentoGridSection />
+          </Suspense>
+
+          <div id="demo" className="relative z-0">
+            <Suspense fallback={<div className="h-96" />}>
+              <InteractiveDemo />
+            </Suspense>
+          </div>
+
+          <div className="relative z-20 bg-background">
+            <Suspense fallback={<div className="h-96" />}>
+              <Testimonials />
+            </Suspense>
+
+            <Suspense fallback={<div className="h-96" />}>
+              <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
+            </Suspense>
+          </div>
+        </main>
+
+        <Suspense fallback={<div className="h-40" />}>
+          <PremiumFooter />
         </Suspense>
-
-        <Suspense fallback={<div className="h-96" />}>
-          <BentoGridSection />
-        </Suspense>
-
-        <div id="demo" className="relative z-0">
-          <Suspense fallback={<div className="h-96" />}>
-            <InteractiveDemo />
-          </Suspense>
-        </div>
-
-        <div className="relative z-20 bg-background">
-          <Suspense fallback={<div className="h-96" />}>
-            <Testimonials />
-          </Suspense>
-
-          <Suspense fallback={<div className="h-96" />}>
-            <PricingAurora onPlanSelect={(plan) => handleCreatePage(`pricing_${plan}`)} />
-          </Suspense>
-
-          {/* Footer */}
-          <Suspense fallback={<div className="h-40" />}>
-            <PremiumFooter />
-          </Suspense>
-        </div>
-
       </div>
     </>
   );

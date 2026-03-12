@@ -71,25 +71,25 @@ export const Testimonials = () => {
                     </p>
                 </Reveal>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
                     {testimonials.map((testimonial, i) => (
                         <Reveal key={i} delay={i * 100}>
-                            <div className="bg-card border border-border/60 rounded-2xl p-6 flex flex-col gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 h-full">
-                                <div className="flex gap-1 text-primary">
+                            <div className="glass backdrop-blur-3xl border-white/5 rounded-[2rem] p-8 flex flex-col gap-5 transition-all duration-500 hover:-translate-y-2 hover:bg-white/10 shadow-glass group h-full">
+                                <div className="flex gap-1 text-primary drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.3)]">
                                     {[...Array(5)].map((_, j) => (
-                                        <Star key={j} className="w-4 h-4 fill-current" />
+                                        <Star key={j} className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
                                     ))}
                                 </div>
-                                <p className="text-sm leading-relaxed text-muted-foreground flex-grow">
+                                <p className="text-sm md:text-base leading-relaxed text-foreground/70 font-medium italic">
                                     "{testimonial.content}"
                                 </p>
-                                <div className="flex items-center gap-3 mt-2">
-                                    <Avatar className="h-8 w-8 border border-primary/20">
-                                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{testimonial.avatar}</AvatarFallback>
+                                <div className="flex items-center gap-4 mt-auto">
+                                    <Avatar className="h-10 w-10 border border-white/10 rounded-xl">
+                                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-black rounded-xl">{testimonial.avatar}</AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <div className="text-sm font-bold">{testimonial.name}</div>
-                                        <div className="text-xs text-muted-foreground">{testimonial.role}</div>
+                                        <div className="text-sm font-black tracking-tight">{testimonial.name}</div>
+                                        <div className="text-[10px] font-black uppercase tracking-widest text-primary/60">{testimonial.role}</div>
                                     </div>
                                 </div>
                             </div>

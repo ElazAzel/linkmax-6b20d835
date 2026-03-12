@@ -45,7 +45,7 @@ export const StatCard = memo(function StatCard({
             className={cn(
                 'rounded-2xl transition-all duration-300',
                 variant === 'glass'
-                    ? 'glass-card'
+                    ? 'glass'
                     : 'bg-card border border-border/50 shadow-sm hover:shadow-md',
                 compact ? 'p-3' : 'p-4 md:p-5',
                 className

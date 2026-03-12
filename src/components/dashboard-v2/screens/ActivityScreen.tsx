@@ -182,13 +182,14 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
       <DashboardHeader
         title={t('dashboard.activity.title', 'Входящие')}
         subtitle={`${stats.total} ${t('dashboard.activity.totalLeads', 'заявок')}`}
+        onMenuClick={() => {}}
         actions={
           <div className="flex items-center gap-2">
             {isPremium && leads.length > 0 && activeTab === 'leads' && (
               <Button
                 variant="outline"
                 size="sm"
-                className="h-12 w-12 rounded-2xl md:h-9 md:w-auto md:px-4 md:rounded-xl"
+                className="h-11 w-11 rounded-2xl md:h-10 md:w-auto md:px-5 md:rounded-xl glass hover:bg-white/10 border-white/10"
                 onClick={() => {
                   toast.promise(
                     exportLeadsToExcel({ leads }),
@@ -200,13 +201,13 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                   );
                 }}
               >
-                <span className="hidden md:inline">{t('dashboard.activity.export', 'Экспорт')}</span>
+                <span className="hidden md:inline font-bold uppercase tracking-widest text-[10px]">{t('dashboard.activity.export', 'Экспорт')}</span>
                 <span className="md:hidden font-bold">EX</span>
               </Button>
             )}
             <Button
               size="icon"
-              className="h-12 w-12 rounded-2xl md:h-9 md:w-9 md:rounded-xl shadow-lg shadow-primary/25"
+              className="h-11 w-11 rounded-2xl md:h-10 md:w-10 md:rounded-xl bg-primary shadow-glass text-primary-foreground hover:scale-105 transition-transform"
               onClick={() => setShowAddDialog(true)}
             >
               <Plus className="h-6 w-6 md:h-5 md:w-5" />
@@ -221,25 +222,25 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
       </div>
 
       {/* Tabs */}
-      <div className="px-5 pb-3">
-        <div className="bg-muted/50 rounded-2xl p-1">
+      <div className="px-5 pb-4">
+        <div className="p-1 glass-subtle rounded-2xl border-white/5 shadow-inner">
           <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as 'leads' | 'bookings')}>
             <TabsList className="grid grid-cols-2 h-11 bg-transparent p-0 gap-1">
               <TabsTrigger
                 value="leads"
-                className="rounded-xl h-full data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-sm"
+                className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass font-black text-[10px] uppercase tracking-widest transition-all"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 {t('dashboard.activity.tabs.leads', 'Заявки')}
                 {stats.new > 0 && (
-                  <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-xs">
+                  <Badge className="ml-2 h-5 px-1.5 bg-blue-500 text-white text-[10px] font-black border-none ring-offset-0">
                     {stats.new}
                   </Badge>
                 )}
               </TabsTrigger>
               <TabsTrigger
                 value="bookings"
-                className="rounded-xl h-full data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-sm"
+                className="rounded-xl h-full data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass font-black text-[10px] uppercase tracking-widest transition-all"
               >
                 <Calendar className="h-4 w-4 mr-2" />
                 {t('dashboard.activity.tabs.bookings', 'Записи')}
@@ -473,13 +474,13 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
     <button
       onClick={onClick}
       className={cn(
-        "w-full p-4 rounded-2xl glass-card transition-all duration-300 relative overflow-hidden group",
-        "hover:bg-primary/5 hover:translate-x-1 active:scale-[0.98] border-white/10",
-        lead.status === 'new' && "border-blue-500/30 ring-1 ring-blue-500/20"
+        "w-full p-5 rounded-3xl glass transition-all duration-500 relative overflow-hidden group border-white/10",
+        "hover:scale-[1.01] hover:bg-white/10 active:scale-[0.98] shadow-glass",
+        lead.status === 'new' && "shadow-blue-500/10 ring-1 ring-blue-500/20"
       )}
     >
       <div className={cn(
-        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-primary/5 to-transparent -z-1",
+        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-primary/5 via-transparent to-transparent -z-1",
         lead.status === 'new' && "opacity-10"
       )} />
       <div className="flex items-start gap-3">

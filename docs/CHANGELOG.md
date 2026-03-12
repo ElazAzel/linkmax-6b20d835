@@ -1,18 +1,22 @@
 # Changelog
 
-### [2026-03-12] - Phase 3: "Living Canvas" UI Transformation
+### [2026-03-12] - Phase 4 & 5: "Living Canvas" Expansion & Brand Resonance
 
-* **Core Design System Evolution**:
+* **Brand Resonance (Phase 5)**:
+  - Completely refreshed Landing Page with **Living Canvas** aesthetic.
+  - Redesigned **HeroSection** with premium typography and glass CTA buttons.
+  - Standardized **PricingAurora** and **Testimonials** with high-index glass cards.
+  - Refined **PremiumFooter** with optimized layout and modern aesthetics.
+  - Consolidated **Index.tsx** to resolve code duplication and optimize lazy loading.
+* **Full Content Immersion (Phase 4)**:
+  - Refreshed all Dashboard screens: **HomeScreen**, **InsightsScreen**, and **ActivityScreen**.
+  - Standardized **InsightsScreen** with unified glass card layouts for analytics.
+  - Refined **ActivityScreen** lead management interface with premium material effects.
+  - Standardized financial widgets (**KaspiQR**, **Wallet**) across the dashboard.
+* **Core Design System Evolution (Phase 3)**:
   - Migrated from "Liquid Glass" to **"Living Canvas"** aesthetic.
   - Standardized **Frosted High-Index Glass** tokens (`glass-subtle`, `glass`).
   - Implemented **Canvas Engine**: WebGL-powered reactive backgrounds with fluid dynamics.
-* **Dashboard V2 Overhaul**:
-  - Refined **DashboardSidebar** with premium material effects and organic spring animations.
-  - Updated **DashboardHeader** with better mobile accessibility and "Live" status indicators.
-  - Integrated **DashboardLayout** with the dynamic canvas engine.
-* **Landing Page Refresh**:
-  - Updated **HeroSection** and **BentoGrid** with reactive visual metaphors and refined typography.
-  - Fixed various visual regressions in community components.
 
 ### [2026-03-11] - Global Search & Data Export (CRM Depth)
 

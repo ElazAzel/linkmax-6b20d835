@@ -221,7 +221,10 @@ export const InsightsScreen = memo(function InsightsScreen({
   if (loading) {
     return (
       <div className="min-h-screen safe-area-top">
-        <DashboardHeader title={t('dashboard.insights.title', 'Аналитика')} />
+        <DashboardHeader 
+          title={t('dashboard.insights.title', 'Аналитика')} 
+          onMenuClick={() => {}} 
+        />
         <div className="px-5 py-6">
           <LoadingSkeleton variant="stats" />
         </div>
@@ -236,9 +239,10 @@ export const InsightsScreen = memo(function InsightsScreen({
       <DashboardHeader
         title={t('dashboard.insights.title', 'Аналитика')}
         subtitle={t('dashboard.insights.subtitle', 'Статистика страницы')}
+        onMenuClick={() => {}}
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={refresh} className="h-8 w-8">
+            <Button variant="ghost" size="icon" onClick={refresh} className="h-9 w-9 glass border-white/10 rounded-xl">
               <RefreshCw className="h-4 w-4" />
             </Button>
             {isPremium && <AnalyticsExport analytics={analytics} period={period} />}
@@ -247,17 +251,17 @@ export const InsightsScreen = memo(function InsightsScreen({
       />
 
       {/* Period Selector */}
-      <div className="px-5 pb-4">
-        <div className="flex gap-2">
+      <div className="px-5 pb-5">
+        <div className="flex gap-2 p-1.5 glass-subtle rounded-2xl border-white/5 shadow-inner">
           {(['7d', '14d', '30d'] as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => handlePeriodChange(p)}
               className={cn(
-                "flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                "flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300",
                 period === p
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-[1.05]"
-                  : "glass-subtle text-muted-foreground/60 hover:bg-muted"
+                  ? "bg-white text-primary shadow-glass-lg scale-[1.02]"
+                  : "text-muted-foreground/50 hover:text-muted-foreground hover:bg-white/5"
               )}
             >
               {t(`dashboard.insights.period.${p}`, p === '7d' ? '7 дней' : p === '14d' ? '14 дней' : '30 дней')}
@@ -266,7 +270,7 @@ export const InsightsScreen = memo(function InsightsScreen({
         </div>
       </div>
 
-      <div className="px-5 pb-24 space-y-6">
+      <div className="px-5 pb-24 space-y-7">
         {!hasData ? (
           <EmptyState
             icon={Eye}
@@ -277,88 +281,80 @@ export const InsightsScreen = memo(function InsightsScreen({
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="grid w-full grid-cols-5 h-10">
-                <TabsTrigger value="overview" className="text-xs">
+              <TabsList className="grid w-full grid-cols-5 h-11 bg-white/5 border border-white/10 rounded-2xl p-1 items-center gap-1 shadow-inner">
+                <TabsTrigger value="overview" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
                   <ChartBar className="h-3.5 w-3.5 mr-1" />
-                  {t('analytics.tabs.overview', 'Обзор')}
+                  <span className="hidden sm:inline">{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="text-xs">
+                <TabsTrigger value="traffic" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
                   <Globe className="h-3.5 w-3.5 mr-1" />
-                  {t('analytics.tabs.traffic', 'Трафик')}
+                  <span className="hidden sm:inline">{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="text-xs">
+                <TabsTrigger value="blocks" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
                   <Target className="h-3.5 w-3.5 mr-1" />
-                  {t('analytics.tabs.blocks', 'Блоки')}
+                  <span className="hidden sm:inline">{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="text-xs">
+                <TabsTrigger value="funnel" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
                   <TrendingUp className="h-3.5 w-3.5 mr-1" />
-                  {t('analytics.tabs.funnel', 'Воронка')}
+                  <span className="hidden sm:inline">{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="text-xs">
+                  <TabsTrigger value="experiments" className="text-[10px] font-bold uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass">
                     <FlaskConical className="h-3.5 w-3.5 mr-1" />
-                    {t('analytics.tabs.experiments', 'Тесты')}
+                    <span className="hidden sm:inline">{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>
                 )}
               </TabsList>
 
               {/* Overview Tab */}
-              <TabsContent value="overview" className="mt-4">
+              <TabsContent value="overview" className="mt-6">
                 <motion.div
-                  className="space-y-4"
+                  className="space-y-6"
                   variants={containerVariants}
                   initial="hidden"
                   animate="show"
                 >
-                  {/* Main Stats */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-4">
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={Eye}
-                        iconBg="bg-blue-500/15"
-                        iconColor="text-blue-500"
                         value={stats.views}
                         label={t('dashboard.insights.views', 'Просмотры')}
-                        change={stats.viewsChange}
+                        variant="glass"
                       />
                     </motion.div>
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={MousePointerClick}
-                        iconBg="bg-emerald-500/15"
-                        iconColor="text-emerald-500"
                         value={stats.clicks}
                         label={t('dashboard.insights.clicks', 'Клики')}
-                        change={stats.clicksChange}
+                        variant="glass"
                       />
                     </motion.div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-4">
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={Users}
-                        iconBg="bg-violet-500/15"
-                        iconColor="text-violet-500"
                         value={stats.uniqueVisitors}
                         label={t('dashboard.insights.uniqueVisitors', 'Уникальные')}
-                        change={stats.visitorsChange}
+                        variant="glass"
                       />
                     </motion.div>
                     <motion.div variants={itemVariants}>
                       <StatCard
                         icon={Target}
-                        iconBg="bg-amber-500/15"
-                        iconColor="text-amber-500"
                         value={`${stats.ctr.toFixed(1)}%`}
                         label={t('dashboard.insights.ctr', 'CTR')}
+                        variant="glass"
                       />
                     </motion.div>
                   </div>
 
                   {/* Chart */}
                   {stats.dailyData.length > 0 && (
-                    <motion.div variants={itemVariants}>
+                    <motion.div variants={itemVariants} className="glass border-white/10 shadow-glass rounded-[2rem] overflow-hidden p-2">
                       <AnalyticsChart
                         data={stats.dailyData}
                         title={t('analytics.chart.title', 'Динамика за период')}
@@ -369,82 +365,86 @@ export const InsightsScreen = memo(function InsightsScreen({
 
                   {/* AI Insights */}
                   {insights.length > 0 && (
-                    <motion.div variants={itemVariants} className="space-y-3">
-                      <div className="flex items-center gap-2 px-1">
-                        <Sparkles className="h-5 w-5 text-primary" />
-                        <h2 className="font-bold">{t('dashboard.insights.aiInsights', 'AI Рекомендации')}</h2>
+                    <motion.div variants={itemVariants} className="space-y-4 pt-2">
+                      <div className="flex items-center gap-3 px-1">
+                        <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <Sparkles className="h-4 w-4 text-primary" />
+                        </div>
+                        <h2 className="text-sm font-black uppercase tracking-[0.2em] opacity-60">{t('dashboard.insights.aiInsights', 'Рекомендации')}</h2>
                       </div>
 
-                      {insights.map((insight, i) => (
-                        <motion.div key={insight.id} variants={itemVariants} custom={i}>
-                          <Card
-                            className={cn(
-                              "p-4 border-l-4 transition-all hover:scale-[1.01]",
-                              insight.impact === 'high'
-                                ? "border-l-emerald-500 bg-emerald-500/5"
-                                : insight.impact === 'medium'
-                                  ? "border-l-amber-500 bg-amber-500/5"
-                                  : "border-l-blue-500 bg-blue-500/5"
-                            )}
-                          >
-                            <div className="flex items-start gap-3">
-                              <div
-                                className={cn(
-                                  "h-9 w-9 rounded-xl flex items-center justify-center shrink-0",
-                                  insight.impact === 'high'
-                                    ? "bg-emerald-500/20"
-                                    : insight.impact === 'medium'
-                                      ? "bg-amber-500/20"
-                                      : "bg-blue-500/20"
-                                )}
-                              >
-                                <Sparkles
+                      <div className="space-y-3">
+                        {insights.map((insight, i) => (
+                          <motion.div key={insight.id} variants={itemVariants} custom={i}>
+                            <Card
+                              className={cn(
+                                "p-5 border-white/10 glass transition-all hover:scale-[1.02] shadow-glass rounded-3xl",
+                                insight.impact === 'high'
+                                  ? "shadow-emerald-500/5 group/insight"
+                                  : insight.impact === 'medium'
+                                    ? "shadow-amber-500/5 group/insight"
+                                    : "shadow-blue-500/5 group/insight"
+                              )}
+                            >
+                              <div className="flex items-start gap-4">
+                                <div
                                   className={cn(
-                                    "h-4 w-4",
+                                    "h-10 w-10 rounded-2xl flex items-center justify-center shrink-0 shadow-inner",
                                     insight.impact === 'high'
-                                      ? "text-emerald-600"
+                                      ? "bg-emerald-500/10"
                                       : insight.impact === 'medium'
-                                        ? "text-amber-600"
-                                        : "text-blue-600"
+                                        ? "bg-amber-500/10"
+                                        : "bg-blue-500/10"
                                   )}
-                                />
-                              </div>
+                                >
+                                  <Sparkles
+                                    className={cn(
+                                      "h-5 w-5",
+                                      insight.impact === 'high'
+                                        ? "text-emerald-500"
+                                        : insight.impact === 'medium'
+                                          ? "text-amber-500"
+                                          : "text-blue-500"
+                                    )}
+                                  />
+                                </div>
 
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-bold text-sm mb-0.5">{insight.title}</h3>
-                                <p className="text-xs text-muted-foreground mb-2">{insight.description}</p>
-                                {insight.action && (
-                                  <Button size="sm" variant="outline" className="h-7 text-xs rounded-lg" onClick={insight.action}>
-                                    {t('dashboard.insights.apply', 'Применить')}
-                                    <ArrowRight className="h-3 w-3 ml-1" />
-                                  </Button>
-                                )}
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-black text-sm mb-1 tracking-tight">{insight.title}</h3>
+                                  <p className="text-xs text-muted-foreground/80 mb-4 leading-relaxed">{insight.description}</p>
+                                  {insight.action && (
+                                    <Button size="sm" variant="secondary" className="h-10 px-5 text-xs font-bold rounded-xl glass hover:bg-white/10 border-white/10" onClick={insight.action}>
+                                      {t('dashboard.insights.apply', 'Применить')}
+                                      <ArrowRight className="h-3.5 w-3.5 ml-2 transition-transform group-hover/insight:translate-x-1" />
+                                    </Button>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </Card>
-                        </motion.div>
-                      ))}
+                            </Card>
+                          </motion.div>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
 
                   {/* Devices */}
-                  <motion.div variants={itemVariants} className="space-y-3">
-                    <h2 className="font-bold px-1">{t('dashboard.insights.devices', 'Устройства')}</h2>
+                  <motion.div variants={itemVariants} className="space-y-4 pt-2">
+                    <h2 className="text-sm font-black uppercase tracking-[0.2em] px-1 opacity-60">{t('dashboard.insights.devices', 'Устройства')}</h2>
                     <div className="grid grid-cols-3 gap-3">
-                      <Card className="p-3 text-center">
-                        <Smartphone className="h-5 w-5 mx-auto mb-1.5 text-blue-500" />
-                        <div className="text-xl font-black">{devicePercentages.mobile}%</div>
-                        <div className="text-xs text-muted-foreground">{t('dashboard.insights.mobile', 'Телефон')}</div>
+                      <Card className="p-4 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
+                        <Smartphone className="h-5 w-5 mx-auto mb-2 text-blue-500 group-hover/device:scale-110 transition-transform" />
+                        <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.mobile}%</div>
+                        <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.mobile', 'Телефон')}</div>
                       </Card>
-                      <Card className="p-3 text-center">
-                        <Monitor className="h-5 w-5 mx-auto mb-1.5 text-emerald-500" />
-                        <div className="text-xl font-black">{devicePercentages.desktop}%</div>
-                        <div className="text-xs text-muted-foreground">{t('dashboard.insights.desktop', 'Компьютер')}</div>
+                      <Card className="p-4 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
+                        <Monitor className="h-5 w-5 mx-auto mb-2 text-emerald-500 group-hover/device:scale-110 transition-transform" />
+                        <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.desktop}%</div>
+                        <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.desktop', 'ПК')}</div>
                       </Card>
-                      <Card className="p-3 text-center">
-                        <Globe className="h-5 w-5 mx-auto mb-1.5 text-violet-500" />
-                        <div className="text-xl font-black">{devicePercentages.tablet}%</div>
-                        <div className="text-xs text-muted-foreground">{t('dashboard.insights.tablet', 'Планшет')}</div>
+                      <Card className="p-4 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
+                        <Globe className="h-5 w-5 mx-auto mb-2 text-violet-500 group-hover/device:scale-110 transition-transform" />
+                        <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.tablet}%</div>
+                        <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.tablet', 'Планшет')}</div>
                       </Card>
                     </div>
                   </motion.div>

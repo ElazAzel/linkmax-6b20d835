@@ -119,14 +119,17 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </p>
 
                 {/* CTA Buttons - Physical & Magnetic */}
-                <div className="flex flex-col gap-6 w-full sm:w-auto items-center">
+                <div className="flex flex-col gap-6 w-full sm:w-auto items-center mt-12">
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
-                        className="h-16 px-10 rounded-[2rem] text-xl font-bold shadow-2xl shadow-primary/30 bg-primary text-primary-foreground hover:scale-105 active:scale-95 transition-all min-w-[240px]"
+                        className="h-20 px-14 rounded-[2.5rem] text-xl font-black bg-primary text-primary-foreground shadow-glass-hover hover:scale-[1.03] active:scale-95 transition-all group overflow-hidden relative"
                     >
-                        {t('landing.v4.hero.cta', 'Start for Free')}
-                        <ArrowRight className="w-6 h-6 ml-2" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                        <span className="relative z-10 flex items-center gap-3 uppercase tracking-widest">
+                            {t('landing.v4.hero.cta', 'Start for Free')}
+                            <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                        </span>
                     </MagneticButton>
 
                     <button

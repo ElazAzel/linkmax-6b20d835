@@ -8,6 +8,7 @@
  * Preview is labeled "предпросмотр", confirmed is labeled "проверено"
  */
 import { memo, useMemo, useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -15,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils/utils';
 import { computeQualityScore, getSearchReadinessStatus, type QualityBreakdown } from '@/lib/seo/quality-score';
 import { fetchPageSearchDiagnostics, type SearchDiagnostics, type ChildSummary } from '@/lib/seo/indexnow-client';
+import { motion } from 'framer-motion';
 import Search from 'lucide-react/dist/esm/icons/search';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Circle from 'lucide-react/dist/esm/icons/circle';
@@ -30,6 +32,7 @@ interface SearchReadinessCardProps {
 }
 
 export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData }: SearchReadinessCardProps) {
+  const { t } = useTranslation();
   // 1. Client-side preview (instant, on every keystroke)
   const preview = useMemo(() => computeQualityScore(pageData), [pageData]);
   
@@ -74,28 +77,30 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         : 'Предпросмотр';
 
   return (
-    <Card className="p-5 space-y-4 glass-card border-white/10 shadow-glass">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <Card className="p-6 space-y-5 glass border-white/10 shadow-glass rounded-[2rem] overflow-hidden group">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-30 pointer-events-none" />
+      
+      <div className="flex items-center justify-between relative">
+        <div className="flex items-center gap-4">
           <div className={cn(
-            'h-10 w-10 rounded-xl flex items-center justify-center',
-            color === 'emerald' && 'bg-emerald-500/15',
-            color === 'amber' && 'bg-amber-500/15',
-            color === 'red' && 'bg-red-500/15',
+            'h-12 w-12 rounded-[1.25rem] flex items-center justify-center shadow-inner transition-transform group-hover:scale-110 duration-500',
+            color === 'emerald' && 'bg-emerald-500/10',
+            color === 'amber' && 'bg-amber-500/10',
+            color === 'red' && 'bg-red-500/10',
           )}>
             <Search className={cn(
-              'h-5 w-5',
-              color === 'emerald' && 'text-emerald-600',
-              color === 'amber' && 'text-amber-600',
+              'h-6 w-6',
+              color === 'emerald' && 'text-emerald-500',
+              color === 'amber' && 'text-amber-500',
               color === 'red' && 'text-red-500',
             )} />
           </div>
           <div>
-            <h3 className="font-bold text-sm">Видимость в поиске</h3>
+            <h3 className="font-black text-sm tracking-tight">{t('seo.readiness.title', 'Видимость в поиске')}</h3>
             <p className={cn(
-              'text-xs font-medium',
-              color === 'emerald' && 'text-emerald-600',
-              color === 'amber' && 'text-amber-600',
+              'text-[10px] font-black uppercase tracking-[0.15em] opacity-80',
+              color === 'emerald' && 'text-emerald-500',
+              color === 'amber' && 'text-amber-500',
               color === 'red' && 'text-red-500',
             )}>
               {label}
@@ -103,12 +108,15 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
           </div>
         </div>
         <div className="text-right">
-          <span className="text-lg font-black tabular-nums">{displayScore}<span className="text-xs text-muted-foreground font-medium">/100</span></span>
-          <div className="flex items-center gap-1 justify-end">
-            {diagLoading && <RefreshCw className="h-2.5 w-2.5 text-muted-foreground animate-spin" />}
+          <div className="flex items-baseline justify-end gap-0.5">
+            <span className="text-2xl font-black tracking-tighter tabular-nums">{displayScore}</span>
+            <span className="text-[10px] text-muted-foreground font-black opacity-40">/100</span>
+          </div>
+          <div className="flex items-center gap-1.5 justify-end">
+            {diagLoading && <RefreshCw className="h-3 w-3 text-muted-foreground animate-spin" />}
             <span className={cn(
-              'text-xs',
-              hasServerData && !isServerStale ? 'text-emerald-600' : 'text-muted-foreground'
+              'text-[9px] font-bold uppercase tracking-widest',
+              hasServerData && !isServerStale ? 'text-emerald-500/70' : 'text-muted-foreground/50'
             )}>
               {sourceLabel}
             </span>
@@ -116,7 +124,18 @@ export const SearchReadinessCard = memo(function SearchReadinessCard({ pageData 
         </div>
       </div>
 
-      <Progress value={displayScore} className="h-2" />
+      <div className="relative h-2.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 shadow-inner">
+        <motion.div 
+          className={cn(
+            'h-full rounded-full shadow-lg transition-all duration-1000',
+            color === 'emerald' && 'bg-emerald-500 shadow-emerald-500/20',
+            color === 'amber' && 'bg-amber-500 shadow-amber-500/20',
+            color === 'red' && 'bg-red-500 shadow-red-500/20',
+          )}
+          initial={{ width: 0 }}
+          animate={{ width: `${displayScore}%` }}
+        />
+      </div>
 
       {/* Status badges */}
       <div className="flex flex-wrap gap-1.5">
