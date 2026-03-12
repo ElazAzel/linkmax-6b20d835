@@ -98,7 +98,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
             <div className="container relative z-10 flex flex-col items-center text-center">
 
                 {/* Badge - Prismatic & Floating */}
-                <div className="mb-10">
+                <div className="mb-6 sm:mb-10">
                     <Badge variant="outline" className="h-10 px-5 py-2 text-sm glass backdrop-blur-md border-white/20 text-foreground/80 gap-2.5 shadow-glass-lg hover:bg-white/10 transition-all cursor-default scale-110">
                         <Sparkles className="w-4 h-4 text-primary" />
                         <span className="font-semibold tracking-tight">{t('landing.v4.hero.badge', 'The Micro-Business OS')}</span>
