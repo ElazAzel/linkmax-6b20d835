@@ -81,7 +81,7 @@ export default function Index() {
         <AISearchOptimizer pageType="homepage" entityName="LinkMAX" entityCategory="SaaS" />
       </Suspense>
 
-      <div className="bg-background min-h-screen text-foreground selection:bg-primary/30 relative overflow-x-hidden">
+      <div className="bg-transparent min-h-screen text-foreground selection:bg-primary/30 relative overflow-x-hidden">
         {/* PREMIUM LAYERS */}
         <Suspense fallback={null}>
           <CanvasBackground />
@@ -116,7 +116,7 @@ export default function Index() {
             </Suspense>
           </div>
 
-          <div className="relative z-20 bg-background">
+          <div className="relative z-20 bg-transparent">
             <Suspense fallback={<div className="h-96" />}>
               <Testimonials />
             </Suspense>

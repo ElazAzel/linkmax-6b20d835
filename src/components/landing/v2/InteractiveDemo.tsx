@@ -93,7 +93,7 @@ function RevealOnScroll({ children, delay = 0 }: { children: React.ReactNode; de
 function MobileDemo({ steps }: { steps: any[] }) {
     const { t } = useTranslation();
     return (
-        <section className="py-16 bg-background">
+        <section className="py-16 bg-transparent">
             <div className="container px-4">
                 <h2 className="text-2xl font-bold text-center mb-10">{t('landing.demo.title', 'How it works')}</h2>
                 <div className="space-y-8">
@@ -146,7 +146,7 @@ function DesktopDemo({ steps }: { steps: any[] }) {
     }, []);
 
     return (
-        <section className="py-24 bg-background">
+        <section className="py-24 bg-transparent">
             <div className="container max-w-6xl px-8">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-16">{t('landing.demo.title', 'How it works')}</h2>
                 <div className="relative flex">

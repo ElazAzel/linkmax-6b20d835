@@ -78,11 +78,11 @@ function BackgroundPlane({ opacity = 0.4 }: { opacity?: number }) {
 export const CanvasBackground = () => {
     return (
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden bg-background">
-            {/* Fallback CSS Aurora (SEO/Bot friendly) */}
-            <div className="absolute inset-0 bg-aurora opacity-50 block md:hidden" />
+            {/* Fallback CSS Aurora (Always active behind WebGL for depth) */}
+            <div className="absolute inset-0 bg-aurora opacity-70" />
             
-            {/* High-fidelity WebGL Layer */}
-            <div className="absolute inset-0 hidden md:block opacity-60 dark:opacity-40 transition-opacity duration-1000">
+            {/* High-fidelity WebGL Layer - Enabled for all devices with adaptive opacity */}
+            <div className="absolute inset-0 opacity-40 dark:opacity-20 transition-opacity duration-1000">
                 <Canvas camera={{ position: [0, 0, 1] }}>
                     <BackgroundPlane />
                 </Canvas>

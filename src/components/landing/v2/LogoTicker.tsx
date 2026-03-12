@@ -28,7 +28,7 @@ export const LogoTicker = () => {
     }));
 
     return (
-        <div className="py-10 bg-background/50 border-y border-white/5 backdrop-blur-sm overflow-hidden">
+        <div className="py-10 bg-transparent border-y border-white/5 backdrop-blur-sm overflow-hidden">
             <div className="container mx-auto px-4 mb-4 text-center">
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">{t('landing.ticker.title', 'Trusted by creators worldwide')}</p>
             </div>

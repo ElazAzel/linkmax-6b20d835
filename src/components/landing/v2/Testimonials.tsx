@@ -53,7 +53,7 @@ export const Testimonials = () => {
     ];
 
     return (
-        <SectionWrapper className="overflow-hidden z-10 bg-background">
+        <SectionWrapper className="overflow-hidden z-10 bg-transparent">
             {/* Subtle background glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
 

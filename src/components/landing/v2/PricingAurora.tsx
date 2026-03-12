@@ -64,7 +64,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
     ];
 
     return (
-        <SectionWrapper id="pricing" className="overflow-hidden z-10 bg-background">
+        <SectionWrapper id="pricing" className="overflow-hidden z-10 bg-transparent">
             <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/8 blur-[100px] pointer-events-none" />
 

@@ -16,7 +16,7 @@ export const PremiumFooter = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="border-t border-white/5 py-24 pb-32 px-6 bg-background relative overflow-hidden">
+        <footer className="border-t border-white/5 py-24 pb-32 px-6 bg-transparent relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
             
             <div className="max-w-7xl mx-auto relative z-10">
