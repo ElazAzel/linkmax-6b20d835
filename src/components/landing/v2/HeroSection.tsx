@@ -98,7 +98,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
             <div className="container relative z-10 flex flex-col items-center text-center">
 
                 {/* Badge - Prismatic & Floating */}
-                <div className="mb-10">
+                <div className="mb-6 sm:mb-10">
                     <Badge variant="outline" className="h-10 px-5 py-2 text-sm glass backdrop-blur-md border-white/20 text-foreground/80 gap-2.5 shadow-glass-lg hover:bg-white/10 transition-all cursor-default scale-110">
                         <Sparkles className="w-4 h-4 text-primary" />
                         <span className="font-semibold tracking-tight">{t('landing.v4.hero.badge', 'The Micro-Business OS')}</span>
@@ -106,37 +106,37 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
 
                 {/* Headline - Editorial Boldness */}
-                <h1 className="max-w-6xl text-display mb-10 tracking-[-0.04em] leading-[0.85] text-balance">
+                <h1 className="max-w-6xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-10 tracking-[-0.04em] leading-[0.9] text-balance">
                     <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
-                    <span className="block mt-6 pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
+                    <span className="block mt-3 sm:mt-6 pb-3 sm:pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
                         {t('landing.v4.hero.titleEnd', 'in one place')}
                     </span>
                 </h1>
 
                 {/* Subtitle - Refined Contrast */}
-                <p className="max-w-xl text-lg md:text-xl text-muted-foreground/80 mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
+                <p className="max-w-xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground/80 mb-8 sm:mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
                     {t('landing.v4.hero.subtitle', 'Page builder, lead management, click analytics. Everything your small business needs - no code required.')}
                 </p>
 
                 {/* CTA Buttons - Physical & Magnetic */}
-                <div className="flex flex-col gap-8 w-full sm:w-auto items-center mt-6 relative">
+                <div className="flex flex-col gap-5 sm:gap-8 w-full sm:w-auto items-center mt-4 sm:mt-6 relative px-4 sm:px-0">
                     <div className="absolute -inset-10 bg-primary/10 blur-[60px] rounded-full opacity-50 pointer-events-none" />
                     
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
-                        className="h-16 md:h-24 px-8 md:px-16 rounded-[2rem] md:rounded-[3rem] text-lg md:text-2xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none"
+                        className="h-14 sm:h-16 md:h-20 px-8 sm:px-12 md:px-16 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] text-base sm:text-lg md:text-xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none w-full sm:w-auto"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-                        <span className="relative z-10 flex items-center gap-3 md:gap-4 uppercase tracking-[0.1em] md:tracking-[0.2em]">
+                        <span className="relative z-10 flex items-center justify-center gap-3 uppercase tracking-[0.1em] md:tracking-[0.15em]">
                             {t('landing.v4.hero.cta', 'Start for Free')}
-                            <ArrowRight className="h-6 w-6 md:h-7 md:w-7 group-hover:translate-x-2 transition-transform duration-500" />
+                            <ArrowRight className="h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-500" />
                         </span>
                     </MagneticButton>
 
                     <button
                         onClick={onExamples}
-                        className="inline-flex items-center gap-3 text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.3em]"
+                        className="inline-flex items-center gap-3 text-xs sm:text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.2em] sm:tracking-[0.3em]"
                     >
                         <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
                             <Play className="w-3 h-3 fill-current group-hover:scale-125 transition-transform duration-500" />
