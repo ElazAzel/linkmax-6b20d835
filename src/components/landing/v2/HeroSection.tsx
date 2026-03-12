@@ -106,9 +106,9 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
 
                 {/* Headline - Editorial Boldness */}
-                <h1 className="max-w-6xl text-display mb-10 tracking-[-0.04em] leading-[0.85] text-balance">
+                <h1 className="max-w-6xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-10 tracking-[-0.04em] leading-[0.9] text-balance">
                     <span className="block text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]">{t('landing.v4.hero.titleStart', 'Website, CRM & Analytics')}</span>
-                    <span className="block mt-6 pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
+                    <span className="block mt-3 sm:mt-6 pb-3 sm:pb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary animate-[gradient-shift_6s_ease_infinite] bg-[length:200%_auto] filter drop-shadow-[0_4px_12px_rgba(var(--primary-rgb),0.3)]">
                         {t('landing.v4.hero.titleEnd', 'in one place')}
                     </span>
                 </h1>
