@@ -142,7 +142,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                                     ))}
                                 </ul>
 
-                                <MagneticButton className="w-full h-20 rounded-2xl text-lg font-black uppercase tracking-[0.2em] bg-primary text-white shadow-glass-lg hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('pro')}>
+                                <MagneticButton className="w-full h-14 sm:h-16 md:h-20 rounded-2xl text-sm sm:text-base md:text-lg font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] bg-primary text-white shadow-glass-lg hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all" onClick={() => onPlanSelect('pro')}>
                                     {t('landing.pricing.proCta', 'Start Pro Trial')}
                                 </MagneticButton>
                             </div>
