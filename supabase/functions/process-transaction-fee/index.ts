@@ -90,11 +90,11 @@ serve(async (req) => {
     if (txError) throw txError;
 
     // 3. Update the wallet balance
-    const newBalance = Number(wallet.balance) + netAmount;
+    const newBalance = Number(wallet!.balance) + netAmount;
     const { error: updateError } = await supabaseClient
       .from('user_wallets')
       .update({ balance: newBalance, updated_at: new Date().toISOString() })
-      .eq('id', wallet.id)
+      .eq('id', wallet!.id)
 
     if (updateError) throw updateError;
 
