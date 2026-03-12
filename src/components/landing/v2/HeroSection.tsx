@@ -114,7 +114,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </h1>
 
                 {/* Subtitle - Refined Contrast */}
-                <p className="max-w-xl text-lg md:text-xl text-muted-foreground/80 mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
+                <p className="max-w-xl text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground/80 mb-8 sm:mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
                     {t('landing.v4.hero.subtitle', 'Page builder, lead management, click analytics. Everything your small business needs - no code required.')}
                 </p>
 
