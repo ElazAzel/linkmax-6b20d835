@@ -544,35 +544,35 @@ function LeadCard({ lead, onClick, onQuickReply, isRepeat }: LeadCardProps) {
               <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={handleWhatsAppReply}
-                  className="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title="WhatsApp"
                 >
-                  <MessageCircle className="h-4 w-4" />
+                  <MessageCircle className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleTelegramReply}
-                  className="h-9 w-9 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20 hover:bg-blue-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 border border-blue-500/20 hover:bg-blue-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title="Telegram"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleCallReply}
-                  className="h-9 w-9 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/20 hover:bg-violet-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                  className="h-11 w-11 rounded-xl bg-violet-500/10 text-violet-600 border border-violet-500/20 hover:bg-violet-500/20 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                   title={t('crm.quickReply.call', 'Позвонить')}
                 >
-                  <Phone className="h-4 w-4" />
+                  <Phone className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleMarkContacted}
-                  className="h-9 px-3 rounded-xl bg-foreground/5 text-foreground/60 border border-foreground/10 hover:bg-foreground/10 flex items-center justify-center transition-all text-[10px] font-black uppercase tracking-widest"
+                  className="h-11 px-4 rounded-xl bg-foreground/5 text-foreground/60 border border-foreground/10 hover:bg-foreground/10 flex items-center justify-center transition-all text-[10px] font-black uppercase tracking-widest"
                 >
                   <CheckCheck className="h-4 w-4 mr-1.5 text-emerald-500" />
                   {t('crm.quickReply.done', 'Готово')}
                 </button>
               </div>
             ) : (
-              <Badge className={cn("text-[10px] font-black uppercase tracking-widest h-8 px-4 rounded-xl shadow-glass-sm", statusConfig.bg, statusConfig.text, "border-none")}>
+              <Badge className={cn("text-[10px] font-black uppercase tracking-widest h-10 px-4 rounded-xl shadow-glass-sm", statusConfig.bg, statusConfig.text, "border-none")}>
                 {t(statusConfig.i18nKey)}
               </Badge>
             )}

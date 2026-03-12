@@ -181,7 +181,7 @@ export const HomeScreen = memo(function HomeScreen({
         actions={pageSwitcher}
       />
 
-      <div className="px-5 py-6 space-y-6">
+      <div className="px-4 md:px-5 py-6 space-y-6">
         {/* Activation Checklist — ABOVE page card for visibility */}
         {activation.isVisible && !checklistDismissed && (
           <ActivationChecklist
@@ -232,7 +232,7 @@ export const HomeScreen = memo(function HomeScreen({
         )}
 
         {/* Primary Page Card */}
-        <Card className="p-8 space-y-6 glass border-white/20 shadow-glass-lg relative overflow-hidden group rounded-[3rem]">
+        <Card className="p-5 md:p-8 space-y-6 glass border-white/20 shadow-glass-lg relative overflow-hidden group rounded-[2.5rem] md:rounded-[3rem]">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-30 group-hover:opacity-50 transition-opacity duration-1000 -z-10" />
           
           {/* Page Header */}

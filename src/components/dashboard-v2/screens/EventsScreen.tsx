@@ -33,11 +33,11 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
 import UserCheck from 'lucide-react/dist/esm/icons/user-check';
 import Crown from 'lucide-react/dist/esm/icons/crown';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { toast } from 'sonner';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
 import { getPublicPageUrl } from '@/lib/utils/url-helpers';
+import { DashboardHeader } from '../layout/DashboardHeader';
 
 interface EventData {
   id: string;
@@ -81,7 +81,6 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       if (!user) return;
 
       try {
-        // Fetch events with page info
         const { data: eventsData, error } = await supabase
           .from('events')
           .select(`
@@ -105,7 +104,6 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
         if (error) throw error;
 
-        // Get registration counts for each event
         const eventsWithStats: EventData[] = await Promise.all(
           (eventsData || []).map(async (event) => {
             const { data: regs } = await supabase
@@ -155,12 +153,10 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
     fetchEvents();
   }, [user, i18n.language, t]);
 
-  // Filter events by search
   const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Group events by status
   const upcomingEvents = filteredEvents.filter(e =>
     e.status === 'published' && (!e.startAt || new Date(e.startAt) >= new Date())
   );
@@ -192,13 +188,6 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
       if (error) throw error;
 
-      // Get tickets separately
-      const { data: ticketsData } = await supabase
-        .from('event_tickets')
-        .select('registration_id, ticket_code, status, checked_in_at')
-        .in('registration_id', (data || []).map(r => r.attendee_email)); // We'll match by registration later
-
-      // Create CSV
       const headers = [t('events.csvName', 'Имя'), 'Email', t('events.csvPhone', 'Телефон'), t('events.csvStatus', 'Статус'), t('events.csvDate', 'Дата регистрации')];
       const rows = (data || []).map(r => [
         r.attendee_name,
@@ -225,7 +214,6 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   };
 
   const renderEventCard = (event: EventData) => {
-    const isUpcoming = event.startAt && new Date(event.startAt) > new Date();
     const statusColors: Record<string, string> = {
       draft: 'bg-muted text-muted-foreground',
       published: 'bg-emerald-500/10 text-emerald-600',
@@ -235,32 +223,32 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
     return (
       <Card
         key={event.id}
-        className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+        className="p-5 glass border-white/10 hover:bg-white/5 transition-all cursor-pointer rounded-[2rem] active:scale-[0.98] shadow-glass"
         onClick={() => navigate(`/dashboard/events/${event.id}`)}
       >
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold truncate">{event.title}</h3>
-              <Badge className={cn('text-xs', statusColors[event.status])}>
+            <div className="flex items-center gap-2 mb-2">
+              <h3 className="text-base font-bold truncate">{event.title}</h3>
+              <Badge className={cn('text-[9px] font-black uppercase tracking-widest px-2 h-5 rounded-md border-none', statusColors[event.status])}>
                 {t(`events.status.${event.status}`, event.status)}
               </Badge>
               {event.isPaid && (
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-[9px] font-black border-white/10">
                   {event.price} {event.currency}
                 </Badge>
               )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-3">
+            <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mb-4">
               {event.startAt && (
-                <span className="flex items-center gap-1">
-                  <CalendarDays className="h-3 w-3" />
+                <span className="flex items-center gap-1.5">
+                  <CalendarDays className="h-3.5 w-3.5" />
                   {format(new Date(event.startAt), 'd MMM yyyy, HH:mm', { locale })}
                 </span>
               )}
-              <span className="flex items-center gap-1">
-                <MapPin className="h-3 w-3" />
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5" />
                 {event.locationType === 'online'
                   ? t('events.online', 'Онлайн')
                   : t('events.offline', 'Офлайн')}
@@ -268,67 +256,69 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 text-sm">
-                <Users className="h-4 w-4 text-primary" />
-                <span className="font-medium">{event.totalRegistrations}</span>
+            <div className="flex items-center gap-5">
+              <div className="flex items-center gap-2 text-sm">
+                <Users className="h-4 w-4 text-primary/40" />
+                <span className="font-bold">{event.totalRegistrations}</span>
                 {event.capacity && (
-                  <span className="text-muted-foreground">/ {event.capacity}</span>
+                  <span className="text-muted-foreground opacity-30">/ {event.capacity}</span>
                 )}
               </div>
-              <div className="flex items-center gap-1.5 text-sm">
-                <UserCheck className="h-4 w-4 text-emerald-500" />
-                <span>{event.checkedIn}</span>
+              <div className="flex items-center gap-2 text-sm">
+                <UserCheck className="h-4 w-4 text-emerald-500/40" />
+                <span className="font-bold">{event.checkedIn}</span>
               </div>
               {event.pendingApproval > 0 && (
-                <Badge variant="secondary" className="text-xs">
+                <Badge variant="secondary" className="text-[9px] font-black bg-amber-500/10 text-amber-600 border-none">
                   {event.pendingApproval} {t('events.pending', 'ожидают')}
                 </Badge>
               )}
             </div>
           </div>
 
-          <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
+          <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/5 opacity-40">
+            <ChevronRight className="h-5 w-5" />
+          </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t">
+        <div className="flex items-center gap-2 mt-5 pt-5 border-t border-white/5">
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs gap-1.5"
+            className="h-10 flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest gap-2 glass border-white/10"
             onClick={(e) => {
               e.stopPropagation();
               handleOpenScanner(event.id);
             }}
           >
-            <QrCode className="h-3.5 w-3.5" />
+            <QrCode className="h-4 w-4" />
             {t('events.scanner', 'Сканер')}
             {!isPremium && <Crown className="h-3 w-3 text-amber-500" />}
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs gap-1.5"
+            className="h-10 flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest gap-2 glass border-white/10"
             onClick={(e) => {
               e.stopPropagation();
               handleExportRegistrations(event.id, event.title);
             }}
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className="h-4 w-4" />
             {t('events.export', 'Экспорт')}
             {!isPremium && <Crown className="h-3 w-3 text-amber-500" />}
           </Button>
           <Button
             variant="ghost"
-            size="sm"
-            className="h-8 text-xs gap-1.5 ml-auto"
+            size="icon"
+            className="h-10 w-10 rounded-xl glass border-white/5 hover:bg-white/10"
             onClick={(e) => {
               e.stopPropagation();
               window.open(getPublicPageUrl(event.pageSlug), '_blank');
             }}
           >
-            <ExternalLink className="h-3.5 w-3.5" />
+            <ExternalLink className="h-4 w-4 opacity-40 hover:opacity-100 transition-opacity" />
           </Button>
         </div>
       </Card>
@@ -348,100 +338,104 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
   return (
     <div className={cn('min-h-screen safe-area-top', className)}>
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/10">
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <div>
-              <h1 className="text-lg font-bold">
-                {t('events.title', 'События')}
-              </h1>
-              <p className="text-xs text-muted-foreground">
-                {events.length} {t('events.eventsCount', 'событий')}
-              </p>
-            </div>
-          </div>
+      <DashboardHeader
+        onMenuClick={() => {}}
+        title={t('events.title', 'События')}
+        subtitle={`${events.length} ${t('events.eventsCount', 'событий')}`}
+      />
 
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t('events.search', 'Поиск событий...')}
-              className="pl-9 h-10 rounded-xl"
-            />
+      <div className="sticky top-[80px] md:top-[96px] z-30 bg-background/95 backdrop-blur-xl border-b border-white/5">
+        <div className="px-5 py-4">
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500" />
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t('events.search', 'Поиск событий...')}
+                className="pl-11 h-14 rounded-2xl text-base shadow-glass-sm bg-white/5 border-white/10 focus:bg-white/10 focus:border-primary/20 transition-all font-medium"
+              />
+            </div>
           </div>
         </div>
       </div>
 
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6">
+        <div className="p-5 space-y-8">
           {events.length === 0 ? (
-            <Card className="p-8 text-center">
-              <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="font-semibold mb-2">
+            <Card className="p-12 text-center glass border-white/10 shadow-glass-lg rounded-[2.5rem]">
+              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10">
+                <Calendar className="h-10 w-10 text-muted-foreground opacity-30" />
+              </div>
+              <h3 className="text-xl font-black mb-2">
                 {t('events.noEvents', 'Нет событий')}
               </h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground mb-8 px-4 font-medium leading-relaxed">
                 {t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
               </p>
-              <Button onClick={() => navigate('/dashboard/home?tab=editor')}>
+              <Button onClick={() => navigate('/dashboard/home?tab=editor')} className="h-14 px-8 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-glass-lg hover:scale-105 active:scale-95 transition-all">
                 <Plus className="h-4 w-4 mr-2" />
                 {t('events.addEventBlock', 'Добавить блок')}
               </Button>
             </Card>
           ) : filteredEvents.length === 0 ? (
-            <Card className="p-6 text-center">
-              <Search className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">
+            <Card className="p-12 text-center glass border-white/10 shadow-glass rounded-[2rem]">
+              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
+                <Search className="h-8 w-8 text-muted-foreground opacity-30" />
+              </div>
+              <p className="font-bold text-muted-foreground">
                 {t('events.noSearchResults', 'Ничего не найдено')}
               </p>
             </Card>
           ) : (
-            <>
-              {/* Upcoming Events */}
+            <div className="space-y-8 pb-24">
               {upcomingEvents.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
                     <Clock className="h-4 w-4" />
                     {t('events.upcoming', 'Предстоящие')}
-                    <Badge variant="secondary" className="ml-auto">{upcomingEvents.length}</Badge>
+                    <Badge variant="secondary" className="ml-auto bg-primary/10 text-primary border-none shadow-glass-sm h-5 font-black">{upcomingEvents.length}</Badge>
                   </h2>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {upcomingEvents.map(renderEventCard)}
                   </div>
                 </section>
               )}
 
-              {/* Draft Events */}
               {draftEvents.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
+                    <PenTool className="h-4 w-4" />
                     {t('events.drafts', 'Черновики')}
-                    <Badge variant="outline" className="ml-auto">{draftEvents.length}</Badge>
+                    <Badge variant="outline" className="ml-auto border-white/10 bg-white/5 h-5 font-black">{draftEvents.length}</Badge>
                   </h2>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {draftEvents.map(renderEventCard)}
                   </div>
                 </section>
               )}
 
-              {/* Past Events */}
               {pastEvents.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-5 px-1 flex items-center gap-2.5">
+                    <History className="h-4 w-4" />
                     {t('events.past', 'Прошедшие')}
-                    <Badge variant="outline" className="ml-auto">{pastEvents.length}</Badge>
+                    <Badge variant="outline" className="ml-auto border-white/10 bg-white/5 h-5 font-black">{pastEvents.length}</Badge>
                   </h2>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {pastEvents.map(renderEventCard)}
                   </div>
                 </section>
               )}
-            </>
+            </div>
           )}
         </div>
       </ScrollArea>
     </div>
   );
 });
+
+// Missing imports fix
+import History from 'lucide-react/dist/esm/icons/history';
+import PenTool from 'lucide-react/dist/esm/icons/pen-tool';

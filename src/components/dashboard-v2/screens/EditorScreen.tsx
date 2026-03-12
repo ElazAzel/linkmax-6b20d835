@@ -234,24 +234,24 @@ export const EditorScreen = memo(function EditorScreen({
             </div>
 
             {/* Center: Undo/Redo */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-9 w-9 p-0 rounded-xl"
+                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
                 onClick={handleUndoWithFriction}
                 disabled={!canUndo}
               >
-                <Undo2 className="h-4 w-4" />
+                <Undo2 className="h-5 w-5 md:h-4 md:w-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-9 w-9 p-0 rounded-xl"
+                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
                 onClick={handleRedoWithFriction}
                 disabled={!canRedo}
               >
-                <Redo2 className="h-4 w-4" />
+                <Redo2 className="h-5 w-5 md:h-4 md:w-4" />
               </Button>
             </div>
 
@@ -260,20 +260,20 @@ export const EditorScreen = memo(function EditorScreen({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-9 w-9 p-0 rounded-xl"
+                className="h-11 w-11 p-0 rounded-2xl md:h-9 md:w-9 md:rounded-xl"
                 onClick={onPreview}
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-5 w-5 md:h-4 md:w-4" />
               </Button>
               <Button
                 size="sm"
                 className={cn(
-                  "h-9 rounded-xl font-semibold px-4",
-                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground"
+                  "h-11 md:h-9 rounded-2xl md:rounded-xl font-black text-[10px] uppercase tracking-widest px-5 md:px-4",
+                  !isPublished && "bg-primary hover:bg-primary/90 text-primary-foreground shadow-glass"
                 )}
                 onClick={onShare}
               >
-                <Share2 className="h-4 w-4 mr-1.5" />
+                <Share2 className="h-4 w-4 md:h-3.5 md:w-3.5 mr-2 md:mr-1.5" />
                 {isPublished ? t('editor.share', 'Поделиться') : t('editor.publish', 'Опубликовать')}
               </Button>
             </div>
@@ -281,17 +281,17 @@ export const EditorScreen = memo(function EditorScreen({
         </div>
 
         {/* Quick tools bar */}
-        <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide border-t border-border/5">
+        <div className="px-4 py-2.5 flex gap-2.5 overflow-x-auto scrollbar-hide border-t border-white/5 bg-white/5 backdrop-blur-md">
           {/* Show templates only for pages without content */}
           {!hasContent && (
             <Button
               variant="outline"
               size="sm"
-              className="h-8 rounded-xl shrink-0 gap-1.5"
+              className="h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm border-white/10 glass"
               onClick={onOpenTemplates}
             >
-              <LayoutTemplate className="h-3.5 w-3.5" />
-              {t('editor.templates', 'Шаблоны')}
+              <LayoutTemplate className="h-4 w-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.templates', 'Шаблоны')}</span>
             </Button>
           )}
 
@@ -300,11 +300,11 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 rounded-xl shrink-0 gap-1.5"
+              className="h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm border-white/10 glass"
               onClick={onOpenVersions}
             >
-              <History className="h-3.5 w-3.5" />
-              {t('editor.versions', 'История')}
+              <History className="h-4 w-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.versions', 'История')}</span>
             </Button>
           )}
 
@@ -313,11 +313,11 @@ export const EditorScreen = memo(function EditorScreen({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 rounded-xl shrink-0 gap-1.5"
+              className="h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm border-white/10 glass"
               onClick={() => setStructureOpen(true)}
             >
-              <Layers className="h-3.5 w-3.5" />
-              {t('editor.structure', 'Структура')}
+              <Layers className="h-4 w-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.structure', 'Структура')}</span>
             </Button>
           )}
 
@@ -327,20 +327,26 @@ export const EditorScreen = memo(function EditorScreen({
               <Button
                 variant={reviewMode === 'problematic' ? 'default' : 'outline'}
                 size="sm"
-                className="h-8 rounded-xl shrink-0 gap-1.5"
+                className={cn(
+                  "h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm transition-all",
+                  reviewMode === 'problematic' ? "bg-red-500 text-white border-none" : "border-white/10 glass"
+                )}
                 onClick={() => toggleReviewMode('problematic')}
               >
-                <AlertCircle className="h-3.5 w-3.5" />
-                {t('editor.problematic', 'Проблемные')}
+                <AlertCircle className="h-4 w-4" />
+                <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.problematic', 'Проблемные')}</span>
               </Button>
               <Button
                 variant={reviewMode === 'cta_contact' ? 'default' : 'outline'}
                 size="sm"
-                className="h-8 rounded-xl shrink-0 gap-1.5"
+                className={cn(
+                  "h-10 rounded-xl shrink-0 gap-2 px-4 shadow-glass-sm transition-all",
+                  reviewMode === 'cta_contact' ? "bg-emerald-500 text-white border-none" : "border-white/10 glass"
+                )}
                 onClick={() => toggleReviewMode('cta_contact')}
               >
-                <MousePointerClick className="h-3.5 w-3.5" />
-                {t('editor.cta', 'CTA')}
+                <MousePointerClick className="h-4 w-4" />
+                <span className="text-[10px] font-black uppercase tracking-widest">{t('editor.cta', 'CTA')}</span>
               </Button>
             </>
           )}
@@ -352,19 +358,21 @@ export const EditorScreen = memo(function EditorScreen({
         const top = intelligence.nextActions.find((a) => a.id !== dismissedHint);
         if (!top) return null;
         return (
-          <div className="mx-4 mt-3 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2">
-            <Lightbulb className="h-4 w-4 text-primary shrink-0" />
-            <span className="text-xs text-foreground/80 flex-1 truncate">
+          <div className="mx-4 mt-4 flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3.5 shadow-glass-sm backdrop-blur-sm">
+            <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Lightbulb className="h-4.5 w-4.5 text-primary" />
+            </div>
+            <span className="text-xs font-medium text-foreground/80 flex-1 leading-relaxed">
               {t(top.titleKey, top.actionType.replace(/_/g, ' '))}
             </span>
-            <Badge variant="outline" className="text-xs shrink-0">
+            <Badge variant="outline" className="text-[10px] font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
               {top.priority}
             </Badge>
             <button
               onClick={() => setDismissedHint(top.id)}
-              className="p-0.5 rounded hover:bg-muted"
+              className="p-1.5 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
             >
-              <X className="h-3 w-3 text-muted-foreground" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         );

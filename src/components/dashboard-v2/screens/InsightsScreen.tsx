@@ -281,27 +281,27 @@ export const InsightsScreen = memo(function InsightsScreen({
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="grid w-full grid-cols-5 h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1.5 items-center gap-1.5 shadow-inner glass-subtle">
-                <TabsTrigger value="overview" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+              <TabsList className="flex overflow-x-auto scrollbar-hide w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1.5 items-center gap-1.5 shadow-inner glass-subtle">
+                <TabsTrigger value="overview" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <ChartBar className="h-3.5 w-3.5 mr-1 shrink-0" />
-                  <span className="hidden sm:inline">{t('analytics.tabs.overview', 'Обзор')}</span>
+                  <span>{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="traffic" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
-                  <span className="hidden sm:inline">{t('analytics.tabs.traffic', 'Трафик')}</span>
+                  <span>{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="blocks" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <Target className="h-3.5 w-3.5 mr-1 shrink-0" />
-                  <span className="hidden sm:inline">{t('analytics.tabs.blocks', 'Блоки')}</span>
+                  <span>{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="funnel" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <TrendingUp className="h-3.5 w-3.5 mr-1 shrink-0" />
-                  <span className="hidden sm:inline">{t('analytics.tabs.funnel', 'Воронка')}</span>
+                  <span>{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <TabsTrigger value="experiments" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                     <FlaskConical className="h-3.5 w-3.5 mr-1 shrink-0" />
-                    <span className="hidden sm:inline">{t('analytics.tabs.experiments', 'Тесты')}</span>
+                    <span>{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>
                 )}
               </TabsList>
@@ -430,21 +430,27 @@ export const InsightsScreen = memo(function InsightsScreen({
                   {/* Devices */}
                   <motion.div variants={itemVariants} className="space-y-4 pt-2">
                     <h2 className="text-sm font-black uppercase tracking-[0.2em] px-1 opacity-60">{t('dashboard.insights.devices', 'Устройства')}</h2>
-                    <div className="grid grid-cols-3 gap-3">
-                      <Card className="p-4 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
-                        <Smartphone className="h-5 w-5 mx-auto mb-2 text-blue-500 group-hover/device:scale-110 transition-transform" />
-                        <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.mobile}%</div>
-                        <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.mobile', 'Телефон')}</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
+                        <Smartphone className="h-6 w-6 sm:h-5 sm:w-5 text-blue-500 group-hover/device:scale-110 transition-transform" />
+                        <div className="flex-1 sm:flex-none text-left sm:text-center">
+                          <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.mobile}%</div>
+                          <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.mobile', 'Телефон')}</div>
+                        </div>
                       </Card>
-                      <Card className="p-4 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
-                        <Monitor className="h-5 w-5 mx-auto mb-2 text-emerald-500 group-hover/device:scale-110 transition-transform" />
-                        <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.desktop}%</div>
-                        <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.desktop', 'ПК')}</div>
+                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
+                        <Monitor className="h-6 w-6 sm:h-5 sm:w-5 text-emerald-500 group-hover/device:scale-110 transition-transform" />
+                        <div className="flex-1 sm:flex-none text-left sm:text-center">
+                          <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.desktop}%</div>
+                          <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.desktop', 'ПК')}</div>
+                        </div>
                       </Card>
-                      <Card className="p-4 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
-                        <Globe className="h-5 w-5 mx-auto mb-2 text-violet-500 group-hover/device:scale-110 transition-transform" />
-                        <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.tablet}%</div>
-                        <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.tablet', 'Планшет')}</div>
+                      <Card className="p-5 sm:p-4 flex sm:flex-col items-center gap-4 sm:gap-2 text-center glass border-white/10 shadow-glass rounded-3xl group/device hover:bg-white/5 transition-colors">
+                        <Globe className="h-6 w-6 sm:h-5 sm:w-5 text-violet-500 group-hover/device:scale-110 transition-transform" />
+                        <div className="flex-1 sm:flex-none text-left sm:text-center">
+                          <div className="text-2xl font-black text-gradient tabular-nums">{devicePercentages.tablet}%</div>
+                          <div className="text-[10px] uppercase font-black tracking-widest text-muted-foreground opacity-50">{t('dashboard.insights.tablet', 'Планшет')}</div>
+                        </div>
                       </Card>
                     </div>
                   </motion.div>

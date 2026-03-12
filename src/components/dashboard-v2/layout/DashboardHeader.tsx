@@ -32,31 +32,35 @@ export const DashboardHeader = memo(function DashboardHeader({
   const { t } = useTranslation();
 
   return (
-    <header className="h-20 md:h-24 glass-subtle backdrop-blur-3xl border-b border-white/5 sticky top-0 z-40 flex items-center justify-between px-5 md:px-8 shadow-glass translate-z-0">
-      <div className="flex items-center gap-5">
+    <header className="h-20 md:h-24 glass-subtle backdrop-blur-3xl border-b border-white/5 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 shadow-glass translate-z-0">
+      <div className="flex items-center gap-3 md:gap-5 min-w-0">
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden h-12 w-12 rounded-2xl hover:bg-white/10 transition-all active:scale-95"
+          className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
           onClick={onMenuClick}
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-5 w-5" />
         </Button>
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-0">
           {title && (
-            <h1 className="text-lg font-black tracking-tight text-foreground flex items-center gap-2">
-              {title}
-              {activeTab && <span className="opacity-20 text-sm font-medium">/ {activeTab}</span>}
+            <h1 className="text-base md:text-lg font-black tracking-tight text-foreground flex items-center gap-2 truncate">
+              <span className="truncate">{title}</span>
+              {activeTab && <span className="opacity-20 text-xs md:text-sm font-medium shrink-0">/ {activeTab}</span>}
             </h1>
           )}
-          {subtitle && <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-50">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-muted-foreground opacity-50 truncate">
+              {subtitle}
+            </p>
+          )}
           {!title && pageSwitcher}
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4 shrink-0">
         {actions}
-        <div className="hidden sm:flex items-center gap-2.5 px-4 py-2 rounded-full glass-subtle border border-white/5 shadow-inner">
+        <div className="hidden lg:flex items-center gap-2.5 px-4 py-2 rounded-full glass-subtle border border-white/5 shadow-inner">
           <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
             {t('dashboard.header.live', 'Live Platform')}

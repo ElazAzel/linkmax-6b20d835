@@ -183,8 +183,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     }
 
     onInsert(blockType);
-    setIsOpen(false);
-    setSearchQuery('');
+    
+    // Use a small delay to ensure onInsert processing doesn't block sheet closure
+    // and to handle potential Radix UI state conflicts during rapid re-renders
+    setTimeout(() => {
+      setIsOpen(false);
+      setSearchQuery('');
+    }, 100);
   };
 
   const getReasonTooltip = (blockType: string): string | null => {

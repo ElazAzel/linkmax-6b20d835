@@ -68,7 +68,7 @@ export const DashboardLayout = memo(function DashboardLayout({
               duration: 0.5, 
               ease: [0.22, 1, 0.36, 1] 
             }}
-            className="w-full h-full p-4 md:p-8"
+            className="w-full h-full p-2 md:p-8"
           >
             <div className="max-w-7xl mx-auto glass rounded-[2.5rem] min-h-full shadow-glass-lg border border-white/5 overflow-hidden">
               {children}

@@ -142,6 +142,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
     return (
         <div className="min-h-screen safe-area-top">
             <DashboardHeader
+                onMenuClick={() => {}}
                 title={t('dashboard.leads.title', 'Лиды (CRM)')}
                 actions={
                     <Button
@@ -159,8 +160,8 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
             <div className="px-5 py-4 space-y-4">
                 {/* Status Filter Pills */}
-                <div className="overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-2 min-w-max">
+                <div className="overflow-x-auto scrollbar-hide pb-2">
+                    <div className="flex gap-3 min-w-max px-0.5">
                         {STATUS_FILTERS.map((status) => {
                             const count = stats[status];
                             const isActive = statusFilter === status;
@@ -169,17 +170,22 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                     key={status}
                                     onClick={() => setStatusFilter(status)}
                                     className={cn(
-                                        "h-9 px-4 rounded-full text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2",
+                                        "h-11 px-5 rounded-2xl text-[10px] uppercase font-black tracking-widest whitespace-nowrap transition-all flex items-center gap-2.5 shadow-glass-sm",
                                         isActive
-                                            ? "bg-foreground text-background shadow-lg scale-105"
-                                            : "bg-muted/60 text-muted-foreground hover:bg-muted"
+                                            ? "bg-primary text-primary-foreground shadow-lg scale-105"
+                                            : "bg-white/5 text-muted-foreground/60 hover:bg-white/10 border border-white/10"
                                     )}
                                 >
                                     {status === 'all'
                                         ? t('dashboard.leads.filterAll', 'Все')
                                         : t(`crm.status.${status}`)
                                     }
-                                    <span className="text-xs opacity-70">({count})</span>
+                                    <Badge variant="secondary" className={cn(
+                                        "h-5 min-w-[20px] px-1 rounded-md text-[9px] border-none",
+                                        isActive ? "bg-white/20 text-white" : "bg-white/10"
+                                    )}>
+                                        {count}
+                                    </Badge>
                                 </button>
                             );
                         })}
@@ -188,69 +194,84 @@ export const LeadsScreen = memo(function LeadsScreen() {
 
                 {/* Search */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder={t('dashboard.leads.search', 'Поиск по лидам...')}
-                        className="pl-9 h-11 rounded-xl bg-card border-none shadow-sm"
+                        className="pl-11 h-12 rounded-2xl bg-white/5 border-white/10 shadow-glass-sm text-base"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
 
                 {/* Lead List */}
-                <div className="space-y-3 pb-24 h-[calc(100vh-260px)] overflow-y-auto hidden-scrollbar">
+                <div className="space-y-4 pb-24">
                     {loading ? (
-                        <div className="flex flex-col items-center justify-center py-12 text-muted-foreground animate-pulse">
-                            <div className="w-12 h-12 bg-muted rounded-full mb-4" />
-                            <div className="h-4 w-24 bg-muted rounded mb-2" />
+                        <div className="grid grid-cols-1 gap-4">
+                            {[1, 2, 3].map(i => (
+                                <Card key={i} className="p-8 glass border-white/10 animate-pulse rounded-[2rem]">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-white/10 rounded-2xl" />
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 bg-white/10 rounded w-1/3" />
+                                            <div className="h-3 bg-white/10 rounded w-1/4" />
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))}
                         </div>
                     ) : filteredLeads.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-12 text-center">
-                            <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mb-4">
-                                <Inbox className="h-8 w-8 text-muted-foreground" />
+                        <Card className="p-12 text-center glass border-white/10 shadow-glass rounded-[2.5rem]">
+                            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10">
+                                <Inbox className="h-10 w-10 text-muted-foreground opacity-30" />
                             </div>
-                            <h3 className="text-lg font-bold mb-1">{t('dashboard.leads.emptyTitle', 'Пока нет лидов')}</h3>
-                            <p className="text-sm text-muted-foreground px-4">
+                            <h3 className="text-xl font-black mb-2">{t('dashboard.leads.emptyTitle', 'Пока нет лидов')}</h3>
+                            <p className="text-sm text-muted-foreground px-4 font-medium leading-relaxed">
                                 {t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
                             </p>
-                        </div>
+                        </Card>
                     ) : (
                         filteredLeads.map((lead) => {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;
                             const StatusIcon = config.icon;
 
                             return (
-                                <Card key={lead.id} className="p-4 border-none shadow-sm hover:shadow-md transition-shadow">
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <Avatar className="h-10 w-10 rounded-xl shrink-0">
-                                                <AvatarFallback className={cn("rounded-xl text-sm font-bold", config.bg, config.text)}>
+                                <Card 
+                                    key={lead.id} 
+                                    className="p-5 glass border-white/10 shadow-glass hover:bg-white/5 transition-all rounded-[2rem] active:scale-[0.98]"
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className="flex items-center gap-4">
+                                            <Avatar className="h-12 w-12 rounded-2xl shrink-0 border border-white/10 shadow-glass-sm">
+                                                <AvatarFallback className={cn("rounded-2xl text-base font-black shadow-inner", config.bg, config.text)}>
                                                     {lead.name?.charAt(0)?.toUpperCase() || '?'}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div>
-                                                <span className="font-bold text-sm">{lead.name}</span>
-                                                <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                                                <span className="font-bold text-base block mb-0.5">{lead.name}</span>
+                                                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
                                                     <Clock className="h-3 w-3" />
                                                     {new Date(lead.created_at).toLocaleDateString()}
                                                 </div>
                                             </div>
                                         </div>
-
+ 
                                         {/* Status Dropdown */}
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Badge className={cn("cursor-pointer text-xs font-bold h-7 px-2.5 border-0", config.bg, config.text)}>
-                                                    <StatusIcon className="h-3 w-3 mr-1" />
+                                                <Badge className={cn("cursor-pointer text-[10px] font-black uppercase tracking-widest h-9 px-4 rounded-xl shadow-glass-sm border-none", config.bg, config.text)}>
+                                                    <StatusIcon className="h-3.5 w-3.5 mr-2" />
                                                     {t(`crm.status.${lead.status}`)}
                                                 </Badge>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
+                                            <DropdownMenuContent align="end" className="glass-strong border-white/10 rounded-2xl min-w-[160px] p-2">
                                                 {(['new', 'contacted', 'qualified', 'converted', 'lost'] as LeadStatus[]).map(s => (
                                                     <DropdownMenuItem
                                                         key={s}
                                                         onClick={() => updateLeadStatus(lead.id, s)}
-                                                        className={cn(lead.status === s && "font-bold")}
+                                                        className={cn(
+                                                            "rounded-xl py-2.5 px-3 text-xs font-bold transition-colors",
+                                                            lead.status === s ? "bg-primary/10 text-primary font-black" : "hover:bg-white/5"
+                                                        )}
                                                     >
                                                         {t(`crm.status.${s}`)}
                                                     </DropdownMenuItem>
@@ -258,55 +279,57 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
-
+ 
                                     {/* Contact Info */}
-                                    <div className="space-y-1.5 mb-3">
+                                    <div className="space-y-2 mb-4 px-1">
                                         {lead.email && (
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <Mail className="h-3.5 w-3.5" />
+                                            <div className="flex items-center gap-3 text-sm text-muted-foreground/80 font-medium">
+                                                <Mail className="h-4 w-4 text-primary/40" />
                                                 <span className="truncate">{lead.email}</span>
                                             </div>
                                         )}
                                         {lead.phone && (
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <Phone className="h-3.5 w-3.5" />
+                                            <div className="flex items-center gap-3 text-sm text-muted-foreground/80 font-medium">
+                                                <Phone className="h-4 w-4 text-emerald-500/40" />
                                                 <span>{lead.phone}</span>
                                             </div>
                                         )}
                                         {lead.notes && (
-                                            <p className="text-xs text-muted-foreground/70 line-clamp-2 mt-1">{lead.notes}</p>
+                                            <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                                                <p className="text-xs text-muted-foreground/70 italic line-clamp-2 leading-relaxed">&ldquo;{lead.notes}&rdquo;</p>
+                                            </div>
                                         )}
                                     </div>
-
+ 
                                     {/* Quick Actions */}
-                                    <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+                                    <div className="flex items-center gap-2 pt-4 border-t border-white/5">
                                         {lead.phone && (
                                             <>
                                                 <Button
-                                                    variant="ghost"
+                                                    variant="secondary"
                                                     size="sm"
-                                                    className="h-8 px-2.5 text-xs rounded-lg text-emerald-600 hover:bg-emerald-500/10"
+                                                    className="h-11 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-emerald-600 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 flex-1 shadow-glass-sm"
                                                     onClick={() => openWhatsApp(lead.phone!)}
                                                 >
-                                                    <MessageCircle className="h-3.5 w-3.5 mr-1" />
-                                                    WhatsApp
+                                                    <MessageCircle className="h-4 w-4 mr-2" />
+                                                    WA
                                                 </Button>
                                                 <Button
-                                                    variant="ghost"
+                                                    variant="secondary"
                                                     size="sm"
-                                                    className="h-8 px-2.5 text-xs rounded-lg text-blue-500 hover:bg-blue-500/10"
+                                                    className="h-11 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/10 flex-1 shadow-glass-sm"
                                                     onClick={() => openTelegram(lead.phone!)}
                                                 >
-                                                    <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                                                    Telegram
+                                                    <Send className="h-4 w-4 mr-2" />
+                                                    TG
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
+                                                    className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
                                                     onClick={() => openCall(lead.phone!)}
                                                 >
-                                                    <Phone className="h-3.5 w-3.5" />
+                                                    <Phone className="h-5 w-5" />
                                                 </Button>
                                             </>
                                         )}
@@ -314,10 +337,10 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
+                                                className="h-11 w-11 rounded-xl text-muted-foreground/40 hover:text-foreground hover:bg-white/5"
                                                 onClick={() => openEmail(lead.email!)}
                                             >
-                                                <Mail className="h-3.5 w-3.5" />
+                                                <Mail className="h-5 w-5" />
                                             </Button>
                                         )}
                                     </div>

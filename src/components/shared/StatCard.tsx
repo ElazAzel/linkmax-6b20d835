@@ -47,7 +47,7 @@ export const StatCard = memo(function StatCard({
                 variant === 'glass'
                     ? 'glass border-white/20'
                     : 'bg-card border border-border/50 shadow-sm hover:shadow-glass hover:border-primary/20',
-                compact ? 'p-3.5' : 'p-5 md:p-6',
+                compact ? 'p-3.5' : 'p-4 sm:p-5 md:p-6',
                 className
             )}
         >
