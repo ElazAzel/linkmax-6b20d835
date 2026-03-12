@@ -101,7 +101,7 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                 <Reveal delay={200}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 max-w-6xl mx-auto px-4">
                         {/* PRO Card */}
-                        <div className="glass border-primary/30 rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass-lg group">
+                        <div className="glass border-primary/30 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass-lg group">
                             <div className="bg-white/5 backdrop-blur-[40px] rounded-[2.5rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
                                 <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em] shadow-glass">
                                     {t('landing.pricing.popular', 'POPULAR')}
