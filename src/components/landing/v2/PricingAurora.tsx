@@ -149,8 +149,8 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                         </div>
 
                         {/* BUSINESS Card */}
-                        <div className="glass border-white/10 rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass group">
-                            <div className="bg-white/5 backdrop-blur-[30px] rounded-[3.3rem] p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
+                        <div className="glass border-white/10 rounded-[2.5rem] sm:rounded-[3.5rem] p-1 relative transition-all duration-700 hover:-translate-y-3 hover:shadow-glass group">
+                            <div className="bg-white/5 backdrop-blur-[30px] rounded-[2.3rem] sm:rounded-[3.3rem] p-6 sm:p-10 md:p-12 h-full flex flex-col relative overflow-hidden">
                                 <div className="absolute top-0 right-0 bg-white/10 backdrop-blur-md text-foreground/50 text-[10px] font-black px-8 py-3 rounded-bl-[2rem] uppercase tracking-[0.2em]">
                                     {t('landing.pricing.newBadge', 'NEW')}
                                 </div>
