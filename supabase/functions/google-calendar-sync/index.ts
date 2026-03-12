@@ -76,7 +76,7 @@ serve(async (req) => {
                 key,
                 encoder.encode(dataToSign)
             );
-            const sig = base64Encode(new Uint8Array(sigBuffer));
+            const sig = base64Encode(new Uint8Array(sigBuffer) as unknown as ArrayBuffer);
 
             const stateObj = {
                 user_id: user.id,
@@ -85,7 +85,7 @@ serve(async (req) => {
                 sig,
             };
             const stateB64 = base64Encode(
-                encoder.encode(JSON.stringify(stateObj))
+                encoder.encode(JSON.stringify(stateObj)) as unknown as ArrayBuffer
             );
 
             const authUrl = new URL(GOOGLE_AUTH_URL);
@@ -319,9 +319,9 @@ serve(async (req) => {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
             status: 400,
         });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(error);
-        return new Response(JSON.stringify({ error: error.message }), {
+        return new Response(JSON.stringify({ error: (error as Error).message }), {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
             status: 500,
         });

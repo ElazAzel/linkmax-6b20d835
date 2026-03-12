@@ -2,23 +2,22 @@
  * DashboardHeader - Screen header with context actions
  * Includes optional page switcher for page-context screens
  */
-/**
- * DashboardHeader - Screen header with context actions
- * Includes optional page switcher for page-context screens
- */
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import Menu from 'lucide-react/dist/esm/icons/menu';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import { cn } from '@/lib/utils/utils';
 
-interface DashboardHeaderProps {
-  onMenuClick: () => void;
+export interface DashboardHeaderProps {
+  onMenuClick?: () => void;
   activeTab?: string;
   pageSwitcher?: React.ReactNode;
   title?: string;
   subtitle?: string;
   actions?: React.ReactNode;
+  showBack?: boolean;
+  onBack?: () => void;
 }
 
 export const DashboardHeader = memo(function DashboardHeader({
@@ -28,20 +27,33 @@ export const DashboardHeader = memo(function DashboardHeader({
   title,
   subtitle,
   actions,
+  showBack,
+  onBack,
 }: DashboardHeaderProps) {
   const { t } = useTranslation();
 
   return (
     <header className="h-16 md:h-24 pt-[env(safe-area-inset-top)] glass-subtle backdrop-blur-3xl border-b border-white/5 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 shadow-glass translate-z-0">
       <div className="flex items-center gap-3 md:gap-5 min-w-0">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
-          onClick={onMenuClick}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
+        {showBack && onBack ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
+            onClick={onBack}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        ) : onMenuClick ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10 transition-all active:scale-95 shrink-0"
+            onClick={onMenuClick}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        ) : null}
         <div className="flex flex-col min-w-0">
           {title && (
             <h1 className="text-base md:text-lg font-black tracking-tight text-foreground flex items-center gap-2 truncate">

@@ -66,14 +66,14 @@ serve(async (req) => {
         .single()
 
       if (walletError) throw walletError;
-      wallet = newWallet;
+      wallet = newWallet!;
     }
 
     // 2. Create the transaction record
     const { data: transaction, error: txError } = await supabaseClient
       .from('wallet_transactions')
       .insert({
-        wallet_id: wallet.id,
+        wallet_id: wallet!.id,
         type: 'deposit',
         status: 'completed',
         gross_amount: grossAmount,
@@ -90,11 +90,11 @@ serve(async (req) => {
     if (txError) throw txError;
 
     // 3. Update the wallet balance
-    const newBalance = Number(wallet.balance) + netAmount;
+    const newBalance = Number(wallet!.balance) + netAmount;
     const { error: updateError } = await supabaseClient
       .from('user_wallets')
       .update({ balance: newBalance, updated_at: new Date().toISOString() })
-      .eq('id', wallet.id)
+      .eq('id', wallet!.id)
 
     if (updateError) throw updateError;
 
@@ -108,10 +108,10 @@ serve(async (req) => {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error processing transaction fee:', error)
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: (error as Error).message || 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
