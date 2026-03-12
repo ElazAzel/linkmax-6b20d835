@@ -66,7 +66,7 @@ serve(async (req) => {
         .single()
 
       if (walletError) throw walletError;
-      wallet = newWallet;
+      wallet = newWallet!;
     }
 
     // 2. Create the transaction record
