@@ -32,7 +32,7 @@ export const ActionCard = memo(function ActionCard({
     <button
       onClick={onClick}
       className={cn(
-        "p-5 rounded-[2rem] text-left transition-all active:scale-[0.97] relative overflow-hidden group",
+        "p-[var(--space-card-p)] rounded-[2rem] text-left transition-all active:scale-[0.97] relative overflow-hidden group",
         "glass hover:bg-white/10 hover:translate-y-[-4px]",
         "shadow-glass hover:shadow-glass-lg",
         "border border-white/10",

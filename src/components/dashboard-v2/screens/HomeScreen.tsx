@@ -237,11 +237,11 @@ export const HomeScreen = memo(function HomeScreen({
           
           {/* Page Header */}
           <div className="flex items-center gap-6">
-            <div className="relative group/avatar">
+            <div className="relative group/avatar shrink-0">
               <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-2xl blur-md opacity-20 group-hover/avatar:opacity-40 transition duration-1000 animate-pulse" />
-              <Avatar className="h-24 w-24 rounded-2xl border-2 border-white/30 relative shadow-glass">
+              <Avatar className="h-20 w-20 md:h-24 md:w-24 rounded-2xl border-2 border-white/30 relative shadow-glass">
                 <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
-                <AvatarFallback className="rounded-2xl text-3xl font-black bg-white/10 text-primary backdrop-blur-xl">
+                <AvatarFallback className="rounded-2xl text-2xl md:text-3xl font-black bg-white/10 text-primary backdrop-blur-xl">
                   {name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
@@ -265,7 +265,7 @@ export const HomeScreen = memo(function HomeScreen({
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-3 gap-2 md:gap-5">
             <button onClick={onOpenEditor} className="text-left transition-smooth active:scale-95 group/stat">
               <StatCard
                 icon={<LayoutGrid className="w-5 h-5 group-hover/stat:scale-110 group-hover/stat:text-primary transition-all" />}

@@ -8,6 +8,7 @@ import Search from 'lucide-react/dist/esm/icons/search';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -184,12 +185,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     onInsert(blockType);
     
-    // Use a small delay to ensure onInsert processing doesn't block sheet closure
-    // and to handle potential Radix UI state conflicts during rapid re-renders
-    setTimeout(() => {
-      setIsOpen(false);
-      setSearchQuery('');
-    }, 100);
+    // Close the panel immediately
+    setIsOpen(false);
+    setSearchQuery('');
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -299,14 +297,22 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <SheetHeader className="px-6 pt-2 pb-5 border-b border-border/10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-              {!isPremium && (
-                <Badge
-                  variant={isAtBlockLimit ? 'destructive' : 'secondary'}
-                  className="text-sm px-4 py-1.5 rounded-full font-bold"
+              <div className="flex items-center gap-3">
+                {!isPremium && (
+                  <Badge
+                    variant={isAtBlockLimit ? 'destructive' : 'secondary'}
+                    className="text-sm px-4 py-1.5 rounded-full font-bold"
+                  >
+                    {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                  </Badge>
+                )}
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 rounded-full hover:bg-muted transition-colors"
                 >
-                  {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
-                </Badge>
-              )}
+                  <X className="h-6 w-6 text-muted-foreground" />
+                </button>
+              </div>
             </div>
             <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
           </SheetHeader>

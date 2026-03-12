@@ -338,48 +338,27 @@
   /* Display — Landing hero ONLY. Avoid in multilingual-heavy UIs. */
   .text-display {
     font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
-    font-size: 3rem;
-    line-height: 1.1;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1.05;
     font-weight: 800;
-    letter-spacing: -0.025em;
-  }
-
-  @media (min-width: 768px) {
-    .text-display {
-      font-size: 4.5rem;
-      line-height: 1.05;
-    }
+    letter-spacing: -0.04em;
   }
 
   /* Hero — Section hero, page titles. ONE per screen. */
   .text-hero {
     font-family: var(--font-heading, 'Manrope', 'Inter', sans-serif);
-    font-size: 1.875rem;
-    line-height: 1.2;
+    font-size: clamp(1.75rem, 5vw, 3rem);
+    line-height: 1.1;
     font-weight: 700;
     letter-spacing: -0.025em;
   }
 
-  @media (min-width: 768px) {
-    .text-hero {
-      font-size: 3rem;
-      line-height: 1.16;
-    }
-  }
-
   /* Section Title — Headings within sections. */
   .text-section-title {
-    font-size: 1.5rem;
-    line-height: 1.3;
+    font-size: clamp(1.5rem, 4vw, 1.875rem);
+    line-height: 1.25;
     font-weight: 700;
     letter-spacing: -0.015em;
-  }
-
-  @media (min-width: 768px) {
-    .text-section-title {
-      font-size: 1.875rem;
-      line-height: 1.25;
-    }
   }
 
   /* Card Title — Card headers, panel titles. */
@@ -420,22 +399,13 @@
   }
 
   /* ========================================
-     MOBILE SPACING OVERRIDES
-     Compress spacing by ~25% on mobile
+     FLUID SPACING SYSTEM
      ======================================== */
-  @media (max-width: 640px) {
-    :root {
-      --space-section-y: 3rem;
-      --space-block-gap: 0.5rem;
-      --space-card-p: 1rem;
-      --space-safe-x: 1rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    :root {
-      --space-safe-x: 2rem;
-    }
+  :root {
+    --space-page-px: clamp(1rem, 5vw, 2rem);
+    --space-section-y: clamp(3rem, 10vw, 6rem);
+    --space-block-gap: clamp(0.5rem, 2vw, 1rem);
+    --space-card-p: clamp(1rem, 3vw, 1.5rem);
   }
 
   /* ========================================

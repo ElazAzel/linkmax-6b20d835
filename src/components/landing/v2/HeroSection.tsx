@@ -114,7 +114,7 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </h1>
 
                 {/* Subtitle - Refined Contrast */}
-                <p className="max-w-xl text-xl md:text-2xl text-muted-foreground/80 mb-16 leading-relaxed font-semibold tracking-tight">
+                <p className="max-w-xl text-lg md:text-xl text-muted-foreground/80 mb-12 leading-relaxed font-semibold tracking-tight px-4 md:px-0">
                     {t('landing.v4.hero.subtitle', 'Page builder, lead management, click analytics. Everything your small business needs - no code required.')}
                 </p>
 
@@ -125,12 +125,12 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
-                        className="h-24 px-16 rounded-[3rem] text-2xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none"
+                        className="h-16 md:h-24 px-8 md:px-16 rounded-[2rem] md:rounded-[3rem] text-lg md:text-2xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-                        <span className="relative z-10 flex items-center gap-4 uppercase tracking-[0.2em]">
+                        <span className="relative z-10 flex items-center gap-3 md:gap-4 uppercase tracking-[0.1em] md:tracking-[0.2em]">
                             {t('landing.v4.hero.cta', 'Start for Free')}
-                            <ArrowRight className="h-7 w-7 group-hover:translate-x-2 transition-transform duration-500" />
+                            <ArrowRight className="h-6 w-6 md:h-7 md:w-7 group-hover:translate-x-2 transition-transform duration-500" />
                         </span>
                     </MagneticButton>
 
@@ -146,24 +146,24 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </div>
 
                 {/* Animated Stats Strip */}
-                <div className="mt-16 pt-8 border-t border-border/10 w-full max-w-sm md:max-w-2xl">
-                    <div className="flex justify-between items-center">
-                        <div className="flex flex-col items-center gap-1 group">
-                            <Layers className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={28} suffix="+" /></span>
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust1', 'Smart Blocks')}</span>
+                <div className="mt-12 md:mt-16 pt-8 border-t border-border/10 w-full max-w-sm md:max-w-2xl px-2">
+                    <div className="flex justify-between items-center gap-2">
+                        <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
+                            <Layers className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
+                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={28} suffix="+" /></span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust1', 'Blocks')}</span>
                         </div>
-                        <div className="w-px h-10 bg-border/20" />
-                        <div className="flex flex-col items-center gap-1 group">
-                            <Users className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2000} suffix="+" /></span>
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust2', 'Creators')}</span>
+                        <div className="w-px h-8 md:h-10 bg-border/20 shrink-0" />
+                        <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
+                            <Users className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
+                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={2000} suffix="+" /></span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust2', 'Creators')}</span>
                         </div>
-                        <div className="w-px h-10 bg-border/20" />
-                        <div className="flex flex-col items-center gap-1 group">
-                            <Globe className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors" />
-                            <span className="text-lg md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={40} suffix="+" /></span>
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider min-w-0 truncate">{t('landing.v4.hero.trust3', 'Languages')}</span>
+                        <div className="w-px h-8 md:h-10 bg-border/20 shrink-0" />
+                        <div className="flex flex-col items-center gap-0.5 md:gap-1 group min-w-0 flex-1">
+                            <Globe className="w-4 h-4 md:w-5 md:h-5 text-primary/60 group-hover:text-primary transition-colors" />
+                            <span className="text-base md:text-xl font-bold text-foreground tabular-nums"><AnimatedCount target={40} suffix="+" /></span>
+                            <span className="text-[10px] md:text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate w-full text-center">{t('landing.v4.hero.trust3', 'Langs')}</span>
                         </div>
                     </div>
                 </div>

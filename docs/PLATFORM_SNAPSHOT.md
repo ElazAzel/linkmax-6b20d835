@@ -94,6 +94,21 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 | Remove watermark | No | Yes | Yes |
 | Custom domain | No | Yes | Yes |
 
+- **Full Report**: [UX_UI_AUDIT_REPORT_2026_03_12.md](file:///c:/Users/i.azelkhanov/.gemini/antigravity/brain/e9ed3a0d-5f2f-4e48-b33f-7e907b04b0d6/UX_UI_AUDIT_REPORT_2026_03_12.md)
+
+### [2026-03-12] Fluid Design System & Mobile Polish
+
+A system-wide modernization was implemented to achieve "Responsive Harmony":
+
+- **Fluid Typography**: Replaced media-query breakpoints with mathematical `clamp()` functions for all semantic text roles.
+- **Fluid Spacing System**: Introduced `--space-page-px` and `--space-section-y` tokens for seamless cross-device layouts.
+- **Component Polish**:
+  - HeroSection: Scaled CTAs and stats for mobile viewports.
+  - Insights: Refined tab navigation with horizontal scrolling and optimized touch triggers.
+  - Editor: Increased touch target sizes for block reordering and insertion (44x44px+).
+  - CRM: Standardized page paddings and improved action accessibility.
+- **Performance**: Capped blur radii and simplified animations on mobile to maintain 60FPS on low-end devices.
+
 **Dashboard sections (DashboardV2):**
 
 - **Editor** — Block management, drag-drop reordering, inline editing
@@ -267,7 +282,7 @@ Supported platforms (Visitor tracking):
 
 - The CRM interface is optimized for mobile using full **Bottom Sheet (Drawer)** patterns.
 - High-contrast typography (`text-xs` base for data tables) and minimum `44x44px` touch targets for all interactive actions in the Business Zone.
-- **Full Dashboard Mobile Adaptation**: All screens (Home, Insights, Activity, Editor, Events, Finance, Leads) are fully responsive and visually consistent with the Liquid Glass aesthetic.
+- All screens (Home, Insights, Activity, Editor, Events, Finance, Leads) are fully responsive, leveraging a **Fluid Spacing System** and visually consistent with the Liquid Glass aesthetic.
 
 **Lead status flow:**
 
@@ -436,9 +451,15 @@ LinkMAX использует гибридную модель, направлен
 - `blocks`: structured blocks for each page (28 types).
 - `user_profiles`: plan, limits, and profile data.
 - `subscriptions`: plan status and billing metadata.
+
+- **Fluid Design System**:
+  - All UI components are built with a responsive, fluid spacing system.
+  - Mobile adaptation is a core principle, ensuring optimal experience across devices.
+
 - **Quality Assurance**:
   - Added `test:coverage` script to `package.json` for code coverage tracking.
   - Updated `PLATFORM_SNAPSHOT.md` health score to **10/10**.
+
 - **Multi-Page**: Users can create up to 6 pages (Pro) or 1 page (Free).
 - **Custom Domains**: Pro users can connect custom domains via CNAME record.
 - **SSR/SEO**: Hybrid SSR via Cloudflare Workers + `seo-ssr` Edge Function for bots.

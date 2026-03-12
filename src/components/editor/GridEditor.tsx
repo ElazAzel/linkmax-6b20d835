@@ -89,7 +89,7 @@ function InsertBetweenDivider({
             "shrink-0 flex items-center justify-center rounded-full transition-all duration-300",
             "glass-subtle bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
             "active:scale-95 hover:scale-110",
-            isMobile ? "h-8 w-8" : "h-7 w-7"
+            isMobile ? "h-11 w-11" : "h-7 w-7"
           )}
           aria-label="Insert block here"
         >
@@ -696,7 +696,7 @@ export const GridEditor = memo(function GridEditor({
   }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t]);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-4 space-y-2 pb-32 md:pb-24">
+    <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">
       {/* Profile block */}
       {profileBlock && (
         <div className="relative" data-onboarding="profile-block">

@@ -251,7 +251,7 @@ export const InsightsScreen = memo(function InsightsScreen({
       />
 
       {/* Period Selector */}
-      <div className="px-5 pb-5">
+      <div className="px-[var(--space-page-px)] pb-5">
         <div className="flex gap-2 p-1.5 glass-subtle rounded-[1.5rem] border-white/10 shadow-inner">
           {(['7d', '14d', '30d'] as Period[]).map((p) => (
             <button
@@ -270,7 +270,7 @@ export const InsightsScreen = memo(function InsightsScreen({
         </div>
       </div>
 
-      <div className="px-5 pb-24 space-y-7">
+      <div className="px-[var(--space-page-px)] pb-24 space-y-7">
         {!hasData ? (
           <EmptyState
             icon={Eye}
@@ -281,25 +281,25 @@ export const InsightsScreen = memo(function InsightsScreen({
           <>
             {/* Tab Navigation */}
             <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as Tab)} className="w-full">
-              <TabsList className="flex overflow-x-auto scrollbar-hide w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1.5 items-center gap-1.5 shadow-inner glass-subtle">
-                <TabsTrigger value="overview" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+              <TabsList className="flex overflow-x-auto scrollbar-hide w-full h-12 bg-white/5 border border-white/10 rounded-[1.5rem] p-1 items-center gap-1 shadow-inner glass-subtle">
+                <TabsTrigger value="overview" className="flex-1 min-w-[90px] h-10 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <ChartBar className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span>{t('analytics.tabs.overview', 'Обзор')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="traffic" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="traffic" className="flex-1 min-w-[90px] h-10 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <Globe className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span>{t('analytics.tabs.traffic', 'Трафик')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="blocks" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="blocks" className="flex-1 min-w-[90px] h-10 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <Target className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span>{t('analytics.tabs.blocks', 'Блоки')}</span>
                 </TabsTrigger>
-                <TabsTrigger value="funnel" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                <TabsTrigger value="funnel" className="flex-1 min-w-[90px] h-10 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                   <TrendingUp className="h-3.5 w-3.5 mr-1 shrink-0" />
                   <span>{t('analytics.tabs.funnel', 'Воронка')}</span>
                 </TabsTrigger>
                 {isPremium && (
-                  <TabsTrigger value="experiments" className="flex-1 min-w-[80px] h-9 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
+                  <TabsTrigger value="experiments" className="flex-1 min-w-[90px] h-10 text-[9px] font-black uppercase tracking-wider rounded-xl data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-glass transition-smooth">
                     <FlaskConical className="h-3.5 w-3.5 mr-1 shrink-0" />
                     <span>{t('analytics.tabs.experiments', 'Тесты')}</span>
                   </TabsTrigger>

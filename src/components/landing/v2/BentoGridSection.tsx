@@ -144,12 +144,12 @@ const LeadsVisual = () => {
   ];
   return (
     <div ref={ref} className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-sky-500/15 to-primary/5 items-center justify-center relative overflow-hidden group-hover/bento:scale-105 transition-transform duration-500">
-      <div className="absolute left-6 top-1/2 -translate-y-1/2">
-        <div className="w-14 h-14 rounded-2xl bg-sky-500/20 flex items-center justify-center shadow-lg">
-          <Send className="w-7 h-7 text-sky-500" />
+      <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 shrink-0">
+        <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-sky-500/20 flex items-center justify-center shadow-lg">
+          <Send className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
         </div>
       </div>
-      <div className="flex flex-col gap-2 ml-24">
+      <div className="flex flex-col gap-1.5 md:gap-2 ml-16 md:ml-24 overflow-hidden pr-2">
         {items.map((item, i) => (
           <div
             key={i}
@@ -247,7 +247,7 @@ export function BentoGridSection() {
         />
       </Reveal>
 
-      <BentoGrid className="max-w-6xl mx-auto md:auto-rows-[20rem] gap-6">
+      <BentoGrid className="max-w-6xl mx-auto md:auto-rows-[20rem] gap-[var(--space-block-gap)]">
         {items.map((item, i) => (
           <Reveal key={i} delay={i * 100}>
             <BentoGridItem

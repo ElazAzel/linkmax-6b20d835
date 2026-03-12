@@ -158,7 +158,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 }
             />
 
-            <div className="px-5 py-4 space-y-4">
+            <div className="px-[var(--space-page-px)] py-4 space-y-4">
                 {/* Status Filter Pills */}
                 <div className="overflow-x-auto scrollbar-hide pb-2">
                     <div className="flex gap-3 min-w-max px-0.5">
