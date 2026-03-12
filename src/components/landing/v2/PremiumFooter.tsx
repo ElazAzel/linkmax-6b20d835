@@ -21,11 +21,11 @@ export const PremiumFooter = () => {
             
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Logo and description */}
-                <div className="text-center mb-24 flex flex-col items-center">
-                    <span className="text-5xl font-black tracking-[-0.05em] mb-6 drop-shadow-sm">
+                <div className="text-center mb-12 sm:mb-24 flex flex-col items-center">
+                    <span className="text-3xl sm:text-5xl font-black tracking-[-0.05em] mb-4 sm:mb-6 drop-shadow-sm">
                         lnk<span className="text-primary italic">mx.</span>
                     </span>
-                    <p className="text-lg text-muted-foreground/40 max-w-md mx-auto font-semibold leading-relaxed tracking-tight">
+                    <p className="text-sm sm:text-lg text-muted-foreground/40 max-w-md mx-auto font-semibold leading-relaxed tracking-tight px-4">
                         {t('landingV5.footer.description', 'The all-in-one platform for creators and micro-businesses. Built for the future.')}
                     </p>
                 </div>
