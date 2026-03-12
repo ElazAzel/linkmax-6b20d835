@@ -119,24 +119,24 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
                 </p>
 
                 {/* CTA Buttons - Physical & Magnetic */}
-                <div className="flex flex-col gap-8 w-full sm:w-auto items-center mt-6 relative">
+                <div className="flex flex-col gap-5 sm:gap-8 w-full sm:w-auto items-center mt-4 sm:mt-6 relative px-4 sm:px-0">
                     <div className="absolute -inset-10 bg-primary/10 blur-[60px] rounded-full opacity-50 pointer-events-none" />
                     
                     <MagneticButton
                         onClick={onStart}
                         size="lg"
-                        className="h-16 md:h-24 px-8 md:px-16 rounded-[2rem] md:rounded-[3rem] text-lg md:text-2xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none"
+                        className="h-14 sm:h-16 md:h-20 px-8 sm:px-12 md:px-16 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] text-base sm:text-lg md:text-xl font-black bg-primary text-white shadow-glass-hover hover:scale-[1.05] active:scale-95 transition-all group overflow-hidden relative border-none w-full sm:w-auto"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-                        <span className="relative z-10 flex items-center gap-3 md:gap-4 uppercase tracking-[0.1em] md:tracking-[0.2em]">
+                        <span className="relative z-10 flex items-center justify-center gap-3 uppercase tracking-[0.1em] md:tracking-[0.15em]">
                             {t('landing.v4.hero.cta', 'Start for Free')}
-                            <ArrowRight className="h-6 w-6 md:h-7 md:w-7 group-hover:translate-x-2 transition-transform duration-500" />
+                            <ArrowRight className="h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-500" />
                         </span>
                     </MagneticButton>
 
                     <button
                         onClick={onExamples}
-                        className="inline-flex items-center gap-3 text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.3em]"
+                        className="inline-flex items-center gap-3 text-xs sm:text-sm font-black text-muted-foreground/50 hover:text-primary transition-all group uppercase tracking-[0.2em] sm:tracking-[0.3em]"
                     >
                         <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary/50 transition-colors">
                             <Play className="w-3 h-3 fill-current group-hover:scale-125 transition-transform duration-500" />
