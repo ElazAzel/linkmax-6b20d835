@@ -83,7 +83,11 @@ export const CanvasBackground = () => {
             
             {/* High-fidelity WebGL Layer - Enabled for all devices with adaptive opacity */}
             <div className="absolute inset-0 opacity-40 dark:opacity-20 transition-opacity duration-1000">
-                <Canvas camera={{ position: [0, 0, 1] }}>
+                <Canvas 
+                    gl={{ antialias: true, alpha: true, stencil: false, depth: false }}
+                    dpr={[1, 2]}
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                >
                     <BackgroundPlane />
                 </Canvas>
             </div>

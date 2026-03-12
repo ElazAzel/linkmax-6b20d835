@@ -196,9 +196,16 @@
     --glass-bg-subtle: 0 0% 100% / 0.35;
     --glass-bg-strong: 0 0% 100% / 0.85;
 
+    /* Blur Radius - Standardized 2026 */
+    --glass-blur: 16px;
+    --glass-blur-sm: 8px;
+    --glass-blur-lg: 24px;
+    --glass-blur-xl: 40px;
+
     /* Prismatic Border Effect */
     --glass-border: 0 0% 100% / 0.4;
     --glass-border-subtle: 0 0% 100% / 0.2;
+    --prismatic-blur: 15px;
     --prismatic-glow: linear-gradient(135deg, hsl(211 100% 50% / 0.3), hsl(262 83% 58% / 0.3));
 
     /* Enhanced Shadows - Editorial & Physical */
@@ -1013,4 +1020,17 @@
   color: transparent;
   transition: opacity 0.5s;
   opacity: 0.8;
+}
+
+@keyframes animate-grain {
+  0%, 100% { transform: translate(0, 0) }
+  10% { transform: translate(-5%, -10%) }
+  20% { transform: translate(-15%, 5%) }
+  30% { transform: translate(7%, -25%) }
+  40% { transform: translate(-5%, 25%) }
+  50% { transform: translate(-15%, 10%) }
+  60% { transform: translate(15%, 0%) }
+  70% { transform: translate(0%, 15%) }
+  80% { transform: translate(3%, 35%) }
+  90% { transform: translate(-10%, 10%) }
 }

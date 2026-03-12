@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils/utils";
 
 export const LiquidCursor = () => {
     const outerRef = useRef<HTMLDivElement>(null);
-    const posRef = useRef({ x: -100, y: -100 });
-    const targetRef = useRef({ x: -100, y: -100 });
+    const posRef = useRef({ x: -200, y: -200 });
+    const targetRef = useRef({ x: -200, y: -200 });
     const rafRef = useRef<number>(0);
     const [isHovering, setIsHovering] = useState(false);
     const [isClicking, setIsClicking] = useState(false);

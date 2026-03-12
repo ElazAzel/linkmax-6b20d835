@@ -78,11 +78,11 @@ export const HeroSection = ({ onStart, onExamples }: HeroProp) => {
     return (
         <section ref={containerRef} className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden py-20 px-4">
             {/* Minimal overlays to let CanvasBackground shine through */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background/60 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/5 to-background/10 pointer-events-none" />
 
-            {/* Radial glow behind headline - refined for 2026 */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-[160px] pointer-events-none" />
-
+            {/* Dynamic background glow that follows the canvas */}
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/[0.03] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full bg-secondary/[0.02] blur-[100px] pointer-events-none" />
             {/* Floating Decorative Elements - Frosted Physicality */}
             <div style={style1} className="absolute left-[8%] top-[25%] w-24 h-24 rounded-3xl glass backdrop-blur-2xl hidden lg:flex items-center justify-center shadow-glass-lg animate-float-slow transition-transform duration-700">
                 <Zap className="w-10 h-10 text-yellow-400/80 drop-shadow-sm" />
