@@ -58,6 +58,22 @@ export default defineConfig(({ mode }) => ({
         main: path.resolve(__dirname, 'index.html'),
         telegram: path.resolve(__dirname, 'tg.html'),
       },
+      output: {
+        manualChunks(id) {
+          // Split large vendor bundle into smaller chunks to reduce TBT
+          // Each chunk parses/executes in a shorter task, staying under 50ms
+          if (id.includes('node_modules')) {
+            if (id.includes('@supabase/')) return 'vendor-supabase';
+            if (id.includes('react-dom')) return 'vendor-react-dom';
+            if (id.includes('react-router') || id.includes('@remix-run')) return 'vendor-router';
+            if (id.includes('@tanstack/react-query')) return 'vendor-query';
+            if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
+            if (id.includes('framer-motion')) return 'vendor-motion';
+            if (id.includes('@radix-ui/')) return 'vendor-radix';
+            if (id.includes('@sentry/')) return 'vendor-sentry';
+          }
+        },
+      },
     },
   },
 }));
