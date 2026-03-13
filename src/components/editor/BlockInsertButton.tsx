@@ -183,11 +183,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    onInsert(blockType);
-    
-    // Close the panel immediately
+    // Close first, then insert to avoid state conflicts
     setIsOpen(false);
     setSearchQuery('');
+    
+    // Use setTimeout to ensure close happens before insert triggers re-renders
+    setTimeout(() => {
+      onInsert(blockType);
+    }, 0);
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -285,10 +288,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         </Button>
       )}
 
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isOpen} onOpenChange={(open) => {
+        if (!open) setSearchQuery('');
+        setIsOpen(open);
+      }}>
         <SheetContent
           side="bottom"
-          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px]"
+          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] [&>button.absolute]:hidden"
         >
           <div className="flex justify-center pt-4 pb-2">
             <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
