@@ -129,78 +129,43 @@ function MobileDemo({ steps }: { steps: any[] }) {
 function DesktopDemo({ steps }: { steps: any[] }) {
     const { t } = useTranslation();
     const [activeStep, setActiveStep] = useState(0);
-    const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-    useEffect(() => {
-        const observers: IntersectionObserver[] = [];
-        stepRefs.current.forEach((ref, index) => {
-            if (!ref) return;
-            const observer = new IntersectionObserver(
-                (entries) => { entries.forEach((entry) => { if (entry.isIntersecting) setActiveStep(index); }); },
-                { threshold: 0.3, rootMargin: "-30% 0px -30% 0px" }
-            );
-            observer.observe(ref);
-            observers.push(observer);
-        });
-        return () => observers.forEach((o) => o.disconnect());
-    }, []);
 
     return (
-        <section className="py-24 bg-transparent border-none">
-            <div className="container max-w-6xl px-8">
-                <h2 className="text-3xl md:text-5xl font-bold text-center mb-16">{t('landing.demo.title', 'How it works')}</h2>
-                <div className="relative flex">
-                    {/* Left: Sticky phone mockup */}
-                    <div className="w-1/2 shrink-0">
-                        <div className="sticky top-24 flex items-center justify-center py-8">
-                            <div className="relative w-[300px] h-[580px] bg-foreground/90 rounded-[3rem] border-8 border-muted shadow-2xl overflow-hidden">
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-foreground/90 rounded-b-xl z-20" />
-                                {steps.map((step: any, i: number) => (
-                                    <div
-                                        key={i}
-                                        className="absolute inset-0 pt-12 bg-background flex flex-col text-foreground"
-                                        style={{
-                                            opacity: activeStep === i ? 1 : 0,
-                                            transform: activeStep === i ? 'scale(1)' : 'scale(0.95)',
-                                            transition: 'opacity 0.35s ease-out, transform 0.35s ease-out',
-                                            pointerEvents: activeStep === i ? 'auto' : 'none',
-                                            zIndex: activeStep === i ? 1 : 0,
-                                        }}
-                                    >
+        <section className="py-20 md:py-28 bg-transparent border-none">
+            <div className="container max-w-5xl px-6">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-14">{t('landing.demo.title', 'How it works')}</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+                    {steps.map((step: any, i: number) => (
+                        <div
+                            key={i}
+                            className="group cursor-pointer"
+                            onMouseEnter={() => setActiveStep(i)}
+                        >
+                            <RevealOnScroll delay={i * 120}>
+                                {/* Phone mockup */}
+                                <div className="relative mx-auto w-[220px] h-[400px] bg-foreground/90 rounded-[2rem] border-[6px] border-muted shadow-xl overflow-hidden mb-6 group-hover:shadow-2xl group-hover:scale-[1.03] transition-all duration-300">
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-foreground/90 rounded-b-xl z-20" />
+                                    <div className="absolute inset-0 pt-10 bg-background flex flex-col text-foreground">
                                         {step.mockContent}
                                     </div>
-                                ))}
-                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-muted-foreground/30 rounded-full z-10" />
-                            </div>
-                        </div>
-                    </div>
+                                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-muted-foreground/30 rounded-full z-10" />
+                                </div>
 
-                    {/* Right: Steps */}
-                    <div className="w-1/2 flex flex-col pl-10">
-                        {steps.map((step: any, i: number) => (
-                            <div
-                                key={i}
-                                ref={(el) => { stepRefs.current[i] = el; }}
-                                className="min-h-[70vh] flex items-center"
-                            >
-                                <div className={cn(
-                                    "flex gap-5 items-start transition-all duration-500",
-                                    activeStep === i ? "opacity-100 scale-100" : "opacity-25 scale-95"
-                                )}>
+                                {/* Step info */}
+                                <div className="text-center">
                                     <div className={cn(
-                                        "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg text-xl font-bold transition-colors duration-300",
+                                        "w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-3 text-base font-bold transition-colors duration-300 shadow",
                                         activeStep === i ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                                     )}>
                                         {i + 1}
                                     </div>
-                                    <div className="flex flex-col gap-2 pt-2">
-                                        <h3 className="text-2xl font-bold leading-tight">{step.title}</h3>
-                                        <p className="text-muted-foreground text-base leading-relaxed max-w-sm">{step.description}</p>
-                                    </div>
+                                    <h3 className="text-lg font-bold mb-1.5">{step.title}</h3>
+                                    <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">{step.description}</p>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            </RevealOnScroll>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
