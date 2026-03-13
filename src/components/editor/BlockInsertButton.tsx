@@ -183,11 +183,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    onInsert(blockType);
-    
-    // Close the panel immediately
+    // Close first, then insert to avoid state conflicts
     setIsOpen(false);
     setSearchQuery('');
+    
+    // Use setTimeout to ensure close happens before insert triggers re-renders
+    setTimeout(() => {
+      onInsert(blockType);
+    }, 0);
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
