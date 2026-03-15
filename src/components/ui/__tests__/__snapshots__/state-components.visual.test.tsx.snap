@@ -1,0 +1,223 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UI state components visual snapshots > renders empty state with CTA > empty-state 1`] = `
+<div
+  class="rounded-2xl border border-border/60 bg-card/50 p-8 text-center"
+>
+  <div
+    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted"
+  >
+    <svg
+      class="lucide lucide-inbox h-6 w-6 text-muted-foreground"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <polyline
+        points="22 12 16 12 14 15 10 15 8 12 2 12"
+      />
+      <path
+        d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+      />
+    </svg>
+  </div>
+  <h3
+    class="text-lg font-semibold"
+  >
+    No leads yet
+  </h3>
+  <p
+    class="mt-2 text-sm text-muted-foreground"
+  >
+    Start by creating your first lead
+  </p>
+  <button
+    aria-busy="false"
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] active:shadow-md h-12 min-h-[44px] px-6 py-3 mt-5"
+  >
+    Create lead
+  </button>
+</div>
+`;
+
+exports[`UI state components visual snapshots > renders error state with retry CTA > error-state 1`] = `
+<div
+  class="rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center"
+>
+  <div
+    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10"
+  >
+    <svg
+      class="lucide lucide-circle-alert h-6 w-6 text-destructive"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx="12"
+        cy="12"
+        r="10"
+      />
+      <line
+        x1="12"
+        x2="12"
+        y1="8"
+        y2="12"
+      />
+      <line
+        x1="12"
+        x2="12.01"
+        y1="16"
+        y2="16"
+      />
+    </svg>
+  </div>
+  <h3
+    class="text-lg font-semibold"
+  >
+    Failed to load
+  </h3>
+  <p
+    class="mt-2 text-sm text-muted-foreground"
+  >
+    Please check your internet connection
+  </p>
+  <button
+    aria-busy="false"
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none border-2 border-border/60 bg-background/60 backdrop-blur-sm hover:bg-accent/60 hover:text-accent-foreground hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] h-12 min-h-[44px] px-6 py-3 mt-5"
+  >
+    <svg
+      class="lucide lucide-refresh-cw mr-2 h-4 w-4"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+      />
+      <path
+        d="M21 3v5h-5"
+      />
+      <path
+        d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+      />
+      <path
+        d="M8 16H3v5"
+      />
+    </svg>
+    Retry
+  </button>
+</div>
+`;
+
+exports[`UI state components visual snapshots > renders loading states variants > loading-skeleton-cards 1`] = `
+<div
+  class="grid grid-cols-1 gap-3"
+>
+  <div
+    class="rounded-2xl border p-5 space-y-3"
+  >
+    <div
+      class="animate-pulse rounded-md bg-muted h-5 w-2/5"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-4 w-3/4"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-10 w-full"
+    />
+  </div>
+  <div
+    class="rounded-2xl border p-5 space-y-3"
+  >
+    <div
+      class="animate-pulse rounded-md bg-muted h-5 w-2/5"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-4 w-3/4"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-10 w-full"
+    />
+  </div>
+</div>
+`;
+
+exports[`UI state components visual snapshots > renders loading states variants > loading-skeleton-list 1`] = `
+<div
+  class="space-y-3"
+>
+  <div
+    class="rounded-2xl border p-4 space-y-2"
+  >
+    <div
+      class="animate-pulse rounded-md bg-muted h-4 w-1/3"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-3 w-2/3"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-3 w-1/2"
+    />
+  </div>
+  <div
+    class="rounded-2xl border p-4 space-y-2"
+  >
+    <div
+      class="animate-pulse rounded-md bg-muted h-4 w-1/3"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-3 w-2/3"
+    />
+    <div
+      class="animate-pulse rounded-md bg-muted h-3 w-1/2"
+    />
+  </div>
+</div>
+`;
+
+exports[`UI state components visual snapshots > renders loading states variants > loading-spinner 1`] = `
+<div
+  class="flex flex-col items-center justify-center gap-3 py-10 text-muted-foreground"
+>
+  <svg
+    class="lucide lucide-loader-circle h-6 w-6 animate-spin"
+    fill="none"
+    height="24"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M21 12a9 9 0 1 1-6.219-8.56"
+    />
+  </svg>
+  <p
+    class="text-sm"
+  >
+    Loading records
+  </p>
+</div>
+`;

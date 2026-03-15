@@ -60,8 +60,15 @@ export const BookingCard = memo(function BookingCard({
       {...(onClick ? { type: 'button', onClick } : {})}
       className={cn(
         'p-4 rounded-2xl glass-card border-white/10 transition-all duration-300 w-full text-left',
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={!onClick}
+      className={cn(
+        'w-full text-left p-4 rounded-2xl glass-card border-white/10 transition-all duration-300',
         isPending && 'border-amber-500/30 ring-1 ring-amber-500/20',
-        onClick && 'cursor-pointer hover:bg-primary/5 active:scale-[0.98]',
+        onClick && 'cursor-pointer hover:bg-primary/5 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        !onClick && 'cursor-default',
       )}
     >
       <div className="flex items-start gap-3">
@@ -125,5 +132,6 @@ export const BookingCard = memo(function BookingCard({
         </div>
       </div>
     </RootElement>
+    </button>
   );
 });

@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   AlertDialog,
@@ -259,12 +260,7 @@ END:VCALENDAR`;
   };
 
   if (loading) {
-    return (
-      <div className="p-8 text-center text-muted-foreground">
-        <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
-        {t('messages.loading', 'Loading...')}
-      </div>
-    );
+    return <LoadingState className="p-8" message={t('messages.loading', 'Loading...')} />;
   }
 
   return (
@@ -307,10 +303,11 @@ END:VCALENDAR`;
       {/* Bookings List */}
       <ScrollArea className="flex-1">
         {filteredBookings.length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground">
-            <CalendarDays className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="text-sm">{t('bookings.noBookings', 'No bookings yet')}</p>
-          </div>
+          <EmptyState
+            icon={CalendarDays}
+            title={t('bookings.noBookings', 'No bookings yet')}
+            className="py-12"
+          />
         ) : (
           <div className="divide-y">
             {filteredBookings.map((booking) => (

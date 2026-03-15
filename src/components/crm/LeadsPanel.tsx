@@ -4,10 +4,11 @@ import { formatDateShort } from '@/lib/utils/format';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Sheet,
@@ -321,16 +322,23 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               {/* Leads List */}
               <ScrollArea className="h-[calc(100vh-320px)] sm:h-[calc(100vh-300px)] px-3 sm:px-0 bg-accent/20 sm:bg-transparent">
                 {loading ? (
-                  <div className="p-8 text-center text-muted-foreground text-sm">
-                    {t('messages.loading', 'Loading...')}
-                  </div>
+                  <LoadingState
+                    message={t('messages.loading', 'Loading...')}
+                  />
                 ) : filteredLeads.length === 0 ? (
-                  <div className="p-8 text-center text-muted-foreground text-sm">
-                    {searchQuery || statusFilter !== 'all'
+                  <EmptyState
+                    title={searchQuery || statusFilter !== 'all'
                       ? t('crm.noResults', 'No leads found')
                       : t('crm.noLeads', 'No leads yet. Add your first lead!')
                     }
-                  </div>
+                    description={searchQuery || statusFilter !== 'all'
+                      ? t('crm.tryAnotherFilter', 'Try another filter or clear search')
+                      : t('crm.addFirstLeadHint', 'Start by adding your first lead manually or using forms')
+                    }
+                    ctaLabel={t('crm.addLead', 'Add lead')}
+                    onCtaClick={() => setAddDialogOpen(true)}
+                    className="mx-3 sm:mx-4"
+                  />
                 ) : (
                   <div className="space-y-2 py-2 sm:py-0 sm:space-y-0 sm:divide-y">
                     {filteredLeads.map(lead => (
