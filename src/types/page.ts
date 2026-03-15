@@ -86,6 +86,8 @@ export interface PageData {
   viewCount?: number;
   favicon_url?: string;
   hideBranding?: boolean;
+  webhook_url?: string;
+  webhook_secret?: string;
   integrations?: PageIntegrations;
   editorMode?: EditorMode;
   gridConfig?: GridConfig;

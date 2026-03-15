@@ -23,6 +23,8 @@ const GET_DATE_LOCALE = (lang: string) => {
     return enUS;
 };
 
+import { FinanceInsightsWidget } from '../widgets/FinanceInsightsWidget';
+
 export const FinanceScreen = memo(function FinanceScreen() {
     const { t, i18n } = useTranslation();
     const { user } = useAuth();
@@ -55,6 +57,9 @@ export const FinanceScreen = memo(function FinanceScreen() {
             />
             
             <div className="px-4 py-6 space-y-6 pb-24">
+                {/* Insights Widget - Q2 Feature */}
+                <FinanceInsightsWidget className="min-h-[400px]" />
+
                 {/* Wallet Balance Card */}
                 <Card className="p-6 glass-strong border-white/20 shadow-glass-lg overflow-hidden relative rounded-[2.5rem]">
                     <div className="absolute inset-0 bg-primary/5 -z-10" />

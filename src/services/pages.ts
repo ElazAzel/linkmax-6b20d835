@@ -23,6 +23,8 @@ export interface DbPage {
   view_count: number;
   favicon_url: string | null;
   hide_branding: boolean;
+  webhook_url: string | null;
+  webhook_secret: string | null;
   organization_id: string | null;
   created_at: string;
   updated_at: string;
@@ -209,6 +211,8 @@ export async function savePage(
       p_favicon_url: pageData.favicon_url || null,
       p_hide_branding: pageData.hideBranding || false,
       p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : null,
+      p_webhook_url: pageData.webhook_url || null,
+      p_webhook_secret: pageData.webhook_secret || null,
     });
 
     if (upsertError) {
@@ -321,6 +325,8 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       integrations: pg.integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      webhook_url: pg.webhook_url || undefined,
+      webhook_secret: pg.webhook_secret || undefined,
       organization_id: pg.organization_id || undefined,
       experiments
     };
@@ -372,6 +378,8 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       integrations: pg.integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      webhook_url: pg.webhook_url || undefined,
+      webhook_secret: pg.webhook_secret || undefined,
       organization_id: pg.organization_id || undefined,
       experiments
     };
@@ -443,6 +451,8 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       integrations: (pg as unknown as { integrations?: Record<string, string> }).integrations || undefined,
       favicon_url: pg.favicon_url || undefined,
       hideBranding: pg.hide_branding || false,
+      webhook_url: pg.webhook_url || undefined,
+      webhook_secret: pg.webhook_secret || undefined,
       organization_id: pg.organization_id || undefined,
       updatedAt: pg.updated_at || null,
       experiments,

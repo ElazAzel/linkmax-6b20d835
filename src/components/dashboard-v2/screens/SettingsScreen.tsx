@@ -60,6 +60,9 @@ interface SettingsScreenProps {
   faviconUrl?: string;
   hideBranding?: boolean;
   onUpdateBranding?: (branding: { faviconUrl?: string; hideBranding?: boolean }) => void;
+  webhookUrl?: string;
+  webhookSecret?: string;
+  onUpdateWebhooks?: (data: { webhook_url?: string; webhook_secret?: string }) => void;
   onUpgradePage?: () => void;
 
   // Entity fields
@@ -187,6 +190,9 @@ export const SettingsScreen = memo(function SettingsScreen(props: SettingsScreen
               onOpenTemplates={onOpenTemplates}
               onOpenMarketplace={onOpenMarketplace}
               onOpenAIBuilder={onOpenAIBuilder}
+              webhookUrl={props.webhookUrl}
+              webhookSecret={props.webhookSecret}
+              onUpdateWebhooks={props.onUpdateWebhooks}
             />
           </TabsContent>
 

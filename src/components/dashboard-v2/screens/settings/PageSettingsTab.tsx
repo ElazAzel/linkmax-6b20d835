@@ -40,6 +40,8 @@ interface PageSettingsTabProps {
     niche?: Niche;
     faviconUrl?: string;
     hideBranding?: boolean;
+    webhookUrl?: string;
+    webhookSecret?: string;
 
     // Entity fields
     city?: string;
@@ -61,6 +63,7 @@ interface PageSettingsTabProps {
     onToggleIndexable?: (indexable: boolean) => void;
     onNicheChange: (niche: Niche) => void;
     onUpdateEntityFields?: (fields: { city?: string; profession?: string; entity_type?: string; contact_email?: string; contact_phone?: string; contact_whatsapp?: string }) => void;
+    onUpdateWebhooks?: (data: { webhook_url?: string; webhook_secret?: string }) => void;
     onUpgradePage?: () => void;
     onOpenTheme?: () => void;
     onOpenTemplates?: () => void;
@@ -89,6 +92,8 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     contactWhatsapp,
     avatarUrl,
     displayName,
+    webhookUrl,
+    webhookSecret,
     onUpdateSlug,
     onUpdateCustomDomain,
     onUpdateSeo,
@@ -96,6 +101,7 @@ export const PageSettingsTab = memo(function PageSettingsTab({
     onToggleIndexable,
     onNicheChange,
     onUpdateEntityFields,
+    onUpdateWebhooks,
     onUpgradePage,
     onOpenTheme,
     onOpenTemplates,
@@ -116,6 +122,9 @@ export const PageSettingsTab = memo(function PageSettingsTab({
 
     const [faviconInput, setFaviconInput] = useState(faviconUrl || '');
     const [hideBrandingInner, setHideBrandingInner] = useState(hideBranding || false);
+
+    const [webhookUrlInput, setWebhookUrlInput] = useState(webhookUrl || '');
+    const [webhookSecretInput, setWebhookSecretInput] = useState(webhookSecret || '');
 
     // Entity field local state
     const [professionInput, setProfessionInput] = useState(profession || '');
@@ -187,6 +196,16 @@ export const PageSettingsTab = memo(function PageSettingsTab({
             onUpdateBranding({
                 faviconUrl: faviconInput || undefined,
                 hideBranding: hideBrandingInner,
+            });
+            toast.success(t('common.saved', 'Сохранено'));
+        }
+    };
+
+    const handleSaveWebhooks = () => {
+        if (onUpdateWebhooks) {
+            onUpdateWebhooks({
+                webhook_url: webhookUrlInput || undefined,
+                webhook_secret: webhookSecretInput || undefined,
             });
             toast.success(t('common.saved', 'Сохранено'));
         }
@@ -668,6 +687,58 @@ export const PageSettingsTab = memo(function PageSettingsTab({
                             }}
                             disabled={!isPremium}
                         />
+                    </div>
+                </Card>
+            </div>
+
+            {/* Webhooks (PRO Only) */}
+            <div className="space-y-2">
+                <div className="flex items-center gap-2 px-1">
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                        Webhooks
+                    </h3>
+                    {!isPremium && <Badge variant="secondary" className="text-xs uppercase border border-primary/20 text-primary bg-primary/10">PRO</Badge>}
+                </div>
+                <Card className={cn("p-4 space-y-4 glass-card border-white/10 shadow-glass", !isPremium && "opacity-60 cursor-not-allowed relative")}>
+                    {!isPremium && (
+                        <div className="absolute inset-0 z-10" onClick={onUpgradePage} />
+                    )}
+
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                            Webhook URL
+                        </Label>
+                        <Input
+                            value={webhookUrlInput}
+                            onChange={(e) => setWebhookUrlInput(e.target.value)}
+                            onBlur={handleSaveWebhooks}
+                            placeholder="https://your-server.com/webhook"
+                            className="h-12 rounded-xl"
+                            disabled={!isPremium}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            {t('dashboard.pageSettings.webhookHint', 'URL for receiving POST requests when a new lead is submitted.')}
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                            <Check className="w-4 h-4 text-emerald-500" />
+                            Webhook Secret (Optional)
+                        </Label>
+                        <Input
+                            value={webhookSecretInput}
+                            onChange={(e) => setWebhookSecretInput(e.target.value)}
+                            onBlur={handleSaveWebhooks}
+                            placeholder="your-secret-key"
+                            className="h-12 rounded-xl"
+                            disabled={!isPremium}
+                            type="password"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            {t('dashboard.pageSettings.webhookSecretHint', 'The secret key will be sent in the X-LinkMAX-Secret header.')}
+                        </p>
                     </div>
                 </Card>
             </div>

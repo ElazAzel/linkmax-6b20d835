@@ -12,6 +12,7 @@ import Languages from 'lucide-react/dist/esm/icons/languages';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import X from 'lucide-react/dist/esm/icons/x';
+import Wand2 from 'lucide-react/dist/esm/icons/wand-2';
 import {
   LANGUAGES,
   LANGUAGE_DEFINITIONS,
@@ -79,6 +80,9 @@ interface MultilingualInputProps {
   primaryLanguage?: LocaleCode;
   /** Show compact mode with fewer default tabs */
   compact?: boolean;
+  /** Callback for Magic Wand assistant */
+  onMagicWand?: () => void;
+  magicWandTitle?: string;
 }
 
 export function MultilingualInput({
@@ -205,6 +209,19 @@ export function MultilingualInput({
           {required && <span className="text-destructive ml-1">*</span>}
         </Label>
         <div className="flex items-center gap-1">
+          {onMagicWand && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onMagicWand}
+              className="h-7 px-2 text-xs gap-1.5 text-violet-600 hover:text-violet-700 hover:bg-violet-50 dark:text-violet-400 dark:hover:text-violet-300 dark:hover:bg-violet-900/20"
+              title={magicWandTitle || t('ai.magicWand', 'Улучшить текст')}
+            >
+              <Wand2 className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{t('ai.magic', 'Магия')}</span>
+            </Button>
+          )}
           <Button
             type="button"
             variant="ghost"

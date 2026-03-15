@@ -861,13 +861,16 @@ Based on codebase analysis, these are logical next improvements:
 15. **CRM Excel & PDF Exports** — Full native .xlsx generation and local JS-driven PDF Acts/Invoices (Completed 2026-03-11)
 16. **Phase 4 & 5: Living Canvas Expansion** — Complete Landing Page overhaul and Dashboard UI standardization (Completed 2026-03-12)
 17. ~~**Email sequences**~~ — Automated email drip campaigns for leads (Completed 2026-03-15)
-18. **Mobile app** — Native iOS/Android app for page management
+18. ~~**Lead Webhooks**~~ — Real-time connectivity with external CRMs via POST requests (Completed 2026-03-15)
+19. ~~**Finance Insights**~~ — Centralized economy dashboard with Revenue/Profit charts (Completed 2026-03-15)
+20. ~~**Smart-Writing 1.0**~~ — Niche-specific algorithmic text suggestions (Completed 2026-03-15)
+21. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: Support for RU/EN/KK/UZ. Current status: **100% sync** (Synced March 2026).
 - **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_24.md](FULL_PLATFORM_AUDIT_2026_02_24.md), [EDO_MODULE_AUDIT_2026_03_05.md](EDO_MODULE_AUDIT_2026_03_05.md), and [AUDIT_REPORT_2026_03_10.md](AUDIT_REPORT_2026_03_10.md).
 
 ---
 
-*Last updated: March 12, 2026*
+*Last updated: March 15, 2026*
 *Current Platform Health Score: **10/10** (Full Mobile Adaptation & Dashboard Standardization completed, 256/256 tests passing)*
 *Maintained by: Antigravity (Principal Engineer)*

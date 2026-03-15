@@ -1,4 +1,6 @@
+// @ts-ignore
 import { serve } from "http/server";
+// @ts-ignore
 import { createClient } from "supabase";
 import { checkInboundLimit } from "../_shared/check-inbound-limit.ts";
 
@@ -65,7 +67,9 @@ serve(async (req: Request) => {
             throw new Error('Payload too large');
         }
 
+        // @ts-ignore
         const supabaseUrl = Deno.env.get('SUPABASE_URL');
+        // @ts-ignore
         const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
         if (!supabaseUrl || !supabaseServiceKey) {
@@ -106,7 +110,7 @@ serve(async (req: Request) => {
         // 1. Fetch page owner info for limit check and notification
         const { data: pageData, error: pageError } = await supabase
             .from('pages')
-            .select('user_id, slug, title, content')
+            .select('user_id, slug, title, content, webhook_url, webhook_secret')
             .eq('id', pageId)
             .single();
 
@@ -141,7 +145,48 @@ serve(async (req: Request) => {
             throw insertError;
         }
 
-        // 4. Handle Email Sequence Trigger
+        // 4. Trigger Webhook if configured
+        if (pageData.webhook_url) {
+            try {
+                const webhookPayload = {
+                    event: 'lead.created',
+                    timestamp: new Date().toISOString(),
+                    data: {
+                        lead_id: lead.id,
+                        page_id: pageId,
+                        page_slug: pageData.slug,
+                        form_data: sanitizedFormData,
+                        metadata: sanitizedMetadata
+                    }
+                };
+
+                const webhookHeaders: Record<string, string> = {
+                    'Content-Type': 'application/json',
+                    'X-LinkMAX-Event': 'lead.created',
+                    'User-Agent': 'LinkMAX-Webhooks/1.0'
+                };
+
+                // Simple secret verification if present
+                if (pageData.webhook_secret) {
+                    webhookHeaders['X-LinkMAX-Secret'] = pageData.webhook_secret;
+                }
+
+                // Fire and forget (don't wait for completion to respond to user)
+                fetch(pageData.webhook_url, {
+                    method: 'POST',
+                    headers: webhookHeaders,
+                    body: JSON.stringify(webhookPayload)
+                }).then(resp => {
+                    console.log(`Webhook sent to ${pageData.webhook_url}, status: ${resp.status}`);
+                }).catch(err => {
+                    console.error('Webhook delivery failed:', err);
+                });
+            } catch (whErr) {
+                console.error('Error preparing webhook:', whErr);
+            }
+        }
+
+        // 5. Handle Email Sequence Trigger
         if (sanitizedFormData) {
             try {
                 // Find the email field (case-insensitive)
@@ -180,8 +225,9 @@ serve(async (req: Request) => {
                 .eq('id', pageData.user_id)
                 .single();
 
-            // 3. Send Telegram Notification if enabled
+            // 6. Send Telegram Notification if enabled
             if (profile?.telegram_notifications_enabled && profile?.telegram_chat_id) {
+                // @ts-ignore
                 const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
                 if (telegramBotToken) {
 
@@ -236,4 +282,5 @@ serve(async (req: Request) => {
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
     }
+
 });

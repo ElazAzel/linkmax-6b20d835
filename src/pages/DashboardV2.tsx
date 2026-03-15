@@ -655,6 +655,14 @@ function DashboardV2Inner() {
                   contactPhone={dashboard.pageData?.contact_phone}
                   contactWhatsapp={dashboard.pageData?.contact_whatsapp}
                   onUpdateEntityFields={dashboard.updateEntityFields}
+                  webhookUrl={dashboard.pageData?.webhook_url}
+                  webhookSecret={dashboard.pageData?.webhook_secret}
+                  onUpdateWebhooks={(data) => {
+                    dashboard.updatePageDataPartial({
+                      webhook_url: data.webhook_url,
+                      webhook_secret: data.webhook_secret,
+                    });
+                  }}
                 />
               </ScreenErrorBoundary>
             )}

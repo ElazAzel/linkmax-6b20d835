@@ -16,9 +16,10 @@ import Lock from 'lucide-react/dist/esm/icons/lock';
 import { useState } from 'react';
 import { AVATAR_ICON_OPTIONS, VERIFICATION_COLOR_OPTIONS, VERIFICATION_POSITION_OPTIONS, VERIFICATION_ICON_OPTIONS } from '@/lib/avatar-frame-utils';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
-import type { ProfileFrameStyle } from '@/types/page';
-import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
 import { Badge } from '@/components/ui/badge';
+import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { toast } from 'sonner';
 
 
 function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
@@ -26,6 +27,26 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
   const navigate = useNavigate();
   const [frameOpen, setFrameOpen] = useState(false);
   const { canUseVerificationBadge, canUsePremiumFrames, canUseAdvancedThemes, currentTier } = useFreemiumLimits();
+  const { pageData } = useDashboard();
+  const niche = pageData?.niche || 'general';
+
+  const handleMagicWandName = () => {
+    const suggestion = getRandomSuggestion(niche, 'heading', {
+      profession: t(`niches.${niche}`, niche),
+    });
+    const currentName = migrateToMultilingual(formData.name);
+    onChange({ ...formData, name: { ...currentName, ru: suggestion } });
+    toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+  };
+
+  const handleMagicWandBio = () => {
+    const suggestion = getRandomSuggestion(niche, 'description', {
+      profession: t(`niches.${niche}`, niche),
+    });
+    const currentBio = migrateToMultilingual(formData.bio);
+    onChange({ ...formData, bio: { ...currentBio, ru: suggestion } });
+    toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+  };
 
   const isPremiumFrameType = (frame: string) => {
     const freeFrames = ['default', 'circle', 'rounded', 'square'];
@@ -48,6 +69,8 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         value={migrateToMultilingual(formData.name)}
         onChange={(value) => onChange({ ...formData, name: value })}
         placeholder={t('placeholders.yourName', 'Your Name')}
+        onMagicWand={handleMagicWandName}
+        magicWandTitle={t('ai.generateHeadline', 'Сгенерировать заголовок')}
       />
 
       <MultilingualInput
@@ -57,6 +80,8 @@ function ProfileBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
         type="textarea"
         placeholder={t('placeholders.tellAboutYourself', 'Tell people about yourself...')}
         enableRichText={true}
+        onMagicWand={handleMagicWandBio}
+        magicWandTitle={t('ai.generateBio', 'Сгенерировать био')}
       />
 
       <div className="border-t pt-4 space-y-4">
