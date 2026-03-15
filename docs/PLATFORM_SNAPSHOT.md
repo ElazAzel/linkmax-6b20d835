@@ -860,7 +860,7 @@ Based on codebase analysis, these are logical next improvements:
 14. **Global Command Palette (Cmd+K)** — Quick-select navigation across contacts and deals (Completed 2026-03-11)
 15. **CRM Excel & PDF Exports** — Full native .xlsx generation and local JS-driven PDF Acts/Invoices (Completed 2026-03-11)
 16. **Phase 4 & 5: Living Canvas Expansion** — Complete Landing Page overhaul and Dashboard UI standardization (Completed 2026-03-12)
-17. **Email sequences** — Automated email drip campaigns for leads
+17. ~~**Email sequences**~~ — Automated email drip campaigns for leads (Completed 2026-03-15)
 18. **Mobile app** — Native iOS/Android app for page management
 
 - **i18n**: Support for RU/EN/KK/UZ. Current status: **100% sync** (Synced March 2026).
