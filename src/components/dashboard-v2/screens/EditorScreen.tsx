@@ -96,6 +96,7 @@ export const EditorScreen = memo(function EditorScreen({
 }: EditorScreenProps) {
   const { t } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
+  const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
@@ -219,6 +220,48 @@ export const EditorScreen = memo(function EditorScreen({
     }
   }, [frictionSignal, acceptFriction, setReviewMode]);
 
+  const isPublished = pageData?.isPublished || false;
+  const blockCount = pageData?.blocks.length || 0;
+  const hasContent = (pageData?.blocks.length || 0) > 1 ||
+    ((pageData?.blocks.length || 0) === 1 && pageData?.blocks[0].type !== 'profile');
+
+  const onboardingHints = useMemo(() => {
+    const hints = [] as Array<{ id: string; title: string; description: string; ctaLabel: string; onCta: () => void }>;
+
+    if (!hasContent) {
+      hints.push({
+        id: 'add-first-block',
+        title: t('editor.onboarding.addBlockTitle', 'Добавьте первый блок'),
+        description: t('editor.onboarding.addBlockDesc', 'Начните с оффера, ссылки или формы — это первый шаг к лидам.'),
+        ctaLabel: t('editor.onboarding.addBlockCta', 'Добавить блок'),
+        onCta: () => {
+          const addBlockButton = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
+          addBlockButton?.click();
+        },
+      });
+    }
+
+    if (hasContent && !isPublished) {
+      hints.push({
+        id: 'publish-page',
+        title: t('editor.onboarding.publishTitle', 'Опубликуйте страницу'),
+        description: t('editor.onboarding.publishDesc', 'После публикации можно делиться ссылкой и получать первого лида.'),
+        ctaLabel: t('editor.onboarding.publishCta', 'Опубликовать'),
+        onCta: onShare,
+      });
+    }
+
+    return hints.filter((hint) => !dismissedOnboardingHints.includes(hint.id));
+  }, [dismissedOnboardingHints, hasContent, isPublished, onShare, t]);
+
+  const dismissOnboardingHint = useCallback((hintId: string) => {
+    setDismissedOnboardingHints((prev) => {
+      if (prev.includes(hintId)) return prev;
+      const next = [...prev, hintId];
+      storage.set('editor_onboarding_hints_dismissed', next);
+      return next;
+    });
+  }, []);
   const contextualTips = useMemo(() => {
     const tips = [
       {
@@ -261,12 +304,6 @@ export const EditorScreen = memo(function EditorScreen({
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
-
-  const isPublished = pageData.isPublished || false;
-  const blockCount = pageData.blocks.length;
-  const contentBlockCount = pageData.blocks.filter(b => b.type !== 'profile').length;
-  const hasContent = pageData.blocks.length > 1 ||
-    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -480,6 +517,31 @@ export const EditorScreen = memo(function EditorScreen({
           <button onClick={() => dismissTip(primaryTip.id)} className="p-1 rounded hover:bg-white/10">
             <X className="h-3.5 w-3.5 text-muted-foreground" />
           </button>
+        </div>
+      )}
+
+      {/* Lightweight onboarding hints */}
+      {onboardingHints.length > 0 && (
+        <div className="mx-4 mt-3 space-y-2">
+          {onboardingHints.map((hint) => (
+            <div key={hint.id} className="flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
+              <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
+                <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
+              </div>
+              <Button size="sm" className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider" onClick={hint.onCta}>
+                {hint.ctaLabel}
+              </Button>
+              <button
+                className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground"
+                onClick={() => dismissOnboardingHint(hint.id)}
+                aria-label={t('common.dismiss', 'Скрыть')}
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
         </div>
       )}
 

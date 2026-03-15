@@ -2,6 +2,7 @@
  * useActivationChecklist v2.0 - Outcome-based activation tracking
  * 4 steps focused on real value delivery, not UI actions
  */
+import { useMemo, useCallback, useState } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { storage } from '@/lib/storage';
 import { trackActivationEvent } from '@/lib/activation-events';
@@ -16,16 +17,21 @@ export interface ActivationStep {
   completed: boolean;
   href: string;
   action?: () => void;
+  ctaKey: string;
 }
 
 interface UseActivationChecklistOptions {
   pageData: PageData | null;
+  onOpenEditor: () => void;
+  onShare: () => void;
   pageId?: string;
   leadsCount?: number;
 }
 
 export function useActivationChecklist({
   pageData,
+  onOpenEditor,
+  onShare,
   pageId,
   leadsCount = 0,
 }: UseActivationChecklistOptions) {
@@ -36,6 +42,8 @@ export function useActivationChecklist({
   const steps = useMemo((): ActivationStep[] => {
     if (!pageData) return [];
 
+    const hasPage = !!pageData.id;
+    const hasContentBlock = pageData.blocks.some(block => block.type !== 'profile');
     const hasPage = pageData.blocks.length > 0;
     const hasContentBlock = pageData.blocks.some((block) => block.type !== 'profile');
     const isPublished = pageData.isPublished || false;
@@ -46,24 +54,35 @@ export function useActivationChecklist({
         id: 'create-page',
         labelKey: 'activation.steps.createPage',
         completed: hasPage,
+        action: onOpenEditor,
+        ctaKey: 'activation.cta.openEditor',
         href: '/dashboard/pages?action=create',
       },
       {
         id: 'add-block',
         labelKey: 'activation.steps.addBlock',
         completed: hasContentBlock,
+        action: onOpenEditor,
+        ctaKey: 'activation.cta.addBlock',
         href: '/dashboard/home?tab=editor&action=add-block',
       },
       {
         id: 'publish',
         labelKey: 'activation.steps.publish',
         completed: isPublished,
+        action: onShare,
+        ctaKey: 'activation.cta.publish',
         href: '/dashboard/home?tab=editor&action=publish',
       },
       {
         id: 'first-lead',
         labelKey: 'activation.steps.firstLead',
         completed: hasFirstLead,
+        action: onOpenEditor,
+        ctaKey: 'activation.cta.promotePage',
+      },
+    ];
+  }, [pageData, leadsCount, onOpenEditor, onShare]);
         href: '/dashboard/activity?action=first-lead',
       },
     ];
