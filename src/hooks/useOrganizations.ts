@@ -13,7 +13,7 @@ export function useOrganizations() {
         setOrganizations(orgs);
 
         // Load last selected org from local storage or default to the first one (Personal)
-        const lastOrgId = localStorage.getItem('last_org_id');
+        const lastOrgId = window.localStorage.getItem('last_org_id');
         const savedOrg = orgs.find(o => o.id === lastOrgId);
 
         if (savedOrg) {
@@ -21,7 +21,7 @@ export function useOrganizations() {
         } else if (orgs.length > 0) {
             const personalOrg = orgs.find(o => o.name === 'Personal Organization') || orgs[0];
             setCurrentOrg(personalOrg);
-            localStorage.setItem('last_org_id', personalOrg.id);
+            window.localStorage.setItem('last_org_id', personalOrg.id);
         }
 
         setLoading(false);
@@ -33,7 +33,7 @@ export function useOrganizations() {
 
     const switchOrganization = (org: Organization) => {
         setCurrentOrg(org);
-        localStorage.setItem('last_org_id', org.id);
+        window.localStorage.setItem('last_org_id', org.id);
     };
 
     return {

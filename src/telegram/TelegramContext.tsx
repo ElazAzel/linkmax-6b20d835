@@ -278,7 +278,11 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
     const showBackButton = useCallback(
         (show: boolean) => {
             if (!webApp) return;
-            show ? webApp.BackButton.show() : webApp.BackButton.hide();
+            if (show) {
+                webApp.BackButton.show();
+            } else {
+                webApp.BackButton.hide();
+            }
         },
         [webApp]
     );

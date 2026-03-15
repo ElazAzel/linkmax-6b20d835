@@ -14,6 +14,7 @@ vi.mock('@/lib/utils/logger', () => ({
 describe('fintechService', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.mocked(supabase.from).mockReset();
     });
 
     describe('recordPendingIncome', () => {
@@ -143,7 +144,7 @@ describe('fintechService', () => {
             mockFrom.mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
-                single: vi.fn().mockResolvedValue({ data: mockWallet, error: null })
+                maybeSingle: vi.fn().mockResolvedValue({ data: mockWallet, error: null })
             } as any);
 
             // Transactions call

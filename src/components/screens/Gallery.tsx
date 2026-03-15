@@ -61,7 +61,7 @@ export default function Gallery() {
 
   // Filter & sort pages
   const filteredPages = useMemo(() => {
-    let result = pages.filter(page => {
+    const result = pages.filter(page => {
       const matchesSearch = !searchQuery ||
         page.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         page.description?.toLowerCase().includes(searchQuery.toLowerCase());

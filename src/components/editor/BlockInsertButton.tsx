@@ -30,10 +30,10 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { BLOCK_MANIFEST, type BlockManifestEntry } from '@/lib/blocks/block-manifest';
+import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 
-import { getRecommendedBlocks, type BlockRecommendation } from '@/lib/blocks/block-recommendations';
+import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
 
@@ -117,6 +117,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = onOpenChange || setInternalIsOpen;
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setSearchQuery('');
+    }
+    setIsOpen(open);
+  };
+
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
   const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
 
@@ -184,17 +191,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    // Close first, then insert to avoid state conflicts
-    setIsOpen(false);
-    // Reset search query after a short delay to not flicker while closing
-    setTimeout(() => setSearchQuery(''), 200);
-    
-    // Use a slightly longer timeout (150ms) to ensure the sheet has 
-    // started its closing animation and state has updated before
-    // parent re-renders trigger heavy block insertion logic
-    setTimeout(() => {
-      onInsert(blockType);
-    }, 150);
+    // Close first, then insert in a microtask to avoid race conditions
+    // while keeping UX responsive on mobile/desktop.
+    handleOpenChange(false);
+    queueMicrotask(() => onInsert(blockType));
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -293,11 +293,11 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       )}
 
       <Sheet open={isOpen} onOpenChange={(open) => {
-        if (!open) setSearchQuery('');
-        setIsOpen(open);
+        handleOpenChange(open);
       }}>
         <SheetContent
           side="bottom"
+          hideCloseButton
           className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none"
         >
           <div className="flex justify-center pt-4 pb-2">
@@ -317,7 +317,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                   </Badge>
                 )}
                 <SheetClose asChild>
-                  <button 
+                  <button
+                    type="button"
                     className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
                     aria-label={t('common.close', 'Close')}
                   >
