@@ -2,9 +2,9 @@
  * useActivationChecklist v2.0 - Outcome-based activation tracking
  * 4 steps focused on real value delivery, not UI actions
  */
-import { useMemo, useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { storage } from '@/lib/storage';
+import { trackActivationEvent } from '@/lib/activation-events';
 import type { PageData } from '@/types/page';
 
 const STORAGE_KEY = 'activation_checklist_dismissed';
@@ -14,27 +14,21 @@ export interface ActivationStep {
   id: string;
   labelKey: string;
   completed: boolean;
+  href: string;
   action?: () => void;
 }
 
 interface UseActivationChecklistOptions {
   pageData: PageData | null;
-  onOpenEditor: () => void;
-  onShare: () => void;
-  viewCount?: number;
+  pageId?: string;
   leadsCount?: number;
-  bookingsCount?: number;
 }
 
 export function useActivationChecklist({
   pageData,
-  onOpenEditor,
-  onShare,
-  viewCount = 0,
+  pageId,
   leadsCount = 0,
-  bookingsCount = 0,
 }: UseActivationChecklistOptions) {
-  const { t } = useTranslation();
   const [celebrationDismissed, setCelebrationDismissed] = useState(
     () => !!storage.get(CELEBRATION_KEY)
   );
@@ -43,51 +37,44 @@ export function useActivationChecklist({
     if (!pageData) return [];
 
     const hasPage = pageData.blocks.length > 0;
+    const hasContentBlock = pageData.blocks.some((block) => block.type !== 'profile');
     const isPublished = pageData.isPublished || false;
-    const hasFirstView = (pageData.viewCount || viewCount) >= 1;
-    const hasFirstConversion = leadsCount >= 1 || bookingsCount >= 1;
-    const hasFirstBooking = bookingsCount >= 1;
+    const hasFirstLead = leadsCount >= 1;
 
     return [
       {
         id: 'create-page',
         labelKey: 'activation.steps.createPage',
         completed: hasPage,
-        action: onOpenEditor,
+        href: '/dashboard/pages?action=create',
+      },
+      {
+        id: 'add-block',
+        labelKey: 'activation.steps.addBlock',
+        completed: hasContentBlock,
+        href: '/dashboard/home?tab=editor&action=add-block',
       },
       {
         id: 'publish',
         labelKey: 'activation.steps.publish',
         completed: isPublished,
-        action: onShare,
+        href: '/dashboard/home?tab=editor&action=publish',
       },
       {
-        id: 'first-visitor',
-        labelKey: 'activation.steps.firstVisitor',
-        completed: hasFirstView,
-        action: onShare,
-      },
-      {
-        id: 'first-conversion',
-        labelKey: 'activation.steps.firstConversion',
-        completed: hasFirstConversion,
-        action: onOpenEditor,
-      },
-      {
-        id: 'first-booking',
-        labelKey: 'activation.steps.firstBooking',
-        completed: hasFirstBooking,
-        action: onOpenEditor,
+        id: 'first-lead',
+        labelKey: 'activation.steps.firstLead',
+        completed: hasFirstLead,
+        href: '/dashboard/activity?action=first-lead',
       },
     ];
-  }, [pageData, viewCount, leadsCount, bookingsCount, onOpenEditor, onShare]);
+  }, [pageData, leadsCount]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;
   const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
   const isComplete = completedCount === totalCount;
 
-  // Published = step 2 done → can dismiss after that
+  // Published = step 3 done → can dismiss after that
   const isPublished = steps.find(s => s.id === 'publish')?.completed || false;
   const isDismissed = !!storage.get(STORAGE_KEY);
 
@@ -99,6 +86,31 @@ export function useActivationChecklist({
     storage.set(CELEBRATION_KEY, 'true');
     setCelebrationDismissed(true);
   }, []);
+
+
+  const completedRef = useRef<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!pageId || steps.length === 0) return;
+    steps.forEach((step) => {
+      const wasCompleted = completedRef.current[step.id] || false;
+      if (!wasCompleted && step.completed) {
+        trackActivationEvent(pageId, 'activation_checklist_step_completed', {
+          stepId: step.id,
+          href: step.href,
+        });
+      }
+      completedRef.current[step.id] = step.completed;
+    });
+  }, [pageId, steps]);
+
+  const handleStepClick = useCallback((step: ActivationStep) => {
+    if (!pageId || step.completed) return;
+    trackActivationEvent(pageId, 'activation_checklist_step_clicked', {
+      stepId: step.id,
+      href: step.href,
+    });
+  }, [pageId]);
 
   // Show celebration when all complete and not yet dismissed
   const showCelebration = isComplete && !celebrationDismissed;
@@ -120,5 +132,6 @@ export function useActivationChecklist({
     canDismiss,
     dismiss,
     dismissCelebration,
+    handleStepClick,
   };
 }
