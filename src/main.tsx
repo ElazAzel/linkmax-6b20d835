@@ -11,6 +11,7 @@ import "./index.css";
 import App from "./App";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import { prefetchRouteChunks } from "@/lib/routing/route-prefetch";
 
 // Defer non-critical init: only load after user interacts or 10s idle
 // This prevents vendor-sentry (150KB) and cache-utils from loading on landing page
@@ -38,6 +39,28 @@ const fireDeferOnce = () => {
   window.addEventListener(e, fireDeferOnce, { once: true, passive: true })
 );
 setTimeout(fireDeferOnce, 10000);
+
+// Route-level prefetch only for nearest likely transitions
+const scheduleLikelyRoutePrefetch = () => {
+  const path = window.location.pathname;
+
+  if (path === '/' || path === '/auth') {
+    // Landing/auth users usually continue to dashboard, pricing, or view examples
+    prefetchRouteChunks(['dashboard', 'pricing', 'gallery']);
+    return;
+  }
+
+  if (path.startsWith('/dashboard')) {
+    // Dashboard users frequently open editor and preview public page
+    prefetchRouteChunks(['editor', 'publicPage']);
+    return;
+  }
+
+  // Public profile visitors most likely auth or open dashboard after sign-in
+  prefetchRouteChunks(['auth', 'dashboard']);
+};
+
+_ric(scheduleLikelyRoutePrefetch);
 
 // Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
 const CHUNK_RECOVERY_KEY = 'linkmax_chunk_recovery_once';

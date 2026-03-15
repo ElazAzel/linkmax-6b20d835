@@ -10,6 +10,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/user/useAuth";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { RoutePrefetchManager } from "@/components/performance/RoutePrefetchManager";
+import { RouteWebVitalsMonitor } from "@/components/performance/RouteWebVitalsMonitor";
 
 
 // Lazy load non-critical shell components to reduce main bundle
@@ -86,8 +88,6 @@ const App = () => {
         window.removeEventListener(e, run)
       );
       _ric(() => {
-        // Web Vitals — monitoring only, not needed for render
-        import("@/hooks/analytics/useWebVitals");
         // Clear old storage versions
         import('@/lib/storage').then(({ storage }) => {
           storage.clearOldVersions();
@@ -131,6 +131,8 @@ const App = () => {
             <TooltipProvider>
               <Toaster />
               <Sonner />
+              <RoutePrefetchManager />
+              <RouteWebVitalsMonitor />
               <RouteErrorBoundary>
                 <Suspense fallback={<PageLoader />}>
                   <Outlet />

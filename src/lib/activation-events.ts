@@ -7,6 +7,8 @@ import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 
 export type ActivationEventType =
+  | 'activation_checklist_step_clicked'
+  | 'activation_checklist_step_completed'
   | 'wizard_started'
   | 'wizard_niche_selected'
   | 'wizard_completed'
@@ -16,6 +18,11 @@ export type ActivationEventType =
   | 'first_block_click'
   | 'first_lead_captured'
   | 'dashboard_return'
+  // Onboarding funnel steps (primary path)
+  | 'funnel_step_create_page_completed'
+  | 'funnel_step_add_block_completed'
+  | 'funnel_step_publish_completed'
+  | 'funnel_step_first_lead_completed'
   // CRM-layer events
   | 'lead_seen'
   | 'lead_replied'

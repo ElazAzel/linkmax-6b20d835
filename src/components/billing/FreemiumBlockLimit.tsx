@@ -63,7 +63,7 @@ export const FreemiumBlockLimit = memo(function FreemiumBlockLimit({
               className="mt-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
             >
               <Crown className="h-3.5 w-3.5 mr-1.5" />
-              {t('freemium.upgradeToPremium', 'Перейти на Premium')}
+              {t('common.cta.upgradeToTier', 'Upgrade to {{tier}}', { tier: 'Premium' })}
             </Button>
           )}
         </div>

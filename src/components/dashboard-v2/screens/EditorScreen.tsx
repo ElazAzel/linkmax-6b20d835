@@ -3,8 +3,9 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useState, useMemo } from 'react';
+import { memo, useCallback, useState, useMemo, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
@@ -21,9 +22,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { GridEditor } from '@/components/editor/GridEditor';
-import { StructureView } from '@/components/editor/StructureView';
 import { cn } from '@/lib/utils/utils';
+import { storage } from '@/lib/storage';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
 import { useEditorStore } from '@/store/useEditorStore';
@@ -32,6 +32,18 @@ import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
+
+const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
+const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
+
+const EditorCanvasSkeleton = () => (
+  <div className="space-y-4 p-4 animate-pulse">
+    <div className="h-10 w-1/3 rounded-xl bg-muted" />
+    <div className="h-24 rounded-2xl bg-muted/80" />
+    <div className="h-24 rounded-2xl bg-muted/70" />
+    <div className="h-24 rounded-2xl bg-muted/60" />
+  </div>
+);
 
 interface EditorScreenProps {
   pageData: PageData | null;
@@ -56,6 +68,7 @@ interface EditorScreenProps {
   onRedo?: () => void;
   // Versions
   onOpenVersions?: () => void;
+  deepLinkAction?: string | null;
 }
 
 export const EditorScreen = memo(function EditorScreen({
@@ -79,10 +92,13 @@ export const EditorScreen = memo(function EditorScreen({
   onUndo,
   onRedo,
   onOpenVersions,
+  deepLinkAction,
 }: EditorScreenProps) {
   const { t } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
+  const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
+  const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   // P5: Store state for sections & review
   const {
@@ -204,15 +220,90 @@ export const EditorScreen = memo(function EditorScreen({
     }
   }, [frictionSignal, acceptFriction, setReviewMode]);
 
+  const isPublished = pageData?.isPublished || false;
+  const blockCount = pageData?.blocks.length || 0;
+  const hasContent = (pageData?.blocks.length || 0) > 1 ||
+    ((pageData?.blocks.length || 0) === 1 && pageData?.blocks[0].type !== 'profile');
+
+  const onboardingHints = useMemo(() => {
+    const hints = [] as Array<{ id: string; title: string; description: string; ctaLabel: string; onCta: () => void }>;
+
+    if (!hasContent) {
+      hints.push({
+        id: 'add-first-block',
+        title: t('editor.onboarding.addBlockTitle', 'Добавьте первый блок'),
+        description: t('editor.onboarding.addBlockDesc', 'Начните с оффера, ссылки или формы — это первый шаг к лидам.'),
+        ctaLabel: t('editor.onboarding.addBlockCta', 'Добавить блок'),
+        onCta: () => {
+          const addBlockButton = document.querySelector('[data-onboarding="add-block"]') as HTMLButtonElement | null;
+          addBlockButton?.click();
+        },
+      });
+    }
+
+    if (hasContent && !isPublished) {
+      hints.push({
+        id: 'publish-page',
+        title: t('editor.onboarding.publishTitle', 'Опубликуйте страницу'),
+        description: t('editor.onboarding.publishDesc', 'После публикации можно делиться ссылкой и получать первого лида.'),
+        ctaLabel: t('editor.onboarding.publishCta', 'Опубликовать'),
+        onCta: onShare,
+      });
+    }
+
+    return hints.filter((hint) => !dismissedOnboardingHints.includes(hint.id));
+  }, [dismissedOnboardingHints, hasContent, isPublished, onShare, t]);
+
+  const dismissOnboardingHint = useCallback((hintId: string) => {
+    setDismissedOnboardingHints((prev) => {
+      if (prev.includes(hintId)) return prev;
+      const next = [...prev, hintId];
+      storage.set('editor_onboarding_hints_dismissed', next);
+      return next;
+    });
+  }, []);
+  const contextualTips = useMemo(() => {
+    const tips = [
+      {
+        id: 'add-block',
+        title: t('editor.contextTips.addBlock.title', 'Добавьте первый блок с оффером'),
+        description: t('editor.contextTips.addBlock.desc', 'Откройте палитру команд и выберите блок «Кнопка», «Товар» или «Форма».'),
+        actionLabel: t('editor.contextTips.addBlock.action', 'Открыть палитру'),
+        onAction: () => onOpenTemplates(),
+      },
+      {
+        id: 'publish',
+        title: t('editor.contextTips.publish.title', 'Опубликуйте страницу'),
+        description: t('editor.contextTips.publish.desc', 'После публикации ссылка станет доступна клиентам.'),
+        actionLabel: t('editor.contextTips.publish.action', 'Опубликовать'),
+        onAction: () => onShare(),
+      },
+      {
+        id: 'first-lead',
+        title: t('editor.contextTips.firstLead.title', 'Поставьте ловушку на первый лид'),
+        description: t('editor.contextTips.firstLead.desc', 'Добавьте форму или кнопку контакта, чтобы собирать обращения.'),
+        actionLabel: t('editor.contextTips.firstLead.action', 'Перейти в активность'),
+        href: '/dashboard/activity?action=first-lead',
+      },
+    ];
+
+    return tips.filter((tip) => !disabledTips.includes(tip.id));
+  }, [disabledTips, onOpenTemplates, onShare, t]);
+
+  const primaryTip = useMemo(() => {
+    if (!deepLinkAction) return contextualTips[0];
+    return contextualTips.find((tip) => tip.id === deepLinkAction) || contextualTips[0];
+  }, [contextualTips, deepLinkAction]);
+
+  const dismissTip = useCallback((tipId: string) => {
+    const next = [...disabledTips, tipId];
+    setDisabledTips(next);
+    storage.set('editor_context_tips_disabled', next);
+  }, [disabledTips]);
+
   if (loading || !pageData) {
     return <LoadingSkeleton />;
   }
-
-  const isPublished = pageData.isPublished || false;
-  const blockCount = pageData.blocks.length;
-  const contentBlockCount = pageData.blocks.filter(b => b.type !== 'profile').length;
-  const hasContent = pageData.blocks.length > 1 ||
-    (pageData.blocks.length === 1 && pageData.blocks[0].type !== 'profile');
 
   return (
     <div className="min-h-screen safe-area-top">
@@ -368,12 +459,15 @@ export const EditorScreen = memo(function EditorScreen({
             <Badge variant="outline" className="text-[10px] font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
               {top.priority}
             </Badge>
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setDismissedHint(top.id)}
               className="p-1.5 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
         );
       })()}
@@ -385,62 +479,119 @@ export const EditorScreen = memo(function EditorScreen({
           <span className="text-xs text-foreground/80 flex-1">
             {t(`friction.${frictionSignal.suggestedActionKey}`, frictionSignal.suggestedAction)}
           </span>
-          <button
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
             onClick={handleFrictionAction}
-            className="text-xs font-semibold text-primary hover:underline shrink-0"
+            className="h-auto px-0 py-0 text-xs font-semibold text-primary hover:underline shrink-0"
           >
             {t('friction.try', 'Попробовать')}
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
             onClick={dismissFriction}
-            className="p-0.5 rounded hover:bg-muted shrink-0"
+            className="p-0.5 h-auto shrink-0"
           >
             <X className="h-3 w-3 text-muted-foreground" />
+          </Button>
+        </div>
+      )}
+
+      {primaryTip && (
+        <div className="mx-4 mt-2 flex items-start gap-3 rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+          <Lightbulb className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold">{primaryTip.title}</p>
+            <p className="text-xs text-muted-foreground mt-1">{primaryTip.description}</p>
+            <div className="mt-2">
+              {primaryTip.href ? (
+                <Link to={primaryTip.href} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</Link>
+              ) : (
+                <button onClick={primaryTip.onAction} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</button>
+              )}
+            </div>
+          </div>
+          <button onClick={() => dismissTip(primaryTip.id)} className="p-1 rounded hover:bg-white/10">
+            <X className="h-3.5 w-3.5 text-muted-foreground" />
           </button>
+        </div>
+      )}
+
+      {/* Lightweight onboarding hints */}
+      {onboardingHints.length > 0 && (
+        <div className="mx-4 mt-3 space-y-2">
+          {onboardingHints.map((hint) => (
+            <div key={hint.id} className="flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3">
+              <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-black uppercase tracking-wider">{hint.title}</p>
+                <p className="text-xs text-muted-foreground mt-1">{hint.description}</p>
+              </div>
+              <Button size="sm" className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider" onClick={hint.onCta}>
+                {hint.ctaLabel}
+              </Button>
+              <button
+                className="p-1 rounded-lg hover:bg-white/10 text-muted-foreground"
+                onClick={() => dismissOnboardingHint(hint.id)}
+                aria-label={t('common.dismiss', 'Скрыть')}
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
       {/* Grid Editor */}
       <div className="pt-4">
-        <GridEditor
-          blocks={pageData.blocks}
-          isPremium={isPremium}
-          currentTier={currentTier}
-          premiumTier={premiumTier}
-          gridConfig={pageData.gridConfig}
-          onInsertBlock={handleInsertBlockWithFriction}
-          onEditBlock={onEditBlock}
-          onDeleteBlock={handleDeleteBlockWithFriction}
-          onUpdateBlock={onUpdateBlock}
-          onReorderBlocks={onReorderBlocks}
-          onDuplicateBlock={onDuplicateBlock}
-        />
+        <Suspense fallback={<EditorCanvasSkeleton />}>
+          <GridEditor
+            blocks={pageData.blocks}
+            isPremium={isPremium}
+            currentTier={currentTier}
+            premiumTier={premiumTier}
+            gridConfig={pageData.gridConfig}
+            onInsertBlock={handleInsertBlockWithFriction}
+            onEditBlock={onEditBlock}
+            onDeleteBlock={handleDeleteBlockWithFriction}
+            onUpdateBlock={onUpdateBlock}
+            onReorderBlocks={onReorderBlocks}
+            onDuplicateBlock={onDuplicateBlock}
+          />
+        </Suspense>
       </div>
 
       {/* P5: Structure View 2.0 */}
-      <StructureView
-        open={structureOpen}
-        onOpenChange={setStructureOpen}
-        blocks={pageData.blocks}
-        onBlockSelect={(blockId) => {
-          setStructureOpen(false);
-          onEditBlock(pageData.blocks.find(b => b.id === blockId) || pageData.blocks[0]);
-        }}
-        onBlockDuplicate={onDuplicateBlock}
-        onBlockDelete={handleDeleteBlockWithFriction}
-        onBlockMoveUp={handleBlockMoveUp}
-        onBlockMoveDown={handleBlockMoveDown}
-        sectionMeta={sectionMeta}
-        collapsedSections={collapsedSections}
-        onToggleSectionCollapse={toggleSectionCollapse}
-        onDissolveSection={handleDissolveSection}
-        onDeleteSection={handleDeleteSection}
-        onDuplicateSection={handleDuplicateSection}
-        onRenameSection={handleRenameSection}
-        blockQuality={intelligence?.blockQuality}
-        reviewMode={reviewMode}
-        onSetReviewMode={setReviewMode}
-      />
+      {structureOpen && (
+        <Suspense fallback={null}>
+          <StructureView
+            open={structureOpen}
+            onOpenChange={setStructureOpen}
+            blocks={pageData.blocks}
+            onBlockSelect={(blockId) => {
+              setStructureOpen(false);
+              onEditBlock(pageData.blocks.find(b => b.id === blockId) || pageData.blocks[0]);
+            }}
+            onBlockDuplicate={onDuplicateBlock}
+            onBlockDelete={handleDeleteBlockWithFriction}
+            onBlockMoveUp={handleBlockMoveUp}
+            onBlockMoveDown={handleBlockMoveDown}
+            sectionMeta={sectionMeta}
+            collapsedSections={collapsedSections}
+            onToggleSectionCollapse={toggleSectionCollapse}
+            onDissolveSection={handleDissolveSection}
+            onDeleteSection={handleDeleteSection}
+            onDuplicateSection={handleDuplicateSection}
+            onRenameSection={handleRenameSection}
+            blockQuality={intelligence?.blockQuality}
+            reviewMode={reviewMode}
+            onSetReviewMode={setReviewMode}
+          />
+        </Suspense>
+      )}
     </div>
   );
 });

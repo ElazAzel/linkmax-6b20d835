@@ -86,3 +86,12 @@ If you change a feature or API, please update the corresponding documentation in
 
 ---
 Happy Coding! 🚀
+
+## ✍️ UI Microcopy Review Checklist
+When adding or changing UI text, verify:
+- [ ] Text uses existing i18n keys where possible (`common.*` first for shared patterns).
+- [ ] Error/empty/CTA/confirmation messages are aligned with the glossary in `docs/implementation/microcopy-glossary.md`.
+- [ ] Tone is concise, action-oriented, and consistent across auth, editor, billing/limits, and CRM flows.
+- [ ] Buttons and notifications use the same wording for identical actions (e.g., cancel, save, upgrade, retry).
+- [ ] New text keys include at least `en` and `ru` translations in `src/i18n/locales/*.json`.
+

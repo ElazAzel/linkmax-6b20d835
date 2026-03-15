@@ -145,7 +145,29 @@
     "name": "Имя",
     "status": "Статус",
     "date": "Дата",
-    "created": "created"
+    "created": "created",
+    "cta": {
+      "continue": "Продолжить",
+      "tryAgain": "Попробовать снова",
+      "upgrade": "Улучшить",
+      "upgradeToTier": "Улучшить до {{tier}}",
+      "submit": "Отправить"
+    },
+    "empty": {
+      "noData": "Пока нет данных",
+      "noResults": "Ничего не найдено",
+      "noMatches": "Совпадений не найдено"
+    },
+    "errors": {
+      "invalidEmail": "Введите корректный email",
+      "passwordMismatch": "Пароли не совпадают",
+      "resetFailed": "Не удалось отправить письмо для сброса",
+      "updateFailed": "Не удалось обновить данные"
+    },
+    "confirmations": {
+      "delete": "Вы уверены, что хотите удалить этот элемент?",
+      "discardChanges": "Отменить несохранённые изменения?"
+    }
   },
   "fields": {
     "name": "Имя",
