@@ -15,6 +15,7 @@
   - Completed **Deep Localization** for EN, KK, and UZ languages.
   - Synchronized over 1,600+ unique keys across all target locales.
   - Verified 100% absence of Russian/English placeholders; all technical and business terms translated.
+  - **Telegram Mini App (TMA)**: Extracted all hardcoded strings (50+ keys) into the `tma` namespace.
   - Refined `mend_i18n.js` to support deep merging and empty string resolution.
 - **Features**
   - Added Command Palette (Cmd+K).

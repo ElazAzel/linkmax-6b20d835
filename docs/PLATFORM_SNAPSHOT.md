@@ -10,11 +10,11 @@
 
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
-1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic (frosted high-index glass, reactive WebGL backgrounds, and organic micro-animations) to provide a high-end, 2026-standard look by default. Landing Page is fully refreshed with premium Living Canvas components.
+1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic (frosted high-index glass, reactive WebGL backgrounds, and organic micro-animations). Fully localized in 4 languages (RU, EN, KK, UZ).
 2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a global **Cmd+K Command Palette** for deep search across entities, and native **export for Analytics, Leads, and CRM data**.
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
 4. **Team Collaboration & Business Zones** — RBAC-based organization management using **Secured View Architecture (`public_teams`)** and multi-tenant workspaces with CRM Kanban and Team Inbox.
-5. **Fintech Core & Auth** — Telegram Mini App integration, Telegram Web Login, integrated ledger with Kaspi QR Sandbox, local **PDF Invoice / Acts generation**, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
+5. **Fintech Core & Auth** — Telegram Mini App integration with full localization, Telegram Web Login, integrated ledger with Kaspi QR Sandbox, local **PDF Invoice / Acts generation**, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
 
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
 
