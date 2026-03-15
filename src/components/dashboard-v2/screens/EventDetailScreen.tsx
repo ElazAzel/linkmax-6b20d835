@@ -19,6 +19,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -539,12 +540,17 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
   if (loading) {
     return (
-      <div className="p-4 space-y-4">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
-      </div>
+      <LoadingState
+        className="p-4"
+        skeleton={(
+          <>
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </>
+        )}
+      />
     );
   }
 
@@ -708,13 +714,14 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       <ScrollArea className="flex-1">
         <div className="p-4 pt-2 space-y-3">
           {filteredRegistrations.length === 0 ? (
-            <Card className="p-6 text-center">
-              <Users className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">
-                {searchQuery
+            <Card>
+              <EmptyState
+                icon={Users}
+                title={searchQuery
                   ? t('events.noSearchResults', 'Ничего не найдено')
                   : t('events.noRegistrations', 'Пока нет регистраций')}
-              </p>
+                className="py-10"
+              />
             </Card>
           ) : (
             filteredRegistrations.map(renderRegistrationCard)

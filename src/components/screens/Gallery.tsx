@@ -15,6 +15,8 @@ import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SkeletonGalleryGrid } from '@/components/ui/skeleton-card';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { LoadingState } from '@/components/ui/loading-state';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
@@ -343,6 +345,12 @@ export default function Gallery() {
             {/* Grid */}
             <div className="px-4 pb-20">
               {loading ? (
+                <LoadingState skeleton={<SkeletonGalleryGrid />} />
+              ) : filteredPages.length === 0 ? (
+                <EmptyState
+                  icon={Users}
+                  title={t('gallery.noPages', 'Страниц не найдено')}
+                  description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
                 <LoadingState
                   variant="skeleton-cards"
                   skeletonCount={6}

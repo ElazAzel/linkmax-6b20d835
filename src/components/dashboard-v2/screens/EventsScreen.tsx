@@ -18,9 +18,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { LoadingState } from '@/components/ui/loading-state';
-import { EmptyState } from '@/components/ui/empty-state';
-import { ErrorState } from '@/components/ui/error-state';
+import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Input } from '@/components/ui/input';
 import Users from 'lucide-react/dist/esm/icons/users';
 import QrCode from 'lucide-react/dist/esm/icons/qr-code';
@@ -330,26 +329,17 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
   if (loading || premiumLoading) {
     return (
-      <div className={cn('p-4 space-y-4', className)}>
-        <LoadingState
-          variant="skeleton-cards"
-          skeletonCount={4}
-          message={t('events.loading', 'Загрузка событий...')}
-        />
-      </div>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <div className={cn('p-5', className)}>
-        <ErrorState
-          title={t('events.loadErrorTitle', 'Не удалось загрузить события')}
-          description={t('events.loadErrorDesc', 'Проверьте подключение и попробуйте еще раз.')}
-          retryLabel={t('common.retry', 'Повторить')}
-          onRetry={() => window.location.reload()}
-        />
-      </div>
+      <LoadingState
+        className={cn('p-4', className)}
+        skeleton={(
+          <>
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+          </>
+        )}
+      />
     );
   }
 
@@ -381,19 +371,26 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       <ScrollArea className="flex-1">
         <div className="p-5 space-y-8">
           {events.length === 0 ? (
-            <EmptyState
-              title={t('events.noEvents', 'Нет событий')}
-              description={t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
-              ctaLabel={t('events.addEventBlock', 'Добавить блок')}
-              onCtaClick={() => navigate('/dashboard/home?tab=editor')}
-            />
+            <Card className="glass border-white/10 shadow-glass-lg rounded-[2.5rem]">
+              <EmptyState
+                icon={Calendar}
+                title={t('events.noEvents', 'Нет событий')}
+                description={t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
+                action={{
+                  label: t('events.addEventBlock', 'Добавить блок'),
+                  onClick: () => navigate('/dashboard/home?tab=editor'),
+                }}
+                className="py-12"
+              />
+            </Card>
           ) : filteredEvents.length === 0 ? (
-            <EmptyState
-              title={t('events.noSearchResults', 'Ничего не найдено')}
-              description={t('events.tryOtherSearch', 'Попробуйте изменить поисковый запрос')}
-              ctaLabel={t('events.resetSearch', 'Сбросить поиск')}
-              onCtaClick={() => setSearchQuery('')}
-            />
+            <Card className="glass border-white/10 shadow-glass rounded-[2rem]">
+              <EmptyState
+                icon={Search}
+                title={t('events.noSearchResults', 'Ничего не найдено')}
+                className="py-10"
+              />
+            </Card>
           ) : (
             <div className="space-y-8 pb-24">
               {upcomingEvents.length > 0 && (

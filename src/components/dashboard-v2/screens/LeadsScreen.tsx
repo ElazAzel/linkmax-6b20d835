@@ -15,6 +15,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { LoadingState } from '@/components/ui/loading-state';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -208,6 +209,16 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 {/* Lead List */}
                 <div className="space-y-4 pb-24">
                     {loading ? (
+                        <LoadingState message={t('messages.loading', 'Loading...')} />
+                    ) : filteredLeads.length === 0 ? (
+                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
+                            <EmptyState
+                                icon={Inbox}
+                                title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
+                                description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
+                                className="py-12"
+                            />
+                        </Card>
                         <LoadingState
                             variant="skeleton-cards"
                             skeletonCount={3}
