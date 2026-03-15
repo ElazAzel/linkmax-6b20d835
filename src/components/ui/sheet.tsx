@@ -50,6 +50,14 @@ const sheetVariants = cva(
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {
+  /**
+   * Hide default close button rendered in top-right corner.
+   *
+   * Use this only when a custom close control is rendered inside content
+   * (exactly one visual close button per Sheet) and `Sheet` has controlled
+   * `open` + `onOpenChange` so overlay click / ESC / button all close via
+   * a single state transition contract.
+   */
   hideCloseButton?: boolean;
 }
 

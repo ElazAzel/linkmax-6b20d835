@@ -30,7 +30,6 @@ import { DashboardHeader } from '../layout/DashboardHeader';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils/utils';
-import { exportLeadsToExcel } from '@/lib/export/excel-export-leads';
 import type { Lead } from '@/hooks/crm/useLeads';
 
 type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
@@ -117,7 +116,10 @@ export const LeadsScreen = memo(function LeadsScreen() {
             return;
         }
         toast.promise(
-            exportLeadsToExcel({ leads }),
+            (async () => {
+                const { exportLeadsToExcel } = await import('@/lib/export/excel-export-leads');
+                return exportLeadsToExcel({ leads });
+            })(),
             {
                 loading: t('dashboard.leads.exporting', 'Экспорт...'),
                 success: t('crm.exportSuccess', 'Лиды экспортированы'),

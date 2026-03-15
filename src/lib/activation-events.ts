@@ -18,6 +18,11 @@ export type ActivationEventType =
   | 'first_block_click'
   | 'first_lead_captured'
   | 'dashboard_return'
+  // Onboarding funnel steps (primary path)
+  | 'funnel_step_create_page_completed'
+  | 'funnel_step_add_block_completed'
+  | 'funnel_step_publish_completed'
+  | 'funnel_step_first_lead_completed'
   // CRM-layer events
   | 'lead_seen'
   | 'lead_replied'

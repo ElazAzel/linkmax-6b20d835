@@ -233,7 +233,7 @@ export default function Auth() {
 
     const emailValidation = z.string().trim().email().safeParse(email);
     if (!emailValidation.success) {
-      toast.error(t('auth.invalidEmail', 'Please enter a valid email address'));
+      toast.error(t('common.errors.invalidEmail', 'Please enter a valid email address'));
       playError();
       setIsLoading(false);
       return;
@@ -245,7 +245,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Password reset error:', error, { context: 'Auth' });
-      handleError(error, t('auth.resetFailed', 'Failed to send reset email'));
+      handleError(error, t('common.errors.resetFailed', 'Failed to send reset email'));
       playError();
       setIsLoading(false);
       return;
@@ -333,7 +333,7 @@ export default function Auth() {
     const confirmPassword = formData.get('confirm-password') as string;
 
     if (newPassword !== confirmPassword) {
-      toast.error(t('auth.passwordsDoNotMatch', 'Passwords do not match'));
+      toast.error(t('common.errors.passwordMismatch', 'Passwords do not match'));
       playError();
       setIsLoading(false);
       return;
@@ -353,7 +353,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Password update error:', error, { context: 'Auth' });
-      handleError(error, t('auth.updateFailed', 'Failed to update password'));
+      handleError(error, t('common.errors.updateFailed', 'Failed to update data'));
       playError();
       setIsLoading(false);
       return;
@@ -445,10 +445,10 @@ export default function Auth() {
                 <img src="/favicon.png" alt="LinkMAX" className="h-10 w-10 object-contain" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
               {t('auth.title')}
             </h1>
-            <p className="text-muted-foreground mt-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
               {t('auth.subtitle')}
             </p>
             <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
@@ -514,7 +514,7 @@ export default function Auth() {
                       </p>
                     </div>
                     <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                      {isLoading ? t('messages.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
+                      {isLoading ? t('common.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
                     </Button>
                   </form>
                 )}
@@ -591,8 +591,8 @@ export default function Auth() {
 
                 <Tabs defaultValue="signin" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
-                    <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signIn')}</TabsTrigger>
-                    <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signUp')}</TabsTrigger>
+                    <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signIn')}</TabsTrigger>
+                    <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signUp')}</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="signin">
@@ -634,7 +634,7 @@ export default function Auth() {
                             />
                           </div>
                           <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                            {isLoading ? t('messages.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
+                            {isLoading ? t('common.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
                           </Button>
                           <div className="relative py-2">
                             <div className="absolute inset-0 flex items-center">
@@ -810,7 +810,7 @@ export default function Auth() {
                           </label>
                         </div>
                         <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                          {isLoading ? t('messages.loading', 'Loading...') : t('auth.signUp')}
+                          {isLoading ? t('common.loading', 'Loading...') : t('auth.signUp')}
                         </Button>
                       </form>
                     )}

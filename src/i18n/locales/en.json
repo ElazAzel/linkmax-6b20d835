@@ -145,7 +145,29 @@
     "name": "Name",
     "status": "Status",
     "date": "Date",
-    "created": ""
+    "created": "",
+    "cta": {
+      "continue": "Continue",
+      "tryAgain": "Try again",
+      "upgrade": "Upgrade",
+      "upgradeToTier": "Upgrade to {{tier}}",
+      "submit": "Submit"
+    },
+    "empty": {
+      "noData": "No data yet",
+      "noResults": "Nothing found",
+      "noMatches": "No matches"
+    },
+    "errors": {
+      "invalidEmail": "Please enter a valid email address",
+      "passwordMismatch": "Passwords do not match",
+      "resetFailed": "Failed to send reset email",
+      "updateFailed": "Failed to update data"
+    },
+    "confirmations": {
+      "delete": "Are you sure you want to delete this item?",
+      "discardChanges": "Discard unsaved changes?"
+    }
   },
   "fields": {
     "name": "Name",

@@ -205,11 +205,11 @@ export const MobileSettingsSheet = memo(function MobileSettingsSheet({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="bottom" className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card/90 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl [&>button]:hidden">
+        <SheetContent side="bottom" hideCloseButton className="h-[90vh] p-0 rounded-t-[2.5rem] bg-card/90 backdrop-blur-2xl border-t border-border/30 shadow-glass-xl">
           <SheetHeader className="p-6 pb-4 border-b border-border/20 sticky top-0 bg-card/80 backdrop-blur-xl z-10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-xl font-black">{t('mobileToolbar.settings', 'Настройки')}</SheetTitle>
-              <Button variant="ghost" size="lg" onClick={() => onOpenChange(false)} className="rounded-2xl hover:bg-card/60 h-12 w-12">
+              <Button variant="ghost" size="lg" onClick={() => onOpenChange(false)} aria-label={t('common.close', 'Закрыть')} className="rounded-2xl hover:bg-card/60 h-12 w-12">
                 <X className="h-6 w-6" />
               </Button>
             </div>

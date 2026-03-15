@@ -134,7 +134,8 @@ export const MobileBlockActions = memo(function MobileBlockActions({
     }}>
       <SheetContent 
         side="bottom" 
-        className="h-auto max-h-[75vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl border-t-0 shadow-2xl [&>button]:hidden"
+        hideCloseButton
+        className="h-auto max-h-[75vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl border-t-0 shadow-2xl"
       >
         {/* Handle bar */}
         <div className="flex justify-center pt-4 pb-3">
@@ -150,6 +151,7 @@ export const MobileBlockActions = memo(function MobileBlockActions({
               variant="ghost" 
               size="icon" 
               onClick={() => onOpenChange(false)} 
+              aria-label={t('common.close', 'Закрыть')}
               className="rounded-2xl h-11 w-11 hover:bg-muted/50"
             >
               <X className="h-5 w-5" />

@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetClose,
   SheetHeader,
@@ -208,15 +209,37 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const isProBlock = block.tier === 'pro';
     const IconComponent = getLucideIcon(block.icon);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
+    const marker = showRelevantBadge && !isLocked
+      ? {
+          icon: Sparkles,
+          label: t('recommendations.relevant', 'Актуально'),
+          className: 'bg-emerald-500 text-white',
+        }
+      : block.tier === 'pro'
+        ? {
+            icon: isLocked ? Lock : Crown,
+            label: t('pricing.pro', 'PRO'),
+            className: isLocked ? 'bg-muted text-muted-foreground' : 'bg-amber-500 text-white',
+          }
+        : null;
 
     const blockButton = (
       <button
         key={block.type}
+        type="button"
         onClick={() => handleInsert(block.type, block.tier)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleInsert(block.type, block.tier);
+          }
+        }}
         disabled={isLocked}
         data-testid={`add-block-option-${block.type}`}
+        aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
-          "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all",
+          "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
+          "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isLocked
             ? "opacity-40 cursor-not-allowed"
             : "hover:bg-muted/50 active:scale-95"
@@ -229,13 +252,26 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <IconComponent className="h-7 w-7" />
         </div>
 
-        <span className="text-sm font-bold text-center leading-tight">
+        <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
           {t(block.labelKey, block.type)}
         </span>
 
+        {marker && (
+          <div className="absolute -top-2 left-2">
+            <Badge
+              variant="default"
+              className={cn('border-0 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', marker.className)}
+            >
+              <marker.icon className="mr-1 h-2.5 w-2.5" />
+              {marker.label}
+            </Badge>
+          </div>
+        )}
         {!isLocked && (isProBlock || showRelevantBadge) && (
           <div className="absolute -top-1 -left-1">
             <Badge
+              variant="default"
+              className="max-w-[5.5rem] text-[10px] sm:text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0 whitespace-normal break-words text-wrap leading-tight"
               variant="secondary"
               className="text-xs px-1.5 py-0.5"
             >
@@ -333,6 +369,11 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     type="button"
                     data-testid="add-block-sheet-close"
                     className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+              <div className="flex items-center">
+                <SheetClose asChild>
+                  <button
+                    type="button"
+                    className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-muted transition-colors active:scale-90"
                     aria-label={t('common.close', 'Close')}
                   >
                     <X className="h-6 w-6 text-muted-foreground" />
@@ -354,6 +395,17 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
               />
             </div>
+
+            {!isPremium && (
+              <div className="mt-3">
+                <Badge
+                  variant={isAtBlockLimit ? 'destructive' : 'secondary'}
+                  className="rounded-full px-3 py-1 text-xs font-semibold"
+                >
+                  {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                </Badge>
+              </div>
+            )}
           </div>
               <SheetHeader className="px-6 pt-2 pb-4">
                 <div className="flex items-center justify-between">
@@ -403,6 +455,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {t('recommendations.title', 'Рекомендовано для вас')}
                   </h3>
                 </div>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {recommendedBlocks.map((block) => renderBlockItem(block, true))}
                 </div>
@@ -418,6 +471,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     </h3>
                   </div>
                 )}
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {otherBlocks.map((block) => renderBlockItem(block, false))}
                 </div>

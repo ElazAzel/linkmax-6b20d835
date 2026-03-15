@@ -158,20 +158,20 @@ export function AddLeadDialog({ open, onOpenChange }: AddLeadDialogProps) {
       {isDesktop ? (
         <DialogFooter className="pt-4">
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-            {t('editor.cancel', 'Cancel')}
+            {t('common.cancel', 'Cancel')}
           </Button>
           <Button type="submit" disabled={saving || !formData.name.trim()}>
-            {saving ? t('messages.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
+            {saving ? t('common.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
           </Button>
         </DialogFooter>
       ) : (
         <DrawerFooter className="px-0 pt-6">
           <Button type="submit" disabled={saving || !formData.name.trim()}>
-            {saving ? t('messages.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
+            {saving ? t('common.loading', 'Loading...') : t('crm.addLead', 'Add Lead')}
           </Button>
           <DrawerClose asChild>
             <Button type="button" variant="outline">
-              {t('editor.cancel', 'Cancel')}
+              {t('common.cancel', 'Cancel')}
             </Button>
           </DrawerClose>
         </DrawerFooter>

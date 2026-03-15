@@ -243,7 +243,8 @@ export const MobileToolbar = memo(function MobileToolbar({
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
         <SheetContent
           side="bottom"
-          className="z-[100] h-auto max-h-[92vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl border-t border-border/20 shadow-2xl [&>button]:hidden"
+          hideCloseButton
+          className="z-[100] h-auto max-h-[92vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl border-t border-border/20 shadow-2xl"
         >
           {/* Handle bar */}
           <div className="flex justify-center pt-4 pb-2">
@@ -257,6 +258,7 @@ export const MobileToolbar = memo(function MobileToolbar({
                 variant="ghost"
                 size="icon"
                 onClick={() => setMoreOpen(false)}
+                aria-label={t('common.close', 'Закрыть')}
                 className="rounded-2xl h-12 w-12 hover:bg-muted/50"
               >
                 <X className="h-6 w-6" />

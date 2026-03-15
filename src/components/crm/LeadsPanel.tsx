@@ -197,32 +197,32 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
 
           {/* Tabs for Leads / Analytics */}
           <Tabs value={activeTab} onValueChange={(v: string) => setActiveTab(v as typeof activeTab)} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mx-0 rounded-none border-b bg-transparent h-10 sm:h-11">
-              <TabsTrigger value="leads" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
+            <TabsList className="grid w-full grid-cols-5 mx-0 rounded-none border-b bg-transparent min-h-10 sm:min-h-11">
+              <TabsTrigger value="leads" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5 min-h-10 leading-tight">
                 <Users className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline ml-1">{t('crm.leads', 'Leads')}</span>
+                <span className="hidden sm:inline ml-1 whitespace-normal break-words text-wrap max-w-[4.5rem]">{t('crm.leads', 'Leads')}</span>
               </TabsTrigger>
-              <TabsTrigger value="bookings" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
+              <TabsTrigger value="bookings" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5 min-h-10 leading-tight">
                 <CalendarDays className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline ml-1">{t('crm.bookings', 'Bookings')}</span>
+                <span className="hidden sm:inline ml-1 whitespace-normal break-words text-wrap max-w-[4.5rem]">{t('crm.bookings', 'Bookings')}</span>
               </TabsTrigger>
-              <TabsTrigger value="analytics" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
+              <TabsTrigger value="analytics" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5 min-h-10 leading-tight">
                 <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline ml-1">{t('analytics.title', 'Stats')}</span>
+                <span className="hidden sm:inline ml-1 whitespace-normal break-words text-wrap max-w-[4.5rem]">{t('analytics.title', 'Stats')}</span>
               </TabsTrigger>
-              <TabsTrigger value="funnel" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
+              <TabsTrigger value="funnel" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5 min-h-10 leading-tight">
                 <svg className="h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
                 </svg>
-                <span className="hidden sm:inline ml-1">{t('funnel.short', 'Funnel')}</span>
+                <span className="hidden sm:inline ml-1 whitespace-normal break-words text-wrap max-w-[4.5rem]">{t('funnel.short', 'Funnel')}</span>
               </TabsTrigger>
-              <TabsTrigger value="heatmap" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-xs sm:text-xs px-0.5">
+              <TabsTrigger value="heatmap" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary text-[10px] sm:text-xs px-0.5 min-h-10 leading-tight">
                 <svg className="h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="10" />
                   <circle cx="12" cy="12" r="6" />
                   <circle cx="12" cy="12" r="2" />
                 </svg>
-                <span className="hidden sm:inline ml-1">{t('heatmap.short', 'Heat')}</span>
+                <span className="hidden sm:inline ml-1 whitespace-normal break-words text-wrap max-w-[4.5rem]">{t('heatmap.short', 'Heat')}</span>
               </TabsTrigger>
             </TabsList>
 
@@ -259,7 +259,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                         } ${statusColors[status]}`}
                     >
                       <div className="text-base sm:text-lg font-bold">{stats[status]}</div>
-                      <div className="text-[8px] sm:text-xs uppercase opacity-70 truncate">
+                      <div className="text-[8px] sm:text-xs uppercase opacity-70 whitespace-normal break-words text-wrap leading-tight">
                         {t(`crm.status.${status}`, status)}
                       </div>
                     </Button>
@@ -274,7 +274,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => setSourceFilter('all')}
-                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
+                  className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full min-h-8 text-[11px] sm:text-xs font-medium transition-all whitespace-normal break-words text-wrap leading-tight shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
                     }`}
                 >
                   {t('crm.allSources', 'All')} ({stats.total})
@@ -287,7 +287,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                       variant="ghost"
                       size="sm"
                       onClick={() => setSourceFilter(sourceFilter === source ? 'all' : source)}
-                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1 shrink-0 ${sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
+                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full min-h-8 text-[11px] sm:text-xs font-medium transition-all whitespace-normal break-words text-wrap leading-tight flex items-center gap-1 shrink-0 ${sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
                         } ${sourceColors[source]}`}
                     >
                       <span>{sourceIcons[source]}</span>

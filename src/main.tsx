@@ -11,6 +11,11 @@ import "./index.css";
 import App from "./App";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import {
+  CHUNK_RECOVERY_KEY,
+  isChunkRuntimeError,
+  recoverFromStaleAssets,
+} from "@/lib/utils/runtime-recovery";
 import { prefetchRouteChunks } from "@/lib/routing/route-prefetch";
 
 // Defer non-critical init: only load after user interacts or 10s idle
@@ -115,14 +120,14 @@ function recoverFromStaleAssets(): void {
 
 window.addEventListener('error', (event) => {
   if (isChunkRuntimeError(event.error || event.message)) {
-    recoverFromStaleAssets();
+    recoverFromStaleAssets('window.error');
   }
 });
 
 window.addEventListener('unhandledrejection', (event) => {
   if (isChunkRuntimeError(event.reason)) {
     event.preventDefault();
-    recoverFromStaleAssets();
+    recoverFromStaleAssets('unhandledrejection');
   }
 });
 

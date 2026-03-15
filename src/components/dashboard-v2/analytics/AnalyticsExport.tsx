@@ -4,17 +4,9 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import Download from 'lucide-react/dist/esm/icons/download';
 import Table from 'lucide-react/dist/esm/icons/table';
 import { toast } from 'sonner';
 import type { AnalyticsSummary } from '@/hooks/analytics/usePageAnalytics';
-import { exportAnalyticsToExcel } from '@/lib/export/excel-export-analytics';
 
 interface AnalyticsExportProps {
   analytics: AnalyticsSummary | null;
@@ -24,7 +16,6 @@ interface AnalyticsExportProps {
 
 export const AnalyticsExport = memo(function AnalyticsExport({
   analytics,
-  pageTitle = 'Page',
   period,
 }: AnalyticsExportProps) {
   const { t } = useTranslation();
@@ -40,6 +31,7 @@ export const AnalyticsExport = memo(function AnalyticsExport({
         views: d.views,
       }));
 
+      const { exportAnalyticsToExcel } = await import('@/lib/export/excel-export-analytics');
       await exportAnalyticsToExcel({
         pageViews,
         blockStats: analytics.topBlocks,

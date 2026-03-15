@@ -41,10 +41,13 @@ import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklis
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
 import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
+import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
+import { trackActivationEvent, trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { differenceInDays, parseISO } from 'date-fns';
+import { storage } from '@/lib/storage';
 import Repeat from 'lucide-react/dist/esm/icons/repeat';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
@@ -90,10 +93,42 @@ export const HomeScreen = memo(function HomeScreen({
   // Activation checklist with outcome-based data
   const activation = useActivationChecklist({
     pageData,
+    onOpenEditor,
+    onShare,
     pageId: pageData?.id,
     leadsCount: realLeadsCount,
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!pageData?.id || activation.steps.length === 0) return;
+
+    const trackingKey = `activation_funnel_steps_${pageData.id}`;
+    const trackedSteps = storage.get<string[]>(trackingKey) || [];
+    const trackedSet = new Set(trackedSteps);
+
+    const completionEvents: Record<string, 'funnel_step_create_page_completed' | 'funnel_step_add_block_completed' | 'funnel_step_publish_completed' | 'funnel_step_first_lead_completed'> = {
+      'create-page': 'funnel_step_create_page_completed',
+      'add-block': 'funnel_step_add_block_completed',
+      'publish': 'funnel_step_publish_completed',
+      'first-lead': 'funnel_step_first_lead_completed',
+    };
+
+    let hasUpdates = false;
+
+    activation.steps.forEach((step) => {
+      if (!step.completed || trackedSet.has(step.id)) return;
+      const eventType = completionEvents[step.id];
+      if (!eventType) return;
+      trackActivationEvent(pageData.id, eventType);
+      trackedSet.add(step.id);
+      hasUpdates = true;
+    });
+
+    if (hasUpdates) {
+      storage.set(trackingKey, Array.from(trackedSet));
+    }
+  }, [activation.steps, pageData?.id]);
 
   // Creator return-after-gap detection
   useEffect(() => {

@@ -3,6 +3,7 @@ import globals from "globals";
 import i18nPlugin from "./eslint/i18n-plugin.js";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import jsxA11y from "./eslint/jsx-a11y-plugin.js";
 import tseslint from "typescript-eslint";
 
 const isI18nLint = process.env.LINT_I18N === "true";
@@ -84,6 +85,18 @@ export default tseslint.config(
           },
         ]
         : "off",
+    },
+  },
+
+  {
+    files: ["src/components/**/*.{ts,tsx}", "src/pages/**/*.{ts,tsx}"],
+    plugins: {
+      "jsx-a11y": jsxA11y,
+    },
+    rules: {
+      "jsx-a11y/click-events-have-key-events": "error",
+      "jsx-a11y/interactive-supports-focus": "error",
+      "jsx-a11y/no-static-element-interactions": "error",
     },
   },
   {

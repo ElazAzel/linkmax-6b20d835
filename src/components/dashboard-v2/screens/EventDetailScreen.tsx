@@ -56,8 +56,6 @@ import { toast } from 'sonner';
 import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
-import { exportToExcel, exportToCSV } from '@/lib/export/excel-export';
-import { exportEventToPDF, calculateEventAnalytics } from '@/lib/export/pdf-export';
 import type { SupportedLanguage } from '@/lib/i18n-helpers';
 import type { EventFormField } from '@/types/page';
 
@@ -360,6 +358,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
     setExporting(true);
     try {
+      const { exportToExcel } = await import('@/lib/export/excel-export');
       await exportToExcel({
         eventTitle: event.title,
         registrations: fullRegistrations,
@@ -384,6 +383,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
     setExporting(true);
     try {
+      const { exportToCSV } = await import('@/lib/export/excel-export');
       exportToCSV({
         eventTitle: event.title,
         registrations: fullRegistrations,
@@ -413,6 +413,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
     setExporting(true);
     try {
+      const { exportEventToPDF, calculateEventAnalytics } = await import('@/lib/export/pdf-export');
       const analytics = calculateEventAnalytics(
         fullRegistrations,
         event.formSchema,
