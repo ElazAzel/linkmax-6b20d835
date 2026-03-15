@@ -31,9 +31,8 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { StatusBadge } from '../common/StatusBadge';
-import { EmptyState } from '../common/EmptyState';
-import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { cn } from '@/lib/utils/utils';
+import { EmptyState } from '@/components/ui/empty-state';
+import { LoadingState } from '@/components/ui/loading-state';
 
 interface PageItem {
   id: string;
@@ -148,7 +147,11 @@ export const PagesScreen = memo(function PagesScreen({
   if (loading) {
     return (
       <div className="p-4 space-y-4">
-        <LoadingSkeleton variant="cards" count={3} />
+        <LoadingState
+          variant="skeleton-cards"
+          skeletonCount={3}
+          message={t('dashboard.pages.loading', 'Загружаем страницы...')}
+        />
       </div>
     );
   }
@@ -240,10 +243,8 @@ export const PagesScreen = memo(function PagesScreen({
               ? t('dashboard.pages.emptyDescription', 'Create your first page to get started')
               : t('dashboard.pages.noResultsDescription', 'Try adjusting your search or filters')
             }
-            action={pages.length === 0 ? {
-              label: t('dashboard.pages.createFirst', 'Create Page'),
-              onClick: onCreatePage,
-            } : undefined}
+            ctaLabel={pages.length === 0 ? t('dashboard.pages.createFirst', 'Create Page') : undefined}
+            onCtaClick={pages.length === 0 ? onCreatePage : undefined}
           />
         ) : (
           <div className="grid gap-3">
