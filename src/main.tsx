@@ -11,6 +11,11 @@ import "./index.css";
 import App from "./App";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import {
+  CHUNK_RECOVERY_KEY,
+  isChunkRuntimeError,
+  recoverFromStaleAssets,
+} from "@/lib/utils/runtime-recovery";
 
 // Defer non-critical init: only load after user interacts or 10s idle
 // This prevents vendor-sentry (150KB) and cache-utils from loading on landing page
@@ -39,67 +44,16 @@ const fireDeferOnce = () => {
 );
 setTimeout(fireDeferOnce, 10000);
 
-// Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
-const CHUNK_RECOVERY_KEY = 'linkmax_chunk_recovery_once';
-
-function isChunkRuntimeError(err: unknown): boolean {
-  const message = typeof err === 'string'
-    ? err
-    : (err as { message?: string })?.message || '';
-
-  return [
-    'ChunkLoadError',
-    'Loading chunk',
-    'Failed to fetch dynamically imported module',
-    'Importing a module script failed',
-    'O is not a function',
-  ].some((token) => message.includes(token));
-}
-
-function recoverFromStaleAssets(): void {
-  try {
-    if (window.sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
-    window.sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
-
-    // Clear runtime caches that can hold stale assets
-    try {
-      Object.keys(window.localStorage).forEach((key) => {
-        if (key.startsWith('linkmax_') || key.startsWith('sb-')) {
-          window.localStorage.removeItem(key);
-        }
-      });
-    } catch {
-      // ignore
-    }
-
-    try {
-      if ('caches' in window) {
-        caches.keys().then((names) => {
-          names.forEach((name) => caches.delete(name));
-          window.location.reload();
-        });
-        return;
-      }
-    } catch {
-      // ignore
-    }
-
-    window.location.reload();
-  } catch {
-    window.location.reload();
-  }
-}
-
 window.addEventListener('error', (event) => {
   if (isChunkRuntimeError(event.error || event.message)) {
-    recoverFromStaleAssets();
+    recoverFromStaleAssets('window.error');
   }
 });
 
 window.addEventListener('unhandledrejection', (event) => {
   if (isChunkRuntimeError(event.reason)) {
     event.preventDefault();
-    recoverFromStaleAssets();
+    recoverFromStaleAssets('unhandledrejection');
   }
 });
 
