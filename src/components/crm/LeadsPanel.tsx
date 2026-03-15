@@ -4,10 +4,11 @@ import { formatDateShort } from '@/lib/utils/format';
 import { useLeads, LeadStatus } from '@/hooks/crm/useLeads';
 import { usePremiumStatus } from '@/hooks/user/usePremiumStatus';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Sheet,
@@ -248,8 +249,11 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               <div className="overflow-x-auto -mx-0">
                 <div className="grid grid-cols-5 gap-1.5 sm:gap-2 p-3 sm:p-4 border-b min-w-[320px]">
                   {(['new', 'contacted', 'qualified', 'converted', 'lost'] as LeadStatus[]).map(status => (
-                    <button
+                    <Button
                       key={status}
+                      type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setStatusFilter(statusFilter === status ? 'all' : status)}
                       className={`p-1.5 sm:p-2 rounded-lg text-center transition-all ${statusFilter === status ? 'ring-2 ring-primary ring-offset-1' : ''
                         } ${statusColors[status]}`}
@@ -258,24 +262,30 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                       <div className="text-[8px] sm:text-xs uppercase opacity-70 truncate">
                         {t(`crm.status.${status}`, status)}
                       </div>
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
 
               {/* Source Filter - Scrollable */}
               <div className="flex gap-1.5 sm:gap-2 p-3 sm:p-4 border-b overflow-x-auto scrollbar-hide">
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setSourceFilter('all')}
                   className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs font-medium transition-all whitespace-nowrap shrink-0 ${sourceFilter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-accent text-foreground'
                     }`}
                 >
                   {t('crm.allSources', 'All')} ({stats.total})
-                </button>
+                </Button>
                 {(['form', 'messenger', 'manual', 'page_view', 'other'] as const).map(source => (
                   sourceStats[source] > 0 && (
-                    <button
+                    <Button
                       key={source}
+                      type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setSourceFilter(sourceFilter === source ? 'all' : source)}
                       className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-xs font-medium transition-all whitespace-nowrap flex items-center gap-1 shrink-0 ${sourceFilter === source ? 'ring-2 ring-primary ring-offset-1' : ''
                         } ${sourceColors[source]}`}
@@ -283,7 +293,7 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
                       <span>{sourceIcons[source]}</span>
                       <span className="hidden sm:inline">{t(`crm.source.${source}`, source)}</span>
                       ({sourceStats[source]})
-                    </button>
+                    </Button>
                   )
                 ))}
               </div>
@@ -321,16 +331,23 @@ export function LeadsPanel({ open, onOpenChange }: LeadsPanelProps) {
               {/* Leads List */}
               <ScrollArea className="h-[calc(100vh-320px)] sm:h-[calc(100vh-300px)] px-3 sm:px-0 bg-accent/20 sm:bg-transparent">
                 {loading ? (
-                  <div className="p-8 text-center text-muted-foreground text-sm">
-                    {t('messages.loading', 'Loading...')}
-                  </div>
+                  <LoadingState
+                    message={t('messages.loading', 'Loading...')}
+                  />
                 ) : filteredLeads.length === 0 ? (
-                  <div className="p-8 text-center text-muted-foreground text-sm">
-                    {searchQuery || statusFilter !== 'all'
+                  <EmptyState
+                    title={searchQuery || statusFilter !== 'all'
                       ? t('crm.noResults', 'No leads found')
                       : t('crm.noLeads', 'No leads yet. Add your first lead!')
                     }
-                  </div>
+                    description={searchQuery || statusFilter !== 'all'
+                      ? t('crm.tryAnotherFilter', 'Try another filter or clear search')
+                      : t('crm.addFirstLeadHint', 'Start by adding your first lead manually or using forms')
+                    }
+                    ctaLabel={t('crm.addLead', 'Add lead')}
+                    onCtaClick={() => setAddDialogOpen(true)}
+                    className="mx-3 sm:mx-4"
+                  />
                 ) : (
                   <div className="space-y-2 py-2 sm:py-0 sm:space-y-0 sm:divide-y">
                     {filteredLeads.map(lead => (

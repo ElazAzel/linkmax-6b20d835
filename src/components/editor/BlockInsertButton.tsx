@@ -15,9 +15,11 @@ import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
   SheetContent,
+  SheetClose,
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
 } from '@/components/ui/sheet';
 import {
   Tooltip,
@@ -203,6 +205,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
     const isLocked = !canUseBlock(block.tier);
+    const isProBlock = block.tier === 'pro';
     const IconComponent = getLucideIcon(block.icon);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
 
@@ -230,14 +233,23 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           {t(block.labelKey, block.type)}
         </span>
 
-        {showRelevantBadge && !isLocked && (
+        {!isLocked && (isProBlock || showRelevantBadge) && (
           <div className="absolute -top-1 -left-1">
             <Badge
-              variant="default"
-              className="text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0"
+              variant="secondary"
+              className="text-xs px-1.5 py-0.5"
             >
-              <Sparkles className="h-2.5 w-2.5 mr-0.5" />
-              {t('recommendations.relevant', 'Актуально')}
+              {isProBlock ? (
+                <>
+                  <Crown className="h-2.5 w-2.5 mr-0.5" />
+                  {t('blocks.premium', 'Premium')}
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-2.5 w-2.5 mr-0.5" />
+                  {t('recommendations.relevant', 'Актуально')}
+                </>
+              )}
             </Badge>
           </div>
         )}
@@ -245,11 +257,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         {isLocked && (
           <div className="absolute top-2 right-2">
             <Lock className="h-4 w-4 text-muted-foreground" />
-          </div>
-        )}
-        {block.tier === 'pro' && !isLocked && (
-          <div className="absolute top-2 right-2">
-            <Crown className="h-4 w-4 text-amber-500" />
           </div>
         )}
       </button>
@@ -301,10 +308,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           hideCloseButton
           data-testid="add-block-sheet"
           className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none"
+          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
         >
-          <div className="flex justify-center pt-4 pb-2">
-            <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
-          </div>
+          <div className="flex-1 overflow-y-auto">
+            <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
+              <div className="flex justify-center pt-4 pb-2">
+                <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
+              </div>
 
           <SheetHeader className="px-6 pt-2 pb-5 border-b border-border/10">
             <div className="flex items-center justify-between">
@@ -345,8 +355,46 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               />
             </div>
           </div>
+              <SheetHeader className="px-6 pt-2 pb-4">
+                <div className="flex items-center justify-between">
+                  <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
+                  <SheetClose asChild>
+                    <button
+                      type="button"
+                      className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                      aria-label={t('common.close', 'Close')}
+                    >
+                      <X className="h-6 w-6 text-muted-foreground" />
+                    </button>
+                  </SheetClose>
+                </div>
+                <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
+              </SheetHeader>
 
-          <div className="overflow-y-auto px-5 py-5" style={{ height: 'calc(100% - 180px)' }}>
+              <div className="px-6 pb-5 bg-muted/20">
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  {!isPremium && (
+                    <Badge
+                      variant="secondary"
+                      className="text-xs px-3 py-1 rounded-full font-medium text-muted-foreground"
+                    >
+                      {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                    </Badge>
+                  )}
+                </div>
+                <div className="relative">
+                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
+                  <Input
+                    placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="px-5 py-5">
             {recommendedBlocks.length > 0 && !searchQuery && (
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4 px-1">
@@ -355,7 +403,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {t('recommendations.title', 'Рекомендовано для вас')}
                   </h3>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {recommendedBlocks.map((block) => renderBlockItem(block, true))}
                 </div>
               </div>
@@ -370,7 +418,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     </h3>
                   </div>
                 )}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {otherBlocks.map((block) => renderBlockItem(block, false))}
                 </div>
               </div>
@@ -381,6 +429,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 <p className="text-lg text-muted-foreground">{t('common.noResults', 'Ничего не найдено')}</p>
               </div>
             )}
+            </div>
           </div>
         </SheetContent>
       </Sheet>

@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -316,7 +315,8 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
               const isEventPast = event.end_at ? isPast(new Date(event.end_at)) : false;
 
               return (
-                <Card
+                <button
+                  type="button"
                   key={event.id}
                   className="m-3 p-3 border rounded-lg cursor-pointer hover:border-primary/50 transition-colors"
                   onClick={() => setSelectedEventId(event.id)}
@@ -379,7 +379,7 @@ export function EventsPanel({ isPremium }: EventsPanelProps) {
 
                     <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
                   </div>
-                </Card>
+                </button>
               );
             })}
           </div>
