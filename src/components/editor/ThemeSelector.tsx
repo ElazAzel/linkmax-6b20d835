@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
 import Check from 'lucide-react/dist/esm/icons/check';
 import { cn } from '@/lib/utils/utils';
 import type { PageTheme } from '@/types/page';
@@ -116,7 +115,8 @@ export const ThemeSelector = memo(function ThemeSelector({
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {THEMES.map((theme) => (
-          <Card
+          <button
+            type="button"
             key={theme.id}
             onClick={() => onThemeChange(theme.theme)}
             className={cn(
@@ -149,7 +149,7 @@ export const ThemeSelector = memo(function ThemeSelector({
               </div>
               <p className="text-xs text-muted-foreground">{t(theme.descKey)}</p>
             </div>
-          </Card>
+          </button>
         ))}
       </div>
     </div>

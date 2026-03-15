@@ -246,7 +246,8 @@ function SortableGridBlockItem({
         </div>
 
         {/* Click Overlay */}
-        <div
+        <button
+          type="button"
           className="absolute inset-0 z-20 cursor-pointer rounded-2xl ring-offset-background transition-colors hover:bg-black/5 active:bg-black/10"
           onClick={(e) => {
             e.preventDefault();
@@ -261,8 +262,11 @@ function SortableGridBlockItem({
           onTouchEnd={(e) => {
             e.stopPropagation();
           }}
-          role="button"
-          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              e.currentTarget.blur();
+            }
+          }}
           aria-label={`Edit ${block.type} block`}
         />
       </div>

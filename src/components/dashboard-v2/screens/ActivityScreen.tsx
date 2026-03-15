@@ -41,7 +41,6 @@ import { BookingsPanel } from '@/components/crm/BookingsPanel';
 import { WalletWidget } from '@/components/crm/WalletWidget';
 import { cn } from '@/lib/utils/utils';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
-import { exportLeadsToExcel } from '@/lib/export/excel-export-leads';
 import type { Lead } from '@/hooks/crm/useLeads';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/platform/supabase/client';
@@ -192,7 +191,10 @@ export const ActivityScreen = memo(function ActivityScreen({ isPremium }: Activi
                 className="h-11 w-11 rounded-2xl md:h-10 md:w-auto md:px-5 md:rounded-xl glass hover:bg-white/10 border-white/10"
                 onClick={() => {
                   toast.promise(
-                    exportLeadsToExcel({ leads }),
+                    (async () => {
+                      const { exportLeadsToExcel } = await import('@/lib/export/excel-export-leads');
+                      return exportLeadsToExcel({ leads });
+                    })(),
                     {
                       loading: t('dashboard.activity.exporting', 'Экспорт лидов...'),
                       success: t('dashboard.activity.exportSuccess', 'Экспорт завершен'),

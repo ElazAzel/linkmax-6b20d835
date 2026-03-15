@@ -41,7 +41,6 @@ import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklis
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
 import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
-import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
@@ -84,32 +83,15 @@ export const HomeScreen = memo(function HomeScreen({
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { repeatCount } = useRepeatCustomers();
   const gapDetectedRef = useRef(false);
 
   const viewCount = pageData?.viewCount || 0;
 
   // Activation checklist with outcome-based data
-  // Fetch bookings count for activation milestone
-  const [bookingsCount, setBookingsCount] = useState(0);
-  useEffect(() => {
-    if (!pageData?.id) return;
-    (async () => {
-      const { count } = await supabase
-        .from('bookings')
-        .select('*', { count: 'exact', head: true })
-        .eq('page_id', pageData.id);
-      setBookingsCount(count || 0);
-    })();
-  }, [pageData?.id]);
-
   const activation = useActivationChecklist({
     pageData,
-    onOpenEditor,
-    onShare,
-    viewCount,
+    pageId: pageData?.id,
     leadsCount: realLeadsCount,
-    bookingsCount,
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
 
@@ -196,6 +178,10 @@ export const HomeScreen = memo(function HomeScreen({
             onDismiss={() => {
               activation.dismiss();
               setChecklistDismissed(true);
+            }}
+            onStepClick={(step) => {
+              activation.handleStepClick(step);
+              navigate(step.href);
             }}
           />
         )}

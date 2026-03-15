@@ -5,6 +5,7 @@ import { fintechService, WalletOverview, WalletTransaction } from '@/services/fi
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { Card } from '@/components/ui/card';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import Wallet from 'lucide-react/dist/esm/icons/wallet';
 import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import ArrowDownLeft from 'lucide-react/dist/esm/icons/arrow-down-left';
@@ -40,7 +41,7 @@ export const FinanceScreen = memo(function FinanceScreen() {
             .finally(() => setLoading(false));
     }, [user]);
 
-    if (loading) return <LoadingSkeleton />;
+    if (loading) return <LoadingState skeleton={<LoadingSkeleton />} />;
 
     const balance = data?.wallet?.balance || 0;
     const currency = data?.wallet?.currency || 'KZT';
@@ -85,14 +86,13 @@ export const FinanceScreen = memo(function FinanceScreen() {
                     </h3>
 
                     {transactions.length === 0 ? (
-                        <Card className="p-12 text-center glass border-white/10 shadow-glass rounded-[2.5rem]">
-                            <div className="h-16 w-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
-                                <TrendingUp className="h-8 w-8 text-muted-foreground opacity-30" />
-                            </div>
-                            <h3 className="font-bold mb-2">{t('finance.empty.title', 'Транзакций пока нет')}</h3>
-                            <p className="text-sm text-muted-foreground">
-                                {t('finance.empty.desc', 'Здесь будет отображаться история ваших доходов и комиссий')}
-                            </p>
+                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
+                            <EmptyState
+                                icon={TrendingUp}
+                                title={t('finance.empty.title', 'Транзакций пока нет')}
+                                description={t('finance.empty.desc', 'Здесь будет отображаться история ваших доходов и комиссий')}
+                                className="py-12"
+                            />
                         </Card>
                     ) : (
                         <div className="space-y-4">

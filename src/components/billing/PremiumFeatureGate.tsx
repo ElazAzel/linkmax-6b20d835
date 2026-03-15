@@ -95,7 +95,7 @@ export function PremiumFeatureGate({
             className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700"
             onClick={() => navigate('/pricing')}
           >
-            {t('premium.upgrade', 'Улучшить до {{tier}}', { tier: tierNames[requiredTier] })}
+            {t('common.cta.upgradeToTier', 'Upgrade to {{tier}}', { tier: tierNames[requiredTier] })}
           </Button>
         )}
       </div>

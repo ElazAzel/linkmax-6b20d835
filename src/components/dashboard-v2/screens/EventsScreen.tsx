@@ -19,15 +19,14 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Input } from '@/components/ui/input';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Users from 'lucide-react/dist/esm/icons/users';
 import QrCode from 'lucide-react/dist/esm/icons/qr-code';
 import Download from 'lucide-react/dist/esm/icons/download';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Search from 'lucide-react/dist/esm/icons/search';
-import Plus from 'lucide-react/dist/esm/icons/plus';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days';
@@ -72,6 +71,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loadError, setLoadError] = useState(false);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
@@ -80,6 +80,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
     const fetchEvents = async () => {
       if (!user) return;
 
+      setLoadError(false);
       try {
         const { data: eventsData, error } = await supabase
           .from('events')
@@ -144,6 +145,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
         setEvents(eventsWithStats);
       } catch (error) {
         console.error('Error fetching events:', error);
+        setLoadError(true);
         toast.error(t('events.fetchError', 'Ошибка загрузки событий'));
       } finally {
         setLoading(false);
@@ -327,12 +329,17 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
 
   if (loading || premiumLoading) {
     return (
-      <div className={cn('p-4 space-y-4', className)}>
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
-      </div>
+      <LoadingState
+        className={cn('p-4', className)}
+        skeleton={(
+          <>
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+          </>
+        )}
+      />
     );
   }
 
@@ -364,29 +371,25 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
       <ScrollArea className="flex-1">
         <div className="p-5 space-y-8">
           {events.length === 0 ? (
-            <Card className="p-12 text-center glass border-white/10 shadow-glass-lg rounded-[2.5rem]">
-              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10">
-                <Calendar className="h-10 w-10 text-muted-foreground opacity-30" />
-              </div>
-              <h3 className="text-xl font-black mb-2">
-                {t('events.noEvents', 'Нет событий')}
-              </h3>
-              <p className="text-sm text-muted-foreground mb-8 px-4 font-medium leading-relaxed">
-                {t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
-              </p>
-              <Button onClick={() => navigate('/dashboard/home?tab=editor')} className="h-14 px-8 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-glass-lg hover:scale-105 active:scale-95 transition-all">
-                <Plus className="h-4 w-4 mr-2" />
-                {t('events.addEventBlock', 'Добавить блок')}
-              </Button>
+            <Card className="glass border-white/10 shadow-glass-lg rounded-[2.5rem]">
+              <EmptyState
+                icon={Calendar}
+                title={t('events.noEvents', 'Нет событий')}
+                description={t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
+                action={{
+                  label: t('events.addEventBlock', 'Добавить блок'),
+                  onClick: () => navigate('/dashboard/home?tab=editor'),
+                }}
+                className="py-12"
+              />
             </Card>
           ) : filteredEvents.length === 0 ? (
-            <Card className="p-12 text-center glass border-white/10 shadow-glass rounded-[2rem]">
-              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
-                <Search className="h-8 w-8 text-muted-foreground opacity-30" />
-              </div>
-              <p className="font-bold text-muted-foreground">
-                {t('events.noSearchResults', 'Ничего не найдено')}
-              </p>
+            <Card className="glass border-white/10 shadow-glass rounded-[2rem]">
+              <EmptyState
+                icon={Search}
+                title={t('events.noSearchResults', 'Ничего не найдено')}
+                className="py-10"
+              />
             </Card>
           ) : (
             <div className="space-y-8 pb-24">
