@@ -32,8 +32,31 @@ BEGIN
     RAISE EXCEPTION 'FAILURE: User A cannot see own wallet';
   END IF;
 
+  -- VERIFICATION 3: Trigger Guard on user_profiles (is_premium)
+  -- Try to escalate privileges
+  UPDATE public.user_profiles SET is_premium = true WHERE id = user_a;
+  
+  IF (SELECT is_premium FROM public.user_profiles WHERE id = user_a) = true THEN
+    RAISE EXCEPTION 'SECURITY BREACH: Trigger Guard failed to revert is_premium';
+  ELSE
+    RAISE NOTICE 'SUCCESS: Trigger Guard reverted illegal is_premium update';
+  END IF;
+
+  -- VERIFICATION 4: Invite code masking in public_teams
+  -- Insert a team with an invite code as owner
+  INSERT INTO public.teams (id, name, owner_id, invite_code) 
+  VALUES ('00000000-0000-0000-0000-000000000001', 'Test Team', admin_user, 'SECRET123')
+  ON CONFLICT DO NOTHING;
+
+  -- Verification as User A (non-member)
+  IF (SELECT invite_code FROM public.public_teams WHERE id = '00000000-0000-0000-0000-000000000001') IS NOT NULL THEN
+    RAISE EXCEPTION 'SECURITY BREACH: invite_code exposed in public_teams for non-member';
+  ELSE
+    RAISE NOTICE 'SUCCESS: invite_code masked in public_teams';
+  END IF;
+
   -- Reset context
   SET request.jwt.claims = '';
   
-  RAISE NOTICE 'RLS Verification completed successfully';
+  RAISE NOTICE 'RLS & Trigger Verification completed successfully';
 END $$;

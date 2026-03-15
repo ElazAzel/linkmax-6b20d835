@@ -20,20 +20,28 @@
 - **Статус:** ✅ **Исправлено** (Health Score: 9/10). `sitemap.xml` и `robots.txt` в `public/`.
 - **Что сделать:**
   - [x] Восстановить работу `sitemap.ts` (заменено статическим xml в public).
-- [x] Проверить индексацию поисковыми роботами (Интегрирован `AISearchOptimizer` 27.02.2026).
+  - [x] Проверить индексацию поисковыми роботами (Интегрирован `AISearchOptimizer` 27.02.2026).
 
 ### 3. Monetization & Payments (Step-by-Growth)
-
 - **Проблема:** Переход от подписочной модели к транзакционной требует сложной логики сплитования и биллинга.
-- **Статус:** ⚠️ **Infrastructure Ready** (Health Score: 8/10). ADR 0026 принят, архитектура согласована.
-- **Что сделать:**
+- **Статус:** ✅ **Implemented** (Health Score: 10/10).
+- **Что сделано:**
   - [x] Спроектировать слой транзакций (ADR 0026).
-  - [ ] Реализовать `process-transaction-fee` Edge Function для Starter (7%) и Pro (1%).
-  - [ ] Интегрировать Kaspi QR (Merchant API) для автоматизации списаний.
+  - [x] Реализовать `process-transaction-fee` Edge Function для Starter (7%) и Pro (1%).
+  - [x] Интегрировать Kaspi QR (Merchant API) для автоматизации списаний.
+  - [x] Реализовать Ledger для отслеживания комиссий и выплат.
+
+### 4. Security Hardening (Post-Audit March 2026)
+- **Проблема:** Прямое редактирование системных колонок через API и утечка invite_code.
+- **Статус:** ✅ **Fixed** (Health Score: 10/10).
+- **Что сделано:**
+  - [x] Реализована триггерная защита `SECURITY DEFINER` (ADR 0027).
+  - [x] Скрыты `invite_code` через `public_teams` view.
+  - [x] Ужесточены политики RLS для финансовых таблиц.
 
 ## Высокий приоритет (P1 — UX & Stability)
 
-### 4. Authentication (OAuth Redirects)
+### 5. Authentication (OAuth Redirects)
 
 - **Проблема:** Параметр `returnTo` игнорируется при входе через Google/Apple, прерывая deep-linking.
 - **Статус:** ✅ **Исправлено** (Audit 05.03.2026).
@@ -81,4 +89,4 @@
 
 ## Metadata
 
-*Документ обновлен: 7 марта 2026 г. (Global Documentation Sync & Step-by-Growth Pivot)*
+*Документ обновлен: 15 марта 2026 г. (Security Post-Audit & Technical Debt Cleanup)*

@@ -11,9 +11,9 @@
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
 1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic (frosted high-index glass, reactive WebGL backgrounds, and organic micro-animations) to provide a high-end, 2026-standard look by default. Landing Page is fully refreshed with premium Living Canvas components.
-2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a global **Cmd+K Command Palette** for deep search across entities, and native **Excel/CSV data export**.
+2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a global **Cmd+K Command Palette** for deep search across entities, and native **export for Analytics, Leads, and CRM data**.
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
-4. **Team Collaboration & Business Zones** — RBAC-based organization management and multi-tenant workspaces with CRM Kanban and Team Inbox.
+4. **Team Collaboration & Business Zones** — RBAC-based organization management using **Secured View Architecture (`public_teams`)** and multi-tenant workspaces with CRM Kanban and Team Inbox.
 5. **Fintech Core & Auth** — Telegram Mini App integration, Telegram Web Login, integrated ledger with Kaspi QR Sandbox, local **PDF Invoice / Acts generation**, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
 
 **Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
@@ -28,6 +28,7 @@ LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)*
 ### Repository Security & Privacy
 
 The codebase is hosted in a **Private** repository to protect intellectual property and business logic. Access is restricted to authorized team members and IPA BEEGIN representatives. Git history is periodically audited and sanitized of sensitive credentials. See [ADR 0024: Repository Security and Privacy](../../ADR/0024-repository-security.md) for details on recent security hardening.
+The database layer is further hardened with **Trigger Guards** (ADR 0027) preventing unauthorized mutation of system-critical columns in `user_profiles` and `challenge_progress`.
 
 **Target audiences:**
 
@@ -107,7 +108,7 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
   - Insights: Refined tab navigation with horizontal scrolling and optimized touch triggers.
   - Editor: Increased touch target sizes for block reordering and insertion (44x44px+).
   - CRM: Standardized page paddings and improved action accessibility.
-- **Performance**: Capped blur radii and simplified animations on mobile to maintain 60FPS on low-end devices.
+- **Performance**: Capped blur radii and simplified animations on mobile to maintain 60FPS on low-end devices. Implemented **Vendor Bundle Splitting** (`manualChunks`) in production builds to reduce TBT and improve Core Web Vitals.
 
 **Dashboard sections (DashboardV2):**
 
@@ -459,7 +460,7 @@ LinkMAX использует гибридную модель, направлен
 
 - **Quality Assurance**:
   - Added `test:coverage` script to `package.json` for code coverage tracking.
-  - Updated `PLATFORM_SNAPSHOT.md` health score to **10/10**.
+  - Updated `PLATFORM_SNAPSHOT.md` health score to **10/10** (Status: Production Ready).
 
 - **Multi-Page**: Users can create up to 6 pages (Pro) or 1 page (Free).
 - **Custom Domains**: Pro users can connect custom domains via CNAME record.

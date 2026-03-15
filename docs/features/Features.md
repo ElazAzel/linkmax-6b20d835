@@ -49,6 +49,8 @@
 | Lead status tracking | Implemented | Pipeline stages and notes |
 | Telegram notifications | Implemented | Lead alerts via Telegram bot |
 | CRM automations | Implemented | Hourly cron processes automation rules |
+| Command Palette | Implemented | Cmd+K global search across all entities (Users, Pages, CRM) |
+| Export System | Implemented | CSV/PDF export for Analytics, Leads, and Transactions |
 | Quick replies | In progress | Templates for faster responses |
 
 ## Analytics & Tracking
@@ -110,6 +112,14 @@
 | Cloudflare Turnstile | Implemented | Anti-spam on public forms |
 | CSP headers | Implemented | Strict Content Security Policy |
 | XSS sandbox | Implemented | Custom code iframe sandboxed |
+| Trigger Guards | Implemented | Database-level protection for sensitive columns |
+
+## Design Systems
+
+| Feature | Status | Notes |
+|---|---|---|
+| Living Canvas | Implemented | Evolution of Liquid Glass: Prismatic effects, WebGL backgrounds |
+| Fluid Spacing/Typo | Implemented | Math-based scaling for all viewports |
 
 ## Infrastructure
 
@@ -122,4 +132,4 @@
 
 ---
 
-*Last updated: 2026-03-05*
+*Last updated: 2026-03-15*

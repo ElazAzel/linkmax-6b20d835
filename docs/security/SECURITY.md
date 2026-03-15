@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the security measures implemented in the lnkmx platform. Last fully audited: **2026-02-18** (Phases 1–5).
+This document outlines the security measures implemented in the lnkmx platform. Last fully audited: **2026-03-15** (Security Hardening Phase).
 
 ---
 
@@ -32,21 +32,45 @@ This document outlines the security measures implemented in the lnkmx platform. 
 ### ✅ All Tables Have RLS Enabled
 
 | Table | RLS | Policies |
-|-------|-----|----------|
-| `pages` | ✅ | Users can only access their own pages |
-| `blocks` | ✅ | Access through page ownership |
-| `user_profiles` | ✅ | Users can view all, update own |
-| `leads` | ✅ | Users can only access their own leads |
-| `bookings` | ✅ | Owner/customer access only (fixed: overly permissive policy removed) |
-| `analytics` | ✅ | Page owner access for viewing |
-| `token_transactions` | ✅ | User/seller/buyer access |
-| `token_withdrawals` | ✅ | User can only view/create own |
-| `collaborations` | ✅ | Requester/target access |
-| `verification_requests` | ✅ | User can only view/create own |
-| `template_purchases` | ✅ | Buyer/seller access |
-| `teams` | ✅ | Owner/member access |
-| `languages` | ✅ | Admin management, public read active |
-| `rate_limits` | ✅ | Service role access only |
+| Table                 | RLS State   | Protection Mechanism           |
+| :-------------------- | :---------- | :----------------------------- |
+| `pages`               | Active      | User ownership                 |
+| `blocks`              | Active      | Access through page ownership  |
+| `user_profiles`       | Active      | Trigger Guard (Sensitive Cols) |
+| `leads`               | Active      | User ownership                 |
+| `bookings`            | Active      | Owner/customer access only     |
+| `analytics`           | Active      | Page owner access for viewing  |
+| `token_transactions`  | Restricted  | Edge functions only            |
+| `user_wallets`        | Strict      | No Update Policy (Edge Only)   |
+| `user_tokens`         | Strict      | No Update Policy (Edge Only)   |
+| `teams`               | Masked      | `public_teams` View + RLS      |
+| `event_registrations` | Restricted  | Hardened INSERT Policy         |
+| `languages`           | Active      | Admin management, public read  |
+| `rate_limits`         | Restricted  | Service role access only       |
+
+### 🛡️ Database Hardening Triggers
+
+To prevent privilege escalation through direct API updates, sensitive columns are protected by **BEFORE UPDATE** triggers with `SECURITY DEFINER`.
+
+```mermaid
+sequenceDiagram
+    participant U as Authenticated User
+    participant A as Supabase API (PostgREST)
+    participant T as BEFORE UPDATE Trigger
+    participant DB as Postgres Table
+
+    U->>A: PATCH /user_profiles { is_premium: true }
+    A->>T: Execution check
+    Note over T: Role is not 'service_role'
+    T->>T: Force NEW.is_premium = OLD.is_premium
+    T->>DB: Commit with original values
+    DB-->>A: Success (but values reverted)
+    A-->>U: 204 No Content
+```
+
+**Protected Tables:**
+- `user_profiles`: Protects `is_premium`, `is_verified`, `premium_tier`, `premium_expires_at`, `trial_ends_at`.
+- `challenge_progress`: Protects `is_completed`, `reward_claimed`, `completed_at`.
 
 ### Double-Booking Prevention
 
@@ -204,4 +228,4 @@ npm audit
 
 **Security contact**: admin@lnkmx.my
 
-*Last updated: 2026-02-18*
+*Last updated: 2026-03-15*

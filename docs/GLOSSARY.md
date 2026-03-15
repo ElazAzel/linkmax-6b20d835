@@ -21,6 +21,8 @@
 | **EDO / ЭДО** | Генератор документов: акты, договоры и счета на базе HTML-шаблонов. |
 | **Liquid Glass** | Дизайн-система платформы: glassmorphism, микро-анимации. |
 | **Pixel Proxy** | Серверная отправка событий в рекламные системы (FB CAPI, TikTok) для обхода блокировщиков. |
+| **Command Palette** | Глобальный поиск и панель команд (Cmd+K) для быстрого перехода и действий. |
+| **Living Canvas** | Эстетическая концепция: динамический фон, призма-эффекты, WebGL. |
 
 ## Технические термины
 
@@ -30,6 +32,8 @@
 | **RLS** | Row Level Security — разграничение доступа к строкам БД на уровне PostgreSQL. |
 | **SSR (для ботов)** | Pre-render HTML для поисковых роботов через Cloudflare Worker + Supabase Edge. |
 | **AEO/GEO** | Answer Engine Optimization / Generative Engine Optimization — схемы и контент для AI-поиска. |
+| **Trigger Guard** | Защита колонок БД через `BEFORE UPDATE` триггеры (ADR 0027). |
+| **Manual Chunks** | Стратегия разделения бандла на вендор-части для оптимизации TBT (Performance Guide). |
 
 ## Глоссарий переводов (RU/KK/EN)
 

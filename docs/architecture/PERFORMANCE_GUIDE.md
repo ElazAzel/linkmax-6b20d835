@@ -28,6 +28,25 @@ export function AnalyticsWidget() {
 }
 ```
 
+### 1.5 Vendor Bundle Splitting
+Since March 13, the platform uses a manual chunking strategy in `vite.config.ts` to separate infrequent dependencies from business logic.
+
+**Benefits:**
+- **Improved TBT (Total Blocking Time)**: Smaller individual scripts allow the browser main thread to breathe.
+- **Better Caching**: Libraries like `react` or `supabase-js` don't change often and remain cached even when app code is updated.
+
+**Implementation (vite.config.ts):**
+```ts
+manualChunks(id) {
+  if (id.includes('node_modules')) {
+    if (id.includes('@supabase')) return 'vendor-supabase';
+    if (id.includes('react')) return 'vendor-react';
+    if (id.includes('framer-motion')) return 'vendor-animation';
+    return 'vendor';
+  }
+}
+```
+
 ### 1.2 Image Optimization
 Images are the largest content paint (LCP) blockers.
 

@@ -1,5 +1,33 @@
 # Changelog
 
+## [2026.03.15] — Security Hardening & Data Protection
+
+### Added
+
+- **Security Hardening (March 15)**
+  - Implemented `BEFORE UPDATE` trigger guards for `user_profiles` and `challenge_progress`.
+  - Created `public_teams` view to mask `invite_code`.
+  - Removed direct `UPDATE` access to wallets and tokens.
+- **Performance (March 13)**
+  - Implemented `manualChunks` vendor splitting in Vite.
+  - Reduced TBT and improved caching for major libraries.
+- **Features**
+  - Added Command Palette (Cmd+K).
+  - Added Export System (CSV/PDF) for Analytics and CRM.
+
+### Changed
+
+- **RLS Tightening**: Removed `UPDATE` policies for `user_wallets`, `user_tokens`, and `daily_quests_completed`. Transactions must now go through Edge Functions.
+- **Hardened Registrations**: Restricted `event_registrations` insert policy to prevent payment status bypass.
+- **Settings Privacy**: Restricted `app_settings` public read access to a whitelist of non-sensitive keys.
+
+## [2026.03.13] — Performance & Core Improvements
+### Added
+- **Vendor Splitting**: Implemented `manualChunks` in `vite.config.ts` to split large libraries (Supabase, React, Radix, Sentry) into separate chunks. This significantly reduces Total Blocking Time (TBT).
+### Changed
+- **CSS Loading**: Replaced blocking CSS link tags with non-render-blocking media query pattern in production builds.
+- **UI Stabilized**: Fixed layout shifts and interaction issues in "Add Block Sheet" and "Living Canvas" components.
+
 ### [2026-03-12] - Phase 4 & 5: "Living Canvas" Expansion & Brand Resonance
 
 * **Mobile Adaptation & Polish (Phase 6)**:
