@@ -8,7 +8,6 @@ import Search from 'lucide-react/dist/esm/icons/search';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
-import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +17,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetClose,
 } from '@/components/ui/sheet';
 import {
   Tooltip,
@@ -30,10 +28,10 @@ import { useIsMobile } from '@/hooks/ui/use-mobile';
 import { cn } from '@/lib/utils/utils';
 import { FREE_LIMITS, type FreeTier } from '@/hooks/user/useFreemiumLimits';
 import { toast } from 'sonner';
-import { BLOCK_MANIFEST, type BlockManifestEntry } from '@/lib/blocks/block-manifest';
+import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 
-import { getRecommendedBlocks, type BlockRecommendation } from '@/lib/blocks/block-recommendations';
+import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
 
@@ -117,6 +115,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = onOpenChange || setInternalIsOpen;
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setSearchQuery('');
+    }
+    setIsOpen(open);
+  };
+
   const isAtBlockLimit = !isPremium && currentBlockCount >= FREE_LIMITS.maxBlocks;
   const remainingBlocks = isPremium ? Infinity : FREE_LIMITS.maxBlocks - currentBlockCount;
 
@@ -185,9 +190,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     }
 
     // Close first, then insert to avoid state conflicts
-    setIsOpen(false);
-    // Reset search query after a short delay to not flicker while closing
-    setTimeout(() => setSearchQuery(''), 200);
+    handleOpenChange(false);
     
     // Use a slightly longer timeout (150ms) to ensure the sheet has 
     // started its closing animation and state has updated before
@@ -293,8 +296,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       )}
 
       <Sheet open={isOpen} onOpenChange={(open) => {
-        if (!open) setSearchQuery('');
-        setIsOpen(open);
+        handleOpenChange(open);
       }}>
         <SheetContent
           side="bottom"
@@ -316,14 +318,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
                   </Badge>
                 )}
-                <SheetClose asChild>
-                  <button 
-                    className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
-                    aria-label={t('common.close', 'Close')}
-                  >
-                    <X className="h-6 w-6 text-muted-foreground" />
-                  </button>
-                </SheetClose>
               </div>
             </div>
             <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
