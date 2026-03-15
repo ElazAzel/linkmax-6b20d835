@@ -173,7 +173,8 @@ export const BlockManager = memo(function BlockManager({
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
         side="bottom"
-        className="h-[85vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl [&>button]:hidden"
+        hideCloseButton
+        className="h-[85vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl"
       >
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1">

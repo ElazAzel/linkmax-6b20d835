@@ -189,7 +189,8 @@ export const StructureView = memo(function StructureView({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent 
         side="bottom" 
-        className="h-[80vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl [&>button]:hidden"
+        hideCloseButton
+        className="h-[80vh] rounded-t-[32px] p-0 bg-card/98 backdrop-blur-3xl"
       >
         {/* Handle */}
         <div className="flex justify-center pt-4 pb-2">
@@ -216,6 +217,7 @@ export const StructureView = memo(function StructureView({
               variant="ghost" 
               size="icon" 
               onClick={() => onOpenChange(false)}
+              aria-label={t('common.close', 'Закрыть')}
               className="h-12 w-12 rounded-2xl"
             >
               <X className="h-6 w-6" />

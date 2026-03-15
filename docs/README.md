@@ -26,8 +26,9 @@
 
 1. **[COMPREHENSIVE_PLATFORM_GUIDE.md](architecture/COMPREHENSIVE_PLATFORM_GUIDE.md)** — Подробнейшая документация по всем подсистемам платформы.
 2. **[UI-COMPONENTS.md](features/UI-COMPONENTS.md)** — Компоненты UI (Liquid Glass Design System).
-3. **[API.md](implementation/API.md)** — Edge Functions, RPCs, интеграции.
-4. **[DATABASE_SCHEMA_GUIDE.md](implementation/DATABASE_SCHEMA_GUIDE.md)** — Схема БД, таблицы, RLS.
+3. **[UI_MODAL_CONTRACT.md](architecture/UI_MODAL_CONTRACT.md)** — Единый контракт для `Dialog/Sheet` (крестик, `onOpenChange`, закрытие по overlay/ESC/button).
+4. **[API.md](implementation/API.md)** — Edge Functions, RPCs, интеграции.
+5. **[DATABASE_SCHEMA_GUIDE.md](implementation/DATABASE_SCHEMA_GUIDE.md)** — Схема БД, таблицы, RLS.
 
 ### Для тестировщиков и DevOps
 
