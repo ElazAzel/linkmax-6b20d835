@@ -223,8 +223,8 @@ export default function Gallery() {
                 </div>
               ) : (
                 <>
-                  <div className="flex-1 min-w-0">
-                    <h1 className="text-lg font-bold truncate">
+                  <div className="flex-1 min-w-0 max-w-[min(46vw,18rem)]">
+                    <h1 className="text-base sm:text-lg font-bold break-words whitespace-normal text-wrap leading-tight">
                       {t('gallery.title', 'Галерея')}
                     </h1>
                   </div>
@@ -242,7 +242,7 @@ export default function Gallery() {
               <LanguageSwitcher />
               <Button
                 size="sm"
-                className="h-9 rounded-full font-semibold text-xs px-4 shrink-0"
+                className="h-9 min-h-9 rounded-full font-semibold text-[11px] sm:text-xs px-3 sm:px-4 shrink-0 max-w-[9.5rem] sm:max-w-[11rem] whitespace-normal break-words text-wrap leading-tight"
                 onClick={() => navigate('/auth')}
               >
                 <Sparkles className="h-3.5 w-3.5 mr-1" />
@@ -255,7 +255,7 @@ export default function Gallery() {
               <button
                 onClick={() => setActiveTab('gallery')}
                 className={cn(
-                  "flex-1 h-8 rounded-full text-xs font-semibold transition-all",
+                  "flex-1 min-h-8 rounded-full text-[11px] sm:text-xs font-semibold transition-all whitespace-normal break-words text-wrap leading-tight px-2",
                   activeTab === 'gallery'
                     ? "bg-background shadow-sm text-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -266,7 +266,7 @@ export default function Gallery() {
               <button
                 onClick={() => setActiveTab('leaderboard')}
                 className={cn(
-                  "flex-1 h-8 rounded-full text-xs font-semibold transition-all",
+                  "flex-1 min-h-8 rounded-full text-[11px] sm:text-xs font-semibold transition-all whitespace-normal break-words text-wrap leading-tight px-2",
                   activeTab === 'leaderboard'
                     ? "bg-background shadow-sm text-foreground"
                     : "text-muted-foreground hover:text-foreground"

@@ -8,6 +8,7 @@ import Search from 'lucide-react/dist/esm/icons/search';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
 } from '@/components/ui/sheet';
 import {
   Tooltip,
@@ -224,7 +226,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <IconComponent className="h-7 w-7" />
         </div>
 
-        <span className="text-sm font-bold text-center leading-tight">
+        <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
           {t(block.labelKey, block.type)}
         </span>
 
@@ -232,7 +234,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <div className="absolute -top-1 -left-1">
             <Badge
               variant="default"
-              className="text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0"
+              className="max-w-[5.5rem] text-[10px] sm:text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0 whitespace-normal break-words text-wrap leading-tight"
             >
               <Sparkles className="h-2.5 w-2.5 mr-0.5" />
               {t('recommendations.relevant', 'Актуально')}

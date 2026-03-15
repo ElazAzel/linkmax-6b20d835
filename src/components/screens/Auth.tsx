@@ -445,10 +445,10 @@ export default function Auth() {
                 <img src="/favicon.png" alt="LinkMAX" className="h-10 w-10 object-contain" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-primary to-violet-500 bg-clip-text text-transparent animate-fade-in break-words text-wrap max-w-[20rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.1s' }}>
               {t('auth.title')}
             </h1>
-            <p className="text-muted-foreground mt-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2 animate-fade-in break-words text-wrap max-w-[22rem] sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
               {t('auth.subtitle')}
             </p>
             <div className="mt-4 flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
@@ -591,8 +591,8 @@ export default function Auth() {
 
                 <Tabs defaultValue="signin" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
-                    <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signIn')}</TabsTrigger>
-                    <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass">{t('auth.signUp')}</TabsTrigger>
+                    <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signIn')}</TabsTrigger>
+                    <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signUp')}</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="signin">
