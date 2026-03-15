@@ -39,6 +39,8 @@ export function FramePreview({ frameStyle, size = 'small', selected, onClick, av
           isAnimated && 'animate-pulse-slow'
         )}
         style={frameStyles}
+        aria-pressed={selected}
+        aria-label={`Select frame ${frameStyle}`}
       >
         <Avatar className={cn(sizes.avatar, isGradient && 'p-0')}>
           <AvatarImage 

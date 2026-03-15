@@ -114,6 +114,7 @@ export function EmailSequencesManager() {
             <div className="flex items-center justify-between">
               <button
                 type="button"
+                className="cursor-pointer flex-1 text-left"
                 className="cursor-pointer flex-1 text-left rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 onClick={() => handleSelectSequence(seq.id)}
               >

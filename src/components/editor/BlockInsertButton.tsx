@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
   SheetContent,
+  SheetClose,
   SheetHeader,
   SheetTitle,
   SheetDescription,

@@ -262,6 +262,11 @@ function SortableGridBlockItem({
           onTouchEnd={(e) => {
             e.stopPropagation();
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              e.currentTarget.blur();
+            }
+          }}
           aria-label={`Edit ${block.type} block`}
         />
       </div>
