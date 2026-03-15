@@ -59,11 +59,23 @@ export const FormBlock = memo(function FormBlock({ block, pageOwnerId, pageId }:
         const email = formData['email'] || formData['Email'] || formData['Почта'] || formData['почта'] || null;
         const phone = formData['phone'] || formData['Phone'] || formData['Телефон'] || formData['телефон'] || null;
 
+        // Capture UTM parameters and Referrer
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmMetadata = {
+          utm_source: urlParams.get('utm_source'),
+          utm_medium: urlParams.get('utm_medium'),
+          utm_campaign: urlParams.get('utm_campaign'),
+          utm_term: urlParams.get('utm_term'),
+          utm_content: urlParams.get('utm_content'),
+          referrer: document.referrer || 'direct',
+        };
+
         const { data: fnResponse, error } = await supabase.functions.invoke('submit-lead', {
           body: {
             pageId,
             blockId: block.id,
             formData: formData,
+            metadata: utmMetadata,
           },
         });
 

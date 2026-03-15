@@ -3702,6 +3702,15 @@
     "section": "Секция"
   },
   "crm": {
+    "attribution": "Атрибуция",
+    "formData": "Данные формы",
+    "sources": {
+      "title": "Источники лидов",
+      "direct": "Прямые заходы",
+      "referral": "Рефералы",
+      "social": "Соцсети",
+      "ads": "Реклама"
+    },
     "createLead": "Создать лид",
     "createDeal": "Создать сделку",
     "createInvoice": "Выставить счет"

@@ -36,6 +36,7 @@ import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchRea
 import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
 import { MetricsGrid } from '@/components/dashboard-v2/widgets/MetricsGrid';
 import { ConversionFunnelWidget } from '@/components/dashboard-v2/widgets/ConversionFunnelWidget';
+import { SourcesWidget } from '@/components/dashboard-v2/widgets/SourcesWidget';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
@@ -238,6 +239,7 @@ export const HomeScreen = memo(function HomeScreen({
               </h3>
               <MetricsGrid pageId={pageData?.id} />
               <ConversionFunnelWidget pageId={pageData?.id} />
+              <SourcesWidget className="mt-1" />
             </div>
           </>
         )}

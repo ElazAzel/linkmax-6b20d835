@@ -93,6 +93,16 @@ serve(async (req: Request) => {
         // Validate and sanitize form data
         const sanitizedFormData = validateAndSanitizeFormData(formData);
 
+        // Sanitize incoming metadata (UTM, referrer, etc.)
+        const sanitizedMetadata: Record<string, any> = {};
+        if (body.metadata && typeof body.metadata === 'object') {
+            for (const [key, value] of Object.entries(body.metadata)) {
+                if (typeof key === 'string' && key.length < 50) {
+                    sanitizedMetadata[key] = String(value).substring(0, 500);
+                }
+            }
+        }
+
         // 1. Fetch page owner info for limit check and notification
         const { data: pageData, error: pageError } = await supabase
             .from('pages')
@@ -120,6 +130,7 @@ serve(async (req: Request) => {
                 page_id: pageId,
                 block_id: blockId,
                 form_data: sanitizedFormData,
+                metadata: sanitizedMetadata,
                 status: 'new'
             })
             .select()

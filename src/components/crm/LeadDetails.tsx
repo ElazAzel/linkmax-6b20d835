@@ -50,6 +50,8 @@ import Video from 'lucide-react/dist/esm/icons/video';
 import FileText from 'lucide-react/dist/esm/icons/file-text';
 import Send from 'lucide-react/dist/esm/icons/send';
 import Tag from 'lucide-react/dist/esm/icons/tag';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import type { Lead } from '@/hooks/crm/useLeads';
 
@@ -173,16 +175,58 @@ export function LeadDetails({ lead, open, onOpenChange }: LeadDetailsProps) {
         <Card className="p-3 sm:p-4">
           <h4 className="font-medium text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3 flex items-center gap-2">
             <Tag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            {t('crm.formData', 'Form Data')}
+            {t('crm.formData', 'Данные формы')}
           </h4>
           <div className="space-y-1.5 sm:space-y-2">
-            {Object.entries(lead.metadata).map(([key, value]) => (
+            {Object.entries(lead.metadata)
+              .filter(([key]) => !key.startsWith('utm_') && key !== 'referrer')
+              .map(([key, value]) => (
               <div key={key} className="flex flex-col gap-0.5 p-2 bg-accent/50 rounded-lg">
-                <span className="text-xs sm:text-xs font-medium text-muted-foreground uppercase">{key}</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase">{key}</span>
                 <span className="text-xs sm:text-sm break-words">{String(value)}</span>
               </div>
             ))}
           </div>
+
+          {/* Attribution Section */}
+          {Object.keys(lead.metadata).some(k => k.startsWith('utm_') || k === 'referrer') && (
+            <div className="mt-4 pt-4 border-t border-white/5 space-y-3">
+              <h4 className="font-medium text-[10px] uppercase tracking-widest text-muted-foreground/60 mb-2 flex items-center gap-2">
+                <Megaphone className="h-3 w-3" />
+                {t('crm.attribution', 'Атрибуция')}
+              </h4>
+              
+              <div className="grid grid-cols-2 gap-2">
+                {lead.metadata.utm_source && (
+                  <div className="p-2 bg-blue-500/5 rounded-xl border border-blue-500/10">
+                    <span className="text-[9px] font-black text-blue-400 block mb-0.5 uppercase">Source</span>
+                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_source}</span>
+                  </div>
+                )}
+                {lead.metadata.utm_medium && (
+                  <div className="p-2 bg-purple-500/5 rounded-xl border border-purple-500/10">
+                    <span className="text-[9px] font-black text-purple-400 block mb-0.5 uppercase">Medium</span>
+                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_medium}</span>
+                  </div>
+                )}
+                {lead.metadata.utm_campaign && (
+                  <div className="p-2 bg-violet-500/5 rounded-xl border border-violet-500/10 col-span-2">
+                    <span className="text-[9px] font-black text-violet-400 block mb-0.5 uppercase">Campaign</span>
+                    <span className="text-xs font-bold truncate block">{lead.metadata.utm_campaign}</span>
+                  </div>
+                )}
+                {lead.metadata.referrer && (
+                  <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 col-span-2">
+                    <span className="text-[9px] font-black text-emerald-400 block mb-0.5 uppercase flex items-center gap-1">
+                      <Globe className="h-2 w-2" />
+                      Referrer
+                    </span>
+                    <span className="text-xs font-medium truncate block opacity-80 italic">{lead.metadata.referrer}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </Card>
       )}
 

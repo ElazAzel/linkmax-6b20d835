@@ -3702,6 +3702,15 @@
     "section": "Section"
   },
   "crm": {
+    "attribution": "Attribution",
+    "formData": "Form Data",
+    "sources": {
+      "title": "Lead Sources",
+      "direct": "Direct",
+      "referral": "Referrals",
+      "social": "Social",
+      "ads": "Ads"
+    },
     "createLead": "Create Lead",
     "createDeal": "Create Deal",
     "createInvoice": "Create Invoice"
