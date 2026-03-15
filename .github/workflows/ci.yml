@@ -83,6 +83,48 @@ jobs:
       - name: E2E tests
         run: npm run e2e:ci
 
+  editor-sheet-required:
+    name: Editor Add-Block Sheet Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect editor changes
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            editor:
+              - 'src/components/editor/**'
+
+      - name: Setup Node
+        if: steps.changes.outputs.editor == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.changes.outputs.editor == 'true'
+        run: npm ci
+
+      - name: Install Playwright browsers
+        if: steps.changes.outputs.editor == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Editor add-block sheet scenarios (desktop + mobile)
+        if: steps.changes.outputs.editor == 'true'
+        run: npx playwright test e2e/editor-add-block-sheet.spec.ts --project=chromium --project="Mobile Chrome"
+
+      - name: No editor changes
+        if: steps.changes.outputs.editor != 'true'
+        run: echo "No changes in src/components/editor/**; required check passes."
+
   build:
     name: Build Check
     runs-on: ubuntu-latest
