@@ -8,6 +8,7 @@ import Search from 'lucide-react/dist/esm/icons/search';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -210,6 +211,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         key={block.type}
         onClick={() => handleInsert(block.type, block.tier)}
         disabled={isLocked}
+        data-testid={`add-block-option-${block.type}`}
         className={cn(
           "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all",
           isLocked
@@ -285,6 +287,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               : "h-14 w-14 rounded-2xl"
           )}
           data-onboarding="add-block"
+          data-testid="add-block-trigger"
         >
           <Plus className={isMobile ? "h-9 w-9" : "h-7 w-7"} strokeWidth={2.5} />
         </Button>
@@ -296,6 +299,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         <SheetContent
           side="bottom"
           hideCloseButton
+          data-testid="add-block-sheet"
           className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none"
         >
           <div className="flex justify-center pt-4 pb-2">
@@ -317,6 +321,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 <SheetClose asChild>
                   <button
                     type="button"
+                    data-testid="add-block-sheet-close"
                     className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
                     aria-label={t('common.close', 'Close')}
                   >
@@ -332,6 +337,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             <div className="relative">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
               <Input
+                data-testid="add-block-search"
                 placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
