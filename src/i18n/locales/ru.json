@@ -3143,7 +3143,17 @@
     "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
     "purchaseTemplate": "Покупка шаблона: {{name}}",
     "chosen": "Выбрано",
-    "use": "Выбрать"
+    "use": "Выбрать",
+    "fillAllFields": "Please fill all required fields",
+    "addNew": "Add New",
+    "edit": "Edit Template",
+    "create": "Create Template",
+    "nameLabel": "Template Name",
+    "subjectLabel": "Email Subject",
+    "subjectPlaceholder": "Hello {lead_name}!",
+    "contentLabel": "HTML Content",
+    "variablesNote": "Use {lead_name} for personalization",
+    "empty": "No templates created yet"
   },
   "alternatives": {
     "seo": {
@@ -5049,7 +5059,12 @@
     "messageTemplate": "Шаблон сообщения",
     "variables": "Используйте {lead_name}, {owner_name} для персонализации",
     "saveSettings": "Сохранить настройки",
-    "telegramNote": "Напоминания приходят в ваш Telegram"
+    "telegramNote": "Напоминания приходят в ваш Telegram",
+    "tabs": {
+      "telegram": "Telegram",
+      "templates": "Templates",
+      "sequences": "Sequences"
+    }
   },
   "aiBuilder": {
     "description": "Создайте страницу с помощью AI",
@@ -6587,5 +6602,24 @@
   "search": {
     "placeholder": "Type a command or search...",
     "noResults": "No results found."
+  },
+  "sequences": {
+    "enterName": "Enter sequence name",
+    "createError": "Failed to create sequence",
+    "loadDetailError": "Failed to load details",
+    "stepAdded": "Step added",
+    "addStepError": "Failed to add step",
+    "statusUpdated": "Status updated",
+    "confirmDelete": "Delete this sequence?",
+    "deleted": "Sequence deleted",
+    "title": "Email Sequences",
+    "new": "New Sequence",
+    "noDesc": "No description",
+    "steps": "Sequence Steps",
+    "selectTemplate": "Select Template",
+    "choose": "Choose...",
+    "delayHours": "Delay (hours)",
+    "addStep": "Add Step",
+    "empty": "Create your first automated sequence"
   }
 }

@@ -27,7 +27,7 @@ export interface DbPage {
   created_at: string;
   updated_at: string;
   preview_url: string | null;
-  experiments?: any[];
+  experiments?: any[]; // Raw experiments from DB
 }
 
 export interface DbBlock {
@@ -83,14 +83,21 @@ function wrapError(error: unknown): Error {
  * Map raw database experiment data to PageExperiment type
  */
 function mapExperimentData(experiments: any[]): PageExperiment[] {
-  return (experiments || []).map((exp: any) => ({
+  return (experiments || []).map((exp) => ({
     id: exp.id,
     page_id: exp.page_id,
     name: exp.name,
-    status: exp.status,
+    status: exp.status as PageExperiment['status'],
     started_at: exp.started_at,
     ended_at: exp.ended_at,
-    variants: exp.experiment_variants || []
+    variants: (exp.experiment_variants || []).map((v: any) => ({
+      id: v.id,
+      experiment_id: v.experiment_id,
+      base_block_id: v.base_block_id,
+      variant_label: v.variant_label,
+      block_data: v.block_data as Partial<Block>,
+      traffic_weight: v.traffic_weight
+    }))
   }));
 }
 

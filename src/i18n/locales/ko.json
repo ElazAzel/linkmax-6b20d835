@@ -3109,7 +3109,17 @@
     "notEnoughTokens": "Недостаточно токенов. Нужно еще {{amount}} Linkkon.",
     "purchaseTemplate": "Покупка шаблона: {{name}}",
     "chosen": "",
-    "use": ""
+    "use": "",
+    "fillAllFields": "",
+    "addNew": "",
+    "edit": "",
+    "create": "",
+    "nameLabel": "",
+    "subjectLabel": "",
+    "subjectPlaceholder": "",
+    "contentLabel": "",
+    "variablesNote": "",
+    "empty": ""
   },
   "alternatives": {
     "seo": {
@@ -5015,7 +5025,12 @@
     "messageTemplate": "",
     "variables": "",
     "saveSettings": "",
-    "telegramNote": ""
+    "telegramNote": "",
+    "tabs": {
+      "telegram": "",
+      "templates": "",
+      "sequences": ""
+    }
   },
   "aiBuilder": {
     "description": "",
@@ -6553,5 +6568,24 @@
   "search": {
     "placeholder": "",
     "noResults": ""
+  },
+  "sequences": {
+    "enterName": "",
+    "createError": "",
+    "loadDetailError": "",
+    "stepAdded": "",
+    "addStepError": "",
+    "statusUpdated": "",
+    "confirmDelete": "",
+    "deleted": "",
+    "title": "",
+    "new": "",
+    "noDesc": "",
+    "steps": "",
+    "selectTemplate": "",
+    "choose": "",
+    "delayHours": "",
+    "addStep": "",
+    "empty": ""
   }
 }

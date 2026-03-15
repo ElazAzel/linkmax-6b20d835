@@ -3143,7 +3143,17 @@
     "notEnoughTokens": "Tokenlar yetarli emas. Yana {{amount}} Linkkon kerak.",
     "purchaseTemplate": "Shablonni xarid qilish: {{name}}",
     "chosen": "Tanlandi",
-    "use": "Tanlash"
+    "use": "Tanlash",
+    "fillAllFields": "",
+    "addNew": "",
+    "edit": "",
+    "create": "",
+    "nameLabel": "",
+    "subjectLabel": "",
+    "subjectPlaceholder": "",
+    "contentLabel": "",
+    "variablesNote": "",
+    "empty": ""
   },
   "alternatives": {
     "seo": {
@@ -5049,7 +5059,12 @@
     "messageTemplate": "Xabar shabloni",
     "variables": "Moslashtirish uchun {lead_name}, {owner_name} dan foydalaning",
     "saveSettings": "Sozlamalarni saqlash",
-    "telegramNote": "Eslatmalar Telegram’da keladi"
+    "telegramNote": "Eslatmalar Telegram’da keladi",
+    "tabs": {
+      "telegram": "",
+      "templates": "",
+      "sequences": ""
+    }
   },
   "aiBuilder": {
     "description": "AI yordamida sahifa yarating",
@@ -6587,5 +6602,24 @@
   "search": {
     "placeholder": "",
     "noResults": ""
+  },
+  "sequences": {
+    "enterName": "",
+    "createError": "",
+    "loadDetailError": "",
+    "stepAdded": "",
+    "addStepError": "",
+    "statusUpdated": "",
+    "confirmDelete": "",
+    "deleted": "",
+    "title": "",
+    "new": "",
+    "noDesc": "",
+    "steps": "",
+    "selectTemplate": "",
+    "choose": "",
+    "delayHours": "",
+    "addStep": "",
+    "empty": ""
   }
 }

@@ -3143,7 +3143,17 @@
     "notEnoughTokens": "Not enough tokens. Need another {{amount}} Linkkon.",
     "purchaseTemplate": "Purchasing a template: {{name}}",
     "chosen": "Selected",
-    "use": "Select"
+    "use": "Select",
+    "fillAllFields": "",
+    "addNew": "",
+    "edit": "",
+    "create": "",
+    "nameLabel": "",
+    "subjectLabel": "",
+    "subjectPlaceholder": "",
+    "contentLabel": "",
+    "variablesNote": "",
+    "empty": ""
   },
   "alternatives": {
     "seo": {
@@ -5049,7 +5059,12 @@
     "messageTemplate": "Message template",
     "variables": "Use {lead_name}, {owner_name} for personalization",
     "saveSettings": "Save settings",
-    "telegramNote": "Reminders arrive in your Telegram"
+    "telegramNote": "Reminders arrive in your Telegram",
+    "tabs": {
+      "telegram": "",
+      "templates": "",
+      "sequences": ""
+    }
   },
   "aiBuilder": {
     "description": "Create a page using AI",
@@ -6587,5 +6602,24 @@
   "search": {
     "placeholder": "",
     "noResults": ""
+  },
+  "sequences": {
+    "enterName": "",
+    "createError": "",
+    "loadDetailError": "",
+    "stepAdded": "",
+    "addStepError": "",
+    "statusUpdated": "",
+    "confirmDelete": "",
+    "deleted": "",
+    "title": "",
+    "new": "",
+    "noDesc": "",
+    "steps": "",
+    "selectTemplate": "",
+    "choose": "",
+    "delayHours": "",
+    "addStep": "",
+    "empty": ""
   }
 }

@@ -18,6 +18,9 @@ import Save from 'lucide-react/dist/esm/icons/save';
 import Info from 'lucide-react/dist/esm/icons/info';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { EmailTemplateEditor } from './EmailTemplateEditor';
+import { EmailSequencesManager } from './EmailSequencesManager';
 
 interface Automation {
   id?: string;
@@ -219,13 +222,18 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
         <div className="p-1.5 rounded-lg bg-primary/10">
           <Bot className="h-4 w-4 text-primary" />
         </div>
-        <div>
-          <h3 className="font-semibold">{t('automations.title', 'Smart Automations')}</h3>
-          <p className="text-xs text-muted-foreground">{t('automations.subtitle', 'Auto-reminders via Telegram')}</p>
         </div>
       </div>
 
-      <div className="space-y-3">
+      <Tabs defaultValue="telegram" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 mb-4 bg-background/50">
+          <TabsTrigger value="telegram" className="text-xs">{t('automations.tabs.telegram', 'Telegram')}</TabsTrigger>
+          <TabsTrigger value="templates" className="text-xs">{t('automations.tabs.templates', 'Templates')}</TabsTrigger>
+          <TabsTrigger value="sequences" className="text-xs">{t('automations.tabs.sequences', 'Sequences')}</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="telegram">
+          <div className="space-y-3">
         {automations.map((automation) => {
           const config = getAutomationConfig(automation.automation_type);
           const Icon = config.icon;
@@ -337,6 +345,16 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
           {t('automations.telegramNote', 'Reminders are sent to your Telegram')}
         </p>
       </div>
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <EmailTemplateEditor />
+        </TabsContent>
+
+        <TabsContent value="sequences">
+          <EmailSequencesManager />
+        </TabsContent>
+      </Tabs>
     </Card>
   );
 }

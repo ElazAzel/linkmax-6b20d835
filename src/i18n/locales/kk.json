@@ -3143,7 +3143,17 @@
     "notEnoughTokens": "Токендер жеткіліксіз. Тағы {{amount}} Linkkon қажет.",
     "purchaseTemplate": "Үлгіні сатып алу: {{name}}",
     "chosen": "Таңдалды",
-    "use": "Таңдау"
+    "use": "Таңдау",
+    "fillAllFields": "",
+    "addNew": "",
+    "edit": "",
+    "create": "",
+    "nameLabel": "",
+    "subjectLabel": "",
+    "subjectPlaceholder": "",
+    "contentLabel": "",
+    "variablesNote": "",
+    "empty": ""
   },
   "alternatives": {
     "seo": {
@@ -5049,7 +5059,12 @@
     "messageTemplate": "Хабарлама үлгісі",
     "variables": "Жекелендіру үшін {lead_name}, {owner_name} пайдаланыңыз",
     "saveSettings": "Параметрлерді сақтау",
-    "telegramNote": "Еске салғыштар Telegram-ға келеді"
+    "telegramNote": "Еске салғыштар Telegram-ға келеді",
+    "tabs": {
+      "telegram": "",
+      "templates": "",
+      "sequences": ""
+    }
   },
   "aiBuilder": {
     "description": "AI көмегімен бет жасаңыз",
@@ -6587,5 +6602,24 @@
   "search": {
     "placeholder": "",
     "noResults": ""
+  },
+  "sequences": {
+    "enterName": "",
+    "createError": "",
+    "loadDetailError": "",
+    "stepAdded": "",
+    "addStepError": "",
+    "statusUpdated": "",
+    "confirmDelete": "",
+    "deleted": "",
+    "title": "",
+    "new": "",
+    "noDesc": "",
+    "steps": "",
+    "selectTemplate": "",
+    "choose": "",
+    "delayHours": "",
+    "addStep": "",
+    "empty": ""
   }
 }
