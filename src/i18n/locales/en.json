@@ -1780,6 +1780,32 @@
     "newLeadCaptured": "New Lead Captured"
   },
   "dashboard": {
+    "home": {
+      "performance": "Performance",
+      "title": "Home",
+      "subtitle": "Review of your page",
+      "myPage": "My page",
+      "blocks": "blocks",
+      "views": "views",
+      "leads": "applications",
+      "edit": "Edit",
+      "share": "Share",
+      "publish": "Publish",
+      "preview": "Preview",
+      "quickActions": "Quick Actions",
+      "templates": "Templates",
+      "templatesDesc": "Ready pages",
+      "marketplace": "Marketplace",
+      "marketplaceDesc": "From the community",
+      "gallery": "Gallery",
+      "galleryDesc": "Inspiration",
+      "premium": "Premium",
+      "premiumDesc": "More options",
+      "tip": "Advice",
+      "tipContent": "Add a price block to increase conversion by 40%",
+      "versions": "Story",
+      "versionsDesc": "Page versions"
+    },
     "loadError": "Loading error",
     "loadErrorDesc": "Failed to load page data",
     "tryAgain": "Try again",
@@ -1817,31 +1843,6 @@
     "seo": {
       "title": "Personal account LinkMAX",
       "description": "Manage pages, leads and analytics."
-    },
-    "home": {
-      "title": "Home",
-      "subtitle": "Review of your page",
-      "myPage": "My page",
-      "blocks": "blocks",
-      "views": "views",
-      "leads": "applications",
-      "edit": "Edit",
-      "share": "Share",
-      "publish": "Publish",
-      "preview": "Preview",
-      "quickActions": "Quick Actions",
-      "templates": "Templates",
-      "templatesDesc": "Ready pages",
-      "marketplace": "Marketplace",
-      "marketplaceDesc": "From the community",
-      "gallery": "Gallery",
-      "galleryDesc": "Inspiration",
-      "premium": "Premium",
-      "premiumDesc": "More options",
-      "tip": "Advice",
-      "tipContent": "Add a price block to increase conversion by 40%",
-      "versions": "Story",
-      "versionsDesc": "Page versions"
     },
     "activity": {
       "title": "Inbox",
@@ -6537,5 +6538,22 @@
     "dashboard": "Dashboard",
     "insights": "Insights",
     "settings": "Settings"
+  },
+  "metrics": {
+    "views": "Views",
+    "clicks": "Clicks",
+    "ctr": "Activity",
+    "conversion": "Conversion",
+    "funnel": {
+      "title": "Conversion Funnel",
+      "last30Days": "Last 30 days",
+      "views": "Views",
+      "clicks": "Interest (clicks)",
+      "leads": "Leads",
+      "insightTitle": "LinkMAX AI Tip",
+      "insightNoLeads": "You have views but no leads. Try adding a contact form to the first screen.",
+      "insightLowConversion": "Many clicks but few leads. Make sure your offer is clear to the client.",
+      "insightGoodJob": "Your funnel is working steadily. Keep driving traffic through social media!"
+    }
   }
 }

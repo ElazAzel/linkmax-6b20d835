@@ -34,6 +34,8 @@ import { StatCard } from '@/components/shared/StatCard';
 import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { SearchReadinessCard } from '@/components/dashboard-v2/widgets/SearchReadinessCard';
 import { KaspiQRWidget } from '@/components/dashboard-v2/widgets/KaspiQRWidget';
+import { MetricsGrid } from '@/components/dashboard-v2/widgets/MetricsGrid';
+import { ConversionFunnelWidget } from '@/components/dashboard-v2/widgets/ConversionFunnelWidget';
 import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
 import { IncomingWidget } from '@/components/dashboard-v2/widgets/IncomingWidget';
 import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/OperatorSummaryWidget';
@@ -228,6 +230,15 @@ export const HomeScreen = memo(function HomeScreen({
               ownerId={pageData?.userId || ''}
               className="glass border-white/10 shadow-glass"
             />
+
+            {/* Performance Hub / Metrics */}
+            <div className="space-y-3 pt-2">
+              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+                {t('dashboard.home.performance', 'Эффективность')}
+              </h3>
+              <MetricsGrid pageId={pageData?.id} />
+              <ConversionFunnelWidget pageId={pageData?.id} />
+            </div>
           </>
         )}
 
