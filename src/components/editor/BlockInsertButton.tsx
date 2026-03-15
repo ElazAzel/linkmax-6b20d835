@@ -189,15 +189,10 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    // Close first, then insert to avoid state conflicts
+    // Close first, then insert in a microtask to avoid race conditions
+    // while keeping UX responsive on mobile/desktop.
     handleOpenChange(false);
-    
-    // Use a slightly longer timeout (150ms) to ensure the sheet has 
-    // started its closing animation and state has updated before
-    // parent re-renders trigger heavy block insertion logic
-    setTimeout(() => {
-      onInsert(blockType);
-    }, 150);
+    queueMicrotask(() => onInsert(blockType));
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -300,6 +295,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       }}>
         <SheetContent
           side="bottom"
+          hideCloseButton
           className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none"
         >
           <div className="flex justify-center pt-4 pb-2">
@@ -318,6 +314,15 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
                   </Badge>
                 )}
+                <SheetClose asChild>
+                  <button
+                    type="button"
+                    className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                    aria-label={t('common.close', 'Close')}
+                  >
+                    <X className="h-6 w-6 text-muted-foreground" />
+                  </button>
+                </SheetClose>
               </div>
             </div>
             <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
