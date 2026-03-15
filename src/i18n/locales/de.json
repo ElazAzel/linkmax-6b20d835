@@ -144,7 +144,8 @@
     "untitled": "",
     "name": "",
     "status": "",
-    "date": ""
+    "date": "",
+    "created": ""
   },
   "fields": {
     "name": "Name",
@@ -717,7 +718,17 @@
       "gcalDisconnectFailed": "",
       "gcalDisconnected": "",
       "active": "",
-      "gcalDesc": ""
+      "gcalDesc": "",
+      "apiKeyNameRequired": "",
+      "apiKeys": "",
+      "apiKeysDesc": "",
+      "apiKeyNamePlaceholder": "",
+      "newKeyGenerated": "",
+      "apiKeyWarning": "",
+      "noApiKeys": "",
+      "viewApiDocs": "",
+      "apiKeyGenerated": "",
+      "apiKeyDeleted": ""
     },
     "pageBackground": "",
     "backgroundType": "",
@@ -2058,7 +2069,8 @@
       "billingHistory": "Zahlungsverlauf",
       "security": "Sicherheit",
       "changePassword": "Passwort ändern",
-      "signOut": "Abmelden"
+      "signOut": "Abmelden",
+      "apiAccess": ""
     },
     "settingsTabs": {
       "page": "Seite",

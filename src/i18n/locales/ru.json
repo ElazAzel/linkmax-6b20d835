@@ -144,7 +144,8 @@
     "untitled": "Без названия",
     "name": "Имя",
     "status": "Статус",
-    "date": "Дата"
+    "date": "Дата",
+    "created": "created"
   },
   "fields": {
     "name": "Имя",
@@ -717,7 +718,17 @@
       "gcalDisconnectFailed": "Ошибка отключения Google Calendar",
       "gcalDisconnected": "Google Calendar отключен",
       "active": "Активно",
-      "gcalDesc": "Синхронизация бронирований с календарем"
+      "gcalDesc": "Синхронизация бронирований с календарем",
+      "apiKeyNameRequired": "Enter a name for the API key",
+      "apiKeys": "API Keys",
+      "apiKeysDesc": "Use these keys to access the LinkMAX API from external services like Zapier or Make.",
+      "apiKeyNamePlaceholder": "e.g. Zapier Integration",
+      "newKeyGenerated": "New API Key Generated",
+      "apiKeyWarning": "Copy this key now. You won",
+      "noApiKeys": "No API keys generated yet",
+      "viewApiDocs": "View API Documentation",
+      "apiKeyGenerated": "apiKeyGenerated",
+      "apiKeyDeleted": "apiKeyDeleted"
     },
     "pageBackground": "Фон страницы",
     "backgroundType": "Тип фона",
@@ -2058,7 +2069,8 @@
       "billingHistory": "История платежей",
       "security": "Безопасность",
       "changePassword": "Сменить пароль",
-      "signOut": "Выйти"
+      "signOut": "Выйти",
+      "apiAccess": "API Access"
     },
     "settingsTabs": {
       "page": "Страница",

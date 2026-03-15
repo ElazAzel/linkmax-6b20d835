@@ -26,7 +26,8 @@ export interface DbPage {
   organization_id: string | null;
   created_at: string;
   updated_at: string;
-  experiments?: any[]; // To be mapped to PageExperiment[]
+  preview_url: string | null;
+  experiments?: any[];
 }
 
 export interface DbBlock {

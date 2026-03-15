@@ -144,7 +144,8 @@
     "untitled": "Untitled",
     "name": "Name",
     "status": "Status",
-    "date": "Date"
+    "date": "Date",
+    "created": ""
   },
   "fields": {
     "name": "Name",
@@ -717,7 +718,17 @@
       "gcalDisconnectFailed": "Failed to disconnect Google Calendar",
       "gcalDisconnected": "Google Calendar disconnected",
       "active": "Active",
-      "gcalDesc": "Sync bookings with calendar"
+      "gcalDesc": "Sync bookings with calendar",
+      "apiKeyNameRequired": "",
+      "apiKeys": "",
+      "apiKeysDesc": "",
+      "apiKeyNamePlaceholder": "",
+      "newKeyGenerated": "",
+      "apiKeyWarning": "",
+      "noApiKeys": "",
+      "viewApiDocs": "",
+      "apiKeyGenerated": "",
+      "apiKeyDeleted": ""
     },
     "pageBackground": "Page background",
     "backgroundType": "Background type",
@@ -2058,7 +2069,8 @@
       "billingHistory": "Payment history",
       "security": "Safety",
       "changePassword": "Change password",
-      "signOut": "Log out"
+      "signOut": "Log out",
+      "apiAccess": ""
     },
     "settingsTabs": {
       "page": "Page",

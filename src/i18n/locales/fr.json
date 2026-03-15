@@ -144,7 +144,8 @@
     "untitled": "",
     "name": "",
     "status": "",
-    "date": ""
+    "date": "",
+    "created": ""
   },
   "fields": {
     "name": "Nom",
@@ -717,7 +718,17 @@
       "gcalDisconnectFailed": "",
       "gcalDisconnected": "",
       "active": "",
-      "gcalDesc": ""
+      "gcalDesc": "",
+      "apiKeyNameRequired": "",
+      "apiKeys": "",
+      "apiKeysDesc": "",
+      "apiKeyNamePlaceholder": "",
+      "newKeyGenerated": "",
+      "apiKeyWarning": "",
+      "noApiKeys": "",
+      "viewApiDocs": "",
+      "apiKeyGenerated": "",
+      "apiKeyDeleted": ""
     },
     "pageBackground": "",
     "backgroundType": "",
@@ -2024,7 +2035,8 @@
       "billingHistory": "Billing History",
       "security": "Security",
       "changePassword": "Change Password",
-      "signOut": "Sign Out"
+      "signOut": "Sign Out",
+      "apiAccess": ""
     },
     "settingsTabs": {
       "page": "Page",

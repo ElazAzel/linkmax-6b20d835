@@ -855,7 +855,7 @@ Based on codebase analysis, these are logical next improvements:
 | 12. **Phase 6: Regional Expansion & Technical Hardening**: Standardized Edge Functions with import maps, implemented manual CRM automations (Auto-Invoice), established Kaspi Pay service bridge, and added E2E CRM workflow verification. (Completed 2026-03-06)
 | 12. **Monetization (Phase 1): Payment Skeleton**: Implemented `PaymentService` and `orders` table infrastructure. (Completed 2026-03-05)
 | 13. **Business Zones Phase 4 (Analytics Dashboard)**: Visual funnel charts, revenue timeline, and performance metrics for zones. (Completed)
-12. **API access** — Public API for integrations (Zapier, Make, custom apps)
+12. ~~**API access**~~ — Public API for integrations (Zapier, Make, custom apps) (Completed 2026-03-15)
 13. **Booking TZ & GCal Protection** — Robust timezone awareness and server-side calendar conflict checks (Completed 2026-03-11)
 14. **Global Command Palette (Cmd+K)** — Quick-select navigation across contacts and deals (Completed 2026-03-11)
 15. **CRM Excel & PDF Exports** — Full native .xlsx generation and local JS-driven PDF Acts/Invoices (Completed 2026-03-11)

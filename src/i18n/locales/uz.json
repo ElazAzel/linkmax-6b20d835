@@ -144,7 +144,8 @@
     "untitled": "Nomsiz",
     "name": "Ism",
     "status": "Holat",
-    "date": "Sana"
+    "date": "Sana",
+    "created": ""
   },
   "fields": {
     "name": "Ism",
@@ -717,7 +718,17 @@
       "gcalDisconnectFailed": "Google Calendar-ni o'chirishda xatolik",
       "gcalDisconnected": "Google Calendar o'chirildi",
       "active": "Faol",
-      "gcalDesc": "Band qilishlarni kalendar bilan sinxronlash"
+      "gcalDesc": "Band qilishlarni kalendar bilan sinxronlash",
+      "apiKeyNameRequired": "",
+      "apiKeys": "",
+      "apiKeysDesc": "",
+      "apiKeyNamePlaceholder": "",
+      "newKeyGenerated": "",
+      "apiKeyWarning": "",
+      "noApiKeys": "",
+      "viewApiDocs": "",
+      "apiKeyGenerated": "",
+      "apiKeyDeleted": ""
     },
     "pageBackground": "Sahifa foni",
     "backgroundType": "Fon turi",
@@ -2058,7 +2069,8 @@
       "billingHistory": "To'lov tarixi",
       "security": "Xavfsizlik",
       "changePassword": "Parolni o'zgartirish",
-      "signOut": "Chiqish"
+      "signOut": "Chiqish",
+      "apiAccess": ""
     },
     "settingsTabs": {
       "page": "Sahifa",

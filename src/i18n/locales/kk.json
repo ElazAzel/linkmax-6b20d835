@@ -144,7 +144,8 @@
     "untitled": "Атаусыз",
     "name": "Аты",
     "status": "Мәртебесі",
-    "date": "Күні"
+    "date": "Күні",
+    "created": ""
   },
   "fields": {
     "name": "Аты",
@@ -717,7 +718,17 @@
       "gcalDisconnectFailed": "Google Calendar ажырату қатесі",
       "gcalDisconnected": "Google Calendar ажыратылды",
       "active": "Белсенді",
-      "gcalDesc": "Брондауларды күнтізбемен синхрондау"
+      "gcalDesc": "Брондауларды күнтізбемен синхрондау",
+      "apiKeyNameRequired": "",
+      "apiKeys": "",
+      "apiKeysDesc": "",
+      "apiKeyNamePlaceholder": "",
+      "newKeyGenerated": "",
+      "apiKeyWarning": "",
+      "noApiKeys": "",
+      "viewApiDocs": "",
+      "apiKeyGenerated": "",
+      "apiKeyDeleted": ""
     },
     "pageBackground": "Бет фоны",
     "backgroundType": "Фон түрі",
@@ -2058,7 +2069,8 @@
       "billingHistory": "Төлем тарихы",
       "security": "Қауіпсіздік",
       "changePassword": "Құпия сөзді өзгерту",
-      "signOut": "Шығу"
+      "signOut": "Шығу",
+      "apiAccess": ""
     },
     "settingsTabs": {
       "page": "Бет",
