@@ -96,7 +96,7 @@ serve(async (req: Request) => {
         // 1. Fetch page owner info for limit check and notification
         const { data: pageData, error: pageError } = await supabase
             .from('pages')
-            .select('user_id, slug, title')
+            .select('user_id, slug, title, content')
             .eq('id', pageId)
             .single();
 
@@ -128,6 +128,38 @@ serve(async (req: Request) => {
         if (insertError) {
             console.error('Error inserting lead:', insertError);
             throw insertError;
+        }
+
+        // 4. Handle Email Sequence Trigger
+        if (sanitizedFormData) {
+            try {
+                // Find the email field (case-insensitive)
+                const emailField = Object.entries(sanitizedFormData).find(([key]) => 
+                    /^(email|почта|e-mail)$/i.test(key)
+                );
+                const leadEmail = emailField ? emailField[1] : null;
+
+                if (leadEmail) {
+                    // Find the block in page content to see if it has a sequenceId
+                    const blocks = (pageData.content || []) as any[];
+                    const currentBlock = blocks.find(b => b.id === blockId);
+                    const sequenceId = currentBlock?.content?.sequenceId;
+
+                    if (sequenceId) {
+                        console.log(`Subscribing lead ${lead.id} to sequence ${sequenceId}`);
+                        await supabase
+                            .from('lead_sequence_subscriptions')
+                            .insert({
+                                lead_id: lead.id,
+                                sequence_id: sequenceId,
+                                status: 'active'
+                            });
+                    }
+                }
+            } catch (seqErr) {
+                console.error('Error handling sequence trigger:', seqErr);
+                // Don't fail the lead creation
+            }
         }
 
         if (pageData?.user_id) {

@@ -7,10 +7,23 @@ import { ArrayFieldItem } from '@/components/form-fields/ArrayFieldItem';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
+import { emailSequencesService, type EmailSequence } from '@/services/emailSequences';
+import { useEffect, useState } from 'react';
 
 function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t } = useTranslation();
+  const [sequences, setSequences] = useState<EmailSequence[]>([]);
   const fields = formData.fields || [];
+
+  useEffect(() => {
+    const fetchSequences = async () => {
+      const { data } = await emailSequencesService.listSequences();
+      if (data) {
+        setSequences(data.filter(s => s.status === 'active'));
+      }
+    };
+    fetchSequences();
+  }, []);
 
   const addField = () => {
     const newField = {
@@ -53,6 +66,29 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         onChange={(value) => onChange({ ...formData, buttonText: value })}
         placeholder={t('fields.send', 'Send')}
       />
+
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">{t('crm.triggerSequence', 'Trigger Email Sequence')}</Label>
+        <Select
+          value={formData.sequenceId || 'none'}
+          onValueChange={(value) => onChange({ ...formData, sequenceId: value === 'none' ? null : value })}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder={t('crm.selectSequence', 'Select a sequence')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">{t('common.none', 'None')}</SelectItem>
+            {sequences.map((seq) => (
+              <SelectItem key={seq.id} value={seq.id}>
+                {seq.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p className="text-[10px] text-muted-foreground italic">
+          {t('crm.triggerSequenceHint', 'New leads will be automatically subscribed to this sequence if they provide an email.')}
+        </p>
+      </div>
 
       <ArrayFieldList label={t('fields.formFields', 'Form Fields')} items={fields} onAdd={addField}>
         {fields.map((field: any, index: number) => (
