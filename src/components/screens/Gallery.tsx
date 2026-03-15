@@ -7,7 +7,6 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import Users from 'lucide-react/dist/esm/icons/users';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Search from 'lucide-react/dist/esm/icons/search';
@@ -16,7 +15,8 @@ import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { SkeletonGalleryGrid } from '@/components/ui/skeleton-card';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
@@ -134,7 +134,7 @@ export default function Gallery() {
     navigate(`/gallery?${nextParams.toString()}`, { replace: true });
   }, [searchParams, navigate]);
 
-  const handleCopyTemplate = useCallback((pageSlug: string) => {
+  const handleCopyTemplate = useCallback((_pageSlug: string) => {
     toast.success(t('gallery.templateCopied', 'Шаблон скопирован!'), {
       description: t('gallery.goToEditor', 'Откройте редактор чтобы настроить'),
       action: {
@@ -343,17 +343,22 @@ export default function Gallery() {
             {/* Grid */}
             <div className="px-4 pb-20">
               {loading ? (
-                <SkeletonGalleryGrid />
+                <LoadingState
+                  variant="skeleton-cards"
+                  skeletonCount={6}
+                  message={t('messages.loading', 'Загрузка...')}
+                />
               ) : filteredPages.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="w-14 h-14 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <h3 className="font-semibold mb-1">{t('gallery.noPages', 'Страниц не найдено')}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
-                  </p>
-                </div>
+                <EmptyState
+                  title={t('gallery.noPages', 'Страниц не найдено')}
+                  description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
+                  ctaLabel={t('gallery.resetFilters', 'Сбросить фильтры')}
+                  onCtaClick={() => {
+                    setSearchQuery('');
+                    setSortMode('popular');
+                    updateNiche(null);
+                  }}
+                />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                   {filteredPages.map((page) => (
