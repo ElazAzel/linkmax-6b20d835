@@ -40,7 +40,7 @@ interface LandingSession {
 
 function getOrCreateSession(): LandingSession {
   try {
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = window.sessionStorage.getItem(SESSION_KEY);
     if (stored) {
       return JSON.parse(stored);
     }
@@ -57,7 +57,7 @@ function getOrCreateSession(): LandingSession {
   };
 
   try {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
+    window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
   } catch {
     // Ignore
   }
@@ -69,7 +69,7 @@ function updateSession(updates: Partial<LandingSession>) {
   try {
     const current = getOrCreateSession();
     const updated = { ...current, ...updates };
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+    window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(updated));
     return updated;
   } catch {
     return null;
@@ -141,7 +141,7 @@ export function useLandingAnalytics() {
     if (hasTrackedView.current || isBot() || isDevTraffic()) return;
 
     const sessionKey = 'lnkmx_landing_viewed';
-    const alreadyViewed = sessionStorage.getItem(sessionKey);
+    const alreadyViewed = window.sessionStorage.getItem(sessionKey);
 
     if (!alreadyViewed) {
       trackLandingEvent({
@@ -153,7 +153,7 @@ export function useLandingAnalytics() {
           utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign'),
         }
       });
-      sessionStorage.setItem(sessionKey, 'true');
+      window.sessionStorage.setItem(sessionKey, 'true');
       hasTrackedView.current = true;
     }
   }, []);

@@ -80,11 +80,11 @@ export default function Auth() {
   const nicheParam = searchParams.get('niche');
   const refSlug = searchParams.get('ref_slug');
 
-  // Store growth source params in sessionStorage for post-auth use
+  // Store growth source params in window.sessionStorage for post-auth use
   useEffect(() => {
-    if (fromSource) sessionStorage.setItem('lnkmx_signup_from', fromSource);
-    if (nicheParam) sessionStorage.setItem('lnkmx_signup_niche', nicheParam);
-    if (refSlug) sessionStorage.setItem('lnkmx_signup_ref_slug', refSlug);
+    if (fromSource) window.sessionStorage.setItem('lnkmx_signup_from', fromSource);
+    if (nicheParam) window.sessionStorage.setItem('lnkmx_signup_niche', nicheParam);
+    if (refSlug) window.sessionStorage.setItem('lnkmx_signup_ref_slug', refSlug);
   }, [fromSource, nicheParam, refSlug]);
 
   // Persistence for deep-linking

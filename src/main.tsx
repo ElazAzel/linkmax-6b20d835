@@ -58,14 +58,14 @@ function isChunkRuntimeError(err: unknown): boolean {
 
 function recoverFromStaleAssets(): void {
   try {
-    if (sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
-    sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
+    if (window.sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
+    window.sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
 
     // Clear runtime caches that can hold stale assets
     try {
-      Object.keys(localStorage).forEach((key) => {
+      Object.keys(window.localStorage).forEach((key) => {
         if (key.startsWith('linkmax_') || key.startsWith('sb-')) {
-          localStorage.removeItem(key);
+          window.localStorage.removeItem(key);
         }
       });
     } catch {
@@ -106,7 +106,7 @@ window.addEventListener('unhandledrejection', (event) => {
 // If app boot succeeded, allow future recovery attempts
 window.addEventListener('load', () => {
   setTimeout(() => {
-    sessionStorage.removeItem(CHUNK_RECOVERY_KEY);
+    window.sessionStorage.removeItem(CHUNK_RECOVERY_KEY);
   }, 15000);
 });
 

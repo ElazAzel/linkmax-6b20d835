@@ -100,7 +100,7 @@ function truncate(str: string, max: number): string {
 }
 
 function stripMarkdown(text: string): string {
-  return text.replace(/[#*_~`>\[\]()!]/g, '').trim();
+  return text.replace(/[#*_~`>[\]()!]/g, '').trim();
 }
 
 function extractDomain(url?: string): string {

@@ -56,7 +56,7 @@ async function fetchZoneBookings(zoneId: string): Promise<ZoneBooking[]> {
 
   return (bookings || []).map(b => {
     // If the booking has no timezone info, default to viewer's timezone
-    // @ts-ignore - timezone will be added in the upcoming db migration
+    // @ts-expect-error - timezone will be added in the upcoming db migration
     const bookingTz = b.timezone || viewerTimeZone;
 
     // Create a date object in UTC for the exact booked string
