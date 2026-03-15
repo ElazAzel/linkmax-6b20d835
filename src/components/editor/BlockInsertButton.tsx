@@ -236,13 +236,15 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <IconComponent className="h-7 w-7" />
         </div>
 
-        <span className="text-sm font-bold text-center leading-tight">
+        <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
           {t(block.labelKey, block.type)}
         </span>
 
         {!isLocked && (isProBlock || showRelevantBadge) && (
           <div className="absolute -top-1 -left-1">
             <Badge
+              variant="default"
+              className="max-w-[5.5rem] text-[10px] sm:text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0 whitespace-normal break-words text-wrap leading-tight"
               variant="secondary"
               className="text-xs px-1.5 py-0.5"
             >

@@ -152,7 +152,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                       </span>
                     )}
                   </div>
-                  <span className={cn("text-[8px] font-black leading-none truncate max-w-full px-0.5 tracking-tighter uppercase", isActive && "text-primary")}>
+                  <span className={cn("text-[8px] font-black leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal break-words text-wrap text-center", isActive && "text-primary")}>
                     {t(tab.labelKey, tab.defaultLabel)}
                   </span>
                 </button>
@@ -174,7 +174,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                 />
               )}
               <MoreHorizontal className={cn("h-5 w-5 shrink-0", isMoreActive && "drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]")} />
-              <span className={cn("text-[8px] font-black leading-none truncate max-w-full px-0.5 tracking-tighter uppercase", isMoreActive && "text-primary")}>
+              <span className={cn("text-[8px] font-black leading-tight max-w-full px-0.5 tracking-tighter uppercase whitespace-normal break-words text-wrap text-center", isMoreActive && "text-primary")}>
                 {t('dashboard.nav.more', 'Ещё')}
               </span>
             </button>
@@ -202,7 +202,9 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                   )}
                 >
                   <Icon className="h-6 w-6" />
-                  <span className="text-xs font-medium">{t(item.labelKey, item.defaultLabel)}</span>
+                  <span className="text-[11px] sm:text-xs font-medium text-center whitespace-normal break-words text-wrap leading-tight max-w-[5.5rem]">
+                    {t(item.labelKey, item.defaultLabel)}
+                  </span>
                 </button>
               );
             })}
