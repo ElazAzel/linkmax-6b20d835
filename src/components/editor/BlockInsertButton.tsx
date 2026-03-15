@@ -266,10 +266,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         {!isLocked && (isProBlock || showRelevantBadge) && (
           <div className="absolute -top-1 -left-1">
             <Badge
-              variant="default"
               className="max-w-[5.5rem] text-[10px] sm:text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0 whitespace-normal break-words text-wrap leading-tight"
               variant="secondary"
-              className="text-xs px-1.5 py-0.5"
             >
               {isProBlock ? (
                 <>
