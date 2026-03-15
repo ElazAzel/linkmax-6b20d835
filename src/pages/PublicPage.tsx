@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -9,8 +9,6 @@ import QrCode from 'lucide-react/dist/esm/icons/qr-code';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import Copy from 'lucide-react/dist/esm/icons/copy';
 import { GridBlocksRenderer } from '@/components/blocks/GridBlocksRenderer';
-import { ChatbotWidget } from '@/components/chat/ChatbotWidget';
-import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
 import { FreemiumWatermark } from '@/components/billing/FreemiumWatermark';
 import { EnhancedSEOHead } from '@/components/seo/EnhancedSEOHead';
 import { CrawlerFriendlyContent } from '@/components/seo/CrawlerFriendlyContent';
@@ -19,7 +17,6 @@ import { SEOMetaEnhancer } from '@/components/seo/SEOMetaEnhancer';
 import { AISearchOptimizer } from '@/components/seo/AISearchOptimizer';
 import { PublicPageSkeleton } from '@/components/public/PublicPageSkeleton';
 import { PublicPageError } from '@/components/public/PublicPageError';
-import { TrackingScripts } from '@/components/analytics/TrackingScripts';
 import { decompressPageData } from '@/lib/utils/compression';
 import { usePublicPage, usePublicPageByDomain } from '@/hooks/page/usePageCache';
 import { AnalyticsProvider } from '@/hooks/analytics/useAnalyticsTracking';
@@ -43,12 +40,19 @@ import { QRCodeSVG } from 'qrcode.react';
 import { usePageExperiments } from '@/hooks/page/usePageExperiments';
 import { getVisitorId } from '@/services/analytics';
 
+const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1);
+
+const ChatbotWidget = lazy(() => import('@/components/chat/ChatbotWidget').then(m => ({ default: m.ChatbotWidget })));
+const LanguageSwitcher = lazy(() => import('@/components/translation/LanguageSwitcher').then(m => ({ default: m.LanguageSwitcher })));
+const TrackingScripts = lazy(() => import('@/components/analytics/TrackingScripts').then(m => ({ default: m.TrackingScripts })));
+
 export default function PublicPage() {
   const { t } = useTranslation();
   const { compressed, slug } = useParams<{ compressed?: string; slug?: string }>();
   const [compressedPageData, setCompressedPageData] = useState<PageData | null>(null);
   const [showQR, setShowQR] = useState(false);
   const [translatedBlocks, setTranslatedBlocks] = useState<Block[] | null>(null);
+  const [enhancementsReady, setEnhancementsReady] = useState(false);
   const currentUrl = window.location.href;
 
   const visitorId = useMemo(() => getVisitorId(), []);
@@ -76,6 +80,21 @@ export default function PublicPage() {
     if (!isPlatformDomain) {
       setCustomDomain(hostname);
     }
+  }, []);
+
+  // Progressive hydration for non-critical widgets
+  useEffect(() => {
+    let active = true;
+    const start = () => {
+      if (active) setEnhancementsReady(true);
+    };
+
+    _ric(start);
+    const timer = setTimeout(start, 1500);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, []);
 
   // Use React Query for slug-based pages (with caching)
@@ -265,7 +284,13 @@ export default function PublicPage() {
             <div>
               {/* Language Switcher - Top Right */}
               <div className="fixed top-4 right-4 z-50">
-                <LanguageSwitcher />
+                {enhancementsReady ? (
+                  <Suspense fallback={<div className="h-9 w-9 rounded-lg bg-background/70 animate-pulse" />}>
+                    <LanguageSwitcher />
+                  </Suspense>
+                ) : (
+                  <div className="h-9 w-9 rounded-lg bg-background/70 animate-pulse" />
+                )}
               </div>
 
               <div className="container max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
@@ -317,11 +342,17 @@ export default function PublicPage() {
               </Dialog>
 
               {/* AI Chatbot Widget */}
-              {slug && <ChatbotWidget pageSlug={slug} />}
+              {enhancementsReady && slug && (
+                <Suspense fallback={null}>
+                  <ChatbotWidget pageSlug={slug} />
+                </Suspense>
+              )}
 
               {/* Analytics Tracking Scripts */}
-              {pageData?.integrations && (
-                <TrackingScripts integrations={pageData.integrations} pageId={pageData.id} />
+              {enhancementsReady && pageData?.integrations && (
+                <Suspense fallback={null}>
+                  <TrackingScripts integrations={pageData.integrations} pageId={pageData.id} />
+                </Suspense>
               )}
             </div>
           </AnalyticsProvider>

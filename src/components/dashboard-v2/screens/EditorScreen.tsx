@@ -3,7 +3,7 @@
  * Mobile-first design with GridEditor and block editing capabilities
  * P5: Structure view, review modes, friction recovery, sections wired
  */
-import { memo, useCallback, useState, useMemo } from 'react';
+import { memo, useCallback, useState, useMemo, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
@@ -21,8 +21,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
-import { GridEditor } from '@/components/editor/GridEditor';
-import { StructureView } from '@/components/editor/StructureView';
 import { cn } from '@/lib/utils/utils';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
@@ -32,6 +30,18 @@ import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
 import type { FreeTier } from '@/hooks/user/useFreemiumLimits';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
+
+const GridEditor = lazy(() => import('@/components/editor/GridEditor').then(m => ({ default: m.GridEditor })));
+const StructureView = lazy(() => import('@/components/editor/StructureView').then(m => ({ default: m.StructureView })));
+
+const EditorCanvasSkeleton = () => (
+  <div className="space-y-4 p-4 animate-pulse">
+    <div className="h-10 w-1/3 rounded-xl bg-muted" />
+    <div className="h-24 rounded-2xl bg-muted/80" />
+    <div className="h-24 rounded-2xl bg-muted/70" />
+    <div className="h-24 rounded-2xl bg-muted/60" />
+  </div>
+);
 
 interface EditorScreenProps {
   pageData: PageData | null;
@@ -402,45 +412,51 @@ export const EditorScreen = memo(function EditorScreen({
 
       {/* Grid Editor */}
       <div className="pt-4">
-        <GridEditor
-          blocks={pageData.blocks}
-          isPremium={isPremium}
-          currentTier={currentTier}
-          premiumTier={premiumTier}
-          gridConfig={pageData.gridConfig}
-          onInsertBlock={handleInsertBlockWithFriction}
-          onEditBlock={onEditBlock}
-          onDeleteBlock={handleDeleteBlockWithFriction}
-          onUpdateBlock={onUpdateBlock}
-          onReorderBlocks={onReorderBlocks}
-          onDuplicateBlock={onDuplicateBlock}
-        />
+        <Suspense fallback={<EditorCanvasSkeleton />}>
+          <GridEditor
+            blocks={pageData.blocks}
+            isPremium={isPremium}
+            currentTier={currentTier}
+            premiumTier={premiumTier}
+            gridConfig={pageData.gridConfig}
+            onInsertBlock={handleInsertBlockWithFriction}
+            onEditBlock={onEditBlock}
+            onDeleteBlock={handleDeleteBlockWithFriction}
+            onUpdateBlock={onUpdateBlock}
+            onReorderBlocks={onReorderBlocks}
+            onDuplicateBlock={onDuplicateBlock}
+          />
+        </Suspense>
       </div>
 
       {/* P5: Structure View 2.0 */}
-      <StructureView
-        open={structureOpen}
-        onOpenChange={setStructureOpen}
-        blocks={pageData.blocks}
-        onBlockSelect={(blockId) => {
-          setStructureOpen(false);
-          onEditBlock(pageData.blocks.find(b => b.id === blockId) || pageData.blocks[0]);
-        }}
-        onBlockDuplicate={onDuplicateBlock}
-        onBlockDelete={handleDeleteBlockWithFriction}
-        onBlockMoveUp={handleBlockMoveUp}
-        onBlockMoveDown={handleBlockMoveDown}
-        sectionMeta={sectionMeta}
-        collapsedSections={collapsedSections}
-        onToggleSectionCollapse={toggleSectionCollapse}
-        onDissolveSection={handleDissolveSection}
-        onDeleteSection={handleDeleteSection}
-        onDuplicateSection={handleDuplicateSection}
-        onRenameSection={handleRenameSection}
-        blockQuality={intelligence?.blockQuality}
-        reviewMode={reviewMode}
-        onSetReviewMode={setReviewMode}
-      />
+      {structureOpen && (
+        <Suspense fallback={null}>
+          <StructureView
+            open={structureOpen}
+            onOpenChange={setStructureOpen}
+            blocks={pageData.blocks}
+            onBlockSelect={(blockId) => {
+              setStructureOpen(false);
+              onEditBlock(pageData.blocks.find(b => b.id === blockId) || pageData.blocks[0]);
+            }}
+            onBlockDuplicate={onDuplicateBlock}
+            onBlockDelete={handleDeleteBlockWithFriction}
+            onBlockMoveUp={handleBlockMoveUp}
+            onBlockMoveDown={handleBlockMoveDown}
+            sectionMeta={sectionMeta}
+            collapsedSections={collapsedSections}
+            onToggleSectionCollapse={toggleSectionCollapse}
+            onDissolveSection={handleDissolveSection}
+            onDeleteSection={handleDeleteSection}
+            onDuplicateSection={handleDuplicateSection}
+            onRenameSection={handleRenameSection}
+            blockQuality={intelligence?.blockQuality}
+            reviewMode={reviewMode}
+            onSetReviewMode={setReviewMode}
+          />
+        </Suspense>
+      )}
     </div>
   );
 });

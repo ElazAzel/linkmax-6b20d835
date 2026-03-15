@@ -91,6 +91,7 @@ const LoadingState = () => (
 const CanvasBackground = lazy(() => import('@/components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
 import { storage } from '@/lib/storage';
+import { prefetchRouteChunks } from '@/lib/routing/route-prefetch';
 
 // Lazy load heavy components for better bundle splitting
 const BlockEditorV2 = lazy(() => import('@/components/editor/BlockEditorV2').then(m => ({ default: m.BlockEditorV2 })));
@@ -221,6 +222,23 @@ function DashboardV2Inner() {
   const seoDescription = t('dashboard.seo.description', 'Manage your LinkMAX pages, leads, and analytics.');
 
   // QuickStartFlow removed — AIBuilderWizard handles all onboarding via useDashboardOnboarding
+
+  useEffect(() => {
+    // Prefetch only nearest probable next transitions by active dashboard tab
+    if (currentTab === 'home') {
+      prefetchRouteChunks(['editor']);
+      return;
+    }
+
+    if (currentTab === 'editor') {
+      prefetchRouteChunks(['publicPage']);
+      return;
+    }
+
+    if (currentTab === 'pages') {
+      prefetchRouteChunks(['publicPage', 'editor']);
+    }
+  }, [currentTab]);
 
   // Handle tab change - navigate to the proper route
   const handleTabChange = useCallback((tabId: string) => {
@@ -711,14 +729,16 @@ function DashboardV2Inner() {
 
         <Suspense fallback={null}>
           {/* Create Page Dialog */}
-          <CreatePageDialogLazy
-            open={showCreatePage}
-            onOpenChange={setShowCreatePage}
-            onCreatePage={handleCreatePage}
-            limits={multiPage.limits}
-            isPremium={dashboard.isPremium}
-            onUpgrade={() => navigate('/pricing')}
-          />
+          {showCreatePage && (
+            <CreatePageDialogLazy
+              open={showCreatePage}
+              onOpenChange={setShowCreatePage}
+              onCreatePage={handleCreatePage}
+              limits={multiPage.limits}
+              isPremium={dashboard.isPremium}
+              onUpgrade={() => navigate('/pricing')}
+            />
+          )}
 
           {/* Block Editor Modal */}
           {dashboard.blockEditor.editingBlock && (
@@ -733,21 +753,25 @@ function DashboardV2Inner() {
           )}
 
           {/* Template Gallery */}
-          <TemplateGallery
-            open={templateGalleryOpen}
-            onClose={() => setTemplateGalleryOpen(false)}
-            onSelect={dashboard.handleApplyTemplate}
-          />
+          {templateGalleryOpen && (
+            <TemplateGallery
+              open={templateGalleryOpen}
+              onClose={() => setTemplateGalleryOpen(false)}
+              onSelect={dashboard.handleApplyTemplate}
+            />
+          )}
 
           {/* Template Marketplace */}
-          <TemplateMarketplace
-            open={showMarketplace}
-            onClose={() => setShowMarketplace(false)}
-            onApplyTemplate={(blocks) => {
-              dashboard.handleApplyTemplate(blocks);
-              setShowMarketplace(false);
-            }}
-          />
+          {showMarketplace && (
+            <TemplateMarketplace
+              open={showMarketplace}
+              onClose={() => setShowMarketplace(false)}
+              onApplyTemplate={(blocks) => {
+                dashboard.handleApplyTemplate(blocks);
+                setShowMarketplace(false);
+              }}
+            />
+          )}
 
           {/* AI Generator */}
           {dashboard.aiState.aiGeneratorOpen && (
@@ -768,68 +792,82 @@ function DashboardV2Inner() {
           )}
 
           {/* AI Builder Wizard (onboarding + settings) */}
-          <AIBuilderWizard
-            open={dashboard.onboardingState.showAIBuilderWizard}
-            onClose={dashboard.onboardingState.handleAIBuilderClose}
-            onComplete={dashboard.onboardingState.handleAIBuilderComplete}
-            isOnboarding={true}
-          />
+          {dashboard.onboardingState.showAIBuilderWizard && (
+            <AIBuilderWizard
+              open={dashboard.onboardingState.showAIBuilderWizard}
+              onClose={dashboard.onboardingState.handleAIBuilderClose}
+              onComplete={dashboard.onboardingState.handleAIBuilderComplete}
+              isOnboarding={true}
+            />
+          )}
 
           {/* Panels & Dialogs */}
           {showAchievements && <AchievementsPanel onClose={() => setShowAchievements(false)} />}
           {showFriends && <FriendsPanel onClose={() => setShowFriends(false)} />}
 
-          <SaveTemplateDialog
-            open={showSaveTemplate}
-            onClose={() => setShowSaveTemplate(false)}
-            blocks={dashboard.pageData.blocks}
-            previewContainerId="preview-container"
-          />
+          {showSaveTemplate && (
+            <SaveTemplateDialog
+              open={showSaveTemplate}
+              onClose={() => setShowSaveTemplate(false)}
+              blocks={dashboard.pageData.blocks}
+              previewContainerId="preview-container"
+            />
+          )}
 
-          <MyTemplatesPanel
-            open={showMyTemplates}
-            onOpenChange={setShowMyTemplates}
-            onApplyTemplate={dashboard.handleApplyTemplate}
-            currentBlocks={dashboard.pageData.blocks}
-          />
+          {showMyTemplates && (
+            <MyTemplatesPanel
+              open={showMyTemplates}
+              onOpenChange={setShowMyTemplates}
+              onApplyTemplate={dashboard.handleApplyTemplate}
+              currentBlocks={dashboard.pageData.blocks}
+            />
+          )}
 
-          <TokensPanel open={showTokens} onOpenChange={setShowTokens} />
+          {showTokens && <TokensPanel open={showTokens} onOpenChange={setShowTokens} />}
 
-          <InstallPromptDialog
-            open={dashboard.sharingState.showInstallPrompt}
-            onClose={dashboard.sharingState.closeInstallPrompt}
-            pageUrl={dashboard.sharingState.publishedUrl}
-          />
+          {dashboard.sharingState.showInstallPrompt && (
+            <InstallPromptDialog
+              open={dashboard.sharingState.showInstallPrompt}
+              onClose={dashboard.sharingState.closeInstallPrompt}
+              pageUrl={dashboard.sharingState.publishedUrl}
+            />
+          )}
 
-          <ShareAfterPublishDialog
-            open={dashboard.sharingState.showShareDialog}
-            onOpenChange={dashboard.sharingState.closeShareDialog}
-            userId={dashboard.user?.id}
-            publishedUrl={dashboard.sharingState.publishedUrl}
-          />
+          {dashboard.sharingState.showShareDialog && (
+            <ShareAfterPublishDialog
+              open={dashboard.sharingState.showShareDialog}
+              onOpenChange={dashboard.sharingState.closeShareDialog}
+              userId={dashboard.user?.id}
+              publishedUrl={dashboard.sharingState.publishedUrl}
+            />
+          )}
 
           {/* Page Versions Dialog */}
-          <PageVersionsDialogLazy
-            open={showVersions}
-            onClose={() => setShowVersions(false)}
-            versions={pageVersions.versions}
-            loading={pageVersions.loading}
-            onRestore={pageVersions.restoreVersion}
-            pageId={dashboard.pageData?.id}
-            onFetch={pageVersions.fetchVersions}
-          />
+          {showVersions && (
+            <PageVersionsDialogLazy
+              open={showVersions}
+              onClose={() => setShowVersions(false)}
+              versions={pageVersions.versions}
+              loading={pageVersions.loading}
+              onRestore={pageVersions.restoreVersion}
+              pageId={dashboard.pageData?.id}
+              onFetch={pageVersions.fetchVersions}
+            />
+          )}
 
           {/* Theme Panel */}
-          <ThemePanel
-            open={showTheme}
-            onClose={() => setShowTheme(false)}
-            currentTheme={dashboard.pageData?.theme || {}}
-            onThemeChange={(theme) => {
-              dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } });
-            }}
-            isPremium={dashboard.isPremium}
-            onUpgrade={() => navigate('/pricing')}
-          />
+          {showTheme && (
+            <ThemePanel
+              open={showTheme}
+              onClose={() => setShowTheme(false)}
+              currentTheme={dashboard.pageData?.theme || {}}
+              onThemeChange={(theme) => {
+                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } });
+              }}
+              isPremium={dashboard.isPremium}
+              onUpgrade={() => navigate('/pricing')}
+            />
+          )}
         </Suspense>
 
         {/* P2: Command Palette + Keyboard Shortcuts */}
