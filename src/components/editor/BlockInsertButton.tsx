@@ -212,10 +212,18 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const blockButton = (
       <button
         key={block.type}
+        type="button"
         onClick={() => handleInsert(block.type, block.tier)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleInsert(block.type, block.tier);
+          }
+        }}
         disabled={isLocked}
+        aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
-          "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all",
+          "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isLocked
             ? "opacity-40 cursor-not-allowed"
             : "hover:bg-muted/50 active:scale-95"
