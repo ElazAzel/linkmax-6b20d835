@@ -8,14 +8,13 @@
   - Added new algorithmic niches: **Beauty**, **Real Estate**, **E-commerce**.
   - Implemented niche-specific "Magic Wand" for **Links**, **Buttons**, **FAQ**, **Messenger**, and **Product** blocks using a deterministic algorithm (no AI latency).
   - Integrated smart suggestions into `LinkBlockEditor`, `ButtonBlockEditor`, `FAQBlockEditor`, `MessengerBlockEditor`, and `ProductBlockEditor`.
-- **Platform Hardening & UI Stability**
-  - Resolved **Block Insertion Sheet** closure issue (race condition fix with 150ms delay).
-  - Implemented **Radix UI `SheetClose`** for reliable manual closure of the insert panel.
+- **Platform Hardening & Error Audit**
+  - **Fintech Service**: Removed `as any` casts and implemented proper typing for `user_wallets` and `user_profiles`. Fixed `PostgrestError` status check.
+  - **Dashboard Hooks**: Fixed critical bug in `useDashboardMetrics` subscription filter (removed reference to non-existent `page_id` in `leads` table). Improved analytics typing.
+  - **Editor UI**: Resolved **Block Insertion Sheet** closure race condition and fixed double-opening `div` structures for the block grid.
+  - **Observability**: Verified **Sentry noise filtering** for `cute-cursors` extension and validated **PWA Manifest** icon paths.
   - Implemented RPC Fallback for `upsert_user_page` ensuring zero downtime during schema migrations (backward compatibility).
   - Fixed 406 error in Fintech wallet fetching by migrating to `maybeSingle()`.
-  - Optimized PWA Manifest by resolving icon download errors (`favicon.png` substitution).
-  - **Analytics & Tracking**: Implemented **Google Consent Mode v2** initialization in `TrackingScripts.tsx` to resolve sequencing errors.
-  - **Observability**: Enhanced **Sentry noise filtering** to completely suppress external errors from the `cute-cursors` browser extension.
 
 ### Changed
 

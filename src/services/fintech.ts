@@ -95,7 +95,7 @@ export const fintechService = {
             const feeAmount = Number((grossAmount * commissionRate).toFixed(2));
             const netAmount = grossAmount - feeAmount;
 
-            const { data: wallet, error: walletError } = await (supabase as any)
+            const { data: wallet, error: walletError } = await supabase
                 .from('user_wallets')
                 .select('id')
                 .eq('user_id', params.userId)
@@ -107,6 +107,7 @@ export const fintechService = {
             }
 
             // Single insert with gross/fee/net per modern schema
+            // NOTE: wallet_transactions might not be in types.ts yet, using as any for the table name only
             const { data: transaction, error: txError } = await (supabase as any)
                 .from('wallet_transactions')
                 .insert({
@@ -127,7 +128,7 @@ export const fintechService = {
 
             if (txError) throw txError;
 
-            return transaction;
+            return transaction as WalletTransaction;
         } catch (err) {
             logger.error('Failed to record pending income', err);
             throw err;
@@ -136,7 +137,7 @@ export const fintechService = {
 
     async getWalletOverview(userId: string) {
         try {
-            const { data: wallet, error: walletError } = await (supabase as any)
+            const { data: wallet, error: walletError } = await supabase
                 .from('user_wallets')
                 .select('*')
                 .eq('user_id', userId)
@@ -144,7 +145,7 @@ export const fintechService = {
 
             // Gracefully handle missing table (feature not launched yet)
             if (walletError) {
-                if (walletError.code === 'PGRST205' || walletError.code === '42P01' || walletError.status === 404) {
+                if (walletError.code === 'PGRST205' || walletError.code === '42P01') {
                     return { wallet: null, transactions: [], pendingGMV: 0 };
                 }
                 throw walletError;
@@ -170,7 +171,7 @@ export const fintechService = {
 
             return {
                 wallet,
-                transactions,
+                transactions: (transactions || []) as WalletTransaction[],
                 pendingGMV
             };
         } catch (err) {
@@ -182,7 +183,7 @@ export const fintechService = {
     async requestPayout(params: { userId: string; amount: number; method: PayoutMethod; notes?: string }) {
         const { userId, amount, method, notes } = params;
 
-        const { data: wallet } = await (supabase as any)
+        const { data: wallet } = await supabase
             .from('user_wallets')
             .select('id, balance')
             .eq('user_id', userId)
@@ -192,13 +193,13 @@ export const fintechService = {
             throw new Error('Insufficient funds');
         }
 
-        const { data: request, error: requestError } = await (supabase as any)
+        const { data: request, error: requestError } = await supabase
             .from('token_withdrawals')
             .insert({
                 user_id: userId,
                 amount,
-                payment_method: method,
-                payment_details: notes ? { notes } : null,
+                payment_method: method as any, // Cast because PayoutMethod.type is string, but token_withdrawals expects specific
+                payment_details: (notes ? { notes } : null) as Json,
                 status: 'pending'
             })
             .select()

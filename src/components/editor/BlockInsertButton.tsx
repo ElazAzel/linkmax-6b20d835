@@ -237,10 +237,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
           "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
-          "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          isLocked
-            ? "opacity-40 cursor-not-allowed"
-            : "hover:bg-muted/50 active:scale-95"
+          "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          isLocked && "opacity-40 cursor-not-allowed"
         )}
       >
         <div className={cn(
@@ -398,7 +396,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {t('recommendations.title', 'Рекомендовано для вас')}
                   </h3>
                 </div>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {recommendedBlocks.map((block) => renderBlockItem(block, true))}
                 </div>
@@ -414,7 +411,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     </h3>
                   </div>
                 )}
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {otherBlocks.map((block) => renderBlockItem(block, false))}
                 </div>

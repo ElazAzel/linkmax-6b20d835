@@ -868,12 +868,12 @@ Based on codebase analysis, these are logical next improvements:
 21. ~~**Platform Hardening & UI Stability**~~ — RPC Fallbacks, 406 Wallet fixes, CSP & PWA optimizations, and **Block Sheet Closure Fix** (Completed 2026-03-16)
 22. **Mobile app** — Native iOS/Android app for page management
 
-- **Health Score**: 10/10
+- **Health Score**: 9.5/10 (Minor schema inconsistency in `leads` table)
 - **i18n**: Support for RU/EN/KK/UZ. Current status: **100% sync** (Synced March 2026).
 - **Audit History**: See [FULL_PLATFORM_AUDIT_2026_02_18.md](FULL_PLATFORM_AUDIT_2026_02_18.md), [FULL_PLATFORM_AUDIT_2026_02_24.md](FULL_PLATFORM_AUDIT_2026_02_24.md), [EDO_MODULE_AUDIT_2026_03_05.md](EDO_MODULE_AUDIT_2026_03_05.md), and [AUDIT_REPORT_2026_03_10.md](AUDIT_REPORT_2026_03_10.md).
 
 ---
 
 *Last updated: March 16, 2026*
-*Current Platform Health Score: **10/10** (Full Mobile Adaptation & Dashboard Standardization completed, 256/256 tests passing)*
+*Current Platform Health Score: **9.5/10** (Status: Production Ready, Manual Audit + Type Hardening pass completed on 2026-03-16)*
 *Maintained by: Antigravity (Principal Engineer)*

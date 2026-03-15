@@ -32,8 +32,8 @@ export function useDashboardMetrics(pageId: string | undefined) {
       try {
         const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
 
-        // 1. Fetch Views & Clicks from analytics (simplified for TS performance)
-        const { count: viewsCount, error: viewsError } = await (supabase as any)
+        // 1. Fetch Views & Clicks from analytics (properly typed)
+        const { count: viewsCount, error: viewsError } = await supabase
           .from('analytics')
           .select('*', { count: 'exact', head: true })
           .eq('page_id', pageId)
@@ -42,7 +42,7 @@ export function useDashboardMetrics(pageId: string | undefined) {
 
         if (viewsError) throw viewsError;
 
-        const { count: clicksCount, error: clicksError } = await (supabase as any)
+        const { count: clicksCount, error: clicksError } = await supabase
           .from('analytics')
           .select('*', { count: 'exact', head: true })
           .eq('page_id', pageId)
@@ -55,8 +55,8 @@ export function useDashboardMetrics(pageId: string | undefined) {
         const clicks = clicksCount || 0;
 
         // 2. Fetch Leads from leads table
-        // NOTE: 'leads' table currently lacks 'page_id' column in schema.
-        // We fetch total leads for the user as a fallback or return 0 to avoid 400 error.
+        // NOTE: 'leads' table currently lacks 'page_id' column in schema (verified in types.ts).
+        // Fetching all leads for the user as a fallback.
         const { count: leadsCount, error: leadsError } = await supabase
           .from('leads')
           .select('*', { count: 'exact', head: true })
@@ -85,14 +85,14 @@ export function useDashboardMetrics(pageId: string | undefined) {
 
     fetchMetrics();
     
-    // Set up real-time subscription for leads only (as analytics are high volume)
+    // Set up real-time subscription for leads only
+    // Removed broken page_id filter as it doesn't exist in schema yet
     const subscription = supabase
       .channel('public:leads')
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'leads',
-        filter: `page_id=eq.${pageId}` 
+        table: 'leads'
       }, () => {
         fetchMetrics();
       })
