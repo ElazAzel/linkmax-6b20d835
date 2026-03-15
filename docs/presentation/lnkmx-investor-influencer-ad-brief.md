@@ -1,246 +1,146 @@
-# lnkmx Investor/Influencer Ad Brief
+# LinkMAX Investor/Influencer Ad Concept
 
-## Goal
+## Creative Direction
 
-Create a 20-45 second investor/influencer-style product ad for `lnkmx` that positions it as more than a link-in-bio tool.
+- Format: `16:9` landscape
+- Target runtime: `33s`
+- Tone: calm, premium, grounded, investor-grade without startup hype
+- Narrative: what starts as a link page becomes the operating system behind a solo business
+- Single CTA: `See LinkMAX live at lnkmx.my`
+- Sora-safe visual direction: UI-first product film, device mockups, abstract premium environments, no real people, no public figures, no copyrighted characters, no brand-logo dependency
 
-Core narrative:
-`lnkmx` starts as a public page builder, then expands into analytics and business operations.
+## Script
 
-One clear CTA:
-`Build the page. Run the business.`
+### Runtime: `0:00-0:33`
 
-## Sora-Ready Prompt
+**0:00-0:05**
 
-Create a premium 35-second product ad for `lnkmx`, a mobile-first creator and micro-business platform. The tone is a blend of startup-investor confidence and creator-economy polish. The visual language should feel modern, expensive, fast, and credible, not hype-y or scammy. Use cinematic lighting, macro UI shots, handheld creator-energy moments, subtle camera push-ins, smooth whip transitions, layered screen composites, and elegant motion graphics. Show the product as a progression: from building a public page, to seeing analytics, to managing leads and business workflows in one dashboard.
-
-Style references:
-- founder-mode product film
-- premium SaaS launch ad
-- influencer-tech ad with investor polish
-- clean, believable UI-centric storytelling
-
-Visual priorities:
-- phone-first product views
-- polished dashboard close-ups
-- crisp UI overlays
-- modern creator workspace
-- momentum, clarity, and operational depth
-
-Story beats:
-1. Start with the pain of fragmented tools and attention chaos.
-2. Show `lnkmx` building a polished page fast with multiple content blocks.
-3. Transition into analytics: views, clicks, sources, geography, block performance.
-4. Reveal the Business Zone/dashboard: leads, deals, contacts, tasks, invoices, documents, automations, calendar.
-5. Land on the positioning: not just a link page, a micro-business operating system.
-6. End with one strong CTA to visit `lnkmx.my`.
-
-Important guardrails:
-- do not invent revenue, user count, conversion uplift, or market leadership claims
-- do not imply payments, AI, or events are universal if shown; keep them framed as product capabilities, not guaranteed outcomes
-- do not show fake press logos or fake testimonials
-- keep the CTA singular and clean
-- keep the final tone confident, grounded, and premium
-
-On-screen final CTA:
-`lnkmx.my`
-`Build the page. Run the business.`
-
-## Final Script
-
-### Duration: 35 seconds
-
-**0:00-0:04**
-
-Narration:
-`Most creator tools stop at the link.`
+Spoken narration:
+`Most link pages stop at attention. LinkMAX is built to take the next step.`
 
 On-screen text:
-`A link is not a business.`
+`A link gets seen.`
+`A business gets run.`
 
-**0:04-0:10**
+**0:05-0:10**
 
-Narration:
-`lnkmx turns that page into a working system: build fast, stack 28 block types, and launch pages that actually move people.`
-
-On-screen text:
-`28 block types`
-`Multi-page`
-`AI-assisted setup`
-
-**0:10-0:15**
-
-Narration:
-`Every tap becomes signal: views, clicks, traffic sources, geography, and block-level performance.`
+Spoken narration:
+`It starts with a polished public page, assembled from modular blocks for the way modern solo businesses actually sell.`
 
 On-screen text:
-`Know what converts`
+`Start with the page`
 
-**0:15-0:23**
+**0:10-0:16**
 
-Narration:
-`Then it goes beyond the page: leads, deals, contacts, tasks, invoices, documents, events, and automations in one mobile-first dashboard.`
-
-On-screen text:
-`From audience to operations`
-
-**0:23-0:29**
-
-Narration:
-`This is not another link-in-bio. It's a micro-business OS for people building with attention.`
+Spoken narration:
+`Then the page starts feeding the system behind it: leads, activity, and follow-up moving into one operating flow.`
 
 On-screen text:
-`Public page + CRM + analytics`
+`The page feeds the business`
 
-**0:29-0:35**
+**0:16-0:22**
 
-Narration:
-`If your link is doing marketing, it should be doing operations too. Build yours at lnkmx.my.`
+Spoken narration:
+`Now the signal is measurable: views, clicks, traffic context, and experiments that help you learn what deserves more attention.`
 
 On-screen text:
-`lnkmx.my`
-`Build the page. Run the business.`
+`Measure. Learn. Improve.`
+
+**0:22-0:29**
+
+Spoken narration:
+`From deals and tasks to invoices, documents, calendar, and mobile touchpoints, the stack gets smaller and the business gets clearer.`
+
+On-screen text:
+`One stack. More control.`
+
+**0:29-0:33**
+
+Spoken narration:
+`LinkMAX is not just a link page. See LinkMAX live at lnkmx.my.`
+
+On-screen text:
+`Not just a link page`
+`See LinkMAX live at lnkmx.my`
 
 ## Shot List
 
 ### Shot 1
 
-Length:
-`4s`
-
-Visual:
-Creator desk, phone, laptop, multiple tabs and tools open, fast fragmented motion, notifications and tabs piling up.
-
-Motion:
-Slow push-in, screen reflections, shallow depth of field, rising tension.
-
-On-screen:
-`Too many tools`
+- Length: `5s`
+- Visuals: floating fragments of a solo-business stack, such as page links, notes, charts, bookings, and chat-style alerts, collapsing into one centered LinkMAX-style product frame
+- Motion: slow dolly-in
+- On screen:
+  - `A link gets seen.`
+  - `A business gets run.`
 
 ### Shot 2
 
-Length:
-`6s`
-
-Visual:
-Close-up of the `lnkmx` editor on mobile. Blocks snap into place. Quick UI flashes of page setup, block picker, and page creation.
-
-Motion:
-Swipe transitions, drag-and-drop motion, crisp UI zooms.
-
-On-screen:
-`Build fast`
+- Length: `5s`
+- Visuals: phone mockup with a clean editor surface; modular content blocks snap into place and resolve into a polished public page
+- Motion: straight-on push-in
+- On screen:
+  - `Start with the page`
 
 ### Shot 3
 
-Length:
-`5s`
-
-Visual:
-The page switches from editor to live public profile. Clean mobile page, polished layout, CTA buttons, share flow, QR view, and language switcher.
-
-Motion:
-Match cut from edit to publish, gentle parallax, polished live-state reveal.
-
-On-screen:
-`Go live`
+- Length: `6s`
+- Visuals: the published page morphs into incoming lead cards, notification-style alerts, and a zone-style CRM surface with cards moving into an organized pipeline
+- Motion: smooth lateral slide
+- On screen:
+  - `The page feeds the business`
 
 ### Shot 4
 
-Length:
-`5s`
-
-Visual:
-Analytics view with charts, counters, block performance, traffic sources, and geography widgets.
-
-Motion:
-Numbers animate upward, charts draw in, camera tracks left to right across UI panels.
-
-On-screen:
-`See what converts`
+- Length: `6s`
+- Visuals: analytics panels, event streams, traffic context chips, and an experiment split view; charts animate in while an abstract server-side signal path runs behind the UI
+- Motion: left-to-right tracking move
+- On screen:
+  - `Measure. Learn. Improve.`
 
 ### Shot 5
 
-Length:
-`8s`
-
-Visual:
-Business Zone montage: leads list, deals Kanban, contacts, tasks, invoices, documents, automations, and calendar. Optionally flash event QR check-in as a premium capability.
-
-Motion:
-Fast modular UI transitions, card drags, sheet opens, smooth dashboard fly-through.
-
-On-screen:
-`From audience to operations`
+- Length: `7s`
+- Visuals: a desktop-plus-mobile dashboard montage showing deals, tasks, invoices, documents, calendar, products, and a mini-app style mobile touchpoint in one ecosystem
+- Motion: gentle orbit
+- On screen:
+  - `One stack. More control.`
 
 ### Shot 6
 
-Length:
-`4s`
+- Length: `4s`
+- Visuals: final hero composition with desktop and phone screens layered in a premium abstract environment; the full product stack sits behind the public page
+- Motion: slow crane-up
+- On screen:
+  - `Not just a link page`
+  - `See LinkMAX live at lnkmx.my`
 
-Visual:
-Hero composite of phone plus desktop with the product ecosystem visible at once.
+## Safe Claims Grounded in Repo Evidence
 
-Motion:
-Slow dolly-in, premium lighting, subtle floating UI layers.
+- LinkMAX supports `28` block types in the editor. Evidence: `src/types/blocks/base.ts`
+- The app supports `16` UI languages. Evidence: `src/i18n/config.ts`
+- The routed dashboard includes leads plus zone surfaces for analytics, deals, contacts, inbox, tasks, automations, invoices, products, calendar, events, documents, settings, and team. Evidence: `src/main.tsx`, `src/components/zones/*`
+- The analytics layer tracks views, clicks, shares, UTM/referrer/device context, and session metadata. Evidence: `src/services/analytics.ts`
+- The repo includes client-to-server event forwarding through a pixel proxy flow for server-side tracking. Evidence: `src/lib/analytics.ts`, `supabase/functions/pixel-proxy/index.ts`
+- The product includes Telegram notification plumbing and a Telegram mini-app shell. Evidence: `supabase/functions/send-lead-notification/index.ts`, `src/telegram/TelegramApp.tsx`
+- The app includes installable/mobile-ready surfaces plus public-page SEO/SSR infrastructure for bots and crawlers. Evidence: `src/components/pwa/PWAInstallPrompt.tsx`, `android/`, `ios/`, `cloudflare-worker/README.md`
 
-On-screen:
-`Not just a link-in-bio`
+## Assumptions
 
-### Shot 7
-
-Length:
-`3s`
-
-Visual:
-Final brand lockup on clean background with one product hero screen.
-
-Motion:
-Minimal motion, confident hold.
-
-On-screen:
-`lnkmx.my`
-`Build the page. Run the business.`
-
-## Safe Claims Grounded In Repo
-
-These claims are supported by the current repository and are safe to use in the ad:
-
-- `lnkmx` includes a public-page experience with sharing, QR, language switching, analytics hooks, and custom-domain-aware loading.
-- The editor exposes `28` block types.
-- The product includes multi-page management.
-- The dashboard includes analytics, leads, pages, settings, events, and team areas.
-- The Business Zone includes deals, contacts, inbox, tasks, automations, invoices, documents, calendar, products, and analytics.
-- Analytics code supports views, clicks, shares, traffic sources, device breakdown, geography, conversions, heatmap tracking, and experiments.
-- The repo includes AI-assisted content/page generation flows.
-- The repo includes multilingual support and bot-aware SEO/SSR infrastructure.
-- The project is configured for Capacitor mobile builds.
-
-## Assumptions And Boundaries
-
-Use these only with labels or careful phrasing:
-
-- `micro-business OS` is positioning language, not a literal technical category.
-- If AI is shown, frame it as `AI-assisted setup` or `AI-assisted generation`, not fully autonomous business creation.
-- If event QR scanning is shown, treat it as a premium/product capability, not the main product promise.
-- Do not claim proven uplift, traction, market leadership, user volume, or revenue.
-- Do not imply all users get every feature by default; some capabilities appear tier-gated in the product.
+- `Business OS`, `operating system`, and `not just a link page` are positioning language, not literal technical taxonomies.
+- If AI is introduced in a later version of this concept, it should be framed as optional or assistive tooling, not autonomous business creation.
+- If notification visuals appear as generic chat alerts in video, they are shorthand for the Telegram-backed notification and mini-app surfaces present in the repo.
+- The concept shows product breadth, not a guarantee that every user or plan tier gets every capability by default.
 
 ## Internal Evidence Map
 
-- Public page: `src/pages/PublicPage.tsx`
-- Dashboard shell: `src/pages/DashboardV2.tsx`
-- Block catalog: `src/components/editor/BlockInsertButton.tsx`
-- AI generation UI: `src/components/editor/AIGenerator.tsx`
-- Analytics screen: `src/components/dashboard-v2/screens/InsightsScreen.tsx`
-- Page analytics hook: `src/hooks/analytics/usePageAnalytics.ts`
-- Heatmap tracking: `src/hooks/analytics/useHeatmapTracking.ts`
-- Experiments: `src/hooks/page/usePageExperiments.ts`
-- Business Zone deals: `src/components/zones/ZoneDealsScreen.tsx`
-- Business Zone analytics: `src/components/zones/ZoneAnalyticsScreen.tsx`
-- Event scanner: `src/pages/EventScanner.tsx`
-- i18n: `src/i18n/config.ts`
-- Cloudflare SEO worker: `cloudflare-worker/prerender-worker.js`
-- Pixel proxy: `supabase/functions/pixel-proxy/index.ts`
-- AI content generator: `supabase/functions/ai-content-generator/index.ts`
-- Mobile config: `capacitor.config.ts`
+- Block types: `src/types/blocks/base.ts`
+- Languages: `src/i18n/config.ts`
+- Routed dashboard and zone surfaces: `src/main.tsx`
+- Analytics tracking: `src/services/analytics.ts`
+- Server-side tracking helpers: `src/lib/analytics.ts`
+- Pixel proxy edge function: `supabase/functions/pixel-proxy/index.ts`
+- Telegram notifications: `supabase/functions/send-lead-notification/index.ts`
+- Telegram mini-app shell: `src/telegram/TelegramApp.tsx`
+- PWA install prompt: `src/components/pwa/PWAInstallPrompt.tsx`
+- Public-page SSR and bot routing: `cloudflare-worker/README.md`
