@@ -3,7 +3,6 @@
  * 4 steps focused on real value delivery, not UI actions
  */
 import { useMemo, useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { storage } from '@/lib/storage';
 import type { PageData } from '@/types/page';
 
@@ -15,26 +14,22 @@ export interface ActivationStep {
   labelKey: string;
   completed: boolean;
   action?: () => void;
+  ctaKey: string;
 }
 
 interface UseActivationChecklistOptions {
   pageData: PageData | null;
   onOpenEditor: () => void;
   onShare: () => void;
-  viewCount?: number;
   leadsCount?: number;
-  bookingsCount?: number;
 }
 
 export function useActivationChecklist({
   pageData,
   onOpenEditor,
   onShare,
-  viewCount = 0,
   leadsCount = 0,
-  bookingsCount = 0,
 }: UseActivationChecklistOptions) {
-  const { t } = useTranslation();
   const [celebrationDismissed, setCelebrationDismissed] = useState(
     () => !!storage.get(CELEBRATION_KEY)
   );
@@ -42,11 +37,10 @@ export function useActivationChecklist({
   const steps = useMemo((): ActivationStep[] => {
     if (!pageData) return [];
 
-    const hasPage = pageData.blocks.length > 0;
+    const hasPage = !!pageData.id;
+    const hasContentBlock = pageData.blocks.some(block => block.type !== 'profile');
     const isPublished = pageData.isPublished || false;
-    const hasFirstView = (pageData.viewCount || viewCount) >= 1;
-    const hasFirstConversion = leadsCount >= 1 || bookingsCount >= 1;
-    const hasFirstBooking = bookingsCount >= 1;
+    const hasFirstLead = leadsCount >= 1;
 
     return [
       {
@@ -54,33 +48,31 @@ export function useActivationChecklist({
         labelKey: 'activation.steps.createPage',
         completed: hasPage,
         action: onOpenEditor,
+        ctaKey: 'activation.cta.openEditor',
+      },
+      {
+        id: 'add-block',
+        labelKey: 'activation.steps.addBlock',
+        completed: hasContentBlock,
+        action: onOpenEditor,
+        ctaKey: 'activation.cta.addBlock',
       },
       {
         id: 'publish',
         labelKey: 'activation.steps.publish',
         completed: isPublished,
         action: onShare,
+        ctaKey: 'activation.cta.publish',
       },
       {
-        id: 'first-visitor',
-        labelKey: 'activation.steps.firstVisitor',
-        completed: hasFirstView,
-        action: onShare,
-      },
-      {
-        id: 'first-conversion',
-        labelKey: 'activation.steps.firstConversion',
-        completed: hasFirstConversion,
+        id: 'first-lead',
+        labelKey: 'activation.steps.firstLead',
+        completed: hasFirstLead,
         action: onOpenEditor,
-      },
-      {
-        id: 'first-booking',
-        labelKey: 'activation.steps.firstBooking',
-        completed: hasFirstBooking,
-        action: onOpenEditor,
+        ctaKey: 'activation.cta.promotePage',
       },
     ];
-  }, [pageData, viewCount, leadsCount, bookingsCount, onOpenEditor, onShare]);
+  }, [pageData, leadsCount, onOpenEditor, onShare]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;

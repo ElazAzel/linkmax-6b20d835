@@ -1,12 +1,13 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { useDashboardMetrics } from '@/hooks/dashboard/useDashboardMetrics';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils/utils';
+import { supabase } from '@/platform/supabase/client';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import MousePointer2 from 'lucide-react/dist/esm/icons/mouse-pointer-2';
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
@@ -16,18 +17,58 @@ interface ConversionFunnelWidgetProps {
   className?: string;
 }
 
+interface ActivationStepCount {
+  label: string;
+  value: number;
+}
+
 export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
   pageId,
   className
 }: ConversionFunnelWidgetProps) {
   const { t } = useTranslation();
   const { totalViews, totalClicks, totalLeads, loading, error } = useDashboardMetrics(pageId);
+  const [activationSteps, setActivationSteps] = useState<ActivationStepCount[]>([]);
+
+  useEffect(() => {
+    if (!pageId) {
+      setActivationSteps([]);
+      return;
+    }
+
+    (async () => {
+      const eventTypes = [
+        'activation:funnel_step_create_page_completed',
+        'activation:funnel_step_add_block_completed',
+        'activation:funnel_step_publish_completed',
+        'activation:funnel_step_first_lead_completed',
+      ];
+
+      const counts = await Promise.all(
+        eventTypes.map(async (eventType) => {
+          const { count } = await supabase
+            .from('analytics')
+            .select('*', { count: 'exact', head: true })
+            .eq('page_id', pageId)
+            .eq('event_type', eventType);
+          return count || 0;
+        })
+      );
+
+      setActivationSteps([
+        { label: t('activation.steps.createPage', 'Создание страницы'), value: counts[0] },
+        { label: t('activation.steps.addBlock', 'Добавление блока'), value: counts[1] },
+        { label: t('activation.steps.publish', 'Публикация'), value: counts[2] },
+        { label: t('activation.steps.firstLead', 'Первый лид'), value: counts[3] },
+      ]);
+    })();
+  }, [pageId, t]);
 
   if (loading) {
     return <Skeleton className={cn("h-64 rounded-[2.5rem] bg-white/5", className)} />;
   }
 
-  if (error || (!totalViews && !totalClicks && !totalLeads)) return null;
+  if (error || (!totalViews && !totalClicks && !totalLeads && activationSteps.length === 0)) return null;
 
   const steps = [
     {
@@ -78,7 +119,7 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
               </div>
               <span className="text-sm font-black tracking-tight">{step.value}</span>
             </div>
-            
+
             <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
               <motion.div
                 initial={{ width: 0 }}
@@ -89,7 +130,7 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent" />
               </motion.div>
             </div>
-            
+
             {idx > 0 && totalViews > 0 && (
               <div className="absolute -top-4 right-0 text-[10px] font-black text-muted-foreground">
                 {step.percent}%
@@ -99,11 +140,29 @@ export const ConversionFunnelWidget = memo(function ConversionFunnelWidget({
         ))}
       </div>
 
+      {activationSteps.length > 0 && (
+        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground">
+            {t('metrics.funnel.activationTitle', 'Онбординг-воронка: страница → блок → публикация → лид')}
+          </h4>
+          {activationSteps.map((step, idx) => {
+            const base = activationSteps[0]?.value || 0;
+            const conversion = idx === 0 || base === 0 ? 100 : Math.round((step.value / base) * 100);
+            return (
+              <div key={step.label} className="flex items-center justify-between text-xs">
+                <span className="text-foreground/80">{idx + 1}. {step.label}</span>
+                <span className="font-bold">{step.value} · {conversion}%</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       <div className="mt-8 p-4 rounded-2xl bg-white/5 border border-white/5 text-[11px] leading-relaxed text-muted-foreground font-medium">
         <strong className="text-foreground font-black block mb-1">
           {t('metrics.funnel.insightTitle', 'Совет от LinkMAX AI')}
         </strong>
-        {totalViews > 0 && totalLeads === 0 
+        {totalViews > 0 && totalLeads === 0
           ? t('metrics.funnel.insightNoLeads', 'У вас есть просмотры, но нет заявок. Попробуйте добавить форму сбора контактов на первый экран.')
           : totalClicks > 0 && (totalLeads / totalClicks) < 0.1
           ? t('metrics.funnel.insightLowConversion', 'Много кликов, но мало заявок. Убедитесь, что ваше предложение (оффер) понятно клиенту.')
