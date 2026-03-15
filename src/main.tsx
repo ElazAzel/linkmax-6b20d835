@@ -16,6 +16,7 @@ import {
   isChunkRuntimeError,
   recoverFromStaleAssets,
 } from "@/lib/utils/runtime-recovery";
+import { prefetchRouteChunks } from "@/lib/routing/route-prefetch";
 
 // Defer non-critical init: only load after user interacts or 10s idle
 // This prevents vendor-sentry (150KB) and cache-utils from loading on landing page
@@ -43,6 +44,79 @@ const fireDeferOnce = () => {
   window.addEventListener(e, fireDeferOnce, { once: true, passive: true })
 );
 setTimeout(fireDeferOnce, 10000);
+
+// Route-level prefetch only for nearest likely transitions
+const scheduleLikelyRoutePrefetch = () => {
+  const path = window.location.pathname;
+
+  if (path === '/' || path === '/auth') {
+    // Landing/auth users usually continue to dashboard, pricing, or view examples
+    prefetchRouteChunks(['dashboard', 'pricing', 'gallery']);
+    return;
+  }
+
+  if (path.startsWith('/dashboard')) {
+    // Dashboard users frequently open editor and preview public page
+    prefetchRouteChunks(['editor', 'publicPage']);
+    return;
+  }
+
+  // Public profile visitors most likely auth or open dashboard after sign-in
+  prefetchRouteChunks(['auth', 'dashboard']);
+};
+
+_ric(scheduleLikelyRoutePrefetch);
+
+// Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
+const CHUNK_RECOVERY_KEY = 'linkmax_chunk_recovery_once';
+
+function isChunkRuntimeError(err: unknown): boolean {
+  const message = typeof err === 'string'
+    ? err
+    : (err as { message?: string })?.message || '';
+
+  return [
+    'ChunkLoadError',
+    'Loading chunk',
+    'Failed to fetch dynamically imported module',
+    'Importing a module script failed',
+    'O is not a function',
+  ].some((token) => message.includes(token));
+}
+
+function recoverFromStaleAssets(): void {
+  try {
+    if (window.sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
+    window.sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
+
+    // Clear runtime caches that can hold stale assets
+    try {
+      Object.keys(window.localStorage).forEach((key) => {
+        if (key.startsWith('linkmax_') || key.startsWith('sb-')) {
+          window.localStorage.removeItem(key);
+        }
+      });
+    } catch {
+      // ignore
+    }
+
+    try {
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => caches.delete(name));
+          window.location.reload();
+        });
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    window.location.reload();
+  } catch {
+    window.location.reload();
+  }
+}
 
 window.addEventListener('error', (event) => {
   if (isChunkRuntimeError(event.error || event.message)) {

@@ -9,6 +9,9 @@ import { emailTemplatesService, type EmailTemplate } from '@/services/emailTempl
 import { toast } from 'sonner';
 import { logger } from '@/lib/utils/logger';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
+import { ErrorState } from '@/components/ui/error-state';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
@@ -22,6 +25,7 @@ export function EmailTemplateEditor() {
   const [loading, setLoading] = useState(true);
   const [editingTemplate, setEditingTemplate] = useState<Partial<EmailTemplate> | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     loadTemplates();
@@ -29,9 +33,13 @@ export function EmailTemplateEditor() {
 
   const loadTemplates = async () => {
     setLoading(true);
+    setLoadError(false);
     const { data, error } = await emailTemplatesService.listTemplates();
     if (data) setTemplates(data);
-    if (error) toast.error(t('templates.loadError', 'Failed to load templates'));
+    if (error) {
+      setLoadError(true);
+      toast.error(t('templates.loadError', 'Failed to load templates'));
+    }
     setLoading(false);
   };
 
@@ -88,10 +96,17 @@ export function EmailTemplateEditor() {
   };
 
   if (loading) {
+    return <LoadingState message={t('messages.loading', 'Loading...')} />;
+  }
+
+  if (loadError) {
     return (
-      <div className="flex justify-center p-8">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
+      <ErrorState
+        title={t('templates.loadErrorTitle', 'Не удалось загрузить шаблоны')}
+        description={t('templates.loadErrorDesc', 'Попробуйте обновить список шаблонов.') }
+        retryLabel={t('common.retry', 'Повторить')}
+        onRetry={loadTemplates}
+      />
     );
   }
 
@@ -164,9 +179,12 @@ export function EmailTemplateEditor() {
       ) : (
         <div className="grid gap-3">
           {templates.length === 0 ? (
-            <p className="text-sm text-center text-muted-foreground py-8 border border-dashed rounded-xl">
-              {t('templates.empty', 'No templates created yet')}
-            </p>
+            <EmptyState
+              title={t('templates.empty', 'No templates created yet')}
+              description={t('templates.emptyDesc', 'Create your first reusable email template')}
+              ctaLabel={t('templates.addNew', 'Add New')}
+              onCtaClick={handleCreate}
+            />
           ) : (
             templates.map(tpl => (
               <Card key={tpl.id} className="p-3 flex items-center justify-between bg-background/30 border-border/20">

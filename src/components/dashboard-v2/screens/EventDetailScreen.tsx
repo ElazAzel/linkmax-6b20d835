@@ -19,6 +19,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -55,8 +56,6 @@ import { toast } from 'sonner';
 import { getPublicPageUrl } from '@/lib/utils/url-helpers';
 import { openPremiumPurchase } from '@/lib/utils/upgrade-utils';
 import { cn } from '@/lib/utils/utils';
-import { exportToExcel, exportToCSV } from '@/lib/export/excel-export';
-import { exportEventToPDF, calculateEventAnalytics } from '@/lib/export/pdf-export';
 import type { SupportedLanguage } from '@/lib/i18n-helpers';
 import type { EventFormField } from '@/types/page';
 
@@ -359,6 +358,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
     setExporting(true);
     try {
+      const { exportToExcel } = await import('@/lib/export/excel-export');
       await exportToExcel({
         eventTitle: event.title,
         registrations: fullRegistrations,
@@ -383,6 +383,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
     setExporting(true);
     try {
+      const { exportToCSV } = await import('@/lib/export/excel-export');
       exportToCSV({
         eventTitle: event.title,
         registrations: fullRegistrations,
@@ -412,6 +413,7 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
     setExporting(true);
     try {
+      const { exportEventToPDF, calculateEventAnalytics } = await import('@/lib/export/pdf-export');
       const analytics = calculateEventAnalytics(
         fullRegistrations,
         event.formSchema,
@@ -539,12 +541,17 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
 
   if (loading) {
     return (
-      <div className="p-4 space-y-4">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
-      </div>
+      <LoadingState
+        className="p-4"
+        skeleton={(
+          <>
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </>
+        )}
+      />
     );
   }
 
@@ -708,13 +715,14 @@ export const EventDetailScreen = memo(function EventDetailScreen() {
       <ScrollArea className="flex-1">
         <div className="p-4 pt-2 space-y-3">
           {filteredRegistrations.length === 0 ? (
-            <Card className="p-6 text-center">
-              <Users className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">
-                {searchQuery
+            <Card>
+              <EmptyState
+                icon={Users}
+                title={searchQuery
                   ? t('events.noSearchResults', 'Ничего не найдено')
                   : t('events.noRegistrations', 'Пока нет регистраций')}
-              </p>
+                className="py-10"
+              />
             </Card>
           ) : (
             filteredRegistrations.map(renderRegistrationCard)

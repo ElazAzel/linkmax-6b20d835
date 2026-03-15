@@ -5,13 +5,11 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Check from 'lucide-react/dist/esm/icons/check';
-import Circle from 'lucide-react/dist/esm/icons/circle';
 import X from 'lucide-react/dist/esm/icons/x';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import PartyPopper from 'lucide-react/dist/esm/icons/party-popper';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils/utils';
 import type { ActivationStep } from '@/hooks/onboarding/useActivationChecklist';
 
@@ -22,6 +20,7 @@ interface ActivationChecklistProps {
   progress: number;
   canDismiss: boolean;
   onDismiss: () => void;
+  onStepClick: (step: ActivationStep) => void;
 }
 
 export const ActivationChecklist = memo(function ActivationChecklist({
@@ -31,8 +30,10 @@ export const ActivationChecklist = memo(function ActivationChecklist({
   progress,
   canDismiss,
   onDismiss,
+  onStepClick,
 }: ActivationChecklistProps) {
   const { t } = useTranslation();
+  const activeIndex = steps.findIndex((step) => !step.completed);
 
   return (
     <Card className="p-5 space-y-4 bg-gradient-to-br from-primary/5 to-violet-500/5 border-primary/15">
@@ -63,15 +64,76 @@ export const ActivationChecklist = memo(function ActivationChecklist({
         )}
       </div>
 
-      {/* Progress bar */}
-      <Progress value={progress} className="h-2" />
+      {/* Progress bar + stepper */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+          <span>{t('activation.progress', '{{done}} из {{total}}', { done: completedCount, total: totalCount })}</span>
+          <span>{progress}%</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {steps.map((step, index) => {
+            const isCompleted = step.completed;
+            const isActive = !isCompleted && index === activeIndex;
+            return (
+              <div key={step.id} className="flex-1 h-2 rounded-full overflow-hidden bg-white/10 border border-white/10">
+                <div
+                  className={cn(
+                    'h-full w-full transition-colors',
+                    isCompleted ? 'bg-primary' : isActive ? 'bg-amber-400/90' : 'bg-transparent'
+                  )}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Steps */}
+      <div className="space-y-2">
+        {steps.map((step, index) => {
+          const isCompleted = step.completed;
+          const isActive = !isCompleted && index === activeIndex;
+          return (
+            <div
+              key={step.id}
+              className={cn(
+                'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-colors text-sm',
+                isCompleted ? 'text-muted-foreground bg-white/5' : 'bg-white/5',
+                isActive && 'border border-primary/25 bg-primary/5'
+              )}
+            >
+              <div className={cn(
+                'h-6 w-6 rounded-full flex items-center justify-center shrink-0 text-[10px] font-black',
+                isCompleted
+                  ? 'bg-primary/20 text-primary'
+                  : isActive
+                  ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
+                  : 'bg-white/10 text-muted-foreground'
+              )}>
+                {isCompleted ? <Check className="h-3.5 w-3.5" /> : index + 1}
+              </div>
+              <span className={cn('flex-1', isCompleted && 'line-through')}>
+                {t(step.labelKey)}
+              </span>
+              {!isCompleted && step.action && (
+                <Button size="sm" variant={isActive ? 'default' : 'outline'} className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider" onClick={step.action}>
+                  {t(step.ctaKey)}
+                </Button>
+              )}
+            </div>
+          );
+        })}
       <div className="space-y-1.5">
         {steps.map((step) => (
           <button
             key={step.id}
-            onClick={step.completed ? undefined : step.action}
+            onClick={() => {
+              if (step.completed) return;
+              onStepClick(step);
+              if (step.action) {
+                step.action();
+              }
+            }}
             disabled={step.completed}
             className={cn(
               "flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl transition-colors text-sm",
@@ -88,7 +150,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
               <Circle className="h-5 w-5 text-muted-foreground/40 shrink-0" />
             )}
             <span className={cn(step.completed && "line-through")}>
-              {t(step.labelKey)}
+              {t(step.labelKey, step.id === 'add-block' ? 'Добавить блок' : step.id === 'first-lead' ? 'Получить первый лид' : step.id === 'create-page' ? 'Создать страницу' : 'Опубликовать')}
             </span>
           </button>
         ))}

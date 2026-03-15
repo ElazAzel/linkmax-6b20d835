@@ -7,7 +7,6 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
-import Users from 'lucide-react/dist/esm/icons/users';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Search from 'lucide-react/dist/esm/icons/search';
@@ -17,6 +16,9 @@ import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SkeletonGalleryGrid } from '@/components/ui/skeleton-card';
+import { EmptyState, LoadingState } from '@/components/ui/states';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
@@ -134,7 +136,7 @@ export default function Gallery() {
     navigate(`/gallery?${nextParams.toString()}`, { replace: true });
   }, [searchParams, navigate]);
 
-  const handleCopyTemplate = useCallback((pageSlug: string) => {
+  const handleCopyTemplate = useCallback((_pageSlug: string) => {
     toast.success(t('gallery.templateCopied', 'Шаблон скопирован!'), {
       description: t('gallery.goToEditor', 'Откройте редактор чтобы настроить'),
       action: {
@@ -223,8 +225,8 @@ export default function Gallery() {
                 </div>
               ) : (
                 <>
-                  <div className="flex-1 min-w-0">
-                    <h1 className="text-lg font-bold truncate">
+                  <div className="flex-1 min-w-0 max-w-[min(46vw,18rem)]">
+                    <h1 className="text-base sm:text-lg font-bold break-words whitespace-normal text-wrap leading-tight">
                       {t('gallery.title', 'Галерея')}
                     </h1>
                   </div>
@@ -242,7 +244,7 @@ export default function Gallery() {
               <LanguageSwitcher />
               <Button
                 size="sm"
-                className="h-9 rounded-full font-semibold text-xs px-4 shrink-0"
+                className="h-9 min-h-9 rounded-full font-semibold text-[11px] sm:text-xs px-3 sm:px-4 shrink-0 max-w-[9.5rem] sm:max-w-[11rem] whitespace-normal break-words text-wrap leading-tight"
                 onClick={() => navigate('/auth')}
               >
                 <Sparkles className="h-3.5 w-3.5 mr-1" />
@@ -255,7 +257,7 @@ export default function Gallery() {
               <button
                 onClick={() => setActiveTab('gallery')}
                 className={cn(
-                  "flex-1 h-8 rounded-full text-xs font-semibold transition-all",
+                  "flex-1 min-h-8 rounded-full text-[11px] sm:text-xs font-semibold transition-all whitespace-normal break-words text-wrap leading-tight px-2",
                   activeTab === 'gallery'
                     ? "bg-background shadow-sm text-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -266,7 +268,7 @@ export default function Gallery() {
               <button
                 onClick={() => setActiveTab('leaderboard')}
                 className={cn(
-                  "flex-1 h-8 rounded-full text-xs font-semibold transition-all",
+                  "flex-1 min-h-8 rounded-full text-[11px] sm:text-xs font-semibold transition-all whitespace-normal break-words text-wrap leading-tight px-2",
                   activeTab === 'leaderboard'
                     ? "bg-background shadow-sm text-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -343,17 +345,28 @@ export default function Gallery() {
             {/* Grid */}
             <div className="px-4 pb-20">
               {loading ? (
-                <SkeletonGalleryGrid />
+                <LoadingState skeleton={<SkeletonGalleryGrid />} />
               ) : filteredPages.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="w-14 h-14 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <h3 className="font-semibold mb-1">{t('gallery.noPages', 'Страниц не найдено')}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
-                  </p>
-                </div>
+                <EmptyState
+                  icon={Users}
+                  title={t('gallery.noPages', 'Страниц не найдено')}
+                  description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
+                <LoadingState
+                  variant="skeleton-cards"
+                  skeletonCount={6}
+                  message={t('messages.loading', 'Загрузка...')}
+                />
+              ) : filteredPages.length === 0 ? (
+                <EmptyState
+                  title={t('gallery.noPages', 'Страниц не найдено')}
+                  description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
+                  ctaLabel={t('gallery.resetFilters', 'Сбросить фильтры')}
+                  onCtaClick={() => {
+                    setSearchQuery('');
+                    setSortMode('popular');
+                    updateNiche(null);
+                  }}
+                />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                   {filteredPages.map((page) => (
