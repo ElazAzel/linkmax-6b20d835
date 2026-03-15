@@ -21,7 +21,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Input } from '@/components/ui/input';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import Users from 'lucide-react/dist/esm/icons/users';
 import QrCode from 'lucide-react/dist/esm/icons/qr-code';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -72,6 +71,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loadError, setLoadError] = useState(false);
 
   const locale = i18n.language === 'ru' ? ru : i18n.language === 'kk' ? kk : enUS;
 
@@ -80,6 +80,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
     const fetchEvents = async () => {
       if (!user) return;
 
+      setLoadError(false);
       try {
         const { data: eventsData, error } = await supabase
           .from('events')
@@ -144,6 +145,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
         setEvents(eventsWithStats);
       } catch (error) {
         console.error('Error fetching events:', error);
+        setLoadError(true);
         toast.error(t('events.fetchError', 'Ошибка загрузки событий'));
       } finally {
         setLoading(false);

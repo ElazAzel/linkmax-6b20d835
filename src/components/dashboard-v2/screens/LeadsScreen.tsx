@@ -1,9 +1,6 @@
 import { memo, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import Inbox from 'lucide-react/dist/esm/icons/inbox';
-import Filter from 'lucide-react/dist/esm/icons/filter';
 import Search from 'lucide-react/dist/esm/icons/search';
-import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
 import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Phone from 'lucide-react/dist/esm/icons/phone';
@@ -14,13 +11,15 @@ import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
 import Send from 'lucide-react/dist/esm/icons/send';
 import CheckCheck from 'lucide-react/dist/esm/icons/check-check';
 import X from 'lucide-react/dist/esm/icons/x';
-import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { LoadingState } from '@/components/ui/loading-state';
+import { EmptyState } from '@/components/ui/empty-state';
+import { ErrorState } from '@/components/ui/error-state';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,8 +43,10 @@ export const LeadsScreen = memo(function LeadsScreen() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTERS[number]>('all');
+    const [loadError, setLoadError] = useState(false);
 
     const fetchLeads = useCallback(async () => {
+        setLoadError(false);
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { setLoading(false); return; }
@@ -60,6 +61,7 @@ export const LeadsScreen = memo(function LeadsScreen() {
             if (error) console.error('Error fetching leads', error);
         } catch (e) {
             console.error("Error fetching leads", e);
+            setLoadError(true);
         } finally {
             setLoading(false);
         }
@@ -217,6 +219,29 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                 className="py-12"
                             />
                         </Card>
+                        <LoadingState
+                            variant="skeleton-cards"
+                            skeletonCount={3}
+                            message={t('messages.loading', 'Loading...')}
+                        />
+                    ) : loadError ? (
+                        <ErrorState
+                            title={t('dashboard.leads.loadErrorTitle', 'Не удалось загрузить лиды')}
+                            description={t('dashboard.leads.loadErrorDesc', 'Проверьте соединение и попробуйте снова.')}
+                            retryLabel={t('common.retry', 'Повторить')}
+                            onRetry={() => {
+                                setLoading(true);
+                                fetchLeads();
+                            }}
+                        />
+                    ) : filteredLeads.length === 0 ? (
+                        <EmptyState
+                            title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
+                            description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
+                            ctaLabel={t('dashboard.leads.emptyCta', 'Поделиться страницей')}
+                            onCtaClick={() => window.open('/dashboard?tab=editor', '_self')}
+                            className="shadow-glass rounded-[2.5rem]"
+                        />
                     ) : (
                         filteredLeads.map((lead) => {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;
