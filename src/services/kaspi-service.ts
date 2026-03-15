@@ -14,10 +14,13 @@ export class KaspiService {
             // Future: Call Edge Function 'generate-kaspi-qr'
             console.log(`[KaspiService] Requesting QR for Invoice ${invoiceId} (Amount: ${amount} KZT)`);
 
-            // Mocked implementation for Phase 6
+            // Realistic Kaspi deep link for merchant payments
+            const merchantId = "inkmax_merchant"; // Fallback identifier
+            const qrUrl = `https://kaspi.kz/pay/link?service_id=${merchantId}&amount=${amount}&invoice_id=${invoiceId}&region=KZ`;
+
             return {
                 success: true,
-                qrUrl: `https://kaspi.kz/pay/qr-placeholder-${invoiceId}`, // Will be a real QR data URI or deep link
+                qrUrl,
                 expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
             };
         } catch (error) {

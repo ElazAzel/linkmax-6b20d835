@@ -414,7 +414,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                     <CardContent>
                         <div className="grid lg:grid-cols-2 gap-6">
                             {/* Table */}
-                            <div className="overflow-x-auto">
+                            <div className="overflow-x-auto -mx-2 px-2 scrollbar-none pb-2 touch-pan-x">
                                 <table className="w-full text-sm">
                                     <thead>
                                         <tr className="border-b">

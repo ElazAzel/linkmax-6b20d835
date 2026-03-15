@@ -1,4 +1,4 @@
-﻿{
+{
   "2": {
     "5 MB": "5 MB"
   },
@@ -130,21 +130,21 @@
     "collapse": "Collapse",
     "generating": "Generating...",
     "generate": "Generate",
-    "active": "",
-    "configuring": "",
-    "verify": "",
-    "guide": "",
-    "coming_soon": "",
-    "details": "",
-    "actions": "",
-    "unknownUser": "",
-    "allTime": "",
-    "quantity": "",
-    "amount": "",
-    "untitled": "",
-    "name": "",
-    "status": "",
-    "date": ""
+    "active": "Active",
+    "configuring": "Configuring",
+    "verify": "Verify",
+    "guide": "Guide",
+    "coming_soon": "Скоро",
+    "details": "Info",
+    "actions": "Status Actions",
+    "unknownUser": "Unknown",
+    "allTime": "Всё время",
+    "quantity": "Количество",
+    "amount": "Сумма",
+    "untitled": "Без названия",
+    "name": "Имя",
+    "status": "Статус",
+    "date": "Дата"
   },
   "fields": {
     "name": "Name",
@@ -365,7 +365,7 @@
     "enterPlaceholder": "Enter",
     "submitting": "Sending...",
     "limitReached": {
-      "customer": ""
+      "customer": "Форма временно недоступна."
     }
   },
   "newsletter": {
@@ -693,9 +693,9 @@
       "unlinkFailed": "Failed to disable account",
       "unlinkSuccess": "Account disabled",
       "cannotUnlinkLast": "You must leave at least one login method",
-      "linkFailedReason": "",
-      "identityNotFound": "",
-      "primaryIdentity": ""
+      "linkFailedReason": "Failed to link account: {{reason}}",
+      "identityNotFound": "Identity not found or already unlinked",
+      "primaryIdentity": "Основной метод входа отвязать нельзя. В настройках Supabase также должно быть включено Manual Linking."
     },
     "integrations": {
       "title": "Integrations and analytics",
@@ -710,14 +710,14 @@
       "ttHint": "TikTok Ads в†’ Assets в†’ Events в†’ Pixel Code",
       "ga4Hint": "GA4 в†’ Admin в†’ Data Streams в†’ Measurement ID",
       "yandexHint": "Metrica в†’ Settings в†’ Counter number",
-      "gcalConnected": "",
-      "gcalFailed": "",
-      "gcalNotConfigured": "",
-      "gcalRedirecting": "",
-      "gcalDisconnectFailed": "",
-      "gcalDisconnected": "",
-      "active": "",
-      "gcalDesc": ""
+      "gcalConnected": "Google Calendar успешно подключён!",
+      "gcalFailed": "Ошибка подключения Google Calendar: {{reason}}",
+      "gcalNotConfigured": "Google Calendar не настроен на сервере",
+      "gcalRedirecting": "Перенаправление в Google...",
+      "gcalDisconnectFailed": "Ошибка отключения Google Calendar",
+      "gcalDisconnected": "Google Calendar отключен",
+      "active": "Активно",
+      "gcalDesc": "Синхронизация бронирований с календарем"
     },
     "pageBackground": "Page background",
     "backgroundType": "Background type",
@@ -735,18 +735,18 @@
     "openVerification": "Go through verification",
     "pageBackgroundLocked": "Custom page background is only available on the Business plan. Set a color, gradient, image or GIF as your page background.",
     "password": {
-      "required": "",
-      "minLength": "",
-      "confirmRequired": "",
-      "mismatch": "",
-      "success": "",
-      "error": "",
-      "title": "",
-      "description": "",
-      "newPassword": "",
-      "confirmPassword": "",
-      "hint": "",
-      "submit": ""
+      "required": "Password is required",
+      "minLength": "Password must be at least 8 characters",
+      "confirmRequired": "Please confirm your password",
+      "mismatch": "Passwords do not match",
+      "success": "Password updated successfully",
+      "error": "Failed to update password",
+      "title": "Change Password",
+      "description": "Enter your new password below",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "hint": "Use at least 8 characters with a mix of letters and numbers",
+      "submit": "Update Password"
     }
   },
   "niche": {
@@ -888,29 +888,29 @@
       "b4": "Team chat & tasks",
       "b5": "Roles & access control",
       "b6": "Up to 5 team members",
-      "month": "",
-      "total": "",
-      "billedOnce": ""
+      "month": "мес",
+      "total": "Итого",
+      "billedOnce": "единоразово"
     },
     "demo": {
       "title": "Feel the magic.",
-      "step1Title": "",
-      "step1Desc": "",
-      "step2Title": "",
-      "step2Desc": "",
-      "step3Title": "",
-      "step3Desc": "",
-      "iAmA": "",
-      "nicheCreator": "",
-      "nicheFitness": "",
-      "nicheCrypto": "",
-      "nicheBeauty": "",
-      "nicheMusic": "",
-      "nicheTutor": "",
-      "aiGenerating": "",
-      "chatMsg1": "",
-      "chatMsg2": "",
-      "leadCaptured": "",
+      "step1Title": "Выберите свою нишу",
+      "step1Desc": "Расскажите ИИ, чем вы занимаетесь. Красота, крипто, коучинг — мы говорим на вашем языке.",
+      "step2Title": "ИИ строит всё",
+      "step2Desc": "Структура, текст и дизайн за секунды. Никакого drag-and-drop.",
+      "step3Title": "Получайте лиды в Telegram",
+      "step3Desc": "Ваша страница запущена. Лиды идут прямо в ЛС. Закрывайте сделки мгновенно.",
+      "iAmA": "Я...",
+      "nicheCreator": "Цифровой креатор",
+      "nicheFitness": "Фитнес-тренер",
+      "nicheCrypto": "Криптоэксперт",
+      "nicheBeauty": "Бьюти-блогер",
+      "nicheMusic": "Музыкальный продюсер",
+      "nicheTutor": "Онлайн-репетитор",
+      "aiGenerating": "ИИ генерирует...",
+      "chatMsg1": "Привет, хочу записаться на консультацию!",
+      "chatMsg2": "Отлично! Давайте запланируем.",
+      "leadCaptured": "Новый лид получен",
       "badge": "Try it now",
       "subtitle": "Play with the editor right here. Add blocks, change content and see the changes in real time.",
       "profile": "Profile",
@@ -1345,9 +1345,9 @@
       "solution": "LinkMAX makes one clear page where the visitor quickly understands who you are, how you are useful, how much it costs, and where to click to apply. And you see leads and analytics in one place."
     },
     "howItWorks": {
-      "badge": "",
-      "title": "",
-      "cta": ""
+      "badge": "1 минута до результата",
+      "title": "Как это работает",
+      "cta": "Попробовать бесплатно"
     },
     "features": {
       "title": "What will you get in the first version",
@@ -1607,7 +1607,7 @@
         "title": "For free",
         "subtitle": "Forever, no hidden fees",
         "cta": "Start for free",
-        "f5_booking": ""
+        "f5_booking": "Запись + форма + CRM (50/мес)"
       },
       "premium": {
         "f1_v2": "All 25+ block types",
@@ -1621,13 +1621,13 @@
         "title": "Premium",
         "subtitle": "Everything for business growth",
         "cta": "Get Premium",
-        "f1_v3": "",
-        "f2_v3": "",
-        "f3_v3": "",
-        "f4_v3": "",
-        "f5_v3": "",
-        "f6_v3": "",
-        "f7_v3": ""
+        "f1_v3": "Безлимитные обращения клиентов",
+        "f2_v3": "Без водяного знака — ваш бренд",
+        "f3_v3": "Расширенная аналитика кликов",
+        "f4_v3": "Экспорт + Telegram-уведомления",
+        "f5_v3": "Все 25+ типов блоков",
+        "f6_v3": "До 6 страниц + свой домен",
+        "f7_v3": "10 AI-генераций в месяц"
       },
       "badge": "Simple tariffs",
       "title": "Free or Premium"
@@ -1787,7 +1787,7 @@
       "activity": "Inbox",
       "insights": "Analytics",
       "settings": "Settings",
-      "more": ""
+      "more": "Ещё"
     },
     "sidebar": {
       "tools": "Tools",
@@ -1849,10 +1849,10 @@
       "noResults": "Nothing found",
       "noLeads": "No applications yet",
       "noLeadsHint": "Applications will appear here when visitors fill out forms on your page",
-      "exporting": "",
-      "exportSuccess": "",
-      "exportError": "",
-      "export": ""
+      "exporting": "Экспорт лидов...",
+      "exportSuccess": "Экспорт завершен",
+      "exportError": "Ошибка экспорта",
+      "export": "Экспорт"
     },
     "insights": {
       "title": "Analytics",
@@ -1952,9 +1952,9 @@
         "slug_taken": "This URL is already taken",
         "invalid_slug": "Incorrect URL"
       },
-      "duplicated": "",
-      "deleteConfirm": "",
-      "deleted": ""
+      "duplicated": "Page duplicated",
+      "deleteConfirm": "Are you sure you want to delete this page? This cannot be undone.",
+      "deleted": "Page deleted"
     },
     "multiPage": {
       "switchPage": "Select page",
@@ -2026,7 +2026,7 @@
       "dnsType": "Type",
       "dnsName": "Name",
       "dnsValue": "Value",
-      "dnsHint": ""
+      "dnsHint": "Note: DNS changes can take up to 24 hours to propagate globally."
     },
     "accountSettings": {
       "title": "Account Settings",
@@ -2116,42 +2116,42 @@
         "feature7": "Priority support"
       },
       "identity": {
-        "feature1": "",
-        "feature2": "",
-        "feature3": "",
-        "feature4": ""
+        "feature1": "Basic blocks",
+        "feature2": "1 page",
+        "feature3": "1 AI generation/month",
+        "feature4": "LinkMAX watermark"
       },
       "starter": {
-        "feature1": "",
-        "feature2": "",
-        "feature3": "",
-        "feature4": "",
-        "feature5": "",
-        "feature6": ""
+        "feature1": "All 25+ blocks",
+        "feature2": "3 pages",
+        "feature3": "Full CRM access",
+        "feature4": "Telegram notifications",
+        "feature5": "No watermark",
+        "feature6": "7% commission on transactions"
       },
       "business": {
-        "feature1": "",
-        "feature2": "",
-        "feature3": "",
-        "feature4": "",
-        "feature5": "",
-        "feature6": ""
+        "feature1": "Everything in Pro",
+        "feature2": "Business Zones",
+        "feature3": "Team CRM & Kanban",
+        "feature4": "Up to 5 team members",
+        "feature5": "Role-based access",
+        "feature6": "0% commission"
       },
-      "businessPlan": "",
-      "starterPlan": "",
-      "identityPlan": "",
-      "commissionRate": "",
-      "upgradeToStarter": "",
-      "upgradeToPro": "",
-      "unlockCRM": "",
-      "reduceFees": "",
-      "starterDescription": "",
-      "proDescription": "",
-      "activateStarter": "",
-      "yourBenefits": "",
-      "lowCommission": "",
-      "starterCommission": "",
-      "freeTier": ""
+      "businessPlan": "Business Plan",
+      "starterPlan": "Starter Plan",
+      "identityPlan": "Identity Plan",
+      "commissionRate": "Transaction fee: {{rate}}",
+      "upgradeToStarter": "Upgrade to Starter — FREE",
+      "upgradeToPro": "Upgrade to Pro",
+      "unlockCRM": "Unlock CRM & notifications",
+      "reduceFees": "Reduce fees to 1%",
+      "starterDescription": "Get full CRM access, all blocks, and grow your business. Free to use, 7% on transactions.",
+      "proDescription": "Get custom domain, advanced analytics, and reduce commission to just 1%.",
+      "activateStarter": "Activate Starter — Free",
+      "yourBenefits": "Your {{plan}} benefits",
+      "lowCommission": "1% commission",
+      "starterCommission": "7% commission",
+      "freeTier": "Free tier"
     },
     "createPage": {
       "titleRequired": "Enter page title",
@@ -2185,16 +2185,16 @@
       "search": "Search by leads...",
       "emptyTitle": "No leads yet",
       "emptyDesc": "Applications from your clients will appear here through forms and quizzes on the page.",
-      "updateError": "",
-      "exporting": "",
-      "exportError": "",
-      "export": "",
-      "filterAll": ""
+      "updateError": "Ошибка обновления",
+      "exporting": "Экспорт...",
+      "exportError": "Ошибка экспорта",
+      "export": "Экспорт",
+      "filterAll": "Все"
     },
     "addFirstBlock": "Click + to add the first block",
     "templateApplied": "Template applied!",
-    "kaspi_qr": "",
-    "instant": ""
+    "kaspi_qr": "Kaspi QR",
+    "instant": "МГНОВЕННО"
   },
   "blocks": {
     "profile": "Profile",
@@ -2346,8 +2346,8 @@
     "premiumRequired": "This block is only available in PRO",
     "limitReached": "Block limit reached. Upgrade to Premium.",
     "proOnly": "This block is only available in PRO",
-    "duplicated": "",
-    "duplicateFailed": ""
+    "duplicated": "Block duplicated",
+    "duplicateFailed": "Failed to duplicate block"
   },
   "auth": {
     "signIn": "Login",
@@ -2395,12 +2395,12 @@
       "success": "рџЋ‰ +{{days}} days of Premium using referral code!"
     },
     "validation": {
-      "email": "",
-      "emailMax": "",
-      "passwordMin": "",
-      "passwordUppercase": "",
-      "passwordLowercase": "",
-      "passwordNumber": ""
+      "email": "Введите корректный email",
+      "emailMax": "Email должен быть не более 255 символов",
+      "passwordMin": "Пароль должен содержать минимум 8 символов",
+      "passwordUppercase": "Пароль должен содержать хотя бы одну заглавную букву",
+      "passwordLowercase": "Пароль должен содержать хотя бы одну строчную букву",
+      "passwordNumber": "Пароль должен содержать хотя бы одну цифру"
     },
     "telegram": {
       "invalidChatId": "Enter the correct Telegram Chat ID",
@@ -2431,7 +2431,7 @@
     "loginRequired": "Login to your account",
     "signupEmailSent": "We sent a confirmation link to your email",
     "login": "Login",
-    "oauthError": ""
+    "oauthError": "Authentication Error: {{error}}"
   },
   "gallery": {
     "title": "Gallery of pages",
@@ -2510,10 +2510,10 @@
     "allPages": "All pages",
     "noPages": "No pages found",
     "tryAnotherFilter": "Try a different filter",
-    "useTemplate": "",
-    "sortPopular": "",
-    "sortViews": "",
-    "sortRecent": ""
+    "useTemplate": "Создать",
+    "sortPopular": "Популярные",
+    "sortViews": "Просмотры",
+    "sortRecent": "Новые"
   },
   "errors": {
     "general": "An error has occurred",
@@ -2838,8 +2838,8 @@
     "noTemplatesFound": "No templates found",
     "editUserTierDescription": "Change user access level",
     "roleAdmin": "Admin",
-    "fintech": "",
-    "category": ""
+    "fintech": "Финансы",
+    "category": "Category"
   },
   "adminCharts": {
     "userGrowth": "User growth",
@@ -3055,7 +3055,7 @@
       "placeholder": "For example: I am a fitness trainer in Almaty...",
       "button": "Generate",
       "hint": "Describe your business, and we will select and fill out the best template.",
-      "generating": ""
+      "generating": "Generating..."
     },
     "captureError": "Couldn't find preview",
     "captured": "Preview captured!",
@@ -3120,8 +3120,8 @@
     "browseMk": "Check out the template marketplace",
     "notEnoughTokens": "Not enough tokens. Need another {{amount}} Linkkon.",
     "purchaseTemplate": "Purchasing a template: {{name}}",
-    "chosen": "",
-    "use": ""
+    "chosen": "Выбрано",
+    "use": "Выбрать"
   },
   "alternatives": {
     "seo": {
@@ -3260,12 +3260,12 @@
   },
   "phaseB": {
     "whyLnkmx": {
-      "title": "",
-      "noSetup": "",
-      "mobile": "",
-      "premium": "",
-      "emptyDeals": "",
-      "emptyContacts": ""
+      "title": "Почему LinkMAX",
+      "noSetup": "CRM за 15 минут — без внедрения",
+      "mobile": "Вся работа со смартфона",
+      "premium": "Дизайн премиум из коробки",
+      "emptyDeals": "CRM за 15 минут — без внедрения. Добавьте первую сделку.",
+      "emptyContacts": "Вся работа со смартфона. Импортируйте контакты или добавьте вручную."
     }
   },
   "blockPreview": {
@@ -3504,9 +3504,9 @@
       "button": "Export",
       "summary": "Summary (CSV)",
       "daily": "By day (CSV)",
-      "success": "",
-      "error": "",
-      "excel": ""
+      "success": "Данные успешно экспортированы",
+      "error": "Ошибка экспорта данных",
+      "excel": "Export Excel"
     },
     "blocks": {
       "title": "Block efficiency",
@@ -3584,7 +3584,7 @@
       "traffic": "Traffic",
       "blocks": "Blocks",
       "funnel": "Funnel",
-      "experiments": ""
+      "experiments": "Тесты"
     },
     "chart": {
       "title": "Dynamics for the period"
@@ -3644,29 +3644,29 @@
     "saveAndClose": "Save",
     "selectBlock": "Select a block to add",
     "searchBlocks": "Searching for blocks...",
-    "problematic": "",
-    "cta": "",
-    "edit": "",
-    "moveUp": "",
-    "moveDown": "",
-    "copy": "",
-    "duplicate": "",
-    "transform": "",
-    "selected": "",
-    "createSection": "",
-    "clearSelection": "",
-    "experiment": "",
-    "experimentCreated": "",
-    "setupABTest": "",
-    "abTestDesc": "",
-    "experimentName": "",
-    "trafficSplit": "",
-    "howItWorks": "",
-    "abTestInstructions": "",
-    "startExperiment": "",
-    "sectionName": "",
-    "newSection": "",
-    "section": ""
+    "problematic": "Проблемные",
+    "cta": "CTA",
+    "edit": "Edit",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "copy": "Copy",
+    "duplicate": "Duplicate",
+    "transform": "Convert to...",
+    "selected": "selected",
+    "createSection": "Group into section",
+    "clearSelection": "Clear selection",
+    "experiment": "Эксперимент",
+    "experimentCreated": "Experiment created! Now you can edit Variant B in the block settings.",
+    "setupABTest": "Настроить A/B Тест",
+    "abTestDesc": "Compare two versions of this block to see which performs better.",
+    "experimentName": "Название теста",
+    "trafficSplit": "Распределение трафика",
+    "howItWorks": "Как это работает",
+    "abTestInstructions": "After creating the experiment, you will be able to switch between Variant A and B in the block editor to customize their individual content and styles.",
+    "startExperiment": "Начать тест",
+    "sectionName": "Имя секции:",
+    "newSection": "Новая секция",
+    "section": "Секция"
   },
   "crm": {
     "title": "CRM",
@@ -3701,7 +3701,7 @@
       "lost": "Lost",
       "": ""
     },
-    "source": "",
+    "source": "Source",
     "addLeadDescription": "Fill in the form to add a new lead to your CRM",
     "namePlaceholder": "Client name",
     "phone": "Phone",
@@ -3730,7 +3730,7 @@
     "bookingStatus": {
       "pending": "Pending",
       "confirmed": "Confirmed",
-      "completed": ""
+      "completed": "Выполнено"
     },
     "booking": {
       "confirm": "Confirm",
@@ -4188,14 +4188,14 @@
     "prepayment": "Prepayment",
     "requirePrepayment": "Require prepayment",
     "prepaymentDesc": "After recording, the client will go to WhatsApp to pay",
-    "prepaymentMethod": "",
-    "methodWhatsApp": "",
-    "methodKaspi": "",
-    "methodRobokassa": "",
+    "prepaymentMethod": "Способ оплаты",
+    "methodWhatsApp": "WhatsApp (перевод)",
+    "methodKaspi": "Kaspi (QR/перевод)",
+    "methodRobokassa": "Robokassa (карта)",
     "prepaymentPhone": "WhatsApp for payment",
     "phoneHint": "WhatsApp phone number to accept payment",
-    "kaspiPhone": "",
-    "kaspiHint": "",
+    "kaspiPhone": "Kaspi номер",
+    "kaspiHint": "Номер для перевода через Kaspi",
     "prepaymentAmount": "Prepayment amount",
     "currency": "Currency",
     "notifications": "Notifications in Telegram",
@@ -4206,10 +4206,10 @@
     "weeklyMotivationDesc": "Monday at 9:00 - personal inspiration",
     "buttonText": "Button text",
     "buttonTextPlaceholder": "Sign up",
-    "gcalSync": "",
-    "gcalSyncDesc": "",
-    "timezone": "",
-    "timezoneDesc": ""
+    "gcalSync": "Синхронизация Google Календаря",
+    "gcalSyncDesc": "Использовать Google Календарь для проверки доступности и создания событий. (Доступно в профиле)",
+    "timezone": "Часовой пояс",
+    "timezoneDesc": "Укажите часовой пояс в котором вы работаете. Клиенты увидят время в своем часовом поясе."
   },
   "mapBlock": {
     "address": "Address",
@@ -4241,21 +4241,21 @@
     "prepaymentNote": "After registration you will be redirected to WhatsApp for payment",
     "success": "You have successfully registered!",
     "error": "Error while writing. Try again.",
-    "addDetails": "",
-    "prepaymentBadge": "",
-    "slotPrepaymentHint": "",
-    "formPrepaymentNote": "",
+    "addDetails": "Добавить email или комментарий",
+    "prepaymentBadge": "Предоплата {{amount}} {{currency}}",
+    "slotPrepaymentHint": "Предоплата {{amount}} {{currency}} · гарантирует бронь",
+    "formPrepaymentNote": "Предоплата {{amount}} {{currency}} после записи",
     "confirmation": {
-      "title": "",
-      "subtitle": "",
-      "ref": "",
-      "copied": "",
-      "prepaymentRequired": "",
-      "prepaymentHint": "",
-      "payWhatsApp": "",
-      "payKaspi": "",
-      "awaitConfirm": "",
-      "bookAgain": ""
+      "title": "Вы записаны!",
+      "subtitle": "Детали вашей записи",
+      "ref": "Номер записи",
+      "copied": "Скопировано",
+      "prepaymentRequired": "Предоплата для подтверждения",
+      "prepaymentHint": "Оплатите для гарантии записи. Возвращается при отмене за 24ч.",
+      "payWhatsApp": "Оплатить через WhatsApp",
+      "payKaspi": "Оплатить через Kaspi",
+      "awaitConfirm": "Ожидайте подтверждения от специалиста",
+      "bookAgain": "Записаться ещё раз"
     },
     "whatsapp": {
       "greeting": "Hello! I have made an appointment on {{date}} at {{time}}.\\n",
@@ -4265,9 +4265,9 @@
     },
     "selectedTime": "Time selected",
     "limitReached": {
-      "customer": ""
+      "customer": "Запись временно недоступна. Свяжитесь напрямую."
     },
-    "timezoneHint": ""
+    "timezoneHint": "(Местное время)"
   },
   "days": {
     "sunday": "Sun",
@@ -4805,7 +4805,7 @@
     "directoryDescription": "Find experts and specialists on LinkMAX",
     "tagDescription": "Profiles of {{tag}} specialists on LinkMAX",
     "findExperts": "Find experts",
-    "onLnkmx": "",
+    "onLnkmx": "на LinkMAX",
     "subtitle": "Mini-sites for experts, freelancers and small businesses",
     "searchPlaceholder": "Search by name or niche...",
     "profiles": "profiles",
@@ -4925,10 +4925,10 @@
     },
     "paymentNote": "Payment via RoboKassa",
     "whyLnkmx": {
-      "title": "",
-      "noSetup": "",
-      "mobile": "",
-      "premium": ""
+      "title": "Почему LinkMAX",
+      "noSetup": "CRM за 15 минут — без внедрения",
+      "mobile": "Вся работа со смартфона",
+      "premium": "Дизайн премиум из коробки"
     },
     "features": {
       "basicThemes": "Basic themes",
@@ -4960,14 +4960,14 @@
       "teamRoles": "Roles & access control",
       "teamMembers": "Up to 5 team members",
       "prioritySupport": "Priority support",
-      "basicViewStats": "",
-      "unlimitedInbound": "",
-      "noWatermark": "",
-      "exportAndAutomation": "",
-      "multiPage": "",
-      "customDomain": "",
-      "freeBooking": "",
-      "freeCRM": ""
+      "basicViewStats": "Базовая статистика просмотров",
+      "unlimitedInbound": "Безлимитные обращения клиентов",
+      "noWatermark": "Без водяного знака — ваш бренд",
+      "exportAndAutomation": "Экспорт + Telegram-уведомления",
+      "multiPage": "До 6 страниц",
+      "customDomain": "Свой домен",
+      "freeBooking": "Запись клиентов + предоплата",
+      "freeCRM": "CRM до 50 заявок/мес"
     },
     "limitations": {
       "watermark": "Watermark LinkMAX.my",
@@ -5099,10 +5099,10 @@
       "desc": "You can now edit colors, fonts and blocks in the control panel."
     },
     "complete": {
-      "title": "",
-      "desc": "",
-      "publishNow": "",
-      "editFirst": ""
+      "title": "✨ Страница готова!",
+      "desc": "Опубликуйте её, чтобы получить ссылку и первых посетителей",
+      "publishNow": "Опубликовать сейчас",
+      "editFirst": "Сначала отредактировать"
     }
   },
   "funnel": {
@@ -5524,10 +5524,10 @@
     "title": "Streak",
     "keepGoing": "Keep it going!",
     "days": "days",
-    "currentStreak": "",
-    "longestStreak": "",
-    "streakFrozen": "",
-    "loginTomorrow": "",
+    "currentStreak": "Текущая серия",
+    "longestStreak": "Лучшая серия",
+    "streakFrozen": "Серия заморожена",
+    "loginTomorrow": "Зайдите завтра, чтобы продолжить серию!",
     "bonusDays": "bonus days",
     "bonusTrialDays": "bonus trial days!",
     "awesome": "Awesome!",
@@ -5550,20 +5550,20 @@
     "hide": "Hide",
     "duplicate": "Duplicate",
     "delete": "Delete",
-    "filterAll": "",
-    "filterProblematic": "",
-    "filterHidden": "",
-    "filterCTA": "",
-    "sections": "",
-    "search": "",
-    "reviewMode": "",
-    "exitReview": "",
-    "untitledSection": "",
-    "renameSection": "",
-    "rename": "",
-    "dissolve": "",
-    "deleteSection": "",
-    "ungrouped": ""
+    "filterAll": "Все",
+    "filterProblematic": "Проблемные",
+    "filterHidden": "Скрытые",
+    "filterCTA": "CTA",
+    "sections": "секций",
+    "search": "Поиск...",
+    "reviewMode": "Режим проверки",
+    "exitReview": "Выйти",
+    "untitledSection": "Секция",
+    "renameSection": "Новое имя секции:",
+    "rename": "Переименовать",
+    "dissolve": "Расгруппировать",
+    "deleteSection": "Удалить секцию",
+    "ungrouped": "Без секции"
   },
   "url": {
     "external": "External link",
@@ -5633,11 +5633,11 @@
     "createdAt": "Created",
     "completedAt": "Completed",
     "save": "Save",
-    "recurrenceLabel": "",
-    "recurrenceUntil": "",
-    "comments": "",
-    "noComments": "",
-    "commentPlaceholder": ""
+    "recurrenceLabel": "Повторение",
+    "recurrenceUntil": "До какой даты (необязательно)",
+    "comments": "Комментарии",
+    "noComments": "Нет комментариев",
+    "commentPlaceholder": "Написать комментарий..."
   },
   "zones": {
     "selectOrCreate": "Select or create a zone",
@@ -5726,34 +5726,34 @@
       "deleteWarning": "This will permanently delete {{name}}. Linked deals and tasks won't be deleted.",
       "updated": "Contact updated",
       "deleted": "Contact deleted",
-      "call": "",
-      "sendEmail": "",
-      "notes": "",
-      "additionalInfo": "",
-      "emptyFile": "",
-      "noNameColumn": "",
-      "parseError": "",
-      "unsupportedFormat": "",
-      "imported": "",
-      "importDescription": "",
-      "uploadFile": "",
-      "requiredColumns": "",
-      "rows": "",
-      "andMore": "",
-      "importing": "",
-      "importButton": "",
-      "created": "",
-      "exportSuccess": "",
-      "export": "",
+      "call": "Call",
+      "sendEmail": "Email",
+      "notes": "Timeline",
+      "additionalInfo": "Дополнительная информация",
+      "emptyFile": "File is empty",
+      "noNameColumn": "No ",
+      "parseError": "Failed to parse file",
+      "unsupportedFormat": "Use CSV or XLSX files",
+      "imported": "{{count}} contacts imported",
+      "importDescription": "Upload a CSV or Excel file to import contacts into your zone",
+      "uploadFile": "Upload CSV or Excel file",
+      "requiredColumns": "Required column: name. Optional: phone, email, telegram, tags",
+      "rows": "rows",
+      "andMore": "and {{count}} more",
+      "importing": "Importing...",
+      "importButton": "Import {{count}}",
+      "created": "Contact created",
+      "exportSuccess": "Contacts exported",
+      "export": "Export",
       "presets": {
-        "label": "",
-        "none": "",
-        "saveCurrent": "",
-        "createFromCurrent": "",
-        "saveTitle": "",
-        "saveDescription": "",
-        "nameLabel": "",
-        "namePlaceholder": ""
+        "label": "Segments",
+        "none": "All contacts",
+        "saveCurrent": "Save current filters",
+        "createFromCurrent": "Save as segment",
+        "saveTitle": "Save segment",
+        "saveDescription": "Give a name to this combination of search and tags to reuse it later.",
+        "nameLabel": "Segment name",
+        "namePlaceholder": "e.g. VIP clients, warm leads"
       }
     },
     "deals": {
@@ -5797,30 +5797,30 @@
       "dealTitle": "Deal Title",
       "contact": "Contact",
       "valueKzt": "Value (KZT)",
-      "addComment": "",
-      "noComments": "",
-      "customFieldsBlock": "",
-      "noStages": "",
-      "created": "",
-      "dateFrom": "",
-      "dateTo": "",
-      "valueMin": "",
-      "valueMax": "",
+      "addComment": "Write a comment... (use @ to mention)",
+      "noComments": "No comments yet",
+      "customFieldsBlock": "Дополнительные поля",
+      "noStages": "No stages available",
+      "created": "Deal created",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "valueMin": "Min value",
+      "valueMax": "Max value",
       "presets": {
-        "placeholder": "",
-        "none": "",
-        "saveCurrent": "",
-        "saveTitle": "",
-        "saveDescription": "",
-        "nameLabel": "",
-        "namePlaceholder": ""
+        "placeholder": "Фильтры",
+        "none": "Без пресета",
+        "saveCurrent": "Сохранить текущие",
+        "saveTitle": "Сохранить фильтры",
+        "saveDescription": "Введите название для текущей комбинации фильтров, чтобы быстро применять её позже.",
+        "nameLabel": "Название пресета",
+        "namePlaceholder": "Например: Большие сделки за месяц"
       },
-      "exportSuccess": "",
-      "export": "",
-      "newDealDescription": "",
-      "selectContact": "",
-      "nextStepPlaceholder": "",
-      "markAsWonOrLost": ""
+      "exportSuccess": "Deals exported",
+      "export": "Export",
+      "newDealDescription": "Fill in the information to create a new deal in the pipeline",
+      "selectContact": "Select contact",
+      "nextStepPlaceholder": "Call back tomorrow",
+      "markAsWonOrLost": "Mark deal as Won or Lost?"
     },
     "tasks": {
       "title": "Tasks",
@@ -5835,14 +5835,14 @@
       "unassigned": "Unassigned",
       "contact": "Contact",
       "deal": "Deal",
-      "overdue": "",
-      "mine": "",
-      "new": "",
-      "taskTitle": "",
-      "taskTitlePlaceholder": "",
-      "description": "",
-      "descriptionPlaceholder": "",
-      "dueDate": ""
+      "overdue": "просрочено",
+      "mine": "Мои",
+      "new": "Новая задача",
+      "taskTitle": "Название",
+      "taskTitlePlaceholder": "Название задачи",
+      "description": "Описание",
+      "descriptionPlaceholder": "Описание (необязательно)",
+      "dueDate": "Срок"
     },
     "invoices": {
       "title": "Finance",
@@ -5883,10 +5883,10 @@
       "payLink": "Payment link",
       "markPaid": "Mark as Paid",
       "cancelPayment": "Cancel payment",
-      "urlGenerated": "",
-      "generatePayLink": "",
-      "downloadPDF": "",
-      "pdfSuccess": ""
+      "urlGenerated": "Link generated",
+      "generatePayLink": "Спегенерировать ссылку",
+      "downloadPDF": "Download PDF",
+      "pdfSuccess": "PDF saved"
     },
     "settings": {
       "title": "Settings",
@@ -5905,82 +5905,82 @@
       "removeMember": "Remove member?",
       "emailLabel": "Email",
       "fields": {
-        "created": "",
-        "updated": "",
-        "deleted": "",
-        "typeText": "",
-        "typeNumber": "",
-        "typeDate": "",
-        "typeBoolean": "",
-        "title": "",
-        "description": "",
-        "add": "",
-        "empty": "",
-        "required": "",
-        "addTitle": "",
-        "editTitle": "",
-        "nameLabel": "",
-        "namePlaceholder": "",
-        "typeLabel": "",
-        "requiredLabel": "",
-        "deleteTitle": "",
-        "deleteWarning": ""
+        "created": "Field created successfully",
+        "updated": "Field updated successfully",
+        "deleted": "Field deleted successfully",
+        "typeText": "Text",
+        "typeNumber": "Number",
+        "typeDate": "Date",
+        "typeBoolean": "Yes/No",
+        "title": "Custom Contact Fields",
+        "description": "Define custom fields to collect specific information for your contacts.",
+        "add": "Add Field",
+        "empty": "No custom fields defined yet.",
+        "required": "Required",
+        "addTitle": "Add Custom Field",
+        "editTitle": "Edit Custom Field",
+        "nameLabel": "Field Name",
+        "namePlaceholder": "e.g., IIN, Birthdate",
+        "typeLabel": "Field Type",
+        "requiredLabel": "This field is required",
+        "deleteTitle": "Delete Field?",
+        "deleteWarning": "Are you sure you want to delete the field "
       },
       "dealFields": {
-        "created": "",
-        "updated": "",
-        "deleted": "",
-        "title": "",
-        "description": "",
-        "empty": "",
-        "addTitle": "",
-        "editTitle": "",
-        "deleteTitle": ""
+        "created": "Deal field created successfully",
+        "updated": "Deal field updated successfully",
+        "deleted": "Deal field deleted successfully",
+        "title": "Custom Deal Fields",
+        "description": "Define custom fields for your deals and sales pipelines.",
+        "empty": "No custom fields defined yet.",
+        "addTitle": "Add Custom Field",
+        "editTitle": "Edit Custom Field",
+        "deleteTitle": "Delete Field?"
       },
       "pipelines": {
-        "created": "",
-        "updated": "",
-        "lastOne": "",
-        "cannotDeleteDefault": "",
-        "confirmDelete": "",
-        "deleted": "",
-        "newPlaceholder": "",
-        "empty": "",
-        "title": "",
-        "desc": ""
+        "created": "Pipeline created",
+        "updated": "Pipeline updated",
+        "lastOne": "Cannot delete the last pipeline",
+        "cannotDeleteDefault": "Cannot delete default pipeline. Set another as default first.",
+        "confirmDelete": "Are you sure? Deals in this pipeline will be hidden until reassigned.",
+        "deleted": "Pipeline deleted",
+        "newPlaceholder": "Новая воронка...",
+        "empty": "У вас пока нет воронок. Создайте первую воронку продаж.",
+        "title": "Управление воронками продаж",
+        "desc": "Создавайте и настраивайте воронки для разных процессов."
       },
-      "memberLimitReached": "",
-      "inviteSent": "",
-      "linkCopied": "",
-      "inviteRevoked": "",
-      "leftZone": "",
-      "memberRemoved": "",
-      "roleUpdated": "",
-      "saved": "",
-      "members": "",
-      "billing": "",
-      "pipelinesTab": "",
-      "fieldsTab": "",
-      "general": "",
-      "membersCount": "",
-      "invite": "",
-      "pendingInvites": "",
-      "expires": "",
-      "currentPlan": "",
-      "planDesc": "",
-      "plan": "",
-      "cycle": "",
-      "renewsAt": "",
-      "price": "",
-      "managePlan": "",
-      "dangerZone": "",
-      "ownerCannotLeave": "",
-      "role": "",
-      "leaveConfirmTitle": "",
-      "leaveConfirmDesc": "",
-      "removeMemberTitle": "",
-      "removeMemberDesc": "",
-      "confirmRemove": ""
+      "memberLimitReached": "Member limit reached. Upgrade your plan.",
+      "inviteSent": "Invite sent",
+      "linkCopied": "Invite link copied to clipboard",
+      "inviteRevoked": "Invite revoked",
+      "leftZone": "You left the zone",
+      "memberRemoved": "Member removed",
+      "roleUpdated": "Role updated",
+      "saved": "Settings saved",
+      "members": "Members",
+      "billing": "Billing",
+      "pipelinesTab": "Воронки",
+      "fieldsTab": "Поля",
+      "general": "General",
+      "membersCount": "members",
+      "invite": "Invite",
+      "pendingInvites": "Pending invites",
+      "expires": "Expires",
+      "currentPlan": "Current Plan",
+      "planDesc": "Manage your membership tier and usage limits.",
+      "plan": "Plan",
+      "cycle": "Billing Cycle",
+      "renewsAt": "Next Renewal",
+      "price": "Subscription Cost",
+      "managePlan": "Upgrade or Change Plan",
+      "dangerZone": "Danger Zone",
+      "ownerCannotLeave": "As the owner, you cannot leave the zone. Transfer ownership first or contact support.",
+      "role": "Role",
+      "leaveConfirmTitle": "Leave this zone?",
+      "leaveConfirmDesc": "You will lose access to all zone data including deals, contacts, and messages. This action cannot be undone.",
+      "removeMemberTitle": "Remove member?",
+      "removeMemberDesc": "This will remove {{name}} from the zone. They will lose access to all zone data.",
+      "confirmRemove": "Remove"
     },
     "automations": {
       "title": "Automations",
@@ -6025,19 +6025,19 @@
         "notify_owner": "Notify owner",
         "create_deal": "Create new deal"
       },
-      "created": "",
-      "createError": "",
+      "created": "Автоматизация добавлена",
+      "createError": "Не удалось создать автоматизацию",
       "presets": {
-        "overdueTaskName": "",
-        "invoicePaidName": "",
-        "overdueTaskChip": "",
-        "invoicePaidChip": ""
+        "overdueTaskName": "Задача при просрочке шага",
+        "invoicePaidName": "Закрывать сделку после оплаты",
+        "overdueTaskChip": "Задача при просрочке шага",
+        "invoicePaidChip": "Закрывать сделку после оплаты"
       },
-      "emptyTitle": "",
-      "emptyDesc": "",
-      "tryFirst": "",
-      "configParams": "",
-      "changeToStage": ""
+      "emptyTitle": "Автоматизируйте рутину",
+      "emptyDesc": "Создавайте правила, которые будут срабатывать автоматически при определенных событиях.",
+      "tryFirst": "Попробовать первое правило",
+      "configParams": "Настройка параметров",
+      "changeToStage": "Перевести на стадию"
     },
     "inbox": {
       "title": "Inbox",
@@ -6056,141 +6056,141 @@
       "createError": "Failed to create conversation"
     },
     "documents": {
-      "generated": "",
-      "generateError": "",
-      "generateDocument": "",
-      "preview": "",
-      "variables": "",
-      "unreplacedWarning": "",
-      "availableVariables": "",
-      "customVariables": "",
-      "customVariablesHint": "",
-      "enterValue": "",
-      "allVariablesFilled": "",
-      "downloadPDF": "",
-      "title": "",
-      "subtitle": "",
-      "templates": "",
-      "newDocument": "",
-      "searchPlaceholder": "",
+      "generated": "Документ сгенерирован",
+      "generateError": "Ошибка генерации PDF",
+      "generateDocument": "Генерация документа",
+      "preview": "Предпросмотр",
+      "variables": "Переменные",
+      "unreplacedWarning": "Некоторые переменные не заполнены",
+      "availableVariables": "Доступные переменные",
+      "customVariables": "Пользовательские значения",
+      "customVariablesHint": "Заполните недостающие переменные вручную",
+      "enterValue": "Введите значение...",
+      "allVariablesFilled": "Все переменные заполнены",
+      "downloadPDF": "Скачать PDF",
+      "title": "Documents",
+      "subtitle": "Manage documents, templates and digital workflow",
+      "templates": "Templates",
+      "newDocument": "New document",
+      "searchPlaceholder": "Search by title, number, contact or deal...",
       "empty": {
-        "title": "",
-        "description": ""
+        "title": "No documents",
+        "description": "Create your first document from a template. Link it to a deal or contact for autofill."
       },
-      "createDocument": "",
+      "createDocument": "Create document",
       "notFound": {
-        "title": "",
-        "description": ""
+        "title": "Nothing found",
+        "description": "Try adjusting your search or filter parameters."
       },
-      "resetFilters": "",
+      "resetFilters": "Reset filters",
       "actions": {
-        "generate": "",
-        "view": "",
-        "download": "",
-        "delete": ""
+        "generate": "Generate PDF",
+        "view": "View",
+        "download": "Download",
+        "delete": "Delete"
       },
-      "confirmDelete": "",
-      "totalCount": "",
-      "filteredCount": ""
+      "confirmDelete": "Are you sure you want to delete this document?",
+      "totalCount": "Total: {{count}}",
+      "filteredCount": "Showing {{shown}} of {{total}}"
     },
     "analytics": {
-      "exportSuccess": "",
-      "exportError": "",
-      "title": "",
-      "subtitle": "",
-      "activeValue": "",
-      "dealsOpen": "",
-      "winRate": "",
-      "tasksDone": "",
-      "overdue": "",
-      "noOverdue": "",
-      "paidValue": "",
-      "pendingAmount": "",
-      "newContacts": "",
-      "totalContacts": "",
-      "plSummary": "",
-      "grossRevenue": "",
-      "paidInvoices": "",
-      "pendingRevenue": "",
-      "awaitingPayment": "",
-      "wonDealsValue": "",
-      "closedDeals": "",
-      "funnel": "",
-      "funnelDesc": "",
-      "deals": "",
-      "funnelEmpty": "",
-      "revenueTimeline": "",
-      "revenueTimelineDesc": "",
-      "revenue": "",
-      "noRevenue": "",
-      "conversionTrend": "",
-      "improving": "",
-      "declining": "",
-      "conversionTrendDesc": "",
-      "won": "",
-      "lost": "",
-      "teamPerformance": "",
-      "teamPerformanceDesc": "",
-      "member": "",
-      "tasks": "",
-      "done": "",
-      "avgClose": "",
-      "completed": "",
-      "total": "",
-      "taskMetrics": "",
-      "pending": "",
-      "completionRate": ""
+      "exportSuccess": "Data exported successfully",
+      "exportError": "Export failed",
+      "title": "Analytics & Reports",
+      "subtitle": "Sales, finances and team performance summary.",
+      "activeValue": "Open deals value",
+      "dealsOpen": "open deals",
+      "winRate": "Win Rate",
+      "tasksDone": "Completed tasks",
+      "overdue": "overdue",
+      "noOverdue": "No overdue",
+      "paidValue": "Paid invoices",
+      "pendingAmount": "Pending: {{amount}} ({{count}})",
+      "newContacts": "New contacts",
+      "totalContacts": "Total: {{count}}",
+      "plSummary": "Revenue Summary",
+      "grossRevenue": "Gross Revenue",
+      "paidInvoices": "paid invoices",
+      "pendingRevenue": "Pending Revenue",
+      "awaitingPayment": "awaiting payment",
+      "wonDealsValue": "Won Deals Value",
+      "closedDeals": "closed deals",
+      "funnel": "Sales funnel",
+      "funnelDesc": "Deals count and value per pipeline stage.",
+      "deals": "Deals",
+      "funnelEmpty": "No data to display.",
+      "revenueTimeline": "Revenue timeline",
+      "revenueTimelineDesc": "Paid invoices over time.",
+      "revenue": "Revenue",
+      "noRevenue": "No revenue data for this period.",
+      "conversionTrend": "Conversion Trend",
+      "improving": "Improving",
+      "declining": "Declining",
+      "conversionTrendDesc": "Won vs. lost deals over time.",
+      "won": "Won",
+      "lost": "Lost",
+      "teamPerformance": "Team Performance",
+      "teamPerformanceDesc": "Task completion by team member.",
+      "member": "Member",
+      "tasks": "Tasks",
+      "done": "Done",
+      "avgClose": "Avg. Close",
+      "completed": "Completed",
+      "total": "Total",
+      "taskMetrics": "Task performance",
+      "pending": "In progress",
+      "completionRate": "Completion rate"
     },
     "calendar": {
-      "title": "",
-      "subtitle": "",
-      "today": "",
-      "upcoming": "",
-      "todayBtn": "",
-      "day": "",
-      "week": "",
-      "month": "",
-      "bookingDetail": "",
-      "feedCopied": "",
-      "export": "",
-      "downloadICS": "",
-      "copyFeedUrl": "",
-      "addToCalendar": "",
-      "fromPage": ""
+      "title": "Календарь записей",
+      "subtitle": "Все записи из блоков Booking ваших страниц",
+      "today": "Сегодня",
+      "upcoming": "Предстоящие",
+      "todayBtn": "Сегодня",
+      "day": "День",
+      "week": "Неделя",
+      "month": "Месяц",
+      "bookingDetail": "Детали записи",
+      "feedCopied": "Ссылка на календарь скопирована",
+      "export": "Экспорт",
+      "downloadICS": "Скачать .ics (Apple Calendar)",
+      "copyFeedUrl": "Скопировать URL подписки",
+      "addToCalendar": "Добавить в календарь",
+      "fromPage": "Со страницы"
     },
     "error": {
-      "title": "",
-      "description": "",
-      "retry": ""
+      "title": "Что-то пошло не так",
+      "description": "Произошла ошибка при загрузке",
+      "retry": "Попробовать снова"
     },
     "events": {
-      "title": "",
-      "subtitle": "",
-      "totalEvents": "",
-      "published": "",
-      "totalRegistrations": "",
-      "revenue": "",
-      "draft": "",
-      "closed": "",
-      "empty": "",
-      "registered": "",
-      "maxCapacity": "",
-      "registrations": "",
-      "noRegistrations": ""
+      "title": "Мероприятия",
+      "subtitle": "Управление ивентами из блоков Event ваших страниц",
+      "totalEvents": "Всего",
+      "published": "Активных",
+      "totalRegistrations": "Регистраций",
+      "revenue": "Выручка",
+      "draft": "Черновики",
+      "closed": "Завершённые",
+      "empty": "Нет мероприятий. Добавьте блок Event на страницу, привязанную к зоне.",
+      "registered": "зарегистрировано",
+      "maxCapacity": "макс.",
+      "registrations": "Регистрации",
+      "noRegistrations": "Пока нет регистраций"
     },
     "plans": {
-      "monthly": "",
-      "yearly": ""
+      "monthly": "Monthly",
+      "yearly": "Yearly"
     },
     "invites": {
-      "accepted": "",
-      "invalid": "",
-      "invalidDesc": "",
-      "title": "",
-      "roleLabel": "",
-      "emailNotice": "",
-      "loginRequired": "",
-      "join": ""
+      "accepted": "Welcome to the zone!",
+      "invalid": "Invitation invalid",
+      "invalidDesc": "This invitation link is invalid, expired, or has already been used.",
+      "title": "Join Workspace",
+      "roleLabel": "Role",
+      "emailNotice": "Accepting as",
+      "loginRequired": "Please sign in to accept this invitation",
+      "join": "Accept & Join"
     }
   },
   "activation": {
@@ -6268,8 +6268,8 @@
       "visitedYesterday": "Visited yesterday at {{time}}",
       "send": "Message",
       "template": "Hello {{name}}! Thanks for visiting! How was it? We'd love to see you again рџЉ",
-      "completedOn": "",
-      "sent": ""
+      "completedOn": "Визит {{date}}",
+      "sent": "Отправлено"
     },
     "week": {
       "leads": "This week:"
@@ -6282,9 +6282,9 @@
       "page": "Page hasn't been updated in over 2 weeks вЂ” refresh your content"
     },
     "rebook": {
-      "title": "",
-      "daysSince": "",
-      "nudge": ""
+      "title": "Пора вернуть клиента",
+      "daysSince": "{{days}} дн. назад",
+      "nudge": "Напомнить"
     }
   },
   "lifecycle": {
@@ -6302,153 +6302,152 @@
     }
   },
   "experiments": {
-    "confirmDelete": "",
-    "deleteSuccess": "",
-    "confirmWinner": "",
-    "winnerSet": "",
+    "confirmDelete": "Вы уверены, что хотите удалить этот эксперимент?",
+    "deleteSuccess": "Эксперимент удален",
+    "confirmWinner": "Версия будет применена ко всем пользователям. Продолжить?",
+    "winnerSet": "Победитель выбран и применен",
     "empty": {
-      "title": "",
-      "desc": ""
+      "title": "Нет активных тестов",
+      "desc": "Протестируйте разные заголовки или кнопки, чтобы узнать, что лучше конвертирует посетителей."
     },
-    "started": "",
-    "ended": "",
+    "started": "Начат",
+    "ended": "Завершен",
     "actions": {
-      "start": "",
-      "stop": "",
-      "pickWinner": ""
+      "start": "Запустить",
+      "stop": "Остановить",
+      "pickWinner": "Выбрать победителем"
     },
     "label": {
-      "original": "",
-      "variant": ""
+      "original": "Оригинал",
+      "variant": "Вариант"
     },
-    "leading": "",
+    "leading": "ЛИДИРУЕТ",
     "insight": {
-      "title": "",
-      "desc": ""
+      "title": "Промежуточный инсайт",
+      "desc": "Данных пока недостаточно для 95% уверенности, но Вариант {{variant}} показывает лучший результат по CTR."
     },
-    "defaultName": "",
+    "defaultName": "Тест",
     "error": {
-      "nameRequired": "",
-      "starting": ""
+      "nameRequired": "Введите название теста",
+      "starting": "Ошибка при запуске"
     },
     "success": {
-      "started": ""
+      "started": "Эксперимент запущен"
     },
     "setup": {
-      "title": "",
-      "description": "",
-      "nameLabel": "",
-      "namePlaceholder": "",
-      "variants": "",
-      "variantsCount": "",
-      "variantA": "",
-      "variantB": "",
-      "hideEditor": "",
-      "configure": "",
-      "tipTitle": "",
-      "tipDesc": "",
-      "start": "",
-      "editFields": ""
+      "title": "Создать A/B тест",
+      "description": "Сравните две версии блока, чтобы узнать, какая работает лучше.",
+      "nameLabel": "Название эксперимента",
+      "namePlaceholder": "Назовите ваш тест...",
+      "variants": "Варианты и трафик",
+      "variantsCount": "варианта",
+      "variantA": "Оригинал",
+      "variantB": "Вариант B",
+      "hideEditor": "Скрыть редактор",
+      "configure": "Настроить контент",
+      "tipTitle": "Совет",
+      "tipDesc": "Меняйте только одно свойство (например, текст кнопки), чтобы точно знать, что именно повлияло на конверсию.",
+      "start": "Запустить тест",
+      "editFields": "Редактировать контент варианта"
     }
   },
   "friction": {
-    "try": ""
+    "try": "Попробовать"
   },
   "commands": {
-    "searchPlaceholder": "",
-    "noResults": ""
+    "searchPlaceholder": "Search commands, blocks, presets...",
+    "noResults": "No matching commands"
   },
   "billing": {
     "types": {
-      "subscription": "",
-      "zoneUpgrade": "",
-      "payment": "",
-      "refund": ""
+      "subscription": "Subscription",
+      "zoneUpgrade": "Zone Upgrade",
+      "payment": "Payment",
+      "refund": "Refund"
     },
     "history": {
-      "title": "",
-      "empty": "",
-      "emptyDesc": ""
+      "title": "Billing History",
+      "empty": "No billing history",
+      "emptyDesc": "Your payment history will appear here after your first purchase"
     }
   },
   "kaspi": {
-    "generateQR": "",
-    "invalidAmount": "",
-    "paymentSimulated": "",
-    "linkCopied": "",
-    "title": "",
-    "description": "",
-    "amount": "",
-    "comment": "",
-    "commentPlaceholder": "",
-    "scanHint": "",
-    "copyLink": "",
-    "downloadQR": "",
-    "simulateMock": "",
-    "disclaimer": "",
-    "pay": "",
-    "enter_amount": ""
+    "generateQR": "Kaspi QR Payment",
+    "invalidAmount": "Invalid amount or missing owner ID",
+    "paymentSimulated": "Payment successfully simulated and fee processed!",
+    "linkCopied": "Link copied to clipboard",
+    "title": "Kaspi QR Payment",
+    "description": "Generate QR code for quick Kaspi payment",
+    "amount": "Amount",
+    "comment": "Comment",
+    "commentPlaceholder": "Payment description",
+    "scanHint": "Scan with Kaspi app to pay",
+    "copyLink": "Copy Link",
+    "downloadQR": "Download QR",
+    "simulateMock": "Simulate Payment (Sandbox)",
+    "disclaimer": "Powered by Kaspi.kz payment system",
+    "pay": "Pay",
+    "enter_amount": "Введите сумму для генерации QR"
   },
   "zone": {
     "notifications": {
-      "title": "",
-      "markAllRead": "",
-      "empty": ""
+      "title": "Уведомления",
+      "markAllRead": "Прочитать все",
+      "empty": "Нет уведомлений"
     },
     "products": {
-      "nameRequired": "",
-      "updated": "",
-      "created": "",
-      "confirmDelete": "",
-      "deleted": "",
-      "title": "",
-      "add": "",
-      "empty": "",
-      "emptyHint": "",
-      "inactive": "",
-      "per": "",
-      "edit": "",
-      "create": "",
-      "name": "",
-      "namePlaceholder": "",
-      "description": "",
-      "price": "",
-      "currency": "",
-      "unit": "",
-      "active": ""
+      "nameRequired": "Введите название",
+      "updated": "Продукт обновлён",
+      "created": "Продукт создан",
+      "confirmDelete": "Удалить продукт?",
+      "deleted": "Продукт удалён",
+      "title": "Каталог продуктов",
+      "add": "Добавить",
+      "empty": "Нет продуктов",
+      "emptyHint": "Добавьте первый продукт в каталог",
+      "inactive": "Неактивен",
+      "per": "за",
+      "edit": "Редактировать продукт",
+      "create": "Новый продукт",
+      "name": "Название",
+      "namePlaceholder": "Например: Консультация 1 час",
+      "description": "Описание",
+      "price": "Цена",
+      "currency": "Валюта",
+      "unit": "Единица",
+      "active": "Активен"
     }
   },
   "forMasters": {
-    "badge": "",
-    "headline": "",
-    "subheadline": "",
-    "cta": "",
-    "ctaSecondary": "",
-    "val1Title": "",
-    "val1Desc": "",
-    "val2Title": "",
-    "val2Desc": "",
-    "val3Title": "",
-    "val3Desc": "",
-    "examplesTitle": "",
-    "freeTitle": "",
-    "freeDesc": "",
-    "finalCta": "",
-    "trustLine": ""
+    "badge": "Для мастеров красоты",
+    "headline": "Онлайн-запись для мастеров — бесплатно, за 5 минут",
+    "subheadline": "Клиенты записываются прямо из Instagram. Без звонков, без переписки.",
+    "cta": "Создать страницу записи",
+    "ctaSecondary": "Посмотреть примеры",
+    "val1Title": "Ссылка для записи в bio",
+    "val1Desc": "Одна ссылка — и клиенты видят ваши услуги, цены и свободные слоты",
+    "val2Title": "Клиент видит цену и записывается сам",
+    "val2Desc": "Без переписки «а сколько стоит?». Клиент выбирает время и подтверждает",
+    "val3Title": "Все заявки в одном месте",
+    "val3Desc": "Видите кто записался, подтверждаете, отправляете напоминания",
+    "examplesTitle": "Примеры страниц мастеров",
+    "freeTitle": "Бесплатно навсегда",
+    "freeDesc": "До 50 записей в месяц — бесплатно. Без привязки карты. Без скрытых платежей. Без срока действия.",
+    "finalCta": "Начните принимать записи сегодня",
+    "trustLine": "Более 1000 мастеров уже используют lnkmx"
   },
   "from": {
-    "seoTitle": "",
-    "seoDesc": "",
-    "madeWith": "",
-    "headline": "",
-    "subheadline": "",
-    "val1": "",
-    "val2": "",
-    "val3": "",
-    "cta": "",
-    "free": ""
-  }
-,
+    "seoTitle": "Создайте свою страницу — бесплатно | lnkmx",
+    "seoDesc": "Создайте страницу для записи клиентов за 5 минут. Бесплатно.",
+    "madeWith": "Эта страница создана на lnkmx",
+    "headline": "Создайте такую же — бесплатно",
+    "subheadline": "Ссылка для записи клиентов. Готова за 5 минут.",
+    "val1": "Красивая ссылка для Instagram bio",
+    "val2": "Клиенты видят цены и записываются сами",
+    "val3": "Без звонков и переписки",
+    "cta": "Создать свою страницу",
+    "free": "Бесплатно. Без карты. Без скрытых платежей."
+  },
   "fintech": {
     "balance": {
       "available": "Available",
