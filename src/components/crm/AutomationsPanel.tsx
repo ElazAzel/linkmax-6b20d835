@@ -222,7 +222,7 @@ export function AutomationsPanel({ userId, isPremium }: AutomationsPanelProps) {
         <div className="p-1.5 rounded-lg bg-primary/10">
           <Bot className="h-4 w-4 text-primary" />
         </div>
-        </div>
+        <h3 className="font-semibold">{t('automations.title', 'Smart Automations')}</h3>
       </div>
 
       <Tabs defaultValue="telegram" className="w-full">
