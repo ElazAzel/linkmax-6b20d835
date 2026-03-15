@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTelegram } from '../TelegramContext';
 import { useTelegramZone } from '../hooks/useTelegramZone';
 import { useZoneBookings, type ZoneBooking } from '@/hooks/zones/useZoneBookings';
 
 export function BookingsScreen() {
+    const { t } = useTranslation();
     const { haptic } = useTelegram();
     const { zoneId } = useTelegramZone();
     const { bookings, loading, refetch } = useZoneBookings(zoneId);
@@ -19,7 +21,7 @@ export function BookingsScreen() {
     return (
         <div className="tg-screen tg-fade-in">
             <div className="tg-screen-header">
-                <h1 className="tg-screen-title">Записи</h1>
+                <h1 className="tg-screen-title">{t('tma.bookings_title')}</h1>
                 <button
                     className="tg-icon-button"
                     onClick={() => {
@@ -35,7 +37,7 @@ export function BookingsScreen() {
                 {bookings.length === 0 ? (
                     <div style={{ padding: '40px 20px', textAlign: 'center' }}>
                         <div style={{ fontSize: 40, marginBottom: 12 }}>📅</div>
-                        <p className="tg-text-hint">Записей пока нет</p>
+                        <p className="tg-text-hint">{t('tma.bookings_empty')}</p>
                     </div>
                 ) : (
                     <div className="tg-list">
@@ -63,7 +65,8 @@ function BookingItem({
     booking: ZoneBooking;
     onClick: () => void;
 }) {
-    const date = new Date(booking.slot_date).toLocaleDateString('ru-RU', {
+    const { t, i18n } = useTranslation();
+    const date = new Date(booking.slot_date).toLocaleDateString(i18n.language === 'ru' ? 'ru-RU' : 'en-US', {
         day: 'numeric',
         month: 'short'
     });
@@ -76,13 +79,13 @@ function BookingItem({
             <div className="tg-list-item-content">
                 <div className="tg-list-item-row">
                     <span className="tg-list-item-title">
-                        {booking.client_name || 'Клиент'}
+                        {booking.client_name || t('tma.booking_client_fallback')}
                     </span>
                     <span className="tg-list-item-time">{booking.slot_time}</span>
                 </div>
                 <div className="tg-list-item-row">
                     <span className="tg-list-item-subtitle tg-ellipsis">
-                        {booking.page_title || 'Источник'}
+                        {booking.page_title || t('tma.booking_source_fallback')}
                     </span>
                     <span
                         className="tg-badge"
@@ -91,7 +94,7 @@ function BookingItem({
                             opacity: booking.status === 'confirmed' ? 1 : 0.8
                         }}
                     >
-                        {booking.status === 'confirmed' ? 'Ок' : 'Новый'}
+                        {booking.status === 'confirmed' ? t('tma.status_confirmed') : t('tma.status_new')}
                     </span>
                 </div>
             </div>

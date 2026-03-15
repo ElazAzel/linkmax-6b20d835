@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useTelegram } from './TelegramContext';
 import { useTelegramZone } from './hooks/useTelegramZone';
 import { useZoneAnalytics } from '@/hooks/zones/useZoneAnalytics';
@@ -54,6 +55,7 @@ const MoreIcon = () => (
 // ---- Loading Screen ----
 
 function LoadingScreen() {
+    const { t } = useTranslation();
     return (
         <div style={{
             display: 'flex',
@@ -64,7 +66,7 @@ function LoadingScreen() {
             gap: 16,
         }}>
             <div className="tg-spinner" />
-            <p className="tg-text-hint" style={{ fontSize: 14 }}>Загрузка LinkMAX...</p>
+            <p className="tg-text-hint" style={{ fontSize: 14 }}>{t('tma.loading')}</p>
         </div>
     );
 }
@@ -72,6 +74,7 @@ function LoadingScreen() {
 // ---- Error Screen ----
 
 function ErrorScreen({ error }: { error: string | null }) {
+    const { t } = useTranslation();
     const isNotInTelegram = error === 'not_in_telegram';
 
     return (
@@ -88,13 +91,13 @@ function ErrorScreen({ error }: { error: string | null }) {
             <div style={{ fontSize: 48 }}>{isNotInTelegram ? '📱' : '⚠️'}</div>
             <h2 style={{ fontSize: 20, fontWeight: 700 }}>
                 {isNotInTelegram
-                    ? 'Откройте в Telegram'
-                    : 'Ошибка загрузки'}
+                    ? t('tma.error_open_in_tg')
+                    : t('tma.error_loading')}
             </h2>
             <p className="tg-text-hint" style={{ fontSize: 15, maxWidth: 280 }}>
                 {isNotInTelegram
-                    ? 'Это приложение работает только внутри Telegram. Откройте @linkmaxmy_bot и нажмите "Launch App".'
-                    : error || 'Что-то пошло не так. Попробуйте перезапустить приложение.'}
+                    ? t('tma.error_tg_only')
+                    : error || t('tma.error_unknown')}
             </p>
             {isNotInTelegram && (
                 <a
@@ -102,7 +105,7 @@ function ErrorScreen({ error }: { error: string | null }) {
                     className="tg-button"
                     style={{ maxWidth: 280, textDecoration: 'none' }}
                 >
-                    Открыть в Telegram
+                    {t('tma.btn_open_in_tg')}
                 </a>
             )}
         </div>
@@ -112,6 +115,7 @@ function ErrorScreen({ error }: { error: string | null }) {
 // ---- Home Screen ----
 
 function HomeScreen() {
+    const { t } = useTranslation();
     const { user, haptic, setScreen } = useTelegram();
     const { zoneId } = useTelegramZone();
     const { metrics, loading } = useZoneAnalytics(zoneId);
@@ -120,29 +124,29 @@ function HomeScreen() {
         {
             icon: '📄',
             bg: 'var(--tg-theme-secondary-bg-color)',
-            title: 'Моя страница',
-            desc: 'Редактировать и опубликовать',
+            title: t('tma.action_page_title'),
+            desc: t('tma.action_page_desc'),
             screen: 'page' as TelegramScreen,
         },
         {
             icon: '📩',
             bg: 'var(--tg-theme-secondary-bg-color)',
-            title: 'Лиды',
-            desc: 'Входящие заявки',
+            title: t('tma.action_crm_title'),
+            desc: t('tma.action_crm_desc'),
             screen: 'crm' as TelegramScreen,
         },
         {
             icon: '📅',
             bg: 'var(--tg-theme-secondary-bg-color)',
-            title: 'Бронирования',
-            desc: 'Записи и расписание',
+            title: t('tma.action_bookings_title'),
+            desc: t('tma.action_bookings_desc'),
             screen: 'bookings' as TelegramScreen,
         },
         {
             icon: '💳',
             bg: 'var(--tg-theme-secondary-bg-color)',
-            title: 'Платежи',
-            desc: 'Инвойсы и тариф',
+            title: t('tma.action_payments_title'),
+            desc: t('tma.action_payments_desc'),
             screen: 'payments' as TelegramScreen,
         },
     ];
@@ -152,10 +156,10 @@ function HomeScreen() {
             {/* Greeting */}
             <div style={{ marginBottom: 24 }}>
                 <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0 }}>
-                    Привет, {user?.first_name || 'друг'} 👋
+                    {t('tma.home_greeting', { name: user?.first_name || t('tma.home_greeting_fallback') })}
                 </h1>
                 <p className="tg-text-hint" style={{ fontSize: 15, marginTop: 4 }}>
-                    Ваш бизнес-центр в Telegram
+                    {t('tma.home_subtitle')}
                 </p>
             </div>
 
@@ -165,25 +169,25 @@ function HomeScreen() {
                     <span className="tg-stat-value">
                         {loading ? '...' : metrics?.deals?.open || 0}
                     </span>
-                    <span className="tg-stat-label">Лиды</span>
+                    <span className="tg-stat-label">{t('tma.stats_leads')}</span>
                 </div>
                 <div className="tg-stat-card">
                     <span className="tg-stat-value">
                         {loading ? '...' : metrics?.tasks?.pending || 0}
                     </span>
-                    <span className="tg-stat-label">Дела</span>
+                    <span className="tg-stat-label">{t('tma.stats_tasks')}</span>
                 </div>
                 <div className="tg-stat-card">
                     <span className="tg-stat-value">
                         {loading ? '...' : (metrics?.invoices?.totalPaidAmount ? `${metrics.invoices.totalPaidAmount}₽` : '0₽')}
                     </span>
-                    <span className="tg-stat-label">Выручка</span>
+                    <span className="tg-stat-label">{t('tma.stats_revenue')}</span>
                 </div>
             </div>
 
             {/* Quick Actions */}
             <div className="tg-section">
-                <div className="tg-section-header">Инструменты</div>
+                <div className="tg-section-header">{t('tma.section_tools')}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {quickActions.map((action) => (
                         <div
@@ -218,6 +222,7 @@ function HomeScreen() {
 // ---- Stub Screens (P1: will be replaced with full implementations) ----
 
 function StubScreen({ title, icon }: { title: string; icon: string }) {
+    const { t } = useTranslation();
     const { goBack } = useTelegram();
 
     return (
@@ -225,14 +230,14 @@ function StubScreen({ title, icon }: { title: string; icon: string }) {
             <div style={{ fontSize: 48, marginBottom: 16 }}>{icon}</div>
             <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{title}</h2>
             <p className="tg-text-hint" style={{ fontSize: 15 }}>
-                Скоро появится в следующем обновлении
+                {t('tma.stub_upcoming')}
             </p>
             <button
                 className="tg-button tg-button--secondary"
                 style={{ maxWidth: 200, margin: '24px auto 0' }}
                 onClick={goBack}
             >
-                Назад
+                {t('tma.btn_back')}
             </button>
         </div>
     );
@@ -241,6 +246,7 @@ function StubScreen({ title, icon }: { title: string; icon: string }) {
 // ---- Router ----
 
 export function TelegramRouter() {
+    const { t } = useTranslation();
     const { route, isLoading, error } = useTelegram();
     const { isLoading: zoneLoading } = useTelegramZone();
 
@@ -257,15 +263,15 @@ export function TelegramRouter() {
         case 'bookings':
             return <BookingsScreen />;
         case 'payments':
-            return <StubScreen title="Платежи" icon="💳" />;
+            return <StubScreen title={t('tma.nav_payments')} icon="💳" />;
         case 'settings':
-            return <StubScreen title="Настройки" icon="⚙️" />;
+            return <StubScreen title={t('tma.nav_more')} icon="⚙️" />;
         case 'onboarding':
             return <OnboardingScreen />;
         case 'lead_detail':
-            return <StubScreen title={`Лид ${route.entityId || ''}`} icon="👤" />;
+            return <StubScreen title={`${t('tma.nav_crm')} ${route.entityId || ''}`} icon="👤" />;
         case 'deal_detail':
-            return <StubScreen title={`Сделка ${route.entityId || ''}`} icon="💰" />;
+            return <StubScreen title={`${t('tma.nav_tasks')} ${route.entityId || ''}`} icon="💰" />;
         default:
             return <HomeScreen />;
     }
@@ -274,15 +280,16 @@ export function TelegramRouter() {
 // ---- Bottom Navigation ----
 
 export function BottomNavigation() {
+    const { t } = useTranslation();
     const { route, setScreen, haptic } = useTelegram();
     const currentScreen = route.screen;
 
     const tabs: { screen: TelegramScreen; label: string; icon: React.ReactNode }[] = [
-        { screen: 'home', label: 'Главная', icon: <HomeIcon /> },
-        { screen: 'page', label: 'Страница', icon: <PageIcon /> },
-        { screen: 'crm', label: 'Лиды', icon: <LeadsIcon /> },
-        { screen: 'bookings', label: 'Записи', icon: <CalendarIcon /> },
-        { screen: 'settings', label: 'Ещё', icon: <MoreIcon /> },
+        { screen: 'home', label: t('tma.nav_home'), icon: <HomeIcon /> },
+        { screen: 'page', label: t('tma.nav_page'), icon: <PageIcon /> },
+        { screen: 'crm', label: t('tma.nav_crm'), icon: <LeadsIcon /> },
+        { screen: 'bookings', label: t('tma.nav_bookings'), icon: <CalendarIcon /> },
+        { screen: 'settings', label: t('tma.nav_more'), icon: <MoreIcon /> },
     ];
 
     return (

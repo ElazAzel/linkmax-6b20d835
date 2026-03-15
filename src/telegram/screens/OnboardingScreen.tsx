@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTelegram } from '../TelegramContext';
 import { useZones } from '@/hooks/zones/useZones';
 
 export function OnboardingScreen() {
+    const { t } = useTranslation();
     const { haptic, setScreen } = useTelegram();
     const { createZone, loading: zonesLoading } = useZones();
 
@@ -12,11 +14,11 @@ export function OnboardingScreen() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const categories = [
-        { id: 'beauty', label: 'Красота и уход', icon: '💅' },
-        { id: 'service', label: 'Услуги и сервис', icon: '🛠️' },
-        { id: 'consult', label: 'Консультации', icon: '🧠' },
-        { id: 'edu', label: 'Обучение', icon: '📚' },
-        { id: 'other', label: 'Другое', icon: '✨' },
+        { id: 'beauty', label: t('tma.cat_beauty'), icon: '💅' },
+        { id: 'service', label: t('tma.cat_service'), icon: '🛠️' },
+        { id: 'consult', label: t('tma.cat_consult'), icon: '🧠' },
+        { id: 'edu', label: t('tma.cat_edu'), icon: '📚' },
+        { id: 'other', label: t('tma.cat_other'), icon: '✨' },
     ];
 
     const handleCreate = async () => {
@@ -44,20 +46,20 @@ export function OnboardingScreen() {
                 <div className="tg-slide-up">
                     <div style={{ fontSize: 48, marginBottom: 24 }}>🚀</div>
                     <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>
-                        Добро пожаловать в LinkMAX!
+                        {t('tma.onboarding_welcome')}
                     </h1>
                     <p className="tg-text-hint" style={{ fontSize: 16, marginBottom: 32, lineHeight: 1.5 }}>
-                        Давайте создадим ваше бизнес-пространство за пару секунд.
+                        {t('tma.onboarding_subtitle')}
                     </p>
 
                     <div className="tg-section">
                         <label className="tg-text-hint" style={{ fontSize: 13, marginBottom: 8, display: 'block' }}>
-                            Как называется ваш бренд?
+                            {t('tma.onboarding_brand_label')}
                         </label>
                         <input
                             type="text"
                             className="tg-input"
-                            placeholder="Напр: Studio 123"
+                            placeholder={t('tma.onboarding_brand_placeholder')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             autoFocus
@@ -73,13 +75,13 @@ export function OnboardingScreen() {
                             setStep(2);
                         }}
                     >
-                        Продолжить
+                        {t('tma.btn_continue')}
                     </button>
                 </div>
             ) : (
                 <div className="tg-slide-up">
                     <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
-                        Выберите направление
+                        {t('tma.onboarding_category_title')}
                     </h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
@@ -108,7 +110,7 @@ export function OnboardingScreen() {
                             style={{ flex: 1 }}
                             onClick={() => setStep(1)}
                         >
-                            Назад
+                            {t('tma.btn_back')}
                         </button>
                         <button
                             className="tg-button"
@@ -116,7 +118,7 @@ export function OnboardingScreen() {
                             disabled={!category || isSubmitting}
                             onClick={handleCreate}
                         >
-                            {isSubmitting ? 'Создаем...' : 'Запустить бизнес'}
+                            {isSubmitting ? t('tma.btn_submitting') : t('tma.btn_launch')}
                         </button>
                     </div>
                 </div>

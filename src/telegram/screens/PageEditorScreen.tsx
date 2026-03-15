@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTelegram } from '../TelegramContext';
 import { useCloudPageState } from '@/hooks/page/useCloudPageState';
 import type { ProfileBlock, LinkBlock } from '@/types/blocks/content';
-import type { Block } from '@/types/page';
 import { QRCodeSVG } from 'qrcode.react';
 
 export function PageEditorScreen() {
+    const { t } = useTranslation();
     const { haptic, setBottomButton } = useTelegram();
     const { pageData, loading, updateBlock, addBlock, deleteBlock, saving, publish } = useCloudPageState();
 
@@ -19,7 +20,7 @@ export function PageEditorScreen() {
     useEffect(() => {
         if (pageData) {
             setBottomButton({
-                text: saving ? 'Сохранение...' : 'Опубликовать страницу',
+                text: saving ? t('tma.btn_publishing') : t('tma.btn_publish_full'),
                 onClick: async () => {
                     haptic('impact', 'medium');
                     await publish();
@@ -30,9 +31,9 @@ export function PageEditorScreen() {
             });
         }
         return () => setBottomButton(null);
-    }, [pageData, saving, publish, haptic, setBottomButton]);
+    }, [pageData, saving, publish, haptic, setBottomButton, t]);
 
-    if (loading) {
+    if (loading && !pageData) {
         return (
             <div className="tg-loading-centered">
                 <div className="tg-spinner" />
@@ -43,7 +44,7 @@ export function PageEditorScreen() {
     if (!pageData) {
         return (
             <div className="tg-screen tg-fade-in" style={{ padding: 20, textAlign: 'center' }}>
-                <p className="tg-text-hint">Страница не найдена</p>
+                <p className="tg-text-hint">{t('tma.page_not_found')}</p>
             </div>
         );
     }
@@ -51,74 +52,80 @@ export function PageEditorScreen() {
     return (
         <div className="tg-screen tg-fade-in">
             <div className="tg-screen-header">
-                <h1 className="tg-screen-title">Редактор</h1>
-                <div className="tg-tabs">
-                    <button
-                        className={`tg-tab ${activeTab === 'profile' ? 'tg-tab--active' : ''}`}
-                        onClick={() => { haptic('selection'); setActiveTab('profile'); }}
-                    >
-                        Профиль
-                    </button>
-                    <button
-                        className={`tg-tab ${activeTab === 'links' ? 'tg-tab--active' : ''}`}
-                        onClick={() => { haptic('selection'); setActiveTab('links'); }}
-                    >
-                        Ссылки
-                    </button>
-                    <button
-                        className={`tg-tab ${activeTab === 'qr' ? 'tg-tab--active' : ''}`}
-                        onClick={() => { haptic('selection'); setActiveTab('qr'); }}
-                    >
-                        QR-код
-                    </button>
+                <h1 className="tg-screen-title">{t('tma.editor_title')}</h1>
+            </div>
+
+            {/* Tabs */}
+            <div className="tg-tabs">
+                <div
+                    className={`tg-tab ${activeTab === 'profile' ? 'tg-tab--active' : ''}`}
+                    onClick={() => { haptic('selection'); setActiveTab('profile'); }}
+                >
+                    {t('tma.tab_profile')}
+                </div>
+                <div
+                    className={`tg-tab ${activeTab === 'links' ? 'tg-tab--active' : ''}`}
+                    onClick={() => { haptic('selection'); setActiveTab('links'); }}
+                >
+                    {t('tma.tab_links')}
+                </div>
+                <div
+                    className={`tg-tab ${activeTab === 'qr' ? 'tg-tab--active' : ''}`}
+                    onClick={() => { haptic('selection'); setActiveTab('qr'); }}
+                >
+                    {t('tma.tab_qr')}
                 </div>
             </div>
 
-            <div className="tg-section">
+            <div className="tg-tab-content" style={{ marginTop: 16 }}>
                 {activeTab === 'profile' && profileBlock && (
-                    <div className="tg-form tg-slide-up">
-                        <div className="tg-form-group">
-                            <label className="tg-label">Имя / Заголовок</label>
+                    <div className="tg-section tg-slide-up">
+                        <div className="tg-form-item">
+                            <label className="tg-label">{t('tma.label_name_title')}</label>
                             <input
                                 type="text"
                                 className="tg-input"
                                 value={typeof profileBlock.name === 'string' ? profileBlock.name : (profileBlock.name as any)?.ru || ''}
                                 onChange={(e) => updateBlock(profileBlock.id, { name: e.target.value })}
+                                placeholder={t('tma.placeholder_name')}
                             />
                         </div>
-                        <div className="tg-form-group">
-                            <label className="tg-label">О себе (Bio)</label>
+                        <div className="tg-form-item">
+                            <label className="tg-label">{t('tma.label_bio')}</label>
                             <textarea
                                 className="tg-input"
-                                rows={3}
+                                style={{ minHeight: 100, paddingTop: 12 }}
                                 value={typeof profileBlock.bio === 'string' ? profileBlock.bio : (profileBlock.bio as any)?.ru || ''}
                                 onChange={(e) => updateBlock(profileBlock.id, { bio: e.target.value })}
+                                placeholder={t('tma.placeholder_bio')}
                             />
                         </div>
-                        <div className="tg-form-group">
-                            <label className="tg-label">Ссылка на фото (Avatar URL)</label>
+                        <div className="tg-form-item">
+                            <label className="tg-label">{t('tma.label_avatar_url')}</label>
                             <input
                                 type="text"
                                 className="tg-input"
                                 value={profileBlock.avatar || ''}
                                 onChange={(e) => updateBlock(profileBlock.id, { avatar: e.target.value })}
+                                placeholder="https://..."
                             />
                         </div>
                     </div>
                 )}
 
                 {activeTab === 'links' && (
-                    <div className="tg-slide-up">
+                    <div className="tg-section tg-slide-up">
                         <div className="tg-list" style={{ marginBottom: 16 }}>
                             {linkBlocks.map((link) => (
-                                <div key={link.id} className="tg-list-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                                <div key={link.id} className="tg-list-item" style={{ flexDirection: 'column', alignItems: 'stretch', padding: '12px 16px' }}>
                                     <div className="tg-list-item-row" style={{ marginBottom: 8 }}>
                                         <input
                                             type="text"
-                                            className="tg-input tg-input--small"
-                                            style={{ fontWeight: 600 }}
+                                            className="tg-input"
+                                            style={{ fontWeight: 600, border: 'none', padding: 0, height: 'auto', background: 'transparent' }}
                                             value={typeof link.title === 'string' ? link.title : (link.title as any)?.ru || ''}
                                             onChange={(e) => updateBlock(link.id, { title: e.target.value })}
+                                            placeholder={t('tma.link_title_placeholder')}
                                         />
                                         <button
                                             className="tg-icon-button"
@@ -146,42 +153,53 @@ export function PageEditorScreen() {
                                 addBlock({
                                     id: crypto.randomUUID(),
                                     type: 'link',
-                                    title: 'Новая ссылка',
+                                    title: t('tma.link_new_title'),
                                     url: 'https://',
                                 } as any);
                             }}
                         >
-                            + Добавить ссылку
+                            + {t('tma.btn_add_link')}
                         </button>
                     </div>
                 )}
 
                 {activeTab === 'qr' && (
-                    <div className="tg-slide-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 20 }}>
-                        <div style={{ background: 'white', padding: 16, borderRadius: 16, marginBottom: 16 }}>
+                    <div className="tg-section tg-slide-up" style={{ textAlign: 'center' }}>
+                        <div style={{
+                            background: '#fff',
+                            padding: 20,
+                            borderRadius: 16,
+                            display: 'inline-block',
+                            marginBottom: 20,
+                            marginTop: 10
+                        }}>
                             <QRCodeSVG
                                 value={`https://lnkmx.my/${pageData.slug}`}
-                                size={200}
-                                bgColor={"#ffffff"}
-                                fgColor={"#000000"}
-                                level={"H"}
-                                marginSize={1}
+                                size={180}
+                                level="M"
+                                includeMargin={false}
                             />
                         </div>
-                        <p className="tg-text-hint" style={{ textAlign: 'center' }}>
-                            Покажите этот код вашим клиентам для быстрого перехода на страницу.
+                        <p className="tg-text-hint" style={{ fontSize: 14, marginBottom: 20 }}>
+                            {t('tma.qr_instruction')}
                         </p>
+                        <div className="tg-form-item" style={{ textAlign: 'left' }}>
+                            <label className="tg-label">{t('tma.label_page_url')}</label>
+                            <div className="tg-input" style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>
+                                lnkmx.my/{pageData.slug}
+                            </div>
+                        </div>
+                        <button
+                            className="tg-button tg-button--secondary"
+                            onClick={() => {
+                                haptic('selection');
+                                // Copy logic...
+                            }}
+                        >
+                            {t('tma.btn_copy_link')}
+                        </button>
                     </div>
                 )}
-            </div>
-
-            <div className="tg-section" style={{ marginTop: 20 }}>
-                <div className="tg-card">
-                    <div className="tg-text-hint" style={{ fontSize: 12, marginBottom: 4 }}>Адрес вашей страницы:</div>
-                    <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--tg-theme-link-color)' }}>
-                        lnkmx.my/{pageData.slug}
-                    </div>
-                </div>
             </div>
         </div>
     );
