@@ -8,11 +8,13 @@ import Search from 'lucide-react/dist/esm/icons/search';
 import Lock from 'lucide-react/dist/esm/icons/lock';
 import Crown from 'lucide-react/dist/esm/icons/crown';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -204,6 +206,19 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const isLocked = !canUseBlock(block.tier);
     const IconComponent = getLucideIcon(block.icon);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
+    const marker = showRelevantBadge && !isLocked
+      ? {
+          icon: Sparkles,
+          label: t('recommendations.relevant', 'Актуально'),
+          className: 'bg-emerald-500 text-white',
+        }
+      : block.tier === 'pro'
+        ? {
+            icon: isLocked ? Lock : Crown,
+            label: t('pricing.pro', 'PRO'),
+            className: isLocked ? 'bg-muted text-muted-foreground' : 'bg-amber-500 text-white',
+          }
+        : null;
 
     const blockButton = (
       <button
@@ -211,7 +226,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         onClick={() => handleInsert(block.type, block.tier)}
         disabled={isLocked}
         className={cn(
-          "relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all",
+          "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
           isLocked
             ? "opacity-40 cursor-not-allowed"
             : "hover:bg-muted/50 active:scale-95"
@@ -228,26 +243,15 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           {t(block.labelKey, block.type)}
         </span>
 
-        {showRelevantBadge && !isLocked && (
-          <div className="absolute -top-1 -left-1">
+        {marker && (
+          <div className="absolute -top-2 left-2">
             <Badge
               variant="default"
-              className="text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0"
+              className={cn('border-0 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', marker.className)}
             >
-              <Sparkles className="h-2.5 w-2.5 mr-0.5" />
-              {t('recommendations.relevant', 'Актуально')}
+              <marker.icon className="mr-1 h-2.5 w-2.5" />
+              {marker.label}
             </Badge>
-          </div>
-        )}
-
-        {isLocked && (
-          <div className="absolute top-2 right-2">
-            <Lock className="h-4 w-4 text-muted-foreground" />
-          </div>
-        )}
-        {block.tier === 'pro' && !isLocked && (
-          <div className="absolute top-2 right-2">
-            <Crown className="h-4 w-4 text-amber-500" />
           </div>
         )}
       </button>
@@ -305,19 +309,11 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <SheetHeader className="px-6 pt-2 pb-5 border-b border-border/10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-              <div className="flex items-center gap-3">
-                {!isPremium && (
-                  <Badge
-                    variant={isAtBlockLimit ? 'destructive' : 'secondary'}
-                    className="text-sm px-4 py-1.5 rounded-full font-bold"
-                  >
-                    {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
-                  </Badge>
-                )}
+              <div className="flex items-center">
                 <SheetClose asChild>
                   <button
                     type="button"
-                    className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                    className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-muted transition-colors active:scale-90"
                     aria-label={t('common.close', 'Close')}
                   >
                     <X className="h-6 w-6 text-muted-foreground" />
@@ -338,6 +334,17 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
               />
             </div>
+
+            {!isPremium && (
+              <div className="mt-3">
+                <Badge
+                  variant={isAtBlockLimit ? 'destructive' : 'secondary'}
+                  className="rounded-full px-3 py-1 text-xs font-semibold"
+                >
+                  {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                </Badge>
+              </div>
+            )}
           </div>
 
           <div className="overflow-y-auto px-5 py-5" style={{ height: 'calc(100% - 180px)' }}>
@@ -349,7 +356,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {t('recommendations.title', 'Рекомендовано для вас')}
                   </h3>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                   {recommendedBlocks.map((block) => renderBlockItem(block, true))}
                 </div>
               </div>
@@ -364,7 +371,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     </h3>
                   </div>
                 )}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                   {otherBlocks.map((block) => renderBlockItem(block, false))}
                 </div>
               </div>
