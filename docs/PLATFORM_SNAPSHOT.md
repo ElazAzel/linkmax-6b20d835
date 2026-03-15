@@ -337,6 +337,7 @@ new -> contacted -> qualified -> won/lost
 
 ### AI integration (Decoupling in Progress)
 
+- **Smart-Writing 2.0 (Deterministic Algorithm)**: Expanded `writing-algorithm.ts` with niche-specific patterns for FAQ, Messenger, and Product blocks, allowing instant high-quality suggestions without AI latency.
 - AI feature sets (Generate AI buttons) are currently decoupled.
 - Temporarily bypassing Gemini generation to fallback to static layout construction, pending deployment of new internal algorithms.
 - Deep localization for EN, KK, UZ languages (100% coverage, march 15). All keys synchronized and verified for zero Russian/English placeholders in target locales.

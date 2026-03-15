@@ -6,14 +6,15 @@
 
 - **Smart-Writing 2.0 (Expansion)**
   - Added new algorithmic niches: **Beauty**, **Real Estate**, **E-commerce**.
-  - Implemented niche-specific "Magic Wand" for **Links** and **Buttons** using a deterministic algorithm (no AI latency).
-  - Integrated smart suggestions into `LinkBlockEditor` and `ButtonBlockEditor`.
+  - Implemented niche-specific "Magic Wand" for **Links**, **Buttons**, **FAQ**, **Messenger**, and **Product** blocks using a deterministic algorithm (no AI latency).
+  - Integrated smart suggestions into `LinkBlockEditor`, `ButtonBlockEditor`, `FAQBlockEditor`, `MessengerBlockEditor`, and `ProductBlockEditor`.
 - **Platform Hardening & UI Stability**
   - Resolved **Block Insertion Sheet** closure issue (race condition fix with 150ms delay).
   - Implemented **Radix UI `SheetClose`** for reliable manual closure of the insert panel.
   - Implemented RPC Fallback for `upsert_user_page` ensuring zero downtime during schema migrations (backward compatibility).
   - Fixed 406 error in Fintech wallet fetching by migrating to `maybeSingle()`.
   - Optimized PWA Manifest by resolving icon download errors (`favicon.png` substitution).
+  - Added Sentry logs filtering to exclude noise from external browser extensions (e.g., `cute-cursors.com`).
 
 ### Changed
 

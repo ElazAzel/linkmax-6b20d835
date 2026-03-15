@@ -12,6 +12,10 @@ import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import type { FAQBlock, FAQItem } from '@/types/page';
 import { createMultilingualString, getI18nText } from '@/lib/i18n-helpers';
 import { cn } from '@/lib/utils/utils';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
+import { AIButton } from '@/components/form-fields/AIButton';
+import { toast } from 'sonner';
 
 interface FAQBlockEditorProps {
   formData: Partial<FAQBlock>;
@@ -22,8 +26,30 @@ export function FAQBlockEditor({ formData, onChange }: FAQBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const currentLang = i18n.language as 'ru' | 'en' | 'kk';
+  const { pageData } = useDashboard();
+  const niche = pageData?.niche || 'general';
 
   const items = formData.items || [];
+
+  const handleMagicWandQuestion = (itemId: string) => {
+    const suggestion = getRandomSuggestion(niche, 'faq_question');
+    const item = items.find(i => i.id === itemId);
+    if (item) {
+      const currentQ = typeof item.question === 'string' ? createMultilingualString(item.question) : item.question;
+      updateItem(itemId, { question: { ...currentQ, [currentLang]: suggestion } });
+      toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+    }
+  };
+
+  const handleMagicWandAnswer = (itemId: string) => {
+    const suggestion = getRandomSuggestion(niche, 'faq_answer');
+    const item = items.find(i => i.id === itemId);
+    if (item) {
+      const currentA = typeof item.answer === 'string' ? createMultilingualString(item.answer) : item.answer;
+      updateItem(itemId, { answer: { ...currentA, [currentLang]: suggestion } });
+      toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+    }
+  };
 
   const addItem = () => {
     const newItem: FAQItem = {
@@ -117,20 +143,30 @@ export function FAQBlockEditor({ formData, onChange }: FAQBlockEditorProps) {
                 {/* Expanded view */}
                 {expandedItem === item.id && (
                   <div className="mt-4 space-y-3 border-t pt-4">
-                    <MultilingualInput
-                      label={t('blocks.faq.question', 'Вопрос')}
-                      value={typeof item.question === 'string' ? createMultilingualString(item.question) : item.question}
-                      onChange={(value) => updateItem(item.id, { question: value })}
-                      placeholder={t('blocks.faq.questionPlaceholder', 'Введите вопрос')}
-                    />
+                    <div className="relative">
+                      <MultilingualInput
+                        label={t('blocks.faq.question', 'Вопрос')}
+                        value={typeof item.question === 'string' ? createMultilingualString(item.question) : item.question}
+                        onChange={(value) => updateItem(item.id, { question: value })}
+                        placeholder={t('blocks.faq.questionPlaceholder', 'Введите вопрос')}
+                      />
+                      <div className="absolute top-0 right-0">
+                        <AIButton onClick={() => handleMagicWandQuestion(item.id)} loading={false} />
+                      </div>
+                    </div>
 
-                    <MultilingualInput
-                      label={t('blocks.faq.answer', 'Ответ')}
-                      value={typeof item.answer === 'string' ? createMultilingualString(item.answer) : item.answer}
-                      onChange={(value) => updateItem(item.id, { answer: value })}
-                      placeholder={t('blocks.faq.answerPlaceholder', 'Введите ответ')}
-                      type="textarea"
-                    />
+                    <div className="relative">
+                      <MultilingualInput
+                        label={t('blocks.faq.answer', 'Ответ')}
+                        value={typeof item.answer === 'string' ? createMultilingualString(item.answer) : item.answer}
+                        onChange={(value) => updateItem(item.id, { answer: value })}
+                        placeholder={t('blocks.faq.answerPlaceholder', 'Введите ответ')}
+                        type="textarea"
+                      />
+                      <div className="absolute top-0 right-0">
+                        <AIButton onClick={() => handleMagicWandAnswer(item.id)} loading={false} />
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>

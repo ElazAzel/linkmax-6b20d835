@@ -8,10 +8,26 @@ import { ArrayFieldItem } from '@/components/form-fields/ArrayFieldItem';
 import { useTranslation } from 'react-i18next';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual } from '@/lib/i18n-helpers';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
+import { AIButton } from '@/components/form-fields/AIButton';
+import { toast } from 'sonner';
 
 function MessengerBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'ru' | 'en' | 'kk';
+  const { pageData } = useDashboard();
+  const niche = pageData?.niche || 'general';
   const messengers = formData.messengers || [];
+
+  const handleMagicWandMessage = (index: number) => {
+    const suggestion = getRandomSuggestion(niche, 'messenger_message');
+    const updated = [...messengers];
+    const currentM = migrateToMultilingual(updated[index].message);
+    updated[index] = { ...updated[index], message: { ...currentM, [currentLang]: suggestion } };
+    onChange({ ...formData, messengers: updated });
+    toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+  };
 
   const addMessenger = () => {
     onChange({
@@ -77,13 +93,18 @@ function MessengerBlockEditorComponent({ formData, onChange }: BaseBlockEditorPr
               />
             </div>
 
-            <MultilingualInput
-              label={`${t('fields.prefilledMessage', 'Pre-filled Message')} (${t('fields.optional', 'optional')})`}
-              value={migrateToMultilingual(messenger.message)}
-              onChange={(value) => updateMessenger(index, 'message', value)}
-              type="textarea"
-              placeholder={t('fields.prefilledMessagePlaceholder', 'Hello! I have a question...')}
-            />
+            <div className="relative">
+              <MultilingualInput
+                label={`${t('fields.prefilledMessage', 'Pre-filled Message')} (${t('fields.optional', 'optional')})`}
+                value={migrateToMultilingual(messenger.message)}
+                onChange={(value) => updateMessenger(index, 'message', value)}
+                type="textarea"
+                placeholder={t('fields.prefilledMessagePlaceholder', 'Hello! I have a question...')}
+              />
+              <div className="absolute top-0 right-0">
+                <AIButton onClick={() => handleMagicWandMessage(index)} loading={false} />
+              </div>
+            </div>
           </ArrayFieldItem>
         ))}
       </ArrayFieldList>
