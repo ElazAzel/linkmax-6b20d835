@@ -126,7 +126,14 @@ export const fintechService = {
                 .select()
                 .single();
 
-            if (txError) throw txError;
+            if (txError) {
+                // PGRST205: Table not found, 42P01: Relation not found
+                if (txError.code === 'PGRST205' || txError.code === '42P01') {
+                    logger.warn('Wallet transactions table not found. Skipping transaction recording.', { data: { amount: grossAmount } });
+                    return null;
+                }
+                throw txError;
+            }
 
             return transaction as WalletTransaction;
         } catch (err) {

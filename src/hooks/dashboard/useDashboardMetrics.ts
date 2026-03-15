@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/platform/supabase/client';
+import { useAuth } from '@/hooks/user/useAuth';
 import { subDays, startOfDay, endOfDay } from 'date-fns';
 import { logger } from '@/lib/utils/logger';
 
@@ -14,6 +15,7 @@ interface MetricsSummary {
 }
 
 export function useDashboardMetrics(pageId: string | undefined) {
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState<MetricsSummary>({
     totalViews: 0,
     totalClicks: 0,
@@ -25,7 +27,7 @@ export function useDashboardMetrics(pageId: string | undefined) {
   });
 
   useEffect(() => {
-    if (!pageId) return;
+    if (!pageId || !user) return;
 
     const fetchMetrics = async () => {
       setMetrics(prev => ({ ...prev, loading: true }));
@@ -60,9 +62,13 @@ export function useDashboardMetrics(pageId: string | undefined) {
         const { count: leadsCount, error: leadsError } = await supabase
           .from('leads')
           .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id) // Ensure we filter by user_id
           .gte('created_at', thirtyDaysAgo);
 
-        if (leadsError) throw leadsError;
+        if (leadsError) {
+          // Log but don't crash if it's a minor error
+          logger.error('Error fetching leads count', leadsError);
+        }
 
         const totalLeads = leadsCount || 0;
         const conversionRate = views > 0 ? (totalLeads / views) * 100 : 0;
@@ -86,13 +92,13 @@ export function useDashboardMetrics(pageId: string | undefined) {
     fetchMetrics();
     
     // Set up real-time subscription for leads only
-    // Removed broken page_id filter as it doesn't exist in schema yet
     const subscription = supabase
       .channel('public:leads')
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'leads'
+        table: 'leads',
+        filter: `user_id=eq.${user.id}` // Added security filter
       }, () => {
         fetchMetrics();
       })
@@ -101,7 +107,7 @@ export function useDashboardMetrics(pageId: string | undefined) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [pageId]);
+  }, [pageId, user]);
 
   return metrics;
 }

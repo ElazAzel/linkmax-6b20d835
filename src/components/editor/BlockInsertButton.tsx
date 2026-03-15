@@ -14,11 +14,11 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
 } from '@/components/ui/sheet';
 import {
   Tooltip,
@@ -294,16 +294,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     if (reasonTooltip && !isMobile) {
       return (
-        <TooltipProvider key={block.type}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              {blockButton}
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="max-w-[200px]">
-              <p className="text-xs">{reasonTooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {blockButton}
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="max-w-[200px]">
+            <p className="text-xs">{reasonTooltip}</p>
+          </TooltipContent>
+        </Tooltip>
       );
     }
 
@@ -395,7 +393,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                   </h3>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                  {recommendedBlocks.map((block) => renderBlockItem(block, true))}
+                  <TooltipProvider delayDuration={300}>
+                    {recommendedBlocks.map((block) => renderBlockItem(block, true))}
+                  </TooltipProvider>
                 </div>
               </div>
             )}
@@ -410,7 +410,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                   </div>
                 )}
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                  {otherBlocks.map((block) => renderBlockItem(block, false))}
+                  <TooltipProvider delayDuration={300}>
+                    {otherBlocks.map((block) => renderBlockItem(block, false))}
+                  </TooltipProvider>
                 </div>
               </div>
             )}

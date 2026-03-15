@@ -121,11 +121,15 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
         // Google Analytics 4
         if (integrations.ga4_id) {
             window.dataLayer = window.dataLayer || [];
-            const gtag: GTag = function (...args: unknown[]) { window.dataLayer.push(args); }
-            window.gtag = gtag;
+            if (!window.gtag) {
+                window.gtag = function (...args: unknown[]) { 
+                  window.dataLayer.push(args); 
+                } as GTag;
+            }
+            
+            const gtag = window.gtag;
 
             // Initialize Consent Mode v2 BEFORE loading the script
-            // Default to denied for storage unless already consented
             const hasConsent = hasThirdPartyConsent();
             const consentValue = hasConsent ? 'granted' : 'denied';
 
@@ -134,17 +138,23 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
                 'ad_user_data': consentValue,
                 'ad_personalization': consentValue,
                 'analytics_storage': consentValue,
-                'wait_for_update': 500 // Allow some time for consent update
+                'wait_for_update': 500
             });
 
             gtag('js', new Date());
-            gtag('config', integrations.ga4_id);
+            gtag('config', integrations.ga4_id, {
+                send_page_view: false // Manual tracking on route change
+            });
 
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = `https://www.googletagmanager.com/gtag/js?id=${integrations.ga4_id}`;
-            const firstScript = document.getElementsByTagName('script')[0];
-            firstScript.parentNode?.insertBefore(script, firstScript);
+            // Prevent multiple script injections
+            const existingScript = document.querySelector(`script[src*="gtag/js?id=${integrations.ga4_id}"]`);
+            if (!existingScript) {
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${integrations.ga4_id}`;
+                const firstScript = document.getElementsByTagName('script')[0];
+                firstScript.parentNode?.insertBefore(script, firstScript);
+            }
         }
         // Yandex Metrika
         if (integrations.yandex_metrika) {
