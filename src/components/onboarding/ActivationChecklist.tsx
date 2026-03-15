@@ -22,6 +22,7 @@ interface ActivationChecklistProps {
   progress: number;
   canDismiss: boolean;
   onDismiss: () => void;
+  onStepClick: (step: ActivationStep) => void;
 }
 
 export const ActivationChecklist = memo(function ActivationChecklist({
@@ -31,6 +32,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
   progress,
   canDismiss,
   onDismiss,
+  onStepClick,
 }: ActivationChecklistProps) {
   const { t } = useTranslation();
 
@@ -71,7 +73,13 @@ export const ActivationChecklist = memo(function ActivationChecklist({
         {steps.map((step) => (
           <button
             key={step.id}
-            onClick={step.completed ? undefined : step.action}
+            onClick={() => {
+              if (step.completed) return;
+              onStepClick(step);
+              if (step.action) {
+                step.action();
+              }
+            }}
             disabled={step.completed}
             className={cn(
               "flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl transition-colors text-sm",
@@ -88,7 +96,7 @@ export const ActivationChecklist = memo(function ActivationChecklist({
               <Circle className="h-5 w-5 text-muted-foreground/40 shrink-0" />
             )}
             <span className={cn(step.completed && "line-through")}>
-              {t(step.labelKey)}
+              {t(step.labelKey, step.id === 'add-block' ? 'Добавить блок' : step.id === 'first-lead' ? 'Получить первый лид' : step.id === 'create-page' ? 'Создать страницу' : 'Опубликовать')}
             </span>
           </button>
         ))}

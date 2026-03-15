@@ -185,6 +185,8 @@ function DashboardV2Inner() {
     return 'home';
   }, [searchParams, location.pathname]);
 
+  const activationAction = searchParams.get('action');
+
   // UI State
   const [migrationKey, setMigrationKey] = useState(0);
   const [templateGalleryOpen, setTemplateGalleryOpen] = useState(false);
@@ -353,6 +355,25 @@ function DashboardV2Inner() {
     setCommandPaletteOpen,
   }), [dashboard, selectedBlockId, commandPaletteOpen, editorHistory, setSelectedBlockId, setCommandPaletteOpen, setTemplateGalleryOpen]);
 
+  useEffect(() => {
+    if (!activationAction) return;
+
+    if (activationAction === 'create' && currentTab === 'pages') {
+      setShowCreatePage(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete('action');
+      setSearchParams(next, { replace: true });
+      return;
+    }
+
+    if (activationAction === 'add-block' && currentTab === 'editor') {
+      setCommandPaletteOpen(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete('action');
+      setSearchParams(next, { replace: true });
+    }
+  }, [activationAction, currentTab, searchParams, setSearchParams, setCommandPaletteOpen]);
+
   // Loading state
   if (dashboard.loading || multiPage.loading) {
     return <LoadingState />;
@@ -487,6 +508,7 @@ function DashboardV2Inner() {
                   onUndo={editorHistory.undo}
                   onRedo={editorHistory.redo}
                   onOpenVersions={() => setShowVersions(true)}
+                  deepLinkAction={activationAction}
                 />
               </ScreenErrorBoundary>
             )}

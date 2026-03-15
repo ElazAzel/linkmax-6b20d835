@@ -5,6 +5,7 @@
  */
 import { memo, useCallback, useState, useMemo, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import Eye from 'lucide-react/dist/esm/icons/eye';
 import Share2 from 'lucide-react/dist/esm/icons/share-2';
 import Sparkles from 'lucide-react/dist/esm/icons/sparkles';
@@ -22,6 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '../layout/DashboardHeader';
 import { LoadingSkeleton } from '../common/LoadingSkeleton';
 import { cn } from '@/lib/utils/utils';
+import { storage } from '@/lib/storage';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
 import { useEditorStore } from '@/store/useEditorStore';
@@ -66,6 +68,7 @@ interface EditorScreenProps {
   onRedo?: () => void;
   // Versions
   onOpenVersions?: () => void;
+  deepLinkAction?: string | null;
 }
 
 export const EditorScreen = memo(function EditorScreen({
@@ -89,10 +92,12 @@ export const EditorScreen = memo(function EditorScreen({
   onUndo,
   onRedo,
   onOpenVersions,
+  deepLinkAction,
 }: EditorScreenProps) {
   const { t } = useTranslation();
   const [dismissedHint, setDismissedHint] = useState<string | null>(null);
   const [structureOpen, setStructureOpen] = useState(false);
+  const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
 
   // P5: Store state for sections & review
   const {
@@ -213,6 +218,45 @@ export const EditorScreen = memo(function EditorScreen({
       setReviewMode('problematic');
     }
   }, [frictionSignal, acceptFriction, setReviewMode]);
+
+  const contextualTips = useMemo(() => {
+    const tips = [
+      {
+        id: 'add-block',
+        title: t('editor.contextTips.addBlock.title', 'Добавьте первый блок с оффером'),
+        description: t('editor.contextTips.addBlock.desc', 'Откройте палитру команд и выберите блок «Кнопка», «Товар» или «Форма».'),
+        actionLabel: t('editor.contextTips.addBlock.action', 'Открыть палитру'),
+        onAction: () => onOpenTemplates(),
+      },
+      {
+        id: 'publish',
+        title: t('editor.contextTips.publish.title', 'Опубликуйте страницу'),
+        description: t('editor.contextTips.publish.desc', 'После публикации ссылка станет доступна клиентам.'),
+        actionLabel: t('editor.contextTips.publish.action', 'Опубликовать'),
+        onAction: () => onShare(),
+      },
+      {
+        id: 'first-lead',
+        title: t('editor.contextTips.firstLead.title', 'Поставьте ловушку на первый лид'),
+        description: t('editor.contextTips.firstLead.desc', 'Добавьте форму или кнопку контакта, чтобы собирать обращения.'),
+        actionLabel: t('editor.contextTips.firstLead.action', 'Перейти в активность'),
+        href: '/dashboard/activity?action=first-lead',
+      },
+    ];
+
+    return tips.filter((tip) => !disabledTips.includes(tip.id));
+  }, [disabledTips, onOpenTemplates, onShare, t]);
+
+  const primaryTip = useMemo(() => {
+    if (!deepLinkAction) return contextualTips[0];
+    return contextualTips.find((tip) => tip.id === deepLinkAction) || contextualTips[0];
+  }, [contextualTips, deepLinkAction]);
+
+  const dismissTip = useCallback((tipId: string) => {
+    const next = [...disabledTips, tipId];
+    setDisabledTips(next);
+    storage.set('editor_context_tips_disabled', next);
+  }, [disabledTips]);
 
   if (loading || !pageData) {
     return <LoadingSkeleton />;
@@ -406,6 +450,26 @@ export const EditorScreen = memo(function EditorScreen({
             className="p-0.5 rounded hover:bg-muted shrink-0"
           >
             <X className="h-3 w-3 text-muted-foreground" />
+          </button>
+        </div>
+      )}
+
+      {primaryTip && (
+        <div className="mx-4 mt-2 flex items-start gap-3 rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+          <Lightbulb className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-semibold">{primaryTip.title}</p>
+            <p className="text-xs text-muted-foreground mt-1">{primaryTip.description}</p>
+            <div className="mt-2">
+              {primaryTip.href ? (
+                <Link to={primaryTip.href} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</Link>
+              ) : (
+                <button onClick={primaryTip.onAction} className="text-xs font-semibold text-primary hover:underline">{primaryTip.actionLabel}</button>
+              )}
+            </div>
+          </div>
+          <button onClick={() => dismissTip(primaryTip.id)} className="p-1 rounded hover:bg-white/10">
+            <X className="h-3.5 w-3.5 text-muted-foreground" />
           </button>
         </div>
       )}
