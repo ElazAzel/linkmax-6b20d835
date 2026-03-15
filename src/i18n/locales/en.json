@@ -3701,78 +3701,9 @@
     "section": "Section"
   },
   "crm": {
-    "title": "CRM",
-    "description": "Manage leads and interactions",
-    "leads": "Leads",
-    "bookings": "Posts",
-    "analytics": "Analytics",
-    "premiumRequired": "Premium feature",
-    "leadLimit": {
-      "used": "{{used}} of {{max}} submissions this month",
-      "warning": "{{remaining}} submissions remaining",
-      "reached": "Submission limit reached",
-      "upgrade": "Remove limit →"
-    },
-    "premiumDescription": "Upgrade to Premium for CRM access and lead tracking",
-    "noLeadsToExport": "No leads to export",
-    "exportSuccess": "Leads exported",
-    "allSources": "All",
-    "searchPlaceholder": "Search...",
-    "export": "CSV export",
-    "noResults": "No leads found",
-    "noLeads": "No leads yet. Add the first one!",
-    "contactInfo": "Contact information",
-    "formData": "Form data",
-    "addLead": "Add a lead",
-    "status": {
-      "label": "Status",
-      "new": "New",
-      "contacted": "Contacted",
-      "qualified": "Qualified",
-      "converted": "Converted",
-      "lost": "Lost",
-      "": ""
-    },
-    "source": "Source",
-    "addLeadDescription": "Fill in the form to add a new lead to your CRM",
-    "namePlaceholder": "Client name",
-    "phone": "Phone",
-    "notes": "Notes",
-    "notesPlaceholder": "Additional notes about this lead...",
-    "addInteraction": "Add Interaction",
-    "interactionPlaceholder": "What happened?",
-    "history": "History",
-    "noInteractions": "No interactions yet",
-    "deleteLead": "Delete Lead",
-    "confirmDelete": "Delete this lead?",
-    "deleteWarning": "This action cannot be undone. All interactions will also be deleted.",
-    "openPanel": "Open CRM",
-    "upgradeToPremium": "Get Premium",
-    "responseTime": {
-      "justNow": "just now",
-      "minutesAgo": "{{count}} min ago",
-      "hoursAgo": "{{count}}h ago — reply!",
-      "missed": "missed"
-    },
-    "quickReply": {
-      "template": "Hello, {{name}}! Thanks for your request. How can I help?",
-      "call": "Call",
-      "done": "Done"
-    },
-    "bookingStatus": {
-      "pending": "Pending",
-      "confirmed": "Confirmed",
-      "completed": "Completed"
-    },
-    "booking": {
-      "confirm": "Confirm",
-      "cancel": "Decline"
-    },
-    "aging": {
-      "stale": "Getting cold",
-      "missed": "Missed",
-      "needsFollowup": "Needs follow-up"
-    }
+    "createLead": "Create Lead",
+    "createDeal": "Create Deal",
+    "createInvoice": "Create Invoice"
   },
   "pagination": {
     "previous": "Back",
@@ -5036,35 +4967,7 @@
     "enterText": "Enter your text..."
   },
   "automations": {
-    "saved": "Automation retained",
-    "saveError": "Failed to save automation",
-    "followUp": {
-      "title": "Reminder (Follow-up)",
-      "description": "Send a reminder if the client is not active"
-    },
-    "timeClarification": {
-      "title": "Time clarification",
-      "description": "Offer to select a time slot"
-    },
-    "reviewRequest": {
-      "title": "Request Feedback",
-      "description": "Ask for feedback after the transaction is completed"
-    },
-    "title": "Smart automation",
-    "premiumRequired": "Upgrade to Pro to Use Automations",
-    "unlockPremium": "Available in Pro",
-    "subtitle": "Auto-reminders via Telegram",
-    "triggerAfter": "Launch via",
-    "hours": "hours",
-    "messageTemplate": "Message template",
-    "variables": "Use {lead_name}, {owner_name} for personalization",
-    "saveSettings": "Save settings",
-    "telegramNote": "Reminders arrive in your Telegram",
-    "tabs": {
-      "telegram": "",
-      "templates": "",
-      "sequences": ""
-    }
+    "startSequence": "Manage Sequences"
   },
   "aiBuilder": {
     "description": "Create a page using AI",
@@ -6600,8 +6503,16 @@
     "nav_tasks": ""
   },
   "search": {
-    "placeholder": "",
-    "noResults": ""
+    "placeholder": "Search or command...",
+    "noResults": "No results found.",
+    "groups": {
+      "page": "Pages",
+      "contact": "Contacts",
+      "deal": "Deals",
+      "task": "Tasks",
+      "quickActions": "Quick Actions",
+      "navigation": "Navigation"
+    }
   },
   "sequences": {
     "enterName": "",
@@ -6621,5 +6532,10 @@
     "delayHours": "",
     "addStep": "",
     "empty": ""
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "insights": "Insights",
+    "settings": "Settings"
   }
 }
