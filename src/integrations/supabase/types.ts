@@ -1808,6 +1808,13 @@ export type Database = {
             foreignKeyName: "team_members_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
+            referencedRelation: "public_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
@@ -3695,6 +3702,48 @@ export type Database = {
           title?: string | null
           updated_at?: string | null
           view_count?: number | null
+        }
+        Relationships: []
+      }
+      public_teams: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          invite_code: string | null
+          is_public: boolean | null
+          name: string | null
+          niche: string | null
+          owner_id: string | null
+          slug: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          invite_code?: never
+          is_public?: boolean | null
+          name?: string | null
+          niche?: string | null
+          owner_id?: string | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          invite_code?: never
+          is_public?: boolean | null
+          name?: string | null
+          niche?: string | null
+          owner_id?: string | null
+          slug?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
