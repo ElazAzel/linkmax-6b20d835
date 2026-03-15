@@ -37,7 +37,8 @@ if (SENTRY_DSN) {
                 return null;
             }
             // Ignore noise from cute-cursors browser extension
-            if (JSON.stringify(event).includes('solomon.cute-cursors.com')) {
+            const eventString = JSON.stringify(event);
+            if (eventString.includes('cute-cursors') || eventString.includes('solomon.cute-cursors.com')) {
                 return null;
             }
             return event;

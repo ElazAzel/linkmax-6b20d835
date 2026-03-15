@@ -144,7 +144,7 @@ export const fintechService = {
 
             // Gracefully handle missing table (feature not launched yet)
             if (walletError) {
-                if (walletError.code === 'PGRST205' || walletError.code === '42P01') {
+                if (walletError.code === 'PGRST205' || walletError.code === '42P01' || walletError.status === 404) {
                     return { wallet: null, transactions: [], pendingGMV: 0 };
                 }
                 throw walletError;

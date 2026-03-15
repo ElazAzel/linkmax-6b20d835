@@ -120,16 +120,31 @@ export function TrackingScripts({ integrations, pageId }: TrackingScriptsProps) 
 
         // Google Analytics 4
         if (integrations.ga4_id) {
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = `https://www.googletagmanager.com/gtag/js?id=${integrations.ga4_id}`;
-            document.head.appendChild(script);
-
             window.dataLayer = window.dataLayer || [];
             const gtag: GTag = function (...args: unknown[]) { window.dataLayer.push(args); }
             window.gtag = gtag;
+
+            // Initialize Consent Mode v2 BEFORE loading the script
+            // Default to denied for storage unless already consented
+            const hasConsent = hasThirdPartyConsent();
+            const consentValue = hasConsent ? 'granted' : 'denied';
+
+            gtag('consent', 'default', {
+                'ad_storage': consentValue,
+                'ad_user_data': consentValue,
+                'ad_personalization': consentValue,
+                'analytics_storage': consentValue,
+                'wait_for_update': 500 // Allow some time for consent update
+            });
+
             gtag('js', new Date());
             gtag('config', integrations.ga4_id);
+
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${integrations.ga4_id}`;
+            const firstScript = document.getElementsByTagName('script')[0];
+            firstScript.parentNode?.insertBefore(script, firstScript);
         }
         // Yandex Metrika
         if (integrations.yandex_metrika) {

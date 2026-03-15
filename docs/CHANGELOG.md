@@ -14,7 +14,8 @@
   - Implemented RPC Fallback for `upsert_user_page` ensuring zero downtime during schema migrations (backward compatibility).
   - Fixed 406 error in Fintech wallet fetching by migrating to `maybeSingle()`.
   - Optimized PWA Manifest by resolving icon download errors (`favicon.png` substitution).
-  - Added Sentry logs filtering to exclude noise from external browser extensions (e.g., `cute-cursors.com`).
+  - **Analytics & Tracking**: Implemented **Google Consent Mode v2** initialization in `TrackingScripts.tsx` to resolve sequencing errors.
+  - **Observability**: Enhanced **Sentry noise filtering** to completely suppress external errors from the `cute-cursors` browser extension.
 
 ### Changed
 
