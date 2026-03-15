@@ -17,6 +17,7 @@ import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SkeletonGalleryGrid } from '@/components/ui/skeleton-card';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
@@ -343,17 +344,13 @@ export default function Gallery() {
             {/* Grid */}
             <div className="px-4 pb-20">
               {loading ? (
-                <SkeletonGalleryGrid />
+                <LoadingState skeleton={<SkeletonGalleryGrid />} />
               ) : filteredPages.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="w-14 h-14 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <h3 className="font-semibold mb-1">{t('gallery.noPages', 'Страниц не найдено')}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
-                  </p>
-                </div>
+                <EmptyState
+                  icon={Users}
+                  title={t('gallery.noPages', 'Страниц не найдено')}
+                  description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
+                />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                   {filteredPages.map((page) => (

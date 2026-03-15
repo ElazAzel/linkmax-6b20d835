@@ -19,6 +19,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -206,28 +207,15 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 {/* Lead List */}
                 <div className="space-y-4 pb-24">
                     {loading ? (
-                        <div className="grid grid-cols-1 gap-4">
-                            {[1, 2, 3].map(i => (
-                                <Card key={i} className="p-8 glass border-white/10 animate-pulse rounded-[2rem]">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-white/10 rounded-2xl" />
-                                        <div className="flex-1 space-y-2">
-                                            <div className="h-4 bg-white/10 rounded w-1/3" />
-                                            <div className="h-3 bg-white/10 rounded w-1/4" />
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
+                        <LoadingState message={t('messages.loading', 'Loading...')} />
                     ) : filteredLeads.length === 0 ? (
-                        <Card className="p-12 text-center glass border-white/10 shadow-glass rounded-[2.5rem]">
-                            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10">
-                                <Inbox className="h-10 w-10 text-muted-foreground opacity-30" />
-                            </div>
-                            <h3 className="text-xl font-black mb-2">{t('dashboard.leads.emptyTitle', 'Пока нет лидов')}</h3>
-                            <p className="text-sm text-muted-foreground px-4 font-medium leading-relaxed">
-                                {t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
-                            </p>
+                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
+                            <EmptyState
+                                icon={Inbox}
+                                title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
+                                description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
+                                className="py-12"
+                            />
                         </Card>
                     ) : (
                         filteredLeads.map((lead) => {

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
+import { EmptyState, LoadingState } from '@/components/ui/states';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Search from 'lucide-react/dist/esm/icons/search';
 import Download from 'lucide-react/dist/esm/icons/download';
@@ -22,7 +23,6 @@ import Ticket from 'lucide-react/dist/esm/icons/ticket';
 import Check from 'lucide-react/dist/esm/icons/check';
 import X from 'lucide-react/dist/esm/icons/x';
 import Clock from 'lucide-react/dist/esm/icons/clock';
-import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
@@ -156,11 +156,7 @@ export function EventRegistrationsList({
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
@@ -223,10 +219,11 @@ export function EventRegistrationsList({
       {/* Registrations List */}
       <ScrollArea className="flex-1">
         {filteredRegistrations.length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground">
-            <User className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="text-sm">{t('events.noRegistrations', 'Нет регистраций')}</p>
-          </div>
+          <EmptyState
+            icon={User}
+            title={t('events.noRegistrations', 'Нет регистраций')}
+            className="py-12"
+          />
         ) : (
           <div className="divide-y">
             {filteredRegistrations.map((reg) => {
