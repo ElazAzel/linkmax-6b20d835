@@ -53,11 +53,13 @@ export const BookingCard = memo(function BookingCard({
     }
   })();
 
+  const RootElement = onClick ? 'button' : 'div';
+
   return (
-    <div
-      onClick={onClick}
+    <RootElement
+      {...(onClick ? { type: 'button', onClick } : {})}
       className={cn(
-        'p-4 rounded-2xl glass-card border-white/10 transition-all duration-300',
+        'p-4 rounded-2xl glass-card border-white/10 transition-all duration-300 w-full text-left',
         isPending && 'border-amber-500/30 ring-1 ring-amber-500/20',
         onClick && 'cursor-pointer hover:bg-primary/5 active:scale-[0.98]',
       )}
@@ -122,6 +124,6 @@ export const BookingCard = memo(function BookingCard({
           )}
         </div>
       </div>
-    </div>
+    </RootElement>
   );
 });

@@ -27,7 +27,8 @@ export function FramePreview({ frameStyle, size = 'small', selected, onClick, av
   return (
     <>
       <style>{FRAME_CSS}</style>
-      <div
+      <button
+        type="button"
         onClick={onClick}
         className={cn(
           'rounded-full cursor-pointer transition-all duration-200 hover:scale-105',
@@ -37,6 +38,8 @@ export function FramePreview({ frameStyle, size = 'small', selected, onClick, av
           isAnimated && 'animate-pulse-slow'
         )}
         style={frameStyles}
+        aria-pressed={selected}
+        aria-label={`Select frame ${frameStyle}`}
       >
         <Avatar className={cn(sizes.avatar, isGradient && 'p-0')}>
           <AvatarImage 
@@ -48,7 +51,7 @@ export function FramePreview({ frameStyle, size = 'small', selected, onClick, av
             AB
           </AvatarFallback>
         </Avatar>
-      </div>
+      </button>
     </>
   );
 }
