@@ -235,6 +235,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           }
         }}
         disabled={isLocked}
+        data-testid={`add-block-option-${block.type}`}
         aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
         className={cn(
           "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
@@ -329,6 +330,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               : "h-14 w-14 rounded-2xl"
           )}
           data-onboarding="add-block"
+          data-testid="add-block-trigger"
         >
           <Plus className={isMobile ? "h-9 w-9" : "h-7 w-7"} strokeWidth={2.5} />
         </Button>
@@ -340,6 +342,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         <SheetContent
           side="bottom"
           hideCloseButton
+          data-testid="add-block-sheet"
+          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none"
           className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
         >
           <div className="flex-1 overflow-y-auto">
@@ -351,6 +355,20 @@ export const BlockInsertButton = memo(function BlockInsertButton({
           <SheetHeader className="px-6 pt-2 pb-5 border-b border-border/10">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
+              <div className="flex items-center gap-3">
+                {!isPremium && (
+                  <Badge
+                    variant={isAtBlockLimit ? 'destructive' : 'secondary'}
+                    className="text-sm px-4 py-1.5 rounded-full font-bold"
+                  >
+                    {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                  </Badge>
+                )}
+                <SheetClose asChild>
+                  <button
+                    type="button"
+                    data-testid="add-block-sheet-close"
+                    className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
               <div className="flex items-center">
                 <SheetClose asChild>
                   <button
@@ -370,6 +388,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             <div className="relative">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
               <Input
+                data-testid="add-block-search"
                 placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
