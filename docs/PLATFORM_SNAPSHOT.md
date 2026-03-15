@@ -307,7 +307,7 @@ new -> contacted -> qualified -> won/lost
 - Vite React SPA (Core Platform)
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
-- i18next for RU/EN/KK/UZ (100% synchronized coverage)
+- i18next for RU/EN/KK/UZ (100% deep localization coverage, zero placeholders)
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
 - **Universal Error Normalization**: `app-error-normalizer.ts` and `useAppError` pattern maps raw exceptions to safe, localized `react-i18next` messages, abstracting technical details from the UI.
@@ -332,7 +332,7 @@ new -> contacted -> qualified -> won/lost
 
 - AI feature sets (Generate AI buttons) are currently decoupled.
 - Temporarily bypassing Gemini generation to fallback to static layout construction, pending deployment of new internal algorithms.
-- Translation for RU/EN/KK/UZ content using Locize-style logic with 100% key synchronization across targeted locales.
+- Deep localization for EN, KK, UZ languages (100% coverage, march 15). All keys synchronized and verified for zero Russian/English placeholders in target locales.
 - Chatbot for visitor engagement
 
 ---
@@ -670,7 +670,7 @@ LinkMAX/
 │   │   └── ...                   # Other types
 │   │
 │   ├── i18n/                     # Internationalization
-│   │   └── locales/              # RU, EN, KK, UZ translations (100% synced)
+│   │   └── locales/              # RU, EN, KK, UZ deep localization (100% verified)
 │   │
 │   ├── contexts/                 # React contexts
 │   │

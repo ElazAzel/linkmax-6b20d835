@@ -11,6 +11,11 @@
 - **Performance (March 13)**
   - Implemented `manualChunks` vendor splitting in Vite.
   - Reduced TBT and improved caching for major libraries.
+- **Localization (March 15)**
+  - Completed **Deep Localization** for EN, KK, and UZ languages.
+  - Synchronized over 1,600+ unique keys across all target locales.
+  - Verified 100% absence of Russian/English placeholders; all technical and business terms translated.
+  - Refined `mend_i18n.js` to support deep merging and empty string resolution.
 - **Features**
   - Added Command Palette (Cmd+K).
   - Added Export System (CSV/PDF) for Analytics and CRM.

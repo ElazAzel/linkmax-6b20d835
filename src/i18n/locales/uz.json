@@ -134,17 +134,17 @@
     "configuring": "Configuring",
     "verify": "Verify",
     "guide": "Guide",
-    "coming_soon": "Скоро",
+    "coming_soon": "Yaqinda",
     "details": "Info",
     "actions": "Status Actions",
     "unknownUser": "Unknown",
-    "allTime": "Всё время",
-    "quantity": "Количество",
-    "amount": "Сумма",
-    "untitled": "Без названия",
-    "name": "Имя",
-    "status": "Статус",
-    "date": "Дата"
+    "allTime": "Barcha vaqt",
+    "quantity": "Soni",
+    "amount": "Summa",
+    "untitled": "Nomsiz",
+    "name": "Ism",
+    "status": "Holat",
+    "date": "Sana"
   },
   "fields": {
     "name": "Ism",
@@ -365,7 +365,7 @@
     "enterPlaceholder": "Kirish",
     "submitting": "Yuborilmoqda...",
     "limitReached": {
-      "customer": "Форма временно недоступна."
+      "customer": "Shakl vaqtincha foydalanish imkonsiz."
     }
   },
   "newsletter": {
@@ -695,7 +695,7 @@
       "cannotUnlinkLast": "Siz kamida bitta kirish usulini qoldirishingiz kerak",
       "linkFailedReason": "Failed to link account: {{reason}}",
       "identityNotFound": "Identity not found or already unlinked",
-      "primaryIdentity": "Основной метод входа отвязать нельзя. В настройках Supabase также должно быть включено Manual Linking."
+      "primaryIdentity": "Asosiy kirish usulini uzib bo'lmaydi. Supabase sozlamalarida Manual Linking ham yoqilgan bo'lishi kerak."
     },
     "integrations": {
       "title": "Integratsiya va tahlil",
@@ -710,14 +710,14 @@
       "ttHint": "TikTok reklamalari → Aktivlar → Voqealar → Piksel kodi",
       "ga4Hint": "GA4 → Admin → Maʼlumotlar oqimi → Oʻlchov identifikatori",
       "yandexHint": "Metrika → Parametrlar → Hisoblagich raqami",
-      "gcalConnected": "Google Calendar успешно подключён!",
-      "gcalFailed": "Ошибка подключения Google Calendar: {{reason}}",
-      "gcalNotConfigured": "Google Calendar не настроен на сервере",
-      "gcalRedirecting": "Перенаправление в Google...",
-      "gcalDisconnectFailed": "Ошибка отключения Google Calendar",
-      "gcalDisconnected": "Google Calendar отключен",
-      "active": "Активно",
-      "gcalDesc": "Синхронизация бронирований с календарем"
+      "gcalConnected": "Google Calendar muvaffaqiyatli ulandi!",
+      "gcalFailed": "Google Calendar ulanish xatosi: {{reason}}",
+      "gcalNotConfigured": "Google Calendar serverda sozlanmagan",
+      "gcalRedirecting": "Google-ga yo'naltirilmoqda...",
+      "gcalDisconnectFailed": "Google Calendar-ni o'chirishda xatolik",
+      "gcalDisconnected": "Google Calendar o'chirildi",
+      "active": "Faol",
+      "gcalDesc": "Band qilishlarni kalendar bilan sinxronlash"
     },
     "pageBackground": "Sahifa foni",
     "backgroundType": "Fon turi",
@@ -845,72 +845,72 @@
       "bookingSlot": "Mavjud"
     },
     "testimonials": {
-      "title": "Нас любят",
+      "title": "Bizni sevishadi",
       "count": "2 000+",
-      "suffix": "креаторов",
-      "subtitle": "Эксперты, коучи и малый бизнес доверяют LinkMAX.",
-      "role1": "Фитнес-тренер",
-      "review1": "Я создал страницу за 3 минуты прямо в зале. Первый клиент пришёл через час. AI реально понимает.",
-      "role2": "Цифровой художник",
-      "review2": "Эстетика на другом уровне. Это не выглядит как обычный link-in-bio. Выглядит как кастомный сайт.",
-      "role3": "Владелец бизнеса",
-      "review3": "Заявки в Telegram изменили мой рабочий процесс. Больше не проверяю почту. Закрываю сделки в чате.",
-      "role4": "Владелица салона красоты",
-      "review4": "Мои клиенты в восторге от записи. А я люблю CRM. Наконец-то знаю, откуда приходит трафик."
+      "suffix": "kreatorlar",
+      "subtitle": "Ekspertlar, coach-lar va kichik biznes LinkMAX-ga ishonishadi.",
+      "role1": "Fitnes-trener",
+      "review1": "Men sahifani zalda 3 daqiqada yaratdim. Birinchi mijoz bir soatdan keyin keldi. AI haqiqatan ham tushunadi.",
+      "role2": "Raqamli rassom",
+      "review2": "Estetika boshqa darajada. Bu oddiy link-in-bio-ga o'xshamaydi. Maxsus sayt kabi ko'rinadi.",
+      "role3": "Biznes egasi",
+      "review3": "Telegram-dagi arizalar ish jarayonimni o'zgartirdi. Endi pochtani tekshirmayman. Bitimlarni chatda yopaman.",
+      "role4": "Go'zallik saloni egasi",
+      "review4": "Mening mijozlarim yozilishdan xursand. Men esa CRM-ni yaxshi ko'raman. Nihoyat trafik qayerdan kelayotganini bilaman."
     },
     "pricing": {
       "title": "Tariflar",
-      "titleHighlight": "экспоненциальный рост",
+      "titleHighlight": "eksponentsial o'sish",
       "subtitle": "Bepul boshlang va ko'proq kerak bo'lganda yangilang",
-      "monthly": "Ежемесячно",
-      "yearly": "Ежегодно",
+      "monthly": "Har oy",
+      "yearly": "Har yili",
       "save": "-30%",
-      "popular": "ПОПУЛЯРНЫЙ",
+      "popular": "OMMABOP",
       "proName": "Pro",
       "aiPowered": "AI Powered",
-      "perMonth": "мес",
-      "billedYearly": "Оплата {{price}} в год",
-      "f1": "Все блоки без ограничений",
-      "f2": "Онлайн-запись и мини-CRM",
-      "f3": "Мгновенные заявки в Telegram",
-      "f4": "Продажа товаров и билетов",
-      "f5": "Встроенный QR-сканер",
-      "f6": "Продвинутая аналитика и отчёты",
-      "proCta": "Попробовать Pro",
-      "freeCta": "Начать бесплатно",
-      "newBadge": "НОВИНКА",
+      "perMonth": "oy",
+      "billedYearly": "Yiliga {{price}} to'lov",
+      "f1": "Barcha bloklar cheklovlarsiz",
+      "f2": "Onlayn yozilish va mini-CRM",
+      "f3": "Telegram-ga bir lahzalik arizalar",
+      "f4": "Tovarlar va chiptalar sotuvi",
+      "f5": "O'rnatilgan QR-skaner",
+      "f6": "Kengaytirilgan tahlil va hisobotlar",
+      "proCta": "Pro-ni sinab ko'ring",
+      "freeCta": "Bepul boshlang",
+      "newBadge": "YANGILIK",
       "businessName": "Business",
-      "teamLabel": "Команда",
-      "businessCta": "Подключить Business",
-      "b1": "Всё из Pro, плюс:",
-      "b2": "Бизнес-зоны (рабочие пространства)",
-      "b3": "Командная CRM и Kanban",
-      "b4": "Командный чат и задачи",
-      "b5": "Роли и разграничение доступа",
-      "b6": "До 5 участников команды",
+      "teamLabel": "Jamoa",
+      "businessCta": "Business-ni ulash",
+      "b1": "Pro-dagi hamma narsa va yana:",
+      "b2": "Biznes-zonalar (ish joylari)",
+      "b3": "Jamoaviy CRM va Kanban",
+      "b4": "Jamoaviy chat va vazifalar",
+      "b5": "Rollar va kirishni cheklash",
+      "b6": "Jamoada 5 tagacha ishtirokchi",
       "month": "oylar",
       "total": "Jami",
       "billedOnce": "bir marta"
     },
     "demo": {
       "title": "Sehrni his eting.",
-      "step1Title": "Выберите свою нишу",
-      "step1Desc": "Расскажите ИИ, чем вы занимаетесь. Красота, крипто, коучинг — мы говорим на вашем языке.",
-      "step2Title": "ИИ строит всё",
-      "step2Desc": "Структура, текст и дизайн за секунды. Никакого drag-and-drop.",
-      "step3Title": "Получайте лиды в Telegram",
-      "step3Desc": "Ваша страница запущена. Лиды идут прямо в ЛС. Закрывайте сделки мгновенно.",
-      "iAmA": "Я...",
-      "nicheCreator": "Цифровой креатор",
-      "nicheFitness": "Фитнес-тренер",
-      "nicheCrypto": "Криптоэксперт",
-      "nicheBeauty": "Бьюти-блогер",
-      "nicheMusic": "Музыкальный продюсер",
-      "nicheTutor": "Онлайн-репетитор",
-      "aiGenerating": "ИИ генерирует...",
-      "chatMsg1": "Привет, хочу записаться на консультацию!",
-      "chatMsg2": "Отлично! Давайте запланируем.",
-      "leadCaptured": "Новый лид получен",
+      "step1Title": "O'z yo'nalishingizni tanlang",
+      "step1Desc": "AI-ga nima bilan shug'ullanishingizni ayting. Go'zallik, kripto, coaching — biz sizning tilingizda gaplashamiz.",
+      "step2Title": "AI hamma narsani quradi",
+      "step2Desc": "Tuzilma, matn va dizayn soniyalar ichida. Hech qanday drag-and-drop shart emas.",
+      "step3Title": "Lidlarni Telegram-da oling",
+      "step3Desc": "Sahifangiz ishga tushdi. Lidlar to'g'ridan-to'g'ri shaxsiy xabarlarga boradi. Bitimlarni bir zumda yoping.",
+      "iAmA": "Men...",
+      "nicheCreator": "Raqamli kreator",
+      "nicheFitness": "Fitnes-trener",
+      "nicheCrypto": "Kriptoekspert",
+      "nicheBeauty": "Go'zallik blogeri",
+      "nicheMusic": "Musiqiy prodyuser",
+      "nicheTutor": "Onlayn repetitor",
+      "aiGenerating": "AI yaratmoqda...",
+      "chatMsg1": "Salom, konsultatsiyaga yozilmoqchiman!",
+      "chatMsg2": "Ajoyib! Keling, rejalashtiramiz.",
+      "leadCaptured": "Yangi lid olindi",
       "badge": "Hozir sinab ko'ring",
       "subtitle": "Bu yerda muharrir bilan o'ynang. Bloklarni qo'shing, tarkibni o'zgartiring va real vaqtda o'zgarishlarni ko'ring.",
       "profile": "Profil",
@@ -1345,9 +1345,9 @@
       "solution": "LinkMAX tashrif buyuruvchi sizning kimligingizni, qanchalik foydali ekanligingizni, qancha turadi va qayerga murojaat qilish kerakligini tezda tushunadigan aniq sahifa yaratadi. Siz yetakchilar va tahlillarni bir joyda ko‘rasiz."
     },
     "howItWorks": {
-      "badge": "1 минута до результата",
-      "title": "Как это работает",
-      "cta": "Попробовать бесплатно"
+      "badge": "Natijagacha 1 daqiqa",
+      "title": "Bu qanday ishlaydi",
+      "cta": "Bepul sinab ko'ring"
     },
     "features": {
       "title": "Birinchi versiyada nima olasiz",
@@ -1462,32 +1462,32 @@
       "title": "Namuna sahifalar"
     },
     "pricingLegacy": {
-      "title": "Тарифы",
-      "subtitle": "Начните бесплатно и подключите Pro, когда понадобится больше",
-      "forever": "Навсегда",
-      "bestValue": "Лучшая цена",
-      "freeAction": "Начать бесплатно",
-      "viewPlans": "Выбрать Pro",
-      "otherPlans": "Другие варианты:",
-      "annualPriceKzt": "36 540 ₸ за 12 месяцев",
-      "annualPriceUsd": "71 доллар США в год",
-      "otherPlansSix": "6 мес: 3 698 ₸/мес (-15%)",
-      "otherPlansThree": "3 мес: 4 350 ₸/мес",
+      "title": "Tariflar",
+      "subtitle": "Bepul boshlang va kerak bo'lganda Pro-ni ulang",
+      "forever": "Umrbod",
+      "bestValue": "Eng yaxshi narx",
+      "freeAction": "Bepul boshlash",
+      "viewPlans": "Pro-ni tanlash",
+      "otherPlans": "Boshqa variantlar:",
+      "annualPriceKzt": "Yiliga 36 540 ₸",
+      "annualPriceUsd": "Yiliga 71 dollar",
+      "otherPlansSix": "6 oy: 3 698 ₸/oy (-15%)",
+      "otherPlansThree": "3 oy: 4 350 ₸/oy",
       "free": {
-        "item1": "6 базовых блоков",
-        "item2": "1 AI генерация/месяц",
-        "item3": "Базовая аналитика"
+        "item1": "6 ta asosiy blok",
+        "item2": "Oyiga 1 ta AI yaratish",
+        "item3": "Asosiy tahlil"
       },
       "pro": {
-        "item1": "Безлимит блоков и шаблонов",
-        "item2": "5 AI генераций/месяц",
-        "item3": "CRM + Telegram уведомления",
-        "item4": "Расширенная аналитика",
-        "item5": "Без watermark"
+        "item1": "Cheksiz bloklar va shablonlar",
+        "item2": "Oyiga 5 ta AI yaratish",
+        "item3": "CRM + Telegram bildirishnomalari",
+        "item4": "Kengaytirilgan tahlil",
+        "item5": "Watermark-siz"
       },
-      "month": "мес",
-      "total": "Итого",
-      "billedOnce": "единоразово"
+      "month": "oy",
+      "total": "Jami",
+      "billedOnce": "bir marta"
     },
     "finalCta": {
       "title": "2 daqiqada ilovaga olib boradigan sahifa yarating",
@@ -1607,7 +1607,7 @@
         "title": "Bepul",
         "subtitle": "Abadiy, yashirin to'lovlar yo'q",
         "cta": "Bepul boshlang",
-        "f5_booking": "Запись + форма + CRM (50/мес)"
+        "f5_booking": "Yozilish + shakl + CRM (50/oy)"
       },
       "premium": {
         "f1_v2": "Barcha 25+ blok turlari",
@@ -1621,13 +1621,13 @@
         "title": "Premium",
         "subtitle": "Biznes rivojlanishi uchun hamma narsa",
         "cta": "Premium oling",
-        "f1_v3": "Безлимитные обращения клиентов",
-        "f2_v3": "Без водяного знака — ваш бренд",
-        "f3_v3": "Расширенная аналитика кликов",
-        "f4_v3": "Экспорт + Telegram-уведомления",
-        "f5_v3": "Все 25+ типов блоков",
-        "f6_v3": "До 6 страниц + свой домен",
-        "f7_v3": "10 AI-генераций в месяц"
+        "f1_v3": "Mijozlarning cheksiz murojaatlari",
+        "f2_v3": "Watermark-siz — sizning brendingiz",
+        "f3_v3": "Kengaytirilgan kliklar tahlili",
+        "f4_v3": "Eksport + Telegram-bildirishnomalar",
+        "f5_v3": "Barcha 25+ turdagi bloklar",
+        "f6_v3": "6 tagacha sahifa + o'z domeni",
+        "f7_v3": "Oyiga 10 ta AI yaratish"
       },
       "badge": "Oddiy tariflar",
       "title": "Bepul yoki Premium"
@@ -1787,7 +1787,7 @@
       "activity": "Kiruvchi quti",
       "insights": "Analitika",
       "settings": "Sozlamalar",
-      "more": "Ещё"
+      "more": "Yana"
     },
     "sidebar": {
       "tools": "Asboblar",
@@ -1849,10 +1849,10 @@
       "noResults": "Hech narsa topilmadi",
       "noLeads": "Hali hech qanday ilova mavjud emas",
       "noLeadsHint": "Mehmonlar sizning sahifangizdagi shakllarni to'ldirganda, ilovalar shu yerda paydo bo'ladi",
-      "exporting": "Экспорт лидов...",
-      "exportSuccess": "Экспорт завершен",
-      "exportError": "Ошибка экспорта",
-      "export": "Экспорт"
+      "exporting": "Lidlarni eksport qilish...",
+      "exportSuccess": "Eksport yakunlandi",
+      "exportError": "Eksport xatosi",
+      "export": "Eksport"
     },
     "insights": {
       "title": "Analitika",
@@ -2185,16 +2185,16 @@
       "search": "Etakchilar boʻyicha qidirish...",
       "emptyTitle": "Hali hech kim yo'q",
       "emptyDesc": "Mijozlaringizdan arizalar bu yerda sahifadagi shakllar va testlar orqali paydo bo'ladi.",
-      "updateError": "Ошибка обновления",
-      "exporting": "Экспорт...",
-      "exportError": "Ошибка экспорта",
-      "export": "Экспорт",
-      "filterAll": "Все"
+      "updateError": "Yangilash xatosi",
+      "exporting": "Eksport qilinmoqda...",
+      "exportError": "Eksport xatosi",
+      "export": "Eksport",
+      "filterAll": "Barchasi"
     },
     "addFirstBlock": "Birinchi blokni qo'shish uchun + tugmasini bosing",
     "templateApplied": "Shablon qo'llanildi!",
     "kaspi_qr": "Kaspi QR",
-    "instant": "МГНОВЕННО"
+    "instant": "DARHOL"
   },
   "blocks": {
     "profile": "Profil",
@@ -2395,12 +2395,12 @@
       "success": "🎉 Tavsiya kodi yordamida +{{days}} kun Premium!"
     },
     "validation": {
-      "email": "Введите корректный email",
-      "emailMax": "Email должен быть не более 255 символов",
-      "passwordMin": "Пароль должен содержать минимум 8 символов",
-      "passwordUppercase": "Пароль должен содержать хотя бы одну заглавную букву",
-      "passwordLowercase": "Пароль должен содержать хотя бы одну строчную букву",
-      "passwordNumber": "Пароль должен содержать хотя бы одну цифру"
+      "email": "To'g'ri email kiriting",
+      "emailMax": "Email 255 belgidan oshmasligi kerak",
+      "passwordMin": "Parol kamida 8 belgidan iborat bo'lishi kerak",
+      "passwordUppercase": "Parolda kamida bitta bosh harf bo'lishi kerak",
+      "passwordLowercase": "Parolda kamida bitta kichik harf bo'lishi kerak",
+      "passwordNumber": "Parolda kamida bitta raqam bo'lishi kerak"
     },
     "telegram": {
       "invalidChatId": "To'g'ri Telegram Chat ID kiriting",
@@ -2510,10 +2510,10 @@
     "allPages": "Barcha sahifalar",
     "noPages": "Hech qanday sahifa topilmadi",
     "tryAnotherFilter": "Boshqa filtrni sinab ko'ring",
-    "useTemplate": "Создать",
-    "sortPopular": "Популярные",
-    "sortViews": "Просмотры",
-    "sortRecent": "Новые"
+    "useTemplate": "Yaratish",
+    "sortPopular": "Ommabop",
+    "sortViews": "Ko'rishlar",
+    "sortRecent": "Yangi"
   },
   "errors": {
     "general": "Xatolik yuz berdi",
@@ -2838,7 +2838,7 @@
     "noTemplatesFound": "Shablonlar topilmadi",
     "editUserTierDescription": "Foydalanuvchiga kirish darajasini o'zgartirish",
     "roleAdmin": "Administrator",
-    "fintech": "Финансы",
+    "fintech": "Moliya",
     "category": "Category"
   },
   "adminCharts": {
@@ -3120,8 +3120,8 @@
     "browseMk": "Shablon bozorini tekshiring",
     "notEnoughTokens": "Tokenlar yetarli emas. Yana {{amount}} Linkkon kerak.",
     "purchaseTemplate": "Shablonni xarid qilish: {{name}}",
-    "chosen": "Выбрано",
-    "use": "Выбрать"
+    "chosen": "Tanlandi",
+    "use": "Tanlash"
   },
   "alternatives": {
     "seo": {
@@ -3240,32 +3240,32 @@
       "address": "Olmaota, st. Sholoxova, 20"
     },
     "bitrix24": {
-      "title": "Почему не Bitrix24 для соло",
-      "intro": "Bitrix24 заточен под команды и предприятия. Для соло и микро-бизнеса мы предлагаем более простую альтернативу.",
-      "rowSimplicity": "Простота",
-      "rowTime": "Время до запуска",
-      "rowMobile": "Мобильность",
-      "rowPrice": "Цена (соло)",
-      "LinkMAXSimple": "3 клика, без инструкций",
-      "bitrixComplex": "Сложный интерфейс, долгая адаптация",
-      "LinkMAX15min": "CRM за 15 минут, без внедрения",
-      "bitrixWeeks": "Недели, часто консультанты",
-      "LinkMAXMobile": "PWA + нативные приложения, пуш",
-      "bitrixWeak": "Слабое мобильное приложение",
-      "LinkMAXPrice": "Один тариф Pro ~$6.5/мес",
-      "bitrixPrice": "Рост по пользователям, per-seat",
-      "positioning": "LinkMAX — «анти-Битрикс» для соло и микро-бизнеса: простая, быстрая, мобильная CRM и визитка за 15 минут, без внедрения и программистов.",
-      "cta": "Создать страницу"
+      "title": "Nega yakkaxonlar uchun Bitrix24 emas",
+      "intro": "Bitrix24 jamoalar va korxonalar uchun mo'ljallangan. Yakkaxon va mikro-biznes uchun biz oddiyroq alternativ taklif qilamiz.",
+      "rowSimplicity": "Oddiylik",
+      "rowTime": "Ishga tushirish vaqti",
+      "rowMobile": "Mobillik",
+      "rowPrice": "Narx (yakkaxon)",
+      "LinkMAXSimple": "3 ta klik, ko'rsatmalarsiz",
+      "bitrixComplex": "Murakkab interfeys, uzoq moslashuv",
+      "LinkMAX15min": "15 daqiqada CRM, joriy etishsiz",
+      "bitrixWeeks": "Haftalar, ko'pincha maslahatchilar kerak",
+      "LinkMAXMobile": "PWA + ilovalar, push-bildirishnomalar",
+      "bitrixWeak": "Mobil ilovasi kuchsiz",
+      "LinkMAXPrice": "Bitta Pro tarifi ~$6.5/oy",
+      "bitrixPrice": "Foydalanuvchilar soniga qarab narx oshadi",
+      "positioning": "LinkMAX — yakkaxon va mikro-biznes uchun «anti-Bitrix»: 15 daqiqada dasturchilarsiz ishga tushadigan oddiy, tez va mobil CRM va vizitka.",
+      "cta": "Sahifa yaratish"
     }
   },
   "phaseB": {
     "whyLnkmx": {
-      "title": "Почему LinkMAX",
-      "noSetup": "CRM за 15 минут — без внедрения",
-      "mobile": "Вся работа со смартфона",
-      "premium": "Дизайн премиум из коробки",
-      "emptyDeals": "CRM за 15 минут — без внедрения. Добавьте первую сделку.",
-      "emptyContacts": "Вся работа со смартфона. Импортируйте контакты или добавьте вручную."
+      "title": "Nega LinkMAX",
+      "noSetup": "15 daqiqada CRM — joriy etishsiz",
+      "mobile": "Barcha ish smartfondan",
+      "premium": "Premium dizayn tayyor holda",
+      "emptyDeals": "15 daqiqada CRM — joriy etishsiz. Birinchi bitimni qo'shing.",
+      "emptyContacts": "Barcha ish smartfondan. Kontaktlarni import qiling yoki qo'lda qo'shing."
     }
   },
   "blockPreview": {
@@ -3504,8 +3504,8 @@
       "button": "Eksport",
       "summary": "Xulosa (CSV)",
       "daily": "Kun bo'yicha (CSV)",
-      "success": "Данные успешно экспортированы",
-      "error": "Ошибка экспорта данных",
+      "success": "Ma'lumotlar muvaffaqiyatli eksport qilindi",
+      "error": "Ma'lumotlarni eksport qilishda xatolik",
       "excel": "Export Excel"
     },
     "blocks": {
@@ -3516,19 +3516,19 @@
       "andMore": "va yana {{count}} blok"
     },
     "blockTypes": {
-      "link": "Ссылка",
-      "social": "Соцсети",
-      "button": "Кнопка",
-      "booking": "Бронирование",
-      "contactForm": "Форма",
-      "pricing": "Цены",
-      "product": "Товар",
-      "gallery": "Галерея",
-      "video": "Видео",
-      "event": "Событие",
-      "messenger": "Мессенджер"
+      "link": "Havola",
+      "social": "Ijtimoiy tarmoqlar",
+      "button": "Tugma",
+      "booking": "Band qilish",
+      "contactForm": "Shakl",
+      "pricing": "Narxlar",
+      "product": "Mahsulot",
+      "gallery": "Galereya",
+      "video": "Video",
+      "event": "Tadbir",
+      "messenger": "Messenger"
     },
-    "tooltipClicks": "Клики",
+    "tooltipClicks": "Kliklar",
     "traffic": {
       "instagram": "Instagram",
       "facebook": "Facebook",
@@ -3537,14 +3537,14 @@
       "youtube": "YouTube",
       "telegram": "Telegram",
       "whatsapp": "WhatsApp",
-      "vkontakte": "ВКонтакте",
+      "vkontakte": "VKontakte",
       "linkedin": "LinkedIn",
       "google": "Google",
-      "yandex": "Яндекс",
+      "yandex": "Yandex",
       "bing": "Bing",
-      "direct": "Прямой",
-      "referral": "Реферал",
-      "unknown": "Другое"
+      "direct": "To'g'ridan-to'g'ri",
+      "referral": "Referal",
+      "unknown": "Boshqa"
     },
     "funnel": {
       "views": "Koʻrishlar",
@@ -3557,10 +3557,10 @@
       "clickRate": "Bosish/ko‘rishlar",
       "conversionRate": "Konversiyalar/koʻrishlar",
       "avgPerDay": "Kuniga o'rtacha",
-      "dropOff": "потерь",
-      "retention": "удержание",
-      "overallLabel": "Итоговая конверсия",
-      "subtitle": "Путь посетителя до покупки"
+      "dropOff": "yo'qotishlar",
+      "retention": "ushlab qolish",
+      "overallLabel": "Umumiy konversiya",
+      "subtitle": "Tashrif buyuruvchining xaridgacha bo'lgan yo'li"
     },
     "engagement": {
       "ctr": "CTR",
@@ -3584,7 +3584,7 @@
       "traffic": "Yo'l harakati",
       "blocks": "Bloklar",
       "funnel": "Huni",
-      "experiments": "Тесты"
+      "experiments": "Testlar"
     },
     "chart": {
       "title": "Davr uchun dinamika"
@@ -3644,7 +3644,7 @@
     "saveAndClose": "Saqlash",
     "selectBlock": "Qo'shish uchun blokni tanlang",
     "searchBlocks": "Bloklar qidirilmoqda...",
-    "problematic": "Проблемные",
+    "problematic": "Muammoli",
     "cta": "CTA",
     "edit": "Edit",
     "moveUp": "Move up",
@@ -3655,18 +3655,18 @@
     "selected": "selected",
     "createSection": "Group into section",
     "clearSelection": "Clear selection",
-    "experiment": "Эксперимент",
+    "experiment": "Eksperiment",
     "experimentCreated": "Experiment created! Now you can edit Variant B in the block settings.",
-    "setupABTest": "Настроить A/B Тест",
+    "setupABTest": "A/B testni sozlash",
     "abTestDesc": "Compare two versions of this block to see which performs better.",
-    "experimentName": "Название теста",
-    "trafficSplit": "Распределение трафика",
-    "howItWorks": "Как это работает",
+    "experimentName": "Test nomi",
+    "trafficSplit": "Trafikni taqsimlash",
+    "howItWorks": "Bu qanday ishlaydi",
     "abTestInstructions": "After creating the experiment, you will be able to switch between Variant A and B in the block editor to customize their individual content and styles.",
-    "startExperiment": "Начать тест",
-    "sectionName": "Имя секции:",
-    "newSection": "Новая секция",
-    "section": "Секция"
+    "startExperiment": "Testni boshlash",
+    "sectionName": "Seksiya nomi:",
+    "newSection": "Yangi seksiya",
+    "section": "Seksiya"
   },
   "crm": {
     "title": "CRM",
@@ -3676,10 +3676,10 @@
     "analytics": "Analitika",
     "premiumRequired": "Premium xususiyat",
     "leadLimit": {
-      "used": "{{used}} из {{max}} обращений в этом месяце",
-      "warning": "Осталось {{remaining}} обращений до лимита",
-      "reached": "Лимит обращений достигнут",
-      "upgrade": "Снять лимит →"
+      "used": "Bu oyda {{max}} tadan {{used}} ta murojaat ishlatildi",
+      "warning": "Limitgacha {{remaining}} ta murojaat qoldi",
+      "reached": "Murojaatlar limiti tugadi",
+      "upgrade": "Limitni olib tashlash →"
     },
     "premiumDescription": "CRM-ga kirish va mijozlarni kuzatish uchun Premium-ga yangilang",
     "noLeadsToExport": "Eksportga olib kelmaydi",
@@ -3717,29 +3717,29 @@
     "openPanel": "CRM ni ochish",
     "upgradeToPremium": "Premium oling",
     "responseTime": {
-      "justNow": "только что",
-      "minutesAgo": "{{count}} мин назад",
-      "hoursAgo": "{{count}} ч назад — ответьте!",
-      "missed": "пропущено"
+      "justNow": "hozirgina",
+      "minutesAgo": "{{count}} daqiqa oldin",
+      "hoursAgo": "{{count}} soat oldin — javob bering!",
+      "missed": "o'tkazib yuborilgan"
     },
     "quickReply": {
-      "template": "Здравствуйте, {{name}}! Спасибо за заявку. Чем могу помочь?",
-      "call": "Позвонить",
-      "done": "Готово"
+      "template": "Assalomu alaykum, {{name}}! Murojaat uchun rahmat. Qanday yordam bera olaman?",
+      "call": "Qo'ng'iroq",
+      "done": "Tayyor"
     },
     "bookingStatus": {
-      "pending": "Ожидает",
-      "confirmed": "Подтв.",
-      "completed": "Выполнено"
+      "pending": "Kutilmoqda",
+      "confirmed": "Tasdiq.",
+      "completed": "Bajarildi"
     },
     "booking": {
-      "confirm": "Подтвердить",
-      "cancel": "Отклонить"
+      "confirm": "Tasdiqlash",
+      "cancel": "Rad etish"
     },
     "aging": {
-      "stale": "Остывает",
-      "missed": "Пропущено",
-      "needsFollowup": "Нужен follow-up"
+      "stale": "Sovumoqda",
+      "missed": "O'tkazib yuborilgan",
+      "needsFollowup": "Follow-up kerak"
     }
   },
   "pagination": {
@@ -4188,14 +4188,14 @@
     "prepayment": "Oldindan to'lov",
     "requirePrepayment": "Oldindan to'lovni talab qilish",
     "prepaymentDesc": "Yozib olgandan so'ng, mijoz to'lash uchun WhatsApp-ga o'tadi",
-    "prepaymentMethod": "Способ оплаты",
-    "methodWhatsApp": "WhatsApp (перевод)",
-    "methodKaspi": "Kaspi (QR/перевод)",
-    "methodRobokassa": "Robokassa (карта)",
+    "prepaymentMethod": "To'lov usuli",
+    "methodWhatsApp": "WhatsApp (o'tkazma)",
+    "methodKaspi": "Kaspi (QR/o'tkazma)",
+    "methodRobokassa": "Robokassa (karta)",
     "prepaymentPhone": "To'lov uchun WhatsApp",
     "phoneHint": "To'lovni qabul qilish uchun WhatsApp telefon raqami",
-    "kaspiPhone": "Kaspi номер",
-    "kaspiHint": "Номер для перевода через Kaspi",
+    "kaspiPhone": "Kaspi raqami",
+    "kaspiHint": "Kaspi orqali o'tkazma uchun raqam",
     "prepaymentAmount": "Oldindan to'lov miqdori",
     "currency": "Valyuta",
     "notifications": "Telegramdagi bildirishnomalar",
@@ -4206,10 +4206,10 @@
     "weeklyMotivationDesc": "Dushanba soat 9:00 - shaxsiy ilhom",
     "buttonText": "Tugma matni",
     "buttonTextPlaceholder": "Ro'yxatdan o'tish",
-    "gcalSync": "Синхронизация Google Календаря",
-    "gcalSyncDesc": "Использовать Google Календарь для проверки доступности и создания событий. (Доступно в профиле)",
-    "timezone": "Часовой пояс",
-    "timezoneDesc": "Укажите часовой пояс в котором вы работаете. Клиенты увидят время в своем часовом поясе."
+    "gcalSync": "Google Kalendar sinxronizatsiyasi",
+    "gcalSyncDesc": "Mavjudlikni tekshirish va tadbirlar yaratish uchun Google Kalendardan foydalanish. (Profilda mavjud)",
+    "timezone": "Vaqt mintaqasi",
+    "timezoneDesc": "Siz ishlaydigan vaqt mintaqasini ko'rsating. Mijozlar vaqtni o'z vaqt mintaqalarida ko'rishadi."
   },
   "mapBlock": {
     "address": "Manzil",
@@ -4241,21 +4241,21 @@
     "prepaymentNote": "Ro'yxatdan o'tganingizdan so'ng siz to'lov uchun WhatsApp-ga yo'naltirilasiz",
     "success": "Siz ro'yxatdan o'tdingiz!",
     "error": "Yozish paytida xato. Qayta urinib ko'ring.",
-    "addDetails": "Добавить email или комментарий",
-    "prepaymentBadge": "Предоплата {{amount}} {{currency}}",
-    "slotPrepaymentHint": "Предоплата {{amount}} {{currency}} · гарантирует бронь",
-    "formPrepaymentNote": "Предоплата {{amount}} {{currency}} после записи",
+    "addDetails": "Email yoki izoh qo'shish",
+    "prepaymentBadge": "Oldindan to'lov {{amount}} {{currency}}",
+    "slotPrepaymentHint": "Oldindan to'lov {{amount}} {{currency}} · band qilishni kafolatlaydi",
+    "formPrepaymentNote": "Yozilishdan so'ng {{amount}} {{currency}} oldindan to'lov",
     "confirmation": {
-      "title": "Вы записаны!",
-      "subtitle": "Детали вашей записи",
-      "ref": "Номер записи",
-      "copied": "Скопировано",
-      "prepaymentRequired": "Предоплата для подтверждения",
-      "prepaymentHint": "Оплатите для гарантии записи. Возвращается при отмене за 24ч.",
-      "payWhatsApp": "Оплатить через WhatsApp",
-      "payKaspi": "Оплатить через Kaspi",
-      "awaitConfirm": "Ожидайте подтверждения от специалиста",
-      "bookAgain": "Записаться ещё раз"
+      "title": "Siz yozildingiz!",
+      "subtitle": "Yozilishingiz tafsilotlari",
+      "ref": "Yozilish raqami",
+      "copied": "Nusxalandi",
+      "prepaymentRequired": "Tasdiqlash uchun oldindan to'lov",
+      "prepaymentHint": "Yozilish kafolati uchun to'lov qiling. 24 soat oldin bekor qilinganda qaytariladi.",
+      "payWhatsApp": "WhatsApp orqali to'lash",
+      "payKaspi": "Kaspi orqali to'lash",
+      "awaitConfirm": "Mutaxassisdan tasdiqlashni kuting",
+      "bookAgain": "Yana yozilish"
     },
     "whatsapp": {
       "greeting": "Salom! Men {{date}} kuni {{time}} da uchrashuv belgiladim.\\n",
@@ -4265,9 +4265,9 @@
     },
     "selectedTime": "Vaqt tanlangan",
     "limitReached": {
-      "customer": "Запись временно недоступна. Свяжитесь напрямую."
+      "customer": "Yozilish vaqtincha imkonsiz. To'g'ridan-to'g'ri bog'laning."
     },
-    "timezoneHint": "(Местное время)"
+    "timezoneHint": "(Mahalliy vaqt)"
   },
   "days": {
     "sunday": "Quyosh",
@@ -4894,11 +4894,11 @@
     "popular": "Mashhur",
     "basicDesc": "Bepul boshlang",
     "proDesc": "Professionallar va biznes uchun hamma narsa",
-    "businessDesc": "CRM, команда и зоны для бизнеса",
-    "businessNote": "Нужна командная CRM, зоны и роли?",
-    "businessLink": "Узнать о тарифе BUSINESS →",
-    "freeForever": "Бесплатно навсегда",
-    "new": "Новинка",
+    "businessDesc": "Biznes uchun CRM, jamoa va zonalar",
+    "businessNote": "Jamoaviy CRM, zonalar va rollar kerakmi?",
+    "businessLink": "BUSINESS tarifi haqida bilib oling →",
+    "freeForever": "Abadiy bepul",
+    "new": "Yangilik",
     "free": {
       "title": "Bepul"
     },
@@ -4925,10 +4925,10 @@
     },
     "paymentNote": "RoboKassa orqali to'lov",
     "whyLnkmx": {
-      "title": "Почему LinkMAX",
-      "noSetup": "CRM за 15 минут — без внедрения",
-      "mobile": "Вся работа со смартфона",
-      "premium": "Дизайн премиум из коробки"
+      "title": "Nega LinkMAX",
+      "noSetup": "15 daqiqada CRM — joriy etishsiz",
+      "mobile": "Barcha ish smartfondan",
+      "premium": "Premium dizayn tayyor holda"
     },
     "features": {
       "basicThemes": "Asosiy mavzular",
@@ -4953,21 +4953,21 @@
       "faq": "Tez-tez so'raladigan savollar va fikr-mulohaza bloklari",
       "timers": "Ortga hisoblash taymerlari",
       "aiMonthlyPro": "Oyiga 5 ta AI avlodi",
-      "allPro": "Всё из PRO, плюс:",
-      "businessZones": "Бизнес-зоны (рабочие пространства)",
-      "teamCRM": "Командная CRM и Kanban",
-      "teamInbox": "Командный чат и задачи",
-      "teamRoles": "Роли и разграничение доступа",
-      "teamMembers": "До 5 участников команды",
-      "prioritySupport": "Приоритетная поддержка",
-      "basicViewStats": "Базовая статистика просмотров",
-      "unlimitedInbound": "Безлимитные обращения клиентов",
-      "noWatermark": "Без водяного знака — ваш бренд",
-      "exportAndAutomation": "Экспорт + Telegram-уведомления",
-      "multiPage": "До 6 страниц",
-      "customDomain": "Свой домен",
-      "freeBooking": "Запись клиентов + предоплата",
-      "freeCRM": "CRM до 50 заявок/мес"
+      "allPro": "Pro-dagi barcha narsalar va yana:",
+      "businessZones": "Biznes-zonalar (ish joylari)",
+      "teamCRM": "Jamoaviy CRM va Kanban",
+      "teamInbox": "Jamoaviy chat va vazifalar",
+      "teamRoles": "Rollar va kirishni cheklash",
+      "teamMembers": "Jamoada 5 tagacha ishtirokchi",
+      "prioritySupport": "Ustuvor qo'llab-quvvatlash",
+      "basicViewStats": "Asosiy ko'rishlar statistikasi",
+      "unlimitedInbound": "Mijozlarning cheksiz murojaatlari",
+      "noWatermark": "Watermark-siz — sizning brendingiz",
+      "exportAndAutomation": "Eksport + Telegram-bildirishnomalar",
+      "multiPage": "6 tagacha sahifa",
+      "customDomain": "O'z domeni",
+      "freeBooking": "Mijozlarni yozib olish + oldindan to'lov",
+      "freeCRM": "Oyiga 50 ta arizagacha CRM"
     },
     "limitations": {
       "watermark": "Suv belgisi LinkMAX.my",
@@ -5099,10 +5099,10 @@
       "desc": "Endi siz boshqaruv panelida ranglar, shriftlar va bloklarni tahrirlashingiz mumkin."
     },
     "complete": {
-      "title": "✨ Страница готова!",
-      "desc": "Опубликуйте её, чтобы получить ссылку и первых посетителей",
-      "publishNow": "Опубликовать сейчас",
-      "editFirst": "Сначала отредактировать"
+      "title": "✨ Sahifa tayyor!",
+      "desc": "Havola va birinchi tashrif buyuruvchilarni olish uchun uni chop eting",
+      "publishNow": "Hozir chop etish",
+      "editFirst": "Avval tahrirlash"
     }
   },
   "funnel": {
@@ -5524,10 +5524,10 @@
     "title": "Ketma-ketlik",
     "keepGoing": "Davom eting!",
     "days": "kun",
-    "currentStreak": "Текущая серия",
-    "longestStreak": "Лучшая серия",
-    "streakFrozen": "Серия заморожена",
-    "loginTomorrow": "Зайдите завтра, чтобы продолжить серию!",
+    "currentStreak": "Joriy seriya",
+    "longestStreak": "Eng yaxshi seriya",
+    "streakFrozen": "Seriya muzlatilgan",
+    "loginTomorrow": "Seriyani davom ettirish uchun ertaga kiring!",
     "bonusDays": "bonus kunlar",
     "bonusTrialDays": "bonus sinov kunlari!",
     "awesome": "Ajoyib!",
@@ -5550,20 +5550,20 @@
     "hide": "Yashirish",
     "duplicate": "Dublikat",
     "delete": "Oʻchirish",
-    "filterAll": "Все",
-    "filterProblematic": "Проблемные",
-    "filterHidden": "Скрытые",
+    "filterAll": "Barchasi",
+    "filterProblematic": "Muammoli",
+    "filterHidden": "Yashirin",
     "filterCTA": "CTA",
-    "sections": "секций",
-    "search": "Поиск...",
-    "reviewMode": "Режим проверки",
-    "exitReview": "Выйти",
-    "untitledSection": "Секция",
-    "renameSection": "Новое имя секции:",
-    "rename": "Переименовать",
-    "dissolve": "Расгруппировать",
-    "deleteSection": "Удалить секцию",
-    "ungrouped": "Без секции"
+    "sections": "seksiyalar",
+    "search": "Qidiruv...",
+    "reviewMode": "Tekshirish rejimi",
+    "exitReview": "Chiqish",
+    "untitledSection": "Seksiya",
+    "renameSection": "Seksiyaning yangi nomi:",
+    "rename": "Nomini o'zgartirish",
+    "dissolve": "Guruhdan chiqarish",
+    "deleteSection": "Seksiyani o'chirish",
+    "ungrouped": "Seksiyasiz"
   },
   "url": {
     "external": "Tashqi havola",
@@ -5633,11 +5633,11 @@
     "createdAt": "Yaratilgan",
     "completedAt": "Bajarilgan",
     "save": "Saqlash",
-    "recurrenceLabel": "Повторение",
-    "recurrenceUntil": "До какой даты (необязательно)",
-    "comments": "Комментарии",
-    "noComments": "Нет комментариев",
-    "commentPlaceholder": "Написать комментарий..."
+    "recurrenceLabel": "Takrorlanish",
+    "recurrenceUntil": "Qaysi sanagacha (ixtiyoriy)",
+    "comments": "Izohlar",
+    "noComments": "Izohlar yo'q",
+    "commentPlaceholder": "Izoh yozish..."
   },
   "zones": {
     "selectOrCreate": "Hududni tanlang yoki yarating",
@@ -5729,31 +5729,31 @@
       "call": "Call",
       "sendEmail": "Email",
       "notes": "Timeline",
-      "additionalInfo": "Дополнительная информация",
+      "additionalInfo": "Qo'shimcha ma'lumot",
       "emptyFile": "File is empty",
-      "noNameColumn": "No ",
-      "parseError": "Failed to parse file",
-      "unsupportedFormat": "Use CSV or XLSX files",
-      "imported": "{{count}} contacts imported",
-      "importDescription": "Upload a CSV or Excel file to import contacts into your zone",
-      "uploadFile": "Upload CSV or Excel file",
-      "requiredColumns": "Required column: name. Optional: phone, email, telegram, tags",
-      "rows": "rows",
-      "andMore": "and {{count}} more",
-      "importing": "Importing...",
-      "importButton": "Import {{count}}",
-      "created": "Contact created",
-      "exportSuccess": "Contacts exported",
-      "export": "Export",
+      "noNameColumn": "Nom ustuni yo'q",
+      "parseError": "Faylni tahlil qilishda xatolik",
+      "unsupportedFormat": "CSV yoki XLSX fayllaridan foydalaning",
+      "imported": "{{count}} ta kontakt import qilindi",
+      "importDescription": "Zonaga kontaktlarni import qilish uchun CSV yoki Excel faylini yuklang",
+      "uploadFile": "CSV yoki Excel faylini yuklash",
+      "requiredColumns": "Majburiy ustun: name. Ixtiyoriy: phone, email, telegram, tags",
+      "rows": "qatorlar",
+      "andMore": "va yana {{count}} ta",
+      "importing": "Import qilinmoqda...",
+      "importButton": "{{count}} tani import qilish",
+      "created": "Kontakt yaratildi",
+      "exportSuccess": "Kontaktlar eksport qilindi",
+      "export": "Eksport",
       "presets": {
-        "label": "Segments",
-        "none": "All contacts",
-        "saveCurrent": "Save current filters",
-        "createFromCurrent": "Save as segment",
-        "saveTitle": "Save segment",
-        "saveDescription": "Give a name to this combination of search and tags to reuse it later.",
-        "nameLabel": "Segment name",
-        "namePlaceholder": "e.g. VIP clients, warm leads"
+        "label": "Segmentlar",
+        "none": "Barcha kontaktlar",
+        "saveCurrent": "Joriy filtrlarni saqlash",
+        "createFromCurrent": "Segment sifatida saqlash",
+        "saveTitle": "Segmentni saqlash",
+        "saveDescription": "Ushbu qidiruv va teglar kombinatsiyasiga keyinchalik qayta foydalanish uchun nom bering.",
+        "nameLabel": "Segment nomi",
+        "namePlaceholder": "masalan, VIP mijozlar, iliq lidlar"
       }
     },
     "deals": {
@@ -5797,30 +5797,30 @@
       "dealTitle": "Sarlavha",
       "contact": "Kontakt",
       "valueKzt": "Qiymat (KZT)",
-      "addComment": "Write a comment... (use @ to mention)",
-      "noComments": "No comments yet",
-      "customFieldsBlock": "Дополнительные поля",
-      "noStages": "No stages available",
-      "created": "Deal created",
-      "dateFrom": "From",
-      "dateTo": "To",
-      "valueMin": "Min value",
-      "valueMax": "Max value",
+      "addComment": "Izoh yozing... (belgilash uchun @ foydalaning)",
+      "noComments": "Hozircha izohlar yo'q",
+      "customFieldsBlock": "Qo'shimcha maydonlar",
+      "noStages": "Mavjud bosqichlar yo'q",
+      "created": "Bitim yaratildi",
+      "dateFrom": "Dan",
+      "dateTo": "Gacha",
+      "valueMin": "Minimal qiymat",
+      "valueMax": "Maksimal qiymat",
       "presets": {
-        "placeholder": "Фильтры",
-        "none": "Без пресета",
-        "saveCurrent": "Сохранить текущие",
-        "saveTitle": "Сохранить фильтры",
-        "saveDescription": "Введите название для текущей комбинации фильтров, чтобы быстро применять её позже.",
-        "nameLabel": "Название пресета",
-        "namePlaceholder": "Например: Большие сделки за месяц"
+        "placeholder": "Filtrlar",
+        "none": "Preset-siz",
+        "saveCurrent": "Joriylarni saqlash",
+        "saveTitle": "Filtrlarni saqlash",
+        "saveDescription": "Keyinchalik tez qo'llash uchun joriy filtrlar kombinatsiyasiga nom bering.",
+        "nameLabel": "Preset nomi",
+        "namePlaceholder": "Masalan: Oyning katta bitimlari"
       },
-      "exportSuccess": "Deals exported",
-      "export": "Export",
-      "newDealDescription": "Fill in the information to create a new deal in the pipeline",
-      "selectContact": "Select contact",
-      "nextStepPlaceholder": "Call back tomorrow",
-      "markAsWonOrLost": "Mark deal as Won or Lost?"
+      "exportSuccess": "Bitimlar eksport qilindi",
+      "export": "Eksport",
+      "newDealDescription": "Quvurdagi yangi bitimni yaratish uchun ma'lumotlarni to'ldiring",
+      "selectContact": "Kontaktni tanlang",
+      "nextStepPlaceholder": "Ertaga qayta qo'ng'iroq qilish",
+      "markAsWonOrLost": "Bitimni 'Yutgan' yoki 'Yutqazilgan' deb belgilaysizmi?"
     },
     "tasks": {
       "title": "Vazifalar",
@@ -5835,14 +5835,14 @@
       "unassigned": "Tayinlanmagan",
       "contact": "Kontakt",
       "deal": "Bitim",
-      "overdue": "просрочено",
-      "mine": "Мои",
-      "new": "Новая задача",
-      "taskTitle": "Название",
-      "taskTitlePlaceholder": "Название задачи",
-      "description": "Описание",
-      "descriptionPlaceholder": "Описание (необязательно)",
-      "dueDate": "Срок"
+      "overdue": "muddati o'tgan",
+      "mine": "Mening",
+      "new": "Yangi vazifa",
+      "taskTitle": "Nom",
+      "taskTitlePlaceholder": "Vazifa nomi",
+      "description": "Tavsif",
+      "descriptionPlaceholder": "Tavsif (ixtiyoriy)",
+      "dueDate": "Muddati"
     },
     "invoices": {
       "title": "Moliya",
@@ -5883,10 +5883,10 @@
       "payLink": "To'lov havolasi",
       "markPaid": "To'langan deb belgilash",
       "cancelPayment": "To'lovni bekor qilish",
-      "urlGenerated": "Link generated",
-      "generatePayLink": "Спегенерировать ссылку",
-      "downloadPDF": "Download PDF",
-      "pdfSuccess": "PDF saved"
+      "urlGenerated": "Havola yaratildi",
+      "generatePayLink": "To'lov havolasini yaratish",
+      "downloadPDF": "PDF yuklab olish",
+      "pdfSuccess": "PDF saqlandi"
     },
     "settings": {
       "title": "Sozlamalar",
@@ -5905,82 +5905,82 @@
       "removeMember": "A'zoni olib tashlash?",
       "emailLabel": "Email",
       "fields": {
-        "created": "Field created successfully",
-        "updated": "Field updated successfully",
-        "deleted": "Field deleted successfully",
-        "typeText": "Text",
-        "typeNumber": "Number",
-        "typeDate": "Date",
-        "typeBoolean": "Yes/No",
-        "title": "Custom Contact Fields",
-        "description": "Define custom fields to collect specific information for your contacts.",
-        "add": "Add Field",
-        "empty": "No custom fields defined yet.",
-        "required": "Required",
-        "addTitle": "Add Custom Field",
-        "editTitle": "Edit Custom Field",
-        "nameLabel": "Field Name",
-        "namePlaceholder": "e.g., IIN, Birthdate",
-        "typeLabel": "Field Type",
-        "requiredLabel": "This field is required",
-        "deleteTitle": "Delete Field?",
-        "deleteWarning": "Are you sure you want to delete the field "
+        "created": "Maydon muvaffaqiyatli yaratildi",
+        "updated": "Maydon muvaffaqiyatli yangilandi",
+        "deleted": "Maydon muvaffaqiyatli o'chirildi",
+        "typeText": "Matn",
+        "typeNumber": "Raqam",
+        "typeDate": "Sana",
+        "typeBoolean": "Ha/Yo'q",
+        "title": "Maxsus kontakt maydonlari",
+        "description": "Kontaktlaringiz uchun maxsus ma'lumotlarni yig'ish uchun maydonlarni belgilang.",
+        "add": "Maydon qo'shish",
+        "empty": "Hozircha maxsus maydonlar yo'q.",
+        "required": "Majburiy",
+        "addTitle": "Maxsus maydon qo'shish",
+        "editTitle": "Maxsus maydonni tahrirlash",
+        "nameLabel": "Maydon nomi",
+        "namePlaceholder": "masalan, IIN, Tug'ilgan sana",
+        "typeLabel": "Maydon turi",
+        "requiredLabel": "Bu maydon majburiy",
+        "deleteTitle": "Maydonni o'chirish?",
+        "deleteWarning": "Haqiqatan ham maydonni o'chirmoqchimisiz? "
       },
       "dealFields": {
-        "created": "Deal field created successfully",
-        "updated": "Deal field updated successfully",
-        "deleted": "Deal field deleted successfully",
-        "title": "Custom Deal Fields",
-        "description": "Define custom fields for your deals and sales pipelines.",
-        "empty": "No custom fields defined yet.",
-        "addTitle": "Add Custom Field",
-        "editTitle": "Edit Custom Field",
-        "deleteTitle": "Delete Field?"
+        "created": "Bitim maydoni muvaffaqiyatli yaratildi",
+        "updated": "Bitim maydoni muvaffaqiyatli yangilandi",
+        "deleted": "Bitim maydoni muvaffaqiyatli o'chirildi",
+        "title": "Maxsus bitim maydonlari",
+        "description": "Bitimlaringiz va savdo quvurlaringiz uchun maxsus maydonlarni belgilang.",
+        "empty": "Hozircha maxsus maydonlar yo'q.",
+        "addTitle": "Maxsus maydon qo'shish",
+        "editTitle": "Maxsus maydonni tahrirlash",
+        "deleteTitle": "Maydonni o'chirish?"
       },
       "pipelines": {
-        "created": "Pipeline created",
-        "updated": "Pipeline updated",
-        "lastOne": "Cannot delete the last pipeline",
-        "cannotDeleteDefault": "Cannot delete default pipeline. Set another as default first.",
-        "confirmDelete": "Are you sure? Deals in this pipeline will be hidden until reassigned.",
-        "deleted": "Pipeline deleted",
-        "newPlaceholder": "Новая воронка...",
-        "empty": "У вас пока нет воронок. Создайте первую воронку продаж.",
-        "title": "Управление воронками продаж",
-        "desc": "Создавайте и настраивайте воронки для разных процессов."
+        "created": "Quvur yaratildi",
+        "updated": "Quvur yangilandi",
+        "lastOne": "Oxirgi quvurni o'chirib bo'lmaydi",
+        "cannotDeleteDefault": "Asosiy quvurni o'chirib bo'lmaydi. Avval boshqasini asosiy qilib belgilang.",
+        "confirmDelete": "Ishonchingiz komilmi? Ushbu quvurdagi bitimlar qayta belgilanmaguncha yashiriladi.",
+        "deleted": "Quvur o'chirildi",
+        "newPlaceholder": "Yangi quvur...",
+        "empty": "Sizda hozircha quvurlar yo'q. Birinchi savdo quvurini yarating.",
+        "title": "Savdo quvurlarini boshqarish",
+        "desc": "Turli jarayonlar uchun quvurlar yarating va sozlang."
       },
-      "memberLimitReached": "Member limit reached. Upgrade your plan.",
-      "inviteSent": "Invite sent",
-      "linkCopied": "Invite link copied to clipboard",
-      "inviteRevoked": "Invite revoked",
-      "leftZone": "You left the zone",
-      "memberRemoved": "Member removed",
-      "roleUpdated": "Role updated",
-      "saved": "Settings saved",
-      "members": "Members",
-      "billing": "Billing",
-      "pipelinesTab": "Воронки",
-      "fieldsTab": "Поля",
-      "general": "General",
-      "membersCount": "members",
-      "invite": "Invite",
-      "pendingInvites": "Pending invites",
-      "expires": "Expires",
-      "currentPlan": "Current Plan",
-      "planDesc": "Manage your membership tier and usage limits.",
-      "plan": "Plan",
-      "cycle": "Billing Cycle",
-      "renewsAt": "Next Renewal",
-      "price": "Subscription Cost",
-      "managePlan": "Upgrade or Change Plan",
-      "dangerZone": "Danger Zone",
-      "ownerCannotLeave": "As the owner, you cannot leave the zone. Transfer ownership first or contact support.",
-      "role": "Role",
-      "leaveConfirmTitle": "Leave this zone?",
-      "leaveConfirmDesc": "You will lose access to all zone data including deals, contacts, and messages. This action cannot be undone.",
-      "removeMemberTitle": "Remove member?",
-      "removeMemberDesc": "This will remove {{name}} from the zone. They will lose access to all zone data.",
-      "confirmRemove": "Remove"
+      "memberLimitReached": "A'zolar limiti tugadi. Tarifingizni yangilang.",
+      "inviteSent": "Taklifnoma yuborildi",
+      "linkCopied": "Taklif havolasi buferga nusxalandi",
+      "inviteRevoked": "Taklif qaytarib olindi",
+      "leftZone": "Siz zonani tark etdingiz",
+      "memberRemoved": "A'zo olib tashlandi",
+      "roleUpdated": "Rol yangilandi",
+      "saved": "Sozlamalar saqlandi",
+      "members": "A'zolar",
+      "billing": "To'lovlar",
+      "pipelinesTab": "Quvurlar",
+      "fieldsTab": "Maydonlar",
+      "general": "Umumiy",
+      "membersCount": "a'zolar",
+      "invite": "Taklif qilish",
+      "pendingInvites": "Kutilayotgan takliflar",
+      "expires": "Muddati",
+      "currentPlan": "Joriy tarif",
+      "planDesc": "A'zolik darajangizni va foydalanish limitlarini boshqaring.",
+      "plan": "Tarif",
+      "cycle": "To'lov davri",
+      "renewsAt": "Keyingi yangilanish",
+      "price": "Obuna narxi",
+      "managePlan": "Tarifni yangilash yoki o'zgartirish",
+      "dangerZone": "Xavf zonasi",
+      "ownerCannotLeave": "Ega sifatida siz zonani tark eta olmaysiz. Avval egalikni o'tkazing yoki qo'llab-quvvatlash xizmatiga murojaat qiling.",
+      "role": "Rol",
+      "leaveConfirmTitle": "Ushbu zonani tark etasizmi?",
+      "leaveConfirmDesc": "Siz zona ma'lumotlariga, jumladan bitimlar, kontaktlar va xabarlarga kirish huquqini yo'qotasiz. Bu harakatni qaytarib bo'lmaydi.",
+      "removeMemberTitle": "A'zoni olib tashlash?",
+      "removeMemberDesc": "Bu {{name}} ni zonadan olib tashlaydi. Ular barcha zona ma'lumotlariga kirish huquqini yo'qotadilar.",
+      "confirmRemove": "Olib tashlash"
     },
     "automations": {
       "title": "Avtomatlashtirish",
@@ -6025,19 +6025,19 @@
         "notify_owner": "Egasiga xabar berish",
         "create_deal": "Yangi bitim yaratish"
       },
-      "created": "Автоматизация добавлена",
-      "createError": "Не удалось создать автоматизацию",
+      "created": "Avtomatlashtirish qo'shildi",
+      "createError": "Avtomatlashtirishni yaratib bo'lmadi",
       "presets": {
-        "overdueTaskName": "Задача при просрочке шага",
-        "invoicePaidName": "Закрывать сделку после оплаты",
-        "overdueTaskChip": "Задача при просрочке шага",
-        "invoicePaidChip": "Закрывать сделку после оплаты"
+        "overdueTaskName": "Bosqich muddati o'tganda vazifa",
+        "invoicePaidName": "To'lovdan keyin bitimni yopish",
+        "overdueTaskChip": "Bosqich muddati o'tganda vazifa",
+        "invoicePaidChip": "To'lovdan keyin bitimni yopish"
       },
-      "emptyTitle": "Автоматизируйте рутину",
-      "emptyDesc": "Создавайте правила, которые будут срабатывать автоматически при определенных событиях.",
-      "tryFirst": "Попробовать первое правило",
-      "configParams": "Настройка параметров",
-      "changeToStage": "Перевести на стадию"
+      "emptyTitle": "Muntazam ishlarni avtomatlashtiring",
+      "emptyDesc": "Muayyan hodisalar sodir bo'lganda avtomatik ravishda ishga tushadigan qoidalarni yarating.",
+      "tryFirst": "Birinchi qoidani sinab ko'ring",
+      "configParams": "Parametrlarni sozlash",
+      "changeToStage": "Bosqichga o'tkazish"
     },
     "inbox": {
       "title": "Kiruvchi xabarlar",
@@ -6056,303 +6056,303 @@
       "createError": "Suhbat yaratib bo'lmadi"
     },
     "documents": {
-      "generated": "Документ сгенерирован",
-      "generateError": "Ошибка генерации PDF",
-      "generateDocument": "Генерация документа",
-      "preview": "Предпросмотр",
-      "variables": "Переменные",
-      "unreplacedWarning": "Некоторые переменные не заполнены",
-      "availableVariables": "Доступные переменные",
-      "customVariables": "Пользовательские значения",
-      "customVariablesHint": "Заполните недостающие переменные вручную",
-      "enterValue": "Введите значение...",
-      "allVariablesFilled": "Все переменные заполнены",
-      "downloadPDF": "Скачать PDF",
-      "title": "Documents",
-      "subtitle": "Manage documents, templates and digital workflow",
-      "templates": "Templates",
-      "newDocument": "New document",
-      "searchPlaceholder": "Search by title, number, contact or deal...",
+      "generated": "Hujjat yaratildi",
+      "generateError": "PDF yaratishda xatolik",
+      "generateDocument": "Hujjatni yaratish",
+      "preview": "Ko'rish",
+      "variables": "O'zgaruvchilar",
+      "unreplacedWarning": "Ba'zi o'zgaruvchilar to'ldirilmagan",
+      "availableVariables": "Mavjud o'zgaruvchilar",
+      "customVariables": "Maxsus qiymatlar",
+      "customVariablesHint": "Yetishmayotgan o'zgaruvchilarni qo'lda to'ldiring",
+      "enterValue": "Qiymatni kiriting...",
+      "allVariablesFilled": "Barcha o'zgaruvchilar to'ldirildi",
+      "downloadPDF": "PDF yuklab olish",
+      "title": "Hujjatlar",
+      "subtitle": "Hujjatlar, shablonlar va raqamli ish jarayonini boshqarish",
+      "templates": "Shablonlar",
+      "newDocument": "Yangi hujjat",
+      "searchPlaceholder": "Sarlavha, raqam, kontakt yoki bitim bo'yicha qidirish...",
       "empty": {
-        "title": "No documents",
-        "description": "Create your first document from a template. Link it to a deal or contact for autofill."
+        "title": "Hujjatlar yo'q",
+        "description": "Shablondan birinchi hujjatingizni yarating. Avtomatik to'ldirish uchun uni bitim yoki kontaktga bog'lang."
       },
-      "createDocument": "Create document",
+      "createDocument": "Hujjat yaratish",
       "notFound": {
-        "title": "Nothing found",
-        "description": "Try adjusting your search or filter parameters."
+        "title": "Hech narsa topilmadi",
+        "description": "Qidiruv yoki filtr parametrlarini o'zgartirib ko'ring."
       },
-      "resetFilters": "Reset filters",
+      "resetFilters": "Filtrlarni tozalash",
       "actions": {
-        "generate": "Generate PDF",
-        "view": "View",
-        "download": "Download",
-        "delete": "Delete"
+        "generate": "PDF yaratish",
+        "view": "Ko'rish",
+        "download": "Yuklab olish",
+        "delete": "O'chirish"
       },
-      "confirmDelete": "Are you sure you want to delete this document?",
-      "totalCount": "Total: {{count}}",
-      "filteredCount": "Showing {{shown}} of {{total}}"
+      "confirmDelete": "Haqiqatan ham ushbu hujjatni o'chirmoqchimisiz?",
+      "totalCount": "Jami: {{count}}",
+      "filteredCount": "{{total}} tadan {{shown}} tasi ko'rsatilmoqda"
     },
     "analytics": {
-      "exportSuccess": "Data exported successfully",
-      "exportError": "Export failed",
-      "title": "Analytics & Reports",
-      "subtitle": "Sales, finances and team performance summary.",
-      "activeValue": "Open deals value",
-      "dealsOpen": "open deals",
-      "winRate": "Win Rate",
-      "tasksDone": "Completed tasks",
-      "overdue": "overdue",
-      "noOverdue": "No overdue",
-      "paidValue": "Paid invoices",
-      "pendingAmount": "Pending: {{amount}} ({{count}})",
-      "newContacts": "New contacts",
-      "totalContacts": "Total: {{count}}",
-      "plSummary": "Revenue Summary",
-      "grossRevenue": "Gross Revenue",
-      "paidInvoices": "paid invoices",
-      "pendingRevenue": "Pending Revenue",
-      "awaitingPayment": "awaiting payment",
-      "wonDealsValue": "Won Deals Value",
-      "closedDeals": "closed deals",
-      "funnel": "Sales funnel",
-      "funnelDesc": "Deals count and value per pipeline stage.",
-      "deals": "Deals",
-      "funnelEmpty": "No data to display.",
-      "revenueTimeline": "Revenue timeline",
-      "revenueTimelineDesc": "Paid invoices over time.",
-      "revenue": "Revenue",
-      "noRevenue": "No revenue data for this period.",
-      "conversionTrend": "Conversion Trend",
-      "improving": "Improving",
-      "declining": "Declining",
-      "conversionTrendDesc": "Won vs. lost deals over time.",
-      "won": "Won",
-      "lost": "Lost",
-      "teamPerformance": "Team Performance",
-      "teamPerformanceDesc": "Task completion by team member.",
-      "member": "Member",
-      "tasks": "Tasks",
-      "done": "Done",
-      "avgClose": "Avg. Close",
-      "completed": "Completed",
-      "total": "Total",
-      "taskMetrics": "Task performance",
-      "pending": "In progress",
-      "completionRate": "Completion rate"
+      "exportSuccess": "Ma'lumotlar muvaffaqiyatli eksport qilindi",
+      "exportError": "Eksport amalga oshmadi",
+      "title": "Tahlil va hisobotlar",
+      "subtitle": "Savdo, moliya va jamoa samaradorligi xulosasi.",
+      "activeValue": "Ochiq bitimlar qiymati",
+      "dealsOpen": "ochiq bitimlar",
+      "winRate": "Yutish ko'rsatkichi",
+      "tasksDone": "Bajarilgan vazifalar",
+      "overdue": "muddati o'tgan",
+      "noOverdue": "Muddati o'tganlar yo'q",
+      "paidValue": "To'langan hisob-fakturalar",
+      "pendingAmount": "Kutilmoqda: {{amount}} ({{count}})",
+      "newContacts": "Yangi kontaktlar",
+      "totalContacts": "Jami: {{count}}",
+      "plSummary": "Daromad xulosasi",
+      "grossRevenue": "Umumiy daromad",
+      "paidInvoices": "to'langan hisoblar",
+      "pendingRevenue": "Kutilayotgan daromad",
+      "awaitingPayment": "to'lov kutilmoqda",
+      "wonDealsValue": "Yutilgan bitimlar qiymati",
+      "closedDeals": "yopilgan bitimlar",
+      "funnel": "Savdo voronkasi",
+      "funnelDesc": "Har bir quvur bosqichi bo'yicha bitimlar soni va qiymati.",
+      "deals": "Bitimlar",
+      "funnelEmpty": "Ko'rsatish uchun ma'lumot yo'q.",
+      "revenueTimeline": "Daromad xronologiyasi",
+      "revenueTimelineDesc": "Vaqt o'tishi bilan to'langan hisoblar.",
+      "revenue": "Daromad",
+      "noRevenue": "Ushbu davr uchun daromad ma'lumotlari yo'q.",
+      "conversionTrend": "Konversiya trendi",
+      "improving": "Yaxshilanmoqda",
+      "declining": "Pasaymoqda",
+      "conversionTrendDesc": "Vaqt o'tishi bilan yutilgan va yutqazilgan bitimlar.",
+      "won": "Yutilgan",
+      "lost": "Yutqazilgan",
+      "teamPerformance": "Jamoa samaradorligi",
+      "teamPerformanceDesc": "Jamoa a'zolari bo'yicha vazifalarni bajarish.",
+      "member": "A'zo",
+      "tasks": "Vazifalar",
+      "done": "Bajarildi",
+      "avgClose": "O'rtacha yopilish",
+      "completed": "Yakunlangan",
+      "total": "Jami",
+      "taskMetrics": "Vazifa samaradorligi",
+      "pending": "Jarayonda",
+      "completionRate": "Bajarilish ko'rsatkichi"
     },
     "calendar": {
-      "title": "Календарь записей",
-      "subtitle": "Все записи из блоков Booking ваших страниц",
-      "today": "Сегодня",
-      "upcoming": "Предстоящие",
-      "todayBtn": "Сегодня",
-      "day": "День",
-      "week": "Неделя",
-      "month": "Месяц",
-      "bookingDetail": "Детали записи",
-      "feedCopied": "Ссылка на календарь скопирована",
-      "export": "Экспорт",
-      "downloadICS": "Скачать .ics (Apple Calendar)",
-      "copyFeedUrl": "Скопировать URL подписки",
-      "addToCalendar": "Добавить в календарь",
-      "fromPage": "Со страницы"
+      "title": "Yozilishlar taqvimi",
+      "subtitle": "Sahifalaringizning Booking bloklaridan barcha yozilishlar",
+      "today": "Bugun",
+      "upcoming": "Kelgusi",
+      "todayBtn": "Bugun",
+      "day": "Kun",
+      "week": "Hafta",
+      "month": "Oy",
+      "bookingDetail": "Yozilish tafsilotlari",
+      "feedCopied": "Taqvim havolasi nusxalandi",
+      "export": "Eksport",
+      "downloadICS": ".ics yuklab olish (Apple Calendar)",
+      "copyFeedUrl": "Obuna URL-ni nusxalash",
+      "addToCalendar": "Taqvimga qo'shish",
+      "fromPage": "Sahifadan"
     },
     "error": {
-      "title": "Что-то пошло не так",
-      "description": "Произошла ошибка при загрузке",
-      "retry": "Попробовать снова"
+      "title": "Nimadir xato ketdi",
+      "description": "Yuklashda xatolik yuz berdi",
+      "retry": "Qayta urinish"
     },
     "events": {
-      "title": "Мероприятия",
-      "subtitle": "Управление ивентами из блоков Event ваших страниц",
-      "totalEvents": "Всего",
-      "published": "Активных",
-      "totalRegistrations": "Регистраций",
-      "revenue": "Выручка",
-      "draft": "Черновики",
-      "closed": "Завершённые",
-      "empty": "Нет мероприятий. Добавьте блок Event на страницу, привязанную к зоне.",
-      "registered": "зарегистрировано",
-      "maxCapacity": "макс.",
-      "registrations": "Регистрации",
-      "noRegistrations": "Пока нет регистраций"
+      "title": "Tadbirlar",
+      "subtitle": "Sahifalaringizning Event bloklaridan tadbirlarni boshqarish",
+      "totalEvents": "Jami",
+      "published": "Faol",
+      "totalRegistrations": "Ro'yxatdan o'tganlar",
+      "revenue": "Tushum",
+      "draft": "Qoralamalar",
+      "closed": "Yakunlangan",
+      "empty": "Tadbirlar yo'q. Zonaga bog'langan sahifaga Event blokini qo'shing.",
+      "registered": "ro'yxatdan o'tdi",
+      "maxCapacity": "maks.",
+      "registrations": "Ro'yxatdan o'tishlar",
+      "noRegistrations": "Hozircha ro'yxatdan o'tganlar yo'q"
     },
     "plans": {
-      "monthly": "Monthly",
-      "yearly": "Yearly"
+      "monthly": "Oylik",
+      "yearly": "Yillik"
     },
     "invites": {
-      "accepted": "Welcome to the zone!",
-      "invalid": "Invitation invalid",
-      "invalidDesc": "This invitation link is invalid, expired, or has already been used.",
-      "title": "Join Workspace",
-      "roleLabel": "Role",
-      "emailNotice": "Accepting as",
-      "loginRequired": "Please sign in to accept this invitation",
-      "join": "Accept & Join"
+      "accepted": "Zonaga xush kelibsiz!",
+      "invalid": "Taklifnoma yaroqsiz",
+      "invalidDesc": "Ushbu taklif havolasi yaroqsiz, muddati o'tgan yoki allaqachon foydalanilgan.",
+      "title": "Ish joyiga qo'shilish",
+      "roleLabel": "Rol",
+      "emailNotice": "Sifatida qabul qilinmoqda",
+      "loginRequired": "Taklifni qabul qilish uchun tizimga kiring",
+      "join": "Qabul qilish va qo'shilish"
     }
   },
   "activation": {
-    "title": "Запустите страницу",
-    "progress": "{{done}} из {{total}}",
+    "title": "Sahifani ishga tushiring",
+    "progress": "{{total}} tadan {{done}} tasi",
     "steps": {
-      "createPage": "Создайте страницу",
-      "publish": "Опубликуйте",
-      "firstVisitor": "Получите первого посетителя",
-      "firstConversion": "Получите первый отклик",
-      "firstBooking": "Получите первую запись"
+      "createPage": "Sahifa yarating",
+      "publish": "Chop eting",
+      "firstVisitor": "Birinchi tashrif buyuruvchini oling",
+      "firstConversion": "Birinchi javobni oling",
+      "firstBooking": "Birinchi yozilishni oling"
     },
     "tips": {
-      "addBlock": "Добавьте первый блок — ссылку, товар или видео",
-      "publish": "Опубликуйте страницу, чтобы она стала доступна по ссылке",
-      "shareForVisitor": "Поделитесь ссылкой — 5 из 10 пользователей получают первого посетителя в первый час",
-      "addForm": "Добавьте форму сбора контактов — каждая 5-я страница с формой получает лиды",
-      "growTraffic": "Поделитесь ссылкой в соцсетях, чтобы привлечь больше посетителей"
+      "addBlock": "Birinchi blokni qo'shing — havola, tovar yoki video",
+      "publish": "Sahifani havola orqali foydalanish mumkin bo'lishi uchun chop eting",
+      "shareForVisitor": "Havolani ulashing — 10 tadan 5 ta foydalanuvchi birinchi soatda birinchi tashrif buyuruvchini oladi",
+      "addForm": "Kontakt yig'ish shaklini qo'shing — shakli bor har 5-sahifa lidlar oladi",
+      "growTraffic": "Ko'proq tashrif buyuruvchilarni jalb qilish uchun havolani ijtimoiy tarmoqlarda ulashing"
     },
-    "celebrationTitle": "🎉 Поздравляем!",
-    "celebrationDesc": "Ваша страница работает и приносит результаты"
+    "celebrationTitle": "🎉 Tabriklaymiz!",
+    "celebrationDesc": "Sahifangiz ishlamoqda va natija keltirmoqda"
   },
   "onboardingTour": {
     "welcome": {
-      "title": "Добро пожаловать в LinkMAX! 👋",
-      "desc": "Сейчас мы покажем вам основы работы с редактором. Это займет всего минуту."
+      "title": "LinkMAX-ga xush kelibsiz! 👋",
+      "desc": "Hozir biz sizga muharrir bilan ishlash asoslarini ko'rsatamiz. Bu bir daqiqa vaqt oladi."
     },
     "profile": {
-      "title": "Ваш профиль",
-      "desc": "Кликните на блок профиля, чтобы изменить имя, био и аватар."
+      "title": "Profilingiz",
+      "desc": "Ism, bio va avatarni o'zgartirish uchun profil blokiga bosing."
     },
     "addBlock": {
-      "title": "Добавление блоков",
-      "desc": "Нажмите на кнопку +, чтобы добавить новый блок. Доступны ссылки, товары, видео и многое другое."
+      "title": "Bloklar qo'shish",
+      "desc": "Yangi blok qo'shish uchun + tugmasini bosing. Havolalar, tovarlar, videolar va boshqalar mavjud."
     },
     "editBlock": {
-      "title": "Редактирование блоков",
-      "desc": "Наведите на любой блок, чтобы увидеть кнопки редактирования, удаления и перетаскивания."
+      "title": "Bloklarni tahrirlash",
+      "desc": "Tahrirlash, o'chirish va ko'chirish tugmalarini ko'rish uchun har qanday blok ustiga boring."
     },
     "share": {
-      "title": "Публикация страницы",
-      "desc": "Когда закончите, нажмите «Поделиться», чтобы получить публичную ссылку для соцсетей."
+      "title": "Sahifani chop etish",
+      "desc": "Tugatganingizdan so'ng, ijtimoiy tarmoqlar uchun ommaviy havola olish uchun 'Ulashish' tugmasini bosing."
     },
     "complete": {
-      "title": "Готово! 🎉",
-      "desc": "Теперь вы знаете основы. Начните создавать свою страницу!"
+      "title": "Tayyor! 🎉",
+      "desc": "Endi siz asoslarni bilasiz. Sahifangizni yaratishni boshlang!"
     },
-    "skip": "Пропустить",
-    "back": "Назад",
-    "next": "Далее",
-    "start": "Начать"
+    "skip": "O'tkazib yuborish",
+    "back": "Orqaga",
+    "next": "Keyingisi",
+    "start": "Boshlash"
   },
   "home": {
     "incoming": {
-      "title": "Входящие",
-      "empty": "Пока нет входящих",
-      "emptyHint": "Поделитесь страницей, чтобы получить первые заявки",
-      "share": "Поделиться",
-      "viewAll": "Все",
-      "lead": "Заявка",
-      "booking": "Запись"
+      "title": "Kiruvchi",
+      "empty": "Hozircha kiruvchi xabarlar yo'q",
+      "emptyHint": "Birinchi arizalarni olish uchun sahifangizni ulashing",
+      "share": "Ulashish",
+      "viewAll": "Barchasi",
+      "lead": "Ariza",
+      "booking": "Yozilish"
     }
   },
   "operator": {
     "today": {
-      "title": "Сегодня записей: {{count}}",
-      "next": "Ближайшая: {{name}} в {{time}}"
+      "title": "Bugungi yozilishlar: {{count}}",
+      "next": "Yaqindagi: {{time}} da {{name}}"
     },
     "unanswered": {
-      "title": "Необработано: {{count}}",
-      "missed": "{{count}} пропущено (>24ч)"
+      "title": "Ishlov berilmagan: {{count}}",
+      "missed": "{{count}} ta o'tkazib yuborilgan (>24s)"
     },
     "followUp": {
-      "title": "Нужен follow-up",
-      "visitedYesterday": "Визит вчера в {{time}}",
-      "send": "Написать",
-      "template": "Здравствуйте, {{name}}! Спасибо за визит! Как вам? Будем рады видеть вас снова 😊",
-      "completedOn": "Визит {{date}}",
-      "sent": "Отправлено"
+      "title": "Follow-up kerak",
+      "visitedYesterday": "Kecha {{time}} da tashrif",
+      "send": "Yozish",
+      "template": "Assalomu alaykum, {{name}}! Tashrif uchun rahmat! Sizga yoqdimi? Sizni yana ko'rishdan xursand bo'lamiz 😊",
+      "completedOn": "Tashrif {{date}}",
+      "sent": "Yuborildi"
     },
     "week": {
-      "leads": "За неделю:"
+      "leads": "Hafta davomida:"
     },
     "repeat": {
-      "label": "Повторных:",
-      "badge": "Повторный"
+      "label": "Takroriylar:",
+      "badge": "Takroriy"
     },
     "stale": {
-      "page": "Страница не обновлялась более 2 недель — обновите контент"
+      "page": "Sahifa 2 haftadan ko'proq vaqt davomida yangilanmadi — kontentni yangilang"
     },
     "rebook": {
-      "title": "Пора вернуть клиента",
-      "daysSince": "{{days}} дн. назад",
-      "nudge": "Напомнить"
+      "title": "Mijozni qaytarish vaqti",
+      "daysSince": "{{days}} kun oldin",
+      "nudge": "Eslatish"
     }
   },
   "lifecycle": {
     "trafficNoLeads": {
-      "title": "Есть трафик, но нет заявок",
-      "hint": "Добавьте форму сбора контактов или блок записи — каждая 5-я страница с формой получает заявки"
+      "title": "Trafik bor, lekin arizalar yo'q",
+      "hint": "Kontakt yig'ish shakli yoki yozilish blokini qo'shing — shakli bor har 5-sahifa arizalar oladi"
     },
     "repeatCustomers": {
-      "title": "Постоянные клиенты",
-      "hint": "У вас {{count}} постоянных клиентов — отличная работа! 🎉"
+      "title": "Doimiy mijozlar",
+      "hint": "Sizda {{count}} ta doimiy mijoz bor — ajoyib ish! 🎉"
     },
     "hasLeads": {
-      "title": "Заявки поступают",
-      "hint": "Напишите клиентам после визита — это повышает возврат на 30%"
+      "title": "Arizalar kelmoqda",
+      "hint": "Tashrifdan so'ng mijozlarga yozing — bu qaytishni 30% ga oshiradi"
     }
   },
   "experiments": {
-    "confirmDelete": "Вы уверены, что хотите удалить этот эксперимент?",
-    "deleteSuccess": "Эксперимент удален",
-    "confirmWinner": "Версия будет применена ко всем пользователям. Продолжить?",
-    "winnerSet": "Победитель выбран и применен",
+    "confirmDelete": "Haqiqatan ham ushbu eksperimentni o'chirmoqchimisiz?",
+    "deleteSuccess": "Eksperiment o'chirildi",
+    "confirmWinner": "Versiya barcha foydalanuvchilarga qo'llaniladi. Davom etasizmi?",
+    "winnerSet": "G'olib tanlandi va qo'llanildi",
     "empty": {
-      "title": "Нет активных тестов",
-      "desc": "Протестируйте разные заголовки или кнопки, чтобы узнать, что лучше конвертирует посетителей."
+      "title": "Faol testlar yo'q",
+      "desc": "Qaysi biri tashrif buyuruvchilarni yaxshiroq jalb qilishini bilish uchun turli sarlavhalar yoki tugmalarni sinab ko'ring."
     },
-    "started": "Начат",
-    "ended": "Завершен",
+    "started": "Boshlandi",
+    "ended": "Yakunlandi",
     "actions": {
-      "start": "Запустить",
-      "stop": "Остановить",
-      "pickWinner": "Выбрать победителем"
+      "start": "Ishga tushirish",
+      "stop": "To'xtatish",
+      "pickWinner": "G'olib deb tanlash"
     },
     "label": {
-      "original": "Оригинал",
-      "variant": "Вариант"
+      "original": "Asl nusxa",
+      "variant": "Variant"
     },
-    "leading": "ЛИДИРУЕТ",
+    "leading": "YETAKCHI",
     "insight": {
-      "title": "Промежуточный инсайт",
-      "desc": "Данных пока недостаточно для 95% уверенности, но Вариант {{variant}} показывает лучший результат по CTR."
+      "title": "Oraliq ma'lumot",
+      "desc": "Ma'lumotlar hozircha 95% ishonch uchun yetarli emas, lekin {{variant}}-variant CTR bo'yicha yaxshiroq natija ko'rsatmoqda."
     },
-    "defaultName": "Тест",
+    "defaultName": "Test",
     "error": {
-      "nameRequired": "Введите название теста",
-      "starting": "Ошибка при запуске"
+      "nameRequired": "Test nomini kiriting",
+      "starting": "Ishga tushirishda xatolik"
     },
     "success": {
-      "started": "Эксперимент запущен"
+      "started": "Eksperiment boshlandi"
     },
     "setup": {
-      "title": "Создать A/B тест",
-      "description": "Сравните две версии блока, чтобы узнать, какая работает лучше.",
-      "nameLabel": "Название эксперимента",
-      "namePlaceholder": "Назовите ваш тест...",
-      "variants": "Варианты и трафик",
-      "variantsCount": "варианта",
-      "variantA": "Оригинал",
-      "variantB": "Вариант B",
-      "hideEditor": "Скрыть редактор",
-      "configure": "Настроить контент",
-      "tipTitle": "Совет",
-      "tipDesc": "Меняйте только одно свойство (например, текст кнопки), чтобы точно знать, что именно повлияло на конверсию.",
-      "start": "Запустить тест",
-      "editFields": "Редактировать контент варианта"
+      "title": "A/B test yaratish",
+      "description": "Qaysi biri yaxshiroq ishlashini bilish uchun blokning ikki versiyasini solishtiring.",
+      "nameLabel": "Eksperiment nomi",
+      "namePlaceholder": "Testingizni nomlang...",
+      "variants": "Variantlar va trafik",
+      "variantsCount": "variant",
+      "variantA": "Asl nusxa",
+      "variantB": "B varianti",
+      "hideEditor": "Muharrirni yashirish",
+      "configure": "Kontentni sozlash",
+      "tipTitle": "Maslahat",
+      "tipDesc": "Konversiyaga aynan nima ta'sir qilganini aniq bilish uchun faqat bitta xususiyatni (masalan, tugma matnini) o'zgartiring.",
+      "start": "Testni boshlash",
+      "editFields": "Variant kontentini tahrirlash"
     }
   },
   "friction": {
-    "try": "Попробовать"
+    "try": "Sinab ko'rish"
   },
   "commands": {
     "searchPlaceholder": "Search commands, blocks, presets...",
@@ -6360,116 +6360,116 @@
   },
   "billing": {
     "types": {
-      "subscription": "Subscription",
-      "zoneUpgrade": "Zone Upgrade",
-      "payment": "Payment",
-      "refund": "Refund"
+      "subscription": "Obuna",
+      "zoneUpgrade": "Zonani yangilash",
+      "payment": "To'lov",
+      "refund": "Qaytarish"
     },
     "history": {
-      "title": "Billing History",
-      "empty": "No billing history",
-      "emptyDesc": "Your payment history will appear here after your first purchase"
+      "title": "To'lovlar tarixi",
+      "empty": "To'lovlar tarixi yo'q",
+      "emptyDesc": "To'lovlar tarixi birinchi xaridingizdan so'ng bu yerda paydo bo'ladi"
     }
   },
   "kaspi": {
-    "generateQR": "Kaspi QR Payment",
-    "invalidAmount": "Invalid amount or missing owner ID",
-    "paymentSimulated": "Payment successfully simulated and fee processed!",
-    "linkCopied": "Link copied to clipboard",
-    "title": "Kaspi QR Payment",
-    "description": "Generate QR code for quick Kaspi payment",
-    "amount": "Amount",
-    "comment": "Comment",
-    "commentPlaceholder": "Payment description",
-    "scanHint": "Scan with Kaspi app to pay",
-    "copyLink": "Copy Link",
-    "downloadQR": "Download QR",
-    "simulateMock": "Simulate Payment (Sandbox)",
-    "disclaimer": "Powered by Kaspi.kz payment system",
-    "pay": "Pay",
-    "enter_amount": "Введите сумму для генерации QR"
+    "generateQR": "Kaspi QR to'lovi",
+    "invalidAmount": "Noto'g'ri summa yoki egasi ID-si yetishmayapti",
+    "paymentSimulated": "To'lov muvaffaqiyatli simulyatsiya qilindi va komissiya ishlov berildi!",
+    "linkCopied": "Havola buferga nusxalandi",
+    "title": "Kaspi QR to'lovi",
+    "description": "Tezkor Kaspi to'lovi uchun QR-kod yaratish",
+    "amount": "Summa",
+    "comment": "Izoh",
+    "commentPlaceholder": "To'lov tavsifi",
+    "scanHint": "To'lash uchun Kaspi ilovasi bilan skan qiling",
+    "copyLink": "Havolani nusxalash",
+    "downloadQR": "QR yuklab olish",
+    "simulateMock": "To'lovni simulyatsiya qilish (Sandbox)",
+    "disclaimer": "Kaspi.kz to'lov tizimi tomonidan taqdim etilgan",
+    "pay": "To'lash",
+    "enter_amount": "QR yaratish uchun summani kiriting"
   },
   "zone": {
     "notifications": {
-      "title": "Уведомления",
-      "markAllRead": "Прочитать все",
-      "empty": "Нет уведомлений"
+      "title": "Bildirishnomalar",
+      "markAllRead": "Barchasini o'qilgan deb belgilash",
+      "empty": "Bildirishnomalar yo'q"
     },
     "products": {
-      "nameRequired": "Введите название",
-      "updated": "Продукт обновлён",
-      "created": "Продукт создан",
-      "confirmDelete": "Удалить продукт?",
-      "deleted": "Продукт удалён",
-      "title": "Каталог продуктов",
-      "add": "Добавить",
-      "empty": "Нет продуктов",
-      "emptyHint": "Добавьте первый продукт в каталог",
-      "inactive": "Неактивен",
-      "per": "за",
-      "edit": "Редактировать продукт",
-      "create": "Новый продукт",
-      "name": "Название",
-      "namePlaceholder": "Например: Консультация 1 час",
-      "description": "Описание",
-      "price": "Цена",
-      "currency": "Валюта",
-      "unit": "Единица",
-      "active": "Активен"
+      "nameRequired": "Nomini kiriting",
+      "updated": "Mahsulot yangilandi",
+      "created": "Mahsulot yaratildi",
+      "confirmDelete": "Mahsulotni o'chirish?",
+      "deleted": "Mahsulot o'chirildi",
+      "title": "Mahsulotlar katalogi",
+      "add": "Qo'shish",
+      "empty": "Mahsulotlar yo'q",
+      "emptyHint": "Katalogga birinchi mahsulotni qo'shing",
+      "inactive": "Faol emas",
+      "per": "uchun",
+      "edit": "Mahsulotni tahrirlash",
+      "create": "Yangi mahsulot",
+      "name": "Nom",
+      "namePlaceholder": "Masalan: 1 soatlik konsultatsiya",
+      "description": "Tavsif",
+      "price": "Narx",
+      "currency": "Valyuta",
+      "unit": "Birlik",
+      "active": "Faol"
     }
   },
   "forMasters": {
-    "badge": "Для мастеров красоты",
-    "headline": "Онлайн-запись для мастеров — бесплатно, за 5 минут",
-    "subheadline": "Клиенты записываются прямо из Instagram. Без звонков, без переписки.",
-    "cta": "Создать страницу записи",
-    "ctaSecondary": "Посмотреть примеры",
-    "val1Title": "Ссылка для записи в bio",
-    "val1Desc": "Одна ссылка — и клиенты видят ваши услуги, цены и свободные слоты",
-    "val2Title": "Клиент видит цену и записывается сам",
-    "val2Desc": "Без переписки «а сколько стоит?». Клиент выбирает время и подтверждает",
-    "val3Title": "Все заявки в одном месте",
-    "val3Desc": "Видите кто записался, подтверждаете, отправляете напоминания",
-    "examplesTitle": "Примеры страниц мастеров",
-    "freeTitle": "Бесплатно навсегда",
-    "freeDesc": "До 50 записей в месяц — бесплатно. Без привязки карты. Без скрытых платежей. Без срока действия.",
-    "finalCta": "Начните принимать записи сегодня",
-    "trustLine": "Более 1000 мастеров уже используют lnkmx"
+    "badge": "Go'zallik ustalari uchun",
+    "headline": "Ustalar uchun onlayn-yozilish — bepul, 5 daqiqada",
+    "subheadline": "Mijozlar to'g'ridan-to'g'ri Instagram-dan yozilishadi. Qo'ng'iroqlarsiz, yozishmalarsiz.",
+    "cta": "Yozilish sahifasini yaratish",
+    "ctaSecondary": "Namunalarni ko'rish",
+    "val1Title": "Bio-dagi yozilish havolasi",
+    "val1Desc": "Bitta havola — va mijozlar xizmatlaringizni, narxlaringizni va bo'sh vaqtlaringizni ko'rishadi",
+    "val2Title": "Mijoz narxni ko'radi va o'zi yoziladi",
+    "val2Desc": "'Narxi qancha?' degan yozishmalarsiz. Mijoz vaqtni tanlaydi va tasdiqlaydi",
+    "val3Title": "Barcha arizalar bir joyda",
+    "val3Desc": "Kim yozilganini ko'rasiz, tasdiqlaysiz, eslatmalar yuborasiz",
+    "examplesTitle": "Ustalar sahifalaridan namunalar",
+    "freeTitle": "Umrbod bepul",
+    "freeDesc": "Oyiga 50 tagacha yozilish — bepul. Karta bog'lash shart emas. Yashirin to'lovlar yo'q. Amal qilish muddati cheklanmagan.",
+    "finalCta": "Bugun yozilishlarni qabul qilishni boshlang",
+    "trustLine": "1000 dan ortiq ustalar allaqachon lnkmx-dan foydalanmoqda"
   },
   "from": {
-    "seoTitle": "Создайте свою страницу — бесплатно | lnkmx",
-    "seoDesc": "Создайте страницу для записи клиентов за 5 минут. Бесплатно.",
-    "madeWith": "Эта страница создана на lnkmx",
-    "headline": "Создайте такую же — бесплатно",
-    "subheadline": "Ссылка для записи клиентов. Готова за 5 минут.",
-    "val1": "Красивая ссылка для Instagram bio",
-    "val2": "Клиенты видят цены и записываются сами",
-    "val3": "Без звонков и переписки",
-    "cta": "Создать свою страницу",
-    "free": "Бесплатно. Без карты. Без скрытых платежей."
+    "seoTitle": "Sahifangizni yarating — bepul | lnkmx",
+    "seoDesc": "5 daqiqada mijozlarni yozib olish uchun sahifa yarating. Bepul.",
+    "madeWith": "Ushbu sahifa lnkmx-da yaratilgan",
+    "headline": "Siz ham shunday yarating — bepul",
+    "subheadline": "Mijozlarni yozib olish uchun havola. 5 daqiqada tayyor.",
+    "val1": "Instagram bio uchun chiroyli havola",
+    "val2": "Mijozlar narxlarni ko'rishadi va o'zlari yozilishadi",
+    "val3": "Qo'ng'iroqlar va yozishmalarsiz",
+    "cta": "Sahifangizni yaratish",
+    "free": "Bepul. Kartasiz. Yashirin to'lovlarsiz."
   },
   "fintech": {
     "balance": {
-      "available": "Доступно",
-      "pending": "В ожидании"
+      "available": "Mavjud",
+      "pending": "Kutilmoqda"
     },
     "gmv": {
-      "title": "Оборот (GMV)"
+      "title": "Aylanma (GMV)"
     },
     "fees": {
-      "title": "Комиссия"
+      "title": "Komissiya"
     },
-    "view_finance": "Все транзакции"
+    "view_finance": "Barcha tranzaksiyalar"
   },
   "finance": {
-    "title": "Финансы",
-    "subtitle": "История транзакций и кошелек",
-    "wallet_balance": "Ваш баланс",
-    "withdrawal_hint": "Средства доступны для вывода на карту",
-    "transactions": "История транзакций",
+    "title": "Moliya",
+    "subtitle": "Tranzaksiyalar tarixi va hamyon",
+    "wallet_balance": "Balansingiz",
+    "withdrawal_hint": "Mablag'larni kartaga yechib olish mumkin",
+    "transactions": "Tranzaksiyalar tarixi",
     "empty": {
-      "title": "Транзакций пока нет",
-      "desc": "Здесь будет отображаться история ваших доходов и комиссий"
+      "title": "Hozircha tranzaksiyalar yo'q",
+      "desc": "Bu yerda daromadlaringiz va komissiyalar tarixi ko'rsatiladi"
     }
   }
 }
