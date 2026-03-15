@@ -422,12 +422,15 @@ export const EditorScreen = memo(function EditorScreen({
             <Badge variant="outline" className="text-[10px] font-black uppercase tracking-widest shrink-0 border-primary/20 bg-primary/5 text-primary">
               {top.priority}
             </Badge>
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setDismissedHint(top.id)}
               className="p-1.5 rounded-xl hover:bg-white/10 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
         );
       })()}
@@ -439,18 +442,24 @@ export const EditorScreen = memo(function EditorScreen({
           <span className="text-xs text-foreground/80 flex-1">
             {t(`friction.${frictionSignal.suggestedActionKey}`, frictionSignal.suggestedAction)}
           </span>
-          <button
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
             onClick={handleFrictionAction}
-            className="text-xs font-semibold text-primary hover:underline shrink-0"
+            className="h-auto px-0 py-0 text-xs font-semibold text-primary hover:underline shrink-0"
           >
             {t('friction.try', 'Попробовать')}
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
             onClick={dismissFriction}
-            className="p-0.5 rounded hover:bg-muted shrink-0"
+            className="p-0.5 h-auto shrink-0"
           >
             <X className="h-3 w-3 text-muted-foreground" />
-          </button>
+          </Button>
         </div>
       )}
 
