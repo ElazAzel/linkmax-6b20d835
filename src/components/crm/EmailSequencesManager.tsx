@@ -112,8 +112,10 @@ export function EmailSequencesManager() {
         {sequences.map(seq => (
           <Card key={seq.id} className="p-3 bg-background/30 border-border/20">
             <div className="flex items-center justify-between">
-              <div 
-                className="cursor-pointer flex-1"
+              <button
+                type="button"
+                className="cursor-pointer flex-1 text-left"
+                className="cursor-pointer flex-1 text-left rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 onClick={() => handleSelectSequence(seq.id)}
               >
                 <div className="flex items-center gap-2">
@@ -125,7 +127,7 @@ export function EmailSequencesManager() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">{seq.description || t('sequences.noDesc', 'No description')}</p>
-              </div>
+              </button>
               <div className="flex items-center gap-1">
                 <Button variant="ghost" size="icon" onClick={() => handleToggleStatus(seq)}>
                   {seq.status === 'active' ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}

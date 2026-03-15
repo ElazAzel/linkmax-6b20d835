@@ -7,6 +7,8 @@ import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 
 export type ActivationEventType =
+  | 'activation_checklist_step_clicked'
+  | 'activation_checklist_step_completed'
   | 'wizard_started'
   | 'wizard_niche_selected'
   | 'wizard_completed'

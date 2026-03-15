@@ -67,7 +67,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               size="icon"
               onClick={onUndo}
               disabled={!canUndo}
-              aria-label={t('editor.undo', 'Отменить')}
+              aria-label={t('editor.undo', t('common.undo', 'Undo'))}
               className={cn(
                 "h-12 w-12 rounded-2xl transition-all",
                 canUndo && "hover:bg-primary/10 active:scale-95"
@@ -77,7 +77,7 @@ export const EditorToolbar = memo(function EditorToolbar({
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" className="rounded-xl">
-            {t('editor.undo', 'Отменить')} (⌘Z)
+            {t('editor.undo', t('common.undo', 'Undo'))} (⌘Z)
           </TooltipContent>
         </Tooltip>
 
@@ -96,7 +96,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               size="icon"
               onClick={onRedo}
               disabled={!canRedo}
-              aria-label={t('editor.redo', 'Повторить')}
+              aria-label={t('editor.redo', 'Redo')}
               className={cn(
                 "h-12 w-12 rounded-2xl transition-all",
                 canRedo && "hover:bg-primary/10 active:scale-95"
@@ -106,7 +106,7 @@ export const EditorToolbar = memo(function EditorToolbar({
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" className="rounded-xl">
-            {t('editor.redo', 'Повторить')} (⌘⇧Z)
+            {t('editor.redo', 'Redo')} (⌘⇧Z)
           </TooltipContent>
         </Tooltip>
 
@@ -118,14 +118,14 @@ export const EditorToolbar = memo(function EditorToolbar({
           <TooltipTrigger asChild>
             <Button
               onClick={onAddBlock}
-              aria-label={t('editor.addBlock', 'Добавить блок')}
+              aria-label={t('editor.addBlock', 'Add block')}
               className="h-12 w-12 rounded-2xl bg-primary shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 active:scale-95 transition-all"
             >
               <Plus className="h-6 w-6" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" className="rounded-xl">
-            {t('editor.addBlock', 'Добавить блок')}
+            {t('editor.addBlock', 'Add block')}
           </TooltipContent>
         </Tooltip>
 
@@ -139,14 +139,14 @@ export const EditorToolbar = memo(function EditorToolbar({
               variant="ghost"
               size="icon"
               onClick={onOpenStructure}
-              aria-label={t('editor.structure', 'Структура')}
+              aria-label={t('editor.structure', 'Structure')}
               className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
             >
               <Layers className="h-5 w-5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" className="rounded-xl">
-            {t('editor.structure', 'Структура')}
+            {t('editor.structure', 'Structure')}
           </TooltipContent>
         </Tooltip>
 
@@ -157,14 +157,14 @@ export const EditorToolbar = memo(function EditorToolbar({
               variant="ghost"
               size="icon"
               onClick={onOpenReorder}
-              aria-label={t('editor.reorder', 'Упорядочить')}
+              aria-label={t('editor.reorder', 'Reorder')}
               className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
             >
               <ArrowUpDown className="h-5 w-5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" className="rounded-xl">
-            {t('editor.reorder', 'Упорядочить')}
+            {t('editor.reorder', 'Reorder')}
           </TooltipContent>
         </Tooltip>
 
@@ -175,14 +175,14 @@ export const EditorToolbar = memo(function EditorToolbar({
               variant="ghost"
               size="icon"
               onClick={onPreview}
-              aria-label={t('editor.preview', 'Предпросмотр')}
+              aria-label={t('editor.preview', 'Preview')}
               className="h-12 w-12 rounded-2xl hover:bg-muted/50 active:scale-95 transition-all"
             >
               <Eye className="h-5 w-5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="top" className="rounded-xl">
-            {t('editor.preview', 'Предпросмотр')}
+            {t('editor.preview', 'Preview')}
           </TooltipContent>
         </Tooltip>
 
@@ -207,7 +207,7 @@ export const EditorToolbar = memo(function EditorToolbar({
               </Button>
             </TooltipTrigger>
             <TooltipContent side="top" className="rounded-xl">
-              {t('editor.save', 'Сохранить')}
+              {t('editor.save', t('common.save', 'Save'))}
             </TooltipContent>
           </Tooltip>
         )}

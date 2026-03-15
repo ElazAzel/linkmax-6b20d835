@@ -43,6 +43,7 @@ import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/Operato
 import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import { trackActivationEvent, trackCreatorReturnedAfterGap } from '@/lib/activation-events';
+import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { differenceInDays, parseISO } from 'date-fns';
@@ -85,7 +86,6 @@ export const HomeScreen = memo(function HomeScreen({
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { repeatCount } = useRepeatCustomers();
   const gapDetectedRef = useRef(false);
 
   const viewCount = pageData?.viewCount || 0;
@@ -95,6 +95,7 @@ export const HomeScreen = memo(function HomeScreen({
     pageData,
     onOpenEditor,
     onShare,
+    pageId: pageData?.id,
     leadsCount: realLeadsCount,
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
@@ -212,6 +213,10 @@ export const HomeScreen = memo(function HomeScreen({
             onDismiss={() => {
               activation.dismiss();
               setChecklistDismissed(true);
+            }}
+            onStepClick={(step) => {
+              activation.handleStepClick(step);
+              navigate(step.href);
             }}
           />
         )}

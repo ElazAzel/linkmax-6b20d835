@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -416,7 +415,8 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 p-1">
                 {filteredTemplates.map((template) => (
-                  <Card
+                  <button
+                    type="button"
                     key={template.id}
                     className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
                     onClick={() => handleApply(template)}
@@ -534,7 +534,7 @@ export const TemplateMarketplace = memo(function TemplateMarketplace({
                         </div>
                       </div>
                     </div>
-                  </Card>
+                  </button>
                 ))}
               </div>
             )}
