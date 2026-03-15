@@ -137,9 +137,12 @@ export const BookingBlock = memo(function BookingBlockComponent({
               time_max: timeMax
             }
           });
-          if (!error && data?.blocked_slots) gcalBlockedSlots = data.blocked_slots;
+          if (!error && data?.blocked_slots) {
+            gcalBlockedSlots = data.blocked_slots;
+          }
         } catch (err) {
           console.error('Failed to sync with Google Calendar:', err);
+          // Don't toast here to avoid annoying visitor, but log it
         }
       }
 
@@ -317,27 +320,8 @@ export const BookingBlock = memo(function BookingBlockComponent({
         // Notification failed but booking succeeded
       }
 
-      // Google Calendar sync
-      if (block.gcalSyncEnabled && pageOwnerId) {
-        try {
-          await supabase.functions.invoke('google-calendar-sync', {
-            body: {
-              action: 'create_event',
-              owner_id: pageOwnerId,
-              date: format(selectedDate, 'yyyy-MM-dd'),
-              start_time: selectedSlot.time,
-              end_time: selectedSlot.endTime || null,
-              client_name: formData.name,
-              client_phone: formData.phone || '',
-              client_email: formData.email || '',
-              client_notes: formData.notes || '',
-              block_title: blockTitle
-            }
-          });
-        } catch (err) {
-          console.error('Failed to create event in Google Calendar:', err);
-        }
-      }
+      // Note: Auto-push is now handled on the server via submit-booking edge function
+      // to ensure atomicity and reliability. Client-side push is removed to avoid duplicates.
 
       // Show confirmation screen instead of toast
       setConfirmation({

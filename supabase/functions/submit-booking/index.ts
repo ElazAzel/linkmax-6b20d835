@@ -123,8 +123,7 @@ serve(async (req: Request) => {
         }
       } catch (gcalErr) {
         console.error('GCal verification error:', gcalErr);
-        // We continue if GCal check fails (fail-open) to not block user, 
-        // but log it. Decision: safety first? Roadmap says "total protection".
+        // Fail-open strategy: log error but don't block the user
       }
     }
 
@@ -153,6 +152,21 @@ serve(async (req: Request) => {
     if (insertError) {
       console.error('Error inserting booking:', insertError);
       throw insertError;
+    }
+
+    // 3.1 Push to Google Calendar automatically if enabled
+    if (gcalSyncEnabled && booking?.id) {
+      try {
+        await supabase.functions.invoke('google-calendar-sync', {
+          body: {
+            action: 'push_booking',
+            payload: { booking_id: booking.id }
+          }
+        });
+        console.log(`Booking ${booking.id} pushed to GCal`);
+      } catch (pushErr) {
+        console.error('Failed to auto-push to GCal:', pushErr);
+      }
     }
 
     // 4. Send notification to owner
