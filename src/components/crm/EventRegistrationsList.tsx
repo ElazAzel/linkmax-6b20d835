@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -236,7 +235,8 @@ export function EventRegistrationsList({
               const ticketStatusConfig = ticket ? TICKET_STATUS_CONFIG[ticket.status as keyof typeof TICKET_STATUS_CONFIG] : null;
 
               return (
-                <Card
+                <button
+                  type="button"
                   key={reg.id}
                   className="m-3 p-3 border rounded-lg cursor-pointer hover:border-primary/50 transition-colors"
                   onClick={() => setSelectedRegistration(reg)}
@@ -313,7 +313,7 @@ export function EventRegistrationsList({
                       </div>
                     )}
                   </div>
-                </Card>
+                </button>
               );
             })}
           </div>
