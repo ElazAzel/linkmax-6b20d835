@@ -2194,7 +2194,17 @@
     "addFirstBlock": "Бірінші блокты қосу үшін + түймесін басыңыз",
     "templateApplied": "Template applied!",
     "kaspi_qr": "Kaspi QR",
-    "instant": "ЛЕДЗЕ"
+    "instant": "ЛЕДЗЕ",
+    "header": {
+      "live": ""
+    },
+    "fintech": {
+      "wallet": "",
+      "net_balance": "",
+      "gmv": "",
+      "fees": "",
+      "view_details": ""
+    }
   },
   "blocks": {
     "profile": "Профиль",
@@ -4267,7 +4277,8 @@
     "limitReached": {
       "customer": "Жазылу уақытша қолжетімсіз. Тікелей хабарласыңыз."
     },
-    "timezoneHint": "(Жергілікті уақыт)"
+    "timezoneHint": "(Жергілікті уақыт)",
+    "yourTimezone": ""
   },
   "days": {
     "sunday": "Күн",
@@ -4287,6 +4298,9 @@
     "organization": {
       "description": "AI-powered link in bio and mini-landing page builder",
       "street": "Sholokhov St., 20/7"
+    },
+    "readiness": {
+      "title": ""
     }
   },
   "adminTranslations": {
@@ -4825,7 +4839,8 @@
     "legal": "Legal",
     "paymentTerms": "Payment Terms",
     "contacts": "Contacts",
-    "companyInfo": "ARchitecKZ / БСН 190540008684 / Қазақстан, Алматы"
+    "companyInfo": "ARchitecKZ / БСН 190540008684 / Қазақстан, Алматы",
+    "brand": ""
   },
   "themes": {
     "pageTheme": "Тақырып және түстер",
@@ -5886,7 +5901,10 @@
       "urlGenerated": "Сілтеме жасалды",
       "generatePayLink": "Сілтеме жасау",
       "downloadPDF": "PDF жүктеу",
-      "pdfSuccess": "PDF сақталды"
+      "pdfSuccess": "PDF сақталды",
+      "downloadInvoice": "",
+      "actSuccess": "",
+      "downloadAct": ""
     },
     "settings": {
       "title": "Баптаулар",
@@ -5947,7 +5965,14 @@
         "newPlaceholder": "Жаңа воронка...",
         "empty": "Сізде әлі воронкалар жоқ. Алғашқы сату воронкасын құрыңыз.",
         "title": "Сату воронкаларын басқару",
-        "desc": "Әртүрлі процестер үшін воронкаларды құрыңыз және баптаңыз."
+        "desc": "Әртүрлі процестер үшін воронкаларды құрыңыз және баптаңыз.",
+        "cannotDeleteLast": "",
+        "description": "",
+        "add": "",
+        "default": "",
+        "edit": "",
+        "create": "",
+        "nameLabel": ""
       },
       "memberLimitReached": "Мүшелер санының шегіне жеттіңіз. Тарифіңізді жаңартыңыз.",
       "inviteSent": "Шақыру жіберілді",
@@ -6533,10 +6558,22 @@
     "page_not_found": "Парақша табылмады",
     "label_name_title": "Есім / Тақырып",
     "label_bio": "Өзім туралы (Bio)",
-    "label_avatar_url": "Фотоға сілтеме (Avatar URL)",
+    "label_avatar": "",
     "btn_add_link": "+ Сілтеме қосу",
     "link_new_title": "Жаңа сілтеме",
     "qr_instruction": "Клиенттеріңізге парақшаңызға жылдам өту үшін осы кодты көрсетіңіз.",
-    "label_page_url": "Парақшаңыздың мекенжайы:"
+    "label_page_url": "Парақшаңыздың мекенжайы:",
+    "btn_publish_full": "",
+    "placeholder_name": "",
+    "placeholder_bio": "",
+    "label_avatar_url": "Фотоға сілтеме (Avatar URL)",
+    "link_title_placeholder": "",
+    "btn_copy_link": "",
+    "nav_payments": "",
+    "nav_tasks": ""
+  },
+  "search": {
+    "placeholder": "",
+    "noResults": ""
   }
 }

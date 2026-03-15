@@ -2194,7 +2194,17 @@
     "addFirstBlock": "Birinchi blokni qo'shish uchun + tugmasini bosing",
     "templateApplied": "Shablon qo'llanildi!",
     "kaspi_qr": "Kaspi QR",
-    "instant": "DARHOL"
+    "instant": "DARHOL",
+    "header": {
+      "live": ""
+    },
+    "fintech": {
+      "wallet": "",
+      "net_balance": "",
+      "gmv": "",
+      "fees": "",
+      "view_details": ""
+    }
   },
   "blocks": {
     "profile": "Profil",
@@ -4267,7 +4277,8 @@
     "limitReached": {
       "customer": "Yozilish vaqtincha imkonsiz. To'g'ridan-to'g'ri bog'laning."
     },
-    "timezoneHint": "(Mahalliy vaqt)"
+    "timezoneHint": "(Mahalliy vaqt)",
+    "yourTimezone": ""
   },
   "days": {
     "sunday": "Quyosh",
@@ -4287,6 +4298,9 @@
     "organization": {
       "description": "AI-powered link in bio and mini-landing page builder",
       "street": "Sholokhov St., 20/7"
+    },
+    "readiness": {
+      "title": ""
     }
   },
   "adminTranslations": {
@@ -4825,7 +4839,8 @@
     "legal": "Legal",
     "paymentTerms": "Payment Terms",
     "contacts": "Contacts",
-    "companyInfo": "ARchitecKZ / BIN 190540008684 / Qozog'iston, Olmaota"
+    "companyInfo": "ARchitecKZ / BIN 190540008684 / Qozog'iston, Olmaota",
+    "brand": ""
   },
   "themes": {
     "pageTheme": "Mavzu va ranglar",
@@ -5886,7 +5901,10 @@
       "urlGenerated": "Havola yaratildi",
       "generatePayLink": "To'lov havolasini yaratish",
       "downloadPDF": "PDF yuklab olish",
-      "pdfSuccess": "PDF saqlandi"
+      "pdfSuccess": "PDF saqlandi",
+      "downloadInvoice": "",
+      "actSuccess": "",
+      "downloadAct": ""
     },
     "settings": {
       "title": "Sozlamalar",
@@ -5947,7 +5965,14 @@
         "newPlaceholder": "Yangi quvur...",
         "empty": "Sizda hozircha quvurlar yo'q. Birinchi savdo quvurini yarating.",
         "title": "Savdo quvurlarini boshqarish",
-        "desc": "Turli jarayonlar uchun quvurlar yarating va sozlang."
+        "desc": "Turli jarayonlar uchun quvurlar yarating va sozlang.",
+        "cannotDeleteLast": "",
+        "description": "",
+        "add": "",
+        "default": "",
+        "edit": "",
+        "create": "",
+        "nameLabel": ""
       },
       "memberLimitReached": "A'zolar limiti tugadi. Tarifingizni yangilang.",
       "inviteSent": "Taklifnoma yuborildi",
@@ -6533,10 +6558,22 @@
     "page_not_found": "Sahifa topilmadi",
     "label_name_title": "Ism / Sarlavha",
     "label_bio": "O'zim haqimda (Bio)",
-    "label_avatar_url": "Rasmga link (Avatar URL)",
+    "label_avatar": "",
     "btn_add_link": "+ Link qo'shish",
     "link_new_title": "Yangi link",
     "qr_instruction": "Mijozlaringizga sahifangizga tezda o'tishlari uchun ushbu kodni ko'rsating.",
-    "label_page_url": "Sahifangiz manzili:"
+    "label_page_url": "Sahifangiz manzili:",
+    "btn_publish_full": "",
+    "placeholder_name": "",
+    "placeholder_bio": "",
+    "label_avatar_url": "Rasmga link (Avatar URL)",
+    "link_title_placeholder": "",
+    "btn_copy_link": "",
+    "nav_payments": "",
+    "nav_tasks": ""
+  },
+  "search": {
+    "placeholder": "",
+    "noResults": ""
   }
 }

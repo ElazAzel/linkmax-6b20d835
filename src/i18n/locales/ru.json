@@ -2194,7 +2194,17 @@
     "addFirstBlock": "Нажмите + чтобы добавить первый блок",
     "templateApplied": "Шаблон применен!",
     "kaspi_qr": "Kaspi QR",
-    "instant": "МГНОВЕННО"
+    "instant": "МГНОВЕННО",
+    "header": {
+      "live": "Live Platform"
+    },
+    "fintech": {
+      "wallet": "Ваш кошелек",
+      "net_balance": "Доступно к выводу",
+      "gmv": "Оборот",
+      "fees": "Комиссия",
+      "view_details": "Детализация финансов"
+    }
   },
   "blocks": {
     "profile": "Профиль",
@@ -4267,7 +4277,8 @@
     "limitReached": {
       "customer": "Запись временно недоступна. Свяжитесь напрямую."
     },
-    "timezoneHint": "(Местное время)"
+    "timezoneHint": "(Местное время)",
+    "yourTimezone": "Ваш пояс"
   },
   "days": {
     "sunday": "Вс",
@@ -4287,6 +4298,9 @@
     "organization": {
       "description": "Ссылка на базе искусственного интеллекта в биографии и конструкторе мини-лендингов",
       "street": "Шолохова ул., 20/7"
+    },
+    "readiness": {
+      "title": "Видимость в поиске"
     }
   },
   "adminTranslations": {
@@ -4825,7 +4839,8 @@
     "legal": "Правовая информация",
     "paymentTerms": "Условия оплаты",
     "contacts": "Контакты",
-    "companyInfo": "ARchitecKZ / БИН 190540008684 / Казахстан, г. Алматы"
+    "companyInfo": "ARchitecKZ / БИН 190540008684 / Казахстан, г. Алматы",
+    "brand": "Platform"
   },
   "themes": {
     "pageTheme": "Тема и цвета",
@@ -5886,7 +5901,10 @@
       "urlGenerated": "Link generated",
       "generatePayLink": "Спегенерировать ссылку",
       "downloadPDF": "Download PDF",
-      "pdfSuccess": "PDF saved"
+      "pdfSuccess": "PDF saved",
+      "downloadInvoice": "Счет на оплату",
+      "actSuccess": "Акт сохранен",
+      "downloadAct": "Акт выполненных работ"
     },
     "settings": {
       "title": "Настройки",
@@ -5947,7 +5965,14 @@
         "newPlaceholder": "Новая воронка...",
         "empty": "У вас пока нет воронок. Создайте первую воронку продаж.",
         "title": "Управление воронками продаж",
-        "desc": "Создавайте и настраивайте воронки для разных процессов."
+        "desc": "Создавайте и настраивайте воронки для разных процессов.",
+        "cannotDeleteLast": "Нельзя удалить последнюю воронку",
+        "description": "Управляйте пайплайнами для организации процессов продаж и обслуживания.",
+        "add": "Добавить воронку",
+        "default": "По умолчанию",
+        "edit": "Редактировать воронку",
+        "create": "Новая воронка",
+        "nameLabel": "Название воронки"
       },
       "memberLimitReached": "Member limit reached. Upgrade your plan.",
       "inviteSent": "Invite sent",
@@ -6537,6 +6562,18 @@
     "btn_add_link": "+ Добавить ссылку",
     "link_new_title": "Новая ссылка",
     "qr_instruction": "Покажите этот код вашим клиентам для быстрого перехода на страницу.",
-    "label_page_url": "Адрес вашей страницы:"
+    "label_page_url": "Адрес вашей страницы:",
+    "btn_publish_full": "btn_publish_full",
+    "placeholder_name": "placeholder_name",
+    "placeholder_bio": "placeholder_bio",
+    "label_avatar_url": "label_avatar_url",
+    "link_title_placeholder": "link_title_placeholder",
+    "btn_copy_link": "btn_copy_link",
+    "nav_payments": "nav_payments",
+    "nav_tasks": "nav_tasks"
+  },
+  "search": {
+    "placeholder": "Type a command or search...",
+    "noResults": "No results found."
   }
 }

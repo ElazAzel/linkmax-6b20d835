@@ -17,14 +17,14 @@
   },
   "textEffects": {
     "none": "No effect",
-    "shimmer": "вњЁ Transfusion",
-    "glow": "рџ’Ў Glow",
-    "pulse": "рџ’“ Ripple",
-    "blink": "рџ‘Ѓ Flashing",
-    "rainbow": "рџЊ€ Rainbow",
-    "neon": "рџ”®Neon",
-    "typewriter": "вЊЁпёЏ Typewriter",
-    "gradientFlow": "рџЊЉ Fluid gradient"
+    "shimmer": "✨ Transfusion",
+    "glow": "💡 Glow",
+    "pulse": "💓 Ripple",
+    "blink": "👁 Flashing",
+    "rainbow": "🌈 Rainbow",
+    "neon": "🔮Neon",
+    "typewriter": "⌨️ Typewriter",
+    "gradientFlow": "🌊 Fluid gradient"
   },
   "googleForms": {
     "importTitle": "Import from Google Forms",
@@ -242,7 +242,7 @@
     "verifiedColor": "Icon background",
     "verifiedPosition": "Icon position",
     "proofOfHuman": "Proof of Identity",
-    "boostTrust": "рџ“€ +Trust",
+    "boostTrust": "📈 +Trust",
     "proofOfHumanDescription": "Add a short video or audio greeting",
     "introVideo": "Video greeting (max 30s)",
     "introAudio": "Audio greeting",
@@ -257,8 +257,8 @@
     "iconPreview": "Icon preview",
     "noUrl": "Enter URL",
     "iconMode": "Icon source",
-    "iconAuto": "рџЊђ Auto (site favicon)",
-    "iconManual": "рџ–јпёЏ Upload yours",
+    "iconAuto": "🌐 Auto (site favicon)",
+    "iconManual": "🖼️ Upload yours",
     "refreshIcon": "Update icon",
     "customIcon": "Own icon",
     "enterCommaSeparatedColors": "Enter colors separated by commas",
@@ -284,7 +284,7 @@
     "productNamePlaceholder": "Product Name",
     "productDescPlaceholder": "Product description...",
     "scratchRevealPlaceholder": "Scratch to Reveal",
-    "scratchPrizePlaceholder": "рџЋ‰ You won't get 20% discount!",
+    "scratchPrizePlaceholder": "🎉 You won't get 20% discount!",
     "myVideoPlaceholder": "My Video",
     "videoUrlHint": "Supports YouTube and Vimeo URLs",
     "aspectRatio169": "16:9 (Widescreen)",
@@ -321,7 +321,7 @@
     "generate": "Create",
     "generatingTitle": "AI creates the page",
     "generatingDescription": "We select blocks and content specifically for you",
-    "completeTitle": "Ready! рџЋ‰",
+    "completeTitle": "Ready! 🎉",
     "completeDescription": "The page has been created and is ready to edit",
     "title": "Quick start",
     "description": "Create a page quickly with the AI вЂ‹вЂ‹assistant"
@@ -392,7 +392,7 @@
     "send": "Send",
     "buyTokens": "Buy tokens",
     "buyForTokens": "Buy for",
-    "tapToView": "Read more в†’",
+    "tapToView": "Read more →",
     "save": "Save",
     "upgrade": "Upgrade",
     "cancel": "Cancel"
@@ -706,10 +706,10 @@
       "yandexMetrika": "ID Yandex Metrics",
       "webhookUrl": "Webhook URL (Pro)",
       "webhookHint": "We will send a POST request with application data",
-      "fbHint": "Events Manager в†’ Data Sources в†’ Pixel ID",
-      "ttHint": "TikTok Ads в†’ Assets в†’ Events в†’ Pixel Code",
-      "ga4Hint": "GA4 в†’ Admin в†’ Data Streams в†’ Measurement ID",
-      "yandexHint": "Metrica в†’ Settings в†’ Counter number",
+      "fbHint": "Events Manager → Data Sources → Pixel ID",
+      "ttHint": "TikTok Ads → Assets → Events → Pixel Code",
+      "ga4Hint": "GA4 → Admin → Data Streams → Measurement ID",
+      "yandexHint": "Metrica → Settings → Counter number",
       "gcalConnected": "Google Calendar connected successfully!",
       "gcalFailed": "Google Calendar connection error: {{reason}}",
       "gcalNotConfigured": "Google Calendar is not configured on the server",
@@ -1070,10 +1070,10 @@
     "v4": {
       "hero": {
         "badge": "The Micro-Business OS",
-        "title": "Website, CRM & Analytics вЂ” in one place",
+        "title": "Website, CRM & Analytics — in one place",
         "titleStart": "Website, CRM & Analytics",
         "titleEnd": "in one place",
-        "subtitle": "Page builder, lead management, click analytics. Everything your small business needs вЂ” no code required.",
+        "subtitle": "Page builder, lead management, click analytics. Everything your small business needs — no code required.",
         "cta": "Start for Free",
         "secondary": "See Examples",
         "trust1": "Smart Blocks",
@@ -1094,8 +1094,8 @@
       "problem": {
         "title": "Sound familiar?",
         "item1": "There is a link to WhatsApp in the bio, and clients ask the same thing",
-        "item2": "There is no clear price list - you lose those who donвЂ™t want to write",
-        "item3": "ItвЂ™s unclear which posts and stories actually generate applications",
+        "item2": "There is no clear price list - you lose those who don't want to write",
+        "item3": "It's unclear which posts and stories actually generate applications",
         "solution": "- one page where everything is clear: who you are, how you help, how much it costs and where to click."
       },
       "howItWorks": {
@@ -1569,7 +1569,7 @@
     "premiumValue": {
       "crm": {
         "title": "Mini-CRM",
-        "description": "All requests from the form automatically go into the CRM. Statuses: new в†’ in progress в†’ completed. No more Excel."
+        "description": "All requests from the form automatically go into the CRM. Statuses: new → in progress → completed. No more Excel."
       },
       "telegram": {
         "title": "Telegram notifications",
@@ -1655,7 +1655,7 @@
         "subtitle": "Psychologists, tutors, consultants",
         "result1": "Portfolio and reviews in a beautiful way",
         "result2": "Leads automatically in Mini-CRM",
-        "result3": "Client statuses: new в†’ in progress в†’ ready"
+        "result3": "Client statuses: new → in progress → ready"
       },
       "business": {
         "title": "Small business",
@@ -1773,7 +1773,7 @@
     "loadErrorDesc": "Failed to load page data",
     "tryAgain": "Try again",
     "collabs": "Collabs",
-    "aiBlocksCreated": "вњЁ {{count}} blocks created using AI",
+    "aiBlocksCreated": "✨ {{count}} blocks created using AI",
     "blocksAdded": "{{count}} blocks added",
     "onboardingComplete": "Welcome! Start creating your page.",
     "errors": {
@@ -2194,7 +2194,17 @@
     "addFirstBlock": "Click + to add the first block",
     "templateApplied": "Template applied!",
     "kaspi_qr": "Kaspi QR",
-    "instant": "INSTANT"
+    "instant": "INSTANT",
+    "header": {
+      "live": ""
+    },
+    "fintech": {
+      "wallet": "",
+      "net_balance": "",
+      "gmv": "",
+      "fees": "",
+      "view_details": ""
+    }
   },
   "blocks": {
     "profile": "Profile",
@@ -2392,7 +2402,7 @@
     "referral": {
       "invited": "You've been invited!",
       "bonus": "Register and get +3 days Premium",
-      "success": "рџЋ‰ +{{days}} days of Premium using referral code!"
+      "success": "🎉 +{{days}} days of Premium using referral code!"
     },
     "validation": {
       "email": "Enter a valid email",
@@ -2458,7 +2468,7 @@
     "seo": {
       "title": "Gallery LinkMAX - examples of link in bio and mini-sites",
       "description": "Real user pages: templates, niches, ideas for your link in bio.",
-      "nicheTitle": "Gallery LinkMAX вЂ” {{niche}}",
+      "nicheTitle": "Gallery LinkMAX — {{niche}}",
       "nicheDescription": "Examples of LinkMAX pages in the {{niche}} niche: templates, ideas and structure.",
       "imageAlt": "LinkMAX Gallery - Link in Bio Examples",
       "opt": {
@@ -3254,7 +3264,7 @@
       "bitrixWeak": "Weak mobile app",
       "LinkMAXPrice": "One Pro plan ~$6.5/mo",
       "bitrixPrice": "Grows with users, per-seat",
-      "positioning": "LinkMAX is the anti-Bitrix for solopreneurs: simple, fast, mobile CRM and landing in 15 minutesвЂ”no implementation or developers.",
+      "positioning": "LinkMAX is the anti-Bitrix for solopreneurs: simple, fast, mobile CRM and landing in 15 minutes—no implementation or developers.",
       "cta": "Create page"
     }
   },
@@ -3320,11 +3330,11 @@
     "useAi": "use of AI",
     "toastEarned": "+{{count}} Linkkon for {{action}}!",
     "insufficientForPremium": "Linkkon is not enough. Need {{count}} tokens.",
-    "premiumGranted": "рџЋ‰ You received 1 day of Premium!",
+    "premiumGranted": "🎉 You received 1 day of Premium!",
     "insufficientTokens": "Not enough tokens",
     "convertError": "Error during conversion",
     "insufficientForPurchase": "Linkkon is not enough. Need {{count}} tokens.",
-    "purchaseSuccess": "вњЁ Purchase successful!",
+    "purchaseSuccess": "✨ Purchase successful!",
     "purchaseError": "Error when purchasing",
     "withdrawalCreated": "The withdrawal request has been created!",
     "withdrawalPremiumRequired": "Withdrawal is available only for Premium users",
@@ -3355,7 +3365,7 @@
     "toastDailyVisit": "рџ‘‹ +{{count}} Linkkon for visiting daily!",
     "toastCompleted": "{{icon}} +{{count}} Linkkon for \"{{title}}\"!",
     "panelTitle": "Daily quests",
-    "allCompleted": "рџЋ‰ All tasks completed!",
+    "allCompleted": "🎉 All tasks completed!",
     "tokensEarned": "+{{count}} Linkkon earned"
   },
   "referral": {
@@ -3363,7 +3373,7 @@
     "yourCode": "Your code",
     "invited": "Invited",
     "earned": "Earned",
-    "toastSuccess": "рџЋ‰ +{{count}} Premium days for you and a friend!",
+    "toastSuccess": "🎉 +{{count}} Premium days for you and a friend!",
     "codeCopied": "Code copied!",
     "linkCopied": "Link copied!",
     "errors": {
@@ -3452,7 +3462,7 @@
     "featureRequires": "{{feature}} available in {{tier}}",
     "premiumFramesLocked": "Premium frames require PRO subscription",
     "verificationRequiresPro": "Verification badge is available for PRO users",
-    "upgradeToPro": "Upgrade to PRO в†’",
+    "upgradeToPro": "Upgrade to PRO →",
     "blockLocked": "Premium block",
     "unlockWith": "Unlock this block with a Pro subscription",
     "upgradeToBusiness": "Go to Business"
@@ -3679,7 +3689,7 @@
       "used": "{{used}} of {{max}} submissions this month",
       "warning": "{{remaining}} submissions remaining",
       "reached": "Submission limit reached",
-      "upgrade": "Remove limit в†’"
+      "upgrade": "Remove limit →"
     },
     "premiumDescription": "Upgrade to Premium for CRM access and lead tracking",
     "noLeadsToExport": "No leads to export",
@@ -3719,7 +3729,7 @@
     "responseTime": {
       "justNow": "just now",
       "minutesAgo": "{{count}} min ago",
-      "hoursAgo": "{{count}}h ago вЂ” reply!",
+      "hoursAgo": "{{count}}h ago — reply!",
       "missed": "missed"
     },
     "quickReply": {
@@ -3921,7 +3931,7 @@
     "buyTokens": "Buy tokens",
     "buyFor": "Buy for",
     "buy": "Buy",
-    "tapToView": "Read more в†’",
+    "tapToView": "Read more →",
     "purchaseDescription": "Purchase of goods: {{name}}",
     "purchasing": "Purchase..."
   },
@@ -4267,7 +4277,8 @@
     "limitReached": {
       "customer": "Booking is temporarily unavailable. Contact directly."
     },
-    "timezoneHint": "(Local time)"
+    "timezoneHint": "(Local time)",
+    "yourTimezone": ""
   },
   "days": {
     "sunday": "Sun",
@@ -4287,6 +4298,9 @@
     "organization": {
       "description": "AI-powered link in bio and mini-landing page builder",
       "street": "Sholokhov St., 20/7"
+    },
+    "readiness": {
+      "title": ""
     }
   },
   "adminTranslations": {
@@ -4566,7 +4580,7 @@
       },
       "events": {
         "title": "Organizers",
-        "problem": "Information is scattered, people donвЂ™t get to register",
+        "problem": "Information is scattered, people don't get to register",
         "solution": "Date, place, program and form in one place",
         "cta": "Create"
       },
@@ -4751,7 +4765,7 @@
       },
       "q7": {
         "question": "Do you take a commission on sales?",
-        "answer": "No. 0%. If you sell through the page, itвЂ™s all yours."
+        "answer": "No. 0%. If you sell through the page, it's all yours."
       },
       "q8": {
         "question": "Why is Linktree better?",
@@ -4825,7 +4839,8 @@
     "legal": "Legal",
     "paymentTerms": "Payment Terms",
     "contacts": "Contacts",
-    "companyInfo": "ARchitecKZ / BIN 190540008684 / Kazakhstan, Almaty"
+    "companyInfo": "ARchitecKZ / BIN 190540008684 / Kazakhstan, Almaty",
+    "brand": ""
   },
   "themes": {
     "pageTheme": "Theme and colors",
@@ -4896,7 +4911,7 @@
     "proDesc": "Everything for professionals and business",
     "businessDesc": "CRM, team & zones for business",
     "businessNote": "Need team CRM, zones, and roles?",
-    "businessLink": "Learn about the BUSINESS plan в†’",
+    "businessLink": "Learn about the BUSINESS plan →",
     "freeForever": "Free forever",
     "new": "New",
     "free": {
@@ -5027,7 +5042,7 @@
   "aiBuilder": {
     "description": "Create a page using AI",
     "selectTemplate": "Select a template",
-    "success": "вњЁ The page has been created!",
+    "success": "✨ The page has been created!",
     "error": "Generation error. Try again.",
     "title": "AI Builder",
     "step": "Step",
@@ -5060,7 +5075,7 @@
     "completeTitle": "Ready!",
     "completeDesc": "Blocks added to your page",
     "nicheQuestions": {
-      "title": "Tell us about yourself вњЁ",
+      "title": "Tell us about yourself ✨",
       "desc": "This data is needed to fill out the blocks. You can skip any step.",
       "nameLabel": "What is your name or what is the name of your project?",
       "nameHint": "This will be your profile title",
@@ -5083,7 +5098,7 @@
       "mediaLabel": "Links to useful materials (Media)",
       "mediaHint": "Links to YouTube, portfolio or pictures (separated by commas)",
       "mediaPlaceholder": "https://youtube.com/watch?v=..., https://my-portfolio.com",
-      "generateBtn": "Generate magic вњЁ"
+      "generateBtn": "Generate magic ✨"
     },
     "gen": {
       "socials": "Connecting social networks...",
@@ -5417,7 +5432,7 @@
   },
   "scratch": {
     "scratchHere": "рџ‘† Scratch here",
-    "revealed": "рџЋ‰ Revealed!",
+    "revealed": "🎉 Revealed!",
     "hint": "Scratch the layer to reveal a surprise"
   },
   "guide": {
@@ -5886,7 +5901,10 @@
       "urlGenerated": "Link generated",
       "generatePayLink": "Generate link",
       "downloadPDF": "Download PDF",
-      "pdfSuccess": "PDF saved"
+      "pdfSuccess": "PDF saved",
+      "downloadInvoice": "",
+      "actSuccess": "",
+      "downloadAct": ""
     },
     "settings": {
       "title": "Settings",
@@ -5947,7 +5965,14 @@
         "newPlaceholder": "New pipeline...",
         "empty": "You have no pipelines yet. Create your first sales funnel.",
         "title": "Sales Funnel Management",
-        "desc": "Create and configure pipelines for different processes."
+        "desc": "Create and configure pipelines for different processes.",
+        "cannotDeleteLast": "",
+        "description": "",
+        "add": "",
+        "default": "",
+        "edit": "",
+        "create": "",
+        "nameLabel": ""
       },
       "memberLimitReached": "Member limit reached. Upgrade your plan.",
       "inviteSent": "Invite sent",
@@ -6204,13 +6229,13 @@
       "firstBooking": "Get your first booking"
     },
     "tips": {
-      "addBlock": "Add your first block вЂ” a link, product, or video",
+      "addBlock": "Add your first block — a link, product, or video",
       "publish": "Publish your page to make it available via link",
-      "shareForVisitor": "Share your link вЂ” 5 out of 10 users get their first visitor within an hour",
-      "addForm": "Add a contact form вЂ” every 5th page with a form gets leads",
+      "shareForVisitor": "Share your link — 5 out of 10 users get their first visitor within an hour",
+      "addForm": "Add a contact form — every 5th page with a form gets leads",
       "growTraffic": "Share your link on social media to attract more visitors"
     },
-    "celebrationTitle": "рџЋ‰ Congratulations!",
+    "celebrationTitle": "🎉 Congratulations!",
     "celebrationDesc": "Your page is live and delivering results"
   },
   "onboardingTour": {
@@ -6235,7 +6260,7 @@
       "desc": "When done, click \"Share\" to get a public link for social media."
     },
     "complete": {
-      "title": "All done! рџЋ‰",
+      "title": "All done! 🎉",
       "desc": "Now you know the basics. Start building your page!"
     },
     "skip": "Skip",
@@ -6279,7 +6304,7 @@
       "badge": "Returning"
     },
     "stale": {
-      "page": "Page hasn't been updated in over 2 weeks вЂ” refresh your content"
+      "page": "Page hasn't been updated in over 2 weeks — refresh your content"
     },
     "rebook": {
       "title": "Time to bring back client",
@@ -6290,15 +6315,15 @@
   "lifecycle": {
     "trafficNoLeads": {
       "title": "Traffic but no leads",
-      "hint": "Add a contact form or booking block вЂ” every 5th page with a form gets leads"
+      "hint": "Add a contact form or booking block — every 5th page with a form gets leads"
     },
     "repeatCustomers": {
       "title": "Repeat customers",
-      "hint": "You have {{count}} repeat customers вЂ” great job! рџЋ‰"
+      "hint": "You have {{count}} repeat customers — great job! 🎉"
     },
     "hasLeads": {
       "title": "Leads are coming in",
-      "hint": "Follow up with clients after their visit вЂ” it improves return rate by 30%"
+      "hint": "Follow up with clients after their visit — it improves return rate by 30%"
     }
   },
   "experiments": {
@@ -6533,10 +6558,22 @@
     "page_not_found": "Page not found",
     "label_name_title": "Name / Title",
     "label_bio": "Bio",
-    "label_avatar_url": "Avatar URL",
+    "label_avatar": "",
     "btn_add_link": "+ Add Link",
     "link_new_title": "New Link",
     "qr_instruction": "Show this code to your clients for quick access to your page.",
-    "label_page_url": "Your page address:"
+    "label_page_url": "Your page address:",
+    "btn_publish_full": "",
+    "placeholder_name": "",
+    "placeholder_bio": "",
+    "label_avatar_url": "Avatar URL",
+    "link_title_placeholder": "",
+    "btn_copy_link": "",
+    "nav_payments": "",
+    "nav_tasks": ""
+  },
+  "search": {
+    "placeholder": "",
+    "noResults": ""
   }
 }

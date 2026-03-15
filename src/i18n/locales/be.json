@@ -2160,7 +2160,17 @@
     "addFirstBlock": "",
     "templateApplied": "",
     "kaspi_qr": "",
-    "instant": ""
+    "instant": "",
+    "header": {
+      "live": ""
+    },
+    "fintech": {
+      "wallet": "",
+      "net_balance": "",
+      "gmv": "",
+      "fees": "",
+      "view_details": ""
+    }
   },
   "blocks": {
     "profile": "Profile",
@@ -4233,7 +4243,8 @@
     "limitReached": {
       "customer": ""
     },
-    "timezoneHint": ""
+    "timezoneHint": "",
+    "yourTimezone": ""
   },
   "days": {
     "sunday": "Sun",
@@ -4253,6 +4264,9 @@
     "organization": {
       "description": "",
       "street": ""
+    },
+    "readiness": {
+      "title": ""
     }
   },
   "adminTranslations": {
@@ -4791,7 +4805,8 @@
     "legal": "",
     "paymentTerms": "",
     "contacts": "",
-    "companyInfo": ""
+    "companyInfo": "",
+    "brand": ""
   },
   "themes": {
     "pageTheme": "Theme & Colors",
@@ -5852,7 +5867,10 @@
       "urlGenerated": "",
       "generatePayLink": "",
       "downloadPDF": "",
-      "pdfSuccess": ""
+      "pdfSuccess": "",
+      "downloadInvoice": "",
+      "actSuccess": "",
+      "downloadAct": ""
     },
     "settings": {
       "title": "Наладкі",
@@ -5913,7 +5931,14 @@
         "newPlaceholder": "",
         "empty": "",
         "title": "",
-        "desc": ""
+        "desc": "",
+        "cannotDeleteLast": "",
+        "description": "",
+        "add": "",
+        "default": "",
+        "edit": "",
+        "create": "",
+        "nameLabel": ""
       },
       "memberLimitReached": "",
       "inviteSent": "",
@@ -6413,5 +6438,108 @@
     "val3": "",
     "cta": "",
     "free": ""
+  },
+  "fintech": {
+    "balance": {
+      "available": "",
+      "pending": ""
+    },
+    "gmv": {
+      "title": ""
+    },
+    "fees": {
+      "title": ""
+    },
+    "view_finance": ""
+  },
+  "finance": {
+    "title": "",
+    "subtitle": "",
+    "wallet_balance": "",
+    "withdrawal_hint": "",
+    "transactions": "",
+    "empty": {
+      "title": "",
+      "desc": ""
+    }
+  },
+  "tma": {
+    "loading": "",
+    "error_open_in_tg": "",
+    "error_loading": "",
+    "error_tg_only": "",
+    "error_unknown": "",
+    "btn_open_in_tg": "",
+    "nav_home": "",
+    "nav_page": "",
+    "nav_crm": "",
+    "nav_bookings": "",
+    "nav_more": "",
+    "home_greeting": "",
+    "home_greeting_fallback": "",
+    "home_subtitle": "",
+    "stats_leads": "",
+    "stats_tasks": "",
+    "stats_revenue": "",
+    "section_tools": "",
+    "action_page_title": "",
+    "action_page_desc": "",
+    "action_crm_title": "",
+    "action_crm_desc": "",
+    "action_bookings_title": "",
+    "action_bookings_desc": "",
+    "action_payments_title": "",
+    "action_payments_desc": "",
+    "stub_upcoming": "",
+    "btn_back": "",
+    "onboarding_welcome": "",
+    "onboarding_subtitle": "",
+    "onboarding_brand_label": "",
+    "onboarding_brand_placeholder": "",
+    "btn_continue": "",
+    "onboarding_category_title": "",
+    "cat_beauty": "",
+    "cat_service": "",
+    "cat_consult": "",
+    "cat_edu": "",
+    "cat_other": "",
+    "btn_submitting": "",
+    "btn_launch": "",
+    "crm_title": "",
+    "crm_empty": "",
+    "conv_no_name": "",
+    "conv_no_msg": "",
+    "bookings_title": "",
+    "bookings_empty": "",
+    "booking_client_fallback": "",
+    "booking_source_fallback": "",
+    "status_confirmed": "",
+    "status_new": "",
+    "editor_title": "",
+    "tab_profile": "",
+    "tab_links": "",
+    "tab_qr": "",
+    "btn_publishing": "",
+    "btn_publish": "",
+    "page_not_found": "",
+    "label_name_title": "",
+    "label_bio": "",
+    "label_avatar": "",
+    "btn_add_link": "",
+    "link_new_title": "",
+    "qr_instruction": "",
+    "label_page_url": "",
+    "btn_publish_full": "",
+    "placeholder_name": "",
+    "placeholder_bio": "",
+    "label_avatar_url": "",
+    "link_title_placeholder": "",
+    "btn_copy_link": "",
+    "nav_payments": "",
+    "nav_tasks": ""
+  },
+  "search": {
+    "placeholder": "",
+    "noResults": ""
   }
 }

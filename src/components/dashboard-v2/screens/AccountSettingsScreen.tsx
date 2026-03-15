@@ -40,6 +40,7 @@ import { VerificationPanel } from '@/components/settings/VerificationPanel';
 import { LinkedAccountsSection } from '@/components/settings/LinkedAccountsSection';
 import { ChangePasswordDialog } from '@/components/settings/ChangePasswordDialog';
 import { BillingHistorySheet } from '@/components/settings/BillingHistorySheet';
+import { ApiKeysManagement } from '@/components/settings/ApiKeysManagement';
 import { cn } from '@/lib/utils/utils';
 import type { ProfileBlock } from '@/types/page';
 import type { PremiumTier } from '@/hooks/user/usePremiumStatus';
@@ -370,6 +371,16 @@ export const AccountSettingsScreen = memo(function AccountSettingsScreen(props: 
               label={t('dashboard.accountSettings.changePassword', 'Change Password')}
               onClick={() => setShowPasswordDialog(true)}
             />
+          </Card>
+        </motion.div>
+
+        {/* API Access (Roadmap Item 12) */}
+        <motion.div variants={itemVariants} className="space-y-2">
+          <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
+            {t('dashboard.accountSettings.apiAccess', 'API Access')}
+          </h3>
+          <Card className="p-5">
+            <ApiKeysManagement />
           </Card>
         </motion.div>
 
