@@ -233,7 +233,7 @@ export default function Auth() {
 
     const emailValidation = z.string().trim().email().safeParse(email);
     if (!emailValidation.success) {
-      toast.error(t('auth.invalidEmail', 'Please enter a valid email address'));
+      toast.error(t('common.errors.invalidEmail', 'Please enter a valid email address'));
       playError();
       setIsLoading(false);
       return;
@@ -245,7 +245,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Password reset error:', error, { context: 'Auth' });
-      handleError(error, t('auth.resetFailed', 'Failed to send reset email'));
+      handleError(error, t('common.errors.resetFailed', 'Failed to send reset email'));
       playError();
       setIsLoading(false);
       return;
@@ -333,7 +333,7 @@ export default function Auth() {
     const confirmPassword = formData.get('confirm-password') as string;
 
     if (newPassword !== confirmPassword) {
-      toast.error(t('auth.passwordsDoNotMatch', 'Passwords do not match'));
+      toast.error(t('common.errors.passwordMismatch', 'Passwords do not match'));
       playError();
       setIsLoading(false);
       return;
@@ -353,7 +353,7 @@ export default function Auth() {
 
     if (error) {
       logger.error('Password update error:', error, { context: 'Auth' });
-      handleError(error, t('auth.updateFailed', 'Failed to update password'));
+      handleError(error, t('common.errors.updateFailed', 'Failed to update data'));
       playError();
       setIsLoading(false);
       return;
@@ -514,7 +514,7 @@ export default function Auth() {
                       </p>
                     </div>
                     <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                      {isLoading ? t('messages.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
+                      {isLoading ? t('common.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
                     </Button>
                   </form>
                 )}
@@ -634,7 +634,7 @@ export default function Auth() {
                             />
                           </div>
                           <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                            {isLoading ? t('messages.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
+                            {isLoading ? t('common.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
                           </Button>
                           <div className="relative py-2">
                             <div className="absolute inset-0 flex items-center">
@@ -810,7 +810,7 @@ export default function Auth() {
                           </label>
                         </div>
                         <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                          {isLoading ? t('messages.loading', 'Loading...') : t('auth.signUp')}
+                          {isLoading ? t('common.loading', 'Loading...') : t('auth.signUp')}
                         </Button>
                       </form>
                     )}
