@@ -8,6 +8,8 @@ import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { AlignmentButton } from './EditorUtils';
+import { getRandomSuggestion, type SuggestionContext } from '@/lib/intelligence/writing-algorithm';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2';
 import Square from 'lucide-react/dist/esm/icons/square';
 import Minus from 'lucide-react/dist/esm/icons/minus';
@@ -23,6 +25,27 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
   const { t } = useTranslation();
   const data = formData as any;
   const handleChange = (updates: any) => onChange(updates);
+
+  const { pageData } = useDashboard();
+  const currentNiche = pageData?.niche || 'general';
+
+  const handleMagicWand = () => {
+    const context: SuggestionContext = {
+      city: pageData?.city || '',
+      company_name: (pageData?.blocks.find(b => b.type === 'profile') as any)?.name || '',
+    };
+
+    const suggestion = getRandomSuggestion(currentNiche, 'button', context);
+    if (suggestion) {
+      handleChange({
+        ...data,
+        title: {
+          ...migrateToMultilingual(data.title),
+          ru: suggestion
+        }
+      });
+    }
+  };
 
   // Progress tracking
   const contentFilled = [
@@ -44,6 +67,7 @@ function ButtonBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps
           label={t('fields.title', 'Title')}
           value={migrateToMultilingual(data.title)}
           onChange={(value) => handleChange({ ...data, title: value })}
+          onMagicWand={handleMagicWand}
           placeholder={t('placeholders.buttonText', 'Button text')}
           required
         />

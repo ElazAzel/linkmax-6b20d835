@@ -12,6 +12,8 @@ import { migrateToMultilingual } from '@/lib/i18n-helpers';
 import { AIButton } from '@/components/form-fields/AIButton';
 import { MediaUpload } from '@/components/form-fields/MediaUpload';
 import { generateMagicTitle } from '@/lib/ai-helpers';
+import { getRandomSuggestion, type SuggestionContext } from '@/lib/intelligence/writing-algorithm';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
 import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper';
 import { EditorSection, EditorField, EditorDivider } from './EditorSection';
 import { validateLinkBlock } from '@/lib/blocks/block-validators';
@@ -124,6 +126,9 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
     }
   };
 
+  const { pageData } = useDashboard();
+  const currentNiche = pageData?.niche || 'general';
+
   const handleGenerateTitle = async () => {
     if (!formData.url) return;
 
@@ -133,6 +138,24 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
       onChange({ ...formData, title: { ru: title, en: '', kk: '' } });
     } finally {
       setAiLoading(false);
+    }
+  };
+
+  const handleMagicWand = () => {
+    const context: SuggestionContext = {
+      city: pageData?.city || '',
+      company_name: (pageData?.blocks.find(b => b.type === 'profile') as any)?.name || '',
+    };
+
+    const suggestion = getRandomSuggestion(currentNiche, 'link', context);
+    if (suggestion) {
+      onChange({
+        ...formData,
+        title: {
+          ...migrateToMultilingual(formData.title),
+          ru: suggestion
+        }
+      });
     }
   };
 
@@ -183,6 +206,7 @@ function LinkBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
               label=""
               value={migrateToMultilingual(formData.title)}
               onChange={(value) => onChange({ ...formData, title: value })}
+              onMagicWand={handleMagicWand}
               required
             />
           </div>

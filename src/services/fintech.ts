@@ -140,7 +140,7 @@ export const fintechService = {
                 .from('user_wallets')
                 .select('*')
                 .eq('user_id', userId)
-                .single();
+                .maybeSingle();
 
             // Gracefully handle missing table (feature not launched yet)
             if (walletError) {
@@ -186,7 +186,7 @@ export const fintechService = {
             .from('user_wallets')
             .select('id, balance')
             .eq('user_id', userId)
-            .single();
+            .maybeSingle();
 
         if (!wallet || wallet.balance < amount) {
             throw new Error('Insufficient funds');

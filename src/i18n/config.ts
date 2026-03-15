@@ -146,6 +146,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    debug: false,
     ns: ['translation'],
     defaultNS: 'translation',
     detection: {

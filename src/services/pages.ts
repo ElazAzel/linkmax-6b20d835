@@ -196,7 +196,7 @@ export async function savePage(
     const bioText = typeof profileBio === 'string' ? profileBio : (profileBio ? getI18nText(profileBio, 'ru') : null);
 
     // Upsert page atomically
-    const { data: pageId, error: upsertError } = await supabase.rpc('upsert_user_page', {
+    let { data: pageId, error: upsertError } = await supabase.rpc('upsert_user_page', {
       p_user_id: userId,
       p_slug: slug,
       p_title: profileName || 'My Page',
@@ -214,6 +214,29 @@ export async function savePage(
       p_webhook_url: pageData.webhook_url || null,
       p_webhook_secret: pageData.webhook_secret || null,
     });
+
+    // Fallback for legacy RPC if the new one with webhooks parameters is not yet deployed
+    if (upsertError && (upsertError.code === 'PGRST202' || upsertError.message?.includes('p_webhook_url'))) {
+      logger.info('Retrying with legacy upsert_user_page RPC (fallback)');
+      const fallbackResult = await supabase.rpc('upsert_user_page', {
+        p_user_id: userId,
+        p_slug: slug,
+        p_title: profileName || 'My Page',
+        p_description: bioText,
+        p_avatar_url: profileBlock?.avatar || null,
+        p_avatar_style: { type: 'default', color: '#000000' } as unknown as Json,
+        p_theme_settings: pageData.theme as unknown as Json,
+        p_seo_meta: pageData.seo as unknown as Json,
+        p_editor_mode: pageData.editorMode || 'linear',
+        p_grid_config: (pageData.gridConfig || null) as unknown as Json,
+        p_integrations: (pageData.integrations || null) as unknown as Json,
+        p_favicon_url: pageData.favicon_url || null,
+        p_hide_branding: pageData.hideBranding || false,
+        p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : null,
+      } as any);
+      pageId = fallbackResult.data;
+      upsertError = fallbackResult.error;
+    }
 
     if (upsertError) {
       logger.error('Error upserting page', upsertError, { context: 'pages', data: { userId, slug } });

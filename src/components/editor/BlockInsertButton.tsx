@@ -18,6 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
 } from '@/components/ui/sheet';
 import {
   Tooltip,
@@ -185,12 +186,15 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
     // Close first, then insert to avoid state conflicts
     setIsOpen(false);
-    setSearchQuery('');
+    // Reset search query after a short delay to not flicker while closing
+    setTimeout(() => setSearchQuery(''), 200);
     
-    // Use setTimeout to ensure close happens before insert triggers re-renders
+    // Use a slightly longer timeout (150ms) to ensure the sheet has 
+    // started its closing animation and state has updated before
+    // parent re-renders trigger heavy block insertion logic
     setTimeout(() => {
       onInsert(blockType);
-    }, 0);
+    }, 150);
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -294,7 +298,7 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       }}>
         <SheetContent
           side="bottom"
-          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] [&>button.absolute]:hidden"
+          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none"
         >
           <div className="flex justify-center pt-4 pb-2">
             <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
@@ -312,12 +316,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                     {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
                   </Badge>
                 )}
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 rounded-full hover:bg-muted transition-colors"
-                >
-                  <X className="h-6 w-6 text-muted-foreground" />
-                </button>
+                <SheetClose asChild>
+                  <button 
+                    className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                    aria-label={t('common.close', 'Close')}
+                  >
+                    <X className="h-6 w-6 text-muted-foreground" />
+                  </button>
+                </SheetClose>
               </div>
             </div>
             <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>

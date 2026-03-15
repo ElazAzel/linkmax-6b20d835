@@ -1,5 +1,27 @@
 # Changelog
 
+## [2026.03.16] — Platform Hardening & Smart-Writing 2.0
+
+### Added
+
+- **Smart-Writing 2.0 (Expansion)**
+  - Added new algorithmic niches: **Beauty**, **Real Estate**, **E-commerce**.
+  - Implemented niche-specific "Magic Wand" for **Links** and **Buttons** using a deterministic algorithm (no AI latency).
+  - Integrated smart suggestions into `LinkBlockEditor` and `ButtonBlockEditor`.
+- **Platform Hardening & UI Stability**
+  - Resolved **Block Insertion Sheet** closure issue (race condition fix with 150ms delay).
+  - Implemented **Radix UI `SheetClose`** for reliable manual closure of the insert panel.
+  - Implemented RPC Fallback for `upsert_user_page` ensuring zero downtime during schema migrations (backward compatibility).
+  - Fixed 406 error in Fintech wallet fetching by migrating to `maybeSingle()`.
+  - Optimized PWA Manifest by resolving icon download errors (`favicon.png` substitution).
+
+### Changed
+
+- **Security & Logging**
+  - Hardened Content Security Policy (CSP) to permit `data:` URIs for inline SVGs.
+  - Disabled Verbose i18n Debugging in production builds to reduce console noise.
+  - Fixed type-safety issues in Edge Functions and Block Editors.
+
 ## [2026.03.15] — Security Hardening & Data Protection
 
 ### Added
