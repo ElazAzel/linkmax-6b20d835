@@ -11,10 +11,30 @@ import { withBlockEditor, type BaseBlockEditorProps } from './BlockEditorWrapper
 import { validateProductBlock } from '@/lib/blocks/block-validators';
 import { MultilingualInput } from '@/components/form-fields/MultilingualInput';
 import { migrateToMultilingual, getI18nText, type SupportedLanguage } from '@/lib/i18n-helpers';
+import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
+import { toast } from 'sonner';
 
 function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) {
   const { t, i18n } = useTranslation();
   const [aiLoading, setAiLoading] = useState(false);
+  const { pageData } = useDashboard();
+  const niche = pageData?.niche || 'general';
+  const currentLang = i18n.language as SupportedLanguage;
+
+  const handleMagicWandName = () => {
+    const suggestion = getRandomSuggestion(niche, 'product_name');
+    const currentName = migrateToMultilingual(formData.name);
+    onChange({ ...formData, name: { ...currentName, [currentLang]: suggestion } });
+    toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+  };
+
+  const handleMagicWandDescription = () => {
+    const suggestion = getRandomSuggestion(niche, 'product_description');
+    const currentDesc = migrateToMultilingual(formData.description);
+    onChange({ ...formData, description: { ...currentDesc, [currentLang]: suggestion } });
+    toast.success(t('ai.suggestionApplied', 'Предложение примененно'));
+  };
 
   const handleGenerateCopy = async () => {
     const name = getI18nText(formData.name, i18n.language as SupportedLanguage);
@@ -44,13 +64,18 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
   return (
     <div className="space-y-4">
-      <MultilingualInput
-        label={t('fields.productName', 'Product Name')}
-        value={migrateToMultilingual(formData.name)}
-        onChange={(value) => onChange({ ...formData, name: value })}
-        placeholder={t('fields.productNamePlaceholder', 'Product Name')}
-        required
-      />
+      <div className="relative">
+        <MultilingualInput
+          label={t('fields.productName', 'Product Name')}
+          value={migrateToMultilingual(formData.name)}
+          onChange={(value) => onChange({ ...formData, name: value })}
+          placeholder={t('fields.productNamePlaceholder', 'Product Name')}
+          required
+        />
+        <div className="absolute top-0 right-0">
+          <AIButton onClick={handleMagicWandName} loading={false} />
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 gap-2">
         <div>
@@ -71,13 +96,18 @@ function ProductBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
       </div>
 
       <div>
-        <MultilingualInput
-          label={t('fields.description', 'Description')}
-          value={migrateToMultilingual(formData.description)}
-          onChange={(value) => onChange({ ...formData, description: value })}
-          type="textarea"
-          placeholder={t('fields.productDescPlaceholder', 'Product description...')}
-        />
+        <div className="relative">
+          <MultilingualInput
+            label={t('fields.description', 'Description')}
+            value={migrateToMultilingual(formData.description)}
+            onChange={(value) => onChange({ ...formData, description: value })}
+            type="textarea"
+            placeholder={t('fields.productDescPlaceholder', 'Product description...')}
+          />
+          <div className="absolute top-0 right-0">
+            <AIButton onClick={handleMagicWandDescription} loading={false} />
+          </div>
+        </div>
         <div className="mt-2">
           <AIButton
             onClick={handleGenerateCopy}
