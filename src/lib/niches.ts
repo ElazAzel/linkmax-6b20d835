@@ -1,5 +1,6 @@
 // 15 generalized niches for page categorization
 export const NICHES = [
+  'expert',      // Coaches, consultants, freelancers (Expert-First)
   'beauty',      // Beauty, cosmetics, skincare
   'fitness',     // Fitness, sports, health
   'food',        // Restaurants, cafes, chefs, food
@@ -21,6 +22,7 @@ export type Niche = typeof NICHES[number];
 
 // Niche icons mapping (using emoji for simplicity)
 export const NICHE_ICONS: Record<Niche, string> = {
+  expert: '🚀',
   beauty: '💄',
   fitness: '💪',
   food: '🍽️',

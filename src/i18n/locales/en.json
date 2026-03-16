@@ -807,6 +807,7 @@
     "fitness": "Fitness trainer",
     "musician": "Musician",
     "designer": "Designer",
+    "expert": "Expert",
     "teacher": "Tutor",
     "shop": "Shop",
     "marketer": "Marketer",
@@ -814,6 +815,7 @@
     "chef": "Cook/Pastry Chef"
   },
   "niches": {
+    "expert": "Expert",
     "beauty": "Beauty",
     "fitness": "Fitness",
     "food": "Food",

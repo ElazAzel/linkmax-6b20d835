@@ -68,6 +68,9 @@ interface UserInfo {
   services: string;
   socials: string;
   mediaLinks: string;
+  expertGoal?: string;
+  expertOffer?: string;
+  expertChannel?: 'telegram' | 'email';
 }
 
 type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
@@ -91,6 +94,9 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     services: '',
     socials: '',
     mediaLinks: '',
+    expertGoal: '',
+    expertOffer: '',
+    expertChannel: 'telegram',
   });
   const [selectedNiche, setSelectedNiche] = useState<Niche | null>(null);
   const [templates, setTemplates] = useState<DBTemplate[]>([]);
@@ -200,9 +206,18 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
 
     try {
       // Build user description for AI
+      let finalBio = userInfo.bio;
+      if (selectedNiche === 'expert') {
+        finalBio = [
+          userInfo.expertGoal && `${t('aiBuilder.nicheQuestions.expertGoalLabel', 'Target')}: ${userInfo.expertGoal}`,
+          userInfo.expertOffer && `${t('aiBuilder.nicheQuestions.expertOfferLabel', 'Offer')}: ${userInfo.expertOffer}`,
+          userInfo.bio
+        ].filter(Boolean).join('\n\n');
+      }
+
       const userDescription = [
         `Имя/Название: ${userInfo.name}`,
-        userInfo.bio && `О себе: ${userInfo.bio}`,
+        finalBio && `О себе: ${finalBio}`,
         userInfo.services && `Услуги/Товары: ${userInfo.services}`,
         userInfo.contacts && `Контакты: ${userInfo.contacts}`,
         userInfo.socials && `Соцсети: ${userInfo.socials}`,
@@ -212,7 +227,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
       // Generate structural layout and inject user data synchronously
       const finalBlocks: Block[] = generateBlocksFromTemplate(
         Array.isArray(selectedTemplate.blocks) ? selectedTemplate.blocks : [],
-        userInfo
+        { ...userInfo, bio: finalBio }
       );
 
       // Brief delay to simulate generation and keep UX smooth
@@ -474,23 +489,67 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                 </div>
 
                 {/* 2. BIO (Depends on niche) */}
-                <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-base font-semibold">
-                      {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.bioBeauty', 'Кратко о вашем опыте (Бьюти)') :
-                        (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :
-                          selectedNiche === 'business' ? t('aiBuilder.nicheQuestions.bioBusiness', 'Опишите ваш бизнес в 2-х словах') :
-                            t('aiBuilder.nicheQuestions.bioGeneric', 'О себе / Описание')}
-                    </Label>
-                    <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                {selectedNiche === 'expert' ? (
+                  <>
+                    <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in">
+                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.expertGoalLabel', 'Кому вы помогаете?')}</Label>
+                      <Input
+                        value={userInfo.expertGoal}
+                        onChange={(e) => setUserInfo(p => ({ ...p, expertGoal: e.target.value }))}
+                        placeholder={t('aiBuilder.nicheQuestions.expertGoalPlaceholder', 'Например: предпринимателям...')}
+                        className="h-12 rounded-xl bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-75">
+                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.expertOfferLabel', 'Какой результат вы даете?')}</Label>
+                      <Textarea
+                        value={userInfo.expertOffer}
+                        onChange={(e) => setUserInfo(p => ({ ...p, expertOffer: e.target.value }))}
+                        placeholder={t('aiBuilder.nicheQuestions.expertOfferPlaceholder', 'Например: помогаю запустить бизнес...')}
+                        className="rounded-xl min-h-[80px] bg-background resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50 animate-fade-in delay-100">
+                      <Label className="text-base font-semibold">{t('aiBuilder.nicheQuestions.expertChannelLabel', 'Куда слать уведомления?')}</Label>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant={userInfo.expertChannel === 'telegram' ? 'default' : 'outline'}
+                          className="flex-1 rounded-xl"
+                          onClick={() => setUserInfo(p => ({ ...p, expertChannel: 'telegram' }))}
+                        >
+                          {t('aiBuilder.nicheQuestions.expertChannelTelegram', 'Telegram')}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={userInfo.expertChannel === 'email' ? 'default' : 'outline'}
+                          className="flex-1 rounded-xl"
+                          onClick={() => setUserInfo(p => ({ ...p, expertChannel: 'email' }))}
+                        >
+                          {t('aiBuilder.nicheQuestions.expertChannelEmail', 'Email')}
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="space-y-2 bg-muted/30 p-4 rounded-2xl border border-border/50">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-semibold">
+                        {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.bioBeauty', 'Кратко о вашем опыте (Бьюти)') :
+                          (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :
+                            selectedNiche === 'business' ? t('aiBuilder.nicheQuestions.bioBusiness', 'Опишите ваш бизнес в 2-х словах') :
+                              t('aiBuilder.nicheQuestions.bioGeneric', 'О себе / Описание')}
+                      </Label>
+                      <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>
+                    </div>
+                    <Textarea
+                      value={userInfo.bio}
+                      onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
+                      placeholder={t('aiBuilder.nicheQuestions.bioPlaceholder', 'Напишите пару предложений... Можно добавить ссылку, алгоритм сам сделает из неё красивую кнопку.')}
+                      className="rounded-xl flex-1 min-h-[80px] bg-background resize-none"
+                    />
                   </div>
-                  <Textarea
-                    value={userInfo.bio}
-                    onChange={(e) => setUserInfo(p => ({ ...p, bio: e.target.value }))}
-                    placeholder={t('aiBuilder.nicheQuestions.bioPlaceholder', 'Напишите пару предложений... Можно добавить ссылку, алгоритм сам сделает из неё красивую кнопку.')}
-                    className="rounded-xl flex-1 min-h-[80px] bg-background resize-none"
-                  />
-                </div>
+                )}
 
                 {/* 3. SERVICES (If required by template) */}
                 {formFields.needsServices && (

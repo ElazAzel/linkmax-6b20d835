@@ -1,6 +1,8 @@
 # LinkMAX — The Business OS for the Solo-Economy (Encyclopedia v2026.03)
 
-> **Strategic Vision:** LinkMAX is the **"Anti-Bitrix/AmoCRM"** for solopreneurs. We are a comprehensive **Business Operating System** (Solo OS) that consolidates the fragmented tech stack into a single, mobile-first, AI-native platform with a **"Step-by-Growth"** monetization model.
+> **Strategic Vision:** LinkMAX is the **"Anti-Bitrix/AmoCRM"** for solopreneurs. We are a comprehensive **Business Operating System** (Solo OS) that consolidates the fragmented tech stack into a single, mobile-first, AI-native platform. 
+> 
+> **2026 Growth Pivot:** Our current focus is **"Narrowing the Noise"** — simplifying the interface and onboarding to provide the fastest "Time to Value" for specific niches, starting with **Experts and Consultants**.
 
 ---
 
@@ -10,13 +12,13 @@
 
 LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)**, where creators operate as independent digital enterprises. It combines:
 
-1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic (frosted high-index glass, reactive WebGL backgrounds, and organic micro-animations). Fully localized in 4 languages (RU, EN, KK, UZ) with 100% coverage.
-2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a global **Cmd+K Command Palette** for deep search across entities, and native **export for Analytics, Leads, and CRM data**.
-3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) to bypass browser restrictions and **AI-optimized Answer Blocks** for generative search (Perplexity, GPT).
-4. **Team Collaboration & Business Zones** — RBAC-based organization management using **Secured View Architecture (`public_teams`)** and multi-tenant workspaces with CRM Kanban and Team Inbox.
-5. **Fintech Core & Auth** — Telegram Mini App integration with full localization, Telegram Web Login, integrated ledger with Kaspi QR Sandbox, local **PDF Invoice / Acts generation**, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
+1. **Page Builder** — AI-powered drag-and-drop constructor with 28+ blocks. Uses the **"Living Canvas"** aesthetic. **Expert-optimized presets** ensure a professional page is ready in minutes.
+2. **Mini-CRM** — Real-time lead management, automated Telegram notifications, Custom Fields, and Kanban. Features a simplified **"Expert Cockpit"** for high-clarity lead tracking.
+3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) and full funnel activation telemetry.
+4. **Team Collaboration & Business Zones** — RBAC-based organization management. Advanced features are progressively disclosed as the user business grows.
+5. **Fintech Core & Auth** — Telegram Mini App integration, Kaspi QR Sandbox, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
 
-**Core Value:** Eliminating the "Tool Tax" (high costs and admin fatigue from using multiple разрозненных SaaS) by providing a unified infrastructure in 15 minutes.
+**Core Value:** Eliminating the "Tool Tax" and "Complexity Fatigue" by providing a unified, expert-focused infrastructure in 15 minutes.
 
 ### Key Competitive Moats
 
