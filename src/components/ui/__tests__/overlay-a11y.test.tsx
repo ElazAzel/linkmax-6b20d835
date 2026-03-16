@@ -54,7 +54,7 @@ describe('DialogContent a11y', () => {
     fireEvent.click(trigger);
 
     const content = await screen.findByRole('dialog');
-    expect(content).toContainElement(document.activeElement);
+    expect(content).toContainElement(document.activeElement as HTMLElement);
 
     const outside = screen.getByText('Outside focus', { selector: 'button' });
     outside.focus();
