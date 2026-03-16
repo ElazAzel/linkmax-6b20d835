@@ -100,7 +100,7 @@ describe('SheetContent a11y', () => {
     outside.focus();
 
     await waitFor(() => {
-      expect(content).toContainElement(document.activeElement);
+      expect(content).toContainElement(document.activeElement as HTMLElement);
     });
 
     fireEvent.keyDown(document, { key: 'Escape' });
