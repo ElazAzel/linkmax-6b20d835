@@ -9,7 +9,8 @@
   - Implemented niche-specific "Magic Wand" for **Links**, **Buttons**, **FAQ**, **Messenger**, and **Product** blocks using a deterministic algorithm (no AI latency).
   - Integrated smart suggestions into `LinkBlockEditor`, `ButtonBlockEditor`, `FAQBlockEditor`, `MessengerBlockEditor`, and `ProductBlockEditor`.
 - **Platform Hardening & Error Audit**
-  - **Editor UI**: Resolved **Block Insertion Sheet** closure issues (selection race condition) by implementing robust `SheetClose` wrappers for block items.
+  - **Full Localization Expansion**: Achieved 100% coverage for **Kazakh (KK)** and **Uzbek (UZ)**. Completed translations for core business modules: Experiments, Billing, CRM, Fintech, and Finance. Unified JSON structure to prevent key mismatches.
+- **Editor UI**: Resolved **Block Insertion Sheet** closure issues (selection race condition) by implementing robust `SheetClose` wrappers for block items.
   - **Localization**: Restored over 15 missing activation checklist keys in `ru.json` and `en.json`, ensuring 100% UI coverage for onboarding flows.
   - **Fintech Service**: Removed `as any` casts and implemented proper typing for `user_wallets` and `user_profiles`. Fixed `PostgrestError` status check.
   - **Observability**: Verified **Sentry noise filtering** for `cute-cursors` extension and validated **PWA Manifest** icon paths.
