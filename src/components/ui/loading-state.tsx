@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { cn } from '@/lib/utils/utils';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -7,6 +8,8 @@ interface LoadingStateProps {
   message?: string;
   variant?: 'spinner' | 'skeleton-list' | 'skeleton-cards';
   skeletonCount?: number;
+  /** Custom skeleton element to render instead of default */
+  skeleton?: ReactNode;
 }
 
 export function LoadingState({
@@ -14,7 +17,12 @@ export function LoadingState({
   message,
   variant = 'spinner',
   skeletonCount = 3,
+  skeleton,
 }: LoadingStateProps) {
+  if (skeleton) {
+    return <>{skeleton}</>;
+  }
+
   if (variant === 'skeleton-list') {
     return (
       <div className={cn('space-y-3', className)}>

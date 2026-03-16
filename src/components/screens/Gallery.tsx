@@ -347,7 +347,7 @@ export default function Gallery() {
                 <LoadingState skeleton={<SkeletonGalleryGrid />} />
               ) : filteredPages.length === 0 ? (
                 <EmptyState
-                  icon={Users}
+                  icon={Search}
                   title={t('gallery.noPages', 'Страниц не найдено')}
                   description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
                   ctaLabel={t('gallery.resetFilters', 'Сбросить фильтры')}
