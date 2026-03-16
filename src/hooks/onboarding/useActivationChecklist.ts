@@ -83,10 +83,6 @@ export function useActivationChecklist({
       },
     ];
   }, [pageData, leadsCount, onOpenEditor, onShare]);
-        href: '/dashboard/activity?action=first-lead',
-      },
-    ];
-  }, [pageData, leadsCount]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;

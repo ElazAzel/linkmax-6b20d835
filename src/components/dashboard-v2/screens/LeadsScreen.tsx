@@ -221,11 +221,6 @@ export const LeadsScreen = memo(function LeadsScreen() {
                                 className="py-12"
                             />
                         </Card>
-                        <LoadingState
-                            variant="skeleton-cards"
-                            skeletonCount={3}
-                            message={t('messages.loading', 'Loading...')}
-                        />
                     ) : loadError ? (
                         <ErrorState
                             title={t('dashboard.leads.loadErrorTitle', 'Не удалось загрузить лиды')}

@@ -132,6 +132,5 @@ export const BookingCard = memo(function BookingCard({
         </div>
       </div>
     </RootElement>
-    </button>
   );
 });
