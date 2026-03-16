@@ -16,9 +16,8 @@ import X from 'lucide-react/dist/esm/icons/x';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SkeletonGalleryGrid } from '@/components/ui/skeleton-card';
-import { EmptyState, LoadingState } from '@/components/ui/states';
-import { LoadingState } from '@/components/ui/loading-state';
 import { EmptyState } from '@/components/ui/empty-state';
+import { LoadingState } from '@/components/ui/loading-state';
 import { Leaderboard } from '@/components/gallery/Leaderboard';
 import { TopReferrers } from '@/components/gallery/TopReferrers';
 import { LanguageSwitcher } from '@/components/translation/LanguageSwitcher';
@@ -348,7 +347,7 @@ export default function Gallery() {
                 <LoadingState skeleton={<SkeletonGalleryGrid />} />
               ) : filteredPages.length === 0 ? (
                 <EmptyState
-                  icon={Users}
+                  icon={Search}
                   title={t('gallery.noPages', 'Страниц не найдено')}
                   description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
                   ctaLabel={t('gallery.resetFilters', 'Сбросить фильтры')}

@@ -12,27 +12,26 @@ export interface ApiKey {
 
 export const apiKeysService = {
   async listKeys(): Promise<ApiKey[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('user_api_keys')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as ApiKey[];
   },
 
   async generateKey(name: string): Promise<{ key: string; details: ApiKey }> {
-    // Вызов RPC функции для безопасной генерации ключа на стороне сервера
-    const { data, error } = await supabase.rpc('generate_user_api_key', {
+    const { data, error } = await (supabase as any).rpc('generate_user_api_key', {
       key_name: name
     });
 
     if (error) throw error;
-    return data;
+    return data as { key: string; details: ApiKey };
   },
 
   async deleteKey(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('user_api_keys')
       .delete()
       .eq('id', id);

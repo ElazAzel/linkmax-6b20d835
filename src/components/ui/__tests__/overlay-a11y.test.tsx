@@ -54,13 +54,13 @@ describe('DialogContent a11y', () => {
     fireEvent.click(trigger);
 
     const content = await screen.findByRole('dialog');
-    expect(content).toContainElement(document.activeElement);
+    expect(content).toContainElement(document.activeElement as HTMLElement);
 
     const outside = screen.getByText('Outside focus', { selector: 'button' });
     outside.focus();
 
     await waitFor(() => {
-      expect(content).toContainElement(document.activeElement);
+      expect(content).toContainElement(document.activeElement as HTMLElement);
     });
 
     fireEvent.keyDown(document, { key: 'Escape' });
@@ -94,13 +94,13 @@ describe('SheetContent a11y', () => {
     fireEvent.click(trigger);
 
     const content = await screen.findByRole('dialog');
-    expect(content).toContainElement(document.activeElement);
+    expect(content).toContainElement(document.activeElement as HTMLElement);
 
     const outside = screen.getByText('Sheet outside focus', { selector: 'button' });
     outside.focus();
 
     await waitFor(() => {
-      expect(content).toContainElement(document.activeElement);
+      expect(content).toContainElement(document.activeElement as HTMLElement);
     });
 
     fireEvent.keyDown(document, { key: 'Escape' });

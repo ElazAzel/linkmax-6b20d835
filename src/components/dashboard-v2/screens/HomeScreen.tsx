@@ -43,7 +43,6 @@ import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/Operato
 import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import { trackActivationEvent, trackCreatorReturnedAfterGap } from '@/lib/activation-events';
-import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { differenceInDays, parseISO } from 'date-fns';
@@ -153,7 +152,7 @@ export const HomeScreen = memo(function HomeScreen({
   const isPublished = pageData?.isPublished || false;
   const hasContent = (pageData?.blocks?.length || 0) > 1 ||
     (pageData?.blocks?.length === 1 && pageData?.blocks[0].type !== 'profile');
-
+  const { repeatCount } = useRepeatCustomers();
   // Context-aware tip — outcome-focused, not cosmetic
   const dynamicTip = useMemo(() => {
     if (!isPublished && hasContent) {

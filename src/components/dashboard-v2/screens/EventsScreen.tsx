@@ -373,7 +373,7 @@ export const EventsScreen = memo(function EventsScreen({ className }: EventsScre
           {events.length === 0 ? (
             <Card className="glass border-white/10 shadow-glass-lg rounded-[2.5rem]">
               <EmptyState
-                icon={Calendar}
+                icon={CalendarDays}
                 title={t('events.noEvents', 'Нет событий')}
                 description={t('events.noEventsDesc', 'Добавьте блок "Событие" на свою страницу, чтобы начать собирать регистрации')}
                 action={{

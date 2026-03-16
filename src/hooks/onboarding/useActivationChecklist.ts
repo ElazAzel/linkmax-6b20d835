@@ -2,7 +2,6 @@
  * useActivationChecklist v2.0 - Outcome-based activation tracking
  * 4 steps focused on real value delivery, not UI actions
  */
-import { useMemo, useCallback, useState } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { storage } from '@/lib/storage';
 import { trackActivationEvent } from '@/lib/activation-events';
@@ -44,8 +43,6 @@ export function useActivationChecklist({
 
     const hasPage = !!pageData.id;
     const hasContentBlock = pageData.blocks.some(block => block.type !== 'profile');
-    const hasPage = pageData.blocks.length > 0;
-    const hasContentBlock = pageData.blocks.some((block) => block.type !== 'profile');
     const isPublished = pageData.isPublished || false;
     const hasFirstLead = leadsCount >= 1;
 
@@ -80,6 +77,7 @@ export function useActivationChecklist({
         completed: hasFirstLead,
         action: onOpenEditor,
         ctaKey: 'activation.cta.promotePage',
+        href: '/dashboard/activity?action=first-lead',
       },
     ];
   }, [pageData, leadsCount, onOpenEditor, onShare]);

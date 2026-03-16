@@ -14,7 +14,7 @@ export interface EmailTemplate {
 export const emailTemplatesService = {
   async listTemplates() {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_templates')
         .select('*')
         .order('created_at', { ascending: false });
@@ -29,7 +29,7 @@ export const emailTemplatesService = {
 
   async getTemplate(id: string) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_templates')
         .select('*')
         .eq('id', id)
@@ -48,7 +48,7 @@ export const emailTemplatesService = {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_templates')
         .insert({
           ...template,
@@ -67,7 +67,7 @@ export const emailTemplatesService = {
 
   async updateTemplate(id: string, updates: Partial<EmailTemplate>) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_templates')
         .update({
           ...updates,
@@ -87,7 +87,7 @@ export const emailTemplatesService = {
 
   async deleteTemplate(id: string) {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('email_templates')
         .delete()
         .eq('id', id);

@@ -67,56 +67,9 @@ const scheduleLikelyRoutePrefetch = () => {
 
 _ric(scheduleLikelyRoutePrefetch);
 
-// Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
-const CHUNK_RECOVERY_KEY = 'linkmax_chunk_recovery_once';
+// Runtime recovery uses imported functions from runtime-recovery module
 
-function isChunkRuntimeError(err: unknown): boolean {
-  const message = typeof err === 'string'
-    ? err
-    : (err as { message?: string })?.message || '';
-
-  return [
-    'ChunkLoadError',
-    'Loading chunk',
-    'Failed to fetch dynamically imported module',
-    'Importing a module script failed',
-    'O is not a function',
-  ].some((token) => message.includes(token));
-}
-
-function recoverFromStaleAssets(): void {
-  try {
-    if (window.sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
-    window.sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
-
-    // Clear runtime caches that can hold stale assets
-    try {
-      Object.keys(window.localStorage).forEach((key) => {
-        if (key.startsWith('linkmax_') || key.startsWith('sb-')) {
-          window.localStorage.removeItem(key);
-        }
-      });
-    } catch {
-      // ignore
-    }
-
-    try {
-      if ('caches' in window) {
-        caches.keys().then((names) => {
-          names.forEach((name) => caches.delete(name));
-          window.location.reload();
-        });
-        return;
-      }
-    } catch {
-      // ignore
-    }
-
-    window.location.reload();
-  } catch {
-    window.location.reload();
-  }
-}
+// Recovery function wraps the imported version
 
 window.addEventListener('error', (event) => {
   if (isChunkRuntimeError(event.error || event.message)) {
