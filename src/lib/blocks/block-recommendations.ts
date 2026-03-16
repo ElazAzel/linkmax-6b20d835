@@ -19,6 +19,7 @@ export type PageNiche =
   | 'ecommerce'      // Online stores, product sellers
   | 'health'         // Health, fitness, wellness
   | 'community'      // Community leaders, groups
+  | 'expert'         // Coaches, consultants, freelancers
   | 'general';       // General / undetected
 
 /**
@@ -43,6 +44,7 @@ export function mapNicheToPageNiche(niche?: Niche | string): PageNiche {
     realestate: 'business',
     events: 'events',
     services: 'freelancer',
+    expert: 'expert',
     other: 'general',
   };
 
@@ -151,6 +153,16 @@ const NICHE_WEIGHTS: Record<PageNiche, BlockWeight[]> = {
     { block: 'newsletter', weight: 75, reason: 'recommendations.reason.newsletter_community' },
     { block: 'form', weight: 70, reason: 'recommendations.reason.form' },
     { block: 'faq', weight: 65, reason: 'recommendations.reason.faq' },
+  ],
+  expert: [
+    { block: 'booking', weight: 100, reason: 'recommendations.reason.booking_expert' },
+    { block: 'pricing', weight: 95, reason: 'recommendations.reason.pricing_expert' },
+    { block: 'testimonial', weight: 90, reason: 'recommendations.reason.testimonial_expert' },
+    { block: 'form', weight: 85, reason: 'recommendations.reason.form_expert' },
+    { block: 'newsletter', weight: 80, reason: 'recommendations.reason.newsletter_expert' },
+    { block: 'messenger', weight: 75, reason: 'recommendations.reason.messenger' },
+    { block: 'video', weight: 70, reason: 'recommendations.reason.video' },
+    { block: 'socials', weight: 65, reason: 'recommendations.reason.socials' },
   ],
   general: [
     { block: 'link', weight: 100, reason: 'recommendations.reason.link_general' },

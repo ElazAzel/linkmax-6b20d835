@@ -182,6 +182,35 @@ export const BLOCK_PRESETS: BlockPreset[] = [
     overrides: { title: 'Stay Updated', description: 'Get the latest news and updates.' },
     keywords: ['newsletter', 'subscribe', 'рассылка', 'подписка'],
   },
+
+  // ── Expert presets ──
+  {
+    id: 'expert_consultation_cta',
+    blockType: 'booking',
+    labelKey: 'presets.expert.consultation',
+    descriptionKey: 'presets.expert.consultationDesc',
+    category: 'cta',
+    overrides: { title: 'Записаться на консультацию', buttonText: 'Выбрать время' },
+    keywords: ['expert', 'consultation', 'консультация', 'запись'],
+  },
+  {
+    id: 'expert_guide_buy',
+    blockType: 'button',
+    labelKey: 'presets.expert.guideBuy',
+    descriptionKey: 'presets.expert.guideBuyDesc',
+    category: 'commerce',
+    overrides: { label: '💎 Купить мой Гайд/Курс', url: '#', style: 'gradient', icon: 'sparkles' },
+    keywords: ['guide', 'course', 'курс', 'гайд', 'продажа'],
+  },
+  {
+    id: 'expert_telegram_join',
+    blockType: 'button',
+    labelKey: 'presets.expert.telegramJoin',
+    descriptionKey: 'presets.expert.telegramJoinDesc',
+    category: 'social',
+    overrides: { label: '📢 Мой Telegram канал', url: 'https://t.me/', icon: 'send', style: 'rounded' },
+    keywords: ['telegram', 'tg', 'телеграм', 'канал'],
+  },
 ];
 
 /**
