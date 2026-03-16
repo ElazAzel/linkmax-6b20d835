@@ -263,26 +263,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             </Badge>
           </div>
         )}
-        {!isLocked && (isProBlock || showRelevantBadge) && (
-          <div className="absolute -top-1 -left-1">
-            <Badge
-              className="max-w-[5.5rem] text-[10px] sm:text-xs px-1.5 py-0.5 bg-emerald-500 hover:bg-emerald-500 border-0 whitespace-normal break-words text-wrap leading-tight"
-              variant="secondary"
-            >
-              {isProBlock ? (
-                <>
-                  <Crown className="h-2.5 w-2.5 mr-0.5" />
-                  {t('blocks.premium', 'Premium')}
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-2.5 w-2.5 mr-0.5" />
-                  {t('recommendations.relevant', 'Актуально')}
-                </>
-              )}
-            </Badge>
-          </div>
-        )}
+
+
 
         {isLocked && (
           <div className="absolute top-2 right-2">
