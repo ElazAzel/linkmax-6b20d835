@@ -310,9 +310,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         </Button>
       )}
 
-      <Sheet open={isOpen} onOpenChange={(open) => {
-        handleOpenChange(open);
-      }}>
+      <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+
         <SheetContent
           side="bottom"
           hideCloseButton
