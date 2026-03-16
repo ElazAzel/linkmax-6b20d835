@@ -43,8 +43,6 @@ export function useActivationChecklist({
 
     const hasPage = !!pageData.id;
     const hasContentBlock = pageData.blocks.some(block => block.type !== 'profile');
-    const hasPage = pageData.blocks.length > 0;
-    const hasContentBlock = pageData.blocks.some((block) => block.type !== 'profile');
     const isPublished = pageData.isPublished || false;
     const hasFirstLead = leadsCount >= 1;
 
