@@ -13,7 +13,25 @@
     "source": "Source",
     "englishMandatory": "English is required for international audiences",
     "translateNow": "Translate",
-    "browserLanguageDetected": "Browser language defined: {{language}}"
+    "browserLanguageDetected": "Browser language defined: {{language}}",
+    "activation": {
+      "title": "Launch Your Page",
+      "progress": "{{done}} out of {{total}}",
+      "steps": {
+        "createPage": "Create your main page",
+        "addBlock": "Add your first content block",
+        "publish": "Publish page to the web",
+        "firstLead": "Get your first lead or click"
+      },
+      "cta": {
+        "openEditor": "Open Editor",
+        "addBlock": "Add Block",
+        "publish": "Publish",
+        "promotePage": "Promote"
+      },
+      "celebrationTitle": "🎉 Congratulations!",
+      "celebrationDesc": "Your page is live and delivering results"
+    }
   },
   "textEffects": {
     "none": "No effect",

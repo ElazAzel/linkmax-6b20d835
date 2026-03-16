@@ -9,9 +9,9 @@
   - Implemented niche-specific "Magic Wand" for **Links**, **Buttons**, **FAQ**, **Messenger**, and **Product** blocks using a deterministic algorithm (no AI latency).
   - Integrated smart suggestions into `LinkBlockEditor`, `ButtonBlockEditor`, `FAQBlockEditor`, `MessengerBlockEditor`, and `ProductBlockEditor`.
 - **Platform Hardening & Error Audit**
+  - **Editor UI**: Resolved **Block Insertion Sheet** closure issues (selection race condition) by implementing robust `SheetClose` wrappers for block items.
+  - **Localization**: Restored over 15 missing activation checklist keys in `ru.json` and `en.json`, ensuring 100% UI coverage for onboarding flows.
   - **Fintech Service**: Removed `as any` casts and implemented proper typing for `user_wallets` and `user_profiles`. Fixed `PostgrestError` status check.
-  - **Dashboard Hooks**: Fixed critical bug in `useDashboardMetrics` subscription filter (removed reference to non-existent `page_id` in `leads` table). Improved analytics typing.
-  - **Editor UI**: Resolved **Block Insertion Sheet** closure race condition and fixed double-opening `div` structures for the block grid.
   - **Observability**: Verified **Sentry noise filtering** for `cute-cursors` extension and validated **PWA Manifest** icon paths.
   - Implemented RPC Fallback for `upsert_user_page` ensuring zero downtime during schema migrations (backward compatibility).
   - Fixed 406 error in Fintech wallet fetching by migrating to `maybeSingle()`.

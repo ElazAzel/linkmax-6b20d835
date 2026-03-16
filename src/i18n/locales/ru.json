@@ -13,7 +13,25 @@
     "source": "Источник",
     "englishMandatory": "Английский обязателен для международной аудитории",
     "translateNow": "Перевести",
-    "browserLanguageDetected": "Определён язык браузера: {{language}}"
+    "browserLanguageDetected": "Определён язык браузера: {{language}}",
+    "activation": {
+      "title": "Запустить страницу",
+      "progress": "{{done}} из {{total}}",
+      "steps": {
+        "createPage": "Создать основную страницу",
+        "addBlock": "Добавить первый блок с контентом",
+        "publish": "Опубликовать страницу в сети",
+        "firstLead": "Получить первый лид или клик"
+      },
+      "cta": {
+        "openEditor": "Открыть редактор",
+        "addBlock": "Добавить блок",
+        "publish": "Опубликовать",
+        "promotePage": "Продвигать"
+      },
+      "celebrationTitle": "🎉 Поздравляем!",
+      "celebrationDesc": "Ваша страница работает и приносит результаты"
+    }
   },
   "textEffects": {
     "none": "Без эффекта",

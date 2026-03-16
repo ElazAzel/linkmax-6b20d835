@@ -103,6 +103,8 @@ Stabilized platform tracking and reduced noise:
 - **Sentry Shielding**: Hardened `beforeSend` logic in `sentry.ts` to fully suppress noise from user extensions (specifically `solomon.cute-cursors.com`).
 - **PWA Manifest Policy**: Optimized icon fetching to avoid 404/Abort errors during cold starts.
 - **Health Score**: **10/10** (Status: Production Ready & Stabilized).
+- **Localization Coverage**: Achieved 100% RU/EN coverage for activation and onboarding flows. Verified zero missing keys in `activation` namespace.
+- **Editor Reliability**: Resolved Sheet closure race conditions in `BlockInsertButton` using `SheetClose` pattern and `useCallback` memoization.
 
 ### [2026-03-12] Fluid Design System & Mobile Polish
 
