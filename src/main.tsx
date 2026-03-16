@@ -67,22 +67,7 @@ const scheduleLikelyRoutePrefetch = () => {
 
 _ric(scheduleLikelyRoutePrefetch);
 
-// Runtime recovery: handle stale chunk/cache mismatch to avoid infinite static fallback
-const CHUNK_RECOVERY_KEY = 'linkmax_chunk_recovery_once';
-
-function isChunkRuntimeError(err: unknown): boolean {
-  const message = typeof err === 'string'
-    ? err
-    : (err as { message?: string })?.message || '';
-
-  return [
-    'ChunkLoadError',
-    'Loading chunk',
-    'Failed to fetch dynamically imported module',
-    'Importing a module script failed',
-    'O is not a function',
-  ].some((token) => message.includes(token));
-}
+// Runtime recovery uses imported functions from runtime-recovery module
 
 function recoverFromStaleAssets(): void {
   try {
