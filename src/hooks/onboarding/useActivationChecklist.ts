@@ -2,7 +2,6 @@
  * useActivationChecklist v2.0 - Outcome-based activation tracking
  * 4 steps focused on real value delivery, not UI actions
  */
-import { useMemo, useCallback, useState } from 'react';
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { storage } from '@/lib/storage';
 import { trackActivationEvent } from '@/lib/activation-events';
