@@ -69,39 +69,7 @@ _ric(scheduleLikelyRoutePrefetch);
 
 // Runtime recovery uses imported functions from runtime-recovery module
 
-function recoverFromStaleAssets(): void {
-  try {
-    if (window.sessionStorage.getItem(CHUNK_RECOVERY_KEY) === '1') return;
-    window.sessionStorage.setItem(CHUNK_RECOVERY_KEY, '1');
-
-    // Clear runtime caches that can hold stale assets
-    try {
-      Object.keys(window.localStorage).forEach((key) => {
-        if (key.startsWith('linkmax_') || key.startsWith('sb-')) {
-          window.localStorage.removeItem(key);
-        }
-      });
-    } catch {
-      // ignore
-    }
-
-    try {
-      if ('caches' in window) {
-        caches.keys().then((names) => {
-          names.forEach((name) => caches.delete(name));
-          window.location.reload();
-        });
-        return;
-      }
-    } catch {
-      // ignore
-    }
-
-    window.location.reload();
-  } catch {
-    window.location.reload();
-  }
-}
+// Recovery function wraps the imported version
 
 window.addEventListener('error', (event) => {
   if (isChunkRuntimeError(event.error || event.message)) {

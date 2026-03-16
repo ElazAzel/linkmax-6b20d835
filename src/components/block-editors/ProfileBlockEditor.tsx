@@ -19,6 +19,8 @@ import { getLucideIcon } from '@/lib/utils/icon-utils';
 import { Badge } from '@/components/ui/badge';
 import { getRandomSuggestion } from '@/lib/intelligence/writing-algorithm';
 import { useDashboard } from '@/hooks/dashboard/useDashboard';
+import { useFreemiumLimits } from '@/hooks/user/useFreemiumLimits';
+import type { ProfileFrameStyle } from '@/types/blocks/content';
 import { toast } from 'sonner';
 
 

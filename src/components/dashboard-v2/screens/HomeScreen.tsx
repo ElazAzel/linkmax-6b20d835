@@ -43,7 +43,6 @@ import { OperatorSummaryWidget } from '@/components/dashboard-v2/widgets/Operato
 import { WalletOverviewWidget } from '@/components/dashboard-v2/widgets/WalletOverviewWidget';
 import { useRepeatCustomers } from '@/hooks/crm/useRepeatCustomers';
 import { trackActivationEvent, trackCreatorReturnedAfterGap } from '@/lib/activation-events';
-import { trackCreatorReturnedAfterGap } from '@/lib/activation-events';
 import { supabase } from '@/platform/supabase/client';
 import { useAuth } from '@/hooks/user/useAuth';
 import { differenceInDays, parseISO } from 'date-fns';

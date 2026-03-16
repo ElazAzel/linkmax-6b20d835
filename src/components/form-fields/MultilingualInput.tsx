@@ -96,6 +96,8 @@ export function MultilingualInput({
   allowAddLanguages = true,
   primaryLanguage = 'en',
   compact = false,
+  onMagicWand,
+  magicWandTitle,
 }: MultilingualInputProps) {
   const { t } = useTranslation();
 

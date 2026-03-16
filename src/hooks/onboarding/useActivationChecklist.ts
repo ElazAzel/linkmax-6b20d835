@@ -77,6 +77,7 @@ export function useActivationChecklist({
         completed: hasFirstLead,
         action: onOpenEditor,
         ctaKey: 'activation.cta.promotePage',
+        href: '/dashboard/activity?action=first-lead',
       },
     ];
   }, [pageData, leadsCount, onOpenEditor, onShare]);
