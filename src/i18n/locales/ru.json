@@ -21,13 +21,15 @@
         "createPage": "Создать основную страницу",
         "addBlock": "Добавить первый блок с контентом",
         "publish": "Опубликовать страницу в сети",
-        "firstLead": "Получить первый лид или клик"
+        "firstLead": "Получить первый лид или клик",
+        "connectTelegram": "Подключить уведомления в Telegram"
       },
       "cta": {
         "openEditor": "Открыть редактор",
         "addBlock": "Добавить блок",
         "publish": "Опубликовать",
-        "promotePage": "Продвигать"
+        "promotePage": "Продвигать",
+        "connectTelegram": "Подключить"
       },
       "celebrationTitle": "🎉 Поздравляем!",
       "celebrationDesc": "Ваша страница работает и приносит результаты"

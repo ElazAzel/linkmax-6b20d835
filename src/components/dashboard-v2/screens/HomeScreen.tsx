@@ -56,6 +56,7 @@ interface HomeScreenProps {
   loading: boolean;
   isPremium: boolean;
   realLeadsCount?: number;
+  telegramChatId?: string;
   onOpenEditor: () => void;
   onPreview: () => void;
   onShare: () => void;
@@ -65,6 +66,7 @@ interface HomeScreenProps {
   onOpenVersions?: () => void;
   onOpenInsights?: () => void;
   onOpenActivity?: () => void;
+  onNavigate?: (tabId: string) => void;
 }
 
 export const HomeScreen = memo(function HomeScreen({
@@ -80,7 +82,9 @@ export const HomeScreen = memo(function HomeScreen({
   onOpenVersions,
   onOpenInsights,
   onOpenActivity,
+  onNavigate,
   realLeadsCount = 0,
+  telegramChatId,
 }: HomeScreenProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -96,6 +100,8 @@ export const HomeScreen = memo(function HomeScreen({
     onShare,
     pageId: pageData?.id,
     leadsCount: realLeadsCount,
+    telegramChatId,
+    onNavigate,
   });
   const [checklistDismissed, setChecklistDismissed] = useState(false);
 
@@ -106,10 +112,11 @@ export const HomeScreen = memo(function HomeScreen({
     const trackedSteps = storage.get<string[]>(trackingKey) || [];
     const trackedSet = new Set(trackedSteps);
 
-    const completionEvents: Record<string, 'funnel_step_create_page_completed' | 'funnel_step_add_block_completed' | 'funnel_step_publish_completed' | 'funnel_step_first_lead_completed'> = {
+    const completionEvents: Record<string, string> = {
       'create-page': 'funnel_step_create_page_completed',
       'add-block': 'funnel_step_add_block_completed',
       'publish': 'funnel_step_publish_completed',
+      'connect-telegram': 'funnel_step_connect_telegram_completed',
       'first-lead': 'funnel_step_first_lead_completed',
     };
 
@@ -117,7 +124,7 @@ export const HomeScreen = memo(function HomeScreen({
 
     activation.steps.forEach((step) => {
       if (!step.completed || trackedSet.has(step.id)) return;
-      const eventType = completionEvents[step.id];
+      const eventType = completionEvents[step.id] as any;
       if (!eventType) return;
       trackActivationEvent(pageData.id, eventType);
       trackedSet.add(step.id);
@@ -225,8 +232,48 @@ export const HomeScreen = memo(function HomeScreen({
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
         )}
 
-        {/* Operator Widgets — incoming leads + bookings + summary (after activation) */}
-        {(checklistDismissed || activation.showCelebration || !activation.isVisible) && isPublished && (
+        {/* --- EXPERT COCKPIT VIEW --- */}
+        {pageData?.niche === 'expert' && isPublished && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Minimal Stats Hub */}
+            <div className="grid grid-cols-3 gap-3">
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10">
+                <span className="text-2xl font-black text-primary">{realLeadsCount}</span>
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
+              </Card>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10">
+                <span className="text-sm font-black text-emerald-500 uppercase">{isPublished ? 'Live' : 'Draft'}</span>
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.pageStatus', 'status')}</span>
+              </Card>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10">
+                <span className="text-2xl font-black text-violet-500">{viewCount}</span>
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
+              </Card>
+            </div>
+
+            {/* Quick Activity Button */}
+            <Button 
+              size="lg" 
+              className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-glass-lg group overflow-hidden relative"
+              onClick={onOpenActivity}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
+              {t('dashboard.home.viewLeads', 'Смотреть заявки')}
+              <Badge className="ml-3 bg-white/20 text-white border-none">{realLeadsCount}</Badge>
+            </Button>
+            
+            {/* Lead Feed */}
+            <IncomingWidget
+              pageId={pageData?.id}
+              onOpenActivity={onOpenActivity}
+              onShare={onShare}
+            />
+          </div>
+        )}
+
+        {/* --- STANDARD VIEW --- */}
+        {pageData?.niche !== 'expert' && (checklistDismissed || activation.showCelebration || !activation.isVisible) && isPublished && (
           <>
             <IncomingWidget
               pageId={pageData?.id}

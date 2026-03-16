@@ -481,6 +481,8 @@ function DashboardV2Inner() {
                   onOpenVersions={() => setShowVersions(true)}
                   onOpenInsights={() => handleTabChange('insights')}
                   onOpenActivity={() => handleTabChange('activity')}
+                  telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
+                  onNavigate={handleTabChange}
                 />
               </ScreenErrorBoundary>
             )}

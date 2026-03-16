@@ -21,13 +21,15 @@
         "createPage": "Create your main page",
         "addBlock": "Add your first content block",
         "publish": "Publish page to the web",
-        "firstLead": "Get your first lead or click"
+        "firstLead": "Get your first lead or click",
+        "connectTelegram": "Connect Telegram notifications"
       },
       "cta": {
         "openEditor": "Open Editor",
         "addBlock": "Add Block",
         "publish": "Publish",
-        "promotePage": "Promote"
+        "promotePage": "Promote",
+        "connectTelegram": "Connect"
       },
       "celebrationTitle": "🎉 Congratulations!",
       "celebrationDesc": "Your page is live and delivering results"

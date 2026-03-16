@@ -99,6 +99,13 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 - **Full Report**: [UX_UI_AUDIT_REPORT_2026_03_12.md](file:///c:/Users/i.azelkhanov/.gemini/antigravity/brain/e9ed3a0d-5f2f-4e48-b33f-7e907b04b0d6/UX_UI_AUDIT_REPORT_2026_03_12.md)
 
+### [2026-03-16] Expert Onboarding & Cockpit
+Implemented specialized onboarding and dashboard experience for the **Expert niche**:
+- **AI Builder Wizard**: Added expert-specific fields (`goal`, `offer`, `channel`) to the onboarding flow to capture high-intent data for AI generation.
+- **Expert Cockpit**: Refactored `HomeScreen.tsx` into a high-clarity dashboard for experts, prioritizing Leads, Page Status, and Views. Replaced generic widgets with a focused stats hub.
+- **Connect Telegram Activation**: Introduced a mandatory activation step to connect Telegram for real-time notifications, tracked via `funnel_step_connect_telegram_completed` event.
+- **Localization**: Full RU/EN coverage for all expert-related onboarding steps and dashboard components.
+
 ### [2026-03-16] Analytics & Console Hygiene
 
 Stabilized platform tracking and reduced noise:

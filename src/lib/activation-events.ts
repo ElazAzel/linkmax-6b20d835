@@ -22,6 +22,7 @@ export type ActivationEventType =
   | 'funnel_step_create_page_completed'
   | 'funnel_step_add_block_completed'
   | 'funnel_step_publish_completed'
+  | 'funnel_step_connect_telegram_completed'
   | 'funnel_step_first_lead_completed'
   // CRM-layer events
   | 'lead_seen'

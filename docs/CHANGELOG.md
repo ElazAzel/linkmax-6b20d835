@@ -29,6 +29,12 @@
   - Disabled Verbose i18n Debugging in production builds to reduce console noise.
   - Fixed type-safety issues in Edge Functions and Block Editors.
 
+- **Expert Onboarding & Cockpit**
+  - Added specialized onboarding fields (`expertGoal`, `expertOffer`, `expertChannel`) for high-intent data capture.
+  - Refactored `HomeScreen` into a simplified "Expert Cockpit" for expert users.
+  - Integrated "Connect Telegram" activation step with tracking events.
+  - Achieved 100% RU/EN localization coverage for new expert features.
+
 ## [2026.03.15] — Security Hardening & Data Protection
 
 ### Added

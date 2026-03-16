@@ -25,6 +25,8 @@ interface UseActivationChecklistOptions {
   onShare: () => void;
   pageId?: string;
   leadsCount?: number;
+  telegramChatId?: string;
+  onNavigate?: (tabId: string) => void;
 }
 
 export function useActivationChecklist({
@@ -33,6 +35,8 @@ export function useActivationChecklist({
   onShare,
   pageId,
   leadsCount = 0,
+  telegramChatId,
+  onNavigate,
 }: UseActivationChecklistOptions) {
   const [celebrationDismissed, setCelebrationDismissed] = useState(
     () => !!storage.get(CELEBRATION_KEY)
@@ -45,8 +49,9 @@ export function useActivationChecklist({
     const hasContentBlock = pageData.blocks.some(block => block.type !== 'profile');
     const isPublished = pageData.isPublished || false;
     const hasFirstLead = leadsCount >= 1;
+    const isTelegramConnected = !!telegramChatId;
 
-    return [
+    const items: ActivationStep[] = [
       {
         id: 'create-page',
         labelKey: 'activation.steps.createPage',
@@ -71,16 +76,31 @@ export function useActivationChecklist({
         ctaKey: 'activation.cta.publish',
         href: '/dashboard/home?tab=editor&action=publish',
       },
-      {
-        id: 'first-lead',
-        labelKey: 'activation.steps.firstLead',
-        completed: hasFirstLead,
-        action: onOpenEditor,
-        ctaKey: 'activation.cta.promotePage',
-        href: '/dashboard/activity?action=first-lead',
-      },
     ];
-  }, [pageData, leadsCount, onOpenEditor, onShare]);
+
+    // Add connect telegram for experts
+    if (pageData.niche === 'expert') {
+      items.push({
+        id: 'connect-telegram',
+        labelKey: 'activation.steps.connectTelegram',
+        completed: isTelegramConnected,
+        action: () => onNavigate?.('settings'),
+        ctaKey: 'activation.cta.connectTelegram',
+        href: '/dashboard/settings?action=connect-telegram',
+      });
+    }
+
+    items.push({
+      id: 'first-lead',
+      labelKey: 'activation.steps.firstLead',
+      completed: hasFirstLead,
+      action: onOpenEditor,
+      ctaKey: 'activation.cta.promotePage',
+      href: '/dashboard/activity?action=first-lead',
+    });
+
+    return items;
+  }, [pageData, leadsCount, telegramChatId, onOpenEditor, onShare, onNavigate]);
 
   const completedCount = useMemo(() => steps.filter(s => s.completed).length, [steps]);
   const totalCount = steps.length;
