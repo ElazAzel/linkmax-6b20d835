@@ -152,7 +152,7 @@ export const HomeScreen = memo(function HomeScreen({
   const isPublished = pageData?.isPublished || false;
   const hasContent = (pageData?.blocks?.length || 0) > 1 ||
     (pageData?.blocks?.length === 1 && pageData?.blocks[0].type !== 'profile');
-
+  const { repeatCount } = useRepeatCustomers();
   // Context-aware tip — outcome-focused, not cosmetic
   const dynamicTip = useMemo(() => {
     if (!isPublished && hasContent) {

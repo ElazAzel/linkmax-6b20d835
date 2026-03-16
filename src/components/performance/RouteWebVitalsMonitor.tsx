@@ -9,6 +9,7 @@ interface MetricEnvelope {
   delta: number;
   route: string;
   ts: number;
+  [key: string]: unknown;
 }
 
 const STORAGE_KEY = 'lnkmx_route_vitals';

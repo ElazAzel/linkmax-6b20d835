@@ -22,7 +22,7 @@ export interface SequenceStep {
 export const emailSequencesService = {
   async listSequences() {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_sequences')
         .select('*')
         .order('created_at', { ascending: false });
@@ -37,7 +37,7 @@ export const emailSequencesService = {
 
   async getSequenceDetails(id: string) {
     try {
-      const { data: sequence, error: seqError } = await supabase
+      const { data: sequence, error: seqError } = await (supabase as any)
         .from('email_sequences')
         .select('*')
         .eq('id', id)
@@ -45,7 +45,7 @@ export const emailSequencesService = {
 
       if (seqError) throw seqError;
 
-      const { data: steps, error: stepsError } = await supabase
+      const { data: steps, error: stepsError } = await (supabase as any)
         .from('email_sequence_steps')
         .select('*, template:email_templates(*)')
         .eq('sequence_id', id)
@@ -71,7 +71,7 @@ export const emailSequencesService = {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_sequences')
         .insert({
           name,
@@ -92,7 +92,7 @@ export const emailSequencesService = {
 
   async addStep(sequenceId: string, templateId: string, delayHours: number, order: number) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_sequence_steps')
         .insert({
           sequence_id: sequenceId,
@@ -113,7 +113,7 @@ export const emailSequencesService = {
 
   async deleteSequence(id: string) {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('email_sequences')
         .delete()
         .eq('id', id);
@@ -128,7 +128,7 @@ export const emailSequencesService = {
 
   async updateStatus(id: string, status: EmailSequence['status']) {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('email_sequences')
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', id);
