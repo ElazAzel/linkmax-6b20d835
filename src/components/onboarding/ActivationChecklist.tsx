@@ -123,37 +123,6 @@ export const ActivationChecklist = memo(function ActivationChecklist({
             </div>
           );
         })}
-      <div className="space-y-1.5">
-        {steps.map((step) => (
-          <button
-            key={step.id}
-            onClick={() => {
-              if (step.completed) return;
-              onStepClick(step);
-              if (step.action) {
-                step.action();
-              }
-            }}
-            disabled={step.completed}
-            className={cn(
-              "flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl transition-colors text-sm",
-              step.completed
-                ? "text-muted-foreground"
-                : "hover:bg-primary/5 cursor-pointer"
-            )}
-          >
-            {step.completed ? (
-              <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-                <Check className="h-3 w-3 text-primary" />
-              </div>
-            ) : (
-              <Circle className="h-5 w-5 text-muted-foreground/40 shrink-0" />
-            )}
-            <span className={cn(step.completed && "line-through")}>
-              {t(step.labelKey, step.id === 'add-block' ? 'Добавить блок' : step.id === 'first-lead' ? 'Получить первый лид' : step.id === 'create-page' ? 'Создать страницу' : 'Опубликовать')}
-            </span>
-          </button>
-        ))}
       </div>
     </Card>
   );
