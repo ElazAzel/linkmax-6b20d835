@@ -39,12 +39,16 @@ export function TurnstileWidget({ onToken, onError, className }: TurnstileWidget
 
     useEffect(() => {
         const el = containerRef.current;
-        if (!el) return;
+        if (!el || !TURNSTILE_SITE_KEY || TURNSTILE_SITE_KEY.includes('PLACEHOLDER')) return;
+
+        let isMounted = true;
 
         // Wait for turnstile to be loaded
         const tryRender = () => {
+            if (!isMounted) return;
+            
             if (!window.turnstile) {
-                setTimeout(tryRender, 200);
+                setTimeout(tryRender, 500); // Increased delay
                 return;
             }
 
@@ -53,19 +57,30 @@ export function TurnstileWidget({ onToken, onError, className }: TurnstileWidget
                 try { window.turnstile.remove(widgetIdRef.current); } catch { /* ignore */ }
             }
 
-            widgetIdRef.current = window.turnstile.render(el, {
-                sitekey: TURNSTILE_SITE_KEY,
-                callback: (token: string) => onToken(token),
-                'error-callback': () => onError?.(),
-                theme: 'auto', // follows system dark/light
-                size: 'flexible',  // invisible by default, challenges only when suspicious
-            });
+            try {
+                widgetIdRef.current = window.turnstile.render(el, {
+                    sitekey: TURNSTILE_SITE_KEY,
+                    callback: (token: string) => {
+                        if (isMounted) onToken(token);
+                    },
+                    'error-callback': () => {
+                        if (isMounted) onError?.();
+                    },
+                    theme: 'auto',
+                    size: 'flexible',
+                });
+            } catch (err) {
+                console.error('Turnstile render error:', err);
+            }
         };
+        
         tryRender();
 
         return () => {
+            isMounted = false;
             if (widgetIdRef.current && window.turnstile) {
                 try { window.turnstile.remove(widgetIdRef.current); } catch { /* ignore */ }
+                widgetIdRef.current = null;
             }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps

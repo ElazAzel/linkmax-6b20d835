@@ -191,10 +191,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    // Close first, then insert in a microtask to avoid race conditions
-    // while keeping UX responsive on mobile/desktop.
+    // Close the sheet first
     handleOpenChange(false);
-    queueMicrotask(() => onInsert(blockType));
+    
+    // Then trigger insertion in next tick to avoid state conflicts
+    setTimeout(() => {
+      onInsert(blockType);
+      toast.success(t('editor.blockAdded', 'Блок добавлен'));
+    }, 100); 
   };
 
   const getReasonTooltip = (blockType: string): string | null => {

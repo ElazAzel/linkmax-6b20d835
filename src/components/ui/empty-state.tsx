@@ -24,13 +24,16 @@ export function EmptyState({
 }: EmptyStateProps) {
   const resolvedAction = action || (ctaLabel && onCtaClick ? { label: ctaLabel, onClick: onCtaClick } : null);
 
-  // Render icon: if it's a component (function), instantiate it; otherwise render as ReactNode
+  // Render icon: if it's a component (function/object with render), instantiate it; otherwise render as ReactNode
   const renderIcon = () => {
     if (!icon) return <Inbox className="h-6 w-6 text-muted-foreground" />;
-    if (typeof icon === 'function') {
+    
+    // Check if it's a component (function or forwardRef object)
+    if (typeof icon === 'function' || (typeof icon === 'object' && icon !== null && 'render' in icon)) {
       const IconComponent = icon as ComponentType<{ className?: string }>;
       return <IconComponent className="h-6 w-6 text-muted-foreground" />;
     }
+    
     return icon;
   };
 

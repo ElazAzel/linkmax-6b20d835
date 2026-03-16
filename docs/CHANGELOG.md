@@ -8,6 +8,11 @@
   - Added new algorithmic niches: **Beauty**, **Real Estate**, **E-commerce**.
   - Implemented niche-specific "Magic Wand" for **Links**, **Buttons**, **FAQ**, **Messenger**, and **Product** blocks using a deterministic algorithm (no AI latency).
   - Integrated smart suggestions into `LinkBlockEditor`, `ButtonBlockEditor`, `FAQBlockEditor`, `MessengerBlockEditor`, and `ProductBlockEditor`.
+
+### Fixed
+- **Editor**: Исправлена критическая ошибка React (Error #31) в `EmptyState`, приводившая к краху интерфейса.
+- **Editor**: Стабилизирована логика закрытия окна добавления блоков (`BlockInsertButton`).
+- **Security**: Оптимизирован `TurnstileWidget`, устранены ошибки 400020 в консоли.
 - **Platform Hardening & Error Audit**
   - **Full Localization Expansion**: Achieved 100% coverage for **Kazakh (KK)** and **Uzbek (UZ)**. Completed translations for core business modules: Experiments, Billing, CRM, Fintech, and Finance. Unified JSON structure to prevent key mismatches.
 - **Editor UI**: Resolved **Block Insertion Sheet** closure issues (selection race condition) by implementing robust `SheetClose` wrappers for block items.
