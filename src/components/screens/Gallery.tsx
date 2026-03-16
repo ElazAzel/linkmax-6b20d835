@@ -351,15 +351,6 @@ export default function Gallery() {
                   icon={Users}
                   title={t('gallery.noPages', 'Страниц не найдено')}
                   description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
-                <LoadingState
-                  variant="skeleton-cards"
-                  skeletonCount={6}
-                  message={t('messages.loading', 'Загрузка...')}
-                />
-              ) : filteredPages.length === 0 ? (
-                <EmptyState
-                  title={t('gallery.noPages', 'Страниц не найдено')}
-                  description={t('gallery.tryAnotherFilter', 'Попробуйте другой фильтр')}
                   ctaLabel={t('gallery.resetFilters', 'Сбросить фильтры')}
                   onCtaClick={() => {
                     setSearchQuery('');
