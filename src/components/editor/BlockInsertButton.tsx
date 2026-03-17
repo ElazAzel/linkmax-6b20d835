@@ -109,7 +109,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   existingBlocks = [],
   isOpen: externalIsOpen,
   onOpenChange,
-  hideTrigger = false
+  hideTrigger = false,
+  renderSheet = true,
 }: BlockInsertButtonProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
