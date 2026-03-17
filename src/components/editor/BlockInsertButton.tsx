@@ -49,6 +49,7 @@ interface BlockInsertButtonProps {
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   hideTrigger?: boolean;
+  renderSheet?: boolean;
 }
 
 type BlockTier = 'free' | 'pro';
@@ -108,7 +109,8 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   existingBlocks = [],
   isOpen: externalIsOpen,
   onOpenChange,
-  hideTrigger = false
+  hideTrigger = false,
+  renderSheet = true,
 }: BlockInsertButtonProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -408,140 +410,135 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         </Button>
       )}
 
-      <Sheet open={isOpen} onOpenChange={handleOpenChange}>
-
-        <SheetContent
-          side="bottom"
-          hideCloseButton
-          data-testid="add-block-sheet"
-          className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
-          onPointerDownOutside={() => handleOpenChange(false)}
-          onEscapeKeyDown={() => handleOpenChange(false)}
-        >
-          <div className="flex-1 overflow-y-auto">
-            <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
-              <div className="flex justify-center pt-4 pb-2">
-                <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
-              </div>
-
-              <SheetHeader className="px-6 pt-2 pb-4">
-                <div className="flex items-center justify-between">
-                  <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-                  <button
-                    type="button"
-                    onClick={() => handleOpenChange(false)}
-                    className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
-                    aria-label={t('common.close', 'Close')}
-                  >
-                    <X className="h-6 w-6 text-muted-foreground" />
-                  </button>
+      {renderSheet && (
+        <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+          <SheetContent
+            side="bottom"
+            hideCloseButton
+            data-testid="add-block-sheet"
+            className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
+            onPointerDownOutside={() => handleOpenChange(false)}
+            onEscapeKeyDown={() => handleOpenChange(false)}
+          >
+            <div className="flex-1 overflow-y-auto">
+              <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
+                <div className="flex justify-center pt-4 pb-2">
+                  <div className="w-14 h-1.5 rounded-full bg-muted-foreground/25" />
                 </div>
-                <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
-              </SheetHeader>
 
-              <div className="px-6 pb-5 bg-muted/20">
-                <div className="flex items-center justify-between gap-3 mb-3">
-                  {!isPremium && (
-                    <Badge
-                      variant={isAtBlockLimit ? 'destructive' : 'secondary'}
-                      className="rounded-full px-3 py-1 text-xs font-semibold"
+                <SheetHeader className="px-6 pt-2 pb-4">
+                  <div className="flex items-center justify-between">
+                    <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenChange(false)}
+                      className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                      aria-label={t('common.close', 'Close')}
                     >
-                      {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                      <X className="h-6 w-6 text-muted-foreground" />
+                    </button>
+                  </div>
+                  <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
+                </SheetHeader>
+
+                <div className="px-6 pb-5 bg-muted/20">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    {!isPremium && (
+                      <Badge
+                        variant={isAtBlockLimit ? 'destructive' : 'secondary'}
+                        className="rounded-full px-3 py-1 text-xs font-semibold"
+                      >
+                        {remainingBlocks > 0 ? `${remainingBlocks} ${t('freemium.left', 'осталось')}` : t('freemium.limit', 'Лимит')}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
+                    <Input
+                      data-testid="add-block-search"
+                      placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-5 py-5">
+              {/* Featured Presets (Expert only) */}
+              {featuredPresets.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex items-center gap-2 mb-4 px-1">
+                    <Badge variant="outline" className="h-5 bg-primary/10 text-primary border-primary/20 text-[10px] font-black uppercase">
+                      {t('expert.presets_badge', 'Эксперт')}
                     </Badge>
-                  )}
-                </div>
-                <div className="relative">
-                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
-                  <Input
-                    data-testid="add-block-search"
-                    placeholder={t('editor.searchBlocks', 'Поиск блоков...')}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-14 h-14 text-lg rounded-2xl bg-background border-border/30 font-medium"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="px-5 py-5">
-            {/* Featured Presets (Expert only) */}
-            {featuredPresets.length > 0 && (
-              <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4 px-1">
-                  <Badge variant="outline" className="h-5 bg-primary/10 text-primary border-primary/20 text-[10px] font-black uppercase">
-                    {t('expert.presets_badge', 'Эксперт')}
-                  </Badge>
-                  <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
-                    {t('expert.featured_presets', 'Готовые решения')}
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                  {featuredPresets.map(preset => renderPresetItem(preset, true))}
-                </div>
-              </div>
-            )}
-
-            {recommendedBlocks.length > 0 && !searchQuery && (
-              <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4 px-1">
-                  <Sparkles className="h-4 w-4 text-emerald-500" />
-                  <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
-                    {t('recommendations.title', 'Рекомендовано для вас')}
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                  <TooltipProvider delayDuration={300}>
-                    {recommendedBlocks.map((block) => {
-                      const presets = getPresetsForType(block.type as BlockType);
-                      // If there's a specific expert preset for this block type, it might be redundant with Featured, 
-                      // but we show the base block here or a generic preset if it feels right.
-                      // For now, keep base blocks in recommendations to avoid clutter.
-                      return renderBlockItem(block, true);
-                    })}
-                  </TooltipProvider>
-                </div>
-              </div>
-            )}
-
-            {searchQuery && filteredPresets.length > 0 && (
-              <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4 px-1">
-                  <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
-                    {t('editor.presets_tab', 'Готовые блоки')}
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                  {filteredPresets.map(preset => renderPresetItem(preset))}
-                </div>
-              </div>
-            )}
-
-            {otherBlocks.length > 0 && (
-              <div>
-                {(recommendedBlocks.length > 0 || featuredPresets.length > 0) && !searchQuery && (
-                  <div className="flex items-center gap-2 mb-4 px-1 pt-4 border-t border-border/10">
-                    <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
-                      {t('recommendations.allBlocks', 'Все блоки')}
+                    <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+                      {t('expert.featured_presets', 'Готовые решения')}
                     </h3>
                   </div>
-                )}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                  <TooltipProvider delayDuration={300}>
-                    {otherBlocks.map((block) => renderBlockItem(block, false))}
-                  </TooltipProvider>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                    {featuredPresets.map(preset => renderPresetItem(preset, true))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {filteredBlocks.length === 0 && filteredPresets.length === 0 && (
-              <div className="text-center py-16">
-                <p className="text-lg text-muted-foreground font-bold">{t('common.noResults', 'Ничего не найдено')}</p>
+              {recommendedBlocks.length > 0 && !searchQuery && (
+                <div className="mb-8">
+                  <div className="flex items-center gap-2 mb-4 px-1">
+                    <Sparkles className="h-4 w-4 text-emerald-500" />
+                    <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+                      {t('recommendations.title', 'Рекомендовано для вас')}
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    <TooltipProvider delayDuration={300}>
+                      {recommendedBlocks.map((block) => renderBlockItem(block, true))}
+                    </TooltipProvider>
+                  </div>
+                </div>
+              )}
+
+              {searchQuery && filteredPresets.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex items-center gap-2 mb-4 px-1">
+                    <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
+                      {t('editor.presets_tab', 'Готовые блоки')}
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                    {filteredPresets.map(preset => renderPresetItem(preset))}
+                  </div>
+                </div>
+              )}
+
+              {otherBlocks.length > 0 && (
+                <div>
+                  {(recommendedBlocks.length > 0 || featuredPresets.length > 0) && !searchQuery && (
+                    <div className="flex items-center gap-2 mb-4 px-1 pt-4 border-t border-border/10">
+                      <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
+                        {t('recommendations.allBlocks', 'Все блоки')}
+                      </h3>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    <TooltipProvider delayDuration={300}>
+                      {otherBlocks.map((block) => renderBlockItem(block, false))}
+                    </TooltipProvider>
+                  </div>
+                </div>
+              )}
+
+              {filteredBlocks.length === 0 && filteredPresets.length === 0 && (
+                <div className="text-center py-16">
+                  <p className="text-lg text-muted-foreground font-bold">{t('common.noResults', 'Ничего не найдено')}</p>
+                </div>
+              )}
               </div>
-            )}
             </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   );
 });
