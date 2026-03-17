@@ -797,7 +797,7 @@ export const GridEditor = memo(function GridEditor({
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType)}
+            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
