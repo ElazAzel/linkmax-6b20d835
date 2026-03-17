@@ -767,12 +767,14 @@ export const GridEditor = memo(function GridEditor({
             {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
           </p>
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
-            onInsertPreset={(preset) => handleInsertPreset(preset, blocks.length)}
+            onInsert={handleSharedInsert}
+            onInsertPreset={handleSharedInsertPreset}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
             existingBlocks={blocks.map(b => b.type as BlockType)}
+            renderSheet={false}
+            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </div>
       )}
