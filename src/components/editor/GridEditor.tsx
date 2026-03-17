@@ -501,6 +501,14 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
+  const [insertSheetOpen, setInsertSheetOpen] = useState(false);
+  const [insertPosition, setInsertPosition] = useState(blocks.length);
+
+  const openInsertSheet = useCallback((position: number) => {
+    setInsertPosition(position);
+    setInsertSheetOpen(true);
+  }, []);
+
   const handleInsertBlock = useCallback((blockType: string, position: number) => {
     onInsertBlock(blockType, position);
   }, [onInsertBlock]);
@@ -512,6 +520,14 @@ export const GridEditor = memo(function GridEditor({
       onInsertBlock(preset.blockType, position);
     }
   }, [onInsertPreset, onInsertBlock]);
+
+  const handleSharedInsert = useCallback((blockType: string) => {
+    handleInsertBlock(blockType, insertPosition);
+  }, [handleInsertBlock, insertPosition]);
+
+  const handleSharedInsertPreset = useCallback((preset: import('@/lib/editor/editor-presets').BlockPreset) => {
+    handleInsertPreset(preset, insertPosition);
+  }, [handleInsertPreset, insertPosition]);
 
   // P4: Block click handler with multi-select support
   const handleBlockClick = useCallback((block: Block, e: React.MouseEvent) => {
