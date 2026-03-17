@@ -1,5 +1,19 @@
 # Changelog
 
+## [Phase 2: Platform Hardening] - 2026-03-17
+
+### Added
+
+- **Hardened CI Gate**: Enforced mandatory unit test coverage (50%), strict TypeScript checks, and consolidated quality gates in GitHub Actions.
+- **Autosave State Machine**: Implemented a robust versioned state machine for autosave and publish cycles in `useCloudPageState.ts`.
+- **Standardized Error Handling**: Integrated `app-error-normalizer.ts` into core editor workflows for safe, localized error reporting.
+- **ADR 0007**: Documented the design decisions for the new autosave architecture.
+
+### Enhanced
+
+- **CI Reliability**: Consolidated individual lint/test/typecheck steps into a single `quality:check` pipeline.
+- **Save Feedback**: Updated `AutoSaveIndicator` and toast notifications to use normalized error messages.
+
 ## [2026.03.16] — Platform Hardening & Smart-Writing 2.0
 
 ### Added

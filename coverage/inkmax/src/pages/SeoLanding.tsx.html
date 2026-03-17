@@ -1,0 +1,1318 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for inkmax/src/pages/SeoLanding.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">inkmax/src/pages</a> SeoLanding.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/378</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/378</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useEffect, useState } from "react";<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >import { useNavigate, useSearchParams } from "react-router-dom";</span>
+<span class="cstat-no" title="statement not covered" >import { Helmet } from "react-helmet-async";</span>
+<span class="cstat-no" title="statement not covered" >import { AISearchOptimizer } from "@/components/seo/AISearchOptimizer";</span>
+<span class="cstat-no" title="statement not covered" >import { FAQSchema } from "@/components/seo/FAQSchema";</span>
+<span class="cstat-no" title="statement not covered" >import { StructuredData } from "@/components/seo/StructuredData";</span>
+<span class="cstat-no" title="statement not covered" >import { getAppDomain } from "@/lib/utils/url-helpers";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >const SeoLanding = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const navigate = useNavigate();</span>
+<span class="cstat-no" title="statement not covered" >    const [searchParams] = useSearchParams();</span>
+<span class="cstat-no" title="statement not covered" >    const [isBot, setIsBot] = useState(false);</span>
+<span class="cstat-no" title="statement not covered" >    const lang = searchParams.get("lang") || "ru";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    useEffect(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const userAgent = navigator.userAgent.toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >        const botPatterns = [</span>
+<span class="cstat-no" title="statement not covered" >            "googlebot", "bingbot", "slurp", "duckduckbot", "baiduspider",</span>
+<span class="cstat-no" title="statement not covered" >            "yandexbot", "sogou", "exabot", "facebot", "ia_archiver",</span>
+<span class="cstat-no" title="statement not covered" >            "gptbot", "chatgpt-user", "perplexitybot", "claudebot",</span>
+<span class="cstat-no" title="statement not covered" >        ];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        const isSearchBot = botPatterns.some((pattern) =&gt; userAgent.includes(pattern));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!isSearchBot) {</span>
+<span class="cstat-no" title="statement not covered" >            navigate("/", { replace: true });</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            setIsBot(true);</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    }, [navigate]);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!isBot) {</span>
+<span class="cstat-no" title="statement not covered" >        return null;</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const t = {</span>
+<span class="cstat-no" title="statement not covered" >        title: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "LinkMAX — Мультиссылка и Business OS для микро-бизнеса и креаторов",</span>
+<span class="cstat-no" title="statement not covered" >            en: "LinkMAX — Link in Bio &amp; Business OS for Micro-businesses &amp; Creators",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "LinkMAX — Микро-бизнес пен креаторларға арналған мультисілтеме және Business OS",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "LinkMAX — Mikro-biznes va kreatorlar uchun multisilka va Business OS",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "LinkMAX — Мультипосилання та Business OS для мікро-бізнесу та креаторів",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "LinkMAX — Mikro İşletmeler ve İçerik Üreticiler için Link in Bio ve Business OS",</span>
+<span class="cstat-no" title="statement not covered" >            be: "LinkMAX — Мультыспасылка і Business OS для мікра-бізнесу і крэатараў",</span>
+<span class="cstat-no" title="statement not covered" >            de: "LinkMAX — Link in Bio &amp; Business OS für Kleinunternehmen &amp; Creator",</span>
+<span class="cstat-no" title="statement not covered" >            es: "LinkMAX — Link in Bio y Business OS para Microempresas y Creadores",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "LinkMAX — Link in Bio &amp; Business OS pour les Micro-entreprises et Créateurs",</span>
+<span class="cstat-no" title="statement not covered" >            it: "LinkMAX — Link in Bio e Business OS per Micro-imprese e Creator",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "LinkMAX — マイクロビジネスとクリエイターのためのリンクインバイオとBusiness OS",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "LinkMAX — 마이크로 비즈니스 및 크리에이터를 위한 링크인바이오 및 Business OS",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "LinkMAX — Link na Bio e Business OS para Microempresas e Criadores",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "LinkMAX — 面向微型企业和创作者的 Link in Bio 和 Business OS",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "LinkMAX — Link in Bio و Business OS للمؤسسات الصغيرة والمبدعين"</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        description: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "LinkMAX — первая в Казахстане Business OS для микро-бизнеса. Создайте профессиональную мультиссылку с CRM и аналитикой за 5 минут.",</span>
+<span class="cstat-no" title="statement not covered" >            en: "LinkMAX — the first Business OS for micro-business in Kazakhstan. Create a professional link-in-bio with CRM and analytics in 5 minutes.",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "LinkMAX — Қазақстандағы микро-бизнеске арналған алғашқы Business OS. 5 минутта CRM және аналитикасы бар кәсіби мультисілтеме жасаңыз.",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "LinkMAX — Qozog'istondagi mikro-biznes uchun birinchi Business OS. 5 daqiqa ichida CRM va analitikaga ega professional multisilka yarating.",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "LinkMAX — перша в Казахстані Business OS для мікро-бізнесу. Створіть професійне мультипосилання з CRM та аналітикою за 5 хвилин.",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "LinkMAX — Kazakistan'daki mikro işletmeler için ilk Business OS. 5 dakikada CRM ve analiz içeren profesyonel bir link-in-bio oluşturun.",</span>
+<span class="cstat-no" title="statement not covered" >            be: "LinkMAX — першая ў Казахстане Business OS для мікра-бізнесу. Стварыце прафесійную мультыспасылку з CRM і аналітыкай за 5 хвілін.",</span>
+<span class="cstat-no" title="statement not covered" >            de: "LinkMAX — das erste Business OS für Kleinunternehmen in Kasachstan. Erstellen Sie einen professionellen Link-in-Bio mit CRM und Analytics in 5 Minuten.",</span>
+<span class="cstat-no" title="statement not covered" >            es: "LinkMAX — el primer Business OS para microempresas en Kazajistán. Crea un link-in-bio profesional con CRM y analítica en 5 minutos.",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "LinkMAX — le premier Business OS pour micro-entreprises au Kazakhstan. Créez un link-in-bio professionnel avec CRM et analyses en 5 minutes.",</span>
+<span class="cstat-no" title="statement not covered" >            it: "LinkMAX — il primo Business OS per micro-imprese in Kazakistan. Crea un link-in-bio professionale con CRM e analytics in 5 minuti.",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "LinkMAX — カザフスタン初のマイクロビジネス向けBusiness OS。5分でCRMとアナリティクスを備えたプロフェッショナルなリンクインバイオを作成。",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "LinkMAX — 카자흐스탄 최초의 마이크로 비즈니스용 Business OS. 5분 만에 CRM 및 분석 기능이 포함된 전문적인 링크인바이오를 만드세요.",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "LinkMAX — o primeiro Business OS para microempresas no Cazaquistão. Crie um link-na-bio profissional com CRM e análise em 5 minutos.",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "LinkMAX — 哈萨克斯坦首个面向微型企业的 Business OS。5 分钟内创建包含 CRM 和分析功能的专业链接。",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "LinkMAX — أول نظام Business OS للمؤسسات الصغيرة في كازاخستان. قم بإنشاء رابط احترافي مع CRM ونظام تحليلات في 5 دقائق."</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        question: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "Что такое LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            en: "What is LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "LinkMAX дегеніміз не?",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "LinkMAX nima?",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "Що таке LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "LinkMAX nedir?",</span>
+<span class="cstat-no" title="statement not covered" >            be: "Што такое LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            de: "Was ist LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            es: "¿Qué es LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "Qu'est-ce que LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            it: "Cos'è LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "LinkMAXとは何ですか？",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "LinkMAX란 무엇인가요?",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "O que é o LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "什么是 LinkMAX？",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "ما هو LinkMAX؟"</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        answer: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "LinkMAX — это универсальная платформа (Business OS) для соло-предпринимателей и креаторов, позволяющая создавать микро-лендинги, управлять лидами и автоматизировать продажи.",</span>
+<span class="cstat-no" title="statement not covered" >            en: "LinkMAX is a universal platform (Business OS) for solo entrepreneurs and creators, enabling them to create micro-landings, manage leads, and automate sales.",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "LinkMAX — бұл соло-кәсіпкерлер мен креаторларға арналған әмбебап платформа (Business OS), ол микро-лендингтер жасауға, лидтерді басқаруға және сатылымдарды автоматтандыруға мүмкіндік береді.",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "LinkMAX — bu yakkaxon tadbirkorlar va kreatorlar uchun universal platforma (Business OS) bo'lib, u mikro-lendinglar yaratish, lidlarni boshqarish va sotuvlarni avtomatlashtirish imkonini beradi.",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "LinkMAX — це універсальна платформа (Business OS) для соло-підприємців та креаторів, що дозволяє створювати мікро-лендинги, керувати лідами та автоматизовувати продажі.",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "LinkMAX, solo girişimciler ve içerik üreticileri için mikro-landing sayfaları oluşturmalarına, müşteri adaylarını yönetmelerine ve satışları otomatikleştirmelerine olanak tanıyan evrensel bir platformdur (Business OS).",</span>
+<span class="cstat-no" title="statement not covered" >            be: "LinkMAX — гэта ўніверсальная платформа (Business OS) для сола-прадпрымальнікаў і крэатараў, якая дазваляє ствараць мікра-лэндынгі, кіраваць лідамі і аўтаматызаваць продажы.",</span>
+<span class="cstat-no" title="statement not covered" >            de: "LinkMAX ist eine universelle Plattform (Business OS) für Einzelunternehmer und Creator, die es ermöglicht, Micro-Landings zu erstellen, Leads zu verwalten und Verkäufe zu automatisieren.",</span>
+<span class="cstat-no" title="statement not covered" >            es: "LinkMAX es una plataforma universal (Business OS) para emprendedores individuales y creadores que permite crear micro-landings, gestionar leads y automatizar ventas.",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "LinkMAX est une plateforme universelle (Business OS) pour les auto-entrepreneurs et créateurs, permettant de créer des micro-landings, de gérer les prospects et d'automatiser les ventes.",</span>
+<span class="cstat-no" title="statement not covered" >            it: "LinkMAX è una piattaforma universale (Business OS) per imprenditori singoli e creator, che consente di creare micro-landing, gestire i lead e automatizzare le vendite.",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "LinkMAXは、ソロプレナーやクリエイター向けのユニバーサルプラットフォーム（Business OS）であり、マイクロランディングの作成、リード管理、販売の自動化を可能にします。",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "LinkMAX는 솔로 프레너 및 크리에이터를 위한 유니버설 플랫폼(Business OS)으로, 마이크로 랜딩 생성, 리드 관리 및 판매 자동화를 가능하게 합니다.",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "o LinkMAX é uma plataforma universal (Business OS) para empreendedores individuais e criadores, permitindo criar micro-landings, gerir leads e automatizar vendas.",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "LinkMAX 是一个面向个体企业家和创作者的通用平台 (Business OS)，可用于创建微型落地页、管理潜在客户并实现销售自动化。",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "LinkMAX عبارة عن منصة عالمية (Business OS) لرواد الأعمال والمبدعين، تمكنهم من إنشاء صفحات هبوط مصغرة، وإدارة العملاء المحتملين، وأتمتة المبيعات."</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        heroTitle: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "LinkMAX: Максимизируйте ваше цифровое присутствие",</span>
+<span class="cstat-no" title="statement not covered" >            en: "LinkMAX: Maximize Your Digital Impact",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "LinkMAX: Цифрлық қатысуыңызды барынша арттырыңыз",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "LinkMAX: Raqamli mavjudligingizni maksimal darajaga ko'taring",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "LinkMAX: Максимізуйте вашу цифрову присутність",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "LinkMAX: Dijital Etkinizi En Üst Düzeye Çıkarın",</span>
+<span class="cstat-no" title="statement not covered" >            be: "LinkMAX: Максімізуйце вашу лічбавую прысутнасць",</span>
+<span class="cstat-no" title="statement not covered" >            de: "LinkMAX: Maximieren Sie Ihre digitale Präsenz",</span>
+<span class="cstat-no" title="statement not covered" >            es: "LinkMAX: Maximiza tu impacto digital",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "LinkMAX : Maximisez votre impact numérique",</span>
+<span class="cstat-no" title="statement not covered" >            it: "LinkMAX: Massimizza il tuo impatto digitale",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "LinkMAX：デジタルインパクトを最大化する",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "LinkMAX: 디지털 영향력의 극대화",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "LinkMAX: Maximize o seu impacto digital",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "LinkMAX：最大化您的数字影响力",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "LinkMAX: ضاعف تأثيرك الرقمي"</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        heroSubtitle: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "Единое решение для ссылок в био, доверенное тысячами креаторов и бизнесов.",</span>
+<span class="cstat-no" title="statement not covered" >            en: "The all-in-one link in bio solution trusted by creators, influencers, and businesses worldwide.",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "Мыңдаған креаторлар мен бизнестер сенім білдірген биодағы сілтемелерге арналған бірыңғай шешім.",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "Minglab kreatorlar va bizneslar ishongan biodagi havolalar uchun yagona yechim.",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "Єдине рішення для посилань у біо, якому довіряють тисячі креаторів та бізнесів.",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "Dünya çapında içerik üreticileri, fenomenler ve işletmeler tarafından güvenilen hepsi bir arada link-in-bio çözümü.",</span>
+<span class="cstat-no" title="statement not covered" >            be: "Адзінае рашэнне для спасылак у бія, якому давяраюць тысячы крэатараў і бізнесаў.",</span>
+<span class="cstat-no" title="statement not covered" >            de: "Die All-in-One-Lösung für Links in Biografien, der Tausende von Creatorn und Unternehmen weltweit vertrauen.",</span>
+<span class="cstat-no" title="statement not covered" >            es: "La solución todo en uno para el link de tu biografía, en la que confían miles de creadores y empresas.",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "La solution link-in-bio tout-en-un approuvée par des milliers de créateurs et d'entreprises.",</span>
+<span class="cstat-no" title="statement not covered" >            it: "La soluzione link-in-bio all-in-one scelta da migliaia di creator e aziende.",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "世界中のクリエイター、インフルエンサー、ビジネスに信頼されているオールインワンのリンクインバイオソリューション。",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "전 세계 크리에이터, 인플루언서 및 비즈니스가 신뢰하는 올인원 링크인바이오 솔루션입니다.",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "A solução completa para links na bio, em que confiam milhares de criadores e empresas em todo o mundo.",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "全球成千上万创作者、影响者和企业信赖的一体化链接解决方案。",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "الحل المتكامل للرابط في السيرة الذاتية (Link in Bio) الموثوق به من قبل الآلاف من المبدعين والشركات."</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        whyChoose: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "Почему выбирают LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            en: "Why Choose LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "Неліктен LinkMAX таңдайды?",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "Nima uchun LinkMAX-ni tanlashadi?",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "Чому обирають LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "Neden LinkMAX'i seçmelisiniz?",</span>
+<span class="cstat-no" title="statement not covered" >            be: "Чаму выбіраюць LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            de: "Warum LinkMAX wählen?",</span>
+<span class="cstat-no" title="statement not covered" >            es: "¿Por qué elegir LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "Pourquoi choisir LinkMAX ?",</span>
+<span class="cstat-no" title="statement not covered" >            it: "Perché scegliere LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "LinkMAXが選ばれる理由",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "LinkMAX를 선택해야 하는 이유",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "Porquê escolher o LinkMAX?",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "为什么选择 LinkMAX？",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "لماذا تختار LinkMAX؟"</span>
+<span class="cstat-no" title="statement not covered" >        },</span>
+<span class="cstat-no" title="statement not covered" >        fragmented: {</span>
+<span class="cstat-no" title="statement not covered" >            ru: "В современном цифровом мире ваша аудитория рассредоточена по разным платформам. LinkMAX собирает их воедино.",</span>
+<span class="cstat-no" title="statement not covered" >            en: "In today's fragmented digital landscape, LinkMAX brings your audience together in one place.",</span>
+<span class="cstat-no" title="statement not covered" >            kk: "Қазіргі цифрлық әлемде сіздің аудиторияңыз әртүрлі платформаларда шашыраңқы. LinkMAX оларды бір жерге жинайды.",</span>
+<span class="cstat-no" title="statement not covered" >            uz: "Bugungi raqamli dunyoda sizning auditoriyangiz turli platformalarda tarqalgan. LinkMAX ularni bir joyga jamlaydi.",</span>
+<span class="cstat-no" title="statement not covered" >            uk: "У сучасному цифровому світі ваша аудиторія розпорошена по різних платформах. LinkMAX збирає їх воєдино.",</span>
+<span class="cstat-no" title="statement not covered" >            tr: "Günümüzün parçalı dijital dünyasında, LinkMAX hedef kitlenizi tek bir yerde toplar.",</span>
+<span class="cstat-no" title="statement not covered" >            be: "У сучасным лічбавым свеце ваша аўдыторыя рассроджана па розных платформах. LinkMAX збірае іх разам.",</span>
+<span class="cstat-no" title="statement not covered" >            de: "In der heutigen fragmentierten digitalen Welt bringt LinkMAX Ihr Publikum an einem Ort zusammen.",</span>
+<span class="cstat-no" title="statement not covered" >            es: "En el fragmentado panorama digital actual, LinkMAX reúne a tu audiencia en un solo lugar.",</span>
+<span class="cstat-no" title="statement not covered" >            fr: "Dans le paysage numérique fragmenté d'aujourd'hui, LinkMAX rassemble votre public en un seul endroit.",</span>
+<span class="cstat-no" title="statement not covered" >            it: "Nell'attuale panorama digitale frammentato, LinkMAX riunisce il tuo pubblico in un unico posto.",</span>
+<span class="cstat-no" title="statement not covered" >            ja: "今日の断片化されたデジタル環境において、LinkMAXはあなたのオーディエンスを1か所に集めます。",</span>
+<span class="cstat-no" title="statement not covered" >            ko: "오늘날 파편화된 디지털 환경에서 LinkMAX는 청중을 한자리에 모아줍니다.",</span>
+<span class="cstat-no" title="statement not covered" >            pt: "No panorama digital fragmentado de hoje, o LinkMAX reúne o seu público num único lugar.",</span>
+<span class="cstat-no" title="statement not covered" >            zh: "在当今分散的数字格局中，LinkMAX 将您的受众聚集在同一个地方。",</span>
+<span class="cstat-no" title="statement not covered" >            ar: "في المشهد الرقمي المجزأ اليوم، يجمع LinkMAX جمهورك معًا في مكان واحد."</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const getT = (key: keyof typeof t) =&gt; t[key][lang as keyof (typeof t)['title']] || t[key]['ru'];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const getLocalizedBullet = (key: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const bullets: Record&lt;string, Record&lt;string, string&gt;&gt; = {</span>
+<span class="cstat-no" title="statement not covered" >            "centralized": {</span>
+<span class="cstat-no" title="statement not covered" >                ru: "Одна ссылка для всего вашего контента",</span>
+<span class="cstat-no" title="statement not covered" >                en: "One link for all your content",</span>
+<span class="cstat-no" title="statement not covered" >                kk: "Барлық мазмұныңызға арналған бір сілтеме",</span>
+<span class="cstat-no" title="statement not covered" >                uz: "Barcha kontentingiz uchun bitta havola",</span>
+<span class="cstat-no" title="statement not covered" >                uk: "Одне посилання для всього вашого контенту",</span>
+<span class="cstat-no" title="statement not covered" >                tr: "Tüm içeriğiniz için tek bir bağlantı",</span>
+<span class="cstat-no" title="statement not covered" >                be: "Адна спасылка для ўсяго вашага кантэнту",</span>
+<span class="cstat-no" title="statement not covered" >                de: "Ein Link für alle Ihre Inhalte",</span>
+<span class="cstat-no" title="statement not covered" >                es: "Un enlace para todo tu contenido",</span>
+<span class="cstat-no" title="statement not covered" >                fr: "Un seul lien pour tout votre contenu",</span>
+<span class="cstat-no" title="statement not covered" >                it: "Un unico link per tutti i tuoi contenuti",</span>
+<span class="cstat-no" title="statement not covered" >                ja: "すべてのコンテンツに1つのリンクを",</span>
+<span class="cstat-no" title="statement not covered" >                ko: "모든 콘텐츠를 위한 하나의 링크",</span>
+<span class="cstat-no" title="statement not covered" >                pt: "Um link para todo o seu conteúdo",</span>
+<span class="cstat-no" title="statement not covered" >                zh: "同一个链接包含您的所有内容",</span>
+<span class="cstat-no" title="statement not covered" >                ar: "رابط واحد لجميع المحتويات الخاصة بك"</span>
+<span class="cstat-no" title="statement not covered" >            },</span>
+<span class="cstat-no" title="statement not covered" >            "ai": {</span>
+<span class="cstat-no" title="statement not covered" >                ru: "Стройте страницы быстрее с помощью AI",</span>
+<span class="cstat-no" title="statement not covered" >                en: "Build pages smarter and faster with AI",</span>
+<span class="cstat-no" title="statement not covered" >                kk: "AI көмегімен парақшаларды тезірек жасаңыз",</span>
+<span class="cstat-no" title="statement not covered" >                uz: "AI yordamida sahifalarni tezroq yarating",</span>
+<span class="cstat-no" title="statement not covered" >                uk: "Будуйте сторінки швидше за допомогою AI",</span>
+<span class="cstat-no" title="statement not covered" >                tr: "AI ile sayfaları daha akıllı ve daha hızlı oluşturun",</span>
+<span class="cstat-no" title="statement not covered" >                be: "Будуйце старонкі хутчэй з дапамогай AI",</span>
+<span class="cstat-no" title="statement not covered" >                de: "Erstellen Sie Seiten intelligenter und schneller mit KI",</span>
+<span class="cstat-no" title="statement not covered" >                es: "Crea páginas de forma más inteligente y rápida con IA",</span>
+<span class="cstat-no" title="statement not covered" >                fr: "Créez des pages plus intelligentes et plus rapides avec l'IA",</span>
+<span class="cstat-no" title="statement not covered" >                it: "Crea pagine in modo più intelligente e veloce con l'IA",</span>
+<span class="cstat-no" title="statement not covered" >                ja: "AIでよりスマートかつ迅速にページを構築",</span>
+<span class="cstat-no" title="statement not covered" >                ko: "AI로 더욱 스마트하고 빠르게 페이지 구축",</span>
+<span class="cstat-no" title="statement not covered" >                pt: "Crie páginas de forma mais inteligente e rápida com IA",</span>
+<span class="cstat-no" title="statement not covered" >                zh: "利用 AI 更智能、更快速地构建页面",</span>
+<span class="cstat-no" title="statement not covered" >                ar: "أنشئ صفحات بشكل أذكى وأسرع باستخدام الذكاء الاصطاعي"</span>
+<span class="cstat-no" title="statement not covered" >            },</span>
+<span class="cstat-no" title="statement not covered" >            "business": {</span>
+<span class="cstat-no" title="statement not covered" >                ru: "Интегрированная CRM и аналитика",</span>
+<span class="cstat-no" title="statement not covered" >                en: "Integrated CRM and analytics",</span>
+<span class="cstat-no" title="statement not covered" >                kk: "Интеграцияланған CRM және аналитика",</span>
+<span class="cstat-no" title="statement not covered" >                uz: "Integratsiyalangan CRM va analitika",</span>
+<span class="cstat-no" title="statement not covered" >                uk: "Інтегрована CRM та аналітика",</span>
+<span class="cstat-no" title="statement not covered" >                tr: "Entegre CRM ve analitik",</span>
+<span class="cstat-no" title="statement not covered" >                be: "Інтэграваная CRM і аналітыка",</span>
+<span class="cstat-no" title="statement not covered" >                de: "Integrierte CRM und Analytics",</span>
+<span class="cstat-no" title="statement not covered" >                es: "CRM y analítica integrados",</span>
+<span class="cstat-no" title="statement not covered" >                fr: "CRM et analyses intégrés",</span>
+<span class="cstat-no" title="statement not covered" >                it: "CRM e analytics integrati",</span>
+<span class="cstat-no" title="statement not covered" >                ja: "統合されたCRMとアナリティクス",</span>
+<span class="cstat-no" title="statement not covered" >                ko: "통합 CRM 및 분석",</span>
+<span class="cstat-no" title="statement not covered" >                pt: "CRM e análise integrados",</span>
+<span class="cstat-no" title="statement not covered" >                zh: "集成的 CRM 和分析",</span>
+<span class="cstat-no" title="statement not covered" >                ar: "نظام CRM وتحليلات متكامل"</span>
+<span class="cstat-no" title="statement not covered" >            },</span>
+<span class="cstat-no" title="statement not covered" >            "design": {</span>
+<span class="cstat-no" title="statement not covered" >                ru: "Премиальная эстетика для вашего бренда",</span>
+<span class="cstat-no" title="statement not covered" >                en: "Premium aesthetics for your brand",</span>
+<span class="cstat-no" title="statement not covered" >                kk: "Брендіңіз үшін премиум эстетика",</span>
+<span class="cstat-no" title="statement not covered" >                uz: "Brendingiz uchun premium estetika",</span>
+<span class="cstat-no" title="statement not covered" >                uk: "Преміальна естетика для вашого бренду",</span>
+<span class="cstat-no" title="statement not covered" >                tr: "Markanız için birinci sınıf estetik",</span>
+<span class="cstat-no" title="statement not covered" >                be: "Прэміяльная эстэтыка для вашага брэнда",</span>
+<span class="cstat-no" title="statement not covered" >                de: "Premium-Ästhetik für Ihre Marke",</span>
+<span class="cstat-no" title="statement not covered" >                es: "Estética premium para su marca",</span>
+<span class="cstat-no" title="statement not covered" >                fr: "Une esthétique premium pour votre marque",</span>
+<span class="cstat-no" title="statement not covered" >                it: "Estetica premium per il tuo brand",</span>
+<span class="cstat-no" title="statement not covered" >                ja: "ブランドにふさわしいプレミアムな美学",</span>
+<span class="cstat-no" title="statement not covered" >                ko: "브랜드를 위한 프리미엄 에스테틱",</span>
+<span class="cstat-no" title="statement not covered" >                pt: "Estética premium para a sua marca",</span>
+<span class="cstat-no" title="statement not covered" >                zh: "为您的品牌提供优质的美学设计",</span>
+<span class="cstat-no" title="statement not covered" >                ar: "جماليات متميزة لعلامتك التجارية"</span>
+<span class="cstat-no" title="statement not covered" >            }</span>
+<span class="cstat-no" title="statement not covered" >        };</span>
+<span class="cstat-no" title="statement not covered" >        return bullets[key][lang] || bullets[key]['ru'];</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    const structuredData = {</span>
+<span class="cstat-no" title="statement not covered" >        "@context": "https://schema.org",</span>
+<span class="cstat-no" title="statement not covered" >        "@graph": [</span>
+<span class="cstat-no" title="statement not covered" >            {</span>
+<span class="cstat-no" title="statement not covered" >                "@type": "SoftwareApplication",</span>
+<span class="cstat-no" title="statement not covered" >                "name": "LinkMAX",</span>
+<span class="cstat-no" title="statement not covered" >                "applicationCategory": "BusinessApplication",</span>
+<span class="cstat-no" title="statement not covered" >                "operatingSystem": "Web, iOS, Android, PWA",</span>
+<span class="cstat-no" title="statement not covered" >                "offers": {</span>
+<span class="cstat-no" title="statement not covered" >                    "@type": "Offer",</span>
+<span class="cstat-no" title="statement not covered" >                    "price": "0",</span>
+<span class="cstat-no" title="statement not covered" >                    "priceCurrency": "KZT",</span>
+<span class="cstat-no" title="statement not covered" >                },</span>
+<span class="cstat-no" title="statement not covered" >                "description": getT('description'),</span>
+<span class="cstat-no" title="statement not covered" >                "aggregateRating": {</span>
+<span class="cstat-no" title="statement not covered" >                    "@type": "AggregateRating",</span>
+<span class="cstat-no" title="statement not covered" >                    "ratingValue": "4.9",</span>
+<span class="cstat-no" title="statement not covered" >                    "ratingCount": "1500",</span>
+<span class="cstat-no" title="statement not covered" >                },</span>
+<span class="cstat-no" title="statement not covered" >            },</span>
+<span class="cstat-no" title="statement not covered" >            {</span>
+<span class="cstat-no" title="statement not covered" >                "@type": "Organization",</span>
+<span class="cstat-no" title="statement not covered" >                "name": "LinkMAX",</span>
+<span class="cstat-no" title="statement not covered" >                "url": getAppDomain(),</span>
+<span class="cstat-no" title="statement not covered" >                "logo": `${getAppDomain()}/logo.png`,</span>
+<span class="cstat-no" title="statement not covered" >                "sameAs": [</span>
+<span class="cstat-no" title="statement not covered" >                    "https://instagram.com/lnkmx.my",</span>
+                ],
+<span class="cstat-no" title="statement not covered" >            },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;div className="prose max-w-none p-8 font-sans"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;Helmet&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;title&gt;{getT('title')}&lt;/title&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;meta name="geo.region" content="KZ-ALA" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;meta name="geo.placename" content="Almaty" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;meta name="geo.position" content="43.2220;76.8512" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;meta name="ICBM" content="43.2220, 76.8512" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;meta name="description" content={getT('description')} /&gt;</span>
+            &lt;/Helmet&gt;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            &lt;AISearchOptimizer</span>
+<span class="cstat-no" title="statement not covered" >                pageType="homepage"</span>
+<span class="cstat-no" title="statement not covered" >                entityName="LinkMAX"</span>
+<span class="cstat-no" title="statement not covered" >                entityCategory="Business OS, Link in Bio, CRM, AI Page Builder"</span>
+<span class="cstat-no" title="statement not covered" >                primaryQuestion={getT('question')}</span>
+<span class="cstat-no" title="statement not covered" >                primaryAnswer={getT('answer')}</span>
+<span class="cstat-no" title="statement not covered" >                useCases={lang === "ru" || lang === "be" || lang === "uk" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    "Цифровая визитка и AI конструктор страниц",</span>
+<span class="cstat-no" title="statement not covered" >                    "Business OS для соло-предпринимателей",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM и управление лидами (Business Zones)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Мультиязычный микро-лендинг для услуг",</span>
+<span class="cstat-no" title="statement not covered" >                    "Финтех интеграция (Инвойсы и Платежи)"</span>
+<span class="cstat-no" title="statement not covered" >                ] : lang === "kk" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    "Цифрлық визитка және AI парақша конструкторы",</span>
+<span class="cstat-no" title="statement not covered" >                    "Соло-кәсіпкерлерге арналған Business OS",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM және лидтерді басқару (Business Zones)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Қызметтерге арналған көптілді микро-лендинг",</span>
+<span class="cstat-no" title="statement not covered" >                    "Финтех интеграциясы (Инвойстар және Төлемдер)"</span>
+<span class="cstat-no" title="statement not covered" >                ] : lang === "uz" || lang === "tr" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    "Raqamli vizitka va AI sahifa konstruktori",</span>
+<span class="cstat-no" title="statement not covered" >                    "Yakkaxon tadbirkorlar uchun Business OS",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM va lidlarni boshqarish (Business Zones)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Xizmatlar uchun ko'p tilli mikro-lending",</span>
+<span class="cstat-no" title="statement not covered" >                    "Fintex integratsiyasi (Invoyslar va To'lovlar)"</span>
+<span class="cstat-no" title="statement not covered" >                ] : [</span>
+<span class="cstat-no" title="statement not covered" >                    "Digital business card &amp; AI Page Builder",</span>
+<span class="cstat-no" title="statement not covered" >                    "Business OS for solo entrepreneurs",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM &amp; Lead management (Business Zones)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Multilingual micro-landing for services",</span>
+<span class="cstat-no" title="statement not covered" >                    "Fintech integration (Invoicing &amp; Payments)"</span>
+<span class="cstat-no" title="statement not covered" >                ]}</span>
+<span class="cstat-no" title="statement not covered" >                keyFeatures={lang === "ru" || lang === "be" || lang === "uk" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    "AI Page Builder (Liquid Glass дизайн)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Business Zones (Мульти-аккаунт рабочие пространства)",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM Kanban и воронка продаж",</span>
+<span class="cstat-no" title="statement not covered" >                    "Fintech Core (Ledger, Инвойсы, RoboKassa)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Pixel Proxy (Серверный трекинг)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Мультиязычная поддержка (RU, EN, KK, UZ...)"</span>
+<span class="cstat-no" title="statement not covered" >                ] : lang === "kk" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    "AI Page Builder (Liquid Glass дизайны)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Business Zones (Мульти-аккаунт жұмыс кеңістіктері)",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM Kanban және сату воронкасы",</span>
+<span class="cstat-no" title="statement not covered" >                    "Fintech Core (Ledger, Инвойстар, RoboKassa)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Pixel Proxy (Серверлік трекинг)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Көптілді қолдау"</span>
+<span class="cstat-no" title="statement not covered" >                ] : [</span>
+<span class="cstat-no" title="statement not covered" >                    "AI Page Builder (Liquid Glass Design)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Business Zones (Multi-tenant workspaces)",</span>
+<span class="cstat-no" title="statement not covered" >                    "CRM Kanban &amp; Sales Pipeline",</span>
+<span class="cstat-no" title="statement not covered" >                    "Fintech Core (Ledger, Invoicing, RoboKassa)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Pixel Proxy (Server-side tracking)",</span>
+<span class="cstat-no" title="statement not covered" >                    "Multilingual Support (Global Coverage)"</span>
+                ]}
+            /&gt;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            &lt;FAQSchema</span>
+<span class="cstat-no" title="statement not covered" >                faqItems={lang === "ru" || lang === "be" || lang === "uk" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "Что такое LinkMAX?", answer: "Это универсальная операционная система для микро-бизнеса, включающая AI-конструктор страниц, CRM и аналитику." },</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "Сколько стоит LinkMAX?", answer: "Есть бесплатный тариф Identity. Платные тарифы начинаются от небольшого процента с продаж или фиксированной подписки." },</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "Поддерживает ли LinkMAX прием платежей?", answer: "Да, интегрированы популярные платежные системы, такие как RoboKassa и Kaspi." }</span>
+<span class="cstat-no" title="statement not covered" >                ] : lang === "kk" ? [</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "LinkMAX дегеніміз не?", answer: "Бұл микро-бизнеске арналған әмбебап операциялық жүйе, оған AI парақша конструкторы, CRM және аналитика кіреді." },</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "LinkMAX қанша тұрады?", answer: "Тегін Identity тарифі бар. Ақылы тарифтер сатылымнан аз пайыз немесе тіркелген жазылымнан басталады." },</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "LinkMAX төлемдерді қабылдауды қолдай ма?", answer: "Иә, RoboKassa және Kaspi сияғы танымал төлем жүйелері интеграцияланған." }</span>
+<span class="cstat-no" title="statement not covered" >                ] : [</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "What is LinkMAX?", answer: "It is a universal Operating System for micro-businesses, including an AI page builder, CRM, and analytics." },</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "How much does LinkMAX cost?", answer: "There is a free Identity plan. Paid plans start from a small percentage of sales or a fixed subscription fee." },</span>
+<span class="cstat-no" title="statement not covered" >                    { question: "Does LinkMAX support payments?", answer: "Yes, popular payment systems like RoboKassa and Stripe are integrated." }</span>
+                ]}
+            /&gt;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            &lt;StructuredData id="seo-landing-jsonld" data={structuredData} /&gt;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            &lt;header&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;h1 className="text-4xl font-bold mb-4"&gt;{getT('heroTitle')}&lt;/h1&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;p className="text-xl mb-8"&gt;{getT('heroSubtitle')}&lt;/p&gt;</span>
+            &lt;/header&gt;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            &lt;main&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;article&gt;</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;section className="mb-12"&gt;</span>
+<span class="cstat-no" title="statement not covered" >                        &lt;h2 className="text-2xl font-semibold mb-4"&gt;{getT('whyChoose')}&lt;/h2&gt;</span>
+<span class="cstat-no" title="statement not covered" >                        &lt;p className="mb-4"&gt;{getT('fragmented')}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >                        &lt;ul className="list-disc pl-6 mb-4"&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            &lt;li&gt;&lt;strong&gt;Centralized Hub:&lt;/strong&gt; {getLocalizedBullet('centralized')}&lt;/li&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            &lt;li&gt;&lt;strong&gt;AI-Powered:&lt;/strong&gt; {getLocalizedBullet('ai')}&lt;/li&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            &lt;li&gt;&lt;strong&gt;Business OS:&lt;/strong&gt; {getLocalizedBullet('business')}&lt;/li&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            &lt;li&gt;&lt;strong&gt;Liquid Glass Design:&lt;/strong&gt; {getLocalizedBullet('design')}&lt;/li&gt;</span>
+                        &lt;/ul&gt;
+                    &lt;/section&gt;
+                &lt;/article&gt;
+            &lt;/main&gt;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            &lt;footer className="mt-12 pt-8 border-t border-gray-200 text-sm text-muted-foreground"&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;p&gt;&amp;copy; {new Date().getFullYear()} LinkMAX. All rights reserved.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;address className="not-italic mt-4"&gt;</span>
+<span class="cstat-no" title="statement not covered" >                    LinkMAX HQ&lt;br /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                    Almaty, Kazakhstan&lt;br /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;a href="mailto:support@lnkmx.my" className="text-blue-600"&gt;support@lnkmx.my&lt;/a&gt;</span>
+                &lt;/address&gt;
+            &lt;/footer&gt;
+        &lt;/div&gt;
+    );
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export default SeoLanding;</span>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-17T17:14:38.207Z
+            </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    

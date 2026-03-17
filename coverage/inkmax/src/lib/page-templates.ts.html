@@ -1,0 +1,1516 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for inkmax/src/lib/page-templates.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">inkmax/src/lib</a> page-templates.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/437</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/437</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { createBlock as createBaseBlock } from '@/lib/blocks/block-factory';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+import type { Block } from '@/types/page';
+import { TemplateCategoryKey } from '@/lib/templateCategories';
+&nbsp;
+export interface Template {
+    id: string;
+    name: string;
+    description: string;
+    category: TemplateCategoryKey;
+    preview: string;
+    isPremium?: boolean;
+    blocks: Array&lt;{ type: string; overrides?: Record&lt;string, unknown&gt; }&gt;;
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >// Helper to create template block with overrides</span>
+<span class="cstat-no" title="statement not covered" >export const createTemplateBlock = (type: string, overrides: Record&lt;string, unknown&gt; = {}): Block =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const baseBlock = createBaseBlock(type);</span>
+<span class="cstat-no" title="statement not covered" >    return { ...baseBlock, ...overrides } as Block;</span>
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >// Placeholder images from Unsplash (free to use)</span>
+<span class="cstat-no" title="statement not covered" >export const PLACEHOLDER_IMAGES = {</span>
+<span class="cstat-no" title="statement not covered" >    barber: [</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >    ],</span>
+<span class="cstat-no" title="statement not covered" >    beauty: [</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >    ],</span>
+<span class="cstat-no" title="statement not covered" >    fitness: [</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >    ],</span>
+<span class="cstat-no" title="statement not covered" >    food: [</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1482049016gy4e-1c99c8f0b46a?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >    ],</span>
+<span class="cstat-no" title="statement not covered" >    photo: [</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >    ],</span>
+<span class="cstat-no" title="statement not covered" >    realestate: [</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&amp;h=600&amp;fit=crop',</span>
+<span class="cstat-no" title="statement not covered" >        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&amp;h=600&amp;fit=crop',</span>
+    ],
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export const TEMPLATES: Template[] = [</span>
+<span class="cstat-no" title="statement not covered" >    // ===== КРЕАТОРЫ =====</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'influencer',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Блогер / Инфлюенсер',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Для контент-мейкеров и блогеров — полный набор',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'creators',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '👤',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Алина Lifestyle', en: 'Alina Lifestyle', kk: 'Алина Lifestyle' }, bio: { ru: '✨ Блогер • 500K подписчиков\n🎥 Влоги о путешествиях и моде\n📍 Алматы → Мир', en: '✨ Blogger • 500K followers\n🎥 Travel &amp; fashion vlogs\n📍 Almaty → World', kk: '✨ Блогер • 500K жазылушы\n🎥 Саяхат және сән влогтары\n📍 Алматы → Әлем' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: '🔥 Новый влог через:', en: '🔥 New vlog in:', kk: '🔥 Жаңа влог:' }, endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), style: 'modern' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🎬 YouTube — новые влоги каждую неделю', en: '🎬 YouTube — new vlogs weekly', kk: '🎬 YouTube — жаңа влогтар апта сайын' }, url: 'https://youtube.com/@example', icon: 'youtube', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📸 Instagram — бэкстейдж и stories', en: '📸 Instagram — backstage &amp; stories', kk: '📸 Instagram — бэкстейдж және stories' }, url: 'https://instagram.com/example', icon: 'instagram', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🎵 TikTok — короткие видео', en: '🎵 TikTok — short videos', kk: '🎵 TikTok — қысқа бейнелер' }, url: 'https://tiktok.com/@example', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🔥 Последний влог: Дубай 2024', en: '🔥 Latest vlog: Dubai 2024', kk: '🔥 Соңғы влог: Дубай 2024' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💼 Сотрудничество', en: '💼 Collaboration', kk: '💼 Ынтымақтастық' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Реклама в сторис', en: 'Story ad placement', kk: 'Stories-те жарнама' }, description: { ru: '24 часа в сторис + отметка + свайп', en: '24h story + mention + swipe up', kk: '24 сағат stories + белгі + свайп' }, price: 150000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Интеграция в YouTube', en: 'YouTube integration', kk: 'YouTube интеграциясы' }, description: { ru: 'Упоминание + демонстрация продукта', en: 'Mention + product demonstration', kk: 'Атап өту + өнімді көрсету' }, price: 350000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Амбассадорство', en: 'Ambassador package', kk: 'Амбассадорлық' }, description: { ru: '3 месяца • 12 постов • эксклюзив', en: '3 months • 12 posts • exclusive', kk: '3 ай • 12 пост • эксклюзив' }, price: 1500000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'L\'Oreal Kazakhstan', en: 'L\'Oreal Kazakhstan', kk: 'L\'Oreal Kazakhstan' }, role: { ru: 'Бренд-партнёр', en: 'Brand partner', kk: 'Бренд-серіктес' }, text: { ru: 'Алина — идеальный партнёр для beauty-кампаний. Высокий engagement и качественный контент!', en: 'Alina is the perfect partner for beauty campaigns. High engagement and quality content!', kk: 'Алина — beauty-кампаниялар үшін тамаша серіктес. Жоғары қатысу және сапалы контент!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Какой формат рекламы лучше?', en: 'What ad format is best?', kk: 'Қай жарнама форматы жақсы?' }, answer: { ru: 'Зависит от ваших целей. Stories — для охвата, YouTube — для глубокого вовлечения. Напишите, обсудим!', en: 'Depends on your goals. Stories for reach, YouTube for deep engagement. Write me, let\'s discuss!', kk: 'Мақсаттарыңызға байланысты. Stories — қамту үшін, YouTube — терең қатысу үшін. Жазыңыз, талқылайық!' } }, { question: { ru: 'Сколько времени на подготовку?', en: 'How much time to prepare?', kk: 'Дайындық қанша уақыт алады?' }, answer: { ru: 'Обычно 3-5 дней. Для сложных интеграций — до 2 недель.', en: 'Usually 3-5 days. For complex integrations — up to 2 weeks.', kk: 'Әдетте 3-5 күн. Күрделі интеграциялар үшін — 2 аптаға дейін.' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'socials', overrides: { platforms: [{ platform: 'telegram', url: 'https://t.me/example' }, { platform: 'youtube', url: 'https://youtube.com/@example' }, { platform: 'instagram', url: 'https://instagram.com/example' }, { platform: 'tiktok', url: 'https://tiktok.com/@example' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'telegram', username: 'alina_manager' }, { platform: 'email', username: 'collab@alina.kz' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'musician',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Музыкант / Артист',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Для музыкантов и исполнителей — концерты, музыка, мерч',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'creators',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🎵',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'ARMAN', en: 'ARMAN', kk: 'ARMAN' }, bio: { ru: '🎤 Хип-хоп артист\n🏆 Лучший альбом 2023\n🎧 5M+ прослушиваний', en: '🎤 Hip-hop artist\n🏆 Best Album 2023\n🎧 5M+ streams', kk: '🎤 Хип-хоп әртіс\n🏆 2023 үздік альбом\n🎧 5M+ тыңдау' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🔥 Премьера клипа "Жизнь"', en: '🔥 Music video premiere "Life"', kk: '🔥 "Өмір" клипінің премьерасы' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🎧 Слушать музыку', en: '🎧 Listen to music', kk: '🎧 Музыка тыңдау' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🎧 Spotify — слушать новый альбом', en: '🎧 Spotify — listen new album', kk: '🎧 Spotify — жаңа альбомды тыңдау' }, url: 'https://open.spotify.com/artist/example', icon: 'globe', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🍎 Apple Music', en: '🍎 Apple Music', kk: '🍎 Apple Music' }, url: 'https://music.apple.com/artist/example', icon: 'globe', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🎬 YouTube Music', en: '🎬 YouTube Music', kk: '🎬 YouTube Music' }, url: 'https://music.youtube.com/channel/example', icon: 'youtube', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📲 Яндекс Музыка', en: '📲 Yandex Music', kk: '📲 Яндекс Музыка' }, url: 'https://music.yandex.ru/artist/example', icon: 'globe', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '📅 Ближайшие концерты', en: '📅 Upcoming concerts', kk: '📅 Жақын концерттер' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: '🎤 Большой концерт в Алматы', en: '🎤 Big concert in Almaty', kk: '🎤 Алматыдағы үлкен концерт' }, endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), style: 'modern' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: '🎫 Алматы — 15 марта — Дворец Республики', en: '🎫 Almaty — March 15 — Palace of Republic', kk: '🎫 Алматы — 15 наурыз — Республика сарайы' }, description: { ru: 'VIP + Meet &amp; Greet', en: 'VIP + Meet &amp; Greet', kk: 'VIP + Meet &amp; Greet' }, price: 25000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: '🎫 Астана — 22 марта — Barys Arena', en: '🎫 Astana — March 22 — Barys Arena', kk: '🎫 Астана — 22 наурыз — Barys Arena' }, description: { ru: 'Fan zone + Soundcheck', en: 'Fan zone + Soundcheck', kk: 'Fan zone + Soundcheck' }, price: 15000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🛍️ Мерч', en: '🛍️ Merch', kk: '🛍️ Мерч' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Худи "ARMAN TOUR 2024"', en: 'Hoodie "ARMAN TOUR 2024"', kk: 'Худи "ARMAN TOUR 2024"' }, description: { ru: 'Лимитированная коллекция • S-XXL', en: 'Limited edition • S-XXL', kk: 'Лимиттелген коллекция • S-XXL' }, price: 18000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Кепка с автографом', en: 'Signed cap', kk: 'Қол қойылған кепка' }, description: { ru: 'Персональный автограф', en: 'Personal autograph', kk: 'Жеке қол қою' }, price: 8000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'telegram', username: 'arman_music' }, { platform: 'instagram', username: 'arman_official' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'designer',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Дизайнер / Иллюстратор',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Портфолио для творческих специалистов с примерами работ',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'creators',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🎨',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Дария Ким', en: 'Dariya Kim', kk: 'Дария Ким' }, bio: { ru: '🎨 UI/UX дизайнер • 7 лет опыта\n✨ Брендинг • Веб-дизайн • Иллюстрации\n🏆 Behance Featured', en: '🎨 UI/UX designer • 7 years exp\n✨ Branding • Web design • Illustrations\n🏆 Behance Featured', kk: '🎨 UI/UX дизайнер • 7 жыл тәжірибе\n✨ Брендинг • Веб-дизайн • Иллюстрациялар\n🏆 Behance Featured' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💬 "Дизайн — это не как выглядит, а как работает"', en: '💬 "Design is not how it looks, but how it works"', kk: '💬 "Дизайн — бұл қалай көрінеді емес, қалай жұмыс істейді"' }, style: 'quote', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '🖼 Избранные работы', en: '🖼 Featured works', kk: '🖼 Таңдаулы жұмыстар' }, images: [{ url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&amp;h=600&amp;fit=crop', alt: 'UI Design' }, { url: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&amp;h=600&amp;fit=crop', alt: 'Branding' }, { url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&amp;h=600&amp;fit=crop', alt: 'Illustration' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💰 Услуги и цены', en: '💰 Services &amp; Prices', kk: '💰 Қызметтер мен бағалар' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Логотип', en: 'Logo', kk: 'Логотип' }, price: 80000, currency: 'KZT', period: { ru: 'проект', en: 'project', kk: 'жоба' }, features: [{ ru: '3 концепции', en: '3 concepts', kk: '3 концепция' }, { ru: 'До 3 правок', en: 'Up to 3 revisions', kk: '3 түзетуге дейін' }, { ru: 'Исходники AI/SVG/PNG', en: 'Source files AI/SVG/PNG', kk: 'AI/SVG/PNG файлдары' }], isPopular: false }, { name: { ru: 'Фирменный стиль', en: 'Brand Identity', kk: 'Фирмалық стиль' }, price: 250000, currency: 'KZT', period: { ru: 'проект', en: 'project', kk: 'жоба' }, features: [{ ru: 'Лого + визитки', en: 'Logo + business cards', kk: 'Лого + визиткалар' }, { ru: 'Брендбук до 20 стр', en: 'Brandbook up to 20 pages', kk: '20 бетке дейін брендбук' }, { ru: 'Соцсети + презентации', en: 'Social media + presentations', kk: 'Соцсети + презентациялар' }], isPopular: true }, { name: { ru: 'Лендинг', en: 'Landing Page', kk: 'Лендинг' }, price: 120000, currency: 'KZT', period: { ru: 'проект', en: 'project', kk: 'жоба' }, features: [{ ru: 'До 5 экранов', en: 'Up to 5 screens', kk: '5 экранға дейін' }, { ru: 'Адаптив Desktop/Mobile', en: 'Desktop/Mobile adaptive', kk: 'Desktop/Mobile адаптив' }, { ru: 'Figma с компонентами', en: 'Figma with components', kk: 'Компоненттермен Figma' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🏆 Клиенты', en: '🏆 Clients', kk: '🏆 Клиенттер' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: 'Kaspi.kz • Chocofamily • Glovo KZ • Freedom Finance • Air Astana', en: 'Kaspi.kz • Chocofamily • Glovo KZ • Freedom Finance • Air Astana', kk: 'Kaspi.kz • Chocofamily • Glovo KZ • Freedom Finance • Air Astana' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Айдана', en: 'Aidana', kk: 'Айдана' }, role: { ru: 'CEO Startup Studio', en: 'CEO Startup Studio', kk: 'CEO Startup Studio' }, text: { ru: 'Дария создала бренд для нашего стартапа с нуля. Профессионально, быстро и с душой. Рекомендую!', en: 'Dariya created a brand for our startup from scratch. Professional, fast and with soul. Recommend!', kk: 'Дария стартапымыз үшін нөлден бренд жасады. Кәсіби, жылдам және жанмен. Ұсынамын!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🎨 Портфолио на Behance', en: '🎨 Portfolio on Behance', kk: '🎨 Behance портфолиосы' }, url: 'https://behance.net/dariyakim', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📱 Работы в Dribbble', en: '📱 Works on Dribbble', kk: '📱 Dribbble жұмыстары' }, url: 'https://dribbble.com/dariyakim', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'telegram', username: 'dariya_design' }, { platform: 'whatsapp', username: '+77001234567' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'streamer',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Стример / Геймер',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Для стримеров и киберспортсменов',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'creators',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🎮',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'DarkNight', en: 'DarkNight', kk: 'DarkNight' }, bio: { ru: '🎮 Twitch Partner • 100K followers\n🏆 CS2 • Valorant • GTA RP\n⏰ Стримы: ПН-ПТ 20:00', en: '🎮 Twitch Partner • 100K followers\n🏆 CS2 • Valorant • GTA RP\n⏰ Streams: MON-FRI 8PM', kk: '🎮 Twitch Partner • 100K жазылушы\n🏆 CS2 • Valorant • GTA RP\n⏰ Стримдер: ДС-ЖМ 20:00' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: '⏰ Следующий стрим через:', en: '⏰ Next stream in:', kk: '⏰ Келесі стрим:' }, endDate: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(), style: 'modern' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🟣 Twitch — смотреть стрим LIVE', en: '🟣 Twitch — watch stream LIVE', kk: '🟣 Twitch — LIVE стримді қарау' }, url: 'https://twitch.tv/darknight', icon: 'globe', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🔴 YouTube — нарезки и хайлайты', en: '🔴 YouTube — clips &amp; highlights', kk: '🔴 YouTube — үзінділер мен хайлайттар' }, url: 'https://youtube.com/@darknight', icon: 'youtube', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '💬 Discord — сообщество (5000+ участников)', en: '💬 Discord — community (5000+ members)', kk: '💬 Discord — қауымдастық (5000+ қатысушы)' }, url: 'https://discord.gg/darknight', icon: 'globe', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🔥 Лучший момент недели — ACE на Inferno', en: '🔥 Best moment — ACE on Inferno', kk: '🔥 Аптаның үздік сәті — Inferno-да ACE' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💎 Поддержать стримера', en: '💎 Support streamer', kk: '💎 Стримерді қолдау' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Подписка Tier 1', en: 'Tier 1 Subscription', kk: 'Tier 1 жазылым' }, description: { ru: 'Эмоуты + без рекламы + значок', en: 'Emotes + ad-free + badge', kk: 'Эмоуттар + жарнамасыз + белгі' }, price: 2500, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Подписка Tier 2', en: 'Tier 2 Subscription', kk: 'Tier 2 жазылым' }, description: { ru: 'Всё из Tier 1 + эксклюзив Discord', en: 'All from Tier 1 + exclusive Discord', kk: 'Tier 1 бәрі + эксклюзив Discord' }, price: 5000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Донат (любая сумма)', en: 'Donation (any amount)', kk: 'Донат (кез-келген сома)' }, description: { ru: 'Сообщение на стриме + благодарность', en: 'Message on stream + thanks', kk: 'Стримде хабарлама + алғыс' }, price: 500, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '📅 Расписание стримов', en: '📅 Stream schedule', kk: '📅 Стрим кестесі' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: 'ПН-ПТ: 20:00 — CS2 / Valorant\nСБ: 18:00 — GTA RP (специальный эфир)\nВС: выходной', en: 'MON-FRI: 8PM — CS2 / Valorant\nSAT: 6PM — GTA RP (special stream)\nSUN: day off', kk: 'ДС-ЖМ: 20:00 — CS2 / Valorant\nСБ: 18:00 — GTA RP (арнайы эфир)\nЖС: демалыс' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'socials', overrides: { platforms: [{ platform: 'telegram', url: 'https://t.me/darknight_chat' }, { platform: 'tiktok', url: 'https://tiktok.com/@darknight' }, { platform: 'twitter', url: 'https://twitter.com/darknight' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    // ===== БИЗНЕС =====</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'barber',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Барбершоп',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Полный шаблон для барберов — прайс, галерея, запись',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '💈',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'BLACKBEARD Barbershop', en: 'BLACKBEARD Barbershop', kk: 'BLACKBEARD Barbershop' }, bio: { ru: '✂️ Мужские стрижки в центре Алматы\n🏆 Лучший барбершоп 2023 по версии 2GIS\n⭐ 4.9 рейтинг • 500+ отзывов', en: '✂️ Men\'s haircuts in Almaty center\n🏆 Best barbershop 2023 by 2GIS\n⭐ 4.9 rating • 500+ reviews', kk: '✂️ Алматы орталығында ерлер шаш қию\n🏆 2GIS бойынша 2023 үздік барбершоп\n⭐ 4.9 рейтинг • 500+ пікір' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '⏰ Режим работы: Пн-Вс 10:00 - 21:00', en: '⏰ Working hours: Mon-Sun 10:00 - 21:00', kk: '⏰ Жұмыс уақыты: Дс-Жс 10:00 - 21:00' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📅 ЗАПИСАТЬСЯ ОНЛАЙН', en: '📅 BOOK ONLINE', kk: '📅 ОНЛАЙН ЖАЗЫЛУ', }, url: 'https://dikidi.net/blackbeard', icon: 'calendar', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '💈 Наши работы', en: '💈 Our works', kk: '💈 Біздің жұмыстар' }, images: [{ url: PLACEHOLDER_IMAGES.barber[0], alt: 'Haircut 1' }, { url: PLACEHOLDER_IMAGES.barber[1], alt: 'Haircut 2' }, { url: PLACEHOLDER_IMAGES.barber[2], alt: 'Haircut 3' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💰 Прайс-лист', en: '💰 Price list', kk: '💰 Бағалар тізімі' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Мужская стрижка', en: 'Men\'s haircut', kk: 'Ерлер шаш қию' }, description: { ru: 'Стрижка машинкой/ножницами + укладка + стайлинг', en: 'Clipper/scissors cut + styling', kk: 'Машинкамен/қайшымен қию + сәндеу' }, price: 4000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Стрижка + Борода', en: 'Haircut + Beard', kk: 'Шаш қию + Сақал' }, description: { ru: 'Комплекс: стрижка + моделирование бороды + уход', en: 'Complex: haircut + beard shaping + care', kk: 'Кешен: шаш қию + сақал пішіндеу + күтім' }, price: 6500, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Королевское бритье', en: 'Royal shave', kk: 'Патшалық қырыну' }, description: { ru: 'Горячее полотенце + опасная бритва + уход', en: 'Hot towel + straight razor + care', kk: 'Ыстық сүлгі + қауіпті ұстара + күтім' }, price: 5000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Детская стрижка', en: 'Kids haircut', kk: 'Балалар шаш қию' }, description: { ru: 'До 12 лет • Мультики на экране', en: 'Up to 12 years • Cartoons on screen', kk: '12 жасқа дейін • Экранда мультфильмдер' }, price: 3000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Окрашивание', en: 'Hair coloring', kk: 'Шаш бояу' }, description: { ru: 'Камуфляж седины или креативное окрашивание', en: 'Gray camouflage or creative coloring', kk: 'Ақ шашты жасыру немесе шығармашылық бояу' }, price: 4500, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '👨‍🔧 Наши барберы', en: '👨‍🔧 Our barbers', kk: '👨‍🔧 Біздің барберлер' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🧔 Арман — топ-барбер, 8 лет опыта\n🧔 Данияр — специалист по бородам\n🧔 Ерлан — детские стрижки', en: '🧔 Arman — top barber, 8 years exp\n🧔 Daniyar — beard specialist\n🧔 Yerlan — kids haircuts', kk: '🧔 Арман — топ-барбер, 8 жыл тәжірибе\n🧔 Данияр — сақал маманы\n🧔 Ерлан — балалар шаш қию' }, style: 'paragraph', alignment: 'left' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Алексей', en: 'Alexey', kk: 'Алексей' }, role: { ru: 'Постоянный клиент', en: 'Regular client', kk: 'Тұрақты клиент' }, text: { ru: 'Хожу только сюда уже 2 года. Лучшие барберы в городе, всегда чётко и по делу. Рекомендую!', en: 'Been coming here for 2 years. Best barbers in town, always on point. Recommend!', kk: '2 жыл бойы тек мұнда келемін. Қалада ең жақсы барберлер, әрқашан дәл. Ұсынамын!' }, rating: 5 }, { name: { ru: 'Тимур', en: 'Timur', kk: 'Тимур' }, role: { ru: 'Постоянный клиент', en: 'Regular client', kk: 'Тұрақты клиент' }, text: { ru: 'Атмосфера — огонь! Виски, PlayStation, крутые ребята. Не барбершоп, а мужской клуб.', en: 'Atmosphere is fire! Whiskey, PlayStation, cool guys. Not a barbershop, but a men\'s club.', kk: 'Атмосфера — өте керемет! Виски, PlayStation, керемет жігіттер. Барбершоп емес, ерлер клубы.' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Нужна ли предварительная запись?', en: 'Do I need to book in advance?', kk: 'Алдын ала жазылу керек пе?' }, answer: { ru: 'Рекомендуем записаться онлайн или позвонить. В выходные — обязательно!', en: 'We recommend booking online or calling. On weekends — mandatory!', kk: 'Онлайн жазылуды немесе қоңырау шалуды ұсынамыз. Демалыс күндері — міндетті!' } }, { question: { ru: 'Есть ли парковка?', en: 'Is there parking?', kk: 'Тұрақ бар ма?' }, answer: { ru: 'Да, бесплатная парковка во дворе и на улице рядом.', en: 'Yes, free parking in the yard and on the street nearby.', kk: 'Иә, ауладa және жақын көшеде тегін тұрақ бар.' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'map', overrides: { address: 'Алматы, ул. Панфилова 100', title: { ru: '📍 Мы здесь', en: '📍 Find us', kk: '📍 Біз мұндамыз' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77071234567' }, { platform: 'instagram', username: 'blackbeard.almaty' }, { platform: 'telegram', username: 'blackbeard_book' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'photographer',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Фотограф',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Полное портфолио — пакеты услуг, галерея, отзывы',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '📷',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Анна Фото', en: 'Anna Photo', kk: 'Анна Фото' }, bio: { ru: '📸 Профессиональный фотограф\n💍 Свадьбы • Портреты • Love Story\n🏆 10 лет опыта • 500+ свадеб\n📍 Алматы и выезд', en: '📸 Professional photographer\n💍 Weddings • Portraits • Love Story\n🏆 10 years exp • 500+ weddings\n📍 Almaty &amp; travel', kk: '📸 Кәсіби фотограф\n💍 Тойлар • Портреттер • Love Story\n🏆 10 жыл тәжірибе • 500+ той\n📍 Алматы және сапар' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: '🎉 Скидка 20% на весенние съёмки до:', en: '🎉 20% off spring shoots until:', kk: '🎉 Көктемгі түсірілімге 20% жеңілдік:' }, endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), style: 'elegant' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '📷 Портфолио', en: '📷 Portfolio', kk: '📷 Портфолио' }, images: [{ url: PLACEHOLDER_IMAGES.photo[0], alt: 'Wedding' }, { url: PLACEHOLDER_IMAGES.photo[1], alt: 'Portrait' }, { url: PLACEHOLDER_IMAGES.photo[2], alt: 'Love Story' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🎬 Свадебный фильм Асель и Арман', en: '🎬 Wedding film Assel &amp; Arman', kk: '🎬 Әсел мен Арманның той фильмі' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💎 Пакеты услуг', en: '💎 Service packages', kk: '💎 Қызмет пакеттері' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Портрет', en: 'Portrait', kk: 'Портрет' }, price: 35000, currency: 'KZT', period: { ru: 'сессия', en: 'session', kk: 'сессия' }, features: [{ ru: '1.5 часа съёмки', en: '1.5 hours shooting', kk: '1.5 сағат түсіру' }, { ru: '15 фото в ретуши', en: '15 retouched photos', kk: '15 ретушь фото' }, { ru: 'Локация на выбор', en: 'Location of choice', kk: 'Таңдаулы локация' }, { ru: 'Готовность 5 дней', en: 'Ready in 5 days', kk: '5 күнде дайын' }], isPopular: false }, { name: { ru: 'Love Story', en: 'Love Story', kk: 'Love Story' }, price: 50000, currency: 'KZT', period: { ru: 'сессия', en: 'session', kk: 'сессия' }, features: [{ ru: '2 часа съёмки', en: '2 hours shooting', kk: '2 сағат түсіру' }, { ru: '25 фото в ретуши', en: '25 retouched photos', kk: '25 ретушь фото' }, { ru: 'Помощь со стилем', en: 'Styling help', kk: 'Стиль бойынша көмек' }, { ru: 'Слайд-шоу в подарок', en: 'Slideshow as gift', kk: 'Слайд-шоу сыйлық' }], isPopular: true }, { name: { ru: 'Свадьба', en: 'Wedding', kk: 'Той' }, price: 200000, currency: 'KZT', period: { ru: 'день', en: 'day', kk: 'күн' }, features: [{ ru: 'Полный день (до 12ч)', en: 'Full day (up to 12h)', kk: 'Толық күн (12 сағатқа дейін)' }, { ru: '200+ фото в ретуши', en: '200+ retouched photos', kk: '200+ ретушь фото' }, { ru: 'Видео-тизер 1 мин', en: '1 min video teaser', kk: '1 мин видео-тизер' }, { ru: 'Онлайн галерея', en: 'Online gallery', kk: 'Онлайн галерея' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'before_after', overrides: { title: { ru: '✨ До / После обработки', en: '✨ Before / After editing', kk: '✨ Өңдеуге дейін / кейін' }, beforeImage: 'https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&amp;h=400&amp;fit=crop&amp;sat=-100', afterImage: 'https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&amp;h=400&amp;fit=crop' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Асель и Арман', en: 'Assel &amp; Arman', kk: 'Әсел мен Арман' }, role: { ru: 'Свадьба 2024', en: 'Wedding 2024', kk: 'Той 2024' }, text: { ru: 'Анна — волшебница! Фото получились невероятными, все гости в восторге. Через 3 года пересматриваем и плачем от счастья!', en: 'Anna is a magician! Photos turned out incredible, all guests were delighted. We look back after 3 years and cry with happiness!', kk: 'Анна — сиқыршы! Фотолар керемет шықты, барлық қонақтар қуанышта. 3 жылдан кейін қарап, бақыттан жыладық!' }, rating: 5 }, { name: { ru: 'Мадина', en: 'Madina', kk: 'Мадина' }, role: { ru: 'Портретная съёмка', en: 'Portrait session', kk: 'Портрет түсіру' }, text: { ru: 'Я всегда стеснялась камеры, но Анна создала такую атмосферу, что я расслабилась и получились лучшие фото в моей жизни!', en: 'I was always camera shy, but Anna created such an atmosphere that I relaxed and got the best photos of my life!', kk: 'Мен әрқашан камерадан ұялатынмын, бірақ Анна мені босаңсытатын атмосфера жасады және өмірімдегі ең жақсы фотолар шықты!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'За сколько дней бронировать?', en: 'How many days to book in advance?', kk: 'Қанша күн бұрын брондау керек?' }, answer: { ru: 'Портреты — за 3-5 дней, свадьбы — за 1-3 месяца (особенно летом!)', en: 'Portraits — 3-5 days, weddings — 1-3 months (especially summer!)', kk: 'Портреттер — 3-5 күн, тойлар — 1-3 ай (әсіресе жазда!)' } }, { question: { ru: 'Выезжаете за город?', en: 'Do you travel outside the city?', kk: 'Қаладан тыс шығасыз ба?' }, answer: { ru: 'Да! Астана, Шымкент, Караганда и за границу. Трансфер и проживание оплачиваются отдельно.', en: 'Yes! Astana, Shymkent, Karaganda and abroad. Transfer and accommodation paid separately.', kk: 'Иә! Астана, Шымкент, Қарағанды және шет елге. Трансфер мен тұру бөлек төленеді.' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📅 Проверить доступные даты', en: '📅 Check available dates', kk: '📅 Бос күндерді тексеру' }, url: 'https://calendly.com/anna-photo', icon: 'calendar', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77051234567' }, { platform: 'telegram', username: 'anna_photo' }, { platform: 'instagram', username: 'anna.photo.kz' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'beauty',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Салон красоты',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Для салонов и бьюти-мастеров — полный прайс с бронированием',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '💅',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'GLOW Beauty Studio', en: 'GLOW Beauty Studio', kk: 'GLOW Beauty Studio' }, bio: { ru: '✨ Салон красоты премиум-класса\n💅 Маникюр • Брови • Ресницы • Макияж\n⭐ 4.9 рейтинг • 1000+ отзывов\n📍 Алматы, Достык Плаза', en: '✨ Premium beauty salon\n💅 Nails • Brows • Lashes • Makeup\n⭐ 4.9 rating • 1000+ reviews\n📍 Almaty, Dostyk Plaza', kk: '✨ Премиум сұлулық салоны\n💅 Маникюр • Қастар • Кірпіктер • Макияж\n⭐ 4.9 рейтинг • 1000+ пікір\n📍 Алматы, Достық Плаза' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '⏰ Пн-Вс: 10:00 - 21:00 (без выходных)', en: '⏰ Mon-Sun: 10:00 - 21:00 (no days off)', kk: '⏰ Дс-Жс: 10:00 - 21:00 (демалыссыз)' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📅 ЗАПИСАТЬСЯ ОНЛАЙН (свободные окна)', en: '📅 BOOK ONLINE (available slots)', kk: '📅 ОНЛАЙН ЖАЗЫЛУ (бос терезелер)' }, url: 'https://dikidi.net/glow', icon: 'calendar', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '✨ Наши работы', en: '✨ Our works', kk: '✨ Біздің жұмыстар' }, images: [{ url: PLACEHOLDER_IMAGES.beauty[0], alt: 'Nails' }, { url: PLACEHOLDER_IMAGES.beauty[1], alt: 'Makeup' }, { url: PLACEHOLDER_IMAGES.beauty[2], alt: 'Brows' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💅 Маникюр', en: '💅 Manicure', kk: '💅 Маникюр' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Маникюр с покрытием', en: 'Manicure with gel polish', kk: 'Жабынды маникюр' }, description: { ru: 'Комбинированный маникюр + гель-лак + дизайн 2 пальца', en: 'Combined manicure + gel polish + 2 nail design', kk: 'Комбинацияланған маникюр + гель-лак + 2 саусақ дизайны' }, price: 6000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Наращивание ногтей', en: 'Nail extensions', kk: 'Тырнақ ұзарту' }, description: { ru: 'Гель или акрил • Любая длина и форма', en: 'Gel or acrylic • Any length and shape', kk: 'Гель немесе акрил • Кез-келген ұзындық және пішін' }, price: 10000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Комплекс руки + ноги', en: 'Hands + feet combo', kk: 'Қол + аяқ кешені' }, description: { ru: 'Маникюр + педикюр с покрытием • Экономия 15%', en: 'Manicure + pedicure with polish • Save 15%', kk: 'Маникюр + педикюр жабынды • 15% үнемдеу' }, price: 12000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '👁 Брови и ресницы', en: '👁 Brows &amp; lashes', kk: '👁 Қастар мен кірпіктер' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Архитектура бровей', en: 'Brow architecture', kk: 'Қас архитектурасы' }, description: { ru: 'Коррекция + окрашивание + укладка brow fix', en: 'Correction + coloring + brow fix styling', kk: 'Түзету + бояу + brow fix сәндеу' }, price: 5000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Наращивание ресниц 2D-3D', en: '2D-3D lash extensions', kk: '2D-3D кірпік ұзарту' }, description: { ru: 'Премиум материалы • Держатся до 4 недель', en: 'Premium materials • Lasts up to 4 weeks', kk: 'Премиум материалдар • 4 аптаға дейін сақталады' }, price: 8000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Ламинирование ресниц', en: 'Lash lamination', kk: 'Кірпікті ламинациялау' }, description: { ru: 'Botox + окрашивание + подъём', en: 'Botox + coloring + lift', kk: 'Botox + бояу + көтеру' }, price: 6000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💄 Макияж', en: '💄 Makeup', kk: '💄 Макияж' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Дневной макияж', en: 'Day makeup', kk: 'Күндізгі макияж' }, description: { ru: 'Натуральный образ • Стойкие материалы', en: 'Natural look • Long-lasting materials', kk: 'Табиғи бейне • Берік материалдар' }, price: 8000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Вечерний макияж', en: 'Evening makeup', kk: 'Кешкі макияж' }, description: { ru: 'Smoky eyes, стрелки, контуринг', en: 'Smoky eyes, arrows, contouring', kk: 'Smoky eyes, бағдаршамдар, контуринг' }, price: 12000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Свадебный макияж', en: 'Bridal makeup', kk: 'Үйлену макияжы' }, description: { ru: 'Репетиция + макияж в день свадьбы', en: 'Rehearsal + wedding day makeup', kk: 'Репетиция + той күні макияжы' }, price: 25000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'before_after', overrides: { title: { ru: '✨ Результаты наращивания', en: '✨ Extension results', kk: '✨ Ұзарту нәтижелері' }, beforeImage: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&amp;h=300&amp;fit=crop', afterImage: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&amp;h=300&amp;fit=crop' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Айжан', en: 'Aizhan', kk: 'Айжан' }, role: { ru: 'Постоянный клиент', en: 'Regular client', kk: 'Тұрақты клиент' }, text: { ru: 'Хожу в GLOW уже 2 года на маникюр и брови. Девочки — профи, всегда идеальный результат. Люблю!', en: 'I\'ve been going to GLOW for 2 years for manicure and brows. Girls are pros, always perfect result. Love it!', kk: 'GLOW-ға 2 жыл бойы маникюр мен қасқа жүремін. Қыздар — профи, әрқашан тамаша нәтиже. Жақсы көремін!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'map', overrides: { address: 'Алматы, Достык 240, Достык Плаза, 2 этаж' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77001234567' }, { platform: 'instagram', username: 'glow.beauty.almaty' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'fitness',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Фитнес-тренер',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Для тренеров — программы, результаты, онлайн-курсы',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '💪',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Артём Fitness', en: 'Artem Fitness', kk: 'Артём Fitness' }, bio: { ru: '💪 Сертифицированный тренер\n🏆 Мастер спорта • 8 лет опыта\n🔥 1000+ клиентов • 50 000 кг сброшено\n📍 World Class Almaty + Онлайн', en: '💪 Certified trainer\n🏆 Master of Sports • 8 years exp\n🔥 1000+ clients • 50,000 kg lost\n📍 World Class Almaty + Online', kk: '💪 Сертификатталған жаттықтырушы\n🏆 Спорт шебері • 8 жыл тәжірибе\n🔥 1000+ клиент • 50 000 кг тасталды\n📍 World Class Almaty + Онлайн' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '🏆 Трансформации клиентов', en: '🏆 Client transformations', kk: '🏆 Клиенттердің трансформациялары' }, images: [{ url: PLACEHOLDER_IMAGES.fitness[0], alt: 'Training' }, { url: PLACEHOLDER_IMAGES.fitness[1], alt: 'Results' }, { url: PLACEHOLDER_IMAGES.fitness[2], alt: 'Workout' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🔥 Тренировка дня: HIIT на 20 минут (сожги 300 ккал)', en: '🔥 Workout of the day: 20 min HIIT (burn 300 cal)', kk: '🔥 Күннің жаттығуы: 20 минуттық HIIT (300 ккал жақ)' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: '🎁 Скидка 30% на первый месяц до:', en: '🎁 30% off first month until:', kk: '🎁 Бірінші айға 30% жеңілдік:' }, endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), style: 'modern' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🏋️ Мои программы', en: '🏋️ My programs', kk: '🏋️ Менің бағдарламаларым' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Разовая', en: 'Single', kk: 'Бір рет' }, price: 10000, currency: 'KZT', period: { ru: 'тренировка', en: 'session', kk: 'жаттығу' }, features: [{ ru: '60 минут', en: '60 minutes', kk: '60 минут' }, { ru: 'Зал или онлайн', en: 'Gym or online', kk: 'Зал немесе онлайн' }, { ru: 'Индивидуальный план', en: 'Individual plan', kk: 'Жеке жоспар' }], isPopular: false }, { name: { ru: 'Абонемент', en: 'Subscription', kk: 'Абонемент' }, price: 64000, currency: 'KZT', period: { ru: '8 тренировок', en: '8 sessions', kk: '8 жаттығу' }, features: [{ ru: 'Экономия 20%', en: 'Save 20%', kk: '20% үнемдеу' }, { ru: 'Действует 2 месяца', en: 'Valid 2 months', kk: '2 ай жарамды' }, { ru: 'План питания', en: 'Meal plan', kk: 'Тамақтану жоспары' }, { ru: 'Чат поддержка 24/7', en: '24/7 chat support', kk: '24/7 чат қолдау' }], isPopular: true }, { name: { ru: 'Онлайн-курс', en: 'Online course', kk: 'Онлайн курс' }, price: 35000, currency: 'KZT', period: { ru: '4 недели', en: '4 weeks', kk: '4 апта' }, features: [{ ru: '20 видео-тренировок', en: '20 video workouts', kk: '20 видео жаттығу' }, { ru: 'Доступ навсегда', en: 'Lifetime access', kk: 'Мәңгілік қатынау' }, { ru: 'Рецепты ПП', en: 'Healthy recipes', kk: 'ДТ рецепттері' }, { ru: 'Проверка формы', en: 'Form check', kk: 'Форманы тексеру' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Мадина', en: 'Madina', kk: 'Мадина' }, role: { ru: '-15 кг за 3 месяца', en: '-15 kg in 3 months', kk: '3 айда -15 кг' }, text: { ru: 'За 3 месяца с Артёмом сбросила 15 кг! Тренировки разнообразные, никогда не скучно. Супер мотиватор! Теперь живу активно и с удовольствием!', en: 'Lost 15 kg in 3 months with Artem! Varied workouts, never boring. Super motivator! Now I live actively and happily!', kk: 'Артёммен 3 айда 15 кг тастадым! Жаттығулар әртүрлі, ешқашан зерікпейсің. Супер мотиватор! Қазір белсенді және қуанышпен өмір сүремін!' }, rating: 5 }, { name: { ru: 'Данияр', en: 'Daniyar', kk: 'Данияр' }, role: { ru: '+8 кг мышц', en: '+8 kg muscle', kk: '+8 кг бұлшықет' }, text: { ru: 'Набрал 8 кг сухой массы за полгода. Артём знает, как правильно нагружать и как восстанавливаться. Результат виден!', en: 'Gained 8 kg lean mass in 6 months. Artem knows how to load properly and recover. Results are visible!', kk: '6 айда 8 кг құрғақ масса алдым. Артём дұрыс жүктеуді және қалпына келуді біледі. Нәтиже көрінеді!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Подойдёт ли новичку?', en: 'Is it suitable for beginners?', kk: 'Бастаушыларға жарай ма?' }, answer: { ru: 'Конечно! Программа адаптируется под ваш уровень. Начнём с базы и постепенно усложним.', en: 'Of course! The program adapts to your level. We\'ll start with basics and gradually increase difficulty.', kk: 'Әрине! Бағдарлама деңгейіңізге бейімделеді. Негізден бастап біртіндеп күрделендіреміз.' } }, { question: { ru: 'Нужно ли покупать инвентарь?', en: 'Do I need to buy equipment?', kk: 'Құрал-жабдық сатып алу керек пе?' }, answer: { ru: 'Для зала — нет. Для дома достаточно коврика и гантелей (можно бутылки с водой).', en: 'For gym — no. For home, a mat and dumbbells are enough (water bottles work too).', kk: 'Зал үшін — жоқ. Үйге кілем мен гантельдер жеткілікті (су бөтелкелері де болады).' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📱 Бесплатные тренировки на YouTube', en: '📱 Free workouts on YouTube', kk: '📱 YouTube-та тегін жаттығулар' }, url: 'https://youtube.com/@artem_fitness', icon: 'youtube', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📅 Записаться на пробную тренировку', en: '📅 Book a trial session', kk: '📅 Сынақ жаттығуға жазылу' }, url: 'https://calendly.com/artem-fit', icon: 'calendar', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77011234567' }, { platform: 'telegram', username: 'artem_fit' }, { platform: 'instagram', username: 'artem.fitness.kz' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'chef',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Шеф-повар / Кондитер',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Вкусное портфолио — меню, мастер-классы, заказы',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '👨‍🍳',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Chef Marco', en: 'Chef Marco', kk: 'Chef Marco' }, bio: { ru: '👨‍🍳 Шеф-повар итальянской кухни\n🍰 Авторские торты на заказ\n🎓 Кулинарные мастер-классы', en: '👨‍🍳 Italian cuisine chef\n🍰 Custom author cakes\n🎓 Culinary masterclasses', kk: '👨‍🍳 Итальян асханасының бас аспазы\n🍰 Тапсырыспен авторлық торттар\n🎓 Кулинарлық мастер-класстар' }, avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&amp;h=400&amp;fit=crop' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '🍰 Мои десерты', en: '🍰 My desserts', kk: '🍰 Менің десерттерім' }, images: [{ url: PLACEHOLDER_IMAGES.food[0], alt: 'Cake' }, { url: PLACEHOLDER_IMAGES.food[1], alt: 'Pasta' }, { url: PLACEHOLDER_IMAGES.food[2], alt: 'Steak' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🎂 Торты на заказ', en: '🎂 Custom cakes', kk: '🎂 Тапсырыспен торттар' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Бенто-торт', en: 'Bento cake', kk: 'Бенто-торт' }, description: { ru: '500г • Дизайн любой • На 1-2 человека', en: '500g • Any design • For 1-2 people', kk: '500г • Кез-келген дизайн • 1-2 адамға' }, price: 6500, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Медовик "Классика"', en: 'Honey cake "Classic"', kk: 'Медовик "Классика"' }, description: { ru: '1 кг • Домашний рецепт • Ягоды', en: '1 kg • Home recipe • Berries', kk: '1 кг • Үй рецепті • Жидектер' }, price: 9000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Свадебный торт', en: 'Wedding cake', kk: 'Үйлену торты' }, description: { ru: 'От 3 кг • Декор живыми цветами', en: 'From 3 kg • Fresh flowers decor', kk: '3 кг-нан бастап • Тірі гүлдермен декор' }, price: 35000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🎓 Обучение', en: '🎓 Education', kk: '🎓 Оқу' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Мастер-класс "Стейки"', en: 'Masterclass "Steaks"', kk: 'Мастер-класс "Стейктер"' }, description: { ru: 'Офлайн • 3 часа • Готовим и едим', en: 'Offline • 3 hours • Cook and eat', kk: 'Офлайн • 3 сағат • Пісіреміз және жейміз' }, price: 25000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Гайд "Завтраки за 15 мин"', en: 'Guide "Breakfasts in 15 min"', kk: 'Гайд "15 минутта таңғы ас"' }, description: { ru: 'PDF-сборник • 30 рецептов', en: 'PDF collection • 30 recipes', kk: 'PDF жинақ • 30 рецепт' }, price: 3000, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Елена', en: 'Elena', kk: 'Елена' }, text: { ru: 'Торт был просто космос! Нежный, не приторный. Гости съели всё до крошки!', en: 'The cake was just space! Tender, not clogging. Guests ate everything to crumbs!', kk: 'Торт жай ғана ғарыш болды! Жұмсақ, тәтті емес. Қонақтар бәрін жеп қойды!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77001112233', message: 'Здравствуйте, хочу заказать торт' }, { platform: 'instagram', username: 'chef.marco' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'shop',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Магазин / Товарка',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Витрина товаров, акции, контакты — мини-интернет магазин',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🛍️',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Sneaker Head KZ', en: 'Sneaker Head KZ', kk: 'Sneaker Head KZ' }, bio: { ru: '👟 Топовые кроссовки в Алматы\n🔥 Только оригинал • Доставка по РК\n⚡ New Balance • Nike • Adidas', en: '👟 Top sneakers in Almaty\n🔥 Original only • Delivery across KZ\n⚡ New Balance • Nike • Adidas', kk: '👟 Алматыдағы топ кроссовкалар\n🔥 Тек түпнұсқа • ҚР бойынша жеткізу\n⚡ New Balance • Nike • Adidas' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🔥 Обзор новинок недели', en: '🔥 Weekly new arrivals review', kk: '🔥 Апта жаңалықтарына шолу' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: '⚡ SALE -40% заканчивается через:', en: '⚡ SALE -40% ends in:', kk: '⚡ SALE -40% аяқталады:' }, endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), style: 'modern' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'catalog', overrides: { title: { ru: '🔥 Популярное', en: '🔥 Popular', kk: '🔥 Танымал' }, items: [{ id: '1', name: 'Nike Air Jordan 1', description: 'Classic High • Red/Black', price: 85000, currency: 'KZT' }, { id: '2', name: 'New Balance 530', description: 'Retro Running • White/Silver', price: 65000, currency: 'KZT' }, { id: '3', name: 'Adidas Yeezy 350', description: 'Boost V2 • Bone', price: 120000, currency: 'KZT' }, { id: '4', name: 'Nike Dunk Low', description: 'Panda • Black/White', price: 75000, currency: 'KZT' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📦 Условия доставки и возврата', en: '📦 Delivery and return policy', kk: '📦 Жеткізу және қайтару шарттары' }, url: 'https://example.com/delivery', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Это оригинал?', en: 'Is it original?', kk: 'Бұл түпнұсқа ма?' }, answer: { ru: 'Да, 100% оригинал. Любые проверки. Есть чеки и сертификаты.', en: 'Yes, 100% original. Any checks. We have receipts and certificates.', kk: 'Иә, 100% түпнұсқа. Кез-келген тексеру. Чектер мен сертификаттар бар.' } }, { question: { ru: 'Как подобрать размер?', en: 'How to choose size?', kk: 'Өлшемді қалай таңдауға болады?' }, answer: { ru: 'Напишите нам в WhatsApp, мы поможем измерить стельку и подберем идеально.', en: 'Write to us on WhatsApp, we will help measure the insole and choose perfectly.', kk: 'Бізге WhatsApp-қа жазыңыз, біз табанды өлшеуге және мінсіз таңдауға көмектесеміз.' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77005556677', message: 'Здравствуйте, хочу купить кроссовки' }, { platform: 'telegram', username: 'sneaker_kz' }, { platform: 'instagram', username: 'sneaker.head.kz' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'realestate',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Недвижимость / Риелтор',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Каталог объектов, видео-обзоры, запись на просмотр',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🏠',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Elite Estate Almaty', en: 'Elite Estate Almaty', kk: 'Elite Estate Almaty' }, bio: { ru: '🏠 Недвижимость премиум-класса\n🔑 Подбор • Продажа • Аренда\n🌇 Лучшие ЖК города', en: '🏠 Premium real estate\n🔑 Selection • Sale • Rent\n🌇 Best city complexes', kk: '🏠 Премиум жылжымайтын мүлік\n🔑 Таңдау • Сату • Жалға алу\n🌇 Қаланың үздік ТК' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '🔥 Горячие предложения', en: '🔥 Hot offers', kk: '🔥 Қызу ұсыныстар' }, images: [{ url: PLACEHOLDER_IMAGES.realestate[0], alt: 'Luxury Apartment' }, { url: PLACEHOLDER_IMAGES.realestate[1], alt: 'Penthouse' }, { url: PLACEHOLDER_IMAGES.realestate[2], alt: 'Modern Home' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🎥 Рум-тур: Трёхкомнатная в ЖК Esentai City', en: '🎥 Room tour: 3-room in Esentai City', kk: '🎥 Рум-тур: Esentai City-де 3 бөлмелі' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'catalog', overrides: { title: { ru: '🏠 Объекты в продаже', en: '🏠 Objects for sale', kk: '🏠 Сатылымдағы нысандар' }, items: [{ id: '1', name: '2-комн, ЖК Metropole', description: '75 м² • 12/20 этаж • Дизайнерский ремонт', price: 85000000, currency: 'KZT' }, { id: '2', name: '3-комн, ЖК Highvill', description: '120 м² • Панорама • Мебель', price: 145000000, currency: 'KZT' }, { id: '3', name: 'Пентхаус, ЖК Esentai', description: '250 м² • Терраса • Вид на горы', price: 450000000, currency: 'KZT' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'form', overrides: { title: { ru: '📝 Заявка на подбор', en: '📝 Selection request', kk: '📝 Таңдауға өтінім' }, fields: [{ name: 'Имя', type: 'text', required: true, placeholder: 'Ваше имя' }, { name: 'Бюджет', type: 'text', required: true, placeholder: 'до 50 млн ₸' }, { name: 'Телефон', type: 'tel', required: true, placeholder: '+7...' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Работаете с ипотекой?', en: 'Do you work with mortgages?', kk: 'Ипотекамен жұмыс жасайсыз ба?' }, answer: { ru: 'Да, сопровождаем сделки через Отбасы Банк и БЦК.', en: 'Yes, we accompany deals via Otbasy Bank and BCC.', kk: 'Иә, Отбасы Банк және БЦК арқылы мәмілелерді сүйемелдейміз.' } }, { question: { ru: 'Сколько стоят ваши услуги?', en: 'How much are your services?', kk: 'Қызметтеріңіз қанша тұрады?' }, answer: { ru: 'Для покупателей на вторичном рынке — 0% (комиссию платит продавец).', en: 'For buyers on secondary market — 0% (seller pays commission).', kk: 'Қайталама нарықта сатып алушылар үшін — 0% (комиссияны сатушы төлейді).' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77009998877', message: 'Здравствуйте, ищу квартиру' }, { platform: 'telegram', username: 'elite_estate_manager' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'wedding',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Свадебное приглашение',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Электронное приглашение для гостей с RSVP формой',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '💍',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Арман &amp; Асель', en: 'Arman &amp; Assel', kk: 'Арман &amp; Әсел' }, bio: { ru: '💍 Мы женимся!\n📅 25 Августа 2024\n📍 Ресторан "Sultan Hall"', en: '💍 We are getting married!\n📅 August 25, 2024\n📍 Restaurant "Sultan Hall"', kk: '💍 Біз үйленеміз!\n📅 25 Тамыз 2024\n📍 "Sultan Hall" мейрамханасы' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'countdown', overrides: { title: { ru: 'До нашей свадьбы осталось:', en: 'Time left until our wedding:', kk: 'Біздің тойымызға дейін қалды:' }, endDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(), style: 'elegant' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'image', overrides: { url: PLACEHOLDER_IMAGES.photo[2], blockStyle: { borderRadius: 'lg', shadow: 'md' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: 'Дорогие друзья и родные!\n\nПриглашаем вас разделить с нами этот особенный день. Ваша поддержка и любовь очень важны для нас!', en: 'Dear friends and family!\n\nWe invite you to share this special day with us. Your support and love are very important to us!', kk: 'Қымбатты достар мен туыстар!\n\nСіздерді осы ерекше күнді бізбен бөлісуге шақырамыз. Сіздердің қолдауларыңыз бен махаббаттарыңыз біз үшін өте маңызды!' }, style: 'quote', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'map', overrides: { address: 'Алматы, пр. Достык 123', title: { ru: '📍 Место проведения', en: '📍 Venue', kk: '📍 Өтетін орны' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '📋 Программа вечера', en: '📋 Evening program', kk: '📋 Кеш бағдарламасы' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '17:00 — Сбор гостей\n18:00 — Церемония регистрации\n19:00 — Банкет и танцы\n23:00 — Торт и фейерверк', en: '17:00 — Guest gathering\n18:00 — Registration ceremony\n19:00 — Banquet and dancing\n23:00 — Cake and fireworks', kk: '17:00 — Қонақтарды жинау\n18:00 — Тіркеу рәсімі\n19:00 — Банкет және би\n23:00 — Торт және отшашу' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'form', overrides: { title: { ru: 'Подтвердите присутствие', en: 'RSVP', kk: 'Қатысуды растаңыз' }, buttonText: { ru: 'Я приду!', en: 'I will come!', kk: 'Мен келемін!' }, fields: [{ name: 'Имя и Фамилия', type: 'text', required: true, placeholder: 'Иван и Мария' }, { name: 'Буду с парой?', type: 'select', required: true, options: ['Да', 'Нет, буду один/одна', 'С детьми'] }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '🎁 Вишлист (что нам подарить)', en: '🎁 Wishlist', kk: '🎁 Вишлист (бізге не сыйлау керек)' }, url: 'https://example.com/wishlist', icon: 'gift', style: 'outline' } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    // ===== ЭКСПЕРТЫ =====</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'psychologist',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Психолог / Коуч',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Доверие с первой секунды — статьи, отзывы, запись',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'experts',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🧠',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Елена Психолог', en: 'Elena Psychologist', kk: 'Елена Психолог' }, bio: { ru: '🧠 Клинический психолог • Гештальт-терапевт\n✨ Помогаю справиться с тревожностью и выгоранием\n🎓 12 лет практики • 3000+ часов терапии', en: '🧠 Clinical psychologist • Gestalt therapist\n✨ Helping to cope with anxiety and burnout\n🎓 12 years practice • 3000+ therapy hours', kk: '🧠 Клиникалық психолог • Гештальт-терапевт\n✨ Мазасыздық пен күйзеліспен күресуге көмектесемін\n🎓 12 жыл тәжірибе • 3000+ терапия сағаты' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💬 "Все ответы уже внутри вас. Я лишь помогаю их найти."', en: '💬 "All answers are within you. I only help find them."', kk: '💬 "Барлық жауаптар сіздің ішіңізде. Мен тек оларды табуға көмектесемін."' }, style: 'quote', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🎥 Видео-знакомство: Как проходит сессия?', en: '🎥 Introduction video: How is the session?', kk: '🎥 Таныстыру видеосы: Сессия қалай өтеді?' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💡 С чем я работаю', en: '💡 What I work with', kk: '💡 Мен немен жұмыс істеймін' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Тревожность и панические атаки', en: 'Anxiety and panic attacks', kk: 'Мазасыздық және үрей ұстамалары' }, answer: { ru: 'Научимся техникам саморегуляции и найдем причины.', en: 'We will learn self-regulation techniques and find causes.', kk: 'Өзін-өзі реттеу техникаларын үйренеміз және себептерін табамыз.' } }, { question: { ru: 'Проблемы в отношениях', en: 'Relationship problems', kk: 'Қарым-қатынас мәселелері' }, answer: { ru: 'Выход из созависимости, конфликты, развод.', en: 'Exit from codependency, conflicts, divorce.', kk: 'Тәуелділіктен шығу, жанжалдар, ажырасу.' } }, { question: { ru: 'Поиск себя и карьеры', en: 'Finding self and career', kk: 'Өзін және мансап іздеу' }, answer: { ru: 'Синдром самозванца, профориентация, самооценка.', en: 'Imposter syndrome, career guidance, self-esteem.', kk: 'Алаяқ синдромы, кәсіби бағдар, өзін-өзі бағалау.' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Консультация', en: 'Consultation', kk: 'Кеңес беру' }, price: 15000, currency: 'KZT', period: { ru: '50 мин', en: '50 min', kk: '50 мин' }, features: [{ ru: 'Онлайн (Zoom/Skype)', en: 'Online (Zoom/Skype)', kk: 'Онлайн (Zoom/Skype)' }, { ru: 'Разбор запроса', en: 'Request analysis', kk: 'Сұранысты талдау' }, { ru: 'Домашнее задание', en: 'Homework', kk: 'Үй тапсырмасы' }], isPopular: true }, { name: { ru: 'Пакет "Терапия"', en: 'Package "Therapy"', kk: '"Терапия" пакеті' }, price: 65000, currency: 'KZT', period: { ru: '5 сессий', en: '5 sessions', kk: '5 сессия' }, features: [{ ru: 'Экономия 10000 ₸', en: 'Save 10000 ₸', kk: '10000 ₸ үнемдеу' }, { ru: 'Глубинная проработка', en: 'Deep processing', kk: 'Терең өңдеу' }, { ru: 'Поддержка в чате', en: 'Chat support', kk: 'Чатта қолдау' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'Алина', en: 'Alina', kk: 'Алина' }, text: { ru: 'Елена помогла мне пережить сложный развод. Я снова чувствую себя живой и счастливой. Спасибо!', en: 'Elena helped me survive a difficult divorce. I feel alive and happy again. Thank you!', kk: 'Елена маған қиын ажырасудан өтуге көмектесті. Мен қайтадан тірі және бақытты сезінемін. Рахмет!' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📅 Записаться на сессию', en: '📅 Book a session', kk: '📅 Сессияға жазылу' }, url: 'https://calendly.com/elena-psy', icon: 'calendar', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'telegram', username: 'elena_psy_admin' }, { platform: 'whatsapp', username: '+77001112233' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'teacher',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Репетитор / Учитель',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Для преподавателей — курсы, материалы, расписание',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'experts',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '📚',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'English with Maria', en: 'English with Maria', kk: 'English with Maria' }, bio: { ru: '🇬🇧 Английский для жизни и работы\n🎓 IELTS 8.5 • CELTA Certified\n🚀 Заговоришь уже на первом уроке!', en: '🇬🇧 English for life and work\n🎓 IELTS 8.5 • CELTA Certified\n🚀 You\'ll speak on the first lesson!', kk: '🇬🇧 Өмір мен жұмыс үшін ағылшын тілі\n🎓 IELTS 8.5 • CELTA Certified\n🚀 Бірінші сабақта сөйлеп кетесіз!' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🎥 Бесплатный урок: 5 ошибок в Present Perfect', en: '🎥 Free lesson: 5 mistakes in Present Perfect', kk: '🎥 Тегін сабақ: Present Perfect-те 5 қате' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '📚 Мои курсы', en: '📚 My courses', kk: '📚 Менің курстарым' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Группа', en: 'Group', kk: 'Топ' }, price: 25000, currency: 'KZT', period: { ru: 'месяц', en: 'month', kk: 'ай' }, features: [{ ru: '3 раза в неделю', en: '3 times a week', kk: 'аптасына 3 рет' }, { ru: 'Мини-группа до 6 чел', en: 'Mini-group up to 6 ppl', kk: '6 адамға дейін мини-топ' }, { ru: 'Speaking Club', en: 'Speaking Club', kk: 'Speaking Club' }], isPopular: true }, { name: { ru: 'Индивидуально', en: 'Individually', kk: 'Жеке' }, price: 50000, currency: 'KZT', period: { ru: 'месяц', en: 'month', kk: 'ай' }, features: [{ ru: 'Персональная программа', en: 'Personal program', kk: 'Жеке бағдарлама' }, { ru: 'Гибкий график', en: 'Flexible schedule', kk: 'Икемді кесте' }, { ru: 'Подготовка к IELTS', en: 'IELTS prep', kk: 'IELTS дайындық' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🎁 Полезные материалы', en: '🎁 Useful materials', kk: '🎁 Пайдалы материалдар' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'download', overrides: { title: { ru: 'Гайд "100 фраз для путешествий"', en: 'Guide "100 phrases for travel"', kk: 'Гайд "Саяхатқа арналған 100 сөз"' }, fileName: 'travel-english.pdf', fileSize: '2.5 MB' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'download', overrides: { title: { ru: 'Чек-лист "Времена английского"', en: 'Checklist "English Tenses"', kk: 'Чек-лист "Ағылшын шақтары"' }, fileName: 'tenses-checklist.pdf', fileSize: '1.2 MB' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'faq', overrides: { items: [{ question: { ru: 'Какой у меня уровень?', en: 'What is my level?', kk: 'Менің деңгейім қандай?' }, answer: { ru: 'Пройдите мой бесплатный тест в Telegram боте.', en: 'Take my free test in Telegram bot.', kk: 'Telegram боттағы менің тегін тестімнен өтіңіз.' } }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📝 Пройти тест на уровень', en: '📝 Take level test', kk: '📝 Деңгейге тест тапсыру' }, url: 'https://t.me/example_bot', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77001234567' }, { platform: 'telegram', username: 'maria_eng' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'marketer',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Маркетолог / SMM',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Кейсы, услуги, консультации для бизнеса',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'experts',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '📈',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'SMM Expert', en: 'SMM Expert', kk: 'SMM Expert' }, bio: { ru: '🚀 Продвижение бизнеса в соцсетях\n📈 Таргет • Контент • Стратегия\n💼 50+ кейсов в разных нишах', en: '🚀 Business promotion in social media\n📈 Target • Content • Strategy\n💼 50+ cases in different niches', kk: '🚀 Бизнесті әлеуметтік желілерде жылжыту\n📈 Таргет • Контент • Стратегия\n💼 Әр түрлі салада 50+ кейс' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '📊 Мои кейсы', en: '📊 My cases', kk: '📊 Менің кейстерім' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'before_after', overrides: { title: { ru: 'Магазин одежды (за 1 месяц)', en: 'Clothing store (in 1 month)', kk: 'Киім дүкені (1 айда)' }, beforeLabel: { ru: 'Было: 10 заявок', en: 'Before: 10 leads', kk: 'Болды: 10 өтінім' }, afterLabel: { ru: 'Стало: 150 заявок', en: 'After: 150 leads', kk: 'Болды: 150 өтінім' }, beforeImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&amp;h=400&amp;fit=crop&amp;sat=-100', afterImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&amp;h=400&amp;fit=crop' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Консультация', en: 'Consultation', kk: 'Кеңес беру' }, price: 20000, currency: 'KZT', period: { ru: '1.5 часа', en: '1.5 hours', kk: '1.5 сағат' }, features: [{ ru: 'Разбор профиля', en: 'Profile analysis', kk: 'Профильді талдау' }, { ru: 'Стратегия продвижения', en: 'Promotion strategy', kk: 'Жылжыту стратегиясы' }, { ru: 'Ответы на вопросы', en: 'Q&amp;A', kk: 'Сұрақ-жауап' }], isPopular: false }, { name: { ru: 'Ведение "Под ключ"', en: 'Full Management', kk: 'Толық жүргізу' }, price: 250000, currency: 'KZT', period: { ru: 'месяц', en: 'month', kk: 'ай' }, features: [{ ru: '15 Reels + 20 Stories', en: '15 Reels + 20 Stories', kk: '15 Reels + 20 Stories' }, { ru: 'Таргетированная реклама', en: 'Targeted ads', kk: 'Таргеттік жарнама' }, { ru: 'Копирайтинг и дизайн', en: 'Copywriting and design', kk: 'Копирайтинг және дизайн' }], isPopular: true }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📝 Заполнить бриф', en: '📝 Fill the brief', kk: '📝 Брифті толтыру' }, url: 'https://forms.google.com/geek', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'telegram', username: 'smm_expert' }, { platform: 'whatsapp', username: '+77001112233' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'lawyer',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Юрист / Консультант',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Строгий стиль, перечень услуг, запись на консультацию',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'experts',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '⚖️',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'Адвокат Смирнов', en: 'Lawyer Smirnov', kk: 'Адвокат Смирнов' }, bio: { ru: '⚖️ Юридическая помощь бизнесу и гражданам\n🎓 Стаж 15 лет • Выиграно 95% дел\n📍 Алматы, БЦ Нурлы Тау', en: '⚖️ Legal help for business and citizens\n🎓 15 years exp • 95% cases won\n📍 Almaty, BC Nurly Tau', kk: '⚖️ Бизнес пен азаматтарға заңгерлік көмек\n🎓 15 жыл өтіл • 95% іс ұтып алынды\n📍 Алматы, БО Нұрлы Тау' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🏛 Практики', en: '🏛 Practices', kk: '🏛 Тәжірибелер' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '• Семейное право (разводы, алименты)\n• Наследственные споры\n• Арбитраж и взыскание долгов\n• Защита бизнеса при проверках', en: '• Family law (divorces, alimony)\n• Inheritance disputes\n• Arbitration and debt collection\n• Business protection during inspections', kk: '• Отбасылық құқық (ажырасу, алимент)\n• Мұрагерлік даулар\n• Арбитраж және қарыз өндіру\n• Тексеру кезінде бизнесті қорғау' }, style: 'paragraph', alignment: 'left' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💰 Стоимость', en: '💰 Cost', kk: '💰 Құны' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'Устная консультация', en: 'Oral consultation', kk: 'Ауызша кеңес' }, price: 15000, currency: 'KZT', period: { ru: '30 мин', en: '30 min', kk: '30 мин' }, features: [{ ru: 'Анализ ситуации', en: 'Situation analysis', kk: 'Жағдайды талдау' }, { ru: 'Правовая оценка', en: 'Legal assessment', kk: 'Құқықтық бағалау' }, { ru: 'План действий', en: 'Action plan', kk: 'Әрекет жоспары' }], isPopular: true }, { name: { ru: 'Подготовка иска', en: 'Claim preparation', kk: 'Талап арыз дайындау' }, price: 50000, currency: 'KZT', period: { ru: 'документ', en: 'document', kk: 'құжат' }, features: [{ ru: 'Изучение документов', en: 'Documents study', kk: 'Құжаттарды зерттеу' }, { ru: 'Написание иска', en: 'Writing claim', kk: 'Талап арыз жазу' }, { ru: 'Подача в суд', en: 'Filing to court', kk: 'Сотқа беру' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'map', overrides: { address: 'Алматы, пр. Аль-Фараби 19, БЦ Нурлы Тау', title: { ru: '📍 Офис', en: '📍 Office', kk: '📍 Кеңсе' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📞 Позвонить секретарю', en: '📞 Call secretary', kk: '📞 Хатшыға қоңырау шалу' }, url: 'tel:+77271234567', icon: 'globe', style: 'rounded' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77011112233' }, { platform: 'email', username: 'lawyer@example.com' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    // ===== ПРЕМИУМ =====</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'agency',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Digital Агентство',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Премиум дизайн, анимации, кейсы и команда',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        isPremium: true,</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🏆',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'EAGLE AGENCY', en: 'EAGLE AGENCY', kk: 'EAGLE AGENCY' }, bio: { ru: '🚀 Digital-агентство полного цикла\n💻 Web • Mobile • Branding • Marketing\n🏆 Золото Tagline 2023', en: '🚀 Full cycle digital agency\n💻 Web • Mobile • Branding • Marketing\n🏆 Tagline Gold 2023', kk: '🚀 Толық циклді digital-агенттік\n💻 Web • Mobile • Branding • Marketing\n🏆 Tagline 2023 Алтын' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'video', overrides: { url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', title: { ru: '🎬 Наш шоурил 2024', en: '🎬 Our showreel 2024', kk: '🎬 Біздің шоурил 2024' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🏆 Почему мы?', en: '🏆 Why us?', kk: '🏆 Неге біз?' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: 'Мы создаем продукты, которые меняют рынок. Глубокая аналитика, смелый дизайн и передовые технологии.', en: 'We create products that change the market. Deep analytics, bold design and advanced technologies.', kk: 'Біз нарықты өзгертетін өнімдер жасаймыз. Терең аналитика, батыл дизайн және озық технологиялар.' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '💻 Наши проекты', en: '💻 Our projects', kk: '💻 Біздің жобалар' }, images: [{ url: PLACEHOLDER_IMAGES.photo[0], alt: 'Fintech App' }, { url: PLACEHOLDER_IMAGES.photo[1], alt: 'E-commerce' }, { url: PLACEHOLDER_IMAGES.photo[2], alt: 'Corporate Site' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'pricing', overrides: { plans: [{ name: { ru: 'MVP Стартап', en: 'MVP Startup', kk: 'MVP Стартап' }, price: 1500000, currency: 'KZT', period: { ru: 'проект', en: 'project', kk: 'жоба' }, features: [{ ru: 'Прототипирование', en: 'Prototyping', kk: 'Прототиптеу' }, { ru: 'Дизайн-система', en: 'Design system', kk: 'Дизайн жүйесі' }, { ru: 'Разработка (React/Next.js)', en: 'Development (React/Next.js)', kk: 'Әзірлеу (React/Next.js)' }], isPopular: true }, { name: { ru: 'Corporate', en: 'Corporate', kk: 'Corporate' }, price: 3000000, currency: 'KZT', period: { ru: 'проект', en: 'project', kk: 'жоба' }, features: [{ ru: 'Сложные интеграции', en: 'Complex integrations', kk: 'Күрделі интеграциялар' }, { ru: 'Брендинг под ключ', en: 'Turnkey branding', kk: 'Толық брендинг' }, { ru: 'SEO и аналитика', en: 'SEO and analytics', kk: 'SEO және аналитика' }], isPopular: false }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'testimonial', overrides: { testimonials: [{ name: { ru: 'CEO Fintech Bank', en: 'CEO Fintech Bank', kk: 'CEO Fintech Bank' }, role: { ru: 'Заказчик', en: 'Client', kk: 'Тапсырыс беруші' }, text: { ru: 'Ребята сделали невозможное — запустили мобильный банк за 4 месяца. Качество кода и дизайна на высоте.', en: 'Guys did the impossible — launched mobile bank in 4 months. Code and design quality is top notch.', kk: 'Жігіттер мүмкін еместі жасады — 4 айда мобильді банкті іске қосты. Код пен дизайн сапасы жоғары деңгейде.' }, rating: 5 }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'telegram', username: 'eagle_agency_ceo' }, { platform: 'email', username: 'hello@eagle.agency' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'restaurant',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Ресторан / Кафе',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Красочное меню, бронирование столиков, доставка',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        isPremium: true,</span>
+<span class="cstat-no" title="statement not covered" >        preview: '🍷',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'profile', overrides: { name: { ru: 'La Villa Restaurant', en: 'La Villa Restaurant', kk: 'La Villa Restaurant' }, bio: { ru: '🍷 Итальянская кухня и винотека\n🍕 Паста ручной работы • Пицца из печи\n📍 Алматы, пр. Абая 44', en: '🍷 Italian cuisine and wine bar\n🍕 Handmade pasta • Oven pizza\n📍 Almaty, Abay ave 44', kk: '🍷 Итальян асханасы және винотека\n🍕 Қолдан жасалған паста • Пештен шыққан пицца\n📍 Алматы, Абай даңғылы 44' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '⏰ Мы открыты: 12:00 - 00:00', en: '⏰ We are open: 12:00 - 00:00', kk: '⏰ Біз ашықпыз: 12:00 - 00:00' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'carousel', overrides: { title: { ru: '🍽 Интерьер и блюда', en: '🍽 Interior and dishes', kk: '🍽 Интерьер және тағамдар' }, images: [{ url: PLACEHOLDER_IMAGES.food[0], alt: 'Interior' }, { url: PLACEHOLDER_IMAGES.food[1], alt: 'Pasta' }, { url: PLACEHOLDER_IMAGES.food[2], alt: 'Wine' }] } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📖 ПОСМОТРЕТЬ МЕНЮ', en: '📖 VIEW MENU', kk: '📖 МӘЗІРДІ ҚАРАУ' }, url: 'https://menu.qrcode.kz/lavilla', icon: 'file-text', style: 'pill' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🍕 Популярное', en: '🍕 Popular', kk: '🍕 Танымал' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Пицца Маргарита', en: 'Pizza Margherita', kk: 'Пицца Маргарита' }, description: { ru: 'Томатный соус, моцарелла, базилик', en: 'Tomato sauce, mozzarella, basil', kk: 'Қызанақ тұздығы, моцарелла, насыбайгүл' }, price: 3500, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Паста Карбонара', en: 'Pasta Carbonara', kk: 'Паста Карбонара' }, description: { ru: 'Панчетта, пармезан, яичный желток', en: 'Pancetta, parmesan, egg yolk', kk: 'Панчетта, пармезан, жұмыртқа сарысы' }, price: 4200, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'product', overrides: { name: { ru: 'Тирамису', en: 'Tiramisu', kk: 'Тирамису' }, description: { ru: 'Классический итальянский десерт', en: 'Classic Italian dessert', kk: 'Классикалық итальян десерті' }, price: 2800, currency: 'KZT' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'booking', overrides: { title: { ru: '📅 Забронировать столик', en: '📅 Book a table', kk: '📅 Үстел брондау' }, workingHoursStart: 12, workingHoursEnd: 23 } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'map', overrides: { address: 'Алматы, Абая 44', title: { ru: '📍 Ждем вас', en: '📍 Waiting for you', kk: '📍 Сізді күтеміз' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'whatsapp', username: '+77271112233', message: 'Хочу забронировать столик' }, { platform: 'instagram', username: 'lavilla.kz' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'portfolio-pro',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Резюме / CV Pro',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Современное резюме для топ-менеджеров и IT',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'business',</span>
+<span class="cstat-no" title="statement not covered" >        isPremium: true,</span>
+<span class="cstat-no" title="statement not covered" >        preview: '📄',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'avatar', overrides: { imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400', name: { ru: 'Максим Петров', en: 'Maxim Petrov', kk: 'Максим Петров' }, subtitle: { ru: 'Senior Product Manager @ Fintech', en: 'Senior Product Manager @ Fintech', kk: 'Senior Product Manager @ Fintech' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🚀 10 лет в IT. Запускал продукты для 1М+ пользователей. Эксперт в Agile и Data-driven развитии.', en: '🚀 10 years in IT. Launched products for 1M+ users. Expert in Agile and Data-driven development.', kk: '🚀 IT-де 10 жыл. 1М+ қолданушыларға арналған өнімдерді іске қосты. Agile және Data-driven дамыту бойынша сарапшы.' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '💼 Опыт работы', en: '💼 Work Experience', kk: '💼 Жұмыс тәжірибесі' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '2020 - Наст. время\n🏢 Kaspi.kz — Head of Mobile\n• Рост MAU +40%\n• Запуск инвестиционного продукта', en: '2020 - Present\n🏢 Kaspi.kz — Head of Mobile\n• MAU growth +40%\n• Investment product launch', kk: '2020 - Қазіргі уақыт\n🏢 Kaspi.kz — Head of Mobile\n• MAU өсімі +40%\n• Инвестициялық өнімді іске қосу' }, style: 'paragraph', alignment: 'left' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '2017 - 2020\n🏢 ChocoFamily — Senior PM\n• Увеличение LTV на 25%\n• Интеграция с Apple Pay', en: '2017 - 2020\n🏢 ChocoFamily — Senior PM\n• LTV increase by 25%\n• Apple Pay integration', kk: '2017 - 2020\n🏢 ChocoFamily — Senior PM\n• LTV 25%-ға артуы\n• Apple Pay интеграциясы' }, style: 'paragraph', alignment: 'left' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'separator', overrides: { style: 'line' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '🛠 Навыки', en: '🛠 Skills', kk: '🛠 Дағдылар' }, style: 'heading', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: '• Product Strategy\n• Unit Economics\n• A/B Testing\n• SQL &amp; Python\n• Team Leadership', en: '• Product Strategy\n• Unit Economics\n• A/B Testing\n• SQL &amp; Python\n• Team Leadership', kk: '• Product Strategy\n• Unit Economics\n• A/B Testing\n• SQL &amp; Python\n• Team Leadership' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'download', overrides: { title: { ru: '📄 Скачать полное CV (PDF)', en: '📄 Download full CV (PDF)', kk: '📄 Толық CV жүктеу (PDF)' }, fileName: 'Maxim_Petrov_CV.pdf' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'email', username: 'maxim@example.com' }, { platform: 'linkedin', username: 'maxim-petrov-pm' }, { platform: 'telegram', username: 'maxim_pm' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    // ===== ДРУГОЕ =====</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'personal',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'Личный блог',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Минималистичный шаблон для мыслей и заметок',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'other',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '📝',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'avatar', overrides: { imageUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400', name: { ru: 'Алексей', en: 'Alexey', kk: 'Алексей' }, subtitle: { ru: 'Просто пишу о жизни', en: 'Just writing about life', kk: 'Жай ғана өмір туралы жазамын' } } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'text', overrides: { content: { ru: 'Привет! Здесь я делюсь своими мыслями, книгами и путешествиями.', en: 'Hi! Here I share my thoughts, books and travels.', kk: 'Сәлем! Мұнда мен ойларыммен, кітаптарыммен және саяхаттарыммен бөлісемін.' }, style: 'paragraph', alignment: 'center' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📝 Мой Telegram канал', en: '📝 My Telegram channel', kk: '📝 Менің Telegram арнам' }, url: 'https://t.me/example', icon: 'telegram', style: 'simple' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'link', overrides: { title: { ru: '📚 Список любимых книг', en: '📚 Favorite books list', kk: '📚 Сүйікті кітаптар тізімі' }, url: 'https://goodreads.com', icon: 'book', style: 'simple' } },</span>
+<span class="cstat-no" title="statement not covered" >            { type: 'messenger', overrides: { messengers: [{ platform: 'email', username: 'alex@example.com' }] } },</span>
+        ],
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    {</span>
+<span class="cstat-no" title="statement not covered" >        id: 'blank',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'С чистого листа',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Начните с пустого шаблона и создайте свой уникальный дизайн',</span>
+<span class="cstat-no" title="statement not covered" >        category: 'other',</span>
+<span class="cstat-no" title="statement not covered" >        preview: '✨',</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [],</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >];</span>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-17T17:14:38.207Z
+            </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    

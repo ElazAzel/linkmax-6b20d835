@@ -44,23 +44,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-
-      - name: i18n lint
-        run: npm run lint:i18n
-
-      - name: i18n key alignment
-        run: npm run i18n:check
-
-      - name: TypeScript check
-        run: npx tsc --noEmit
-
-      - name: Dependency quality gate
-        run: npm run quality:gate
+      - name: Hardened Quality Gate
+        run: npm run quality:check
 
   unit-tests:
-    name: Unit Tests
+    name: Unit Tests (with Coverage)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -76,8 +64,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run unit tests
-        run: npm test -- --run
+      - name: Run unit tests with coverage
+        run: npm run test:ci
 
   e2e-tests:
     name: E2E Tests

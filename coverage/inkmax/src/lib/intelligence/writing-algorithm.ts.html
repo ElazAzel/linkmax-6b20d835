@@ -1,0 +1,1069 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for inkmax/src/lib/intelligence/writing-algorithm.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">inkmax/src/lib/intelligence</a> writing-algorithm.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/283</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/283</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >/**<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+ * Smart-Writing Algorithm - Deterministic text suggestions based on business niches.
+ * This replaces generic AI prompts with high-converting, niche-specific patterns.
+<span class="cstat-no" title="statement not covered" > */</span>
+&nbsp;
+export interface SuggestionPack {
+    headings: string[];
+    descriptions: string[];
+    links: string[];
+    buttons: string[];
+    // New types for Smart-Writing 2.0
+    faqQuestions: string[];
+    faqAnswers: string[];
+    messengerMessages: string[];
+    productNames: string[];
+    productDescriptions: string[];
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >const PATTERNS: Record&lt;string, SuggestionPack&gt; = {</span>
+<span class="cstat-no" title="statement not covered" >    freelancer: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Профессиональные услуги: {profession}",</span>
+<span class="cstat-no" title="statement not covered" >            "Решаю задачи бизнеса качественно и в срок",</span>
+<span class="cstat-no" title="statement not covered" >            "{profession} с фокусом на результат",</span>
+<span class="cstat-no" title="statement not covered" >            "Помогаю вашему бизнесу расти через {profession}"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Специализируюсь на создании эффективных решений для малого и среднего бизнеса. Опыт более 5 лет.",</span>
+<span class="cstat-no" title="statement not covered" >            "Превращаю ваши идеи в работающие продукты. Работаю удаленно по всему миру, нахожусь в г. {city}.",</span>
+<span class="cstat-no" title="statement not covered" >            "Моя цель — ваш успех. Гарантирую индивидуальный подход и соблюдение дедлайнов в каждом проекте."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Мое портфолио", "Отзывы клиентов", "Прайс-лист услуг", "Связаться в Telegram"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Заказать проект", "Обсудить задачу", "Узнать стоимость", "Смотреть работы"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Как происходит оплата?", "Какие гарантии соблюдения сроков?", "Как начать работу с вами?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Работаю по поэтапной оплате или 50% предоплате. Принимаю переводы и оплату по счету.",</span>
+<span class="cstat-no" title="statement not covered" >            "Все сроки фиксируются в договоре или ТЗ. За каждый день просрочки предусмотрена скидка.",</span>
+<span class="cstat-no" title="statement not covered" >            "Просто напишите мне в мессенджер. Мы обсудим задачу, я составлю смету и план работы."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Добрый день! Хочу заказать {profession}. Свободны ли вы сейчас?", "Здравствуйте! Нужен расчет стоимости проекта по {profession}."],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["{profession}: Консультация (60 мин)", "Аудит вашего текущего проекта", "Полная разработка под ключ"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Разберу вашу ситуацию и дам пошаговый план решения.", "Выявлю ошибки и точки роста для вашего бизнеса.", "Выполню проект от идеи до запуска с гарантией результата."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    business: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Ваш надежный партнер: {company_name}",</span>
+<span class="cstat-no" title="statement not covered" >            "Премиальный сервис и качество в г. {city}",</span>
+<span class="cstat-no" title="statement not covered" >            "Решения для тех, кто ценит время и результат",</span>
+<span class="cstat-no" title="statement not covered" >            "{business_type}: Лидеры рынка в своей нише"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Мы создаем ценность для наших клиентов с 2018 года. Более 1000 успешных кейсов.",</span>
+<span class="cstat-no" title="statement not covered" >            "Профессиональная команда, современное оборудование и высокие стандарты качества в {city}.",</span>
+<span class="cstat-no" title="statement not covered" >            "Помогаем нашим клиентам достигать новых высот. Узнайте больше о наших услугах ниже."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Наш сайт", "Каталог товаров", "О компании", "Наш офис в г. {city}"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Получить консультацию", "Оставить заявку", "Стать партнером", "Связаться с нами"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Где вы находитесь?", "Как стать вашим клиентом?", "Работаете ли вы с юрлицами?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Наш центральный офис расположен в г. {city}. Также работаем дистанционно по всей стране.",</span>
+<span class="cstat-no" title="statement not covered" >            "Оставьте заявку на сайте или позвоните нам. Менеджер свяжется с вами в течение 15 минут.",</span>
+<span class="cstat-no" title="statement not covered" >            "Да, мы работаем с ИП и ТОО, предоставляем все закрывающие документы и акты."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Здравствуйте! Интересуют услуги компании {company_name}. Подскажите условия.", "Добрый день! Хотим заказать {business_type} у вас."],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["Пакет услуг 'Стандарт'", "Пакет услуг 'Премиум'", "Индивидуальное решение"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Оптимальный набор опций для большинства задач.", "Максимальный приоритет и расширенная поддержка.", "Разработка стратегии специально под нужды вашего бизнеса."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    beauty: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Студия красоты: {beauty_name}",</span>
+<span class="cstat-no" title="statement not covered" >            "Ваш идеальный образ в г. {city}",</span>
+<span class="cstat-no" title="statement not covered" >            "Преображение, которое вы заслуживаете",</span>
+<span class="cstat-no" title="statement not covered" >            "{beauty_type}: Профессиональный уход"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Подчеркиваем вашу естественную красоту. Используем только премиальную косметику.",</span>
+<span class="cstat-no" title="statement not covered" >            "Мастера высшей категории и уютная атмосфера в самом центре {city}.",</span>
+<span class="cstat-no" title="statement not covered" >            "Мы заботимся о каждой детали вашего образа. Записывайтесь онлайн прямо сейчас."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Запись онлайн", "Наши работы", "Услуги и цены", "Мы в Instagram"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Записаться", "Выбрать время", "Узнать подробнее", "Хочу к мастеру"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Как записаться к мастеру?", "Какие материалы вы используете?", "Есть ли парковка рядом?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Вы можете выбрать удобное время через кнопку 'Записаться' или написать нам в WhatsApp.",</span>
+<span class="cstat-no" title="statement not covered" >            "Мы работаем только на сертифицированной косметике премиум-класса из Европы и США.",</span>
+<span class="cstat-no" title="statement not covered" >            "Да, для наших клиентов предусмотрена бесплатная гостевая парковка возле входа."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Привет! Хочу записаться в {beauty_name} на {beauty_type}. Есть окошки на завтра?", "Здравствуйте! Подскажите стоимость услуги {beauty_type}."],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["{beauty_type}: Классика", "{beauty_type}: Комплекс", "Подарочный сертификат"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Базовая процедура для отличного настроения.", "Полное преображение и глубокий уход.", "Идеальный подарок для тех, кого вы любите."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    ecommerce: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Магазин {store_name}",</span>
+<span class="cstat-no" title="statement not covered" >            "Лучшие товары с доставкой из г. {city}",</span>
+<span class="cstat-no" title="statement not covered" >            "Качество и стиль в каждой детали",</span>
+<span class="cstat-no" title="statement not covered" >            "{product_category}: Новое поступление уже в продаже"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Быстрая доставка по всему Казахстану и гарантия качества на каждый товар.",</span>
+<span class="cstat-no" title="statement not covered" >            "Находимся в г. {city}. У нас вы найдете все необходимое по лучшим ценам.",</span>
+<span class="cstat-no" title="statement not covered" >            "Порадуйте себя и своих близких. Переходите в каталог и делайте заказ."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Каталог товаров", "Условия доставки", "Акции и скидки", "Отследить заказ"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["В корзину", "Купить сейчас", "Смотреть каталог", "Заказать доставку"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Условия и сроки доставки?", "Как я могу обменять или вернуть товар?", "Какие способы оплаты доступны?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Доставляем курьером по г. {city} в день заказа. В другие регионы — почтой от 2 до 5 дней.",</span>
+<span class="cstat-no" title="statement not covered" >            "Обмен и возврат возможен в течение 14 дней при сохранении товарного вида и упаковки.",</span>
+<span class="cstat-no" title="statement not covered" >            "Вы можете оплатить картой на сайте, через Kaspi QR или наличными при получении."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Здравствуйте! Есть ли в наличии {product_category}? Нужен размер S.", "Добрый день! Подскажите, когда будет доставка в г. {city}?"],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["{product_category}: Хит продаж", "Новинка сезона", "Набор 'Summer Mix'"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Товар, который выбирают сотни наших покупателей.", "Самое актуальное поступление в нашем каталоге.", "Комплект товаров по выгодной цене со скидкой 15%."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    realestate: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Недвижимость в г. {city}",</span>
+<span class="cstat-no" title="statement not covered" >            "Ваш дом мечты от {company_name}",</span>
+<span class="cstat-no" title="statement not covered" >            "Аренда и продажа проверенных объектов",</span>
+<span class="cstat-no" title="statement not covered" >            "Помогаем найти идеальное жилье в {city}"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Полное юридическое сопровождение сделок. Большая база объектов во всех районах.",</span>
+<span class="cstat-no" title="statement not covered" >            "Экспертная оценка и подбор вариантов под ваш бюджет. Мы знаем все о рынке недвижимости.",</span>
+<span class="cstat-no" title="statement not covered" >            "Мечтаете о новой квартире? Мы поможем сделать этот путь легким и безопасным."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["База квартир", "Ипотечный калькулятор", "Заявка на подбор", "Наши контакты"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Записаться на просмотр", "Получить подборку", "Оценить квартиру", "Связаться с агентом"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Помогаете ли вы с ипотекой?", "Как быстро можно выйти на сделку?", "Есть ли у вас скрытые комиссии?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Да, мы работаем со всеми банками и помогаем получить одобрение ипотеки бесплатно.",</span>
+<span class="cstat-no" title="statement not covered" >            "При наличии всех документов со стороны продавца — от 3 до 7 рабочих дней.",</span>
+<span class="cstat-no" title="statement not covered" >            "Нет, наши услуги оплачиваются фиксированно согласно договору. Честность — наш приоритет."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Здравствуйте! Хочу посмотреть квартиру в ЖК {company_name}.", "Добрый день! Есть ли варианты 2-комнатных квартир в г. {city} до 40 млн?"],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["Подбор квартиры (Новостройки)", "Юридическая проверка объекта", "Продажа вашей недвижимости"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Найдем лучшие варианты без комиссии от застройщика.", "Гарантия безопасности вашей покупки и прав собственности.", "Поможем продать объект быстро и по рыночной цене."],</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    creator: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Создаю контент, который вдохновляет",</span>
+<span class="cstat-no" title="statement not covered" >            "Добро пожаловать в мой творческий мир",</span>
+<span class="cstat-no" title="statement not covered" >            "Делюсь опытом и знаниями каждый день",</span>
+<span class="cstat-no" title="statement not covered" >            "Мой путь в {creation_type}: проекты и мысли"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Блогер и криэйтор из г. {city}. Здесь вы найдете эксклюзивный контент и анонсы новых проектов.",</span>
+<span class="cstat-no" title="statement not covered" >            "Показываю жизнь без фильтров. Подписывайтесь на мои соцсети, чтобы быть в курсе событий.",</span>
+<span class="cstat-no" title="statement not covered" >            "Сотрудничество и реклама: пишите в мессенджеры ниже. Открыт к новым интересным предложениям."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Мой YouTube канал", "Telegram канал", "Поддержать проекты", "Сотрудничество"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Подписаться", "Смотреть видео", "Написать мне", "Поддержать"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["На что ты снимаешь?", "Как ты монтируешь видео?", "Как заказать рекламу или коллаб?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Снимаю на профессиональное оборудование {creation_type}. Список техники есть в Telegram.",</span>
+<span class="cstat-no" title="statement not covered" >            "Использую современные редакторы. Основной фокус на динамику и вовлечение зрителя.",</span>
+<span class="cstat-no" title="statement not covered" >            "Напишите мне в личные сообщения с описанием вашего продукта и бюджета."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Привет! Хочу предложить сотрудничество по теме {creation_type}.", "Добрый вечер! Интересует реклама в твоем канале/блоге."],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["Эксклюзивный доступ (Boosty/Patreon)", "Консультация по блогингу", "Мерч 'Limited Edition'"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Дополнительный контент и ранний доступ к видео.", "Разбор вашего контента и советы по продвижению.", "Классные вещи для моих самых преданных подписчиков."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    education: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Обучение {subject} с нуля до профи",</span>
+<span class="cstat-no" title="statement not covered" >            "Инвестируйте в свое будущее сегодня",</span>
+<span class="cstat-no" title="statement not covered" >            "Авторский курс: {course_name}",</span>
+<span class="cstat-no" title="statement not covered" >            "Помогаю освоить {subject} легко и быстро"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Пошаговая методика обучения, проверенная на сотнях студентов. Доступно и понятно каждому.",</span>
+<span class="cstat-no" title="statement not covered" >            "Научу вас всему, что знаю сам. Забирайте бесплатный гайд или записывайтесь на консультацию.",</span>
+<span class="cstat-no" title="statement not covered" >            "Образовательная платформа №1 в г. {city} по направлению {subject}. Начните учиться сейчас!"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Программа обучения", "Бесплатный вебинар", "Отзывы учеников", "Личный кабинет"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Начать обучение", "Записаться на курс", "Забрать бонус", "Узнать программу"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Будет ли именной сертификат?", "Подойдет ли курс новичку?", "Сколько времени нужно на обучение?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Да, после выполнения всех домашних заданий вы получите официальный сертификат школы.",</span>
+<span class="cstat-no" title="statement not covered" >            "Курс {course_name} разработан специально для тех, кто начинает путь с самого нуля.",</span>
+<span class="cstat-no" title="statement not covered" >            "Достаточно уделять 30-40 минут в день. У вас будет доступ ко всем материалам навсегда."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Здравствуйте! Хочу записаться на курс {course_name}. Есть ли скидки?", "Привет! Подскажите, когда стартует поток по {subject}?"],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["Интенсив: {subject}", "Курс {course_name} (Тариф Стандарт)", "Личное менторство"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["7 дней плотной работы и практики для быстрого старта.", "Полная программа обучения с проверкой домашних заданий.", "Индивидуальная работа со мной до достижения результата."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    health: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Ваше здоровье — мой главный приоритет",</span>
+<span class="cstat-no" title="statement not covered" >            "Запишитесь на прием в г. {city}",</span>
+<span class="cstat-no" title="statement not covered" >            "Профессиональный уход и забота о себе",</span>
+<span class="cstat-no" title="statement not covered" >            "{specialization}: Красота и здоровье в гармонии"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Дипломированный специалист с многолетней практикой. Использую только проверенные методики.",</span>
+<span class="cstat-no" title="statement not covered" >            "Помогу вам чувствовать себя лучше и увереннее. Запись на консультацию открыта через WhatsApp.",</span>
+<span class="cstat-no" title="statement not covered" >            "Современная медицина и бережный подход. Ждем вас в нашей клинике в г. {city}."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Запись на прием", "Стоимость услуг", "Наши врачи", "Советы по здоровью"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Записаться", "Получить консультацию", "Выбрать услугу", "Связаться с врачом"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Сколько длится первичная консультация?", "Нужно ли приносить анализы с собой?", "Как подготовиться к приему?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Первичный прием длится от 40 до 60 минут. Мы проведем полный осмотр и опрос.",</span>
+<span class="cstat-no" title="statement not covered" >            "Если есть результаты за последние 6 месяцев — берите. Остальное назначим на месте.",</span>
+<span class="cstat-no" title="statement not covered" >            "Основные рекомендации мы вышлем вам в SMS или WhatsApp сразу после записи."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Здравствуйте! Хочу записаться к вам на прием в г. {city}.", "Добрый день! Подскажите стоимость консультации по {specialization}."],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["Чекап организма 'Базовый'", "Консультация специалиста", "Курс процедур/терапии"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Комплексное обследование для тех, кто следит за своим здоровьем.", "Подробный разбор вашей проблемы и постановка диагноза.", "Эффективный план лечения с сопровождением до выздоровления."]</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    general: {</span>
+<span class="cstat-no" title="statement not covered" >        headings: [</span>
+<span class="cstat-no" title="statement not covered" >            "Добро пожаловать на мою страницу",</span>
+<span class="cstat-no" title="statement not covered" >            "Узнайте больше о моих услугах",</span>
+<span class="cstat-no" title="statement not covered" >            "Свяжитесь со мной удобным способом",</span>
+<span class="cstat-no" title="statement not covered" >            "Профессионализм и открытость к общению"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: [</span>
+<span class="cstat-no" title="statement not covered" >            "Рад видеть вас здесь! Я занимаюсь любимым делом и делюсь результатами своей работы.",</span>
+<span class="cstat-no" title="statement not covered" >            "На этой странице собраны все мои важные ссылки и контакты. Буду рад сотрудничеству.",</span>
+<span class="cstat-no" title="statement not covered" >            "Нахожусь в г. {city}. Пишите по любым вопросам — отвечу максимально быстро."</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        links: ["Мои контакты", "О себе", "Что я могу предложить", "Свежие новости"],</span>
+<span class="cstat-no" title="statement not covered" >        buttons: ["Написать мне", "Узнать больше", "Перейти по ссылке", "Связаться"],</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: ["Как с вами связаться?", "Где можно увидеть ваше портфолио?", "С какими проектами вы работаете?"],</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: [</span>
+<span class="cstat-no" title="statement not covered" >            "Самый быстрый способ — написать в мессенджеры, ссылки на которые есть ниже.",</span>
+<span class="cstat-no" title="statement not covered" >            "Основные работы собраны в разделе 'Портфолио' или по ссылке в Instagram/Telegram.",</span>
+<span class="cstat-no" title="statement not covered" >            "Я открыт к любым интересным предложениям в г. {city} и онлайн. Давайте обсудим!"</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: ["Привет! Нашел твою страницу, хочу задать пару вопросов.", "Здравствуйте! Можно узнать подробнее о вашей деятельности?"],</span>
+<span class="cstat-no" title="statement not covered" >        productNames: ["Услуга / Товар", "Консультация", "Спецпредложение"],</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: ["Качественное исполнение и индивидуальный подход.", "Помогу разобраться в вашем вопросе за 30 минут.", "Специальные условия для новых клиентов."]</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+export interface SuggestionContext {
+    city?: string;
+    profession?: string;
+    company_name?: string;
+    business_type?: string;
+    creation_type?: string;
+    subject?: string;
+    course_name?: string;
+    specialization?: string;
+    // New niche contexts
+    beauty_name?: string;
+    beauty_type?: string;
+    store_name?: string;
+    product_category?: string;
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >/**</span>
+ * Personalize a template string by replacing placeholders with context values.
+<span class="cstat-no" title="statement not covered" > */</span>
+<span class="cstat-no" title="statement not covered" >function personalize(template: string, context: SuggestionContext): string {</span>
+<span class="cstat-no" title="statement not covered" >    let result = template;</span>
+<span class="cstat-no" title="statement not covered" >    const entries = Object.entries(context);</span>
+    
+<span class="cstat-no" title="statement not covered" >    entries.forEach(([key, value]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (value) {</span>
+<span class="cstat-no" title="statement not covered" >            const regex = new RegExp(`{${key}}`, 'g');</span>
+<span class="cstat-no" title="statement not covered" >            result = result.replace(regex, value);</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" >    });</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    // Clean up any remaining tags with defaults to avoid broken UI</span>
+<span class="cstat-no" title="statement not covered" >    return result.replace(/{[a-z_]+}/g, (match) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const key = match.slice(1, -1);</span>
+<span class="cstat-no" title="statement not covered" >        const defaults: Record&lt;string, string&gt; = {</span>
+<span class="cstat-no" title="statement not covered" >            city: "вашем городе",</span>
+<span class="cstat-no" title="statement not covered" >            profession: "специалист",</span>
+<span class="cstat-no" title="statement not covered" >            company_name: "наша компания",</span>
+<span class="cstat-no" title="statement not covered" >            business_type: "наш бизнес",</span>
+<span class="cstat-no" title="statement not covered" >            creation_type: "творческой сфере",</span>
+<span class="cstat-no" title="statement not covered" >            subject: "новым навыкам",</span>
+<span class="cstat-no" title="statement not covered" >            course_name: "обучающий курс",</span>
+<span class="cstat-no" title="statement not covered" >            specialization: "ваш эксперт",</span>
+<span class="cstat-no" title="statement not covered" >            beauty_name: "наша студия",</span>
+<span class="cstat-no" title="statement not covered" >            beauty_type: "салон красоты",</span>
+<span class="cstat-no" title="statement not covered" >            store_name: "наш магазин",</span>
+<span class="cstat-no" title="statement not covered" >            product_category: "товаров"</span>
+<span class="cstat-no" title="statement not covered" >        };</span>
+<span class="cstat-no" title="statement not covered" >        return defaults[key] || "";</span>
+<span class="cstat-no" title="statement not covered" >    });</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >/**</span>
+ * Main entry point for Smart-Writing suggestions.
+<span class="cstat-no" title="statement not covered" > */</span>
+<span class="cstat-no" title="statement not covered" >export function getWritingSuggestions(niche: string, context: SuggestionContext = {}): SuggestionPack {</span>
+<span class="cstat-no" title="statement not covered" >    const pack = PATTERNS[niche] || PATTERNS.general;</span>
+    
+<span class="cstat-no" title="statement not covered" >    return {</span>
+<span class="cstat-no" title="statement not covered" >        headings: pack.headings.map(h =&gt; personalize(h, context)),</span>
+<span class="cstat-no" title="statement not covered" >        descriptions: pack.descriptions.map(d =&gt; personalize(d, context)),</span>
+<span class="cstat-no" title="statement not covered" >        links: pack.links.map(l =&gt; personalize(l, context)),</span>
+<span class="cstat-no" title="statement not covered" >        buttons: pack.buttons.map(b =&gt; personalize(b, context)),</span>
+<span class="cstat-no" title="statement not covered" >        faqQuestions: pack.faqQuestions.map(q =&gt; personalize(q, context)),</span>
+<span class="cstat-no" title="statement not covered" >        faqAnswers: pack.faqAnswers.map(a =&gt; personalize(a, context)),</span>
+<span class="cstat-no" title="statement not covered" >        messengerMessages: pack.messengerMessages.map(m =&gt; personalize(m, context)),</span>
+<span class="cstat-no" title="statement not covered" >        productNames: pack.productNames.map(n =&gt; personalize(n, context)),</span>
+<span class="cstat-no" title="statement not covered" >        productDescriptions: pack.productDescriptions.map(d =&gt; personalize(d, context))</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
+export type SuggestionType = 'heading' | 'description' | 'link' | 'button' | 'faq_question' | 'faq_answer' | 'messenger_message' | 'product_name' | 'product_description';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >/**</span>
+ * Get a random single suggestion for quick use (e.g. Magic Wand click).
+<span class="cstat-no" title="statement not covered" > */</span>
+<span class="cstat-no" title="statement not covered" >export function getRandomSuggestion(niche: string, type: SuggestionType, context: SuggestionContext = {}): string {</span>
+<span class="cstat-no" title="statement not covered" >    const pack = getWritingSuggestions(niche, context);</span>
+<span class="cstat-no" title="statement not covered" >    let options: string[] = [];</span>
+    
+<span class="cstat-no" title="statement not covered" >    if (type === 'heading') options = pack.headings;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'description') options = pack.descriptions;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'link') options = pack.links;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'button') options = pack.buttons;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'faq_question') options = pack.faqQuestions;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'faq_answer') options = pack.faqAnswers;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'messenger_message') options = pack.messengerMessages;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'product_name') options = pack.productNames;</span>
+<span class="cstat-no" title="statement not covered" >    else if (type === 'product_description') options = pack.productDescriptions;</span>
+    
+<span class="cstat-no" title="statement not covered" >    return options[Math.floor(Math.random() * options.length)];</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-17T17:14:38.207Z
+            </div>
+        <script src="../../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
+    </body>
+</html>
+    

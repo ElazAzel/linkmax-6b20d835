@@ -1,0 +1,1345 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for inkmax/src/components/legal/TermsOfServiceModal.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">inkmax/src/components/legal</a> TermsOfServiceModal.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/309</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/309</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useState } from 'react';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >import { useTranslation } from 'react-i18next';</span>
+<span class="cstat-no" title="statement not covered" >import {</span>
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+<span class="cstat-no" title="statement not covered" >import { ScrollArea } from '@/components/ui/scroll-area';</span>
+<span class="cstat-no" title="statement not covered" >import { Button } from '@/components/ui/button';</span>
+<span class="cstat-no" title="statement not covered" >import { getAppDomain } from '@/lib/utils/url-helpers';</span>
+&nbsp;
+interface TermsOfServiceModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) =&gt; void;
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >// Company details constant - exported for use in other legal pages</span>
+<span class="cstat-no" title="statement not covered" >export const COMPANY_DETAILS = {</span>
+<span class="cstat-no" title="statement not covered" >  name: 'ARchitecKZ',</span>
+<span class="cstat-no" title="statement not covered" >  address: 'г. Алматы, ул. Шолохова, д. 20',</span>
+<span class="cstat-no" title="statement not covered" >  bin: '190540008684',</span>
+<span class="cstat-no" title="statement not covered" >  bank: 'АО "Kaspi Bank"',</span>
+<span class="cstat-no" title="statement not covered" >  kbe: '19',</span>
+<span class="cstat-no" title="statement not covered" >  bik: 'CASPKZKA',</span>
+<span class="cstat-no" title="statement not covered" >  account: 'KZ58722S000020135125',</span>
+<span class="cstat-no" title="statement not covered" >  email: 'admin@lnkmx.my',</span>
+<span class="cstat-no" title="statement not covered" >  phone: '+7 705 109 76 64',</span>
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function TermsOfServiceModal({ open, onOpenChange }: TermsOfServiceModalProps) {</span>
+<span class="cstat-no" title="statement not covered" >  const { t, i18n } = useTranslation();</span>
+<span class="cstat-no" title="statement not covered" >  const lang = i18n.language;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const getCompanyDetailsSection = (lang: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (lang === 'en') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;Company Details&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;div className="text-sm text-muted-foreground mb-2 space-y-1"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Company:&lt;/strong&gt; {COMPANY_DETAILS.name}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Address:&lt;/strong&gt; Almaty, Sholokhov Street, building 20/7, apt/office 11&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;BIN (IIN):&lt;/strong&gt; {COMPANY_DETAILS.bin}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Bank:&lt;/strong&gt; {COMPANY_DETAILS.bank}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;KBe:&lt;/strong&gt; {COMPANY_DETAILS.kbe}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;BIC:&lt;/strong&gt; {COMPANY_DETAILS.bik}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Account Number:&lt;/strong&gt; {COMPANY_DETAILS.account}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {COMPANY_DETAILS.email}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Phone:&lt;/strong&gt; {COMPANY_DETAILS.phone}&lt;/p&gt;</span>
+          &lt;/div&gt;
+        &lt;/&gt;
+      );
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    if (lang === 'kk') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;Компания деректемелері&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;div className="text-sm text-muted-foreground mb-2 space-y-1"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Компания:&lt;/strong&gt; {COMPANY_DETAILS.name}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Мекенжай:&lt;/strong&gt; Алматы қ., Шолохов к-сі, 20/7 үй, 11 пәтер/кеңсе&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;БСН (ЖСН):&lt;/strong&gt; {COMPANY_DETAILS.bin}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Банк:&lt;/strong&gt; {COMPANY_DETAILS.bank}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;КБе:&lt;/strong&gt; {COMPANY_DETAILS.kbe}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;БСК:&lt;/strong&gt; {COMPANY_DETAILS.bik}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Шот нөмірі:&lt;/strong&gt; {COMPANY_DETAILS.account}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {COMPANY_DETAILS.email}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;p&gt;&lt;strong&gt;Телефон:&lt;/strong&gt; {COMPANY_DETAILS.phone}&lt;/p&gt;</span>
+          &lt;/div&gt;
+        &lt;/&gt;
+      );
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    // Russian default</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+<span class="cstat-no" title="statement not covered" >      &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;Реквизиты организации&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;div className="text-sm text-muted-foreground mb-2 space-y-1"&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;Компания:&lt;/strong&gt; {COMPANY_DETAILS.name}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;Адрес:&lt;/strong&gt; {COMPANY_DETAILS.address}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;БИН (ИИН):&lt;/strong&gt; {COMPANY_DETAILS.bin}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;Банк:&lt;/strong&gt; {COMPANY_DETAILS.bank}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;КБе:&lt;/strong&gt; {COMPANY_DETAILS.kbe}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;БИК:&lt;/strong&gt; {COMPANY_DETAILS.bik}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;Номер счёта:&lt;/strong&gt; {COMPANY_DETAILS.account}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {COMPANY_DETAILS.email}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p&gt;&lt;strong&gt;Телефон:&lt;/strong&gt; {COMPANY_DETAILS.phone}&lt;/p&gt;</span>
+        &lt;/div&gt;
+      &lt;/&gt;
+    );
+<span class="cstat-no" title="statement not covered" >  };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const getServiceDeliverySection = (lang: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (lang === 'en') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;11. Service Delivery Terms&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.1. &lt;strong&gt;Service Description:&lt;/strong&gt; lnkmx.my provides digital services for creating and hosting personal mini-sites (link-in-bio pages), analytics, CRM functionality, and AI-powered content generation. All services are provided remotely via the Internet.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.2. &lt;strong&gt;Service Activation:&lt;/strong&gt; Access to paid services is activated automatically within 15 minutes after successful payment confirmation. The User receives access to all features of the selected tariff plan immediately.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.3. &lt;strong&gt;Service Period:&lt;/strong&gt; The subscription period starts from the moment of successful payment and continues for the selected duration (3, 6, or 12 months).&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.4. &lt;strong&gt;No Physical Delivery:&lt;/strong&gt; As lnkmx.my provides exclusively digital services, no physical delivery of goods is performed.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;12. Refund and Cancellation Policy&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.1. &lt;strong&gt;Refund Eligibility:&lt;/strong&gt; In accordance with Article 30 of the Law of the Republic of Kazakhstan "On Protection of Consumer Rights", refunds for digital services may be requested under the following conditions:&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Within 14 calendar days from the date of payment if the service has not been used (no pages created, no blocks added, no analytics accessed);&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• In case of technical impossibility to provide the service due to the fault of the Administration;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• If the service significantly differs from the description on the website.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.2. &lt;strong&gt;Non-Refundable Cases:&lt;/strong&gt; Refunds are not provided if:&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• The User has actively used the paid features (created pages, used AI generation, accessed analytics);&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• More than 14 days have passed since the payment date;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• The account was blocked due to violation of the Terms of Service;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• The User has violated the rules of use specified in Section 4 of this Agreement.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.3. &lt;strong&gt;Refund Process:&lt;/strong&gt; To request a refund, the User must send an application to {COMPANY_DETAILS.email} indicating: full name, email used for registration, payment date and amount, reason for refund.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.4. &lt;strong&gt;Refund Timeline:&lt;/strong&gt; The refund request is reviewed within 10 business days. If approved, funds are returned within 14 business days to the original payment method.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.5. &lt;strong&gt;Partial Refunds:&lt;/strong&gt; If the service has been partially used, a proportional refund may be calculated based on unused days of the subscription period.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.6. &lt;strong&gt;Subscription Cancellation:&lt;/strong&gt; The User may cancel automatic subscription renewal at any time through account settings. Cancellation does not entitle to a refund for the current paid period.&lt;/p&gt;</span>
+        &lt;/&gt;
+      );
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    if (lang === 'kk') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;11. Қызметтерді көрсету шарттары&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.1. &lt;strong&gt;Қызметтің сипаттамасы:&lt;/strong&gt; lnkmx.my жеке мини-сайттар (link-in-bio беттері), аналитика, CRM функционалы және AI мазмұнын генерациялау үшін цифрлық қызметтер көрсетеді. Барлық қызметтер интернет арқылы қашықтан көрсетіледі.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.2. &lt;strong&gt;Қызметті іске қосу:&lt;/strong&gt; Ақылы қызметтерге қол жеткізу төлемді сәтті растағаннан кейін 15 минут ішінде автоматты түрде іске қосылады.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.3. &lt;strong&gt;Қызмет мерзімі:&lt;/strong&gt; Жазылым мерзімі сәтті төлем сәтінен басталады және таңдалған ұзақтыққа (3, 6 немесе 12 ай) жалғасады.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.4. &lt;strong&gt;Физикалық жеткізу жоқ:&lt;/strong&gt; lnkmx.my тек цифрлық қызметтер көрсететіндіктен, тауарларды физикалық жеткізу жүзеге асырылмайды.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;12. Ақшаны қайтару және бас тарту саясаты&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.1. &lt;strong&gt;Қайтару құқығы:&lt;/strong&gt; Қазақстан Республикасының «Тұтынушылардың құқықтарын қорғау туралы» Заңының 30-бабына сәйкес, цифрлық қызметтер үшін ақшаны қайтару мынадай жағдайларда сұралуы мүмкін:&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Төлем күнінен бастап 14 күнтізбелік күн ішінде, егер қызмет пайдаланылмаса;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Әкімшіліктің кінәсінен қызмет көрсетудің техникалық мүмкін еместігі жағдайында;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Егер қызмет веб-сайттағы сипаттамадан айтарлықтай ерекшеленсе.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.2. &lt;strong&gt;Қайтарылмайтын жағдайлар:&lt;/strong&gt; Егер:&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Пайдаланушы ақылы мүмкіндіктерді белсенді пайдаланса;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Төлем күнінен бастап 14 күннен астам уақыт өтсе;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Қызмет көрсету шарттарын бұзғаны үшін аккаунт бұғатталса.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.3. &lt;strong&gt;Қайтару процесі:&lt;/strong&gt; Қайтаруды сұрау үшін Пайдаланушы {COMPANY_DETAILS.email} мекенжайына өтініш жіберуі керек.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.4. &lt;strong&gt;Қайтару мерзімі:&lt;/strong&gt; Қайтару сұранысы 10 жұмыс күні ішінде қаралады. Мақұлданған жағдайда ақша 14 жұмыс күні ішінде бастапқы төлем әдісіне қайтарылады.&lt;/p&gt;</span>
+        &lt;/&gt;
+      );
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    // Russian default</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+<span class="cstat-no" title="statement not covered" >      &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;11. Условия предоставления услуг&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.1. &lt;strong&gt;Описание услуг:&lt;/strong&gt; lnkmx.my предоставляет цифровые услуги по созданию и размещению персональных мини-сайтов (link-in-bio страниц), аналитике, CRM-функционалу и генерации контента с использованием искусственного интеллекта. Все услуги оказываются дистанционно через сеть Интернет.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.2. &lt;strong&gt;Активация услуг:&lt;/strong&gt; Доступ к платным услугам активируется автоматически в течение 15 минут после успешного подтверждения оплаты. Пользователь получает доступ ко всем функциям выбранного тарифного плана незамедлительно.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.3. &lt;strong&gt;Период действия услуги:&lt;/strong&gt; Период подписки начинается с момента успешной оплаты и продолжается в течение выбранного срока (3, 6 или 12 месяцев).&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;11.4. &lt;strong&gt;Отсутствие физической доставки:&lt;/strong&gt; Поскольку lnkmx.my предоставляет исключительно цифровые услуги, физическая доставка товаров не осуществляется.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;12. Политика возврата и отказа от услуг&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.1. &lt;strong&gt;Право на возврат:&lt;/strong&gt; В соответствии со статьёй 30 Закона Республики Казахстан «О защите прав потребителей», возврат денежных средств за цифровые услуги может быть запрошен при следующих условиях:&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• В течение 14 календарных дней с даты оплаты, если услуга не использовалась (не создано страниц, не добавлено блоков, не использована аналитика);&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• В случае технической невозможности предоставления услуги по вине Администрации;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Если услуга существенно отличается от описания на сайте.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.2. &lt;strong&gt;Случаи отказа в возврате:&lt;/strong&gt; Возврат не осуществляется, если:&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Пользователь активно использовал платные функции (создавал страницы, использовал AI-генерацию, просматривал аналитику);&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• С даты оплаты прошло более 14 дней;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Аккаунт был заблокирован за нарушение Условий использования;&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2 ml-4"&gt;• Пользователь нарушил правила использования, указанные в разделе 4 настоящего Соглашения.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.3. &lt;strong&gt;Процедура возврата:&lt;/strong&gt; Для запроса возврата Пользователь должен направить заявление на {COMPANY_DETAILS.email} с указанием: ФИО, email, использованный при регистрации, дата и сумма платежа, причина возврата.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.4. &lt;strong&gt;Сроки возврата:&lt;/strong&gt; Заявка на возврат рассматривается в течение 10 рабочих дней. При положительном решении денежные средства возвращаются в течение 14 рабочих дней на первоначальный способ оплаты.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.5. &lt;strong&gt;Частичный возврат:&lt;/strong&gt; Если услуга была частично использована, может быть рассчитан пропорциональный возврат на основе неиспользованных дней периода подписки.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;12.6. &lt;strong&gt;Отмена подписки:&lt;/strong&gt; Пользователь может отменить автоматическое продление подписки в любое время через настройки аккаунта. Отмена не даёт права на возврат средств за текущий оплаченный период.&lt;/p&gt;</span>
+      &lt;/&gt;
+    );
+<span class="cstat-no" title="statement not covered" >  };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const getTermsContent = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (lang === 'en') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h2 className="text-lg font-semibold mb-4"&gt;lnkmx.my Platform User Agreement&lt;/h2&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="mb-4 text-sm text-muted-foreground"&gt;</span>
+            This User Agreement (hereinafter referred to as the "Agreement") defines the terms of access to and use of the lnkmx.my web platform and related services (hereinafter referred to as the "Platform") for individuals and representatives of legal entities (hereinafter referred to as the "User").
+          &lt;/p&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;p className="mb-4 text-sm text-muted-foreground"&gt;</span>
+            By using the Platform, the User confirms that they have carefully read the terms of the Agreement and the Privacy Policy and fully accept them.
+          &lt;/p&gt;
+          
+<span class="cstat-no" title="statement not covered" >          {getCompanyDetailsSection('en')}</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;1. Terms&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.1. lnkmx.my - an online platform and services for creating personal mini-sites (link-in-bio pages and micro-landings), analytics, and lead management using artificial intelligence.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`1.2. Platform - the website at ${getAppDomain()}, related subdomains, API, and the progressive web application (PWA) providing access to page creation and management, analytics, CRM, and other services.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.3. Agreement - this document and all appendices to it governing the procedure for access to and use of the Platform.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`1.4. Privacy Policy - a document defining the procedure for processing and protecting Users' personal data, posted at ${getAppDomain()}/privacy.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.5. User - a legally capable individual who has registered an account on the Platform, or a representative of a legal entity/individual entrepreneur using the Platform on behalf of the organization.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.6. Account - a set of User data (login, password, Telegram ID, etc.) required for authentication and access to Platform functionality.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.7. Personal Data - any information relating to a directly or indirectly identifiable User (name, contacts, payment data, page content, etc.).&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;2. General Provisions&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;2.1. This Agreement applies to all current and future Platform features, including updates and new services.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`2.2. Use of the Platform is subject to: this Agreement; the Privacy Policy; the terms of tariffs and paid services published at ${getAppDomain()}/pricing.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;2.3. The Administration has the right to make changes to the Agreement and Privacy Policy unilaterally. The new version takes effect from the moment of publication on the Platform, unless otherwise expressly stated.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;3. Registration and Account Access&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`3.1. Registration is done through the web interface at ${getAppDomain()} using: email and password and/or; login via third-party services (Google, Apple) and/or; verification via Telegram bot.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.2. The User is obliged to provide accurate information during registration and maintain its accuracy.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.3. Activation of notification and Mini-CRM features may require mandatory linking of a Telegram account via the official lnkmx.my bot.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.4. The User is fully responsible for the safety of their login, password, and access to their Telegram account. All actions performed through their account are considered actions of the User.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;4. Platform Usage Terms and User Responsibility&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.1. The Platform is provided to the User "as is" for the purposes of: creating and hosting personal mini-sites/pages; promoting own services and products; collecting and processing leads (applications); analytics and communication with the audience.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.2. The User undertakes to: use the Platform only for lawful purposes; not post content that violates the rights of third parties, laws, or generally accepted ethics.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.3. Prohibited content includes: extremist, terrorist, or pornographic materials; propaganda of violence, racial, national, or religious hatred; violation of copyright; false advertising and any form of fraud; personal data of third parties without their consent.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;5. Paid Services, Tariffs, and Payments&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.1. Access to additional Platform features (PRO tariff) is provided on a prepaid subscription basis with a minimum term of 3 months.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.2. Current pricing in Kazakhstani tenge (KZT): 3 months - 4,350₸/month (total 13,050₸); 6 months - 3,698₸/month (total 22,185₸, 15% discount); 12 months - 3,045₸/month (total 36,540₸, 30% discount). Approximate USD equivalent: $8.50, $7.20, $5.95 per month respectively.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`5.3. Prices, tariff composition and payment terms are published on the tariffs page at ${getAppDomain()}/pricing and may be changed by the Administration unilaterally for new periods.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.4. Payment is made through the RoboKassa payment system and other available payment methods.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;6. Content Rights and Intellectual Property&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;6.1. All exclusive rights to the Platform, its software code, design, corporate style, logos, and technical documentation belong to the Administration.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;6.2. The User retains rights to their Content but grants the Administration a non-exclusive license to: store and display Content on the Platform; create backups; use it to the extent necessary for the functioning of services.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;7. Limitation of Liability&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;7.1. The Platform is provided "as is", without any guarantees of uninterrupted operation, meeting User expectations, or suitability for specific purposes.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;7.2. The Administration is not responsible for: temporary failures and interruptions in Platform operation; data loss due to actions of the User, third parties, or force majeure; any indirect damages.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;8. Moderation and Blocking&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;8.1. The Administration has the right to moderate public pages, profiles, and other Content for compliance with legislation, this Agreement, and internal policies.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;8.2. In case of violation of Agreement terms, the Administration may without prior notice: delete or hide individual materials; limit account functionality; temporarily or permanently block access to the Platform.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;9. B2B Offer for Agencies and Partners&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;9.1. B2B partner status applies to legal entities or individual entrepreneurs (agencies, studios, integrators, resellers) that have entered into a separate agreement with the Administration.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;10. Final Provisions&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.1. This Agreement and relations between the User and Administration are governed by the laws of the Republic of Kazakhstan.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.2. All disputes and disagreements under the Agreement shall, if possible, be resolved through negotiations.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.3. Account registration and use of the Platform signifies the User's agreement to all terms of the Agreement and Privacy Policy.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`10.4. The current version of the Agreement is always available at: ${getAppDomain()}/terms.`}&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          {getServiceDeliverySection('en')}</span>
+        &lt;/&gt;
+      );
+<span class="cstat-no" title="statement not covered" >    }</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (lang === 'kk') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h2 className="text-lg font-semibold mb-4"&gt;lnkmx.my платформасының пайдаланушы келісімі&lt;/h2&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="mb-4 text-sm text-muted-foreground"&gt;</span>
+            Осы Пайдаланушы келісімі (бұдан әрі - «Келісім») lnkmx.my веб-платформасы мен онымен байланысты қызметтерге (бұдан әрі - «Платформа») жеке тұлғалар мен заңды тұлғалардың өкілдеріне (бұдан әрі - «Пайдаланушы») қол жеткізу және пайдалану шарттарын анықтайды.
+          &lt;/p&gt;
+<span class="cstat-no" title="statement not covered" >          &lt;p className="mb-4 text-sm text-muted-foreground"&gt;</span>
+            Платформаны пайдалана отырып, Пайдаланушы Келісім мен Құпиялылық саясатының шарттарымен мұқият танысқанын және оларды толық қабылдайтынын растайды.
+          &lt;/p&gt;
+          
+<span class="cstat-no" title="statement not covered" >          {getCompanyDetailsSection('kk')}</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;1. Терминдер&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.1. lnkmx.my - жасанды интеллект көмегімен жеке мини-сайттар (link-in-bio беттері мен микролендингтер), аналитика және лидтерді басқару үшін онлайн-платформа және қызметтер.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`1.2. Платформа - ${getAppDomain()} мекенжайындағы веб-сайт, байланысты субдомендер, API, сондай-ақ беттерді жасау мен басқаруға, аналитикаға, CRM-ге және басқа қызметтерге қол жеткізуді қамтамасыз ететін прогрессивті веб-қосымша (PWA).`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.3. Келісім - осы құжат және оған қосымшалар, Платформаға қол жеткізу мен пайдалану тәртібін реттейді.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.4. Құпиялылық саясаты - Пайдаланушылардың жеке деректерін өңдеу мен қорғау тәртібін анықтайтын құжат.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.5. Пайдаланушы - Платформада тіркелгі тіркеген әрекетке қабілетті жеке тұлға немесе ұйым атынан Платформаны пайдаланатын заңды тұлғаның/ЖК өкілі.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;2. Жалпы ережелер&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;2.1. Осы Келісім Платформаның барлық ағымдағы және болашақ мүмкіндіктеріне, соның ішінде жаңартулар мен жаңа қызметтерге қолданылады.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`2.2. Платформаны пайдалану: осы Келісім; Құпиялылық саясаты; ${getAppDomain()}/pricing сайтында жарияланған тарифтер мен ақылы қызметтер шарттары негізінде жүзеге асырылады.`}&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;3. Тіркелу және тіркелгіге қол жеткізу&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`3.1. Тіркелу ${getAppDomain()} мекенжайындағы веб-интерфейс арқылы жүзеге асырылады: email және құпия сөз және/немесе; үшінші тарап қызметтері арқылы кіру (Google, Apple) және/немесе; Telegram боты арқылы растау.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.2. Пайдаланушы тіркелу кезінде дұрыс деректерді көрсетуге және олардың өзектілігін сақтауға міндетті.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;4. Платформаны пайдалану шарттары және Пайдаланушының жауапкершілігі&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.1. Платформа Пайдаланушыға «сол күйінде» ұсынылады: жеке мини-сайттар/беттер жасау және орналастыру; өз қызметтері мен өнімдерін жылжыту; лидтерді жинау және өңдеу; аналитика және аудиториямен байланыс мақсаттары үшін.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.2. Пайдаланушы міндеттенеді: Платформаны тек заңды мақсаттарда пайдалануға; үшінші тараптардың құқықтарын, заңдарды немесе жалпы қабылданған этиканы бұзатын мазмұнды жарияламауға.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;5. Ақылы қызметтер, тарифтер және төлемдер&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.1. Платформаның қосымша мүмкіндіктеріне қол жеткізу (PRO тарифі) кемінде 3 айлық мерзімге алдын ала төлемді жазылым негізінде ұсынылады.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.2. Қазақстан теңгесіндегі (KZT) ағымдағы бағалар: 3 ай - 4 350₸/ай (барлығы 13 050₸); 6 ай - 3 500₸/ай (барлығы 21 000₸); 12 ай - 3 045₸/ай (барлығы 36 540₸). АҚШ долларындағы болжамды баламасы: тиісінше $8.50, $6.80, $5.95/ай.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`5.3. Ағымдағы бағалар, тарифтік жоспарлар мен төлем шарттары ${getAppDomain()}/pricing тарифтер бетінде жарияланған.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.4. Төлем RoboKassa төлем жүйесі және басқа қолжетімді төлем әдістері арқылы жүзеге асырылады.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;6. Мазмұн құқықтары және зияткерлік меншік&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;6.1. Платформаға, оның бағдарламалық кодына, дизайнына, корпоративтік стиліне, логотиптері мен техникалық құжаттамасына барлық ерекше құқықтар Әкімшілікке тиесілі.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;7. Жауапкершілікті шектеу&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;7.1. Платформа «сол күйінде» ұсынылады, үздіксіз жұмыс, Пайдаланушының күтулеріне сәйкестік немесе нақты мақсаттарға жарамдылық кепілдіктерінсіз.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;8. Модерация және бұғаттау&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;8.1. Әкімшілік жария беттерді, профильдерді және басқа Мазмұнды заңнамаға, осы Келісімге және ішкі саясаттарға сәйкестігі үшін модерациялау құқығына ие.&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="font-semibold mt-6 mb-2"&gt;10. Қорытынды ережелер&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.1. Осы Келісімге және Пайдаланушы мен Әкімшілік арасындағы қатынастарға Қазақстан Республикасының қолданыстағы заңнамасы қолданылады.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.2. Келісім бойынша барлық даулар мен келіспеушіліктер мүмкіндігінше келіссөздер жолымен шешіледі.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.3. Тіркелгіні тіркеу және Платформаны пайдалану Пайдаланушының Келісім мен Құпиялылық саясатының барлық шарттарымен келісуін білдіреді.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`10.4. Келісімнің ағымдағы нұсқасы әрқашан мына мекенжайда қол жетімді: ${getAppDomain()}/terms.`}&lt;/p&gt;</span>
+          
+<span class="cstat-no" title="statement not covered" >          {getServiceDeliverySection('kk')}</span>
+        &lt;/&gt;
+      );
+<span class="cstat-no" title="statement not covered" >    }</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    // Default: Russian</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+<span class="cstat-no" title="statement not covered" >      &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;h2 className="text-lg font-semibold mb-4"&gt;Пользовательское соглашение платформы lnkmx.my&lt;/h2&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="mb-4 text-sm text-muted-foreground"&gt;</span>
+          Настоящее Пользовательское соглашение (далее - «Соглашение») определяет условия доступа и использования веб-платформы lnkmx.my и связанных с ней сервисов (далее - «Платформа») для физических лиц и представителей юридических лиц (далее - «Пользователь»).
+        &lt;/p&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;p className="mb-4 text-sm text-muted-foreground"&gt;</span>
+          Используя Платформу, Пользователь подтверждает, что внимательно ознакомился с условиями Соглашения и Политики конфиденциальности и полностью их принимает.
+        &lt;/p&gt;
+        
+<span class="cstat-no" title="statement not covered" >        {getCompanyDetailsSection('ru')}</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;1. Термины&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.1. lnkmx.my - онлайн-платформа и сервисы для создания персональных мини-сайтов (link-in-bio страниц и микролендингов), аналитики и управления лидами с использованием искусственного интеллекта.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`1.2. Платформа - веб-сайт по адресу ${getAppDomain()}, связанные поддомены, API, а также прогрессивное веб-приложение (PWA), предоставляющие доступ к функционалу по созданию и управлению страницами, аналитике, CRM и другим сервисам.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.3. Соглашение - настоящий документ и все приложения к нему, регламентирующие порядок доступа и использования Платформы.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`1.4. Политика конфиденциальности - документ, определяющий порядок обработки и защиты персональных данных Пользователей, размещённый по адресу ${getAppDomain()}/privacy.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.5. Пользователь - дееспособное физическое лицо, зарегистрировавшее аккаунт на Платформе, либо представитель юридического лица/ИП, использующий Платформу от имени организации.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.6. Аккаунт (Учётная запись) - совокупность данных Пользователя (логин, пароль, Telegram ID и др.), необходимых для аутентификации и доступа к функционалу Платформы.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.7. Персональные данные - любая информация, относящаяся к прямо или косвенно определяемому Пользователю (имя, контакты, платежные данные, содержимое страниц и др.).&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.8. Публичная страница (Page) - сгенерированный или созданный вручную мини-сайт Пользователя, доступный по уникальному адресу (slug).&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.9. Контент Пользователя - любые материалы, размещаемые Пользователем на Платформе: тексты, изображения, видео, ссылки, товары, формы, файлы и др.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.10. Сервисы - платные и бесплатные функции Платформы (создание страниц, аналитика, Mini-CRM, AI-генерация, интеграции и др.).&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.11. Тарифы - комплексы функционала (BASIC, PRO, BUSINESS), предоставляемые Пользователю на условиях подписки.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;1.12. Администрация Платформы (Администрация) - правообладатель lnkmx.my и уполномоченные им лица, управляющие работой Платформы.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;2. Общие положения&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;2.1. Настоящее Соглашение распространяется на все текущие и будущие функции Платформы, включая обновления и новые сервисы.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`2.2. Использование Платформы осуществляется на условиях: настоящего Соглашения; Политики конфиденциальности; условий тарифов и платных сервисов, опубликованных на ${getAppDomain()}/pricing.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;2.3. Администрация вправе вносить изменения в Соглашение и Политику конфиденциальности в одностороннем порядке. Новая редакция вступает в силу с момента публикации на Платформе, если иное прямо не указано.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;2.4. Начало или продолжение использования Платформы после изменения документов означает согласие Пользователя с такими изменениями.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;3. Регистрация и доступ к аккаунту&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`3.1. Регистрация осуществляется через веб-интерфейс по адресу ${getAppDomain()} с использованием: email и пароля и/или; входа через сторонние сервисы (Google, Apple) и/или; верификации через Telegram-бота.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.2. Пользователь обязан указывать достоверные данные при регистрации и поддерживать их актуальность.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.3. Для активации функций уведомлений и Mini-CRM может требоваться обязательная привязка Telegram-аккаунта через официального бота lnkmx.my.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;3.4. Пользователь несёт полную ответственность за сохранность логина, пароля и доступа к Telegram-аккаунту. Все действия, совершенные через его аккаунт, считаются действиями Пользователя.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;4. Условия использования Платформы и ответственность Пользователя&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.1. Платформа предоставляется Пользователю «как есть» (as is) для целей: создания и размещения персональных мини-сайтов/страниц; продвижения собственных услуг и продуктов; сбора и обработки лидов (заявок); аналитики и коммуникации с аудиторией.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.2. Пользователь обязуется: использовать Платформу только в законных целях; не размещать контент, нарушающий права третьих лиц, нормы законодательства и общепринятую этику.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;4.3. Запрещённый контент включает, но не ограничивается: материалы экстремистского, террористического, порнографического характера; пропаганду насилия, расовой, национальной, религиозной ненависти; нарушение авторских, смежных и иных прав; недостоверную рекламу и любые формы мошенничества; персональные данные третьих лиц без их согласия.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;5. Платные сервисы, тарифы и платежи&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.1. Доступ к дополнительным возможностям Платформы (тариф PRO) предоставляется на условиях предоплатной подписки с минимальным периодом 3 месяца.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.2. Актуальные цены в казахстанских тенге (KZT): 3 месяца - 4 350₸/мес (итого 13 050₸); 6 месяцев - 3 500₸/мес (итого 21 000₸); 12 месяцев - 3 045₸/мес (итого 36 540₸). Эквивалент в долларах США: $8.50, $6.80, $5.95/мес соответственно.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`5.3. Цены, состав тарифов и условия оплаты публикуются на странице тарифов ${getAppDomain()}/pricing и могут изменяться Администрацией в одностороннем порядке для новых периодов.`}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.4. Оплата производится через платёжную систему RoboKassa и другие доступные способы оплаты.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;5.5. Факт успешной оплаты подтверждается электронной квитанцией/уведомлением. С этого момента услуги считаются оказанными в объёме, соответствующем выбранному тарифу и периоду.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;6. Права на контент и интеллектуальная собственность&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;6.1. Все исключительные права на Платформу, её программный код, дизайн, фирменный стиль, логотипы и техническую документацию принадлежат Администрации.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;6.2. Пользователь сохраняет права на свой Контент, но предоставляет Администрации неисключительную лицензию на: хранение и отображение Контента на Платформе; создание резервных копий; использование в пределах, необходимых для функционирования сервисов.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;7. Ограничение ответственности&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;7.1. Платформа предоставляется «как есть», без каких-либо гарантий бесперебойной работы, соответствия ожиданиям Пользователя или пригодности для конкретных целей.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;7.2. Администрация не несёт ответственности за: временные сбои и перерывы в работе Платформы; потерю данных в результате действий Пользователя, третьих лиц или форс-мажорных обстоятельств; любой косвенный ущерб.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;8. Модерация и блокировка&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;8.1. Администрация вправе проводить модерацию публичных страниц, профилей и иного Контента на предмет соответствия законодательству, настоящему Соглашению и внутренним политикам.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;8.2. В случае нарушения условий Соглашения Администрация вправе без предварительного уведомления: удалить или скрыть отдельные материалы; ограничить функционал аккаунта; временно или постоянно заблокировать доступ к Платформе.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;9. B2B-оферта для агентств и партнёров&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;9.1. B2B-партнёром считается юридическое лицо или индивидуальный предприниматель (агентство, студия, интегратор, реселлер), заключивший с Администрацией отдельный договор и/или принявший условия B2B-оферты lnkmx.my.&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        &lt;h3 className="font-semibold mt-6 mb-2"&gt;10. Заключительные положения&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.1. К настоящему Соглашению и отношениям между Пользователем и Администрацией применяется действующее законодательство Республики Казахстан.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.2. Все споры и разногласия по Соглашению по возможности решаются путём переговоров. При недостижении соглашения споры подлежат рассмотрению в суде по месту регистрации Администрации.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;10.3. Регистрация аккаунта и использование Платформы означает согласие Пользователя со всеми условиями Соглашения и Политики конфиденциальности.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p className="text-sm text-muted-foreground mb-2"&gt;{`10.4. Актуальная версия Соглашения всегда доступна по адресу: ${getAppDomain()}/terms.`}&lt;/p&gt;</span>
+        
+<span class="cstat-no" title="statement not covered" >        {getServiceDeliverySection('ru')}</span>
+      &lt;/&gt;
+    );
+<span class="cstat-no" title="statement not covered" >  };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+<span class="cstat-no" title="statement not covered" >    &lt;Dialog open={open} onOpenChange={onOpenChange}&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;DialogContent className="max-w-2xl max-h-[90vh] p-0"&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;DialogHeader className="p-6 pb-0"&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;DialogTitle&gt;{t('legal.termsOfService', 'Пользовательское соглашение')}&lt;/DialogTitle&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;DialogDescription&gt;</span>
+<span class="cstat-no" title="statement not covered" >            {t('legal.termsDescription', 'Ознакомьтесь с условиями использования платформы lnkmx.my')}</span>
+          &lt;/DialogDescription&gt;
+        &lt;/DialogHeader&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;ScrollArea className="h-[60vh] px-6 pb-6"&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;div className="pr-4"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            {getTermsContent()}</span>
+          &lt;/div&gt;
+        &lt;/ScrollArea&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;div className="p-6 pt-0"&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;Button onClick={() =&gt; onOpenChange(false)} className="w-full"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            {t('common.close', 'Закрыть')}</span>
+          &lt;/Button&gt;
+        &lt;/div&gt;
+      &lt;/DialogContent&gt;
+    &lt;/Dialog&gt;
+  );
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
+// Simple link component that opens the modal
+interface TermsLinkProps {
+  children: React.ReactNode;
+  className?: string;
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function TermsLink({ children, className }: TermsLinkProps) {</span>
+<span class="cstat-no" title="statement not covered" >  const [open, setOpen] = useState(false);</span>
+  
+<span class="cstat-no" title="statement not covered" >  return (</span>
+<span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;button</span>
+<span class="cstat-no" title="statement not covered" >        type="button"</span>
+<span class="cstat-no" title="statement not covered" >        onClick={() =&gt; setOpen(true)}</span>
+<span class="cstat-no" title="statement not covered" >        className={className || "text-primary hover:underline cursor-pointer"}</span>
+      &gt;
+<span class="cstat-no" title="statement not covered" >        {children}</span>
+      &lt;/button&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;TermsOfServiceModal open={open} onOpenChange={setOpen} /&gt;</span>
+    &lt;/&gt;
+  );
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-17T17:14:38.207Z
+            </div>
+        <script src="../../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
+    </body>
+</html>
+    

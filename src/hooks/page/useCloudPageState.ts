@@ -14,6 +14,7 @@ import type { PageData, Block, EditorMode } from '@/types/page';
 import type { Niche } from '@/lib/niches';
 import { toast } from 'sonner';
 import type { SaveStatus } from '@/components/editor/AutoSaveIndicator';
+import { normalizeAppError } from '@/lib/errors/app-error-normalizer';
 
 // Request versioning to prevent stale writes
 let saveRequestVersion = 0;
@@ -122,7 +123,7 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
 
         // Save first with retry logic
         let retries = 2;
-        let lastError: Error | null = null;
+        let lastError: any = null;
         let savedPageId: string | undefined;
 
         while (retries > 0) {
@@ -141,10 +142,10 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
             lastSaveVersionRef.current = thisRequestVersion;
             break;
           } catch (err) {
-            lastError = err as Error;
+            lastError = err;
             retries--;
             if (retries > 0) {
-              await new Promise(r => setTimeout(r, 500));
+              await new Promise(r => setTimeout(r, 1000)); // Increased backoff
             }
           }
         }
@@ -205,19 +206,26 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
         }
 
         // Invalidate server diagnostics so SearchReadinessCard refetches
-        if (savedPageId || sanitizedData.id) {
+        if (pageIdForIndexing) {
           queryClient.invalidateQueries({
-            queryKey: ['search-diagnostics', savedPageId || sanitizedData.id],
+            queryKey: ['search-diagnostics', pageIdForIndexing],
           });
         }
-
-        setSaveStatus('saved');
+        
+        // Final check after all async ops
+        if (thisRequestVersion === saveRequestVersion) {
+          setSaveStatus('saved');
+        }
       } catch (error) {
-        // Silent fail for auto-save/publish
-        logger.error('Auto-save/publish error:', error, { context: 'useCloudPageState' });
+        // Only set error if this is still the active request
+        if (thisRequestVersion === saveRequestVersion) {
+          const normalized = normalizeAppError(error);
+          setSaveStatus('error');
+          logger.error('Auto-save/publish error normalized:', normalized, { context: 'useCloudPageState' });
+        }
       }
-    }, 1500); // Optimized debounce time
-  }, [user, savePageMutation, publishPageMutation]);
+    }, 2000); // Slightly more conservative debounce
+  }, [user, savePageMutation, publishPageMutation, queryClient]);
 
   const save = useCallback(async () => {
     if (!user || !pageData) return;
@@ -238,6 +246,8 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
       toast.success('Changes saved and published!');
     } catch (error) {
       setSaveStatus('error');
+      const normalized = normalizeAppError(error);
+      toast.error(normalized.safeMessage);
       throw error;
     }
   }, [user, pageData, chatbotContext, savePageMutation, publishPageMutation]);
