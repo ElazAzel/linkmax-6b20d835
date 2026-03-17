@@ -57,6 +57,7 @@ import { motion } from 'framer-motion';
 function InsertBetweenDivider({
   position,
   onInsert,
+  onInsertPreset,
   isPremium,
   currentTier,
   currentBlockCount,
@@ -64,6 +65,7 @@ function InsertBetweenDivider({
 }: {
   position: number;
   onInsert: (blockType: string, position: number) => void;
+  onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
   isPremium: boolean;
   currentTier: FreeTier;
   currentBlockCount: number;
@@ -100,6 +102,7 @@ function InsertBetweenDivider({
 
       <BlockInsertButton
         onInsert={handleInsert}
+        onInsertPreset={(preset) => onInsertPreset?.(preset, position)}
         isPremium={isPremium}
         currentTier={currentTier}
         currentBlockCount={currentBlockCount}
@@ -128,6 +131,8 @@ interface GridEditorProps {
   onCreateSection?: (blocks: Block[], selectedIds: Set<string>, label: string) => void;
   // P5: Transform callback
   onTransform?: (block: Block, toType: BlockType) => void;
+  onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
+  pageNiche?: string;
 }
 
 interface SortableGridBlockItemProps {
@@ -152,6 +157,7 @@ interface SortableGridBlockItemProps {
   isLast?: boolean;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset) => void;
 }
 
 function SortableGridBlockItem({
@@ -434,6 +440,8 @@ export const GridEditor = memo(function GridEditor({
   onDuplicateBlock,
   onCreateSection,
   onTransform,
+  onInsertPreset,
+  pageNiche,
 }: GridEditorProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -518,10 +526,17 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
-  const handleInsertBlock = useCallback((blockType: string, position?: number) => {
-    const pos = typeof position === 'number' ? position : blocks.length;
-    onInsertBlock(blockType, pos);
-  }, [onInsertBlock, blocks.length]);
+  const handleInsertBlock = useCallback((blockType: string, position: number) => {
+    onInsertBlock(blockType, position);
+  }, [onInsertBlock]);
+
+  const handleInsertPreset = useCallback((preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => {
+    if (onInsertPreset) {
+      onInsertPreset(preset, position);
+    } else {
+      onInsertBlock(preset.blockType, position);
+    }
+  }, [onInsertPreset, onInsertBlock]);
 
   // P4: Block click handler with multi-select support
   const handleBlockClick = useCallback((block: Block, e: React.MouseEvent) => {
@@ -656,7 +671,8 @@ export const GridEditor = memo(function GridEditor({
         <InsertBetweenDivider
           key={`divider-${block.id}`}
           position={index + profileOffset}
-          onInsert={onInsertBlock}
+          onInsert={handleInsertBlock}
+          onInsertPreset={(preset) => handleInsertPreset(preset, index + profileOffset)}
           isPremium={isPremium}
           currentTier={currentTier}
           currentBlockCount={blocks.length}
@@ -697,7 +713,7 @@ export const GridEditor = memo(function GridEditor({
     });
 
     return items;
-  }, [contentBlocks, profileBlock, onInsertBlock, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t]);
+  }, [contentBlocks, profileBlock, handleInsertBlock, handleInsertPreset, isPremium, currentTier, blocks.length, isMobile, onEditBlock, onDeleteBlock, onDuplicateBlock, onUpdateBlock, premiumTier, selectedBlockIds, handleBlockClick, handleBlockDoubleClick, sectionMeta, sections, collapsedSections, toggleSectionCollapse, reviewDimmedIds, t, onReorderBlocks]);
 
   return (
     <div className="max-w-2xl mx-auto px-[var(--space-page-px)] py-4 space-y-2 pb-32 md:pb-24">
@@ -744,10 +760,13 @@ export const GridEditor = memo(function GridEditor({
           transition={{ delay: 0.2 }}
         >
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType)}
+            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
+            onInsertPreset={(preset) => handleInsertPreset(preset, blocks.length)}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
+            pageNiche={pageNiche}
+            existingBlocks={blocks.map(b => b.type as BlockType)}
           />
         </motion.div>
       </div>
@@ -759,10 +778,12 @@ export const GridEditor = memo(function GridEditor({
             {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
           </p>
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType)}
+            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
+            onInsertPreset={(preset) => handleInsertPreset(preset, blocks.length)}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
+            existingBlocks={blocks.map(b => b.type as BlockType)}
           />
         </div>
       )}

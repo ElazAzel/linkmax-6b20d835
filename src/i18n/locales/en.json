@@ -33,6 +33,38 @@
       },
       "celebrationTitle": "🎉 Congratulations!",
       "celebrationDesc": "Your page is live and delivering results"
+    },
+    "presets": {
+      "text": {
+        "headline": "Headline",
+        "headlineDesc": "Large text for your main offer",
+        "bio": "Bio",
+        "bioDesc": "Short description of what you do",
+        "description": "Services Description",
+        "descriptionDesc": "More detailed text about your work"
+      },
+      "button": {
+        "cta": "Action Button",
+        "ctaDesc": "Prominent button for conversion or leads",
+        "whatsapp": "Chat on WhatsApp",
+        "whatsappDesc": "Direct link to your WhatsApp chat",
+        "bookNow": "Book Now",
+        "bookNowDesc": "Button to trigger the booking flow"
+      },
+      "messenger": {
+        "whatsapp": "WhatsApp Chat",
+        "whatsappDesc": "Quick contact block via WhatsApp",
+        "telegram": "Telegram Chat",
+        "telegramDesc": "Quick contact block via Telegram"
+      },
+      "expert": {
+        "consultation_cta": "Book Consultation",
+        "consultation_cta_desc": "Call to action for an expert consultation",
+        "guide_buy": "Buy Guide/Course",
+        "guide_buy_desc": "Button to sell digital products",
+        "telegram_join": "Join Telegram",
+        "telegram_join_desc": "Button to join your community on Telegram"
+      }
     }
   },
   "textEffects": {

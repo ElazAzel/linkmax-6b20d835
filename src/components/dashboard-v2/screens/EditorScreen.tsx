@@ -57,6 +57,7 @@ interface EditorScreenProps {
   onUpdateBlock: (id: string, updates: Partial<Block>) => void;
   onReorderBlocks: (blocks: Block[]) => void;
   onDuplicateBlock?: (id: string) => void;
+  onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => { success: boolean; blockId?: string; error?: string };
   onPreview: () => void;
   onShare: () => void;
   onOpenTemplates: () => void;
@@ -83,6 +84,7 @@ export const EditorScreen = memo(function EditorScreen({
   onUpdateBlock,
   onReorderBlocks,
   onDuplicateBlock,
+  onInsertPreset,
   onPreview,
   onShare,
   onOpenTemplates,
@@ -123,6 +125,12 @@ export const EditorScreen = memo(function EditorScreen({
     pushFrictionEvent('block_added', blockType);
     return result;
   }, [onInsertBlock, pushFrictionEvent]);
+
+  const handleInsertPresetWithFriction = useCallback((preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => {
+    const result = onInsertPreset ? onInsertPreset(preset, position) : { success: false, error: 'Preset handler missing' };
+    pushFrictionEvent('block_added', preset.blockType);
+    return result;
+  }, [onInsertPreset, pushFrictionEvent]);
 
   const handleDeleteBlockWithFriction = useCallback((blockId: string) => {
     const block = pageData?.blocks.find(b => b.id === blockId);
@@ -554,12 +562,14 @@ export const EditorScreen = memo(function EditorScreen({
             currentTier={currentTier}
             premiumTier={premiumTier}
             gridConfig={pageData.gridConfig}
+            pageNiche={pageData.niche}
             onInsertBlock={handleInsertBlockWithFriction}
             onEditBlock={onEditBlock}
             onDeleteBlock={handleDeleteBlockWithFriction}
             onUpdateBlock={onUpdateBlock}
             onReorderBlocks={onReorderBlocks}
             onDuplicateBlock={onDuplicateBlock}
+            onInsertPreset={handleInsertPresetWithFriction}
           />
         </Suspense>
       </div>

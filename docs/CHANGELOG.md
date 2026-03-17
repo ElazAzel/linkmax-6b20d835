@@ -34,6 +34,8 @@
   - Refactored `HomeScreen` into a simplified "Expert Cockpit" for expert users.
   - Integrated "Connect Telegram" activation step with tracking events.
   - Achieved 100% RU/EN localization coverage for new expert features.
+  - **Expert Block Presets**: Integrated specialized block presets (`expert_consultation_cta`, `expert_guide_buy`, `expert_telegram_join`) into the Editor with a dedicated "Featured Presets" section for expert users.
+  - **Smart Recommendations**: Updated `block-recommendations.ts` to prioritize high-value blocks for experts in the "Recommended for you" section.
 
 ## [2026.03.15] — Security Hardening & Data Protection
 

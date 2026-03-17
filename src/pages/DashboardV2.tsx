@@ -497,6 +497,7 @@ function DashboardV2Inner() {
                   currentTier={dashboard.isPremium ? 'pro' : 'identity'}
                   premiumTier={dashboard.currentTier}
                   onInsertBlock={dashboard.blockEditor.handleInsertBlock}
+                  onInsertPreset={dashboard.blockEditor.handleInsertPreset}
                   onEditBlock={dashboard.blockEditor.handleEditBlock}
                   onDeleteBlock={dashboard.blockEditor.handleDeleteBlock}
                   onUpdateBlock={dashboard.updateBlock}

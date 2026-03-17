@@ -34,11 +34,13 @@ import { BLOCK_MANIFEST } from '@/lib/blocks/block-manifest';
 import { getLucideIcon } from '@/lib/utils/icon-utils';
 
 import { getRecommendedBlocks } from '@/lib/blocks/block-recommendations';
+import { BLOCK_PRESETS, type BlockPreset, getPresetsForType } from '@/lib/editor/editor-presets';
 import type { Niche } from '@/lib/niches';
 import type { BlockType } from '@/types/page';
 
 interface BlockInsertButtonProps {
   onInsert: (blockType: string) => void;
+  onInsertPreset?: (preset: BlockPreset) => void;
   isPremium?: boolean;
   currentBlockCount?: number;
   className?: string;
@@ -98,6 +100,7 @@ const MANIFEST_BLOCKS = Object.values(BLOCK_MANIFEST)
 
 export const BlockInsertButton = memo(function BlockInsertButton({
   onInsert,
+  onInsertPreset,
   isPremium = false,
   currentBlockCount = 0,
   className,
@@ -150,6 +153,22 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     t(block.labelKey, block.type).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const filteredPresets = useMemo(() => {
+    if (!searchQuery) return [];
+    const query = searchQuery.toLowerCase();
+    return BLOCK_PRESETS.filter(preset =>
+      t(preset.labelKey).toLowerCase().includes(query) ||
+      preset.keywords.some(k => k.toLowerCase().includes(query))
+    );
+  }, [searchQuery, t]);
+
+  const featuredPresets = useMemo(() => {
+    if (searchQuery || pageNiche !== 'expert') return [];
+    return BLOCK_PRESETS.filter(p =>
+      ['expert_consultation_cta', 'expert_guide_buy', 'expert_telegram_join'].includes(p.id)
+    );
+  }, [pageNiche, searchQuery]);
+
   const { recommendedBlocks, otherBlocks } = useMemo(() => {
     if (searchQuery) {
       return { recommendedBlocks: [] as typeof MANIFEST_BLOCKS, otherBlocks: filteredBlocks };
@@ -191,14 +210,44 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    // Close the sheet first
     handleOpenChange(false);
     
-    // Then trigger insertion in next tick to avoid state conflicts
     setTimeout(() => {
       onInsert(blockType);
       toast.success(t('editor.blockAdded', 'Блок добавлен'));
     }, 100); 
+  };
+
+  const handleInsertPresetClick = (preset: BlockPreset) => {
+    const manifest = BLOCK_MANIFEST[preset.blockType];
+    const blockTier = (manifest?.isPremium ? 'pro' : 'free') as BlockTier;
+
+    if (!canUseBlock(blockTier)) {
+      toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
+        action: {
+          label: t('actions.upgrade', 'Upgrade'),
+          onClick: () => navigate('/pricing'),
+        },
+      });
+      return;
+    }
+
+    if (isAtBlockLimit) {
+      toast.error(t('blocks.limitReached', 'Достигнут лимит {{count}} блоков. Перейдите на Premium.', { count: FREE_LIMITS.maxBlocks }));
+      return;
+    }
+
+    handleOpenChange(false);
+    
+    setTimeout(() => {
+      if (onInsertPreset) {
+        onInsertPreset(preset);
+      } else {
+        // Fallback if no preset handler provided (though we expect one)
+        onInsert(preset.blockType);
+      }
+      toast.success(t('editor.blockAdded', 'Блок добавлен'));
+    }, 100);
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -208,7 +257,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
 
   const renderBlockItem = (block: typeof MANIFEST_BLOCKS[number], showRelevantBadge: boolean = false) => {
     const isLocked = !canUseBlock(block.tier);
-    const isProBlock = block.tier === 'pro';
     const IconComponent = getLucideIcon(block.icon);
     const reasonTooltip = showRelevantBadge ? getReasonTooltip(block.type) : null;
     const marker = showRelevantBadge && !isLocked
@@ -268,8 +316,6 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             </div>
           )}
 
-
-
           {isLocked && (
             <div className="absolute top-2 right-2">
               <Lock className="h-4 w-4 text-muted-foreground" />
@@ -293,6 +339,56 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     }
 
     return blockButton;
+  };
+
+  const renderPresetItem = (preset: BlockPreset, isFeatured: boolean = false) => {
+    const manifest = BLOCK_MANIFEST[preset.blockType];
+    if (!manifest) return null;
+
+    const blockTier = (manifest.isPremium ? 'pro' : 'free') as BlockTier;
+    const isLocked = !canUseBlock(blockTier);
+    const IconComponent = getLucideIcon(manifest.icon);
+    const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
+
+    return (
+      <SheetClose asChild key={preset.id}>
+        <button
+          type="button"
+          onClick={() => handleInsertPresetClick(preset)}
+          disabled={isLocked}
+          className={cn(
+            "relative flex flex-col items-center gap-2 rounded-3xl p-4 transition-all",
+            "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+            isLocked && "opacity-40 cursor-not-allowed",
+            isFeatured && "ring-1 ring-primary/20 bg-primary/5"
+          )}
+        >
+          <div className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md",
+            color
+          )}>
+            <IconComponent className="h-6 w-6" />
+          </div>
+
+          <div className="flex flex-col items-center gap-0.5">
+            <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">
+              {t(manifest.labelKey)}
+            </span>
+            <span className="text-xs font-bold text-center leading-tight">
+              {t(preset.labelKey)}
+            </span>
+          </div>
+
+          {isFeatured && (
+            <div className="absolute -top-1 -right-1">
+              <Badge className="h-4 w-4 p-0 flex items-center justify-center rounded-full bg-primary animate-pulse">
+                <Sparkles className="h-2.5 w-2.5 text-white" />
+              </Badge>
+            </div>
+          )}
+        </button>
+      </SheetClose>
+    );
   };
 
   return (
@@ -370,27 +466,63 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             </div>
 
             <div className="px-5 py-5">
+            {/* Featured Presets (Expert only) */}
+            {featuredPresets.length > 0 && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 px-1">
+                  <Badge variant="outline" className="h-5 bg-primary/10 text-primary border-primary/20 text-[10px] font-black uppercase">
+                    {t('expert.presets_badge', 'Эксперт')}
+                  </Badge>
+                  <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
+                    {t('expert.featured_presets', 'Готовые решения')}
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  {featuredPresets.map(preset => renderPresetItem(preset, true))}
+                </div>
+              </div>
+            )}
+
             {recommendedBlocks.length > 0 && !searchQuery && (
-              <div className="mb-6">
+              <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4 px-1">
                   <Sparkles className="h-4 w-4 text-emerald-500" />
-                  <h3 className="text-sm font-bold text-foreground">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-foreground">
                     {t('recommendations.title', 'Рекомендовано для вас')}
                   </h3>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   <TooltipProvider delayDuration={300}>
-                    {recommendedBlocks.map((block) => renderBlockItem(block, true))}
+                    {recommendedBlocks.map((block) => {
+                      const presets = getPresetsForType(block.type as BlockType);
+                      // If there's a specific expert preset for this block type, it might be redundant with Featured, 
+                      // but we show the base block here or a generic preset if it feels right.
+                      // For now, keep base blocks in recommendations to avoid clutter.
+                      return renderBlockItem(block, true);
+                    })}
                   </TooltipProvider>
+                </div>
+              </div>
+            )}
+
+            {searchQuery && filteredPresets.length > 0 && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4 px-1">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
+                    {t('editor.presets_tab', 'Готовые блоки')}
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  {filteredPresets.map(preset => renderPresetItem(preset))}
                 </div>
               </div>
             )}
 
             {otherBlocks.length > 0 && (
               <div>
-                {recommendedBlocks.length > 0 && !searchQuery && (
-                  <div className="flex items-center gap-2 mb-4 px-1 pt-2 border-t border-border/10">
-                    <h3 className="text-sm font-bold text-muted-foreground">
+                {(recommendedBlocks.length > 0 || featuredPresets.length > 0) && !searchQuery && (
+                  <div className="flex items-center gap-2 mb-4 px-1 pt-4 border-t border-border/10">
+                    <h3 className="text-sm font-black uppercase tracking-wider text-muted-foreground">
                       {t('recommendations.allBlocks', 'Все блоки')}
                     </h3>
                   </div>
@@ -403,9 +535,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
               </div>
             )}
 
-            {filteredBlocks.length === 0 && (
+            {filteredBlocks.length === 0 && filteredPresets.length === 0 && (
               <div className="text-center py-16">
-                <p className="text-lg text-muted-foreground">{t('common.noResults', 'Ничего не найдено')}</p>
+                <p className="text-lg text-muted-foreground font-bold">{t('common.noResults', 'Ничего не найдено')}</p>
               </div>
             )}
             </div>

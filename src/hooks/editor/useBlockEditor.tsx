@@ -124,7 +124,7 @@ export function useBlockEditor({
    * Insert a preset block (with overrides)
    */
   const handleInsertPreset = useCallback(
-    (preset: BlockPreset): BlockInsertResult => {
+    (preset: BlockPreset, position?: number): BlockInsertResult => {
       try {
         if (isPremiumBlock(preset.blockType)) {
           toast.error(t('blocks.premiumRequired', 'This block requires Premium'));
@@ -133,13 +133,14 @@ export function useBlockEditor({
         }
 
         const previousBlocks = [...blocks];
-        const position = blocks.length;
+        const targetPosition = typeof position === 'number' ? position : blocks.length;
         const newBlock = createBlock(preset.blockType, preset.overrides);
-        addBlock(newBlock, position);
+        addBlock(newBlock, targetPosition);
         playAdd?.();
         toast.success(t('blocks.added', 'Block added'));
 
-        const newBlocks = [...previousBlocks, newBlock];
+        const newBlocks = [...previousBlocks];
+        newBlocks.splice(targetPosition, 0, newBlock);
         editorHistory?.recordBlockAdd(previousBlocks, newBlocks, preset.blockType, newBlock.id);
 
         trackEditorAction('preset_used', { blockType: preset.blockType, presetId: preset.id, source: 'palette' });

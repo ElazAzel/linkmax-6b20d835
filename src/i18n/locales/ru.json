@@ -33,6 +33,38 @@
       },
       "celebrationTitle": "🎉 Поздравляем!",
       "celebrationDesc": "Ваша страница работает и приносит результаты"
+    },
+    "presets": {
+      "text": {
+        "headline": "Заголовок",
+        "headlineDesc": "Крупный текст для главного оффера",
+        "bio": "О себе",
+        "bioDesc": "Краткое описание вашей деятельности",
+        "description": "Описание услуг",
+        "descriptionDesc": "Более подробный текст о том, что вы делаете"
+      },
+      "button": {
+        "cta": "Кнопка действия",
+        "ctaDesc": "Яркая кнопка для перехода к покупке или регистрации",
+        "whatsapp": "Связаться в WhatsApp",
+        "whatsappDesc": "Прямая ссылка на чат в мессенджере",
+        "bookNow": "Записаться",
+        "bookNowDesc": "Кнопка для перехода к форме записи"
+      },
+      "messenger": {
+        "whatsapp": "WhatsApp чат",
+        "whatsappDesc": "Блок для быстрой связи через WhatsApp",
+        "telegram": "Telegram чат",
+        "telegramDesc": "Блок для быстрой связи через Telegram"
+      },
+      "expert": {
+        "consultation_cta": "Запись на консультацию",
+        "consultation_cta_desc": "Кнопка с призывом записаться на пробную консультацию",
+        "guide_buy": "Купить гайд/курс",
+        "guide_buy_desc": "Кнопка для продажи цифровых продуктов",
+        "telegram_join": "Вступить в Telegram",
+        "telegram_join_desc": "Кнопка для подписки на ваш канал"
+      }
     }
   },
   "textEffects": {
