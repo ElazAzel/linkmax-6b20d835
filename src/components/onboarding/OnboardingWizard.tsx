@@ -55,6 +55,7 @@ interface OnboardingWizardProps {
 
 // Map niches to icons
 const NICHE_ICON_MAP: Record<Niche, React.ComponentType<{ className?: string }>> = {
+  expert: Laptop,
   beauty: Heart,
   fitness: Dumbbell,
   food: ChefHat,
@@ -74,6 +75,7 @@ const NICHE_ICON_MAP: Record<Niche, React.ComponentType<{ className?: string }>>
 
 // Gradient colors for each niche
 const NICHE_COLORS: Record<Niche, string> = {
+  expert: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30',
   beauty: 'from-pink-500/20 to-rose-500/20 border-pink-500/30',
   fitness: 'from-green-500/20 to-emerald-500/20 border-green-500/30',
   food: 'from-amber-500/20 to-yellow-500/20 border-amber-500/30',

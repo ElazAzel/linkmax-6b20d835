@@ -56,27 +56,13 @@ import { motion } from 'framer-motion';
 // ─── Insert-Between Divider ────────────────────────────────────────
 function InsertBetweenDivider({
   position,
-  onInsert,
-  onInsertPreset,
-  isPremium,
-  currentTier,
-  currentBlockCount,
+  onOpenInsert,
   isMobile,
 }: {
   position: number;
-  onInsert: (blockType: string, position: number) => void;
-  onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
-  isPremium: boolean;
-  currentTier: FreeTier;
-  currentBlockCount: number;
+  onOpenInsert: (position: number) => void;
   isMobile: boolean;
 }) {
-  const [sheetOpen, setSheetOpen] = useState(false);
-
-  const handleInsert = useCallback((blockType: string) => {
-    onInsert(blockType, position);
-  }, [onInsert, position]);
-
   return (
     <div className="relative group/divider py-1 col-span-2">
       <div className={cn(
@@ -86,7 +72,7 @@ function InsertBetweenDivider({
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <button
           type="button"
-          onClick={() => setSheetOpen(true)}
+          onClick={() => onOpenInsert(position)}
           className={cn(
             "shrink-0 flex items-center justify-center rounded-full transition-all duration-300",
             "glass-subtle bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
@@ -99,17 +85,6 @@ function InsertBetweenDivider({
         </button>
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
-
-      <BlockInsertButton
-        onInsert={handleInsert}
-        onInsertPreset={(preset) => onInsertPreset?.(preset, position)}
-        isPremium={isPremium}
-        currentTier={currentTier}
-        currentBlockCount={currentBlockCount}
-        isOpen={sheetOpen}
-        onOpenChange={setSheetOpen}
-        hideTrigger
-      />
     </div>
   );
 }
@@ -526,6 +501,14 @@ export const GridEditor = memo(function GridEditor({
     }
   }, [contentBlocks, profileBlock, onReorderBlocks]);
 
+  const [insertSheetOpen, setInsertSheetOpen] = useState(false);
+  const [insertPosition, setInsertPosition] = useState(blocks.length);
+
+  const openInsertSheet = useCallback((position: number) => {
+    setInsertPosition(position);
+    setInsertSheetOpen(true);
+  }, []);
+
   const handleInsertBlock = useCallback((blockType: string, position: number) => {
     onInsertBlock(blockType, position);
   }, [onInsertBlock]);
@@ -537,6 +520,14 @@ export const GridEditor = memo(function GridEditor({
       onInsertBlock(preset.blockType, position);
     }
   }, [onInsertPreset, onInsertBlock]);
+
+  const handleSharedInsert = useCallback((blockType: string) => {
+    handleInsertBlock(blockType, insertPosition);
+  }, [handleInsertBlock, insertPosition]);
+
+  const handleSharedInsertPreset = useCallback((preset: import('@/lib/editor/editor-presets').BlockPreset) => {
+    handleInsertPreset(preset, insertPosition);
+  }, [handleInsertPreset, insertPosition]);
 
   // P4: Block click handler with multi-select support
   const handleBlockClick = useCallback((block: Block, e: React.MouseEvent) => {
@@ -671,11 +662,7 @@ export const GridEditor = memo(function GridEditor({
         <InsertBetweenDivider
           key={`divider-${block.id}`}
           position={index + profileOffset}
-          onInsert={handleInsertBlock}
-          onInsertPreset={(preset) => handleInsertPreset(preset, index + profileOffset)}
-          isPremium={isPremium}
-          currentTier={currentTier}
-          currentBlockCount={blocks.length}
+          onOpenInsert={openInsertSheet}
           isMobile={isMobile}
         />
       );
@@ -760,13 +747,15 @@ export const GridEditor = memo(function GridEditor({
           transition={{ delay: 0.2 }}
         >
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
-            onInsertPreset={(preset) => handleInsertPreset(preset, blocks.length)}
+            onInsert={handleSharedInsert}
+            onInsertPreset={handleSharedInsertPreset}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
             pageNiche={pageNiche}
             existingBlocks={blocks.map(b => b.type as BlockType)}
+            renderSheet={false}
+            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </motion.div>
       </div>
@@ -778,12 +767,14 @@ export const GridEditor = memo(function GridEditor({
             {t('dashboard.addFirstBlock', 'Нажмите + чтобы добавить первый блок')}
           </p>
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
-            onInsertPreset={(preset) => handleInsertPreset(preset, blocks.length)}
+            onInsert={handleSharedInsert}
+            onInsertPreset={handleSharedInsertPreset}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
             existingBlocks={blocks.map(b => b.type as BlockType)}
+            renderSheet={false}
+            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </div>
       )}
@@ -797,13 +788,29 @@ export const GridEditor = memo(function GridEditor({
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType)}
+            onInsert={handleSharedInsert}
+            onInsertPreset={handleSharedInsertPreset}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
+            renderSheet={false}
+            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </motion.div>
       )}
+
+      <BlockInsertButton
+        onInsert={handleSharedInsert}
+        onInsertPreset={handleSharedInsertPreset}
+        isPremium={isPremium}
+        currentTier={currentTier}
+        currentBlockCount={blocks.length}
+        pageNiche={pageNiche}
+        existingBlocks={blocks.map(b => b.type as BlockType)}
+        isOpen={insertSheetOpen}
+        onOpenChange={setInsertSheetOpen}
+        hideTrigger
+      />
 
       {/* P4: Bulk Action Bar - P5: with section creation */}
       <BulkActionBar
