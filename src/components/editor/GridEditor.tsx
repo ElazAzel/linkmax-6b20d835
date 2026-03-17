@@ -662,11 +662,7 @@ export const GridEditor = memo(function GridEditor({
         <InsertBetweenDivider
           key={`divider-${block.id}`}
           position={index + profileOffset}
-          onInsert={handleInsertBlock}
-          onInsertPreset={(preset) => handleInsertPreset(preset, index + profileOffset)}
-          isPremium={isPremium}
-          currentTier={currentTier}
-          currentBlockCount={blocks.length}
+          onOpenInsert={openInsertSheet}
           isMobile={isMobile}
         />
       );
