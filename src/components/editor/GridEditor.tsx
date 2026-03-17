@@ -747,13 +747,15 @@ export const GridEditor = memo(function GridEditor({
           transition={{ delay: 0.2 }}
         >
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
-            onInsertPreset={(preset) => handleInsertPreset(preset, blocks.length)}
+            onInsert={handleSharedInsert}
+            onInsertPreset={handleSharedInsertPreset}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
             pageNiche={pageNiche}
             existingBlocks={blocks.map(b => b.type as BlockType)}
+            renderSheet={false}
+            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </motion.div>
       </div>
