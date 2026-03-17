@@ -797,6 +797,8 @@ export const GridEditor = memo(function GridEditor({
             onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </motion.div>
+      )}
+
       <BlockInsertButton
         onInsert={handleSharedInsert}
         onInsertPreset={handleSharedInsertPreset}
@@ -809,7 +811,6 @@ export const GridEditor = memo(function GridEditor({
         onOpenChange={setInsertSheetOpen}
         hideTrigger
       />
-
 
       {/* P4: Bulk Action Bar - P5: with section creation */}
       <BulkActionBar
