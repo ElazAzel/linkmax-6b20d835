@@ -349,43 +349,42 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     const color = BLOCK_COLORS[preset.blockType] || 'bg-muted';
 
     return (
-      <SheetClose asChild key={preset.id}>
-        <button
-          type="button"
-          onClick={() => handleInsertPresetClick(preset)}
-          disabled={isLocked}
-          className={cn(
-            "relative flex flex-col items-center gap-2 rounded-3xl p-4 transition-all",
-            "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-            isLocked && "opacity-40 cursor-not-allowed",
-            isFeatured && "ring-1 ring-primary/20 bg-primary/5"
-          )}
-        >
-          <div className={cn(
-            "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md",
-            color
-          )}>
-            <IconComponent className="h-6 w-6" />
-          </div>
+      <button
+        key={preset.id}
+        type="button"
+        onClick={() => handleInsertPresetClick(preset)}
+        disabled={isLocked}
+        className={cn(
+          "relative flex flex-col items-center gap-2 rounded-3xl p-4 transition-all",
+          "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          isLocked && "opacity-40 cursor-not-allowed",
+          isFeatured && "ring-1 ring-primary/20 bg-primary/5"
+        )}
+      >
+        <div className={cn(
+          "w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md",
+          color
+        )}>
+          <IconComponent className="h-6 w-6" />
+        </div>
 
-          <div className="flex flex-col items-center gap-0.5">
-            <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">
-              {t(manifest.labelKey)}
-            </span>
-            <span className="text-xs font-bold text-center leading-tight">
-              {t(preset.labelKey)}
-            </span>
-          </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">
+            {t(manifest.labelKey)}
+          </span>
+          <span className="text-xs font-bold text-center leading-tight">
+            {t(preset.labelKey)}
+          </span>
+        </div>
 
-          {isFeatured && (
-            <div className="absolute -top-1 -right-1">
-              <Badge className="h-4 w-4 p-0 flex items-center justify-center rounded-full bg-primary animate-pulse">
-                <Sparkles className="h-2.5 w-2.5 text-white" />
-              </Badge>
-            </div>
-          )}
-        </button>
-      </SheetClose>
+        {isFeatured && (
+          <div className="absolute -top-1 -right-1">
+            <Badge className="h-4 w-4 p-0 flex items-center justify-center rounded-full bg-primary animate-pulse">
+              <Sparkles className="h-2.5 w-2.5 text-white" />
+            </Badge>
+          </div>
+        )}
+      </button>
     );
   };
 
