@@ -46,6 +46,7 @@ type Step = 'intro' | 'niche' | 'details' | 'generating' | 'complete';
 
 // Niche gradient colors for visual appeal
 const NICHE_GRADIENTS: Record<Niche, string> = {
+  expert: 'from-emerald-500/20 to-teal-500/20',
   beauty: 'from-pink-500/20 to-rose-500/20',
   fitness: 'from-green-500/20 to-emerald-500/20',
   food: 'from-amber-500/20 to-yellow-500/20',
