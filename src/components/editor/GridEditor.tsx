@@ -788,10 +788,13 @@ export const GridEditor = memo(function GridEditor({
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
           <BlockInsertButton
-            onInsert={(blockType) => handleInsertBlock(blockType, blocks.length)}
+            onInsert={handleSharedInsert}
+            onInsertPreset={handleSharedInsertPreset}
             isPremium={isPremium}
             currentTier={currentTier}
             currentBlockCount={blocks.length}
+            renderSheet={false}
+            onOpenChange={(open) => open && openInsertSheet(blocks.length)}
           />
         </motion.div>
       )}
