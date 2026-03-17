@@ -49,6 +49,7 @@ interface BlockInsertButtonProps {
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   hideTrigger?: boolean;
+  renderSheet?: boolean;
 }
 
 type BlockTier = 'free' | 'pro';

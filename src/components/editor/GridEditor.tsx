@@ -56,27 +56,13 @@ import { motion } from 'framer-motion';
 // ─── Insert-Between Divider ────────────────────────────────────────
 function InsertBetweenDivider({
   position,
-  onInsert,
-  onInsertPreset,
-  isPremium,
-  currentTier,
-  currentBlockCount,
+  onOpenInsert,
   isMobile,
 }: {
   position: number;
-  onInsert: (blockType: string, position: number) => void;
-  onInsertPreset?: (preset: import('@/lib/editor/editor-presets').BlockPreset, position: number) => void;
-  isPremium: boolean;
-  currentTier: FreeTier;
-  currentBlockCount: number;
+  onOpenInsert: (position: number) => void;
   isMobile: boolean;
 }) {
-  const [sheetOpen, setSheetOpen] = useState(false);
-
-  const handleInsert = useCallback((blockType: string) => {
-    onInsert(blockType, position);
-  }, [onInsert, position]);
-
   return (
     <div className="relative group/divider py-1 col-span-2">
       <div className={cn(
@@ -86,7 +72,7 @@ function InsertBetweenDivider({
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <button
           type="button"
-          onClick={() => setSheetOpen(true)}
+          onClick={() => onOpenInsert(position)}
           className={cn(
             "shrink-0 flex items-center justify-center rounded-full transition-all duration-300",
             "glass-subtle bg-primary/10 hover:bg-primary hover:text-primary-foreground border-white/20 shadow-lg shadow-primary/10",
@@ -99,17 +85,6 @@ function InsertBetweenDivider({
         </button>
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       </div>
-
-      <BlockInsertButton
-        onInsert={handleInsert}
-        onInsertPreset={(preset) => onInsertPreset?.(preset, position)}
-        isPremium={isPremium}
-        currentTier={currentTier}
-        currentBlockCount={currentBlockCount}
-        isOpen={sheetOpen}
-        onOpenChange={setSheetOpen}
-        hideTrigger
-      />
     </div>
   );
 }
