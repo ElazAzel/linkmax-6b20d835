@@ -48,6 +48,7 @@ interface NicheOnboardingProps {
 
 // Map niches to icons
 const NICHE_ICON_MAP: Record<Niche, React.ComponentType<{ className?: string }>> = {
+  expert: Laptop,
   beauty: Heart,
   fitness: Dumbbell,
   food: ChefHat,
