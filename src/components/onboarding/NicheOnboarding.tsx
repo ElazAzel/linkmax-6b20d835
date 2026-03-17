@@ -68,6 +68,7 @@ const NICHE_ICON_MAP: Record<Niche, React.ComponentType<{ className?: string }>>
 
 // Gradient colors for each niche
 const NICHE_COLORS: Record<Niche, string> = {
+  expert: 'from-emerald-500 to-teal-600',
   beauty: 'from-pink-500 to-rose-600',
   fitness: 'from-green-500 to-emerald-600',
   food: 'from-amber-600 to-yellow-500',
