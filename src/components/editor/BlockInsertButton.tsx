@@ -273,55 +273,54 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         : null;
 
     const blockButton = (
-      <SheetClose asChild key={block.type}>
-        <button
-          type="button"
-          onClick={() => handleInsert(block.type, block.tier)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleInsert(block.type, block.tier);
-            }
-          }}
-          disabled={isLocked}
-          data-testid={`add-block-option-${block.type}`}
-          aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
-          className={cn(
-            "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
-            "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-            isLocked && "opacity-40 cursor-not-allowed"
-          )}
-        >
-          <div className={cn(
-            "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg",
-            block.color
-          )}>
-            <IconComponent className="h-7 w-7" />
+      <button
+        key={block.type}
+        type="button"
+        onClick={() => handleInsert(block.type, block.tier)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleInsert(block.type, block.tier);
+          }
+        }}
+        disabled={isLocked}
+        data-testid={`add-block-option-${block.type}`}
+        aria-label={t('editor.insertBlockAria', 'Добавить блок {{name}}', { name: t(block.labelKey, block.type) })}
+        className={cn(
+          "relative flex min-h-[124px] flex-col items-center gap-3 rounded-3xl p-4 transition-all",
+          "hover:bg-muted/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          isLocked && "opacity-40 cursor-not-allowed"
+        )}
+      >
+        <div className={cn(
+          "w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg",
+          block.color
+        )}>
+          <IconComponent className="h-7 w-7" />
+        </div>
+
+        <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
+          {t(block.labelKey, block.type)}
+        </span>
+
+        {marker && (
+          <div className="absolute -top-2 left-2">
+            <Badge
+              variant="default"
+              className={cn('border-0 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', marker.className)}
+            >
+              <marker.icon className="mr-1 h-2.5 w-2.5" />
+              {marker.label}
+            </Badge>
           </div>
+        )}
 
-          <span className="max-w-[7rem] text-xs sm:text-sm font-bold text-center leading-tight break-words whitespace-normal text-wrap">
-            {t(block.labelKey, block.type)}
-          </span>
-
-          {marker && (
-            <div className="absolute -top-2 left-2">
-              <Badge
-                variant="default"
-                className={cn('border-0 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide', marker.className)}
-              >
-                <marker.icon className="mr-1 h-2.5 w-2.5" />
-                {marker.label}
-              </Badge>
-            </div>
-          )}
-
-          {isLocked && (
-            <div className="absolute top-2 right-2">
-              <Lock className="h-4 w-4 text-muted-foreground" />
-            </div>
-          )}
-        </button>
-      </SheetClose>
+        {isLocked && (
+          <div className="absolute top-2 right-2">
+            <Lock className="h-4 w-4 text-muted-foreground" />
+          </div>
+        )}
+      </button>
     );
 
     if (reasonTooltip && !isMobile) {
