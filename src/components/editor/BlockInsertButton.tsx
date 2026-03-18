@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -195,6 +196,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return { recommendedBlocks: recommended.slice(0, 6), otherBlocks: others };
   }, [filteredBlocks, recommendedBlockTypes, recommendations, searchQuery]);
 
+  const closeSheetAndRun = useCallback((callback: () => void) => {
+    handleOpenChange(false);
+    requestAnimationFrame(() => {
+      callback();
+      toast.success(t('editor.blockAdded', 'Блок добавлен'));
+    });
+  }, [handleOpenChange, t]);
+
   const handleInsert = (blockType: string, blockTier: BlockTier) => {
     if (!canUseBlock(blockTier)) {
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
@@ -211,12 +220,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    handleOpenChange(false);
-    
-    setTimeout(() => {
+    closeSheetAndRun(() => {
       onInsert(blockType);
-      toast.success(t('editor.blockAdded', 'Блок добавлен'));
-    }, 100); 
+    });
   };
 
   const handleInsertPresetClick = (preset: BlockPreset) => {
@@ -238,17 +244,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    handleOpenChange(false);
-    
-    setTimeout(() => {
+    closeSheetAndRun(() => {
       if (onInsertPreset) {
         onInsertPreset(preset);
-      } else {
-        // Fallback if no preset handler provided (though we expect one)
-        onInsert(preset.blockType);
+        return;
       }
-      toast.success(t('editor.blockAdded', 'Блок добавлен'));
-    }, 100);
+
+      onInsert(preset.blockType);
+    });
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
@@ -417,7 +420,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             hideCloseButton
             data-testid="add-block-sheet"
             className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
-            onPointerDownOutside={() => handleOpenChange(false)}
+            onPointerDownOutside={(event) => {
+              event.preventDefault();
+              handleOpenChange(false);
+            }}
+            onInteractOutside={(event) => {
+              event.preventDefault();
+              handleOpenChange(false);
+            }}
             onEscapeKeyDown={() => handleOpenChange(false)}
           >
             <div className="flex-1 overflow-y-auto">
@@ -429,14 +439,20 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 <SheetHeader className="px-6 pt-2 pb-4">
                   <div className="flex items-center justify-between">
                     <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenChange(false)}
-                      className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
-                      aria-label={t('common.close', 'Close')}
-                    >
-                      <X className="h-6 w-6 text-muted-foreground" />
-                    </button>
+                    <SheetClose asChild>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          handleOpenChange(false);
+                        }}
+                        className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                        aria-label={t('common.close', 'Close')}
+                      >
+                        <X className="h-6 w-6 text-muted-foreground" />
+                      </button>
+                    </SheetClose>
                   </div>
                   <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
                 </SheetHeader>
