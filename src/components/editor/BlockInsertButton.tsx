@@ -196,6 +196,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return { recommendedBlocks: recommended.slice(0, 6), otherBlocks: others };
   }, [filteredBlocks, recommendedBlockTypes, recommendations, searchQuery]);
 
+  const closeSheetAndRun = useCallback((callback: () => void) => {
+    handleOpenChange(false);
+    requestAnimationFrame(() => {
+      callback();
+      toast.success(t('editor.blockAdded', 'Блок добавлен'));
+    });
+  }, [handleOpenChange, t]);
+
   const handleInsert = (blockType: string, blockTier: BlockTier) => {
     if (!canUseBlock(blockTier)) {
       toast.error(t('blocks.proOnly', 'Этот блок доступен только в PRO'), {
@@ -212,12 +220,9 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    handleOpenChange(false);
-    
-    setTimeout(() => {
+    closeSheetAndRun(() => {
       onInsert(blockType);
-      toast.success(t('editor.blockAdded', 'Блок добавлен'));
-    }, 100); 
+    });
   };
 
   const handleInsertPresetClick = (preset: BlockPreset) => {
@@ -239,17 +244,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
       return;
     }
 
-    handleOpenChange(false);
-    
-    setTimeout(() => {
+    closeSheetAndRun(() => {
       if (onInsertPreset) {
         onInsertPreset(preset);
-      } else {
-        // Fallback if no preset handler provided (though we expect one)
-        onInsert(preset.blockType);
+        return;
       }
-      toast.success(t('editor.blockAdded', 'Блок добавлен'));
-    }, 100);
+
+      onInsert(preset.blockType);
+    });
   };
 
   const getReasonTooltip = (blockType: string): string | null => {
