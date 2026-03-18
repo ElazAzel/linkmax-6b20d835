@@ -420,7 +420,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
             hideCloseButton
             data-testid="add-block-sheet"
             className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
-            onPointerDownOutside={() => handleOpenChange(false)}
+            onPointerDownOutside={(event) => {
+              event.preventDefault();
+              handleOpenChange(false);
+            }}
+            onInteractOutside={(event) => {
+              event.preventDefault();
+              handleOpenChange(false);
+            }}
             onEscapeKeyDown={() => handleOpenChange(false)}
           >
             <div className="flex-1 overflow-y-auto">
@@ -432,14 +439,20 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 <SheetHeader className="px-6 pt-2 pb-4">
                   <div className="flex items-center justify-between">
                     <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenChange(false)}
-                      className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
-                      aria-label={t('common.close', 'Close')}
-                    >
-                      <X className="h-6 w-6 text-muted-foreground" />
-                    </button>
+                    <SheetClose asChild>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          handleOpenChange(false);
+                        }}
+                        className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                        aria-label={t('common.close', 'Close')}
+                      >
+                        <X className="h-6 w-6 text-muted-foreground" />
+                      </button>
+                    </SheetClose>
                   </div>
                   <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
                 </SheetHeader>
