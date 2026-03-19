@@ -128,16 +128,20 @@ export function useFinanceMetrics() {
   }, [user]);
 
   useEffect(() => {
+    if (!user?.id) {
+      setLoading(false);
+      return;
+    }
+
     fetchMetrics();
     
-    // Subscribe to changes in transactions for real-time updates
     const channel = supabase
-      .channel('finance-updates')
+      .channel(`finance-updates:${user.id}`)
       .on('postgres_changes', { 
         event: '*', 
         schema: 'public', 
         table: 'wallet_transactions',
-        filter: `user_id=eq.${user?.id}`
+        filter: `user_id=eq.${user.id}`
       }, () => {
         fetchMetrics();
       })
