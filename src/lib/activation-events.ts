@@ -5,6 +5,7 @@
  */
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
+import type { Json } from '@/integrations/supabase/types';
 
 export type ActivationEventType =
   | 'activation_checklist_step_clicked'
@@ -64,6 +65,12 @@ export type ActivationEventType =
   | 'signup_from_watermark'
   | 'signup_from_gallery';
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isValidUuid(value: string | null | undefined): value is string {
+  return typeof value === 'string' && UUID_REGEX.test(value);
+}
+
 /**
  * Track an activation event to the analytics table
  */
@@ -72,13 +79,17 @@ export async function trackActivationEvent(
   eventType: ActivationEventType,
   metadata?: Record<string, unknown>
 ): Promise<void> {
+  if (!isValidUuid(pageId)) {
+    return;
+  }
+
   try {
     const { error } = await supabase
       .from('analytics')
-      .insert([{
+      .insert([{ 
         page_id: pageId,
         event_type: `activation:${eventType}`,
-        metadata: (metadata || {}) as Record<string, string>,
+        metadata: (metadata ?? {}) as Json,
       }]);
 
     if (error) {

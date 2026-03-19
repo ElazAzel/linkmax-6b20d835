@@ -150,7 +150,6 @@ export const fintechService = {
                 .eq('user_id', userId)
                 .maybeSingle();
 
-            // Gracefully handle missing table (feature not launched yet)
             if (walletError) {
                 if (walletError.code === 'PGRST205' || walletError.code === '42P01') {
                     return { wallet: null, transactions: [], pendingGMV: 0 };
@@ -165,14 +164,34 @@ export const fintechService = {
                 .order('created_at', { ascending: false })
                 .limit(10);
 
-            if (txError) throw txError;
+            if (txError) {
+                if (txError.code === 'PGRST205' || txError.code === '42P01') {
+                    return {
+                        wallet,
+                        transactions: [],
+                        pendingGMV: 0,
+                    };
+                }
+                throw txError;
+            }
 
-            const { data: pendingData } = await (supabase as any)
+            const { data: pendingData, error: pendingError } = await (supabase as any)
                 .from('wallet_transactions')
                 .select('gross_amount, net_amount')
                 .eq('user_id', userId)
                 .eq('type', 'payment')
                 .eq('status', 'pending');
+
+            if (pendingError) {
+                if (pendingError.code === 'PGRST205' || pendingError.code === '42P01') {
+                    return {
+                        wallet,
+                        transactions: (transactions || []) as WalletTransaction[],
+                        pendingGMV: 0,
+                    };
+                }
+                throw pendingError;
+            }
 
             const pendingGMV = (pendingData || []).reduce((acc: number, curr: any) => acc + Number(curr.gross_amount || 0), 0);
 
