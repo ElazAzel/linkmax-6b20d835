@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useMemo, useId } from 'react';
+import { memo, useCallback, useState, useMemo, useId, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Edit2 from 'lucide-react/dist/esm/icons/edit-2';
 import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
@@ -503,10 +503,23 @@ export const GridEditor = memo(function GridEditor({
 
   const [insertSheetOpen, setInsertSheetOpen] = useState(false);
   const [insertPosition, setInsertPosition] = useState(blocks.length);
+  const lastInsertSheetCloseAtRef = useRef(0);
 
   const openInsertSheet = useCallback((position: number) => {
+    if (Date.now() - lastInsertSheetCloseAtRef.current < 250) {
+      return;
+    }
+
     setInsertPosition(position);
     setInsertSheetOpen(true);
+  }, []);
+
+  const handleInsertSheetOpenChange = useCallback((open: boolean) => {
+    if (!open) {
+      lastInsertSheetCloseAtRef.current = Date.now();
+    }
+
+    setInsertSheetOpen(open);
   }, []);
 
   const handleInsertBlock = useCallback((blockType: string, position: number) => {
@@ -808,7 +821,7 @@ export const GridEditor = memo(function GridEditor({
         pageNiche={pageNiche}
         existingBlocks={blocks.map(b => b.type as BlockType)}
         isOpen={insertSheetOpen}
-        onOpenChange={setInsertSheetOpen}
+        onOpenChange={handleInsertSheetOpenChange}
         hideTrigger
       />
 
