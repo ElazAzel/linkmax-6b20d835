@@ -45,18 +45,17 @@ export function useFinanceMetrics() {
         .select('status, created_at')
         .eq('user_id', user.id);
 
-      if (txError) {
-        // Gracefully handle case where table might not exist yet or user has no wallet
-        if (txError.code !== 'PGRST116' && txError.code !== '42P01') {
-          logger.error('Error fetching transactions', txError);
-        }
+      const walletTableMissing = txError?.code === 'PGRST205' || txError?.code === '42P01' || txError?.code === 'PGRST116';
+
+      if (txError && !walletTableMissing) {
+        logger.error('Error fetching transactions', txError);
       }
 
       if (leadsError) {
         logger.error('Error fetching leads for metrics', leadsError);
       }
 
-      const transactions = (txData || []) as any[];
+      const transactions = walletTableMissing ? [] : ((txData || []) as any[]);
       const leads = (leadsData || []) as any[];
 
       // Aggregators
