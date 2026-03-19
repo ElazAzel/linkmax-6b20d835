@@ -503,10 +503,23 @@ export const GridEditor = memo(function GridEditor({
 
   const [insertSheetOpen, setInsertSheetOpen] = useState(false);
   const [insertPosition, setInsertPosition] = useState(blocks.length);
+  const lastInsertSheetCloseAtRef = useRef(0);
 
   const openInsertSheet = useCallback((position: number) => {
+    if (Date.now() - lastInsertSheetCloseAtRef.current < 250) {
+      return;
+    }
+
     setInsertPosition(position);
     setInsertSheetOpen(true);
+  }, []);
+
+  const handleInsertSheetOpenChange = useCallback((open: boolean) => {
+    if (!open) {
+      lastInsertSheetCloseAtRef.current = Date.now();
+    }
+
+    setInsertSheetOpen(open);
   }, []);
 
   const handleInsertBlock = useCallback((blockType: string, position: number) => {
