@@ -821,7 +821,7 @@ export const GridEditor = memo(function GridEditor({
         pageNiche={pageNiche}
         existingBlocks={blocks.map(b => b.type as BlockType)}
         isOpen={insertSheetOpen}
-        onOpenChange={setInsertSheetOpen}
+        onOpenChange={handleInsertSheetOpenChange}
         hideTrigger
       />
 
