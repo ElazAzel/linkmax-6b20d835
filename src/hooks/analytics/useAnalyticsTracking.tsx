@@ -9,7 +9,8 @@ import { session } from '@/lib/storage';
 import {
   trackPageView,
   trackBlockClick,
-  trackShare
+  trackShare,
+  initSessionDurationTracking,
 } from '@/services/analytics';
 import { trackClickLink, trackViewContent } from '@/lib/analytics';
 
