@@ -1,7 +1,7 @@
 'use client';
 
 import { useNavigate } from 'react-router-dom';
-import { memo, useState, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import Search from 'lucide-react/dist/esm/icons/search';
@@ -18,6 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
 } from '@/components/ui/sheet';
 import {
   Tooltip,
@@ -121,10 +122,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = onOpenChange || setInternalIsOpen;
 
-  const handleOpenChange = useCallback((open: boolean) => {
-    if (!open) {
+  // Reset search when sheet closes
+  useEffect(() => {
+    if (!isOpen) {
       setSearchQuery('');
     }
+  }, [isOpen]);
+
+  const handleOpenChange = useCallback((open: boolean) => {
     setIsOpen(open);
   }, [setIsOpen]);
 
@@ -195,13 +200,19 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return { recommendedBlocks: recommended.slice(0, 6), otherBlocks: others };
   }, [filteredBlocks, recommendedBlockTypes, recommendations, searchQuery]);
 
+  const closeSheet = useCallback(() => {
+    setSearchQuery('');
+    setIsOpen(false);
+  }, [setIsOpen]);
+
   const closeSheetAndRun = useCallback((callback: () => void) => {
-    handleOpenChange(false);
-    requestAnimationFrame(() => {
+    closeSheet();
+    // Run callback after state update propagates
+    setTimeout(() => {
       callback();
       toast.success(t('editor.blockAdded', 'Блок добавлен'));
-    });
-  }, [handleOpenChange, t]);
+    }, 50);
+  }, [closeSheet, t]);
 
   const handleInsert = (blockType: string, blockTier: BlockTier) => {
     if (!canUseBlock(blockTier)) {
@@ -412,14 +423,13 @@ export const BlockInsertButton = memo(function BlockInsertButton({
         </Button>
       )}
 
-      {renderSheet && (
-        <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+      {renderSheet && isOpen && (
+        <Sheet open onOpenChange={(open) => { if (!open) closeSheet(); }}>
           <SheetContent
             side="bottom"
             hideCloseButton
             data-testid="add-block-sheet"
             className="h-[85vh] p-0 bg-background border-t-0 rounded-t-[32px] outline-none flex flex-col overflow-hidden"
-            onEscapeKeyDown={() => handleOpenChange(false)}
           >
             <div className="flex-1 overflow-y-auto">
               <div className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/10">
@@ -430,18 +440,16 @@ export const BlockInsertButton = memo(function BlockInsertButton({
                 <SheetHeader className="px-6 pt-2 pb-4">
                   <div className="flex items-center justify-between">
                     <SheetTitle className="text-2xl font-black">{t('editor.addBlock', 'Добавить')}</SheetTitle>
-                    <button
-                      type="button"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        handleOpenChange(false);
-                      }}
-                      className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
-                      aria-label={t('common.close', 'Close')}
-                    >
-                      <X className="h-6 w-6 text-muted-foreground" />
-                    </button>
+                    <SheetClose asChild>
+                      <button
+                        type="button"
+                        data-testid="add-block-sheet-close"
+                        className="p-2 rounded-full hover:bg-muted transition-colors active:scale-90"
+                        aria-label={t('common.close', 'Close')}
+                      >
+                        <X className="h-6 w-6 text-muted-foreground" />
+                      </button>
+                    </SheetClose>
                   </div>
                   <SheetDescription className="sr-only">{t('editor.selectBlock', 'Выберите блок для добавления')}</SheetDescription>
                 </SheetHeader>
