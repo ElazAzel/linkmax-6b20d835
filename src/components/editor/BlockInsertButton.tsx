@@ -122,10 +122,14 @@ export const BlockInsertButton = memo(function BlockInsertButton({
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = onOpenChange || setInternalIsOpen;
 
-  const handleOpenChange = useCallback((open: boolean) => {
-    if (!open) {
+  // Reset search when sheet closes
+  useEffect(() => {
+    if (!isOpen) {
       setSearchQuery('');
     }
+  }, [isOpen]);
+
+  const handleOpenChange = useCallback((open: boolean) => {
     setIsOpen(open);
   }, [setIsOpen]);
 
