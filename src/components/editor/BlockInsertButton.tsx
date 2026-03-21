@@ -196,13 +196,19 @@ export const BlockInsertButton = memo(function BlockInsertButton({
     return { recommendedBlocks: recommended.slice(0, 6), otherBlocks: others };
   }, [filteredBlocks, recommendedBlockTypes, recommendations, searchQuery]);
 
+  const closeSheet = useCallback(() => {
+    setSearchQuery('');
+    setIsOpen(false);
+  }, [setIsOpen]);
+
   const closeSheetAndRun = useCallback((callback: () => void) => {
-    handleOpenChange(false);
-    requestAnimationFrame(() => {
+    closeSheet();
+    // Run callback after state update propagates
+    setTimeout(() => {
       callback();
       toast.success(t('editor.blockAdded', 'Блок добавлен'));
-    });
-  }, [handleOpenChange, t]);
+    }, 50);
+  }, [closeSheet, t]);
 
   const handleInsert = (blockType: string, blockTier: BlockTier) => {
     if (!canUseBlock(blockTier)) {
