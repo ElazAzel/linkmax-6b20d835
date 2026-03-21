@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { MagneticButton } from "./MagneticButton";
 import { SectionWrapper } from '@/components/shared/SectionWrapper';
+import { Slider } from "@/components/ui/slider";
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -22,6 +23,74 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
     return (
         <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)', transition: `all 0.5s ease ${delay}ms` }}>
             {children}
+        </div>
+    );
+}
+
+function ProfitCalculator() {
+    const { t } = useTranslation();
+    const [leads, setLeads] = useState(100);
+    const [conversion, setConversion] = useState(10);
+    const [avgCheck, setAvgCheck] = useState(50);
+
+    const revenue = leads * (conversion / 100) * avgCheck;
+    // Base $5.90 + 1% processing fee
+    const linkmaxCost = 5.9 + (revenue * 0.01);
+    // Competitors usually charge ~8% or high flat monthly fee
+    const competitorCost = revenue * 0.08; 
+    const savings = competitorCost - linkmaxCost;
+
+    return (
+        <div className="glass border-primary/20 rounded-[2rem] p-6 sm:p-8 max-w-3xl mx-auto mb-16 relative overflow-hidden group shadow-glass-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-50" />
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[60px] rounded-full pointer-events-none" />
+            
+            <h3 className="text-xl sm:text-2xl font-black mb-8 text-center flex items-center justify-center gap-3">
+                {t('landing.pricing.calculator.title', 'Profitability Calculator')}
+                <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-none uppercase tracking-widest text-[9px] hover:bg-green-500/30">ROI</Badge>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8 relative z-10 w-full px-2">
+                <div className="space-y-4">
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.leads', 'Monthly Leads')}</Label>
+                    <div className="flex items-center gap-4">
+                        <Slider value={[leads]} max={5000} step={10} onValueChange={(v) => setLeads(v[0])} className="flex-1 cursor-grab active:cursor-grabbing" />
+                        <span className="w-10 text-right font-black text-sm tabular-nums">{leads}</span>
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.conversion', 'Conversion Rate (%)')}</Label>
+                    <div className="flex items-center gap-4">
+                        <Slider value={[conversion]} max={100} step={1} onValueChange={(v) => setConversion(v[0])} className="flex-1 cursor-grab active:cursor-grabbing" />
+                        <span className="w-10 text-right font-black text-sm tabular-nums">{conversion}%</span>
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">{t('landing.pricing.calculator.avgCheck', 'Average Check ($)')}</Label>
+                    <div className="flex items-center gap-4">
+                        <Slider value={[avgCheck]} max={500} step={5} onValueChange={(v) => setAvgCheck(v[0])} className="flex-1 cursor-grab active:cursor-grabbing" />
+                        <span className="w-10 text-right font-black text-sm tabular-nums">${avgCheck}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 mt-4 border-t border-border/10 relative z-10">
+                <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-background/40">
+                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.revenue', 'Your Revenue:')}</span>
+                    <span className="text-2xl font-black tabular-nums tracking-tighter">${Math.round(revenue).toLocaleString()}</span>
+                </div>
+                <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-background/40 opacity-70">
+                    <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-1">{t('landing.pricing.calculator.competitorCost', 'Competitors (8%):')}</span>
+                    <span className="text-xl font-black tabular-nums tracking-tighter line-through decoration-red-500/50 decoration-2">${Math.round(competitorCost).toLocaleString()}</span>
+                </div>
+                <div className="flex flex-col items-center justify-center bg-primary/10 rounded-2xl p-4 border border-primary/20 shadow-inner group-hover:bg-primary/15 transition-colors">
+                    <span className="text-[11px] text-primary font-black uppercase tracking-widest mb-1">{t('landing.pricing.calculator.savings', 'Your Savings:')}</span>
+                    <span className="text-3xl font-black tabular-nums tracking-tighter text-primary drop-shadow-sm">
+                        +${Math.max(0, Math.round(savings)).toLocaleString()}
+                    </span>
+                    <span className="text-[9px] text-primary/60 font-bold uppercase mt-1">/ {t('landing.pricing.perMonth', 'mo')}</span>
+                </div>
+            </div>
         </div>
     );
 }
@@ -97,6 +166,10 @@ export const PricingAurora = ({ onPlanSelect }: { onPlanSelect: (plan: string) =
                         </div>
                     </Reveal>
                 </div>
+
+                <Reveal delay={175}>
+                    <ProfitCalculator />
+                </Reveal>
 
                 <Reveal delay={200}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 max-w-6xl mx-auto px-4">

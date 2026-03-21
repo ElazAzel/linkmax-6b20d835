@@ -99,6 +99,12 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 - **Full Report**: [UX_UI_AUDIT_REPORT_2026_03_12.md](file:///c:/Users/i.azelkhanov/.gemini/antigravity/brain/e9ed3a0d-5f2f-4e48-b33f-7e907b04b0d6/UX_UI_AUDIT_REPORT_2026_03_12.md)
 
+### [2026-03-21] Phase 3: Platform & GTM (Infobusiness Focus)
+
+- **Profitability Calculator**: Interactive tool on the Landing Page showing direct ROI and savings vs competitors.
+- **Anti-Bitrix Positioning**: Upgraded landing page hero and grid with bold copy emphasizing "Expert-First" and 2-minute launch speed.
+- **Localization**: Implemented comprehensive Infobusiness-specific translations in `ru.json` and `en.json`.
+
 ### [2026-03-17] Platform Hardening & Autosave 2.0
 
 - **Autosave State Machine**: Refactored `useCloudPageState.ts` to use a versioned state machine for autosave/publish. This eliminates race conditions and ensures the UI always reflects the true save or error state.

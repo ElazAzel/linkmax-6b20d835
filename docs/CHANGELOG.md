@@ -1,5 +1,15 @@
 # Changelog
 
+## [Phase 3: Platform & GTM (Infobusiness Focus)] - 2026-03-21
+
+### Added
+- **Profitability Calculator**: Interactive tool on the Landing Page showing direct ROI and savings vs competitors (Bitrix24, GetCourse).
+- **Anti-Bitrix Positioning**: Bold copy emphasizing "Expert-First" and 2-minute launch speed.
+
+### Enhanced
+- **Landing Page**: Upgraded `HeroSection.tsx` and `BentoGridSection.tsx` with Infobusiness-specific translations and features (Online Courses, Leads to Telegram).
+- **Localization**: Added comprehensive `ru.json` and `en.json` keys for the new v4 landing page components.
+
 ## [Phase 2: Platform Hardening] - 2026-03-17
 
 ### Added

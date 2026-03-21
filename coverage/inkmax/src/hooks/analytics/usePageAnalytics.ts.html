@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/312</span>
+                <span class='fraction'>0/329</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/312</span>
+                <span class='fraction'>0/329</span>
             </div>
         
             
@@ -493,7 +493,27 @@
 <a name='L428'></a><a href='#L428'>428</a>
 <a name='L429'></a><a href='#L429'>429</a>
 <a name='L430'></a><a href='#L430'>430</a>
-<a name='L431'></a><a href='#L431'>431</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -784,6 +804,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1204,19 +1244,39 @@ export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
 <span class="cstat-no" title="statement not covered" >        }))</span>
 <span class="cstat-no" title="statement not covered" >        .sort((a, b) =&gt; b.count - a.count);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      // Calculate session metrics (estimates based on available data)</span>
+<span class="cstat-no" title="statement not covered" >      // Calculate session metrics from real data</span>
 <span class="cstat-no" title="statement not covered" >      const sessionsWithClicks = events.filter(e =&gt; e.event_type === 'click').length;</span>
 <span class="cstat-no" title="statement not covered" >      const bounceRate = totalViews &gt; 0</span>
 <span class="cstat-no" title="statement not covered" >        ? Math.max(0, Math.min(100, ((totalViews - sessionsWithClicks) / totalViews) * 100))</span>
 <span class="cstat-no" title="statement not covered" >        : 0;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      // Estimate average session duration from metadata if available</span>
-<span class="cstat-no" title="statement not covered" >      const durations = events</span>
+<span class="cstat-no" title="statement not covered" >      // Calculate average session duration from session_end events or view metadata</span>
+<span class="cstat-no" title="statement not covered" >      const allDurations: number[] = [];</span>
+<span class="cstat-no" title="statement not covered" >      // Check session_end events</span>
+<span class="cstat-no" title="statement not covered" >      const { data: sessionEndEvents } = await supabase</span>
+<span class="cstat-no" title="statement not covered" >        .from('analytics')</span>
+<span class="cstat-no" title="statement not covered" >        .select('metadata')</span>
+<span class="cstat-no" title="statement not covered" >        .eq('page_id', pageId)</span>
+<span class="cstat-no" title="statement not covered" >        .eq('event_type', 'session_end')</span>
+<span class="cstat-no" title="statement not covered" >        .gte('created_at', startDate.toISOString());</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (sessionEndEvents) {</span>
+<span class="cstat-no" title="statement not covered" >        sessionEndEvents.forEach((e: any) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          const d = e.metadata?.sessionDuration;</span>
+<span class="cstat-no" title="statement not covered" >          if (typeof d === 'number' &amp;&amp; d &gt; 0 &amp;&amp; d &lt; 3600) {</span>
+<span class="cstat-no" title="statement not covered" >            allDurations.push(d);</span>
+<span class="cstat-no" title="statement not covered" >          }</span>
+<span class="cstat-no" title="statement not covered" >        });</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      // Also check durations embedded in view metadata</span>
+<span class="cstat-no" title="statement not covered" >      events</span>
 <span class="cstat-no" title="statement not covered" >        .filter(e =&gt; e.metadata?.sessionDuration &amp;&amp; typeof e.metadata.sessionDuration === 'number')</span>
-<span class="cstat-no" title="statement not covered" >        .map(e =&gt; e.metadata.sessionDuration as number);</span>
-<span class="cstat-no" title="statement not covered" >      const avgSessionDuration = durations.length &gt; 0</span>
-<span class="cstat-no" title="statement not covered" >        ? durations.reduce((sum, d) =&gt; sum + d, 0) / durations.length</span>
-<span class="cstat-no" title="statement not covered" >        : 45; // Default estimate</span>
+<span class="cstat-no" title="statement not covered" >        .forEach(e =&gt; allDurations.push(e.metadata.sessionDuration as number));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      const avgSessionDuration = allDurations.length &gt; 0</span>
+<span class="cstat-no" title="statement not covered" >        ? Math.round(allDurations.reduce((sum, d) =&gt; sum + d, 0) / allDurations.length)</span>
+<span class="cstat-no" title="statement not covered" >        : (totalViews &gt; 0 ? 45 : 0); // Default estimate only if there are views</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      // Calculate returning visitors</span>
 <span class="cstat-no" title="statement not covered" >      const visitorCounts = new Map&lt;string, number&gt;();</span>
@@ -1360,7 +1420,7 @@ export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-17T17:14:38.207Z
+                at 2026-03-21T06:57:37.767Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
