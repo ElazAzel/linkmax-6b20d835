@@ -279,19 +279,39 @@ export function usePageAnalytics() {
         }))
         .sort((a, b) => b.count - a.count);
 
-      // Calculate session metrics (estimates based on available data)
+      // Calculate session metrics from real data
       const sessionsWithClicks = events.filter(e => e.event_type === 'click').length;
       const bounceRate = totalViews > 0
         ? Math.max(0, Math.min(100, ((totalViews - sessionsWithClicks) / totalViews) * 100))
         : 0;
 
-      // Estimate average session duration from metadata if available
-      const durations = events
+      // Calculate average session duration from session_end events or view metadata
+      const allDurations: number[] = [];
+      // Check session_end events
+      const { data: sessionEndEvents } = await supabase
+        .from('analytics')
+        .select('metadata')
+        .eq('page_id', pageId)
+        .eq('event_type', 'session_end')
+        .gte('created_at', startDate.toISOString());
+
+      if (sessionEndEvents) {
+        sessionEndEvents.forEach((e: any) => {
+          const d = e.metadata?.sessionDuration;
+          if (typeof d === 'number' && d > 0 && d < 3600) {
+            allDurations.push(d);
+          }
+        });
+      }
+
+      // Also check durations embedded in view metadata
+      events
         .filter(e => e.metadata?.sessionDuration && typeof e.metadata.sessionDuration === 'number')
-        .map(e => e.metadata.sessionDuration as number);
-      const avgSessionDuration = durations.length > 0
-        ? durations.reduce((sum, d) => sum + d, 0) / durations.length
-        : 45; // Default estimate
+        .forEach(e => allDurations.push(e.metadata.sessionDuration as number));
+
+      const avgSessionDuration = allDurations.length > 0
+        ? Math.round(allDurations.reduce((sum, d) => sum + d, 0) / allDurations.length)
+        : (totalViews > 0 ? 45 : 0); // Default estimate only if there are views
 
       // Calculate returning visitors
       const visitorCounts = new Map<string, number>();

@@ -44,6 +44,129 @@ export interface AnalyticsEvent {
  */
 const ANALYTICS_ENABLED = !import.meta.env.DEV;
 
+// ============================================
+// Geo-location Cache
+// ============================================
+
+interface GeoInfo {
+  country: string;
+  countryCode: string;
+  city?: string;
+  region?: string;
+}
+
+let _geoCache: GeoInfo | null = null;
+let _geoFetchPromise: Promise<GeoInfo | null> | null = null;
+
+/**
+ * Fetch geo info from a free IP geolocation API (cached per session)
+ */
+async function getGeoInfo(): Promise<GeoInfo | null> {
+  if (_geoCache) return _geoCache;
+  if (_geoFetchPromise) return _geoFetchPromise;
+
+  _geoFetchPromise = (async () => {
+    try {
+      // Use multiple fallback APIs for reliability
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+
+      const response = await fetch('https://ipapi.co/json/', {
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      if (!response.ok) return null;
+
+      const data = await response.json();
+      _geoCache = {
+        country: data.country_name || 'Unknown',
+        countryCode: data.country_code || 'XX',
+        city: data.city || undefined,
+        region: data.region || undefined,
+      };
+      return _geoCache;
+    } catch {
+      // Try fallback
+      try {
+        const controller2 = new AbortController();
+        const timeout2 = setTimeout(() => controller2.abort(), 3000);
+        const resp2 = await fetch('https://ip.guide/', {
+          headers: { Accept: 'application/json' },
+          signal: controller2.signal,
+        });
+        clearTimeout(timeout2);
+        if (!resp2.ok) return null;
+        const d2 = await resp2.json();
+        _geoCache = {
+          country: d2.location?.country || 'Unknown',
+          countryCode: d2.location?.country_code || 'XX',
+          city: d2.location?.city || undefined,
+        };
+        return _geoCache;
+      } catch {
+        return null;
+      }
+    }
+  })();
+
+  return _geoFetchPromise;
+}
+
+// ============================================
+// Session Duration Tracking
+// ============================================
+
+let _pageLoadTime = Date.now();
+let _sessionDurationTracked = false;
+
+/**
+ * Get time spent on page in seconds
+ */
+function getTimeOnPage(): number {
+  return Math.round((Date.now() - _pageLoadTime) / 1000);
+}
+
+/**
+ * Initialize session duration tracking — sends duration on page hide/unload
+ */
+export function initSessionDurationTracking(pageId: string) {
+  if (_sessionDurationTracked) return;
+  _sessionDurationTracked = true;
+  _pageLoadTime = Date.now();
+
+  const sendDuration = () => {
+    const duration = getTimeOnPage();
+    if (duration < 2) return; // Skip very short visits
+
+    const session = getOrCreateSession();
+    const payload = JSON.stringify({
+      page_id: pageId,
+      event_type: 'session_end',
+      metadata: {
+        sessionDuration: duration,
+        visitorId: session.visitorId,
+        sessionId: session.id,
+      },
+    });
+
+    // Use sendBeacon for reliable delivery on page unload
+    if (navigator.sendBeacon) {
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics`;
+      const blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+    }
+  };
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      sendDuration();
+    }
+  });
+
+  window.addEventListener('pagehide', sendDuration);
+}
+
 /**
  * Get visitor fingerprint for unique visitor tracking
  * Uses a combination of available browser data
@@ -201,6 +324,9 @@ export async function trackEvent({
     const referrer = getReferrerInfo();
     const utmParams = getUtmParams();
 
+    // Fetch geo info (non-blocking, cached)
+    const geo = await getGeoInfo().catch(() => null);
+
     const enrichedMetadata = {
       ...metadata,
       ...utmParams,
@@ -216,6 +342,11 @@ export async function trackEvent({
       screenWidth: screen.width,
       screenHeight: screen.height,
       timestamp: new Date().toISOString(),
+      // Geo enrichment
+      country: geo?.countryCode || undefined,
+      countryName: geo?.country || undefined,
+      city: geo?.city || undefined,
+      region: geo?.region || undefined,
     };
 
     await supabase.from('analytics').insert({
@@ -270,7 +401,7 @@ export async function trackBlockClick(
   // Increment click count in blocks table
   if (blockId) {
     try {
-      await supabase.rpc('increment_block_clicks', { block_id: blockId } as any);
+      await supabase.rpc('increment_block_clicks', { block_uuid: blockId } as any);
     } catch {
       // Silent fail
     }

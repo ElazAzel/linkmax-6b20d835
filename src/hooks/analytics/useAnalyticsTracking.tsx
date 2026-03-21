@@ -9,7 +9,8 @@ import { session } from '@/lib/storage';
 import {
   trackPageView,
   trackBlockClick,
-  trackShare
+  trackShare,
+  initSessionDurationTracking,
 } from '@/services/analytics';
 import { trackClickLink, trackViewContent } from '@/lib/analytics';
 
@@ -37,6 +38,8 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
       trackPageView(pageId);
       session.set(sessionKey, 'true');
       hasTrackedView.current = true;
+      // Start tracking session duration for this page visit
+      initSessionDurationTracking(pageId);
     }
   }, [pageId, trackingEnabled]);
 
