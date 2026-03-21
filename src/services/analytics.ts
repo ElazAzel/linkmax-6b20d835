@@ -324,6 +324,9 @@ export async function trackEvent({
     const referrer = getReferrerInfo();
     const utmParams = getUtmParams();
 
+    // Fetch geo info (non-blocking, cached)
+    const geo = await getGeoInfo().catch(() => null);
+
     const enrichedMetadata = {
       ...metadata,
       ...utmParams,
@@ -339,6 +342,11 @@ export async function trackEvent({
       screenWidth: screen.width,
       screenHeight: screen.height,
       timestamp: new Date().toISOString(),
+      // Geo enrichment
+      country: geo?.countryCode || undefined,
+      countryName: geo?.country || undefined,
+      city: geo?.city || undefined,
+      region: geo?.region || undefined,
     };
 
     await supabase.from('analytics').insert({
