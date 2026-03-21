@@ -39,10 +39,8 @@ export interface AnalyticsEvent {
 
 /**
  * Global analytics feature flag.
- * We полностью отключаем клиентскую аналитику в dev‑режиме,
- * чтобы избежать 401/403 в локальной среде без настроенных политик.
  */
-const ANALYTICS_ENABLED = !import.meta.env.DEV;
+const ANALYTICS_ENABLED = true; // explicitly enable analytics for testing + prod
 
 // ============================================
 // Geo-location Cache

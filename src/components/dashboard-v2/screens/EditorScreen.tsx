@@ -27,6 +27,9 @@ import { storage } from '@/lib/storage';
 import { usePageIntelligence } from '@/hooks/editor/usePageIntelligence';
 import { useFrictionRecovery } from '@/hooks/editor/useFrictionRecovery';
 import { useEditorStore } from '@/store/useEditorStore';
+import { useAuth } from '@/hooks/user/useAuth';
+import { useActivationChecklist } from '@/hooks/onboarding/useActivationChecklist';
+import { ActivationChecklist, ActivationCelebration } from '@/components/onboarding/ActivationChecklist';
 import { dissolveSection, deleteSection, duplicateSection } from '@/lib/editor/section-engine';
 import { trackEditorAction } from '@/lib/editor/editor-analytics';
 import type { PageData, Block, ProfileBlock } from '@/types/page';
@@ -101,6 +104,8 @@ export const EditorScreen = memo(function EditorScreen({
   const [dismissedOnboardingHints, setDismissedOnboardingHints] = useState<string[]>(() => storage.get<string[]>('editor_onboarding_hints_dismissed') || []);
   const [structureOpen, setStructureOpen] = useState(false);
   const [disabledTips, setDisabledTips] = useState<string[]>(() => storage.get<string[]>('editor_context_tips_disabled') || []);
+
+  const { user } = useAuth();
 
   // P5: Store state for sections & review
   const {
@@ -227,6 +232,19 @@ export const EditorScreen = memo(function EditorScreen({
       setReviewMode('problematic');
     }
   }, [frictionSignal, acceptFriction, setReviewMode]);
+
+  // P5: Editor Activation Checklist
+  const activation = useActivationChecklist({
+    pageData,
+    onOpenEditor: () => {}, // No-op, we're already in it
+    onShare,
+    pageId: pageData?.id,
+    telegramChatId: user?.user_metadata?.telegram_chat_id,
+    leadsCount: 0, // In the editor, this visual isn't meant to track leads deeply, just the publishing steps
+    onNavigate: (tabId) => {
+      // Optional: Handle top-level navigation, or let users figure it out
+    }
+  });
 
   const isPublished = pageData?.isPublished || false;
   const blockCount = pageData?.blocks.length || 0;
@@ -451,6 +469,28 @@ export const EditorScreen = memo(function EditorScreen({
           )}
         </div>
       </div>
+
+      {/* P5: Activation Checklist UI */}
+      {activation.isVisible && (
+        <div className="mx-4 mt-4 animate-fade-in">
+          <ActivationChecklist
+            steps={activation.steps}
+            completedCount={activation.completedCount}
+            totalCount={activation.totalCount}
+            progress={activation.progress}
+            canDismiss={activation.canDismiss}
+            onDismiss={activation.dismiss}
+            onStepClick={activation.handleStepClick}
+          />
+        </div>
+      )}
+
+      {/* P5: Activation Celebration */}
+      {activation.showCelebration && (
+        <div className="mx-4 mt-4 animate-fade-in zoom-in-95 duration-500 hover:scale-[1.01] transition-transform">
+          <ActivationCelebration onDismiss={activation.dismissCelebration} />
+        </div>
+      )}
 
       {/* Intelligence hint banner */}
       {intelligence && intelligence.nextActions.length > 0 && (() => {

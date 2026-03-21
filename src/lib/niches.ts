@@ -1,43 +1,25 @@
-// 15 generalized niches for page categorization
+// Narrowed niches for Expert-First GTM Strategy
 export const NICHES = [
-  'expert',      // Coaches, consultants, freelancers (Expert-First)
-  'beauty',      // Beauty, cosmetics, skincare
-  'fitness',     // Fitness, sports, health
-  'food',        // Restaurants, cafes, chefs, food
+  'expert',      // Coaches, consultants, freelancers (Primary)
   'education',   // Teachers, tutors, courses
-  'art',         // Artists, designers, photographers
-  'music',       // Musicians, DJs, producers
-  'tech',        // IT, developers, tech services
-  'business',    // Business, consulting, coaching
-  'health',      // Medicine, psychology, wellness
-  'fashion',     // Fashion, style, clothing
-  'travel',      // Travel, tourism, guides
-  'realestate',  // Real estate, property
-  'events',      // Events, weddings, entertainment
-  'services',    // General services, handyman
-  'other',       // Other / uncategorized
+  'business',    // Business, consulting, B2B services
+  'fitness',     // Fitness, sports, health coaches
+  'health',      // Psychology, wellness, therapy
+  'beauty',      // Beauty experts, makeup artists
+  'art',         // Digital creators, designers
 ] as const;
 
 export type Niche = typeof NICHES[number];
 
-// Niche icons mapping (using emoji for simplicity)
+// Niche icons mapping
 export const NICHE_ICONS: Record<Niche, string> = {
   expert: '🚀',
-  beauty: '💄',
-  fitness: '💪',
-  food: '🍽️',
   education: '📚',
-  art: '🎨',
-  music: '🎵',
-  tech: '💻',
   business: '💼',
+  fitness: '💪',
   health: '🏥',
-  fashion: '👗',
-  travel: '✈️',
-  realestate: '🏠',
-  events: '🎉',
-  services: '🔧',
-  other: '📌',
+  beauty: '💄',
+  art: '🎨',
 };
 
 // Get translated niche label

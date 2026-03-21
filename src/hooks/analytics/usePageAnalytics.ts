@@ -169,8 +169,13 @@ export function usePageAnalytics() {
       const prevClicks = prevEvents.filter(e => e.event_type === 'click').length;
 
       // Calculate changes
-      const viewsChange = prevViews > 0 ? ((totalViews - prevViews) / prevViews) * 100 : 0;
-      const clicksChange = prevClicks > 0 ? ((totalClicks - prevClicks) / prevClicks) * 100 : 0;
+      // Calculate changes - protect against division by zero
+      const viewsChange = prevViews > 0 
+        ? ((totalViews - prevViews) / prevViews) * 100 
+        : (totalViews > 0 ? 100 : 0);
+      const clicksChange = prevClicks > 0 
+        ? ((totalClicks - prevClicks) / prevClicks) * 100 
+        : (totalClicks > 0 ? 100 : 0);
 
       // Unique visitors (by IP in metadata or session)
       const uniqueIPs = new Set(events
@@ -327,18 +332,21 @@ export function usePageAnalytics() {
         .from('leads')
         .select('id')
         .eq('user_id', user.id)
+        .contains('metadata', { pageId: pageId })
         .gte('created_at', startDate.toISOString());
 
       const { data: bookings } = await supabase
         .from('bookings')
         .select('id')
         .eq('owner_id', user.id)
+        .contains('metadata', { pageId: pageId })
         .gte('created_at', startDate.toISOString());
 
       const { data: eventRegistrations } = await supabase
         .from('event_registrations')
         .select('id')
         .eq('owner_id', user.id)
+        .contains('metadata', { pageId: pageId })
         .gte('created_at', startDate.toISOString());
 
       const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);

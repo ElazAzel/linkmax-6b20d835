@@ -169,9 +169,32 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
     }
   }, []);
 
-  // Step handlers
   const handleSelectNiche = async (niche: Niche) => {
     setSelectedNiche(niche);
+    
+    // SMART-WRITING 2.0: For expert strategy, we use a deterministic, ultra-fast pre-configured layout 
+    // and skip the template carousel to minimize friction in the funnel.
+    if (niche === 'expert' || niche === 'business' || niche === 'education') {
+      setSelectedTemplate({
+        id: 'fast-expert-template',
+        name: 'LinkMAX Expert Pro',
+        description: 'Optimized high-converting funnel',
+        category: niche,
+        blocks: [
+          { type: 'profile' },                     // Hero
+          { type: 'catalog', overrides: { title: 'Услуги и Обучение' } }, // Courses
+          { type: 'scratch' },                     // Lead Magnet (Gamification)
+          { type: 'form', overrides: { title: 'Оставить заявку' } },     // Lead Form
+          { type: 'messenger' },                   // Telegram / WhatsApp
+          { type: 'socials' }                      // Socials
+        ],
+        preview_image: null,
+        is_premium: false,
+      });
+      setStep('dynamic_form');
+      return;
+    }
+
     await loadTemplates(niche);
     setStep('template');
   };
@@ -536,7 +559,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                     <div className="flex items-center justify-between">
                       <Label className="text-base font-semibold">
                         {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.bioBeauty', 'Кратко о вашем опыте (Бьюти)') :
-                          (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :
+                          (selectedNiche === 'art') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :
                             selectedNiche === 'business' ? t('aiBuilder.nicheQuestions.bioBusiness', 'Опишите ваш бизнес в 2-х словах') :
                               t('aiBuilder.nicheQuestions.bioGeneric', 'О себе / Описание')}
                       </Label>
@@ -557,7 +580,7 @@ export function AIBuilderWizard({ open, onClose, onComplete, isOnboarding = fals
                     <div className="flex items-center justify-between">
                       <Label className="text-base font-semibold">
                         {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.srvBeauty', 'Какие услуги вы оказываете? (С ценами)') :
-                          (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.srvFreelance', 'Навыки или Тарифы') :
+                          (selectedNiche === 'art') ? t('aiBuilder.nicheQuestions.srvFreelance', 'Навыки или Тарифы') :
                             t('aiBuilder.nicheQuestions.srvGeneric', 'Услуги или Навыки')}
                       </Label>
                       <span className="text-xs text-muted-foreground">{t('common.optional', 'Необязательно')}</span>

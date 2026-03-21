@@ -99,6 +99,12 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 
 - **Full Report**: [UX_UI_AUDIT_REPORT_2026_03_12.md](file:///c:/Users/i.azelkhanov/.gemini/antigravity/brain/e9ed3a0d-5f2f-4e48-b33f-7e907b04b0d6/UX_UI_AUDIT_REPORT_2026_03_12.md)
 
+### [2026-03-21] Phase 4: Onboarding Optimization & Analytics
+
+- **Smart-Writing 2.0**: Integrated a deterministic <1s page generation bypass for Expert niches, converting them faster by skipping the Gemini API loop and utilizing a proven "Hero-Courses-Lead-Telegram" template.
+- **Activation UI Checklist**: Replaced hidden friction logic with an explicit 4-step `ActivationChecklist` in the Editor to pull new users toward Publishing and Telegram Connection.
+- **Analytics Repair**: Resolved severe conversion leakage in `usePageAnalytics.ts` by strictly filtering `pageId` across all conversion types (leads, bookings, registrations). Re-enabled deterministic dev-mode tracking.
+
 ### [2026-03-21] Phase 3: Platform & GTM (Infobusiness Focus)
 
 - **Profitability Calculator**: Interactive tool on the Landing Page showing direct ROI and savings vs competitors.

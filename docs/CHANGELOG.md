@@ -1,5 +1,17 @@
 # Changelog
 
+## [Phase 4: Onboarding Optimization & Analytics] - 2026-03-21
+
+### Added
+- **UI Activation Checklist**: Integrated `ActivationChecklist` into the `EditorScreen` directly, providing explicit progress and celebration states to drive new users (Experts) to publish their first page and connect Telegram.
+- **Deterministic Generation (Smart-Writing 2.0)**: Bypassed Gemini AI generation for the `Expert` niche in `AIBuilderWizard.tsx`, utilizing a pre-configured <1s optimal template (Hero -> Courses -> Lead Magnet -> Telegram Form).
+
+### Changed
+- **Niche Filtering**: Hard-filtered the 15 generalized niches down to top 7 core Expert categories in `niches.ts` (Expert, Education, Business, Fitness, Health, Beauty, Art) to strictly align with the GTM strategy.
+
+### Fixed
+- **Analytics Tracking**: Re-enabled analytics tracking locally and fixed a critical data leakage bug in `usePageAnalytics.ts` where conversions were inaccurately aggregated across multiple pages. Also fixed division-by-zero errors in CTR calculations.
+
 ## [Phase 3: Platform & GTM (Infobusiness Focus)] - 2026-03-21
 
 ### Added
