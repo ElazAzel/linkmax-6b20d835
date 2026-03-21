@@ -401,7 +401,7 @@ export async function trackBlockClick(
   // Increment click count in blocks table
   if (blockId) {
     try {
-      await supabase.rpc('increment_block_clicks', { block_id: blockId } as any);
+      await supabase.rpc('increment_block_clicks', { block_uuid: blockId } as any);
     } catch {
       // Silent fail
     }
