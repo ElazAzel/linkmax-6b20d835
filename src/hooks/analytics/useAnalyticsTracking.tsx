@@ -38,6 +38,8 @@ export function useAnalyticsTracking({ pageId, enabled = true }: UseAnalyticsTra
       trackPageView(pageId);
       session.set(sessionKey, 'true');
       hasTrackedView.current = true;
+      // Start tracking session duration for this page visit
+      initSessionDurationTracking(pageId);
     }
   }, [pageId, trackingEnabled]);
 
