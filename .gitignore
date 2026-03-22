@@ -11,7 +11,17 @@ node_modules
 dist
 dist-ssr
 *.local
-.next/
+
+# Temporary and generated directories
+tmp/
+output/
+coverage/
+
+# Temporary lint/report artifacts
+lint_errors*.txt
+lint_results*.json
+lint_src_results*.json
+missing.txt
 
 # Environment variables - NEVER commit these!
 .env
