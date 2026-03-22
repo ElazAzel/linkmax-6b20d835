@@ -853,9 +853,13 @@ npm run start
 - Verify all block types are registered in `block-registry.ts`
 
 **Git Push Errors:**
-
 - **HTTP 408/Timeout:** Run `git config http.postBuffer 524288000` to increase buffer size.
 - **GH001 Large Files:** Check if `.next` folder was committed. Remove it from git history and add to `.gitignore`.
+
+### Known Issues & Tech Debt
+
+- **Supabase TypeScript Sync:** `src/hooks/` for Business Zones features currently rely on `as any` because tables like `zone_contact_notes`, `zone_pipelines`, `zone_task_checklist` are missing from the dynamically generated `src/integrations/supabase/types.ts`. Any attempt to strongly type the `PostgrestBuilder` without a synchronized schema collapses existing mappings to `never`. Fix requires a manual run of `supabase gen types` configured to this precise Cloud project branch to fully resolve ESLint warnings in the hooks layer.
+
 
 ---
 
@@ -899,6 +903,6 @@ Based on codebase analysis, these are logical next improvements:
 
 ---
 
-*Last updated: March 16, 2026*
-*Current Platform Health Score: **9.5/10** (Status: Production Ready, Manual Audit + Type Hardening pass completed on 2026-03-16)*
+*Last updated: March 22, 2026*
+*Current Platform Health Score: **9.5/10** (Status: Production Ready 1.0.0. Phase 2.2 Type Hardening completed on core services, hooks preserved as tech debt until schema sync).*
 *Maintained by: Antigravity (Principal Engineer)*
