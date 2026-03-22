@@ -2,60 +2,82 @@ import { test, expect } from '@playwright/test';
 
 test.describe('CRM Workflow Smoke Test', () => {
     test.beforeEach(async ({ page }) => {
-        // In real E2E we'd handle login here.
-        // For now we assume the session is active or we are in a dev environment.
         await page.goto('/dashboard');
+        
+        // Wait for main dashboard container to be visible instead of generic loader
+        // This ensures the page is actually mounted
+        await expect(page.locator('main')).toBeVisible({ timeout: 15000 });
 
-        // Navigate to Zones if not already there
-        const zonesLink = page.locator('text=/Zones|Зоны/i');
-        if (await zonesLink.isVisible()) {
-            await zonesLink.click();
+        // Ensure we are in a zone.
+        const zoneDashboardTab = page.getByTestId('zone-dashboard-tab');
+        
+        // If zone items are not visible, try to select a zone
+        if (!await zoneDashboardTab.isVisible()) {
+            console.log('Zone items not found in sidebar, checking if they appear after a short wait...');
+            await page.waitForTimeout(2000);
         }
+
+        // If STILL not visible, try selecting from switcher
+        if (!await zoneDashboardTab.isVisible()) {
+            console.log('Zone items still not found, triggering switcher...');
+            // Zone switcher has Building2 icon
+            const switcher = page.locator('button:has(.lucide-building-2), button:has-text("Select zone"), button:has-text("Выбрать зону")').first();
+            if (await switcher.isVisible()) {
+                await switcher.click();
+                await page.waitForTimeout(1000); // Wait for dropdown animation
+                const firstZone = page.getByTestId('zone-card').first();
+                if (await firstZone.isVisible()) {
+                    await firstZone.click();
+                }
+            }
+        }
+        
+        // Final expectation: we must see at least one zone-prefixed tab
+        await expect(page.getByTestId('zone-dashboard-tab')).toBeVisible({ timeout: 10000 });
     });
 
     test('should navigate through CRM core screens', async ({ page }) => {
-        // 1. Pick a zone
-        const zoneCard = page.locator('[data-testid="zone-card"]').first();
-        if (await zoneCard.isVisible()) {
-            await zoneCard.click();
-        }
-
-        // 2. Check Contacts Screen
-        const contactsTab = page.locator('[data-testid="zone-contacts-tab"]');
+        // 1. Contacts
+        const contactsTab = page.getByTestId('zone-contacts-tab');
         await expect(contactsTab).toBeVisible();
         await contactsTab.click();
-        await expect(page.locator('[data-testid="zone-contacts-title"]')).toBeVisible();
+        
+        // Check for title - wait for it to be visible as screen loads lazily
+        await expect(page.getByTestId('zone-contacts-title')).toBeVisible({ timeout: 10000 });
 
-        // 3. Check Deals (Kanban)
-        const dealsTab = page.locator('[data-testid="zone-deals-tab"]');
+        // 2. Deals
+        const dealsTab = page.getByTestId('zone-deals-tab');
         await expect(dealsTab).toBeVisible();
         await dealsTab.click();
+        await expect(page.getByTestId('zone-deals-title')).toBeVisible({ timeout: 10000 });
 
-        // Verify Kanban title
-        await expect(page.locator('[data-testid="zone-deals-title"]')).toBeVisible();
-
-        // 4. Check Tasks
-        const tasksTab = page.locator('[data-testid="zone-tasks-tab"]');
+        // 3. Tasks
+        const tasksTab = page.getByTestId('zone-tasks-tab');
         await expect(tasksTab).toBeVisible();
         await tasksTab.click();
-        await expect(page.locator('[data-testid="zone-tasks-title"]')).toBeVisible();
+        await expect(page.getByTestId('zone-tasks-title')).toBeVisible({ timeout: 10000 });
     });
 
-    test('should open deal details and check for EDO integration', async ({ page }) => {
-        await page.click('[data-testid="zone-deals-tab"]');
-
-        // Click first deal if exists
-        const dealCard = page.locator('[data-testid="deal-card"]').first();
+    test('should open deal details and check for documents integration', async ({ page }) => {
+        await page.getByTestId('zone-deals-tab').click();
+        
+        // Wait for deal cards
+        const dealCard = page.getByTestId('deal-card').first();
+        
+        // If deals exist, check the details
         if (await dealCard.isVisible()) {
             await dealCard.click();
-
-            // Check for Documents (EDO) tab in sheet
-            const docsTab = page.locator('button:has-text("Документы"), button:has-text("Documents")');
+            
+            // Documents tab in Deal Sheet
+            const docsTab = page.locator('button:has-text("Документы"), button:has-text("Documents")').first();
             await expect(docsTab).toBeVisible();
             await docsTab.click();
-
-            // Verify "Create Document" button
-            await expect(page.locator('button:has-text("Создать"), button:has-text("Create")')).toBeVisible();
+            
+            // Create Document button (EDO)
+            const createBtn = page.locator('button:has-text("Создать"), button:has-text("Create")').first();
+            await expect(createBtn).toBeVisible();
+        } else {
+            console.log('Note: No deal cards found in this zone, skipping details check.');
         }
     });
 });
