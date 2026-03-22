@@ -96,10 +96,10 @@ export const AdminService = {
 
             const dateStr = format(day, 'dd.MM');
 
-            const filterByDay = (items: any[] | null) =>
-                items?.filter(item => {
+            const filterByDay = (items: Record<string, unknown>[] | null) =>
+                (items || []).filter(item => {
                     if (!item.created_at) return false;
-                    const d = new Date(item.created_at);
+                    const d = new Date(item.created_at as string);
                     return d >= dayStart && d < dayEnd;
                 }).length || 0;
 

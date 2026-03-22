@@ -107,8 +107,8 @@ export const fintechService = {
             }
 
             // Single insert with gross/fee/net per modern schema
-            // NOTE: wallet_transactions might not be in types.ts yet, using as any for the table name only
-            const { data: transaction, error: txError } = await (supabase as any)
+            // NOTE: wallet_transactions might not be in types.ts yet
+            const { data: transaction, error: txError } = await (supabase as unknown as { from: (schema: string) => any })
                 .from('wallet_transactions')
                 .insert({
                     wallet_id: wallet.id,
@@ -157,7 +157,7 @@ export const fintechService = {
                 throw walletError;
             }
 
-            const { data: transactions, error: txError } = await (supabase as any)
+            const { data: transactions, error: txError } = await (supabase as unknown as { from: (schema: string) => any })
                 .from('wallet_transactions')
                 .select('*')
                 .eq('user_id', userId)
@@ -175,7 +175,7 @@ export const fintechService = {
                 throw txError;
             }
 
-            const { data: pendingData, error: pendingError } = await (supabase as any)
+            const { data: pendingData, error: pendingError } = await (supabase as unknown as { from: (schema: string) => any })
                 .from('wallet_transactions')
                 .select('gross_amount, net_amount')
                 .eq('user_id', userId)
@@ -193,7 +193,7 @@ export const fintechService = {
                 throw pendingError;
             }
 
-            const pendingGMV = (pendingData || []).reduce((acc: number, curr: any) => acc + Number(curr.gross_amount || 0), 0);
+            const pendingGMV = (pendingData || []).reduce((acc: number, curr: { gross_amount: number | string }) => acc + Number(curr.gross_amount || 0), 0);
 
             return {
                 wallet,
@@ -224,8 +224,12 @@ export const fintechService = {
             .insert({
                 user_id: userId,
                 amount,
-                payment_method: method as any, // Cast because PayoutMethod.type is string, but token_withdrawals expects specific
-                payment_details: (notes ? { notes } : null) as Json,
+                payment_method: method.type,
+                payment_details: {
+                    value: method.value,
+                    ...(method.details || {}),
+                    ...(notes ? { notes } : {})
+                } as unknown as Json,
                 status: 'pending'
             })
             .select()

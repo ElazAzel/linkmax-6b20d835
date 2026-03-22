@@ -12,8 +12,8 @@ export interface ApiKey {
 
 export const apiKeysService = {
   async listKeys(): Promise<ApiKey[]> {
-    const { data, error } = await (supabase as any)
-      .from('user_api_keys')
+    const { data, error } = await (supabase as unknown as { from: (schema: string) => any })
+      .from('api_keys')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -22,7 +22,7 @@ export const apiKeysService = {
   },
 
   async generateKey(name: string): Promise<{ key: string; details: ApiKey }> {
-    const { data, error } = await (supabase as any).rpc('generate_user_api_key', {
+    const { data, error } = await (supabase as unknown as { rpc: (fn: string, args: unknown) => any }).rpc('generate_user_api_key', {
       key_name: name
     });
 
@@ -31,8 +31,8 @@ export const apiKeysService = {
   },
 
   async deleteKey(id: string): Promise<void> {
-    const { error } = await (supabase as any)
-      .from('user_api_keys')
+    const { error } = await (supabase as unknown as { from: (schema: string) => any })
+      .from('api_keys')
       .delete()
       .eq('id', id);
 

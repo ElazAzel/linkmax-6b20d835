@@ -32,7 +32,7 @@ export class KaspiService {
     /**
      * Prepares payment metadata specifically for the Kaspi Business ecosystem.
      */
-    static prepareMetadata(invoice: any) {
+    static prepareMetadata(invoice: { id: string; amount: number }) {
         return {
             external_id: invoice.id,
             amount: invoice.amount,

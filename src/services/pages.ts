@@ -26,10 +26,46 @@ export interface DbPage {
   webhook_url: string | null;
   webhook_secret: string | null;
   organization_id: string | null;
+  custom_domain?: string | null;
+  grid_config?: GridConfig | null;
+  niche?: string | null;
+  integrations?: Record<string, string> | null;
+  city?: string | null;
+  profession?: string | null;
+  entity_type?: string | null;
+  contact_email?: string | null;
+  contact_phone?: string | null;
+  contact_whatsapp?: string | null;
+  quality_score?: number | null;
+  quality_breakdown?: Record<string, any> | null;
+  index_exclusion_reasons?: string[] | null;
+  last_indexnow_at?: string | null;
+  service_slugs?: Record<string, any> | null;
+  blocks?: DbBlock[];
+  private_page_data?: { chatbot_context?: string }[] | { chatbot_context?: string } | null;
   created_at: string;
   updated_at: string;
   preview_url: string | null;
-  experiments?: any[]; // Raw experiments from DB
+  experiments?: RawExperiment[]; // Raw experiments from DB
+}
+
+export interface RawExperiment {
+  id: string;
+  page_id: string;
+  name: string;
+  status: string;
+  started_at: string;
+  ended_at: string;
+  experiment_variants: RawExperimentVariant[];
+}
+
+export interface RawExperimentVariant {
+  id: string;
+  experiment_id: string;
+  base_block_id: string;
+  variant_label: string;
+  block_data: Partial<Block>;
+  traffic_weight: number;
 }
 
 export interface DbBlock {
@@ -84,7 +120,7 @@ function wrapError(error: unknown): Error {
 /**
  * Map raw database experiment data to PageExperiment type
  */
-function mapExperimentData(experiments: any[]): PageExperiment[] {
+function mapExperimentData(experiments: RawExperiment[]): PageExperiment[] {
   return (experiments || []).map((exp) => ({
     id: exp.id,
     page_id: exp.page_id,
@@ -92,12 +128,12 @@ function mapExperimentData(experiments: any[]): PageExperiment[] {
     status: exp.status as PageExperiment['status'],
     started_at: exp.started_at,
     ended_at: exp.ended_at,
-    variants: (exp.experiment_variants || []).map((v: any) => ({
+    variants: (exp.experiment_variants || []).map((v) => ({
       id: v.id,
       experiment_id: v.experiment_id,
       base_block_id: v.base_block_id,
       variant_label: v.variant_label,
-      block_data: v.block_data as Partial<Block>,
+      block_data: v.block_data,
       traffic_weight: v.traffic_weight
     }))
   }));
@@ -210,9 +246,9 @@ export async function savePage(
       p_integrations: (pageData.integrations ?? null) as unknown as Json,
       p_favicon_url: (pageData.favicon_url ?? '') as string,
       p_hide_branding: pageData.hideBranding || false,
-      p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : (null as any),
-      p_webhook_url: (pageData.webhook_url ?? null) as any,
-      p_webhook_secret: (pageData.webhook_secret ?? null) as any,
+      p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : (null as unknown as string),
+      p_webhook_url: (pageData.webhook_url ?? null) as unknown as string,
+      p_webhook_secret: (pageData.webhook_secret ?? null) as unknown as string,
     });
 
     // Fallback for legacy RPC if the new one with webhooks parameters is not yet deployed
@@ -222,18 +258,18 @@ export async function savePage(
         p_user_id: userId,
         p_slug: slug,
         p_title: profileName || 'My Page',
-        p_description: bioText,
-        p_avatar_url: profileBlock?.avatar || null,
+        p_description: bioText || '',
+        p_avatar_url: profileBlock?.avatar || '',
         p_avatar_style: { type: 'default', color: '#000000' } as unknown as Json,
         p_theme_settings: pageData.theme as unknown as Json,
         p_seo_meta: pageData.seo as unknown as Json,
         p_editor_mode: pageData.editorMode || 'linear',
         p_grid_config: (pageData.gridConfig || null) as unknown as Json,
         p_integrations: (pageData.integrations || null) as unknown as Json,
-        p_favicon_url: pageData.favicon_url || null,
+        p_favicon_url: pageData.favicon_url || undefined,
         p_hide_branding: pageData.hideBranding || false,
-        p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : null,
-      } as any);
+        p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : undefined,
+      });
       pageId = fallbackResult.data;
       upsertError = fallbackResult.error;
     }
@@ -278,7 +314,7 @@ export async function savePage(
       await supabase.from('private_page_data').upsert(
         {
           page_id: pageId as string,
-          chatbot_context: (chatbotContext || null) as any,
+          chatbot_context: (chatbotContext || null) as unknown as string,
           updated_at: new Date().toISOString(),
         },
         { onConflict: 'page_id' }
@@ -322,7 +358,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
     if (pageError) return { data: null, error: wrapError(pageError) };
     if (!page) return { data: null, error: null };
 
-    const pg = page as any;
+    const pg = page as unknown as DbPage;
 
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: pg.slug });
@@ -338,7 +374,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
       blocks: convertDbBlocksToBlocks(blocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b: any) => b.is_premium),
+      isPremium: blocks.some((b: DbBlock) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
@@ -365,7 +401,7 @@ export async function loadPageBySlug(slug: string): Promise<LoadPageResult> {
  */
 export async function loadPageByCustomDomain(domain: string): Promise<{ data: PageData | null; error: Error | null }> {
   try {
-    const { data: page, error: pageError } = await (supabase as any)
+    const { data: page, error: pageError } = await supabase
       .from('pages')
       .select('*, blocks(*), private_page_data(*)')
       .eq('custom_domain', domain)
@@ -375,7 +411,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
     if (pageError) return { data: null, error: wrapError(pageError) };
     if (!page) return { data: null, error: null };
 
-    const pg = page as any;
+    const pg = page as unknown as DbPage;
 
     // Increment view count (fire and forget)
     void supabase.rpc('increment_view_count', { page_slug: pg.slug });
@@ -391,7 +427,7 @@ export async function loadPageByCustomDomain(domain: string): Promise<{ data: Pa
       blocks: convertDbBlocksToBlocks(blocks),
       theme: pg.theme_settings as unknown as PageTheme,
       seo: pg.seo_meta as unknown as PageData['seo'],
-      isPremium: blocks.some((b: any) => b.is_premium),
+      isPremium: blocks.some((b: DbBlock) => b.is_premium),
       isPublished: pg.is_published || false,
       viewCount: pg.view_count || 0,
       editorMode: 'grid',
@@ -443,15 +479,15 @@ export async function loadUserPage(userId: string): Promise<LoadUserPageResult> 
       };
     }
 
-    const pg = page as any;
+    const pg = page as unknown as DbPage;
     const blocks = pg.blocks as unknown as DbBlock[];
 
     // Map experiments and variants
-    const experiments: PageExperiment[] = (pg.experiments || []).map((exp: any) => ({
+    const experiments: PageExperiment[] = (pg.experiments || []).map((exp) => ({
       id: exp.id,
       page_id: exp.page_id,
       name: exp.name,
-      status: exp.status,
+      status: exp.status as PageExperiment['status'],
       started_at: exp.started_at,
       ended_at: exp.ended_at,
       variants: exp.experiment_variants || []

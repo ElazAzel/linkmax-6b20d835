@@ -55,13 +55,13 @@ export class PaymentService {
      * Checks the status of a specific order.
      */
     static async getOrderStatus(orderId: string): Promise<PaymentOrder['status']> {
-        const { data, error } = await (supabase
-            .from('orders' as any)
+        const { data, error } = await supabase
+            .from('orders')
             .select('status')
             .eq('id', orderId)
-            .single() as any);
+            .single();
 
         if (error) return 'pending';
-        return (data as any)?.status as PaymentOrder['status'];
+        return (data as { status: string })?.status as PaymentOrder['status'];
     }
 }

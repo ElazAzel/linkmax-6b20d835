@@ -190,7 +190,7 @@ export async function purchaseItem(
 ): Promise<{ success: boolean; error?: string; totalCost?: number; platformFee?: number }> {
   const { data, error } = await supabase.rpc('process_marketplace_purchase', {
     p_buyer_id: buyerId,
-    p_seller_id: (sellerId || null) as any,
+    p_seller_id: (sellerId || null) as unknown as string,
     p_item_type: itemType,
     p_item_id: itemId,
     p_price: price,
