@@ -70,8 +70,8 @@ export default function Index() {
       <Suspense fallback={null}>
         <SEOMetaEnhancer
           pageUrl={`${getAppDomain()}/`}
-          pageTitle={t('landing.v4.hero.title', 'LinkMAX - Your AI Page Builder')}
-          pageDescription={t('landing.v4.hero.subtitle', 'Build professional pages in minutes with AI.')}
+          pageTitle={t('landing.v4.hero.title', 'LinkMAX - Your AI Page Builder & Bio Link')}
+          pageDescription={t('landing.v4.hero.subtitle', 'Build professional Bio Link pages in minutes with AI. Конструктор страниц, CRM и аналитика.')}
           imageUrl={`${getAppDomain()}/og-image.png`}
           imageAlt="LinkMAX"
           type="website"

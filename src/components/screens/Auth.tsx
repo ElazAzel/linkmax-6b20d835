@@ -591,8 +591,8 @@ export default function Auth() {
 
                 <Tabs defaultValue="signin" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1">
-                    <TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signIn')}</TabsTrigger>
-                    <TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signUp')}</TabsTrigger>
+                    <TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signIn')}</TabsTrigger>
+                    <TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2">{t('auth.signUp')}</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="signin">
@@ -719,6 +719,7 @@ export default function Auth() {
                             id="signin-email"
                             name="signin-email"
                             type="email"
+                            data-testid="signin-email-input"
                             placeholder="your@email.com"
                             required
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
@@ -739,6 +740,7 @@ export default function Auth() {
                             id="signin-password"
                             name="signin-password"
                             type="password"
+                            data-testid="signin-password-input"
                             placeholder="••••••••"
                             required
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
@@ -777,6 +779,7 @@ export default function Auth() {
                             id="signup-email"
                             name="signup-email"
                             type="email"
+                            data-testid="signup-email-input"
                             placeholder="your@email.com"
                             required
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
@@ -788,6 +791,7 @@ export default function Auth() {
                             id="signup-password"
                             name="signup-password"
                             type="password"
+                            data-testid="signup-password-input"
                             placeholder="••••••••"
                             required
                             className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"
@@ -797,7 +801,7 @@ export default function Auth() {
                           </p>
                         </div>
                         <div className="flex items-start space-x-2">
-                          <Checkbox id="terms" required className="mt-0.5" />
+                          <Checkbox id="terms" data-testid="terms-checkbox" required className="mt-0.5" />
                           <label htmlFor="terms" className="text-sm text-muted-foreground leading-tight">
                             {t('legal.agreeToTerms')}{' '}
                             <TermsLink className="text-primary hover:underline">
@@ -809,7 +813,7 @@ export default function Auth() {
                             </PrivacyLink>
                           </label>
                         </div>
-                        <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
+                        <Button type="submit" data-testid="signup-button" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
                           {isLoading ? t('common.loading', 'Loading...') : t('auth.signUp')}
                         </Button>
                       </form>

@@ -149,7 +149,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
       <div className="flex items-center justify-between p-4 border-b border-border/30 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <ListTodo className="h-5 w-5 text-primary" />
-          <h1 className="text-lg font-bold">{t('zones.tasks.title', 'Задачи')}</h1>
+          <h1 className="text-lg font-bold" data-testid="zone-tasks-title">{t('zones.tasks.title', 'Задачи')}</h1>
           <Badge variant="secondary" className="text-xs">{tasks.length}</Badge>
           {overdueCount > 0 && (
             <Badge variant="destructive" className="text-xs">{overdueCount} {t('zones.tasks.overdue', 'просрочено')}</Badge>

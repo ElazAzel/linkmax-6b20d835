@@ -115,6 +115,7 @@ export const ZoneSwitcher = memo(function ZoneSwitcher({
                   key={zone.id}
                   onClick={() => onSelectZone(zone.id)}
                   className="gap-2"
+                  data-testid="zone-card"
                 >
                   <Building2 className="h-4 w-4" />
                   <span className="truncate flex-1">{zone.name}</span>

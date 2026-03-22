@@ -169,6 +169,7 @@ export const DashboardSidebar = memo(function DashboardSidebar({
           isZoneLocked && "opacity-50",
           collapsed && "justify-center px-0.5"
         )}
+        data-testid={`${item.id}-tab`}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         layout // animate layout changes

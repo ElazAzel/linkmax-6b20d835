@@ -1,0 +1,22 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:8080",
+      "localStorage": [
+        {
+          "name": "i18nextLng",
+          "value": "en"
+        },
+        {
+          "name": "inkmax_v2_cache_version",
+          "value": "\"11\""
+        },
+        {
+          "name": "sb-pphdcfxucfndmwulpfwv-auth-token",
+          "value": "{\"access_token\":\"eyJhbGciOiJIUzI1NiIsImtpZCI6IkdsdnhOMmorL2FFN1VPeGEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3BwaGRjZnh1Y2ZuZG13dWxwZnd2LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI2YTdiYmYyZS0wZGI5LTQ5ZDMtOWYxNy0zMmMxNWE3NjRlNjMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc0MjA5NjY1LCJpYXQiOjE3NzQyMDYwNjUsImVtYWlsIjoiZGVtb2FjY291bnQxQGdtYWlsLmNvbSIsInBob25lIjoiIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZGlzcGxheV9uYW1lIjoi0JDQvdC90LAg0JrRgNCw0YHQvtGC0LAiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwidXNlcm5hbWUiOiJhbm5hX2JlYXV0eSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzc0MjA2MDY1fV0sInNlc3Npb25faWQiOiJkZTM3Yzk4OS01MTI5LTQwYzctYWM0MC02NDRlZWE4ZGUwOTYiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.f5RM26NiOZoWPzHyNGq3_sOs9EImdneL0aDSELX_prs\",\"token_type\":\"bearer\",\"expires_in\":3600,\"expires_at\":1774209665,\"refresh_token\":\"oje5lnti3b66\",\"user\":{\"id\":\"6a7bbf2e-0db9-49d3-9f17-32c15a764e63\",\"aud\":\"authenticated\",\"role\":\"authenticated\",\"email\":\"demoaccount1@gmail.com\",\"email_confirmed_at\":\"2026-01-02T08:56:00.247553Z\",\"phone\":\"\",\"confirmed_at\":\"2026-01-02T08:56:00.247553Z\",\"last_sign_in_at\":\"2026-03-22T19:01:05.939774098Z\",\"app_metadata\":{\"provider\":\"email\",\"providers\":[\"email\"]},\"user_metadata\":{\"display_name\":\"Анна Красота\",\"email_verified\":true,\"username\":\"anna_beauty\"},\"identities\":[{\"identity_id\":\"22f18797-e8ae-4d29-91fe-fd736534b19b\",\"id\":\"6a7bbf2e-0db9-49d3-9f17-32c15a764e63\",\"user_id\":\"6a7bbf2e-0db9-49d3-9f17-32c15a764e63\",\"identity_data\":{\"email\":\"demoaccount1@gmail.com\",\"email_verified\":false,\"phone_verified\":false,\"sub\":\"6a7bbf2e-0db9-49d3-9f17-32c15a764e63\"},\"provider\":\"email\",\"last_sign_in_at\":\"2026-01-02T08:56:00.239574Z\",\"created_at\":\"2026-01-02T08:56:00.24042Z\",\"updated_at\":\"2026-01-02T08:56:00.24042Z\",\"email\":\"demoaccount1@gmail.com\"}],\"created_at\":\"2026-01-02T08:56:00.218766Z\",\"updated_at\":\"2026-03-22T19:01:05.943705Z\",\"is_anonymous\":false},\"weak_password\":null}"
+        }
+      ]
+    }
+  ]
+}

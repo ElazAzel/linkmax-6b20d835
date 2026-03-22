@@ -310,7 +310,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
         {/* Header */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold">{t('zones.deals.title', 'Deals Pipeline')}</h1>
+            <h1 className="text-2xl font-bold" data-testid="zone-deals-title">{t('zones.deals.title', 'Deals Pipeline')}</h1>
             {pipelines.length > 0 && (
               <Select value={selectedPipelineId} onValueChange={setSelectedPipelineId}>
                 <SelectTrigger className="w-[200px] h-9">

@@ -169,7 +169,7 @@ export const ZoneContactsScreen = memo(function ZoneContactsScreen({ zoneId }: Z
   return (
     <div className="p-4 md:p-6 space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <h1 className="text-2xl font-bold">{t('zones.contacts.title', 'Contacts')}</h1>
+        <h1 className="text-2xl font-bold" data-testid="zone-contacts-title">{t('zones.contacts.title', 'Contacts')}</h1>
         <div className="flex gap-2 flex-wrap">
           <Button variant="outline" size="sm" onClick={async () => {
             try {

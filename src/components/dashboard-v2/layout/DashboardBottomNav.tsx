@@ -137,6 +137,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                     "relative flex flex-col items-center justify-center gap-0.5 transition-all duration-300 active:scale-90 min-w-0 h-full",
                     isActive ? "text-primary scale-110" : "text-muted-foreground/60"
                   )}
+                  data-testid={`${tab.id}-tab`}
                 >
                   {isActive && (
                     <motion.div
@@ -200,6 +201,7 @@ export const DashboardBottomNav = memo(function DashboardBottomNav({
                     "flex flex-col items-center gap-2 p-4 rounded-xl transition-all active:scale-95",
                     isActive ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground hover:bg-muted"
                   )}
+                  data-testid={`${item.id}-tab`}
                 >
                   <Icon className="h-6 w-6" />
                   <span className="text-[11px] sm:text-xs font-medium text-center whitespace-normal break-words text-wrap leading-tight max-w-[5.5rem]">

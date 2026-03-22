@@ -24,21 +24,21 @@ test.describe('CRM Workflow Smoke Test', () => {
         const contactsTab = page.locator('[data-testid="zone-contacts-tab"]');
         await expect(contactsTab).toBeVisible();
         await contactsTab.click();
-        await expect(page.locator('h1, h2').filter({ hasText: /Contacts|Контакты/i })).toBeVisible();
+        await expect(page.locator('[data-testid="zone-contacts-title"]')).toBeVisible();
 
         // 3. Check Deals (Kanban)
         const dealsTab = page.locator('[data-testid="zone-deals-tab"]');
         await expect(dealsTab).toBeVisible();
         await dealsTab.click();
 
-        // Verify Kanban stages or empty state
-        await expect(page.locator('text=/Deal|Сделк/i')).toBeVisible();
+        // Verify Kanban title
+        await expect(page.locator('[data-testid="zone-deals-title"]')).toBeVisible();
 
         // 4. Check Tasks
         const tasksTab = page.locator('[data-testid="zone-tasks-tab"]');
         await expect(tasksTab).toBeVisible();
         await tasksTab.click();
-        await expect(page.locator('text=/Task|Задач/i')).toBeVisible();
+        await expect(page.locator('[data-testid="zone-tasks-title"]')).toBeVisible();
     });
 
     test('should open deal details and check for EDO integration', async ({ page }) => {

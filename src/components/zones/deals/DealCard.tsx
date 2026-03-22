@@ -41,6 +41,7 @@ export const DealCard = memo(function DealCard({ deal, onClick }: DealCardProps)
         isDragging && "opacity-50 shadow-lg",
         isOverdue(deal) && "border-destructive/50"
       )}
+      data-testid="deal-card"
       onClick={(e) => {
         if (!isDragging) {
           e.stopPropagation();

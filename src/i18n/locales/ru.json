@@ -6630,7 +6630,20 @@
     "link_title_placeholder": "link_title_placeholder",
     "btn_copy_link": "btn_copy_link",
     "nav_payments": "nav_payments",
-    "nav_tasks": "nav_tasks"
+    "nav_tasks": "nav_tasks",
+    "landing": {
+      "v4": {
+        "hero": {
+          "badge": "Операционная система для микробизнеса",
+          "titleStart": "Сайт, CRM и Аналитика",
+          "titleEnd": "в одном месте",
+          "subtitle": "Конструктор страниц, управление лидами, аналитика кликов. Все, что нужно вашему микробизнесу - без кода.",
+          "cta": "Начать бесплатно",
+          "secondary": "Смотреть примеры",
+          "scroll": "Листайте вниз"
+        }
+      }
+    }
   },
   "search": {
     "placeholder": "Поиск или команда...",

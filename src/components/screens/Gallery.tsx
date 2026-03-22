@@ -194,7 +194,7 @@ export default function Gallery() {
       />
       <StructuredData id="gallery-schema" data={gallerySchema} />
 
-      <div className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background" data-testid="gallery">
         {/* Compact header */}
         <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-xl border-b border-border/20">
           <div className="max-w-6xl mx-auto px-4 py-3">
@@ -393,7 +393,7 @@ export default function Gallery() {
             <TopReferrers />
           </div>
         )}
-      </div>
+      </main>
     </>
   );
 }

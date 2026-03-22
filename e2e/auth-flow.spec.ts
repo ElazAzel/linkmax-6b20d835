@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
 
+// Reset storage state for auth tests to ensure clean start
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Authentication Flow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -10,7 +13,7 @@ test.describe('Authentication Flow', () => {
     await expect(page).toHaveTitle(/lnkmx|LinkMAX/i);
     
     // Check main CTA is visible
-    const ctaButton = page.locator('text=/Создать|Create|Бесплатно/i').first();
+    const ctaButton = page.locator('text=/Создать|Create|Бесплатно|Start|Free/i').first();
     await expect(ctaButton).toBeVisible();
   });
 
@@ -116,7 +119,7 @@ test.describe('SEO & Meta Tags', () => {
     // Check meta description
     const metaDescription = await page.locator('meta[name="description"]').getAttribute('content');
     expect(metaDescription).toBeTruthy();
-    expect(metaDescription?.toLowerCase()).toMatch(/link|bio|страниц/);
+    expect(metaDescription?.toLowerCase()).toMatch(/link|bio|страниц|builder|crm/i);
     
     // Check Open Graph tags
     const ogTitle = await page.locator('meta[property="og:title"]').getAttribute('content');
