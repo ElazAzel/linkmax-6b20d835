@@ -248,7 +248,7 @@ export const ZoneSettingsScreen = memo(function ZoneSettingsScreen({
                       <>
                         <Select
                           value={member.role}
-                          onValueChange={(val) => handleRoleChange(member.user_id, val)}
+                          onValueChange={(val: string) => handleRoleChange(member.user_id, val)}
                         >
                           <SelectTrigger className="w-24 h-7 text-xs">
                             <SelectValue />

@@ -15,21 +15,17 @@
     "downlevelIteration": true,
     "target": "es2020",
     "noEmit": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "paths": {
       "@/*": [
         "./src/*"
       ]
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [],
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "types": [
       "node"
     ]
@@ -46,9 +42,7 @@
     "src/app"
   ],
   "include": [
-    "next-env.d.ts",
     "src/**/*.ts",
-    "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    "src/**/*.tsx"
   ]
 }

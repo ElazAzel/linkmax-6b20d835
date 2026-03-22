@@ -43,10 +43,10 @@ export async function getStreakData(userId: string): Promise<StreakData | null> 
   }
 
   return {
-    currentStreak: data.current_streak || 0,
-    longestStreak: data.longest_streak || 0,
-    lastActiveDate: data.last_active_date,
-    bonusDaysEarned: data.streak_bonus_days || 0,
+    currentStreak: data?.current_streak || 0,
+    longestStreak: data?.longest_streak || 0,
+    lastActiveDate: data?.last_active_date || null,
+    bonusDaysEarned: data?.streak_bonus_days || 0,
   };
 }
 

@@ -46,28 +46,27 @@ export function useCloudPageState(options?: UseCloudPageStateOptions) {
   // Update local state when cached data loads - ONLY on initial load
   // This prevents cache updates from overwriting local changes
   useEffect(() => {
-    if (userData && !initialLoadDoneRef.current) {
+    const pageId = userData?.pageData?.id;
+    if (pageId && !initialLoadDoneRef.current) {
       setPageData(userData.pageData);
       setChatbotContext(userData.chatbotContext || '');
       initialLoadDoneRef.current = true;
       hasLocalChangesRef.current = false;
       // P2.11: Seed previous service_slugs on initial load
-      if (userData.pageData?.id) {
-        void (async () => {
-          try {
-            const { data: row } = await supabase
-              .from('pages')
-              .select('service_slugs')
-              .eq('id', userData.pageData.id)
-              .single();
-            if (row?.service_slugs) {
-              previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
-            }
-          } catch {
-            // Non-critical
+      void (async () => {
+        try {
+          const { data: row } = await supabase
+            .from('pages')
+            .select('service_slugs')
+            .eq('id', pageId)
+            .single();
+          if (row?.service_slugs) {
+            previousServiceSlugsRef.current = row.service_slugs as unknown as Record<string, ServiceSlugEntryRaw>;
           }
-        })();
-      }
+        } catch {
+          // Non-critical
+        }
+      })();
     }
   }, [userData]);
 

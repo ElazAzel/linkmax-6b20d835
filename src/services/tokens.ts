@@ -145,7 +145,7 @@ export async function addTokens(
     p_user_id: userId,
     p_amount: amount,
     p_source: source,
-    p_description: description || null,
+    p_description: description || undefined,
   });
 
   if (error) {
@@ -190,11 +190,11 @@ export async function purchaseItem(
 ): Promise<{ success: boolean; error?: string; totalCost?: number; platformFee?: number }> {
   const { data, error } = await supabase.rpc('process_marketplace_purchase', {
     p_buyer_id: buyerId,
-    p_seller_id: sellerId,
+    p_seller_id: (sellerId || null) as any,
     p_item_type: itemType,
     p_item_id: itemId,
     p_price: price,
-    p_description: description || null,
+    p_description: description || undefined,
   });
 
   if (error) {
@@ -297,8 +297,8 @@ export async function getWithdrawals(userId: string): Promise<WithdrawalRequest[
 // Admin: Get token analytics
 export async function getTokenAnalytics(startDate?: string, endDate?: string): Promise<Record<string, unknown> | null> {
   const { data, error } = await supabase.rpc('get_token_analytics', {
-    p_start_date: startDate || null,
-    p_end_date: endDate || null,
+    p_start_date: startDate || undefined,
+    p_end_date: endDate || undefined,
   });
 
   if (error) {

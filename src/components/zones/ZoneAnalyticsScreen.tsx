@@ -304,7 +304,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                                             <XAxis type="number" hide />
                                             <YAxis type="category" dataKey="stageName" width={100} tick={{ fontSize: 12 }} />
                                             <RechartsTooltip
-                                                formatter={(value: number) => [value, t('zones.analytics.deals', 'Deals')]}
+                                                formatter={(value: number | undefined) => [value ?? 0, t('zones.analytics.deals', 'Deals')] as [number, string]}
                                                 contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
                                             />
                                             <Bar dataKey="count" radius={[0, 6, 6, 0]}>
@@ -350,7 +350,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                                         <XAxis dataKey="date" tick={{ fontSize: 11 }} />
                                         <YAxis tick={{ fontSize: 11 }} width={60} />
                                         <RechartsTooltip
-                                            formatter={(value: number) => [value.toLocaleString(), t('zones.analytics.revenue', 'Revenue')]}
+                                            formatter={(value: number | undefined) => [(value ?? 0).toLocaleString(), t('zones.analytics.revenue', 'Revenue')] as [string, string]}
                                             contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
                                         />
                                         <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
@@ -449,7 +449,7 @@ export function ZoneAnalyticsScreen({ zoneId }: ZoneAnalyticsScreenProps) {
                                         <XAxis type="number" hide />
                                         <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 11 }} />
                                         <RechartsTooltip
-                                            formatter={(value: number, name: string) => [value, name === 'completed' ? t('zones.analytics.completed', 'Completed') : t('zones.analytics.total', 'Total')]}
+                                            formatter={(value: number | undefined, name: any) => [value ?? 0, name === 'completed' ? t('zones.analytics.completed', 'Completed') : t('zones.analytics.total', 'Total')] as [number, string]}
                                             contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
                                         />
                                         <Bar dataKey="total" fill="hsl(var(--muted-foreground))" radius={[0, 4, 4, 0]} name="total" />

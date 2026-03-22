@@ -28,8 +28,8 @@ export interface WalletOverview {
         user_id: string;
         balance: number;
         currency: string;
-        created_at: string;
-        updated_at: string;
+        created_at: string | null;
+        updated_at: string | null;
     } | null;
     transactions: WalletTransaction[];
     pendingGMV: number;
@@ -142,7 +142,7 @@ export const fintechService = {
         }
     },
 
-    async getWalletOverview(userId: string) {
+    async getWalletOverview(userId: string): Promise<WalletOverview> {
         try {
             const { data: wallet, error: walletError } = await supabase
                 .from('user_wallets')

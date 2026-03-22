@@ -279,7 +279,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {members.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.assignee', 'Ответственный')}</Label>
-                <Select value={newAssignee || '__none__'} onValueChange={v => setNewAssignee(v === '__none__' ? '' : v)}>
+                <Select value={newAssignee || '__none__'} onValueChange={(v: string) => setNewAssignee(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
                     <SelectValue placeholder={t('zones.tasks.unassigned', 'Не назначено')} />
                   </SelectTrigger>
@@ -297,7 +297,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {contacts.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.contact', 'Contact')}</Label>
-                <Select value={newContactId || '__none__'} onValueChange={v => setNewContactId(v === '__none__' ? '' : v)}>
+                <Select value={newContactId || '__none__'} onValueChange={(v: string) => setNewContactId(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
                     <SelectValue placeholder="—" />
                   </SelectTrigger>
@@ -313,7 +313,7 @@ export const ZoneTasksScreen = memo(function ZoneTasksScreen({ zoneId }: Props) 
             {deals.length > 0 && (
               <div>
                 <Label>{t('zones.tasks.deal', 'Deal')}</Label>
-                <Select value={newDealId || '__none__'} onValueChange={v => setNewDealId(v === '__none__' ? '' : v)}>
+                <Select value={newDealId || '__none__'} onValueChange={(v: string) => setNewDealId(v === '__none__' ? '' : v)}>
                   <SelectTrigger className="h-9 mt-1">
                     <SelectValue placeholder="—" />
                   </SelectTrigger>

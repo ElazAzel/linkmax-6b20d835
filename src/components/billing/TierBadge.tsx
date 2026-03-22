@@ -17,14 +17,29 @@ export function TierBadge({ tier, size = 'md', showIcon = true }: TierBadgeProps
       icon: Zap,
       className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
     },
+    starter: {
+      label: 'BASIC',
+      icon: Zap,
+      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
+    },
+    identity: {
+      label: 'BASIC',
+      icon: Zap,
+      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',
+    },
     pro: {
       label: 'PRO',
       icon: Crown,
       className: 'bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/30',
     },
+    business: {
+      label: 'BUSINESS',
+      icon: Crown,
+      className: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',
+    },
   };
 
-  const config = tierConfig[tier];
+  const config = (tierConfig as any)[tier] || tierConfig.free;
   const Icon = config.icon;
 
   const sizeClasses = {

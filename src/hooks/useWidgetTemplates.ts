@@ -26,7 +26,7 @@ export function useWidgetTemplates() {
 
             if (error) throw error;
 
-            return (data || []).map(t => ({
+            return (data || []).map((t: any) => ({
                 id: t.id,
                 name: t.name,
                 nameRu: t.name_ru || t.name,

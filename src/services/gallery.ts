@@ -51,21 +51,21 @@ export async function getGalleryPages(niche?: Niche | null): Promise<GalleryPage
 
   const premiumMap = new Map<string, boolean>();
   profiles?.forEach(p => {
-    const isPremium = p.is_premium || (p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
+    const isPremium = !!p.is_premium || (!!p.trial_ends_at && new Date(p.trial_ends_at) > new Date());
     premiumMap.set(p.id, isPremium);
   });
 
   // Add premium flag and sort: premium first, then by views
-  const pagesWithPremium = (data || []).map(p => ({
+  const pagesWithPremium: GalleryPage[] = (data || []).map(p => ({
     id: p.id,
     slug: p.slug,
     title: p.title,
     description: p.description,
     avatar_url: p.avatar_url,
     preview_url: p.preview_url,
-    gallery_likes: p.gallery_likes,
+    gallery_likes: p.gallery_likes || 0,
     gallery_featured_at: p.gallery_featured_at,
-    view_count: p.view_count,
+    view_count: p.view_count || 0,
     niche: p.niche,
     is_premium: premiumMap.get(p.user_id) || false
   }));
@@ -112,7 +112,19 @@ export async function getTopPremiumPages(limit: number = 5): Promise<GalleryPage
     return [];
   }
 
-  return (data || []).map(p => ({ ...p, is_premium: true }));
+  return (data || []).map(p => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    description: p.description,
+    avatar_url: p.avatar_url,
+    preview_url: p.preview_url,
+    gallery_likes: p.gallery_likes || 0,
+    gallery_featured_at: p.gallery_featured_at,
+    view_count: p.view_count,
+    niche: p.niche,
+    is_premium: true
+  } as GalleryPage));
 }
 
 export async function getNicheCounts(): Promise<Record<string, number>> {

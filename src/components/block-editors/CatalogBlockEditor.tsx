@@ -42,7 +42,7 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
   const updateCategory = (categoryId: string, updates: Partial<CatalogCategory>) => {
     onChange({
-      categories: categories.map(cat =>
+      categories: categories.map((cat: CatalogCategory) =>
         cat.id === categoryId ? { ...cat, ...updates } : cat
       ),
     });
@@ -51,8 +51,8 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
   const removeCategory = (categoryId: string) => {
     // Remove category and unassign items from it
     onChange({
-      categories: categories.filter(cat => cat.id !== categoryId),
-      items: items.map(item =>
+      categories: categories.filter((cat: CatalogCategory) => cat.id !== categoryId),
+      items: items.map((item: CatalogItem) =>
         item.categoryId === categoryId ? { ...item, categoryId: undefined } : item
       ),
     });
@@ -79,14 +79,14 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
   const updateItem = (itemId: string, updates: Partial<CatalogItem>) => {
     onChange({
-      items: items.map(item =>
+      items: items.map((item: CatalogItem) =>
         item.id === itemId ? { ...item, ...updates } : item
       ),
     });
   };
 
   const removeItem = (itemId: string) => {
-    onChange({ items: items.filter(item => item.id !== itemId) });
+    onChange({ items: items.filter((item: CatalogItem) => item.id !== itemId) });
     if (expandedItem === itemId) {
       setExpandedItem(null);
     }
@@ -98,7 +98,7 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
 
   const getItemCategoryName = (item: CatalogItem): string | null => {
     if (!item.categoryId) return null;
-    const category = categories.find(c => c.id === item.categoryId);
+    const category = categories.find((c: CatalogCategory) => c.id === item.categoryId);
     if (!category) return null;
     return getCategoryName(category);
   };
@@ -174,7 +174,7 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           </div>
 
           <div className="space-y-2 max-h-[300px] overflow-y-auto">
-            {categories.map((category, index) => (
+            {categories.map((category: CatalogCategory, index: number) => (
               <Card key={category.id}>
                 <CardContent className="p-3">
                   <div className="flex items-center gap-2">
@@ -198,7 +198,7 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 ml-6">
-                    {items.filter(i => i.categoryId === category.id).length} {t('blocks.catalog.itemsCount', 'позиций')}
+                    {items.filter((i: CatalogItem) => i.categoryId === category.id).length} {t('blocks.catalog.itemsCount', 'позиций')}
                   </p>
                 </CardContent>
               </Card>
@@ -226,7 +226,7 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
           </div>
 
           <div className="space-y-2 max-h-[400px] overflow-y-auto">
-            {items.map((item, index) => {
+            {items.map((item: CatalogItem, index: number) => {
               const categoryName = getItemCategoryName(item);
 
               return (
@@ -306,7 +306,7 @@ function CatalogBlockEditorComponent({ formData, onChange }: BaseBlockEditorProp
                                 <SelectItem value="none">
                                   {t('blocks.catalog.noCategory', 'Без категории')}
                                 </SelectItem>
-                                {categories.map(cat => (
+                                {categories.map((cat: CatalogCategory) => (
                                   <SelectItem key={cat.id} value={cat.id}>
                                     {getCategoryName(cat)}
                                   </SelectItem>

@@ -380,7 +380,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                 <div className="space-y-4">
                   <div>
                     <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">{t('zones.invoices.client', 'Клиент')}</Label>
-                    <Select value={form.contact_id} onValueChange={v => setForm(f => ({ ...f, contact_id: v }))}>
+                    <Select value={form.contact_id} onValueChange={(v: string) => setForm(f => ({ ...f, contact_id: v }))}>
                       <SelectTrigger className="bg-muted/30"><SelectValue placeholder={t('zones.invoices.selectContact', 'Выберите контакт')} /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">{t('zones.invoices.noLink', 'Без привязки')}</SelectItem>
@@ -390,7 +390,7 @@ export function ZoneInvoicesScreen({ zoneId }: Props) {
                   </div>
                   <div>
                     <Label className="text-xs uppercase font-bold text-muted-foreground tracking-widest mb-1.5 block">{t('zones.invoices.deal', 'Сделка')}</Label>
-                    <Select value={form.deal_id} onValueChange={v => setForm(f => ({ ...f, deal_id: v }))}>
+                    <Select value={form.deal_id} onValueChange={(v: string) => setForm(f => ({ ...f, deal_id: v }))}>
                       <SelectTrigger className="bg-muted/30"><SelectValue placeholder={t('zones.invoices.linkDeal', 'Связать со сделкой')} /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">{t('zones.invoices.noLink', 'Без привязки')}</SelectItem>

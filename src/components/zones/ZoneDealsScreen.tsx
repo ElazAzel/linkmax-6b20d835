@@ -349,7 +349,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
                   <Label className="text-xs text-muted-foreground">{t('zones.deals.assignee', 'Assignee')}</Label>
                   <Select
                     value={filterAssignee || '__all__'}
-                    onValueChange={v => {
+                    onValueChange={(v: string) => {
                       clearPresetSelection();
                       setFilterAssignee(v === '__all__' ? '' : v);
                     }}
@@ -448,7 +448,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             </Button>
             <Select
               value={selectedPresetId || '__none__'}
-              onValueChange={(v) => {
+              onValueChange={(v: string) => {
                 if (v === '__none__') {
                   setSelectedPresetId('');
                   return;
@@ -586,7 +586,7 @@ export const ZoneDealsScreen = memo(function ZoneDealsScreen({ zoneId }: ZoneDea
             </div>
             <div className="space-y-2">
               <Label>{t('zones.deals.contact', 'Contact')}</Label>
-              <Select value={newDeal.contact_id} onValueChange={(v) => setNewDeal((p) => ({ ...p, contact_id: v }))}>
+              <Select value={newDeal.contact_id} onValueChange={(v: string) => setNewDeal((p) => ({ ...p, contact_id: v }))}>
                 <SelectTrigger>
                   <SelectValue placeholder={t('zones.deals.selectContact', 'Select contact')} />
                 </SelectTrigger>

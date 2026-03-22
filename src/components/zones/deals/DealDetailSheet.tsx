@@ -455,7 +455,7 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                     <Label className="text-xs text-muted-foreground">{t('zones.deals.stage', 'Stage')}</Label>
                     <Select
                       value={deal.stage_id || ''}
-                      onValueChange={async (v) => {
+                      onValueChange={async (v: string) => {
                         await onMoveDealToStage(deal.id, v);
                         const stage = stages.find((s) => s.id === v);
                         if (stage) await onAddActivity(deal.id, 'stage_change', `Moved to ${stage.name}`);
@@ -553,47 +553,47 @@ export const DealDetailSheet = memo(function DealDetailSheet({
                       <CardContent className="p-3 space-y-2">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
-                            {deal.contact.name.charAt(0)}
+                            {deal.contact?.name.charAt(0)}
                           </div>
                           <div>
-                            <p className="text-xs font-bold leading-none">{deal.contact.name}</p>
+                            <p className="text-xs font-bold leading-none">{deal.contact?.name}</p>
                             <p className="text-xs text-muted-foreground mt-0.5">{t('zones.deals.linkedContact', 'Linked Contact')}</p>
                           </div>
                         </div>
                         <div className="pt-2 flex flex-col gap-2">
                           <div className="flex gap-2">
-                            {deal.contact.phone && (
+                            {deal.contact?.phone && (
                               <Button
                                 variant="outline"
                                 size="sm"
                                 className="flex-1 h-8 gap-1.5 text-xs"
-                                onClick={() => window.open(`tel:${deal.contact.phone}`, '_self')}
+                                onClick={() => window.open(`tel:${deal.contact?.phone}`, '_self')}
                               >
                                 <Phone className="h-3 w-3" />
                                 {t('zones.contacts.call', 'Call')}
                               </Button>
                             )}
-                            {deal.contact.email && (
+                            {deal.contact?.email && (
                               <Button
                                 variant="outline"
                                 size="sm"
                                 className="flex-1 h-8 gap-1.5 text-xs"
-                                onClick={() => window.open(`mailto:${deal.contact.email}`, '_blank')}
+                                onClick={() => window.open(`mailto:${deal.contact?.email}`, '_blank')}
                               >
                                 <Mail className="h-3 w-3" />
                                 {t('zones.contacts.sendEmail', 'Email')}
                               </Button>
                             )}
                           </div>
-                          {deal.contact.telegram_username && (
+                          {deal.contact?.telegram_username && (
                             <Button
                               variant="outline"
                               size="sm"
                               className="w-full h-8 gap-1.5 text-xs text-blue-500 border-blue-500/20 hover:bg-blue-500/10 dark:bg-blue-500/5"
-                              onClick={() => window.open(`https://t.me/${deal.contact.telegram_username}`, '_blank')}
+                              onClick={() => window.open(`https://t.me/${deal.contact?.telegram_username}`, '_blank')}
                             >
                               <Send className="h-3 w-3" />
-                              Telegram (@{deal.contact.telegram_username})
+                              Telegram (@{deal.contact?.telegram_username})
                             </Button>
                           )}
                         </div>

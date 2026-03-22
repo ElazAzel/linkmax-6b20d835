@@ -193,26 +193,26 @@ export async function savePage(
     const profileBlock = pageData.blocks.find((b) => b.type === 'profile') as ProfileBlock | undefined;
     const profileName = profileBlock ? extractBlockTitle(profileBlock) : 'My Page';
     const profileBio = profileBlock?.bio;
-    const bioText = typeof profileBio === 'string' ? profileBio : (profileBio ? getI18nText(profileBio, 'ru') : null);
+    const bioText = typeof profileBio === 'string' ? profileBio : (profileBio ? getI18nText(profileBio, 'ru') : undefined);
 
     // Upsert page atomically
     let { data: pageId, error: upsertError } = await supabase.rpc('upsert_user_page', {
       p_user_id: userId,
       p_slug: slug,
       p_title: profileName || 'My Page',
-      p_description: bioText,
-      p_avatar_url: profileBlock?.avatar || null,
+      p_description: (bioText ?? '') as string,
+      p_avatar_url: (profileBlock?.avatar ?? '') as string,
       p_avatar_style: { type: 'default', color: '#000000' } as unknown as Json,
       p_theme_settings: pageData.theme as unknown as Json,
       p_seo_meta: pageData.seo as unknown as Json,
       p_editor_mode: pageData.editorMode || 'linear',
-      p_grid_config: (pageData.gridConfig || null) as unknown as Json,
-      p_integrations: (pageData.integrations || null) as unknown as Json,
-      p_favicon_url: pageData.favicon_url || null,
+      p_grid_config: (pageData.gridConfig ?? null) as unknown as Json,
+      p_integrations: (pageData.integrations ?? null) as unknown as Json,
+      p_favicon_url: (pageData.favicon_url ?? '') as string,
       p_hide_branding: pageData.hideBranding || false,
-      p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : null,
-      p_webhook_url: pageData.webhook_url || null,
-      p_webhook_secret: pageData.webhook_secret || null,
+      p_organization_id: (pageData.organization_id && pageData.organization_id.length > 0) ? pageData.organization_id : (null as any),
+      p_webhook_url: (pageData.webhook_url ?? null) as any,
+      p_webhook_secret: (pageData.webhook_secret ?? null) as any,
     });
 
     // Fallback for legacy RPC if the new one with webhooks parameters is not yet deployed
@@ -255,7 +255,7 @@ export async function savePage(
 
     // Save blocks atomically
     const { error: blocksError } = await supabase.rpc('save_page_blocks', {
-      p_page_id: pageId,
+      p_page_id: pageId as string,
       p_blocks: JSON.parse(JSON.stringify(blocksData)) as Json,
       p_is_premium: pageData.isPremium || false,
     });
@@ -270,15 +270,15 @@ export async function savePage(
       await supabase
         .from('pages')
         .update({ preview_url: pageData.previewUrl || null })
-        .eq('id', pageId);
+        .eq('id', pageId as string);
     }
 
     // Save chatbot context if provided
     if (chatbotContext !== undefined) {
       await supabase.from('private_page_data').upsert(
         {
-          page_id: pageId,
-          chatbot_context: chatbotContext || null,
+          page_id: pageId as string,
+          chatbot_context: (chatbotContext || null) as any,
           updated_at: new Date().toISOString(),
         },
         { onConflict: 'page_id' }
@@ -289,7 +289,7 @@ export async function savePage(
     const { data: page, error: fetchError } = await supabase
       .from('pages')
       .select('*')
-      .eq('id', pageId)
+      .eq('id', pageId as string)
       .single();
 
     if (fetchError) {
@@ -590,5 +590,8 @@ export async function getPublicPages(): Promise<{ slug: string; updated_at: stri
     return [];
   }
 
-  return data || [];
+  return (data || []).map(p => ({
+    slug: p.slug,
+    updated_at: p.updated_at || new Date().toISOString()
+  }));
 }

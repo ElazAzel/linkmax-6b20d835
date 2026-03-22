@@ -41,7 +41,7 @@ export function useGlobalSearch() {
         .limit(5);
 
       if (pages) {
-        pages.forEach(p => {
+        (pages as any[]).forEach(p => {
           searchResults.push({
             id: p.id,
             type: 'page',
@@ -64,7 +64,7 @@ export function useGlobalSearch() {
           .limit(5);
 
         if (contacts) {
-          contacts.forEach(c => {
+          (contacts as any[]).forEach(c => {
             searchResults.push({
               id: c.id,
               type: 'contact',
@@ -85,7 +85,7 @@ export function useGlobalSearch() {
           .limit(5);
 
         if (deals) {
-          deals.forEach(d => {
+          (deals as any[]).forEach(d => {
             searchResults.push({
               id: d.id,
               type: 'deal',
@@ -106,7 +106,7 @@ export function useGlobalSearch() {
           .limit(5);
 
         if (tasks) {
-          tasks.forEach(t => {
+          (tasks as any[]).forEach(t => {
             searchResults.push({
               id: t.id,
               type: 'task',

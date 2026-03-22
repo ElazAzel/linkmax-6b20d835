@@ -292,7 +292,7 @@ export default function EventScanner() {
       try {
         controlsRef.current.stop();
       } catch (e) {
-        logger.warn('[Scanner] Error stopping controls:', e);
+        logger.warn('[Scanner] Error stopping controls:', { data: e });
       }
       controlsRef.current = null;
     }

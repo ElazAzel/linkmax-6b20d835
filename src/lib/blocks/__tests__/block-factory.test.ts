@@ -43,8 +43,8 @@ describe('block-factory', () => {
             }
         };
         const block = createBlock('image', overrides);
-        expect(block.blockStyle.padding).toBe('none');
-        expect(block.blockStyle.borderRadius).toBe('2xl');
+        expect(block.blockStyle!.padding).toBe('none');
+        expect(block.blockStyle!.borderRadius).toBe('2xl');
         // Check if other default props in blockStyle are preserved or overwritten correctly
         // The current implementation uses spread: ...overrides, which replaces blockStyle if it exists in overrides.
         // Wait, let's check the implementation again:

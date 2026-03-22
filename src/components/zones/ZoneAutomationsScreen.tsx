@@ -214,7 +214,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                       {a.is_active ? <Play className="h-3 w-3 text-primary animate-pulse" /> : <Pause className="h-3 w-3 text-muted-foreground" />}
                       <Switch
                         checked={a.is_active}
-                        onCheckedChange={(v) => toggle(a.id, v)}
+                        onCheckedChange={(v: boolean) => toggle(a.id, v)}
                         className="data-[state=checked]:bg-primary"
                       />
                     </div>
@@ -250,7 +250,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
               <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">{t('zones.automations.ruleName', 'Название правила')}</Label>
               <Input
                 value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, name: e.target.value }))}
                 placeholder={t('zones.automations.ruleNamePlaceholder', 'Например: Авто-инвойс при закрытии')}
                 className="bg-muted/20 border-border/40"
               />
@@ -259,7 +259,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">{t('zones.automations.trigger', 'Триггер (Когда)')}</Label>
-                <Select value={form.trigger_type} onValueChange={v => setForm(f => ({ ...f, trigger_type: v, config: {} }))}>
+                <Select value={form.trigger_type} onValueChange={(v: string) => setForm(f => ({ ...f, trigger_type: v, config: {} }))}>
                   <SelectTrigger className="bg-muted/30 h-11"><SelectValue placeholder={t('zones.automations.event', 'Событие')} /></SelectTrigger>
                   <SelectContent>
                     {TRIGGERS.map(t => (
@@ -276,7 +276,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
 
               <div className="space-y-2">
                 <Label className="text-xs uppercase font-black text-muted-foreground tracking-widest">{t('zones.automations.action', 'Действие (Тогда)')}</Label>
-                <Select value={form.action_type} onValueChange={v => setForm(f => ({ ...f, action_type: v }))}>
+                <Select value={form.action_type} onValueChange={(v: string) => setForm(f => ({ ...f, action_type: v }))}>
                   <SelectTrigger className="bg-muted/30 h-11"><SelectValue placeholder={t('zones.automations.reaction', 'Реакция')} /></SelectTrigger>
                   <SelectContent>
                     {ACTIONS.map(a => (
@@ -304,7 +304,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                     <Label className="text-xs font-medium">{t('zones.automations.dealStage', 'Стадия сделки')}</Label>
                     <Select
                       value={form.config.stage_id || ''}
-                      onValueChange={v => setForm(f => ({ ...f, config: { ...f.config, stage_id: v } }))}
+                      onValueChange={(v: string) => setForm(f => ({ ...f, config: { ...f.config, stage_id: v } }))}
                     >
                       <SelectTrigger className="bg-background/50 h-9"><SelectValue placeholder={t('zones.automations.anyStage', 'Любая стадия')} /></SelectTrigger>
                       <SelectContent>
@@ -320,7 +320,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                     <Label className="text-xs font-medium">{t('zones.automations.taskText', 'Текст задачи')}</Label>
                     <Input
                       value={form.config.task_title || ''}
-                      onChange={e => setForm(f => ({ ...f, config: { ...f.config, task_title: e.target.value } }))}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, config: { ...f.config, task_title: e.target.value } }))}
                       placeholder={t('zones.automations.taskTextPlaceholder', 'Например: Позвонить и подтвердить оплату')}
                       className="bg-background/50 h-9"
                     />
@@ -332,7 +332,7 @@ export function ZoneAutomationsScreen({ zoneId }: Props) {
                     <Label className="text-xs font-medium">{t('zones.automations.changeToStage', 'Перевести на стадию')}</Label>
                     <Select
                       value={form.config.target_stage_id || ''}
-                      onValueChange={v => setForm(f => ({ ...f, config: { ...f.config, target_stage_id: v } }))}
+                      onValueChange={(v: string) => setForm(f => ({ ...f, config: { ...f.config, target_stage_id: v } }))}
                     >
                       <SelectTrigger className="bg-background/50 h-9"><SelectValue placeholder={t('zones.automations.selectStage', 'Выберите стадию')} /></SelectTrigger>
                       <SelectContent>

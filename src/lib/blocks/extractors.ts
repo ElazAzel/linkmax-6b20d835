@@ -131,7 +131,7 @@ export function extractContactsPipeline(text: string): ParsedMessenger[] {
     // 1. Phone extraction (very robust regex for international phones)
     // Matches: +7 777 123 45 67, 8(999)123-45-67, +1-555-555-5555
     const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}/g;
-    let phoneMatch;
+    let phoneMatch: RegExpExecArray | null;
     while ((phoneMatch = phoneRegex.exec(text)) !== null) {
         const phone = phoneMatch[0].replace(/[^+\d]/g, '');
         // Deduplicate
@@ -142,29 +142,29 @@ export function extractContactsPipeline(text: string): ParsedMessenger[] {
 
     // 2. Email extraction
     const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
-    let emailMatch;
+    let emailMatch: RegExpExecArray | null;
     while ((emailMatch = emailRegex.exec(text)) !== null) {
-        if (!results.find(r => r.username === emailMatch[0])) {
-            results.push({ platform: 'email', username: emailMatch[0] });
+        if (!results.find(r => r.username === emailMatch![0])) {
+            results.push({ platform: 'email', username: emailMatch![0] });
         }
     }
 
     // 3. Telegram Contextual Extraction
     // First, look for direct links t.me/username
     const tmeRegex = /t\.me\/([a-zA-Z0-9_]{5,32})/g;
-    let tmeMatch;
+    let tmeMatch: RegExpExecArray | null;
     while ((tmeMatch = tmeRegex.exec(text)) !== null) {
-        if (!results.find(r => r.platform === 'telegram' && r.username === tmeMatch[1])) {
-            results.push({ platform: 'telegram', username: tmeMatch[1] });
+        if (!results.find(r => r.platform === 'telegram' && r.username === tmeMatch![1])) {
+            results.push({ platform: 'telegram', username: tmeMatch![1] });
         }
     }
 
     // Second, look for @username if "тг", "tg", "telegram" is nearby
     const atTgRegex = /(?:тг|tg|telegram|телеграм|телеграмм)[:\s.-]*@([a-zA-Z0-9_]{5,32})/gi;
-    let atTgMatch;
+    let atTgMatch: RegExpExecArray | null;
     while ((atTgMatch = atTgRegex.exec(text)) !== null) {
-        if (!results.find(r => r.platform === 'telegram' && r.username === atTgMatch[1])) {
-            results.push({ platform: 'telegram', username: atTgMatch[1] });
+        if (!results.find(r => r.platform === 'telegram' && r.username === atTgMatch![1])) {
+            results.push({ platform: 'telegram', username: atTgMatch![1] });
         }
     }
 

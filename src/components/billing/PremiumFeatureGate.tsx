@@ -44,9 +44,12 @@ export function PremiumFeatureGate({
     return <>{children}</>;
   }
 
-  const tierNames = {
+  const tierNames: Record<string, string> = {
     free: 'BASIC',
+    starter: 'BASIC',
+    identity: 'BASIC',
     pro: 'PRO',
+    business: 'BUSINESS',
   };
 
   const TierIcon = Crown;

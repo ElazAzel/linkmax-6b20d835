@@ -626,15 +626,18 @@ function DashboardV2Inner() {
                   onUsernameChange={dashboard.usernameState.setUsernameInput}
                   onUpdateUsername={dashboard.usernameState.handleUpdateUsername}
                   usernameSaving={dashboard.usernameState.saving}
-                  profileBlock={dashboard.profileBlock}
-                  onUpdateProfile={dashboard.handleUpdateProfile as any}
+                  profileBlock={dashboard.profileBlock || undefined}
+                  onUpdateProfile={(updates) => dashboard.handleUpdateProfile({
+                    name: typeof updates.name === 'string' ? updates.name : (updates.name?.ru || 'My Page'),
+                    bio: typeof updates.bio === 'string' ? updates.bio : (updates.bio?.ru || ''),
+                  })}
                   isPremium={dashboard.isPremium}
                   premiumTier={dashboard.currentTier}
                   emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}
                   onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}
                   telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}
                   telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}
-                  onTelegramChange={dashboard.userProfile.updateTelegramNotifications}
+                  onTelegramChange={(enabled: boolean, chatId?: string) => dashboard.userProfile.updateTelegramNotifications(enabled, chatId || null)}
                   niche={dashboard.pageData?.niche as Niche | undefined}
                   onNicheChange={dashboard.updateNiche}
                   onSignOut={dashboard.handleSignOut}
@@ -672,7 +675,13 @@ function DashboardV2Inner() {
                   }}
                   onUpdateSeo={(seo) => {
                     dashboard.updatePageDataPartial({
-                      seo: { ...dashboard.pageData?.seo, ...seo },
+                      seo: { 
+                        title: '',
+                        description: '',
+                        keywords: [],
+                        ...dashboard.pageData?.seo, 
+                        ...seo 
+                      } as any, // Cast to any because of required fields in SEO type vs optional in partial
                     });
                   }}
                   onUpdateBranding={(branding) => {
@@ -887,7 +896,7 @@ function DashboardV2Inner() {
               onClose={() => setShowTheme(false)}
               currentTheme={dashboard.pageData?.theme || {}}
               onThemeChange={(theme) => {
-                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } });
+                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } as any });
               }}
               isPremium={dashboard.isPremium}
               onUpgrade={() => navigate('/pricing')}

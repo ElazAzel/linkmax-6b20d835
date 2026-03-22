@@ -162,7 +162,7 @@ export function AdminUsersTab() {
                         {/* Tier selector */}
                         <Select
                           value={currentTier}
-                          onValueChange={(v) => setTier.mutate({ userId: adminUser.id, tier: v as AdminPremiumTier })}
+                          onValueChange={(v: string) => setTier.mutate({ userId: adminUser.id, tier: v as AdminPremiumTier })}
                           disabled={setTier.isPending}
                         >
                           <SelectTrigger className="w-[120px]">
@@ -176,7 +176,7 @@ export function AdminUsersTab() {
                         </Select>
 
                         {/* Subscription duration */}
-                        <Select onValueChange={(v) => setPremiumExpiry.mutate({ userId: adminUser.id, days: parseInt(v) })}>
+                        <Select onValueChange={(v: string) => setPremiumExpiry.mutate({ userId: adminUser.id, days: parseInt(v) })}>
                           <SelectTrigger className="w-[110px]">
                             <SelectValue placeholder="Подписка" />
                           </SelectTrigger>
@@ -189,7 +189,7 @@ export function AdminUsersTab() {
                         </Select>
 
                         {/* Trial */}
-                        <Select onValueChange={(v) => extendTrial.mutate({ userId: adminUser.id, days: parseInt(v) })}>
+                        <Select onValueChange={(v: string) => extendTrial.mutate({ userId: adminUser.id, days: parseInt(v) })}>
                           <SelectTrigger className="w-[100px]">
                             <SelectValue placeholder="Триал" />
                           </SelectTrigger>

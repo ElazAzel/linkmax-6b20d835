@@ -56,14 +56,14 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
       <MultilingualInput
         label={t('fields.formTitle', 'Form Title')}
         value={migrateToMultilingual(formData.title)}
-        onChange={(value) => onChange({ ...formData, title: value })}
+        onChange={(value: any) => onChange({ ...formData, title: value })}
         placeholder={t('fields.contactForm', 'Contact Form')}
       />
 
       <MultilingualInput
         label={t('fields.buttonText', 'Button Text')}
         value={migrateToMultilingual(formData.buttonText)}
-        onChange={(value) => onChange({ ...formData, buttonText: value })}
+        onChange={(value: any) => onChange({ ...formData, buttonText: value })}
         placeholder={t('fields.send', 'Send')}
       />
 
@@ -71,7 +71,7 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
         <Label className="text-sm font-medium">{t('crm.triggerSequence', 'Trigger Email Sequence')}</Label>
         <Select
           value={formData.sequenceId || 'none'}
-          onValueChange={(value) => onChange({ ...formData, sequenceId: value === 'none' ? null : value })}
+          onValueChange={(value: string) => onChange({ ...formData, sequenceId: value === 'none' ? null : value })}
         >
           <SelectTrigger>
             <SelectValue placeholder={t('crm.selectSequence', 'Select a sequence')} />
@@ -101,7 +101,7 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
             <MultilingualInput
               label={t('fields.fieldName', 'Field Name')}
               value={migrateToMultilingual(field.name)}
-              onChange={(value) => updateField(index, 'name', value)}
+              onChange={(value: any) => updateField(index, 'name', value)}
               placeholder={t('fields.fieldNamePlaceholder', 'Name')}
             />
 
@@ -135,7 +135,7 @@ function FormBlockEditorComponent({ formData, onChange }: BaseBlockEditorProps) 
                 type="checkbox"
                 id={`required-${index}`}
                 checked={field.required || false}
-                onChange={(e) => updateField(index, 'required', e.target.checked)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField(index, 'required', e.target.checked)}
                 className="h-4 w-4"
               />
               <Label htmlFor={`required-${index}`} className="cursor-pointer text-xs">

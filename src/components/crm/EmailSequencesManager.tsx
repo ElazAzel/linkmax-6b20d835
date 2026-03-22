@@ -168,7 +168,7 @@ export function EmailSequencesManager() {
                           <Label className="text-[10px]">{t('sequences.selectTemplate', 'Select Template')}</Label>
                           <Select 
                             value={newStep.template_id} 
-                            onValueChange={val => setNewStep({...newStep, template_id: val})}
+                            onValueChange={(val: string) => setNewStep({...newStep, template_id: val})}
                           >
                             <SelectTrigger className="h-8 text-xs bg-background">
                               <SelectValue placeholder={t('sequences.choose', 'Choose...')} />

@@ -136,7 +136,7 @@ export default function PublicPage() {
   const showWatermark = !(isOwnerPremium && pageData?.hideBranding);
 
   // Resolve A/B testing variants
-  const { blocks: experimentalBlocks, assignments } = usePageExperiments(pageData, visitorId);
+  const { blocks: experimentalBlocks, assignments } = usePageExperiments(pageData as PageData | null, visitorId);
 
   // Enable heatmap tracking for published pages
   useHeatmapTracking(pageData?.id, !!slug && !!pageData?.id);
@@ -170,7 +170,7 @@ export default function PublicPage() {
   const handleShare = async () => {
     // Track share event
     if (pageData?.id) {
-      trackShare(pageData.id, navigator.share ? 'native' : 'clipboard');
+      trackShare(pageData.id, (!!navigator.share) ? 'native' : 'clipboard');
     }
 
     if (navigator.share) {
