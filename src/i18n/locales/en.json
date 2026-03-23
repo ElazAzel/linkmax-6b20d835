@@ -197,7 +197,7 @@
     "name": "Name",
     "status": "Status",
     "date": "Date",
-    "created": "",
+    "created": "created",
     "cta": {
       "continue": "Continue",
       "tryAgain": "Try again",
@@ -827,16 +827,16 @@
       "gcalDisconnected": "Google Calendar disconnected",
       "active": "Active",
       "gcalDesc": "Sync bookings with calendar",
-      "apiKeyNameRequired": "",
-      "apiKeys": "",
-      "apiKeysDesc": "",
-      "apiKeyNamePlaceholder": "",
-      "newKeyGenerated": "",
-      "apiKeyWarning": "",
-      "noApiKeys": "",
-      "viewApiDocs": "",
-      "apiKeyGenerated": "",
-      "apiKeyDeleted": ""
+      "apiKeyNameRequired": "Enter a name for the API key",
+      "apiKeys": "API Keys",
+      "apiKeysDesc": "Use these keys to access the LinkMAX API from external services like Zapier or Make.",
+      "apiKeyNamePlaceholder": "e.g. Zapier Integration",
+      "newKeyGenerated": "New API Key Generated",
+      "apiKeyWarning": "Copy this key now. You won",
+      "noApiKeys": "No API keys generated yet",
+      "viewApiDocs": "View API Documentation",
+      "apiKeyGenerated": "apiKeyGenerated",
+      "apiKeyDeleted": "apiKeyDeleted"
     },
     "pageBackground": "Page background",
     "backgroundType": "Background type",
@@ -2191,7 +2191,7 @@
       "security": "Safety",
       "changePassword": "Change password",
       "signOut": "Log out",
-      "apiAccess": ""
+      "apiAccess": "API Access"
     },
     "settingsTabs": {
       "page": "Page",
@@ -2329,14 +2329,14 @@
     "kaspi_qr": "Kaspi QR",
     "instant": "INSTANT",
     "header": {
-      "live": ""
+      "live": "Live Platform"
     },
     "fintech": {
-      "wallet": "",
-      "net_balance": "",
-      "gmv": "",
-      "fees": "",
-      "view_details": ""
+      "wallet": "Ваш кошелек",
+      "net_balance": "Доступно к выводу",
+      "gmv": "Оборот",
+      "fees": "Комиссия",
+      "view_details": "Детализация финансов"
     }
   },
   "blocks": {
@@ -3265,16 +3265,16 @@
     "purchaseTemplate": "Purchasing a template: {{name}}",
     "chosen": "Selected",
     "use": "Select",
-    "fillAllFields": "",
-    "addNew": "",
-    "edit": "",
-    "create": "",
-    "nameLabel": "",
-    "subjectLabel": "",
-    "subjectPlaceholder": "",
-    "contentLabel": "",
-    "variablesNote": "",
-    "empty": ""
+    "fillAllFields": "Please fill all required fields",
+    "addNew": "Add New",
+    "edit": "Edit Template",
+    "create": "Create Template",
+    "nameLabel": "Template Name",
+    "subjectLabel": "Email Subject",
+    "subjectPlaceholder": "Hello {lead_name}!",
+    "contentLabel": "HTML Content",
+    "variablesNote": "Use {lead_name} for personalization",
+    "empty": "No templates created yet"
   },
   "alternatives": {
     "seo": {
@@ -4361,7 +4361,7 @@
       "customer": "Booking is temporarily unavailable. Contact directly."
     },
     "timezoneHint": "(Local time)",
-    "yourTimezone": ""
+    "yourTimezone": "Ваш пояс"
   },
   "days": {
     "sunday": "Sun",
@@ -4383,7 +4383,7 @@
       "street": "Sholokhov St., 20/7"
     },
     "readiness": {
-      "title": ""
+      "title": "Видимость в поиске"
     }
   },
   "adminTranslations": {
@@ -4923,7 +4923,7 @@
     "paymentTerms": "Payment Terms",
     "contacts": "Contacts",
     "companyInfo": "ARchitecKZ / BIN 190540008684 / Kazakhstan, Almaty",
-    "brand": ""
+    "brand": "Platform"
   },
   "themes": {
     "pageTheme": "Theme and colors",
@@ -5962,9 +5962,9 @@
       "generatePayLink": "Generate link",
       "downloadPDF": "Download PDF",
       "pdfSuccess": "PDF saved",
-      "downloadInvoice": "",
-      "actSuccess": "",
-      "downloadAct": ""
+      "downloadInvoice": "Счет на оплату",
+      "actSuccess": "Акт сохранен",
+      "downloadAct": "Акт выполненных работ"
     },
     "settings": {
       "title": "Settings",
@@ -6026,13 +6026,13 @@
         "empty": "You have no pipelines yet. Create your first sales funnel.",
         "title": "Sales Funnel Management",
         "desc": "Create and configure pipelines for different processes.",
-        "cannotDeleteLast": "",
-        "description": "",
-        "add": "",
-        "default": "",
-        "edit": "",
-        "create": "",
-        "nameLabel": ""
+        "cannotDeleteLast": "Нельзя удалить последнюю воронку",
+        "description": "Управляйте пайплайнами для организации процессов продаж и обслуживания.",
+        "add": "Добавить воронку",
+        "default": "По умолчанию",
+        "edit": "Редактировать воронку",
+        "create": "Новая воронка",
+        "nameLabel": "Название воронки"
       },
       "memberLimitReached": "Member limit reached. Upgrade your plan.",
       "inviteSent": "Invite sent",
@@ -6618,19 +6618,19 @@
     "page_not_found": "Page not found",
     "label_name_title": "Name / Title",
     "label_bio": "Bio",
-    "label_avatar": "",
+    "label_avatar": "Ссылка на фото (Avatar URL)",
     "btn_add_link": "+ Add Link",
     "link_new_title": "New Link",
     "qr_instruction": "Show this code to your clients for quick access to your page.",
     "label_page_url": "Your page address:",
-    "btn_publish_full": "",
-    "placeholder_name": "",
-    "placeholder_bio": "",
+    "btn_publish_full": "btn_publish_full",
+    "placeholder_name": "placeholder_name",
+    "placeholder_bio": "placeholder_bio",
     "label_avatar_url": "Avatar URL",
-    "link_title_placeholder": "",
-    "btn_copy_link": "",
-    "nav_payments": "",
-    "nav_tasks": "",
+    "link_title_placeholder": "link_title_placeholder",
+    "btn_copy_link": "btn_copy_link",
+    "nav_payments": "nav_payments",
+    "nav_tasks": "nav_tasks",
     "landing": {
       "v4": {
         "hero": {
@@ -6658,23 +6658,23 @@
     }
   },
   "sequences": {
-    "enterName": "",
-    "createError": "",
-    "loadDetailError": "",
-    "stepAdded": "",
-    "addStepError": "",
-    "statusUpdated": "",
-    "confirmDelete": "",
-    "deleted": "",
-    "title": "",
-    "new": "",
-    "noDesc": "",
-    "steps": "",
-    "selectTemplate": "",
-    "choose": "",
-    "delayHours": "",
-    "addStep": "",
-    "empty": ""
+    "enterName": "Введите название цепочки",
+    "createError": "Ошибка при создании цепочки",
+    "loadDetailError": "Ошибка при загрузке данных",
+    "stepAdded": "Шаг добавлен",
+    "addStepError": "Ошибка при добавлении шага",
+    "statusUpdated": "Статус обновлен",
+    "confirmDelete": "Удалить эту цепочку?",
+    "deleted": "Цепочка удалена",
+    "title": "Email-рассылки",
+    "new": "Новая рассылка",
+    "noDesc": "Нет описания",
+    "steps": "Шаги рассылки",
+    "selectTemplate": "Выберите шаблон",
+    "choose": "Выбрать...",
+    "delayHours": "Задержка (в часах)",
+    "addStep": "Добавить шаг",
+    "empty": "Создайте свою первую автоматическую рассылку"
   },
   "nav": {
     "dashboard": "Dashboard",
