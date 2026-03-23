@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fetchTranslationsFromDB, upsertToDB, syncI18nWithDB } from '../i18n-db-backend';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import i18next from 'i18next';
 
 vi.mock('i18next', () => ({
@@ -11,7 +11,7 @@ vi.mock('i18next', () => ({
     }
 }));
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock('@/platform/supabase/client', () => ({
     supabase: {
         from: vi.fn()
     }

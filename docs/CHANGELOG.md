@@ -1,8 +1,26 @@
 # Changelog
 
+## [Phase 6 & 7: Architecture & Security] - 2026-03-23
+
+#### Added
+
+- **Env Validator**: Zod-based runtime validation for environment variables (`VITE_SUPABASE_URL`, etc.).
+- **Barrel Files**: Created `index.ts` for `src/services`, `src/hooks`, and `src/lib/errors`.
+- **Sentry Filters**: Added suppression for `chrome-extension://` and other common extension prefixes.
+
+### Changed
+
+- **Supabase Consolidation**: Moved everything from `src/integrations/supabase` to `src/platform/supabase`. Updated imports in 30+ files.
+- **Main Entry**: Added `validateEnv()` call at the top of `main.tsx`.
+
+### Removed
+
+- **Redundant Integrations**: Deleted `src/integrations/` directory.
+
 ## [Phase 5: Performance Optimization] - 2026-03-23
 
 ### Added
+
 - **Bundle Analysis**: Integrated `rollup-plugin-visualizer` to identify large dependencies.
 - **Manual Chunking**: Strategic splitting of `node_modules` into specialized vendor chunks (`vendor-lucide`, `vendor-recharts`, `vendor-pdf`, `vendor-excel`, `vendor-zxing`).
 - **Catch-all Vendor Chunk**: Grouped miscellaneous dependencies into `vendor-other` to keep `main.js` clean.

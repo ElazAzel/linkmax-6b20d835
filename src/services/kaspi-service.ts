@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/platform/supabase/client";
 
 /**
  * Service to handle Kaspi Pay (KZ) specific payment logic.

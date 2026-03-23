@@ -3,7 +3,7 @@
  * Saves up to 5 versions when publishing, allows restoring previous versions
  */
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import { toast } from 'sonner';
 import type { Block, PageTheme } from '@/types/page';

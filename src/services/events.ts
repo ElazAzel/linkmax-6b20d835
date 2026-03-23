@@ -1,7 +1,7 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
 import type { EventBlock } from '@/types/page';
-import type { Json } from '@/integrations/supabase/types';
+import type { Json } from '@/platform/supabase/types';
 
 const mapEventBlockToRecord = (block: EventBlock, pageId: string, ownerId: string) => ({
   id: block.eventId,

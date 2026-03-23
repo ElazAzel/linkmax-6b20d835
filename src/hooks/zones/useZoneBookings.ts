@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toZonedTime, formatInTimeZone } from 'date-fns-tz';
 
 export interface ZoneBooking {

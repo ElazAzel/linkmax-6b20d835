@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import type { Database } from '@/integrations/supabase/types';
+import type { Database } from '@/platform/supabase/types';
 
 export interface WidgetTemplate {
     id: string;

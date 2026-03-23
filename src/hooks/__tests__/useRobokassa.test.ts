@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useRobokassa } from '../useRobokassa';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock('@/platform/supabase/client', () => ({
     supabase: {
         auth: {
             getUser: vi.fn()

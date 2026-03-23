@@ -6,7 +6,7 @@
  */
 
 import { storage, session } from '@/lib/storage';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 
 // Version key for cache invalidation
 const CACHE_VERSION_KEY = 'cache_version';

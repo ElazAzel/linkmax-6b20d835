@@ -1,5 +1,5 @@
 import { i18n } from 'i18next';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { logger } from './utils/logger';
 
 /**

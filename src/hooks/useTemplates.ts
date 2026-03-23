@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
-import type { Database } from '@/integrations/supabase/types';
+import type { Database } from '@/platform/supabase/types';
 import type { TemplateCategoryKey } from '@/lib/templateCategories';
 import type { Template } from '@/types/templates';
 

@@ -1,6 +1,6 @@
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
-import { Json } from '@/integrations/supabase/types';
+import { Json } from '@/platform/supabase/types';
 import { getTierCommissionRate, type PremiumTier } from '@/domain/entities/User';
 
 export type TransactionType = 'income' | 'withdrawal' | 'fee' | 'refund';

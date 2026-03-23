@@ -105,7 +105,7 @@ export default function AdminTemplateEditor() {
                 is_premium: data.is_premium,
                 is_public: data.is_public,
                 preview_image: data.preview_image,
-                blocks: data.blocks as unknown as import('@/integrations/supabase/types').Json,
+                blocks: data.blocks as unknown as import('@/platform/supabase/types').Json,
                 sort_order: data.sort_order,
                 updated_at: new Date().toISOString(),
             };

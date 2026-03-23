@@ -5,7 +5,7 @@
  */
 import { supabase } from '@/platform/supabase/client';
 import { logger } from '@/lib/utils/logger';
-import type { Json } from '@/integrations/supabase/types';
+import type { Json } from '@/platform/supabase/types';
 
 export type ActivationEventType =
   | 'activation_checklist_step_clicked'

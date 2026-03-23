@@ -1,5 +1,9 @@
 // CRITICAL: i18n must be imported FIRST, before any React components
 import "./i18n/config";
+import { validateEnv } from "./lib/utils/env-validator";
+
+// Validate environment before anything else
+validateEnv();
 
 // Polyfill requestIdleCallback for Safari
 const _ric = typeof requestIdleCallback === 'function' ? requestIdleCallback : (cb: () => void) => setTimeout(cb, 1) as unknown as number;

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { LocaleCode } from '@/i18n/config';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import { isI18nText, isMultilingualString } from '@/lib/i18n-helpers';
 import { storage } from '@/lib/storage';

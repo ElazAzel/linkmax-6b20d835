@@ -36,9 +36,15 @@ if (SENTRY_DSN) {
             if (event.exception?.values?.[0]?.value?.includes('AbortError')) {
                 return null;
             }
-            // Ignore noise from cute-cursors browser extension
+            // Ignore noise from browser extensions
             const eventString = JSON.stringify(event);
-            if (eventString.includes('cute-cursors') || eventString.includes('solomon.cute-cursors.com')) {
+            if (
+                eventString.includes('cute-cursors') || 
+                eventString.includes('solomon.cute-cursors.com') ||
+                eventString.includes('chrome-extension://') ||
+                eventString.includes('extensions://') ||
+                eventString.includes('moz-extension://')
+            ) {
                 return null;
             }
             return event;
