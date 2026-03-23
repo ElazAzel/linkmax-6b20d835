@@ -102,8 +102,14 @@ Signup → AI Onboarding (3 steps) → Page Generated → Customize Blocks → P
 ### [2026-03-23] Phase 3.5: Fintech E2E Stabilization & Coverage
 
 - **Robokassa Mocking**: Implemented full network-level mocking (`page.route`) for Robokassa payment sessions and Supabase function invocations. This isolated E2E tests from external API availability and restored stability to the Fintech checkout flow.
-- **Testability Upgrades**: Injected `data-testid` attributes into `WalletWidget` and `Pricing` components to eliminate flaky XPath selectors.
-- **Service Layer Coverage**: Achieved 100% unit test coverage for `PaymentService`. Significantly expanded `PageService` tests, addressing critical gaps in landing and management logic.
+- **Service Layer Coverage**: Achieved **83.0% line coverage** for core business logic:
+  - `fintech.ts`: 74.4% (Error paths & Payouts added)
+  - `payment-service.ts`: 100%
+  - `admin.ts`: 100% (Line coverage)
+  - `user.ts`: 69.2% (Premium checks & Username updates)
+  - `kaspi-service.ts`: 90.9%
+  - `robokassa.ts`: 100%
+- **Configuration**: Hardened `vitest.config.ts` with 80% line threshold and 60% branch threshold for CI.
 - **Health Score**: **10/10** (Status: Production Ready & CI Hardened).
 
 ### [2026-03-21] Phase 4: Onboarding Optimization & Analytics

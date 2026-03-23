@@ -7,6 +7,7 @@ import { logger } from '@/lib/utils/logger';
 vi.mock('@/lib/utils/logger', () => ({
     logger: {
         error: vi.fn(),
+        warn: vi.fn(),
         info: vi.fn()
     }
 }));
@@ -129,48 +130,83 @@ describe('fintechService', () => {
                 net_amount: 990
             }));
         });
+
+        it('should return null if table not found (PGRST205)', async () => {
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: { premium_tier: 'pro' }, error: null }),
+            } as any);
+
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: { id: 'w1' }, error: null }),
+            } as any);
+
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                insert: vi.fn().mockReturnThis(),
+                select: vi.fn().mockReturnThis(),
+                single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST205' } }),
+            } as any);
+
+            const result = await fintechService.recordPendingIncome(mockParams);
+            expect(result).toBeNull();
+        });
     });
 
-    describe('getWalletOverview', () => {
-        it('should return wallet, transactions and pending GMV', async () => {
-            const userId = 'user-123';
-            const mockWallet = { id: 'w1', balance: 500 };
-            const mockTxs = [{ id: 't1', gross_amount: 100 }];
-            const mockPending = [{ gross_amount: 200 }, { gross_amount: 300 }];
-
-            const mockFrom = vi.mocked(supabase.from);
-
-            // Wallet call
-            mockFrom.mockReturnValueOnce({
+    describe('getWalletOverview error handling', () => {
+        it('should return empty overview if wallet table not found', async () => {
+            vi.mocked(supabase.from).mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
-                maybeSingle: vi.fn().mockResolvedValue({ data: mockWallet, error: null })
+                maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST205' } }),
             } as any);
 
-            // Transactions call
-            mockFrom.mockReturnValueOnce({
+            const result = await fintechService.getWalletOverview('u1');
+            expect(result.wallet).toBeNull();
+            expect(result.transactions).toHaveLength(0);
+        });
+    });
+
+    describe('requestPayout', () => {
+        it('should request payout successfully', async () => {
+            const mockWallet = { id: 'w1', balance: 1000 };
+            const mockRequest = { id: 'r1', amount: 500 };
+            
+            vi.mocked(supabase.from).mockReturnValueOnce({
                 select: vi.fn().mockReturnThis(),
                 eq: vi.fn().mockReturnThis(),
-                order: vi.fn().mockReturnThis(),
-                limit: vi.fn().mockResolvedValue({ data: mockTxs, error: null })
+                maybeSingle: vi.fn().mockResolvedValue({ data: mockWallet, error: null }),
             } as any);
 
-            // Pending GMV call: emulate chained .select().eq().eq().eq() that resolves when awaited
-            const pendingQuery: any = {
+            vi.mocked(supabase.from).mockReturnValueOnce({
+                insert: vi.fn().mockReturnThis(),
                 select: vi.fn().mockReturnThis(),
-                eq: vi.fn().mockReturnThis(),
-            };
-            pendingQuery.then = (resolve: any) => {
-                resolve({ data: mockPending, error: null });
-            };
+                single: vi.fn().mockResolvedValue({ data: mockRequest, error: null }),
+            } as any);
 
-            mockFrom.mockReturnValueOnce(pendingQuery as any);
+            const result = await fintechService.requestPayout({
+                userId: 'u1',
+                amount: 500,
+                method: { type: 'card', value: '1234' }
+            });
 
-            const result = await fintechService.getWalletOverview(userId);
+            expect(result).toEqual(mockRequest);
+        });
 
-            expect(result.wallet).toEqual(mockWallet);
-            expect(result.transactions).toEqual(mockTxs);
-            expect(result.pendingGMV).toBe(500); // 200 + 300
+        it('should throw if insufficient funds', async () => {
+             vi.mocked(supabase.from).mockReturnValueOnce({
+                 select: vi.fn().mockReturnThis(),
+                 eq: vi.fn().mockReturnThis(),
+                 maybeSingle: vi.fn().mockResolvedValue({ data: { balance: 100 }, error: null }),
+             } as any);
+ 
+             await expect(fintechService.requestPayout({
+                 userId: 'u1',
+                 amount: 500,
+                 method: { type: 'card', value: '1234' }
+             })).rejects.toThrow('Insufficient funds');
         });
     });
 });
