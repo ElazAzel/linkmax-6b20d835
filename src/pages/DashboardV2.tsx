@@ -581,6 +581,7 @@ function DashboardV2Inner() {
               <ScreenErrorBoundary screenName="Insights">
                 <InsightsScreen
                   pageId={dashboard.pageData?.id || ''}
+                  slug={dashboard.pageData?.slug || ''}
                   blocks={dashboard.pageData?.blocks || []}
                   isPremium={dashboard.isPremium}
                   onApplyInsight={(action) => {

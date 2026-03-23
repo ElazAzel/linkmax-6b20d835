@@ -18,11 +18,11 @@
       "title": "Launch Your Page",
       "progress": "{{done}} out of {{total}}",
       "steps": {
-        "createPage": "Create your main page",
-        "addBlock": "Add your first content block",
-        "publish": "Publish page to the web",
-        "firstLead": "Get your first lead or click",
-        "connectTelegram": "Connect Telegram notifications"
+        "createPage": "Create your business card",
+        "addBlock": "Showcase your services",
+        "publish": "Launch to the world",
+        "firstLead": "Get your first lead",
+        "connectTelegram": "Enable instant notifications"
       },
       "cta": {
         "openEditor": "Open Editor",
@@ -1947,6 +1947,9 @@
       "more": "More"
     },
     "sidebar": {
+      "zone": "Business Tools",
+      "operations": "Work",
+      "design": "Design",
       "tools": "Tools",
       "templates": "Templates",
       "marketplace": "Marketplace",
@@ -5765,7 +5768,10 @@
       "dealsCount": "{{count}} deals",
       "noDataForPeriod": "No data for period",
       "salesFunnel": "Sales funnel",
-      "noOpenDeals": "No open deals",
+      "emptyTitle": "No leads yet",
+      "emptyDesc": "Clients leave requests through forms on your page. Add a \"Form\" block if you haven't already.",
+      "emptyCta": "Open Editor",
+      "search": "Search leads...",
       "pendingPayments": "Pending Payments",
       "pendingPaymentsDesc": "Sum of all active invoices",
       "overdueTasks": "Overdue Tasks",

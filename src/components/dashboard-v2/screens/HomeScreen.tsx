@@ -232,54 +232,69 @@ export const HomeScreen = memo(function HomeScreen({
           <ActivationCelebration onDismiss={activation.dismissCelebration} />
         )}
 
-        {/* --- EXPERT COCKPIT VIEW --- */}
-        {pageData?.niche === 'expert' && isPublished && (
+        {/* --- QUICK IMPACT HUB (Universal) --- */}
+        {isPublished && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Minimal Stats Hub */}
             <div className="grid grid-cols-3 gap-3">
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10">
-                <span className="text-2xl font-black text-primary">{realLeadsCount}</span>
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenActivity}>
+                <span className="text-2xl font-black text-primary group-hover:scale-110 transition-transform">{realLeadsCount}</span>
                 <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.leads', 'leads')}</span>
               </Card>
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10">
-                <span className="text-sm font-black text-emerald-500 uppercase">{isPublished ? 'Live' : 'Draft'}</span>
-                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.pageStatus', 'status')}</span>
+              
+              <Card 
+                className={cn(
+                  "p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group",
+                  !telegramChatId && "border-amber-500/20"
+                )}
+                onClick={() => onNavigate?.('settings')}
+              >
+                {telegramChatId ? (
+                  <div className="flex flex-col items-center space-y-1">
+                    <StatusBadge status="published" size="sm" className="bg-emerald-500/20 text-emerald-500 border-none px-2" />
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('settings.notifications', 'Уведомления')}</span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center space-y-1">
+                    <AlertTriangle className="h-5 w-5 text-amber-500 animate-pulse" />
+                    <span className="text-[10px] uppercase font-bold text-amber-500/80 tracking-widest">{t('common.enable', 'Включить')}</span>
+                  </div>
+                )}
               </Card>
-              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10">
-                <span className="text-2xl font-black text-violet-500">{viewCount}</span>
+
+              <Card className="p-4 flex flex-col items-center justify-center text-center space-y-1 glass-subtle border-white/10 hover:bg-white/5 transition-colors cursor-pointer group" onClick={onOpenInsights}>
+                <span className="text-2xl font-black text-violet-500 group-hover:scale-110 transition-transform">{viewCount}</span>
                 <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('dashboard.home.views', 'views')}</span>
               </Card>
             </div>
 
-            {/* Quick Activity Button */}
-            <Button 
-              size="lg" 
-              className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-glass-lg group overflow-hidden relative"
-              onClick={onOpenActivity}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-              <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
-              {t('dashboard.home.viewLeads', 'Смотреть заявки')}
-              <Badge className="ml-3 bg-white/20 text-white border-none">{realLeadsCount}</Badge>
-            </Button>
+            {realLeadsCount > 0 && (
+              <Button 
+                size="lg" 
+                className="w-full h-16 rounded-[1.5rem] bg-primary text-white font-black text-lg shadow-glass-lg group overflow-hidden relative"
+                onClick={onOpenActivity}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                <MessageSquare className="h-5 w-5 mr-3 shrink-0" />
+                {t('dashboard.home.viewLeads', 'Смотреть заявки')}
+                <Badge className="ml-3 bg-white/20 text-white border-none">{realLeadsCount}</Badge>
+              </Button>
+            )}
             
-            {/* Lead Feed */}
-            <IncomingWidget
-              pageId={pageData?.id}
-              onOpenActivity={onOpenActivity}
-              onShare={onShare}
-            />
+            {/* Only show feed if there is activity or it's an expert */}
+            {(realLeadsCount > 0 || pageData?.niche === 'expert') && (
+              <IncomingWidget
+                pageId={pageData?.id}
+                onOpenActivity={onOpenActivity}
+                onShare={onShare}
+              />
+            )}
           </div>
         )}
 
-        {/* --- STANDARD VIEW --- */}
-        {pageData?.niche !== 'expert' && (checklistDismissed || activation.showCelebration || !activation.isVisible) && isPublished && (
-          <>
-            <IncomingWidget
-              pageId={pageData?.id}
-              onOpenActivity={onOpenActivity}
-              onShare={onShare}
-            />
+        {/* --- SUPPLEMENTARY WIDGETS --- */}
+        {isPublished && (
+          <div className="space-y-6">
             <OperatorSummaryWidget
               pageId={pageData?.id}
               pageSlug={slug}
@@ -289,26 +304,33 @@ export const HomeScreen = memo(function HomeScreen({
               onOpenEditor={onOpenEditor}
             />
             
-            <WalletOverviewWidget 
-              onViewFinance={() => navigate('/finance')}
-              className="glass border-white/10 shadow-glass"
-            />
-            
-            <KaspiQRWidget
-              ownerId={pageData?.userId || ''}
-              className="glass border-white/10 shadow-glass"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <WalletOverviewWidget 
+                onViewFinance={() => navigate('/finance')}
+                className="glass border-white/10 shadow-glass h-full"
+              />
+              
+              <KaspiQRWidget
+                ownerId={pageData?.userId || ''}
+                className="glass border-white/10 shadow-glass h-full"
+              />
+            </div>
 
             {/* Performance Hub / Metrics */}
-            <div className="space-y-3 pt-2">
-              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider px-1">
-                {t('dashboard.home.performance', 'Эффективность')}
-              </h3>
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                  {t('dashboard.home.performance', 'Эффективность')}
+                </h3>
+                <Button variant="ghost" size="sm" className="text-xs text-primary" onClick={onOpenInsights}>
+                  {t('common.more', 'Ещё')}
+                </Button>
+              </div>
               <MetricsGrid pageId={pageData?.id} />
               <ConversionFunnelWidget pageId={pageData?.id} />
               <SourcesWidget className="mt-1" />
             </div>
-          </>
+          </div>
         )}
 
         {/* Primary Page Card */}

@@ -42,6 +42,7 @@ import { toast } from 'sonner';
 
 interface InsightsScreenProps {
   pageId: string;
+  slug: string;
   blocks: Block[];
   isPremium: boolean;
   onApplyInsight: (action: { type: string; blockId?: string; data?: Record<string, unknown> }) => void;
@@ -67,6 +68,7 @@ const itemVariants = {
 
 export const InsightsScreen = memo(function InsightsScreen({
   pageId,
+  slug,
   blocks,
   isPremium,
   onApplyInsight,
@@ -276,6 +278,14 @@ export const InsightsScreen = memo(function InsightsScreen({
             icon={Eye}
             title={t('dashboard.insights.noData', 'Нет данных')}
             description={t('dashboard.insights.noDataDesc', 'Опубликуйте страницу, чтобы начать собирать статистику')}
+            action={{
+              label: t('common.share', 'Поделиться'),
+              onClick: () => {
+                const url = window.location.origin + '/' + slug;
+                navigator.clipboard.writeText(url);
+                toast.success(t('common.copied', 'Ссылка скопирована'));
+              }
+            }}
           />
         ) : (
           <>
