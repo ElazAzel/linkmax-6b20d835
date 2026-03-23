@@ -66,6 +66,8 @@ export default defineConfig(({ mode }) => ({
         manualChunks(id) {
           // Split large vendor bundle into smaller chunks to reduce TBT
           // Each chunk parses/executes in a shorter task, staying under 50ms
+          // NOTE: React core stays in vendor-other to guarantee correct init order
+          // via Vite's module preload mechanism. Do NOT separate react into its own chunk.
           if (id.includes('node_modules')) {
             if (id.includes('@supabase/')) return 'vendor-supabase';
             if (id.includes('react-dom')) return 'vendor-react-dom';
