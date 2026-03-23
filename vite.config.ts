@@ -70,7 +70,6 @@ export default defineConfig(({ mode }) => ({
           // via Vite's module preload mechanism. Do NOT separate react into its own chunk.
           if (id.includes('node_modules')) {
             if (id.includes('@supabase/')) return 'vendor-supabase';
-            if (id.includes('react-dom')) return 'vendor-react-dom';
             if (id.includes('react-router') || id.includes('@remix-run')) return 'vendor-router';
             if (id.includes('@tanstack/react-query')) return 'vendor-query';
             if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
