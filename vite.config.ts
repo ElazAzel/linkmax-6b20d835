@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // Plugin to make CSS non-render-blocking in production
 function nonBlockingCssPlugin() {
@@ -39,6 +40,11 @@ export default defineConfig(({ mode }) => ({
         filesToDeleteAfterUpload: ["./dist/**/*.map"],
       },
     }),
+    visualizer({
+      filename: "stats.html",
+      gzipSize: true,
+      brotliSize: true,
+    }),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -69,6 +75,12 @@ export default defineConfig(({ mode }) => ({
             if (id.includes('framer-motion')) return 'vendor-motion';
             if (id.includes('@radix-ui/')) return 'vendor-radix';
             if (id.includes('@sentry/')) return 'vendor-sentry';
+            if (id.includes('lucide-react')) return 'vendor-lucide';
+            if (id.includes('recharts')) return 'vendor-recharts';
+            if (id.includes('jspdf') || id.includes('jspdf-autotable')) return 'vendor-pdf';
+            if (id.includes('exceljs')) return 'vendor-excel';
+            if (id.includes('@zxing')) return 'vendor-zxing';
+            return 'vendor-other';
           }
         },
       },

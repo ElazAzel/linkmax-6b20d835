@@ -1,7 +1,7 @@
 /**
  * Excel/CSV Export utilities for Zone data
  */
-import ExcelJS from 'exceljs';
+// import ExcelJS from 'exceljs'; // Removed static import for bundle optimization
 import type { ZoneContact, ZoneDeal, ZoneDealStage } from '@/types/zones';
 
 interface ExportOptions {
@@ -14,6 +14,7 @@ export async function exportContactsToExcel(
   contacts: ZoneContact[],
   options: ExportOptions = { filename: 'contacts' }
 ): Promise<void> {
+  const ExcelJS = (await import('exceljs')).default;
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet(options.sheetName || 'Contacts');
 
@@ -64,6 +65,7 @@ export async function exportDealsToExcel(
   stages: ZoneDealStage[],
   options: ExportOptions = { filename: 'deals' }
 ): Promise<void> {
+  const ExcelJS = (await import('exceljs')).default;
   const workbook = new ExcelJS.Workbook();
   
   // Main deals sheet
@@ -190,7 +192,7 @@ export function exportToCSV<T extends Record<string, unknown>>(
 }
 
 // Helper to download buffer as file
-function downloadBuffer(buffer: ExcelJS.Buffer, filename: string): void {
+function downloadBuffer(buffer: any, filename: string): void {
   const blob = new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   });

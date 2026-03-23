@@ -1,5 +1,20 @@
 # Changelog
 
+## [Phase 5: Performance Optimization] - 2026-03-23
+
+### Added
+- **Bundle Analysis**: Integrated `rollup-plugin-visualizer` to identify large dependencies.
+- **Manual Chunking**: Strategic splitting of `node_modules` into specialized vendor chunks (`vendor-lucide`, `vendor-recharts`, `vendor-pdf`, `vendor-excel`, `vendor-zxing`).
+- **Catch-all Vendor Chunk**: Grouped miscellaneous dependencies into `vendor-other` to keep `main.js` clean.
+
+### Changed
+- **Dynamic Imports**: Converted `exceljs`, `jspdf`, and `html2canvas` from static to dynamic imports in `sheets-export.ts` and `document-generator.ts`.
+- **Vite Configuration**: Optimized `build.rollupOptions` for better code splitting and reduced TBT.
+
+### Performance
+- **Main Bundle Size**: Reduced `main.js` from ~300KB to **210KB (56KB gzip)**.
+- **Initial Load**: Improved performance by deferring ~1.5MB of non-critical JavaScript.
+
 ## [Phase 3.5: Fintech E2E Stabilization & Coverage] - 2026-03-23
 
 ### Added

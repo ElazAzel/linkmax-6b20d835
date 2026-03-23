@@ -1,8 +1,8 @@
 /**
  * Document Generator - Renders templates with variables and generates PDFs
  */
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// import jsPDF from 'jspdf'; // Removed static import for bundle optimization
+// import html2canvas from 'html2canvas'; // Removed static import for bundle optimization
 import { ZoneContact, ZoneDeal, ZoneDocumentTemplate } from '@/types/zones';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -191,6 +191,9 @@ export async function generatePDFFromHTML(
   document.body.appendChild(container);
   
   try {
+    const { default: html2canvas } = await import('html2canvas');
+    const { default: jsPDF } = await import('jspdf');
+
     // Render to canvas
     const canvas = await html2canvas(container, {
       scale: 2,
