@@ -210,20 +210,11 @@ export const LeadsScreen = memo(function LeadsScreen() {
                 {/* Lead List */}
                 <div className="space-y-4 pb-24">
                     {loading ? (
-                        <LoadingState message={t('messages.loading', 'Loading...')} />
-                    ) : filteredLeads.length === 0 ? (
-                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
-                            <EmptyState
-                                icon={Mail}
-                                title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
-                                description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
-                                className="py-12"
-                            />
-                        </Card>
+                        <LoadingState message={t('messages.loading', 'Загрузка...')} />
                     ) : loadError ? (
                         <ErrorState
-                            title={t('dashboard.leads.loadErrorTitle', 'Не удалось загрузить лиды')}
-                            description={t('dashboard.leads.loadErrorDesc', 'Проверьте соединение и попробуйте снова.')}
+                            title={t('dashboard.leads.loadErrorTitle', 'Ошибка загрузки')}
+                            description={t('dashboard.leads.loadErrorDesc', 'Не удалось загрузить список лидов')}
                             retryLabel={t('common.retry', 'Повторить')}
                             onRetry={() => {
                                 setLoading(true);
@@ -231,13 +222,18 @@ export const LeadsScreen = memo(function LeadsScreen() {
                             }}
                         />
                     ) : filteredLeads.length === 0 ? (
-                        <EmptyState
-                            title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
-                            description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов через формы и квизы на странице.')}
-                            ctaLabel={t('dashboard.leads.emptyCta', 'Поделиться страницей')}
-                            onCtaClick={() => window.open('/dashboard?tab=editor', '_self')}
-                            className="shadow-glass rounded-[2.5rem]"
-                        />
+                        <Card className="glass border-white/10 shadow-glass rounded-[2.5rem]">
+                            <EmptyState
+                                icon={Mail}
+                                title={t('dashboard.leads.emptyTitle', 'Пока нет лидов')}
+                                description={t('dashboard.leads.emptyDesc', 'Здесь появятся заявки от ваших клиентов.')}
+                                action={{
+                                    label: t('dashboard.leads.emptyCta', 'Перейти в редактор'),
+                                    onClick: () => window.open('/dashboard?tab=editor', '_self')
+                                }}
+                                className="py-12"
+                            />
+                        </Card>
                     ) : (
                         filteredLeads.map((lead) => {
                             const config = statusConfig[lead.status as LeadStatus] || statusConfig.new;

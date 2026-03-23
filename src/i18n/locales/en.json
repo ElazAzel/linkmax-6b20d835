@@ -2001,13 +2001,13 @@
       "clicks": "Clicks",
       "clicksCount": "clicks",
       "uniqueVisitors": "Unique visitors",
-      "noData": "No data",
-      "noDataDesc": "Publish your page to start collecting statistics",
+      "noData": "No data yet",
+      "noDataDesc": "Statistics will appear once the first visitors follow your link. Try sharing it on social networks!",
       "aiInsights": "AI Recommendations",
-      "addPricing": "Add a block with prices",
-      "addPricingDesc": "Price list pages receive 40% more requests",
+      "addPricing": "Add a pricing block",
+      "addPricingDesc": "Pricing pages get 40% more requests",
       "addTestimonials": "Add reviews",
-      "addTestimonialsDesc": "Reviews increase trust and conversion by 25%",
+      "addTestimonialsDesc": "Reviews build trust and increase conversion by 25%",
       "duplicateTop": "Duplicate a popular link",
       "duplicateTopDesc": "\"{{title}}\" gets {{percentage}}% of clicks",
       "apply": "Apply",
@@ -2022,10 +2022,22 @@
       "mobileFirstDesc": "Most of your visitors are using mobile devices. Make sure the page looks perfect on phones.",
       "lowCtr": "Low CTR",
       "highBounce": "High bounce rate",
-      "addForm": "Add a grip shape",
+      "addForm": "Add a grab form",
       "addFormDesc": "There is traffic, but no conversions. Add a feedback form",
       "mobileFirst": "Mobile-first audience",
       "ctr": "CTR"
+    },
+    "finance": {
+      "title": "Finance",
+      "empty": {
+        "title": "No transactions yet",
+        "desc": "Start accepting payments via Kaspi QR or forms to see your first transactions here."
+      }
+    },
+    "events": {
+      "title": "Events",
+      "noEvents": "No events",
+      "noEventsDesc": "Add an \"Event\" block to your page to start collecting registrations."
     },
     "settings": {
       "title": "Settings",

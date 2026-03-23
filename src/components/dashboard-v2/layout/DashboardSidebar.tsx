@@ -295,8 +295,11 @@ export const DashboardSidebar = memo(function DashboardSidebar({
         </div>
 
         {/* Sections */}
-        {SECTIONS.map((section) => (
+        {SECTIONS.map((section, idx) => (
           <div key={section.id} className="mb-6">
+            {/* Divider before section (except maybe the first one if preferred) */}
+            <div className="mx-2 mb-4 h-px bg-border/20" />
+            
             <AnimatePresence>
               {!collapsed && (
                 <motion.div
