@@ -63,26 +63,7 @@ export default defineConfig(({ mode }) => ({
         telegram: path.resolve(__dirname, 'tg.html'),
       },
       output: {
-        manualChunks(id) {
-          // Split large vendor bundle into smaller chunks to reduce TBT
-          // Each chunk parses/executes in a shorter task, staying under 50ms
-          // NOTE: React core stays in vendor-other to guarantee correct init order
-          // via Vite's module preload mechanism. Do NOT separate react into its own chunk.
-          if (id.includes('node_modules')) {
-            if (id.includes('@supabase/')) return 'vendor-supabase';
-            if (id.includes('react-router') || id.includes('@remix-run')) return 'vendor-router';
-            if (id.includes('@tanstack/react-query')) return 'vendor-query';
-            if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
-            if (id.includes('framer-motion')) return 'vendor-motion';
-            if (id.includes('@radix-ui/')) return 'vendor-radix';
-            if (id.includes('lucide-react')) return 'vendor-lucide';
-            if (id.includes('recharts')) return 'vendor-recharts';
-            if (id.includes('jspdf') || id.includes('jspdf-autotable')) return 'vendor-pdf';
-            if (id.includes('exceljs')) return 'vendor-excel';
-            if (id.includes('@zxing')) return 'vendor-zxing';
-            return 'vendor-other';
-          }
-        },
+        // Safe default: let Vite manage chunks to ensure correct initialization order
       },
     },
   },
