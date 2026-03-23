@@ -66,12 +66,11 @@ export default defineConfig(({ mode }) => ({
         manualChunks(id) {
           // Split large vendor bundle into smaller chunks to reduce TBT
           // Each chunk parses/executes in a shorter task, staying under 50ms
+          // NOTE: React core stays in vendor-other to guarantee correct init order
+          // via Vite's module preload mechanism. Do NOT separate react into its own chunk.
           if (id.includes('node_modules')) {
-            // React core MUST be in its own chunk to guarantee it initializes
-            // before any consumer — prevents "Cannot set properties of undefined (setting 'Children')"
-            if (id.includes('node_modules/react/') || id.includes('node_modules/scheduler/')) return 'vendor-react';
-            if (id.includes('react-dom')) return 'vendor-react-dom';
             if (id.includes('@supabase/')) return 'vendor-supabase';
+            if (id.includes('react-dom')) return 'vendor-react-dom';
             if (id.includes('react-router') || id.includes('@remix-run')) return 'vendor-router';
             if (id.includes('@tanstack/react-query')) return 'vendor-query';
             if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
@@ -83,9 +82,6 @@ export default defineConfig(({ mode }) => ({
             if (id.includes('jspdf') || id.includes('jspdf-autotable')) return 'vendor-pdf';
             if (id.includes('exceljs')) return 'vendor-excel';
             if (id.includes('@zxing')) return 'vendor-zxing';
-            if (id.includes('cmdk') || id.includes('vaul') || id.includes('sonner') || id.includes('input-otp')) return 'vendor-ui-utils';
-            if (id.includes('date-fns') || id.includes('zod') || id.includes('clsx') || id.includes('tailwind-merge') || id.includes('class-variance-authority')) return 'vendor-utils';
-            if (id.includes('zustand') || id.includes('lz-string') || id.includes('dompurify')) return 'vendor-state';
             return 'vendor-other';
           }
         },
