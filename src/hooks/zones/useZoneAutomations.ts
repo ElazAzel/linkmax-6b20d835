@@ -53,7 +53,7 @@ export function useZoneAutomations(zoneId: string | null) {
       if (!zoneId) throw new Error('No zone');
       const { error } = await supabase
         .from('zone_automations')
-        .insert({ ...automation, zone_id: zoneId } as any);
+        .insert({ ...automation, zone_id: zoneId });
       if (error) throw error;
     },
     onSuccess: invalidate,

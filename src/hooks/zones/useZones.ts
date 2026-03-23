@@ -57,8 +57,8 @@ export function useZones() {
         ...m,
         display_name: m.user_profiles?.display_name || m.user_profiles?.username || null,
         avatar_url: m.user_profiles?.avatar_url || null,
-      }));
-      setMembers(mapped as ZoneMember[]);
+      })) as ZoneMember[];
+      setMembers(mapped);
     };
     fetchMembers();
   }, [currentZoneId]);

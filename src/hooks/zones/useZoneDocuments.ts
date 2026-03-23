@@ -26,7 +26,7 @@ export function useZoneDocuments(
             if (!zoneId) return [];
 
             let query = supabase
-                .from('zone_documents' as any)
+                .from('zone_documents')
                 .select(`
           *,
           template:zone_document_templates(*),
@@ -83,7 +83,7 @@ export function useZoneDocuments(
             if (isReadOnly) throw new Error('Zone is read-only');
 
             const { data, error } = await supabase
-                .from('zone_documents' as any)
+                .from('zone_documents')
                 .insert({
                     zone_id: zoneId,
                     title: payload.title || 'Новый документ',
@@ -117,7 +117,7 @@ export function useZoneDocuments(
             if (fileUrl) payload.file_url = fileUrl;
 
             const { data, error } = await supabase
-                .from('zone_documents' as any)
+                .from('zone_documents')
                 .update(payload)
                 .eq('id', id)
                 .select()
@@ -139,7 +139,7 @@ export function useZoneDocuments(
     const deleteDocumentMutation = useMutation({
         mutationFn: async (id: string) => {
             if (isReadOnly) throw new Error('Zone is read-only');
-            const { error } = await supabase.from('zone_documents' as any).delete().eq('id', id);
+            const { error } = await supabase.from('zone_documents').delete().eq('id', id);
             if (error) throw error;
         },
         onSuccess: () => {
@@ -189,7 +189,7 @@ export function useZoneDocuments(
     const deleteTemplateMutation = useMutation({
         mutationFn: async (id: string) => {
             const { error } = await supabase
-                .from('zone_document_templates' as any)
+                .from('zone_document_templates')
                 .delete()
                 .eq('id', id);
             if (error) throw error;

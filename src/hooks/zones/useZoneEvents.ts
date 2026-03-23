@@ -83,7 +83,7 @@ async function fetchZoneEvents(zoneId: string): Promise<ZoneEvent[]> {
     ...e,
     page_title: pageMap.get(e.page_id)?.title || '',
     registrations_count: regCounts[e.id] || 0,
-  })) as ZoneEvent[];
+  })) as unknown as ZoneEvent[];
 }
 
 async function fetchEventRegistrations(eventId: string): Promise<ZoneEventRegistration[]> {

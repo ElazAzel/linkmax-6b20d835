@@ -4,6 +4,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { ZoneDeal, ZoneDealStage, ZoneDealActivity, ZonePipeline } from '@/types/zones';
+import type { Json } from '@/platform/supabase/types';
 
 // ─── Query Keys ───
 export const zoneDealsKeys = {
@@ -25,28 +26,28 @@ async function fetchStages(zoneId: string, pipelineId?: string | null): Promise<
     .eq('zone_id', zoneId);
     
   if (pipelineId) {
-    query = (query as any).eq('pipeline_id', pipelineId);
+    query.eq('pipeline_id', pipelineId);
   }
     
-  const { data, error } = await (query as any).order('order_index');
+  const { data, error } = await query.order('order_index');
   if (error) throw error;
   return (data || []) as unknown as ZoneDealStage[];
 }
 
 async function fetchPipelines(zoneId: string): Promise<ZonePipeline[]> {
-  const { data, error } = await (supabase
-    .from('zone_pipelines' as any)
+  const { data, error } = await supabase
+    .from('zone_pipelines')
     .select('*')
     .eq('zone_id', zoneId)
-    .order('order_index') as any);
+    .order('order_index');
   if (error) throw error;
   return (data || []) as ZonePipeline[];
 }
 
 async function fetchDeals(zoneId: string, pipelineId?: string | null): Promise<ZoneDeal[]> {
-  let query = (supabase
+  let query = supabase
     .from('zone_deals')
-    .select('*, zone_contacts(*), zone_deal_stages(*)') as any);
+    .select('*, zone_contacts(*), zone_deal_stages(*)');
     
   if (pipelineId) query = query.eq('pipeline_id', pipelineId);
 
@@ -146,7 +147,7 @@ export function useZoneDeals(zoneId: string | null, pipelineId?: string | null) 
       const userId = (await supabase.auth.getUser()).data.user?.id;
       const { data, error } = await supabase
         .from('zone_deals')
-        .insert({ ...deal, zone_id: zoneId, assigned_to: userId } as any)
+        .insert({ ...deal, zone_id: zoneId, assigned_to: userId })
         .select()
         .single();
       if (error) throw error;

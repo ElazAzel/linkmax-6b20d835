@@ -8,7 +8,7 @@ export const zoneDealFieldsKeys = {
 
 async function fetchDealFields(zoneId: string): Promise<ZoneDealField[]> {
     const { data, error } = await supabase
-        .from('zone_deal_fields' as any)
+        .from('zone_deal_fields')
         .select('*')
         .eq('zone_id', zoneId)
         .order('order_index', { ascending: true });
@@ -35,7 +35,7 @@ export function useZoneDealFields(zoneId: string | null) {
         mutationFn: async (field: Partial<ZoneDealField>) => {
             if (!zoneId) throw new Error('No zone selected');
             const { data, error } = await supabase
-                .from('zone_deal_fields' as any)
+                .from('zone_deal_fields')
                 .insert({
                     ...field,
                     zone_id: zoneId,
@@ -51,7 +51,7 @@ export function useZoneDealFields(zoneId: string | null) {
     const updateFieldMutation = useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneDealField> }) => {
             const { error } = await supabase
-                .from('zone_deal_fields' as any)
+                .from('zone_deal_fields')
                 .update(updates)
                 .eq('id', id);
             if (error) throw error;
@@ -62,7 +62,7 @@ export function useZoneDealFields(zoneId: string | null) {
     const deleteFieldMutation = useMutation({
         mutationFn: async (id: string) => {
             const { error } = await supabase
-                .from('zone_deal_fields' as any)
+                .from('zone_deal_fields')
                 .delete()
                 .eq('id', id);
             if (error) throw error;
@@ -78,7 +78,7 @@ export function useZoneDealFields(zoneId: string | null) {
             }));
             for (const update of updates) {
                 const { error } = await supabase
-                    .from('zone_deal_fields' as any)
+                    .from('zone_deal_fields')
                     .update({ order_index: update.order_index })
                     .eq('id', update.id);
                 if (error) throw error;

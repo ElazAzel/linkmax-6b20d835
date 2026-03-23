@@ -49,9 +49,9 @@ async function fetchConversations(zoneId: string): Promise<ZoneConversation[]> {
     .eq('zone_id', zoneId)
     .order('last_message_at', { ascending: false, nullsFirst: false });
   if (error) throw error;
-  return (data || []).map((c: Record<string, unknown>) => ({
+  return (data || []).map(c => ({
     ...c,
-    contact: c.zone_contacts || undefined,
+    contact: (c as any).zone_contacts || undefined,
   })) as ZoneConversation[];
 }
 

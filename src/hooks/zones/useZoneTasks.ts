@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import type { ZoneTask, TaskStatus, TaskPriority, ZoneTaskChecklistItem } from '@/types/zones';
+import type { Json } from '@/platform/supabase/types';
 
 export type { TaskStatus, TaskPriority, ZoneTask };
 
@@ -23,21 +24,21 @@ async function fetchTasks(zoneId: string): Promise<ZoneTask[]> {
 }
 
 async function fetchChecklist(zoneId: string, taskId: string): Promise<ZoneTaskChecklistItem[]> {
-  const { data, error } = await (supabase
-    .from('zone_task_checklist' as any)
+  const { data, error } = await supabase
+    .from('zone_task_checklist')
     .select('*')
     .eq('task_id', taskId)
-    .order('order_index') as any);
+    .order('order_index');
   if (error) throw error;
   return (data || []) as ZoneTaskChecklistItem[];
 }
 
 async function fetchComments(zoneId: string, taskId: string) {
-  const { data, error } = await (supabase
-    .from('zone_task_comments' as any)
+  const { data, error } = await supabase
+    .from('zone_task_comments')
     .select('*, user:user_id(email, raw_user_meta_data)')
     .eq('task_id', taskId)
-    .order('created_at', { ascending: true }) as any);
+    .order('created_at', { ascending: true });
   if (error) throw error;
   return data || [];
 }
@@ -70,7 +71,7 @@ export function useZoneTasks(zoneId: string | null) {
           created_by: userId || '',
           status: task.status || 'todo',
           priority: task.priority || 'medium',
-        } as any)
+        })
         .select()
         .single();
       if (error) throw error;

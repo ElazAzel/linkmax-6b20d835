@@ -29,12 +29,12 @@ export function useZoneNotifications(zoneId: string | null) {
   const { data: notifications = [], isLoading: loading } = useQuery({
     queryKey: keys.all(safeId),
     queryFn: async () => {
-      const { data, error } = await (supabase
-        .from('zone_notifications' as any)
+      const { data, error } = await supabase
+        .from('zone_notifications')
         .select('*')
         .eq('zone_id', safeId)
         .order('created_at', { ascending: false })
-        .limit(50) as any);
+        .limit(50);
       if (error) throw error;
       return (data || []) as ZoneNotification[];
     },
@@ -46,10 +46,10 @@ export function useZoneNotifications(zoneId: string | null) {
 
   const markAsRead = useMutation({
     mutationFn: async (notificationId: string) => {
-      const { error } = await (supabase
-        .from('zone_notifications' as any)
+      const { error } = await supabase
+        .from('zone_notifications')
         .update({ is_read: true })
-        .eq('id', notificationId) as any);
+        .eq('id', notificationId);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -61,12 +61,12 @@ export function useZoneNotifications(zoneId: string | null) {
     mutationFn: async () => {
       if (!zoneId) return;
       const userId = (await supabase.auth.getUser()).data.user?.id;
-      const { error } = await (supabase
-        .from('zone_notifications' as any)
+      const { error } = await supabase
+        .from('zone_notifications')
         .update({ is_read: true })
         .eq('zone_id', zoneId)
         .eq('user_id', userId)
-        .eq('is_read', false) as any);
+        .eq('is_read', false);
       if (error) throw error;
     },
     onSuccess: () => {

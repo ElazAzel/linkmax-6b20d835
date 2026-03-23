@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/platform/supabase/client';
 import { toast } from 'sonner';
 import type { ZoneContact, ZoneContactNote, ContactNoteType } from '@/types/zones';
+import type { Json } from '@/platform/supabase/types';
 
 // ─── Query Keys ───
 export const zoneContactsKeys = {
@@ -126,7 +127,7 @@ export function useZoneContacts(zoneId: string | null) {
       }));
       const { error } = await supabase
         .from('zone_contacts')
-        .insert(rows as any);
+        .insert(rows);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -160,8 +161,8 @@ export function useZoneContactNotes(zoneId: string | null, contactId: string | n
     mutationFn: async ({ type, content }: { type: ContactNoteType; content: string }) => {
       if (!zoneId || !contactId) throw new Error('No zone/contact');
       const userId = (await supabase.auth.getUser()).data.user?.id;
-      const { data, error } = await (supabase
-        .from('zone_contact_notes' as any)
+      const { data, error } = await supabase
+        .from('zone_contact_notes')
         .insert({
           zone_id: zoneId,
           contact_id: contactId,
@@ -170,7 +171,7 @@ export function useZoneContactNotes(zoneId: string | null, contactId: string | n
           created_by: userId || '',
         })
         .select()
-        .single() as any);
+        .single();
       if (error) throw error;
       return data as ZoneContactNote;
     },
@@ -181,10 +182,10 @@ export function useZoneContactNotes(zoneId: string | null, contactId: string | n
 
   const deleteNoteMutation = useMutation({
     mutationFn: async (noteId: string) => {
-      const { error } = await (supabase
-        .from('zone_contact_notes' as any)
+      const { error } = await supabase
+        .from('zone_contact_notes')
         .delete()
-        .eq('id', noteId) as any);
+        .eq('id', noteId);
       if (error) throw error;
     },
     onSuccess: () => {

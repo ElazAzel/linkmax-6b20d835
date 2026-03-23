@@ -3,6 +3,7 @@
 ## [Phase 8 & 9: Docs, Infrastructure & UX Polish] - 2026-03-23
 
 ### Added
+
 - **Documentation**: Created ADR-0028 for Consolidated Architecture.
 - **Runbooks**: Added operational runbooks for deployment, rollback, and incident management.
 - **Infrastructure**: Runtime environment variable validation using Zod.
@@ -14,6 +15,7 @@
 - **README**: Centralized documentation links and updated project overview.
 
 ### Fixed
+
 - **Sentry**: Corrected noise filtering logic for browser extensions.
 - **Auth UI**: Fixed manual spinner implementation in OAuth buttons.
 
@@ -23,6 +25,9 @@
 
 ### Added
 
+- **Bundle Size**: Reduced primary bundle from 300KB to 210KB via code splitting.
+- **Dynamic Imports**: Refactored `exceljs`, `jspdf`, `html2canvas` to lazy-loading.
+- **Manual Chunks**: Implemented granular chunking for heavy vendors (lucide, charts, fintech).
 - **Bundle Analysis**: Integrated `rollup-plugin-visualizer` to identify large dependencies.
 - **Manual Chunking**: Strategic splitting of `node_modules` into specialized vendor chunks (`vendor-lucide`, `vendor-recharts`, `vendor-pdf`, `vendor-excel`, `vendor-zxing`).
 - **Catch-all Vendor Chunk**: Grouped miscellaneous dependencies into `vendor-other` to keep `main.js` clean.

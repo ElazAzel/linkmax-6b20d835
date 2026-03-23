@@ -8,7 +8,7 @@ export const zoneContactFieldsKeys = {
 
 async function fetchFields(zoneId: string): Promise<ZoneContactField[]> {
     const { data, error } = await supabase
-        .from('zone_contact_fields' as any)
+        .from('zone_contact_fields')
         .select('*')
         .eq('zone_id', zoneId)
         .order('order_index');
@@ -35,10 +35,10 @@ export function useZoneContactFields(zoneId: string | null) {
         mutationFn: async (field: Partial<ZoneContactField>) => {
             if (!zoneId) throw new Error('No zone selected');
             const { data, error } = await supabase
-                .from('zone_contact_fields' as any)
-                .insert({ ...field, zone_id: zoneId } as any)
+                .from('zone_contact_fields')
+                .insert({ ...field, zone_id: zoneId })
                 .select()
-                .single() as any;
+                .single();
             if (error) throw error;
             return data as ZoneContactField;
         },
@@ -48,9 +48,9 @@ export function useZoneContactFields(zoneId: string | null) {
     const updateFieldMutation = useMutation({
         mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneContactField> }) => {
             const { error } = await supabase
-                .from('zone_contact_fields' as any)
-                .update(updates as any)
-                .eq('id', id) as any;
+                .from('zone_contact_fields')
+                .update(updates)
+                .eq('id', id);
             if (error) throw error;
         },
         onSuccess: invalidate,
@@ -59,9 +59,9 @@ export function useZoneContactFields(zoneId: string | null) {
     const deleteFieldMutation = useMutation({
         mutationFn: async (id: string) => {
             const { error } = await supabase
-                .from('zone_contact_fields' as any)
+                .from('zone_contact_fields')
                 .delete()
-                .eq('id', id) as any;
+                .eq('id', id);
             if (error) throw error;
         },
         onSuccess: invalidate,
@@ -76,9 +76,9 @@ export function useZoneContactFields(zoneId: string | null) {
             // Simple loop for reordering since Supabase bulk update is tricky without rpc
             for (const update of updates) {
                 await supabase
-                    .from('zone_contact_fields' as any)
-                    .update({ order_index: update.order_index } as any)
-                    .eq('id', update.id) as any;
+                    .from('zone_contact_fields')
+                    .update({ order_index: update.order_index })
+                    .eq('id', update.id);
             }
         },
         onSuccess: invalidate,
