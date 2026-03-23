@@ -21,16 +21,50 @@
         "createPage": "Asosiy sahifani yaratish",
         "addBlock": "Birinchi kontent blokini qo'shish",
         "publish": "Sahifani tarmoqda nashr etish",
-        "firstLead": "Birinchi lid yoki klikni olish"
+        "firstLead": "Birinchi lid yoki klikni olish",
+        "connectTelegram": "Подключить уведомления в Telegram"
       },
       "cta": {
         "openEditor": "Muharrirni ochish",
         "addBlock": "Blok qo'shish",
         "publish": "Nashr etish",
-        "promotePage": "Targ'ib qilish"
+        "promotePage": "Targ'ib qilish",
+        "connectTelegram": "Подключить"
       },
       "celebrationTitle": "🎉 Tabriklaymiz!",
       "celebrationDesc": "Sahifangiz ishlamoqda va natijalar keltirmoqda"
+    },
+    "presets": {
+      "text": {
+        "headline": "Заголовок",
+        "headlineDesc": "Крупный текст для главного оффера",
+        "bio": "О себе",
+        "bioDesc": "Краткое описание вашей деятельности",
+        "description": "Описание услуг",
+        "descriptionDesc": "Более подробный текст о том, что вы делаете"
+      },
+      "button": {
+        "cta": "Кнопка действия",
+        "ctaDesc": "Яркая кнопка для перехода к покупке или регистрации",
+        "whatsapp": "Связаться в WhatsApp",
+        "whatsappDesc": "Прямая ссылка на чат в мессенджере",
+        "bookNow": "Записаться",
+        "bookNowDesc": "Кнопка для перехода к форме записи"
+      },
+      "messenger": {
+        "whatsapp": "WhatsApp чат",
+        "whatsappDesc": "Блок для быстрой связи через WhatsApp",
+        "telegram": "Telegram чат",
+        "telegramDesc": "Блок для быстрой связи через Telegram"
+      },
+      "expert": {
+        "consultation_cta": "Запись на консультацию",
+        "consultation_cta_desc": "Кнопка с призывом записаться на пробную консультацию",
+        "guide_buy": "Купить гайд/курс",
+        "guide_buy_desc": "Кнопка для продажи цифровых продуктов",
+        "telegram_join": "Вступить в Telegram",
+        "telegram_join_desc": "Кнопка для подписки на ваш канал"
+      }
     }
   },
   "textEffects": {
@@ -365,7 +399,41 @@
     "completeTitle": "Tayyor! 🎉",
     "completeDescription": "Sahifa yaratildi va tahrirlashga tayyor",
     "title": "Tez boshlash",
-    "description": "AI yordamchisi yordamida sahifani tezda yarating"
+    "description": "AI yordamchisi yordamida sahifani tezda yarating",
+    "nicheQuestions": {
+      "title": "Расскажите о себе ✨",
+      "desc": "Эти данные нужны для заполнения блоков. Вы можете пропустить любой шаг.",
+      "nameLabel": "Как вас зовут или как называется ваш проект?",
+      "nameHint": "Это будет заголовок вашего профиля",
+      "namePlaceholder": "Например: Иван Иванов или Студия \"Красота\"",
+      "bioBeauty": "Кратко о вашем опыте (Бьюти)",
+      "bioFreelance": "В чем ваша суперсила? (Фриланс)",
+      "bioBusiness": "Опишите ваш бизнес в 2-х словах",
+      "bioExpert": "Ваша специализация и ниша",
+      "bioGeneric": "О себе / Описание",
+      "bioPlaceholder": "Напишите пару предложений... Можно добавить ссылку, алгоритм сам сделает из неё красивую кнопку.",
+      "expertGoalLabel": "Кому вы помогаете?",
+      "expertGoalPlaceholder": "Например: предпринимателям, молодым мамам...",
+      "expertOfferLabel": "Какой результат вы даете?",
+      "expertOfferPlaceholder": "Например: помогаю запустить бизнес с нуля...",
+      "expertChannelLabel": "Куда слать уведомления о новых клиентах?",
+      "expertChannelTelegram": "Телеграм (рекомендуем — мгновенно)",
+      "expertChannelEmail": "Email (на почту)",
+      "srvBeauty": "Какие услуги вы оказываете? (С ценами)",
+      "srvFreelance": "Навыки или Тарифы",
+      "srvGeneric": "Услуги или Навыки",
+      "srvHint": "Алгоритм сам раскидает их по карточкам. Если указать слово \"скидка\" или \"подарок\" — будет создан бонусный блок!",
+      "srvPlaceholder": "Маникюр - 5000 тг\nПедикюр - 7000 тг\nСкидка 10% на первый визит",
+      "contactsLabel": "Где вас найти? (Контакты и Адрес)",
+      "contactsHint": "Укажите номер телефона, почту или физический адрес (начиная с \"г.\" или \"ул.\" — для карты)",
+      "contactsPlaceholder": "+7 777 123 45 67\nг. Алматы, пр. Абая 10",
+      "socialsLabel": "Ваши соцсети",
+      "socialsPlaceholder": "inst: @nickname, t.me/username, youtube.com/...",
+      "mediaLabel": "Ссылки на полезные материалы (Медиа)",
+      "mediaHint": "Ссылки на YouTube, портфолио или картинки (через запятую)",
+      "mediaPlaceholder": "https://youtube.com/watch?v=..., https://my-portfolio.com",
+      "generateBtn": "Сгенерировать магию ✨"
+    }
   },
   "wizard": {
     "back": "Orqaga",
@@ -759,16 +827,16 @@
       "gcalDisconnected": "Google Calendar o'chirildi",
       "active": "Faol",
       "gcalDesc": "Band qilishlarni kalendar bilan sinxronlash",
-      "apiKeyNameRequired": "",
-      "apiKeys": "",
-      "apiKeysDesc": "",
-      "apiKeyNamePlaceholder": "",
-      "newKeyGenerated": "",
-      "apiKeyWarning": "",
-      "noApiKeys": "",
-      "viewApiDocs": "",
-      "apiKeyGenerated": "",
-      "apiKeyDeleted": ""
+      "apiKeyNameRequired": "Enter a name for the API key",
+      "apiKeys": "API Keys",
+      "apiKeysDesc": "Use these keys to access the LinkMAX API from external services like Zapier or Make.",
+      "apiKeyNamePlaceholder": "e.g. Zapier Integration",
+      "newKeyGenerated": "New API Key Generated",
+      "apiKeyWarning": "Copy this key now. You won",
+      "noApiKeys": "No API keys generated yet",
+      "viewApiDocs": "View API Documentation",
+      "apiKeyGenerated": "apiKeyGenerated",
+      "apiKeyDeleted": "apiKeyDeleted"
     },
     "pageBackground": "Sahifa foni",
     "backgroundType": "Fon turi",
@@ -811,7 +879,8 @@
     "shop": "Do'kon",
     "marketer": "Marketolog",
     "beauty": "Go'zallik ustasi",
-    "chef": "Oshpaz / qandolatchi"
+    "chef": "Oshpaz / qandolatchi",
+    "expert": "Эксперт"
   },
   "niches": {
     "beauty": "Go'zallik",
@@ -828,7 +897,8 @@
     "realestate": "Ko'chmas mulk",
     "events": "Voqealar",
     "services": "Xizmatlar",
-    "other": "Boshqa"
+    "other": "Boshqa",
+    "expert": "Эксперт"
   },
   "onboarding": {
     "goalTitle": "Bu sahifadan nimani olishni xohlaysiz?",
@@ -941,7 +1011,17 @@
       "b6": "Jamoada 5 tagacha ishtirokchi",
       "month": "oylar",
       "total": "Jami",
-      "billedOnce": "bir marta"
+      "billedOnce": "bir marta",
+      "calculator": {
+        "title": "Калькулятор выгоды",
+        "leads": "Лидов в месяц",
+        "conversion": "Конверсия в покупку (%)",
+        "avgCheck": "Средний чек ($)",
+        "revenue": "Ваша выручка:",
+        "linkmaxCost": "Стоимость LinkMAX:",
+        "competitorCost": "Стоимость аналогов (7% - 10%):",
+        "savings": "Ваша экономия:"
+      }
     },
     "demo": {
       "title": "Sehrni his eting.",
@@ -3185,16 +3265,16 @@
     "purchaseTemplate": "Shablonni xarid qilish: {{name}}",
     "chosen": "Tanlandi",
     "use": "Tanlash",
-    "fillAllFields": "",
-    "addNew": "",
-    "edit": "",
-    "create": "",
-    "nameLabel": "",
-    "subjectLabel": "",
-    "subjectPlaceholder": "",
-    "contentLabel": "",
-    "variablesNote": "",
-    "empty": ""
+    "fillAllFields": "Please fill all required fields",
+    "addNew": "Add New",
+    "edit": "Edit Template",
+    "create": "Create Template",
+    "nameLabel": "Template Name",
+    "subjectLabel": "Email Subject",
+    "subjectPlaceholder": "Hello {lead_name}!",
+    "contentLabel": "HTML Content",
+    "variablesNote": "Use {lead_name} for personalization",
+    "empty": "No templates created yet"
   },
   "alternatives": {
     "seo": {
@@ -4281,7 +4361,7 @@
       "customer": "Yozilish vaqtincha imkonsiz. To'g'ridan-to'g'ri bog'laning."
     },
     "timezoneHint": "(Mahalliy vaqt)",
-    "yourTimezone": ""
+    "yourTimezone": "Ваш пояс"
   },
   "days": {
     "sunday": "Quyosh",
@@ -4303,7 +4383,7 @@
       "street": "Sholokhov St., 20/7"
     },
     "readiness": {
-      "title": ""
+      "title": "Видимость в поиске"
     }
   },
   "adminTranslations": {
@@ -4843,7 +4923,7 @@
     "paymentTerms": "Payment Terms",
     "contacts": "Contacts",
     "companyInfo": "ARchitecKZ / BIN 190540008684 / Qozog'iston, Olmaota",
-    "brand": ""
+    "brand": "Platform"
   },
   "themes": {
     "pageTheme": "Mavzu va ranglar",
@@ -5882,9 +5962,9 @@
       "generatePayLink": "To'lov havolasini yaratish",
       "downloadPDF": "PDF yuklab olish",
       "pdfSuccess": "PDF saqlandi",
-      "downloadInvoice": "",
-      "actSuccess": "",
-      "downloadAct": ""
+      "downloadInvoice": "Счет на оплату",
+      "actSuccess": "Акт сохранен",
+      "downloadAct": "Акт выполненных работ"
     },
     "settings": {
       "title": "Sozlamalar",
@@ -5946,13 +6026,13 @@
         "empty": "Sizda hozircha quvurlar yo'q. Birinchi savdo quvurini yarating.",
         "title": "Savdo quvurlarini boshqarish",
         "desc": "Turli jarayonlar uchun quvurlar yarating va sozlang.",
-        "cannotDeleteLast": "",
-        "description": "",
-        "add": "",
-        "default": "",
-        "edit": "",
-        "create": "",
-        "nameLabel": ""
+        "cannotDeleteLast": "Нельзя удалить последнюю воронку",
+        "description": "Управляйте пайплайнами для организации процессов продаж и обслуживания.",
+        "add": "Добавить воронку",
+        "default": "По умолчанию",
+        "edit": "Редактировать воронку",
+        "create": "Новая воронка",
+        "nameLabel": "Название воронки"
       },
       "memberLimitReached": "A'zolar limiti tugadi. Tarifingizni yangilang.",
       "inviteSent": "Taklifnoma yuborildi",
@@ -6550,7 +6630,20 @@
     "link_title_placeholder": "Link sarlavhasi",
     "btn_copy_link": "Linkni nusxalash",
     "nav_payments": "To'lovlar",
-    "nav_tasks": "Vazifalar"
+    "nav_tasks": "Vazifalar",
+    "landing": {
+      "v4": {
+        "hero": {
+          "badge": "Операционная система для микробизнеса",
+          "titleStart": "Сайт, CRM и Аналитика",
+          "titleEnd": "в одном месте",
+          "subtitle": "Конструктор страниц, управление лидами, аналитика кликов. Все, что нужно вашему микробизнесу - без кода.",
+          "cta": "Начать бесплатно",
+          "secondary": "Смотреть примеры",
+          "scroll": "Листайте вниз"
+        }
+      }
+    }
   },
   "search": {
     "placeholder": "Qidiruv yoki buyruq...",

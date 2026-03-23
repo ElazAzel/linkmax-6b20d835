@@ -827,16 +827,16 @@
       "gcalDisconnected": "Google Calendar ажыратылды",
       "active": "Белсенді",
       "gcalDesc": "Брондауларды күнтізбемен синхрондау",
-      "apiKeyNameRequired": "",
-      "apiKeys": "",
-      "apiKeysDesc": "",
-      "apiKeyNamePlaceholder": "",
-      "newKeyGenerated": "",
-      "apiKeyWarning": "",
-      "noApiKeys": "",
-      "viewApiDocs": "",
-      "apiKeyGenerated": "",
-      "apiKeyDeleted": ""
+      "apiKeyNameRequired": "Enter a name for the API key",
+      "apiKeys": "API Keys",
+      "apiKeysDesc": "Use these keys to access the LinkMAX API from external services like Zapier or Make.",
+      "apiKeyNamePlaceholder": "e.g. Zapier Integration",
+      "newKeyGenerated": "New API Key Generated",
+      "apiKeyWarning": "Copy this key now. You won",
+      "noApiKeys": "No API keys generated yet",
+      "viewApiDocs": "View API Documentation",
+      "apiKeyGenerated": "apiKeyGenerated",
+      "apiKeyDeleted": "apiKeyDeleted"
     },
     "pageBackground": "Бет фоны",
     "backgroundType": "Фон түрі",
@@ -3265,16 +3265,16 @@
     "purchaseTemplate": "Үлгіні сатып алу: {{name}}",
     "chosen": "Таңдалды",
     "use": "Таңдау",
-    "fillAllFields": "",
-    "addNew": "",
-    "edit": "",
-    "create": "",
-    "nameLabel": "",
-    "subjectLabel": "",
-    "subjectPlaceholder": "",
-    "contentLabel": "",
-    "variablesNote": "",
-    "empty": ""
+    "fillAllFields": "Please fill all required fields",
+    "addNew": "Add New",
+    "edit": "Edit Template",
+    "create": "Create Template",
+    "nameLabel": "Template Name",
+    "subjectLabel": "Email Subject",
+    "subjectPlaceholder": "Hello {lead_name}!",
+    "contentLabel": "HTML Content",
+    "variablesNote": "Use {lead_name} for personalization",
+    "empty": "No templates created yet"
   },
   "alternatives": {
     "seo": {
@@ -4361,7 +4361,7 @@
       "customer": "Жазылу уақытша қолжетімсіз. Тікелей хабарласыңыз."
     },
     "timezoneHint": "(Жергілікті уақыт)",
-    "yourTimezone": ""
+    "yourTimezone": "Ваш пояс"
   },
   "days": {
     "sunday": "Күн",
@@ -4383,7 +4383,7 @@
       "street": "Sholokhov St., 20/7"
     },
     "readiness": {
-      "title": ""
+      "title": "Видимость в поиске"
     }
   },
   "adminTranslations": {
@@ -4923,7 +4923,7 @@
     "paymentTerms": "Payment Terms",
     "contacts": "Contacts",
     "companyInfo": "ARchitecKZ / БСН 190540008684 / Қазақстан, Алматы",
-    "brand": ""
+    "brand": "Platform"
   },
   "themes": {
     "pageTheme": "Тақырып және түстер",
@@ -5962,9 +5962,9 @@
       "generatePayLink": "Сілтеме жасау",
       "downloadPDF": "PDF жүктеу",
       "pdfSuccess": "PDF сақталды",
-      "downloadInvoice": "",
-      "actSuccess": "",
-      "downloadAct": ""
+      "downloadInvoice": "Счет на оплату",
+      "actSuccess": "Акт сохранен",
+      "downloadAct": "Акт выполненных работ"
     },
     "settings": {
       "title": "Баптаулар",
@@ -6026,13 +6026,13 @@
         "empty": "Сізде әлі воронкалар жоқ. Алғашқы сату воронкасын құрыңыз.",
         "title": "Сату воронкаларын басқару",
         "desc": "Әртүрлі процестер үшін воронкаларды құрыңыз және баптаңыз.",
-        "cannotDeleteLast": "",
-        "description": "",
-        "add": "",
-        "default": "",
-        "edit": "",
-        "create": "",
-        "nameLabel": ""
+        "cannotDeleteLast": "Нельзя удалить последнюю воронку",
+        "description": "Управляйте пайплайнами для организации процессов продаж и обслуживания.",
+        "add": "Добавить воронку",
+        "default": "По умолчанию",
+        "edit": "Редактировать воронку",
+        "create": "Новая воронка",
+        "nameLabel": "Название воронки"
       },
       "memberLimitReached": "Мүшелер санының шегіне жеттіңіз. Тарифіңізді жаңартыңыз.",
       "inviteSent": "Шақыру жіберілді",
@@ -6630,7 +6630,20 @@
     "link_title_placeholder": "Сілтеме тақырыбы",
     "btn_copy_link": "Сілтемені көшіру",
     "nav_payments": "Төлемдер",
-    "nav_tasks": "Тапсырмалар"
+    "nav_tasks": "Тапсырмалар",
+    "landing": {
+      "v4": {
+        "hero": {
+          "badge": "Операционная система для микробизнеса",
+          "titleStart": "Сайт, CRM и Аналитика",
+          "titleEnd": "в одном месте",
+          "subtitle": "Конструктор страниц, управление лидами, аналитика кликов. Все, что нужно вашему микробизнесу - без кода.",
+          "cta": "Начать бесплатно",
+          "secondary": "Смотреть примеры",
+          "scroll": "Листайте вниз"
+        }
+      }
+    }
   },
   "search": {
     "placeholder": "Іздеу немесе команда...",
