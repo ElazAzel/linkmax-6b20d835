@@ -378,7 +378,7 @@ new -> contacted -> qualified -> won/lost
 - Vite React SPA (Core Platform)
 - React 18 + TypeScript
 - Tailwind CSS with shadcn/ui
-- i18next for RU/EN/KK/UZ (100% deep localization coverage, zero placeholders)
+- i18next for 16 languages (100% structural parity, deep localization for RU/EN/KK/UZ, zero missing keys)
 - PWA capabilities
 - Motion system (CSS + IntersectionObserver)
 - **Universal Error Normalization**: `app-error-normalizer.ts` and `useAppError` pattern maps raw exceptions to safe, localized `react-i18next` messages, abstracting technical details from the UI.

@@ -3,14 +3,14 @@
     "alreadyFree": "Free plan is already active",
     "basicDesc": "Start for free",
     "businessDesc": "CRM, team & zones for business",
-    "cancelAnytime": "Cancel anytime",
-    "choosePlan": "Choose the right plan",
+    "cancelAnytime": "Annuler à tout moment",
+    "choosePlan": "Choisissez le bon plan",
     "comingSoon": "Payment coming soon! Stay tuned.",
     "companyDetails": {
       "addressLine": "Almaty, st. Sholokhov, 20",
       "nameLine": "ARchitecKZ • BIN: 190540008684"
     },
-    "currentPlan": "Current",
+    "currentPlan": "Plan actuel",
     "description": "Unlock all lnkmx.my features for your business",
     "features": {
       "advancedAnalytics": "Advanced click analytics",
@@ -44,29 +44,29 @@
       "unlimitedLinks": "Unlimited links"
     },
     "free": {
-      "title": "Free"
+      "title": "Gratuit"
     },
     "limitations": {
       "limitedBlocks": "10 blocks maximum",
       "watermark": "lnkmx.my watermark"
     },
-    "moneyBack": "14-day money-back guarantee",
-    "month": "mo",
+    "moneyBack": "Garantie de remboursement de 14 jours",
+    "month": "mois",
     "months": "mo",
     "new": "New",
     "paymentNote": "Payment via RoboKassa",
-    "popular": "Popular",
+    "popular": "Populaire",
     "proDesc": "Everything for professionals and business",
     "savingsText": "Save",
-    "securePayments": "Secure payments",
+    "securePayments": "Paiements sécurisés",
     "seo": {
       "description": "Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.",
       "imageAlt": "lnkmx Pricing Plans",
       "title": "lnkmx Pricing — Plans for Link in Bio & Mini-Sites"
     },
     "startFree": "Start for free",
-    "subscribe": "Subscribe",
-    "title": "Pricing",
+    "subscribe": "S'abonner",
+    "title": "Tarifs",
     "tokens": {
       "balanceDescription": "100 Linkkon = 1 day of Premium. Your balance: {{balance}} tokens",
       "buyDay": "Buy 1 day for {{cost}} Linkkon",

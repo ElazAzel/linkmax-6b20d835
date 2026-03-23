@@ -1,79 +1,79 @@
 {
-    "pricing": {
-        "seo": {
-            "title": "lnkmx Тарифы — Планы для Link in Bio и Мини-сайтов",
-            "description": "Сравните тарифы lnkmx: бесплатный конструктор, Pro с AI, CRM, аналитикой и своим доменом. Прозрачные цены.",
-            "imageAlt": "Тарифные планы lnkmx"
-        },
-        "title": "Тарифы",
-        "choosePlan": "Выберите подходящий тариф",
-        "description": "Разблокируйте все возможности lnkmx.my для вашего бизнеса",
-        "months": "мес",
-        "savingsText": "Экономия",
-        "popular": "Популярный",
-        "basicDesc": "Начните бесплатно",
-        "proDesc": "Всё для профессионалов и бизнеса",
-        "businessDesc": "CRM, команда и зоны для бизнеса",
-        "new": "Новинка",
-        "free": {
-            "title": "Бесплатно"
-        },
-        "month": "мес",
-        "totalFor": "за",
-        "startFree": "Начать бесплатно",
-        "subscribe": "Подписаться",
-        "currentPlan": "Текущий",
-        "alreadyFree": "Бесплатный тариф уже активен",
-        "comingSoon": "Оплата скоро будет доступна! Следите за обновлениями.",
-        "tokens": {
-            "title": "Или платите Linkkon токенами",
-            "balanceDescription": "100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов",
-            "converting": "Конвертация...",
-            "buyDay": "Купить 1 день за {{cost}} Linkkon",
-            "buyTokens": "Купить токены"
-        },
-        "securePayments": "Безопасные платежи",
-        "cancelAnytime": "Отмена в любое время",
-        "moneyBack": "Гарантия возврата 14 дней",
-        "companyDetails": {
-            "nameLine": "ARchitecKZ • БИН: 190540008684",
-            "addressLine": "г. Алматы, ул. Шолохова, д. 20"
-        },
-        "paymentNote": "Оплата через RoboKassa",
-        "features": {
-            "basicThemes": "Базовые темы оформления",
-            "basicCustomization": "Базовая настройка (цвета, шрифты)",
-            "unlimitedLinks": "Неограниченные ссылки",
-            "basicBlocks": "Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)",
-            "messengers": "Мессенджеры и соцсети",
-            "maps": "Карты (адрес + карта)",
-            "basicStats": "Базовая статистика просмотров",
-            "qrCode": "QR-код страницы",
-            "aiMonthly": "1 AI-генерация в месяц",
-            "allBasic": "Всё из BASIC, плюс:",
-            "allBlocks": "Все 25+ типов блоков без ограничений",
-            "proThemes": "Профессиональные темы и анимации",
-            "media": "Медиа: изображения, видео, карусели",
-            "priceLists": "Прайс-листы и каталоги товаров",
-            "scheduler": "Планировщик блоков",
-            "advancedAnalytics": "Расширенная аналитика кликов",
-            "fullCRM": "Полноценная CRM для лидов",
-            "telegramNotifications": "Telegram-уведомления о заявках",
-            "forms": "Формы сбора заявок",
-            "faq": "FAQ и отзывы блоки",
-            "timers": "Таймеры обратного отсчёта",
-            "aiMonthlyPro": "5 AI-генераций в месяц",
-            "allPro": "Всё из PRO, плюс:",
-            "businessZones": "Бизнес-зоны (рабочие пространства)",
-            "teamCRM": "Командная CRM и Kanban",
-            "teamInbox": "Командный чат и задачи",
-            "teamRoles": "Роли и разграничение доступа",
-            "teamMembers": "До 5 участников команды",
-            "prioritySupport": "Приоритетная поддержка"
-        },
-        "limitations": {
-            "watermark": "Водяной знак lnkmx.my",
-            "limitedBlocks": "10 блоков максимум"
-        }
-    }
+  "pricing": {
+    "alreadyFree": "Бесплатный тариф уже активен",
+    "basicDesc": "Начните бесплатно",
+    "businessDesc": "CRM, команда и зоны для бизнеса",
+    "cancelAnytime": "Отмена в любое время",
+    "choosePlan": "Выберите подходящий тариф",
+    "comingSoon": "Оплата скоро будет доступна! Следите за обновлениями.",
+    "companyDetails": {
+      "addressLine": "г. Алматы, ул. Шолохова, д. 20",
+      "nameLine": "ARchitecKZ • БИН: 190540008684"
+    },
+    "currentPlan": "Текущий",
+    "description": "Разблокируйте все возможности lnkmx.my для вашего бизнеса",
+    "features": {
+      "advancedAnalytics": "Расширенная аналитика кликов",
+      "aiMonthly": "1 AI-генерация в месяц",
+      "aiMonthlyPro": "5 AI-генераций в месяц",
+      "allBasic": "Всё из BASIC, плюс:",
+      "allBlocks": "Все 25+ типов блоков без ограничений",
+      "allPro": "Всё из PRO, плюс:",
+      "basicBlocks": "Базовые блоки (Профиль, Ссылка, Текст, Фото, Кнопка, Соцсети)",
+      "basicCustomization": "Базовая настройка (цвета, шрифты)",
+      "basicStats": "Базовая статистика просмотров",
+      "basicThemes": "Базовые темы оформления",
+      "businessZones": "Бизнес-зоны (рабочие пространства)",
+      "faq": "FAQ и отзывы блоки",
+      "forms": "Формы сбора заявок",
+      "fullCRM": "Полноценная CRM для лидов",
+      "maps": "Карты (адрес + карта)",
+      "media": "Медиа: изображения, видео, карусели",
+      "messengers": "Мессенджеры и соцсети",
+      "priceLists": "Прайс-листы и каталоги товаров",
+      "prioritySupport": "Приоритетная поддержка",
+      "proThemes": "Профессиональные темы и анимации",
+      "qrCode": "QR-код страницы",
+      "scheduler": "Планировщик блоков",
+      "teamCRM": "Командная CRM и Kanban",
+      "teamInbox": "Командный чат и задачи",
+      "teamMembers": "До 5 участников команды",
+      "teamRoles": "Роли и разграничение доступа",
+      "telegramNotifications": "Telegram-уведомления о заявках",
+      "timers": "Таймеры обратного отсчёта",
+      "unlimitedLinks": "Неограниченные ссылки"
+    },
+    "free": {
+      "title": "Бесплатно"
+    },
+    "limitations": {
+      "limitedBlocks": "10 блоков максимум",
+      "watermark": "Водяной знак lnkmx.my"
+    },
+    "moneyBack": "Гарантия возврата 14 дней",
+    "month": "мес",
+    "months": "мес",
+    "new": "Новинка",
+    "paymentNote": "Оплата через RoboKassa",
+    "popular": "Популярный",
+    "proDesc": "Всё для профессионалов и бизнеса",
+    "savingsText": "Экономия",
+    "securePayments": "Безопасные платежи",
+    "seo": {
+      "description": "Сравните тарифы lnkmx: бесплатный конструктор, Pro с AI, CRM, аналитикой и своим доменом. Прозрачные цены.",
+      "imageAlt": "Тарифные планы lnkmx",
+      "title": "lnkmx Тарифы — Планы для Link in Bio и Мини-сайтов"
+    },
+    "startFree": "Начать бесплатно",
+    "subscribe": "Подписаться",
+    "title": "Тарифы",
+    "tokens": {
+      "balanceDescription": "100 Linkkon = 1 день Premium. Ваш баланс: {{balance}} токенов",
+      "buyDay": "Купить 1 день за {{cost}} Linkkon",
+      "buyTokens": "Купить токены",
+      "converting": "Конвертация...",
+      "title": "Или платите Linkkon токенами"
+    },
+    "totalFor": "за"
+  }
 }

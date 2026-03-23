@@ -1,32 +1,32 @@
 {
   "pricing": {
     "alreadyFree": "Free plan is already active",
-    "basicDesc": "Start for free",
+    "basicDesc": "Bepul boshlang",
     "businessDesc": "CRM, team & zones for business",
-    "cancelAnytime": "Cancel anytime",
-    "choosePlan": "Choose the right plan",
+    "cancelAnytime": "Istalgan vaqtda bekor qilish",
+    "choosePlan": "Mos tarifni tanlang",
     "comingSoon": "Payment coming soon! Stay tuned.",
     "companyDetails": {
       "addressLine": "Almaty, st. Sholokhov, 20",
       "nameLine": "ARchitecKZ • BIN: 190540008684"
     },
-    "currentPlan": "Current",
-    "description": "Unlock all lnkmx.my features for your business",
+    "currentPlan": "Joriy",
+    "description": "Sizning biznesingiz uchun LinkMAX.my barcha imkoniyatlarini oching",
     "features": {
       "advancedAnalytics": "Advanced click analytics",
       "aiMonthly": "1 AI generation/month",
       "aiMonthlyPro": "5 AI generations/month",
       "allBasic": "Everything in BASIC, plus:",
-      "allBlocks": "All 25+ block types unlimited",
+      "allBlocks": "Barcha 25+ blok turlari cheksiz",
       "allPro": "Everything in PRO, plus:",
       "basicBlocks": "Basic blocks (Profile, Link, Text, Photo, Button, Socials)",
       "basicCustomization": "Basic customization (colors, fonts)",
       "basicStats": "Basic view stats",
-      "basicThemes": "Basic themes",
+      "basicThemes": "Asosiy mavzular",
       "businessZones": "Business Zones (workspaces)",
       "faq": "FAQ and review blocks",
       "forms": "Lead forms",
-      "fullCRM": "Full CRM for leads",
+      "fullCRM": "Lidlar uchun to'liq CRM",
       "maps": "Maps (address + map)",
       "media": "Media: images, video, carousels",
       "messengers": "Messengers and socials",
@@ -39,9 +39,9 @@
       "teamInbox": "Team chat & tasks",
       "teamMembers": "Up to 5 team members",
       "teamRoles": "Roles & access control",
-      "telegramNotifications": "Telegram notifications for leads",
+      "telegramNotifications": "Lidlar haqida Telegram-xabarnomalar",
       "timers": "Countdown timers",
-      "unlimitedLinks": "Unlimited links"
+      "unlimitedLinks": "Cheksiz havolalar"
     },
     "free": {
       "title": "Free"
@@ -50,23 +50,23 @@
       "limitedBlocks": "10 blocks maximum",
       "watermark": "lnkmx.my watermark"
     },
-    "moneyBack": "14-day money-back guarantee",
-    "month": "mo",
-    "months": "mo",
+    "moneyBack": "14 kunlik qaytarish kafolati",
+    "month": "oy",
+    "months": "oy",
     "new": "New",
     "paymentNote": "Payment via RoboKassa",
-    "popular": "Popular",
-    "proDesc": "Everything for professionals and business",
-    "savingsText": "Save",
-    "securePayments": "Secure payments",
+    "popular": "Ommabop",
+    "proDesc": "Professionallar va biznes uchun hamma narsa",
+    "savingsText": "Tejamkorlik",
+    "securePayments": "Xavfsiz to'lovlar",
     "seo": {
-      "description": "Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.",
+      "description": "LinkMAX rejalarini solishtiring: bepul bio-havola yaratuvchisi, AI bilan Pro, CRM, tahlil va shaxsiy domenlar.",
       "imageAlt": "lnkmx Pricing Plans",
-      "title": "lnkmx Pricing — Plans for Link in Bio & Mini-Sites"
+      "title": "LinkMAX tariflari — bio-havolalar va mini-saytlar uchun rejalar"
     },
     "startFree": "Start for free",
-    "subscribe": "Subscribe",
-    "title": "Pricing",
+    "subscribe": "Obuna bo'lish",
+    "title": "Tariflar",
     "tokens": {
       "balanceDescription": "100 Linkkon = 1 day of Premium. Your balance: {{balance}} tokens",
       "buyDay": "Buy 1 day for {{cost}} Linkkon",

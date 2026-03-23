@@ -3,14 +3,14 @@
     "alreadyFree": "Free plan is already active",
     "basicDesc": "Start for free",
     "businessDesc": "CRM, team & zones for business",
-    "cancelAnytime": "Cancel anytime",
-    "choosePlan": "Choose the right plan",
+    "cancelAnytime": "언제든지 취소 가능",
+    "choosePlan": "올바른 요금제 선택",
     "comingSoon": "Payment coming soon! Stay tuned.",
     "companyDetails": {
       "addressLine": "Almaty, st. Sholokhov, 20",
       "nameLine": "ARchitecKZ • BIN: 190540008684"
     },
-    "currentPlan": "Current",
+    "currentPlan": "현재 요금제",
     "description": "Unlock all lnkmx.my features for your business",
     "features": {
       "advancedAnalytics": "Advanced click analytics",
@@ -44,29 +44,29 @@
       "unlimitedLinks": "Unlimited links"
     },
     "free": {
-      "title": "Free"
+      "title": "무료"
     },
     "limitations": {
       "limitedBlocks": "10 blocks maximum",
       "watermark": "lnkmx.my watermark"
     },
-    "moneyBack": "14-day money-back guarantee",
-    "month": "mo",
+    "moneyBack": "14일 환불 보장",
+    "month": "월",
     "months": "mo",
     "new": "New",
     "paymentNote": "Payment via RoboKassa",
-    "popular": "Popular",
+    "popular": "인기",
     "proDesc": "Everything for professionals and business",
     "savingsText": "Save",
-    "securePayments": "Secure payments",
+    "securePayments": "안전한 결제",
     "seo": {
       "description": "Compare lnkmx plans: free link in bio builder, Pro with AI, CRM, analytics, and custom domains. Transparent pricing in minutes.",
       "imageAlt": "lnkmx Pricing Plans",
       "title": "lnkmx Pricing — Plans for Link in Bio & Mini-Sites"
     },
     "startFree": "Start for free",
-    "subscribe": "Subscribe",
-    "title": "Pricing",
+    "subscribe": "구독하기",
+    "title": "요금",
     "tokens": {
       "balanceDescription": "100 Linkkon = 1 day of Premium. Your balance: {{balance}} tokens",
       "buyDay": "Buy 1 day for {{cost}} Linkkon",
