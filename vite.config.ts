@@ -75,7 +75,6 @@ export default defineConfig(({ mode }) => ({
             if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
             if (id.includes('framer-motion')) return 'vendor-motion';
             if (id.includes('@radix-ui/')) return 'vendor-radix';
-            if (id.includes('@sentry/')) return 'vendor-sentry';
             if (id.includes('lucide-react')) return 'vendor-lucide';
             if (id.includes('recharts')) return 'vendor-recharts';
             if (id.includes('jspdf') || id.includes('jspdf-autotable')) return 'vendor-pdf';
