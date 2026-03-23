@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/484</span>
+                <span class='fraction'>0/505</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/484</span>
+                <span class='fraction'>0/505</span>
             </div>
         
             
@@ -803,7 +803,30 @@
 <a name='L738'></a><a href='#L738'>738</a>
 <a name='L739'></a><a href='#L739'>739</a>
 <a name='L740'></a><a href='#L740'>740</a>
-<a name='L741'></a><a href='#L741'>741</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L741'></a><a href='#L741'>741</a>
+<a name='L742'></a><a href='#L742'>742</a>
+<a name='L743'></a><a href='#L743'>743</a>
+<a name='L744'></a><a href='#L744'>744</a>
+<a name='L745'></a><a href='#L745'>745</a>
+<a name='L746'></a><a href='#L746'>746</a>
+<a name='L747'></a><a href='#L747'>747</a>
+<a name='L748'></a><a href='#L748'>748</a>
+<a name='L749'></a><a href='#L749'>749</a>
+<a name='L750'></a><a href='#L750'>750</a>
+<a name='L751'></a><a href='#L751'>751</a>
+<a name='L752'></a><a href='#L752'>752</a>
+<a name='L753'></a><a href='#L753'>753</a>
+<a name='L754'></a><a href='#L754'>754</a>
+<a name='L755'></a><a href='#L755'>755</a>
+<a name='L756'></a><a href='#L756'>756</a>
+<a name='L757'></a><a href='#L757'>757</a>
+<a name='L758'></a><a href='#L758'>758</a>
+<a name='L759'></a><a href='#L759'>759</a>
+<a name='L760'></a><a href='#L760'>760</a>
+<a name='L761'></a><a href='#L761'>761</a>
+<a name='L762'></a><a href='#L762'>762</a>
+<a name='L763'></a><a href='#L763'>763</a>
+<a name='L764'></a><a href='#L764'>764</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -976,7 +999,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1714,9 +1760,32 @@ type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  }, []);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  // Step handlers</span>
 <span class="cstat-no" title="statement not covered" >  const handleSelectNiche = async (niche: Niche) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedNiche(niche);</span>
+    
+<span class="cstat-no" title="statement not covered" >    // SMART-WRITING 2.0: For expert strategy, we use a deterministic, ultra-fast pre-configured layout </span>
+<span class="cstat-no" title="statement not covered" >    // and skip the template carousel to minimize friction in the funnel.</span>
+<span class="cstat-no" title="statement not covered" >    if (niche === 'expert' || niche === 'business' || niche === 'education') {</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedTemplate({</span>
+<span class="cstat-no" title="statement not covered" >        id: 'fast-expert-template',</span>
+<span class="cstat-no" title="statement not covered" >        name: 'LinkMAX Expert Pro',</span>
+<span class="cstat-no" title="statement not covered" >        description: 'Optimized high-converting funnel',</span>
+<span class="cstat-no" title="statement not covered" >        category: niche,</span>
+<span class="cstat-no" title="statement not covered" >        blocks: [</span>
+<span class="cstat-no" title="statement not covered" >          { type: 'profile' },                     // Hero</span>
+<span class="cstat-no" title="statement not covered" >          { type: 'catalog', overrides: { title: 'Услуги и Обучение' } }, // Courses</span>
+<span class="cstat-no" title="statement not covered" >          { type: 'scratch' },                     // Lead Magnet (Gamification)</span>
+<span class="cstat-no" title="statement not covered" >          { type: 'form', overrides: { title: 'Оставить заявку' } },     // Lead Form</span>
+<span class="cstat-no" title="statement not covered" >          { type: 'messenger' },                   // Telegram / WhatsApp</span>
+<span class="cstat-no" title="statement not covered" >          { type: 'socials' }                      // Socials</span>
+<span class="cstat-no" title="statement not covered" >        ],</span>
+<span class="cstat-no" title="statement not covered" >        preview_image: null,</span>
+<span class="cstat-no" title="statement not covered" >        is_premium: false,</span>
+<span class="cstat-no" title="statement not covered" >      });</span>
+<span class="cstat-no" title="statement not covered" >      setStep('dynamic_form');</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    await loadTemplates(niche);</span>
 <span class="cstat-no" title="statement not covered" >    setStep('template');</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
@@ -2081,7 +2150,7 @@ type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
 <span class="cstat-no" title="statement not covered" >                    &lt;div className="flex items-center justify-between"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                      &lt;Label className="text-base font-semibold"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.bioBeauty', 'Кратко о вашем опыте (Бьюти)') :</span>
-<span class="cstat-no" title="statement not covered" >                          (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :</span>
+<span class="cstat-no" title="statement not covered" >                          (selectedNiche === 'art') ? t('aiBuilder.nicheQuestions.bioFreelance', 'В чем ваша суперсила? (Фриланс)') :</span>
 <span class="cstat-no" title="statement not covered" >                            selectedNiche === 'business' ? t('aiBuilder.nicheQuestions.bioBusiness', 'Опишите ваш бизнес в 2-х словах') :</span>
 <span class="cstat-no" title="statement not covered" >                              t('aiBuilder.nicheQuestions.bioGeneric', 'О себе / Описание')}</span>
                       &lt;/Label&gt;
@@ -2102,7 +2171,7 @@ type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
 <span class="cstat-no" title="statement not covered" >                    &lt;div className="flex items-center justify-between"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                      &lt;Label className="text-base font-semibold"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        {selectedNiche === 'beauty' ? t('aiBuilder.nicheQuestions.srvBeauty', 'Какие услуги вы оказываете? (С ценами)') :</span>
-<span class="cstat-no" title="statement not covered" >                          (selectedNiche === 'art' || selectedNiche === 'tech') ? t('aiBuilder.nicheQuestions.srvFreelance', 'Навыки или Тарифы') :</span>
+<span class="cstat-no" title="statement not covered" >                          (selectedNiche === 'art') ? t('aiBuilder.nicheQuestions.srvFreelance', 'Навыки или Тарифы') :</span>
 <span class="cstat-no" title="statement not covered" >                            t('aiBuilder.nicheQuestions.srvGeneric', 'Услуги или Навыки')}</span>
                       &lt;/Label&gt;
 <span class="cstat-no" title="statement not covered" >                      &lt;span className="text-xs text-muted-foreground"&gt;{t('common.optional', 'Необязательно')}&lt;/span&gt;</span>
@@ -2290,7 +2359,7 @@ type Step = 'niche' | 'template' | 'dynamic_form' | 'generating' | 'complete';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

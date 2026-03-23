@@ -908,7 +908,7 @@ export interface ParsedSocial {
 <span class="cstat-no" title="statement not covered" >    // 1. Phone extraction (very robust regex for international phones)</span>
 <span class="cstat-no" title="statement not covered" >    // Matches: +7 777 123 45 67, 8(999)123-45-67, +1-555-555-5555</span>
 <span class="cstat-no" title="statement not covered" >    const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}/g;</span>
-<span class="cstat-no" title="statement not covered" >    let phoneMatch;</span>
+<span class="cstat-no" title="statement not covered" >    let phoneMatch: RegExpExecArray | null;</span>
 <span class="cstat-no" title="statement not covered" >    while ((phoneMatch = phoneRegex.exec(text)) !== null) {</span>
 <span class="cstat-no" title="statement not covered" >        const phone = phoneMatch[0].replace(/[^+\d]/g, '');</span>
 <span class="cstat-no" title="statement not covered" >        // Deduplicate</span>
@@ -919,29 +919,29 @@ export interface ParsedSocial {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    // 2. Email extraction</span>
 <span class="cstat-no" title="statement not covered" >    const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;</span>
-<span class="cstat-no" title="statement not covered" >    let emailMatch;</span>
+<span class="cstat-no" title="statement not covered" >    let emailMatch: RegExpExecArray | null;</span>
 <span class="cstat-no" title="statement not covered" >    while ((emailMatch = emailRegex.exec(text)) !== null) {</span>
-<span class="cstat-no" title="statement not covered" >        if (!results.find(r =&gt; r.username === emailMatch[0])) {</span>
-<span class="cstat-no" title="statement not covered" >            results.push({ platform: 'email', username: emailMatch[0] });</span>
+<span class="cstat-no" title="statement not covered" >        if (!results.find(r =&gt; r.username === emailMatch![0])) {</span>
+<span class="cstat-no" title="statement not covered" >            results.push({ platform: 'email', username: emailMatch![0] });</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    // 3. Telegram Contextual Extraction</span>
 <span class="cstat-no" title="statement not covered" >    // First, look for direct links t.me/username</span>
 <span class="cstat-no" title="statement not covered" >    const tmeRegex = /t\.me\/([a-zA-Z0-9_]{5,32})/g;</span>
-<span class="cstat-no" title="statement not covered" >    let tmeMatch;</span>
+<span class="cstat-no" title="statement not covered" >    let tmeMatch: RegExpExecArray | null;</span>
 <span class="cstat-no" title="statement not covered" >    while ((tmeMatch = tmeRegex.exec(text)) !== null) {</span>
-<span class="cstat-no" title="statement not covered" >        if (!results.find(r =&gt; r.platform === 'telegram' &amp;&amp; r.username === tmeMatch[1])) {</span>
-<span class="cstat-no" title="statement not covered" >            results.push({ platform: 'telegram', username: tmeMatch[1] });</span>
+<span class="cstat-no" title="statement not covered" >        if (!results.find(r =&gt; r.platform === 'telegram' &amp;&amp; r.username === tmeMatch![1])) {</span>
+<span class="cstat-no" title="statement not covered" >            results.push({ platform: 'telegram', username: tmeMatch![1] });</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    // Second, look for @username if "тг", "tg", "telegram" is nearby</span>
 <span class="cstat-no" title="statement not covered" >    const atTgRegex = /(?:тг|tg|telegram|телеграм|телеграмм)[:\s.-]*@([a-zA-Z0-9_]{5,32})/gi;</span>
-<span class="cstat-no" title="statement not covered" >    let atTgMatch;</span>
+<span class="cstat-no" title="statement not covered" >    let atTgMatch: RegExpExecArray | null;</span>
 <span class="cstat-no" title="statement not covered" >    while ((atTgMatch = atTgRegex.exec(text)) !== null) {</span>
-<span class="cstat-no" title="statement not covered" >        if (!results.find(r =&gt; r.platform === 'telegram' &amp;&amp; r.username === atTgMatch[1])) {</span>
-<span class="cstat-no" title="statement not covered" >            results.push({ platform: 'telegram', username: atTgMatch[1] });</span>
+<span class="cstat-no" title="statement not covered" >        if (!results.find(r =&gt; r.platform === 'telegram' &amp;&amp; r.username === atTgMatch![1])) {</span>
+<span class="cstat-no" title="statement not covered" >            results.push({ platform: 'telegram', username: atTgMatch![1] });</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
@@ -1138,7 +1138,7 @@ export interface ParsedSocial {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

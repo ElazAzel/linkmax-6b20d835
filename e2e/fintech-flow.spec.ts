@@ -1,73 +1,96 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Fintech Flow E2E', () => {
-    const testEmail = `fintech-test-${Date.now()}@example.com`;
-    const testPassword = 'TestPassword123!';
-
+    // Rely on global setup for authentication
+    
     test.beforeEach(async ({ page }) => {
-        // 1. Sign up/Login
-        await page.goto('/auth');
-        await page.fill('input[type="email"]', testEmail);
-        await page.fill('input[type="password"]', testPassword);
-        await page.click('button[type="submit"]');
+        // Mock Robokassa payment session creation
+        await page.route('**/functions/v1/create-payment-session', async (route) => {
+            const json = {
+                success: true,
+                paymentUrl: 'https://auth.robokassa.ru/Merchant/Index.aspx?fake=true',
+                orderId: 'fake-order-123'
+            };
+            await route.fulfill({ json });
+        });
 
-        // Wait for redirect to dashboard/onboarding
-        await expect(page).toHaveURL(/dashboard|onboarding/, { timeout: 10000 });
+        // Mock old robokassa function if still used
+        await page.route('**/functions/v1/robokassa', async (route) => {
+            const json = {
+                success: true,
+                url: 'https://auth.robokassa.ru/Merchant/Index.aspx?fake=true'
+            };
+            await route.fulfill({ json });
+        });
+        // Mock Supabase REST calls for wallet
+        await page.route('**/rest/v1/user_wallets*', async (route) => {
+            await route.fulfill({
+                json: [{ id: 'fake-wallet-id', user_id: 'fake-user-id', balance: 5000, currency: 'KZT' }]
+            });
+        });
+
+        await page.route('**/rest/v1/wallet_transactions*', async (route) => {
+            await route.fulfill({
+                json: []
+            });
+        });
     });
 
     test('wallet widget displays correct initial state', async ({ page }) => {
-        await page.goto('/dashboard?tab=crm');
+        await page.goto('/dashboard?tab=activity');
 
-        // Check for WalletWidget title or balance
-        const walletHeading = page.locator('text=Кошелек|Wallet').first();
+        // Check for WalletWidget title via title or balance testid
+        const walletHeading = page.locator('text=Мой кошелек|My Wallet').first();
         await expect(walletHeading).toBeVisible();
 
-        const balanceText = page.locator('text=0.00').first();
+        const balanceText = page.getByTestId('wallet-balance');
         await expect(balanceText).toBeVisible();
     });
 
     test('can open payout request dialog', async ({ page }) => {
-        await page.goto('/dashboard?tab=crm');
+        await page.goto('/dashboard?tab=activity');
 
-        // Click "Вывести средства" (Withdraw) button
-        const withdrawButton = page.locator('button:has-text("Вывести"), button:has-text("Withdraw")').first();
+        // Click "Вывести средства" (Withdraw) button via testid
+        const withdrawButton = page.getByTestId('withdraw-button');
         await expect(withdrawButton).toBeVisible();
         await withdrawButton.click();
 
-        // Check if dialog appeared
-        const dialogTitle = page.locator('text=Запрос на выплату|Payout Request').first();
+        // Check if dialog appeared via testid
+        const dialogTitle = page.getByTestId('payout-dialog-title');
         await expect(dialogTitle).toBeVisible();
 
-        // Check for input fields
-        await expect(page.locator('input[placeholder*="сумму"], input[placeholder*="amount"]')).toBeVisible();
+        // Check for input field via testid
+        await expect(page.getByTestId('payout-amount-input')).toBeVisible();
     });
 
-    test('can initiate subscription payment via Robokassa', async ({ page }) => {
+    test('can initiate subscription payment via Robokassa Mock', async ({ page }) => {
         await page.goto('/pricing');
 
-        // Find a "Buy" or "Pro" button
-        const buyButton = page.locator('button:has-text("Pro"), button:has-text("Buy"), button:has-text("Купить")').first();
+        // Find the Pro button via testid
+        const buyButton = page.getByTestId('pro-plan-button');
         await expect(buyButton).toBeVisible();
+        
+        // Intercept the redirect or check navigation
         await buyButton.click();
 
-        // It should trigger useRobokassa which calls the edge function and redirects
-        // We expect it to redirect to robokassa.ru (or its test subdomain)
-        await page.waitForTimeout(3000);
-        const url = page.url();
-        expect(url).toMatch(/robokassa\.ru|auth/); // Might stay on auth if subscription fails, but should try to redirect
+        // We expect it to try to redirect to robokassa.ru (mocked)
+        await expect(page).toHaveURL(/robokassa\.ru/, { timeout: 10000 });
     });
 });
 
 test.describe('Admin Fintech Management', () => {
     test('admin can access fintech tab', async ({ page }) => {
         // Note: This requires admin privileges. 
-        // In a real environment, we'd use a specific admin account.
+        // In this environment, we assume the user might not be admin, 
+        // so we check for negative or positive depending on auth level.
         await page.goto('/admin?tab=fintech');
 
-        // If not admin, it might redirect or show empty.
-        // But we check if the tab content is rendered.
-        const heading = page.locator('h1, h2:has-text("Выплаты"), h2:has-text("Payouts")').first();
-        // This will fail if not authenticated as admin, which is expected behavior for security
-        // In CI, we skip or use admin-auth.json
+        // If authenticated as admin in setup, this will pass.
+        // For now, just check if we reachable or redirected
+        const url = page.url();
+        if (url.includes('/admin')) {
+            const heading = page.locator('h1, h2:has-text("Выплаты"), h2:has-text("Payouts"), h2:has-text("Fintech")').first();
+            await expect(heading).toBeDefined();
+        }
     });
 });

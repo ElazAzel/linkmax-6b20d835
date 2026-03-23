@@ -399,13 +399,14 @@ export default function Pricing() {
                       </li>
                     ))}
                   </ul>
-                  <Button
-                    className="w-full h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600"
-                    disabled={isCurrentPlan || isLoading}
-                    onClick={() => handleSelectPlan('pro')}
-                  >
-                    {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
-                  </Button>
+                    <Button
+                      data-testid="pro-plan-button"
+                      className="w-full h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-500 to-purple-600"
+                      disabled={isCurrentPlan || isLoading}
+                      onClick={() => handleSelectPlan('pro')}
+                    >
+                      {isCurrentPlan ? t('pricing.currentPlan', 'Текущий план') : t('pricing.subscribe', 'Подписаться')}
+                    </Button>
                 </CardContent>
               </Card>
             );

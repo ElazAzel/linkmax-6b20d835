@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/116</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
@@ -206,6 +206,14 @@
 <a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -214,12 +222,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -229,8 +231,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -345,6 +345,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { supabase } from '@/integrations/supabase/client';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
 import type { PageExperiment, BlockVariation, Block } from '@/types/page';
+import type { Json } from '@/integrations/supabase/types';
 &nbsp;
 <span class="cstat-no" title="statement not covered" >/**</span>
  * Create a new experiment with initial variants
@@ -357,10 +358,11 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
 ) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >        // 1. Create the experiment</span>
-<span class="cstat-no" title="statement not covered" >        const { data: experiment, error: expError } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >        const { data: experiment, error: expError } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >            .from('experiments')</span>
 <span class="cstat-no" title="statement not covered" >            .insert({</span>
 <span class="cstat-no" title="statement not covered" >                page_id: pageId,</span>
+<span class="cstat-no" title="statement not covered" >                block_id: baseBlockId,</span>
 <span class="cstat-no" title="statement not covered" >                name,</span>
 <span class="cstat-no" title="statement not covered" >                status: 'draft'</span>
 <span class="cstat-no" title="statement not covered" >            })</span>
@@ -370,26 +372,24 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
 <span class="cstat-no" title="statement not covered" >        if (expError) throw expError;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        // 2. Create the variants</span>
-<span class="cstat-no" title="statement not covered" >        const variantsToInsert = variants.map(v =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >        const variantsToInsert = variants.map((v, index) =&gt; ({</span>
 <span class="cstat-no" title="statement not covered" >            experiment_id: experiment.id,</span>
-<span class="cstat-no" title="statement not covered" >            base_block_id: baseBlockId,</span>
-<span class="cstat-no" title="statement not covered" >            variant_label: v.variant_label,</span>
-<span class="cstat-no" title="statement not covered" >            block_data: v.block_data,</span>
-<span class="cstat-no" title="statement not covered" >            traffic_weight: v.traffic_weight</span>
+<span class="cstat-no" title="statement not covered" >            variant_key: v.variant_label || `variant_${index}`,</span>
+<span class="cstat-no" title="statement not covered" >            block_data: v.block_data as unknown as Json</span>
 <span class="cstat-no" title="statement not covered" >        }));</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        const { error: varError } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >        const { error: varError } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >            .from('experiment_variants')</span>
 <span class="cstat-no" title="statement not covered" >            .insert(variantsToInsert);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        if (varError) {</span>
 <span class="cstat-no" title="statement not covered" >            // Cleanup experiment if variants fail</span>
-<span class="cstat-no" title="statement not covered" >            await (supabase as any).from('experiments').delete().eq('id', experiment.id);</span>
+<span class="cstat-no" title="statement not covered" >            await (supabase as unknown as { from: (schema: string) =&gt; any }).from('experiments').delete().eq('id', experiment.id);</span>
 <span class="cstat-no" title="statement not covered" >            throw varError;</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return { data: experiment, error: null };</span>
-<span class="cstat-no" title="statement not covered" >    } catch (error: any) {</span>
+<span class="cstat-no" title="statement not covered" >    } catch (error: unknown) {</span>
 <span class="cstat-no" title="statement not covered" >        return { data: null, error: error instanceof Error ? error : new Error(String(error)) };</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >}</span>
@@ -402,14 +402,14 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
 <span class="cstat-no" title="statement not covered" >    status: PageExperiment['status']</span>
 ) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >        const updateData: any = { status };</span>
+<span class="cstat-no" title="statement not covered" >        const updateData: { status: PageExperiment['status']; started_at?: string; ended_at?: string } = { status };</span>
 <span class="cstat-no" title="statement not covered" >        if (status === 'running') {</span>
 <span class="cstat-no" title="statement not covered" >            updateData.started_at = new Date().toISOString();</span>
 <span class="cstat-no" title="statement not covered" >        } else if (status === 'ended') {</span>
 <span class="cstat-no" title="statement not covered" >            updateData.ended_at = new Date().toISOString();</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        const { data, error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >        const { data, error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >            .from('experiments')</span>
 <span class="cstat-no" title="statement not covered" >            .update(updateData)</span>
 <span class="cstat-no" title="statement not covered" >            .eq('id', experimentId)</span>
@@ -428,7 +428,7 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" >export async function deleteExperiment(experimentId: string) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >        const { error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >        const { error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >            .from('experiments')</span>
 <span class="cstat-no" title="statement not covered" >            .delete()</span>
 <span class="cstat-no" title="statement not covered" >            .eq('id', experimentId);</span>
@@ -450,7 +450,7 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
 ) {
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >        // 1. Mark experiment as ended with winner</span>
-<span class="cstat-no" title="statement not covered" >        const { data: experiment, error: expError } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >        const { data: experiment, error: expError } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >            .from('experiments')</span>
 <span class="cstat-no" title="statement not covered" >            .update({</span>
 <span class="cstat-no" title="statement not covered" >                status: 'ended',</span>
@@ -465,14 +465,14 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        // 2. If applyToPage is true, update the base block with variant data</span>
 <span class="cstat-no" title="statement not covered" >        if (applyToPage) {</span>
-<span class="cstat-no" title="statement not covered" >            const variant = experiment.experiment_variants.find((v: any) =&gt; v.id === variantId);</span>
+<span class="cstat-no" title="statement not covered" >            const variant = experiment.experiment_variants.find((v: { id: string }) =&gt; v.id === variantId);</span>
 <span class="cstat-no" title="statement not covered" >            if (variant) {</span>
 <span class="cstat-no" title="statement not covered" >                const { error: blockError } = await supabase</span>
 <span class="cstat-no" title="statement not covered" >                    .from('blocks')</span>
 <span class="cstat-no" title="statement not covered" >                    .update({</span>
 <span class="cstat-no" title="statement not covered" >                        content: variant.block_data</span>
-<span class="cstat-no" title="statement not covered" >                    } as any)</span>
-<span class="cstat-no" title="statement not covered" >                    .eq('id', variant.base_block_id);</span>
+<span class="cstat-no" title="statement not covered" >                    } as unknown as Record&lt;string, unknown&gt;)</span>
+<span class="cstat-no" title="statement not covered" >                    .eq('id', experiment.block_id);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                if (blockError) throw blockError;</span>
 <span class="cstat-no" title="statement not covered" >            }</span>
@@ -490,7 +490,7 @@ import type { PageExperiment, BlockVariation, Block } from '@/types/page';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

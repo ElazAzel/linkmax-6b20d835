@@ -39,9 +39,10 @@ export class PaymentService {
             body: params
         });
 
-        if (error || !data.success) {
-            console.error('Failed to create payment session:', error || data?.error);
-            throw new Error(data?.error || 'Payment initialization failed');
+        if (error || !data?.success) {
+            const errorMessage = error?.message || data?.error || 'Payment initialization failed';
+            console.error('Failed to create payment session:', errorMessage);
+            throw new Error(errorMessage);
         }
 
         return {

@@ -995,7 +995,7 @@ interface Props {
 <span class="cstat-no" title="statement not covered" >                      {a.is_active ? &lt;Play className="h-3 w-3 text-primary animate-pulse" /&gt; : &lt;Pause className="h-3 w-3 text-muted-foreground" /&gt;}</span>
 <span class="cstat-no" title="statement not covered" >                      &lt;Switch</span>
 <span class="cstat-no" title="statement not covered" >                        checked={a.is_active}</span>
-<span class="cstat-no" title="statement not covered" >                        onCheckedChange={(v) =&gt; toggle(a.id, v)}</span>
+<span class="cstat-no" title="statement not covered" >                        onCheckedChange={(v: boolean) =&gt; toggle(a.id, v)}</span>
 <span class="cstat-no" title="statement not covered" >                        className="data-[state=checked]:bg-primary"</span>
                       /&gt;
                     &lt;/div&gt;
@@ -1031,7 +1031,7 @@ interface Props {
 <span class="cstat-no" title="statement not covered" >              &lt;Label className="text-xs uppercase font-black text-muted-foreground tracking-widest"&gt;{t('zones.automations.ruleName', 'Название правила')}&lt;/Label&gt;</span>
 <span class="cstat-no" title="statement not covered" >              &lt;Input</span>
 <span class="cstat-no" title="statement not covered" >                value={form.name}</span>
-<span class="cstat-no" title="statement not covered" >                onChange={e =&gt; setForm(f =&gt; ({ ...f, name: e.target.value }))}</span>
+<span class="cstat-no" title="statement not covered" >                onChange={(e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; setForm(f =&gt; ({ ...f, name: e.target.value }))}</span>
 <span class="cstat-no" title="statement not covered" >                placeholder={t('zones.automations.ruleNamePlaceholder', 'Например: Авто-инвойс при закрытии')}</span>
 <span class="cstat-no" title="statement not covered" >                className="bg-muted/20 border-border/40"</span>
               /&gt;
@@ -1040,7 +1040,7 @@ interface Props {
 <span class="cstat-no" title="statement not covered" >            &lt;div className="grid grid-cols-1 md:grid-cols-2 gap-6"&gt;</span>
 <span class="cstat-no" title="statement not covered" >              &lt;div className="space-y-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;Label className="text-xs uppercase font-black text-muted-foreground tracking-widest"&gt;{t('zones.automations.trigger', 'Триггер (Когда)')}&lt;/Label&gt;</span>
-<span class="cstat-no" title="statement not covered" >                &lt;Select value={form.trigger_type} onValueChange={v =&gt; setForm(f =&gt; ({ ...f, trigger_type: v, config: {} }))}&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;Select value={form.trigger_type} onValueChange={(v: string) =&gt; setForm(f =&gt; ({ ...f, trigger_type: v, config: {} }))}&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;SelectTrigger className="bg-muted/30 h-11"&gt;&lt;SelectValue placeholder={t('zones.automations.event', 'Событие')} /&gt;&lt;/SelectTrigger&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;SelectContent&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    {TRIGGERS.map(t =&gt; (</span>
@@ -1057,7 +1057,7 @@ interface Props {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >              &lt;div className="space-y-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;Label className="text-xs uppercase font-black text-muted-foreground tracking-widest"&gt;{t('zones.automations.action', 'Действие (Тогда)')}&lt;/Label&gt;</span>
-<span class="cstat-no" title="statement not covered" >                &lt;Select value={form.action_type} onValueChange={v =&gt; setForm(f =&gt; ({ ...f, action_type: v }))}&gt;</span>
+<span class="cstat-no" title="statement not covered" >                &lt;Select value={form.action_type} onValueChange={(v: string) =&gt; setForm(f =&gt; ({ ...f, action_type: v }))}&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;SelectTrigger className="bg-muted/30 h-11"&gt;&lt;SelectValue placeholder={t('zones.automations.reaction', 'Реакция')} /&gt;&lt;/SelectTrigger&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;SelectContent&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    {ACTIONS.map(a =&gt; (</span>
@@ -1085,7 +1085,7 @@ interface Props {
 <span class="cstat-no" title="statement not covered" >                    &lt;Label className="text-xs font-medium"&gt;{t('zones.automations.dealStage', 'Стадия сделки')}&lt;/Label&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;Select</span>
 <span class="cstat-no" title="statement not covered" >                      value={form.config.stage_id || ''}</span>
-<span class="cstat-no" title="statement not covered" >                      onValueChange={v =&gt; setForm(f =&gt; ({ ...f, config: { ...f.config, stage_id: v } }))}</span>
+<span class="cstat-no" title="statement not covered" >                      onValueChange={(v: string) =&gt; setForm(f =&gt; ({ ...f, config: { ...f.config, stage_id: v } }))}</span>
                     &gt;
 <span class="cstat-no" title="statement not covered" >                      &lt;SelectTrigger className="bg-background/50 h-9"&gt;&lt;SelectValue placeholder={t('zones.automations.anyStage', 'Любая стадия')} /&gt;&lt;/SelectTrigger&gt;</span>
 <span class="cstat-no" title="statement not covered" >                      &lt;SelectContent&gt;</span>
@@ -1101,7 +1101,7 @@ interface Props {
 <span class="cstat-no" title="statement not covered" >                    &lt;Label className="text-xs font-medium"&gt;{t('zones.automations.taskText', 'Текст задачи')}&lt;/Label&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;Input</span>
 <span class="cstat-no" title="statement not covered" >                      value={form.config.task_title || ''}</span>
-<span class="cstat-no" title="statement not covered" >                      onChange={e =&gt; setForm(f =&gt; ({ ...f, config: { ...f.config, task_title: e.target.value } }))}</span>
+<span class="cstat-no" title="statement not covered" >                      onChange={(e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; setForm(f =&gt; ({ ...f, config: { ...f.config, task_title: e.target.value } }))}</span>
 <span class="cstat-no" title="statement not covered" >                      placeholder={t('zones.automations.taskTextPlaceholder', 'Например: Позвонить и подтвердить оплату')}</span>
 <span class="cstat-no" title="statement not covered" >                      className="bg-background/50 h-9"</span>
                     /&gt;
@@ -1113,7 +1113,7 @@ interface Props {
 <span class="cstat-no" title="statement not covered" >                    &lt;Label className="text-xs font-medium"&gt;{t('zones.automations.changeToStage', 'Перевести на стадию')}&lt;/Label&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;Select</span>
 <span class="cstat-no" title="statement not covered" >                      value={form.config.target_stage_id || ''}</span>
-<span class="cstat-no" title="statement not covered" >                      onValueChange={v =&gt; setForm(f =&gt; ({ ...f, config: { ...f.config, target_stage_id: v } }))}</span>
+<span class="cstat-no" title="statement not covered" >                      onValueChange={(v: string) =&gt; setForm(f =&gt; ({ ...f, config: { ...f.config, target_stage_id: v } }))}</span>
                     &gt;
 <span class="cstat-no" title="statement not covered" >                      &lt;SelectTrigger className="bg-background/50 h-9"&gt;&lt;SelectValue placeholder={t('zones.automations.selectStage', 'Выберите стадию')} /&gt;&lt;/SelectTrigger&gt;</span>
 <span class="cstat-no" title="statement not covered" >                      &lt;SelectContent&gt;</span>
@@ -1144,7 +1144,7 @@ interface Props {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

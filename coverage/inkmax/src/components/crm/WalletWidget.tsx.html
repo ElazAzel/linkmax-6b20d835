@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/167</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/166</span>
+                <span class='fraction'>0/167</span>
             </div>
         
             
@@ -305,7 +305,8 @@
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -505,6 +506,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -674,7 +676,7 @@ import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
 <span class="cstat-no" title="statement not covered" >                &lt;div className="grid grid-cols-2 gap-4"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;div className="p-4 rounded-2xl bg-primary/5 border border-primary/10"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        &lt;p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1"&gt;Доступно&lt;/p&gt;</span>
-<span class="cstat-no" title="statement not covered" >                        &lt;p className="text-2xl font-bold text-gradient"&gt;{balance.toLocaleString()} ₸&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >                        &lt;p className="text-2xl font-bold text-gradient" data-testid="wallet-balance"&gt;{balance.toLocaleString()} ₸&lt;/p&gt;</span>
                     &lt;/div&gt;
 <span class="cstat-no" title="statement not covered" >                    &lt;div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        &lt;p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1"&gt;В ожидании (GMV)&lt;/p&gt;</span>
@@ -736,13 +738,13 @@ import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                &lt;Dialog open={isPayoutOpen} onOpenChange={setIsPayoutOpen}&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;DialogTrigger asChild&gt;</span>
-<span class="cstat-no" title="statement not covered" >                        &lt;Button className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform"&gt;</span>
+<span class="cstat-no" title="statement not covered" >                        &lt;Button data-testid="withdraw-button" className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform"&gt;</span>
                             Вывести средства
                         &lt;/Button&gt;
                     &lt;/DialogTrigger&gt;
 <span class="cstat-no" title="statement not covered" >                    &lt;DialogContent className="glass-card border-white/10 sm:max-w-[425px]"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        &lt;DialogHeader&gt;</span>
-<span class="cstat-no" title="statement not covered" >                            &lt;DialogTitle className="text-xl"&gt;Запрос выплаты&lt;/DialogTitle&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            &lt;DialogTitle className="text-xl" data-testid="payout-dialog-title"&gt;Запрос выплаты&lt;/DialogTitle&gt;</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;DialogDescription&gt;</span>
                                 Укажите сумму и реквизиты для вывода. Мы обработаем запрос в течение 24 часов.
                             &lt;/DialogDescription&gt;
@@ -757,6 +759,7 @@ import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
 <span class="cstat-no" title="statement not covered" >                                    onChange={(e) =&gt; setPayoutAmount(e.target.value)}</span>
 <span class="cstat-no" title="statement not covered" >                                    placeholder="Например: 5000"</span>
 <span class="cstat-no" title="statement not covered" >                                    className="bg-white/5 border-white/10"</span>
+<span class="cstat-no" title="statement not covered" >                                    data-testid="payout-amount-input"</span>
                                 /&gt;
 <span class="cstat-no" title="statement not covered" >                                &lt;p className="text-xs text-muted-foreground"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    Доступно: &lt;span className="text-primary font-bold"&gt;{(data?.wallet?.balance || 0).toLocaleString()} ₸&lt;/span&gt;</span>
@@ -796,7 +799,7 @@ import DollarSign from 'lucide-react/dist/esm/icons/dollar-sign';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

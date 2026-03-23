@@ -893,7 +893,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const updateCategory = (categoryId: string, updates: Partial&lt;CatalogCategory&gt;) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    onChange({</span>
-<span class="cstat-no" title="statement not covered" >      categories: categories.map(cat =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      categories: categories.map((cat: CatalogCategory) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >        cat.id === categoryId ? { ...cat, ...updates } : cat</span>
       ),
 <span class="cstat-no" title="statement not covered" >    });</span>
@@ -902,8 +902,8 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
 <span class="cstat-no" title="statement not covered" >  const removeCategory = (categoryId: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    // Remove category and unassign items from it</span>
 <span class="cstat-no" title="statement not covered" >    onChange({</span>
-<span class="cstat-no" title="statement not covered" >      categories: categories.filter(cat =&gt; cat.id !== categoryId),</span>
-<span class="cstat-no" title="statement not covered" >      items: items.map(item =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      categories: categories.filter((cat: CatalogCategory) =&gt; cat.id !== categoryId),</span>
+<span class="cstat-no" title="statement not covered" >      items: items.map((item: CatalogItem) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >        item.categoryId === categoryId ? { ...item, categoryId: undefined } : item</span>
       ),
 <span class="cstat-no" title="statement not covered" >    });</span>
@@ -930,14 +930,14 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const updateItem = (itemId: string, updates: Partial&lt;CatalogItem&gt;) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    onChange({</span>
-<span class="cstat-no" title="statement not covered" >      items: items.map(item =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      items: items.map((item: CatalogItem) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >        item.id === itemId ? { ...item, ...updates } : item</span>
       ),
 <span class="cstat-no" title="statement not covered" >    });</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const removeItem = (itemId: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    onChange({ items: items.filter(item =&gt; item.id !== itemId) });</span>
+<span class="cstat-no" title="statement not covered" >    onChange({ items: items.filter((item: CatalogItem) =&gt; item.id !== itemId) });</span>
 <span class="cstat-no" title="statement not covered" >    if (expandedItem === itemId) {</span>
 <span class="cstat-no" title="statement not covered" >      setExpandedItem(null);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -949,7 +949,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const getItemCategoryName = (item: CatalogItem): string | null =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!item.categoryId) return null;</span>
-<span class="cstat-no" title="statement not covered" >    const category = categories.find(c =&gt; c.id === item.categoryId);</span>
+<span class="cstat-no" title="statement not covered" >    const category = categories.find((c: CatalogCategory) =&gt; c.id === item.categoryId);</span>
 <span class="cstat-no" title="statement not covered" >    if (!category) return null;</span>
 <span class="cstat-no" title="statement not covered" >    return getCategoryName(category);</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
@@ -1025,7 +1025,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
           &lt;/div&gt;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >          &lt;div className="space-y-2 max-h-[300px] overflow-y-auto"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            {categories.map((category, index) =&gt; (</span>
+<span class="cstat-no" title="statement not covered" >            {categories.map((category: CatalogCategory, index: number) =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >              &lt;Card key={category.id}&gt;</span>
 <span class="cstat-no" title="statement not covered" >                &lt;CardContent className="p-3"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;div className="flex items-center gap-2"&gt;</span>
@@ -1049,7 +1049,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
                     &lt;/Button&gt;
                   &lt;/div&gt;
 <span class="cstat-no" title="statement not covered" >                  &lt;p className="text-xs text-muted-foreground mt-1 ml-6"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    {items.filter(i =&gt; i.categoryId === category.id).length} {t('blocks.catalog.itemsCount', 'позиций')}</span>
+<span class="cstat-no" title="statement not covered" >                    {items.filter((i: CatalogItem) =&gt; i.categoryId === category.id).length} {t('blocks.catalog.itemsCount', 'позиций')}</span>
                   &lt;/p&gt;
                 &lt;/CardContent&gt;
               &lt;/Card&gt;
@@ -1077,7 +1077,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
           &lt;/div&gt;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >          &lt;div className="space-y-2 max-h-[400px] overflow-y-auto"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            {items.map((item, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            {items.map((item: CatalogItem, index: number) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >              const categoryName = getItemCategoryName(item);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >              return (</span>
@@ -1157,7 +1157,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
 <span class="cstat-no" title="statement not covered" >                                &lt;SelectItem value="none"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                  {t('blocks.catalog.noCategory', 'Без категории')}</span>
                                 &lt;/SelectItem&gt;
-<span class="cstat-no" title="statement not covered" >                                {categories.map(cat =&gt; (</span>
+<span class="cstat-no" title="statement not covered" >                                {categories.map((cat: CatalogCategory) =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >                                  &lt;SelectItem key={cat.id} value={cat.id}&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                    {getCategoryName(cat)}</span>
                                   &lt;/SelectItem&gt;
@@ -1249,7 +1249,7 @@ import type { CatalogBlock, CatalogItem, CatalogCategory, Currency } from '@/typ
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

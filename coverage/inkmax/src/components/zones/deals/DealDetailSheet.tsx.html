@@ -1876,7 +1876,7 @@ interface DealDetailSheetProps {
 <span class="cstat-no" title="statement not covered" >                    &lt;Label className="text-xs text-muted-foreground"&gt;{t('zones.deals.stage', 'Stage')}&lt;/Label&gt;</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;Select</span>
 <span class="cstat-no" title="statement not covered" >                      value={deal.stage_id || ''}</span>
-<span class="cstat-no" title="statement not covered" >                      onValueChange={async (v) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                      onValueChange={async (v: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >                        await onMoveDealToStage(deal.id, v);</span>
 <span class="cstat-no" title="statement not covered" >                        const stage = stages.find((s) =&gt; s.id === v);</span>
 <span class="cstat-no" title="statement not covered" >                        if (stage) await onAddActivity(deal.id, 'stage_change', `Moved to ${stage.name}`);</span>
@@ -1974,47 +1974,47 @@ interface DealDetailSheetProps {
 <span class="cstat-no" title="statement not covered" >                      &lt;CardContent className="p-3 space-y-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                        &lt;div className="flex items-center gap-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                          &lt;div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                            {deal.contact.name.charAt(0)}</span>
+<span class="cstat-no" title="statement not covered" >                            {deal.contact?.name.charAt(0)}</span>
                           &lt;/div&gt;
 <span class="cstat-no" title="statement not covered" >                          &lt;div&gt;</span>
-<span class="cstat-no" title="statement not covered" >                            &lt;p className="text-xs font-bold leading-none"&gt;{deal.contact.name}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >                            &lt;p className="text-xs font-bold leading-none"&gt;{deal.contact?.name}&lt;/p&gt;</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;p className="text-xs text-muted-foreground mt-0.5"&gt;{t('zones.deals.linkedContact', 'Linked Contact')}&lt;/p&gt;</span>
                           &lt;/div&gt;
                         &lt;/div&gt;
 <span class="cstat-no" title="statement not covered" >                        &lt;div className="pt-2 flex flex-col gap-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                          &lt;div className="flex gap-2"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                            {deal.contact.phone &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" >                            {deal.contact?.phone &amp;&amp; (</span>
 <span class="cstat-no" title="statement not covered" >                              &lt;Button</span>
 <span class="cstat-no" title="statement not covered" >                                variant="outline"</span>
 <span class="cstat-no" title="statement not covered" >                                size="sm"</span>
 <span class="cstat-no" title="statement not covered" >                                className="flex-1 h-8 gap-1.5 text-xs"</span>
-<span class="cstat-no" title="statement not covered" >                                onClick={() =&gt; window.open(`tel:${deal.contact.phone}`, '_self')}</span>
+<span class="cstat-no" title="statement not covered" >                                onClick={() =&gt; window.open(`tel:${deal.contact?.phone}`, '_self')}</span>
                               &gt;
 <span class="cstat-no" title="statement not covered" >                                &lt;Phone className="h-3 w-3" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                {t('zones.contacts.call', 'Call')}</span>
                               &lt;/Button&gt;
                             )}
-<span class="cstat-no" title="statement not covered" >                            {deal.contact.email &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" >                            {deal.contact?.email &amp;&amp; (</span>
 <span class="cstat-no" title="statement not covered" >                              &lt;Button</span>
 <span class="cstat-no" title="statement not covered" >                                variant="outline"</span>
 <span class="cstat-no" title="statement not covered" >                                size="sm"</span>
 <span class="cstat-no" title="statement not covered" >                                className="flex-1 h-8 gap-1.5 text-xs"</span>
-<span class="cstat-no" title="statement not covered" >                                onClick={() =&gt; window.open(`mailto:${deal.contact.email}`, '_blank')}</span>
+<span class="cstat-no" title="statement not covered" >                                onClick={() =&gt; window.open(`mailto:${deal.contact?.email}`, '_blank')}</span>
                               &gt;
 <span class="cstat-no" title="statement not covered" >                                &lt;Mail className="h-3 w-3" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >                                {t('zones.contacts.sendEmail', 'Email')}</span>
                               &lt;/Button&gt;
                             )}
                           &lt;/div&gt;
-<span class="cstat-no" title="statement not covered" >                          {deal.contact.telegram_username &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" >                          {deal.contact?.telegram_username &amp;&amp; (</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;Button</span>
 <span class="cstat-no" title="statement not covered" >                              variant="outline"</span>
 <span class="cstat-no" title="statement not covered" >                              size="sm"</span>
 <span class="cstat-no" title="statement not covered" >                              className="w-full h-8 gap-1.5 text-xs text-blue-500 border-blue-500/20 hover:bg-blue-500/10 dark:bg-blue-500/5"</span>
-<span class="cstat-no" title="statement not covered" >                              onClick={() =&gt; window.open(`https://t.me/${deal.contact.telegram_username}`, '_blank')}</span>
+<span class="cstat-no" title="statement not covered" >                              onClick={() =&gt; window.open(`https://t.me/${deal.contact?.telegram_username}`, '_blank')}</span>
                             &gt;
 <span class="cstat-no" title="statement not covered" >                              &lt;Send className="h-3 w-3" /&gt;</span>
-<span class="cstat-no" title="statement not covered" >                              Telegram (@{deal.contact.telegram_username})</span>
+<span class="cstat-no" title="statement not covered" >                              Telegram (@{deal.contact?.telegram_username})</span>
                             &lt;/Button&gt;
                           )}
                         &lt;/div&gt;
@@ -2104,7 +2104,7 @@ interface DealDetailSheetProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

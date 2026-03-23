@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.41% </span>
+                <span class="strong">61.9% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>104/164</span>
+                <span class='fraction'>104/168</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.41% </span>
+                <span class="strong">61.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>104/164</span>
+                <span class='fraction'>104/168</span>
             </div>
         
             
@@ -301,7 +301,11 @@
 <a name='L236'></a><a href='#L236'>236</a>
 <a name='L237'></a><a href='#L237'>237</a>
 <a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -522,6 +526,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -569,8 +577,8 @@ export interface WalletOverview {
         user_id: string;
         balance: number;
         currency: string;
-        created_at: string;
-        updated_at: string;
+        created_at: string | null;
+        updated_at: string | null;
     } | null;
     transactions: WalletTransaction[];
     pendingGMV: number;
@@ -648,8 +656,8 @@ export const fintechService = {
             }
 &nbsp;
             // Single insert with gross/fee/net per modern schema
-            // NOTE: wallet_transactions might not be in types.ts yet, using as any for the table name only
-            const { data: transaction, error: txError } = await (supabase as any)
+            // NOTE: wallet_transactions might not be in types.ts yet
+            const { data: transaction, error: txError } = await (supabase as unknown as { from: (schema: string) =&gt; any })
                 .from('wallet_transactions')
                 .insert({
                     wallet_id: wallet.id,
@@ -683,7 +691,7 @@ export const fintechService = {
         }
     },
 &nbsp;
-    async getWalletOverview(userId: string) {
+    async getWalletOverview(userId: string): Promise&lt;WalletOverview&gt; {
         try {
             const { data: wallet, error: walletError } = await supabase
                 .from('user_wallets')
@@ -698,7 +706,7 @@ export const fintechService = {
 <span class="cstat-no" title="statement not covered" >                throw walletError;</span>
 <span class="cstat-no" title="statement not covered" >            }</span>
 &nbsp;
-            const { data: transactions, error: txError } = await (supabase as any)
+            const { data: transactions, error: txError } = await (supabase as unknown as { from: (schema: string) =&gt; any })
                 .from('wallet_transactions')
                 .select('*')
                 .eq('user_id', userId)
@@ -716,7 +724,7 @@ export const fintechService = {
 <span class="cstat-no" title="statement not covered" >                throw txError;</span>
 <span class="cstat-no" title="statement not covered" >            }</span>
 &nbsp;
-            const { data: pendingData, error: pendingError } = await (supabase as any)
+            const { data: pendingData, error: pendingError } = await (supabase as unknown as { from: (schema: string) =&gt; any })
                 .from('wallet_transactions')
                 .select('gross_amount, net_amount')
                 .eq('user_id', userId)
@@ -734,7 +742,7 @@ export const fintechService = {
 <span class="cstat-no" title="statement not covered" >                throw pendingError;</span>
 <span class="cstat-no" title="statement not covered" >            }</span>
 &nbsp;
-            const pendingGMV = (<span class="branch-0 cbranch-no" title="branch not covered" >pendingData || []</span>).reduce((acc: number, curr: any) =&gt; acc + Number(curr.gross_amount<span class="branch-0 cbranch-no" title="branch not covered" > || 0), 0</span>);
+            const pendingGMV = (<span class="branch-0 cbranch-no" title="branch not covered" >pendingData || []</span>).reduce((acc: number, curr: { gross_amount: number | string }) =&gt; acc + Number(curr.gross_amount<span class="branch-0 cbranch-no" title="branch not covered" > || 0), 0</span>);
 &nbsp;
             return {
                 wallet,
@@ -765,8 +773,12 @@ export const fintechService = {
 <span class="cstat-no" title="statement not covered" >            .insert({</span>
 <span class="cstat-no" title="statement not covered" >                user_id: userId,</span>
 <span class="cstat-no" title="statement not covered" >                amount,</span>
-<span class="cstat-no" title="statement not covered" >                payment_method: method as any, // Cast because PayoutMethod.type is string, but token_withdrawals expects specific</span>
-<span class="cstat-no" title="statement not covered" >                payment_details: (notes ? { notes } : null) as Json,</span>
+<span class="cstat-no" title="statement not covered" >                payment_method: method.type,</span>
+<span class="cstat-no" title="statement not covered" >                payment_details: {</span>
+<span class="cstat-no" title="statement not covered" >                    value: method.value,</span>
+<span class="cstat-no" title="statement not covered" >                    ...(method.details || {}),</span>
+<span class="cstat-no" title="statement not covered" >                    ...(notes ? { notes } : {})</span>
+<span class="cstat-no" title="statement not covered" >                } as unknown as Json,</span>
 <span class="cstat-no" title="statement not covered" >                status: 'pending'</span>
 <span class="cstat-no" title="statement not covered" >            })</span>
 <span class="cstat-no" title="statement not covered" >            .select()</span>
@@ -784,7 +796,7 @@ export const fintechService = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

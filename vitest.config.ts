@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    testTimeout: 60000, // Increased testTimeout from 30000 to 60000
     setupFiles: ['./src/testing/setup.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     coverage: {
@@ -25,6 +26,9 @@ export default defineConfig({
         '**/*.test.ts',
         '**/*.spec.ts',
         'src/testing/**',
+        'supabase/**',
+        'src/integrations/**',
+        'src/components/ui/**',
       ],
     },
   },

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.73% </span>
+                <span class="strong">38.53% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>67/218</span>
+                <span class='fraction'>84/218</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>5/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">16.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>3/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.73% </span>
+                <span class="strong">38.53% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>67/218</span>
+                <span class='fraction'>84/218</span>
             </div>
         
             
@@ -368,9 +368,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -540,30 +540,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -656,9 +656,9 @@ const STORAGE_VERSION = 'v2_';
 /**
  * Get namespaced key
  */
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >function getKey(key: string): string {</span></span>
-<span class="cstat-no" title="statement not covered" >    return `${STORAGE_PREFIX}${STORAGE_VERSION}${key}`;</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+function getKey(key: string): string {
+    return `${STORAGE_PREFIX}${STORAGE_VERSION}${key}`;
+}
 &nbsp;
 /**
  * Secure storage interface
@@ -827,31 +827,31 @@ export const session = {
     /**
      * Get item from sessionStorage
      */
-<span class="fstat-no" title="function not covered" >    get&lt;T = unknown&gt;(key: string): T | null {</span>
-<span class="cstat-no" title="statement not covered" >        if (typeof window === 'undefined') return null;</span>
-<span class="cstat-no" title="statement not covered" >        try {</span>
-<span class="cstat-no" title="statement not covered" >            // eslint-disable-next-line no-restricted-globals</span>
-<span class="cstat-no" title="statement not covered" >            const item = sessionStorage.getItem(getKey(key));</span>
-<span class="cstat-no" title="statement not covered" >            if (item === null) return null;</span>
-<span class="cstat-no" title="statement not covered" >            return JSON.parse(item) as T;</span>
-<span class="cstat-no" title="statement not covered" >        } catch (error) {</span>
+    get&lt;T = unknown&gt;(key: string): T | null {
+        if (typeof window === 'undefined') <span class="branch-0 cbranch-no" title="branch not covered" >return null;</span>
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            const item = sessionStorage.getItem(getKey(key));
+            if (item === null) return null;
+            return JSON.parse(item) as T;
+        } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
 <span class="cstat-no" title="statement not covered" >            logger.error(`Error reading from session storage: ${key}`, error, { context: 'storage' });</span>
 <span class="cstat-no" title="statement not covered" >            return null;</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
+    },
 &nbsp;
     /**
      * Set item in sessionStorage
      */
-<span class="fstat-no" title="function not covered" >    set&lt;T = unknown&gt;(key: string, value: T): void {</span>
-<span class="cstat-no" title="statement not covered" >        if (typeof window === 'undefined') return;</span>
-<span class="cstat-no" title="statement not covered" >        try {</span>
-<span class="cstat-no" title="statement not covered" >            // eslint-disable-next-line no-restricted-globals</span>
-<span class="cstat-no" title="statement not covered" >            sessionStorage.setItem(getKey(key), JSON.stringify(value));</span>
-<span class="cstat-no" title="statement not covered" >        } catch (error) {</span>
+    set&lt;T = unknown&gt;(key: string, value: T): void {
+        if (typeof window === 'undefined') <span class="branch-0 cbranch-no" title="branch not covered" >return;</span>
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            sessionStorage.setItem(getKey(key), JSON.stringify(value));
+        } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
 <span class="cstat-no" title="statement not covered" >            logger.error(`Error writing to session storage: ${key}`, error, { context: 'storage' });</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
-<span class="cstat-no" title="statement not covered" >    },</span>
+    },
 &nbsp;
     /**
      * Remove item from sessionStorage
@@ -934,7 +934,7 @@ export const typedStorage = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

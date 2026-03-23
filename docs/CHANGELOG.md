@@ -1,8 +1,26 @@
 # Changelog
 
+## [Phase 3.5: Fintech E2E Stabilization & Coverage] - 2026-03-23
+
+### Added
+
+- **Fintech E2E Mocks**: Implemented `page.route` network interception for Robokassa in `fintech-flow.spec.ts`, allowing stable tests without external API dependencies.
+- **Unit Tests**: Created comprehensive test suites for `PaymentService` (100% coverage) and `generateRoboKassaUrl`.
+- **Enhanced Testability**: Added `data-testid` to `WalletWidget.tsx` and `Pricing.tsx` for reliable element selection in automated tests.
+
+### Changed
+
+- **PageService Coverage**: Refactored `pages.test.ts` to cover `loadPageBySlug`, `updatePageNiche`, and entity field updates, significantly increasing business logic coverage.
+- **Vitest Configuration**: Optimized `vitest.config.ts` by increasing timeouts and refining coverage exclusion patterns to focus on core logic.
+
+### Fixed
+
+- **E2E Navigation**: Corrected dashboard tab routing from `/dashboard?tab=crm` to `/dashboard?tab=activity` in E2E tests to match actual component locations.
+
 ## [Phase 4: Onboarding Optimization & Analytics] - 2026-03-21
 
 ### Added
+
 - **UI Activation Checklist**: Integrated `ActivationChecklist` into the `EditorScreen` directly, providing explicit progress and celebration states to drive new users (Experts) to publish their first page and connect Telegram.
 - **Deterministic Generation (Smart-Writing 2.0)**: Bypassed Gemini AI generation for the `Expert` niche in `AIBuilderWizard.tsx`, utilizing a pre-configured <1s optimal template (Hero -> Courses -> Lead Magnet -> Telegram Form).
 

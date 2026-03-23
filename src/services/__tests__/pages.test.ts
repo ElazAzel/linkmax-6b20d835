@@ -112,7 +112,6 @@ describe('pagesService', () => {
             expect(eqCall).toHaveBeenCalledWith('user_id', 'test-user-id');
         });
     });
-
     describe('publishPage', () => {
         it('should update is_published to true and return slug', async () => {
             const mockPageData = { slug: 'test-slug' };
@@ -132,6 +131,64 @@ describe('pagesService', () => {
             
             const updateCall = vi.mocked(mockFrom).mock.results[0].value.update;
             expect(updateCall).toHaveBeenCalledWith({ is_published: true });
+        });
+    });
+
+    describe('loadPageBySlug', () => {
+        it('should load public page by slug', async () => {
+            const mockPage = { id: 'p1', slug: 's1', is_published: true, view_count: 5 };
+            const mockFrom = vi.mocked(supabase.from);
+            
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockReturnThis(),
+                maybeSingle: vi.fn().mockResolvedValue({ data: mockPage, error: null })
+            } as any);
+
+            const result = await pagesService.loadPageBySlug('s1');
+            expect(result.data?.slug).toBe('s1');
+            expect(supabase.rpc).toHaveBeenCalledWith('increment_view_count', { page_slug: 's1' });
+        });
+    });
+
+    describe('updatePageNiche', () => {
+        it('should update page niche', async () => {
+            const mockFrom = vi.mocked(supabase.from);
+            mockFrom.mockReturnValueOnce({
+                update: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockResolvedValue({ error: null })
+            } as any);
+
+            const result = await pagesService.updatePageNiche('u1', 'e-commerce');
+            expect(result.error).toBeNull();
+        });
+    });
+
+    describe('updatePageEntityFields', () => {
+        it('should update entity fields', async () => {
+            const mockFrom = vi.mocked(supabase.from);
+            mockFrom.mockReturnValueOnce({
+                update: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockResolvedValue({ error: null })
+            } as any);
+
+            const result = await pagesService.updatePageEntityFields('u1', { city: 'Almaty' });
+            expect(result.error).toBeNull();
+        });
+    });
+
+    describe('getPublicPages', () => {
+        it('should return list of slugs', async () => {
+            const mockData = [{ slug: 'p1', updated_at: '2024-01-01' }];
+            const mockFrom = vi.mocked(supabase.from);
+            mockFrom.mockReturnValueOnce({
+                select: vi.fn().mockReturnThis(),
+                eq: vi.fn().mockResolvedValue({ data: mockData, error: null })
+            } as any);
+
+            const result = await pagesService.getPublicPages();
+            expect(result).toHaveLength(1);
+            expect(result[0].slug).toBe('p1');
         });
     });
 });

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/329</span>
+                <span class='fraction'>0/337</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/329</span>
+                <span class='fraction'>0/337</span>
             </div>
         
             
@@ -513,7 +513,15 @@
 <a name='L448'></a><a href='#L448'>448</a>
 <a name='L449'></a><a href='#L449'>449</a>
 <a name='L450'></a><a href='#L450'>450</a>
-<a name='L451'></a><a href='#L451'>451</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -686,6 +694,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -837,6 +850,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -849,7 +863,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1134,8 +1150,13 @@ export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
 <span class="cstat-no" title="statement not covered" >      const prevClicks = prevEvents.filter(e =&gt; e.event_type === 'click').length;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      // Calculate changes</span>
-<span class="cstat-no" title="statement not covered" >      const viewsChange = prevViews &gt; 0 ? ((totalViews - prevViews) / prevViews) * 100 : 0;</span>
-<span class="cstat-no" title="statement not covered" >      const clicksChange = prevClicks &gt; 0 ? ((totalClicks - prevClicks) / prevClicks) * 100 : 0;</span>
+<span class="cstat-no" title="statement not covered" >      // Calculate changes - protect against division by zero</span>
+<span class="cstat-no" title="statement not covered" >      const viewsChange = prevViews &gt; 0 </span>
+<span class="cstat-no" title="statement not covered" >        ? ((totalViews - prevViews) / prevViews) * 100 </span>
+<span class="cstat-no" title="statement not covered" >        : (totalViews &gt; 0 ? 100 : 0);</span>
+<span class="cstat-no" title="statement not covered" >      const clicksChange = prevClicks &gt; 0 </span>
+<span class="cstat-no" title="statement not covered" >        ? ((totalClicks - prevClicks) / prevClicks) * 100 </span>
+<span class="cstat-no" title="statement not covered" >        : (totalClicks &gt; 0 ? 100 : 0);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      // Unique visitors (by IP in metadata or session)</span>
 <span class="cstat-no" title="statement not covered" >      const uniqueIPs = new Set(events</span>
@@ -1292,18 +1313,21 @@ export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
 <span class="cstat-no" title="statement not covered" >        .from('leads')</span>
 <span class="cstat-no" title="statement not covered" >        .select('id')</span>
 <span class="cstat-no" title="statement not covered" >        .eq('user_id', user.id)</span>
+<span class="cstat-no" title="statement not covered" >        .contains('metadata', { pageId: pageId })</span>
 <span class="cstat-no" title="statement not covered" >        .gte('created_at', startDate.toISOString());</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      const { data: bookings } = await supabase</span>
 <span class="cstat-no" title="statement not covered" >        .from('bookings')</span>
 <span class="cstat-no" title="statement not covered" >        .select('id')</span>
 <span class="cstat-no" title="statement not covered" >        .eq('owner_id', user.id)</span>
+<span class="cstat-no" title="statement not covered" >        .contains('metadata', { pageId: pageId })</span>
 <span class="cstat-no" title="statement not covered" >        .gte('created_at', startDate.toISOString());</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      const { data: eventRegistrations } = await supabase</span>
 <span class="cstat-no" title="statement not covered" >        .from('event_registrations')</span>
 <span class="cstat-no" title="statement not covered" >        .select('id')</span>
 <span class="cstat-no" title="statement not covered" >        .eq('owner_id', user.id)</span>
+<span class="cstat-no" title="statement not covered" >        .contains('metadata', { pageId: pageId })</span>
 <span class="cstat-no" title="statement not covered" >        .gte('created_at', startDate.toISOString());</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      const totalConversions = (leads?.length || 0) + (bookings?.length || 0) + (eventRegistrations?.length || 0);</span>
@@ -1420,7 +1444,7 @@ export type TimePeriod = 'day' | 'week' | 'two_weeks' | 'month' | 'all';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

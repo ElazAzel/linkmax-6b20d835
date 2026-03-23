@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/694</span>
+                <span class='fraction'>0/703</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/694</span>
+                <span class='fraction'>0/703</span>
             </div>
         
             
@@ -978,7 +978,16 @@
 <a name='L913'></a><a href='#L913'>913</a>
 <a name='L914'></a><a href='#L914'>914</a>
 <a name='L915'></a><a href='#L915'>915</a>
-<a name='L916'></a><a href='#L916'>916</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L916'></a><a href='#L916'>916</a>
+<a name='L917'></a><a href='#L917'>917</a>
+<a name='L918'></a><a href='#L918'>918</a>
+<a name='L919'></a><a href='#L919'>919</a>
+<a name='L920'></a><a href='#L920'>920</a>
+<a name='L921'></a><a href='#L921'>921</a>
+<a name='L922'></a><a href='#L922'>922</a>
+<a name='L923'></a><a href='#L923'>923</a>
+<a name='L924'></a><a href='#L924'>924</a>
+<a name='L925'></a><a href='#L925'>925</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1599,6 +1608,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2521,15 +2539,18 @@ type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' |
 <span class="cstat-no" title="statement not covered" >                  onUsernameChange={dashboard.usernameState.setUsernameInput}</span>
 <span class="cstat-no" title="statement not covered" >                  onUpdateUsername={dashboard.usernameState.handleUpdateUsername}</span>
 <span class="cstat-no" title="statement not covered" >                  usernameSaving={dashboard.usernameState.saving}</span>
-<span class="cstat-no" title="statement not covered" >                  profileBlock={dashboard.profileBlock}</span>
-<span class="cstat-no" title="statement not covered" >                  onUpdateProfile={dashboard.handleUpdateProfile as any}</span>
+<span class="cstat-no" title="statement not covered" >                  profileBlock={dashboard.profileBlock || undefined}</span>
+<span class="cstat-no" title="statement not covered" >                  onUpdateProfile={(updates) =&gt; dashboard.handleUpdateProfile({</span>
+<span class="cstat-no" title="statement not covered" >                    name: typeof updates.name === 'string' ? updates.name : (updates.name?.ru || 'My Page'),</span>
+<span class="cstat-no" title="statement not covered" >                    bio: typeof updates.bio === 'string' ? updates.bio : (updates.bio?.ru || ''),</span>
+<span class="cstat-no" title="statement not covered" >                  })}</span>
 <span class="cstat-no" title="statement not covered" >                  isPremium={dashboard.isPremium}</span>
 <span class="cstat-no" title="statement not covered" >                  premiumTier={dashboard.currentTier}</span>
 <span class="cstat-no" title="statement not covered" >                  emailNotificationsEnabled={dashboard.userProfile.profile?.email_notifications_enabled ?? true}</span>
 <span class="cstat-no" title="statement not covered" >                  onEmailNotificationsChange={dashboard.userProfile.updateEmailNotifications}</span>
 <span class="cstat-no" title="statement not covered" >                  telegramEnabled={dashboard.userProfile.profile?.telegram_notifications_enabled ?? false}</span>
 <span class="cstat-no" title="statement not covered" >                  telegramChatId={dashboard.userProfile.profile?.telegram_chat_id ?? ''}</span>
-<span class="cstat-no" title="statement not covered" >                  onTelegramChange={dashboard.userProfile.updateTelegramNotifications}</span>
+<span class="cstat-no" title="statement not covered" >                  onTelegramChange={(enabled: boolean, chatId?: string) =&gt; dashboard.userProfile.updateTelegramNotifications(enabled, chatId || null)}</span>
 <span class="cstat-no" title="statement not covered" >                  niche={dashboard.pageData?.niche as Niche | undefined}</span>
 <span class="cstat-no" title="statement not covered" >                  onNicheChange={dashboard.updateNiche}</span>
 <span class="cstat-no" title="statement not covered" >                  onSignOut={dashboard.handleSignOut}</span>
@@ -2567,7 +2588,13 @@ type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' |
 <span class="cstat-no" title="statement not covered" >                  }}</span>
 <span class="cstat-no" title="statement not covered" >                  onUpdateSeo={(seo) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >                    dashboard.updatePageDataPartial({</span>
-<span class="cstat-no" title="statement not covered" >                      seo: { ...dashboard.pageData?.seo, ...seo },</span>
+<span class="cstat-no" title="statement not covered" >                      seo: { </span>
+<span class="cstat-no" title="statement not covered" >                        title: '',</span>
+<span class="cstat-no" title="statement not covered" >                        description: '',</span>
+<span class="cstat-no" title="statement not covered" >                        keywords: [],</span>
+<span class="cstat-no" title="statement not covered" >                        ...dashboard.pageData?.seo, </span>
+<span class="cstat-no" title="statement not covered" >                        ...seo </span>
+<span class="cstat-no" title="statement not covered" >                      } as any, // Cast to any because of required fields in SEO type vs optional in partial</span>
 <span class="cstat-no" title="statement not covered" >                    });</span>
 <span class="cstat-no" title="statement not covered" >                  }}</span>
 <span class="cstat-no" title="statement not covered" >                  onUpdateBranding={(branding) =&gt; {</span>
@@ -2782,7 +2809,7 @@ type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' |
 <span class="cstat-no" title="statement not covered" >              onClose={() =&gt; setShowTheme(false)}</span>
 <span class="cstat-no" title="statement not covered" >              currentTheme={dashboard.pageData?.theme || {}}</span>
 <span class="cstat-no" title="statement not covered" >              onThemeChange={(theme) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } });</span>
+<span class="cstat-no" title="statement not covered" >                dashboard.updatePageDataPartial({ theme: { ...dashboard.pageData?.theme, ...theme } as any });</span>
 <span class="cstat-no" title="statement not covered" >              }}</span>
 <span class="cstat-no" title="statement not covered" >              isPremium={dashboard.isPremium}</span>
 <span class="cstat-no" title="statement not covered" >              onUpgrade={() =&gt; navigate('/pricing')}</span>
@@ -2815,7 +2842,7 @@ type TabId = 'home' | 'editor' | 'pages' | 'activity' | 'insights' | 'finance' |
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -147,7 +147,22 @@
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,6 +174,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -250,14 +280,29 @@ interface TierBadgeProps {
 <span class="cstat-no" title="statement not covered" >      icon: Zap,</span>
 <span class="cstat-no" title="statement not covered" >      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',</span>
 <span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    starter: {</span>
+<span class="cstat-no" title="statement not covered" >      label: 'BASIC',</span>
+<span class="cstat-no" title="statement not covered" >      icon: Zap,</span>
+<span class="cstat-no" title="statement not covered" >      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    identity: {</span>
+<span class="cstat-no" title="statement not covered" >      label: 'BASIC',</span>
+<span class="cstat-no" title="statement not covered" >      icon: Zap,</span>
+<span class="cstat-no" title="statement not covered" >      className: 'bg-slate-500/20 text-slate-600 dark:text-slate-400 border-slate-500/30',</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
 <span class="cstat-no" title="statement not covered" >    pro: {</span>
 <span class="cstat-no" title="statement not covered" >      label: 'PRO',</span>
 <span class="cstat-no" title="statement not covered" >      icon: Crown,</span>
 <span class="cstat-no" title="statement not covered" >      className: 'bg-violet-500/20 text-violet-600 dark:text-violet-400 border-violet-500/30',</span>
 <span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    business: {</span>
+<span class="cstat-no" title="statement not covered" >      label: 'BUSINESS',</span>
+<span class="cstat-no" title="statement not covered" >      icon: Crown,</span>
+<span class="cstat-no" title="statement not covered" >      className: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30',</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const config = tierConfig[tier];</span>
+<span class="cstat-no" title="statement not covered" >  const config = (tierConfig as any)[tier] || tierConfig.free;</span>
 <span class="cstat-no" title="statement not covered" >  const Icon = config.icon;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const sizeClasses = {</span>
@@ -322,7 +367,7 @@ interface RequiredTierProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

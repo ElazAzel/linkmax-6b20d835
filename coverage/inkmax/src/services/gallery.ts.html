@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/179</span>
+                <span class='fraction'>0/191</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/179</span>
+                <span class='fraction'>0/191</span>
             </div>
         
             
@@ -297,7 +297,19 @@
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -411,6 +423,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -584,21 +608,21 @@ export type LeaderboardPeriod = 'week' | 'month' | 'all';
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const premiumMap = new Map&lt;string, boolean&gt;();</span>
 <span class="cstat-no" title="statement not covered" >  profiles?.forEach(p =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const isPremium = p.is_premium || (p.trial_ends_at &amp;&amp; new Date(p.trial_ends_at) &gt; new Date());</span>
+<span class="cstat-no" title="statement not covered" >    const isPremium = !!p.is_premium || (!!p.trial_ends_at &amp;&amp; new Date(p.trial_ends_at) &gt; new Date());</span>
 <span class="cstat-no" title="statement not covered" >    premiumMap.set(p.id, isPremium);</span>
 <span class="cstat-no" title="statement not covered" >  });</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  // Add premium flag and sort: premium first, then by views</span>
-<span class="cstat-no" title="statement not covered" >  const pagesWithPremium = (data || []).map(p =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >  const pagesWithPremium: GalleryPage[] = (data || []).map(p =&gt; ({</span>
 <span class="cstat-no" title="statement not covered" >    id: p.id,</span>
 <span class="cstat-no" title="statement not covered" >    slug: p.slug,</span>
 <span class="cstat-no" title="statement not covered" >    title: p.title,</span>
 <span class="cstat-no" title="statement not covered" >    description: p.description,</span>
 <span class="cstat-no" title="statement not covered" >    avatar_url: p.avatar_url,</span>
 <span class="cstat-no" title="statement not covered" >    preview_url: p.preview_url,</span>
-<span class="cstat-no" title="statement not covered" >    gallery_likes: p.gallery_likes,</span>
+<span class="cstat-no" title="statement not covered" >    gallery_likes: p.gallery_likes || 0,</span>
 <span class="cstat-no" title="statement not covered" >    gallery_featured_at: p.gallery_featured_at,</span>
-<span class="cstat-no" title="statement not covered" >    view_count: p.view_count,</span>
+<span class="cstat-no" title="statement not covered" >    view_count: p.view_count || 0,</span>
 <span class="cstat-no" title="statement not covered" >    niche: p.niche,</span>
 <span class="cstat-no" title="statement not covered" >    is_premium: premiumMap.get(p.user_id) || false</span>
 <span class="cstat-no" title="statement not covered" >  }));</span>
@@ -645,7 +669,19 @@ export type LeaderboardPeriod = 'week' | 'month' | 'all';
 <span class="cstat-no" title="statement not covered" >    return [];</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (data || []).map(p =&gt; ({ ...p, is_premium: true }));</span>
+<span class="cstat-no" title="statement not covered" >  return (data || []).map(p =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >    id: p.id,</span>
+<span class="cstat-no" title="statement not covered" >    slug: p.slug,</span>
+<span class="cstat-no" title="statement not covered" >    title: p.title,</span>
+<span class="cstat-no" title="statement not covered" >    description: p.description,</span>
+<span class="cstat-no" title="statement not covered" >    avatar_url: p.avatar_url,</span>
+<span class="cstat-no" title="statement not covered" >    preview_url: p.preview_url,</span>
+<span class="cstat-no" title="statement not covered" >    gallery_likes: p.gallery_likes || 0,</span>
+<span class="cstat-no" title="statement not covered" >    gallery_featured_at: p.gallery_featured_at,</span>
+<span class="cstat-no" title="statement not covered" >    view_count: p.view_count,</span>
+<span class="cstat-no" title="statement not covered" >    niche: p.niche,</span>
+<span class="cstat-no" title="statement not covered" >    is_premium: true</span>
+<span class="cstat-no" title="statement not covered" >  } as GalleryPage));</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export async function getNicheCounts(): Promise&lt;Record&lt;string, number&gt;&gt; {</span>
@@ -772,7 +808,7 @@ export type LeaderboardPeriod = 'week' | 'month' | 'all';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

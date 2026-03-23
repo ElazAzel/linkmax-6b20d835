@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.71% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/28</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/9</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.71% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/28</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -102,10 +102,19 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -116,22 +125,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -139,10 +139,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { BlockStyle } from '@/types/page';
 &nbsp;
-export function getAnimationClass(style?: BlockStyle): string {
-  if (!<span class="branch-0 cbranch-no" title="branch not covered" >style?.<span class="branch-0 cbranch-no" title="branch not covered" >animation || s</span>tyle.animation === 'none') {</span>
-    return '';
-<span class="branch-0 cbranch-no" title="branch not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" >export function getAnimationClass(style?: BlockStyle): string {</span>
+<span class="cstat-no" title="statement not covered" >  if (!style?.animation || style.animation === 'none') {</span>
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const animationMap: Record&lt;string, string&gt; = {</span>
 <span class="cstat-no" title="statement not covered" >    'fade-in': 'animate-fade-in',</span>
@@ -153,22 +153,22 @@ export function getAnimationClass(style?: BlockStyle): string {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const baseAnimation = animationMap[style.animation] || '';</span>
   
-  // Speed variants
-  const speedMap: Record&lt;string, string&gt; = {
-    'slow': '[animation-duration:0.8s]',
-    'normal': '[animation-duration:0.5s]',
-    'fast': '[animation-duration:0.3s]',
-  };
+<span class="cstat-no" title="statement not covered" >  // Speed variants</span>
+<span class="cstat-no" title="statement not covered" >  const speedMap: Record&lt;string, string&gt; = {</span>
+<span class="cstat-no" title="statement not covered" >    'slow': '[animation-duration:0.8s]',</span>
+<span class="cstat-no" title="statement not covered" >    'normal': '[animation-duration:0.5s]',</span>
+<span class="cstat-no" title="statement not covered" >    'fast': '[animation-duration:0.3s]',</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
-  const speed = style.animationSpeed<span class="branch-0 cbranch-no" title="branch not covered" > ? speedMap[style.animationSpeed]<span class="branch-0 cbranch-no" title="branch not covered" > </span>: '';</span>
+<span class="cstat-no" title="statement not covered" >  const speed = style.animationSpeed ? speedMap[style.animationSpeed] : '';</span>
 &nbsp;
-  return `${baseAnimation} ${speed}`.trim();
-}
+<span class="cstat-no" title="statement not covered" >  return `${baseAnimation} ${speed}`.trim();</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
-export function getAnimationStyle(style?: BlockStyle): React.CSSProperties {
-  if (!<span class="branch-0 cbranch-no" title="branch not covered" >style?.animationDelay) {</span>
-    return {};
-<span class="branch-0 cbranch-no" title="branch not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" >export function getAnimationStyle(style?: BlockStyle): React.CSSProperties {</span>
+<span class="cstat-no" title="statement not covered" >  if (!style?.animationDelay) {</span>
+<span class="cstat-no" title="statement not covered" >    return {};</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
 <span class="cstat-no" title="statement not covered" >    animationDelay: `${style.animationDelay}ms`,</span>
@@ -181,7 +181,7 @@ export function getAnimationStyle(style?: BlockStyle): React.CSSProperties {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

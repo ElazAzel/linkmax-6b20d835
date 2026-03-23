@@ -125,7 +125,7 @@ export const WalletWidget = () => {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10">
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Доступно</p>
-                        <p className="text-2xl font-bold text-gradient">{balance.toLocaleString()} ₸</p>
+                        <p className="text-2xl font-bold text-gradient" data-testid="wallet-balance">{balance.toLocaleString()} ₸</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">В ожидании (GMV)</p>
@@ -187,13 +187,13 @@ export const WalletWidget = () => {
 
                 <Dialog open={isPayoutOpen} onOpenChange={setIsPayoutOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                        <Button data-testid="withdraw-button" className="w-full h-12 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
                             Вывести средства
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="glass-card border-white/10 sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle className="text-xl">Запрос выплаты</DialogTitle>
+                            <DialogTitle className="text-xl" data-testid="payout-dialog-title">Запрос выплаты</DialogTitle>
                             <DialogDescription>
                                 Укажите сумму и реквизиты для вывода. Мы обработаем запрос в течение 24 часов.
                             </DialogDescription>
@@ -208,6 +208,7 @@ export const WalletWidget = () => {
                                     onChange={(e) => setPayoutAmount(e.target.value)}
                                     placeholder="Например: 5000"
                                     className="bg-white/5 border-white/10"
+                                    data-testid="payout-amount-input"
                                 />
                                 <p className="text-xs text-muted-foreground">
                                     Доступно: <span className="text-primary font-bold">{(data?.wallet?.balance || 0).toLocaleString()} ₸</span>

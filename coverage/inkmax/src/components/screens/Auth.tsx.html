@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/629</span>
+                <span class='fraction'>0/633</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/629</span>
+                <span class='fraction'>0/633</span>
             </div>
         
             
@@ -896,7 +896,11 @@
 <a name='L831'></a><a href='#L831'>831</a>
 <a name='L832'></a><a href='#L832'>832</a>
 <a name='L833'></a><a href='#L833'>833</a>
-<a name='L834'></a><a href='#L834'>834</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L834'></a><a href='#L834'>834</a>
+<a name='L835'></a><a href='#L835'>835</a>
+<a name='L836'></a><a href='#L836'>836</a>
+<a name='L837'></a><a href='#L837'>837</a>
+<a name='L838'></a><a href='#L838'>838</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1620,6 +1624,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1633,6 +1638,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1678,8 +1684,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2322,8 +2330,8 @@ type TelegramResetStep = 'request' | 'verify';
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                &lt;Tabs defaultValue="signin" className="w-full"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;TabsList className="grid w-full grid-cols-2 h-12 bg-muted/30 backdrop-blur-xl rounded-2xl p-1"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;TabsTrigger value="signin" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2"&gt;{t('auth.signIn')}&lt;/TabsTrigger&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;TabsTrigger value="signup" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2"&gt;{t('auth.signUp')}&lt;/TabsTrigger&gt;</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;TabsTrigger value="signin" data-testid="signin-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2"&gt;{t('auth.signIn')}&lt;/TabsTrigger&gt;</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;TabsTrigger value="signup" data-testid="signup-tab" className="rounded-xl data-[state=active]:bg-card/80 data-[state=active]:backdrop-blur-xl data-[state=active]:shadow-glass whitespace-normal break-words text-wrap text-xs sm:text-sm leading-tight min-h-10 px-2"&gt;{t('auth.signUp')}&lt;/TabsTrigger&gt;</span>
                   &lt;/TabsList&gt;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                  &lt;TabsContent value="signin"&gt;</span>
@@ -2450,6 +2458,7 @@ type TelegramResetStep = 'request' | 'verify';
 <span class="cstat-no" title="statement not covered" >                            id="signin-email"</span>
 <span class="cstat-no" title="statement not covered" >                            name="signin-email"</span>
 <span class="cstat-no" title="statement not covered" >                            type="email"</span>
+<span class="cstat-no" title="statement not covered" >                            data-testid="signin-email-input"</span>
 <span class="cstat-no" title="statement not covered" >                            placeholder="your@email.com"</span>
 <span class="cstat-no" title="statement not covered" >                            required</span>
 <span class="cstat-no" title="statement not covered" >                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"</span>
@@ -2470,6 +2479,7 @@ type TelegramResetStep = 'request' | 'verify';
 <span class="cstat-no" title="statement not covered" >                            id="signin-password"</span>
 <span class="cstat-no" title="statement not covered" >                            name="signin-password"</span>
 <span class="cstat-no" title="statement not covered" >                            type="password"</span>
+<span class="cstat-no" title="statement not covered" >                            data-testid="signin-password-input"</span>
 <span class="cstat-no" title="statement not covered" >                            placeholder="••••••••"</span>
 <span class="cstat-no" title="statement not covered" >                            required</span>
 <span class="cstat-no" title="statement not covered" >                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"</span>
@@ -2508,6 +2518,7 @@ type TelegramResetStep = 'request' | 'verify';
 <span class="cstat-no" title="statement not covered" >                            id="signup-email"</span>
 <span class="cstat-no" title="statement not covered" >                            name="signup-email"</span>
 <span class="cstat-no" title="statement not covered" >                            type="email"</span>
+<span class="cstat-no" title="statement not covered" >                            data-testid="signup-email-input"</span>
 <span class="cstat-no" title="statement not covered" >                            placeholder="your@email.com"</span>
 <span class="cstat-no" title="statement not covered" >                            required</span>
 <span class="cstat-no" title="statement not covered" >                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"</span>
@@ -2519,6 +2530,7 @@ type TelegramResetStep = 'request' | 'verify';
 <span class="cstat-no" title="statement not covered" >                            id="signup-password"</span>
 <span class="cstat-no" title="statement not covered" >                            name="signup-password"</span>
 <span class="cstat-no" title="statement not covered" >                            type="password"</span>
+<span class="cstat-no" title="statement not covered" >                            data-testid="signup-password-input"</span>
 <span class="cstat-no" title="statement not covered" >                            placeholder="••••••••"</span>
 <span class="cstat-no" title="statement not covered" >                            required</span>
 <span class="cstat-no" title="statement not covered" >                            className="h-12 rounded-xl bg-card/40 backdrop-blur-xl border-border/30 focus:border-primary/50"</span>
@@ -2528,7 +2540,7 @@ type TelegramResetStep = 'request' | 'verify';
                           &lt;/p&gt;
                         &lt;/div&gt;
 <span class="cstat-no" title="statement not covered" >                        &lt;div className="flex items-start space-x-2"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                          &lt;Checkbox id="terms" required className="mt-0.5" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                          &lt;Checkbox id="terms" data-testid="terms-checkbox" required className="mt-0.5" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >                          &lt;label htmlFor="terms" className="text-sm text-muted-foreground leading-tight"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                            {t('legal.agreeToTerms')}{' '}</span>
 <span class="cstat-no" title="statement not covered" >                            &lt;TermsLink className="text-primary hover:underline"&gt;</span>
@@ -2540,7 +2552,7 @@ type TelegramResetStep = 'request' | 'verify';
                             &lt;/PrivacyLink&gt;
                           &lt;/label&gt;
                         &lt;/div&gt;
-<span class="cstat-no" title="statement not covered" >                        &lt;Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}&gt;</span>
+<span class="cstat-no" title="statement not covered" >                        &lt;Button type="submit" data-testid="signup-button" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}&gt;</span>
 <span class="cstat-no" title="statement not covered" >                          {isLoading ? t('common.loading', 'Loading...') : t('auth.signUp')}</span>
                         &lt;/Button&gt;
                       &lt;/form&gt;
@@ -2569,7 +2581,7 @@ type TelegramResetStep = 'request' | 'verify';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

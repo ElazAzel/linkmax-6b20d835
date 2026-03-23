@@ -373,7 +373,7 @@ export interface SequenceStep {
 <span class="cstat-no" title="statement not covered" >export const emailSequencesService = {</span>
 <span class="cstat-no" title="statement not covered" >  async listSequences() {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const { data, error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { data, error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequences')</span>
 <span class="cstat-no" title="statement not covered" >        .select('*')</span>
 <span class="cstat-no" title="statement not covered" >        .order('created_at', { ascending: false });</span>
@@ -388,7 +388,7 @@ export interface SequenceStep {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  async getSequenceDetails(id: string) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const { data: sequence, error: seqError } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { data: sequence, error: seqError } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequences')</span>
 <span class="cstat-no" title="statement not covered" >        .select('*')</span>
 <span class="cstat-no" title="statement not covered" >        .eq('id', id)</span>
@@ -396,7 +396,7 @@ export interface SequenceStep {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (seqError) throw seqError;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      const { data: steps, error: stepsError } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { data: steps, error: stepsError } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequence_steps')</span>
 <span class="cstat-no" title="statement not covered" >        .select('*, template:email_templates(*)')</span>
 <span class="cstat-no" title="statement not covered" >        .eq('sequence_id', id)</span>
@@ -422,7 +422,7 @@ export interface SequenceStep {
 <span class="cstat-no" title="statement not covered" >      const { data: { user } } = await supabase.auth.getUser();</span>
 <span class="cstat-no" title="statement not covered" >      if (!user) throw new Error('User not authenticated');</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      const { data, error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { data, error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequences')</span>
 <span class="cstat-no" title="statement not covered" >        .insert({</span>
 <span class="cstat-no" title="statement not covered" >          name,</span>
@@ -443,7 +443,7 @@ export interface SequenceStep {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  async addStep(sequenceId: string, templateId: string, delayHours: number, order: number) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const { data, error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { data, error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequence_steps')</span>
 <span class="cstat-no" title="statement not covered" >        .insert({</span>
 <span class="cstat-no" title="statement not covered" >          sequence_id: sequenceId,</span>
@@ -464,7 +464,7 @@ export interface SequenceStep {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  async deleteSequence(id: string) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const { error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequences')</span>
 <span class="cstat-no" title="statement not covered" >        .delete()</span>
 <span class="cstat-no" title="statement not covered" >        .eq('id', id);</span>
@@ -479,7 +479,7 @@ export interface SequenceStep {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  async updateStatus(id: string, status: EmailSequence['status']) {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const { error } = await (supabase as any)</span>
+<span class="cstat-no" title="statement not covered" >      const { error } = await (supabase as unknown as { from: (schema: string) =&gt; any })</span>
 <span class="cstat-no" title="statement not covered" >        .from('email_sequences')</span>
 <span class="cstat-no" title="statement not covered" >        .update({ status, updated_at: new Date().toISOString() })</span>
 <span class="cstat-no" title="statement not covered" >        .eq('id', id);</span>
@@ -499,7 +499,7 @@ export interface SequenceStep {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-21T06:57:37.767Z
+                at 2026-03-23T06:06:48.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
