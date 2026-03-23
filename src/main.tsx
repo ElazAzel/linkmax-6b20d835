@@ -129,6 +129,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Index /> },
+      { path: "index", element: <Index /> },
       { path: "auth", element: <Auth /> },
       { path: "auth/callback", element: <AuthCallback /> },
       { path: "dashboard", element: <Dashboard /> },
