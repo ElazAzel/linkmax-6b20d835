@@ -1,19 +1,23 @@
 ---
-description: Run automated tests
+description: Запуск автоматизированных тестов
 ---
-# Test Command
 
-This command runs the automated test suites for the project.
+# Команда Test (Тестирование)
 
-## Unit/Integration Tests (Vitest)
-1.  Run all tests: `npm run test`
-2.  Run tests in watch mode (for TDD): `npm run test:watch` (if configured in package.json)
-3.  Run tests with coverage: `npm run coverage`
+Эта команда запускает наборы автоматизированных тестов.
 
-## End-to-End Tests (Playwright/Cypress - if configured)
-1.  Ensure local dev server is running (`npm run dev`).
-2.  Run E2E tests: e.g., `npx playwright test`
+## 1. Юнит/Интеграционные тесты (Vitest)
 
-## Verification
--   All tests should report "PASS".
--   No tests should be skipped (`.skip`) unless there is a linked issue tracking the fix.
+1. Запуск всех тестов: `npm run test`
+2. Запуск в режиме наблюдения (TDD): `npm run test:watch`
+3. Запуск с отчетом о покрытии: `npm run coverage`
+
+## 2. E2E тесты (Playwright)
+
+1. Убедитесь, что локальный сервер запущен (`npm run dev`).
+2. Запуск E2E тестов: `npx playwright test`
+
+## Верификация
+
+- Все тесты должны иметь статус "PASS".
+- Тесты не должны пропускаться (`.skip`), если только нет связанной задачи на исправление.

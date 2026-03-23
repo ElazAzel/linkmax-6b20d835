@@ -1,13 +1,17 @@
 ---
-description: Manage Supabase database
+description: Управление базой данных Supabase
 ---
-# Database Commands
 
-## Migrate
-Run `supabase db diff -f <migration_name>` to generate a new migration file based on local changes.
+# Команды базы данных
 
-## Reset
-Run `supabase db reset` to wipe local database and re-apply all migrations.
+## Дифф (Миграция)
 
-## Push (Remote)
-Run `supabase db push` to apply local migrations to the remote linked project.
+Выполните `npx supabase db diff -f <имя_миграции>` для генерации нового файла миграции на основе локальных изменений схемы.
+
+## Сброс (Reset)
+
+Выполните `npx supabase db reset`, чтобы полностью очистить локальную базу данных и заново применить все миграции из папки `supabase/migrations`.
+
+## Пуш (В облако)
+
+Выполните `npx supabase db push`, чтобы применить локальные миграции к удаленному проекту Supabase.

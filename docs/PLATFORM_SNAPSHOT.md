@@ -798,6 +798,22 @@ Located in `src/components/dashboard-v2/`:
 
 - Layout components (header, sidebar, navigation)
 - Screen components (editor, analytics, CRM, settings)
+
+## Инфраструктура Агентов (.agent)
+
+Проект использует систему автономных агентов для автоматизации разработки. Основные правила и роли сосредоточены в директории `.agent/rules/`. Все коммуникации и документация ведутся на **русском языке**.
+
+### Система ролей
+- **Оркестратор**: Декомпозиция задач и управление процессом.
+- **Frontend/Backend Специалисты**: Экспертиза в конкретных слоях (React/Supabase).
+- **Implementer/Planner**: Написание кода и планирование.
+- **Verifier/Reviewer**: Контроль качества и тестирование.
+
+### Правила взаимодействия (Collaboration)
+Файл `rules/collaboration.md` определяет протоколы передачи задач (Handoff), управления контекстом и разрешения конфликтов между агентами и людьми.
+
+### Команды и Хуки
+Все основные команды разработки (`dev`, `build`, `database`, `deploy`, `lint`, `test`) задокументированы в `commands/` и имеют четкие инструкции по выполнению и верификации для AI.
 - Common utilities and dialogs
 - **Motion System**: Centralized `framer-motion` variants for staggered entry (`containerVariants`, `itemVariants`) and `AnimatePresence` for smooth layout transitions.
 

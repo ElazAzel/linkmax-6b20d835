@@ -1,18 +1,25 @@
-# Backend Rules (Supabase)
+# Правила бэкенда (Supabase)
 
-1.  **Database**:
-    -   Use **snake_case** for table and column names.
-    -   Always define **RLS Policies** for new tables.
-    -   Use migrations for schema changes.
-2.  **Edge Functions**:
-    -   Use **Deno** runtime.
-    -   Handle CORS properly (use standard `corsHeaders`).
-    -   Validate all inputs strictly (Zod or manual checks).
-    -   Use `supabase-js` for database interactions.
-3.  **Environment Variables**:
-    -   Use `Deno.env.get('VAR_NAME')`.
-    -   Fail fast if critical variables are missing.
-4.  **Security**:
-    -   Never expose service role keys in client code.
-    -   Sanitize user inputs to prevent XSS/Injection.
-    -   Verify signatures for webhooks (e.g., RoboKassa).
+## 1. База данных
+
+- Используйте **snake_case** для именования таблиц и столбцов.
+- Всегда определяйте **RLS политики** для новых таблиц.
+- Используйте миграции для любых изменений схемы.
+
+## 2. Edge Functions
+
+- Используйте среду выполнения **Deno**.
+- Правильно обрабатывайте CORS (используйте стандартные `corsHeaders`).
+- Строго валидируйте все входные данные (Zod или ручные проверки).
+- Используйте `supabase-js` для взаимодействия с БД.
+
+## 3. Переменные окружения
+
+- Используйте `Deno.env.get('VAR_NAME')`.
+- Приложение должно "падать" (fail fast), если критические переменные отсутствуют.
+
+## 4. Безопасность
+
+- Никогда не выносите `service_role` ключи в клиентский код.
+- Санитизируйте ввод пользователя для предотвращения XSS и инъекций.
+- Проверяйте подписи вебхуков (например, от RoboKassa).

@@ -1,21 +1,23 @@
 ---
-description: Start local development environments
+description: Запуск локальной среды разработки
 ---
-# Dev Command
+# Команда Dev (Разработка)
 
-This command starts the local development servers for the frontend and backend.
+Эта команда запускает локальные серверы для фронтенда и бэкенда.
 
-## Frontend (Vite)
-1.  Run `npm run dev`.
-2.  Server usually starts on `http://localhost:8080` (as per vite.config.ts).
+## 1. Фронтенд (Vite)
+- **Команда**: `npm run dev`
+- **Ожидаемый результат**: Сервер запустится на `http://localhost:8080` (настройка в `vite.config.ts`).
+- **Действие**: Откройте браузер по этому адресу для предварительного просмотра.
 
-## Backend (Supabase)
-To run Supabase services locally (Postgres, Auth, Storage, Edge Functions):
-1.  Start Supabase: `npx supabase start`
-2.  To serve Edge Functions locally and watch for changes:
-    - `npx supabase functions serve`
-    - Or for a specific function with a `.env` file: `npx supabase functions serve <function-name> --env-file supabase/.env.local`
+## 2. Бэкенд (Supabase)
+Для запуска локальной инфраструктуры Supabase (Postgres, Auth, Storage, Edge Functions):
+- **Запуск всех сервисов**: `npx supabase start`
+- **Запуск Edge Functions**:
+  - Все функции: `npx supabase functions serve`
+  - Конкретная функция с `.env`: `npx supabase functions serve <имя-функции> --env-file supabase/.env.local`
 
-## Verification
-- Frontend: Open `http://localhost:8080` in browser.
-- Backend: Check Supabase studio at `http://localhost:54323` (or port specified in CLI output).
+## 3. Верификация
+- **Фронтенд**: Проверьте, загружается ли страница в браузере.
+- **Supabase Studio**: Откройте локальную панель управления на `http://localhost:54323` для проверки БД и Auth.
+- **Логи**: Следите за терминалом на предмет ошибок типов или проблем с подключением к БД.

@@ -1,14 +1,16 @@
 ---
-description: Build the project for production
+description: Сборка проекта для продакшена
 ---
-# Build Command
+# Команда Build (Сборка)
 
-This command compiles the frontend application for production deployment.
+Эта команда компилирует фронтенд-приложение для развертывания.
 
-## Steps
-1.  Run `npm run build`.
+## Шаги выполнения
+1. **Команда**: `npm run build`
+2. **Процесс**: Vite выполнит транспиляцию TypeScript, оптимизацию CSS и сборку бандла.
 
-## Verification
--   Ensure the `dist/` directory is created and populated.
--   Check console output for no errors or unresolved unresolved imports.
--   *Note*: If `SENTRY_AUTH_TOKEN` is present in the environment, sourcemaps will be uploaded to Sentry automatically during this step.
+## Верификация
+- Убедитесь, что директория `dist/` создана и наполнена файлами.
+- Проверьте консоль на отсутствие ошибок сборки или неразрешенных импортов.
+- **Sentry**: Если в окружении есть `SENTRY_AUTH_TOKEN`, исходные карты (sourcemaps) будут автоматически загружены в Sentry.
+- **Производительность**: Обратите внимание на размер чанков (если есть предупреждения от Vite об их размере).

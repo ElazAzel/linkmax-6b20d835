@@ -1,9 +1,20 @@
-# Cursor IDE Rules
+# Правила для IDE Cursor
 
-1. **AI Context**: Always provide sufficient context (relevant files, types, and database schemas) when asking Cursor AI to generate code.
-2. **Code Generation**: Review AI-generated code carefully for:
-   - Adherence to Shadcn UI + Tailwind CSS patterns.
-   - Correct Supabase client usage (RLS bypass vs authenticated client).
-   - Proper generic typing in TypeScript.
-3. **Composer Mode**: When using Composer for multi-file edits, ensure it doesn't accidentally overwrite existing robust error handling with overly simplistic `try/catch` and `console.error`.
-4. **Inline Edits**: Use inline edits (Cmd+K) for small refactors, but always verify the surrounding context wasn't broken by the edit.
+## 1. Контекст AI
+
+Всегда предоставляйте достаточный контекст (релевантные файлы, типы, схемы БД) при генерации кода.
+
+## 2. Генерация кода
+
+Тщательно проверяйте сгенерированный код на:
+- Соблюдение паттернов Shadcn UI + Tailwind CSS.
+- Правильное использование Supabase клиента (RLS vs Authenticated).
+- Строгую типизацию.
+
+## 3. Режим Composer
+
+При использовании Composer для многофайловыхправок убедитесь, что он не упрощает обработку ошибок до простых `console.error`.
+
+## 4. Инлайн правки (Cmd+K)
+
+Используйте для небольшого рефакторинга, но всегда проверяйте окружающий контекст.

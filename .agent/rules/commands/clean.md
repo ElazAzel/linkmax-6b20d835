@@ -1,15 +1,16 @@
 ---
-description: Clean build artifacts and caches
+description: Очистка артефактов сборки и кэша
 ---
-# Clean Command
+# Команда Clean (Очистка)
 
-This command resets the local environment by removing build artifacts, dependency directories, and Deno caches. Use this when encountering bizarre build or type errors.
+Эта команда сбрасывает локальное окружение, удаляя артефакты сборки, директории зависимостей и кэши. Используйте это при возникновении странных ошибок сборки или типов.
 
-## Steps
-1.  Remove `node_modules` and `dist` folders: `rm -rf node_modules dist`
-2.  (Optional) Clear Vite cache: `rm -rf node_modules/.vite`
-3.  (Optional) Clear Deno cache for Edge Functions if experiencing Deno import issues: `deno cache --reload supabase/functions/**/index.ts`
-4.  Reinstall dependencies: `npm install`
+## Шаги выполнения
+1. **Удаление папок**: `rm -rf node_modules dist`
+2. **Очистка Vite**: `rm -rf node_modules/.vite` (если нужно сбросить только кэш оптимизации зависимостей).
+3. **Очистка Deno**: Если возникают проблемы с импортами в Edge Functions: `deno cache --reload supabase/functions/**/index.ts`
+4. **Переустановка**: `npm install`
 
-## Verification
--   `npm run build` should succeed after a clean install.
+## Верификация
+- Команда `npm run dev` или `npm run build` должна успешно выполниться после чистой установки.
+- Проверьте, что в IDE пропали ошибки "Module not found" или конфликты типов.

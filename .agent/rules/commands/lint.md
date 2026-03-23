@@ -1,10 +1,12 @@
 ---
-description: Check code quality and style
+description: Проверка качества и стиля кода
 ---
-# Lint Command
 
-Checks for coding standard violations.
+# Команда Lint (Линтинг)
 
-## Steps
-1.  Run `npm run lint`.
-2.  Run `npm run typecheck`.
+Проверка на соответствие стандартам кодирования и поиск ошибок типов.
+
+## Шаги выполнения
+
+1. Выполните проверку стиля: `npm run lint`
+2. Выполните проверку типов: `npm run typecheck`

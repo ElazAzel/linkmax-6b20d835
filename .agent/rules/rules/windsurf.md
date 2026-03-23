@@ -1,6 +1,14 @@
-# Windsurf IDE Rules
+# Правила для IDE Windsurf
 
-1. **Agent Context**: When using Windsurf's agentic AI, ensure it respects the project's architecture (Frontend -> Supabase Client -> Database).
-2. **Code Consistency**: Validate that Windsurf-generated components use existing Shadcn UI components instead of inventing new ones from scratch.
-3. **TypeScript Strictness**: Instruct Windsurf to strictly type its outputs and not rely on `any` or `ts-ignore` assertions during quick iterations.
-4. **Database Migrations**: Windsurf should not attempt to execute raw SQL directly unless it's creating a formal Supabase migration file.
+## 1. Уважение к архитектуре
+
+Всегда следуйте существующим архитектурным решениям, описанным в `PLATFORM_SNAPSHOT.md`.
+
+## 2. Консистентность кода
+
+Пишите код, который выглядит так, будто его написал человек, работающий в этом репозитории давно. Соблюдайте стиль именования и структуру файлов.
+
+## 3. Типизация и Безопасность
+
+- Используйте строгую типизацию TypeScript.
+- **Никакого прямого выполнения SQL** через AI, если это не согласовано. Используйте миграции.

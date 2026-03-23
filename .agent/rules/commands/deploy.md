@@ -1,23 +1,27 @@
 ---
-description: Deploy application and edge functions
+description: Развертывание приложения и Edge Functions
 ---
-# Deploy Command
 
-This outlines the steps to deploy different parts of the lnkmx.my application.
+# Команда Deploy (Деплой)
 
-## Frontend Deployment (Usually CI/CD)
-The frontend is typically deployed via a platform like Vercel or Cloudflare Pages linked to the `main` branch.
--   **Manual Build**: `npm run build`
+Здесь описаны шаги для развертывания различных частей приложения lnkmx.my.
 
-## Supabase Edge Functions Deployment
-To deploy Edge Functions to the Supabase project:
-1.  Ensure you are logged into Supabase CLI: `npx supabase login`
-2.  Link to the project if not already linked: `npx supabase link --project-ref <project-id>`
-3.  Deploy a specific function: `npx supabase functions deploy <function-name> --no-verify-jwt` (if public like a webhook)
-    - *Example*: `npx supabase functions deploy robokassa-webhook --no-verify-jwt`
-4.  Deploy all functions: `npx supabase functions deploy`
+## 1. Деплой Фронтенда (обычно через CI/CD)
 
-## Supabase Schema/Migrations
-To push local database migrations to the remote Supabase project:
-1.  Verify local changes: `npx supabase status`
-2.  Push migrations: `npx supabase db push`
+Фронтенд обычно развертывается через Vercel или Cloudflare Pages при пуше в ветку `main`.
+- **Ручная сборка**: `npm run build`
+
+## 2. Деплой Supabase Edge Functions
+
+Чтобы развернуть функции в облако Supabase:
+1. Убедитесь, что вы авторизованы: `npx supabase login`
+2. Свяжите проект, если это не сделано: `npx supabase link --project-ref <project-id>`
+3. Деплой конкретной функции: `npx supabase functions deploy <имя-функции> --no-verify-jwt` (если она публичная, например, вебхук).
+   - *Пример*: `npx supabase functions deploy robokassa-webhook --no-verify-jwt`
+4. Деплой всех функций: `npx supabase functions deploy`
+
+## 3. Схема БД и Миграции
+
+Чтобы отправить локальные миграции в удаленный проект:
+1. Проверьте статус: `npx supabase status`
+2. Отправьте миграции: `npx supabase db push`
