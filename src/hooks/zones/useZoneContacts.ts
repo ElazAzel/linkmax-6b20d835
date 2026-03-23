@@ -25,14 +25,14 @@ async function fetchContacts(zoneId: string): Promise<ZoneContact[]> {
 }
 
 async function fetchContactNotes(zoneId: string, contactId: string): Promise<ZoneContactNote[]> {
-  const { data, error } = await (supabase
-    .from('zone_contact_notes' as any)
+  const { data, error } = await supabase
+    .from('zone_contact_notes')
     .select('*')
     .eq('zone_id', zoneId)
     .eq('contact_id', contactId)
-    .order('created_at', { ascending: false }) as any);
+    .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data || []) as ZoneContactNote[];
+  return (data || []) as unknown as ZoneContactNote[];
 }
 
 // ─── Hooks ───
@@ -51,16 +51,37 @@ export function useZoneContacts(zoneId: string | null) {
     mutationFn: async (contact: Partial<ZoneContact>) => {
       if (!zoneId) throw new Error('No zone selected');
       const userId = (await supabase.auth.getUser()).data.user?.id;
+      
+      if (!contact.name) throw new Error('Contact name is required');
+      
       const { data, error } = await supabase
         .from('zone_contacts')
-        .insert({ ...contact, zone_id: zoneId, owner_user_id: userId } as any)
+        .insert({ 
+          name: contact.name,
+          zone_id: zoneId, 
+          owner_user_id: userId || null,
+          email: contact.email || null,
+          phone: contact.phone || null,
+          company: contact.company || null,
+          position: contact.position || null,
+          address: contact.address || null,
+          source: contact.source || null,
+          notes: contact.notes || null,
+          telegram_user_id: contact.telegram_user_id || null,
+          telegram_username: contact.telegram_username || null,
+          tags: contact.tags || [],
+          custom_fields: contact.custom_fields as Json || null
+        })
         .select()
         .single();
+        
       if (error) throw error;
+      
       // Fire automations (non-blocking)
       supabase.functions.invoke('run-zone-automations', {
         body: { zone_id: zoneId, trigger_type: 'new_contact', contact_id: data.id },
       }).catch(() => { });
+      
       return data as unknown as ZoneContact;
     },
     onSuccess: () => {
@@ -72,7 +93,7 @@ export function useZoneContacts(zoneId: string | null) {
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<ZoneContact> }) => {
       const { error } = await supabase
         .from('zone_contacts')
-        .update(updates as any)
+        .update(updates)
         .eq('id', id);
       if (error) throw error;
     },

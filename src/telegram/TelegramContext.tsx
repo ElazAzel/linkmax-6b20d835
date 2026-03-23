@@ -18,6 +18,8 @@ import type {
 } from './types';
 import { supabase } from '@/platform/supabase/client';
 
+import { logger } from '@/lib/utils/logger';
+
 // ---- Deep-link parser ----
 
 export function parseStartParam(startParam?: string): DeepLinkRoute {
@@ -196,7 +198,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
             setRoute(parsedRoute);
             screenHistoryRef.current = [parsedRoute.screen];
 
-            console.log(
+            logger.debug(
                 `[TelegramApp] Authenticated: ${data.user.first_name} (${data.user.telegram_user_id}), screen: ${parsedRoute.screen}`
             );
         } catch (err: any) {

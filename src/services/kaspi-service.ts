@@ -1,4 +1,4 @@
-import { supabase } from "@/platform/supabase/client";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * Service to handle Kaspi Pay (KZ) specific payment logic.
@@ -12,7 +12,7 @@ export class KaspiService {
     static async generateQrLink(invoiceId: string, amount: number) {
         try {
             // Future: Call Edge Function 'generate-kaspi-qr'
-            console.log(`[KaspiService] Requesting QR for Invoice ${invoiceId} (Amount: ${amount} KZT)`);
+            logger.debug(`[KaspiService] Requesting QR for Invoice ${invoiceId} (Amount: ${amount} KZT)`);
 
             // Realistic Kaspi deep link for merchant payments
             const merchantId = "inkmax_merchant"; // Fallback identifier

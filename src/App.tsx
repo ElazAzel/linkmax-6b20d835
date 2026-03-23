@@ -76,6 +76,8 @@ class RouteErrorBoundary extends React.Component<
 }
 
 
+import { SkipToMainContent } from "@/components/ui/SkipToMainContent";
+
 const App = () => {
   // Defer non-critical init until user interacts or after 8s
   // This prevents web-vitals, storage, and i18n-db-backend chunks from loading on initial paint
@@ -129,14 +131,17 @@ const App = () => {
         <AuthProvider>
           <LanguageProvider>
             <TooltipProvider>
+              <SkipToMainContent />
               <Toaster />
               <Sonner />
               <RoutePrefetchManager />
               <RouteWebVitalsMonitor />
               <RouteErrorBoundary>
-                <Suspense fallback={<PageLoader />}>
-                  <Outlet />
-                </Suspense>
+                <div id="main-content" className="outline-none" tabIndex={-1}>
+                  <Suspense fallback={<PageLoader />}>
+                    <Outlet />
+                  </Suspense>
+                </div>
               </RouteErrorBoundary>
               <Suspense fallback={null}>
                 <PWAInstallPrompt />

@@ -16,6 +16,8 @@ import { getAppDomain } from '@/lib/utils/url-helpers';
 import { NICHE_ICONS, type Niche } from '@/lib/niches';
 import { trackActivationEvent } from '@/lib/activation-events';
 
+import { LoadingState } from '@/components/ui/states/LoadingState';
+
 export default function FromPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ export default function FromPage() {
   if (isLoading || !page) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <LoadingState className="py-0" />
       </div>
     );
   }

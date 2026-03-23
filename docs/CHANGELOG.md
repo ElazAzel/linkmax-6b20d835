@@ -1,21 +1,23 @@
 # Changelog
 
-## [Phase 6 & 7: Architecture & Security] - 2026-03-23
+## [Phase 8 & 9: Docs, Infrastructure & UX Polish] - 2026-03-23
 
-#### Added
-
-- **Env Validator**: Zod-based runtime validation for environment variables (`VITE_SUPABASE_URL`, etc.).
-- **Barrel Files**: Created `index.ts` for `src/services`, `src/hooks`, and `src/lib/errors`.
-- **Sentry Filters**: Added suppression for `chrome-extension://` and other common extension prefixes.
+### Added
+- **Documentation**: Created ADR-0028 for Consolidated Architecture.
+- **Runbooks**: Added operational runbooks for deployment, rollback, and incident management.
+- **Infrastructure**: Runtime environment variable validation using Zod.
+- **Accessibility**: Implemented `SkipToMainContent` component and skip-navigation links.
+- **Loading UI**: Standardized loading indicators across `FromPage` and `Auth` screens using `Loader2`.
 
 ### Changed
+- **Logging**: Replaced multiple `console.log` statements with the `logger` utility for cleaner production output.
+- **README**: Centralized documentation links and updated project overview.
 
-- **Supabase Consolidation**: Moved everything from `src/integrations/supabase` to `src/platform/supabase`. Updated imports in 30+ files.
-- **Main Entry**: Added `validateEnv()` call at the top of `main.tsx`.
+### Fixed
+- **Sentry**: Corrected noise filtering logic for browser extensions.
+- **Auth UI**: Fixed manual spinner implementation in OAuth buttons.
 
-### Removed
-
-- **Redundant Integrations**: Deleted `src/integrations/` directory.
+## [Phase 6 & 7: Architecture & Security] - 2026-03-23
 
 ## [Phase 5: Performance Optimization] - 2026-03-23
 
@@ -50,9 +52,6 @@
 
 - **E2E Navigation**: Corrected dashboard tab routing in automated flows.
 - **Test Stability**: Resolved flakiness in `BlocksRendering.test.tsx` by disabling unstable skeleton checks in CI.
-
-### Fixed
-
 - **E2E Navigation**: Corrected dashboard tab routing from `/dashboard?tab=crm` to `/dashboard?tab=activity` in E2E tests to match actual component locations.
 
 ## [Phase 4: Onboarding Optimization & Analytics] - 2026-03-21

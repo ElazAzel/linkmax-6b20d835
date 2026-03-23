@@ -26,6 +26,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { StaticSEOHead } from '@/components/seo/StaticSEOHead';
 import { getAppDomain } from '@/lib/utils/url-helpers';
 import { TelegramLoginButton } from '@/components/auth/TelegramLoginButton';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 
 // Zod schema is created inside the component to access t()
 // We define a factory function here
@@ -514,7 +515,12 @@ export default function Auth() {
                       </p>
                     </div>
                     <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                      {isLoading ? t('common.loading', 'Loading...') : t('auth.updatePassword', 'Update Password')}
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          {t('common.loading', 'Loading...')}
+                        </>
+                      ) : t('auth.updatePassword', 'Update Password')}
                     </Button>
                   </form>
                 )}
@@ -550,7 +556,7 @@ export default function Auth() {
                     disabled={isOAuthLoading !== null || isLoading}
                   >
                     {isOAuthLoading === 'google' ? (
-                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <svg className="h-5 w-5" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -570,7 +576,7 @@ export default function Auth() {
                     disabled={isOAuthLoading !== null || isLoading}
                   >
                     {isOAuthLoading === 'apple' ? (
-                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
@@ -634,7 +640,12 @@ export default function Auth() {
                             />
                           </div>
                           <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading}>
-                            {isLoading ? t('common.loading', 'Loading...') : t('auth.sendResetLink', 'Send Reset Link')}
+                            {isLoading ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                {t('common.loading', 'Loading...')}
+                              </>
+                            ) : t('auth.sendResetLink', 'Send Reset Link')}
                           </Button>
                           <div className="relative py-2">
                             <div className="absolute inset-0 flex items-center">
@@ -747,7 +758,12 @@ export default function Auth() {
                           />
                         </div>
                         <Button type="submit" className="w-full h-12 rounded-xl shadow-glass-lg transition-all duration-300 hover:scale-[1.02]" disabled={isLoading || isOAuthLoading !== null}>
-                          {isLoading ? t('auth.signingIn') : t('auth.signIn')}
+                          {isLoading ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              {t('auth.signingIn')}
+                            </>
+                          ) : t('auth.signIn')}
                         </Button>
                       </form>
                     )}

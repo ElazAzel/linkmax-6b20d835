@@ -173,6 +173,8 @@ lnkmx/
 - **[Stack References](docs/architecture/STACK_REFERENCES.md)**: Libraries and best practices.
 - **[API & Backend](docs/implementation/API.md)**: Edge Functions and RPCs.
 - **[Testing](docs/testing/TESTING.md)**: Unit and E2E tests.
+- **[Runbooks](docs/operations/RUNBOOKS/)**: Operational guides (Deploy, Rollback, Incidents).
+- **[ADRs](docs/ADR/)**: Architecture Decision Records history.
 - **[Contributing](CONTRIBUTING.md)**: Guidelines for contributing.
 
 ---
