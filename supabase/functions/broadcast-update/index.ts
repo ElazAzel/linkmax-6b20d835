@@ -20,7 +20,8 @@ function getMainKeyboard(lang: string) {
   return {
     inline_keyboard: [
       [{ text: openAppBtn, web_app: { url: MINIAPP_URL } }],
-      [{ text: '📊 Analytis', callback_data: 'stats' }, { text: '📩 CRM', callback_data: 'leads_page:0' }],
+      [{ text: '📊 Analytics', callback_data: 'stats' }, { text: '📩 CRM / Leads', callback_data: 'leads' }],
+      [{ text: '📂 Projects / Страницы', callback_data: 'pages' }],
     ],
   };
 }

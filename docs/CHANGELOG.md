@@ -1,16 +1,22 @@
 # Changelog
 
 ## [1.7.0] - 2026-03-24
+ 
 ### Added
+ 
 - **Multi-project support**: New `/pages` command to switch between user projects.
 - **Active project context**: All operational commands (`/stats`, `/leads`, `/bookings`) now automatically filter results by the active project.
 - **Direct profile editing**: `/edit_bio` command to update user bio in real-time.
 - **Content management**: `/add_link` command for quick link addition (`Name | URL`).
+- **Advanced Commands**: `/toggle_publish` and `/links` (view/delete) for full remote control.
+- **Mass Broadcast**: Implemented `broadcast-update` edge function to notify users of the Mini CRM evolution.
 - **New SQL Migration**: Persistence of `active_page_id` in `telegram_bot_settings`.
-- **Improved UX**: Updated help menu and interactive project selection buttons.
-
+- **Improved UX**: New help menu with quick access to projects, links, and settings.
+ 
 ## [1.6.0] - 2026-03-24
+ 
 ### Added
+ 
 - **Telegram Bot HQ (Deterministic):**
   - Интерактивные уведомления о лидах с кнопками управления статусом (`В работу`, `Продано`).
   - Прямые ссылки на WhatsApp/Telegram клиента из уведомления.

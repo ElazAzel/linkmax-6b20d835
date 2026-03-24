@@ -352,8 +352,10 @@ function getHelpKeyboard(lang: Language) {
   return {
     inline_keyboard: [
       [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
+      [{ text: '📂 ' + (lang === 'ru' ? 'Мои проекты' : lang === 'kk' ? 'Менің жобаларым' : 'My Projects'), callback_data: 'pages' }, 
+       { text: '🔗 ' + (lang === 'ru' ? 'Ссылки' : lang === 'kk' ? 'Сілтемелер' : 'Links'), callback_data: 'links' }],
+      [{ text: '⚙️ ' + (lang === 'ru' ? 'Настройки' : lang === 'kk' ? 'Баптаулар' : 'Settings'), callback_data: 'settings' }],
       [{ text: m.copy_btn, callback_data: 'copy_id' }],
-      [{ text: m.register_btn, url: 'https://lnkmx.my/auth' }],
       [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
     ],
   };
@@ -739,18 +741,6 @@ serve(async (req: Request) => {
             };
           }
         }
-      } else if (text === '/leads' || text === '/crm') {
-        // Open Mini App → CRM
-        responseText = lang === 'ru' ? '📩 Откройте Mini App для работы с лидами' : lang === 'kk' ? '📩 Лидтермен жұмыс істеу үшін Mini App ашыңыз' : '📩 Open Mini App to manage leads';
-        replyMarkup = getMiniAppKeyboard(lang, 'crm');
-      } else if (text === '/bookings') {
-        // Open Mini App → Bookings
-        responseText = lang === 'ru' ? '📅 Откройте Mini App для управления бронированиями' : lang === 'kk' ? '📅 Брондауларды басқару үшін Mini App ашыңыз' : '📅 Open Mini App to manage bookings';
-        replyMarkup = getMiniAppKeyboard(lang, 'bookings');
-      } else if (text === '/pay') {
-        // Open Mini App → Payments
-        responseText = lang === 'ru' ? '💳 Откройте Mini App для управления платежами' : lang === 'kk' ? '💳 Төлемдерді басқару үшін Mini App ашыңыз' : '💳 Open Mini App to manage payments';
-        replyMarkup = getMiniAppKeyboard(lang, 'pay');
       } else if (text === '/support') {
         // Support info
         responseText = m.support;
@@ -774,42 +764,6 @@ serve(async (req: Request) => {
             [{ text: '🌐 Language / Тіл', callback_data: 'change_lang' }],
           ]
         };
-      } else if (text === '/stats') {
-        // Check if admin
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
-
-        const { data: isAdmin } = profile ? await supabase.rpc('has_role', { _user_id: profile.id, _role: 'admin' }) : { data: false };
-
-        if (isAdmin) {
-          const { count: subsCount } = await supabase.from('telegram_bot_settings').select('*', { count: 'exact', head: true });
-          const { count: usersCount } = await supabase.from('user_profiles').select('*', { count: 'exact', head: true });
-          responseText = m.stats(subsCount || 0, usersCount || 0);
-        } else {
-          responseText = m.admin_only;
-        }
-      } else if (text === '/publish') {
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('id')
-          .eq('telegram_chat_id', chatIdStr)
-          .maybeSingle();
-
-        if (profile) {
-          const { data: page } = await supabase.from('pages').select('id, is_published').eq('user_id', profile.id).maybeSingle();
-          if (page) {
-            const newStatus = !page.is_published;
-            await supabase.from('pages').update({ is_published: newStatus }).eq('id', page.id);
-            responseText = newStatus ? m.publish_on : m.publish_off;
-          } else {
-            responseText = m.no_page;
-          }
-        } else {
-          responseText = m.not_linked;
-        }
       } else if (text === '/wallet' || text === '/balance') {
         const { data: profile } = await supabase
           .from('user_profiles')

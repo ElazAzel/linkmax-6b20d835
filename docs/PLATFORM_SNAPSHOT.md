@@ -200,22 +200,24 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 ---
 
 ### 2.4 Telegram Bot (Operational HQ)
-
+ 
 **Primary goal:** Deterministic remote control of the business without LLM latency or token costs.
-
+ 
 **Features:**
-- **Advanced Lead Management**: `/leads` command with pagination (interactive buttons).
-- **Operational HQ (Telegram Bot)**:
-    - `/stats`: Поддержка выбора проекта (`active_page_id`). Визуальные отчеты (прогресс-бары) по просмотрам, кликам и лидам за 7д/24ч.
-    - `/leads`: Пагинация лидов с фильтрацией по выбранному проекту.
-    - `/bookings`: Просмотр предстоящих бронирований для активного проекта.
-    - `/pages`: [NEW] Переключение между несколькими проектами пользователя.
-    - `/edit_bio`: [NEW] Редактирование био профиля прямо в боте.
-    - `/add_link`: [NEW] Добавление новых ссылок на страницу (`Название | URL`).
-    - `/page`: Детальный отчет по статусу (Draft/Published) и просмотрам.
-    - `/wallet`: Баланс и ожидаемый доход (GMV).
-- **Operational Commands**: `/zone`, `/deals`, `/tasks`, `/contacts` for on-the-go status checks.
-- **Webhook Logic**: High-reliability processing in Supabase Edge Functions.
+ 
+- **Multi-Page Management**: `/pages` command to switch between projects with persistent `active_page_id` state.
+- **Direct Content Editing**: 
+  - `/edit_bio`: Instant profile BIO update.
+  - `/add_link`: Conversational flow (`Title | URL`) to append new blocks.
+- **Advanced Operational Commands**:
+  - `/stats`: Visual reports (progress bars) for views/clicks/leads (7d/24h).
+  - `/leads`: CRM inbox with pagination and status update buttons.
+  - `/bookings`: View upcoming appointments for active project.
+  - `/links`: [NEW] Interactive list of links with ❌ delete buttons.
+  - `/toggle_publish`: [NEW] Toggle page visibility (Draft/Published) with confirmation.
+  - `/settings`: [NEW] Language selection and notification preferences.
+- **Mass Broadcast Protocol**: Dedicated `broadcast-update` edge function for notifying all users about platform evolution (Mini CRM update).
+- **Webhook Logic**: Stateless, high-reliability processing in Supabase Edge Functions.
 
 ---
 
