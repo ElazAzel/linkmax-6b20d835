@@ -25,7 +25,7 @@ const messages = {
       `👋 Привет, ${name}!\n\n📋 <b>Ваш Chat ID для регистрации:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Нажмите на номер чтобы скопировать</b>\n\nЗатем вернитесь в LinkMAX и вставьте его в поле регистрации.`,
     greeting_miniapp: (name: string) =>
       `👋 Привет, ${name}!\n\n🚀 <b>LinkMAX — ваш Business OS в Telegram</b>\n\nОткройте Mini App чтобы:\n• Создать страницу\n• Работать с лидами\n• Управлять бронированиями\n• Смотреть аналитику`,
-    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/app - Открыть Mini App\n/page - Моя страница\n/crm - Лиды / CRM\n/bookings - Бронирования\n/pay - Платежи\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID\n/zone - Сводка по зоне\n/deals - Открытые сделки\n/tasks - Задачи на сегодня\n/contacts - Последние контакты`,
+    help: `📚 <b>Команды:</b>\n\n/start - Начать работу\n/app - Открыть Mini App\n/page - Моя страница\n/leads - Лиды / CRM\n/bookings - Бронирования\n/stats - Аналитика\n/wallet - Кошелек / Баланс\n/pay - Платежи\n/help - Помощь\n/language - Сменить язык\n/id - Показать Chat ID\n/zone - Сводка по зоне\n/deals - Открытые сделки\n/tasks - Задачи на сегодня\n/contacts - Последние контакты`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Как подключить Telegram к LinkMAX:</b>\n\n1️⃣ Скопируйте Chat ID: <code>${chatId}</code>\n2️⃣ Вставьте его при регистрации на lnkmx.my\n3️⃣ Нажмите "Подтвердить"\n\nПосле этого вы будете получать уведомления о заявках прямо сюда! 📩`,
     chat_id: (chatId: number) =>
@@ -37,6 +37,16 @@ const messages = {
     register_btn: '📝 Регистрация',
     copied: 'Chat ID скопирован!',
     support: '💬 <b>Поддержка</b>\n\nЕсли у вас есть вопросы или нужна помощь:\n\n• Напишите @linkmax_support\n• Или опишите проблему прямо здесь',
+    lead_updated: (status: string) => `✅ Статус лида обновлен на: <b>${status}</b>`,
+    page_info: (title: string, slug: string, status: string, views: number) => `📄 <b>Ваша страница:</b>\n\nНазвание: ${title}\nСсылка: lnkmx.my/${slug}\nСтатус: ${status}\nПросмотров за всё время: ${views}`,
+    wallet_info: (balance: number, pending: number) => `💰 <b>Ваш кошелек:</b>\n\nДоступно: ${balance.toLocaleString()} ₸\nВ ожидании (GMV): ${pending.toLocaleString()} ₸`,
+    leads_list: (page: number, total: number) => `📩 <b>Ваши лиды (Стр. ${page + 1}):</b>\n\nВсего: ${total}`,
+    lead_item: (l: any) => `👤 <b>${l.name || 'Без имени'}</b>\n📞 ${l.phone || '-'}\n📅 ${new Date(l.created_at).toLocaleDateString('ru-RU')}\n📝 Статус: ${l.status}`,
+    stats_header: (period: string) => `📊 <b>Статистика (${period}):</b>\n\n`,
+    stats_row: (label: string, value: number, bar: string) => `${label}: <b>${value}</b>\n${bar}\n`,
+    bookings_list: (found: number) => `📅 <b>Бронирования:</b>\n\nНайдено: ${found}`,
+    booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
+    lead_error: '❌ Ошибка при обновлении лида. Попробуйте еще раз.',
   },
   en: {
     welcome: "🌐 Welcome to LinkMAX!\n\nChoose your language:",
@@ -51,7 +61,7 @@ const messages = {
       `👋 Hello, ${name}!\n\n📋 <b>Your Chat ID for registration:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Tap the number to copy</b>\n\nThen return to LinkMAX and paste it into the registration field.`,
     greeting_miniapp: (name: string) =>
       `👋 Hello, ${name}!\n\n🚀 <b>LinkMAX — your Business OS in Telegram</b>\n\nOpen the Mini App to:\n• Create your page\n• Manage leads\n• Handle bookings\n• View analytics`,
-    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/app - Open Mini App\n/page - My page\n/crm - Leads / CRM\n/bookings - Bookings\n/pay - Payments\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
+    help: `📚 <b>Commands:</b>\n\n/start - Get started\n/app - Open Mini App\n/page - My page\n/leads - Leads / CRM\n/bookings - Bookings\n/wallet - Wallet / Balance\n/pay - Payments\n/stats - Detailed Analytics\n/help - Help\n/language - Change language\n/id - Show Chat ID\n/zone - Zone overview\n/deals - Open deals\n/tasks - Today's tasks\n/contacts - Recent contacts`,
     help_full: (chatId: number) =>
       `ℹ️ <b>How to connect Telegram to LinkMAX:</b>\n\n1️⃣ Copy Chat ID: <code>${chatId}</code>\n2️⃣ Paste it during registration at lnkmx.my\n3️⃣ Click "Confirm"\n\nAfter that you will receive notifications about leads directly here! 📩`,
     chat_id: (chatId: number) =>
@@ -63,6 +73,16 @@ const messages = {
     register_btn: '📝 Registration',
     copied: 'Chat ID copied!',
     support: '💬 <b>Support</b>\n\nIf you have questions or need help:\n\n• Message @linkmax_support\n• Or describe your issue right here',
+    lead_updated: (status: string) => `✅ Lead status updated to: <b>${status}</b>`,
+    page_info: (title: string, slug: string, status: string, views: number) => `📄 <b>Your Page:</b>\n\nTitle: ${title}\nURL: lnkmx.my/${slug}\nStatus: ${status}\nTotal Views: ${views}`,
+    wallet_info: (balance: number, pending: number) => `💰 <b>Your Wallet:</b>\n\nAvailable: ${balance.toLocaleString()} ₸\nPending (GMV): ${pending.toLocaleString()} ₸`,
+    leads_list: (page: number, total: number) => `📩 <b>Your Leads (Page ${page + 1}):</b>\n\nTotal: ${total}`,
+    lead_item: (l: any) => `👤 <b>${l.name || 'Unnamed'}</b>\n📞 ${l.phone || '-'}\n📅 ${new Date(l.created_at).toLocaleDateString('en-US')}\n📝 Status: ${l.status}`,
+    stats_header: (period: string) => `📊 <b>Stats (${period}):</b>\n\n`,
+    stats_row: (label: string, value: number, bar: string) => `${label}: <b>${value}</b>\n${bar}\n`,
+    bookings_list: (found: number) => `📅 <b>Bookings:</b>\n\nFound: ${found}`,
+    booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
+    lead_error: '❌ Error updating lead. Please try again.',
   },
   kk: {
     welcome: "🌐 LinkMAX-қа қош келдіңіз!\n\nТілді таңдаңыз:",
@@ -77,7 +97,7 @@ const messages = {
       `👋 Сәлем, ${name}!\n\n📋 <b>Тіркелу үшін Chat ID:</b>\n\n<code>${chatId}</code>\n\n☝️ <b>Көшіру үшін нөмірді басыңыз</b>\n\nСодан кейін lnkmx.my-қа оралып, тіркеу өрісіне қойыңыз.`,
     greeting_miniapp: (name: string) =>
       `👋 Сәлем, ${name}!\n\n🚀 <b>LinkMAX — сіздің Business OS Telegram-да</b>\n\nMini App ашыңыз:\n• Бет жасау\n• Лидтерді басқару\n• Брондауларды басқару\n• Аналитика көру`,
-    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/app - Mini App ашу\n/page - Менің бетім\n/crm - Лидтер / CRM\n/bookings - Брондаулар\n/pay - Төлемдер\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету\n/zone - Аймақ шолуы\n/deals - Ашық мәмілелер\n/tasks - Бүгінгі тапсырмалар\n/contacts - Соңғы контактілер`,
+    help: `📚 <b>Командалар:</b>\n\n/start - Бастау\n/app - Mini App ашу\n/page - Менің бетім\n/leads - Лидтер / CRM\n/bookings - Брондаулар\n/pay - Төлемдер\n/stats - Толық аналитика\n/help - Көмек\n/language - Тілді өзгерту\n/id - Chat ID көрсету\n/zone - Аймақ шолуы\n/deals - Ашық мәмілелер\n/tasks - Бүгінгі тапсырмалар\n/contacts - Соңғы контактілер`,
     help_full: (chatId: number) =>
       `ℹ️ <b>Telegram-ды LinkMAX-қа қалай қосуға болады:</b>\n\n1️⃣ Chat ID көшіріңіз: <code>${chatId}</code>\n2️⃣ lnkmx.my сайтында тіркелу кезінде қойыңыз\n3️⃣ "Растау" басыңыз\n\nОсыдан кейін сіз хабарландыруларды тікелей осы жерде аласыз! 📩`,
     chat_id: (chatId: number) =>
@@ -89,6 +109,16 @@ const messages = {
     register_btn: '📝 Тіркелу',
     copied: 'Chat ID көшірілді!',
     support: '💬 <b>Қолдау</b>\n\nСұрақтарыңыз болса немесе көмек қажет болса:\n\n• @linkmax_support жазыңыз\n• Немесе мәселені осы жерде сипаттаңыз',
+    lead_updated: (status: string) => `✅ Лид статусы жаңартылды: <b>${status}</b>`,
+    page_info: (title: string, slug: string, status: string, views: number) => `📄 <b>Сіздің бетіңіз:</b>\n\nАтауы: ${title}\nСілтеме: lnkmx.my/${slug}\nСтатус: ${status}\nБарлық қаралымдар: ${views}`,
+    wallet_info: (balance: number, pending: number) => `💰 <b>Сіздің әмияныңыз:</b>\n\nҚолжетімді: ${balance.toLocaleString()} ₸\nКүтуде (GMV): ${pending.toLocaleString()} ₸`,
+    leads_list: (page: number, total: number) => `📩 <b>Сіздің лидтеріңіз (${page + 1}-бет):</b>\n\nБарлығы: ${total}`,
+    lead_item: (l: any) => `👤 <b>${l.name || 'Есімсіз'}</b>\n📞 ${l.phone || '-'}\n📅 ${new Date(l.created_at).toLocaleDateString('kk-KZ')}\n📝 Статус: ${l.status}`,
+    stats_header: (period: string) => `📊 <b>Статистика (${period}):</b>\n\n`,
+    stats_row: (label: string, value: number, bar: string) => `${label}: <b>${value}</b>\n${bar}\n`,
+    bookings_list: (found: number) => `📅 <b>Брондаулар:</b>\n\nТабылды: ${found}`,
+    booking_item: (b: any) => `🗓 ${b.slot_date} ${b.slot_time}\n👤 ${b.client_name}\n📞 ${b.client_phone || '-'}\n🏷 ${b.status}`,
+    lead_error: '❌ Лидті жаңарту кезінде қате кетті. Қайталап көріңіз.',
   },
 };
 
@@ -207,6 +237,7 @@ function getMainKeyboard(lang: Language) {
   return {
     inline_keyboard: [
       [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
+      [{ text: '📩 Leads', callback_data: 'leads_page:0' }, { text: '📊 Stats', callback_data: 'stats_help' }],
       [{ text: m.copy_btn, callback_data: 'copy_id' }],
       [{ text: m.continue_btn, url: 'https://lnkmx.my/auth' }],
       [{ text: m.how_works_btn, callback_data: 'help' }],
@@ -367,6 +398,73 @@ serve(async (req: Request) => {
       } else if (data === 'help') {
         responseText = m.help_full(chatId);
         replyMarkup = getHelpKeyboard(lang);
+      } else if (data?.startsWith('lead_status:')) {
+        const [_, status, leadId] = data.split(':');
+        
+        // Update lead/deal status in DB
+        const { error: updateError } = await supabase
+          .from('leads')
+          .update({ status })
+          .eq('id', leadId);
+
+        if (updateError) {
+          console.error('Error updating lead status:', updateError);
+          responseText = m.lead_error;
+        } else {
+          // Map status code to display name
+          const statusNames: Record<string, string> = {
+            'contacted': lang === 'ru' ? 'В работе' : lang === 'kk' ? 'Жұмыста' : 'In Progress',
+            'won': lang === 'ru' ? 'Продано' : lang === 'kk' ? 'Сатылды' : 'Won'
+          };
+          responseText = m.lead_updated(statusNames[status] || status);
+        }
+      } else if (data?.startsWith('leads_page:')) {
+        const page = parseInt(data.split(':')[1]);
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (profile) {
+          const { data: leads, count } = await supabase
+            .from('leads')
+            .select('*', { count: 'exact' })
+            .eq('user_id', profile.id)
+            .order('created_at', { ascending: false })
+            .range(page * 5, (page * 5) + 4);
+
+          if (leads && leads.length > 0) {
+            const leadLines = leads.map((l: any) => m.lead_item(l));
+            responseText = `${m.leads_list(page, count || 0)}\n\n${leadLines.join('\n\n')}`;
+            
+            const buttons = [];
+            const navRow = [];
+            if (page > 0) navRow.push({ text: '⬅️', callback_data: `leads_page:${page - 1}` });
+            if (count && (page + 1) * 5 < count) navRow.push({ text: '➡️', callback_data: `leads_page:${page + 1}` });
+            if (navRow.length > 0) buttons.push(navRow);
+            
+            buttons.push([{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=crm` } }]);
+            replyMarkup = { inline_keyboard: buttons };
+
+            // Edit original message instead of sending new one if possible
+            await fetch(
+              `https://api.telegram.org/bot${telegramBotToken}/editMessageText`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: chatId,
+                  message_id: callbackQuery.message?.message_id,
+                  text: responseText,
+                  parse_mode: 'HTML',
+                  reply_markup: replyMarkup,
+                }),
+              }
+            );
+            return new Response('OK', { status: 200, headers: corsHeaders });
+          }
+        }
       }
 
       // Answer callback query
@@ -451,10 +549,44 @@ serve(async (req: Request) => {
         responseText = m.greeting_miniapp(firstName);
         replyMarkup = getMiniAppKeyboard(lang);
       } else if (text === '/page') {
-        // Open Mini App → Page editor
-        responseText = lang === 'ru' ? '📄 Откройте Mini App для редактирования страницы' : lang === 'kk' ? '📄 Бетті өңдеу үшін Mini App ашыңыз' : '📄 Open Mini App to edit your page';
-        replyMarkup = getMiniAppKeyboard(lang, 'page');
-      } else if (text === '/crm') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          const { data: page } = await supabase
+            .from('pages')
+            .select('id, title, slug, is_published')
+            .eq('user_id', profile.id)
+            .maybeSingle();
+
+          if (!page) {
+            responseText = m.no_page;
+          } else {
+            const { count: views } = await supabase
+              .from('analytics')
+              .select('*', { count: 'exact', head: true })
+              .eq('page_id', page.id)
+              .eq('event_type', 'view');
+
+            const status = page.is_published 
+              ? (lang === 'ru' ? '🚀 Опубликована' : lang === 'kk' ? '🚀 Жарияланды' : '🚀 Published')
+              : (lang === 'ru' ? '📴 Черновик' : lang === 'kk' ? '📴 Шимай' : '📴 Draft');
+
+            responseText = m.page_info(page.title || 'Untitled', page.slug, status, views || 0);
+            replyMarkup = {
+              inline_keyboard: [
+                [{ text: lang === 'ru' ? '🔗 Открыть страницу' : '🔗 Open Page', url: `https://lnkmx.my/${page.slug}` }],
+                [{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=page` } }]
+              ]
+            };
+          }
+        }
+      } else if (text === '/leads' || text === '/crm') {
         // Open Mini App → CRM
         responseText = lang === 'ru' ? '📩 Откройте Mini App для работы с лидами' : lang === 'kk' ? '📩 Лидтермен жұмыс істеу үшін Mini App ашыңыз' : '📩 Open Mini App to manage leads';
         replyMarkup = getMiniAppKeyboard(lang, 'crm');
@@ -524,6 +656,39 @@ serve(async (req: Request) => {
           }
         } else {
           responseText = m.not_linked;
+        }
+      } else if (text === '/wallet' || text === '/balance') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          // Fetch wallet and pending GMV
+          const { data: wallet } = await supabase
+            .from('user_wallets')
+            .select('balance')
+            .eq('user_id', profile.id)
+            .maybeSingle();
+
+          const { data: transactions } = await supabase
+            .from('wallet_transactions')
+            .select('gross_amount')
+            .eq('user_id', profile.id)
+            .eq('status', 'pending');
+          
+          const pendingGMV = (transactions || []).reduce((sum: number, t: any) => sum + (t.gross_amount || 0), 0);
+          
+          responseText = m.wallet_info(wallet?.balance || 0, pendingGMV);
+          replyMarkup = {
+            inline_keyboard: [
+              [{ text: m.open_app_btn, web_app: { url: MINIAPP_URL } }],
+              [{ text: lang === 'ru' ? '💳 Вывод средств' : lang === 'kk' ? '💳 Қаражатты шығару' : '💳 Withdraw', url: `${MINIAPP_URL}?startapp=wallet` }]
+            ]
+          };
         }
       } else if (text === '/zone' || text === '/deals' || text === '/tasks' || text === '/contacts') {
         // Zone commands — find user's zone through linked profile
@@ -639,6 +804,121 @@ serve(async (req: Request) => {
               }
             }
           }
+        }
+      } else if (text === '/leads' || text === '/crm') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          const { data: leads, count } = await supabase
+            .from('leads')
+            .select('*', { count: 'exact' })
+            .eq('user_id', profile.id)
+            .order('created_at', { ascending: false })
+            .range(0, 4);
+
+          if (!leads || leads.length === 0) {
+            responseText = lang === 'ru' ? '📭 У вас пока нет лидов' : lang === 'kk' ? '📭 Сізде әлі лидтер жоқ' : '📭 No leads yet';
+          } else {
+            const leadLines = leads.map((l: any) => m.lead_item(l));
+            responseText = `${m.leads_list(0, count || 0)}\n\n${leadLines.join('\n\n')}`;
+            
+            const buttons = [];
+            if (count && count > 5) {
+              buttons.push([{ text: '➡️', callback_data: 'leads_page:1' }]);
+            }
+            buttons.push([{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=crm` } }]);
+            replyMarkup = { inline_keyboard: buttons };
+          }
+        }
+      } else if (text === '/bookings') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          // Fetch pages for user to get bookings
+          const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
+          const pageIds = pages?.map(p => p.id) || [];
+          
+          const { data: bookings } = await supabase
+            .from('bookings')
+            .select('*')
+            .in('page_id', pageIds)
+            .order('slot_date', { ascending: true })
+            .gte('slot_date', new Date().toISOString().split('T')[0])
+            .limit(5);
+
+          if (!bookings || bookings.length === 0) {
+            responseText = lang === 'ru' ? '📅 Активных бронирований нет' : lang === 'kk' ? '📅 Белсенді брондаулар жоқ' : '📅 No active bookings';
+          } else {
+            const bookingLines = bookings.map((b: any) => m.booking_item(b));
+            responseText = `${m.bookings_list(bookings.length)}\n\n${bookingLines.join('\n\n')}`;
+            replyMarkup = {
+              inline_keyboard: [[{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=bookings` } }]]
+            };
+          }
+        }
+      } else if (text === '/stats') {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('telegram_chat_id', chatIdStr)
+          .maybeSingle();
+
+        if (!profile) {
+          responseText = m.not_linked;
+        } else {
+          const { data: pages } = await supabase.from('pages').select('id').eq('user_id', profile.id);
+          const pageIds = pages?.map(p => p.id) || [];
+          const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+          const [viewsRes, clicksRes, leadsRes] = await Promise.all([
+            supabase.from('analytics').select('created_at').in('page_id', pageIds).eq('event_type', 'view').gte('created_at', weekAgo),
+            supabase.from('analytics').select('created_at').in('page_id', pageIds).eq('event_type', 'click').gte('created_at', weekAgo),
+            supabase.from('leads').select('created_at').eq('user_id', profile.id).gte('created_at', weekAgo),
+          ]);
+
+          const views = viewsRes.data || [];
+          const clicks = clicksRes.data || [];
+          const leads = leadsRes.data || [];
+
+          const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+          const v24 = views.filter(v => v.created_at >= dayAgo).length;
+          const c24 = clicks.filter(c => c.created_at >= dayAgo).length;
+          const l24 = leads.filter(l => l.created_at >= dayAgo).length;
+
+          const createBar = (val: number, max: number) => {
+            const length = max > 0 ? Math.round((val / max) * 10) : 0;
+            return '🟩'.repeat(length) + '⬜'.repeat(10 - length);
+          };
+
+          const maxVal = Math.max(views.length, 1);
+          const period = lang === 'ru' ? '7 дней' : lang === 'kk' ? '7 күн' : '7 days';
+          
+          responseText = m.stats_header(period);
+          responseText += m.stats_row(lang === 'ru' ? '👁 Просмотры' : '👁 Views', views.length, createBar(views.length, maxVal));
+          responseText += m.stats_row(lang === 'ru' ? '🖱 Клики' : '🖱 Clicks', clicks.length, createBar(clicks.length, maxVal));
+          responseText += m.stats_row(lang === 'ru' ? '📩 Лиды' : '📩 Leads', leads.length, createBar(leads.length, maxVal));
+          
+          if (lang === 'ru') {
+            responseText += `\n🆕 <b>За последние 24ч:</b>\n+${v24} просмотров, +${l24} лидов`;
+          } else {
+            responseText += `\n🆕 <b>In last 24h:</b>\n+${v24} views, +${l24} leads`;
+          }
+
+          replyMarkup = {
+            inline_keyboard: [[{ text: m.open_app_btn, web_app: { url: `${MINIAPP_URL}?startapp=stats` } }]]
+          };
         }
       } else {
         // Any other message - just show the ID

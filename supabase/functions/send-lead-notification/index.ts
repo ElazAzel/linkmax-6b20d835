@@ -40,7 +40,8 @@ async function sendTelegramNotification(
   leadName: string,
   leadEmail: string | null,
   leadPhone: string | null,
-  source: string
+  source: string,
+  leadId: string
 ): Promise<{ success: boolean; error?: string }> {
   const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
   if (!botToken) {
@@ -62,6 +63,23 @@ async function sendTelegramNotification(
   if (leadPhone) message += `📱 *Телефон:* ${leadPhone}\n`;
   message += `📍 *Источник:* ${sourceLabels[source] || source}`;
 
+  // Inline keyboard for quick actions
+  const inline_keyboard = [
+    [
+      { text: "✅ В работу", callback_data: `lead_status:contacted:${leadId}` },
+      { text: "💰 Продано", callback_data: `lead_status:won:${leadId}` }
+    ]
+  ];
+
+  // Add contact buttons if phone exists
+  if (leadPhone) {
+    const cleanPhone = leadPhone.replace(/\D/g, '');
+    inline_keyboard.push([
+      { text: "💬 WhatsApp", url: `https://wa.me/${cleanPhone}` },
+      { text: "📱 Telegram", url: `https://t.me/+${cleanPhone}` }
+    ]);
+  }
+
   try {
     const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
@@ -69,7 +87,8 @@ async function sendTelegramNotification(
       body: JSON.stringify({
         chat_id: chatId,
         text: message,
-        parse_mode: "Markdown"
+        parse_mode: "Markdown",
+        reply_markup: { inline_keyboard }
       })
     });
 
@@ -132,7 +151,8 @@ serve(async (req) => {
         leadName,
         leadEmail,
         leadPhone,
-        source
+        source,
+        leadId
       );
       results.telegram = telegramResult.success;
     }

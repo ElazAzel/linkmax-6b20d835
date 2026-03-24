@@ -17,6 +17,7 @@ LinkMAX is a comprehensive SaaS platform designed for the **Solo-Economy (2026)*
 3. **Advanced Analytics & AEO** — Server-side tracking (Pixel Proxy) and full funnel activation telemetry.
 4. **Team Collaboration & Business Zones** — RBAC-based organization management. Advanced features are progressively disclosed as the user business grows.
 5. **Fintech Core & Auth** — Telegram Mini App integration, Kaspi QR Sandbox, and a **"Step-by-Growth"** monetization model (7% / 1% fees).
+6. **Telegram Operational HQ** — Deterministic bot for remote business control. Interactive lead notifications, status management, and instant wallet access via commands.
 
 **Core Value:** Eliminating the "Tool Tax" and "Complexity Fatigue" by providing a unified, expert-focused infrastructure in 15 minutes.
 
@@ -198,6 +199,23 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 
 ---
 
+### 2.4 Telegram Bot (Operational HQ)
+
+**Primary goal:** Deterministic remote control of the business without LLM latency or token costs.
+
+**Features:**
+- **Advanced Lead Management**: `/leads` command with pagination (interactive buttons).
+- **Professional Analytics**: `/stats` command with visual progress bars for 7-day metrics (Views, Clicks, Leads).
+- **Booking Management**: `/bookings` command for quick access to upcoming slots.
+- **Page Insights**: `/page` command with real-time status and view counts.
+- **Interactive CRM Notifications**: Buttons for "✅ In Progress", "💰 Won" directly in the chat.
+- **Direct Contacts**: Instant links to customer's WhatsApp/Telegram from notification.
+- **Financial Commands**: `/wallet` and `/balance` to see balance and pending GMV.
+- **Operational Commands**: `/zone`, `/deals`, `/tasks`, `/contacts` for on-the-go status checks.
+- **Webhook Logic**: High-reliability processing in Supabase Edge Functions.
+
+---
+
 ### 2.3 Admin (Platform Administrator)
 
 **Accessed via:** `/admin` route (requires `app_role = 'admin'`)
@@ -244,6 +262,7 @@ A system-wide modernization was implemented to achieve "Responsive Harmony":
 | **Widget Template** | Resuable HTML/JS/CSS snippet | DB-driven customization | DB: `widget_templates` |
 | **Order** | Payment transaction record | Tracking status & provider | DB: `orders` |
 | **Token** | Linkkon virtual currency | Gamification + marketplace | DB: `user_tokens`, `token_transactions` |
+| **Telegram Bot** | Operational Command Center | Remote management + notifications | `supabase/functions/telegram-bot-webhook` |
 
 ---
 
