@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -6,11 +6,51 @@ import { supabase } from '@/platform/supabase/client';
 import Megaphone from 'lucide-react/dist/esm/icons/megaphone';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Key from 'lucide-react/dist/esm/icons/key';
+import Save from 'lucide-react/dist/esm/icons/save';
 
 export function AdminBroadcastTab() {
   const [loading, setLoading] = useState(false);
+  const [savingToken, setSavingToken] = useState(false);
   const [message, setMessage] = useState('');
-  const [result, setResult] = useState<{ successCount: number; failCount: number } | null>(null);
+  const [botToken, setBotToken] = useState('');
+  const [result, setResult] = useState<{ total_count: number; queued_count: number } | null>(null);
+
+  // Load existing token on mount
+  useEffect(() => {
+    async function loadToken() {
+      const { data } = await (supabase as any)
+        .from('bot_config')
+        .select('value')
+        .eq('key', 'TELEGRAM_BOT_TOKEN')
+        .maybeSingle();
+      
+      if (data && 'value' in data) {
+        setBotToken(data.value);
+      }
+    }
+    loadToken();
+  }, []);
+
+  const handleSaveToken = async () => {
+    if (!botToken.trim()) {
+      toast.error('Введите токен!');
+      return;
+    }
+    setSavingToken(true);
+    try {
+      const { error } = await (supabase as any)
+        .from('bot_config')
+        .upsert({ key: 'TELEGRAM_BOT_TOKEN', value: botToken.trim() });
+      
+      if (error) throw error;
+      toast.success('Токен сохранен!');
+    } catch (err: any) {
+      toast.error('Ошибка сохранения: ' + err.message);
+    } finally {
+      setSavingToken(false);
+    }
+  };
 
   const handleRunBroadcast = async () => {
     const isCustom = message.trim().length > 0;
@@ -26,15 +66,15 @@ export function AdminBroadcastTab() {
     setResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('broadcast-update', {
-        method: 'POST',
-        body: isCustom ? { text: message } : {},
+      // Direct SQL call via RPC (No Edge Function deploy needed!)
+      const { data, error } = await (supabase as any).rpc('send_telegram_broadcast', {
+        p_custom_text: message.trim() || null
       });
 
       if (error) throw error;
 
-      setResult(data);
-      toast.success('Рассылка завершена!');
+      setResult(data as any);
+      toast.success('Рассылка поставлена в очередь!');
     } catch (err: any) {
       console.error('Broadcast error:', err);
       toast.error('Ошибка при запуске рассылки: ' + err.message);
@@ -48,11 +88,38 @@ export function AdminBroadcastTab() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
+            <Key className="h-5 w-5 text-primary" />
+            <CardTitle>Настройка бота</CardTitle>
+          </div>
+          <CardDescription>
+            Введите ваш Telegram Bot Token для работы рассылки через базу данных.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <input
+              type="password"
+              className="flex-1 h-10 px-3 py-2 rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="1234567890:ABCDEFG..."
+              value={botToken}
+              onChange={(e) => setBotToken(e.target.value)}
+            />
+            <Button onClick={handleSaveToken} disabled={savingToken} variant="secondary">
+              {savingToken ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+              Сохранить
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
             <Megaphone className="h-5 w-5 text-primary" />
             <CardTitle>Массовая рассылка</CardTitle>
           </div>
           <CardDescription>
-            Отправка уведомлений всем пользователям LinkMAX через Telegram-бота.
+            Отправка уведомлений всем пользователям LinkMAX через SQL (pg_net).
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -74,33 +141,36 @@ export function AdminBroadcastTab() {
             <AlertTriangle className="h-5 w-5 shrink-0" />
             <div className="text-sm">
               <p className="font-semibold">Внимание!</p>
-              <p>Это действие отправит сообщение всем активным пользователям в БД.</p>
+              <p>Это действие поставит в очередь сообщения для всех активных пользователей в БД.</p>
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
             <Button 
               onClick={handleRunBroadcast} 
-              disabled={loading}
+              disabled={loading || !botToken} 
               className="w-full md:w-auto"
             >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Выполняется рассылка...
+                  Запуск...
                 </>
               ) : (
-                '🚀 Запустить рассылку (Mini CRM Update)'
+                '🚀 Запустить рассылку (через SQL)'
               )}
             </Button>
 
             {result && (
               <div className="mt-4 p-4 bg-muted rounded-lg space-y-2">
-                <p className="font-semibold text-sm">Результат последней рассылки:</p>
+                <p className="font-semibold text-sm">Статус очереди:</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="text-green-600">Успешно: {result.successCount}</div>
-                  <div className="text-red-600">Ошибок: {result.failCount}</div>
+                  <div className="text-blue-600">Всего пользователей: {result.total_count}</div>
+                  <div className="text-green-600">В очереди: {result.queued_count}</div>
                 </div>
+                <p className="text-[10px] text-muted-foreground">
+                  * Сообщения отправляются асинхронно через pg_net.
+                </p>
               </div>
             )}
           </div>
